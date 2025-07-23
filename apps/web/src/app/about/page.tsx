@@ -12,12 +12,9 @@ export default function AboutPage() {
       <nav className="bg-background/95 backdrop-blur-sm sticky top-0 z-50 border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <Home className="h-4 w-4 text-primary-foreground" />
-              </div>
-              <span className="text-xl font-bold">SHELTR-AI</span>
-            </div>
+                         <Link href="/" className="flex items-center">
+               <img src="/logo.svg" alt="SHELTR-AI" className="h-6 w-auto hover:opacity-80 transition-opacity" />
+             </Link>
             <div className="hidden md:flex space-x-8">
               <Link href="/" className="text-muted-foreground hover:text-primary transition-colors">Home</Link>
               <Link href="/about" className="text-foreground hover:text-primary transition-colors">About</Link>
@@ -226,12 +223,9 @@ export default function AboutPage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-4 gap-8">
             <div>
-              <div className="flex items-center space-x-2 mb-4">
-                <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                  <Home className="h-4 w-4 text-primary-foreground" />
-                </div>
-                <span className="text-xl font-bold">SHELTR-AI</span>
-              </div>
+                             <Link href="/" className="flex items-center mb-4">
+                 <img src="/logo.svg" alt="SHELTR-AI" className="h-6 w-auto hover:opacity-80 transition-opacity" />
+               </Link>
               <p className="text-muted-foreground text-sm">
                 Hacking homelessness through technology.
               </p>

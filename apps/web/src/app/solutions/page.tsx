@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Home, Building2, Users, Heart, Government, DollarSign, BarChart3, Shield, QrCode, Handshake, MapPin, UserCheck } from 'lucide-react';
+import { Home, Building2, Users, Heart, DollarSign, BarChart3, Shield, QrCode, Handshake, MapPin, UserCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -91,10 +91,12 @@ export default function SolutionsPage() {
                     </div>
                   </div>
                 </div>
-                <Button className="w-full mt-6">
-                  <Building2 className="h-4 w-4 mr-2" />
-                  Learn More for Organizations
-                </Button>
+                <Link href="/solutions/organizations">
+                  <Button className="w-full mt-6">
+                    <Building2 className="h-4 w-4 mr-2" />
+                    Learn More for Organizations
+                  </Button>
+                </Link>
               </CardContent>
             </Card>
 
@@ -133,10 +135,12 @@ export default function SolutionsPage() {
                     </div>
                   </div>
                 </div>
-                <Button className="w-full mt-6" variant="outline">
-                  <MapPin className="h-4 w-4 mr-2" />
-                  Government Solutions
-                </Button>
+                <Link href="/solutions/government">
+                  <Button className="w-full mt-6" variant="outline">
+                    <MapPin className="h-4 w-4 mr-2" />
+                    Government Solutions
+                  </Button>
+                </Link>
               </CardContent>
             </Card>
 
@@ -175,10 +179,12 @@ export default function SolutionsPage() {
                     </div>
                   </div>
                 </div>
-                <Button className="w-full mt-6" variant="outline">
-                  <Users className="h-4 w-4 mr-2" />
-                  Participant Support
-                </Button>
+                <Link href="/solutions/participants">
+                  <Button className="w-full mt-6" variant="outline">
+                    <Users className="h-4 w-4 mr-2" />
+                    Participant Support
+                  </Button>
+                </Link>
               </CardContent>
             </Card>
 
@@ -217,10 +223,12 @@ export default function SolutionsPage() {
                     </div>
                   </div>
                 </div>
-                <Button className="w-full mt-6">
-                  <Heart className="h-4 w-4 mr-2" />
-                  Start Giving Today
-                </Button>
+                <Link href="/solutions/donors">
+                  <Button className="w-full mt-6">
+                    <Heart className="h-4 w-4 mr-2" />
+                    Start Giving Today
+                  </Button>
+                </Link>
               </CardContent>
             </Card>
           </div>

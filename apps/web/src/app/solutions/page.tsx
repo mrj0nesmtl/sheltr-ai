@@ -3,6 +3,7 @@ import { Home, Building2, Users, Heart, DollarSign, BarChart3, Shield, QrCode, H
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { ThemeToggle } from '@/components/theme-toggle';
 
 export default function SolutionsPage() {
   return (
@@ -23,6 +24,7 @@ export default function SolutionsPage() {
               <Link href="/impact" className="text-muted-foreground hover:text-primary transition-colors">Impact</Link>
             </div>
             <div className="flex items-center space-x-4">
+              <ThemeToggle />
               <Button variant="ghost" size="sm">Sign In</Button>
               <Button>Get Started</Button>
             </div>

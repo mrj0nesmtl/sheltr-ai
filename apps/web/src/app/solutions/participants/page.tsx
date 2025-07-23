@@ -3,6 +3,7 @@ import { ArrowLeft, Users, QrCode, DollarSign, Home, Heart, Shield, Smartphone, 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { ThemeToggle } from '@/components/theme-toggle';
 
 export default function ParticipantsPage() {
   return (
@@ -19,9 +20,11 @@ export default function ParticipantsPage() {
               <Link href="/about" className="text-muted-foreground hover:text-primary transition-colors">About</Link>
               <Link href="/solutions" className="text-muted-foreground hover:text-primary transition-colors">Solutions</Link>
               <Link href="/scan-give" className="text-muted-foreground hover:text-primary transition-colors">Scan & Give</Link>
+              <Link href="/tokenomics" className="text-muted-foreground hover:text-primary transition-colors">Tokenomics</Link>
               <Link href="/impact" className="text-muted-foreground hover:text-primary transition-colors">Impact</Link>
             </div>
             <div className="flex items-center space-x-4">
+              <ThemeToggle />
               <Button variant="ghost" size="sm">Sign In</Button>
               <Button>Get Started</Button>
             </div>

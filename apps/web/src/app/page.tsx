@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Home, QrCode, BarChart3, Heart, LogIn, Smartphone, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { ThemeToggle } from '@/components/theme-toggle';
 
 export default function HomePage() {
   return (
@@ -21,6 +22,7 @@ export default function HomePage() {
               <Link href="/impact" className="text-muted-foreground hover:text-primary transition-colors">Impact</Link>
             </div>
             <div className="flex items-center space-x-4">
+              <ThemeToggle />
               <Button variant="ghost" size="sm">
                 <LogIn className="h-4 w-4 mr-2" />
                 Sign In

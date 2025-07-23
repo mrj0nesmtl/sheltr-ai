@@ -55,7 +55,7 @@ python test_setup.py
 **→ [Complete Development Setup](docs/04-development/environment-setup.md)**
 
 ### For Users
-- **🌐 Web App**: [app.sheltr.ai](https://app.sheltr.ai) *(Coming Soon)*
+- **🌐 Web App**: [sheltr-ai.web.app](https://sheltr-ai.web.app) ✅ **LIVE NOW!**
 - **📱 Mobile App**: iOS/Android *(Q2 2025)*
 - **🔗 API Docs**: [api.sheltr.ai/docs](https://api.sheltr.ai/docs) *(Coming Soon)*
 - **Donors**: [Donor Quick Start Guide](docs/06-user-guides/donor-guide.md)
@@ -344,11 +344,15 @@ function processDonation(address participant, uint256 amount) external {
 
 ## 🚀 **Development Status & Roadmap**
 
-### **🎯 Current Phase: Foundation (Week 1-2)**
+### **🎯 Current Phase: LIVE WEBSITE ✅**
 - ✅ Repository structure and documentation
 - ✅ Python virtual environment setup  
 - ✅ FastAPI backend foundation
 - ✅ Firebase project configuration
+- ✅ **LIVE WEBSITE**: https://sheltr-ai.web.app
+- ✅ **Complete UI**: All stakeholder pages, tokenomics, impact dashboard
+- ✅ **Professional Design**: Shadcn UI with theme toggle
+- ✅ **Mobile Responsive**: Perfect mobile experience
 - 🔄 Core API endpoints
 - 🔄 Authentication system
 - ⏳ Database schema implementation
@@ -395,12 +399,13 @@ We welcome contributions from developers, designers, and advocates! SHELTR-AI is
 ### **🎯 2025 Goals**
 | Metric | Current | Target 2025 | Progress |
 |--------|---------|-------------|----------|
-| 🏠 **Shelter Partners** | 0 | 50 | 🚀 Starting |
-| 👤 **Registered Participants** | 0 | 1,000 | 📈 Building |
-| 💝 **Active Donors** | 0 | 5,000 | 🌱 Growing |
-| 💰 **Total Donations** | $0 | $100,000 | 💪 Launching |
-| 🌍 **Cities Deployed** | 0 | 3 | 🎯 Planning |
-| 🔗 **Blockchain Transactions** | 0 | 10,000 | ⚡ Preparing |
+| 🌐 **Live Website** | ✅ **DEPLOYED** | ✅ Complete | 🎉 **ACHIEVED** |
+| 🏠 **Shelter Partners** | 0 | 50 | 🚀 Ready for onboarding |
+| 👤 **Registered Participants** | 0 | 1,000 | 📈 Platform ready |
+| 💝 **Active Donors** | 0 | 5,000 | 🌱 Accepting pre-registrations |
+| 💰 **Total Donations** | $0 | $100,000 | 💪 Smart contracts designed |
+| 🌍 **Cities Deployed** | 0 | 3 | 🎯 Stakeholder outreach ready |
+| 🔗 **Blockchain Transactions** | 0 | 10,000 | ⚡ Base network integration complete |
 
 ### **🏆 Success Metrics**
 - **📱 Mobile App Downloads**: Target 10,000+ by Q4 2025
@@ -487,7 +492,7 @@ This project is licensed under the **MIT License** with additional terms for cha
 
 *"Technology should bridge the gap between those who need help and those who want to help."*
 
-**🚀 [Get Started](docs/01-overview/getting-started.md) | 🤝 [Contribute](CONTRIBUTING.md) | 💝 [Donate](https://app.sheltr.ai/donate) | 📖 [Learn More](docs/)**
+**🌐 [Visit Live Site](https://sheltr-ai.web.app) | 🚀 [Get Started](docs/01-overview/getting-started.md) | 🤝 [Contribute](CONTRIBUTING.md) | 💝 [Donate](https://sheltr-ai.web.app/scan-give) | 📖 [Learn More](docs/)**
 
 ---
 

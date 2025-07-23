@@ -124,7 +124,7 @@ sheltr-ai/
 - ✅ Gunnar Blaze memorial integration throughout project
 
 ### **Session 02 Planning - Website Launch** 🟡 **READY**
-- **Target**: Live website at `https://sheltr-ai.web.app`
+- **Target**: Live website at Google App Hosting via Firebase
 - **Timeline**: 3-4 hours for complete deployment
 - **Focus**: Firebase + Next.js 15 + core pages + mobile responsive
 - **Deliverables**: Professional website with Home, About, Features, Contact

@@ -1,0 +1,11 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 133 132" width="133" height="132">
+	<title>SHELTR</title>
+	<style>
+		.s0 { fill: #000000 } 
+	</style>
+	<g id="Layer 1">
+		<path id="&lt;Compound Path&gt;" class="s0" d="m4.4 3.4h27.6v102.5h61.3v23.2h-88.9z"/>
+		<path id="&lt;Compound Path&gt;" fill-rule="evenodd" class="s0" d="m134.1 3.4h67.8c22.5 0 36.8 15.7 36.8 34.7 0 14.8-6 25.9-19.9 31.5v0.4c13.5 3.5 17.4 16.7 18.3 29.3 0.5 8 0.3 22.7 5.2 29.8h-27.6c-3.3-7.9-3-20.1-4.4-30.1-1.9-13.2-7-19-20.9-19h-27.7v49.1h-27.6zm27.6 56.8h30.3c12.3 0 19-5.2 19-17.9 0-12.2-6.7-17.4-19-17.4h-30.3z"/>
+		<path id="&lt;Compound Path&gt;" class="s0" d="m128 128.2h-27.6v-102.4h-61.2v-23.2h88.8z"/>
+	</g>
+</svg>

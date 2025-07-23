@@ -195,7 +195,7 @@ export default function TokenomicsPage() {
               </CardHeader>
               <CardContent>
                 <p className="text-center text-muted-foreground mb-4">
-                  Immediate conversion to SHELTR-S tokens for participants' essential needs
+                  Immediate conversion to SHELTR-S tokens for participants&apos; essential needs
                 </p>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-center space-x-2">
@@ -292,7 +292,7 @@ export default function TokenomicsPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold mb-4">Base Network Integration</h2>
-            <p className="text-xl text-muted-foreground">Built on Coinbase's L2 for optimal performance and compliance</p>
+            <p className="text-xl text-muted-foreground">Built on Coinbase&apos;s L2 for optimal performance and compliance</p>
           </div>
 
           <div className="grid lg:grid-cols-2 gap-12">
@@ -463,7 +463,7 @@ export default function TokenomicsPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-6">Join the SHELTR Economy</h2>
           <p className="text-xl text-muted-foreground mb-8">
-            Be part of the revolution that's making charitable giving transparent, efficient, and impactful.
+            Be part of the revolution that&apos;s making charitable giving transparent, efficient, and impactful.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

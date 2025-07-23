@@ -114,7 +114,7 @@ export default function ParticipantsPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold mb-4">Simple Steps to Get Support</h2>
-            <p className="text-xl text-muted-foreground">Getting help shouldn't be complicated</p>
+            <p className="text-xl text-muted-foreground">Getting help shouldn&apos;t be complicated</p>
           </div>
 
           <div className="grid lg:grid-cols-2 gap-12">

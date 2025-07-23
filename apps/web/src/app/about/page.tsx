@@ -127,8 +127,8 @@ export default function AboutPage() {
               </p>
               <div className="bg-muted/50 p-4 rounded-lg border-l-4 border-primary">
                 <p className="italic text-sm">
-                  "Every feature we build honors Gunnar's values: loyalty to our users, 
-                  protection of their dignity, and unconditional care for those who need it most."
+                  &quot;Every feature we build honors Gunnar&apos;s values: loyalty to our users, 
+                  protection of their dignity, and unconditional care for those who need it most.&quot;
                 </p>
               </div>
             </CardContent>
@@ -162,7 +162,7 @@ export default function AboutPage() {
                   <h3 className="text-xl font-semibold mb-3">The Transformation</h3>
                   <p className="text-muted-foreground mb-4">
                     Instead of rebuilding the same system, we used this moment to create SHELTR-AI 2.0 
-                    with modern architecture, enhanced features, and a dedication to Gunnar's memory.
+                    with modern architecture, enhanced features, and a dedication to Gunnar&apos;s memory.
                   </p>
                   
                   <div className="grid md:grid-cols-2 gap-4">

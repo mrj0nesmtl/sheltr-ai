@@ -74,7 +74,7 @@ export default function ScanGivePage() {
                 </div>
                 <CardTitle>1. Scan QR Code</CardTitle>
                 <CardDescription>
-                  Use your phone camera to scan a participant's unique QR code
+                  Use your phone camera to scan a participant&apos;s unique QR code
                 </CardDescription>
               </CardHeader>
               <CardContent>

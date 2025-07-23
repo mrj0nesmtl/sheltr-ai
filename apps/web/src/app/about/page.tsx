@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Home, Heart, Shield, Users, ArrowRight, Github, Twitter, Mail } from 'lucide-react';
+import { Home, Heart, Shield, Users, ArrowRight, Github, Twitter, Mail, Coins } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -20,6 +20,7 @@ export default function AboutPage() {
               <Link href="/about" className="text-foreground hover:text-primary transition-colors">About</Link>
               <Link href="/solutions" className="text-muted-foreground hover:text-primary transition-colors">Solutions</Link>
               <Link href="/scan-give" className="text-muted-foreground hover:text-primary transition-colors">Scan & Give</Link>
+              <Link href="/tokenomics" className="text-muted-foreground hover:text-primary transition-colors">Tokenomics</Link>
               <Link href="/impact" className="text-muted-foreground hover:text-primary transition-colors">Impact</Link>
             </div>
             <div className="flex items-center space-x-4">
@@ -202,10 +203,18 @@ export default function AboutPage() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg">
-              <Heart className="h-4 w-4 mr-2" />
-              Start Giving
-            </Button>
+            <Link href="/scan-give">
+              <Button size="lg">
+                <Heart className="h-4 w-4 mr-2" />
+                Start Giving
+              </Button>
+            </Link>
+            <Link href="/tokenomics">
+              <Button variant="outline" size="lg">
+                <Coins className="h-4 w-4 mr-2" />
+                Learn About $SHLTR
+              </Button>
+            </Link>
             <Button variant="outline" size="lg">
               <Github className="h-4 w-4 mr-2" />
               Contribute Code

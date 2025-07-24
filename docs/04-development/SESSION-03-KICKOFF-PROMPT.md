@@ -203,6 +203,18 @@ Firebase Firestore Structure:
 - ✅ Python environment active
 - ✅ Next.js dev server ready
 
+### **Quick Firebase Setup Reference:**
+```bash
+# Essential environment variables needed:
+# .env.local (web app)
+NEXT_PUBLIC_FIREBASE_API_KEY=your-api-key
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=sheltr-ai-platform.firebaseapp.com
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=sheltr-ai-platform
+
+# Service account key needed for FastAPI
+# Download from: Firebase Console > Project Settings > Service Accounts
+```
+
 ### **Session Goals:**
 - **Transform** public website → secure multi-tenant platform
 - **Enable** real user registration and authentication

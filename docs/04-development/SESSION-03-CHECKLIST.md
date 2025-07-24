@@ -112,6 +112,7 @@ Based on legacy navigation matrix:
 - [ ] **Registration Form**: Role-specific registration
 - [ ] **Auth Status**: Current user display
 - [ ] **Logout Function**: Secure session termination
+- [ ] **Mobile Navigation**: Responsive mobile menu with authentication options
 
 ### **Phase 4: FastAPI Backend Integration** ⏱️ *90 min*
 
@@ -184,8 +185,8 @@ apps/api/
 - [ ] **Logout**: Clean session termination
 
 ### **Role-Based Access Control**
-- [ ] **Super Admin**: Full system access and user management
-- [ ] **Admin**: Shelter-specific management capabilities
+- [ ] **Super Admin**: Full system access, shelter creation, admin assignment
+- [ ] **Admin**: Shelter-specific management, participant onboarding
 - [ ] **Participant**: Personal profile and QR code access
 - [ ] **Donor**: Donation and impact tracking features
 - [ ] **Cross-Role**: Proper permission isolation

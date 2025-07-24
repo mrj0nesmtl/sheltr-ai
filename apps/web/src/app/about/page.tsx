@@ -62,7 +62,7 @@ export default function AboutPage() {
               <CardContent>
                 <p className="text-sm text-muted-foreground">
                   We stand by every participant, donor, and shelter partner with 
-                  the same loyalty that Gunnar showed us every day.
+                  the same commitment to transparency and impact.
                 </p>
               </CardContent>
             </Card>
@@ -102,34 +102,43 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Gunnar Memorial Section */}
+      {/* Our Impact & Mission */}
       <section className="py-20 bg-primary/5">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="mb-8">
             <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
               <Heart className="h-8 w-8 text-primary" />
             </div>
-            <h2 className="text-3xl font-bold mb-4">In Loving Memory</h2>
-            <Badge variant="outline" className="mb-6">Gunnar Blaze • 2010-2025</Badge>
+            <h2 className="text-3xl font-bold mb-4">Real Impact, Real Change</h2>
+            <Badge variant="outline" className="mb-6">Transparent • Scalable • Effective</Badge>
           </div>
           
           <Card className="text-left max-w-2xl mx-auto">
             <CardContent className="p-8">
               <p className="text-lg mb-6">
-                SHELTR-AI is dedicated to <strong>Gunnar Blaze</strong>, a faithful German Shepherd 
-                who embodied the loyalty, protection, and unconditional love that inspires our mission 
-                to care for those without shelter.
+                SHELTR-AI represents a revolutionary approach to charitable giving, combining 
+                cutting-edge technology with compassionate action to create meaningful change 
+                in the fight against homelessness.
               </p>
               <p className="text-muted-foreground mb-6">
-                For fifteen years, Gunnar showed us what it means to be protective of those we love, 
-                loyal to our values, and caring without condition. These qualities now live on in 
-                every line of code we write and every feature we build.
+                Every QR code scan, every blockchain transaction, and every smart contract execution 
+                brings us closer to a world where technology bridges the gap between those who need 
+                help and those ready to provide it.
               </p>
               <div className="bg-muted/50 p-4 rounded-lg border-l-4 border-primary">
                 <p className="italic text-sm">
-                  &quot;Every feature we build honors Gunnar&apos;s values: loyalty to our users, 
-                  protection of their dignity, and unconditional care for those who need it most.&quot;
+                  &quot;Technology should empower dignity, transparency should build trust, 
+                  and every donation should create lasting impact for those who need it most.&quot;
                 </p>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center mt-6">
+                <Button>
+                  <Heart className="h-4 w-4 mr-2" />
+                  Start Giving
+                </Button>
+                <Button variant="outline">
+                  Learn More
+                </Button>
               </div>
             </CardContent>
           </Card>
@@ -162,7 +171,7 @@ export default function AboutPage() {
                   <h3 className="text-xl font-semibold mb-3">The Transformation</h3>
                   <p className="text-muted-foreground mb-4">
                     Instead of rebuilding the same system, we used this moment to create SHELTR-AI 2.0 
-                    with modern architecture, enhanced features, and a dedication to Gunnar&apos;s memory.
+                    with modern architecture, enhanced features, and a commitment to real impact.
                   </p>
                   
                   <div className="grid md:grid-cols-2 gap-4">

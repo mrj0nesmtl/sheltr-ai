@@ -1,9 +1,14 @@
+'use client';
+
 import Link from 'next/link';
-import { Home, QrCode, BarChart3, Heart, LogIn, Smartphone, Zap } from 'lucide-react';
+import { Home, QrCode, BarChart3, Heart, LogIn, Smartphone, Zap, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/theme-toggle';
+import { useState } from 'react';
 
 export default function HomePage() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
       {/* Navigation */}
@@ -23,16 +28,47 @@ export default function HomePage() {
             </div>
             <div className="flex items-center space-x-4">
               <ThemeToggle />
-              <Button variant="ghost" size="sm">
-                <LogIn className="h-4 w-4 mr-2" />
-                Sign In
-              </Button>
-              <Button>
-                Get Started
-              </Button>
+              <div className="hidden md:flex items-center space-x-4">
+                <Button variant="ghost" size="sm">
+                  <LogIn className="h-4 w-4 mr-2" />
+                  Sign In
+                </Button>
+                <Button>
+                  Get Started
+                </Button>
+              </div>
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="md:hidden p-2 text-muted-foreground hover:text-foreground"
+              >
+                {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              </button>
             </div>
           </div>
         </div>
+        
+        {/* Mobile Menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden bg-background border-b">
+            <div className="px-4 py-4 space-y-3">
+              <Link href="/" className="block text-foreground hover:text-primary transition-colors py-2">Home</Link>
+              <Link href="/about" className="block text-muted-foreground hover:text-primary transition-colors py-2">About</Link>
+              <Link href="/solutions" className="block text-muted-foreground hover:text-primary transition-colors py-2">Solutions</Link>
+              <Link href="/scan-give" className="block text-muted-foreground hover:text-primary transition-colors py-2">Scan & Give</Link>
+              <Link href="/tokenomics" className="block text-muted-foreground hover:text-primary transition-colors py-2">Tokenomics</Link>
+              <Link href="/impact" className="block text-muted-foreground hover:text-primary transition-colors py-2">Impact</Link>
+              <div className="border-t pt-4 space-y-3">
+                <Button variant="ghost" className="w-full justify-start">
+                  <LogIn className="h-4 w-4 mr-2" />
+                  Sign In
+                </Button>
+                <Button className="w-full">
+                  Get Started
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
       </nav>
 
       {/* Hero Section */}
@@ -121,22 +157,30 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Gunnar Memorial */}
+      {/* Call to Action */}
       <section className="py-16 bg-primary/5">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
             <Heart className="h-8 w-8 text-primary" />
           </div>
-          <h2 className="text-3xl font-bold mb-4">In Loving Memory</h2>
+          <h2 className="text-3xl font-bold mb-4">Join the Movement</h2>
           <p className="text-xl mb-6">
-            SHELTR-AI is dedicated to <strong>Gunnar Blaze (2010-2025)</strong>, a faithful German Shepherd 
-            who embodied the loyalty, protection, and unconditional love that inspires our mission 
-            to care for those without shelter.
+            Transform charitable giving through technology. SHELTR-AI creates direct connections 
+            between donors and those who need help most, with every donation tracked and verified 
+            through blockchain transparency.
           </p>
-          <p className="text-lg text-muted-foreground">
-            &quot;Every feature we build honors Gunnar&apos;s values: loyalty to our users, protection of their dignity, 
-            and unconditional care for those who need it most.&quot;
-          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button size="lg">
+              <Heart className="h-4 w-4 mr-2" />
+              Donate Now
+            </Button>
+            <Button variant="outline" size="lg">
+              Learn More
+            </Button>
+            <Button variant="ghost" size="lg">
+              Join Our Movement
+            </Button>
+          </div>
         </div>
       </section>
 

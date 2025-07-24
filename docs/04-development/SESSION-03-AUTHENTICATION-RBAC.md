@@ -81,8 +81,8 @@ Based on legacy RBAC.md, here's our role system:
 
 | Role | Tenant Access | Key Permissions | Dashboard |
 |------|---------------|----------------|-----------|
-| **super_admin** | `platform` | System-wide control | SuperAdmin Dashboard |
-| **admin** | `shelter-{id}` | Shelter management | Shelter Admin Dashboard |
+| **super_admin** | `platform` | System-wide control, spawn shelters, assign admins | SuperAdmin Dashboard |
+| **admin** | `shelter-{id}` | Shelter management, onboard participants | Shelter Admin Dashboard |
 | **participant** | `shelter-{id}` or `participant-network` | Personal QR & profile | Participant Dashboard |
 | **donor** | `donor-network` | Donation & impact tracking | Donor Dashboard |
 
@@ -389,11 +389,13 @@ class UserService:
         permissions_map = {
             UserRole.SUPER_ADMIN: [
                 'system:read', 'system:write', 'users:manage', 
-                'analytics:view', 'security:monitor', 'tenants:manage'
+                'analytics:view', 'security:monitor', 'tenants:manage',
+                'shelters:create', 'shelters:assign_admin', 'participants:verify_global'
             ],
             UserRole.ADMIN: [
-                'shelter:manage', 'participants:manage', 'resources:manage',
-                'analytics:view', 'documents:upload'
+                'shelter:manage', 'participants:create', 'participants:manage', 
+                'participants:onboard', 'resources:manage', 'analytics:view', 
+                'documents:upload', 'qr:generate'
             ],
             UserRole.PARTICIPANT: [
                 'profile:read', 'profile:write', 'services:access',

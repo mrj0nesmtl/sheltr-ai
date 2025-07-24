@@ -340,7 +340,16 @@ async def create_tenant(
     tenant_data: TenantCreate,
     current_user: User = Depends(require_super_admin)
 ):
-    """Create new tenant (shelter)"""
+    """Create new tenant (shelter) - SuperAdmin only"""
+    pass
+
+@router.post("/admin/tenants/{tenant_id}/assign-admin")
+async def assign_shelter_admin(
+    tenant_id: str,
+    admin_data: ShelterAdminAssignment,
+    current_user: User = Depends(require_super_admin)
+):
+    """Assign admin to shelter tenant - SuperAdmin only"""
     pass
 ```
 

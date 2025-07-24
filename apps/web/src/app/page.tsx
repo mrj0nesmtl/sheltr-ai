@@ -29,13 +29,17 @@ export default function HomePage() {
             <div className="flex items-center space-x-4">
               <ThemeToggle />
               <div className="hidden md:flex items-center space-x-4">
-                <Button variant="ghost" size="sm">
-                  <LogIn className="h-4 w-4 mr-2" />
-                  Sign In
-                </Button>
-                <Button>
-                  Get Started
-                </Button>
+                <Link href="/login">
+                  <Button variant="ghost" size="sm">
+                    <LogIn className="h-4 w-4 mr-2" />
+                    Sign In
+                  </Button>
+                </Link>
+                <Link href="/register">
+                  <Button>
+                    Get Started
+                  </Button>
+                </Link>
               </div>
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -58,13 +62,17 @@ export default function HomePage() {
               <Link href="/tokenomics" className="block text-muted-foreground hover:text-primary transition-colors py-2">Tokenomics</Link>
               <Link href="/impact" className="block text-muted-foreground hover:text-primary transition-colors py-2">Impact</Link>
               <div className="border-t pt-4 space-y-3">
-                <Button variant="ghost" className="w-full justify-start">
-                  <LogIn className="h-4 w-4 mr-2" />
-                  Sign In
-                </Button>
-                <Button className="w-full">
-                  Get Started
-                </Button>
+                <Link href="/login" className="block">
+                  <Button variant="ghost" className="w-full justify-start">
+                    <LogIn className="h-4 w-4 mr-2" />
+                    Sign In
+                  </Button>
+                </Link>
+                <Link href="/register" className="block">
+                  <Button className="w-full">
+                    Get Started
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
@@ -85,13 +93,17 @@ export default function HomePage() {
               SmartFund™ distribution: 80% direct support, 15% housing fund, 5% operations.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg">
-                <Heart className="h-4 w-4 mr-2" />
-                Start Giving
-              </Button>
-              <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-black">
-                Learn More
-              </Button>
+              <Link href="/register?role=donor">
+                <Button size="lg">
+                  <Heart className="h-4 w-4 mr-2" />
+                  Start Giving
+                </Button>
+              </Link>
+              <Link href="/about">
+                <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-black">
+                  Learn More
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
@@ -170,16 +182,22 @@ export default function HomePage() {
             through blockchain transparency.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg">
-              <Heart className="h-4 w-4 mr-2" />
-              Donate Now
-            </Button>
-            <Button variant="outline" size="lg">
-              Learn More
-            </Button>
-            <Button variant="ghost" size="lg">
-              Join Our Movement
-            </Button>
+            <Link href="/register?role=donor">
+              <Button size="lg">
+                <Heart className="h-4 w-4 mr-2" />
+                Donate Now
+              </Button>
+            </Link>
+            <Link href="/about">
+              <Button variant="outline" size="lg">
+                Learn More
+              </Button>
+            </Link>
+            <Link href="/register">
+              <Button variant="ghost" size="lg">
+                Join Our Movement
+              </Button>
+            </Link>
           </div>
         </div>
       </section>

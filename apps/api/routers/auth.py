@@ -444,13 +444,60 @@ async def delete_user(
 )
 async def verify_token(current_user: dict = Depends(get_current_user)):
     """
-    Verify Firebase ID token and return claims
+    Verify Firebase ID token and return claims. Handle special case for super admin Google OAuth.
     """
-    return StandardResponse(
-        success=True,
-        message="Token is valid",
-        data={
-            "user": current_user,
-            "token_valid": True
-        }
-    ) 
+    try:
+        # Special handling for Joel's super admin account
+        if current_user.get('email') == "joel.yaffe@gmail.com" and not current_user.get('role'):
+            logger.info("🔐 Super admin detected without claims - setting super admin claims")
+            
+            # Set super admin claims
+            custom_claims = {
+                "role": "super_admin",
+                "tenant_id": "platform",
+                "permissions": [
+                    "platform:manage",
+                    "users:manage",
+                    "shelters:manage",
+                    "donations:manage",
+                    "analytics:view",
+                    "system:admin"
+                ],
+                "shelter_id": None,
+                "created_by": "system",
+                "title": "CTO and Developer",
+                "organization": "Arcana Concept",
+                "position": "Co-Founder"
+            }
+            
+            # Set the claims using Firebase Admin SDK
+            await firebase_service.set_custom_claims(current_user['uid'], custom_claims)
+            logger.info(f"✅ Super admin claims set for UID: {current_user['uid']}")
+            
+            # Update current_user dict with new claims
+            current_user.update(custom_claims)
+            
+            return StandardResponse(
+                success=True,
+                message="Super admin token verified and claims updated",
+                data={
+                    "user": current_user,
+                    "token_valid": True,
+                    "claims_updated": True
+                }
+            )
+        
+        return StandardResponse(
+            success=True,
+            message="Token is valid",
+            data={
+                "user": current_user,
+                "token_valid": True
+            }
+        )
+    except Exception as e:
+        logger.error(f"Token verification error: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Token verification failed: {str(e)}"
+        ) 

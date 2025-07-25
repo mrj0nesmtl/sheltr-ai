@@ -1,0 +1,545 @@
+{
+  "timestamp": "2025-07-25T02:39:07.654Z",
+  "collections": {
+    "shelters": [
+      {
+        "id": "1yDQeRjTbyHx28or4AyY",
+        "data": {
+          "name": "Refuge des Jeunes de Montréal",
+          "location": "Montreal, QC",
+          "address": "1836 Sainte-Catherine St East, Montreal, QC H2K 2H5",
+          "coordinates": {
+            "lat": 45.5237,
+            "lng": -73.5587
+          },
+          "type": "Youth Shelter",
+          "capacity": 45,
+          "currentOccupancy": 15,
+          "participants": 33,
+          "totalDonations": 43335,
+          "status": "active",
+          "complianceScore": 95,
+          "lastInspection": "2024-10-22",
+          "contact": {
+            "name": "Youth Services Coordinator",
+            "email": "info@refugejeunes.org",
+            "phone": "514-849-4221"
+          },
+          "joinDate": "2023-03-10",
+          "rating": 4,
+          "tenantId": "platform",
+          "createdAt": {
+            "_seconds": 1753407065,
+            "_nanoseconds": 234000000
+          },
+          "updatedAt": {
+            "_seconds": 1753407065,
+            "_nanoseconds": 234000000
+          }
+        },
+        "path": "tenants/platform/shelters/1yDQeRjTbyHx28or4AyY"
+      },
+      {
+        "id": "9XnLJm9N5U6AAbhzsRze",
+        "data": {
+          "name": "YWCA Montreal",
+          "location": "Montreal, QC",
+          "address": "1355 Boulevard René-Lévesque West, Montreal, QC H3G 1T3",
+          "coordinates": {
+            "lat": 45.4962,
+            "lng": -73.5731
+          },
+          "type": "Family Shelter",
+          "capacity": 95,
+          "currentOccupancy": 65,
+          "participants": 63,
+          "totalDonations": 187875,
+          "status": "active",
+          "complianceScore": 98,
+          "lastInspection": "2024-11-12",
+          "contact": {
+            "name": "Program Coordinator",
+            "email": "info@ydesfemmesmtl.org",
+            "phone": "514-866-9941"
+          },
+          "joinDate": "2023-02-28",
+          "rating": 5,
+          "tenantId": "platform",
+          "createdAt": {
+            "_seconds": 1753407065,
+            "_nanoseconds": 334000000
+          },
+          "updatedAt": {
+            "_seconds": 1753407065,
+            "_nanoseconds": 334000000
+          }
+        },
+        "path": "tenants/platform/shelters/9XnLJm9N5U6AAbhzsRze"
+      },
+      {
+        "id": "SLsqUwZHRHD4oWAZb9O6",
+        "data": {
+          "name": "Le Chaînon",
+          "location": "Montreal, QC",
+          "address": "4373 Avenue de l'Esplanade, Montreal, QC H2W 1T2",
+          "coordinates": {
+            "lat": 45.5208,
+            "lng": -73.5881
+          },
+          "type": "Family Shelter",
+          "capacity": 80,
+          "currentOccupancy": 75,
+          "participants": 34,
+          "totalDonations": 88584,
+          "status": "active",
+          "complianceScore": 94,
+          "lastInspection": "2024-11-08",
+          "contact": {
+            "name": "Support Services Director",
+            "email": "info@chainon.org",
+            "phone": "514-845-0151"
+          },
+          "joinDate": "2023-01-20",
+          "rating": 4,
+          "tenantId": "platform",
+          "createdAt": {
+            "_seconds": 1753407065,
+            "_nanoseconds": 294000000
+          },
+          "updatedAt": {
+            "_seconds": 1753407065,
+            "_nanoseconds": 294000000
+          }
+        },
+        "path": "tenants/platform/shelters/SLsqUwZHRHD4oWAZb9O6"
+      },
+      {
+        "id": "VHHjLHu2MSZn7hHxjbBi",
+        "data": {
+          "name": "Resilience Montreal",
+          "location": "Westmount, QC",
+          "address": "4000 Sainte-Catherine St West, Westmount, QC, H3Z 1P1",
+          "coordinates": {
+            "lat": 45.4871,
+            "lng": -73.5894
+          },
+          "type": "Emergency Shelter",
+          "capacity": 120,
+          "currentOccupancy": 80,
+          "participants": 25,
+          "totalDonations": 79754,
+          "status": "active",
+          "complianceScore": 90,
+          "lastInspection": "2024-11-15",
+          "contact": {
+            "name": "Information Coordinator",
+            "email": "info@resiliencemontreal.com",
+            "phone": "Contact via website"
+          },
+          "joinDate": "2023-06-15",
+          "rating": 5,
+          "tenantId": "platform",
+          "createdAt": {
+            "_seconds": 1753407065,
+            "_nanoseconds": 174000000
+          },
+          "updatedAt": {
+            "_seconds": 1753407065,
+            "_nanoseconds": 174000000
+          }
+        },
+        "path": "tenants/platform/shelters/VHHjLHu2MSZn7hHxjbBi"
+      },
+      {
+        "id": "YDJCJnuLGMC9mWOWDSOa",
+        "data": {
+          "name": "Old Brewery Mission",
+          "location": "Montreal, QC",
+          "address": "915 Clark Street, Montreal, QC H2Z 1J8",
+          "coordinates": {
+            "lat": 45.5052,
+            "lng": -73.5523
+          },
+          "type": "Emergency Shelter",
+          "capacity": 300,
+          "currentOccupancy": 158,
+          "participants": 130,
+          "totalDonations": 153650,
+          "status": "active",
+          "complianceScore": 96,
+          "lastInspection": "2024-11-25",
+          "contact": {
+            "name": "Operations Director",
+            "email": "info@oldbrewerymission.ca",
+            "phone": "514-798-2244"
+          },
+          "joinDate": "2023-01-05",
+          "rating": 4,
+          "tenantId": "platform",
+          "createdAt": {
+            "_seconds": 1753407065,
+            "_nanoseconds": 522000000
+          },
+          "updatedAt": {
+            "_seconds": 1753407065,
+            "_nanoseconds": 522000000
+          }
+        },
+        "path": "tenants/platform/shelters/YDJCJnuLGMC9mWOWDSOa"
+      },
+      {
+        "id": "r5vcdvHGknygMA1I7V1P",
+        "data": {
+          "name": "La Maison Benoît Labre",
+          "location": "Montreal, QC",
+          "address": "1857 Boulevard de Maisonneuve Ouest, Montreal, QC H3H 1J9",
+          "coordinates": {
+            "lat": 45.4919,
+            "lng": -73.5804
+          },
+          "type": "Emergency Shelter",
+          "capacity": 60,
+          "currentOccupancy": 21,
+          "participants": 36,
+          "totalDonations": 48888,
+          "status": "active",
+          "complianceScore": 85,
+          "lastInspection": "2024-10-18",
+          "contact": {
+            "name": "Shelter Coordinator",
+            "email": "info@maisonbenoitlabre.org",
+            "phone": "514-932-0314"
+          },
+          "joinDate": "2023-05-08",
+          "rating": 5,
+          "tenantId": "platform",
+          "createdAt": {
+            "_seconds": 1753407065,
+            "_nanoseconds": 459000000
+          },
+          "updatedAt": {
+            "_seconds": 1753407065,
+            "_nanoseconds": 459000000
+          }
+        },
+        "path": "tenants/platform/shelters/r5vcdvHGknygMA1I7V1P"
+      },
+      {
+        "id": "rEQetmfNnbYljmxUuKjD",
+        "data": {
+          "name": "Montreal SPCA (Emergency Animal Shelter)",
+          "location": "Montreal, QC",
+          "address": "5215 Jean-Talon Street West, Montreal, QC H4P 1X4",
+          "coordinates": {
+            "lat": 45.5347,
+            "lng": -73.6292
+          },
+          "type": "Emergency Shelter",
+          "capacity": 150,
+          "currentOccupancy": 84,
+          "participants": 43,
+          "totalDonations": 134658,
+          "status": "active",
+          "complianceScore": 85,
+          "lastInspection": "2024-11-10",
+          "contact": {
+            "name": "Emergency Services Manager",
+            "email": "info@spca.com",
+            "phone": "514-735-2711"
+          },
+          "joinDate": "2023-07-22",
+          "rating": 4,
+          "tenantId": "platform",
+          "createdAt": {
+            "_seconds": 1753407065,
+            "_nanoseconds": 624000000
+          },
+          "updatedAt": {
+            "_seconds": 1753407065,
+            "_nanoseconds": 624000000
+          }
+        },
+        "path": "tenants/platform/shelters/rEQetmfNnbYljmxUuKjD"
+      },
+      {
+        "id": "w9QRFH329vb3iD9B5mJ3",
+        "data": {
+          "name": "Patricia Mackenzie Pavilion (Women's Shelter)",
+          "location": "Montreal, QC",
+          "address": "1301 Boulevard de Maisonneuve E, Montreal, QC H2L 2A5",
+          "coordinates": {
+            "lat": 45.5168,
+            "lng": -73.5527
+          },
+          "type": "Family Shelter",
+          "capacity": 85,
+          "currentOccupancy": 61,
+          "participants": 73,
+          "totalDonations": 143696,
+          "status": "active",
+          "complianceScore": 87,
+          "lastInspection": "2024-11-18",
+          "contact": {
+            "name": "Women's Services Coordinator",
+            "email": "women@oldbrewerymission.ca",
+            "phone": "514-526-6446"
+          },
+          "joinDate": "2023-02-14",
+          "rating": 4,
+          "tenantId": "platform",
+          "createdAt": {
+            "_seconds": 1753407065,
+            "_nanoseconds": 580000000
+          },
+          "updatedAt": {
+            "_seconds": 1753407065,
+            "_nanoseconds": 580000000
+          }
+        },
+        "path": "tenants/platform/shelters/w9QRFH329vb3iD9B5mJ3"
+      },
+      {
+        "id": "xNY2WCqj7FVBDGy3sa3E",
+        "data": {
+          "name": "Maison du Père",
+          "location": "Montreal, QC",
+          "address": "550 Boulevard René-Lévesque East, Montreal, QC H2L 2L3",
+          "coordinates": {
+            "lat": 45.5127,
+            "lng": -73.554
+          },
+          "type": "Emergency Shelter",
+          "capacity": 170,
+          "currentOccupancy": 163,
+          "participants": 85,
+          "totalDonations": 224394,
+          "status": "active",
+          "complianceScore": 98,
+          "lastInspection": "2024-11-05",
+          "contact": {
+            "name": "Services Manager",
+            "email": "info@maisondupere.org",
+            "phone": "514-845-0168"
+          },
+          "joinDate": "2023-04-12",
+          "rating": 4,
+          "tenantId": "platform",
+          "createdAt": {
+            "_seconds": 1753407065,
+            "_nanoseconds": 408000000
+          },
+          "updatedAt": {
+            "_seconds": 1753407065,
+            "_nanoseconds": 408000000
+          }
+        },
+        "path": "tenants/platform/shelters/xNY2WCqj7FVBDGy3sa3E"
+      },
+      {
+        "id": "yKXpMJNAndzPcVfEI9dD",
+        "data": {
+          "name": "Welcome Hall Mission",
+          "location": "Montreal, QC",
+          "address": "4755 Acorn Street, Montreal, QC H4C 3L6",
+          "coordinates": {
+            "lat": 45.4762,
+            "lng": -73.5895
+          },
+          "type": "Emergency Shelter",
+          "capacity": 200,
+          "currentOccupancy": 191,
+          "participants": 133,
+          "totalDonations": 279725,
+          "status": "active",
+          "complianceScore": 94,
+          "lastInspection": "2024-11-20",
+          "contact": {
+            "name": "Mission Director",
+            "email": "info@welcomehallmission.com",
+            "phone": "514-935-6396"
+          },
+          "joinDate": "2023-01-15",
+          "rating": 5,
+          "tenantId": "platform",
+          "createdAt": {
+            "_seconds": 1753407065,
+            "_nanoseconds": 371000000
+          },
+          "updatedAt": {
+            "_seconds": 1753407065,
+            "_nanoseconds": 371000000
+          }
+        },
+        "path": "tenants/platform/shelters/yKXpMJNAndzPcVfEI9dD"
+      }
+    ],
+    "tenants": [
+      {
+        "id": "Vc48fjy0cajJrstbLQRr",
+        "data": {
+          "name": "SHELTR Platform",
+          "type": "platform",
+          "status": "active",
+          "organization": {
+            "legalName": "SHELTR Technologies Inc.",
+            "address": {
+              "street": "123 Innovation Drive",
+              "city": "Vancouver",
+              "state": "BC",
+              "zipCode": "V6B 1A1",
+              "country": "Canada",
+              "coordinates": {
+                "lat": 49.2827,
+                "lng": -123.1207
+              }
+            },
+            "contact": {
+              "phone": "+1-604-555-0100",
+              "email": "platform@sheltr.ai",
+              "website": "https://sheltr.ai",
+              "socialMedia": {
+                "twitter": "@sheltr_ai",
+                "linkedin": "company/sheltr-ai"
+              }
+            },
+            "registration": {
+              "number": "BC1234567",
+              "country": "Canada",
+              "verified": true
+            }
+          },
+          "settings": {
+            "timezone": "America/Vancouver",
+            "currency": "CAD",
+            "language": "en",
+            "features": [
+              "multi_tenant",
+              "blockchain_integration",
+              "ai_analytics",
+              "mobile_apps",
+              "api_access",
+              "white_label"
+            ],
+            "branding": {
+              "colors": {
+                "primary": "#2563eb",
+                "secondary": "#7c3aed",
+                "accent": "#059669"
+              }
+            }
+          },
+          "subscription": {
+            "plan": "enterprise",
+            "status": "active",
+            "billingCycle": "yearly",
+            "limits": {
+              "maxUsers": -1,
+              "maxParticipants": -1,
+              "maxDonationsPerMonth": -1
+            }
+          },
+          "security": {
+            "dataRegion": "northamerica-northeast1",
+            "encryptionEnabled": true,
+            "auditLogsRetentionDays": 2555,
+            "mfaRequired": true
+          },
+          "createdAt": {
+            "_seconds": 1753391816,
+            "_nanoseconds": 175000000
+          },
+          "updatedAt": {
+            "_seconds": 1753391816,
+            "_nanoseconds": 175000000
+          },
+          "createdBy": "system"
+        },
+        "path": "tenants/Vc48fjy0cajJrstbLQRr",
+        "subcollections": []
+      },
+      {
+        "id": "jUOTh8Vhr8JX2CkAeZGi",
+        "data": {
+          "name": "SHELTR Platform",
+          "type": "platform",
+          "status": "active",
+          "organization": {
+            "legalName": "SHELTR Technologies Inc.",
+            "address": {
+              "street": "123 Innovation Drive",
+              "city": "Vancouver",
+              "state": "BC",
+              "zipCode": "V6B 1A1",
+              "country": "Canada",
+              "coordinates": {
+                "lat": 49.2827,
+                "lng": -123.1207
+              }
+            },
+            "contact": {
+              "phone": "+1-604-555-0100",
+              "email": "platform@sheltr.ai",
+              "website": "https://sheltr.ai",
+              "socialMedia": {
+                "twitter": "@sheltr_ai",
+                "linkedin": "company/sheltr-ai"
+              }
+            },
+            "registration": {
+              "number": "BC1234567",
+              "country": "Canada",
+              "verified": true
+            }
+          },
+          "settings": {
+            "timezone": "America/Vancouver",
+            "currency": "CAD",
+            "language": "en",
+            "features": [
+              "multi_tenant",
+              "blockchain_integration",
+              "ai_analytics",
+              "mobile_apps",
+              "api_access",
+              "white_label"
+            ],
+            "branding": {
+              "colors": {
+                "primary": "#2563eb",
+                "secondary": "#7c3aed",
+                "accent": "#059669"
+              }
+            }
+          },
+          "subscription": {
+            "plan": "enterprise",
+            "status": "active",
+            "billingCycle": "yearly",
+            "limits": {
+              "maxUsers": -1,
+              "maxParticipants": -1,
+              "maxDonationsPerMonth": -1
+            }
+          },
+          "security": {
+            "dataRegion": "northamerica-northeast1",
+            "encryptionEnabled": true,
+            "auditLogsRetentionDays": 2555,
+            "mfaRequired": true
+          },
+          "createdAt": {
+            "_seconds": 1753390505,
+            "_nanoseconds": 41000000
+          },
+          "updatedAt": {
+            "_seconds": 1753390505,
+            "_nanoseconds": 41000000
+          },
+          "createdBy": "system"
+        },
+        "path": "tenants/jUOTh8Vhr8JX2CkAeZGi",
+        "subcollections": []
+      }
+    ]
+  }
+}

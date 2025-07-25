@@ -24,9 +24,14 @@ import * as logger from "firebase-functions/logger";
 // functions should each use functions.runWith({ maxInstances: 10 }) instead.
 // In the v1 API, each function can only serve one request per container, so
 // this will be the maximum concurrent request count.
-setGlobalOptions({ maxInstances: 10 });
+setGlobalOptions({maxInstances: 10});
 
-// export const helloWorld = onRequest((request, response) => {
-//   logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
+// Basic health check endpoint
+export const health = onRequest((request, response) => {
+  logger.info("Health check requested", {structuredData: true});
+  response.json({
+    status: "healthy",
+    timestamp: new Date().toISOString(),
+    service: "sheltr-ai-functions",
+  });
+});

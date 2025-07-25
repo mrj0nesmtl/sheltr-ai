@@ -1,0 +1,21 @@
+
+=== Deploying to 'sheltr-ai'...
+
+i  deploying functions
+Running command: npm --prefix "$RESOURCE_DIR" run lint
+
+> lint
+> eslint --ext .js,.ts .
+
+
+/Users/mrjones/Github/Projects/sheltr-ai/functions/src/index.ts
+  11:9   warning  'onRequest' is defined but never used  @typescript-eslint/no-unused-vars
+  12:13  warning  'logger' is defined but never used     @typescript-eslint/no-unused-vars
+  27:19  error    There should be no space after '{'     object-curly-spacing
+  27:36  error    There should be no space before '}'    object-curly-spacing
+
+✖ 4 problems (2 errors, 2 warnings)
+  2 errors and 0 warnings potentially fixable with the `--fix` option.
+
+
+Error: functions predeploy error: Command terminated with non-zero exit code 1

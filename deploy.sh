@@ -50,12 +50,12 @@ deploy_frontend() {
     
     # Install dependencies
     echo -e "${YELLOW}📦 Installing frontend dependencies...${NC}"
-    npm install > ../logs/deploy-frontend-install.log 2>&1
+    npm install > ../../logs/deploy-frontend-install.log 2>&1
     check_status "Frontend dependency installation"
     
     # Build the application
     echo -e "${YELLOW}🔨 Building Next.js application...${NC}"
-    npm run build > ../logs/deploy-frontend-build.log 2>&1
+    npm run build > ../../logs/deploy-frontend-build.log 2>&1
     check_status "Frontend build"
     
     # Deploy to Firebase Hosting

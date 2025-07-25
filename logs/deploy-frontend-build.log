@@ -1,0 +1,53 @@
+
+> web@0.1.0 build
+> next build
+
+   ▲ Next.js 15.4.3
+   - Environments: .env.local
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 1000ms
+   Skipping linting
+   Checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/22) ...
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+   Generating static pages (5/22) 
+   Generating static pages (10/22) 
+   Generating static pages (16/22) 
+ ✓ Generating static pages (22/22)
+   Finalizing page optimization ...
+   Collecting build traces ...
+   Exporting (0/3) ...
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ ✓ Exporting (3/3)
+
+Route (app)                                 Size  First Load JS
+┌ ○ /                                    5.38 kB         118 kB
+├ ○ /_not-found                            994 B         101 kB
+├ ○ /about                               2.74 kB         115 kB
+├ ○ /dashboard                           4.96 kB         232 kB
+├ ○ /dashboard/analytics                  5.8 kB         121 kB
+├ ○ /dashboard/financial                 5.31 kB         121 kB
+├ ○ /dashboard/platform                  4.75 kB         114 kB
+├ ○ /dashboard/security                  5.45 kB         121 kB
+├ ○ /dashboard/shelters                  15.4 kB         350 kB
+├ ○ /dashboard/users                     8.71 kB         343 kB
+├ ○ /impact                               4.1 kB         117 kB
+├ ○ /login                               4.58 kB         222 kB
+├ ○ /register                            5.21 kB         222 kB
+├ ○ /scan-give                           2.74 kB         115 kB
+├ ○ /solutions                           2.74 kB         115 kB
+├ ○ /solutions/donors                    2.74 kB         115 kB
+├ ○ /solutions/government                2.74 kB         115 kB
+├ ○ /solutions/organizations             2.74 kB         115 kB
+├ ○ /solutions/participants              2.74 kB         115 kB
+└ ○ /tokenomics                          2.74 kB         115 kB
++ First Load JS shared by all            99.7 kB
+  ├ chunks/4bd1b696-cf72ae8a39fa05aa.js  54.1 kB
+  ├ chunks/964-5ee27fd6b313b705.js       43.7 kB
+  └ other shared chunks (total)          1.93 kB
+
+
+○  (Static)  prerendered as static content
+

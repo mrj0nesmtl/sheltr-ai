@@ -1,0 +1,16 @@
+
+=== Deploying to 'sheltr-ai'...
+
+i  deploying hosting
+i  hosting[sheltr-ai]: beginning deploy...
+i  hosting[sheltr-ai]: found 116 files in apps/web/out
+✔  hosting[sheltr-ai]: file upload complete
+i  hosting[sheltr-ai]: finalizing version...
+✔  hosting[sheltr-ai]: version finalized
+i  hosting[sheltr-ai]: releasing new version...
+✔  hosting[sheltr-ai]: release complete
+
+✔  Deploy complete!
+
+Project Console: https://console.firebase.google.com/project/sheltr-ai/overview
+Hosting URL: https://sheltr-ai.web.app

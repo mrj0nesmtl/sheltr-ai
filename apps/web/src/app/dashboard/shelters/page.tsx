@@ -19,6 +19,7 @@ import {
   AlertTriangle,
   Search,
   Filter,
+  X,
   Download,
   Plus,
   Eye,
@@ -39,13 +40,74 @@ export default function ShelterNetwork() {
   const [pendingApplications, setPendingApplications] = useState<PendingApplication[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
+  
+  // Filtering state
+  const [filters, setFilters] = useState({
+    location: '',
+    status: '',
+    type: '',
+    occupancyLevel: '', // 'low', 'medium', 'high', 'at_capacity'
+    searchTerm: ''
+  });
+
+  // Filter shelters based on current filters
+  const filteredShelters = shelters.filter(shelter => {
+    const matchesLocation = !filters.location || shelter.location.toLowerCase().includes(filters.location.toLowerCase());
+    const matchesStatus = !filters.status || shelter.status === filters.status;
+    const matchesType = !filters.type || shelter.type === filters.type;
+    const matchesSearch = !filters.searchTerm || 
+      shelter.name.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
+      shelter.location.toLowerCase().includes(filters.searchTerm.toLowerCase());
+    
+    let matchesOccupancy = true;
+    if (filters.occupancyLevel) {
+      const occupancyPercentage = (shelter.currentOccupancy / shelter.capacity) * 100;
+      switch (filters.occupancyLevel) {
+        case 'low':
+          matchesOccupancy = occupancyPercentage < 50;
+          break;
+        case 'medium':
+          matchesOccupancy = occupancyPercentage >= 50 && occupancyPercentage < 80;
+          break;
+        case 'high':
+          matchesOccupancy = occupancyPercentage >= 80 && occupancyPercentage < 95;
+          break;
+        case 'at_capacity':
+          matchesOccupancy = occupancyPercentage >= 95;
+          break;
+      }
+    }
+    
+    return matchesLocation && matchesStatus && matchesType && matchesSearch && matchesOccupancy;
+  });
+
+  // Get unique values for filter options
+  const uniqueLocations = [...new Set(shelters.map(s => s.location))];
+  const uniqueStatuses = [...new Set(shelters.map(s => s.status))];
+  const uniqueTypes = [...new Set(shelters.map(s => s.type))];
+
+  // Update filters
+  const updateFilter = (key: string, value: string) => {
+    setFilters(prev => ({ ...prev, [key]: value }));
+  };
+
+  // Clear all filters
+  const clearFilters = () => {
+    setFilters({
+      location: '',
+      status: '',
+      type: '',
+      occupancyLevel: '',
+      searchTerm: ''
+    });
+  };
 
   // Load data from Firestore
   const loadData = async () => {
     setLoading(true);
     try {
       const [sheltersData, applicationsData] = await Promise.all([
-        firestoreService.getShelters(),
+        firestoreService.getShelterOrganizations(),
         firestoreService.getPendingApplications()
       ]);
       
@@ -62,31 +124,32 @@ export default function ShelterNetwork() {
     loadData();
   }, []);
 
-  // Calculate metrics from live data
+  // Calculate metrics from filtered data (for display) and raw data (for context)
   const shelterMetrics = {
-    totalShelters: shelters.length,
-    activeShelters: shelters.filter(s => s.status === 'active').length,
+    totalShelters: filteredShelters.length,
+    allShelters: shelters.length, // Keep original count for "of X shelters" display
+    activeShelters: filteredShelters.filter(s => s.status === 'active').length,
     pendingApplications: pendingApplications.length,
-    averageOccupancy: shelters.length > 0 
-      ? Math.round(shelters.reduce((acc, s) => acc + (s.capacity > 0 ? (s.currentOccupancy / s.capacity * 100) : 0), 0) / shelters.length * 10) / 10
+    averageOccupancy: filteredShelters.length > 0 
+      ? Math.round(filteredShelters.reduce((acc, s) => acc + (s.capacity > 0 ? ((s.currentOccupancy || 0) / s.capacity * 100) : 0), 0) / filteredShelters.length * 10) / 10
       : 0,
-    totalCapacity: shelters.reduce((acc, s) => acc + s.capacity, 0),
-    currentOccupants: shelters.reduce((acc, s) => acc + s.currentOccupancy, 0),
+    totalCapacity: filteredShelters.reduce((acc, s) => acc + s.capacity, 0),
+    currentOccupants: filteredShelters.reduce((acc, s) => acc + (s.currentOccupancy || 0), 0),
     monthlyGrowth: 8.2, // This would come from historical data
-    complianceScore: shelters.length > 0 
-      ? Math.round(shelters.reduce((acc, s) => acc + s.complianceScore, 0) / shelters.length * 10) / 10
+    complianceScore: filteredShelters.length > 0 
+      ? Math.round(filteredShelters.reduce((acc, s) => acc + (s.complianceScore || 0), 0) / filteredShelters.length * 10) / 10
       : 0
   };
 
-  const performanceMetrics = shelters
+  const performanceMetrics = filteredShelters
     .filter(s => s.status === 'active')
-    .sort((a, b) => b.rating - a.rating)
+    .sort((a, b) => (b.rating || 0) - (a.rating || 0))
     .map(shelter => ({
       shelter: shelter.name,
-      rating: shelter.rating,
-      donations: shelter.totalDonations,
-      participants: shelter.participants,
-      efficiency: shelter.complianceScore
+      rating: shelter.rating || 0,
+      donations: shelter.totalDonations || 0,
+      participants: shelter.participants || 0,
+      efficiency: shelter.complianceScore || 0
     }));
 
   const getStatusColor = (status: string) => {
@@ -249,6 +312,92 @@ export default function ShelterNetwork() {
         </Card>
       </div>
 
+      {/* Global Filter Bar */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center">
+            <Filter className="mr-2 h-5 w-5" />
+            Global Filters
+          </CardTitle>
+          <CardDescription>Filter shelters across all views (Overview, Map, Directory)</CardDescription>
+        </CardHeader>
+        <CardContent className="p-4">
+          <div className="flex flex-wrap items-center gap-4">
+            <div className="flex items-center space-x-2">
+              <Search className="h-4 w-4 text-muted-foreground" />
+              <input
+                type="text"
+                placeholder="Search shelters..."
+                value={filters.searchTerm}
+                onChange={(e) => updateFilter('searchTerm', e.target.value)}
+                className="px-3 py-2 border rounded-md text-sm w-48 bg-background"
+              />
+            </div>
+            
+            <select
+              value={filters.location}
+              onChange={(e) => updateFilter('location', e.target.value)}
+              className="px-3 py-2 border rounded-md text-sm bg-background"
+            >
+              <option value="">All Locations</option>
+              {uniqueLocations.map(location => (
+                <option key={location} value={location}>{location}</option>
+              ))}
+            </select>
+            
+            <select
+              value={filters.type}
+              onChange={(e) => updateFilter('type', e.target.value)}
+              className="px-3 py-2 border rounded-md text-sm bg-background"
+            >
+              <option value="">All Types</option>
+              {uniqueTypes.map(type => (
+                <option key={type} value={type}>{type.replace('_', ' ')}</option>
+              ))}
+            </select>
+            
+            <select
+              value={filters.status}
+              onChange={(e) => updateFilter('status', e.target.value)}
+              className="px-3 py-2 border rounded-md text-sm bg-background"
+            >
+              <option value="">All Status</option>
+              {uniqueStatuses.map(status => (
+                <option key={status} value={status}>{status}</option>
+              ))}
+            </select>
+            
+            <select
+              value={filters.occupancyLevel}
+              onChange={(e) => updateFilter('occupancyLevel', e.target.value)}
+              className="px-3 py-2 border rounded-md text-sm bg-background"
+            >
+              <option value="">All Occupancy</option>
+              <option value="low">Low (&lt;50%)</option>
+              <option value="medium">Medium (50-80%)</option>
+              <option value="high">High (80-95%)</option>
+              <option value="at_capacity">At Capacity (95%+)</option>
+            </select>
+            
+            {(filters.searchTerm || filters.location || filters.status || filters.type || filters.occupancyLevel) && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={clearFilters}
+                className="flex items-center space-x-1"
+              >
+                <X className="h-3 w-3" />
+                <span>Clear All</span>
+              </Button>
+            )}
+            
+            <div className="text-sm text-muted-foreground font-medium">
+              Showing {filteredShelters.length} of {shelters.length} shelters
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Main Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
         <TabsList className="grid w-full grid-cols-5">
@@ -371,7 +520,7 @@ export default function ShelterNetwork() {
                 </div>
                 <div className="flex items-center space-x-2">
                   <div className="w-4 h-4 rounded-full bg-blue-500"></div>
-                  <span className="text-sm">Low Occupancy (<75%)</span>
+                  <span className="text-sm">Low Occupancy (&lt;75%)</span>
                 </div>
               </div>
             </CardContent>

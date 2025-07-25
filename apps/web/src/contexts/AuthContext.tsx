@@ -26,7 +26,7 @@ export interface CustomClaims {
 
 export interface AuthUser extends User {
   role?: UserRole;
-  tenantId?: string;
+  sheltrTenantId?: string;
   permissions?: string[];
   shelterId?: string;
   customClaims?: CustomClaims;
@@ -94,21 +94,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       return {
         ...firebaseUser,
         role: customClaims.role,
-        tenantId: customClaims.tenant_id,
+        sheltrTenantId: customClaims.tenant_id,
         permissions: customClaims.permissions || [],
         shelterId: customClaims.shelter_id,
         customClaims
       };
     } catch (error) {
       console.error('Error extracting custom claims:', error);
-      return {
-        ...firebaseUser,
-        role: undefined,
-        tenantId: undefined,
-        permissions: [],
-        shelterId: undefined,
-        customClaims: {}
-      };
+              return {
+          ...firebaseUser,
+          role: undefined,
+          sheltrTenantId: undefined,
+          permissions: [],
+          shelterId: undefined,
+          customClaims: {}
+        };
     }
   };
 

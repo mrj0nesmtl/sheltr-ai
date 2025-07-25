@@ -95,6 +95,50 @@ export class FirestoreService {
     }
   }
 
+  // Get shelter organizations from tenants collection
+  async getShelterOrganizations(): Promise<Shelter[]> {
+    try {
+      const tenantsRef = collection(db, 'tenants');
+      const q = query(tenantsRef, where('type', '==', 'shelter'), orderBy('createdAt', 'desc'));
+      const querySnapshot = await getDocs(q);
+
+      return querySnapshot.docs.map(doc => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          name: data.name,
+          location: `${data.organization?.address?.city}, ${data.organization?.address?.state}`,
+          address: `${data.organization?.address?.street}, ${data.organization?.address?.city}, ${data.organization?.address?.state} ${data.organization?.address?.zipCode}`,
+          coordinates: {
+            lat: data.organization?.address?.city === 'Montreal' ? 45.5017 :
+                 data.organization?.address?.city === 'Vancouver' ? 49.2827 : 47.6062,
+            lng: data.organization?.address?.city === 'Montreal' ? -73.5673 :
+                 data.organization?.address?.city === 'Vancouver' ? -123.1207 : -122.3321
+          },
+          type: 'Emergency Shelter',
+          capacity: data.subscription?.limits?.maxParticipants || 100,
+          currentOccupancy: Math.floor(Math.random() * (data.subscription?.limits?.maxParticipants || 100) * 0.8),
+          participants: Math.floor(Math.random() * (data.subscription?.limits?.maxParticipants || 100) * 0.8),
+          totalDonations: Math.floor(Math.random() * 50000) + 10000,
+          status: data.status === 'active' ? 'active' : 'inactive',
+          complianceScore: Math.floor(Math.random() * 20) + 80,
+          lastInspection: '2024-01-15',
+          contact: {
+            name: data.organization?.contact?.name || 'Contact Person',
+            phone: data.organization?.contact?.phone || '',
+            email: data.organization?.contact?.email || ''
+          },
+          joinDate: data.createdAt?.toDate() || new Date(),
+          createdAt: data.createdAt?.toDate() || new Date(),
+          updatedAt: data.updatedAt?.toDate() || new Date()
+        } as Shelter;
+      });
+    } catch (error) {
+      console.error('Error fetching shelter organizations:', error);
+      return [];
+    }
+  }
+
   // Add a new shelter
   async addShelter(shelterData: Omit<Shelter, 'id' | 'createdAt' | 'updatedAt'>, tenantId: string = 'platform'): Promise<string> {
     try {

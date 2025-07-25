@@ -1,222 +1,255 @@
 "use client";
 
 import { useAuth } from '@/contexts/AuthContext';
-import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
-import { useRouter } from 'next/navigation';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { 
+  Users, 
+  Building2, 
+  DollarSign, 
+  TrendingUp, 
+  ArrowUpRight,
+  Activity,
+  CreditCard,
+  Bell
+} from 'lucide-react';
 
-// Role-specific dashboard components
-const SuperAdminDashboard = () => (
-  <div className="space-y-6">
-    <div className="bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg p-6 text-white">
-      <h2 className="text-2xl font-bold mb-2">Super Admin Dashboard</h2>
-      <p>Complete platform oversight and management</p>
-    </div>
-    
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
-        <h3 className="font-semibold text-lg mb-2">Platform Management</h3>
-        <p className="text-gray-600 dark:text-gray-400 mb-4">Manage all platform operations</p>
-        <button className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">
-          Access Admin Panel
-        </button>
-      </div>
-      
-      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
-        <h3 className="font-semibold text-lg mb-2">User Management</h3>
-        <p className="text-gray-600 dark:text-gray-400 mb-4">Manage all user accounts and roles</p>
-        <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-          Manage Users
-        </button>
-      </div>
-      
-      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
-        <h3 className="font-semibold text-lg mb-2">Analytics</h3>
-        <p className="text-gray-600 dark:text-gray-400 mb-4">Platform-wide analytics and insights</p>
-        <button className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
-          View Analytics
-        </button>
-      </div>
-    </div>
-  </div>
-);
+// Mock data for platform overview
+const mockMetrics = {
+  totalUsers: 2847,
+  totalShelters: 156,
+  totalDonations: 89234.67,
+  monthlyGrowth: 12.5,
+  activeParticipants: 1203,
+  recentDonations: 45,
+  platformRevenue: 4461.73,
+  systemHealth: 99.2
+};
 
-const AdminDashboard = () => (
-  <div className="space-y-6">
-    <div className="bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg p-6 text-white">
-      <h2 className="text-2xl font-bold mb-2">Shelter Admin Dashboard</h2>
-      <p>Manage your shelter operations and participants</p>
-    </div>
-    
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
-        <h3 className="font-semibold text-lg mb-2">Participant Management</h3>
-        <p className="text-gray-600 dark:text-gray-400 mb-4">Manage participants in your shelter</p>
-        <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-          Manage Participants
-        </button>
-      </div>
-      
-      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
-        <h3 className="font-semibold text-lg mb-2">Donation Tracking</h3>
-        <p className="text-gray-600 dark:text-gray-400 mb-4">Track donations to your shelter</p>
-        <button className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
-          View Donations
-        </button>
-      </div>
-    </div>
-  </div>
-);
+const recentActivity = [
+  {
+    id: 1,
+    type: 'donation',
+    description: 'New donation to Downtown Shelter',
+    amount: '$125.00',
+    time: '2 minutes ago'
+  },
+  {
+    id: 2,
+    type: 'user',
+    description: 'New participant registered',
+    shelter: 'Hope Center',
+    time: '5 minutes ago'
+  },
+  {
+    id: 3,
+    type: 'shelter',
+    description: 'Riverside Shelter application approved',
+    time: '12 minutes ago'
+  },
+  {
+    id: 4,
+    type: 'donation',
+    description: 'Large donation received',
+    amount: '$500.00',
+    time: '18 minutes ago'
+  }
+];
 
-const ParticipantDashboard = () => (
-  <div className="space-y-6">
-    <div className="bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg p-6 text-white">
-      <h2 className="text-2xl font-bold mb-2">Participant Dashboard</h2>
-      <p>Access your support services and track your journey</p>
-    </div>
-    
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
-        <h3 className="font-semibold text-lg mb-2">My Profile</h3>
-        <p className="text-gray-600 dark:text-gray-400 mb-4">Manage your personal information</p>
-        <button className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
-          Edit Profile
-        </button>
-      </div>
-      
-      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
-                        <h3 className="font-semibold text-lg mb-2">SHELTR Services</h3>
-                <p className="text-gray-600 dark:text-gray-400 mb-4">Access available SHELTR services</p>
-        <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-          View Services
-        </button>
-      </div>
-    </div>
-  </div>
-);
+export default function DashboardOverview() {
+  const { user } = useAuth();
 
-const DonorDashboard = () => (
-  <div className="space-y-6">
-    <div className="bg-gradient-to-r from-orange-500 to-red-500 rounded-lg p-6 text-white">
-      <h2 className="text-2xl font-bold mb-2">Donor Dashboard</h2>
-      <p>Track your impact and make new donations</p>
-    </div>
-    
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
-        <h3 className="font-semibold text-lg mb-2">My Donations</h3>
-        <p className="text-gray-600 dark:text-gray-400 mb-4">Track your donation history</p>
-        <button className="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-700">
-          View History
-        </button>
+  // Only show Super Admin content for super_admin role
+  if (user?.role !== 'super_admin') {
+    return (
+      <div className="text-center py-12">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+          Access Restricted
+        </h2>
+        <p className="text-gray-600 dark:text-gray-400">
+          Super Admin access required for this dashboard.
+        </p>
       </div>
-      
-      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
-        <h3 className="font-semibold text-lg mb-2">Make Donation</h3>
-        <p className="text-gray-600 dark:text-gray-400 mb-4">Support individuals and shelters</p>
-        <button className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
-          Donate Now
-        </button>
-      </div>
-    </div>
-  </div>
-);
-
-export default function DashboardPage() {
-  const { user, logout } = useAuth();
-  const router = useRouter();
-
-  const handleLogout = async () => {
-    try {
-      await logout();
-      router.push('/');
-    } catch (error) {
-      console.error('Logout failed:', error);
-    }
-  };
-
-  const renderDashboard = () => {
-    switch (user?.role) {
-      case 'super_admin':
-        return <SuperAdminDashboard />;
-      case 'admin':
-        return <AdminDashboard />;
-      case 'participant':
-        return <ParticipantDashboard />;
-      case 'donor':
-        return <DonorDashboard />;
-      default:
-        return (
-          <div className="text-center py-12">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-              Welcome to SHELTR
-            </h2>
-            <p className="text-gray-600 dark:text-gray-400">
-              Your account is being set up. Please contact support if this persists.
-            </p>
-          </div>
-        );
-    }
-  };
+    );
+  }
 
   return (
-    <ProtectedRoute>
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-        {/* Header */}
-        <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center h-16">
-              <div className="flex items-center">
-                <h1 className="text-xl font-bold text-gray-900 dark:text-white">
-                  SHELTR
-                </h1>
-              </div>
-              
-              <div className="flex items-center space-x-4">
-                <div className="text-sm text-gray-700 dark:text-gray-300">
-                  <span className="font-medium">{user?.displayName || user?.email}</span>
-                  <span className="ml-2 px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-100 rounded-full text-xs">
-                    {user?.role?.replace('_', ' ').toUpperCase()}
-                  </span>
-                </div>
-                
-                <button
-                  onClick={handleLogout}
-                  className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  Logout
-                </button>
-              </div>
-            </div>
-          </div>
-        </header>
-
-        {/* Main Content */}
-        <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-          {/* User Info Bar */}
-          <div className="mb-8 bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm">
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                  Welcome back, {user?.displayName?.split(' ')[0] || 'User'}!
-                </h1>
-                <p className="text-gray-600 dark:text-gray-400 mt-1">
-                  Tenant: {user?.tenantId || 'platform'} | 
-                  Email Verified: {user?.emailVerified ? '✅' : '❌'}
-                </p>
-              </div>
-              
-              <div className="text-right">
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  Last login: {new Date().toLocaleDateString()}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Role-specific Dashboard Content */}
-          {renderDashboard()}
-        </main>
+    <div className="space-y-6">
+      {/* Welcome Header */}
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+          Welcome back, {user?.displayName?.split(' ')[0] || 'Joel'}!
+        </h1>
+        <p className="text-gray-600 dark:text-gray-400 mt-2">
+          Platform Overview • Last login: {new Date().toLocaleDateString()} • System Status: ✅ Operational
+        </p>
       </div>
-    </ProtectedRoute>
+
+      {/* Key Metrics Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Users</CardTitle>
+            <Users className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{mockMetrics.totalUsers.toLocaleString()}</div>
+            <p className="text-xs text-muted-foreground">
+              +{mockMetrics.monthlyGrowth}% from last month
+            </p>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Active Shelters</CardTitle>
+            <Building2 className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{mockMetrics.totalShelters}</div>
+            <p className="text-xs text-muted-foreground">
+              Across 12 regions
+            </p>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Donations</CardTitle>
+            <DollarSign className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">${mockMetrics.totalDonations.toLocaleString()}</div>
+            <p className="text-xs text-muted-foreground">
+              +20.1% from last month
+            </p>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Platform Revenue</CardTitle>
+            <TrendingUp className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">${mockMetrics.platformRevenue.toLocaleString()}</div>
+            <p className="text-xs text-muted-foreground">
+              5% of total donations
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Quick Actions & Recent Activity */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Quick Actions */}
+        <Card className="lg:col-span-1">
+          <CardHeader>
+            <CardTitle>Quick Actions</CardTitle>
+            <CardDescription>Common administrative tasks</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <Button className="w-full justify-start" variant="outline">
+              <Users className="mr-2 h-4 w-4" />
+              Approve Pending Users
+            </Button>
+            <Button className="w-full justify-start" variant="outline">
+              <Building2 className="mr-2 h-4 w-4" />
+              Review Shelter Applications
+            </Button>
+            <Button className="w-full justify-start" variant="outline">
+              <Activity className="mr-2 h-4 w-4" />
+              View System Health
+            </Button>
+            <Button className="w-full justify-start" variant="outline">
+              <Bell className="mr-2 h-4 w-4" />
+              Check Alerts
+            </Button>
+          </CardContent>
+        </Card>
+
+        {/* Recent Activity */}
+        <Card className="lg:col-span-2">
+          <CardHeader>
+            <CardTitle>Recent Activity</CardTitle>
+            <CardDescription>Latest platform events and transactions</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {recentActivity.map((activity) => (
+                <div key={activity.id} className="flex items-center space-x-4">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <div className="flex-1 space-y-1">
+                    <p className="text-sm text-gray-900 dark:text-gray-100">
+                      {activity.description}
+                    </p>
+                    <div className="flex items-center space-x-2 text-xs text-muted-foreground">
+                      <span>{activity.time}</span>
+                      {activity.amount && (
+                        <>
+                          <span>•</span>
+                          <span className="font-medium text-green-600">{activity.amount}</span>
+                        </>
+                      )}
+                      {activity.shelter && (
+                        <>
+                          <span>•</span>
+                          <span>{activity.shelter}</span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                  <ArrowUpRight className="h-4 w-4 text-muted-foreground" />
+                </div>
+              ))}
+            </div>
+            <div className="mt-4">
+              <Button variant="outline" className="w-full">
+                View All Activity
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* System Status Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">Active Participants</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-3xl font-bold text-green-600">{mockMetrics.activeParticipants}</div>
+            <p className="text-sm text-muted-foreground mt-2">
+              Currently receiving support
+            </p>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">Recent Donations</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-3xl font-bold text-blue-600">{mockMetrics.recentDonations}</div>
+            <p className="text-sm text-muted-foreground mt-2">
+              In the last 24 hours
+            </p>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">System Health</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-3xl font-bold text-green-600">{mockMetrics.systemHealth}%</div>
+            <p className="text-sm text-muted-foreground mt-2">
+              All systems operational
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
   );
 } 

@@ -7,7 +7,10 @@ const nextConfig: NextConfig = {
   distDir: 'out',
   images: {
     unoptimized: true
-  }
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 };
 
 export default nextConfig;

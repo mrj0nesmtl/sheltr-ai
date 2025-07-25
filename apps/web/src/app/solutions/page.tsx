@@ -1,11 +1,17 @@
+'use client';
+
 import Link from 'next/link';
-import { Home, Building2, Users, Heart, DollarSign, BarChart3, Shield, QrCode, Handshake, MapPin, UserCheck, LogIn } from 'lucide-react';
+import { Home, Building2, Users, Heart, DollarSign, BarChart3, Shield, QrCode, Handshake, MapPin, UserCheck, LogIn, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ThemeToggle } from '@/components/theme-toggle';
+import Footer from '@/components/Footer';
+import ThemeLogo from '@/components/ThemeLogo';
+import { useState } from 'react';
 
 export default function SolutionsPage() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
       {/* Navigation */}
@@ -13,7 +19,7 @@ export default function SolutionsPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link href="/" className="flex items-center">
-              <img src="/logo.svg" alt="SHELTR-AI" className="h-6 w-auto hover:opacity-80 transition-opacity" />
+              <ThemeLogo />
             </Link>
             <div className="hidden md:flex space-x-8">
               <Link href="/" className="text-muted-foreground hover:text-primary transition-colors">Home</Link>
@@ -37,9 +43,42 @@ export default function SolutionsPage() {
                   </Button>
                 </Link>
               </div>
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="md:hidden p-2 text-muted-foreground hover:text-foreground"
+              >
+                {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              </button>
             </div>
           </div>
         </div>
+        
+        {/* Mobile Menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden bg-background border-b">
+            <div className="px-4 py-4 space-y-3">
+              <Link href="/" className="block text-muted-foreground hover:text-primary transition-colors py-2">Home</Link>
+              <Link href="/about" className="block text-muted-foreground hover:text-primary transition-colors py-2">About</Link>
+              <Link href="/solutions" className="block text-foreground hover:text-primary transition-colors py-2">Solutions</Link>
+              <Link href="/scan-give" className="block text-muted-foreground hover:text-primary transition-colors py-2">Scan & Give</Link>
+              <Link href="/tokenomics" className="block text-muted-foreground hover:text-primary transition-colors py-2">Tokenomics</Link>
+              <Link href="/impact" className="block text-muted-foreground hover:text-primary transition-colors py-2">Impact</Link>
+              <div className="border-t pt-4 space-y-3">
+                <Link href="/login" className="block">
+                  <Button variant="ghost" className="w-full justify-start">
+                    <LogIn className="h-4 w-4 mr-2" />
+                    Sign In
+                  </Button>
+                </Link>
+                <Link href="/register" className="block">
+                  <Button className="w-full">
+                    Get Started
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
       </nav>
 
       {/* Hero Section */}
@@ -309,54 +348,7 @@ export default function SolutionsPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-muted py-12">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <Link href="/" className="flex items-center mb-4">
-                <img src="/logo.svg" alt="SHELTR-AI" className="h-6 w-auto hover:opacity-80 transition-opacity" />
-              </Link>
-              <p className="text-muted-foreground text-sm">
-                Hacking homelessness through technology.
-              </p>
-            </div>
-            
-            <div>
-              <h3 className="font-semibold mb-4">Platform</h3>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><Link href="/solutions" className="hover:text-foreground">Solutions</Link></li>
-                <li><Link href="/about" className="hover:text-foreground">About</Link></li>
-                <li><Link href="/scan-give" className="hover:text-foreground">Scan & Give</Link></li>
-              </ul>
-            </div>
-            
-            <div>
-              <h3 className="font-semibold mb-4">Community</h3>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="https://github.com/mrj0nesmtl/sheltr-ai" target="_blank" className="hover:text-foreground">GitHub</a></li>
-                <li><Link href="/tokenomics" className="hover:text-foreground">$SHLTR</Link></li>
-                <li><a href="https://bsky.app/profile/sheltrops.bsky.social" target="_blank" className="hover:text-foreground">BlueSky</a></li>
-                <li><a href="#" className="hover:text-foreground">Wiki</a></li>
-              </ul>
-            </div>
-            
-            <div>
-              <h3 className="font-semibold mb-4">Support</h3>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><Link href="/about" className="hover:text-foreground">Documentation</Link></li>
-                <li><a href="#" className="hover:text-foreground">Wiki</a></li>
-                <li><Link href="/register" className="hover:text-foreground">Help Center</Link></li>
-                <li><Link href="/register" className="hover:text-foreground">Contact</Link></li>
-              </ul>
-            </div>
-          </div>
-          
-          <div className="border-t pt-8 mt-8 text-center text-sm text-muted-foreground">
-            <p>&copy; 2025 SHELTR-AI. Built with ❤️ in memory of Gunnar Blaze.</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 } 

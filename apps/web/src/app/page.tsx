@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { Home, QrCode, BarChart3, Heart, LogIn, Smartphone, Zap, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/theme-toggle';
+import Footer from '@/components/Footer';
+import ThemeLogo from '@/components/ThemeLogo';
 import { useState } from 'react';
 
 export default function HomePage() {
@@ -16,7 +18,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link href="/" className="flex items-center">
-              <img src="/logo.svg" alt="SHELTR-AI" className="h-6 w-auto hover:opacity-80 transition-opacity" />
+              <ThemeLogo />
             </Link>
             <div className="hidden md:flex space-x-8">
               <Link href="/" className="text-foreground hover:text-primary transition-colors">Home</Link>
@@ -201,46 +203,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-muted py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <Link href="/" className="flex items-center mb-4">
-                <img src="/logo.svg" alt="SHELTR-AI" className="h-6 w-auto hover:opacity-80 transition-opacity" />
-              </Link>
-              <p className="text-muted-foreground">Hacking homelessness through technology.</p>
-            </div>
-            <div>
-              <h3 className="font-semibold mb-4">Platform</h3>
-              <ul className="space-y-2 text-muted-foreground">
-                <li><Link href="/solutions" className="hover:text-foreground">Solutions</Link></li>
-                <li><Link href="/about" className="hover:text-foreground">About</Link></li>
-                <li><Link href="/scan-give" className="hover:text-foreground">Scan & Give</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-semibold mb-4">Community</h3>
-              <ul className="space-y-2 text-muted-foreground">
-                <li><a href="#" className="hover:text-foreground">GitHub</a></li>
-                <li><a href="#" className="hover:text-foreground">Discord</a></li>
-                <li><a href="#" className="hover:text-foreground">Twitter</a></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-semibold mb-4">Support</h3>
-              <ul className="space-y-2 text-muted-foreground">
-                <li><a href="#" className="hover:text-foreground">Documentation</a></li>
-                <li><a href="#" className="hover:text-foreground">Help Center</a></li>
-                <li><a href="#" className="hover:text-foreground">Privacy Policy</a></li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t pt-8 mt-8 text-center text-muted-foreground">
-            <p>&copy; 2025 SHELTR-AI. Built with ❤️ in memory of Gunnar Blaze.</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 } 

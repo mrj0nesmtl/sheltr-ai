@@ -23,7 +23,7 @@
  ✓ Exporting (3/3)
 
 Route (app)                                 Size  First Load JS
-┌ ○ /                                    5.38 kB         118 kB
+┌ ○ /                                    5.37 kB         118 kB
 ├ ○ /_not-found                            994 B         101 kB
 ├ ○ /about                               2.74 kB         115 kB
 ├ ○ /dashboard                           4.96 kB         232 kB
@@ -31,7 +31,7 @@ Route (app)                                 Size  First Load JS
 ├ ○ /dashboard/financial                 5.31 kB         121 kB
 ├ ○ /dashboard/platform                  4.75 kB         114 kB
 ├ ○ /dashboard/security                  5.45 kB         121 kB
-├ ○ /dashboard/shelters                  15.4 kB         350 kB
+├ ○ /dashboard/shelters                  15.5 kB         350 kB
 ├ ○ /dashboard/users                     8.71 kB         343 kB
 ├ ○ /impact                               4.1 kB         117 kB
 ├ ○ /login                               4.58 kB         222 kB

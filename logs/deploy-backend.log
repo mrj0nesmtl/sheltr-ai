@@ -7,15 +7,31 @@ Running command: npm --prefix "$RESOURCE_DIR" run lint
 > lint
 > eslint --ext .js,.ts .
 
+Running command: npm --prefix "$RESOURCE_DIR" run build
 
-/Users/mrjones/Github/Projects/sheltr-ai/functions/src/index.ts
-  11:9   warning  'onRequest' is defined but never used  @typescript-eslint/no-unused-vars
-  12:13  warning  'logger' is defined but never used     @typescript-eslint/no-unused-vars
-  27:19  error    There should be no space after '{'     object-curly-spacing
-  27:36  error    There should be no space before '}'    object-curly-spacing
+> build
+> tsc
 
-✖ 4 problems (2 errors, 2 warnings)
-  2 errors and 0 warnings potentially fixable with the `--fix` option.
+✔  functions: Finished running predeploy script.
+i  functions: preparing codebase default for deployment
+i  functions: ensuring required API cloudfunctions.googleapis.com is enabled...
+i  functions: ensuring required API cloudbuild.googleapis.com is enabled...
+i  artifactregistry: ensuring required API artifactregistry.googleapis.com is enabled...
+i  functions: Loading and analyzing source code for codebase default to determine what to deploy
+Serving at port 8891
 
+i  extensions: ensuring required API firebaseextensions.googleapis.com is enabled...
+i  functions: preparing functions directory for uploading...
+i  functions: packaged /Users/mrjones/Github/Projects/sheltr-ai/functions (97.31 KB) for uploading
+i  functions: ensuring required API run.googleapis.com is enabled...
+i  functions: ensuring required API eventarc.googleapis.com is enabled...
+i  functions: ensuring required API pubsub.googleapis.com is enabled...
+i  functions: ensuring required API storage.googleapis.com is enabled...
+i  functions: generating the service identity for pubsub.googleapis.com...
+i  functions: generating the service identity for eventarc.googleapis.com...
+i  functions: Skipping the deploy of unchanged functions.
+✔  functions[health(us-central1)] Skipped (No changes detected)
 
-Error: functions predeploy error: Command terminated with non-zero exit code 1
+✔  Deploy complete!
+
+Project Console: https://console.firebase.google.com/project/sheltr-ai/overview

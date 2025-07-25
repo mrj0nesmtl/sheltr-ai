@@ -1,2 +1,59 @@
+# Dependencies
+node_modules/
+apps/*/node_modules/
+
+# Environment files
+.env
+.env.local
+.env.production
 apps/api/.venv/
 apps/api/service-account-key.json
+
+# Build outputs
+apps/web/out/
+apps/web/.next/
+dist/
+build/
+
+# Logs
+logs/
+*.log
+*.pid
+
+# Temporary files
+*.tmp
+*.temp
+*-debug.log
+*-report.txt
+*-config.json
+migration-config.json
+database-report.txt
+pglite-debug.log
+
+# Firebase
+.firebase/
+*.cache
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Testing
+coverage/
+.nyc_output
+
+# Misc
+*.tgz
+*.tar.gz

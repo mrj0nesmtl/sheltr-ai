@@ -8,9 +8,47 @@
    - Environments: .env.local
 
  ✓ Starting...
- ✓ Ready in 2.1s
+ ✓ Ready in 1808ms
  ○ Compiling / ...
- ✓ Compiled / in 3.6s
+ ✓ Compiled / in 2.4s
  ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
- GET / 200 in 4211ms
- GET / 200 in 107ms
+ GET / 200 in 2919ms
+ GET / 200 in 109ms
+ ✓ Compiled /about in 268ms
+ GET /about 200 in 320ms
+ ✓ Compiled /solutions in 228ms
+ GET /solutions 200 in 289ms
+ ✓ Compiled /scan-give in 225ms
+ GET /scan-give 200 in 270ms
+ ✓ Compiled /impact in 219ms
+ GET /impact 200 in 268ms
+ GET /impact 200 in 47ms
+ ✓ Compiled /register in 171ms
+ GET /register 200 in 215ms
+ GET /scan-give 200 in 46ms
+ GET /solutions 200 in 45ms
+ GET /about 200 in 45ms
+ ✓ Compiled /login in 349ms
+ GET /login 200 in 496ms
+ ✓ Compiled /dashboard in 320ms
+ GET /dashboard 200 in 377ms
+ GET /dashboard 200 in 48ms
+ ✓ Compiled /dashboard/platform in 204ms
+ GET /dashboard/platform 200 in 244ms
+ ○ Compiling /dashboard/users ...
+ ✓ Compiled /dashboard/users in 514ms
+ GET /dashboard/users 200 in 561ms
+ ✓ Compiled /dashboard/shelters in 362ms
+ GET /dashboard/shelters 200 in 432ms
+ ✓ Compiled /dashboard/financial in 232ms
+ GET /dashboard/financial 200 in 284ms
+ ✓ Compiled /dashboard/security in 216ms
+ GET /dashboard/security 200 in 262ms
+ ✓ Compiled /dashboard/analytics in 222ms
+ GET /dashboard/analytics 200 in 270ms
+ GET /dashboard/security 200 in 51ms
+ GET /dashboard/financial 200 in 47ms
+ GET /dashboard/shelters 200 in 49ms
+ GET /dashboard/users 200 in 55ms
+ GET /dashboard/platform 200 in 48ms
+ GET /dashboard 200 in 49ms

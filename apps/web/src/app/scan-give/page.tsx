@@ -1,11 +1,17 @@
+'use client';
+
 import Link from 'next/link';
-import { Home, QrCode, Heart, Shield, Smartphone, ArrowRight, Check, LogIn } from 'lucide-react';
+import { Home, QrCode, Heart, Shield, Smartphone, ArrowRight, Check, LogIn, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ThemeToggle } from '@/components/theme-toggle';
+import Footer from '@/components/Footer';
+import ThemeLogo from '@/components/ThemeLogo';
+import { useState } from 'react';
 
 export default function ScanGivePage() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
       {/* Navigation */}
@@ -13,7 +19,7 @@ export default function ScanGivePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
                          <Link href="/" className="flex items-center">
-               <img src="/logo.svg" alt="SHELTR-AI" className="h-6 w-auto hover:opacity-80 transition-opacity" />
+               <ThemeLogo />
              </Link>
             <div className="hidden md:flex space-x-8">
               <Link href="/" className="text-muted-foreground hover:text-primary transition-colors">Home</Link>
@@ -37,9 +43,42 @@ export default function ScanGivePage() {
                   </Button>
                 </Link>
               </div>
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="md:hidden p-2 text-muted-foreground hover:text-foreground"
+              >
+                {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              </button>
             </div>
           </div>
         </div>
+        
+        {/* Mobile Menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden bg-background border-b">
+            <div className="px-4 py-4 space-y-3">
+              <Link href="/" className="block text-muted-foreground hover:text-primary transition-colors py-2">Home</Link>
+              <Link href="/about" className="block text-muted-foreground hover:text-primary transition-colors py-2">About</Link>
+              <Link href="/solutions" className="block text-muted-foreground hover:text-primary transition-colors py-2">Solutions</Link>
+              <Link href="/scan-give" className="block text-foreground hover:text-primary transition-colors py-2">Scan & Give</Link>
+              <Link href="/tokenomics" className="block text-muted-foreground hover:text-primary transition-colors py-2">Tokenomics</Link>
+              <Link href="/impact" className="block text-muted-foreground hover:text-primary transition-colors py-2">Impact</Link>
+              <div className="border-t pt-4 space-y-3">
+                <Link href="/login" className="block">
+                  <Button variant="ghost" className="w-full justify-start">
+                    <LogIn className="h-4 w-4 mr-2" />
+                    Sign In
+                  </Button>
+                </Link>
+                <Link href="/register" className="block">
+                  <Button className="w-full">
+                    Get Started
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
       </nav>
 
       {/* Hero Section */}
@@ -216,6 +255,8 @@ export default function ScanGivePage() {
           </div>
         </div>
       </section>
+
+      <Footer />
     </div>
   );
 } 

@@ -112,7 +112,7 @@ export default function ShelterNetwork() {
     setLoading(true);
     try {
       const [sheltersData, applicationsData] = await Promise.all([
-        firestoreService.getShelterOrganizations(),
+        firestoreService.getShelters('platform'), // Get shelters from platform/shelters collection
         firestoreService.getPendingApplications()
       ]);
       

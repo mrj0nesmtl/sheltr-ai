@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
-import { Icon, LatLngBounds } from 'leaflet';
+import { Icon, LatLngBounds, DivIcon } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Shelter } from '@/services/firestore';
 import { Badge } from '@/components/ui/badge';
 import { Building2, MapPin, Users, Star, Phone, Mail } from 'lucide-react';
+import ReactDOMServer from 'react-dom/server';
 
 // Fix for default markers in React Leaflet
 const DefaultIcon = new Icon({
@@ -18,21 +19,27 @@ const DefaultIcon = new Icon({
   shadowSize: [41, 41]
 });
 
-// Custom shelter marker icons
-const ShelterIcon = new Icon({
-  iconUrl: '/shelter-marker.svg',
-  iconSize: [32, 32],
-  iconAnchor: [16, 32],
-  popupAnchor: [0, -32],
-});
-
-const PendingShelterIcon = new Icon({
-  iconUrl: '/shelter-marker.svg',
-  iconSize: [24, 24],
-  iconAnchor: [12, 24],
-  popupAnchor: [0, -24],
-  className: 'pending-shelter-marker opacity-60'
-});
+// Red Shelter Pin using Lucide MapPin icon
+const createShelterIcon = (status: string) => {
+  const color = status === 'active' ? '#dc2626' : '#f59e0b'; // Red for active, amber for pending
+  const iconHtml = ReactDOMServer.renderToString(
+    <MapPin 
+      size={20} 
+      fill={color} 
+      stroke="white" 
+      strokeWidth={2}
+      className="drop-shadow-lg"
+    />
+  );
+  
+  return new DivIcon({
+    html: `<div style="background: white; border-radius: 50%; padding: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;">${iconHtml}</div>`,
+    iconSize: [32, 32],
+    iconAnchor: [16, 32],
+    popupAnchor: [0, -32],
+    className: 'custom-shelter-marker'
+  });
+};
 
 interface ShelterMapProps {
   shelters: Shelter[];
@@ -128,7 +135,7 @@ export default function ShelterMap({ shelters, className = '', height = '500px' 
           <Marker
             key={shelter.id}
             position={[shelter.coordinates.lat, shelter.coordinates.lng]}
-            icon={shelter.status === 'active' ? ShelterIcon : PendingShelterIcon}
+            icon={createShelterIcon(shelter.status)}
           >
             <Popup className="shelter-popup" maxWidth={300}>
               <div className="p-2 space-y-3">

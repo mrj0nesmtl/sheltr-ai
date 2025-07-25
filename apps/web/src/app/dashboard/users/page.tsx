@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/contexts/AuthContext';
+import UserMap from '@/components/UserMap';
 import { 
   Users, 
   UserCheck,
@@ -18,6 +19,7 @@ import {
   Search,
   Filter,
   Download,
+  Map,
   MoreHorizontal,
   Eye,
   Edit,
@@ -312,7 +314,7 @@ export default function UserManagement() {
 
       {/* User Management Tabs - Updated with Super Admins */}
       <Tabs defaultValue="super-admins" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="super-admins">
             <Crown className="mr-2 h-4 w-4" />
             Super Admins
@@ -328,6 +330,10 @@ export default function UserManagement() {
           <TabsTrigger value="donors">
             <Heart className="mr-2 h-4 w-4" />
             Donors
+          </TabsTrigger>
+          <TabsTrigger value="map">
+            <Map className="mr-2 h-4 w-4" />
+            User Map
           </TabsTrigger>
         </TabsList>
 
@@ -654,6 +660,24 @@ export default function UserManagement() {
                   </div>
                 ))}
               </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* User Map Tab */}
+        <TabsContent value="map" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <Map className="mr-2 h-5 w-5" />
+                User Location Map
+              </CardTitle>
+              <CardDescription>
+                Interactive map showing participants (orange pins) and donors (green pins) across Montreal
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="p-0">
+              <UserMap height="600px" />
             </CardContent>
           </Card>
         </TabsContent>

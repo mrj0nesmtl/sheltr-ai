@@ -6,13 +6,19 @@ INFO:__main__:📚 API documentation: http://localhost:8000/docs
 INFO:__main__:🏥 Health check: http://localhost:8000/health
 INFO:     Will watch for changes in these directories: ['/Users/mrjones/Github/Projects/sheltr-ai/apps/api']
 INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-INFO:     Started reloader process [6630] using WatchFiles
+INFO:     Started reloader process [10048] using WatchFiles
 /Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
   warnings.warn(
-INFO:     Started server process [6642]
+INFO:     Started server process [10070]
 INFO:     Waiting for application startup.
 INFO:main:🚀 SHELTR-AI API starting up...
 INFO:main:🔐 Authentication system initialized
 INFO:main:🏢 Multi-tenant architecture ready
 INFO:     Application startup complete.
-INFO:     127.0.0.1:59927 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49657 - "GET /health HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:main:🛑 SHELTR-AI API shutting down...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [10070]
+INFO:     Stopping reloader process [10048]

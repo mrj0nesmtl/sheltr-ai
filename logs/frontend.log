@@ -8,25 +8,45 @@
    - Environments: .env.local
 
  ✓ Starting...
- ✓ Ready in 1460ms
+ ✓ Ready in 1212ms
  ○ Compiling / ...
- ✓ Compiled / in 2.4s
+ ✓ Compiled / in 2.5s
  ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
- GET / 200 in 3052ms
- GET / 200 in 1358ms
- ✓ Compiled /login in 222ms
- GET /login 200 in 267ms
- ✓ Compiled /dashboard in 278ms
- GET /dashboard 200 in 325ms
- GET /dashboard 200 in 37ms
- ✓ Compiled /dashboard/shelters in 462ms
- GET /dashboard/shelters 200 in 502ms
- ✓ Compiled in 107ms
- GET /dashboard 200 in 57ms
- ✓ Compiled /dashboard/platform in 305ms
- GET /dashboard/platform 200 in 361ms
- ✓ Compiled in 86ms
- GET / 200 in 594ms
- GET /login 200 in 645ms
- GET /login 200 in 105ms
- GET /login 200 in 154ms
+ GET / 200 in 3151ms
+ GET / 200 in 95ms
+ ✓ Compiled /login in 274ms
+ GET /login 200 in 427ms
+ ✓ Compiled /dashboard in 366ms
+ GET /dashboard 200 in 431ms
+ GET /dashboard 200 in 67ms
+ ✓ Compiled /dashboard/platform in 246ms
+ GET /dashboard/platform 200 in 293ms
+ ✓ Compiled /dashboard/users in 285ms
+ GET /dashboard/users 200 in 336ms
+ ✓ Compiled /dashboard/shelters in 456ms
+ GET /dashboard/shelters 200 in 519ms
+ GET /dashboard/users 200 in 90ms
+ GET /dashboard/users 200 in 55ms
+ GET /dashboard/platform 200 in 38ms
+ GET /dashboard/shelters 200 in 51ms
+ GET /dashboard/users 200 in 53ms
+ GET /dashboard/users 200 in 54ms
+ GET /dashboard/shelters 200 in 56ms
+ GET /dashboard/shelters 200 in 47ms
+ ✓ Compiled in 70ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET /dashboard/shelters 200 in 478ms
+ ✓ Compiled in 277ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ✓ Compiled in 63ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET /dashboard/shelters 200 in 553ms
+ GET /dashboard/users 200 in 55ms
+ ✓ Compiled in 72ms
+ ✓ Compiled in 50ms
+ ✓ Compiled in 283ms
+ ✓ Compiled in 129ms
+ GET / 200 in 444ms
+ GET /login 200 in 438ms
+ GET /login 200 in 166ms
+[?25h

@@ -21,8 +21,15 @@ check_port() {
     if lsof -Pi :$port -sTCP:LISTEN -t >/dev/null ; then
         echo -e "${YELLOW}⚠️  Port $port is already in use (${process_name})${NC}"
         echo -e "${YELLOW}   Killing existing process...${NC}"
-        kill $(lsof -ti:$port) 2>/dev/null || true
-        sleep 2
+        kill -9 $(lsof -ti:$port) 2>/dev/null || true
+        sleep 3
+        
+        # Double check and force kill if still running
+        if lsof -Pi :$port -sTCP:LISTEN -t >/dev/null ; then
+            echo -e "${YELLOW}   Force killing stubborn processes...${NC}"
+            pkill -9 -f "port.*$port" 2>/dev/null || true
+            sleep 2
+        fi
     fi
 }
 
@@ -144,18 +151,22 @@ cleanup() {
     echo -e "\n${YELLOW}🛑 Shutting down services...${NC}"
     
     if [ -f logs/backend.pid ]; then
-        kill $(cat logs/backend.pid) 2>/dev/null || true
+        kill -9 $(cat logs/backend.pid) 2>/dev/null || true
         rm logs/backend.pid
     fi
     
     if [ -f logs/frontend.pid ]; then
-        kill $(cat logs/frontend.pid) 2>/dev/null || true
+        kill -9 $(cat logs/frontend.pid) 2>/dev/null || true
         rm logs/frontend.pid
     fi
     
     # Kill any remaining processes on our ports
-    kill $(lsof -ti:3000) 2>/dev/null || true
-    kill $(lsof -ti:8000) 2>/dev/null || true
+    kill -9 $(lsof -ti:3000) 2>/dev/null || true
+    kill -9 $(lsof -ti:8000) 2>/dev/null || true
+    
+    # Kill any FastAPI or Next.js processes
+    pkill -9 -f "uvicorn.*main:app" 2>/dev/null || true
+    pkill -9 -f "next.*dev" 2>/dev/null || true
     
     echo -e "${GREEN}✅ Services stopped${NC}"
     exit 0

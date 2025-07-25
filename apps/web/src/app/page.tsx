@@ -23,7 +23,6 @@ export default function HomePage() {
               <Link href="/about" className="text-muted-foreground hover:text-primary transition-colors">About</Link>
               <Link href="/solutions" className="text-muted-foreground hover:text-primary transition-colors">Solutions</Link>
               <Link href="/scan-give" className="text-muted-foreground hover:text-primary transition-colors">Scan & Give</Link>
-              <Link href="/tokenomics" className="text-muted-foreground hover:text-primary transition-colors">Tokenomics</Link>
               <Link href="/impact" className="text-muted-foreground hover:text-primary transition-colors">Impact</Link>
             </div>
             <div className="flex items-center space-x-4">

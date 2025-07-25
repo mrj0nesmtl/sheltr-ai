@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowLeft, Coins, TrendingUp, Shield, Zap, DollarSign, Users, BarChart3, CheckCircle, ExternalLink, Copy, Eye } from 'lucide-react';
+import { ArrowLeft, Coins, TrendingUp, Shield, Zap, DollarSign, Users, BarChart3, CheckCircle, ExternalLink, Copy, Eye, LogIn } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -20,13 +20,23 @@ export default function TokenomicsPage() {
               <Link href="/about" className="text-muted-foreground hover:text-primary transition-colors">About</Link>
               <Link href="/solutions" className="text-muted-foreground hover:text-primary transition-colors">Solutions</Link>
               <Link href="/scan-give" className="text-muted-foreground hover:text-primary transition-colors">Scan & Give</Link>
-              <Link href="/tokenomics" className="text-foreground hover:text-primary transition-colors">Tokenomics</Link>
               <Link href="/impact" className="text-muted-foreground hover:text-primary transition-colors">Impact</Link>
             </div>
             <div className="flex items-center space-x-4">
               <ThemeToggle />
-              <Button variant="ghost" size="sm">Sign In</Button>
-              <Button>Get Started</Button>
+              <div className="hidden md:flex items-center space-x-4">
+                <Link href="/login">
+                  <Button variant="ghost" size="sm">
+                    <LogIn className="h-4 w-4 mr-2" />
+                    Sign In
+                  </Button>
+                </Link>
+                <Link href="/register">
+                  <Button>
+                    Get Started
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
@@ -469,14 +479,18 @@ export default function TokenomicsPage() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
-              <Coins className="h-4 w-4 mr-2" />
-              Get SHELTR Tokens
-            </Button>
-            <Button variant="outline" size="lg">
-              <Eye className="h-4 w-4 mr-2" />
-              View Live Transactions
-            </Button>
+            <Link href="/register">
+              <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
+                <Coins className="h-4 w-4 mr-2" />
+                Get SHELTR Tokens
+              </Button>
+            </Link>
+            <Link href="/impact">
+              <Button variant="outline" size="lg">
+                <Eye className="h-4 w-4 mr-2" />
+                View Live Transactions
+              </Button>
+            </Link>
             <Link href="/scan-give">
               <Button variant="outline" size="lg">
                 <Zap className="h-4 w-4 mr-2" />
@@ -513,18 +527,20 @@ export default function TokenomicsPage() {
             <div>
               <h3 className="font-semibold mb-4">Community</h3>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-foreground">GitHub</a></li>
-                <li><a href="#" className="hover:text-foreground">Discord</a></li>
-                <li><a href="#" className="hover:text-foreground">Twitter</a></li>
+                <li><a href="https://github.com/mrj0nesmtl/sheltr-ai" target="_blank" className="hover:text-foreground">GitHub</a></li>
+                <li><Link href="/tokenomics" className="hover:text-foreground">$SHLTR</Link></li>
+                <li><a href="https://bsky.app/profile/sheltrops.bsky.social" target="_blank" className="hover:text-foreground">BlueSky</a></li>
+                <li><a href="#" className="hover:text-foreground">Wiki</a></li>
               </ul>
             </div>
             
             <div>
               <h3 className="font-semibold mb-4">Support</h3>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-foreground">Documentation</a></li>
-                <li><a href="#" className="hover:text-foreground">Help Center</a></li>
-                <li><a href="#" className="hover:text-foreground">Contact</a></li>
+                <li><Link href="/about" className="hover:text-foreground">Documentation</Link></li>
+                <li><a href="#" className="hover:text-foreground">Wiki</a></li>
+                <li><Link href="/register" className="hover:text-foreground">Help Center</Link></li>
+                <li><Link href="/register" className="hover:text-foreground">Contact</Link></li>
               </ul>
             </div>
           </div>

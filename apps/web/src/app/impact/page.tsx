@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { TrendingUp, Users, Home, DollarSign, Globe, Shield, Heart, MapPin, Clock, CheckCircle, BarChart3, PieChart, Building2, Coins } from 'lucide-react';
+import { TrendingUp, Users, Home, DollarSign, Globe, Shield, Heart, MapPin, Clock, CheckCircle, BarChart3, PieChart, Building2, Coins, LogIn } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -21,13 +21,23 @@ export default function ImpactPage() {
               <Link href="/about" className="text-muted-foreground hover:text-primary transition-colors">About</Link>
               <Link href="/solutions" className="text-muted-foreground hover:text-primary transition-colors">Solutions</Link>
               <Link href="/scan-give" className="text-muted-foreground hover:text-primary transition-colors">Scan & Give</Link>
-              <Link href="/tokenomics" className="text-muted-foreground hover:text-primary transition-colors">Tokenomics</Link>
               <Link href="/impact" className="text-foreground hover:text-primary transition-colors">Impact</Link>
             </div>
             <div className="flex items-center space-x-4">
               <ThemeToggle />
-              <Button variant="ghost" size="sm">Sign In</Button>
-              <Button>Get Started</Button>
+              <div className="hidden md:flex items-center space-x-4">
+                <Link href="/login">
+                  <Button variant="ghost" size="sm">
+                    <LogIn className="h-4 w-4 mr-2" />
+                    Sign In
+                  </Button>
+                </Link>
+                <Link href="/register">
+                  <Button>
+                    Get Started
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
@@ -328,18 +338,24 @@ export default function ImpactPage() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
-              <Heart className="h-4 w-4 mr-2" />
-              Start Giving
-            </Button>
-            <Button size="lg" variant="outline">
-              <BarChart3 className="h-4 w-4 mr-2" />
-              View Live Dashboard
-            </Button>
-            <Button size="lg" variant="outline">
-              <Coins className="h-4 w-4 mr-2" />
-              Learn About $SHLTR
-            </Button>
+            <Link href="/scan-give">
+              <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
+                <Heart className="h-4 w-4 mr-2" />
+                Start Giving
+              </Button>
+            </Link>
+            <Link href="/dashboard">
+              <Button size="lg" variant="outline">
+                <BarChart3 className="h-4 w-4 mr-2" />
+                View Live Dashboard
+              </Button>
+            </Link>
+            <Link href="/tokenomics">
+              <Button size="lg" variant="outline">
+                <Coins className="h-4 w-4 mr-2" />
+                Learn About $SHLTR
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
@@ -375,8 +391,10 @@ export default function ImpactPage() {
             <div>
               <h4 className="font-semibold mb-4">Support</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="#">Help Center</a></li>
-                <li><a href="#">Contact</a></li>
+                <li><Link href="/about">Documentation</Link></li>
+                <li><a href="#">Wiki</a></li>
+                <li><Link href="/register">Help Center</Link></li>
+                <li><Link href="/register">Contact</Link></li>
                 <li><a href="#">Privacy</a></li>
                 <li><a href="#">Terms</a></li>
               </ul>

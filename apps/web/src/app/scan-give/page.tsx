@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Home, QrCode, Heart, Shield, Smartphone, ArrowRight, Check } from 'lucide-react';
+import { Home, QrCode, Heart, Shield, Smartphone, ArrowRight, Check, LogIn } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -20,13 +20,23 @@ export default function ScanGivePage() {
               <Link href="/about" className="text-muted-foreground hover:text-primary transition-colors">About</Link>
               <Link href="/solutions" className="text-muted-foreground hover:text-primary transition-colors">Solutions</Link>
               <Link href="/scan-give" className="text-foreground hover:text-primary transition-colors">Scan & Give</Link>
-              <Link href="/tokenomics" className="text-muted-foreground hover:text-primary transition-colors">Tokenomics</Link>
               <Link href="/impact" className="text-muted-foreground hover:text-primary transition-colors">Impact</Link>
             </div>
             <div className="flex items-center space-x-4">
               <ThemeToggle />
-              <Button variant="ghost" size="sm">Sign In</Button>
-              <Button>Get Started</Button>
+              <div className="hidden md:flex items-center space-x-4">
+                <Link href="/login">
+                  <Button variant="ghost" size="sm">
+                    <LogIn className="h-4 w-4 mr-2" />
+                    Sign In
+                  </Button>
+                </Link>
+                <Link href="/register">
+                  <Button>
+                    Get Started
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
@@ -46,14 +56,18 @@ export default function ScanGivePage() {
             Revolutionary QR-code based donations that put money directly into the hands 
             of those who need it most. 80% goes directly to participants, 15% to housing, 5% to operations.
           </p>
-          <Button size="lg" className="mr-4">
-            <QrCode className="h-4 w-4 mr-2" />
-            Try Demo QR Code
-          </Button>
-          <Button variant="outline" size="lg">
-            <Smartphone className="h-4 w-4 mr-2" />
-            Download App
-          </Button>
+          <Link href="/register">
+            <Button size="lg" className="mr-4">
+              <QrCode className="h-4 w-4 mr-2" />
+              Try Demo QR Code
+            </Button>
+          </Link>
+          <Link href="/register">
+            <Button variant="outline" size="lg">
+              <Smartphone className="h-4 w-4 mr-2" />
+              Download App
+            </Button>
+          </Link>
         </div>
       </section>
 
@@ -187,14 +201,18 @@ export default function ScanGivePage() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg">
-              <QrCode className="h-4 w-4 mr-2" />
-              Find QR Codes Near Me
-            </Button>
-            <Button variant="outline" size="lg">
-              <Heart className="h-4 w-4 mr-2" />
-              Become a Partner Shelter
-            </Button>
+            <Link href="/register">
+              <Button size="lg">
+                <QrCode className="h-4 w-4 mr-2" />
+                Find QR Codes Near Me
+              </Button>
+            </Link>
+            <Link href="/solutions/organizations">
+              <Button variant="outline" size="lg">
+                <Heart className="h-4 w-4 mr-2" />
+                Become a Partner Shelter
+              </Button>
+            </Link>
           </div>
         </div>
       </section>

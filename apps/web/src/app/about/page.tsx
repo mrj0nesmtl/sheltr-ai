@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Home, Heart, Shield, Users, ArrowRight, Github, Twitter, Mail, Coins } from 'lucide-react';
+import { Home, Heart, Shield, Users, ArrowRight, Github, Twitter, Mail, Coins, LogIn } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -20,13 +20,23 @@ export default function AboutPage() {
               <Link href="/about" className="text-foreground hover:text-primary transition-colors">About</Link>
               <Link href="/solutions" className="text-muted-foreground hover:text-primary transition-colors">Solutions</Link>
               <Link href="/scan-give" className="text-muted-foreground hover:text-primary transition-colors">Scan & Give</Link>
-              <Link href="/tokenomics" className="text-muted-foreground hover:text-primary transition-colors">Tokenomics</Link>
               <Link href="/impact" className="text-muted-foreground hover:text-primary transition-colors">Impact</Link>
             </div>
             <div className="flex items-center space-x-4">
               <ThemeToggle />
-              <Button variant="ghost" size="sm">Sign In</Button>
-              <Button>Get Started</Button>
+              <div className="hidden md:flex items-center space-x-4">
+                <Link href="/login">
+                  <Button variant="ghost" size="sm">
+                    <LogIn className="h-4 w-4 mr-2" />
+                    Sign In
+                  </Button>
+                </Link>
+                <Link href="/register">
+                  <Button>
+                    Get Started
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
@@ -132,13 +142,17 @@ export default function AboutPage() {
                 </p>
               </div>
               <div className="flex flex-col sm:flex-row gap-4 justify-center mt-6">
-                <Button>
-                  <Heart className="h-4 w-4 mr-2" />
-                  Start Giving
-                </Button>
-                <Button variant="outline">
-                  Learn More
-                </Button>
+                <Link href="/scan-give">
+                  <Button>
+                    <Heart className="h-4 w-4 mr-2" />
+                    Start Giving
+                  </Button>
+                </Link>
+                <Link href="/about">
+                  <Button variant="outline">
+                    Learn More
+                  </Button>
+                </Link>
               </div>
             </CardContent>
           </Card>
@@ -224,14 +238,18 @@ export default function AboutPage() {
                 Learn About $SHLTR
               </Button>
             </Link>
-            <Button variant="outline" size="lg">
-              <Github className="h-4 w-4 mr-2" />
-              Contribute Code
-            </Button>
-            <Button variant="outline" size="lg">
-              <Users className="h-4 w-4 mr-2" />
-              Join Community
-            </Button>
+            <Link href="https://github.com/mrj0nesmtl/sheltr-ai" target="_blank">
+              <Button variant="outline" size="lg">
+                <Github className="h-4 w-4 mr-2" />
+                Contribute Code
+              </Button>
+            </Link>
+            <Link href="/register">
+              <Button variant="outline" size="lg">
+                <Users className="h-4 w-4 mr-2" />
+                Join Community
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
@@ -261,11 +279,17 @@ export default function AboutPage() {
             <div>
               <h3 className="font-semibold mb-4">Community</h3>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-foreground flex items-center">
+                <li><a href="https://github.com/mrj0nesmtl/sheltr-ai" target="_blank" className="hover:text-foreground flex items-center">
                   <Github className="h-3 w-3 mr-1" /> GitHub
                 </a></li>
+                <li><a href="https://bsky.app/profile/sheltrops.bsky.social" target="_blank" className="hover:text-foreground flex items-center">
+                  <Twitter className="h-3 w-3 mr-1" /> BlueSky
+                </a></li>
+                <li><Link href="/tokenomics" className="hover:text-foreground flex items-center">
+                  <Coins className="h-3 w-3 mr-1" /> $SHLTR
+                </Link></li>
                 <li><a href="#" className="hover:text-foreground flex items-center">
-                  <Twitter className="h-3 w-3 mr-1" /> Twitter
+                  <Users className="h-3 w-3 mr-1" /> Wiki
                 </a></li>
               </ul>
             </div>
@@ -273,7 +297,9 @@ export default function AboutPage() {
             <div>
               <h3 className="font-semibold mb-4">Support</h3>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-foreground">Documentation</a></li>
+                <li><Link href="/about" className="hover:text-foreground">Documentation</Link></li>
+                <li><a href="#" className="hover:text-foreground">Wiki</a></li>
+                <li><Link href="/register" className="hover:text-foreground">Help Center</Link></li>
                 <li><a href="#" className="hover:text-foreground flex items-center">
                   <Mail className="h-3 w-3 mr-1" /> Contact
                 </a></li>

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Home, Building2, Users, Heart, DollarSign, BarChart3, Shield, QrCode, Handshake, MapPin, UserCheck } from 'lucide-react';
+import { Home, Building2, Users, Heart, DollarSign, BarChart3, Shield, QrCode, Handshake, MapPin, UserCheck, LogIn } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -20,13 +20,23 @@ export default function SolutionsPage() {
               <Link href="/about" className="text-muted-foreground hover:text-primary transition-colors">About</Link>
               <Link href="/solutions" className="text-foreground hover:text-primary transition-colors">Solutions</Link>
               <Link href="/scan-give" className="text-muted-foreground hover:text-primary transition-colors">Scan & Give</Link>
-              <Link href="/tokenomics" className="text-muted-foreground hover:text-primary transition-colors">Tokenomics</Link>
               <Link href="/impact" className="text-muted-foreground hover:text-primary transition-colors">Impact</Link>
             </div>
             <div className="flex items-center space-x-4">
               <ThemeToggle />
-              <Button variant="ghost" size="sm">Sign In</Button>
-              <Button>Get Started</Button>
+              <div className="hidden md:flex items-center space-x-4">
+                <Link href="/login">
+                  <Button variant="ghost" size="sm">
+                    <LogIn className="h-4 w-4 mr-2" />
+                    Sign In
+                  </Button>
+                </Link>
+                <Link href="/register">
+                  <Button>
+                    Get Started
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
@@ -277,18 +287,24 @@ export default function SolutionsPage() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg">
-              <Building2 className="h-4 w-4 mr-2" />
-              Organization Sign Up
-            </Button>
-            <Button variant="outline" size="lg">
-              <Heart className="h-4 w-4 mr-2" />
-              Individual Donor
-            </Button>
-            <Button variant="outline" size="lg">
-              <MapPin className="h-4 w-4 mr-2" />
-              Government Partnership
-            </Button>
+            <Link href="/solutions/organizations">
+              <Button size="lg">
+                <Building2 className="h-4 w-4 mr-2" />
+                Organization Sign Up
+              </Button>
+            </Link>
+            <Link href="/solutions/donors">
+              <Button variant="outline" size="lg">
+                <Heart className="h-4 w-4 mr-2" />
+                Individual Donor
+              </Button>
+            </Link>
+            <Link href="/solutions/government">
+              <Button variant="outline" size="lg">
+                <MapPin className="h-4 w-4 mr-2" />
+                Government Partnership
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
@@ -318,18 +334,20 @@ export default function SolutionsPage() {
             <div>
               <h3 className="font-semibold mb-4">Community</h3>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-foreground">GitHub</a></li>
-                <li><a href="#" className="hover:text-foreground">Discord</a></li>
-                <li><a href="#" className="hover:text-foreground">Twitter</a></li>
+                <li><a href="https://github.com/mrj0nesmtl/sheltr-ai" target="_blank" className="hover:text-foreground">GitHub</a></li>
+                <li><Link href="/tokenomics" className="hover:text-foreground">$SHLTR</Link></li>
+                <li><a href="https://bsky.app/profile/sheltrops.bsky.social" target="_blank" className="hover:text-foreground">BlueSky</a></li>
+                <li><a href="#" className="hover:text-foreground">Wiki</a></li>
               </ul>
             </div>
             
             <div>
               <h3 className="font-semibold mb-4">Support</h3>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-foreground">Documentation</a></li>
-                <li><a href="#" className="hover:text-foreground">Help Center</a></li>
-                <li><a href="#" className="hover:text-foreground">Contact</a></li>
+                <li><Link href="/about" className="hover:text-foreground">Documentation</Link></li>
+                <li><a href="#" className="hover:text-foreground">Wiki</a></li>
+                <li><Link href="/register" className="hover:text-foreground">Help Center</Link></li>
+                <li><Link href="/register" className="hover:text-foreground">Contact</Link></li>
               </ul>
             </div>
           </div>

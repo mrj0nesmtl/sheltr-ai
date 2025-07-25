@@ -20,3 +20,23 @@
  ✓ Compiled /dashboard in 380ms
  GET /dashboard 200 in 453ms
  GET /dashboard 200 in 52ms
+ ✓ Compiled /dashboard/shelters in 475ms
+ GET /dashboard/shelters 200 in 519ms
+ ✓ Compiled /dashboard/platform in 282ms
+ GET /dashboard/platform 200 in 384ms
+ ✓ Compiled /dashboard/users in 231ms
+ GET /dashboard/users 200 in 314ms
+ ✓ Compiled in 286ms
+ ✓ Compiled in 54ms
+ ✓ Compiled in 165ms
+ ✓ Compiled in 161ms
+ ✓ Compiled in 113ms
+ ✓ Compiled in 142ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET /dashboard/shelters 200 in 135ms
+ GET /dashboard/shelters 200 in 40ms
+ ✓ Compiled in 37ms
+ ✓ Compiled in 139ms
+ GET /dashboard 200 in 39ms
+ ✓ Compiled in 42ms
+ GET /dashboard 200 in 47ms

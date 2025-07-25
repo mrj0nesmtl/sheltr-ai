@@ -50,8 +50,13 @@ export default function ShelterNetwork() {
     searchTerm: ''
   });
 
+  // Deduplicate shelters by ID to prevent duplicate key errors
+  const uniqueShelters = shelters.filter((shelter, index, arr) => 
+    arr.findIndex(s => s.id === shelter.id) === index
+  );
+
   // Filter shelters based on current filters
-  const filteredShelters = shelters.filter(shelter => {
+  const filteredShelters = uniqueShelters.filter(shelter => {
     const matchesLocation = !filters.location || shelter.location.toLowerCase().includes(filters.location.toLowerCase());
     const matchesStatus = !filters.status || shelter.status === filters.status;
     const matchesType = !filters.type || shelter.type === filters.type;
@@ -82,9 +87,9 @@ export default function ShelterNetwork() {
   });
 
   // Get unique values for filter options
-  const uniqueLocations = [...new Set(shelters.map(s => s.location))];
-  const uniqueStatuses = [...new Set(shelters.map(s => s.status))];
-  const uniqueTypes = [...new Set(shelters.map(s => s.type))];
+  const uniqueLocations = [...new Set(uniqueShelters.map(s => s.location))];
+  const uniqueStatuses = [...new Set(uniqueShelters.map(s => s.status))];
+  const uniqueTypes = [...new Set(uniqueShelters.map(s => s.type))];
 
   // Update filters
   const updateFilter = (key: string, value: string) => {
@@ -127,7 +132,7 @@ export default function ShelterNetwork() {
   // Calculate metrics from filtered data (for display) and raw data (for context)
   const shelterMetrics = {
     totalShelters: filteredShelters.length,
-    allShelters: shelters.length, // Keep original count for "of X shelters" display
+    allShelters: uniqueShelters.length, // Keep original count for "of X shelters" display
     activeShelters: filteredShelters.filter(s => s.status === 'active').length,
     pendingApplications: pendingApplications.length,
     averageOccupancy: filteredShelters.length > 0 
@@ -145,6 +150,7 @@ export default function ShelterNetwork() {
     .filter(s => s.status === 'active')
     .sort((a, b) => (b.rating || 0) - (a.rating || 0))
     .map(shelter => ({
+      id: shelter.id,
       shelter: shelter.name,
       rating: shelter.rating || 0,
       donations: shelter.totalDonations || 0,
@@ -220,7 +226,7 @@ export default function ShelterNetwork() {
         <div className="flex items-center space-x-2 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-3">
           <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
           <span className="text-sm text-green-700 dark:text-green-300 font-medium">
-            LIVE FIRESTORE DATA - {shelters.length} shelters loaded from database
+            LIVE FIRESTORE DATA - {uniqueShelters.length} unique shelters loaded from database
           </span>
           <Button 
             variant="ghost" 
@@ -392,7 +398,7 @@ export default function ShelterNetwork() {
             )}
             
             <div className="text-sm text-muted-foreground font-medium">
-              Showing {filteredShelters.length} of {shelters.length} shelters
+              Showing {filteredShelters.length} of {uniqueShelters.length} shelters
             </div>
           </div>
         </CardContent>
@@ -434,7 +440,7 @@ export default function ShelterNetwork() {
             <CardContent>
               <div className="space-y-4">
                 {performanceMetrics.slice(0, 5).map((shelter, index) => (
-                  <div key={shelter.shelter} className="flex items-center justify-between p-4 border rounded-lg">
+                  <div key={`performance-${shelter.id}`} className="flex items-center justify-between p-4 border rounded-lg">
                     <div className="flex items-center space-x-4">
                       <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
                         {index + 1}
@@ -734,7 +740,7 @@ export default function ShelterNetwork() {
                   <div>Firebase Project: sheltr-ai-production</div>
                   <div className="ml-2">├── tenants/</div>
                   <div className="ml-4">├── platform/</div>
-                  <div className="ml-6">├── shelters/ ({shelters.length} documents)</div>
+                  <div className="ml-6">├── shelters/ ({uniqueShelters.length} unique documents)</div>
                   <div className="ml-6">├── shelter_applications/ ({pendingApplications.length} documents)</div>
                   <div className="ml-6">└── users/ (super_admin users)</div>
                   <div className="ml-4">├── shelter-[id]/</div>

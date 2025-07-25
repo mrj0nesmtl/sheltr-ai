@@ -23,26 +23,26 @@
  ✓ Exporting (3/3)
 
 Route (app)                                 Size  First Load JS
-┌ ○ /                                    5.37 kB         118 kB
+┌ ○ /                                    5.96 kB         118 kB
 ├ ○ /_not-found                            994 B         101 kB
-├ ○ /about                               2.74 kB         115 kB
+├ ○ /about                               7.06 kB         119 kB
 ├ ○ /dashboard                           4.96 kB         232 kB
 ├ ○ /dashboard/analytics                  5.8 kB         121 kB
 ├ ○ /dashboard/financial                 5.31 kB         121 kB
 ├ ○ /dashboard/platform                  4.75 kB         114 kB
 ├ ○ /dashboard/security                  5.45 kB         121 kB
 ├ ○ /dashboard/shelters                  15.5 kB         350 kB
-├ ○ /dashboard/users                     8.71 kB         343 kB
-├ ○ /impact                               4.1 kB         117 kB
+├ ○ /dashboard/users                     8.73 kB         343 kB
+├ ○ /impact                              9.57 kB         122 kB
 ├ ○ /login                               4.58 kB         222 kB
 ├ ○ /register                            5.21 kB         222 kB
-├ ○ /scan-give                           2.74 kB         115 kB
-├ ○ /solutions                           2.74 kB         115 kB
-├ ○ /solutions/donors                    2.74 kB         115 kB
-├ ○ /solutions/government                2.74 kB         115 kB
-├ ○ /solutions/organizations             2.74 kB         115 kB
-├ ○ /solutions/participants              2.74 kB         115 kB
-└ ○ /tokenomics                          2.74 kB         115 kB
+├ ○ /scan-give                           6.67 kB         119 kB
+├ ○ /solutions                           8.05 kB         120 kB
+├ ○ /solutions/donors                    2.75 kB         115 kB
+├ ○ /solutions/government                2.75 kB         115 kB
+├ ○ /solutions/organizations             2.75 kB         115 kB
+├ ○ /solutions/participants              2.75 kB         115 kB
+└ ○ /tokenomics                          8.64 kB         121 kB
 + First Load JS shared by all            99.7 kB
   ├ chunks/4bd1b696-cf72ae8a39fa05aa.js  54.1 kB
   ├ chunks/964-5ee27fd6b313b705.js       43.7 kB

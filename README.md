@@ -19,206 +19,54 @@ The next generation platform for transparent charitable giving and homelessness 
 
 ## 🚀 Quick Start
 
-### For Developers
-```bash
-# 1. Clone and setup the new repository
-git clone https://github.com/mrj0nesmtl/sheltr-ai.git
-cd sheltr-ai
-
-# 2. Backend setup (FastAPI + Python 3.11)
-cd apps/api
-python -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-
-# 3. Frontend setup (Next.js 15)
-cd ../web
-npm install
-npm run dev
-
-# 4. Mobile setup (Expo)
-cd ../mobile
-npm install
-npx expo start
-
-# 5. Environment setup
-cp .env.example .env.local
-# Configure Firebase, OpenAI, and blockchain settings
-```
-
-### Test Your Python Environment
-```bash
-# In apps/api with virtual environment activated
-python test_setup.py
-```
-
-**→ [Complete Development Setup](docs/04-development/environment-setup.md)**
-
-### For Users
-- **🌐 Web App**: [sheltr-ai.web.app](https://sheltr-ai.web.app) ✅ **LIVE NOW!**
-- **📱 Mobile App**: iOS/Android *(Q2 2025)*
-- **🔗 API Docs**: [api.sheltr.ai/docs](https://api.sheltr.ai/docs) *(Coming Soon)*
-- **Donors**: [Donor Quick Start Guide](docs/06-user-guides/donor-guide.md)
-- **Participants**: [Participant Registration Guide](docs/06-user-guides/participant-guide.md)
-- **Shelter Admins**: [Shelter Management Guide](docs/06-user-guides/shelter-admin-guide.md)
-- **Platform Admins**: [SuperAdmin Guide](docs/06-user-guides/super-admin-guide.md)
-
----
-
-## 🏗️ Architecture Overview
-
-SHELTR-AI is built on a modern, scalable multi-tenant SaaS architecture powered by **Google Cloud Platform** and **Firebase**:
-
-```mermaid
-graph TD
-    A[Next.js 15 Frontend] -->|Multi-tenant routing| B[FastAPI Backend]
-    C[Expo Mobile App] -->|Shared APIs| B
-    B -->|Google Cloud Run| D[Firebase Firestore]
-    B -->|Blockchain integration| E[SHELTR Token System]
-    
-    D -->|Platform tenant| F[SuperAdmin]
-    D -->|Shelter tenants| G[Shelter Admins]
-    D -->|Participant network| H[Participants]
-    D -->|Donor network| I[Donors]
-    
-    E -->|Smart Contracts| J[80% Direct to Participant]
-    E -->|Smart Contracts| K[15% Housing Fund]
-    E -->|Smart Contracts| L[5% Platform Operations]
-    
-    style A fill:#e3f2fd,stroke:#1976d2,stroke-width:3px
-    style C fill:#fff3e0,stroke:#f57c00,stroke-width:3px
-    style B fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
-    style D fill:#e8f5e8,stroke:#388e3c,stroke-width:3px
-    style E fill:#fce4ec,stroke:#c2185b,stroke-width:3px
-```
-
-### **🆕 New Architecture Highlights**
-- **🔥 Firebase-First**: Firestore multi-tenant database with real-time sync
-- **☁️ Google Cloud Run**: Serverless FastAPI backend deployment
-- **🔒 Firebase Auth**: Robust authentication with custom claims
-- **🌐 Firebase Hosting**: Global CDN for web application
-- **📦 Monorepo Structure**: TurboRepo for streamlined development
-- **🐍 Python 3.11**: Modern async FastAPI with type hints
-- **⚡ Real-time**: Live updates across all platforms
-
-**→ [Full Architecture Documentation](docs/02-architecture/README.md)**
-
----
-
-## 📁 **New Monorepo Structure**
-
-SHELTR-AI now uses a modern monorepo structure for better organization and development velocity:
-
-```
-sheltr-ai/
-├── apps/
-│   ├── web/              # Next.js 15 Frontend
-│   ├── mobile/           # Expo Mobile App  
-│   └── api/              # FastAPI Backend (Python 3.11)
-│       ├── .venv/        # Python virtual environment
-│       ├── main.py       # FastAPI application entry
-│       ├── requirements.txt # Python dependencies
-│       └── test_setup.py # Environment verification
-├── packages/
-│   ├── shared/           # Shared utilities
-│   ├── ui/               # Design system components
-│   ├── types/            # TypeScript definitions
-│   └── config/           # Shared configuration
-├── docs/                 # Comprehensive documentation
-│   ├── 01-overview/      # Getting started guides
-│   ├── 02-architecture/  # System design docs
-│   ├── 03-api/          # API documentation
-│   └── [... 10 sections total]
-├── tools/                # Development tools
-├── scripts/              # Automation scripts
-├── .vscode/              # Cursor/VS Code settings
-│   ├── settings.json     # Multi-language setup
-│   └── extensions.json   # Recommended extensions
-├── CHANGELOG.md          # Version history
-├── CONTRIBUTING.md       # Contribution guidelines
-├── LICENSE.md           # MIT License with charitable terms
-└── README.md            # This file
-```
+- **New to SHELTR-AI?** → Start with [Overview & Vision](01-overview/README.md)
+- **Want to develop?** → Check [Development Guide](04-development/SHELTR-AI-DEVELOPMENT-ROADMAP.md)
+- **Need API docs?** → Visit [API Documentation](03-api/README.md)
+- **User guidance?** → See [User Guides](06-user-guides/participant-guide.md)
 
 ---
 
 ## 📚 Documentation Sections
 
 ### 🌟 [01. Overview](docs/01-overview/)
-- [Getting Started](docs/01-overview/getting-started.md)
-- [Architecture Overview](docs/01-overview/architecture-overview.md)
-- [Feature Comparison](docs/01-overview/feature-comparison.md)
-- [Development Roadmap](docs/01-overview/roadmap.md)
+- [Getting Started & Vision](docs/01-overview/README.md)
+- [Mission: Hacking Homelessness](docs/01-overview/hacking_homelessness.md)
+- [Documentation Strategy](docs/01-overview/SHELTR-AI-DOCS-PLAN.md)
+- [Implementation Roadmap](docs/01-overview/SHELTR-AI-IMPLEMENTATION-PLAN.md)
 
 ### 🏗️ [02. Architecture](docs/02-architecture/)
 - [System Design](docs/02-architecture/system-design.md)
-- [Multi-Tenant Design](docs/02-architecture/multi-tenant-design.md)
-- [Database Schema](docs/02-architecture/database-schema.md)
-- [Blockchain Architecture](docs/02-architecture/blockchain-architecture.md)
-- **🆕** [Firebase Integration](docs/02-architecture/firebase-integration.md)
-- **🆕** [Google Cloud Architecture](docs/02-architecture/google-cloud-architecture.md)
+- [Official Whitepaper](docs/02-architecture/whitepaper_final.md)
+- [Blockchain Integration](docs/02-architecture/technical/blockchain.md)
+- [SHELTR Tokenomics](docs/02-architecture/tokenomics/sheltr-tokenomics.md)
 
 ### 🔌 [03. API Documentation](docs/03-api/)
-- [API Overview](docs/03-api/README.md)
-- [Authentication](docs/03-api/authentication.md)
-- [User Management](docs/03-api/user-management.md)
-- [Donation System](docs/03-api/donation-system.md)
-- [QR Management](docs/03-api/qr-management.md)
-- **🆕** [FastAPI Endpoints](docs/03-api/fastapi-endpoints.md)
-- **🆕** [Firebase Functions](docs/03-api/firebase-functions.md)
+- [FastAPI Overview](docs/03-api/README.md)
+- [Authentication Endpoints](docs/03-api/README.md#authentication)
+- [User Management APIs](docs/03-api/README.md#user-management)
+- [Donation System APIs](docs/03-api/README.md#donations)
 
 ### 👩‍💻 [04. Development](docs/04-development/)
-- [Environment Setup](docs/04-development/environment-setup.md)
-- [Firebase Setup](docs/04-development/firebase-setup.md)
-- [Coding Standards](docs/04-development/coding-standards.md)
-- [Testing Guide](docs/04-development/testing-guide.md)
-- **🆕** [Python Development](docs/04-development/python-development.md)
-- **🆕** [Cursor IDE Setup](docs/04-development/cursor-ide-setup.md)
-- **🆕** [Monorepo Workflow](docs/04-development/monorepo-workflow.md)
-
-### 🚀 [05. Deployment](docs/05-deployment/)
-- [Firebase Deployment](docs/05-deployment/firebase-deployment.md)
-- [Google Cloud Run](docs/05-deployment/google-cloud-run.md)
-- [Smart Contract Deployment](docs/05-deployment/smart-contract-deployment.md)
-- [Mobile App Stores](docs/05-deployment/mobile-app-stores.md)
-- **🆕** [Docker Containerization](docs/05-deployment/docker-setup.md)
-- **🆕** [CI/CD Pipeline](docs/05-deployment/github-actions.md)
+- [Development Roadmap](docs/04-development/SHELTR-AI-DEVELOPMENT-ROADMAP.md)
+- [Session 4: Super Admin Dashboard](docs/04-development/SESSION-04-SUPER-ADMIN-DASHBOARD.md)
+- [Session 3: Authentication & RBAC](docs/04-development/SESSION-03-AUTHENTICATION-RBAC.md)
+- [Session 2: Website Launch](docs/04-development/session-02-website-launch.md)
+- [Session 1: Foundation](docs/04-development/session-01-foundation-day.md)
 
 ### 👥 [06. User Guides](docs/06-user-guides/)
-- [SuperAdmin Guide](docs/06-user-guides/super-admin-guide.md)
-- [Shelter Admin Guide](docs/06-user-guides/shelter-admin-guide.md)
 - [Participant Guide](docs/06-user-guides/participant-guide.md)
-- [Donor Guide](docs/06-user-guides/donor-guide.md)
-- [Mobile App Guide](docs/06-user-guides/mobile-app-guide.md)
-
-### 📖 [07. Reference](docs/07-reference/)
-- [API Reference](docs/07-reference/api-reference.md)
-- [Database Reference](docs/07-reference/database-reference.md)
-- [Component Library](docs/07-reference/component-library.md)
-- [Smart Contract Reference](docs/07-reference/smart-contract-reference.md)
-
-### 🔗 [08. Integrations](docs/08-integrations/)
-- [Firebase Integration](docs/08-integrations/firebase-integration.md)
-- [Blockchain Integration](docs/08-integrations/blockchain-integration.md)
-- [Payment Integration](docs/08-integrations/payment-integration.md)
-- [Third-Party APIs](docs/08-integrations/third-party-apis.md)
-- **🆕** [Google Cloud Services](docs/08-integrations/google-cloud-services.md)
-- **🆕** [AI/ML Integration](docs/08-integrations/ai-ml-integration.md)
+- Shelter Admin Guide *(Coming Soon)*
+- Donor Guide *(Coming Soon)*
+- SuperAdmin Guide *(Coming Soon)*
 
 ### 🔄 [09. Migration](docs/09-migration/)
-- [From Supabase](docs/09-migration/from-supabase.md)
-- [Legacy SHELTR Migration](docs/09-migration/legacy-sheltr-migration.md)
-- [Data Migration Guide](docs/09-migration/data-migration-guide.md)
-- **🆕** [Repository Migration](docs/09-migration/repository-migration.md)
-- **🆕** [Database Recovery](docs/09-migration/database-recovery.md)
+- [Database Migration Complete](docs/09-migration/DATABASE_MIGRATION_COMPLETE.md)
+- [Migration Strategy](docs/09-migration/DATABASE_MIGRATION_PLAN.md)
+- [From Supabase Migration](docs/09-migration/from-supabase.md)
 
-### 📦 [10. Resources](docs/10-resources/)
-- [Design System](docs/10-resources/design-system.md)
-- [Brand Guidelines](docs/10-resources/brand-guidelines.md)
-- [Security Checklist](docs/10-resources/security-checklist.md)
-- [Performance Benchmarks](docs/10-resources/performance-benchmarks.md)
-- **🆕** [Contributing Templates](docs/10-resources/templates/)
-- **🆕** [Development Tools](docs/10-resources/development-tools.md)
+### 🤖 AI Agent Documentation
+- [Claude Agent Briefing](docs/CLAUDE-AGENT-BRIEFING.md)
+- [Agent Communication Protocols](docs/CLAUDE-AGENT-COMMUNICATION.md)
 
 ---
 
@@ -375,142 +223,26 @@ function processDonation(address participant, uint256 amount) external {
 
 ---
 
-## 🤝 Contributing
-
-We welcome contributions from developers, designers, and advocates! SHELTR-AI is **hacking homelessness through technology** and we need all the help we can get.
-
-### **🆕 New Contributor Onboarding**
-1. **🔧 Setup**: Follow our [Development Setup Guide](docs/04-development/environment-setup.md)
-2. **🎯 Pick an Issue**: Check our [Good First Issues](https://github.com/mrj0nesmtl/sheltr-ai/labels/good%20first%20issue)
-3. **💬 Join Discussion**: [GitHub Discussions](https://github.com/mrj0nesmtl/sheltr-ai/discussions)
-4. **📝 Submit PR**: Use our [PR Template](docs/10-resources/templates/pr-template.md)
-
-### **Ways to Contribute**
-- 🔧 **Code**: Backend (Python), Frontend (TypeScript), Mobile (React Native)
-- 🎨 **Design**: UI/UX, accessibility improvements, brand development
-- 📝 **Documentation**: Guides, tutorials, translations
-- 🧪 **Testing**: Quality assurance, user testing, security audits
-- 💡 **Ideas**: Feature suggestions, architecture feedback
-- 🌍 **Community**: Outreach, partnerships, user research
-
-### **Quick Links**
-- [Contributing Guidelines](CONTRIBUTING.md)
-- [Bug Report Template](docs/10-resources/templates/bug-report-template.md)
-- [Feature Request Template](docs/10-resources/templates/feature-request-template.md)
-- [Pull Request Template](docs/10-resources/templates/pr-template.md)
-- [Coding Standards](docs/04-development/coding-standards.md)
-
----
-
-## 📊 **Platform Metrics & Impact**
-
-### **🎯 2025 Goals**
-| Metric | Current | Target 2025 | Progress |
-|--------|---------|-------------|----------|
-| 🌐 **Live Website** | ✅ **DEPLOYED** | ✅ Complete | 🎉 **ACHIEVED** |
-| 🏠 **Shelter Partners** | 0 | 50 | 🚀 Ready for onboarding |
-| 👤 **Registered Participants** | 0 | 1,000 | 📈 Platform ready |
-| 💝 **Active Donors** | 0 | 5,000 | 🌱 Accepting pre-registrations |
-| 💰 **Total Donations** | $0 | $100,000 | 💪 Smart contracts designed |
-| 🌍 **Cities Deployed** | 0 | 3 | 🎯 Stakeholder outreach ready |
-| 🔗 **Blockchain Transactions** | 0 | 10,000 | ⚡ Base network integration complete |
-
-### **🏆 Success Metrics**
-- **📱 Mobile App Downloads**: Target 10,000+ by Q4 2025
-- **⚡ Donation Speed**: Sub-30 second QR to wallet transfer
-- **🔍 Transparency Score**: 100% blockchain-verified donations
-- **🌐 Platform Uptime**: 99.9% availability SLA
-- **🔒 Security Incidents**: Zero tolerance for data breaches
-
----
-
-## 📄 License
-
-This project is licensed under the **MIT License** with additional terms for charitable use - see the [LICENSE.md](LICENSE.md) file for details.
-
-### **🆕 Enhanced Licensing**
-- **🎗️ Charitable Use**: Special provisions for non-profit organizations
-- **🔒 Third-Party Services**: Clear terms for Firebase, Google Cloud, blockchain networks
-- **🌍 Open Source**: Commitment to open-source development principles
-- **🤝 Community**: Guidelines for community contributions and usage
-
----
-
-## 🆘 Support & Community
-
-### **For Developers**
-- 📖 **Documentation**: [SHELTR-AI Docs](https://docs.sheltr.ai) *(Coming Soon)*
-- 🐛 **Issues**: [GitHub Issues](https://github.com/mrj0nesmtl/sheltr-ai/issues)
-- 💬 **Discussions**: [GitHub Discussions](https://github.com/mrj0nesmtl/sheltr-ai/discussions)
-- 🔧 **API Reference**: [api.sheltr.ai/docs](https://api.sheltr.ai/docs) *(Coming Soon)*
+## 📞 Support & Community
 
 ### **For Users & Organizations**
 - 📧 **General Support**: support@sheltr.ai
 - 🏠 **Shelter Partnerships**: partnerships@sheltr.ai  
-- 📚 **Training & Onboarding**: training@sheltr.ai
+- 📚 **User Guides**: [User Documentation](docs/06-user-guides/participant-guide.md)
 - 🔧 **Technical Support**: tech@sheltr.ai
-- 🌐 **Website**: [sheltr.ai](https://sheltr.ai) *(Coming Soon)*
+- 🌐 **Website**: [sheltr-ai.web.app](https://sheltr-ai.web.app)
 
-### **🆕 Community Channels**
-- 💬 **Discord**: [Join SHELTR-AI Community](https://discord.gg/sheltr-ai) *(Coming Soon)*
-- 🐦 **Twitter**: [@SheltrAI](https://twitter.com/SheltrAI) *(Coming Soon)*
-- 📘 **LinkedIn**: [SHELTR-AI Company](https://linkedin.com/company/sheltr-ai) *(Coming Soon)*
-- 📺 **YouTube**: Development vlogs and tutorials *(Coming Soon)*
-
----
-
-## 🌟 **What Makes SHELTR-AI Different**
-
-### **🎯 Direct Impact**
-- **80% Direct**: Highest percentage to participants in the industry
-- **⚡ Instant**: Blockchain transactions complete in seconds
-- **🔍 Transparent**: Every donation tracked on public blockchain
-- **📱 Accessible**: QR codes work on any smartphone
-
-### **🏗️ Technical Excellence**  
-- **☁️ Cloud-Native**: Built for scale on Google Cloud Platform
-- **🔥 Real-time**: Firebase powers live updates across all platforms
-- **🐍 Modern Backend**: Python 3.11 + FastAPI for performance
-- **📦 Monorepo**: Streamlined development with shared packages
-
-### **🤝 Community-Driven**
-- **🌍 Open Source**: Transparent development process
-- **🗳️ DAO Governance**: Community decisions through blockchain voting
-- **🎓 Educational**: Learn blockchain + social impact development
-- **🌱 Sustainable**: Self-funding through transparent fee structure
+### **For Developers**
+- 📖 **Documentation Hub**: [Complete Documentation](docs/README.md)
+- 🐛 **Issues**: [GitHub Issues](https://github.com/mrj0nesmtl/sheltr-ai/issues)
+- 💬 **Discussions**: [GitHub Discussions](https://github.com/mrj0nesmtl/sheltr-ai/discussions)
+- 🔧 **API Reference**: [FastAPI Docs](docs/03-api/README.md)
+- 🏗️ **Development Guide**: [Development Roadmap](docs/04-development/SHELTR-AI-DEVELOPMENT-ROADMAP.md)
 
 ---
 
-## 🙏 Acknowledgments
+**📖 "Great documentation is the foundation of great software - and great impact."**
 
-**Hacking homelessness through technology** - built with ❤️ by the SHELTR-AI team and our amazing community.
+*Last Updated: July 25, 2025 - Session 4 Complete*
 
-### **🆕 Special Recognition**
-- **🏠 Homeless Advocacy Community**: For guidance, feedback, and real-world insights
-- **🤝 Shelter Partners**: For trust, collaboration, and field testing
-- **👨‍💻 Open Source Contributors**: Making transparent charitable giving possible
-- **🔗 Blockchain Community**: For innovation in transparent transactions
-- **☁️ Google Cloud**: For providing robust, scalable infrastructure
-- **🔥 Firebase Team**: For real-time database and authentication services
-- **🐍 FastAPI Community**: For the modern, fast Python web framework
-
----
-
-**🏠 Hacking homelessness, one QR code at a time. ✨**
-
-*"Technology should bridge the gap between those who need help and those who want to help."*
-
-**🌐 [Visit Live Site](https://sheltr-ai.web.app) | 🚀 [Get Started](docs/01-overview/getting-started.md) | 🤝 [Contribute](CONTRIBUTING.md) | 💝 [Donate](https://sheltr-ai.web.app/scan-give) | 📖 [Learn More](docs/)**
-
----
-
-### **🔥 LIVE SYSTEM STATUS**
-🌐 **Website**: https://sheltr-ai.web.app ✅ **LIVE**  
-🔐 **Authentication**: 4-Role RBAC System ✅ **OPERATIONAL**  
-👑 **Joel's Super Admin**: Dashboard Active ✅ **WORKING**  
-🎯 **All Buttons**: Login/Register/Get Started ✅ **FUNCTIONAL**  
-📊 **Real-time Data**: Firebase Integration ✅ **SYNCING**  
-📱 **Mobile Navigation**: Hamburger Menu ✅ **ALL PAGES**  
-🎨 **Theme-Aware Logos**: Dynamic Switching ✅ **OPERATIONAL**  
-📄 **Global Footer**: Standardized Component ✅ **IMPLEMENTED**  
-🧹 **Repository**: Clean & Professional ✅ **OPTIMIZED**
+**🌐 [Visit Live Site](https://sheltr-ai.web.app) | 🚀 [Get Started](docs/01-overview/README.md) | 🤝 [Contribute](CONTRIBUTING.md) | 💝 [Donate](https://sheltr-ai.web.app/scan-give) | 📖 [Documentation Hub](docs/README.md)**

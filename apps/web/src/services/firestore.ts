@@ -243,7 +243,7 @@ export class FirestoreService {
         location: appData.location,
         address: appData.address,
         coordinates: appData.coordinates || { lat: 0, lng: 0 },
-        type: appData.type as any,
+        type: appData.type as Shelter['type'],
         capacity: appData.capacity,
         currentOccupancy: 0,
         participants: 0,
@@ -277,4 +277,108 @@ export class FirestoreService {
 }
 
 // Export singleton instance
-export const firestoreService = new FirestoreService(); 
+export const firestoreService = new FirestoreService();
+
+// Database investigation and cleanup functions
+export async function investigateDatabase() {
+  console.log('🔍 INVESTIGATING DATABASE STRUCTURE...\n');
+  
+  try {
+    // Check tenants collection
+    console.log('1. TENANTS COLLECTION:');
+    const tenantsRef = collection(db, 'tenants');
+    const tenantsSnapshot = await getDocs(tenantsRef);
+    console.log(`   Total tenants: ${tenantsSnapshot.size}`);
+    
+    tenantsSnapshot.docs.forEach((doc, index) => {
+      const data = doc.data();
+      console.log(`   ${index + 1}. ${doc.id} - ${data.name || 'Unnamed'} (${data.type || 'unknown type'})`);
+      if (data.organization?.address) {
+        console.log(`      Address: ${data.organization.address.street || 'N/A'}, ${data.organization.address.city || 'N/A'}`);
+      }
+    });
+
+    // Check for shelter data in platform tenant
+    console.log('\n2. PLATFORM TENANT SHELTERS:');
+    const platformSheltersRef = collection(db, 'tenants/platform/shelters');
+    const platformSheltersSnapshot = await getDocs(platformSheltersRef);
+    console.log(`   Platform shelters: ${platformSheltersSnapshot.size}`);
+    
+    platformSheltersSnapshot.docs.forEach((doc, index) => {
+      const data = doc.data();
+      console.log(`   ${index + 1}. ${doc.id} - ${data.name || 'Unnamed'}`);
+      console.log(`      Location: ${data.location || 'N/A'}`);
+      console.log(`      Address: ${data.address || 'N/A'}`);
+    });
+
+    // Check for other tenant shelters
+    console.log('\n3. CHECKING OTHER TENANT COLLECTIONS:');
+    for (const tenantDoc of tenantsSnapshot.docs) {
+      if (tenantDoc.id !== 'platform') {
+        const tenantSheltersRef = collection(db, `tenants/${tenantDoc.id}/shelters`);
+        const tenantSheltersSnapshot = await getDocs(tenantSheltersRef);
+        if (tenantSheltersSnapshot.size > 0) {
+          console.log(`   ${tenantDoc.id} shelters: ${tenantSheltersSnapshot.size}`);
+          tenantSheltersSnapshot.docs.forEach((doc, index) => {
+            const data = doc.data();
+            console.log(`     ${index + 1}. ${data.name || 'Unnamed'}`);
+          });
+        }
+      }
+    }
+
+    console.log('\n🔍 Investigation complete!');
+    
+  } catch (error) {
+    console.error('Error investigating database:', error);
+  }
+}
+
+export async function clearAllShelterData() {
+  console.log('🧹 CLEARING ALL SHELTER DATA...\n');
+  
+  try {
+    // Clear platform shelters
+    console.log('1. Clearing platform shelters...');
+    const platformSheltersRef = collection(db, 'tenants/platform/shelters');
+    const platformSheltersSnapshot = await getDocs(platformSheltersRef);
+    
+    for (const doc of platformSheltersSnapshot.docs) {
+      await deleteDoc(doc.ref);
+      console.log(`   Deleted: ${doc.data().name || doc.id}`);
+    }
+
+    // Clear all tenant shelter organizations (that were created as tenants)
+    console.log('\n2. Clearing tenant shelter organizations...');
+    const tenantsRef = collection(db, 'tenants');
+    const tenantsSnapshot = await getDocs(tenantsRef);
+    
+    for (const tenantDoc of tenantsSnapshot.docs) {
+      const data = tenantDoc.data();
+      if (data.type === 'shelter' && tenantDoc.id !== 'platform') {
+        await deleteDoc(tenantDoc.ref);
+        console.log(`   Deleted tenant: ${data.name || tenantDoc.id}`);
+      }
+    }
+
+    // Clear any shelter subcollections in other tenants
+    console.log('\n3. Clearing shelter subcollections...');
+    for (const tenantDoc of tenantsSnapshot.docs) {
+      if (tenantDoc.id !== 'platform') {
+        const tenantSheltersRef = collection(db, `tenants/${tenantDoc.id}/shelters`);
+        const tenantSheltersSnapshot = await getDocs(tenantSheltersRef);
+        
+        for (const doc of tenantSheltersSnapshot.docs) {
+          await deleteDoc(doc.ref);
+          console.log(`   Deleted from ${tenantDoc.id}: ${doc.data().name || doc.id}`);
+        }
+      }
+    }
+
+    console.log('\n🧹 All shelter data cleared!');
+    
+  } catch (error) {
+    console.error('Error clearing shelter data:', error);
+    throw error;
+  }
+} 

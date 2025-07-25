@@ -81,27 +81,31 @@
    - Latest session achievements
    - Mobile navigation & theme system implementation
 
-3. [**🔐 Session 3: Authentication & RBAC**](04-development/SESSION-03-AUTHENTICATION-RBAC.md)
+3. [**🔒 Session 5: GitHub Security + Super Admin**](04-development/SESSION-05-GITHUB-SECURITY-SUPER-ADMIN.md)
+   - GitHub security setup and repository hardening
+   - Advanced Super Admin dashboard development
+
+4. [**🔐 Session 3: Authentication & RBAC**](04-development/SESSION-03-AUTHENTICATION-RBAC.md)
    - Authentication system implementation
    - Role-based access control setup
 
-4. [**🌐 Session 2: Website Launch**](04-development/session-02-website-launch.md)
+5. [**🌐 Session 2: Website Launch**](04-development/session-02-website-launch.md)
    - Website deployment process
    - Firebase hosting setup
 
-5. [**🏗️ Session 1: Foundation**](04-development/session-01-foundation-day.md)
+6. [**🏗️ Session 1: Foundation**](04-development/session-01-foundation-day.md)
    - Project foundation and setup
    - Repository structure establishment
 
-6. [**✅ Session 2 Checklist**](04-development/SESSION-02-CHECKLIST.md)
+7. [**✅ Session 2 Checklist**](04-development/SESSION-02-CHECKLIST.md)
    - Session 2 completion checklist
    - Task verification and status
 
-7. [**✅ Session 3 Checklist**](04-development/SESSION-03-CHECKLIST.md)
+8. [**✅ Session 3 Checklist**](04-development/SESSION-03-CHECKLIST.md)
    - Session 3 completion checklist
    - Authentication milestone verification
 
-8. [**🎯 Session 3 Planning**](04-development/) 
+9. [**🎯 Session 3 Planning**](04-development/) 
    - [FastAPI Planning](04-development/SESSION-03-FASTAPI-PLANNING.md)
    - [Kickoff Prompt](04-development/SESSION-03-KICKOFF-PROMPT.md)
 
@@ -212,7 +216,7 @@
 
 - **🏠 Main Repository**: [README.md](../README.md)
 - **🌐 Live Website**: [sheltr-ai.web.app](https://sheltr-ai.web.app)
-- **👑 Latest Session**: [Session 4 Dashboard](04-development/SESSION-04-SUPER-ADMIN-DASHBOARD.md)
+- **🔒 Latest Session**: [Session 5 Security + Super Admin](04-development/SESSION-05-GITHUB-SECURITY-SUPER-ADMIN.md)
 - **🗺️ Development Plan**: [Roadmap](04-development/SHELTR-AI-DEVELOPMENT-ROADMAP.md)
 - **🔧 API Reference**: [FastAPI Docs](03-api/README.md)
 

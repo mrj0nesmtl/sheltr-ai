@@ -6,48 +6,59 @@
    - Environments: .env.local
 
    Creating an optimized production build ...
- ✓ Compiled successfully in 1000ms
+ ⚠ Compiled with warnings in 2000ms
+
+./src/app/investor-access/page.tsx
+Attempted import error: 'ThemeLogo' is not exported from '@/components/ThemeLogo' (imported as 'ThemeLogo').
+
+Import trace for requested module:
+./src/app/investor-access/page.tsx
+
+./src/app/investor-relations/page.tsx
+Attempted import error: 'ThemeLogo' is not exported from '@/components/ThemeLogo' (imported as 'ThemeLogo').
+
+Import trace for requested module:
+./src/app/investor-relations/page.tsx
+
+./src/app/investor-relations/page.tsx
+Attempted import error: 'ThemeLogo' is not exported from '@/components/ThemeLogo' (imported as 'ThemeLogo').
+
+Import trace for requested module:
+./src/app/investor-relations/page.tsx
+
+ ⚠ Compiled with warnings in 2000ms
+
+./src/app/investor-access/page.tsx
+Attempted import error: 'ThemeLogo' is not exported from '@/components/ThemeLogo' (imported as 'ThemeLogo').
+
+Import trace for requested module:
+./src/app/investor-access/page.tsx
+
+./src/app/investor-relations/page.tsx
+Attempted import error: 'ThemeLogo' is not exported from '@/components/ThemeLogo' (imported as 'ThemeLogo').
+
+Import trace for requested module:
+./src/app/investor-relations/page.tsx
+
+./src/app/investor-relations/page.tsx
+Attempted import error: 'ThemeLogo' is not exported from '@/components/ThemeLogo' (imported as 'ThemeLogo').
+
+Import trace for requested module:
+./src/app/investor-relations/page.tsx
+
+ ✓ Compiled successfully in 4.0s
    Skipping linting
    Checking validity of types ...
-   Collecting page data ...
-   Generating static pages (0/22) ...
- ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
-   Generating static pages (5/22) 
-   Generating static pages (10/22) 
-   Generating static pages (16/22) 
- ✓ Generating static pages (22/22)
-   Finalizing page optimization ...
-   Collecting build traces ...
-   Exporting (0/3) ...
- ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
- ✓ Exporting (3/3)
+Failed to compile.
 
-Route (app)                                 Size  First Load JS
-┌ ○ /                                    5.96 kB         118 kB
-├ ○ /_not-found                            994 B         101 kB
-├ ○ /about                               7.06 kB         119 kB
-├ ○ /dashboard                           4.96 kB         232 kB
-├ ○ /dashboard/analytics                  5.8 kB         121 kB
-├ ○ /dashboard/financial                 5.31 kB         121 kB
-├ ○ /dashboard/platform                  4.75 kB         114 kB
-├ ○ /dashboard/security                  5.45 kB         121 kB
-├ ○ /dashboard/shelters                  15.5 kB         350 kB
-├ ○ /dashboard/users                     8.73 kB         343 kB
-├ ○ /impact                              9.57 kB         122 kB
-├ ○ /login                               4.58 kB         222 kB
-├ ○ /register                            5.21 kB         222 kB
-├ ○ /scan-give                           6.67 kB         119 kB
-├ ○ /solutions                           8.05 kB         120 kB
-├ ○ /solutions/donors                    2.75 kB         115 kB
-├ ○ /solutions/government                2.75 kB         115 kB
-├ ○ /solutions/organizations             2.75 kB         115 kB
-├ ○ /solutions/participants              2.75 kB         115 kB
-└ ○ /tokenomics                          8.64 kB         121 kB
-+ First Load JS shared by all            99.7 kB
-  ├ chunks/4bd1b696-cf72ae8a39fa05aa.js  54.1 kB
-  ├ chunks/964-5ee27fd6b313b705.js       43.7 kB
-  └ other shared chunks (total)          1.93 kB
+./src/app/investor-access/page.tsx:6:10
+Type error: Module '"@/components/ThemeLogo"' has no exported member 'ThemeLogo'. Did you mean to use 'import ThemeLogo from "@/components/ThemeLogo"' instead?
 
-
-○  (Static)  prerendered as static content
-
+[0m [90m 4 |[39m [36mimport[39m { useRouter } [36mfrom[39m [32m'next/navigation'[39m[33m;[39m
+ [90m 5 |[39m [36mimport[39m [33mLink[39m [36mfrom[39m [32m'next/link'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 6 |[39m [36mimport[39m { [33mThemeLogo[39m } [36mfrom[39m [32m'@/components/ThemeLogo'[39m[33m;[39m
+ [90m   |[39m          [31m[1m^[22m[39m
+ [90m 7 |[39m [36mimport[39m { [33mButton[39m } [36mfrom[39m [32m'@/components/ui/button'[39m[33m;[39m
+ [90m 8 |[39m [36mimport[39m { [33mCard[39m[33m,[39m [33mCardContent[39m[33m,[39m [33mCardHeader[39m[33m,[39m [33mCardTitle[39m } [36mfrom[39m [32m'@/components/ui/card'[39m[33m;[39m
+ [90m 9 |[39m [36mimport[39m { [33mBadge[39m } [36mfrom[39m [32m'@/components/ui/badge'[39m[33m;[39m[0m
+Next.js build worker exited with code: 1 and signal: null

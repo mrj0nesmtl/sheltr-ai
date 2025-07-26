@@ -162,6 +162,7 @@ contract SHELTRSmartFund {
 - **No transaction fees** for participants
 - **Instant conversion** from donations
 - **Stable value preservation** for essential purchases
+- **Welcome bonus**: 100 SHELTR-S tokens ($100 value) for every new participant signup
 
 ### SHELTR Utility
 - **Governance voting** on platform decisions
@@ -236,7 +237,23 @@ interface ConversionSystem {
 
 ## 🌟 Sample Transaction Examples
 
-### Example 1: $100 Donation Processing
+### Example 1: New Participant Onboarding
+```
+Input: New participant signup and verification
+
+Welcome Package:
+├── 100 SHELTR-S tokens ($100 stable value)
+├── Digital wallet creation
+├── QR code generation for donations
+└── Access to Homeless Depot marketplace
+
+Funding Source:
+├── Platform development budget allocation
+├── Sustainable onboarding program
+└── Community growth investment
+```
+
+### Example 2: $100 Donation Processing
 ```
 Input: $100 USD donation via QR code
 
@@ -252,7 +269,7 @@ Blockchain Records:
 └── Block Number: 8,234,567
 ```
 
-### Example 2: Homeless Depot Purchase
+### Example 3: Homeless Depot Purchase
 ```
 Input: 25 SHELTR-S tokens for food kit
 
@@ -268,7 +285,7 @@ Impact:
 └── Dignified transaction experience
 ```
 
-### Example 3: Community Governance
+### Example 4: Community Governance
 ```
 Input: 1,000 SHELTR tokens staked for governance
 

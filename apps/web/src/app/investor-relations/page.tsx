@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { ThemeLogo } from '@/components/ThemeLogo';
+import ThemeLogo from '@/components/ThemeLogo';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
@@ -24,11 +24,34 @@ import {
   PieChart,
   LineChart,
   Building,
-  Handshake
+  Handshake,
+  Mail,
+  Clock,
+  AlertCircle
 } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { CalendarService, SchedulingResult } from '@/services/calendarService';
 
 export default function InvestorRelationsPage() {
   const [activeTab, setActiveTab] = useState('overview');
+
+  // Calendar/Meeting state
+  const [isScheduling, setIsScheduling] = useState(false);
+  const [showScheduleForm, setShowScheduleForm] = useState(false);
+  const [schedulingResult, setSchedulingResult] = useState<SchedulingResult | null>(null);
+  const [meetingForm, setMeetingForm] = useState({
+    name: '',
+    email: '',
+    company: '',
+    investmentRange: '',
+    preferredDate: '',
+    preferredTime: '',
+    timezone: 'America/New_York',
+    additionalNotes: '',
+  });
+
+  const calendarService = new CalendarService();
 
   const tokenProjections = [
     { year: 2025, users: 1000, transactions: 50000, tokenValue: 0.10, marketCap: 100000 },
@@ -39,11 +62,11 @@ export default function InvestorRelationsPage() {
   ];
 
   const fundingAllocation = [
-    { category: 'Platform Development', percentage: 40, amount: 40000, color: 'bg-blue-500' },
-    { category: 'Blockchain Infrastructure', percentage: 25, amount: 25000, color: 'bg-green-500' },
-    { category: 'Regulatory & Compliance', percentage: 15, amount: 15000, color: 'bg-purple-500' },
-    { category: 'Marketing & Partnerships', percentage: 10, amount: 10000, color: 'bg-orange-500' },
-    { category: 'Operations & Legal', percentage: 10, amount: 10000, color: 'bg-red-500' }
+    { category: 'Platform Development', percentage: 40, amount: 60000, color: 'bg-blue-500' },
+    { category: 'Blockchain Infrastructure', percentage: 25, amount: 37500, color: 'bg-green-500' },
+    { category: 'Regulatory & Compliance', percentage: 15, amount: 22500, color: 'bg-purple-500' },
+    { category: 'Marketing & Partnerships', percentage: 10, amount: 15000, color: 'bg-orange-500' },
+    { category: 'Operations & Legal', percentage: 10, amount: 15000, color: 'bg-red-500' }
   ];
 
   const milestones = [
@@ -53,6 +76,61 @@ export default function InvestorRelationsPage() {
     { quarter: 'Q4 2025', title: 'Multi-City Expansion', status: 'planned' }
   ];
 
+  const handleScheduleMeeting = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!meetingForm.name || !meetingForm.email || !meetingForm.preferredDate || !meetingForm.preferredTime) {
+      setSchedulingResult({
+        success: false,
+        message: 'Please fill in all required fields.',
+      });
+      return;
+    }
+
+    setIsScheduling(true);
+    setSchedulingResult(null);
+
+    try {
+      // Combine date and time
+      const dateTime = new Date(`${meetingForm.preferredDate}T${meetingForm.preferredTime}`);
+      
+      const result = await calendarService.createInvestorMeeting(
+        meetingForm.email,
+        meetingForm.name,
+        dateTime.toISOString(),
+        meetingForm.additionalNotes
+      );
+
+      setSchedulingResult(result);
+      
+      if (result.success) {
+        // Reset form on success
+        setMeetingForm({
+          name: '',
+          email: '',
+          company: '',
+          investmentRange: '',
+          preferredDate: '',
+          preferredTime: '',
+          timezone: 'America/New_York',
+          additionalNotes: '',
+        });
+      }
+    } catch (error) {
+      setSchedulingResult({
+        success: false,
+        message: 'An unexpected error occurred. Please try again.',
+      });
+    } finally {
+      setIsScheduling(false);
+    }
+  };
+
+  const handleScheduleButtonClick = () => {
+    setShowScheduleForm(true);
+    setSchedulingResult(null);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
       {/* Header */}
@@ -61,7 +139,6 @@ export default function InvestorRelationsPage() {
           <div className="flex justify-between items-center h-16">
             <Link href="/" className="flex items-center space-x-2">
               <ThemeLogo />
-              <span className="text-xl font-bold">SHELTR-AI</span>
               <Badge variant="secondary" className="text-xs">INVESTOR RELATIONS</Badge>
             </Link>
             
@@ -83,15 +160,20 @@ export default function InvestorRelationsPage() {
               <span className="bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent"> Humanitarian Technology</span>
             </h1>
             <p className="text-xl mb-8 text-blue-100">
-              Join us in revolutionizing homelessness support through blockchain transparency, 
-              AI-driven insights, and dignified participant experiences.
+              Join us in revolutionizing homelessness support through our dual-token architecture: 
+              SHELTR-S (stable) for participant protection and SHELTR (growth) for community governance.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" className="bg-amber-600 hover:bg-amber-700 text-black">
                 <Download className="h-5 w-5 mr-2" />
                 Download Investment Deck
               </Button>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-black">
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="border-white text-white hover:bg-white hover:text-black"
+                onClick={handleScheduleButtonClick}
+              >
                 <Calendar className="h-5 w-5 mr-2" />
                 Schedule Meeting
               </Button>
@@ -100,6 +182,173 @@ export default function InvestorRelationsPage() {
         </div>
       </section>
 
+      {/* Schedule Meeting Modal/Form */}
+      {showScheduleForm && (
+        <section className="py-16 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20">
+          <div className="container mx-auto px-4">
+            <div className="max-w-2xl mx-auto">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Calendar className="h-5 w-5 text-blue-600" />
+                    Schedule Investor Meeting
+                  </CardTitle>
+                  <CardDescription>
+                    Book a 45-minute discussion about SHELTR-AI's investment opportunity
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    {schedulingResult && (
+                      <div className={`mb-6 p-4 rounded-lg ${
+                        schedulingResult.success 
+                          ? 'bg-green-50 border border-green-200 text-green-800' 
+                          : 'bg-red-50 border border-red-200 text-red-800'
+                      }`}>
+                        <div className="flex items-center gap-2">
+                          {schedulingResult.success ? (
+                            <CheckCircle className="h-5 w-5" />
+                          ) : (
+                            <AlertCircle className="h-5 w-5" />
+                          )}
+                          <span className="font-medium">{schedulingResult.message}</span>
+                        </div>
+                        {schedulingResult.success && schedulingResult.meetingLink && (
+                          <div className="mt-2">
+                            <a 
+                              href={schedulingResult.meetingLink} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="text-blue-600 hover:text-blue-800 underline"
+                            >
+                              Join Meeting Link
+                            </a>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    <form onSubmit={handleScheduleMeeting} className="space-y-4">
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="name">Full Name *</Label>
+                          <Input
+                            id="name"
+                            value={meetingForm.name}
+                            onChange={(e) => setMeetingForm({...meetingForm, name: e.target.value})}
+                            placeholder="Your full name"
+                            required
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="email">Email Address *</Label>
+                          <Input
+                            id="email"
+                            type="email"
+                            value={meetingForm.email}
+                            onChange={(e) => setMeetingForm({...meetingForm, email: e.target.value})}
+                            placeholder="your@email.com"
+                            required
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="company">Company/Organization</Label>
+                          <Input
+                            id="company"
+                            value={meetingForm.company}
+                            onChange={(e) => setMeetingForm({...meetingForm, company: e.target.value})}
+                            placeholder="Your company name"
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="investmentRange">Investment Range</Label>
+                          <select
+                            id="investmentRange"
+                            value={meetingForm.investmentRange}
+                            onChange={(e) => setMeetingForm({...meetingForm, investmentRange: e.target.value})}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          >
+                            <option value="">Select range</option>
+                            <option value="$1K-$5K">$1,000 - $5,000</option>
+                            <option value="$5K-$25K">$5,000 - $25,000</option>
+                            <option value="$25K-$50K">$25,000 - $50,000</option>
+                            <option value="$50K+">$50,000+</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="preferredDate">Preferred Date *</Label>
+                          <Input
+                            id="preferredDate"
+                            type="date"
+                            value={meetingForm.preferredDate}
+                            onChange={(e) => setMeetingForm({...meetingForm, preferredDate: e.target.value})}
+                            min={new Date().toISOString().split('T')[0]}
+                            required
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="preferredTime">Preferred Time (EST) *</Label>
+                          <Input
+                            id="preferredTime"
+                            type="time"
+                            value={meetingForm.preferredTime}
+                            onChange={(e) => setMeetingForm({...meetingForm, preferredTime: e.target.value})}
+                            required
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <Label htmlFor="additionalNotes">Additional Notes</Label>
+                        <textarea
+                          id="additionalNotes"
+                          value={meetingForm.additionalNotes}
+                          onChange={(e) => setMeetingForm({...meetingForm, additionalNotes: e.target.value})}
+                          placeholder="Any specific topics you'd like to discuss or questions you have..."
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          rows={3}
+                        />
+                      </div>
+
+                      <div className="flex gap-4 pt-4">
+                        <Button 
+                          type="submit" 
+                          disabled={isScheduling}
+                          className="flex-1"
+                        >
+                          {isScheduling ? (
+                            <>
+                              <Clock className="h-4 w-4 mr-2 animate-spin" />
+                              Scheduling...
+                            </>
+                          ) : (
+                            <>
+                              <Calendar className="h-4 w-4 mr-2" />
+                              Schedule Meeting
+                            </>
+                          )}
+                        </Button>
+                        <Button 
+                          type="button" 
+                          variant="outline"
+                          onClick={() => setShowScheduleForm(false)}
+                        >
+                          Cancel
+                        </Button>
+                      </div>
+                    </form>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          </section>
+        )}
+
       {/* Investment Overview */}
       <section className="py-16">
         <div className="container mx-auto px-4">
@@ -107,7 +356,7 @@ export default function InvestorRelationsPage() {
             <Card className="text-center">
               <CardContent className="pt-6">
                 <Target className="h-12 w-12 mx-auto mb-4 text-green-600" />
-                <h3 className="text-2xl font-bold mb-2">$100K</h3>
+                <h3 className="text-2xl font-bold mb-2">$150K</h3>
                 <p className="text-muted-foreground">Pre-Seed Target</p>
               </CardContent>
             </Card>
@@ -219,6 +468,95 @@ export default function InvestorRelationsPage() {
                   </CardContent>
                 </Card>
               </div>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <TrendingUp className="h-5 w-5" />
+                    Fundraising Thesis & Strategy
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-6">
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div className="space-y-4">
+                        <h4 className="font-bold text-lg text-blue-700 dark:text-blue-300">Token-Based Investment Structure</h4>
+                        <div className="space-y-3">
+                          <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                            <h5 className="font-semibold">SHELTR-S (Stable Token)</h5>
+                            <p className="text-sm text-muted-foreground">USD-pegged utility token for participant protection. Every new participant receives 100 SHELTR-S tokens ($100 value) upon signup.</p>
+                          </div>
+                          <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                            <h5 className="font-semibold">SHELTR (Growth Token)</h5>
+                            <p className="text-sm text-muted-foreground">Community governance token with deflationary mechanics. Pre-seed investors receive SHELTR tokens with 50% discount.</p>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-4">
+                        <h4 className="font-bold text-lg text-green-700 dark:text-green-300">Multi-Round Strategy</h4>
+                        <div className="space-y-3">
+                          <div className="flex justify-between items-center p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                            <div>
+                              <h5 className="font-semibold">Pre-Seed (Current)</h5>
+                              <p className="text-sm text-muted-foreground">Platform completion & token launch</p>
+                            </div>
+                            <span className="font-bold text-green-600">$150K</span>
+                          </div>
+                          <div className="flex justify-between items-center p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+                            <div>
+                              <h5 className="font-semibold">Seed Round (2025 Q4)</h5>
+                              <p className="text-sm text-muted-foreground">Market expansion & partnerships</p>
+                            </div>
+                            <span className="font-bold text-purple-600">$1M</span>
+                          </div>
+                          <div className="flex justify-between items-center p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg">
+                            <div>
+                              <h5 className="font-semibold">Series A (2026)</h5>
+                              <p className="text-sm text-muted-foreground">Global scaling & institutional adoption</p>
+                            </div>
+                            <span className="font-bold text-amber-600">$5M+</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="p-4 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg">
+                      <h4 className="font-bold mb-3">Why Token-Based Investment?</h4>
+                      <div className="grid md:grid-cols-2 gap-4 text-sm">
+                        <ul className="space-y-2">
+                          <li className="flex items-center gap-2">
+                            <CheckCircle className="h-4 w-4 text-green-500" />
+                            <span>Direct utility alignment with platform success</span>
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <CheckCircle className="h-4 w-4 text-green-500" />
+                            <span>Governance rights in platform decisions</span>
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <CheckCircle className="h-4 w-4 text-green-500" />
+                            <span>Built-in liquidity through DeFi markets</span>
+                          </li>
+                        </ul>
+                        <ul className="space-y-2">
+                          <li className="flex items-center gap-2">
+                            <CheckCircle className="h-4 w-4 text-green-500" />
+                            <span>Global accessibility for international investors</span>
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <CheckCircle className="h-4 w-4 text-green-500" />
+                            <span>Deflationary mechanics drive long-term value</span>
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <CheckCircle className="h-4 w-4 text-green-500" />
+                            <span>Transparent on-chain fund management</span>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
 
               <Card>
                 <CardHeader>
@@ -453,8 +791,8 @@ export default function InvestorRelationsPage() {
                         <p className="text-sm text-muted-foreground">Earn yield for providing liquidity</p>
                       </div>
                       <div className="p-3 border rounded-lg">
-                        <h4 className="font-semibold text-orange-700 dark:text-orange-300">Premium Features</h4>
-                        <p className="text-sm text-muted-foreground">Advanced analytics and reporting</p>
+                        <h4 className="font-semibold text-orange-700 dark:text-orange-300">Welcome Bonus</h4>
+                        <p className="text-sm text-muted-foreground">New participants receive 100 SHELTR-S tokens</p>
                       </div>
                     </div>
 
@@ -647,23 +985,43 @@ export default function InvestorRelationsPage() {
                   </CardHeader>
                   <CardContent className="space-y-6">
                     <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                      <h4 className="font-bold text-blue-700 dark:text-blue-300 mb-2">Token Sale Structure (Recommended)</h4>
-                      <div className="space-y-2 text-sm">
-                        <div className="flex justify-between">
-                          <span>Pre-Seed Token Price:</span>
-                          <span className="font-mono font-bold">$0.05/token</span>
+                      <h4 className="font-bold text-blue-700 dark:text-blue-300 mb-2">Dual-Token Investment Structure</h4>
+                      <div className="space-y-3 text-sm">
+                        <div className="border-b pb-2">
+                          <h5 className="font-semibold">SHELTR (Growth Token)</h5>
+                          <div className="flex justify-between">
+                            <span>Pre-Seed Price:</span>
+                            <span className="font-mono font-bold">$0.05/token</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Public Launch Price:</span>
+                            <span className="font-mono">$0.10/token</span>
+                          </div>
                         </div>
-                        <div className="flex justify-between">
-                          <span>Public Launch Price:</span>
-                          <span className="font-mono">$0.10/token</span>
+                        <div className="border-b pb-2">
+                          <h5 className="font-semibold">SHELTR-S (Stable Token)</h5>
+                          <div className="flex justify-between">
+                            <span>Always Pegged:</span>
+                            <span className="font-mono">$1.00 USD</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Participant Welcome:</span>
+                            <span className="font-mono">100 tokens/signup</span>
+                          </div>
                         </div>
-                        <div className="flex justify-between">
-                          <span>Minimum Investment:</span>
-                          <span className="font-mono">$5,000</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span>Maximum Investment:</span>
-                          <span className="font-mono">$25,000</span>
+                        <div>
+                          <div className="flex justify-between">
+                            <span>Minimum Investment:</span>
+                            <span className="font-mono">$5,000</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Maximum Investment:</span>
+                            <span className="font-mono">$37,500</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Total Pre-Seed:</span>
+                            <span className="font-mono font-bold">$150,000</span>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -792,7 +1150,6 @@ export default function InvestorRelationsPage() {
         <div className="container mx-auto px-4 text-center">
           <div className="flex items-center justify-center space-x-2 mb-4">
             <ThemeLogo />
-            <span className="text-xl font-bold">SHELTR-AI</span>
             <Badge variant="secondary">INVESTOR RELATIONS</Badge>
           </div>
           <p className="text-slate-400 mb-4">

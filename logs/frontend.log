@@ -8,47 +8,61 @@
    - Environments: .env.local
 
  ✓ Starting...
- ✓ Ready in 1808ms
+ ✓ Compiled middleware in 170ms
+ ✓ Ready in 1530ms
  ○ Compiling / ...
- ✓ Compiled / in 2.4s
+ ✓ Compiled / in 2.5s
  ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
- GET / 200 in 2919ms
- GET / 200 in 109ms
- ✓ Compiled /about in 268ms
- GET /about 200 in 320ms
- ✓ Compiled /solutions in 228ms
- GET /solutions 200 in 289ms
- ✓ Compiled /scan-give in 225ms
- GET /scan-give 200 in 270ms
- ✓ Compiled /impact in 219ms
- GET /impact 200 in 268ms
- GET /impact 200 in 47ms
- ✓ Compiled /register in 171ms
- GET /register 200 in 215ms
- GET /scan-give 200 in 46ms
- GET /solutions 200 in 45ms
- GET /about 200 in 45ms
- ✓ Compiled /login in 349ms
- GET /login 200 in 496ms
- ✓ Compiled /dashboard in 320ms
- GET /dashboard 200 in 377ms
- GET /dashboard 200 in 48ms
- ✓ Compiled /dashboard/platform in 204ms
- GET /dashboard/platform 200 in 244ms
- ○ Compiling /dashboard/users ...
- ✓ Compiled /dashboard/users in 514ms
- GET /dashboard/users 200 in 561ms
- ✓ Compiled /dashboard/shelters in 362ms
- GET /dashboard/shelters 200 in 432ms
- ✓ Compiled /dashboard/financial in 232ms
- GET /dashboard/financial 200 in 284ms
- ✓ Compiled /dashboard/security in 216ms
- GET /dashboard/security 200 in 262ms
- ✓ Compiled /dashboard/analytics in 222ms
- GET /dashboard/analytics 200 in 270ms
- GET /dashboard/security 200 in 51ms
- GET /dashboard/financial 200 in 47ms
- GET /dashboard/shelters 200 in 49ms
- GET /dashboard/users 200 in 55ms
- GET /dashboard/platform 200 in 48ms
- GET /dashboard 200 in 49ms
+ GET / 200 in 2980ms
+ ✓ Compiled /investor-access in 336ms
+ GET /investor-access 200 in 460ms
+ ✓ Compiled middleware in 1ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET /investor-access 200 in 135ms
+ GET /investor-access 200 in 43ms
+ ✓ Compiled in 94ms
+ ✓ Compiled middleware in 5ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET /investor-access 200 in 166ms
+ GET /investor-access 200 in 37ms
+ ✓ Compiled in 77ms
+ ✓ Compiled middleware in 2ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET /investor-access 200 in 116ms
+ GET /investor-access 200 in 41ms
+ ✓ Compiled in 159ms
+ ✓ Compiled /investor-relations in 381ms
+ GET /investor-relations 200 in 454ms
+ ✓ Compiled middleware in 2ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET /investor-relations 200 in 134ms
+ GET /investor-relations 200 in 35ms
+ ✓ Compiled in 107ms
+ ✓ Compiled in 45ms
+ ✓ Compiled in 95ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET /investor-relations 200 in 559ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET / 200 in 112ms
+ ✓ Compiled /docs in 300ms
+ GET /docs 200 in 346ms
+ ✓ Compiled /docs/blockchain in 240ms
+ GET /docs/blockchain 200 in 295ms
+ ✓ Compiled in 61ms
+ ✓ Compiled /docs/whitepaper in 202ms
+ GET /docs/whitepaper 200 in 241ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET /investor-access 200 in 91ms
+ GET /investor-access 200 in 59ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET /investor-relations 200 in 114ms
+ ✓ Compiled middleware in 3ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET /investor-relations 200 in 138ms
+ GET /investor-relations 200 in 54ms
+ ✓ Compiled middleware in 0ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET / 200 in 398ms
+ ✓ Compiled in 99ms
+ ✓ Compiled in 148ms
+ GET / 200 in 78ms

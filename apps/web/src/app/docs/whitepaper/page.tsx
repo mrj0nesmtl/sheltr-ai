@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowLeft, Download, Share, BookOpen, FileText } from 'lucide-react';
+import { ArrowLeft, Download, Share, BookOpen, FileText, Coins } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ThemeToggle } from '@/components/theme-toggle';
@@ -52,7 +52,7 @@ export default function WhitepaperPage() {
                   <span>•</span>
                   <span>67 pages</span>
                   <span>•</span>
-                  <Badge variant="outline" className="text-green-600 border-green-600">Production Ready</Badge>
+                  <Badge variant="outline" className="text-amber-600 border-amber-600">In Development</Badge>
                 </div>
               </div>
             </div>
@@ -231,16 +231,16 @@ export default function WhitepaperPage() {
                   smart contract code, and comprehensive implementation strategy.
                 </p>
                 <div className="flex gap-4 justify-center">
-                  <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/whitepaper_final.md">
+                  <Link href="/tokenomics">
                     <Button className="bg-white text-blue-600 hover:bg-blue-50">
-                      <BookOpen className="h-4 w-4 mr-2" />
-                      View on GitHub
+                      <Coins className="h-4 w-4 mr-2" />
+                      View Tokenomics
                     </Button>
-                  </a>
+                  </Link>
                   <a href="https://github.com/mrj0nesmtl/sheltr-ai/raw/main/docs/02-architecture/whitepaper_final.md">
                     <Button variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600">
                       <Download className="h-4 w-4 mr-2" />
-                      Download Markdown
+                      Download PDF
                     </Button>
                   </a>
                 </div>

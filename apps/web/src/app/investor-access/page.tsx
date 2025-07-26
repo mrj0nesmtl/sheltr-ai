@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ThemeLogo } from '@/components/ThemeLogo';
+import ThemeLogo from '@/components/ThemeLogo';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -60,9 +60,8 @@ export default function InvestorAccessPage() {
       <header className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <Link href="/" className="flex items-center space-x-2">
+            <Link href="/" className="flex items-center">
               <ThemeLogo />
-              <span className="text-xl font-bold">SHELTR-AI</span>
             </Link>
             
             <div className="flex items-center space-x-4">

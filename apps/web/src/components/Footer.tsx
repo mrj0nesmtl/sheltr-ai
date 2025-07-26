@@ -32,8 +32,9 @@ export default function Footer() {
             <ul className="space-y-1 text-xs text-muted-foreground">
               <li><Link href="/tokenomics" className="hover:text-foreground">Tokenomics</Link></li>
               <li><Link href="/tokenomics#smartfund" className="hover:text-foreground">SmartFund</Link></li>
-              <li><a href="/docs/security" className="hover:text-foreground">Security</a></li>
-              <li><a href="/docs" className="hover:text-foreground">Documentation</a></li>
+              <li><Link href="/docs" className="hover:text-foreground">Documentation</Link></li>
+              <li><Link href="/docs/whitepaper" className="hover:text-foreground">White Paper</Link></li>
+              <li><Link href="/docs/blockchain" className="hover:text-foreground">Blockchain</Link></li>
               <li>
                 <a href="https://github.com/mrj0nesmtl/sheltr-ai" target="_blank" className="hover:text-foreground flex items-center">
                   <Github className="h-3 w-3 mr-1" /> GitHub

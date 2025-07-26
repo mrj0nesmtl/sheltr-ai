@@ -2,7 +2,7 @@
 
 ## Overview
 
-The SHELTR-AI Investor Relations portal is a secure, invitation-only section designed for qualified, vetted investors interested in participating in our **$100,000 Pre-Seed funding round**.
+The SHELTR-AI Investor Relations portal is a secure, invitation-only section designed for qualified, vetted investors interested in participating in our **$150,000 Pre-Seed funding round**.
 
 ## Portal Structure
 
@@ -15,19 +15,24 @@ The SHELTR-AI Investor Relations portal is a secure, invitation-only section des
 ### 📊 Investment Opportunity
 
 #### **Pre-Seed Round Details**
-- **Target Amount**: $100,000 USD
+- **Target Amount**: $150,000 USD
 - **Timeline**: 3 months development completion
-- **Token**: $SHLTR utility token launch
-- **Structure**: Token sale (preferred) vs. traditional equity
+- **Dual-Token Launch**: SHELTR-S (stable) + SHELTR (growth)
+- **Structure**: Token sale with governance rights (not equity)
 
 #### **Use of Funds**
 ```
-Platform Development     40%  ($40,000)
-Blockchain Infrastructure 25%  ($25,000)
-Regulatory & Compliance  15%  ($15,000)
-Marketing & Partnerships 10%  ($10,000)
-Operations & Legal       10%  ($10,000)
+Platform Development     40%  ($60,000)
+Blockchain Infrastructure 25%  ($37,500)
+Regulatory & Compliance  15%  ($22,500)
+Marketing & Partnerships 10%  ($15,000)
+Operations & Legal       10%  ($15,000)
 ```
+
+#### **Participant Onboarding Incentive**
+- **Welcome Bonus**: 100 SHELTR-S tokens ($100 value) per new participant
+- **Purpose**: Immediate engagement and platform adoption
+- **Funding**: Allocated from platform development budget
 
 #### **Token Economics ($SHLTR)**
 - **Total Supply**: 100,000,000 tokens
@@ -38,9 +43,10 @@ Operations & Legal       10%  ($10,000)
 ### 🎯 Investment Terms
 
 #### **Minimum/Maximum Investment**
-- **Minimum**: $5,000 (100,000 tokens)
-- **Maximum**: $25,000 (500,000 tokens)
-- **Total Available**: 2,000,000 tokens (10% of pre-seed allocation)
+- **Minimum**: $5,000 (100,000 SHELTR tokens)
+- **Maximum**: $37,500 (750,000 SHELTR tokens)
+- **Total Available**: 3,000,000 SHELTR tokens (pre-seed allocation)
+- **Multi-Round Strategy**: Pre-Seed ($150K) → Seed ($1M) → Series A ($5M+)
 
 #### **Investor Benefits**
 - 50% discount to public token price

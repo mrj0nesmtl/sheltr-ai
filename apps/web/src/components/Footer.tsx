@@ -31,10 +31,7 @@ export default function Footer() {
             <h3 className="text-sm font-semibold mb-3">Technology</h3>
             <ul className="space-y-1 text-xs text-muted-foreground">
               <li><Link href="/tokenomics" className="hover:text-foreground">Tokenomics</Link></li>
-              <li><Link href="/tokenomics#smartfund" className="hover:text-foreground">SmartFund</Link></li>
-              <li><Link href="/docs" className="hover:text-foreground">Documentation</Link></li>
               <li><Link href="/docs/whitepaper" className="hover:text-foreground">White Paper</Link></li>
-              <li><Link href="/docs/blockchain" className="hover:text-foreground">Blockchain</Link></li>
               <li>
                 <a href="https://github.com/mrj0nesmtl/sheltr-ai" target="_blank" className="hover:text-foreground flex items-center">
                   <Github className="h-3 w-3 mr-1" /> GitHub
@@ -52,13 +49,7 @@ export default function Footer() {
                   BlueSky
                 </a>
               </li>
-              <li>
-                <a href="https://tiktok.com/@sheltr.ai" target="_blank" className="hover:text-foreground">
-                  TikTok
-                </a>
-              </li>
               <li><a href="/wiki" className="hover:text-foreground">Wiki</a></li>
-              <li><Link href="/register" className="hover:text-foreground">Help Center</Link></li>
               <li><span className="text-muted-foreground/60">🤖 AI Support (Soon)</span></li>
             </ul>
           </div>

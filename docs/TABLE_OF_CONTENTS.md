@@ -85,27 +85,32 @@
    - GitHub security setup and repository hardening
    - Advanced Super Admin dashboard development
 
-4. [**🔐 Session 3: Authentication & RBAC**](04-development/SESSION-03-AUTHENTICATION-RBAC.md)
+4. [**💰 Investor Relations Portal**](04-development/INVESTOR-RELATIONS-SETUP.md)
+   - Secure investor access system
+   - $100K pre-seed round documentation
+   - $SHLTR token economics and projections
+
+5. [**🔐 Session 3: Authentication & RBAC**](04-development/SESSION-03-AUTHENTICATION-RBAC.md)
    - Authentication system implementation
    - Role-based access control setup
 
-5. [**🌐 Session 2: Website Launch**](04-development/session-02-website-launch.md)
+6. [**🌐 Session 2: Website Launch**](04-development/session-02-website-launch.md)
    - Website deployment process
    - Firebase hosting setup
 
-6. [**🏗️ Session 1: Foundation**](04-development/session-01-foundation-day.md)
+7. [**🏗️ Session 1: Foundation**](04-development/session-01-foundation-day.md)
    - Project foundation and setup
    - Repository structure establishment
 
-7. [**✅ Session 2 Checklist**](04-development/SESSION-02-CHECKLIST.md)
+8. [**✅ Session 2 Checklist**](04-development/SESSION-02-CHECKLIST.md)
    - Session 2 completion checklist
    - Task verification and status
 
-8. [**✅ Session 3 Checklist**](04-development/SESSION-03-CHECKLIST.md)
+9. [**✅ Session 3 Checklist**](04-development/SESSION-03-CHECKLIST.md)
    - Session 3 completion checklist
    - Authentication milestone verification
 
-9. [**🎯 Session 3 Planning**](04-development/) 
+10. [**🎯 Session 3 Planning**](04-development/) 
    - [FastAPI Planning](04-development/SESSION-03-FASTAPI-PLANNING.md)
    - [Kickoff Prompt](04-development/SESSION-03-KICKOFF-PROMPT.md)
 

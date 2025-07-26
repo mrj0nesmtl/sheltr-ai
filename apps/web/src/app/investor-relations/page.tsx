@@ -1,0 +1,812 @@
+'use client';
+
+import { useState } from 'react';
+import Link from 'next/link';
+import { ThemeLogo } from '@/components/ThemeLogo';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { 
+  TrendingUp, 
+  Shield, 
+  Users, 
+  Coins, 
+  Globe, 
+  BarChart3, 
+  Target,
+  Lock,
+  CheckCircle,
+  ArrowRight,
+  Download,
+  Calendar,
+  DollarSign,
+  PieChart,
+  LineChart,
+  Building,
+  Handshake
+} from 'lucide-react';
+
+export default function InvestorRelationsPage() {
+  const [activeTab, setActiveTab] = useState('overview');
+
+  const tokenProjections = [
+    { year: 2025, users: 1000, transactions: 50000, tokenValue: 0.10, marketCap: 100000 },
+    { year: 2026, users: 5000, transactions: 250000, tokenValue: 0.25, marketCap: 625000 },
+    { year: 2027, users: 15000, transactions: 750000, tokenValue: 0.50, marketCap: 1875000 },
+    { year: 2028, users: 40000, transactions: 2000000, tokenValue: 0.85, marketCap: 8500000 },
+    { year: 2029, users: 100000, transactions: 5000000, tokenValue: 1.20, marketCap: 30000000 }
+  ];
+
+  const fundingAllocation = [
+    { category: 'Platform Development', percentage: 40, amount: 40000, color: 'bg-blue-500' },
+    { category: 'Blockchain Infrastructure', percentage: 25, amount: 25000, color: 'bg-green-500' },
+    { category: 'Regulatory & Compliance', percentage: 15, amount: 15000, color: 'bg-purple-500' },
+    { category: 'Marketing & Partnerships', percentage: 10, amount: 10000, color: 'bg-orange-500' },
+    { category: 'Operations & Legal', percentage: 10, amount: 10000, color: 'bg-red-500' }
+  ];
+
+  const milestones = [
+    { quarter: 'Q1 2025', title: 'Platform Beta Launch', status: 'completed' },
+    { quarter: 'Q2 2025', title: 'Blockchain Integration', status: 'in-progress' },
+    { quarter: 'Q3 2025', title: 'Token Launch ($SHLTR)', status: 'planned' },
+    { quarter: 'Q4 2025', title: 'Multi-City Expansion', status: 'planned' }
+  ];
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
+      {/* Header */}
+      <header className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b sticky top-0 z-50">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <Link href="/" className="flex items-center space-x-2">
+              <ThemeLogo />
+              <span className="text-xl font-bold">SHELTR-AI</span>
+              <Badge variant="secondary" className="text-xs">INVESTOR RELATIONS</Badge>
+            </Link>
+            
+            <div className="flex items-center space-x-4">
+              <Lock className="h-4 w-4 text-amber-600" />
+              <span className="text-sm text-muted-foreground">Private & Confidential</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Hero Section */}
+      <section className="py-20 bg-gradient-to-r from-blue-900 via-purple-900 to-indigo-900 text-white">
+        <div className="container mx-auto px-4 text-center">
+          <div className="max-w-4xl mx-auto">
+            <Badge className="mb-4 bg-amber-600 text-black">PRE-SEED FUNDING ROUND</Badge>
+            <h1 className="text-5xl font-bold mb-6">
+              Invest in the Future of 
+              <span className="bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent"> Humanitarian Technology</span>
+            </h1>
+            <p className="text-xl mb-8 text-blue-100">
+              Join us in revolutionizing homelessness support through blockchain transparency, 
+              AI-driven insights, and dignified participant experiences.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button size="lg" className="bg-amber-600 hover:bg-amber-700 text-black">
+                <Download className="h-5 w-5 mr-2" />
+                Download Investment Deck
+              </Button>
+              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-black">
+                <Calendar className="h-5 w-5 mr-2" />
+                Schedule Meeting
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Investment Overview */}
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          <div className="grid md:grid-cols-4 gap-6 mb-12">
+            <Card className="text-center">
+              <CardContent className="pt-6">
+                <Target className="h-12 w-12 mx-auto mb-4 text-green-600" />
+                <h3 className="text-2xl font-bold mb-2">$100K</h3>
+                <p className="text-muted-foreground">Pre-Seed Target</p>
+              </CardContent>
+            </Card>
+            <Card className="text-center">
+              <CardContent className="pt-6">
+                <Calendar className="h-12 w-12 mx-auto mb-4 text-blue-600" />
+                <h3 className="text-2xl font-bold mb-2">3 Months</h3>
+                <p className="text-muted-foreground">Development Timeline</p>
+              </CardContent>
+            </Card>
+            <Card className="text-center">
+              <CardContent className="pt-6">
+                <Coins className="h-12 w-12 mx-auto mb-4 text-amber-600" />
+                <h3 className="text-2xl font-bold mb-2">$SHLTR</h3>
+                <p className="text-muted-foreground">Utility Token</p>
+              </CardContent>
+            </Card>
+            <Card className="text-center">
+              <CardContent className="pt-6">
+                <TrendingUp className="h-12 w-12 mx-auto mb-4 text-purple-600" />
+                <h3 className="text-2xl font-bold mb-2">30x</h3>
+                <p className="text-muted-foreground">5-Year ROI Projection</p>
+              </CardContent>
+            </Card>
+          </div>
+
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <TabsList className="grid w-full grid-cols-5">
+              <TabsTrigger value="overview">Executive Summary</TabsTrigger>
+              <TabsTrigger value="product">Product & Technology</TabsTrigger>
+              <TabsTrigger value="tokenomics">Tokenomics</TabsTrigger>
+              <TabsTrigger value="projections">Financial Projections</TabsTrigger>
+              <TabsTrigger value="investment">Investment Terms</TabsTrigger>
+            </TabsList>
+
+            {/* Executive Summary */}
+            <TabsContent value="overview" className="space-y-8">
+              <div className="grid md:grid-cols-2 gap-8">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Building className="h-5 w-5" />
+                      Market Opportunity
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <h4 className="font-semibold">Global Homelessness</h4>
+                        <p className="text-2xl font-bold text-red-600">150M+</p>
+                        <p className="text-sm text-muted-foreground">People worldwide</p>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold">Annual Spending</h4>
+                        <p className="text-2xl font-bold text-green-600">$45B</p>
+                        <p className="text-sm text-muted-foreground">Global aid budget</p>
+                      </div>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold mb-2">Key Problems We Solve</h4>
+                      <ul className="space-y-1 text-sm">
+                        <li className="flex items-center gap-2">
+                          <CheckCircle className="h-4 w-4 text-green-500" />
+                          Lack of donation transparency
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <CheckCircle className="h-4 w-4 text-green-500" />
+                          Inefficient resource allocation
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <CheckCircle className="h-4 w-4 text-green-500" />
+                          Participant dignity and privacy
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <CheckCircle className="h-4 w-4 text-green-500" />
+                          Data fragmentation across agencies
+                        </li>
+                      </ul>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Shield className="h-5 w-5" />
+                      Competitive Advantages
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="space-y-3">
+                      <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                        <h4 className="font-semibold text-blue-700 dark:text-blue-300">Blockchain Transparency</h4>
+                        <p className="text-sm text-blue-600 dark:text-blue-400">Every transaction immutably recorded</p>
+                      </div>
+                      <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                        <h4 className="font-semibold text-green-700 dark:text-green-300">AI-Driven Insights</h4>
+                        <p className="text-sm text-green-600 dark:text-green-400">Predictive analytics for resource optimization</p>
+                      </div>
+                      <div className="p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+                        <h4 className="font-semibold text-purple-700 dark:text-purple-300">Multi-Stakeholder Platform</h4>
+                        <p className="text-sm text-purple-600 dark:text-purple-400">Unified solution for all participants</p>
+                      </div>
+                      <div className="p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg">
+                        <h4 className="font-semibold text-amber-700 dark:text-amber-300">Dignity-First Design</h4>
+                        <p className="text-sm text-amber-600 dark:text-amber-400">Privacy-preserving participant experience</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Development Roadmap & Milestones</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid md:grid-cols-4 gap-4">
+                    {milestones.map((milestone, index) => (
+                      <div key={index} className="relative">
+                        <div className={`p-4 rounded-lg border-2 ${
+                          milestone.status === 'completed' ? 'border-green-500 bg-green-50 dark:bg-green-900/20' :
+                          milestone.status === 'in-progress' ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' :
+                          'border-gray-300 bg-gray-50 dark:bg-gray-800'
+                        }`}>
+                          <div className="flex items-center justify-between mb-2">
+                            <Badge variant={
+                              milestone.status === 'completed' ? 'default' :
+                              milestone.status === 'in-progress' ? 'secondary' : 'outline'
+                            }>
+                              {milestone.quarter}
+                            </Badge>
+                            {milestone.status === 'completed' && 
+                              <CheckCircle className="h-5 w-5 text-green-500" />
+                            }
+                          </div>
+                          <h4 className="font-semibold text-sm">{milestone.title}</h4>
+                        </div>
+                        {index < milestones.length - 1 && (
+                          <ArrowRight className="h-4 w-4 absolute top-1/2 -right-2 transform -translate-y-1/2 text-gray-400" />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            {/* Product & Technology */}
+            <TabsContent value="product" className="space-y-8">
+              <div className="grid md:grid-cols-2 gap-8">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>System Architecture</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div className="bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900 dark:to-purple-900 p-6 rounded-lg">
+                        <h4 className="font-bold mb-3 text-center">SHELTR-AI Platform Stack</h4>
+                        <div className="space-y-3">
+                          <div className="bg-white dark:bg-slate-800 p-3 rounded border text-center">
+                            <strong>Frontend:</strong> Next.js + React + TypeScript
+                          </div>
+                          <div className="bg-white dark:bg-slate-800 p-3 rounded border text-center">
+                            <strong>Backend:</strong> FastAPI + Python + Firebase
+                          </div>
+                          <div className="bg-white dark:bg-slate-800 p-3 rounded border text-center">
+                            <strong>Blockchain:</strong> Ethereum + Smart Contracts
+                          </div>
+                          <div className="bg-white dark:bg-slate-800 p-3 rounded border text-center">
+                            <strong>Database:</strong> Firestore + Multi-Tenant Architecture
+                          </div>
+                          <div className="bg-white dark:bg-slate-800 p-3 rounded border text-center">
+                            <strong>AI/ML:</strong> TensorFlow + Predictive Analytics
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Core Features</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-2">
+                          <Users className="h-5 w-5 text-blue-500" />
+                          <span className="font-medium">Multi-Role Access</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Shield className="h-5 w-5 text-green-500" />
+                          <span className="font-medium">Blockchain Security</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <BarChart3 className="h-5 w-5 text-purple-500" />
+                          <span className="font-medium">Real-Time Analytics</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Globe className="h-5 w-5 text-orange-500" />
+                          <span className="font-medium">QR Code Integration</span>
+                        </div>
+                      </div>
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-2">
+                          <Coins className="h-5 w-5 text-amber-500" />
+                          <span className="font-medium">Token Economy</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <PieChart className="h-5 w-5 text-red-500" />
+                          <span className="font-medium">Impact Tracking</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Lock className="h-5 w-5 text-indigo-500" />
+                          <span className="font-medium">Privacy Protection</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <LineChart className="h-5 w-5 text-teal-500" />
+                          <span className="font-medium">Predictive Modeling</span>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Data Flow & Transaction Process</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-700 p-6 rounded-lg">
+                    <div className="grid md:grid-cols-5 gap-4 text-center">
+                      <div className="space-y-2">
+                        <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mx-auto">
+                          <span className="text-white font-bold">1</span>
+                        </div>
+                        <h4 className="font-semibold">Donor Scans QR</h4>
+                        <p className="text-xs text-muted-foreground">Mobile app or web interface</p>
+                      </div>
+                      <div className="space-y-2">
+                        <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mx-auto">
+                          <span className="text-white font-bold">2</span>
+                        </div>
+                        <h4 className="font-semibold">Smart Contract</h4>
+                        <p className="text-xs text-muted-foreground">Blockchain verification</p>
+                      </div>
+                      <div className="space-y-2">
+                        <div className="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center mx-auto">
+                          <span className="text-white font-bold">3</span>
+                        </div>
+                        <h4 className="font-semibold">Fund Allocation</h4>
+                        <p className="text-xs text-muted-foreground">80% direct, 20% housing</p>
+                      </div>
+                      <div className="space-y-2">
+                        <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center mx-auto">
+                          <span className="text-white font-bold">4</span>
+                        </div>
+                        <h4 className="font-semibold">Impact Tracking</h4>
+                        <p className="text-xs text-muted-foreground">Real-time analytics</p>
+                      </div>
+                      <div className="space-y-2">
+                        <div className="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center mx-auto">
+                          <span className="text-white font-bold">5</span>
+                        </div>
+                        <h4 className="font-semibold">Donor Feedback</h4>
+                        <p className="text-xs text-muted-foreground">Transparent reporting</p>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            {/* Tokenomics */}
+            <TabsContent value="tokenomics" className="space-y-8">
+              <div className="grid md:grid-cols-2 gap-8">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Coins className="h-5 w-5 text-amber-500" />
+                      $SHLTR Token Economics
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4 text-center">
+                      <div className="p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg">
+                        <h4 className="font-bold text-2xl text-amber-600">100M</h4>
+                        <p className="text-sm">Total Supply</p>
+                      </div>
+                      <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                        <h4 className="font-bold text-2xl text-blue-600">$0.10</h4>
+                        <p className="text-sm">Initial Price</p>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-3">
+                      <h4 className="font-semibold">Token Distribution</h4>
+                      <div className="space-y-2">
+                        <div className="flex justify-between items-center">
+                          <span>Public Sale (40%)</span>
+                          <span className="font-mono">40,000,000 $SHLTR</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span>Team & Advisors (20%)</span>
+                          <span className="font-mono">20,000,000 $SHLTR</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span>Platform Rewards (15%)</span>
+                          <span className="font-mono">15,000,000 $SHLTR</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span>Development Fund (15%)</span>
+                          <span className="font-mono">15,000,000 $SHLTR</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span>Reserve Fund (10%)</span>
+                          <span className="font-mono">10,000,000 $SHLTR</span>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Token Utility & Value Drivers</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="space-y-3">
+                      <div className="p-3 border rounded-lg">
+                        <h4 className="font-semibold text-green-700 dark:text-green-300">Transaction Fees</h4>
+                        <p className="text-sm text-muted-foreground">2% platform fee paid in $SHLTR</p>
+                      </div>
+                      <div className="p-3 border rounded-lg">
+                        <h4 className="font-semibold text-blue-700 dark:text-blue-300">Governance Rights</h4>
+                        <p className="text-sm text-muted-foreground">Vote on platform upgrades and policies</p>
+                      </div>
+                      <div className="p-3 border rounded-lg">
+                        <h4 className="font-semibold text-purple-700 dark:text-purple-300">Staking Rewards</h4>
+                        <p className="text-sm text-muted-foreground">Earn yield for providing liquidity</p>
+                      </div>
+                      <div className="p-3 border rounded-lg">
+                        <h4 className="font-semibold text-orange-700 dark:text-orange-300">Premium Features</h4>
+                        <p className="text-sm text-muted-foreground">Advanced analytics and reporting</p>
+                      </div>
+                    </div>
+
+                    <div className="mt-6 p-4 bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 rounded-lg">
+                      <h4 className="font-semibold mb-2">Deflationary Mechanics</h4>
+                      <ul className="text-sm space-y-1">
+                        <li>• 1% of transaction fees burned quarterly</li>
+                        <li>• Buy-back program from platform revenue</li>
+                        <li>• Staking locks reduce circulating supply</li>
+                      </ul>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Token Release Schedule</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="grid md:grid-cols-5 gap-4">
+                      {['Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5'].map((year, index) => (
+                        <div key={year} className="text-center">
+                          <div className="h-32 bg-gradient-to-t from-blue-500 to-blue-300 rounded-lg mb-2 flex items-end justify-center pb-2">
+                            <span className="text-white font-bold">{20 + index * 5}%</span>
+                          </div>
+                          <span className="text-sm font-medium">{year}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <p className="text-sm text-muted-foreground text-center">
+                      Progressive unlock schedule ensures long-term value alignment and prevents market dumping
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            {/* Financial Projections */}
+            <TabsContent value="projections" className="space-y-8">
+              <div className="grid md:grid-cols-2 gap-8">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>5-Year Growth Projections</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      {tokenProjections.map((projection, index) => (
+                        <div key={projection.year} className="grid grid-cols-4 gap-2 p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
+                          <div className="text-center">
+                            <div className="font-bold">{projection.year}</div>
+                            <div className="text-xs text-muted-foreground">Year</div>
+                          </div>
+                          <div className="text-center">
+                            <div className="font-bold text-blue-600">{projection.users.toLocaleString()}</div>
+                            <div className="text-xs text-muted-foreground">Users</div>
+                          </div>
+                          <div className="text-center">
+                            <div className="font-bold text-green-600">${projection.tokenValue}</div>
+                            <div className="text-xs text-muted-foreground">Token Value</div>
+                          </div>
+                          <div className="text-center">
+                            <div className="font-bold text-purple-600">${(projection.marketCap / 1000000).toFixed(1)}M</div>
+                            <div className="text-xs text-muted-foreground">Market Cap</div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Pre-Seed Fund Allocation</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      {fundingAllocation.map((item, index) => (
+                        <div key={index} className="space-y-2">
+                          <div className="flex justify-between items-center">
+                            <span className="font-medium">{item.category}</span>
+                            <span className="font-bold">${item.amount.toLocaleString()}</span>
+                          </div>
+                          <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
+                            <div 
+                              className={`h-3 rounded-full ${item.color}`}
+                              style={{ width: `${item.percentage}%` }}
+                            ></div>
+                          </div>
+                          <div className="text-sm text-muted-foreground">{item.percentage}% of total funding</div>
+                        </div>
+                      ))}
+                    </div>
+                    
+                    <div className="mt-6 p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                      <h4 className="font-semibold text-green-700 dark:text-green-300 mb-2">Expected ROI Timeline</h4>
+                      <div className="grid grid-cols-3 gap-4 text-center">
+                        <div>
+                          <div className="font-bold text-lg">6 months</div>
+                          <div className="text-sm">MVP Launch</div>
+                        </div>
+                        <div>
+                          <div className="font-bold text-lg">12 months</div>
+                          <div className="text-sm">Token Generation</div>
+                        </div>
+                        <div>
+                          <div className="font-bold text-lg">24 months</div>
+                          <div className="text-sm">Market Expansion</div>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Revenue Projections & Business Model</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid md:grid-cols-3 gap-6">
+                    <div className="space-y-4">
+                      <h4 className="font-semibold text-blue-600">Platform Fees</h4>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span>Year 1:</span>
+                          <span className="font-mono">$25,000</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Year 3:</span>
+                          <span className="font-mono">$375,000</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Year 5:</span>
+                          <span className="font-mono">$2,500,000</span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-4">
+                      <h4 className="font-semibold text-green-600">Subscription Revenue</h4>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span>Enterprise Clients:</span>
+                          <span className="font-mono">$500/month</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Government Contracts:</span>
+                          <span className="font-mono">$5,000/month</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Premium Analytics:</span>
+                          <span className="font-mono">$100/month</span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-4">
+                      <h4 className="font-semibold text-purple-600">Token Appreciation</h4>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span>Initial Investment:</span>
+                          <span className="font-mono">$0.10/token</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>3-Year Target:</span>
+                          <span className="font-mono">$0.50/token</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>5-Year Target:</span>
+                          <span className="font-mono">$1.20/token</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            {/* Investment Terms */}
+            <TabsContent value="investment" className="space-y-8">
+              <div className="grid md:grid-cols-2 gap-8">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Handshake className="h-5 w-5 text-blue-500" />
+                      Investment Structure
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                      <h4 className="font-bold text-blue-700 dark:text-blue-300 mb-2">Token Sale Structure (Recommended)</h4>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span>Pre-Seed Token Price:</span>
+                          <span className="font-mono font-bold">$0.05/token</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Public Launch Price:</span>
+                          <span className="font-mono">$0.10/token</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Minimum Investment:</span>
+                          <span className="font-mono">$5,000</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Maximum Investment:</span>
+                          <span className="font-mono">$25,000</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                      <h4 className="font-bold text-green-700 dark:text-green-300 mb-2">Investor Benefits</h4>
+                      <ul className="text-sm space-y-1">
+                        <li>• 50% discount to public token price</li>
+                        <li>• Early access to platform features</li>
+                        <li>• Governance voting rights</li>
+                        <li>• Priority customer support</li>
+                        <li>• Quarterly investor updates</li>
+                        <li>• Optional advisory board participation</li>
+                      </ul>
+                    </div>
+
+                    <div className="p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg">
+                      <h4 className="font-bold text-amber-700 dark:text-amber-300 mb-2">Vesting Schedule</h4>
+                      <div className="space-y-1 text-sm">
+                        <div>• 25% released at Token Generation Event (TGE)</div>
+                        <div>• 75% vested over 12 months</div>
+                        <div>• Monthly linear release</div>
+                        <div>• No cliff period for pre-seed investors</div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Legal & Compliance</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    <div className="space-y-4">
+                      <div className="p-4 border rounded-lg">
+                        <h4 className="font-semibold mb-2">Regulatory Compliance</h4>
+                        <ul className="text-sm space-y-1">
+                          <li>• SEC utility token classification</li>
+                          <li>• CFTC compliance for derivatives</li>
+                          <li>• International securities law review</li>
+                          <li>• Privacy regulations (GDPR, CCPA)</li>
+                        </ul>
+                      </div>
+
+                      <div className="p-4 border rounded-lg">
+                        <h4 className="font-semibold mb-2">Investor Protections</h4>
+                        <ul className="text-sm space-y-1">
+                          <li>• Accredited investor verification</li>
+                          <li>• Multi-signature treasury management</li>
+                          <li>• Third-party audit of smart contracts</li>
+                          <li>• Insurance coverage for platform funds</li>
+                        </ul>
+                      </div>
+
+                      <div className="p-4 border rounded-lg">
+                        <h4 className="font-semibold mb-2">Documentation Required</h4>
+                        <ul className="text-sm space-y-1">
+                          <li>• Accredited investor certification</li>
+                          <li>• KYC/AML verification</li>
+                          <li>• Investment agreement execution</li>
+                          <li>• Risk acknowledgment forms</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Next Steps for Interested Investors</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid md:grid-cols-3 gap-6">
+                    <div className="text-center space-y-4">
+                      <div className="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto">
+                        <span className="text-white font-bold text-xl">1</span>
+                      </div>
+                      <h4 className="font-semibold">Initial Contact</h4>
+                      <p className="text-sm text-muted-foreground">
+                        Schedule a confidential call to discuss your investment interests and answer questions.
+                      </p>
+                      <Button variant="outline" size="sm">
+                        <Calendar className="h-4 w-4 mr-2" />
+                        Book Call
+                      </Button>
+                    </div>
+
+                    <div className="text-center space-y-4">
+                      <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto">
+                        <span className="text-white font-bold text-xl">2</span>
+                      </div>
+                      <h4 className="font-semibold">Due Diligence</h4>
+                      <p className="text-sm text-muted-foreground">
+                        Access detailed technical documentation, financial models, and legal frameworks.
+                      </p>
+                      <Button variant="outline" size="sm">
+                        <Download className="h-4 w-4 mr-2" />
+                        Data Room
+                      </Button>
+                    </div>
+
+                    <div className="text-center space-y-4">
+                      <div className="w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center mx-auto">
+                        <span className="text-white font-bold text-xl">3</span>
+                      </div>
+                      <h4 className="font-semibold">Investment Execution</h4>
+                      <p className="text-sm text-muted-foreground">
+                        Complete KYC verification and execute investment agreements with legal review.
+                      </p>
+                      <Button variant="outline" size="sm">
+                        <Handshake className="h-4 w-4 mr-2" />
+                        Invest Now
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-slate-900 text-white py-12">
+        <div className="container mx-auto px-4 text-center">
+          <div className="flex items-center justify-center space-x-2 mb-4">
+            <ThemeLogo />
+            <span className="text-xl font-bold">SHELTR-AI</span>
+            <Badge variant="secondary">INVESTOR RELATIONS</Badge>
+          </div>
+          <p className="text-slate-400 mb-4">
+            This document contains confidential and proprietary information. Distribution is restricted to qualified investors only.
+          </p>
+          <div className="flex justify-center space-x-6 text-sm text-slate-400">
+            <span>© 2025 SHELTR-AI Technologies Inc.</span>
+            <span>•</span>
+            <span>Private & Confidential</span>
+            <span>•</span>
+            <span>All Rights Reserved</span>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+} 

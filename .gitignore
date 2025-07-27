@@ -9,6 +9,15 @@ apps/*/node_modules/
 apps/api/.venv/
 apps/api/service-account-key.json
 
+# Google Calendar MCP Security
+google-credentials.json
+client_secret_*.json
+token.json
+.env.local
+
+# MCP Server files
+mcp-servers/
+
 # Build outputs
 apps/web/out/
 apps/web/.next/

@@ -8,26 +8,8 @@
    - Environments: .env.local
 
  ✓ Starting...
- ✓ Compiled middleware in 125ms
- ✓ Ready in 1415ms
+ ✓ Compiled middleware in 128ms
+ ✓ Ready in 1669ms
  ○ Compiling / ...
- ✓ Compiled / in 2.4s
- GET / 200 in 2988ms
- GET / 200 in 428ms
- ✓ Compiled /login in 325ms
- GET /login 200 in 449ms
- ✓ Compiled /dashboard in 337ms
- GET /dashboard 200 in 395ms
- GET /dashboard 200 in 62ms
- GET / 200 in 78ms
- GET /login 200 in 92ms
- GET /login 200 in 41ms
- GET /login 200 in 43ms
- GET /login 200 in 33ms
- GET /login 200 in 86ms
- GET /login 200 in 54ms
- GET /login 200 in 39ms
- GET /login 200 in 34ms
- GET /dashboard 200 in 109ms
- GET /login 200 in 108ms
- GET /login 200 in 53ms
+ ✓ Compiled / in 2.3s
+ GET / 200 in 2913ms

@@ -1,155 +1,116 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
-import { 
-  Home, 
-  Heart, 
-  Shield, 
-  Users, 
-  ArrowRight, 
-  Github, 
-  Twitter, 
-  Mail, 
-  Coins, 
-  LogIn, 
-  Menu, 
-  X,
-  Cloud,
-  Zap,
-  ShoppingCart,
-  Building,
-  Cpu,
-  Database,
-  QrCode,
-  CreditCard,
-  Bot,
-  Layers,
-  Network,
-  Globe
-} from 'lucide-react';
+import { Menu, X, LogIn, Coins, Shield, Zap, QrCode, UserCheck, CreditCard, Database, Smartphone, Building2, Handshake, Globe, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { ThemeToggle } from '@/components/theme-toggle';
 import Footer from '@/components/Footer';
 import ThemeLogo from '@/components/ThemeLogo';
-import { useState } from 'react';
 
 export default function AboutPage() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  const techStack = [
-    {
-      category: "Cloud Infrastructure",
-      icon: Cloud,
-      color: "text-blue-600",
-      description: "Google Cloud Platform with AI embeddings for intelligent donor-participant matching",
-      technologies: ["Google Cloud AI", "Vector Embeddings", "Firebase", "Cloud Functions"]
-    },
-    {
-      category: "Blockchain Layer",
-      icon: Network,
-      color: "text-purple-600", 
-      description: "Base network integration with dual-token architecture",
-      technologies: ["Base Network", "SHELTR-S Stable Token", "SHELTR Governance Token", "Smart Contracts"]
-    },
-    {
-      category: "Payment Solutions",
-      icon: CreditCard,
-      color: "text-green-600",
-      description: "Visa Intelligent Commerce for AI-powered transactions",
-      technologies: ["Visa AI Commerce", "Tokenized Payments", "SmartFund Contract", "QR Code Payments"]
-    },
-    {
-      category: "AI & Automation",
-      icon: Bot,
-      color: "text-amber-600",
-      description: "Intelligent systems for impact measurement and resource allocation",
-      technologies: ["AI Guidance", "Automated Distribution", "Impact Analytics", "Predictive Modeling"]
-    }
-  ];
-
-  const partnerOrganizations = [
-    {
-      name: "Emergency Housing Providers",
-      location: "Global Network",
-      focus: "Mobile shelter solutions & temporary housing",
-      impact: "Dignified alternatives to tent encampments and unsafe conditions",
-      funding: "SmartFund allocation ready",
-      url: "https://tinytinyhomes.ca/"
-    },
-    {
-      name: "Base Protocol",
-      location: "Global",
-      focus: "Layer 2 blockchain infrastructure", 
-      impact: "Low-cost, fast transactions (~$0.01 fees)",
-      funding: "Strategic partnership",
-      url: "https://www.coinbase.com/en-ca/price/base-protocol"
-    },
-    {
-      name: "Visa Intelligent Commerce",
-      location: "Global",
-      focus: "AI-powered payment solutions",
-      impact: "Seamless AI agent transactions for homeless services",
-      funding: "Technology integration partner",
-      url: "https://corporate.visa.com/en/products/intelligent-commerce.html"
-    }
-  ];
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-muted">
+    <div className="min-h-screen bg-background">
       {/* Navigation */}
       <nav className="bg-background/95 backdrop-blur-sm sticky top-0 z-50 border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <Link href="/" className="flex items-center">
-              <ThemeLogo />
-            </Link>
-            <div className="hidden md:flex space-x-8">
-              <Link href="/" className="text-muted-foreground hover:text-primary transition-colors">Home</Link>
-              <Link href="/about" className="text-foreground hover:text-primary transition-colors">About</Link>
-              <Link href="/solutions" className="text-muted-foreground hover:text-primary transition-colors">Solutions</Link>
-              <Link href="/scan-give" className="text-muted-foreground hover:text-primary transition-colors">Scan & Give</Link>
-              <Link href="/impact" className="text-muted-foreground hover:text-primary transition-colors">Impact</Link>
-              <Link href="/docs" className="text-muted-foreground hover:text-primary transition-colors">Docs</Link>
+            <div className="flex items-center">
+              <Link href="/">
+                <ThemeLogo />
+              </Link>
             </div>
-            <div className="flex items-center space-x-4">
-              <ThemeToggle />
-              <div className="hidden md:flex items-center space-x-4">
-                <Link href="/login">
-                  <Button variant="ghost" size="sm">
-                    <LogIn className="h-4 w-4 mr-2" />
-                    Sign In
-                  </Button>
+            
+            {/* Desktop Navigation */}
+            <div className="hidden md:block">
+              <div className="ml-10 flex items-baseline space-x-4">
+                <Link href="/about" className="text-primary px-3 py-2 text-sm font-medium">
+                  About
                 </Link>
-                <Link href="/register">
-                  <Button>
-                    Get Started
-                  </Button>
+                <Link href="/solutions" className="hover:text-primary px-3 py-2 text-sm font-medium">
+                  Solutions
+                </Link>
+                <Link href="/scan-give" className="hover:text-primary px-3 py-2 text-sm font-medium">
+                  Scan & Give
+                </Link>
+                <Link href="/impact" className="hover:text-primary px-3 py-2 text-sm font-medium">
+                  Impact
                 </Link>
               </div>
-              <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden p-2 text-muted-foreground hover:text-foreground"
+            </div>
+
+            <div className="hidden md:flex items-center space-x-4">
+              <Link href="/login">
+                <Button variant="ghost" size="sm">
+                  <LogIn className="h-4 w-4 mr-2" />
+                  Sign In
+                </Button>
+              </Link>
+              <Link href="/register">
+                <Button size="sm">Get Started</Button>
+              </Link>
+              <ThemeToggle />
+            </div>
+
+            {/* Mobile menu button */}
+            <div className="md:hidden flex items-center space-x-2">
+              <ThemeToggle />
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="p-2"
               >
-                {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-              </button>
+                {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              </Button>
             </div>
           </div>
-          
-          {/* Mobile menu */}
-          {mobileMenuOpen && (
+
+          {/* Mobile Navigation Menu */}
+          {isMenuOpen && (
             <div className="md:hidden">
-              <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-background border-t">
-                <Link href="/" className="block px-3 py-2 text-muted-foreground hover:text-primary">Home</Link>
-                <Link href="/about" className="block px-3 py-2 text-foreground hover:text-primary">About</Link>
-                <Link href="/solutions" className="block px-3 py-2 text-muted-foreground hover:text-primary">Solutions</Link>
-                <Link href="/scan-give" className="block px-3 py-2 text-muted-foreground hover:text-primary">Scan & Give</Link>
-                <Link href="/impact" className="block px-3 py-2 text-muted-foreground hover:text-primary">Impact</Link>
-                <Link href="/docs" className="block px-3 py-2 text-muted-foreground hover:text-primary">Docs</Link>
-                <div className="border-t pt-3 mt-3">
-                  <Link href="/login" className="block px-3 py-2 text-muted-foreground hover:text-primary">Sign In</Link>
-                  <Link href="/register" className="block px-3 py-2 text-muted-foreground hover:text-primary">Get Started</Link>
+              <div className="px-2 pt-2 pb-3 space-y-1 bg-background border-t">
+                <Link 
+                  href="/about" 
+                  className="block px-3 py-2 text-base font-medium text-primary"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  About
+                </Link>
+                <Link 
+                  href="/solutions" 
+                  className="block px-3 py-2 text-base font-medium hover:text-primary"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Solutions
+                </Link>
+                <Link 
+                  href="/scan-give" 
+                  className="block px-3 py-2 text-base font-medium hover:text-primary"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Scan & Give
+                </Link>
+                <Link 
+                  href="/impact" 
+                  className="block px-3 py-2 text-base font-medium hover:text-primary"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Impact
+                </Link>
+                <div className="px-3 py-2 space-y-2">
+                  <Link href="/login" onClick={() => setIsMenuOpen(false)}>
+                    <Button variant="ghost" size="sm" className="w-full justify-start">
+                      <LogIn className="h-4 w-4 mr-2" />
+                      Sign In
+                    </Button>
+                  </Link>
+                  <Link href="/register" onClick={() => setIsMenuOpen(false)}>
+                    <Button size="sm" className="w-full">Get Started</Button>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -158,28 +119,38 @@ export default function AboutPage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-r from-blue-900 via-purple-900 to-indigo-900 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <Badge className="mb-4 bg-amber-600 text-black">POWERED BY AI & BLOCKCHAIN</Badge>
-            <h1 className="text-5xl font-bold mb-6">
-              Funding <span className="bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">Emergency Housing</span>
-              <br />Through the Homeless Depot
+      <section 
+        className="relative py-20 bg-gradient-to-r from-purple-600 to-blue-600"
+        style={{
+          backgroundImage: "url('/backgrounds/about-bg.jpg')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      >
+        <div className="absolute inset-0 bg-purple-900/60"></div>
+        <div className="relative z-10 container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <div className="inline-block bg-orange-500 text-white px-4 py-2 rounded-full text-sm font-semibold mb-6">
+              POWERED BY AI & BLOCKCHAIN
+            </div>
+            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
+              Funding <span className="text-orange-400">Emergency Housing</span>
             </h1>
-            <p className="text-xl mb-8 text-blue-100 max-w-3xl mx-auto">
-              SHELTR powers a revolutionary e-commerce ecosystem where every donation creates immediate impact. 
-              We're funding emergency housing solutions and essential services while building the world's first 
-              AI-powered marketplace for homeless support.
+            <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-4xl mx-auto">
+              SHELTR powers a revolutionary e-commerce ecosystem where every donation creates 
+              immediate impact. We're funding emergency housing solutions and essential services 
+              while building the world's first AI-powered marketplace for homeless support.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/tokenomics">
-                <Button size="lg" className="bg-amber-600 hover:bg-amber-700 text-black">
+                <Button size="lg" className="bg-orange-500 hover:bg-orange-600 text-white">
                   <Coins className="h-5 w-5 mr-2" />
                   View Tokenomics
                 </Button>
               </Link>
               <Link href="/docs">
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-black">
+                <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-purple-600">
                   <Shield className="h-5 w-5 mr-2" />
                   Technical Docs
                 </Button>
@@ -190,151 +161,143 @@ export default function AboutPage() {
       </section>
 
       {/* The SHELTR Story */}
-      <section className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">The SHELTR Story</h2>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              From QR code donations to AI-powered marketplace: How we're revolutionizing charitable giving 
-              and funding real solutions for emergency housing
+      <section className="py-20 bg-gradient-to-b from-blue-50 to-white dark:from-blue-900/20 dark:to-background">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-6">The SHELTR Story</h2>
+            <p className="text-xl text-center text-muted-foreground mb-12">
+              From QR code donations to AI-powered marketplace: How we're revolutionizing charitable giving and funding real solutions for emergency housing
             </p>
-          </div>
 
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h3 className="text-2xl font-bold mb-6">Inspiring Organizations</h3>
-              <p className="text-muted-foreground mb-6">
-                When we discovered <a href="https://tinytinyhomes.ca/" target="_blank" className="text-blue-600 hover:underline">Tiny Tiny Homes</a> in Toronto, 
-                we saw the future of homelessness solutions. Their mobile emergency shelters replace unsafe tent encampments 
-                with dignified, secure alternatives. Organizations like this inspire our vision for what's possible.
+            <div className="prose prose-lg max-w-none dark:prose-invert">
+              <h3 className="text-2xl font-semibold mb-4 flex items-center gap-2">
+                <Building2 className="h-6 w-6 text-blue-600" />
+                Inspiring Organizations
+              </h3>
+              <p className="text-lg leading-relaxed mb-6">
+                When we discovered Tiny Tiny Homes in Toronto, we saw the future of homelessness solutions. 
+                Their mobile emergency shelters replace unsafe tent encampments with dignified, secure alternatives. 
+                Organizations like this inspire our vision for what's possible.
               </p>
-              <p className="text-muted-foreground mb-6">
-                SHELTR was born from this challenge: How do we ensure innovative emergency housing and essential service 
-                providers get the funding they need, instantly and transparently?
+              <p className="text-lg leading-relaxed mb-8">
+                SHELTR was born from this challenge: How do we ensure innovative emergency housing and essential 
+                service providers get the funding they need, instantly and transparently?
               </p>
-              <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
-                <h4 className="font-semibold text-green-800 dark:text-green-200 mb-2">
+
+              <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg p-8 mb-12">
+                <h4 className="text-xl font-semibold mb-4 flex items-center gap-2">
                   💡 The Solution: SmartFund Contracts
                 </h4>
-                <p className="text-green-700 dark:text-green-300 text-sm">
+                <p className="text-lg mb-6">
                   15% of every donation automatically flows to housing solutions via blockchain smart contracts. 
                   Our system enables instant, transparent funding for emergency shelter and essential services.
                 </p>
+
+                <div className="grid md:grid-cols-2 gap-8">
+                  <div>
+                    <h5 className="font-semibold text-red-600 mb-3">Traditional Funding</h5>
+                    <ul className="space-y-2">
+                      <li>• Grant applications take 6-18 months</li>
+                      <li>• Success rates under 20%</li>
+                      <li>• Restrictive reporting requirements</li>
+                      <li>• Funding tied to bureaucratic approval</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h5 className="font-semibold text-green-600 mb-3">SHELTR SmartFund</h5>
+                    <ul className="space-y-2">
+                      <li>• Instant funding via smart contracts</li>
+                      <li>• 100% transparent allocation</li>
+                      <li>• Impact-based distribution</li>
+                      <li>• Community governance via SHELTR tokens</li>
+                    </ul>
+                  </div>
+                </div>
               </div>
-            </div>
-
-            <div className="space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Building className="h-5 w-5 text-blue-600" />
-                    Traditional Funding
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-2 text-sm text-muted-foreground">
-                    <li>• Grant applications take 6-18 months</li>
-                    <li>• Success rates under 20%</li>
-                    <li>• Restrictive reporting requirements</li>
-                    <li>• Funding tied to bureaucratic approval</li>
-                  </ul>
-                </CardContent>
-              </Card>
-
-              <Card className="border-green-200 bg-green-50 dark:bg-green-900/20">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Zap className="h-5 w-5 text-green-600" />
-                    SHELTR SmartFund
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-2 text-sm text-green-700 dark:text-green-300">
-                    <li>• Instant funding via smart contracts</li>
-                    <li>• 100% transparent allocation</li>
-                    <li>• Impact-based distribution</li>
-                    <li>• Community governance via SHELTR tokens</li>
-                  </ul>
-                </CardContent>
-              </Card>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Homeless Depot Concept */}
-      <section className="py-16 bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Introducing the Homeless Depot</h2>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              The world's first AI-powered e-commerce marketplace for homeless services, 
-              powered by Visa Intelligent Commerce and SHELTR's dual-token architecture
-            </p>
-          </div>
+      {/* Homeless Depot Section */}
+      <section className="py-20 bg-slate-900">
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                Introducing the Homeless Depot
+              </h2>
+              <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+                The world's first AI-powered e-commerce marketplace for homeless services, 
+                powered by Visa Intelligent Commerce and SHELTR's dual-token architecture
+              </p>
+            </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <QrCode className="h-5 w-5 text-blue-600" />
-                  Scan & Give
-                </CardTitle>
-                <CardDescription>Instant donations via QR codes</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  Participants receive QR codes linked to their SHELTR-S wallets. 
-                  Donors scan and give instantly, with 80% going directly to participants 
-                  as stable value, protected from crypto volatility.
-                </p>
-              </CardContent>
-            </Card>
+            <div className="grid md:grid-cols-3 gap-8 mb-12">
+              <Card className="bg-slate-800 border-slate-700">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center gap-2">
+                    <QrCode className="h-6 w-6 text-blue-400" />
+                    Scan & Give
+                  </CardTitle>
+                  <CardDescription className="text-gray-400">
+                    Instant donations via QR codes
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="text-gray-300">
+                  <p>
+                    Participants receive QR codes linked to their SHELTR-S wallets. Donors scan and give instantly, 
+                    with 80% going directly to participants as stable value, protected from crypto volatility.
+                  </p>
+                </CardContent>
+              </Card>
 
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Bot className="h-5 w-5 text-purple-600" />
-                  AI Shopping Assistant
-                </CardTitle>
-                <CardDescription>Visa Intelligent Commerce integration</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  AI agents help participants purchase essentials through the Homeless Depot. 
-                  Visa's intelligent commerce platform enables secure, personalized transactions 
-                  with fraud protection and seamless checkout.
-                </p>
-              </CardContent>
-            </Card>
+              <Card className="bg-slate-800 border-slate-700">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center gap-2">
+                    <CreditCard className="h-6 w-6 text-green-400" />
+                    AI Shopping Assistant
+                  </CardTitle>
+                  <CardDescription className="text-gray-400">
+                    Visa Intelligent Commerce integration
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="text-gray-300">
+                  <p>
+                    AI agents help participants purchase essentials through the Homeless Depot. 
+                    Visa's intelligent commerce platform enables secure, personalized transactions 
+                    with fraud protection and seamless checkout.
+                  </p>
+                </CardContent>
+              </Card>
 
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <ShoppingCart className="h-5 w-5 text-green-600" />
-                  Dignity-First Marketplace
-                </CardTitle>
-                <CardDescription>E-commerce built for impact</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  From emergency housing to job training, the Homeless Depot connects participants 
-                  with services that create lasting change. Every purchase tracked on-chain 
-                  for complete transparency.
-                </p>
-              </CardContent>
-            </Card>
-          </div>
+              <Card className="bg-slate-800 border-slate-700">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center gap-2">
+                    <UserCheck className="h-6 w-6 text-purple-400" />
+                    Dignity-First Marketplace
+                  </CardTitle>
+                  <CardDescription className="text-gray-400">
+                    E-commerce built for impact
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="text-gray-300">
+                  <p>
+                    From emergency housing to job training, the Homeless Depot connects participants 
+                    with services that create lasting change. Every purchase tracked on-chain for complete transparency.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
 
-          <div className="mt-12 text-center">
-            <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-6 max-w-3xl mx-auto">
-              <h3 className="font-semibold text-amber-800 dark:text-amber-200 mb-2">
+            <div className="bg-gradient-to-r from-orange-500 to-red-500 rounded-lg p-8 text-center">
+              <h3 className="text-2xl font-bold text-white mb-4 flex items-center justify-center gap-2">
                 🛒 Coming Soon: Homeless Depot Beta
               </h3>
-              <p className="text-amber-700 dark:text-amber-300 text-sm">
+              <p className="text-orange-100 text-lg">
                 Launching Q2 2025 with emergency housing providers and essential service organizations. 
-                Participants will be able to browse, select, and purchase shelter solutions 
-                directly through AI-powered recommendations.
+                Participants will be able to browse, select, and purchase shelter solutions directly 
+                through AI-powered recommendations.
               </p>
             </div>
           </div>
@@ -342,105 +305,203 @@ export default function AboutPage() {
       </section>
 
       {/* Technology Stack */}
-      <section className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Enterprise-Grade Technology Stack</h2>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              Built on Google Cloud with AI embeddings, Base blockchain, and Visa Intelligent Commerce
-            </p>
-          </div>
+      <section className="py-20 bg-gradient-to-b from-blue-50 to-white dark:from-blue-900/20 dark:to-background">
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                Enterprise-Grade Technology Stack
+              </h2>
+              <p className="text-xl text-muted-foreground">
+                Built on Google Cloud with AI embeddings, Base blockchain, and Visa Intelligent Commerce
+              </p>
+            </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
-            {techStack.map((tech, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+              <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-3">
-                    <tech.icon className={`h-8 w-8 ${tech.color}`} />
-                    <div>
-                      <h3 className="text-xl">{tech.category}</h3>
-                      <p className="text-sm text-muted-foreground font-normal">{tech.description}</p>
-                    </div>
+                  <CardTitle className="flex items-center gap-2">
+                    <Database className="h-6 w-6 text-blue-600" />
+                    Cloud Infrastructure
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
+                  <p className="text-sm text-muted-foreground mb-3">
+                    Google Cloud Platform with AI embeddings for intelligent donor-participant matching
+                  </p>
                   <div className="flex flex-wrap gap-2">
-                    {tech.technologies.map((technology, techIndex) => (
-                      <Badge key={techIndex} variant="outline" className="text-xs">
-                        {technology}
-                      </Badge>
-                    ))}
+                    <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">Google Cloud AI</span>
+                    <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">Vector Embeddings</span>
+                    <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">Firebase</span>
+                    <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">Cloud Functions</span>
                   </div>
                 </CardContent>
               </Card>
-            ))}
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Coins className="h-6 w-6 text-purple-600" />
+                    Blockchain Layer
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground mb-3">
+                    Base network integration with dual-token architecture
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <span className="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">Base Network</span>
+                    <span className="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">SHELTR-S Stable Token</span>
+                    <span className="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">SHELTR Governance Token</span>
+                    <span className="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">Smart Contracts</span>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <CreditCard className="h-6 w-6 text-green-600" />
+                    Payment Solutions
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground mb-3">
+                    Visa Intelligent Commerce for AI-powered transactions
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Visa AI Commerce</span>
+                    <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Tokenized Payments</span>
+                    <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">SmartFund Contract</span>
+                    <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">QR Code Payments</span>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Zap className="h-6 w-6 text-orange-600" />
+                    AI & Automation
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground mb-3">
+                    Intelligent systems for impact measurement and resource allocation
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <span className="bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded">AI Guidance</span>
+                    <span className="bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded">Automated Distribution</span>
+                    <span className="bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded">Impact Analytics</span>
+                    <span className="bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded">Predictive Modeling</span>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Partner Organizations */}
-      <section className="py-16 bg-muted/30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Strategic Partners & Funded Organizations</h2>
-            <p className="text-lg text-muted-foreground">
-              Working with industry leaders and innovative nonprofits to create lasting impact
-            </p>
-          </div>
+      {/* Strategic Partners */}
+      <section className="py-20 bg-slate-900">
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                Strategic Partners & Funded Organizations
+              </h2>
+              <p className="text-xl text-gray-300">
+                Working with industry leaders and innovative nonprofits to create lasting impact
+              </p>
+            </div>
 
-          <div className="space-y-6">
-            {partnerOrganizations.map((partner, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow">
-                <CardContent className="p-6">
-                  <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        <h3 className="text-xl font-bold">{partner.name}</h3>
-                        <Badge variant="outline">{partner.location}</Badge>
-                      </div>
-                      <p className="text-muted-foreground mb-2">{partner.focus}</p>
-                      <p className="text-sm">{partner.impact}</p>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-lg font-semibold text-green-600 mb-1">{partner.funding}</div>
-                      <a 
-                        href={partner.url} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="text-blue-600 hover:underline text-sm"
-                      >
-                        Learn More →
-                      </a>
-                    </div>
-                  </div>
+            <div className="grid md:grid-cols-3 gap-8">
+              <Card className="bg-slate-800 border-slate-700">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center gap-2">
+                    <Building2 className="h-6 w-6 text-blue-400" />
+                    Emergency Housing Providers
+                  </CardTitle>
+                  <CardDescription className="text-blue-400">Global Network</CardDescription>
+                </CardHeader>
+                <CardContent className="text-gray-300">
+                  <ul className="space-y-2">
+                    <li>Mobile shelter solutions & temporary housing</li>
+                    <li>Dignified alternatives to tent encampments and unsafe conditions</li>
+                    <li>SmartFund allocation ready</li>
+                  </ul>
+                  <Button variant="outline" className="mt-4 text-blue-400 border-blue-400 hover:bg-blue-400 hover:text-white">
+                    Learn More <ArrowRight className="h-4 w-4 ml-2" />
+                  </Button>
                 </CardContent>
               </Card>
-            ))}
+
+              <Card className="bg-slate-800 border-slate-700">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center gap-2">
+                    <Globe className="h-6 w-6 text-purple-400" />
+                    Base Protocol
+                  </CardTitle>
+                  <CardDescription className="text-purple-400">Global</CardDescription>
+                </CardHeader>
+                <CardContent className="text-gray-300">
+                  <ul className="space-y-2">
+                    <li>Layer 2 blockchain infrastructure</li>
+                    <li>Low-cost, fast transactions (~$0.01 fees)</li>
+                    <li>Strategic partnership</li>
+                  </ul>
+                  <Button variant="outline" className="mt-4 text-purple-400 border-purple-400 hover:bg-purple-400 hover:text-white">
+                    Learn More <ArrowRight className="h-4 w-4 ml-2" />
+                  </Button>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-slate-800 border-slate-700">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center gap-2">
+                    <Handshake className="h-6 w-6 text-green-400" />
+                    Visa Intelligent Commerce
+                  </CardTitle>
+                  <CardDescription className="text-green-400">Global</CardDescription>
+                </CardHeader>
+                <CardContent className="text-gray-300">
+                  <ul className="space-y-2">
+                    <li>AI-powered payment solutions</li>
+                    <li>Seamless AI agent transactions for homeless services</li>
+                    <li>Technology integration partner</li>
+                  </ul>
+                  <Button variant="outline" className="mt-4 text-green-400 border-green-400 hover:bg-green-400 hover:text-white">
+                    Learn More <ArrowRight className="h-4 w-4 ml-2" />
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Call to Action */}
-      <section className="py-20 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-6">Join the Revolution</h2>
-          <p className="text-xl mb-8 text-blue-100">
-            Help us fund more organizations like Tiny Tiny Homes while building 
-            the future of charitable technology
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/investor-relations">
-              <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50">
-                <Coins className="h-5 w-5 mr-2" />
-                Invest in SHELTR
-              </Button>
-            </Link>
-            <Link href="/scan-give">
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600">
-                <Heart className="h-5 w-5 mr-2" />
-                Start Giving
-              </Button>
-            </Link>
+      <section className="py-20 bg-gradient-to-r from-blue-600 to-purple-600">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+              Join the Revolution
+            </h2>
+            <p className="text-xl text-blue-100 mb-8">
+              Help us fund more organizations like Tiny Tiny Homes while building the future of charitable technology
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link href="/investor-relations">
+                <Button size="lg" variant="secondary" className="w-full sm:w-auto">
+                  Invest in SHELTR
+                </Button>
+              </Link>
+              <Link href="/scan-give">
+                <Button variant="outline" size="lg" className="w-full sm:w-auto border-white text-white hover:bg-white hover:text-blue-600">
+                  Start Giving
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </section>

@@ -37,9 +37,6 @@ export default function HomePage() {
                   <Link href="/impact" className="hover:text-primary px-3 py-2 text-sm font-medium">
                     Impact
                   </Link>
-                  <Link href="/docs" className="hover:text-primary px-3 py-2 text-sm font-medium">
-                    Docs
-                  </Link>
                 </div>
               </div>
 
@@ -101,13 +98,6 @@ export default function HomePage() {
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Impact
-                  </Link>
-                  <Link 
-                    href="/docs" 
-                    className="block px-3 py-2 text-base font-medium hover:text-primary"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    Docs
                   </Link>
                   <div className="px-3 py-2 space-y-2">
                     <Link href="/login" onClick={() => setIsMenuOpen(false)}>

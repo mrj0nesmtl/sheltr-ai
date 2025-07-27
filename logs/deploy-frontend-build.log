@@ -11,8 +11,6 @@
    Checking validity of types ...
    Collecting page data ...
    Generating static pages (0/32) ...
- ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
- ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
    Generating static pages (8/32) 
    Generating static pages (16/32) 
    Generating static pages (24/32) 
@@ -20,11 +18,10 @@
    Finalizing page optimization ...
    Collecting build traces ...
    Exporting (0/3) ...
- ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
  ✓ Exporting (3/3)
 
 Route (app)                                 Size  First Load JS
-┌ ○ /                                    5.94 kB         118 kB
+┌ ○ /                                    5.71 kB         118 kB
 ├ ○ /_not-found                            998 B         101 kB
 ├ ○ /about                               9.31 kB         122 kB
 ├ ƒ /api/calendar/create-event             128 B        99.9 kB

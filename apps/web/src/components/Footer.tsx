@@ -50,6 +50,8 @@ export default function Footer() {
                 </a>
               </li>
               <li><a href="/wiki" className="hover:text-foreground">Wiki</a></li>
+              <li><Link href="/terms" className="hover:text-foreground">Terms of Service</Link></li>
+              <li><Link href="/privacy" className="hover:text-foreground">Privacy Policy</Link></li>
               <li><span className="text-muted-foreground/60">🤖 AI Support (Soon)</span></li>
             </ul>
           </div>

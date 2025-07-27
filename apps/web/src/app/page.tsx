@@ -116,9 +116,9 @@ export default function HomePage() {
           </div>
         </nav>
 
-        {/* Hero Section */}
+        {/* Hero Section - Fixed height like About/Solutions pages */}
         <section 
-          className="relative min-h-screen flex items-center justify-center"
+          className="relative py-20 bg-gradient-to-r from-slate-900 to-slate-800"
           style={{
             backgroundImage: "url('/backgrounds/hero-bg.jpg')",
             backgroundSize: 'cover',
@@ -127,104 +127,301 @@ export default function HomePage() {
           }}
         >
           <div className="absolute inset-0 bg-black/60"></div>
-          <div className="relative z-10 max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-              Hacking Homelessness<br />
-              <span className="text-blue-400">Through Technology</span>
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto">
-              Revolutionary charitable giving through QR-code donations, blockchain transparency, 
-              and AI-driven insights. <strong>80% direct support</strong>, 15% housing fund, 5% operations.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/register">
-                <Button size="lg" className="w-full sm:w-auto text-lg px-8 py-4">
-                  Get Started
-                </Button>
-              </Link>
-              <Link href="/scan-give">
-                <Button variant="outline" size="lg" className="w-full sm:w-auto text-lg px-8 py-4 bg-white/10 border-white text-white hover:bg-white hover:text-black">
-                  Scan & Give Now
-                </Button>
-              </Link>
+          <div className="relative z-10 container mx-auto px-4">
+            <div className="max-w-4xl mx-auto text-center">
+              <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
+                Hacking Homelessness<br />
+                <span className="text-blue-400">Through Technology</span>
+              </h1>
+              <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto">
+                Revolutionary charitable giving through QR-code donations, blockchain transparency, 
+                and AI-driven insights. <strong>80% direct support</strong>, 15% housing fund, 5% operations.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link href="/register">
+                  <Button size="lg" className="w-full sm:w-auto text-lg px-8 py-4">
+                    Get Started
+                  </Button>
+                </Link>
+                <Link href="/scan-give">
+                  <Button variant="outline" size="lg" className="w-full sm:w-auto text-lg px-8 py-4 bg-white/10 border-white text-white hover:bg-white hover:text-black">
+                    Scan & Give Now
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Stats Section */}
-        <section className="py-16 bg-slate-900">
+        {/* Stats Section - Toned down colors */}
+        <section className="py-16 bg-muted/50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-white mb-4">Real Impact, Real Numbers</h2>
-              <p className="text-xl text-gray-300">Every scan creates measurable change</p>
+              <h2 className="text-3xl font-bold mb-4">Real Impact, Real Numbers</h2>
+              <p className="text-xl text-muted-foreground">Every scan creates measurable change</p>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-              <div className="text-center">
-                <div className="text-4xl font-bold text-blue-400 mb-2">$2.4M+</div>
-                <div className="text-white text-lg">Total Donations</div>
-                <div className="text-gray-400 text-sm">+$12,847 today</div>
+              <div className="text-center p-6 bg-card rounded-lg border">
+                <div className="text-4xl font-bold text-primary mb-2">$2.4M+</div>
+                <div className="text-lg font-medium">Total Donations</div>
+                <div className="text-muted-foreground text-sm">+$12,847 today</div>
               </div>
-              <div className="text-center">
-                <div className="text-4xl font-bold text-green-400 mb-2">8,429</div>
-                <div className="text-white text-lg">People Helped</div>
-                <div className="text-gray-400 text-sm">+43 this week</div>
+              <div className="text-center p-6 bg-card rounded-lg border">
+                <div className="text-4xl font-bold text-green-600 mb-2">8,429</div>
+                <div className="text-lg font-medium">People Helped</div>
+                <div className="text-muted-foreground text-sm">+43 this week</div>
               </div>
-              <div className="text-center">
-                <div className="text-4xl font-bold text-purple-400 mb-2">1,247</div>
-                <div className="text-white text-lg">Housed Successfully</div>
-                <div className="text-gray-400 text-sm">68% success rate</div>
+              <div className="text-center p-6 bg-card rounded-lg border">
+                <div className="text-4xl font-bold text-blue-600 mb-2">1,247</div>
+                <div className="text-lg font-medium">Successfully Housed</div>
+                <div className="text-muted-foreground text-sm">68% success rate</div>
               </div>
-              <div className="text-center">
-                <div className="text-4xl font-bold text-orange-400 mb-2">127</div>
-                <div className="text-white text-lg">Cities Reached</div>
-                <div className="text-gray-400 text-sm">12 countries</div>
+              <div className="text-center p-6 bg-card rounded-lg border">
+                <div className="text-4xl font-bold text-purple-600 mb-2">127</div>
+                <div className="text-lg font-medium">Cities Reached</div>
+                <div className="text-muted-foreground text-sm">12 countries</div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* How It Works */}
-        <section className="py-20 bg-gradient-to-b from-blue-50 to-white dark:from-blue-900/20 dark:to-background">
+        {/* How it Works Section - Improved cards */}
+        <section className="py-20 bg-background">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">How SHELTR Works</h2>
+              <h2 className="text-4xl font-bold mb-4">One Platform, Every Stakeholder</h2>
               <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                Three simple steps to create lasting impact using cutting-edge technology
+                SHELTR-AI serves shelters, government agencies, homeless participants, and donors 
+                through a unified platform that ensures transparency, dignity, and maximum impact.
               </p>
             </div>
 
+            <div className="text-center mb-12">
+              <h3 className="text-3xl font-bold mb-4">How SHELTR-AI Works for Everyone</h3>
+              <p className="text-lg text-muted-foreground">
+                Our platform creates value for every participant in the homelessness ecosystem, from 
+                frontline organizations to individual donors.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+              {/* Shelters & NGOs */}
+              <div className="bg-card rounded-lg border p-8">
+                <div className="flex items-center mb-6">
+                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
+                    <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                    </svg>
+                  </div>
+                  <h4 className="text-2xl font-bold">Shelters & NGOs</h4>
+                </div>
+                <p className="text-muted-foreground mb-6">Streamlined operations and enhanced participant support</p>
+                
+                <div className="space-y-4">
+                  <div className="flex items-start">
+                    <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3"></div>
+                    <div>
+                      <div className="font-semibold text-sm">Participant Management</div>
+                      <div className="text-sm text-muted-foreground">Digital intake, QR code generation, and progress tracking</div>
+                    </div>
+                  </div>
+                  <div className="flex items-start">
+                    <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3"></div>
+                    <div>
+                      <div className="font-semibold text-sm">Real-Time Analytics</div>
+                      <div className="text-sm text-muted-foreground">Track capacity, services, finances, and resource allocation</div>
+                    </div>
+                  </div>
+                  <div className="flex items-start">
+                    <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3"></div>
+                    <div>
+                      <div className="font-semibold text-sm">Compliance & Reporting</div>
+                      <div className="text-sm text-muted-foreground">Automated reports for funders and regulatory requirements</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-8">
+                  <Link href="/solutions/organizations">
+                    <Button variant="outline" className="w-full">Learn More for Organizations</Button>
+                  </Link>
+                </div>
+              </div>
+
+              {/* Government Agencies */}
+              <div className="bg-card rounded-lg border p-8">
+                <div className="flex items-center mb-6">
+                  <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mr-4">
+                    <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                  </div>
+                  <h4 className="text-2xl font-bold">Government Agencies</h4>
+                </div>
+                <p className="text-muted-foreground mb-6">Data-driven policy making and budget transparency</p>
+                
+                <div className="space-y-4">
+                  <div className="flex items-start">
+                    <div className="w-2 h-2 bg-purple-600 rounded-full mt-2 mr-3"></div>
+                    <div>
+                      <div className="font-semibold text-sm">Policy Insights</div>
+                      <div className="text-sm text-muted-foreground">Real-time homelessness data and trend analysis</div>
+                    </div>
+                  </div>
+                  <div className="flex items-start">
+                    <div className="w-2 h-2 bg-purple-600 rounded-full mt-2 mr-3"></div>
+                    <div>
+                      <div className="font-semibold text-sm">Budget Transparency</div>
+                      <div className="text-sm text-muted-foreground">Track government fund usage and impact measurement</div>
+                    </div>
+                  </div>
+                  <div className="flex items-start">
+                    <div className="w-2 h-2 bg-purple-600 rounded-full mt-2 mr-3"></div>
+                    <div>
+                      <div className="font-semibold text-sm">Multi-Agency Coordination</div>
+                      <div className="text-sm text-muted-foreground">Unified platform for cross-department collaboration</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-8">
+                  <Link href="/solutions/government">
+                    <Button variant="outline" className="w-full">Government Solutions</Button>
+                  </Link>
+                </div>
+              </div>
+
+              {/* Participants */}
+              <div className="bg-card rounded-lg border p-8">
+                <div className="flex items-center mb-6">
+                  <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mr-4">
+                    <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                  </div>
+                  <h4 className="text-2xl font-bold">Participants</h4>
+                </div>
+                <p className="text-muted-foreground mb-6">Dignified support with direct access to resources</p>
+                
+                <div className="space-y-4">
+                  <div className="flex items-start">
+                    <div className="w-2 h-2 bg-green-600 rounded-full mt-2 mr-3"></div>
+                    <div>
+                      <div className="font-semibold text-sm">Personal QR Code</div>
+                      <div className="text-sm text-muted-foreground">Instant donations via QR code linked to their SHELTR-S wallet</div>
+                    </div>
+                  </div>
+                  <div className="flex items-start">
+                    <div className="w-2 h-2 bg-green-600 rounded-full mt-2 mr-3"></div>
+                    <div>
+                      <div className="font-semibold text-sm">Direct Financial Support</div>
+                      <div className="text-sm text-muted-foreground">80% of donations go directly to participant needs</div>
+                    </div>
+                  </div>
+                  <div className="flex items-start">
+                    <div className="w-2 h-2 bg-green-600 rounded-full mt-2 mr-3"></div>
+                    <div>
+                      <div className="font-semibold text-sm">Housing Priority</div>
+                      <div className="text-sm text-muted-foreground">Automatic entry into housing fund for permanent solutions</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-8">
+                  <Link href="/solutions/participants">
+                    <Button variant="outline" className="w-full">Participant Support</Button>
+                  </Link>
+                </div>
+              </div>
+
+              {/* Donors */}
+              <div className="bg-card rounded-lg border p-8">
+                <div className="flex items-center mb-6">
+                  <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mr-4">
+                    <svg className="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                  </div>
+                  <h4 className="text-2xl font-bold">Donors</h4>
+                </div>
+                <p className="text-muted-foreground mb-6">Transparent giving with measurable impact</p>
+                
+                <div className="space-y-4">
+                  <div className="flex items-start">
+                    <div className="w-2 h-2 bg-orange-600 rounded-full mt-2 mr-3"></div>
+                    <div>
+                      <div className="font-semibold text-sm">Blockchain Transparency</div>
+                      <div className="text-sm text-muted-foreground">Every donation tracked on-chain through our SmartFund</div>
+                    </div>
+                  </div>
+                  <div className="flex items-start">
+                    <div className="w-2 h-2 bg-orange-600 rounded-full mt-2 mr-3"></div>
+                    <div>
+                      <div className="font-semibold text-sm">Impact Measurement</div>
+                      <div className="text-sm text-muted-foreground">Real-time updates on how your donation helps participants</div>
+                    </div>
+                  </div>
+                  <div className="flex items-start">
+                    <div className="w-2 h-2 bg-orange-600 rounded-full mt-2 mr-3"></div>
+                    <div>
+                      <div className="font-semibold text-sm">Easy Giving</div>
+                      <div className="text-sm text-muted-foreground">Instant donations via QR code scanning</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-8">
+                  <Link href="/solutions/donors">
+                    <Button variant="outline" className="w-full">Start Giving Today</Button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Why Choose SHELTR-AI Section */}
+        <section className="py-16 bg-muted/30">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold mb-4">Why Choose SHELTR-AI?</h2>
+            </div>
+            
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="text-center p-6">
-                <div className="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-white text-2xl font-bold">1</span>
+              <div className="text-center p-6 bg-card rounded-lg border">
+                <div className="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
                 </div>
-                <h3 className="text-xl font-semibold mb-3">Scan QR Code</h3>
+                <h3 className="text-xl font-bold mb-2">100% Transparent</h3>
                 <p className="text-muted-foreground">
-                  Find QR codes at partner locations or scan directly from participant cards. 
-                  Each code is unique and verified.
+                  Blockchain technology ensures every transaction is visible and verified
                 </p>
               </div>
-
-              <div className="text-center p-6">
-                <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-white text-2xl font-bold">2</span>
+              
+              <div className="text-center p-6 bg-card rounded-lg border">
+                <div className="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                  </svg>
                 </div>
-                <h3 className="text-xl font-semibold mb-3">Instant Distribution</h3>
+                <h3 className="text-xl font-bold mb-2">Data-Driven</h3>
                 <p className="text-muted-foreground">
-                  Our SmartFund™ automatically allocates 80% direct support, 
-                  15% housing fund, 5% operations via blockchain.
+                  Real-time analytics help optimize resource allocation and impact
                 </p>
               </div>
-
-              <div className="text-center p-6">
-                <div className="w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-white text-2xl font-bold">3</span>
+              
+              <div className="text-center p-6 bg-card rounded-lg border">
+                <div className="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                  </svg>
                 </div>
-                <h3 className="text-xl font-semibold mb-3">Track Impact</h3>
+                <h3 className="text-xl font-bold mb-2">Human-Centered</h3>
                 <p className="text-muted-foreground">
-                  Real-time updates on how your donation creates change. 
-                  Full transparency through blockchain verification.
+                  Built with dignity and respect for all participants in the system
                 </p>
               </div>
             </div>
@@ -232,31 +429,46 @@ export default function HomePage() {
         </section>
 
         {/* Call to Action */}
-        <section className="py-20 bg-gradient-to-r from-blue-600 to-purple-600">
+        <section className="py-16 bg-card border-y">
           <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-              Ready to Make a Difference?
-            </h2>
-            <p className="text-xl text-blue-100 mb-8">
-              Join thousands of donors using technology to end homelessness, one scan at a time.
+            <h2 className="text-3xl font-bold mb-4">Ready to Transform How You Address Homelessness?</h2>
+            <p className="text-xl text-muted-foreground mb-8">
+              Join organizations, governments, and individuals already using SHELTR-AI to create lasting change.
             </p>
+            
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/register">
-                <Button size="lg" variant="secondary" className="w-full sm:w-auto text-lg px-8 py-4">
-                  Start Giving Today
+                <Button size="lg" className="w-full sm:w-auto">
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                  </svg>
+                  Organization Sign Up
                 </Button>
               </Link>
-              <Link href="/about">
-                <Button variant="outline" size="lg" className="w-full sm:w-auto text-lg px-8 py-4 border-white text-white hover:bg-white hover:text-blue-600">
-                  Learn More
+              
+              <Link href="/scan-give">
+                <Button variant="outline" size="lg" className="w-full sm:w-auto">
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                  </svg>
+                  Individual Donor
+                </Button>
+              </Link>
+              
+              <Link href="/solutions/government">
+                <Button variant="outline" size="lg" className="w-full sm:w-auto">
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                  </svg>
+                  Government Partnership
                 </Button>
               </Link>
             </div>
           </div>
         </section>
-
-        <Footer />
       </div>
+      
+      <Footer />
     </>
   );
 } 

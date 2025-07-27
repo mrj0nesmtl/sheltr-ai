@@ -4,8 +4,8 @@
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-google-calendar"],
       "env": {
-        "GOOGLE_CLIENT_ID": "714964620823-6rj15f8bld70ma9gje813g7voc2saqpr.apps.googleusercontent.com",
-        "GOOGLE_CLIENT_SECRET": "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",
+        "GOOGLE_CLIENT_ID": "${GOOGLE_CLIENT_ID}",
+        "GOOGLE_CLIENT_SECRET": "${GOOGLE_CLIENT_SECRET}",
         "GOOGLE_REDIRECT_URI": "http://localhost:8080/oauth2callback",
         "GOOGLE_SCOPES": "https://www.googleapis.com/auth/calendar.events,https://www.googleapis.com/auth/userinfo.email"
       }

@@ -6,7 +6,7 @@
    - Environments: .env.local
 
    Creating an optimized production build ...
- ✓ Compiled successfully in 5.0s
+ ✓ Compiled successfully in 4.0s
    Skipping linting
    Checking validity of types ...
    Collecting page data ...
@@ -24,34 +24,34 @@
  ✓ Exporting (3/3)
 
 Route (app)                                 Size  First Load JS
-┌ ○ /                                    5.98 kB         118 kB
+┌ ○ /                                     5.9 kB         118 kB
 ├ ○ /_not-found                            998 B         101 kB
-├ ○ /about                               7.08 kB         120 kB
+├ ○ /about                               9.27 kB         122 kB
 ├ ƒ /api/calendar/create-event             128 B        99.9 kB
 ├ ƒ /api/email/send-confirmation           128 B        99.9 kB
 ├ ○ /dashboard                           4.97 kB         232 kB
 ├ ○ /dashboard/analytics                 5.94 kB         121 kB
-├ ○ /dashboard/financial                 5.46 kB         121 kB
+├ ○ /dashboard/financial                 5.47 kB         121 kB
 ├ ○ /dashboard/platform                  4.76 kB         114 kB
 ├ ○ /dashboard/security                   5.6 kB         121 kB
 ├ ○ /dashboard/shelters                  15.5 kB         350 kB
 ├ ○ /dashboard/users                     8.73 kB         343 kB
 ├ ○ /docs                                3.74 kB         121 kB
-├ ○ /docs/blockchain                     7.54 kB         120 kB
-├ ○ /docs/hacking-homelessness            7.5 kB         122 kB
-├ ○ /docs/whitepaper                     6.85 kB         119 kB
-├ ○ /impact                               7.5 kB         122 kB
+├ ○ /docs/blockchain                     7.46 kB         120 kB
+├ ○ /docs/hacking-homelessness           9.51 kB         122 kB
+├ ○ /docs/whitepaper                     6.86 kB         119 kB
+├ ○ /impact                              9.52 kB         122 kB
 ├ ○ /investor-access                     5.78 kB         118 kB
 ├ ○ /investor-relations                  14.5 kB         133 kB
 ├ ○ /login                               4.59 kB         222 kB
 ├ ○ /register                            5.22 kB         222 kB
-├ ○ /scan-give                           6.69 kB         119 kB
-├ ○ /solutions                           8.07 kB         121 kB
+├ ○ /scan-give                           6.61 kB         119 kB
+├ ○ /solutions                           7.99 kB         120 kB
 ├ ○ /solutions/donors                    2.75 kB         115 kB
 ├ ○ /solutions/government                2.75 kB         115 kB
 ├ ○ /solutions/organizations             2.75 kB         115 kB
 ├ ○ /solutions/participants              2.75 kB         115 kB
-└ ○ /tokenomics                          4.43 kB         122 kB
+└ ○ /tokenomics                          4.43 kB         121 kB
 + First Load JS shared by all            99.7 kB
   ├ chunks/4bd1b696-602635ee57868870.js  54.1 kB
   ├ chunks/5964-71b4770e07aae77a.js      43.7 kB

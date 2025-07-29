@@ -330,37 +330,53 @@ export default function ImpactPage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             <Card>
               <CardContent className="p-6 text-center">
-                <MapPin className="h-8 w-8 text-blue-600 dark:text-blue-400 mx-auto mb-4" />
-                <h3 className="text-2xl font-bold mb-2">North America</h3>
-                <p className="text-muted-foreground mb-2">89 cities</p>
-                <p className="text-sm text-blue-600 dark:text-blue-400">4,231 participants</p>
+                <div className="relative">
+                  <Badge variant="secondary" className="absolute -top-3 -right-3 bg-blue-500/10 text-blue-600 border-blue-500/20">
+                    Launching Soon
+                  </Badge>
+                  <MapPin className="h-8 w-8 text-blue-600 dark:text-blue-400 mx-auto mb-4" />
+                  <h3 className="text-2xl font-bold mb-2">North America</h3>
+                  <p className="text-muted-foreground mb-2">89 cities</p>
+                </div>
               </CardContent>
             </Card>
 
             <Card>
               <CardContent className="p-6 text-center">
-                <MapPin className="h-8 w-8 text-green-600 dark:text-green-400 mx-auto mb-4" />
-                <h3 className="text-2xl font-bold mb-2">Europe</h3>
-                <p className="text-muted-foreground mb-2">23 cities</p>
-                <p className="text-sm text-green-600 dark:text-green-400">2,847 participants</p>
+                <div className="relative">
+                  <Badge variant="secondary" className="absolute -top-3 -right-3 bg-green-500/10 text-green-600 border-green-500/20">
+                    Launching Soon
+                  </Badge>
+                  <MapPin className="h-8 w-8 text-green-600 dark:text-green-400 mx-auto mb-4" />
+                  <h3 className="text-2xl font-bold mb-2">Europe</h3>
+                  <p className="text-muted-foreground mb-2">23 cities</p>
+                </div>
               </CardContent>
             </Card>
 
             <Card>
               <CardContent className="p-6 text-center">
-                <MapPin className="h-8 w-8 text-purple-600 dark:text-purple-400 mx-auto mb-4" />
-                <h3 className="text-2xl font-bold mb-2">Australia</h3>
-                <p className="text-muted-foreground mb-2">11 cities</p>
-                <p className="text-sm text-purple-600 dark:text-purple-400">892 participants</p>
+                <div className="relative">
+                  <Badge variant="secondary" className="absolute -top-3 -right-3 bg-purple-500/10 text-purple-600 border-purple-500/20">
+                    Launching Soon
+                  </Badge>
+                  <MapPin className="h-8 w-8 text-purple-600 dark:text-purple-400 mx-auto mb-4" />
+                  <h3 className="text-2xl font-bold mb-2">Australia</h3>
+                  <p className="text-muted-foreground mb-2">11 cities</p>
+                </div>
               </CardContent>
             </Card>
 
             <Card>
               <CardContent className="p-6 text-center">
-                <MapPin className="h-8 w-8 text-orange-600 dark:text-orange-400 mx-auto mb-4" />
-                <h3 className="text-2xl font-bold mb-2">Asia</h3>
-                <p className="text-muted-foreground mb-2">4 cities</p>
-                <p className="text-sm text-orange-600 dark:text-orange-400">459 participants</p>
+                <div className="relative">
+                  <Badge variant="secondary" className="absolute -top-3 -right-3 bg-orange-500/10 text-orange-600 border-orange-500/20">
+                    Launching Soon
+                  </Badge>
+                  <MapPin className="h-8 w-8 text-orange-600 dark:text-orange-400 mx-auto mb-4" />
+                  <h3 className="text-2xl font-bold mb-2">Asia</h3>
+                  <p className="text-muted-foreground mb-2">4 cities</p>
+                </div>
               </CardContent>
             </Card>
           </div>

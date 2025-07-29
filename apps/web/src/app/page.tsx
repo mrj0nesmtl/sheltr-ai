@@ -130,12 +130,12 @@ export default function HomePage() {
           <div className="relative z-10 container mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center">
               <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-                Hacking Homelessness<br />
-                <span className="text-blue-400">Through Technology</span>
+                Better to Solve,<br />
+                <span className="text-blue-400">than Manage.</span>
               </h1>
               <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto">
-                Revolutionary charitable giving through QR-code donations, blockchain transparency, 
-                and AI-driven insights. <strong>80% direct support</strong>, 15% housing fund, 5% operations.
+                SHELTR is hacking homelessness via QR-code donations, blockchain transparency, 
+                and AI-driven insights.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/register">
@@ -153,52 +153,52 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Stats Section - Toned down colors */}
+        {/* Stats Section - Updated to reflect current status */}
         <section className="py-16 bg-muted/50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4">Real Impact, Real Numbers</h2>
-              <p className="text-xl text-muted-foreground">Every scan creates measurable change</p>
+              <h2 className="text-3xl font-bold mb-4">Building the Future</h2>
+              <p className="text-xl text-muted-foreground">Revolutionary platform launching soon</p>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
               <div className="text-center p-6 bg-card rounded-lg border">
-                <div className="text-4xl font-bold text-primary mb-2">$2.4M+</div>
-                <div className="text-lg font-medium">Total Donations</div>
-                <div className="text-muted-foreground text-sm">+$12,847 today</div>
+                <div className="text-4xl font-bold text-primary mb-2">$150K</div>
+                <div className="text-lg font-medium">Pre-Seed Target</div>
+                <div className="text-muted-foreground text-sm">3-month development</div>
               </div>
               <div className="text-center p-6 bg-card rounded-lg border">
-                <div className="text-4xl font-bold text-green-600 mb-2">8,429</div>
-                <div className="text-lg font-medium">People Helped</div>
-                <div className="text-muted-foreground text-sm">+43 this week</div>
+                <div className="text-4xl font-bold text-green-600 mb-2">100+</div>
+                <div className="text-lg font-medium">Welcome Tokens</div>
+                <div className="text-muted-foreground text-sm">per participant</div>
               </div>
               <div className="text-center p-6 bg-card rounded-lg border">
-                <div className="text-4xl font-bold text-blue-600 mb-2">1,247</div>
-                <div className="text-lg font-medium">Successfully Housed</div>
-                <div className="text-muted-foreground text-sm">68% success rate</div>
+                <div className="text-4xl font-bold text-blue-600 mb-2">80%</div>
+                <div className="text-lg font-medium">Direct Impact</div>
+                <div className="text-muted-foreground text-sm">SmartFund™ distribution</div>
               </div>
               <div className="text-center p-6 bg-card rounded-lg border">
-                <div className="text-4xl font-bold text-purple-600 mb-2">127</div>
-                <div className="text-lg font-medium">Cities Reached</div>
-                <div className="text-muted-foreground text-sm">12 countries</div>
+                <div className="text-4xl font-bold text-purple-600 mb-2">Global</div>
+                <div className="text-lg font-medium">Scalability</div>
+                <div className="text-muted-foreground text-sm">blockchain-powered</div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* How it Works Section - Improved cards */}
+        {/* How it Works Section - Updated */}
         <section className="py-20 bg-background">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold mb-4">One Platform, Every Stakeholder</h2>
               <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                SHELTR-AI serves shelters, government agencies, homeless participants, and donors 
+                SHELTR serves shelters, government agencies, homeless participants, and donors 
                 through a unified platform that ensures transparency, dignity, and maximum impact.
               </p>
             </div>
 
             <div className="text-center mb-12">
-              <h3 className="text-3xl font-bold mb-4">How SHELTR-AI Works for Everyone</h3>
+              <h3 className="text-3xl font-bold mb-4">How SHELTR Works for Everyone</h3>
               <p className="text-lg text-muted-foreground">
                 Our platform creates value for every participant in the homelessness ecosystem, from 
                 frontline organizations to individual donors.
@@ -381,11 +381,15 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Why Choose SHELTR-AI Section */}
+        {/* Why Choose SHELTR Section */}
         <section className="py-16 bg-muted/30">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4">Why Choose SHELTR-AI?</h2>
+              <h2 className="text-4xl font-bold mb-4">Why Choose SHELTR?</h2>
+              <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+                SHELTR combines cutting-edge technology with proven social impact methodologies 
+                to create the most transparent and effective charitable giving platform ever built.
+              </p>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -428,41 +432,27 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Call to Action */}
-        <section className="py-16 bg-card border-y">
-          <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-bold mb-4">Ready to Transform How You Address Homelessness?</h2>
-            <p className="text-xl text-muted-foreground mb-8">
-              Join organizations, governments, and individuals already using SHELTR-AI to create lasting change.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/register">
-                <Button size="lg" className="w-full sm:w-auto">
-                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                  </svg>
-                  Organization Sign Up
-                </Button>
-              </Link>
-              
-              <Link href="/scan-give">
-                <Button variant="outline" size="lg" className="w-full sm:w-auto">
-                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                  </svg>
-                  Individual Donor
-                </Button>
-              </Link>
-              
-              <Link href="/solutions/government">
-                <Button variant="outline" size="lg" className="w-full sm:w-auto">
-                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                  </svg>
-                  Government Partnership
-                </Button>
-              </Link>
+        {/* CTA Section - Updated */}
+        <section className="py-20 bg-primary text-primary-foreground">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div className="max-w-3xl mx-auto">
+              <h2 className="text-4xl font-bold mb-6">Ready to Transform How You Address the Unhoused?</h2>
+              <p className="text-xl mb-8 opacity-90">
+                Join the revolution in charitable giving. Every scan creates transparency, 
+                every donation builds housing, every participant finds dignity.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link href="/register">
+                  <Button size="lg" variant="secondary" className="text-lg px-8 py-4">
+                    Get Started Today
+                  </Button>
+                </Link>
+                <Link href="/scan-give">
+                  <Button size="lg" variant="outline" className="text-lg px-8 py-4 border-white text-white hover:bg-white hover:text-primary">
+                    Learn More
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
         </section>

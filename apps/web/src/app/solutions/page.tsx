@@ -90,7 +90,7 @@ export default function SolutionsPage() {
             One Platform, Every Stakeholder
           </h1>
           <p className="text-xl text-gray-200 mb-8 max-w-3xl mx-auto">
-            SHELTR-AI serves shelters, government agencies, homeless participants, and donors 
+            SHELTR serves shelters, government agencies, homeless participants, and donors 
             through a unified platform that ensures transparency, dignity, and maximum impact.
           </p>
         </div>
@@ -100,7 +100,7 @@ export default function SolutionsPage() {
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4">How SHELTR-AI Works for Everyone</h2>
+            <h2 className="text-3xl font-bold mb-4">How SHELTR Works for Everyone</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               Our platform creates value for every participant in the homelessness ecosystem, 
               from frontline organizations to individual donors.
@@ -290,7 +290,7 @@ export default function SolutionsPage() {
       {/* Platform Benefits */}
       <section className="py-20 bg-primary/5">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-6">Why Choose SHELTR-AI?</h2>
+          <h2 className="text-3xl font-bold mb-6">Why Choose SHELTR?</h2>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="space-y-4">
               <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
@@ -322,7 +322,7 @@ export default function SolutionsPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-6">Ready to Transform How You Address Homelessness?</h2>
           <p className="text-xl text-muted-foreground mb-8">
-            Join organizations, governments, and individuals already using SHELTR-AI to create lasting change.
+            Join organizations, governments, and individuals already using SHELTR to create lasting change.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

@@ -175,7 +175,7 @@ export default function AboutPage() {
                 Inspiring Organizations
               </h3>
               <p className="text-lg leading-relaxed mb-6">
-                When we discovered Tiny Tiny Homes in Toronto, we saw the future of homelessness solutions. 
+                When we first discovered Ryan and Tiny Tiny Homes in Toronto, we saw the future of homelessness solutions. 
                 Their mobile emergency shelters replace unsafe tent encampments with dignified, secure alternatives. 
                 Organizations like this inspire our vision for what's possible.
               </p>
@@ -501,6 +501,137 @@ export default function AboutPage() {
                   Start Giving
                 </Button>
               </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Story Section - Expanded */}
+      <section className="py-20 bg-muted/30">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-6">The Story Behind SHELTR</h2>
+            <p className="text-xl text-muted-foreground">From concept to community-driven solution</p>
+          </div>
+          
+          <div className="space-y-8">
+            <div className="prose prose-lg mx-auto dark:prose-invert">
+              <p className="text-lg leading-relaxed">
+                SHELTR was born from a simple but powerful realization: <strong>"It's better to solve than to manage."</strong> 
+                This philosophy, inspired by Malcolm Gladwell's groundbreaking essay <em>"Million-Dollar Murray"</em> in The New Yorker, 
+                became the foundation of our approach to addressing homelessness through technology.
+              </p>
+              
+              <p className="text-lg leading-relaxed">
+                Sheltr Founder Joel Yaffe's journey into tech for good wasn't born in a boardroom—it emerged from witnessing 
+                the disconnect between charitable intentions and measurable impact. Too often, well-meaning donations 
+                disappeared into administrative overhead, leaving both donors frustrated and those in need still struggling.
+              </p>
+              
+              <p className="text-lg leading-relaxed">
+                SHELTR represents Joel's attempt to join the brilliant collective of social angels doing transformative work. 
+                Inspired by creators like <strong>Just Knate</strong> (2.8M followers), <strong> EdHelpsYT</strong>, 
+                <strong> Ryan from Tiny Tiny Homes</strong> (237.5K followers), <strong>Acts of Heart</strong>, 
+                and <strong>Victor the Good Boss</strong> (4M followers), who use their platforms to directly help those in need.
+              </p>
+              
+              <p className="text-lg leading-relaxed">
+                These digital humanitarians prove that technology and social media can be forces for genuine change. 
+                SHELTR builds on their legacy by creating systematic, scalable solutions that ensure every act of kindness 
+                creates lasting impact through blockchain transparency and AI-driven insights.
+              </p>
+            </div>
+            
+            {/* Malcolm Gladwell Reference Card */}
+            <div className="bg-card rounded-lg p-6 border-l-4 border-primary">
+              <blockquote className="text-lg italic mb-4">
+                "It costs a lot more to manage a problem than it does to solve it."
+              </blockquote>
+              <cite className="text-sm text-muted-foreground">
+                — Malcolm Gladwell, <a href="https://www.newyorker.com/magazine/2006/02/13/million-dollar-murray" 
+                target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                "Million-Dollar Murray," The New Yorker (2006)
+                </a>
+              </cite>
+            </div>
+            
+            {/* Social Impact Creators Grid */}
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
+              <div className="bg-card rounded-lg p-4 text-center">
+                <h4 className="font-semibold mb-2">Just Knate</h4>
+                <p className="text-sm text-muted-foreground mb-2">2.8M Followers • 78.5M Likes</p>
+                <a href="https://www.tiktok.com/@justknate" target="_blank" rel="noopener noreferrer" 
+                   className="text-primary text-sm hover:underline">@justknate</a>
+              </div>
+              
+              <div className="bg-card rounded-lg p-4 text-center">
+                <h4 className="font-semibold mb-2">EdHelpsYT</h4>
+                <p className="text-sm text-muted-foreground mb-2">3K Followers • 128.9K Likes</p>
+                <p className="text-xs text-muted-foreground">Here to help those in need ✝️</p>
+              </div>
+              
+              <div className="bg-card rounded-lg p-4 text-center">
+                <h4 className="font-semibold mb-2">Tiny Tiny Homes</h4>
+                <p className="text-sm text-muted-foreground mb-2">237.5K Followers • 2.1M Likes</p>
+                <a href="https://www.tiktok.com/@tinytinyhomes" target="_blank" rel="noopener noreferrer" 
+                   className="text-primary text-sm hover:underline">@tinytinyhomes</a>
+              </div>
+              
+              <div className="bg-card rounded-lg p-4 text-center">
+                <h4 className="font-semibold mb-2">Acts of Heart</h4>
+                <p className="text-sm text-muted-foreground mb-2">1.5K Followers • 19.8K Likes</p>
+                <a href="https://www.tiktok.com/@actsofheart4" target="_blank" rel="noopener noreferrer" 
+                   className="text-primary text-sm hover:underline">@actsofheart4</a>
+              </div>
+              
+              <div className="bg-card rounded-lg p-4 text-center">
+                <h4 className="font-semibold mb-2">THE GOOD BOSS</h4>
+                <p className="text-sm text-muted-foreground mb-2">4M Followers • 83.6M Likes</p>
+                <p className="text-xs text-muted-foreground">Creator | Entrepreneur | Love Helping Others</p>
+              </div>
+            </div>
+            
+            {/* Content Links */}
+            <div className="grid md:grid-cols-2 gap-6 mt-12">
+              <Card className="hover:shadow-lg transition-shadow">
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <span className="mr-2">📰</span>
+                    SHELTR on Substack
+                  </CardTitle>
+                  <CardDescription>
+                    Read our latest article about hacking homelessness through technology
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <a href="https://substack.com/home/post/p-153502903" target="_blank" rel="noopener noreferrer">
+                    <Button className="w-full">
+                      Read Article
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </a>
+                </CardContent>
+              </Card>
+              
+              <Card className="hover:shadow-lg transition-shadow">
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <span className="mr-2">🎧</span>
+                    SHELTR Podcast
+                  </CardTitle>
+                  <CardDescription>
+                    Listen to our conversation about solving homelessness on Spotify
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <a href="https://open.spotify.com/episode/2TZquGVy7vT6yZMgDraMYe" target="_blank" rel="noopener noreferrer">
+                    <Button className="w-full">
+                      Listen Now
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </a>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </div>

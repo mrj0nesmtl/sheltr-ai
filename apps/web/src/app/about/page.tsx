@@ -138,17 +138,11 @@ export default function AboutPage() {
               Funding <span className="text-orange-400">Emergency Housing</span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-4xl mx-auto">
-              SHELTR powers a revolutionary e-commerce ecosystem where every donation creates 
-              immediate impact. We're funding emergency housing solutions and essential services 
-              while building the world's first AI-powered marketplace for homeless support.
+              An ecosystem where every donation creates 
+              immediate impact.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/tokenomics">
-                <Button size="lg" className="bg-orange-500 hover:bg-orange-600 text-white">
-                  <Coins className="h-5 w-5 mr-2" />
-                  View Tokenomics
-                </Button>
-              </Link>
+             
               <Link href="/docs">
                 <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-purple-600">
                   <Shield className="h-5 w-5 mr-2" />
@@ -165,9 +159,7 @@ export default function AboutPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-6">The SHELTR Story</h2>
-            <p className="text-xl text-center text-muted-foreground mb-12">
-              From QR code donations to AI-powered marketplace: How we're revolutionizing charitable giving and funding real solutions for emergency housing
-            </p>
+          
 
             <div className="prose prose-lg max-w-none dark:prose-invert">
               <h3 className="text-2xl font-semibold mb-4 flex items-center gap-2">
@@ -225,10 +217,10 @@ export default function AboutPage() {
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                Introducing the Homeless Depot
+                Introducing SHELTR
               </h2>
               <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-                The world's first AI-powered e-commerce marketplace for homeless services, 
+                The first marketplace for emergency housing services, 
                 powered by Visa Intelligent Commerce and SHELTR's dual-token architecture
               </p>
             </div>

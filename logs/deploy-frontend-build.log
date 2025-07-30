@@ -21,9 +21,9 @@
  ✓ Exporting (3/3)
 
 Route (app)                                 Size  First Load JS
-┌ ○ /                                    5.71 kB         118 kB
+┌ ○ /                                    7.12 kB         120 kB
 ├ ○ /_not-found                            998 B         101 kB
-├ ○ /about                               9.31 kB         122 kB
+├ ○ /about                               10.4 kB         123 kB
 ├ ƒ /api/calendar/create-event             128 B        99.9 kB
 ├ ƒ /api/email/send-confirmation           128 B        99.9 kB
 ├ ○ /dashboard                           4.97 kB         232 kB
@@ -37,7 +37,7 @@ Route (app)                                 Size  First Load JS
 ├ ○ /docs/blockchain                      7.5 kB         120 kB
 ├ ○ /docs/hacking-homelessness           9.55 kB         122 kB
 ├ ○ /docs/whitepaper                     6.89 kB         119 kB
-├ ○ /impact                              9.56 kB         122 kB
+├ ○ /impact                               9.6 kB         122 kB
 ├ ○ /investor-access                     5.78 kB         118 kB
 ├ ○ /investor-relations                  14.5 kB         133 kB
 ├ ○ /login                               4.59 kB         222 kB

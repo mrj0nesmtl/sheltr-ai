@@ -1,10 +1,10 @@
 # SESSION 06: Multi-Dashboard Development Kickoff
 
 ## 🚀 **Session Overview**
-**Focus**: Shelter Admin, Donor, and Participant Dashboard Development with Base Blockchain Onboarding
+**Focus**: Shelter Admin, Donor, and Participant Dashboard Development with Base Blockchain Structure Planning
 
 **Duration**: Extended Development Session  
-**Complexity**: High (Blockchain Integration + Multi-Role System)  
+**Complexity**: High (Blockchain Planning + Multi-Role System)  
 **Priority**: Critical Path - Core Platform Functionality
 
 ---
@@ -21,7 +21,7 @@
    - Shelter-assisted participant onboarding
    - Self-registration portal for independent users
 
-3. **Base Blockchain Integration**
+3. **Base Blockchain Planning**
    - Smart wallet creation using OnchainKit
    - SHELTR token distribution system
    - QR code generation for each participant

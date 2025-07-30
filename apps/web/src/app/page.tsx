@@ -153,53 +153,16 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Stats Section - Updated to reflect current status */}
-        <section className="py-16 bg-muted/50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4">Building the Future</h2>
-              <p className="text-xl text-muted-foreground">Revolutionary platform launching soon</p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-              <div className="text-center p-6 bg-card rounded-lg border">
-                <div className="text-4xl font-bold text-primary mb-2">$150K</div>
-                <div className="text-lg font-medium">Pre-Seed Target</div>
-                <div className="text-muted-foreground text-sm">3-month development</div>
-              </div>
-              <div className="text-center p-6 bg-card rounded-lg border">
-                <div className="text-4xl font-bold text-green-600 mb-2">100+</div>
-                <div className="text-lg font-medium">Welcome Tokens</div>
-                <div className="text-muted-foreground text-sm">per participant</div>
-              </div>
-              <div className="text-center p-6 bg-card rounded-lg border">
-                <div className="text-4xl font-bold text-blue-600 mb-2">80%</div>
-                <div className="text-lg font-medium">Direct Impact</div>
-                <div className="text-muted-foreground text-sm">SmartFund™ distribution</div>
-              </div>
-              <div className="text-center p-6 bg-card rounded-lg border">
-                <div className="text-4xl font-bold text-purple-600 mb-2">Global</div>
-                <div className="text-lg font-medium">Scalability</div>
-                <div className="text-muted-foreground text-sm">blockchain-powered</div>
-              </div>
-            </div>
-          </div>
-        </section>
 
-        {/* How it Works Section - Updated */}
+
+        {/* How it Works Section - Updated with combined content */}
         <section className="py-20 bg-background">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold mb-4">One Platform, Every Stakeholder</h2>
+              <h2 className="text-4xl font-bold mb-4">How SHELTR Works for Everyone</h2>
               <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
                 SHELTR serves shelters, government agencies, homeless participants, and donors 
-                through a unified platform that ensures transparency, dignity, and maximum impact.
-              </p>
-            </div>
-
-            <div className="text-center mb-12">
-              <h3 className="text-3xl font-bold mb-4">How SHELTR Works for Everyone</h3>
-              <p className="text-lg text-muted-foreground">
+                through a unified platform that ensures transparency, dignity, and maximum impact. 
                 Our platform creates value for every participant in the homelessness ecosystem, from 
                 frontline organizations to individual donors.
               </p>
@@ -382,7 +345,7 @@ export default function HomePage() {
         </section>
 
         {/* Why Choose SHELTR Section */}
-        <section className="py-16 bg-muted/30">
+        <section className="py-12 bg-muted/30">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-4xl font-bold mb-4">Why Choose SHELTR?</h2>
@@ -432,7 +395,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* CTA Section - Updated */}
+        {/* CTA Section - Fixed Learn More button text */}
         <section className="py-20 bg-primary text-primary-foreground">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <div className="max-w-3xl mx-auto">
@@ -448,7 +411,7 @@ export default function HomePage() {
                   </Button>
                 </Link>
                 <Link href="/scan-give">
-                  <Button size="lg" variant="outline" className="text-lg px-8 py-4 border-white text-white hover:bg-white hover:text-primary">
+                  <Button size="lg" variant="outline" className="text-lg px-8 py-4 border-white text-black bg-white/20 hover:bg-white hover:text-black">
                     Learn More
                   </Button>
                 </Link>

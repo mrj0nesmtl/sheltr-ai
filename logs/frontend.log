@@ -8,8 +8,69 @@
    - Environments: .env.local
 
  ✓ Starting...
- ✓ Compiled middleware in 128ms
- ✓ Ready in 1669ms
+ ✓ Compiled middleware in 201ms
+ ✓ Ready in 2.1s
  ○ Compiling / ...
- ✓ Compiled / in 2.3s
- GET / 200 in 2913ms
+ ✓ Compiled / in 2.9s
+ GET / 200 in 3579ms
+ GET / 200 in 164ms
+ ✓ Compiled /about in 278ms
+ GET /about 200 in 326ms
+ ✓ Compiled in 55ms
+ ✓ Compiled in 46ms
+ ✓ Compiled in 44ms
+ ✓ Compiled in 52ms
+ ✓ Compiled in 47ms
+ ✓ Compiled in 47ms
+ ✓ Compiled in 38ms
+ ✓ Compiled in 47ms
+ ✓ Compiled in 42ms
+ ✓ Compiled in 35ms
+ ✓ Compiled in 39ms
+ ✓ Compiled in 40ms
+ ✓ Compiled in 35ms
+ ✓ Compiled in 40ms
+ ✓ Compiled in 39ms
+ ✓ Compiled in 44ms
+ ✓ Compiled in 37ms
+ ✓ Compiled in 41ms
+ ✓ Compiled in 65ms
+ ✓ Compiled /about in 20ms
+ GET /about 200 in 132ms
+ ✓ Compiled /impact in 325ms
+ GET /impact 200 in 426ms
+ GET / 200 in 47ms
+ GET / 200 in 43ms
+ ✓ Compiled /solutions in 251ms
+ GET /solutions 200 in 300ms
+ GET / 200 in 49ms
+ GET / 200 in 175ms
+ ✓ Compiled /investor-access in 241ms
+ GET /investor-access 200 in 542ms
+ ✓ Compiled /investor-relations in 352ms
+ GET /investor-relations 200 in 436ms
+ GET / 200 in 74ms
+ GET /solutions 200 in 58ms
+ GET /about 200 in 56ms
+ GET / 200 in 51ms
+ GET /about 200 in 55ms
+ GET /solutions 200 in 49ms
+ GET / 200 in 52ms
+ GET /about 200 in 85ms
+ GET / 200 in 141ms
+ GET / 200 in 63ms
+ ✓ Compiled in 105ms
+ ✓ Compiled in 60ms
+ GET / 200 in 715ms
+ GET /solutions 200 in 57ms
+ GET /about 200 in 42ms
+ GET /solutions 200 in 134ms
+ ✓ Compiled /scan-give in 445ms
+ GET /scan-give 200 in 512ms
+ GET /impact 200 in 45ms
+ GET /about 200 in 46ms
+ GET / 200 in 83ms
+ GET / 200 in 53ms
+ ✓ Compiled in 112ms
+ ✓ Compiled in 128ms
+ GET / 200 in 433ms

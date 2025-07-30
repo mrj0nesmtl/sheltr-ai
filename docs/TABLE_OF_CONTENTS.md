@@ -11,7 +11,7 @@
 | [**Overview**](#-overview) | 4 | Platform vision & mission | ✅ Active |
 | [**Architecture**](#-architecture) | 4 | Technical design & tokenomics | ✅ Active |
 | [**API**](#-api-documentation) | 1 | FastAPI endpoints | 🔄 Growing |
-| [**Development**](#-development) | 8 | Dev guides & session logs | ✅ Active |
+| [**Development**](#-development) | 10 | Dev guides & session logs | ✅ Active |
 | [**User Guides**](#-user-guides) | 1 | User documentation | 🔄 Growing |
 | [**Migration**](#-migration) | 3 | Database & system migrations | ✅ Complete |
 | [**AI Agent**](#-ai-agent-documentation) | 2 | Claude AI briefings | ✅ Active |
@@ -73,46 +73,45 @@
 ## 👩‍💻 Development
 *Development guides, session logs, and roadmaps*
 
-1. [**🗺️ Development Roadmap**](04-development/SHELTR-AI-DEVELOPMENT-ROADMAP.md)
+1. [**🗺️ Development Roadmap**](04-development/dev-roadmap.md)
    - Complete development strategy
    - 14-week roadmap and milestones
 
-2. [**👑 Session 4: Super Admin Dashboard**](04-development/SESSION-04-SUPER-ADMIN-DASHBOARD.md)
+2. [**🎨 Session 5.5: About & Solutions Redesign**](04-development/SESSION-05.5-ABOUT-SOLUTIONS-REDESIGN.md)
    - Latest session achievements
-   - Mobile navigation & theme system implementation
+   - About page redesign and Solutions enhancement
 
-3. [**🔒 Session 5: GitHub Security + Super Admin**](04-development/SESSION-05-GITHUB-SECURITY-SUPER-ADMIN.md)
+3. [**📊 Session 6: Multi-Dashboard Development**](04-development/SESSION-06-MULTI-DASHBOARD-DEVELOPMENT.md)
+   - Next phase planning
+   - Multi-dashboard architecture and implementation
+
+4. [**🔒 Session 5: GitHub Security + Super Admin**](04-development/SESSION-05-GITHUB-SECURITY-SUPER-ADMIN.md)
    - GitHub security setup and repository hardening
    - Advanced Super Admin dashboard development
 
-4. [**💰 Investor Relations Portal**](04-development/INVESTOR-RELATIONS-SETUP.md)
-   - Secure investor access system
-   - $100K pre-seed round documentation
-   - $SHLTR token economics and projections
+5. [**👑 Session 4: Super Admin Dashboard**](04-development/SESSION-04-SUPER-ADMIN-DASHBOARD.md)
+   - Super Admin dashboard implementation
+   - Mobile navigation & theme system implementation
 
-5. [**🔐 Session 3: Authentication & RBAC**](04-development/SESSION-03-AUTHENTICATION-RBAC.md)
+6. [**🔐 Session 3: Authentication & RBAC**](04-development/SESSION-03-AUTHENTICATION-RBAC.md)
    - Authentication system implementation
    - Role-based access control setup
 
-6. [**🌐 Session 2: Website Launch**](04-development/session-02-website-launch.md)
-   - Website deployment process
-   - Firebase hosting setup
+7. [**🎯 Session 6 Planning**](04-development/) 
+   - [Session 6 Checklist](04-development/SESSION-06-CHECKLIST.md)
+   - [Session 6 Kickoff Prompt](04-development/SESSION-06-KICKOFF-PROMPT.md)
 
-7. [**🏗️ Session 1: Foundation**](04-development/session-01-foundation-day.md)
-   - Project foundation and setup
-   - Repository structure establishment
-
-8. [**✅ Session 2 Checklist**](04-development/SESSION-02-CHECKLIST.md)
-   - Session 2 completion checklist
-   - Task verification and status
-
-9. [**✅ Session 3 Checklist**](04-development/SESSION-03-CHECKLIST.md)
-   - Session 3 completion checklist
-   - Authentication milestone verification
-
-10. [**🎯 Session 3 Planning**](04-development/) 
+8. [**🎯 Session 3 Planning**](04-development/) 
    - [FastAPI Planning](04-development/SESSION-03-FASTAPI-PLANNING.md)
    - [Kickoff Prompt](04-development/SESSION-03-KICKOFF-PROMPT.md)
+
+9. [**🔧 MCP Integration**](04-development/GOOGLE-CALENDAR-MCP-SETUP.md)
+   - Google Calendar MCP configuration
+   - OAuth setup and integration guides
+
+10. [**📚 Development Archive**](04-development/development_archive/)
+    - Historical session documentation
+    - Legacy development materials
 
 ---
 
@@ -191,9 +190,9 @@
 
 | Category | Count | Status | Last Updated |
 |----------|--------|--------|--------------|
-| **Active Docs** | 21 files | ✅ Current | Session 4 |
+| **Active Docs** | 25 files | ✅ Current | Session 5.5 |
 | **Legacy Docs** | 14 files | 📚 Reference | Pre-migration |
-| **Total Files** | 35 files | 📚 Complete | July 25, 2025 |
+| **Total Files** | 39 files | 📚 Complete | January 25, 2025 |
 | **Directories** | 12 folders | 🗂️ Organized | Structured |
 
 ---
@@ -203,7 +202,7 @@
 ### **For New Developers**
 1. Start with [**Overview**](#-overview) → [Documentation Hub](01-overview/README.md)
 2. Review [**Architecture**](#-architecture) → [System Design](02-architecture/system-design.md)
-3. Check [**Development**](#-development) → [Roadmap](04-development/SHELTR-AI-DEVELOPMENT-ROADMAP.md)
+3. Check [**Development**](#-development) → [Roadmap](04-development/dev-roadmap.md)
 
 ### **For Contributors**
 1. Read [**Development**](#-development) session logs for context
@@ -221,10 +220,10 @@
 
 - **🏠 Main Repository**: [README.md](../README.md)
 - **🌐 Live Website**: [sheltr-ai.web.app](https://sheltr-ai.web.app)
-- **🔒 Latest Session**: [Session 5 Security + Super Admin](04-development/SESSION-05-GITHUB-SECURITY-SUPER-ADMIN.md)
-- **🗺️ Development Plan**: [Roadmap](04-development/SHELTR-AI-DEVELOPMENT-ROADMAP.md)
+- **🔒 Latest Session**: [Session 5.5 About & Solutions Redesign](04-development/SESSION-05.5-ABOUT-SOLUTIONS-REDESIGN.md)
+- **🗺️ Development Plan**: [Roadmap](04-development/dev-roadmap.md)
 - **🔧 API Reference**: [FastAPI Docs](03-api/README.md)
 
 ---
 
-*Last Updated: July 25, 2025 - Post Session 4 Documentation Reorganization* 
+*Last Updated: January 25, 2025 - Post Session 5.5 Documentation Enhancement* 

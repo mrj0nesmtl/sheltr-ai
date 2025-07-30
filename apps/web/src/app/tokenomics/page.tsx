@@ -1,10 +1,11 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowLeft, Coins, TrendingUp, Shield, Zap, DollarSign, Users, BarChart3, CheckCircle, ExternalLink, Copy, Eye, LogIn, Menu, X } from 'lucide-react';
+import { ArrowLeft, Coins, TrendingUp, Shield, Zap, DollarSign, Users, BarChart3, CheckCircle, ExternalLink, Copy, Eye, LogIn, Menu, X, FileText, BookOpen, Rocket, Target, PieChart, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
 import { ThemeToggle } from '@/components/theme-toggle';
 import Footer from '@/components/Footer';
 import ThemeLogo from '@/components/ThemeLogo';
@@ -102,18 +103,185 @@ export default function TokenomicsPage() {
           </h1>
           <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
             Revolutionary dual-token architecture combining stability for participants with growth potential for the community. 
-            Built on Base network with Visa MCP integration for seamless real-world utility.
+            Built on Base network with enterprise-grade infrastructure for seamless real-world utility.
           </p>
+          
+          {/* Quick Links to Documentation */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
+            <Link href="/docs/whitepaper">
+              <Button variant="outline" size="lg">
+                <FileText className="h-4 w-4 mr-2" />
+                Technical Whitepaper
+              </Button>
+            </Link>
+            <Link href="/docs" target="_blank" rel="noopener noreferrer">
+              <Button variant="outline" size="lg">
+                <BookOpen className="h-4 w-4 mr-2" />
+                Hacking Homelessness
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
 
-      {/* Token Overview */}
+      {/* Theory of Change Integration */}
+      <section className="py-20 bg-gradient-to-r from-green-500/5 to-blue-500/5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold mb-4">Theory of Change: From Crisis to Solutions</h2>
+            <p className="text-xl text-muted-foreground">How dual-token architecture transforms charitable giving efficiency from 60% to 95%</p>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-12">
+            <Card className="border-2 border-red-500/20 bg-red-500/5">
+              <CardHeader>
+                <CardTitle className="text-xl text-red-600 dark:text-red-400">❌ Traditional Charitable Model</CardTitle>
+                <CardDescription>Broken systems with multiple inefficiencies</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-3">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                    <span>30-40% overhead costs consume donations</span>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                    <span>24-72 hour delays for assistance</span>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                    <span>Opaque processes prevent impact verification</span>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                    <span>Multiple intermediaries create friction</span>
+                  </div>
+                </div>
+                <div className="mt-6 p-4 bg-red-500/10 rounded-lg">
+                  <div className="text-2xl font-bold text-red-600 dark:text-red-400">60-70%</div>
+                  <p className="text-sm text-red-600/70">Actual efficiency rate</p>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-2 border-green-500/20 bg-green-500/5">
+              <CardHeader>
+                <CardTitle className="text-xl text-green-600 dark:text-green-400">✅ SHELTR Dual-Token Model</CardTitle>
+                <CardDescription>Revolutionary blockchain-verified transparency</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-3">
+                  <div className="flex items-center space-x-3">
+                    <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-400" />
+                    <span>Direct P2P donations via QR codes</span>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-400" />
+                    <span>&lt;1 hour support delivery time</span>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-400" />
+                    <span>100% blockchain transparency</span>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-400" />
+                    <span>Smart contract automated distribution</span>
+                  </div>
+                </div>
+                <div className="mt-6 p-4 bg-green-500/10 rounded-lg">
+                  <div className="text-2xl font-bold text-green-600 dark:text-green-400">95%</div>
+                  <p className="text-sm text-green-600/70">Revolutionary efficiency rate</p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Token Architecture Chart */}
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold mb-4">Dual-Token Architecture</h2>
             <p className="text-xl text-muted-foreground">Two tokens, one mission: stability for participants, growth for community</p>
           </div>
+
+          {/* Interactive Token Comparison Chart */}
+          <Card className="mb-12 border-2">
+            <CardHeader>
+              <CardTitle className="text-center">Token Architecture Overview</CardTitle>
+              <CardDescription className="text-center">Complete breakdown of SHELTR&apos;s revolutionary dual-token system</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid lg:grid-cols-3 gap-8">
+                {/* SmartFund Distribution */}
+                <div className="text-center">
+                  <h3 className="font-semibold mb-4">SmartFund™ Distribution</h3>
+                  <div className="space-y-3">
+                    <div className="bg-blue-500/10 p-3 rounded-lg">
+                      <div className="text-2xl font-bold text-blue-600">80%</div>
+                      <div className="text-sm">→ SHELTR-S Tokens</div>
+                      <div className="text-xs text-muted-foreground">Direct participant support</div>
+                    </div>
+                    <div className="bg-green-500/10 p-3 rounded-lg">
+                      <div className="text-2xl font-bold text-green-600">15%</div>
+                      <div className="text-sm">→ Housing Fund</div>
+                      <div className="text-xs text-muted-foreground">Long-term solutions</div>
+                    </div>
+                    <div className="bg-purple-500/10 p-3 rounded-lg">
+                      <div className="text-2xl font-bold text-purple-600">5%</div>
+                      <div className="text-sm">→ Operations</div>
+                      <div className="text-xs text-muted-foreground">Platform sustainability</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Token Supply Chart */}
+                <div className="text-center">
+                  <h3 className="font-semibold mb-4">Token Supply & Economics</h3>
+                  <div className="space-y-3">
+                    <div className="bg-green-500/10 p-3 rounded-lg">
+                      <div className="text-lg font-bold text-green-600">SHELTR-S</div>
+                      <div className="text-sm">Unlimited Supply</div>
+                      <div className="text-xs text-muted-foreground">USDC 1:1 backing</div>
+                    </div>
+                    <div className="bg-purple-500/10 p-3 rounded-lg">
+                      <div className="text-lg font-bold text-purple-600">SHELTR</div>
+                      <div className="text-sm">100M Fixed Supply</div>
+                      <div className="text-xs text-muted-foreground">Deflationary mechanics</div>
+                    </div>
+                    <div className="bg-orange-500/10 p-3 rounded-lg">
+                      <div className="text-lg font-bold text-orange-600">Welcome Bonus</div>
+                      <div className="text-sm">100 SHELTR-S</div>
+                      <div className="text-xs text-muted-foreground">Per new participant</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Network Specifications */}
+                <div className="text-center">
+                  <h3 className="font-semibold mb-4">Network & Fees</h3>
+                  <div className="space-y-3">
+                    <div className="bg-blue-500/10 p-3 rounded-lg">
+                      <div className="text-lg font-bold text-blue-600">Base Network</div>
+                      <div className="text-sm">Coinbase L2</div>
+                      <div className="text-xs text-muted-foreground">Enterprise compliance</div>
+                    </div>
+                    <div className="bg-green-500/10 p-3 rounded-lg">
+                      <div className="text-lg font-bold text-green-600">~$0.01</div>
+                      <div className="text-sm">Transaction Fees</div>
+                      <div className="text-xs text-muted-foreground">Free for participants</div>
+                    </div>
+                    <div className="bg-purple-500/10 p-3 rounded-lg">
+                      <div className="text-lg font-bold text-purple-600">~2 seconds</div>
+                      <div className="text-sm">Transaction Speed</div>
+                      <div className="text-xs text-muted-foreground">Near-instant confirmations</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
           <div className="grid lg:grid-cols-2 gap-8">
             {/* SHELTR-S (Stable) */}
@@ -150,7 +318,7 @@ export default function TokenomicsPage() {
                   </div>
                   <div className="flex items-center space-x-3">
                     <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-400" />
-                    <span>Accepted at Homeless Depot marketplace</span>
+                    <span>100 token welcome bonus for new participants</span>
                   </div>
                   <div className="flex items-center space-x-3">
                     <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-400" />
@@ -164,8 +332,18 @@ export default function TokenomicsPage() {
                     <li>• Daily necessities and essential purchases</li>
                     <li>• Food, clothing, and transportation</li>
                     <li>• Healthcare and emergency expenses</li>
-                    <li>• Homeless Depot marketplace transactions</li>
+                    <li>• Marketplace transactions and services</li>
                   </ul>
+                </div>
+
+                <div className="pt-4">
+                  <h4 className="font-semibold mb-2 text-green-600 dark:text-green-400">Technical Specs:</h4>
+                  <div className="text-sm space-y-1 text-muted-foreground">
+                    <div>• Network: Base (Coinbase L2)</div>
+                    <div>• Standard: ERC-20</div>
+                    <div>• Backing: 1:1 USDC reserve</div>
+                    <div>• Supply: Unlimited (demand-driven)</div>
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -204,7 +382,7 @@ export default function TokenomicsPage() {
                   </div>
                   <div className="flex items-center space-x-3">
                     <CheckCircle className="h-5 w-5 text-purple-600 dark:text-purple-400" />
-                    <span>Premium discounts in Homeless Depot</span>
+                    <span>Premium marketplace discounts</span>
                   </div>
                   <div className="flex items-center space-x-3">
                     <CheckCircle className="h-5 w-5 text-purple-600 dark:text-purple-400" />
@@ -216,14 +394,210 @@ export default function TokenomicsPage() {
                   <h4 className="font-semibold mb-2 text-purple-600 dark:text-purple-400">Use Cases:</h4>
                   <ul className="text-sm space-y-1 text-muted-foreground">
                     <li>• Governance voting and platform decisions</li>
-                    <li>• Staking for additional rewards</li>
-                    <li>• Premium marketplace features</li>
+                    <li>• Staking for additional rewards (8% APY target)</li>
+                    <li>• Premium marketplace features and discounts</li>
                     <li>• Community incentives and recognition</li>
                   </ul>
+                </div>
+
+                <div className="pt-4">
+                  <h4 className="font-semibold mb-2 text-purple-600 dark:text-purple-400">Technical Specs:</h4>
+                  <div className="text-sm space-y-1 text-muted-foreground">
+                    <div>• Total Supply: 100,000,000 SHELTR</div>
+                    <div>• Deflationary Rate: 2% annually</div>
+                    <div>• Network: Base (Coinbase L2)</div>
+                    <div>• Standard: ERC-20</div>
+                  </div>
                 </div>
               </CardContent>
             </Card>
           </div>
+        </div>
+      </section>
+
+      {/* ICO Information Section */}
+      <section className="py-20 bg-gradient-to-r from-orange-500/5 to-red-500/5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold mb-4">Token Launch & ICO Information</h2>
+            <p className="text-xl text-muted-foreground">Investment opportunity in revolutionary social impact technology</p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8 mb-12">
+            <Card className="border-2 border-orange-500/20 bg-orange-500/5">
+              <CardHeader>
+                <CardTitle className="text-xl text-orange-600 dark:text-orange-400">🚀 Pre-Seed Round (Current)</CardTitle>
+                <CardDescription>Early investor opportunity with maximum upside</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-orange-500/10 p-3 rounded-lg">
+                    <div className="font-semibold">Token Price</div>
+                    <div className="text-2xl font-bold text-orange-600">$0.05</div>
+                    <div className="text-xs text-muted-foreground">50% discount to public</div>
+                  </div>
+                  <div className="bg-orange-500/10 p-3 rounded-lg">
+                    <div className="font-semibold">Target Raise</div>
+                    <div className="text-2xl font-bold text-orange-600">$150K</div>
+                    <div className="text-xs text-muted-foreground">3M tokens allocated</div>
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <span>Progress</span>
+                    <span className="font-semibold">$45K / $150K</span>
+                  </div>
+                  <Progress value={30} className="h-2" />
+                </div>
+
+                <div className="space-y-3 pt-4">
+                  <div className="flex items-center space-x-3">
+                    <CheckCircle className="h-5 w-5 text-orange-600" />
+                    <span>Governance rights from day one</span>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <CheckCircle className="h-5 w-5 text-orange-600" />
+                    <span>Staking rewards (8% APY target)</span>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <CheckCircle className="h-5 w-5 text-orange-600" />
+                    <span>Platform fee revenue sharing</span>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <CheckCircle className="h-5 w-5 text-orange-600" />
+                    <span>Deflationary mechanics (2% annual burn)</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-2 border-purple-500/20 bg-purple-500/5">
+              <CardHeader>
+                <CardTitle className="text-xl text-purple-600 dark:text-purple-400">🎯 Public Launch (Q2 2025)</CardTitle>
+                <CardDescription>Fair market launch with full platform utility</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-purple-500/10 p-3 rounded-lg">
+                    <div className="font-semibold">Launch Price</div>
+                    <div className="text-2xl font-bold text-purple-600">$0.10</div>
+                    <div className="text-xs text-muted-foreground">Fair market value</div>
+                  </div>
+                  <div className="bg-purple-500/10 p-3 rounded-lg">
+                    <div className="font-semibold">Public Allocation</div>
+                    <div className="text-2xl font-bold text-purple-600">30M</div>
+                    <div className="text-xs text-muted-foreground">Tokens available</div>
+                  </div>
+                </div>
+
+                <div className="space-y-3 pt-4">
+                  <div className="flex items-center space-x-3">
+                    <Target className="h-5 w-5 text-purple-600" />
+                    <span>Full platform functionality live</span>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <Target className="h-5 w-5 text-purple-600" />
+                    <span>Marketplace integration complete</span>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <Target className="h-5 w-5 text-purple-600" />
+                    <span>Mobile app deployment ready</span>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <Target className="h-5 w-5 text-purple-600" />
+                    <span>Exchange listings initiated</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Token Distribution Chart */}
+          <Card className="border-2">
+            <CardHeader>
+              <CardTitle className="text-center">SHELTR Token Distribution (100M Total Supply)</CardTitle>
+              <CardDescription className="text-center">Transparent allocation ensuring long-term sustainability and growth</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid md:grid-cols-2 gap-8">
+                <div className="space-y-4">
+                  <h3 className="font-semibold">Distribution Breakdown</h3>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between p-3 bg-blue-500/10 rounded-lg">
+                      <span>Public Sale</span>
+                      <div className="text-right">
+                        <div className="font-semibold">30M (30%)</div>
+                        <div className="text-xs text-muted-foreground">Community ownership</div>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between p-3 bg-green-500/10 rounded-lg">
+                      <span>Housing Fund</span>
+                      <div className="text-right">
+                        <div className="font-semibold">25M (25%)</div>
+                        <div className="text-xs text-muted-foreground">Long-term impact</div>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between p-3 bg-purple-500/10 rounded-lg">
+                      <span>Team & Advisors</span>
+                      <div className="text-right">
+                        <div className="font-semibold">20M (20%)</div>
+                        <div className="text-xs text-muted-foreground">4-year vesting</div>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between p-3 bg-orange-500/10 rounded-lg">
+                      <span>Platform Development</span>
+                      <div className="text-right">
+                        <div className="font-semibold">15M (15%)</div>
+                        <div className="text-xs text-muted-foreground">Operations & growth</div>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between p-3 bg-yellow-500/10 rounded-lg">
+                      <span>Community Rewards</span>
+                      <div className="text-right">
+                        <div className="font-semibold">10M (10%)</div>
+                        <div className="text-xs text-muted-foreground">Incentives & airdrops</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="space-y-4">
+                  <h3 className="font-semibold">Value Accrual Mechanisms</h3>
+                  <div className="space-y-3">
+                    <div className="flex items-center space-x-3 p-3 bg-muted/50 rounded-lg">
+                      <DollarSign className="h-5 w-5 text-blue-600" />
+                      <div>
+                        <div className="font-semibold">Platform Fees (2%)</div>
+                        <div className="text-sm text-muted-foreground">Paid in SHELTR tokens</div>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-3 p-3 bg-muted/50 rounded-lg">
+                      <TrendingUp className="h-5 w-5 text-green-600" />
+                      <div>
+                        <div className="font-semibold">Deflationary Burns</div>
+                        <div className="text-sm text-muted-foreground">2% annual token reduction</div>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-3 p-3 bg-muted/50 rounded-lg">
+                      <BarChart3 className="h-5 w-5 text-purple-600" />
+                      <div>
+                        <div className="font-semibold">Staking Rewards</div>
+                        <div className="text-sm text-muted-foreground">8% APY from platform revenue</div>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-3 p-3 bg-muted/50 rounded-lg">
+                      <Users className="h-5 w-5 text-orange-600" />
+                      <div>
+                        <div className="font-semibold">Network Effects</div>
+                        <div className="text-sm text-muted-foreground">Growing utility drives demand</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </section>
 
@@ -266,6 +640,11 @@ export default function TokenomicsPage() {
                     <span>Emergency expenses</span>
                   </li>
                 </ul>
+                
+                <div className="mt-6 p-3 bg-blue-500/10 rounded-lg border">
+                  <div className="text-sm font-semibold text-blue-600">Example: $100 Donation</div>
+                  <div className="text-xs text-muted-foreground">→ 80 SHELTR-S tokens instantly</div>
+                </div>
               </CardContent>
             </Card>
 
@@ -284,21 +663,26 @@ export default function TokenomicsPage() {
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-center space-x-2">
                     <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
-                    <span>Emergency housing</span>
+                    <span>Emergency housing (40%)</span>
                   </li>
                   <li className="flex items-center space-x-2">
                     <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
-                    <span>Transitional programs</span>
+                    <span>Transitional programs (35%)</span>
                   </li>
                   <li className="flex items-center space-x-2">
                     <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
-                    <span>Permanent solutions</span>
+                    <span>Permanent solutions (20%)</span>
                   </li>
                   <li className="flex items-center space-x-2">
                     <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
-                    <span>Support services</span>
+                    <span>Support services (5%)</span>
                   </li>
                 </ul>
+                
+                <div className="mt-6 p-3 bg-green-500/10 rounded-lg border">
+                  <div className="text-sm font-semibold text-green-600">DeFi Strategy</div>
+                  <div className="text-xs text-muted-foreground">6-8% APY target growth</div>
+                </div>
               </CardContent>
             </Card>
 
@@ -332,6 +716,11 @@ export default function TokenomicsPage() {
                     <span>Platform scaling</span>
                   </li>
                 </ul>
+                
+                <div className="mt-6 p-3 bg-purple-500/10 rounded-lg border">
+                  <div className="text-sm font-semibold text-purple-600">Break-even</div>
+                  <div className="text-xs text-muted-foreground">$50K monthly donations</div>
+                </div>
               </CardContent>
             </Card>
           </div>
@@ -379,7 +768,7 @@ export default function TokenomicsPage() {
                   </div>
                   <div className="flex items-center space-x-3">
                     <CheckCircle className="h-5 w-5 text-green-600" />
-                    <span>Visa MCP agent integration</span>
+                    <span>Enterprise-grade security and compliance</span>
                   </div>
                   <div className="flex items-center space-x-3">
                     <CheckCircle className="h-5 w-5 text-green-600" />
@@ -426,12 +815,12 @@ export default function TokenomicsPage() {
 
                   <div className="bg-muted p-3 rounded-lg text-sm">
                     <div className="flex justify-between items-center mb-2">
-                      <span className="font-semibold">Marketplace Purchase</span>
+                      <span className="font-semibold">Welcome Bonus</span>
                       <Badge variant="secondary">Success</Badge>
                     </div>
                     <div className="text-muted-foreground">
                       <div>Hash: 0x5g6h7i8j9k0l123...</div>
-                      <div>Amount: 25 SHELTR-S → Food Kit</div>
+                      <div>Amount: 100 SHELTR-S → New Participant</div>
                       <div>Gas: $0.004</div>
                     </div>
                   </div>
@@ -441,6 +830,96 @@ export default function TokenomicsPage() {
                   <ExternalLink className="h-4 w-4 mr-2" />
                   View on Base Explorer
                 </Button>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Documentation Links Section */}
+      <section className="py-20 bg-muted/50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold mb-4">Technical Documentation</h2>
+            <p className="text-xl text-muted-foreground">Deep dive into the technology and theory behind SHELTR</p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            <Card className="border-2 hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <FileText className="h-6 w-6 mr-3 text-blue-600" />
+                  Technical Whitepaper
+                </CardTitle>
+                <CardDescription>
+                  Complete technical specifications, dual-token architecture, and platform implementation details
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3 mb-6">
+                  <div className="flex items-center space-x-2 text-sm">
+                    <CheckCircle className="h-4 w-4 text-green-600" />
+                    <span>Dual-token economic model detailed analysis</span>
+                  </div>
+                  <div className="flex items-center space-x-2 text-sm">
+                    <CheckCircle className="h-4 w-4 text-green-600" />
+                    <span>Smart contract architecture and security</span>
+                  </div>
+                  <div className="flex items-center space-x-2 text-sm">
+                    <CheckCircle className="h-4 w-4 text-green-600" />
+                    <span>Platform economics and sustainability model</span>
+                  </div>
+                  <div className="flex items-center space-x-2 text-sm">
+                    <CheckCircle className="h-4 w-4 text-green-600" />
+                    <span>Risk assessment and regulatory compliance</span>
+                  </div>
+                </div>
+                <Link href="/docs/whitepaper">
+                  <Button className="w-full">
+                    <FileText className="h-4 w-4 mr-2" />
+                    Read Technical Whitepaper
+                    <ArrowRight className="h-4 w-4 ml-2" />
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+
+            <Card className="border-2 hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <BookOpen className="h-6 w-6 mr-3 text-green-600" />
+                  Hacking Homelessness
+                </CardTitle>
+                <CardDescription>
+                  Theory of Change document explaining our revolutionary approach to solving homelessness
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3 mb-6">
+                  <div className="flex items-center space-x-2 text-sm">
+                    <CheckCircle className="h-4 w-4 text-green-600" />
+                    <span>Three-pillar impact framework breakdown</span>
+                  </div>
+                  <div className="flex items-center space-x-2 text-sm">
+                    <CheckCircle className="h-4 w-4 text-green-600" />
+                    <span>Traditional vs. SHELTR efficiency comparison</span>
+                  </div>
+                  <div className="flex items-center space-x-2 text-sm">
+                    <CheckCircle className="h-4 w-4 text-green-600" />
+                    <span>Behavioral economics and social impact</span>
+                  </div>
+                  <div className="flex items-center space-x-2 text-sm">
+                    <CheckCircle className="h-4 w-4 text-green-600" />
+                    <span>Measurable outcomes and success metrics</span>
+                  </div>
+                </div>
+                <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/01-overview/hacking_homelessness.md" target="_blank" rel="noopener noreferrer">
+                  <Button variant="outline" className="w-full">
+                    <BookOpen className="h-4 w-4 mr-2" />
+                    Read Theory of Change
+                    <ExternalLink className="h-4 w-4 ml-2" />
+                  </Button>
+                </a>
               </CardContent>
             </Card>
           </div>
@@ -476,7 +955,7 @@ export default function TokenomicsPage() {
                 </div>
                 <div className="flex items-center space-x-2">
                   <CheckCircle className="h-4 w-4 text-green-600" />
-                  <span>Optional SHELTR participation</span>
+                  <span>100 SHELTR-S welcome bonus</span>
                 </div>
               </CardContent>
             </Card>
@@ -493,15 +972,15 @@ export default function TokenomicsPage() {
                 </div>
                 <div className="flex items-center space-x-2">
                   <TrendingUp className="h-4 w-4 text-purple-600" />
-                  <span>SHELTR token appreciation</span>
+                  <span>SHELTR token appreciation & staking</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <BarChart3 className="h-4 w-4 text-green-600" />
-                  <span>Premium organization features</span>
+                  <span>DeFi yields from housing fund</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Users className="h-4 w-4 text-orange-600" />
-                  <span>Corporate partnership fees</span>
+                  <span>Enterprise & government partnerships</span>
                 </div>
               </CardContent>
             </Card>
@@ -527,7 +1006,7 @@ export default function TokenomicsPage() {
             <Link href="/impact">
               <Button variant="outline" size="lg">
                 <Eye className="h-4 w-4 mr-2" />
-                View Live Transactions
+                View Impact Dashboard
               </Button>
             </Link>
             <Link href="/scan-give">

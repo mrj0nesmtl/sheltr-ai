@@ -74,3 +74,6 @@
  ✓ Compiled in 112ms
  ✓ Compiled in 128ms
  GET / 200 in 433ms
+ GET / 200 in 480ms
+ GET /about 200 in 72ms
+ ✓ Compiled in 167ms

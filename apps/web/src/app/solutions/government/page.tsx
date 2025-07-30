@@ -50,15 +50,27 @@ export default function GovernmentPage() {
           <div className="w-20 h-20 bg-purple-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
             <MapPin className="h-10 w-10 text-purple-600 dark:text-purple-400" />
           </div>
-          <Badge variant="secondary" className="mb-4 bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20">For Government</Badge>
+          <Badge variant="secondary" className="mb-4 bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20">Policy Brief</Badge>
           <h1 className="text-4xl font-bold mb-6">
             Data-Driven Policy Making, Transparent Budget Allocation
           </h1>
           <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
-            SHELTR-AI provides government agencies with comprehensive regional homelessness data, 
-            enabling evidence-based policy decisions and transparent tracking of public fund impact 
-            across multiple departments and jurisdictions.
+            Our comprehensive policy brief demonstrates how SHELTR-AI enables evidence-based homelessness policy 
+            and transparent public fund tracking. Review detailed implementation strategies and projected outcomes 
+            for your jurisdiction.
           </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button size="lg" className="bg-purple-600 hover:bg-purple-700">
+              <FileText className="h-4 w-4 mr-2" />
+              Schedule Government Demo
+            </Button>
+            <Link href="/solutions/government/policy-brief">
+              <Button variant="outline" size="lg">
+                <FileText className="h-4 w-4 mr-2" />
+                View Policy Brief
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
 

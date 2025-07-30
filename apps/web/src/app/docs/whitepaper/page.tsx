@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowLeft, Download, Share, BookOpen, FileText, Coins } from 'lucide-react';
+import { ArrowLeft, Download, Share, BookOpen, FileText, Code } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ThemeToggle } from '@/components/theme-toggle';
@@ -40,7 +40,7 @@ export default function WhitepaperPage() {
               <div>
                 <div className="flex items-center gap-2 mb-2">
                   <h1 className="text-4xl font-bold">SHELTR Technical White Paper</h1>
-                  <Badge className="bg-blue-500 text-white">Investment Grade</Badge>
+                  <Badge className="bg-blue-500 text-white">Technical Specification</Badge>
                 </div>
                 <p className="text-lg text-muted-foreground">
                   Hacking Homelessness Through Direct-Impact Technology
@@ -52,26 +52,26 @@ export default function WhitepaperPage() {
                   <span>•</span>
                   <span>67 pages</span>
                   <span>•</span>
-                  <Badge variant="outline" className="text-amber-600 border-amber-600">In Development</Badge>
+                  <Badge variant="outline" className="text-green-600 border-green-600">Production Ready</Badge>
                 </div>
               </div>
             </div>
             
             <div className="flex gap-4">
-              <a href="https://github.com/mrj0nesmtl/sheltr-ai/raw/main/docs/02-architecture/whitepaper_final.md">
+              <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/whitepaper_final.md" target="_blank" rel="noopener noreferrer">
                 <Button className="bg-blue-600 hover:bg-blue-700">
                   <Download className="h-4 w-4 mr-2" />
-                  Download PDF
+                  View on GitHub
                 </Button>
               </a>
               <Button variant="outline">
                 <Share className="h-4 w-4 mr-2" />
                 Share Document
               </Button>
-              <Link href="/investor-access">
+              <Link href="/docs">
                 <Button variant="outline">
                   <BookOpen className="h-4 w-4 mr-2" />
-                  Investor Portal
+                  Documentation Hub
                 </Button>
               </Link>
             </div>
@@ -84,14 +84,14 @@ export default function WhitepaperPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             {/* Document Notice */}
-            <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-6 mb-8">
-              <h3 className="font-semibold text-amber-800 dark:text-amber-200 mb-2">
-                📋 Investment Grade Documentation
+            <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-6 mb-8">
+              <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">
+                📋 Technical Specification Document
               </h3>
-              <p className="text-amber-700 dark:text-amber-300 text-sm">
-                This technical white paper contains comprehensive analysis suitable for investors, 
-                technical teams, and strategic partners. The full document is available for download 
-                or can be viewed in our GitHub repository.
+              <p className="text-blue-700 dark:text-blue-300 text-sm">
+                This technical white paper contains comprehensive architecture documentation suitable for 
+                developers, technical teams, and integration partners. The full document is available 
+                for viewing in our GitHub repository.
               </p>
             </div>
 
@@ -105,16 +105,15 @@ export default function WhitepaperPage() {
                     <li>• Theory of Change & Social Impact</li>
                     <li>• Dual-Token Economic Model</li>
                     <li>• Technical Architecture</li>
-                    <li>• Investment Opportunity</li>
                     <li>• Implementation Roadmap</li>
+                    <li>• Market Analysis & Competitive Landscape</li>
                   </ul>
                 </div>
                 <div className="space-y-2">
-                  <h3 className="font-semibold">Business Analysis</h3>
+                  <h3 className="font-semibold">Technical Analysis</h3>
                   <ul className="space-y-1 text-sm text-muted-foreground">
-                    <li>• Market Analysis & Competitive Landscape</li>
                     <li>• Risk Assessment & Mitigation</li>
-                    <li>• Financial Projections & ROI</li>
+                    <li>• Platform Economics & Sustainability</li>
                     <li>• Regulatory Compliance & Legal Framework</li>
                     <li>• Success Metrics & Impact Measurement</li>
                   </ul>
@@ -140,23 +139,13 @@ export default function WhitepaperPage() {
                     15% funds housing solutions, and 5% supports operations—all verified on-chain for complete transparency.
                   </p>
                   <p>
-                    <strong>Investment Opportunity</strong>: SHELTR is raising $150,000 in pre-seed funding through our 
-                    token-based investment structure, with a clear path to $1M seed funding and Series A scaling. 
                     Our platform launches with 100 SHELTR-S tokens ($100 value) gifted to every new participant, 
-                    creating immediate engagement and platform adoption.
+                    creating immediate engagement and platform adoption through direct empowerment.
                   </p>
                 </div>
               </div>
 
               <div className="grid md:grid-cols-3 gap-6">
-                <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-6">
-                  <h3 className="font-bold text-green-800 dark:text-green-200 mb-2">Pre-Seed Round</h3>
-                  <div className="text-2xl font-bold text-green-600 mb-1">$150,000</div>
-                  <p className="text-sm text-green-700 dark:text-green-300">
-                    Target funding at $0.05/token (50% discount to public launch)
-                  </p>
-                </div>
-                
                 <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-6">
                   <h3 className="font-bold text-blue-800 dark:text-blue-200 mb-2">Platform Efficiency</h3>
                   <div className="text-2xl font-bold text-blue-600 mb-1">95%</div>
@@ -165,58 +154,66 @@ export default function WhitepaperPage() {
                   </p>
                 </div>
                 
+                <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-6">
+                  <h3 className="font-bold text-green-800 dark:text-green-200 mb-2">Transaction Speed</h3>
+                  <div className="text-2xl font-bold text-green-600 mb-1">&lt;5s</div>
+                  <p className="text-sm text-green-700 dark:text-green-300">
+                    Average processing time for donations and transfers
+                  </p>
+                </div>
+                
                 <div className="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-6">
-                  <h3 className="font-bold text-purple-800 dark:text-purple-200 mb-2">ROI Potential</h3>
-                  <div className="text-2xl font-bold text-purple-600 mb-1">30x</div>
+                  <h3 className="font-bold text-purple-800 dark:text-purple-200 mb-2">Network Fees</h3>
+                  <div className="text-2xl font-bold text-purple-600 mb-1">~$0.01</div>
                   <p className="text-sm text-purple-700 dark:text-purple-300">
-                    Projected 5-year return for pre-seed investors
+                    Base blockchain transaction costs
                   </p>
                 </div>
               </div>
 
               <div>
-                <h2 className="text-3xl font-bold mb-6">Investment Highlights</h2>
+                <h2 className="text-3xl font-bold mb-6">Technical Highlights</h2>
                 <div className="grid md:grid-cols-2 gap-8">
                   <div>
-                    <h3 className="text-xl font-semibold mb-4">Market Opportunity</h3>
+                    <h3 className="text-xl font-semibold mb-4">Architecture Innovation</h3>
                     <ul className="space-y-2">
                       <li className="flex items-start gap-2">
-                        <span className="text-green-500 mt-1">•</span>
-                        <span>$450B global charitable giving market</span>
+                        <span className="text-blue-500 mt-1">•</span>
+                        <span>Dual-token architecture separating stability from growth</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="text-green-500 mt-1">•</span>
-                        <span>$45B annual homelessness support funding</span>
+                        <span className="text-blue-500 mt-1">•</span>
+                        <span>Smart contract automation for transparent fund distribution</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="text-green-500 mt-1">•</span>
-                        <span>300% YoY growth in cryptocurrency charity</span>
+                        <span className="text-blue-500 mt-1">•</span>
+                        <span>Cross-platform integration bridging traditional and crypto ecosystems</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="text-green-500 mt-1">•</span>
-                        <span>First-mover advantage in dual-token charitable architecture</span>
+                        <span className="text-blue-500 mt-1">•</span>
+                        <span>Scalable infrastructure supporting global deployment</span>
                       </li>
                     </ul>
                   </div>
                   
                   <div>
-                    <h3 className="text-xl font-semibold mb-4">Technical Innovation</h3>
+                    <h3 className="text-xl font-semibold mb-4">Technical Implementation</h3>
                     <ul className="space-y-2">
                       <li className="flex items-start gap-2">
-                        <span className="text-blue-500 mt-1">•</span>
-                        <span>Base network integration (~$0.01 transaction fees)</span>
+                        <span className="text-green-500 mt-1">•</span>
+                        <span>Base L2 network integration with minimal transaction fees</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="text-blue-500 mt-1">•</span>
-                        <span>SHELTR-S stable token with 0% volatility for participants</span>
+                        <span className="text-green-500 mt-1">•</span>
+                        <span>SHELTR-S stable token with USDC backing for 0% volatility</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="text-blue-500 mt-1">•</span>
-                        <span>SHELTR governance token with 8% staking yields</span>
+                        <span className="text-green-500 mt-1">•</span>
+                        <span>Encrypted QR code system for secure participant identification</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="text-blue-500 mt-1">•</span>
-                        <span>Smart contract-governed housing fund with DeFi yields</span>
+                        <span className="text-green-500 mt-1">•</span>
+                        <span>Multi-signature smart contracts with governance controls</span>
                       </li>
                     </ul>
                   </div>
@@ -225,22 +222,22 @@ export default function WhitepaperPage() {
 
               {/* Full Document Access */}
               <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg p-8 text-center">
-                <h2 className="text-2xl font-bold mb-4">Access Complete Documentation</h2>
+                <h2 className="text-2xl font-bold mb-4">Access Complete Technical Documentation</h2>
                 <p className="mb-6">
-                  View the full 67-page technical white paper with detailed financial projections, 
-                  smart contract code, and comprehensive implementation strategy.
+                  View the full 67-page technical white paper with detailed architecture specifications, 
+                  smart contract code, and comprehensive implementation strategies.
                 </p>
                 <div className="flex gap-4 justify-center">
-                  <Link href="/tokenomics">
+                  <Link href="/docs/blockchain">
                     <Button className="bg-white text-blue-600 hover:bg-blue-50">
-                      <Coins className="h-4 w-4 mr-2" />
-                      View Tokenomics
+                      <Code className="h-4 w-4 mr-2" />
+                      Blockchain Architecture
                     </Button>
                   </Link>
-                  <a href="https://github.com/mrj0nesmtl/sheltr-ai/raw/main/docs/02-architecture/whitepaper_final.md">
+                  <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/whitepaper_final.md" target="_blank" rel="noopener noreferrer">
                     <Button variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600">
                       <Download className="h-4 w-4 mr-2" />
-                      Download PDF
+                      View on GitHub
                     </Button>
                   </a>
                 </div>

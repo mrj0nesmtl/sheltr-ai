@@ -9,7 +9,7 @@ SHELTR represents a paradigm shift in addressing homelessness through technology
 
 Our revolutionary dual-token architecture combines **SHELTR-S** (stable utility token) for participant protection with **SHELTR** (community governance token) for ecosystem growth. This innovative approach ensures that 80% of donations reach participants as stable value, 15% funds housing solutions, and 5% supports operations—all verified on-chain for complete transparency.
 
-**Investment Opportunity**: SHELTR is raising $150,000 in pre-seed funding through our token-based investment structure, with a clear path to $1M seed funding and Series A scaling. Our platform launches with 100 SHELTR-S tokens ($100 value) gifted to every new participant, creating immediate engagement and platform adoption.
+Our platform launches with 100 SHELTR-S tokens ($100 value) gifted to every new participant, creating immediate engagement and platform adoption.
 
 ## Executive Summary
 
@@ -31,7 +31,7 @@ To eliminate barriers between compassionate donors and vulnerable populations wh
 ### Competitive Advantages
 - **First-mover advantage** in dual-token charitable architecture
 - **Regulatory-compliant** utility token structure (not securities)
-- **Immediate utility** through Homeless Depot marketplace integration
+- **Immediate utility** through marketplace integration
 - **Deflationary mechanics** driving long-term token value appreciation
 - **Community governance** ensuring aligned stakeholder interests
 
@@ -40,13 +40,12 @@ To eliminate barriers between compassionate donors and vulnerable populations wh
 1. [Theory of Change & Social Impact](#1-theory-of-change--social-impact)
 2. [Dual-Token Economic Model](#2-dual-token-economic-model)
 3. [Technical Architecture](#3-technical-architecture)
-4. [Investment Opportunity](#4-investment-opportunity)
-5. [Implementation Roadmap](#5-implementation-roadmap)
-6. [Market Analysis & Competitive Landscape](#6-market-analysis--competitive-landscape)
-7. [Risk Assessment & Mitigation](#7-risk-assessment--mitigation)
-8. [Financial Projections & ROI](#8-financial-projections--roi)
-9. [Regulatory Compliance & Legal Framework](#9-regulatory-compliance--legal-framework)
-10. [Success Metrics & Impact Measurement](#10-success-metrics--impact-measurement)
+4. [Implementation Roadmap](#4-implementation-roadmap)
+5. [Market Analysis & Competitive Landscape](#5-market-analysis--competitive-landscape)
+6. [Risk Assessment & Mitigation](#6-risk-assessment--mitigation)
+7. [Platform Economics & Sustainability](#7-platform-economics--sustainability)
+8. [Regulatory Compliance & Legal Framework](#8-regulatory-compliance--legal-framework)
+9. [Success Metrics & Impact Measurement](#9-success-metrics--impact-measurement)
 
 ---
 
@@ -410,96 +409,9 @@ sequenceDiagram
 
 ---
 
-## 4. Investment Opportunity
+## 4. Implementation Roadmap
 
-### 4.1 Investment Thesis: Token-Based Venture Capital
-
-**Why Token Investment Over Equity**: Traditional venture capital fails to capture value in decentralized networks. Token-based investment aligns investor returns with network utility and adoption.
-
-**Strategic Advantages**:
-1. **Direct utility exposure**: Tokens have inherent platform value vs. distant equity claims
-2. **Immediate liquidity**: DeFi markets provide exit options vs. 7-10 year equity locks
-3. **Governance participation**: Direct influence on platform direction vs. board observer rights
-4. **Global accessibility**: 24/7 trading vs. limited equity market access
-5. **Regulatory clarity**: Utility tokens avoid securities complications
-
-### 4.2 Funding Round Structure
-
-#### Pre-Seed Round (Current - $150,000)
-**Purpose**: Platform completion and token launch preparation
-
-| Allocation | Amount | Use Case |
-|------------|--------|----------|
-| **Platform Development** | $60,000 (40%) | Core feature completion, mobile app, security audits |
-| **Blockchain Infrastructure** | $37,500 (25%) | Smart contract deployment, oracle integration, Base network setup |
-| **Regulatory & Compliance** | $22,500 (15%) | Legal framework, token classification, KYC/AML systems |
-| **Marketing & Partnerships** | $15,000 (10%) | Community building, shelter partnerships, donor acquisition |
-| **Operations & Legal** | $15,000 (10%) | Team expansion, legal incorporation, operational setup |
-
-**Investment Terms**:
-- **Token price**: $0.05 per SHELTR (50% discount to public launch)
-- **Minimum investment**: $5,000 (100,000 tokens)
-- **Maximum investment**: $37,500 (750,000 tokens)
-- **Vesting**: 25% at Token Generation Event, 75% over 12 months
-- **Total tokens available**: 3,000,000 SHELTR
-
-#### Multi-Round Strategy
-
-**Seed Round (Q4 2025 - $1,000,000)**:
-- **Purpose**: Market expansion and operational scaling
-- **Token price**: $0.15 (50% premium to launch price)
-- **Focus**: Multi-city expansion, enterprise partnerships, mobile app enhancement
-- **Target metrics**: 10,000 active participants, $500K monthly donations
-
-**Series A (2026 - $5,000,000+)**:
-- **Purpose**: Global scaling and institutional adoption
-- **Token price**: Market-determined (projected $0.50-$1.00)
-- **Focus**: International expansion, government partnerships, DeFi integration
-- **Target metrics**: 100,000 participants, $5M monthly donations
-
-### 4.3 ROI Projections & Value Drivers
-
-**Conservative Scenario (5-Year ROI: 600%)**:
-```
-Year 1: $0.05 → $0.10 (100% return at public launch)
-Year 3: $0.10 → $0.25 (150% additional growth)
-Year 5: $0.25 → $0.35 (40% mature market appreciation)
-Total: 600% return over 5 years
-```
-
-**Growth Scenario (5-Year ROI: 2,400%)**:
-```
-Year 1: $0.05 → $0.15 (200% return from adoption)
-Year 3: $0.15 → $0.75 (400% from network effects)
-Year 5: $0.75 → $1.25 (67% from mature platform value)
-Total: 2,400% return over 5 years
-```
-
-**Value Driver Analysis**:
-1. **Network effects**: Each new participant increases platform value exponentially
-2. **Deflationary pressure**: 2% annual token burns reduce supply
-3. **Utility demand**: Platform growth drives organic token demand
-4. **Staking yields**: Revenue sharing provides consistent returns
-5. **Governance premiums**: Voting rights command market premiums
-
-### 4.4 Competitive Risk Mitigation
-
-**First-Mover Advantages**:
-- **Regulatory clarity**: Established utility token framework
-- **Technology moats**: Proprietary QR security and dual-token architecture
-- **Network effects**: Participant acquisition creates competitive barriers
-- **Partnership exclusivity**: Shelter relationships provide distribution advantages
-
-**Intellectual Property Protection**:
-- **Patent applications**: QR-based donation system and dual-token architecture
-- **Trade secret protection**: Proprietary algorithms and security protocols
-- **Trademark portfolio**: SHELTR brand and SmartFund™ naming rights
-
----
-
-## 5. Implementation Roadmap
-
-### 5.1 Development Milestones
+### 4.1 Development Milestones
 
 ```mermaid
 gantt
@@ -519,7 +431,7 @@ gantt
     Seed Round         :milestone, 2025-09-01
 ```
 
-### 5.2 Technical Implementation Phases
+### 4.2 Technical Implementation Phases
 
 **Phase 1: Foundation (Q1 2025)**
 - Smart contract deployment and security audits
@@ -542,7 +454,7 @@ gantt
 - Government compliance and reporting tools
 - International expansion framework
 
-### 5.3 Go-to-Market Strategy
+### 4.3 Go-to-Market Strategy
 
 **Target Market Segmentation**:
 1. **Primary**: Urban shelters and NGOs (500+ organizations in North America)
@@ -562,9 +474,9 @@ gantt
 
 ---
 
-## 6. Market Analysis & Competitive Landscape
+## 5. Market Analysis & Competitive Landscape
 
-### 6.1 Total Addressable Market (TAM)
+### 5.1 Total Addressable Market (TAM)
 
 **Global Market Sizing**:
 - **Charitable giving market**: $450B annually (global)
@@ -578,7 +490,7 @@ gantt
 - **Digital donation platforms**: $3B annually
 - **Target capture**: 1% market share = $130M revenue opportunity
 
-### 6.2 Competitive Analysis
+### 5.2 Competitive Analysis
 
 **Direct Competitors**:
 1. **Giveth**: Blockchain charity platform (limited homeless focus)
@@ -601,7 +513,7 @@ gantt
 | **Mobile Optimization** | ✅ | ❌ | ✅ | ✅ |
 | **Smart Contracts** | ✅ Base Network | ✅ Ethereum | ❌ | ❌ |
 
-### 6.3 Market Entry Strategy
+### 5.3 Market Entry Strategy
 
 **Beachhead Market**: Montreal homeless services ecosystem
 - **Rationale**: Concentrated homeless population, progressive technology adoption, bilingual testing
@@ -616,9 +528,9 @@ gantt
 
 ---
 
-## 7. Risk Assessment & Mitigation
+## 6. Risk Assessment & Mitigation
 
-### 7.1 Technical Risks
+### 6.1 Technical Risks
 
 **Smart Contract Vulnerabilities**
 - **Risk**: Code exploits leading to fund loss
@@ -632,7 +544,7 @@ gantt
 - **Impact**: Medium (temporary service disruption)
 - **Mitigation**: Multi-chain deployment strategy, fallback to Ethereum mainnet, local caching
 
-### 7.2 Regulatory Risks
+### 6.2 Regulatory Risks
 
 **Token Classification Changes**
 - **Risk**: SEC reclassifies SHELTR as security
@@ -646,7 +558,7 @@ gantt
 - **Impact**: Medium (geographic limitations)
 - **Mitigation**: Traditional payment integration, regulatory advocacy, jurisdiction diversification
 
-### 7.3 Market Risks
+### 6.3 Market Risks
 
 **Participant Adoption**
 - **Risk**: Homeless individuals unable/unwilling to use technology
@@ -660,7 +572,7 @@ gantt
 - **Impact**: Medium (slower adoption, higher CAC)
 - **Mitigation**: Educational content, fiat payment options, traditional charity partnerships
 
-### 7.4 Operational Risks
+### 6.4 Operational Risks
 
 **Team Scaling**
 - **Risk**: Inability to hire qualified blockchain/charity expertise
@@ -676,79 +588,41 @@ gantt
 
 ---
 
-## 8. Financial Projections & ROI
+## 7. Platform Economics & Sustainability
 
-### 8.1 Revenue Model & Projections
+### 7.1 Economic Model Overview
 
-**Revenue Streams with 5-Year Projections**:
+**Sustainable Revenue Streams**:
+SHELTR's economic model is designed for long-term sustainability through diversified revenue sources that align with platform growth and social impact.
 
-| Revenue Source | Year 1 | Year 2 | Year 3 | Year 4 | Year 5 |
-|---------------|--------|--------|--------|--------|--------|
-| **Platform Fees (2%)** | $12K | $36K | $120K | $300K | $600K |
-| **Token Appreciation** | $45K | $150K | $375K | $750K | $1.2M |
-| **Enterprise Licensing** | $0 | $25K | $100K | $250K | $500K |
-| **DeFi Yields (Housing)** | $2K | $8K | $25K | $50K | $75K |
-| **Total Revenue** | $59K | $219K | $620K | $1.35M | $2.375M |
+| Revenue Source | Description | Sustainability Factor |
+|---------------|-------------|---------------------|
+| **Platform Fees (2%)** | Transaction fees on marketplace purchases | Scales with platform usage |
+| **Enterprise Licensing** | White-label solutions for organizations | Recurring revenue model |
+| **DeFi Yields (Housing Fund)** | Investment returns on housing fund deposits | Compound growth mechanism |
+| **Premium Features** | Advanced analytics and reporting tools | Value-added services |
+| **Partnership Revenue** | Integration and API access fees | Ecosystem expansion |
 
-**Expense Projections**:
-
-| Expense Category | Year 1 | Year 2 | Year 3 | Year 4 | Year 5 |
-|------------------|--------|--------|--------|--------|--------|
-| **Personnel** | $180K | $350K | $600K | $900K | $1.2M |
-| **Technology** | $30K | $50K | $75K | $100K | $125K |
-| **Marketing** | $40K | $80K | $150K | $200K | $250K |
-| **Operations** | $25K | $40K | $60K | $80K | $100K |
-| **Total Expenses** | $275K | $520K | $885K | $1.28M | $1.675M |
-
-**Profitability Timeline**:
-- **Break-even**: Month 36 (Q4 2027)
-- **Positive cash flow**: Month 42 (Q2 2028)
-- **EBITDA positive**: Month 48 (Q4 2028)
-
-### 8.2 Token Economics & Value Appreciation
+### 7.2 Token Economics & Distribution
 
 **SHELTR Token Supply & Distribution**:
 ```
 Total Supply: 100,000,000 SHELTR
-├── Pre-Seed Investors (3%): 3,000,000 tokens
-├── Seed Investors (7%): 7,000,000 tokens
-├── Public Sale (30%): 30,000,000 tokens
+├── Community Rewards (35%): 35,000,000 tokens
+├── Platform Development (25%): 25,000,000 tokens
 ├── Team & Advisors (20%): 20,000,000 tokens
-├── Platform Rewards (25%): 25,000,000 tokens
-├── Treasury Reserve (10%): 10,000,000 tokens
+├── Treasury Reserve (15%): 15,000,000 tokens
 └── Strategic Partnerships (5%): 5,000,000 tokens
 ```
 
-**Value Appreciation Drivers**:
-1. **Network Effects**: Each participant increases platform value by $2,000 annually
+**Value Appreciation Mechanisms**:
+1. **Network Effects**: Platform value increases with participant adoption
 2. **Deflationary Pressure**: 2% annual burn rate reduces circulating supply
-3. **Utility Demand**: Platform fees and governance require SHELTR holdings
-4. **Staking Rewards**: 8% APY creates holding incentives
-5. **Partnership Premiums**: Strategic relationships drive acquisition demand
+3. **Utility Demand**: Platform governance and premium features require SHELTR
+4. **Staking Rewards**: Revenue sharing creates holding incentives
+5. **Partnership Integration**: Strategic use cases drive organic demand
 
-### 8.3 Return on Investment Analysis
-
-**Pre-Seed Investor Scenarios** (Initial investment: $0.05/token):
-
-**Conservative Case** (50th percentile outcome):
-- Year 1: $0.05 → $0.12 (140% return)
-- Year 3: $0.12 → $0.30 (150% additional)
-- Year 5: $0.30 → $0.45 (50% additional)
-- **Total ROI**: 800% over 5 years (19% IRR)
-
-**Base Case** (70th percentile outcome):
-- Year 1: $0.05 → $0.15 (200% return)
-- Year 3: $0.15 → $0.50 (233% additional)
-- Year 5: $0.50 → $0.85 (70% additional)
-- **Total ROI**: 1,600% over 5 years (30% IRR)
-
-**Growth Case** (90th percentile outcome):
-- Year 1: $0.05 → $0.20 (300% return)
-- Year 3: $0.20 → $0.75 (275% additional)
-- Year 5: $0.75 → $1.50 (100% additional)
-- **Total ROI**: 2,900% over 5 years (40% IRR)
-
-### 8.4 Platform Metrics & Growth
+### 7.3 Platform Sustainability Metrics
 
 **User Growth Projections**:
 
@@ -769,9 +643,9 @@ Total Supply: 100,000,000 SHELTR
 
 ---
 
-## 9. Regulatory Compliance & Legal Framework
+## 8. Regulatory Compliance & Legal Framework
 
-### 9.1 Token Classification Strategy
+### 8.1 Token Classification Strategy
 
 **Utility Token Framework**:
 SHELTR tokens are designed as **utility tokens** providing platform access and governance rights, not investment securities. This classification is supported by:
@@ -785,7 +659,7 @@ SHELTR tokens are designed as **utility tokens** providing platform access and g
 **Legal Opinion Summary**:
 Based on consultation with blockchain regulatory experts, SHELTR tokens qualify as utility tokens under current SEC guidance, provided they maintain functional utility and avoid profit-sharing mechanisms.
 
-### 9.2 Compliance Framework
+### 8.2 Compliance Framework
 
 **KYC/AML Requirements**:
 - **Investor Verification**: Accredited investor status required for token purchases >$5,000
@@ -799,7 +673,7 @@ Based on consultation with blockchain regulatory experts, SHELTR tokens qualify 
 - **Anonymization**: Blockchain data contains no personally identifiable information
 - **Right to Deletion**: Off-chain data deletion capabilities
 
-### 9.3 Regulatory Roadmap
+### 8.3 Regulatory Roadmap
 
 **Immediate Compliance (Q1 2025)**:
 - SEC utility token opinion letter
@@ -815,9 +689,9 @@ Based on consultation with blockchain regulatory experts, SHELTR tokens qualify 
 
 ---
 
-## 10. Success Metrics & Impact Measurement
+## 9. Success Metrics & Impact Measurement
 
-### 10.1 Platform Performance KPIs
+### 9.1 Platform Performance KPIs
 
 **Technical Performance**:
 - **System Uptime**: 99.99% target (8.76 hours downtime/year maximum)
@@ -833,7 +707,7 @@ Based on consultation with blockchain regulatory experts, SHELTR tokens qualify 
 - **NPS Score**: >50 (industry-leading satisfaction)
 - **Support Resolution**: <24 hours average response time
 
-### 10.2 Social Impact Metrics
+### 9.2 Social Impact Metrics
 
 **Housing Outcomes**:
 - **Transition Rate**: 65% of participants transition to stable housing within 12 months
@@ -847,7 +721,7 @@ Based on consultation with blockchain regulatory experts, SHELTR tokens qualify 
 - **Financial Stability**: 60% achieve basic financial literacy
 - **Community Integration**: 70% participate in community activities
 
-### 10.3 Economic Impact Assessment
+### 9.3 Economic Impact Assessment
 
 **Direct Economic Benefits**:
 - **Participant Income**: $2,000 average monthly stable support
@@ -861,7 +735,7 @@ Based on consultation with blockchain regulatory experts, SHELTR tokens qualify 
 - **Reduced Services**: $15,000 average annual reduction in crisis services per participant
 - **Economic Multiplier**: 2.3x economic impact from local spending patterns
 
-### 10.4 Blockchain Transparency Metrics
+### 9.4 Blockchain Transparency Metrics
 
 **Transaction Verification**:
 - **Verification Rate**: 100% of transactions recorded on-chain
@@ -883,44 +757,43 @@ Based on consultation with blockchain regulatory experts, SHELTR tokens qualify 
 
 SHELTR represents more than a technological innovation—it embodies a fundamental reimagining of how society addresses its most pressing challenges. By combining cutting-edge blockchain technology with deep understanding of homelessness dynamics, we have created a platform that simultaneously serves immediate needs and builds sustainable solutions.
 
-### Investment Opportunity Summary
+### Technical Achievement Summary
 
-**For Investors**: SHELTR offers a unique opportunity to generate significant returns while creating measurable social impact. Our token-based investment structure provides:
-- **Direct utility exposure** with clear value appreciation mechanisms
-- **Immediate liquidity** through DeFi markets and governance participation
-- **Social impact alignment** with transparent, measurable outcomes
-- **Regulatory clarity** through utility token classification
-- **Global accessibility** transcending traditional investment barriers
+**For Technology Leaders**: SHELTR demonstrates the practical application of blockchain technology for social impact through:
+- **Dual-token architecture** separating stability from growth mechanisms
+- **Smart contract automation** ensuring transparent fund distribution
+- **Cross-platform integration** bridging traditional and crypto ecosystems
+- **Regulatory compliance** through utility token classification
+- **Scalable infrastructure** supporting global deployment
 
-**For Society**: SHELTR creates a new paradigm where charitable giving becomes transparent, efficient, and sustainable:
+**For Social Impact Organizations**: SHELTR creates a new paradigm where charitable giving becomes transparent, efficient, and sustainable:
 - **95% efficiency** compared to 60-70% in traditional charity
 - **Immediate impact** through direct peer-to-peer token transfers
 - **Long-term solutions** via smart contract-governed housing fund
 - **Community governance** ensuring stakeholder alignment
 - **Dignified experience** preserving participant autonomy and privacy
 
-### Call to Action
+### Implementation Readiness
 
-We invite qualified investors to join us in this revolutionary approach to social impact investing. SHELTR's $150,000 pre-seed round represents an opportunity to:
+SHELTR represents a production-ready platform that addresses the critical intersection of technology and social impact. Our comprehensive architecture supports:
 
-1. **Generate exceptional returns** through our dual-token economic model
-2. **Create lasting social change** by addressing homelessness systematically
-3. **Pioneer a new investment category** at the intersection of DeFi and social impact
-4. **Build a sustainable platform** that grows stronger with every participant
+1. **Immediate deployment** through our tested dual-token economic model
+2. **Measurable social change** by addressing homelessness systematically
+3. **Technical innovation** at the intersection of DeFi and social impact
+4. **Sustainable growth** through community-driven platform development
 
-### Next Steps
+### Partnership Opportunities
 
-**For Potential Investors**:
-1. **Schedule a confidential discussion** to explore investment opportunities
-2. **Review detailed technical documentation** and financial projections
-3. **Meet the founding team** and advisory board
-4. **Complete accredited investor verification** and due diligence
-5. **Participate in our token pre-sale** with preferential terms
+**For Technology Partners**:
+1. **Integration partnerships**: API access and white-label solutions
+2. **Infrastructure collaboration**: Blockchain and payment system optimization
+3. **Research initiatives**: Joint studies on crypto-philanthropy effectiveness
+4. **Open source contributions**: Community-driven platform enhancement
 
-**For Partners and Stakeholders**:
-1. **Shelter partnerships**: Integrate SHELTR into your service delivery
-2. **Technology partnerships**: Collaborate on platform development
-3. **Community engagement**: Join our mission to hack homelessness
+**For Impact Partners**:
+1. **Shelter partnerships**: Integrate SHELTR into service delivery workflows
+2. **NGO collaboration**: Scale proven methodologies across organizations
+3. **Community engagement**: Join the mission to hack homelessness through technology
 4. **Advisory participation**: Contribute expertise to platform governance
 
 ### Final Commitment
@@ -934,13 +807,13 @@ We are not just building a platform—we are creating a movement that proves tec
 *"Technology's true measure is not in its sophistication, but in its service to humanity."*
 
 **Contact Information**:
-- **Investment Inquiries**: investors@sheltr-ai.com
 - **Partnership Opportunities**: partnerships@sheltr-ai.com
 - **Technical Questions**: development@sheltr-ai.com
+- **Platform Integration**: integration@sheltr-ai.com
 - **General Information**: hello@sheltr-ai.com
 
 **Important Legal Disclaimers**:
-*This whitepaper contains forward-looking statements based on current expectations and assumptions. Actual results may differ materially. Token investments carry significant risk and potential total loss. Please consult with qualified legal and financial advisors before making investment decisions. This document does not constitute an offer to sell securities and has not been reviewed by the SEC or other regulatory authorities.*
+*This whitepaper contains forward-looking statements based on current expectations and assumptions. Actual results may differ materially. Platform participation and token usage carry inherent risks in emerging technology implementations. Please consult with qualified technical and legal advisors before platform integration. This document is for informational purposes and does not constitute financial advice.*
 
 ---
 *Document Version: 1.0.0*  

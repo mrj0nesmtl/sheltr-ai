@@ -240,44 +240,97 @@ export default function ParticipantsPage() {
         </div>
       </section>
 
-      {/* Success Stories */}
+      {/* Path to Housing Success */}
       <section className="py-20 bg-green-500/5">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-6">Your Success Is Our Mission</h2>
-          <p className="text-xl text-muted-foreground mb-12">
-            Every person deserves dignity, respect, and the opportunity for a stable life.
-          </p>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold mb-6">Your Path to Housing Success</h2>
+            <p className="text-xl text-muted-foreground">
+              How SHELTR-S tokens help you save money and achieve stable housing through our systematic approach.
+            </p>
+          </div>
           
           <div className="grid md:grid-cols-3 gap-8 mb-12">
+            {/* Step 1: Immediate Relief */}
             <Card className="border-green-500/20 bg-green-500/5">
-              <CardContent className="p-6 text-center">
-                <div className="text-3xl font-bold text-green-600 dark:text-green-400 mb-2">73%</div>
-                <p className="text-sm text-muted-foreground">Participants achieve stable housing within 6 months</p>
+              <CardHeader>
+                <div className="w-12 h-12 bg-green-600 text-white rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-xl font-bold">1</span>
+                </div>
+                <CardTitle className="text-center">Immediate Relief</CardTitle>
+              </CardHeader>
+              <CardContent className="text-center">
+                <p className="text-sm text-muted-foreground mb-4">
+                  Receive SHELTR-S stable tokens directly to your digital wallet for immediate needs like food, 
+                  transportation, and emergency shelter.
+                </p>
+                <div className="bg-green-600/10 rounded-lg p-3">
+                  <div className="text-lg font-semibold text-green-600">$40 direct support</div>
+                  <div className="text-xs text-muted-foreground">per $50 donation received</div>
+                </div>
               </CardContent>
             </Card>
+
+            {/* Step 2: Housing Fund Building */}
             <Card className="border-green-500/20 bg-green-500/5">
-              <CardContent className="p-6 text-center">
-                <div className="text-3xl font-bold text-green-600 dark:text-green-400 mb-2">$2,400</div>
-                <p className="text-sm text-muted-foreground">Average direct support received per participant</p>
+              <CardHeader>
+                <div className="w-12 h-12 bg-green-600 text-white rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-xl font-bold">2</span>
+                </div>
+                <CardTitle className="text-center">Housing Fund Building</CardTitle>
+              </CardHeader>
+              <CardContent className="text-center">
+                <p className="text-sm text-muted-foreground mb-4">
+                  15% of every donation automatically builds a dedicated housing fund that provides security deposits, 
+                  first month&apos;s rent, and move-in assistance.
+                </p>
+                <div className="bg-blue-600/10 rounded-lg p-3">
+                  <div className="text-lg font-semibold text-blue-600">$7.50 housing fund</div>
+                  <div className="text-xs text-muted-foreground">per $50 donation received</div>
+                </div>
               </CardContent>
             </Card>
+
+            {/* Step 3: Sustainable Independence */}
             <Card className="border-green-500/20 bg-green-500/5">
-              <CardContent className="p-6 text-center">
-                <div className="text-3xl font-bold text-green-600 dark:text-green-400 mb-2">95%</div>
-                <p className="text-sm text-muted-foreground">Report feeling treated with dignity and respect</p>
+              <CardHeader>
+                <div className="w-12 h-12 bg-green-600 text-white rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-xl font-bold">3</span>
+                </div>
+                <CardTitle className="text-center">Sustainable Independence</CardTitle>
+              </CardHeader>
+              <CardContent className="text-center">
+                <p className="text-sm text-muted-foreground mb-4">
+                  Once housed, continue receiving support for job training, healthcare access, and financial literacy 
+                  to maintain long-term stability.
+                </p>
+                <div className="bg-purple-600/10 rounded-lg p-3">
+                  <div className="text-lg font-semibold text-purple-600">Ongoing support</div>
+                  <div className="text-xs text-muted-foreground">until sustainable independence</div>
+                </div>
               </CardContent>
             </Card>
           </div>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-green-600 hover:bg-green-700">
-              <MapPin className="h-4 w-4 mr-2" />
-              Find Services Near Me
-            </Button>
-            <Button variant="outline" size="lg" className="border-green-500/20 text-green-600 dark:text-green-400">
-              <Heart className="h-4 w-4 mr-2" />
-              Get Support Now
-            </Button>
+
+          {/* Call to Action */}
+          <div className="text-center">
+            <div className="bg-green-600/10 rounded-lg p-8 mb-8 border border-green-500/20">
+              <h3 className="text-xl font-semibold mb-4">Ready to Start Your Journey?</h3>
+              <p className="text-muted-foreground mb-6">
+                Every person deserves dignity, respect, and the opportunity for a stable life. 
+                SHELTR provides the tools and support to make it happen.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button size="lg" className="bg-green-600 hover:bg-green-700">
+                  <MapPin className="h-4 w-4 mr-2" />
+                  Find Services Near Me
+                </Button>
+                <Button variant="outline" size="lg" className="border-green-500/20 text-green-600 dark:text-green-400">
+                  <Heart className="h-4 w-4 mr-2" />
+                  Get Support Now
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       </section>

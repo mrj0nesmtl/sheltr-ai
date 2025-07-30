@@ -16,7 +16,9 @@ import {
   Menu,
   X,
   ArrowRight,
-  Lock
+  Lock,
+  Rocket,
+  Heart
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -40,7 +42,7 @@ export default function DocsPage() {
       audience: "Investors • Technical Teams • Partners",
       topics: ["Dual-Token Economics", "Smart Contract Architecture", "Base Network Integration", "Security Framework", "Financial Projections"],
       link: "/docs/whitepaper",
-      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/raw/main/docs/02-architecture/whitepaper_final.md",
+      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/whitepaper_final.md",
       lastUpdated: "January 25, 2025"
     },
     {
@@ -53,7 +55,7 @@ export default function DocsPage() {
       audience: "Developers • Blockchain Engineers • Security Auditors",
       topics: ["Smart Contract Code", "Base Network Integration", "Security Protocols", "Oracle Systems", "Token Utilities"],
       link: "/docs/blockchain",
-      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/raw/main/docs/02-architecture/technical/blockchain.md",
+      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/technical/blockchain.md",
       lastUpdated: "January 25, 2025"
     },
     {
@@ -66,27 +68,45 @@ export default function DocsPage() {
       audience: "Executives • Impact Investors • Media • Partners",
       topics: ["Theory of Change", "Market Analysis", "Social Impact", "Investment Thesis", "Implementation Roadmap"],
       link: "/docs/hacking-homelessness",
-      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/raw/main/docs/01-overview/hacking_homelessness.md",
+      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/01-overview/hacking_homelessness.md",
+      lastUpdated: "January 25, 2025"
+    },
+    {
+      title: "API Documentation",
+      description: "Comprehensive API reference for developers, integration guides, and technical specifications",
+      icon: Code,
+      badge: "Technical",
+      badgeColor: "bg-orange-500",
+      pages: "32 pages",
+      audience: "Developers • System Integrators • Technical Partners",
+      topics: ["REST API Endpoints", "Authentication", "Rate Limiting", "Error Handling", "SDK Integration"],
+      link: "/docs/api",
+      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/03-api/README.md",
+      lastUpdated: "January 25, 2025"
+    },
+    {
+      title: "Participant User Guide",
+      description: "Complete guide for participants using the SHELTR platform, from onboarding to advanced features",
+      icon: Users,
+      badge: "User Guide",
+      badgeColor: "bg-teal-500",
+      pages: "28 pages",
+      audience: "Participants • Support Staff • Shelter Administrators",
+      topics: ["Platform Onboarding", "QR Code Usage", "Wallet Management", "Service Access", "Support Resources"],
+      link: "/docs/participant-guide",
+      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/06-user-guides/participant-guide.md",
       lastUpdated: "January 25, 2025"
     }
   ];
 
   const additionalResources = [
     {
-      title: "Investor Relations Portal",
-      description: "Secure access to investment opportunities and detailed financial projections",
-      icon: Lock,
-      link: "/investor-access",
+      title: "Development Roadmap",
+      description: "Detailed development timeline, milestones, and feature planning",
+      icon: Rocket,
+      link: "/docs/roadmap",
       isInternal: true,
-      badge: "Access Required"
-    },
-    {
-      title: "API Documentation",
-      description: "Technical integration guides for developers and partners",
-      icon: Code,
-      link: "https://docs.sheltr.dev",
-      isInternal: false,
-      badge: "Coming Soon"
+      badge: "Planning"
     },
     {
       title: "GitHub Repository",
@@ -103,6 +123,14 @@ export default function DocsPage() {
       link: "/tokenomics",
       isInternal: true,
       badge: "Interactive"
+    },
+    {
+      title: "Community Support",
+      description: "Get help, share feedback, and connect with the SHELTR community",
+      icon: Heart,
+      link: "mailto:joel@arcanaconcept.com",
+      isInternal: false,
+      badge: "Support"
     }
   ];
 
@@ -170,25 +198,31 @@ export default function DocsPage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-r from-blue-900 via-purple-900 to-indigo-900 text-white">
-        <div className="container mx-auto px-4 text-center">
+      <section 
+        className="py-20 relative"
+        style={{
+          backgroundImage: "linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary)) 50%, hsl(var(--secondary)) 100%)"
+        }}
+      >
+        <div className="absolute inset-0 bg-black/20"></div>
+        <div className="relative z-10 container mx-auto px-4 text-center">
           <div className="max-w-4xl mx-auto">
             <div className="flex justify-center mb-6">
-              <Book className="h-16 w-16 text-amber-400" />
+              <Book className="h-16 w-16 text-white/90" />
             </div>
-            <h1 className="text-5xl font-bold mb-6">
+            <h1 className="text-5xl font-bold mb-6 text-white">
               SHELTR Documentation Hub
             </h1>
-            <p className="text-xl mb-8 text-blue-100">
+            <p className="text-xl mb-8 text-white/90">
               Comprehensive technical documentation, investment materials, and implementation guides 
-              for the world's first dual-token charitable ecosystem.
+              for the world&rsquo;s first dual-token charitable ecosystem.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-amber-600 hover:bg-amber-700 text-black">
+              <Button size="lg" variant="secondary" className="bg-white text-foreground hover:bg-white/90">
                 <Download className="h-5 w-5 mr-2" />
                 Download All Documents
               </Button>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-black">
+              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-primary">
                 <Building className="h-5 w-5 mr-2" />
                 View GitHub Repository
               </Button>
@@ -204,66 +238,68 @@ export default function DocsPage() {
             <h2 className="text-3xl font-bold mb-4">Core Documentation</h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
               Investment-grade documentation covering technical architecture, market analysis, 
-              and implementation strategy for SHELTR's revolutionary approach to charitable technology.
+              and implementation strategy for SHELTR&rsquo;s revolutionary approach to charitable technology.
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-1 gap-8 max-w-4xl mx-auto">
+          <div className="grid lg:grid-cols-1 gap-8 max-w-5xl mx-auto">
             {coreDocuments.map((doc, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow">
-                <CardHeader>
+              <Card key={index} className="hover:shadow-xl transition-all duration-300 border-2 hover:border-primary/20">
+                <CardHeader className="pb-4">
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                        <doc.icon className="h-6 w-6 text-primary" />
+                      <div className="w-16 h-16 bg-gradient-to-br from-primary/20 to-primary/10 rounded-xl flex items-center justify-center">
+                        <doc.icon className="h-8 w-8 text-primary" />
                       </div>
                       <div>
-                        <div className="flex items-center gap-2 mb-2">
-                          <CardTitle className="text-xl">{doc.title}</CardTitle>
-                          <Badge className={`${doc.badgeColor} text-white text-xs`}>
+                        <div className="flex items-center gap-3 mb-2">
+                          <CardTitle className="text-2xl">{doc.title}</CardTitle>
+                          <Badge className={`${doc.badgeColor} text-white text-sm px-3 py-1`}>
                             {doc.badge}
                           </Badge>
                         </div>
-                        <CardDescription className="text-base">
+                        <CardDescription className="text-base leading-relaxed">
                           {doc.description}
                         </CardDescription>
                       </div>
                     </div>
-                    <div className="text-right text-sm text-muted-foreground">
-                      <div>{doc.pages}</div>
+                    <div className="text-right text-sm text-muted-foreground bg-muted/50 rounded-lg p-3">
+                      <div className="font-semibold">{doc.pages}</div>
                       <div className="text-xs">Updated {doc.lastUpdated}</div>
                     </div>
                   </div>
                 </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div>
-                      <h4 className="font-semibold mb-2">Target Audience</h4>
-                      <p className="text-sm text-muted-foreground">{doc.audience}</p>
-                    </div>
-                    
-                    <div>
-                      <h4 className="font-semibold mb-2">Key Topics Covered</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {doc.topics.map((topic, topicIndex) => (
-                          <Badge key={topicIndex} variant="outline" className="text-xs">
-                            {topic}
-                          </Badge>
-                        ))}
+                <CardContent className="pt-0">
+                  <div className="space-y-6">
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div>
+                        <h4 className="font-semibold mb-3 text-foreground">Target Audience</h4>
+                        <p className="text-sm text-muted-foreground leading-relaxed">{doc.audience}</p>
+                      </div>
+                      
+                      <div>
+                        <h4 className="font-semibold mb-3 text-foreground">Key Topics Covered</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {doc.topics.map((topic, topicIndex) => (
+                            <Badge key={topicIndex} variant="outline" className="text-xs hover:bg-primary/10 transition-colors">
+                              {topic}
+                            </Badge>
+                          ))}
+                        </div>
                       </div>
                     </div>
                     
-                    <div className="flex gap-3 pt-4">
+                    <div className="flex gap-4 pt-4 border-t">
                       <Link href={doc.link} className="flex-1">
-                        <Button className="w-full">
-                          <FileText className="h-4 w-4 mr-2" />
+                        <Button className="w-full h-12 text-base">
+                          <FileText className="h-5 w-5 mr-2" />
                           View Online
                         </Button>
                       </Link>
-                      <a href={doc.downloadLink} className="flex-1">
-                        <Button variant="outline" className="w-full">
-                          <Download className="h-4 w-4 mr-2" />
-                          Download PDF
+                      <a href={doc.downloadLink} target="_blank" rel="noopener noreferrer" className="flex-1">
+                        <Button variant="outline" className="w-full h-12 text-base border-2 hover:border-primary">
+                          <Download className="h-5 w-5 mr-2" />
+                          View on GitHub
                         </Button>
                       </a>
                     </div>
@@ -328,19 +364,19 @@ export default function DocsPage() {
             <h2 className="text-3xl font-bold mb-6">Need More Information?</h2>
             <p className="text-lg text-muted-foreground mb-8">
               Contact our team for technical support, partnership opportunities, 
-              or investor relations inquiries.
+              or platform integration inquiries.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/investor-access">
+              <a href="mailto:joel@arcanaconcept.com">
                 <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
-                  <Lock className="h-5 w-5 mr-2" />
-                  Investor Portal
-                </Button>
-              </Link>
-              <a href="mailto:hello@sheltr-ai.com">
-                <Button size="lg" variant="outline">
                   <Users className="h-5 w-5 mr-2" />
                   Contact Team
+                </Button>
+              </a>
+              <a href="https://github.com/mrj0nesmtl/sheltr-ai" target="_blank" rel="noopener noreferrer">
+                <Button size="lg" variant="outline">
+                  <ExternalLink className="h-5 w-5 mr-2" />
+                  View on GitHub
                 </Button>
               </a>
             </div>

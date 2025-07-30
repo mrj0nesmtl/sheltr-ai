@@ -241,37 +241,37 @@ export default function DonorsPage() {
         </div>
       </section>
 
-      {/* Impact Stats */}
+      {/* Pre-Launch Vision */}
       <section className="py-20 bg-orange-500/5">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-6">Your Donations Create Real Change</h2>
+          <h2 className="text-3xl font-bold mb-6">Your Donations Will Create Real Change</h2>
           <p className="text-xl text-muted-foreground mb-12">
-            Join thousands of donors making a verified difference in ending homelessness.
+            Be among the first donors to make a verified difference in ending homelessness through blockchain transparency.
           </p>
           
           <div className="grid md:grid-cols-4 gap-8 mb-12">
             <Card className="border-orange-500/20 bg-orange-500/5">
               <CardContent className="p-6 text-center">
-                <div className="text-3xl font-bold text-orange-600 dark:text-orange-400 mb-2">$2.8M</div>
-                <p className="text-sm text-muted-foreground">Donated through platform</p>
+                <div className="text-3xl font-bold text-orange-600 dark:text-orange-400 mb-2">Q2 2025</div>
+                <p className="text-sm text-muted-foreground">Platform launch target</p>
               </CardContent>
             </Card>
             <Card className="border-orange-500/20 bg-orange-500/5">
               <CardContent className="p-6 text-center">
-                <div className="text-3xl font-bold text-orange-600 dark:text-orange-400 mb-2">1,247</div>
-                <p className="text-sm text-muted-foreground">Lives directly impacted</p>
+                <div className="text-3xl font-bold text-orange-600 dark:text-orange-400 mb-2">100%</div>
+                <p className="text-sm text-muted-foreground">Donation transparency</p>
               </CardContent>
             </Card>
             <Card className="border-orange-500/20 bg-orange-500/5">
               <CardContent className="p-6 text-center">
-                <div className="text-3xl font-bold text-orange-600 dark:text-orange-400 mb-2">387</div>
-                <p className="text-sm text-muted-foreground">People housed permanently</p>
+                <div className="text-3xl font-bold text-orange-600 dark:text-orange-400 mb-2">&lt;5s</div>
+                <p className="text-sm text-muted-foreground">Transaction speed</p>
               </CardContent>
             </Card>
             <Card className="border-orange-500/20 bg-orange-500/5">
               <CardContent className="p-6 text-center">
-                <div className="text-3xl font-bold text-orange-600 dark:text-orange-400 mb-2">15,000+</div>
-                <p className="text-sm text-muted-foreground">Active donors</p>
+                <div className="text-3xl font-bold text-orange-600 dark:text-orange-400 mb-2">~$0.01</div>
+                <p className="text-sm text-muted-foreground">Network fees</p>
               </CardContent>
             </Card>
           </div>

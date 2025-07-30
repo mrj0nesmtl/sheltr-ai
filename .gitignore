@@ -120,3 +120,4 @@ tmp/
 # Google OAuth credentials
 google-credentials.json
 **/client_secret_*.json
+apps/api/.venv/

@@ -107,16 +107,22 @@ const investmentSlides = [
     type: 'market',
     title: 'Market Opportunity',
     subtitle: 'Massive addressable market',
-    description: '$45B global homelessness spending',
+    description: '$10-20B global homelessness donations',
     icon: Globe,
     bgGradient: 'from-purple-600 to-pink-600',
     content: {
       marketSizes: [
-        { label: 'Total Addressable Market', value: '$45B', description: 'Global homelessness spending' },
-        { label: 'Serviceable Addressable Market', value: '$12B', description: 'North American charitable giving' },
-        { label: 'Initial Target Market', value: '$500M', description: 'Direct donation platforms' }
+        { label: 'Global Charitable Giving', value: '$530B', description: 'Total market (2024)' },
+        { label: 'Homelessness Donations', value: '$10-20B', description: 'Annual direct spending' },
+        { label: 'Digital Giving Segment', value: '$2-8B', description: '20-40% of homelessness donations' },
+        { label: 'U.S. Shelter Industry', value: '$21.9B', description: 'Annual revenue (2024)' }
       ],
       growth: '8.5% CAGR in charitable giving',
+      projections: [
+        { year: '2024', value: '$530B', description: 'Global charitable giving' },
+        { year: '2033', value: '$848B', description: 'Projected market size' },
+        { year: '2031', value: '$342B', description: 'Transitional housing services' }
+      ],
       segments: ['Individual donors', 'Corporate partnerships', 'Government contracts', 'International expansion']
     }
   },
@@ -730,8 +736,798 @@ function InvestmentDeckSlideshow({ isOpen, onClose }: { isOpen: boolean; onClose
                 </div>
               )}
 
+              {slide.type === 'market' && slide.content && (
+                <div className="h-full">
+                  <div className="text-center mb-6">
+                    <h1 className="text-5xl font-bold mb-4 text-white drop-shadow-lg">{slide.title}</h1>
+                    <h2 className="text-2xl font-semibold mb-2 text-white/90 drop-shadow-md">{slide.subtitle}</h2>
+                    <p className="text-xl text-white/80 drop-shadow-sm">{slide.description}</p>
+                  </div>
+                  
+                  {/* Market Size Statistics */}
+                  <div className="mb-8">
+                    <h3 className="text-3xl font-bold mb-6 text-center text-white drop-shadow-lg">Market Size Breakdown</h3>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      {slide.content.marketSizes?.map((market, index) => (
+                        <div key={index} className="relative overflow-hidden rounded-lg p-4 border border-white/20">
+                          <div className="absolute inset-0 bg-white/15 backdrop-blur-sm"></div>
+                          <div className="relative z-10 text-center">
+                            <div className="text-sm text-white/80 font-medium mb-1">{market.label}</div>
+                            <div className="text-2xl font-bold text-white drop-shadow-sm mb-1">{market.value}</div>
+                            <div className="text-xs text-white/70">{market.description}</div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  {/* Growth Projections */}
+                  <div className="mb-8">
+                    <h3 className="text-2xl font-semibold mb-4 text-white drop-shadow-md">Growth Projections</h3>
+                    <div className="grid md:grid-cols-3 gap-4">
+                      {Array.isArray(slide.content.projections) && slide.content.projections.map((projection: { year: string; value: string; description: string }, index: number) => (
+                        <div key={index} className="relative overflow-hidden rounded-lg p-4 border border-white/20">
+                          <div className="absolute inset-0 bg-white/10"></div>
+                          <div className="relative z-10 text-center">
+                            <div className="text-lg font-bold text-white mb-1">{projection.year}</div>
+                            <div className="text-xl font-bold text-purple-300 mb-1">{projection.value}</div>
+                            <div className="text-sm text-white/80">{projection.description}</div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  {/* Key Market Segments */}
+                  <div>
+                    <h3 className="text-2xl font-semibold mb-4 text-white drop-shadow-md">Target Market Segments</h3>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      {slide.content.segments?.map((segment, index) => (
+                        <div key={index} className="relative overflow-hidden rounded-lg p-3">
+                          <div className="absolute inset-0 bg-white/10"></div>
+                          <div className="relative z-10 flex items-center space-x-3">
+                            <div className="w-2 h-2 bg-purple-400 rounded-full flex-shrink-0"></div>
+                            <span className="text-white/90">{segment}</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {slide.type === 'technology' && slide.content && (
+                <div className="h-full">
+                  <div className="text-center mb-6">
+                    <h1 className="text-5xl font-bold mb-4 text-white drop-shadow-lg">{slide.title}</h1>
+                    <h2 className="text-2xl font-semibold mb-2 text-white/90 drop-shadow-md">{slide.subtitle}</h2>
+                    <p className="text-xl text-white/80 drop-shadow-sm">{slide.description}</p>
+                  </div>
+                  
+                  {/* Technology Stack */}
+                  <div className="mb-8">
+                    <h3 className="text-3xl font-bold mb-6 text-center text-white drop-shadow-lg">Technology Stack</h3>
+                    <div className="grid md:grid-cols-2 gap-6">
+                      {slide.content.stack?.map((tech, index) => (
+                        <div key={index} className="relative overflow-hidden rounded-lg p-6 border border-white/20">
+                          <div className="absolute inset-0 bg-white/15 backdrop-blur-sm"></div>
+                          <div className="relative z-10">
+                            <h4 className="text-xl font-bold text-white mb-3 text-center">{tech.component}</h4>
+                            <div className="bg-white/10 p-4 rounded-lg">
+                              <p className="text-white/90 text-center font-mono text-sm">{tech.tech}</p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  {/* Key Features */}
+                  <div>
+                    <h3 className="text-2xl font-semibold mb-4 text-white drop-shadow-md">Key Features</h3>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      {slide.content.features?.map((feature, index) => (
+                        <div key={index} className="relative overflow-hidden rounded-lg p-3">
+                          <div className="absolute inset-0 bg-white/10"></div>
+                          <div className="relative z-10 flex items-center space-x-3">
+                            <CheckCircle className="h-5 w-5 text-blue-400 flex-shrink-0" />
+                            <span className="text-white/90">{feature}</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {slide.type === 'tokens' && slide.content && (
+                <div className="h-full">
+                  <div className="text-center mb-6">
+                    <h1 className="text-5xl font-bold mb-4 text-white drop-shadow-lg">{slide.title}</h1>
+                    <h2 className="text-2xl font-semibold mb-2 text-white/90 drop-shadow-md">{slide.subtitle}</h2>
+                    <p className="text-xl text-white/80 drop-shadow-sm">{slide.description}</p>
+                  </div>
+                  
+                  {/* Token Overview */}
+                  <div className="mb-8">
+                    <h3 className="text-3xl font-bold mb-6 text-center text-white drop-shadow-lg">Dual-Token Architecture</h3>
+                    <div className="grid md:grid-cols-2 gap-6">
+                      {/* SHELTR-S Card */}
+                      <div className="relative overflow-hidden rounded-lg p-6 border-2 border-green-400/30">
+                        <div className="absolute inset-0 bg-green-500/20"></div>
+                        <div className="relative z-10">
+                          <h4 className="text-2xl font-bold text-green-200 mb-4 text-center">{slide.content.sheltrS?.name}</h4>
+                          <div className="space-y-3">
+                            <div className="flex justify-between items-center">
+                              <span className="text-white/80">Price:</span>
+                              <span className="font-bold text-green-300">{slide.content.sheltrS?.price}</span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-white/80">Supply:</span>
+                              <span className="font-bold text-green-300">{slide.content.sheltrS?.supply}</span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-white/80">Backing:</span>
+                              <span className="font-bold text-green-300">{slide.content.sheltrS?.backing}</span>
+                            </div>
+                            <div className="mt-4 p-3 bg-green-500/20 rounded-lg">
+                              <p className="text-sm text-white/90">{slide.content.sheltrS?.use}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* SHELTR Card */}
+                      <div className="relative overflow-hidden rounded-lg p-6 border-2 border-purple-400/30">
+                        <div className="absolute inset-0 bg-purple-500/20"></div>
+                        <div className="relative z-10">
+                          <h4 className="text-2xl font-bold text-purple-200 mb-4 text-center">{slide.content.sheltr?.name}</h4>
+                          <div className="space-y-3">
+                            <div className="flex justify-between items-center">
+                              <span className="text-white/80">Price:</span>
+                              <span className="font-bold text-purple-300">{slide.content.sheltr?.price}</span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-white/80">Supply:</span>
+                              <span className="font-bold text-purple-300">{slide.content.sheltr?.supply}</span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-white/80">Mechanism:</span>
+                              <span className="font-bold text-purple-300">{slide.content.sheltr?.mechanism}</span>
+                            </div>
+                            <div className="mt-4 p-3 bg-purple-500/20 rounded-lg">
+                              <p className="text-sm text-white/90">{slide.content.sheltr?.use}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* SmartFund Distribution */}
+                  <div>
+                    <h3 className="text-2xl font-semibold mb-4 text-white drop-shadow-md">SmartFund™ Distribution</h3>
+                    <div className="grid md:grid-cols-3 gap-4">
+                      <div className="relative overflow-hidden rounded-lg p-4 border border-white/20">
+                        <div className="absolute inset-0 bg-blue-500/20"></div>
+                        <div className="relative z-10 text-center">
+                          <div className="text-3xl font-bold text-blue-300 mb-2">{slide.content.distribution?.participants}</div>
+                          <div className="text-sm text-white/80">Direct to Participants</div>
+                          <div className="text-xs text-white/60 mt-1">Immediate impact & dignity</div>
+                        </div>
+                      </div>
+                      <div className="relative overflow-hidden rounded-lg p-4 border border-white/20">
+                        <div className="absolute inset-0 bg-green-500/20"></div>
+                        <div className="relative z-10 text-center">
+                          <div className="text-3xl font-bold text-green-300 mb-2">{slide.content.distribution?.housing}</div>
+                          <div className="text-sm text-white/80">Housing Fund</div>
+                          <div className="text-xs text-white/60 mt-1">Long-term solutions</div>
+                        </div>
+                      </div>
+                      <div className="relative overflow-hidden rounded-lg p-4 border border-white/20">
+                        <div className="absolute inset-0 bg-purple-500/20"></div>
+                        <div className="relative z-10 text-center">
+                          <div className="text-3xl font-bold text-purple-300 mb-2">{slide.content.distribution?.operations}</div>
+                          <div className="text-sm text-white/80">Platform Operations</div>
+                          <div className="text-xs text-white/60 mt-1">Sustainable growth</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {slide.type === 'revenue' && slide.content && (
+                <div className="h-full">
+                  <div className="text-center mb-6">
+                    <h1 className="text-5xl font-bold mb-4 text-white drop-shadow-lg">{slide.title}</h1>
+                    <h2 className="text-2xl font-semibold mb-2 text-white/90 drop-shadow-md">{slide.subtitle}</h2>
+                    <p className="text-xl text-white/80 drop-shadow-sm">{slide.description}</p>
+                  </div>
+                  
+                  {/* Revenue Streams */}
+                  <div className="mb-8">
+                    <h3 className="text-3xl font-bold mb-6 text-center text-white drop-shadow-lg">Revenue Streams</h3>
+                    <div className="grid md:grid-cols-2 gap-6">
+                      {slide.content.revenueStreams?.map((stream, index) => (
+                        <div key={index} className="relative overflow-hidden rounded-lg p-6 border border-white/20">
+                          <div className="absolute inset-0 bg-white/15 backdrop-blur-sm"></div>
+                          <div className="relative z-10">
+                            <h4 className="text-xl font-bold text-white mb-3">{stream.source}</h4>
+                            <div className="text-3xl font-bold text-green-300 mb-2">{stream.percentage}</div>
+                            <p className="text-sm text-white/80">{stream.description}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  {/* Revenue Projections */}
+                  <div>
+                    <h3 className="text-2xl font-semibold mb-4 text-white drop-shadow-md">Revenue Projections</h3>
+                    <div className="grid md:grid-cols-3 gap-4">
+                      <div className="relative overflow-hidden rounded-lg p-4 border border-white/20">
+                        <div className="absolute inset-0 bg-blue-500/20"></div>
+                        <div className="relative z-10 text-center">
+                          <div className="text-lg font-bold text-white mb-1">Year 1</div>
+                          <div className="text-2xl font-bold text-blue-300 mb-1">{(slide.content.projections as { year1: string; year2: string; year3: string })?.year1}</div>
+                          <div className="text-xs text-white/70">Platform launch & early adoption</div>
+                        </div>
+                      </div>
+                      <div className="relative overflow-hidden rounded-lg p-4 border border-white/20">
+                        <div className="absolute inset-0 bg-green-500/20"></div>
+                        <div className="relative z-10 text-center">
+                          <div className="text-lg font-bold text-white mb-1">Year 2</div>
+                          <div className="text-2xl font-bold text-green-300 mb-1">{(slide.content.projections as { year1: string; year2: string; year3: string })?.year2}</div>
+                          <div className="text-xs text-white/70">Market expansion & partnerships</div>
+                        </div>
+                      </div>
+                      <div className="relative overflow-hidden rounded-lg p-4 border border-white/20">
+                        <div className="absolute inset-0 bg-purple-500/20"></div>
+                        <div className="relative z-10 text-center">
+                          <div className="text-lg font-bold text-white mb-1">Year 3</div>
+                          <div className="text-2xl font-bold text-purple-300 mb-1">{(slide.content.projections as { year1: string; year2: string; year3: string })?.year3}</div>
+                          <div className="text-xs text-white/70">International scaling</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {slide.type === 'competitive' && slide.content && (
+                <div className="h-full">
+                  <div className="text-center mb-6">
+                    <h1 className="text-5xl font-bold mb-4 text-white drop-shadow-lg">{slide.title}</h1>
+                    <h2 className="text-2xl font-semibold mb-2 text-white/90 drop-shadow-md">{slide.subtitle}</h2>
+                    <p className="text-xl text-white/80 drop-shadow-sm">{slide.description}</p>
+                  </div>
+                  
+                  {/* First-Mover Advantages */}
+                  <div className="mb-8">
+                    <h3 className="text-3xl font-bold mb-6 text-center text-white drop-shadow-lg">First-Mover Advantages</h3>
+                    <div className="grid md:grid-cols-2 gap-6">
+                      {slide.content.advantages?.map((advantage, index) => (
+                        <div key={index} className="relative overflow-hidden rounded-lg p-4 border border-white/20">
+                          <div className="absolute inset-0 bg-white/15 backdrop-blur-sm"></div>
+                          <div className="relative z-10 flex items-center space-x-3">
+                            <CheckCircle className="h-6 w-6 text-yellow-400 flex-shrink-0" />
+                            <span className="text-white/90 font-medium">{advantage}</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  {/* Competitive Moats */}
+                  <div className="mb-8">
+                    <h3 className="text-2xl font-semibold mb-4 text-white drop-shadow-md">Competitive Moats</h3>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      {slide.content.moats?.map((moat, index) => (
+                        <div key={index} className="relative overflow-hidden rounded-lg p-4 border border-white/20">
+                          <div className="absolute inset-0 bg-white/10"></div>
+                          <div className="relative z-10">
+                            <h4 className="text-lg font-bold text-white mb-2">{moat}</h4>
+                            <div className="flex items-center space-x-2">
+                              <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
+                              <span className="text-sm text-white/80">Sustainable competitive advantage</span>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  {/* Blockchain Innovation Highlight */}
+                  <div>
+                    <h3 className="text-2xl font-semibold mb-4 text-white drop-shadow-md">Revolutionary Blockchain Integration</h3>
+                    <div className="bg-gradient-to-r from-blue-500/20 to-purple-500/20 p-6 rounded-lg border border-white/20">
+                      <div className="text-center">
+                        <h4 className="text-xl font-bold text-white mb-3">First Mobile Donation Platform with Blockchain Transparency</h4>
+                        <div className="grid md:grid-cols-3 gap-4 mt-4">
+                          <div className="text-center">
+                            <div className="text-3xl font-bold text-blue-300 mb-1">95%</div>
+                            <div className="text-sm text-white/80">Efficiency vs 60-70% Traditional</div>
+                          </div>
+                          <div className="text-center">
+                            <div className="text-3xl font-bold text-green-300 mb-1">100%</div>
+                            <div className="text-sm text-white/80">Transparent Transactions</div>
+                          </div>
+                          <div className="text-center">
+                            <div className="text-3xl font-bold text-purple-300 mb-1">24/7</div>
+                            <div className="text-sm text-white/80">Blockchain Verification</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {slide.type === 'financial' && slide.content && (
+                <div className="h-full">
+                  <div className="text-center mb-6">
+                    <h1 className="text-5xl font-bold mb-4 text-white drop-shadow-lg">{slide.title}</h1>
+                    <h2 className="text-2xl font-semibold mb-2 text-white/90 drop-shadow-md">{slide.subtitle}</h2>
+                    <p className="text-xl text-white/80 drop-shadow-sm">{slide.description}</p>
+                  </div>
+                  
+                  {/* ICO Information */}
+                  <div className="mb-8">
+                    <h3 className="text-3xl font-bold mb-6 text-center text-white drop-shadow-lg">Pre-Seed ICO Details</h3>
+                    <div className="grid md:grid-cols-2 gap-6">
+                      {/* ICO Card */}
+                      <div className="relative overflow-hidden rounded-lg p-6 border-2 border-blue-400/30">
+                        <div className="absolute inset-0 bg-blue-500/20"></div>
+                        <div className="relative z-10">
+                          <h4 className="text-2xl font-bold text-blue-200 mb-4 text-center">{slide.content.ico?.round}</h4>
+                          <div className="space-y-3">
+                            <div className="flex justify-between items-center">
+                              <span className="text-white/80">Token Price:</span>
+                              <span className="font-bold text-blue-300">{slide.content.ico?.price}</span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-white/80">Target Raise:</span>
+                              <span className="font-bold text-blue-300">{slide.content.ico?.target}</span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-white/80">Tokens Available:</span>
+                              <span className="font-bold text-blue-300">{slide.content.ico?.tokens}</span>
+                            </div>
+                            <div className="mt-4">
+                              <div className="flex justify-between items-center mb-2">
+                                <span className="text-white/80">Progress:</span>
+                                <span className="font-bold text-blue-300">{slide.content.ico?.progress}%</span>
+                              </div>
+                              <div className="w-full bg-white/20 rounded-full h-3">
+                                <div 
+                                  className="bg-blue-400 h-3 rounded-full transition-all duration-500"
+                                  style={{ width: `${slide.content.ico?.progress}%` }}
+                                ></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Public Launch Card */}
+                      <div className="relative overflow-hidden rounded-lg p-6 border-2 border-green-400/30">
+                        <div className="absolute inset-0 bg-green-500/20"></div>
+                        <div className="relative z-10">
+                          <h4 className="text-2xl font-bold text-green-200 mb-4 text-center">{slide.content.public?.round}</h4>
+                          <div className="space-y-3">
+                            <div className="flex justify-between items-center">
+                              <span className="text-white/80">Token Price:</span>
+                              <span className="font-bold text-green-300">{slide.content.public?.price}</span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-white/80">Allocation:</span>
+                              <span className="font-bold text-green-300">{slide.content.public?.allocation}</span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-white/80">Market Cap:</span>
+                              <span className="font-bold text-green-300">{slide.content.public?.marketCap}</span>
+                            </div>
+                            <div className="mt-4 p-3 bg-green-500/20 rounded-lg">
+                              <p className="text-sm text-white/90">100% discount to pre-seed investors</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Market Cap Projections */}
+                  <div>
+                    <h3 className="text-2xl font-semibold mb-4 text-white drop-shadow-md">5-Year Market Cap Projections</h3>
+                    <div className="grid md:grid-cols-3 gap-4">
+                      <div className="relative overflow-hidden rounded-lg p-4 border border-white/20">
+                        <div className="absolute inset-0 bg-blue-500/20"></div>
+                        <div className="relative z-10 text-center">
+                          <div className="text-lg font-bold text-white mb-1">Year 1</div>
+                          <div className="text-2xl font-bold text-blue-300 mb-1">{(slide.content.projections as { year1: string; year2: string; year3: string })?.year1}</div>
+                          <div className="text-xs text-white/70">Platform launch & early adoption</div>
+                        </div>
+                      </div>
+                      <div className="relative overflow-hidden rounded-lg p-4 border border-white/20">
+                        <div className="absolute inset-0 bg-green-500/20"></div>
+                        <div className="relative z-10 text-center">
+                          <div className="text-lg font-bold text-white mb-1">Year 2</div>
+                          <div className="text-2xl font-bold text-green-300 mb-1">{(slide.content.projections as { year1: string; year2: string; year3: string })?.year2}</div>
+                          <div className="text-xs text-white/70">Market expansion & partnerships</div>
+                        </div>
+                      </div>
+                      <div className="relative overflow-hidden rounded-lg p-4 border border-white/20">
+                        <div className="absolute inset-0 bg-purple-500/20"></div>
+                        <div className="relative z-10 text-center">
+                          <div className="text-lg font-bold text-white mb-1">Year 3</div>
+                          <div className="text-2xl font-bold text-purple-300 mb-1">{(slide.content.projections as { year1: string; year2: string; year3: string })?.year3}</div>
+                          <div className="text-xs text-white/70">International scaling</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {slide.type === 'funds' && slide.content && (
+                <div className="h-full">
+                  <div className="text-center mb-6">
+                    <h1 className="text-5xl font-bold mb-4 text-white drop-shadow-lg">{slide.title}</h1>
+                    <h2 className="text-2xl font-semibold mb-2 text-white/90 drop-shadow-md">{slide.subtitle}</h2>
+                    <p className="text-xl text-white/80 drop-shadow-sm">{slide.description}</p>
+                  </div>
+                  
+                  {/* Fund Allocation */}
+                  <div className="mb-8">
+                    <h3 className="text-3xl font-bold mb-6 text-center text-white drop-shadow-lg">Strategic Fund Allocation</h3>
+                    <div className="grid md:grid-cols-2 gap-6">
+                      {slide.content.allocation?.map((item, index) => (
+                        <div key={index} className="relative overflow-hidden rounded-lg p-6 border border-white/20">
+                          <div className="absolute inset-0 bg-white/15 backdrop-blur-sm"></div>
+                          <div className="relative z-10">
+                            <div className="flex justify-between items-center mb-3">
+                              <h4 className="text-xl font-bold text-white">{item.category}</h4>
+                              <div className="text-right">
+                                <div className="text-2xl font-bold text-purple-300">{item.percentage}%</div>
+                                <div className="text-sm text-white/80">{item.amount}</div>
+                              </div>
+                            </div>
+                            <div className="w-full bg-white/20 rounded-full h-3 mb-3">
+                              <div 
+                                className="bg-purple-400 h-3 rounded-full transition-all duration-500"
+                                style={{ width: `${item.percentage}%` }}
+                              ></div>
+                            </div>
+                            <p className="text-sm text-white/80">{item.focus}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  {/* Development Milestones */}
+                  <div>
+                    <h3 className="text-2xl font-semibold mb-4 text-white drop-shadow-md">Key Development Milestones</h3>
+                    <div className="grid md:grid-cols-4 gap-4">
+                      {slide.content.milestones?.map((milestone, index) => (
+                        <div key={index} className="relative overflow-hidden rounded-lg p-4 border border-white/20">
+                          <div className="absolute inset-0 bg-white/10"></div>
+                          <div className="relative z-10 text-center">
+                            <div className="text-lg font-bold text-white mb-2">{milestone}</div>
+                            <div className="flex items-center justify-center space-x-2">
+                              <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
+                              <span className="text-xs text-white/70">Strategic milestone</span>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {slide.type === 'terms' && slide.content && (
+                <div className="h-full">
+                  <div className="text-center mb-6">
+                    <h1 className="text-5xl font-bold mb-4 text-white drop-shadow-lg">{slide.title}</h1>
+                    <h2 className="text-2xl font-semibold mb-2 text-white/90 drop-shadow-md">{slide.subtitle}</h2>
+                    <p className="text-xl text-white/80 drop-shadow-sm">{slide.description}</p>
+                  </div>
+                  
+                  {/* Investment Structure */}
+                  <div className="mb-8">
+                    <h3 className="text-3xl font-bold mb-6 text-center text-white drop-shadow-lg">Investment Structure</h3>
+                    <div className="grid md:grid-cols-2 gap-6">
+                      {/* Structure Card */}
+                      <div className="relative overflow-hidden rounded-lg p-6 border-2 border-indigo-400/30">
+                        <div className="absolute inset-0 bg-indigo-500/20"></div>
+                        <div className="relative z-10">
+                          <h4 className="text-2xl font-bold text-indigo-200 mb-4 text-center">ICO Structure</h4>
+                          <div className="space-y-3">
+                            <div className="flex justify-between items-center">
+                              <span className="text-white/80">Type:</span>
+                              <span className="font-bold text-indigo-300">{slide.content.structure?.type}</span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-white/80">Token:</span>
+                              <span className="font-bold text-indigo-300">{slide.content.structure?.token}</span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-white/80">Governance:</span>
+                              <span className="font-bold text-indigo-300">{slide.content.structure?.governance}</span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-white/80">Vesting:</span>
+                              <span className="font-bold text-indigo-300">{slide.content.structure?.vesting}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Benefits Card */}
+                      <div className="relative overflow-hidden rounded-lg p-6 border-2 border-purple-400/30">
+                        <div className="absolute inset-0 bg-purple-500/20"></div>
+                        <div className="relative z-10">
+                          <h4 className="text-2xl font-bold text-purple-200 mb-4 text-center">Investor Benefits</h4>
+                          <div className="space-y-2">
+                            {slide.content.benefits?.map((benefit, index) => (
+                              <div key={index} className="flex items-center space-x-3">
+                                <CheckCircle className="h-4 w-4 text-purple-400 flex-shrink-0" />
+                                <span className="text-sm text-white/90">{benefit}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Timeline */}
+                  <div>
+                    <h3 className="text-2xl font-semibold mb-4 text-white drop-shadow-md">Investment Timeline</h3>
+                    <div className="grid md:grid-cols-3 gap-4">
+                      <div className="relative overflow-hidden rounded-lg p-4 border border-white/20">
+                        <div className="absolute inset-0 bg-blue-500/20"></div>
+                        <div className="relative z-10 text-center">
+                          <div className="text-lg font-bold text-white mb-1">ICO</div>
+                          <div className="text-xl font-bold text-blue-300 mb-1">{(slide.content.timeline as { ico: string; public: string; exchange: string })?.ico}</div>
+                          <div className="text-xs text-white/70">Pre-seed token sale</div>
+                        </div>
+                      </div>
+                      <div className="relative overflow-hidden rounded-lg p-4 border border-white/20">
+                        <div className="absolute inset-0 bg-green-500/20"></div>
+                        <div className="relative z-10 text-center">
+                          <div className="text-lg font-bold text-white mb-1">Public</div>
+                          <div className="text-xl font-bold text-green-300 mb-1">{(slide.content.timeline as { ico: string; public: string; exchange: string })?.public}</div>
+                          <div className="text-xs text-white/70">Public token launch</div>
+                        </div>
+                      </div>
+                      <div className="relative overflow-hidden rounded-lg p-4 border border-white/20">
+                        <div className="absolute inset-0 bg-purple-500/20"></div>
+                        <div className="relative z-10 text-center">
+                          <div className="text-lg font-bold text-white mb-1">Exchange</div>
+                          <div className="text-xl font-bold text-purple-300 mb-1">{(slide.content.timeline as { ico: string; public: string; exchange: string })?.exchange}</div>
+                          <div className="text-xs text-white/70">Major exchange listings</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {slide.type === 'risks' && slide.content && (
+                <div className="h-full">
+                  <div className="text-center mb-6">
+                    <h1 className="text-5xl font-bold mb-4 text-white drop-shadow-lg">{slide.title}</h1>
+                    <h2 className="text-2xl font-semibold mb-2 text-white/90 drop-shadow-md">{slide.subtitle}</h2>
+                    <p className="text-xl text-white/80 drop-shadow-sm">{slide.description}</p>
+                  </div>
+                  
+                  {/* Risk Assessment */}
+                  <div className="mb-8">
+                    <h3 className="text-3xl font-bold mb-6 text-center text-white drop-shadow-lg">Risk Assessment & Mitigation</h3>
+                    <div className="grid md:grid-cols-2 gap-6">
+                      {slide.content.risks?.map((risk, index) => (
+                        <div key={index} className="relative overflow-hidden rounded-lg p-6 border border-white/20">
+                          <div className="absolute inset-0 bg-white/15 backdrop-blur-sm"></div>
+                          <div className="relative z-10">
+                            <div className="flex items-center justify-between mb-3">
+                              <h4 className="text-lg font-bold text-white">{risk.risk}</h4>
+                              <div className={`px-3 py-1 rounded-full text-xs font-bold ${
+                                risk.impact === 'High' ? 'bg-red-500/20 text-red-300' :
+                                risk.impact === 'Medium' ? 'bg-yellow-500/20 text-yellow-300' :
+                                'bg-green-500/20 text-green-300'
+                              }`}>
+                                {risk.impact} Impact
+                              </div>
+                            </div>
+                            <div className="bg-white/10 p-3 rounded-lg">
+                              <p className="text-sm text-white/80">{risk.mitigation}</p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  {/* Risk Management Framework */}
+                  <div>
+                    <h3 className="text-2xl font-semibold mb-4 text-white drop-shadow-md">Risk Management Framework</h3>
+                    <div className="bg-gradient-to-r from-red-500/20 to-green-500/20 p-6 rounded-lg border border-white/20">
+                      <div className="text-center">
+                        <h4 className="text-xl font-bold text-white mb-4">Proactive Risk Management Strategy</h4>
+                        <div className="grid md:grid-cols-4 gap-4">
+                          <div className="text-center">
+                            <div className="text-3xl font-bold text-blue-300 mb-1">Multiple</div>
+                            <div className="text-sm text-white/80">Security Audits</div>
+                          </div>
+                          <div className="text-center">
+                            <div className="text-3xl font-bold text-green-300 mb-1">Insurance</div>
+                            <div className="text-sm text-white/80">Coverage</div>
+                          </div>
+                          <div className="text-center">
+                            <div className="text-3xl font-bold text-purple-300 mb-1">Legal</div>
+                            <div className="text-sm text-white/80">Framework</div>
+                          </div>
+                          <div className="text-center">
+                            <div className="text-3xl font-bold text-orange-300 mb-1">Emergency</div>
+                            <div className="text-sm text-white/80">Pause</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {slide.type === 'cta' && slide.content && (
+                <div className="h-full flex flex-col items-center justify-center text-center">
+                  {/* Main CTA */}
+                  <div className="mb-12">
+                    <h1 className="text-6xl font-bold mb-6 text-white drop-shadow-lg">Join the Revolution</h1>
+                    <h2 className="text-3xl font-semibold mb-4 text-white/90 drop-shadow-md">Invest in the future of humanitarian technology</h2>
+                    <p className="text-xl text-white/80 drop-shadow-sm">Be part of the solution to homelessness</p>
+                  </div>
+                  
+                  {/* Contact Information */}
+                  <div className="mb-8">
+                    <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
+                      <h3 className="text-2xl font-bold text-white mb-4">Get In Touch</h3>
+                      <div className="flex items-center justify-center space-x-4">
+                        <Mail className="h-6 w-6 text-white/80" />
+                        <a 
+                          href="mailto:info@arcanaconcept.com" 
+                          className="text-xl font-semibold text-white hover:text-blue-300 transition-colors"
+                        >
+                          info@arcanaconcept.com
+                        </a>
+                        <span className="text-white/60">- General Inquiries</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Action Buttons */}
+                  <div className="grid md:grid-cols-2 gap-6 mb-8">
+                    <a 
+                      href="/solutions" 
+                      className="relative overflow-hidden rounded-lg p-6 border-2 border-green-400/30 hover:border-green-400/50 transition-all"
+                    >
+                      <div className="absolute inset-0 bg-green-500/20"></div>
+                      <div className="relative z-10 text-center">
+                        <h4 className="text-2xl font-bold text-green-200 mb-2">Get Started</h4>
+                        <p className="text-sm text-white/80">Explore our solutions and sign up</p>
+                      </div>
+                    </a>
+                    
+                    <a 
+                      href="https://github.com/mrj0nesmtl/sheltr-ai" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="relative overflow-hidden rounded-lg p-6 border-2 border-blue-400/30 hover:border-blue-400/50 transition-all"
+                    >
+                      <div className="absolute inset-0 bg-blue-500/20"></div>
+                      <div className="relative z-10 text-center">
+                        <h4 className="text-2xl font-bold text-blue-200 mb-2">View Code</h4>
+                        <p className="text-sm text-white/80">Open source on GitHub</p>
+                      </div>
+                    </a>
+                  </div>
+                  
+                  {/* Resources Grid */}
+                  <div>
+                    <h3 className="text-2xl font-semibold mb-6 text-white drop-shadow-md">Learn More</h3>
+                    <div className="grid md:grid-cols-3 gap-4">
+                      <a 
+                        href="https://open.substack.com/pub/arcanaconcept/p/sheltr-redefining-charitable-giving?r=4gkajt&utm_campaign=post&utm_medium=web&showWelcomeOnShare=true" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="relative overflow-hidden rounded-lg p-4 border border-white/20 hover:border-white/40 transition-all"
+                      >
+                        <div className="absolute inset-0 bg-purple-500/20"></div>
+                        <div className="relative z-10 text-center">
+                          <div className="text-lg font-bold text-purple-200 mb-1">Substack</div>
+                          <div className="text-xs text-white/70">SHELTR Redefining Charitable Giving</div>
+                        </div>
+                      </a>
+                      
+                      <a 
+                        href="https://www.arcanaconcept.com/concepts/sheltr" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="relative overflow-hidden rounded-lg p-4 border border-white/20 hover:border-white/40 transition-all"
+                      >
+                        <div className="absolute inset-0 bg-orange-500/20"></div>
+                        <div className="relative z-10 text-center">
+                          <div className="text-lg font-bold text-orange-200 mb-1">Arcana Concept</div>
+                          <div className="text-xs text-white/70">SHELTR Concept Page</div>
+                        </div>
+                      </a>
+                      
+                      <a 
+                        href="https://bsky.app/profile/sheltrops.bsky.social" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="relative overflow-hidden rounded-lg p-4 border border-white/20 hover:border-white/40 transition-all"
+                      >
+                        <div className="absolute inset-0 bg-blue-500/20"></div>
+                        <div className="relative z-10 text-center">
+                          <div className="text-lg font-bold text-blue-200 mb-1">Bluesky</div>
+                          <div className="text-xs text-white/70">Follow @sheltrops.bsky.social</div>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                  
+                  {/* Technology Partners */}
+                  <div className="mt-8">
+                    <h3 className="text-xl font-semibold mb-4 text-white/80 drop-shadow-md">Powered By</h3>
+                    <div className="grid md:grid-cols-3 gap-4">
+                      <a 
+                        href="https://www.base.org/" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="relative overflow-hidden rounded-lg p-3 border border-white/10 hover:border-white/30 transition-all"
+                      >
+                        <div className="absolute inset-0 bg-green-500/10"></div>
+                        <div className="relative z-10 text-center">
+                          <div className="text-sm font-bold text-green-200">Base L2</div>
+                          <div className="text-xs text-white/60">Ethereum L2 Network</div>
+                        </div>
+                      </a>
+                      
+                      <a 
+                        href="https://developer.visa.com/use-cases/visa-intelligent-commerce-for-agents" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="relative overflow-hidden rounded-lg p-3 border border-white/10 hover:border-white/30 transition-all"
+                      >
+                        <div className="absolute inset-0 bg-blue-500/10"></div>
+                        <div className="relative z-10 text-center">
+                          <div className="text-sm font-bold text-blue-200">Visa</div>
+                          <div className="text-xs text-white/60">Intelligent Commerce</div>
+                        </div>
+                      </a>
+                      
+                      <a 
+                        href="https://corporate.visa.com/en/products/intelligent-commerce.html" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="relative overflow-hidden rounded-lg p-3 border border-white/10 hover:border-white/30 transition-all"
+                      >
+                        <div className="absolute inset-0 bg-yellow-500/10"></div>
+                        <div className="relative z-10 text-center">
+                          <div className="text-sm font-bold text-yellow-200">Visa Corporate</div>
+                          <div className="text-xs text-white/60">Payment Solutions</div>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* Add more slide type renderers as needed */}
-              {slide.type !== 'title' && slide.type !== 'problem' && slide.type !== 'solution' && (
+              {slide.type !== 'title' && slide.type !== 'problem' && slide.type !== 'solution' && slide.type !== 'market' && slide.type !== 'technology' && slide.type !== 'tokens' && slide.type !== 'revenue' && slide.type !== 'competitive' && slide.type !== 'financial' && slide.type !== 'funds' && slide.type !== 'terms' && slide.type !== 'risks' && slide.type !== 'cta' && (
                 <div className="h-full flex flex-col items-center justify-center text-center">
                   <h1 className="text-4xl font-bold mb-4">{slide.title}</h1>
                   <h2 className="text-2xl font-semibold mb-2">{slide.subtitle}</h2>

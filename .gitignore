@@ -129,3 +129,6 @@ apps/api/.venv/
 # Firebase service account keys
 **/service-account-key.json
 **/firebase-adminsdk-*.json
+
+# Documentation files with credentials
+QUICK-MACBOOK-SYNC.md

@@ -41,6 +41,10 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 
+# Build outputs
+apps/web/out/
+.firebase/
+
 # Runtime data
 pids/
 *.pid
@@ -121,3 +125,7 @@ tmp/
 google-credentials.json
 **/client_secret_*.json
 apps/api/.venv/
+
+# Firebase service account keys
+**/service-account-key.json
+**/firebase-adminsdk-*.json

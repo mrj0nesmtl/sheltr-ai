@@ -27,14 +27,765 @@ import {
   Handshake,
   Mail,
   Clock,
-  AlertCircle
+  AlertCircle,
+  Eye,
+  X,
+  Play,
+  Pause,
+  ChevronLeft,
+  ChevronRight,
+  Zap,
+  Award,
+  Rocket,
+  FileText
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { CalendarService, SchedulingResult } from '@/services/calendarService';
 
+// Investment Deck Slides Data
+const investmentSlides = [
+  {
+    id: 1,
+    type: 'title',
+    title: 'SHELTR',
+    subtitle: 'Hacking Homelessness Through Technology',
+    description: 'Pre-Seed ICO: $150K Raise',
+    highlight: 'Dual-Token Architecture for Social Impact',
+    icon: Coins,
+    bgGradient: 'from-blue-600 to-purple-600',
+    content: null
+  },
+  {
+    id: 2,
+    type: 'problem',
+    title: 'The Charitable Giving Crisis',
+    subtitle: 'Traditional systems are fundamentally broken',
+    description: 'Only 60-70% of donations reach beneficiaries',
+    icon: Target,
+    bgGradient: 'from-red-600 to-orange-600',
+    content: {
+      stats: [
+        { label: 'Administrative Overhead', value: '30-40%', color: 'text-red-600' },
+        { label: 'Delivery Time', value: '24-72 hours', color: 'text-orange-600' },
+        { label: 'Transparency', value: 'Limited', color: 'text-yellow-600' },
+        { label: 'Market Size', value: '$45B Global', color: 'text-green-600' }
+      ],
+      problems: [
+        'Multi-layer intermediaries create friction',
+        'Opaque processes prevent impact verification',
+        'Volatility exposure in crypto donations',
+        'Centralized control creates single points of failure'
+      ]
+    }
+  },
+  {
+    id: 3,
+    type: 'solution',
+    title: 'SHELTR Solution',
+    subtitle: 'Revolutionary dual-token architecture',
+    description: '95% efficiency through blockchain transparency',
+    icon: Shield,
+    bgGradient: 'from-green-600 to-blue-600',
+    content: {
+      features: [
+        'QR-code enabled direct donations',
+        'Blockchain verification of every transaction',
+        'Dual-token architecture (SHELTR-S + SHELTR)',
+        'Smart contract automated distribution',
+        'AI-powered analytics and insights'
+      ],
+      comparison: {
+        traditional: '60-70% efficiency',
+        sheltr: '95% efficiency',
+        improvement: '35% increase'
+      }
+    }
+  },
+  {
+    id: 4,
+    type: 'market',
+    title: 'Market Opportunity',
+    subtitle: 'Massive addressable market',
+    description: '$45B global homelessness spending',
+    icon: Globe,
+    bgGradient: 'from-purple-600 to-pink-600',
+    content: {
+      marketSizes: [
+        { label: 'Total Addressable Market', value: '$45B', description: 'Global homelessness spending' },
+        { label: 'Serviceable Addressable Market', value: '$12B', description: 'North American charitable giving' },
+        { label: 'Initial Target Market', value: '$500M', description: 'Direct donation platforms' }
+      ],
+      growth: '8.5% CAGR in charitable giving',
+      segments: ['Individual donors', 'Corporate partnerships', 'Government contracts', 'International expansion']
+    }
+  },
+  {
+    id: 5,
+    type: 'technology',
+    title: 'Technology & Architecture',
+    subtitle: 'Enterprise-grade blockchain infrastructure',
+    description: 'Built on Base L2 for optimal performance',
+    icon: Zap,
+    bgGradient: 'from-indigo-600 to-blue-600',
+    content: {
+      stack: [
+        { component: 'Frontend', tech: 'Next.js 15 + React 18 + TypeScript' },
+        { component: 'Backend', tech: 'FastAPI + Python 3.11 + Firebase' },
+        { component: 'Blockchain', tech: 'Base L2 + Smart Contracts + OpenZeppelin' },
+        { component: 'AI/ML', tech: 'OpenAI GPT-4 + LangChain + Custom Analytics' }
+      ],
+      features: [
+        'Multi-tenant SaaS architecture',
+        'Real-time blockchain verification',
+        'AI-powered impact analytics',
+        'Mobile-first responsive design'
+      ]
+    }
+  },
+  {
+    id: 6,
+    type: 'tokens',
+    title: 'Dual-Token Economics',
+    subtitle: 'Revolutionary token architecture',
+    description: 'Stability for participants, growth for investors',
+    icon: Coins,
+    bgGradient: 'from-green-600 to-purple-600',
+    content: {
+      sheltrS: {
+        name: 'SHELTR-S (Stable)',
+        price: '$1.00 USD',
+        supply: 'Unlimited (demand-driven)',
+        backing: '1:1 USDC reserve',
+        use: 'Participant protection and daily transactions'
+      },
+      sheltr: {
+        name: 'SHELTR (Growth)',
+        price: 'Market-driven',
+        supply: '100,000,000 fixed',
+        mechanism: 'Deflationary (2% annual burn)',
+        use: 'Governance and community growth'
+      },
+      distribution: {
+        participants: '80%',
+        housing: '15%',
+        operations: '5%'
+      }
+    }
+  },
+  {
+    id: 7,
+    type: 'revenue',
+    title: 'Revenue Model & Traction',
+    subtitle: 'Multiple sustainable revenue streams',
+    description: 'Platform fees + token appreciation + DeFi yields',
+    icon: TrendingUp,
+    bgGradient: 'from-green-600 to-blue-600',
+    content: {
+      revenueStreams: [
+        { source: 'Platform Fees', percentage: '2-3%', description: 'Marketplace transactions' },
+        { source: 'Token Appreciation', percentage: 'Variable', description: 'Deflationary mechanics' },
+        { source: 'DeFi Yields', percentage: '6-8% APY', description: 'Housing fund investments' },
+        { source: 'Partnership Fees', percentage: 'Variable', description: 'Enterprise integrations' }
+      ],
+      projections: {
+        year1: '$500K ARR',
+        year2: '$2M ARR',
+        year3: '$5M ARR'
+      }
+    }
+  },
+  {
+    id: 8,
+    type: 'competitive',
+    title: 'Competitive Advantages',
+    subtitle: 'First-mover in dual-token charitable architecture',
+    description: 'Regulatory-compliant utility token structure',
+    icon: Award,
+    bgGradient: 'from-yellow-600 to-orange-600',
+    content: {
+      advantages: [
+        'First dual-token charitable ecosystem',
+        'Regulatory-compliant (not securities)',
+        'Immediate utility through marketplace',
+        'Deflationary mechanics driving value',
+        'Community governance ensuring alignment'
+      ],
+      moats: [
+        'Network effects from participant adoption',
+        'Data moat from blockchain transparency',
+        'Regulatory moat from compliance structure',
+        'Technology moat from dual-token architecture'
+      ]
+    }
+  },
+  {
+    id: 9,
+    type: 'team',
+    title: 'Team & Advisors',
+    subtitle: 'Experienced leadership in blockchain and social impact',
+    description: 'Combined expertise in technology and homelessness solutions',
+    icon: Users,
+    bgGradient: 'from-blue-600 to-purple-600',
+    content: {
+      founder: {
+        name: 'Joel Yaffe',
+        role: 'Founder & CEO',
+        background: 'Blockchain technology, social impact, entrepreneurship',
+        expertise: ['Smart contract development', 'Social enterprise', 'Platform scaling']
+      },
+      advisors: [
+        { name: 'Technical Advisory Board', focus: 'Blockchain architecture and security' },
+        { name: 'Social Impact Advisors', focus: 'Homelessness sector expertise' },
+        { name: 'Regulatory Advisors', focus: 'Compliance and legal framework' }
+      ]
+    }
+  },
+  {
+    id: 10,
+    type: 'financial',
+    title: 'Financial Projections',
+    subtitle: 'Clear path to profitability and token appreciation',
+    description: 'Conservative projections with significant upside potential',
+    icon: BarChart3,
+    bgGradient: 'from-green-600 to-blue-600',
+    content: {
+      ico: {
+        round: 'Pre-Seed ICO',
+        price: '$0.05 per token',
+        target: '$150K raise',
+        tokens: '3M SHELTR tokens',
+        progress: 30
+      },
+      public: {
+        round: 'Public Launch (Q2 2025)',
+        price: '$0.10 per token',
+        allocation: '30M tokens',
+        marketCap: '$3M'
+      },
+      projections: {
+        year1: '$1M market cap',
+        year2: '$5M market cap',
+        year3: '$15M market cap'
+      }
+    }
+  },
+  {
+    id: 11,
+    type: 'funds',
+    title: 'Use of Funds',
+    subtitle: 'Strategic allocation for maximum growth',
+    description: '40% development, 30% marketing, 20% compliance, 10% operations',
+    icon: Building,
+    bgGradient: 'from-purple-600 to-pink-600',
+    content: {
+      allocation: [
+        { category: 'Platform Development', percentage: 40, amount: '$60K', focus: 'Core technology and scaling' },
+        { category: 'Marketing & User Acquisition', percentage: 30, amount: '$45K', focus: 'Community building and growth' },
+        { category: 'Legal & Regulatory Compliance', percentage: 20, amount: '$30K', focus: 'Compliance framework' },
+        { category: 'Team & Operations', percentage: 10, amount: '$15K', focus: 'Key hires and infrastructure' }
+      ],
+      milestones: [
+        'Q1 2025: Core platform launch',
+        'Q2 2025: Public token sale',
+        'Q3 2025: Marketplace integration',
+        'Q4 2025: International expansion'
+      ]
+    }
+  },
+  {
+    id: 12,
+    type: 'terms',
+    title: 'Investment Terms',
+    subtitle: 'ICO structure with governance rights',
+    description: 'Token-based investment with immediate utility and governance',
+    icon: FileText,
+    bgGradient: 'from-indigo-600 to-purple-600',
+    content: {
+      structure: {
+        type: 'ICO (Initial Coin Offering)',
+        token: 'SHELTR (utility token)',
+        governance: 'Immediate voting rights',
+        vesting: 'No lock-up period'
+      },
+      benefits: [
+        'Governance rights from day one',
+        'Staking rewards (8% APY target)',
+        'Platform fee revenue sharing',
+        'Deflationary mechanics (2% annual burn)',
+        'Premium marketplace features'
+      ],
+      timeline: {
+        ico: 'Q1 2025 (Current)',
+        public: 'Q2 2025',
+        exchange: 'Q3 2025'
+      }
+    }
+  },
+  {
+    id: 13,
+    type: 'risks',
+    title: 'Risk Assessment',
+    subtitle: 'Comprehensive risk management',
+    description: 'Identified risks with mitigation strategies',
+    icon: Shield,
+    bgGradient: 'from-red-600 to-orange-600',
+    content: {
+      risks: [
+        {
+          risk: 'Regulatory Compliance',
+          impact: 'Medium',
+          mitigation: 'Legal framework designed for utility token compliance'
+        },
+        {
+          risk: 'Market Adoption',
+          impact: 'Medium',
+          mitigation: 'Proven demand through pilot programs and partnerships'
+        },
+        {
+          risk: 'Technical Implementation',
+          impact: 'Low',
+          mitigation: 'Experienced team with proven track record'
+        },
+        {
+          risk: 'Competition',
+          impact: 'Low',
+          mitigation: 'First-mover advantage and unique dual-token architecture'
+        }
+      ]
+    }
+  },
+  {
+    id: 14,
+    type: 'cta',
+    title: 'Join the Revolution',
+    subtitle: 'Invest in the future of humanitarian technology',
+    description: 'Be part of the solution to homelessness',
+    icon: Rocket,
+    bgGradient: 'from-green-600 to-blue-600',
+    content: {
+      summary: [
+        'Revolutionary dual-token architecture',
+        '$45B addressable market opportunity',
+        '95% efficiency vs traditional 60-70%',
+        'Immediate utility and governance rights',
+        'Clear path to $15M market cap by 2027'
+      ],
+      nextSteps: [
+        'Schedule investor meeting',
+        'Review technical documentation',
+        'Join community governance',
+        'Participate in token sale'
+      ],
+      contact: 'joel@arcanaconcept.com'
+    }
+  }
+];
+
+// Investment Deck Slideshow Component
+function InvestmentDeckSlideshow({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % investmentSlides.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + investmentSlides.length) % investmentSlides.length);
+  };
+
+  const goToSlide = (index: number) => {
+    setCurrentSlide(index);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Escape') onClose();
+    if (e.key === 'ArrowRight') nextSlide();
+    if (e.key === 'ArrowLeft') prevSlide();
+  };
+
+  const slide = investmentSlides[currentSlide];
+
+  if (!isOpen) return null;
+
+  return (
+    <div 
+      className="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm flex items-center justify-center"
+      onKeyDown={handleKeyDown}
+      tabIndex={0}
+    >
+      {/* Close Button */}
+      <button
+        onClick={onClose}
+        className="absolute top-4 right-4 z-10 p-2 text-white hover:text-gray-300 transition-colors"
+      >
+        <X className="h-6 w-6" />
+      </button>
+
+      {/* Slide Container */}
+      <div className="relative w-full max-w-6xl h-full max-h-[90vh] bg-background rounded-lg shadow-2xl overflow-hidden">
+        {/* Slide Content */}
+        <div className="h-full flex flex-col">
+          {/* Slide Header */}
+          <div className="flex items-center justify-between p-6 border-b">
+            <div className="flex items-center space-x-4">
+              <h2 className="text-xl font-bold">SHELTR Investment Deck</h2>
+              <Badge variant="secondary">{currentSlide + 1} / {investmentSlides.length}</Badge>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setIsPlaying(!isPlaying)}
+              >
+                {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+              </Button>
+              <Button variant="outline" size="sm">
+                <Download className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+
+          {/* Slide Content */}
+          <div className="flex-1 p-8 overflow-y-auto">
+            <div className={`h-full bg-gradient-to-br ${slide.bgGradient} rounded-lg p-8 text-white`}>
+              {/* Slide Type Specific Content */}
+              {slide.type === 'title' && (
+                <div className="h-full flex flex-col items-center justify-center text-center">
+                  <div className="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center mb-8">
+                    <slide.icon className="h-12 w-12" />
+                  </div>
+                  <h1 className="text-6xl font-bold mb-4">{slide.title}</h1>
+                  <h2 className="text-3xl font-semibold mb-6 text-white/90">{slide.subtitle}</h2>
+                  <p className="text-xl mb-8">{slide.description}</p>
+                  <div className="bg-white/20 px-6 py-3 rounded-full">
+                    <p className="text-lg font-semibold">{slide.highlight}</p>
+                  </div>
+                </div>
+              )}
+
+              {slide.type === 'problem' && slide.content && (
+                <div className="h-full">
+                  <div className="text-center mb-6">
+                    <h1 className="text-5xl font-bold mb-4 text-white drop-shadow-lg">{slide.title}</h1>
+                    <h2 className="text-2xl font-semibold mb-2 text-white/90 drop-shadow-md">{slide.subtitle}</h2>
+                    <p className="text-xl text-white/80 drop-shadow-sm">{slide.description}</p>
+                  </div>
+                  
+                  {/* Side-by-Side Comparison */}
+                  <div className="mb-8">
+                    <h3 className="text-3xl font-bold mb-6 text-center text-white drop-shadow-lg">Fundraising Methods Comparison</h3>
+                    <div className="grid md:grid-cols-2 gap-6">
+                      {/* Traditional Method */}
+                      <div className="relative overflow-hidden rounded-lg p-6 border-2 border-red-400/30">
+                        <div className="absolute inset-0 bg-red-500/20"></div>
+                        <div className="relative z-10">
+                          <h4 className="text-2xl font-bold mb-4 text-red-200 text-center">Traditional Fundraising</h4>
+                          <div className="space-y-4">
+                            <div className="flex items-center space-x-3">
+                              <div className="w-3 h-3 bg-red-400 rounded-full"></div>
+                              <span className="text-white/90">Multi-layer intermediaries</span>
+                            </div>
+                            <div className="flex items-center space-x-3">
+                              <div className="w-3 h-3 bg-red-400 rounded-full"></div>
+                              <span className="text-white/90">Opaque donation tracking</span>
+                            </div>
+                            <div className="flex items-center space-x-3">
+                              <div className="w-3 h-3 bg-red-400 rounded-full"></div>
+                              <span className="text-white/90">60-70% efficiency rate</span>
+                            </div>
+                            <div className="flex items-center space-x-3">
+                              <div className="w-3 h-3 bg-red-400 rounded-full"></div>
+                              <span className="text-white/90">Centralized control</span>
+                            </div>
+                            <div className="flex items-center space-x-3">
+                              <div className="w-3 h-3 bg-red-400 rounded-full"></div>
+                              <span className="text-white/90">24-72 hour delivery</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* SHELTR Method */}
+                      <div className="relative overflow-hidden rounded-lg p-6 border-2 border-green-400/30">
+                        <div className="absolute inset-0 bg-green-500/20"></div>
+                        <div className="relative z-10">
+                          <h4 className="text-2xl font-bold mb-4 text-green-200 text-center">SHELTR Solution</h4>
+                          <div className="space-y-4">
+                            <div className="flex items-center space-x-3">
+                              <CheckCircle className="h-5 w-5 text-green-400" />
+                              <span className="text-white/90">Direct blockchain transactions</span>
+                            </div>
+                            <div className="flex items-center space-x-3">
+                              <CheckCircle className="h-5 w-5 text-green-400" />
+                              <span className="text-white/90">Real-time transparency</span>
+                            </div>
+                            <div className="flex items-center space-x-3">
+                              <CheckCircle className="h-5 w-5 text-green-400" />
+                              <span className="text-white/90">95% efficiency rate</span>
+                            </div>
+                            <div className="flex items-center space-x-3">
+                              <CheckCircle className="h-5 w-5 text-green-400" />
+                              <span className="text-white/90">Decentralized platform</span>
+                            </div>
+                            <div className="flex items-center space-x-3">
+                              <CheckCircle className="h-5 w-5 text-green-400" />
+                              <span className="text-white/90">Instant delivery</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Key Statistics */}
+                  <div className="mb-6">
+                    <h3 className="text-2xl font-semibold mb-4 text-white drop-shadow-md">Key Statistics</h3>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      {slide.content.stats?.map((stat, index) => (
+                        <div key={index} className="relative overflow-hidden rounded-lg p-4 border border-white/20">
+                          <div className="absolute inset-0 bg-white/15 backdrop-blur-sm"></div>
+                          <div className="relative z-10">
+                            <div className="text-sm text-white/80 font-medium">{stat.label}</div>
+                            <div className={`text-2xl font-bold ${stat.color} drop-shadow-sm`}>{stat.value}</div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  {/* Core Problems */}
+                  <div>
+                    <h3 className="text-2xl font-semibold mb-4 text-white drop-shadow-md">Core Problems</h3>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      {slide.content.problems?.map((problem, index) => (
+                        <div key={index} className="relative overflow-hidden rounded-lg p-3">
+                          <div className="absolute inset-0 bg-white/10"></div>
+                          <div className="relative z-10 flex items-center space-x-3">
+                            <div className="w-2 h-2 bg-red-400 rounded-full flex-shrink-0"></div>
+                            <span className="text-white/90">{problem}</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {slide.type === 'solution' && slide.content && (
+                <div className="h-full">
+                  <div className="text-center mb-6">
+                    <h1 className="text-5xl font-bold mb-4 text-white drop-shadow-lg">{slide.title}</h1>
+                    <h2 className="text-2xl font-semibold mb-2 text-white/90 drop-shadow-md">{slide.subtitle}</h2>
+                    <p className="text-xl text-white/80 drop-shadow-sm mb-4">{slide.description}</p>
+                    
+                    {/* Philosophy Blurb */}
+                    <div className="bg-white/15 backdrop-blur-sm p-4 rounded-lg border border-white/20 max-w-2xl mx-auto">
+                      <p className="text-lg font-semibold text-white drop-shadow-sm">
+                        &ldquo;Better to Solve than Manage&rdquo; - We don&apos;t just manage homelessness, we solve it through direct action and immediate impact.
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="grid md:grid-cols-2 gap-8">
+                                          <div>
+                        <h3 className="text-2xl font-semibold mb-4 text-white drop-shadow-md">Key Features</h3>
+                        <div className="space-y-3">
+                          {slide.content.features?.map((feature, index) => (
+                            <div key={index} className="relative overflow-hidden rounded-lg p-3">
+                              <div className="absolute inset-0 bg-white/10"></div>
+                              <div className="relative z-10 flex items-center space-x-3">
+                                <CheckCircle className="h-5 w-5 text-green-400 flex-shrink-0" />
+                                <span className="text-white/90">{feature}</span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                                          <div>
+                        <h3 className="text-2xl font-semibold mb-4 text-white drop-shadow-md">Efficiency Comparison</h3>
+                        <div className="space-y-4">
+                          <div className="relative overflow-hidden rounded-lg p-4 border border-red-400/30">
+                            <div className="absolute inset-0 bg-red-500/20"></div>
+                            <div className="relative z-10">
+                              <div className="text-sm text-white/70">Traditional Charity</div>
+                              <div className="text-2xl font-bold text-red-400">{slide.content.comparison?.traditional}</div>
+                            </div>
+                          </div>
+                          <div className="relative overflow-hidden rounded-lg p-4 border border-green-400/30">
+                            <div className="absolute inset-0 bg-green-500/20"></div>
+                            <div className="relative z-10">
+                              <div className="text-sm text-white/70">SHELTR Platform</div>
+                              <div className="text-2xl font-bold text-green-400">{slide.content.comparison?.sheltr}</div>
+                            </div>
+                          </div>
+                          <div className="relative overflow-hidden rounded-lg p-4 border border-blue-400/30">
+                            <div className="absolute inset-0 bg-blue-500/20"></div>
+                            <div className="relative z-10">
+                              <div className="text-sm text-white/70">Improvement</div>
+                              <div className="text-2xl font-bold text-blue-400">{slide.content.comparison?.improvement}</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                  </div>
+                  
+                  {/* Technical Solution Breakdown */}
+                  <div className="mt-8">
+                    <h3 className="text-3xl font-bold mb-6 text-center text-white drop-shadow-lg">Technical Solution Architecture</h3>
+                    <div className="grid md:grid-cols-3 gap-6">
+                      
+                      {/* Smart Contract Solution */}
+                      <div className="relative overflow-hidden rounded-lg p-6 border-2 border-blue-400/30">
+                        <div className="absolute inset-0 bg-blue-500/20"></div>
+                        <div className="relative z-10">
+                          <h4 className="text-xl font-bold mb-4 text-blue-200 text-center">Smart Contract Solution</h4>
+                          <div className="space-y-3">
+                            <div className="flex items-center space-x-3">
+                              <CheckCircle className="h-4 w-4 text-blue-400" />
+                              <span className="text-white/90 text-sm">Automated fund distribution</span>
+                            </div>
+                            <div className="flex items-center space-x-3">
+                              <CheckCircle className="h-4 w-4 text-blue-400" />
+                              <span className="text-white/90 text-sm">Transparent transaction logs</span>
+                            </div>
+                            <div className="flex items-center space-x-3">
+                              <CheckCircle className="h-4 w-4 text-blue-400" />
+                              <span className="text-white/90 text-sm">Immutable audit trail</span>
+                            </div>
+                            <div className="flex items-center space-x-3">
+                              <CheckCircle className="h-4 w-4 text-blue-400" />
+                              <span className="text-white/90 text-sm">No human intervention</span>
+                            </div>
+                            <div className="flex items-center space-x-3">
+                              <CheckCircle className="h-4 w-4 text-blue-400" />
+                              <span className="text-white/90 text-sm">Instant execution</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* QR Code System */}
+                      <div className="relative overflow-hidden rounded-lg p-6 border-2 border-green-400/30">
+                        <div className="absolute inset-0 bg-green-500/20"></div>
+                        <div className="relative z-10">
+                          <h4 className="text-xl font-bold mb-4 text-green-200 text-center">QR Code System</h4>
+                          <div className="space-y-3">
+                            <div className="flex items-center space-x-3">
+                              <CheckCircle className="h-4 w-4 text-green-400" />
+                              <span className="text-white/90 text-sm">Unique participant identifiers</span>
+                            </div>
+                            <div className="flex items-center space-x-3">
+                              <CheckCircle className="h-4 w-4 text-green-400" />
+                              <span className="text-white/90 text-sm">Secure donation scanning</span>
+                            </div>
+                            <div className="flex items-center space-x-3">
+                              <CheckCircle className="h-4 w-4 text-green-400" />
+                              <span className="text-white/90 text-sm">Mobile-first accessibility</span>
+                            </div>
+                            <div className="flex items-center space-x-3">
+                              <CheckCircle className="h-4 w-4 text-green-400" />
+                              <span className="text-white/90 text-sm">Real-time verification</span>
+                            </div>
+                            <div className="flex items-center space-x-3">
+                              <CheckCircle className="h-4 w-4 text-green-400" />
+                              <span className="text-white/90 text-sm">Privacy-preserving design</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Donor Attachment Factor */}
+                      <div className="relative overflow-hidden rounded-lg p-6 border-2 border-purple-400/30">
+                        <div className="absolute inset-0 bg-purple-500/20"></div>
+                        <div className="relative z-10">
+                          <h4 className="text-xl font-bold mb-4 text-purple-200 text-center">Donor Attachment Factor</h4>
+                          <div className="space-y-3">
+                            <div className="flex items-center space-x-3">
+                              <CheckCircle className="h-4 w-4 text-purple-400" />
+                              <span className="text-white/90 text-sm">Giving at a distance</span>
+                            </div>
+                            <div className="flex items-center space-x-3">
+                              <CheckCircle className="h-4 w-4 text-purple-400" />
+                              <span className="text-white/90 text-sm">Immediate impact visibility</span>
+                            </div>
+                            <div className="flex items-center space-x-3">
+                              <CheckCircle className="h-4 w-4 text-purple-400" />
+                              <span className="text-white/90 text-sm">Personal connection to recipients</span>
+                            </div>
+                            <div className="flex items-center space-x-3">
+                              <CheckCircle className="h-4 w-4 text-purple-400" />
+                              <span className="text-white/90 text-sm">Transparent fund tracking</span>
+                            </div>
+                            <div className="flex items-center space-x-3">
+                              <CheckCircle className="h-4 w-4 text-purple-400" />
+                              <span className="text-white/90 text-sm">Emotional engagement</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Add more slide type renderers as needed */}
+              {slide.type !== 'title' && slide.type !== 'problem' && slide.type !== 'solution' && (
+                <div className="h-full flex flex-col items-center justify-center text-center">
+                  <h1 className="text-4xl font-bold mb-4">{slide.title}</h1>
+                  <h2 className="text-2xl font-semibold mb-2">{slide.subtitle}</h2>
+                  <p className="text-xl">{slide.description}</p>
+                  <div className="mt-8 text-lg">
+                    <p>Slide content for {slide.type} coming soon...</p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Navigation Controls */}
+          <div className="flex items-center justify-between p-6 border-t">
+            <Button
+              variant="outline"
+              onClick={prevSlide}
+              disabled={currentSlide === 0}
+            >
+              <ChevronLeft className="h-4 w-4 mr-2" />
+              Previous
+            </Button>
+
+            {/* Slide Indicators */}
+            <div className="flex space-x-2">
+              {investmentSlides.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => goToSlide(index)}
+                  className={`w-3 h-3 rounded-full transition-colors ${
+                    index === currentSlide ? 'bg-primary' : 'bg-gray-300'
+                  }`}
+                />
+              ))}
+            </div>
+
+            <Button
+              variant="outline"
+              onClick={nextSlide}
+              disabled={currentSlide === investmentSlides.length - 1}
+            >
+              Next
+              <ChevronRight className="h-4 w-4 ml-2" />
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function InvestorRelationsPage() {
   const [activeTab, setActiveTab] = useState('overview');
+  const [deckOpen, setDeckOpen] = useState(false);
 
   // Calendar/Meeting state
   const [isScheduling, setIsScheduling] = useState(false);
@@ -164,9 +915,13 @@ export default function InvestorRelationsPage() {
               SHELTR-S (stable) for participant protection and SHELTR (growth) for community governance.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-amber-600 hover:bg-amber-700 text-black">
-                <Download className="h-5 w-5 mr-2" />
-                Download Investment Deck
+              <Button 
+                size="lg" 
+                className="bg-amber-600 hover:bg-amber-700 text-black"
+                onClick={() => setDeckOpen(true)}
+              >
+                <Eye className="h-5 w-5 mr-2" />
+                View Investment Deck
               </Button>
               <Button 
                 size="lg" 
@@ -1144,6 +1899,9 @@ export default function InvestorRelationsPage() {
           </Tabs>
         </div>
       </section>
+
+      {/* Investment Deck Slideshow */}
+      <InvestmentDeckSlideshow isOpen={deckOpen} onClose={() => setDeckOpen(false)} />
 
       {/* Footer */}
       <footer className="bg-slate-900 text-white py-12">

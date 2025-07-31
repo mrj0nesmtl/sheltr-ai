@@ -949,7 +949,7 @@ export default function InvestorRelationsPage() {
                     Schedule Investor Meeting
                   </CardTitle>
                   <CardDescription>
-                    Book a 45-minute discussion about SHELTR-AI's investment opportunity
+                    Book a 45-minute discussion about SHELTR investment opportunity
                   </CardDescription>
                 </CardHeader>
                 <CardContent>

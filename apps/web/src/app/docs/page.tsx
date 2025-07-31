@@ -218,11 +218,11 @@ export default function DocsPage() {
               for the world&rsquo;s first dual-token charitable ecosystem.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" variant="secondary" className="bg-white text-foreground hover:bg-white/90">
+              <Button size="lg" variant="secondary" className="bg-white text-black hover:bg-white/90">
                 <Download className="h-5 w-5 mr-2" />
                 Download All Documents
               </Button>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-primary">
+              <Button size="lg" variant="outline" className="border-white text-black bg-white/10 hover:bg-white hover:text-black">
                 <Building className="h-5 w-5 mr-2" />
                 View GitHub Repository
               </Button>

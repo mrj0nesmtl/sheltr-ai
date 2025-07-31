@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Menu, X, LogIn } from 'lucide-react';
+import { Menu, X, LogIn, ArrowRight, Heart, Wallet, Home, QrCode, Shield, BarChart3, UserPlus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/theme-toggle';
 import Footer from '@/components/Footer';
@@ -12,10 +12,9 @@ export default function HomePage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <>
-      <div className="min-h-screen bg-background">
-        {/* Navigation */}
-        <nav className="bg-background/95 backdrop-blur-sm sticky top-0 z-50 border-b">
+    <div className="min-h-screen bg-background flex flex-col">
+      {/* Navigation */}
+      <nav className="bg-background/95 backdrop-blur-sm sticky top-0 z-50 border-b">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
               <div className="flex items-center">
@@ -116,7 +115,7 @@ export default function HomePage() {
           </div>
         </nav>
 
-        {/* Hero Section - Fixed height like About/Solutions pages */}
+        {/* Hero Section - Transform Donations into Impact */}
         <section 
           className="relative py-20 bg-gradient-to-r from-slate-900 to-slate-800"
           style={{
@@ -130,22 +129,22 @@ export default function HomePage() {
           <div className="relative z-10 container mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center">
               <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-                Better to Solve,<br />
-                <span className="text-blue-400">than Manage.</span>
+                Transform Donations into Impact
               </h1>
               <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto">
-                SHELTR is hacking homelessness via QR-code donations, blockchain transparency, 
-                and AI-driven insights.
+                Transform donations into meaningful actions using blockchain technology and smart contracts 
+                to directly support homeless individuals with transparency and accountability.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link href="/register">
-                  <Button size="lg" className="w-full sm:w-auto text-lg px-8 py-4">
-                    Get Started
+                <Link href="/scan-give">
+                  <Button size="lg" className="w-full sm:w-auto text-lg px-8 py-4 bg-green-600 hover:bg-green-700">
+                    Scan & Donate
                   </Button>
                 </Link>
-                <Link href="/scan-give">
+                <Link href="/about">
                   <Button variant="outline" size="lg" className="w-full sm:w-auto text-lg px-8 py-4 bg-white/10 border-white text-white hover:bg-white hover:text-black">
-                    Scan & Give Now
+                    <ArrowRight className="h-5 w-5 mr-2" />
+                    Learn More
                   </Button>
                 </Link>
               </div>
@@ -153,192 +152,75 @@ export default function HomePage() {
           </div>
         </section>
 
-
-
-        {/* How it Works Section - Updated with combined content */}
+        {/* Feature Cards Section - 6 Cards in 2x3 Grid */}
         <section className="py-20 bg-background">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold mb-4">How SHELTR Works for Everyone</h2>
-              <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                SHELTR serves shelters, government agencies, homeless participants, and donors 
-                through a unified platform that ensures transparency, dignity, and maximum impact. 
-                Our platform creates value for every participant in the homelessness ecosystem, from 
-                frontline organizations to individual donors.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
-              {/* Shelters & NGOs */}
-              <div className="bg-card rounded-lg border p-8">
-                <div className="flex items-center mb-6">
-                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
-                    <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                    </svg>
-                  </div>
-                  <h4 className="text-2xl font-bold">Shelters & NGOs</h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              
+              {/* Direct Impact */}
+              <div className="bg-card rounded-lg border p-6 text-center">
+                <div className="flex items-center justify-center mx-auto mb-4">
+                  <Heart className="w-8 h-8 text-purple-400" />
                 </div>
-                <p className="text-muted-foreground mb-6">Streamlined operations and enhanced participant support</p>
-                
-                <div className="space-y-4">
-                  <div className="flex items-start">
-                    <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3"></div>
-                    <div>
-                      <div className="font-semibold text-sm">Participant Management</div>
-                      <div className="text-sm text-muted-foreground">Digital intake, QR code generation, and progress tracking</div>
-                    </div>
-                  </div>
-                  <div className="flex items-start">
-                    <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3"></div>
-                    <div>
-                      <div className="font-semibold text-sm">Real-Time Analytics</div>
-                      <div className="text-sm text-muted-foreground">Track capacity, services, finances, and resource allocation</div>
-                    </div>
-                  </div>
-                  <div className="flex items-start">
-                    <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3"></div>
-                    <div>
-                      <div className="font-semibold text-sm">Compliance & Reporting</div>
-                      <div className="text-sm text-muted-foreground">Automated reports for funders and regulatory requirements</div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-8">
-                  <Link href="/solutions/organizations">
-                    <Button variant="outline" className="w-full">Learn More for Organizations</Button>
-                  </Link>
-                </div>
+                <h3 className="text-xl font-bold mb-3">Direct Impact</h3>
+                <p className="text-muted-foreground">
+                  Your donations directly support individuals in need through secure, transparent blockchain transactions.
+                </p>
               </div>
 
-              {/* Government Agencies */}
-              <div className="bg-card rounded-lg border p-8">
-                <div className="flex items-center mb-6">
-                  <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mr-4">
-                    <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                    </svg>
-                  </div>
-                  <h4 className="text-2xl font-bold">Government Agencies</h4>
+              {/* Smart Allocation */}
+              <div className="bg-card rounded-lg border p-6 text-center">
+                <div className="flex items-center justify-center mx-auto mb-4">
+                  <Wallet className="w-8 h-8 text-purple-400" />
                 </div>
-                <p className="text-muted-foreground mb-6">Data-driven policy making and budget transparency</p>
-                
-                <div className="space-y-4">
-                  <div className="flex items-start">
-                    <div className="w-2 h-2 bg-purple-600 rounded-full mt-2 mr-3"></div>
-                    <div>
-                      <div className="font-semibold text-sm">Policy Insights</div>
-                      <div className="text-sm text-muted-foreground">Real-time homelessness data and trend analysis</div>
-                    </div>
-                  </div>
-                  <div className="flex items-start">
-                    <div className="w-2 h-2 bg-purple-600 rounded-full mt-2 mr-3"></div>
-                    <div>
-                      <div className="font-semibold text-sm">Budget Transparency</div>
-                      <div className="text-sm text-muted-foreground">Track government fund usage and impact measurement</div>
-                    </div>
-                  </div>
-                  <div className="flex items-start">
-                    <div className="w-2 h-2 bg-purple-600 rounded-full mt-2 mr-3"></div>
-                    <div>
-                      <div className="font-semibold text-sm">Multi-Agency Coordination</div>
-                      <div className="text-sm text-muted-foreground">Unified platform for cross-department collaboration</div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-8">
-                  <Link href="/solutions/government">
-                    <Button variant="outline" className="w-full">Government Solutions</Button>
-                  </Link>
-                </div>
+                <h3 className="text-xl font-bold mb-3">Smart Allocation</h3>
+                <p className="text-muted-foreground">
+                  Funds are automatically distributed: 80% for immediate needs, 15% for housing, and 5% for operations.
+                </p>
               </div>
 
-              {/* Participants */}
-              <div className="bg-card rounded-lg border p-8">
-                <div className="flex items-center mb-6">
-                  <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mr-4">
-                    <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
-                  </div>
-                  <h4 className="text-2xl font-bold">Participants</h4>
+              {/* Housing Focus */}
+              <div className="bg-card rounded-lg border p-6 text-center">
+                <div className="flex items-center justify-center mx-auto mb-4">
+                  <Home className="w-8 h-8 text-blue-400" />
                 </div>
-                <p className="text-muted-foreground mb-6">Dignified support with direct access to resources</p>
-                
-                <div className="space-y-4">
-                  <div className="flex items-start">
-                    <div className="w-2 h-2 bg-green-600 rounded-full mt-2 mr-3"></div>
-                    <div>
-                      <div className="font-semibold text-sm">Personal QR Code</div>
-                      <div className="text-sm text-muted-foreground">Instant donations via QR code linked to their SHELTR-S wallet</div>
-                    </div>
-                  </div>
-                  <div className="flex items-start">
-                    <div className="w-2 h-2 bg-green-600 rounded-full mt-2 mr-3"></div>
-                    <div>
-                      <div className="font-semibold text-sm">Direct Financial Support</div>
-                      <div className="text-sm text-muted-foreground">80% of donations go directly to participant needs</div>
-                    </div>
-                  </div>
-                  <div className="flex items-start">
-                    <div className="w-2 h-2 bg-green-600 rounded-full mt-2 mr-3"></div>
-                    <div>
-                      <div className="font-semibold text-sm">Housing Priority</div>
-                      <div className="text-sm text-muted-foreground">Automatic entry into housing fund for permanent solutions</div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-8">
-                  <Link href="/solutions/participants">
-                    <Button variant="outline" className="w-full">Participant Support</Button>
-                  </Link>
-                </div>
+                <h3 className="text-xl font-bold mb-3">Housing Focus</h3>
+                <p className="text-muted-foreground">
+                  Every donation contributes to a dedicated housing fund, helping create lasting change.
+                </p>
               </div>
 
-              {/* Donors */}
-              <div className="bg-card rounded-lg border p-8">
-                <div className="flex items-center mb-6">
-                  <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mr-4">
-                    <svg className="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                    </svg>
-                  </div>
-                  <h4 className="text-2xl font-bold">Donors</h4>
+              {/* QR Technology */}
+              <div className="bg-card rounded-lg border p-6 text-center">
+                <div className="flex items-center justify-center mx-auto mb-4">
+                  <QrCode className="w-8 h-8 text-green-400" />
                 </div>
-                <p className="text-muted-foreground mb-6">Transparent giving with measurable impact</p>
-                
-                <div className="space-y-4">
-                  <div className="flex items-start">
-                    <div className="w-2 h-2 bg-orange-600 rounded-full mt-2 mr-3"></div>
-                    <div>
-                      <div className="font-semibold text-sm">Blockchain Transparency</div>
-                      <div className="text-sm text-muted-foreground">Every donation tracked on-chain through our SmartFund</div>
-                    </div>
-                  </div>
-                  <div className="flex items-start">
-                    <div className="w-2 h-2 bg-orange-600 rounded-full mt-2 mr-3"></div>
-                    <div>
-                      <div className="font-semibold text-sm">Impact Measurement</div>
-                      <div className="text-sm text-muted-foreground">Real-time updates on how your donation helps participants</div>
-                    </div>
-                  </div>
-                  <div className="flex items-start">
-                    <div className="w-2 h-2 bg-orange-600 rounded-full mt-2 mr-3"></div>
-                    <div>
-                      <div className="font-semibold text-sm">Easy Giving</div>
-                      <div className="text-sm text-muted-foreground">Instant donations via QR code scanning</div>
-                    </div>
-                  </div>
-                </div>
+                <h3 className="text-xl font-bold mb-3">QR Technology</h3>
+                <p className="text-muted-foreground">
+                  Scan unique QR codes to make instant, secure donations to specific individuals in need.
+                </p>
+              </div>
 
-                <div className="mt-8">
-                  <Link href="/solutions/donors">
-                    <Button variant="outline" className="w-full">Start Giving Today</Button>
-                  </Link>
+              {/* Blockchain Security */}
+              <div className="bg-card rounded-lg border p-6 text-center">
+                <div className="flex items-center justify-center mx-auto mb-4">
+                  <Shield className="w-8 h-8 text-red-400" />
                 </div>
+                <h3 className="text-xl font-bold mb-3">Blockchain Security</h3>
+                <p className="text-muted-foreground">
+                  Every transaction is secured and verified through blockchain technology, ensuring complete transparency.
+                </p>
+              </div>
+
+              {/* Impact Tracking */}
+              <div className="bg-card rounded-lg border p-6 text-center">
+                <div className="flex items-center justify-center mx-auto mb-4">
+                  <BarChart3 className="w-8 h-8 text-yellow-400" />
+                </div>
+                <h3 className="text-xl font-bold mb-3">Impact Tracking</h3>
+                <p className="text-muted-foreground">
+                  Monitor your contributions and see the real impact of your donations in real-time.
+                </p>
               </div>
             </div>
           </div>
@@ -357,7 +239,7 @@ export default function HomePage() {
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div className="text-center p-6 bg-card rounded-lg border">
-                <div className="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <div className="flex items-center justify-center mx-auto mb-4">
                   <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
@@ -369,7 +251,7 @@ export default function HomePage() {
               </div>
               
               <div className="text-center p-6 bg-card rounded-lg border">
-                <div className="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <div className="flex items-center justify-center mx-auto mb-4">
                   <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                   </svg>
@@ -381,7 +263,7 @@ export default function HomePage() {
               </div>
               
               <div className="text-center p-6 bg-card rounded-lg border">
-                <div className="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <div className="flex items-center justify-center mx-auto mb-4">
                   <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                   </svg>
@@ -401,7 +283,7 @@ export default function HomePage() {
             <div className="max-w-3xl mx-auto">
               <h2 className="text-4xl font-bold mb-6">Ready to Transform How You Address the Unhoused?</h2>
               <p className="text-xl mb-8 opacity-90">
-                Join the revolution in charitable giving. Every scan creates transparency, 
+                Join the SHELTR movement - Every scan creates transparency, 
                 every donation builds housing, every participant finds dignity.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -411,7 +293,7 @@ export default function HomePage() {
                   </Button>
                 </Link>
                 <Link href="/scan-give">
-                  <Button size="lg" variant="outline" className="text-lg px-8 py-4 border-white text-black bg-white/10 hover:bg-white hover:text-black">
+                  <Button size="lg" variant="outline" className="text-lg px-8 py-4 border-white text-primary-foreground bg-white/10 hover:bg-white hover:text-black">
                     Learn More
                   </Button>
                 </Link>
@@ -419,9 +301,8 @@ export default function HomePage() {
             </div>
           </div>
         </section>
-      </div>
       
       <Footer />
-    </>
+    </div>
   );
 } 

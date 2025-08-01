@@ -4,6 +4,7 @@
 i  deploying hosting
 i  hosting[sheltr-ai]: beginning deploy...
 i  hosting[sheltr-ai]: found 179 files in apps/web/out
+i  hosting: upload complete
 ✔  hosting[sheltr-ai]: file upload complete
 i  hosting[sheltr-ai]: finalizing version...
 ✔  hosting[sheltr-ai]: version finalized

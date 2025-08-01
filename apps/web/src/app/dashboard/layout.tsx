@@ -29,6 +29,34 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useState, useEffect } from 'react';
 
+// Helper function to get user display name
+const getUserDisplayName = (user: { displayName?: string | null; email?: string | null } | null) => {
+  if (user?.displayName) {
+    return user.displayName;
+  }
+  if (user?.email) {
+    // Map specific test emails to names
+    if (user.email === 'donor@example.com') {
+      return 'Sarah Johnson';
+    }
+    if (user.email === 'david.donor@example.com') {
+      return 'David Donor';
+    }
+    if (user.email === 'participant@example.com') {
+      return 'Michael Rodriguez';
+    }
+    if (user.email === 'sarah.manager@sheltr.com') {
+      return 'Sarah Manager';
+    }
+    if (user.email === 'joel.yaffe@gmail.com') {
+      return 'Joel Yaffe';
+    }
+    // Fallback to email prefix formatted as name
+    return user.email.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase());
+  }
+  return 'User';
+};
+
 // Define navigation based on user role
 const getNavigationItems = (userRole: string) => {
   const baseItems: Array<{
@@ -151,15 +179,21 @@ const getNavigationItems = (userRole: string) => {
       },
       {
         title: 'Tax Documents',
-        href: '/dashboard/donor/tax-docs',
+        href: '/dashboard/donor/tax-documents',
         icon: DollarSign,
         description: 'Download receipts and tax forms'
       },
       {
         title: 'SHELTR Portfolio',
-        href: '/dashboard/donor/portfolio',
+        href: '/dashboard/donor/sheltr-portfolio',
         icon: Wallet,
         description: 'Your blockchain rewards'
+      },
+      {
+        title: 'Settings',
+        href: '/dashboard/donor/settings',
+        icon: Settings,
+        description: 'Preferences and privacy settings'
       }
     ];
   }
@@ -362,7 +396,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
-                        {user?.displayName || user?.email}
+                        {getUserDisplayName(user)}
                       </p>
                       <div className="flex items-center space-x-2">
                         <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gradient-to-r ${getRoleColor(user?.role || '')}`}>

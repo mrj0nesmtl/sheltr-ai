@@ -22,7 +22,8 @@ import {
   ChevronRight,
   Heart,
   User,
-  Wallet
+  Wallet,
+  LucideIcon
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -30,7 +31,12 @@ import { useState, useEffect } from 'react';
 
 // Define navigation based on user role
 const getNavigationItems = (userRole: string) => {
-  const baseItems = [];
+  const baseItems: Array<{
+    title: string;
+    href: string;
+    icon: LucideIcon;
+    description: string;
+  }> = [];
 
   // Super Admin Navigation
   if (userRole === 'super_admin') {

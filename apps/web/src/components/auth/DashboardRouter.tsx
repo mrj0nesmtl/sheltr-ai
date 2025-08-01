@@ -45,7 +45,7 @@ export const DashboardRouter: React.FC<DashboardRouterProps> = ({ children }) =>
     }
 
     // If user is on the generic dashboard route, redirect to their specific dashboard
-    if (pathname === '/dashboard' && targetDashboard !== '/dashboard') {
+    if (pathname === '/dashboard' && targetDashboard && targetDashboard !== '/dashboard') {
       router.replace(targetDashboard);
       return;
     }
@@ -56,7 +56,9 @@ export const DashboardRouter: React.FC<DashboardRouterProps> = ({ children }) =>
     if (currentDashboardRole && currentDashboardRole !== userRole && userRole !== 'super_admin') {
       // Super admins can access any dashboard, others are restricted to their own
       console.warn(`User with role ${userRole} attempted to access ${currentDashboardRole} dashboard`);
-      router.replace(targetDashboard);
+      if (targetDashboard) {
+        router.replace(targetDashboard);
+      }
       return;
     }
 

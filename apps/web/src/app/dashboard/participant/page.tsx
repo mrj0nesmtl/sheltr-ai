@@ -163,6 +163,25 @@ export default function ParticipantDashboard() {
     );
   }
 
+  // Get user display name
+  const getUserDisplayName = () => {
+    if (user?.displayName) {
+      return user.displayName;
+    }
+    if (user?.email) {
+      // Map specific test emails to names
+      if (user.email === 'participant@example.com') {
+        return 'Michael Rodriguez';
+      }
+      if (user.email === 'david.donor@example.com') {
+        return 'David Donor';
+      }
+      // Fallback to email prefix formatted as name
+      return user.email.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    }
+    return 'Participant';
+  };
+
   const formatDate = (dateString: string) => new Date(dateString).toLocaleDateString();
   const formatDateTime = (dateString: string) => new Date(dateString).toLocaleString();
 
@@ -171,7 +190,7 @@ export default function ParticipantDashboard() {
       {/* Welcome Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-          Welcome back, {participantData.participantName}!
+          Welcome back, {getUserDisplayName()}!
         </h1>
         <p className="text-gray-600 dark:text-gray-400 mt-2">
           Your SHELTR Dashboard • Member since: {formatDate(participantData.dateJoined)} • ID: {participantData.participantId}

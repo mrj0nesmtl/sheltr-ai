@@ -6,19 +6,71 @@
    - Environments: .env.local
 
    Creating an optimized production build ...
- ✓ Compiled successfully in 6.0s
+ ✓ Compiled successfully in 1000ms
    Skipping linting
    Checking validity of types ...
-Failed to compile.
+   Collecting page data ...
+   Generating static pages (0/40) ...
+   Generating static pages (10/40) 
+   Generating static pages (20/40) 
+   Generating static pages (30/40) 
+ ✓ Generating static pages (40/40)
+   Finalizing page optimization ...
+   Collecting build traces ...
+ ⚠ Statically exporting a Next.js application via `next export` disables API routes and middleware.
+This command is meant for static-only hosts, and is not necessary to make your application static.
+Pages in your application without server-side data dependencies will be automatically statically exported by `next build`, including pages powered by `getStaticProps`.
+Learn more: https://nextjs.org/docs/messages/api-routes-static-export
+   Exporting (0/3) ...
+ ✓ Exporting (3/3)
 
-./src/app/dashboard/layout.tsx:33:9
-Type error: Variable 'baseItems' implicitly has type 'any[]' in some locations where its type cannot be determined.
+Route (app)                                 Size  First Load JS
+┌ ○ /                                    6.74 kB         119 kB
+├ ○ /_not-found                            998 B         101 kB
+├ ○ /about                               8.47 kB         121 kB
+├ ƒ /api/calendar/create-event             128 B        99.9 kB
+├ ƒ /api/email/send-confirmation           128 B        99.9 kB
+├ ○ /dashboard                           4.97 kB         232 kB
+├ ○ /dashboard/analytics                 5.88 kB         121 kB
+├ ○ /dashboard/donor                     6.46 kB         233 kB
+├ ○ /dashboard/financial                 5.39 kB         121 kB
+├ ○ /dashboard/participant               7.43 kB         234 kB
+├ ○ /dashboard/platform                  4.76 kB         114 kB
+├ ○ /dashboard/security                  5.54 kB         121 kB
+├ ○ /dashboard/shelter-admin             5.32 kB         232 kB
+├ ○ /dashboard/shelters                  15.8 kB         350 kB
+├ ○ /dashboard/users                     8.73 kB         343 kB
+├ ○ /docs                                4.86 kB         122 kB
+├ ○ /docs/api                            2.06 kB         119 kB
+├ ○ /docs/blockchain                      7.5 kB         120 kB
+├ ○ /docs/hacking-homelessness           9.55 kB         122 kB
+├ ○ /docs/participant-guide              2.49 kB         119 kB
+├ ○ /docs/roadmap                        2.86 kB         120 kB
+├ ○ /docs/whitepaper                     6.77 kB         119 kB
+├ ○ /impact                                10 kB         122 kB
+├ ○ /investor-access                     5.82 kB         118 kB
+├ ○ /investor-relations                  24.1 kB         143 kB
+├ ○ /login                               4.59 kB         222 kB
+├ ○ /privacy                             10.5 kB         123 kB
+├ ○ /register                            5.22 kB         222 kB
+├ ○ /scan-give                           6.62 kB         119 kB
+├ ○ /solutions                           7.99 kB         120 kB
+├ ○ /solutions/donors                    2.75 kB         115 kB
+├ ○ /solutions/government                2.75 kB         115 kB
+├ ○ /solutions/government/policy-brief   9.92 kB         122 kB
+├ ○ /solutions/organizations             2.75 kB         115 kB
+├ ○ /solutions/organizations/case-study  9.16 kB         122 kB
+├ ○ /solutions/participants              2.75 kB         115 kB
+├ ○ /terms                               9.91 kB         122 kB
+└ ○ /tokenomics                          13.2 kB         126 kB
++ First Load JS shared by all            99.7 kB
+  ├ chunks/4bd1b696-602635ee57868870.js  54.1 kB
+  ├ chunks/5964-71b4770e07aae77a.js      43.7 kB
+  └ other shared chunks (total)          1.95 kB
 
-[0m [90m 31 |[39m [90m// Define navigation based on user role[39m
- [90m 32 |[39m [36mconst[39m getNavigationItems [33m=[39m (userRole[33m:[39m string) [33m=>[39m {
-[31m[1m>[22m[39m[90m 33 |[39m   [36mconst[39m baseItems [33m=[39m [][33m;[39m
- [90m    |[39m         [31m[1m^[22m[39m
- [90m 34 |[39m
- [90m 35 |[39m   [90m// Super Admin Navigation[39m
- [90m 36 |[39m   [36mif[39m (userRole [33m===[39m [32m'super_admin'[39m) {[0m
-Next.js build worker exited with code: 1 and signal: null
+
+ƒ Middleware                             32.9 kB
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

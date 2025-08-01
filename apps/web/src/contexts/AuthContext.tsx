@@ -12,7 +12,8 @@ import {
   sendEmailVerification,
   updateProfile
 } from 'firebase/auth';
-import { auth } from '../lib/firebase';
+import { doc, setDoc } from 'firebase/firestore';
+import { auth, db } from '../lib/firebase';
 
 // Types for our RBAC system
 export type UserRole = 'super_admin' | 'admin' | 'participant' | 'donor';
@@ -140,46 +141,62 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     return null;
   };
 
-  // Register user via our backend API
+  // Register user directly with Firebase Auth and Firestore
   const register = async (userData: UserRegistrationData): Promise<void> => {
     try {
       setLoading(true);
       setError(null);
 
-      // Call our backend registration endpoint
-      const response = await fetch('http://localhost:8000/auth/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: userData.email,
-          password: userData.password,
-          first_name: userData.firstName,
-          last_name: userData.lastName,
-          role: userData.role,
-          shelter_id: userData.shelterId,
-          phone: userData.phone,
-        }),
+      // Create user with Firebase Auth directly
+      const userCredential = await createUserWithEmailAndPassword(auth, userData.email, userData.password);
+      const user = userCredential.user;
+
+      // Update user profile
+      await updateProfile(user, {
+        displayName: `${userData.firstName} ${userData.lastName}`
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Registration failed');
-      }
+      // Create user document in Firestore with role and additional data
+      const userDocData = {
+        uid: user.uid,
+        email: userData.email,
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        role: userData.role || 'participant',
+        phone: userData.phone || '',
+        shelterId: userData.shelterId || null,
+        createdAt: new Date().toISOString(),
+        emailVerified: false,
+        profileComplete: false,
+        lastLoginAt: new Date().toISOString(),
+        status: 'active'
+      };
 
-      // Now sign in the user
-      await signInWithEmailAndPassword(auth, userData.email, userData.password);
+      // Store user data in Firestore
+      await setDoc(doc(db, 'users', user.uid), userDocData);
 
       // Send email verification
-      if (auth.currentUser && !auth.currentUser.emailVerified) {
-        await sendEmailVerification(auth.currentUser);
-      }
+      await sendEmailVerification(user);
+
+      console.log('✅ User registered successfully:', user.uid);
 
     } catch (error: any) {
       console.error('Registration error:', error);
-      setError(error.message || 'Registration failed');
-      throw error;
+      
+      // Provide more specific error messages
+      let errorMessage = 'Registration failed';
+      if (error.code === 'auth/email-already-in-use') {
+        errorMessage = 'An account with this email already exists';
+      } else if (error.code === 'auth/weak-password') {
+        errorMessage = 'Password should be at least 6 characters';
+      } else if (error.code === 'auth/invalid-email') {
+        errorMessage = 'Please enter a valid email address';
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
+      setError(errorMessage);
+      throw new Error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -222,7 +239,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         // Call backend to verify and set claims if needed
         try {
           const token = await user.getIdToken();
-          const response = await fetch('http://localhost:8000/auth/verify-token', {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000'}/auth/verify-token`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

@@ -6,7 +6,7 @@
    - Environments: .env.local
 
    Creating an optimized production build ...
- ✓ Compiled successfully in 3.0s
+ ✓ Compiled successfully in 2000ms
    Skipping linting
    Checking validity of types ...
    Collecting page data ...
@@ -30,7 +30,7 @@ Route (app)                                 Size  First Load JS
 ├ ○ /about                               8.47 kB         121 kB
 ├ ƒ /api/calendar/create-event             128 B        99.9 kB
 ├ ƒ /api/email/send-confirmation           128 B        99.9 kB
-├ ○ /dashboard                              1 kB         231 kB
+├ ○ /dashboard                            1.4 kB         231 kB
 ├ ○ /dashboard/analytics                 6.45 kB         121 kB
 ├ ○ /dashboard/donor                     7.36 kB         234 kB
 ├ ○ /dashboard/financial                 5.96 kB         121 kB

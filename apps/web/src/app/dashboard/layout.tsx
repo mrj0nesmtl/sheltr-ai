@@ -104,7 +104,7 @@ const getNavigationItems = (userRole: string) => {
       {
         title: 'Services',
         href: '/dashboard/shelter-admin/services',
-        icon: Settings,
+        icon: UserCog,
         description: 'Schedule and manage services'
       },
       {
@@ -118,6 +118,12 @@ const getNavigationItems = (userRole: string) => {
         href: '/dashboard/shelter-admin/reports',
         icon: BarChart3,
         description: 'Shelter analytics and reports'
+      },
+      {
+        title: 'Settings',
+        href: '/dashboard/shelter-admin/settings',
+        icon: Settings,
+        description: 'Shelter configuration & public page'
       }
     ];
   }

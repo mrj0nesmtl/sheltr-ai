@@ -8,143 +8,89 @@
    - Environments: .env.local
 
  ✓ Starting...
- ✓ Compiled middleware in 158ms
+ ✓ Compiled middleware in 265ms
  ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
- ✓ Ready in 1936ms
- ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
+ ✓ Ready in 2.1s
  ○ Compiling / ...
- ✓ Compiled / in 2.6s
- GET / 200 in 3183ms
- ✓ Compiled /login in 398ms
- GET /login 200 in 520ms
- GET /login 200 in 626ms
- GET /login 200 in 646ms
- GET /login 200 in 233ms
- GET /login 200 in 131ms
- GET /login 200 in 124ms
- GET /login 200 in 184ms
- ○ Compiling /dashboard ...
- ✓ Compiled /dashboard in 1045ms
- ⨯ [Error: ENOENT: no such file or directory, open '/Users/mrjones/Github/Projects/sheltr-ai/apps/web/out/static/development/_buildManifest.js.tmp.0mihgd7oqezh'] {
-  errno: -2,
-  code: 'ENOENT',
-  syscall: 'open',
-  path: '/Users/mrjones/Github/Projects/sheltr-ai/apps/web/out/static/development/_buildManifest.js.tmp.0mihgd7oqezh'
-}
- ○ Compiling /_error ...
- ✓ Compiled /_error in 1571ms
- ⨯ [Error: ENOENT: no such file or directory, open '/Users/mrjones/Github/Projects/sheltr-ai/apps/web/out/static/development/_buildManifest.js.tmp.5njqwa15g1s'] {
-  errno: -2,
-  code: 'ENOENT',
-  syscall: 'open',
-  path: '/Users/mrjones/Github/Projects/sheltr-ai/apps/web/out/static/development/_buildManifest.js.tmp.5njqwa15g1s'
-}
-[Error: ENOENT: no such file or directory, open '/Users/mrjones/Github/Projects/sheltr-ai/apps/web/out/static/development/_buildManifest.js.tmp.0mihgd7oqezh'] {
-  errno: -2,
-  code: 'ENOENT',
-  syscall: 'open',
-  path: '/Users/mrjones/Github/Projects/sheltr-ai/apps/web/out/static/development/_buildManifest.js.tmp.0mihgd7oqezh'
-}
- ⨯ [Error: ENOENT: no such file or directory, open '/Users/mrjones/Github/Projects/sheltr-ai/apps/web/out/static/development/_buildManifest.js.tmp.70ppjhm60pa'] {
-  errno: -2,
-  code: 'ENOENT',
-  syscall: 'open',
-  path: '/Users/mrjones/Github/Projects/sheltr-ai/apps/web/out/static/development/_buildManifest.js.tmp.70ppjhm60pa'
-}
-[Error: ENOENT: no such file or directory, open '/Users/mrjones/Github/Projects/sheltr-ai/apps/web/out/static/development/_buildManifest.js.tmp.jg7jre9ry1n'] {
-  errno: -2,
-  code: 'ENOENT',
-  syscall: 'open',
-  path: '/Users/mrjones/Github/Projects/sheltr-ai/apps/web/out/static/development/_buildManifest.js.tmp.jg7jre9ry1n'
-}
- ⨯ [Error: ENOENT: no such file or directory, open '/Users/mrjones/Github/Projects/sheltr-ai/apps/web/out/static/development/_buildManifest.js.tmp.7g82sdej9ls'] {
-  errno: -2,
-  code: 'ENOENT',
-  syscall: 'open',
-  path: '/Users/mrjones/Github/Projects/sheltr-ai/apps/web/out/static/development/_buildManifest.js.tmp.7g82sdej9ls'
-}
- ⨯ [Error: ENOENT: no such file or directory, open '/Users/mrjones/Github/Projects/sheltr-ai/apps/web/out/static/development/_buildManifest.js.tmp.mprgxtzq1h'] {
-  errno: -2,
-  code: 'ENOENT',
-  syscall: 'open',
-  path: '/Users/mrjones/Github/Projects/sheltr-ai/apps/web/out/static/development/_buildManifest.js.tmp.mprgxtzq1h'
-}
-[Error: ENOENT: no such file or directory, open '/Users/mrjones/Github/Projects/sheltr-ai/apps/web/out/static/development/_buildManifest.js.tmp.7g82sdej9ls'] {
-  errno: -2,
-  code: 'ENOENT',
-  syscall: 'open',
-  path: '/Users/mrjones/Github/Projects/sheltr-ai/apps/web/out/static/development/_buildManifest.js.tmp.7g82sdej9ls'
-}
- ⨯ [Error: ENOENT: no such file or directory, open '/Users/mrjones/Github/Projects/sheltr-ai/apps/web/out/static/development/_buildManifest.js.tmp.h1tazsuttz'] {
-  errno: -2,
-  code: 'ENOENT',
-  syscall: 'open',
-  path: '/Users/mrjones/Github/Projects/sheltr-ai/apps/web/out/static/development/_buildManifest.js.tmp.h1tazsuttz'
-}
-[Error: ENOENT: no such file or directory, open '/Users/mrjones/Github/Projects/sheltr-ai/apps/web/out/static/development/_buildManifest.js.tmp.0jn0zllya2e'] {
-  errno: -2,
-  code: 'ENOENT',
-  syscall: 'open',
-  path: '/Users/mrjones/Github/Projects/sheltr-ai/apps/web/out/static/development/_buildManifest.js.tmp.0jn0zllya2e'
-}
- ⨯ [Error: ENOENT: no such file or directory, open '/Users/mrjones/Github/Projects/sheltr-ai/apps/web/out/static/development/_buildManifest.js.tmp.5n1zy6usrsq'] {
-  errno: -2,
-  code: 'ENOENT',
-  syscall: 'open',
-  path: '/Users/mrjones/Github/Projects/sheltr-ai/apps/web/out/static/development/_buildManifest.js.tmp.5n1zy6usrsq'
-}
- ⨯ [Error: ENOENT: no such file or directory, open '/Users/mrjones/Github/Projects/sheltr-ai/apps/web/out/static/development/_buildManifest.js.tmp.16c9xh7sv8g'] {
-  errno: -2,
-  code: 'ENOENT',
-  syscall: 'open',
-  path: '/Users/mrjones/Github/Projects/sheltr-ai/apps/web/out/static/development/_buildManifest.js.tmp.16c9xh7sv8g'
-}
-[Error: ENOENT: no such file or directory, open '/Users/mrjones/Github/Projects/sheltr-ai/apps/web/out/static/development/_buildManifest.js.tmp.5n1zy6usrsq'] {
-  errno: -2,
-  code: 'ENOENT',
-  syscall: 'open',
-  path: '/Users/mrjones/Github/Projects/sheltr-ai/apps/web/out/static/development/_buildManifest.js.tmp.5n1zy6usrsq'
-}
- ⨯ [Error: ENOENT: no such file or directory, open '/Users/mrjones/Github/Projects/sheltr-ai/apps/web/out/static/development/_buildManifest.js.tmp.q71cvi1t3w'] {
-  errno: -2,
-  code: 'ENOENT',
-  syscall: 'open',
-  path: '/Users/mrjones/Github/Projects/sheltr-ai/apps/web/out/static/development/_buildManifest.js.tmp.q71cvi1t3w'
-}
-[Error: ENOENT: no such file or directory, open '/Users/mrjones/Github/Projects/sheltr-ai/apps/web/out/static/development/_buildManifest.js.tmp.mo6fo8crd8'] {
-  errno: -2,
-  code: 'ENOENT',
-  syscall: 'open',
-  path: '/Users/mrjones/Github/Projects/sheltr-ai/apps/web/out/static/development/_buildManifest.js.tmp.mo6fo8crd8'
-}
- ⨯ [Error: ENOENT: no such file or directory, open '/Users/mrjones/Github/Projects/sheltr-ai/apps/web/out/static/development/_buildManifest.js.tmp.hjbybn09odq'] {
-  errno: -2,
-  code: 'ENOENT',
-  syscall: 'open',
-  path: '/Users/mrjones/Github/Projects/sheltr-ai/apps/web/out/static/development/_buildManifest.js.tmp.hjbybn09odq'
-}
- ⨯ [Error: ENOENT: no such file or directory, open '/Users/mrjones/Github/Projects/sheltr-ai/apps/web/out/static/development/_buildManifest.js.tmp.0h64df3do7y'] {
-  errno: -2,
-  code: 'ENOENT',
-  syscall: 'open',
-  path: '/Users/mrjones/Github/Projects/sheltr-ai/apps/web/out/static/development/_buildManifest.js.tmp.0h64df3do7y'
-}
-[Error: ENOENT: no such file or directory, open '/Users/mrjones/Github/Projects/sheltr-ai/apps/web/out/static/development/_buildManifest.js.tmp.hjbybn09odq'] {
-  errno: -2,
-  code: 'ENOENT',
-  syscall: 'open',
-  path: '/Users/mrjones/Github/Projects/sheltr-ai/apps/web/out/static/development/_buildManifest.js.tmp.hjbybn09odq'
-}
- ⨯ [Error: ENOENT: no such file or directory, open '/Users/mrjones/Github/Projects/sheltr-ai/apps/web/out/static/development/_buildManifest.js.tmp.xvn5o685en'] {
-  errno: -2,
-  code: 'ENOENT',
-  syscall: 'open',
-  path: '/Users/mrjones/Github/Projects/sheltr-ai/apps/web/out/static/development/_buildManifest.js.tmp.xvn5o685en'
-}
-[Error: ENOENT: no such file or directory, open '/Users/mrjones/Github/Projects/sheltr-ai/apps/web/out/static/development/_buildManifest.js.tmp.uqjo3tqxbus'] {
-  errno: -2,
-  code: 'ENOENT',
-  syscall: 'open',
-  path: '/Users/mrjones/Github/Projects/sheltr-ai/apps/web/out/static/development/_buildManifest.js.tmp.uqjo3tqxbus'
-}
+ ✓ Compiled / in 3s
+ GET / 200 in 3636ms
+ GET / 200 in 142ms
+ ✓ Compiled /login in 305ms
+ GET /login 200 in 375ms
+ ✓ Compiled /dashboard in 385ms
+ GET /dashboard 200 in 471ms
+ GET /dashboard 200 in 272ms
+ GET /dashboard 200 in 133ms
+ ✓ Compiled /dashboard/shelter-admin in 384ms
+ GET /dashboard/shelter-admin 200 in 443ms
+ GET /dashboard/shelter-admin 200 in 43ms
+ GET /dashboard/shelter-admin 200 in 41ms
+ GET /dashboard/shelter-admin 200 in 37ms
+ ✓ Compiled /_not-found/page in 369ms
+ GET /dashboard/shelter-admin/participants 404 in 611ms
+ GET /dashboard/shelter-admin/participants 404 in 101ms
+ GET /dashboard/shelter-admin 200 in 91ms
+ GET /dashboard/shelter-admin/services 404 in 53ms
+ GET /dashboard/shelter-admin/services 404 in 80ms
+ GET /dashboard/shelter-admin 200 in 88ms
+ ✓ Compiled middleware in 14ms
+ ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
+ GET /dashboard/shelter-admin 200 in 246ms
+ GET /dashboard/shelter-admin 200 in 56ms
+ ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
+ ✓ Compiled in 292ms
+ ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
+ ✓ Compiled middleware in 1ms
+ ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
+ GET /dashboard/shelter-admin 200 in 180ms
+ GET /dashboard/shelter-admin 200 in 78ms
+ ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
+ ✓ Compiled in 302ms
+ ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
+ ○ Compiling /dashboard/shelter-admin/participants ...
+ ✓ Compiled /dashboard/shelter-admin/participants in 547ms
+ GET /dashboard/shelter-admin/participants 200 in 616ms
+ ✓ Compiled /dashboard/shelter-admin/services in 435ms
+ GET /dashboard/shelter-admin/services 200 in 516ms
+ GET /dashboard/shelter-admin/resources 404 in 86ms
+ GET /dashboard/shelter-admin/resources 404 in 309ms
+ GET /dashboard/shelter-admin/services 200 in 153ms
+ GET /dashboard/shelter-admin/participants 200 in 56ms
+ GET /dashboard/shelter-admin 200 in 61ms
+ ✓ Compiled middleware in 2ms
+ ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
+ GET /dashboard/shelter-admin 200 in 152ms
+ GET /dashboard/shelter-admin 200 in 58ms
+ ✓ Compiled in 130ms
+ ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
+ ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
+ GET /dashboard/shelter-admin/participants 200 in 83ms
+ GET /dashboard/shelter-admin/services 200 in 368ms
+ ✓ Compiled /dashboard/shelter-admin/resources in 466ms
+ GET /dashboard/shelter-admin/resources 200 in 550ms
+ GET /dashboard/shelter-admin/reports 404 in 97ms
+ GET /dashboard/shelter-admin/reports 404 in 281ms
+ GET /dashboard/shelter-admin/resources 200 in 167ms
+ ✓ Compiled middleware in 1ms
+ ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
+ GET /dashboard/shelter-admin/resources 200 in 197ms
+ GET /dashboard/shelter-admin/resources 200 in 83ms
+ ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
+ ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
+ ○ Compiling /dashboard/shelter-admin/reports ...
+ ✓ Compiled /dashboard/shelter-admin/reports in 570ms
+ GET /dashboard/shelter-admin/reports 200 in 730ms
+ ✓ Compiled middleware in 2ms
+ ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
+ GET /dashboard/shelter-admin/reports 200 in 194ms
+ GET /dashboard/shelter-admin/reports 200 in 96ms
+ ✓ Compiled in 154ms
+ ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
+ ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
+ GET /dashboard/shelter-admin/reports 200 in 339ms
+ GET /login 200 in 160ms
+ GET / 200 in 215ms
+ GET /login 200 in 99ms
+ ✓ Compiled in 119ms
+ ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
 [?25h

@@ -16,6 +16,7 @@ After our major dashboard enhancements and database cleanup, this guide will hel
 
 ### 👥 **Current Test Users:**
 
+
 | Email | Role | Name | Status | Purpose |
 |-------|------|------|--------|---------|
 | `joel.yaffe@gmail.com` | super_admin | Joel Yaffe | ✅ Active | Platform management testing |
@@ -23,7 +24,6 @@ After our major dashboard enhancements and database cleanup, this guide will hel
 | `participant@example.com` | participant | Michael Rodriguez | ✅ Active | **NEW** - Participant features testing |
 | `david.donor@example.com` | donor | David Donor | ✅ Active | **NEW** - Donor dashboard testing |
 | `donor@example.com` | donor | Jane Supporter | ✅ Fixed | Additional donor testing |
-
 ---
 
 ## 🎯 **Testing Plan**

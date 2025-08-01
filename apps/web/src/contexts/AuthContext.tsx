@@ -12,7 +12,7 @@ import {
   sendEmailVerification,
   updateProfile
 } from 'firebase/auth';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { auth, db } from '../lib/firebase';
 
 // Types for our RBAC system
@@ -86,30 +86,58 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   // Clear error helper
   const clearError = () => setError(null);
 
-  // Extract custom claims from Firebase user
+    // Extract custom claims from Firebase user and Firestore data
   const extractCustomClaims = async (firebaseUser: User): Promise<AuthUser> => {
     try {
+      // First, try to get custom claims from Firebase (for backend-created users)
       const idTokenResult = await firebaseUser.getIdTokenResult();
       const customClaims = idTokenResult.claims as CustomClaims;
       
+      // Also fetch user data from Firestore (for direct Firebase Auth users)
+      let firestoreData: any = null;
+      try {
+        const userDocRef = doc(db, 'users', firebaseUser.uid);
+        const userDocSnap = await getDoc(userDocRef);
+        if (userDocSnap.exists()) {
+          firestoreData = userDocSnap.data();
+          console.log('📄 Loaded user data from Firestore:', firestoreData);
+        }
+      } catch (firestoreError) {
+        console.warn('⚠️ Could not fetch user data from Firestore:', firestoreError);
+      }
+      
+      // Merge Firebase custom claims with Firestore data (Firestore takes priority for newer users)
+      const role = firestoreData?.role || customClaims.role;
+      const tenantId = firestoreData?.tenantId || customClaims.tenant_id;
+      const permissions = firestoreData?.permissions || customClaims.permissions || [];
+      const shelterId = firestoreData?.shelterId || customClaims.shelter_id;
+      
+      console.log('🔐 User role detected:', role);
+      
       return {
         ...firebaseUser,
-        role: customClaims.role,
-        sheltrTenantId: customClaims.tenant_id,
-        permissions: customClaims.permissions || [],
-        shelterId: customClaims.shelter_id,
-        customClaims
+        role: role as UserRole,
+        sheltrTenantId: tenantId,
+        permissions: permissions,
+        shelterId: shelterId,
+        customClaims: {
+          ...customClaims,
+          role: role,
+          tenant_id: tenantId,
+          permissions: permissions,
+          shelter_id: shelterId
+        }
       };
     } catch (error) {
-      console.error('Error extracting custom claims:', error);
-              return {
-          ...firebaseUser,
-          role: undefined,
-          sheltrTenantId: undefined,
-          permissions: [],
-          shelterId: undefined,
-          customClaims: {}
-        };
+      console.error('Error extracting user data:', error);
+      return {
+        ...firebaseUser,
+        role: undefined,
+        sheltrTenantId: undefined,
+        permissions: [],
+        shelterId: undefined,
+        customClaims: {}
+      };
     }
   };
 

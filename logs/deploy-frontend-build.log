@@ -6,7 +6,7 @@
    - Environments: .env.local
 
    Creating an optimized production build ...
- ✓ Compiled successfully in 1000ms
+ ✓ Compiled successfully in 2000ms
    Skipping linting
    Checking validity of types ...
    Collecting page data ...
@@ -30,16 +30,16 @@ Route (app)                                 Size  First Load JS
 ├ ○ /about                               8.47 kB         121 kB
 ├ ƒ /api/calendar/create-event             128 B        99.9 kB
 ├ ƒ /api/email/send-confirmation           128 B        99.9 kB
-├ ○ /dashboard                           4.97 kB         232 kB
+├ ○ /dashboard                           5.17 kB         232 kB
 ├ ○ /dashboard/analytics                 5.88 kB         121 kB
-├ ○ /dashboard/donor                     6.46 kB         233 kB
+├ ○ /dashboard/donor                     6.68 kB         234 kB
 ├ ○ /dashboard/financial                 5.39 kB         121 kB
-├ ○ /dashboard/participant               7.43 kB         234 kB
+├ ○ /dashboard/participant               7.64 kB         235 kB
 ├ ○ /dashboard/platform                  4.76 kB         114 kB
 ├ ○ /dashboard/security                  5.54 kB         121 kB
-├ ○ /dashboard/shelter-admin             5.32 kB         232 kB
-├ ○ /dashboard/shelters                  15.8 kB         350 kB
-├ ○ /dashboard/users                     8.73 kB         343 kB
+├ ○ /dashboard/shelter-admin             5.53 kB         232 kB
+├ ○ /dashboard/shelters                  15.8 kB         351 kB
+├ ○ /dashboard/users                     8.93 kB         344 kB
 ├ ○ /docs                                4.86 kB         122 kB
 ├ ○ /docs/api                            2.06 kB         119 kB
 ├ ○ /docs/blockchain                      7.5 kB         120 kB
@@ -50,9 +50,9 @@ Route (app)                                 Size  First Load JS
 ├ ○ /impact                                10 kB         122 kB
 ├ ○ /investor-access                     5.82 kB         118 kB
 ├ ○ /investor-relations                  24.1 kB         143 kB
-├ ○ /login                               4.59 kB         222 kB
+├ ○ /login                               4.81 kB         222 kB
 ├ ○ /privacy                             10.5 kB         123 kB
-├ ○ /register                            5.22 kB         222 kB
+├ ○ /register                            5.41 kB         223 kB
 ├ ○ /scan-give                           6.62 kB         119 kB
 ├ ○ /solutions                           7.99 kB         120 kB
 ├ ○ /solutions/donors                    2.75 kB         115 kB

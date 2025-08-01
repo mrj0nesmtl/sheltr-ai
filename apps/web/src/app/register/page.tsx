@@ -4,6 +4,8 @@ import { RegisterForm } from '@/components/auth/RegisterForm';
 import { useAuth, UserRole } from '@/contexts/AuthContext';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, Suspense } from 'react';
+import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
 
 function RegisterPageContent() {
   const { user, loading } = useAuth();
@@ -39,15 +41,26 @@ function RegisterPageContent() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      {/* Back Button */}
+      <Link 
+        href="/"
+        className="fixed top-6 left-6 flex items-center text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors z-10"
+      >
+        <ArrowLeft className="h-4 w-4 mr-2" />
+        <span className="text-sm">Back to Home</span>
+      </Link>
+
       <div className="w-full">
         {/* SHELTR Icon */}
         <div className="text-center mb-8">
           <div className="flex justify-center mb-4">
-            <img 
-              src="/icon.svg" 
-              alt="SHELTR" 
-              className="h-16 w-auto filter invert dark:invert-0"
-            />
+            <Link href="/" className="cursor-pointer transition-transform hover:scale-105">
+              <img 
+                src="/icon.svg" 
+                alt="SHELTR" 
+                className="h-16 w-auto filter invert dark:invert-0"
+              />
+            </Link>
           </div>
           <p className="text-lg text-gray-600 dark:text-gray-400">
             Hacking Homelessness Through Technology

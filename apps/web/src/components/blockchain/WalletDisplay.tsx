@@ -9,7 +9,7 @@ import {
   TrendingUp, 
   Shield, 
   Copy, 
-  Refresh,
+  RefreshCw,
   Eye,
   EyeOff,
   AlertCircle
@@ -200,10 +200,10 @@ export const WalletDisplay: React.FC<WalletDisplayProps> = ({
             {/* Actions */}
             {showActions && (
               <div className="flex space-x-2">
-                <Button variant="outline" className="flex-1" onClick={handleRefresh}>
-                  <Refresh className="mr-2 h-4 w-4" />
-                  Refresh
-                </Button>
+                               <Button variant="outline" className="flex-1" onClick={handleRefresh}>
+                 <RefreshCw className="mr-2 h-4 w-4" />
+                 Refresh
+               </Button>
                 <Button variant="outline" className="flex-1">
                   <Eye className="mr-2 h-4 w-4" />
                   History
@@ -275,12 +275,12 @@ export const WalletDisplay: React.FC<WalletDisplayProps> = ({
 
         {/* Actions */}
         {showActions && (
-          <div className="flex space-x-2">
-            <Button variant="outline" size="sm" className="flex-1" onClick={handleRefresh}>
-              <Refresh className="mr-2 h-4 w-4" />
-              Refresh
-            </Button>
-          </div>
+                     <div className="flex space-x-2">
+             <Button variant="outline" size="sm" className="flex-1" onClick={handleRefresh}>
+               <RefreshCw className="mr-2 h-4 w-4" />
+               Refresh
+             </Button>
+           </div>
         )}
       </CardContent>
     </Card>

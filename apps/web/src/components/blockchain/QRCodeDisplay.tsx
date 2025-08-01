@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { 
   QrCode, 
-  Refresh, 
+  RefreshCw, 
   Download, 
   Share2,
   Copy,
@@ -181,7 +181,7 @@ export const QRCodeDisplay: React.FC<QRCodeDisplayProps> = ({
               )}
             </div>
             <Button variant="ghost" size="sm" onClick={handleGenerateNew}>
-              <Refresh className="h-4 w-4" />
+              <RefreshCw className="h-4 w-4" />
             </Button>
           </div>
         </CardContent>
@@ -302,7 +302,7 @@ export const QRCodeDisplay: React.FC<QRCodeDisplayProps> = ({
             {/* Actions */}
             <div className="grid grid-cols-3 gap-2">
               <Button variant="outline" size="sm" onClick={handleGenerateNew}>
-                <Refresh className="mr-2 h-4 w-4" />
+                <RefreshCw className="mr-2 h-4 w-4" />
                 Refresh
               </Button>
               <Button variant="outline" size="sm" onClick={handleDownload}>

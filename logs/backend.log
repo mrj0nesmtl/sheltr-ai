@@ -16,3 +16,8 @@ INFO:main:🔐 Authentication system initialized
 INFO:main:🏢 Multi-tenant architecture ready
 INFO:     Application startup complete.
 INFO:     127.0.0.1:58977 - "GET /health HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:main:🛑 SHELTR-AI API shutting down...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [37614]

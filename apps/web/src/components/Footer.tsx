@@ -59,7 +59,7 @@ export default function Footer() {
         
         {/* Copyright */}
         <div className="border-t pt-6 mt-6 text-center text-xs text-muted-foreground">
-          <p>&copy; 2025 SHELTR-AI. Built with ❤️ in memory of Gunnar Blaze.</p>
+          <p>&copy; 2025 SHELTR. Built with ❤️ in memory of Gunnar Blaze.</p>
         </div>
       </div>
     </footer>

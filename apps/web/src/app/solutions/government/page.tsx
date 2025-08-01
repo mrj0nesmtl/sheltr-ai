@@ -55,7 +55,7 @@ export default function GovernmentPage() {
             Data-Driven Policy Making, Transparent Budget Allocation
           </h1>
           <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
-            Our comprehensive policy brief demonstrates how SHELTR-AI enables evidence-based homelessness policy 
+            Our comprehensive policy brief demonstrates how SHELTR enables evidence-based homelessness policy 
             and transparent public fund tracking. Review detailed implementation strategies and projected outcomes 
             for your jurisdiction.
           </p>
@@ -353,7 +353,7 @@ export default function GovernmentPage() {
           </div>
           
           <div className="border-t pt-8 mt-8 text-center text-sm text-muted-foreground">
-            <p>&copy; 2025 SHELTR-AI. Built with ❤️ in memory of Gunnar Blaze.</p>
+            <p>&copy; 2025 SHELTR. Built with ❤️ in memory of Gunnar Blaze.</p>
           </div>
         </div>
       </footer>

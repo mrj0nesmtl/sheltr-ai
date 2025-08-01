@@ -41,7 +41,7 @@ export default function OrganizationsCaseStudyPage() {
               <Building2 className="h-12 w-12 text-blue-600" />
               <div>
                 <div className="flex items-center gap-2 mb-2">
-                  <h1 className="text-4xl font-bold">SHELTR-AI Case Study</h1>
+                  <h1 className="text-4xl font-bold">SHELTR for Shelters -  Case Study</h1>
                   <Badge className="bg-blue-500 text-white">Organizations</Badge>
                 </div>
                 <p className="text-lg text-muted-foreground">
@@ -50,11 +50,11 @@ export default function OrganizationsCaseStudyPage() {
                 <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
                   <span>Case Study</span>
                   <span>•</span>
-                  <span>January 2025</span>
+                  <span>June 2025</span>
                   <span>•</span>
                   <span>15 min read</span>
                   <span>•</span>
-                  <Badge variant="outline" className="text-green-600 border-green-600">Implementation Ready</Badge>
+                  <Badge variant="outline" className="text-green-600 border-green-600">Implementation Studied</Badge>
                 </div>
               </div>
             </div>
@@ -80,7 +80,7 @@ export default function OrganizationsCaseStudyPage() {
             <div className="prose prose-lg max-w-none dark:prose-invert mb-12">
               <h2>Executive Summary</h2>
               <p>
-                This case study examines how SHELTR-AI revolutionizes shelter and NGO operations through 
+                This case study examines how SHELTR can revolutionize shelter and NGO operations through 
                 blockchain-powered participant management, automated reporting, and transparent fund tracking. 
                 Organizations implementing our platform report significant improvements in operational efficiency, 
                 funding success rates, and participant outcomes.
@@ -396,7 +396,7 @@ export default function OrganizationsCaseStudyPage() {
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-3xl font-bold mb-6">Ready to Transform Your Operations?</h2>
             <p className="text-xl text-muted-foreground mb-8">
-              Join forward-thinking organizations already using SHELTR-AI to maximize their impact.
+              Join forward-thinking organizations already using SHELTR to maximize their impact.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">

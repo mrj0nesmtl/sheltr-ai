@@ -47,9 +47,9 @@ export default function TermsPage() {
                   SHELTR-AI Platform Terms and Conditions
                 </p>
                 <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
-                  <span>Effective: January 25, 2025</span>
+                  <span>Effective: July 31, 2025</span>
                   <span>•</span>
-                  <span>Last Updated: January 25, 2025</span>
+                  <span>Last Updated: July 31, 2025</span>
                 </div>
               </div>
             </div>
@@ -107,7 +107,7 @@ export default function TermsPage() {
               <h2>1. Acceptance of Terms</h2>
               <p>
                 By accessing or using the SHELTR platform ("Platform"), including the website, mobile applications, 
-                smart contracts, and related services provided by SHELTR-AI Technologies Inc. ("Company", "we", "us", or "our"), 
+                smart contracts, and related services provided by SHELTR Technologies Inc. ("Company", "we", "us", or "our"), 
                 you ("User", "you", or "your") agree to be bound by these Terms of Service ("Terms").
               </p>
               <p>
@@ -346,13 +346,13 @@ export default function TermsPage() {
               <h2>15. Dispute Resolution</h2>
               <h3>15.1 Governing Law</h3>
               <p>
-                These Terms are governed by the laws of Ontario, Canada, without regard to conflict of law principles.
+                These Terms are governed by the laws of British Columbia, Canada, without regard to conflict of law principles.
               </p>
 
               <h3>15.2 Arbitration</h3>
               <p>
                 Any disputes shall be resolved through binding arbitration in accordance with the 
-                Arbitration Act of Ontario. Class action lawsuits are not permitted.
+                Arbitration Act of British Columbia. Class action lawsuits are not permitted.
               </p>
 
               <h2>16. Changes to Terms</h2>
@@ -374,8 +374,8 @@ export default function TermsPage() {
                 For questions about these Terms, contact us at:
               </p>
               <ul>
-                <li>Email: legal@sheltr-ai.com</li>
-                <li>Address: SHELTR-AI Technologies Inc., Toronto, Ontario, Canada</li>
+                <li>Email: info@arcanaconcept.com</li>
+                <li>Address: SHELTR Technologies by Arcana Concept, Canada</li>
                 <li>Website: https://sheltr-ai.web.app</li>
               </ul>
 
@@ -396,7 +396,7 @@ export default function TermsPage() {
             <div className="mt-12 p-6 bg-slate-50 dark:bg-slate-800 rounded-lg">
               <h3 className="font-semibold mb-4">Legal Disclaimer</h3>
               <p className="text-sm text-muted-foreground">
-                This document was last updated on January 25, 2025. These Terms of Service are subject to change. 
+                This document was last updated on July 25, 2025. These Terms of Service are subject to change. 
                 Users are encouraged to review these terms regularly. For specific legal advice regarding your 
                 situation, please consult with a qualified attorney.
               </p>

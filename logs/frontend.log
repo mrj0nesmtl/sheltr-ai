@@ -8,72 +8,60 @@
    - Environments: .env.local
 
  ✓ Starting...
- ✓ Compiled middleware in 201ms
- ✓ Ready in 2.1s
+ ✓ Compiled middleware in 131ms
+ ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
+ ✓ Ready in 1572ms
  ○ Compiling / ...
- ✓ Compiled / in 2.9s
- GET / 200 in 3579ms
- GET / 200 in 164ms
- ✓ Compiled /about in 278ms
- GET /about 200 in 326ms
- ✓ Compiled in 55ms
- ✓ Compiled in 46ms
- ✓ Compiled in 44ms
- ✓ Compiled in 52ms
- ✓ Compiled in 47ms
- ✓ Compiled in 47ms
- ✓ Compiled in 38ms
- ✓ Compiled in 47ms
- ✓ Compiled in 42ms
- ✓ Compiled in 35ms
- ✓ Compiled in 39ms
- ✓ Compiled in 40ms
- ✓ Compiled in 35ms
- ✓ Compiled in 40ms
- ✓ Compiled in 39ms
- ✓ Compiled in 44ms
- ✓ Compiled in 37ms
- ✓ Compiled in 41ms
- ✓ Compiled in 65ms
- ✓ Compiled /about in 20ms
- GET /about 200 in 132ms
- ✓ Compiled /impact in 325ms
- GET /impact 200 in 426ms
- GET / 200 in 47ms
- GET / 200 in 43ms
- ✓ Compiled /solutions in 251ms
- GET /solutions 200 in 300ms
- GET / 200 in 49ms
- GET / 200 in 175ms
- ✓ Compiled /investor-access in 241ms
- GET /investor-access 200 in 542ms
- ✓ Compiled /investor-relations in 352ms
- GET /investor-relations 200 in 436ms
- GET / 200 in 74ms
- GET /solutions 200 in 58ms
- GET /about 200 in 56ms
- GET / 200 in 51ms
- GET /about 200 in 55ms
- GET /solutions 200 in 49ms
- GET / 200 in 52ms
- GET /about 200 in 85ms
- GET / 200 in 141ms
- GET / 200 in 63ms
- ✓ Compiled in 105ms
- ✓ Compiled in 60ms
- GET / 200 in 715ms
- GET /solutions 200 in 57ms
- GET /about 200 in 42ms
- GET /solutions 200 in 134ms
- ✓ Compiled /scan-give in 445ms
- GET /scan-give 200 in 512ms
- GET /impact 200 in 45ms
- GET /about 200 in 46ms
- GET / 200 in 83ms
- GET / 200 in 53ms
- ✓ Compiled in 112ms
- ✓ Compiled in 128ms
- GET / 200 in 433ms
- GET / 200 in 480ms
- GET /about 200 in 72ms
- ✓ Compiled in 167ms
+ ✓ Compiled / in 2.6s
+ GET / 200 in 3122ms
+ GET / 200 in 169ms
+ ✓ Compiled /login in 301ms
+ GET /login 200 in 342ms
+ ✓ Compiled /dashboard in 390ms
+ GET /dashboard 200 in 457ms
+ GET /dashboard 200 in 81ms
+ ✓ Compiled /dashboard/platform in 345ms
+ GET /dashboard/platform 200 in 426ms
+ ✓ Compiled /dashboard/shelter-admin in 402ms
+ GET /dashboard/shelter-admin 200 in 531ms
+ ✓ Compiled /dashboard/donor in 314ms
+ GET /dashboard/donor 200 in 409ms
+ ✓ Compiled /dashboard/participant in 324ms
+ ⨯ ./src/app/dashboard/participant/page.tsx:375:13
+Parsing ecmascript source code failed
+[0m [90m 373 |[39m           [33m<[39m[33m/[39m[33mdiv[39m[33m>[39m
+ [90m 374 |[39m         [33m<[39m[33m/[39m[33mCardContent[39m[33m>[39m
+[31m[1m>[22m[39m[90m 375 |[39m       [33m<[39m[33m/[39m[33mdiv[39m[33m>[39m
+ [90m     |[39m             [31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m 376 |[39m
+ [90m     |[39m [31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m 377 |[39m       {[90m/* Recent Activity & Blockchain Transactions */[39m}
+ [90m     |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 378 |[39m       [33m<[39m[33mdiv[39m className[33m=[39m[32m"grid grid-cols-1 lg:grid-cols-2 gap-6"[39m[33m>[39m
+ [90m 379 |[39m         [33m<[39m[33mCard[39m[33m>[39m
+ [90m 380 |[39m           [33m<[39m[33mCardHeader[39m[33m>[39m[0m
+
+Expected '</', got 'jsx text (
+
+      )'
+
+
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 932ms
+ GET /dashboard/participant/ 500 in 1459ms
+ GET /dashboard/donor 500 in 89ms
+ ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
+ ✓ Compiled in 331ms
+ ✓ Compiled /dashboard/participant in 143ms
+Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
+1. You might have mismatching versions of React and the renderer (such as React DOM)
+2. You might be breaking the Rules of Hooks
+3. You might have more than one copy of React in the same app
+See https://react.dev/link/invalid-hook-call for tips about how to debug and fix this problem.
+ ⨯ [TypeError: Cannot read properties of null (reading 'useContext')] {
+  digest: '4118901781'
+}
+ GET /dashboard/shelter-admin 200 in 1380ms
+ GET /dashboard/platform 200 in 1382ms
+ GET /dashboard/donor 200 in 1390ms
+ GET /dashboard/participant/ 500 in 1386ms

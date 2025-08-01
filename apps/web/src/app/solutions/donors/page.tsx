@@ -66,7 +66,7 @@ export default function DonorsPage() {
       <section className="py-16 bg-orange-500/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Why Donors Love SHELTR-AI</h2>
+            <h2 className="text-3xl font-bold mb-4">Why Donors Love SHELTR</h2>
             <p className="text-xl text-muted-foreground">The most transparent and impactful way to end homelessness</p>
           </div>
 
@@ -321,7 +321,7 @@ export default function DonorsPage() {
                 <span className="text-orange-600 dark:text-orange-400 font-bold">1</span>
               </div>
               <h3 className="font-semibold mb-2">Find a QR Code</h3>
-              <p className="text-sm text-muted-foreground">Look for SHELTR-AI QR codes or visit our platform</p>
+              <p className="text-sm text-muted-foreground">Look for SHELTR QR codes or visit our platform</p>
             </div>
             <div className="text-center">
               <div className="w-12 h-12 bg-orange-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -383,7 +383,7 @@ export default function DonorsPage() {
           </div>
           
           <div className="border-t pt-8 mt-8 text-center text-sm text-muted-foreground">
-            <p>&copy; 2025 SHELTR-AI. Built with ❤️ in memory of Gunnar Blaze.</p>
+            <p>&copy; 2025 SHELTR. Built with ❤️ in memory of Gunnar Blaze.</p>
           </div>
         </div>
       </footer>

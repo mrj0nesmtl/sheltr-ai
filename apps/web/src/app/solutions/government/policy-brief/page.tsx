@@ -41,7 +41,7 @@ export default function GovernmentPolicyBriefPage() {
               <MapPin className="h-12 w-12 text-purple-600" />
               <div>
                 <div className="flex items-center gap-2 mb-2">
-                  <h1 className="text-4xl font-bold">SHELTR-AI Policy Brief</h1>
+                  <h1 className="text-4xl font-bold">SHELTR Policy Brief</h1>
                   <Badge className="bg-purple-500 text-white">Government</Badge>
                 </div>
                 <p className="text-lg text-muted-foreground">
@@ -80,7 +80,7 @@ export default function GovernmentPolicyBriefPage() {
             <div className="prose prose-lg max-w-none dark:prose-invert mb-12">
               <h2>Executive Summary</h2>
               <p>
-                This policy brief outlines how SHELTR-AI enables government agencies to implement 
+                This policy brief outlines how SHELTR enables government agencies to implement 
                 evidence-based homelessness policy through comprehensive data analytics, transparent 
                 budget allocation, and measurable outcomes. Our blockchain-powered platform provides 
                 unprecedented visibility into program effectiveness and public fund utilization.
@@ -185,7 +185,7 @@ export default function GovernmentPolicyBriefPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4">SHELTR-AI Solution Framework</h2>
+              <h2 className="text-3xl font-bold mb-4">SHELTR Solution Framework</h2>
               <p className="text-xl text-muted-foreground">
                 Comprehensive platform for evidence-based policy implementation
               </p>
@@ -529,7 +529,7 @@ export default function GovernmentPolicyBriefPage() {
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-3xl font-bold mb-6">Ready to Transform Policy Making?</h2>
             <p className="text-xl text-muted-foreground mb-8">
-              Join forward-thinking government agencies using SHELTR-AI for evidence-based homelessness policy.
+              Join forward-thinking government agencies using SHELTR for evidence-based homelessness policy.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">

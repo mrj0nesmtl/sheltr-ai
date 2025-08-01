@@ -93,7 +93,7 @@ export default function ScanGivePage() {
           </h1>
           <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
             Revolutionary QR-code based donations that put money directly into the hands 
-            of those who need it most. 80% goes directly to participants, 15% to housing, 5% to operations.
+            of those who need it most.
           </p>
           <Link href="/register">
             <Button size="lg" className="mr-4">

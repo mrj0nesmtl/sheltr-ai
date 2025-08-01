@@ -313,13 +313,13 @@ export default function AboutPage() {
               </p>
               
               <p className="text-lg leading-relaxed">
-                Founder Joel Yaffe&rsquo;s journey into tech for good wasn&rsquo;t born in a boardroom—it emerged from witnessing 
+                This journey into tech-for-good wasn&rsquo;t born in a boardroom—it emerged from witnessing 
                 the disconnect between charitable intentions and measurable impact. Too often, well-meaning donations 
                 disappeared into administrative overhead, leaving both donors frustrated and those in need still struggling.
               </p>
               
               <p className="text-lg leading-relaxed">
-                SHELTR represents an attempt to join the brilliant collective of Community Angels doing transformative work—
+                SHELTR represents an attempt to join the brilliant collective of Internet Angels doing transformative work—
                 creators who use their platforms and influence to directly help those in need, proving that technology 
                 and social media can be forces for genuine, lasting change.
               </p>
@@ -364,7 +364,7 @@ export default function AboutPage() {
                 </CardHeader>
                 <CardContent>
                   <p className="text-sm text-muted-foreground mb-3">
-                    Google Cloud Platform with AI embeddings for intelligent donor-participant matching
+                    Google Cloud Platform with AI trimmings for intelligent donor-participant matching
                   </p>
                   <div className="flex flex-wrap gap-2">
                     <span className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs px-2 py-1 rounded">Google Cloud AI</span>

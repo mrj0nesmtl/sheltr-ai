@@ -52,11 +52,11 @@ export default function OrganizationsPage() {
           </div>
           <Badge variant="secondary" className="mb-4 bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20">Case Study</Badge>
           <h1 className="text-4xl font-bold mb-6">
-            Streamline Your Operations, Amplify Your Impact
+            Streamline Your Mission, Attract and Amplify Your Impact
           </h1>
           <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
-            See how SHELTR-AI transforms shelter and NGO operations through our comprehensive case study. 
-            Discover proven strategies for reducing administrative burden while maximizing direct service impact.
+            See how SHELTR could transform fundraising operations through our comprehensive case study. 
+            Discover proven strategies for increasing funding while maximizing direct service impact.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
@@ -77,15 +77,15 @@ export default function OrganizationsPage() {
       <section className="py-16 bg-blue-500/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Why Organizations Choose SHELTR-AI</h2>
-            <p className="text-xl text-muted-foreground">Purpose-built for the unique challenges of homelessness services</p>
+            <h2 className="text-3xl font-bold mb-4">Why Organizations Should Trust SHELTR</h2>
+            <p className="text-xl text-muted-foreground">Open source, purpose-built for the unique challenges of emergency homelessness services.</p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
             <Card className="border-blue-500/20 bg-blue-500/5">
               <CardHeader className="text-center">
                 <Clock className="h-12 w-12 text-blue-600 dark:text-blue-400 mx-auto mb-4" />
-                <CardTitle className="text-blue-600 dark:text-blue-400">Save 15+ Hours Weekly</CardTitle>
+                <CardTitle className="text-blue-600 dark:text-blue-400">Save Hours</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground text-center">
@@ -98,7 +98,7 @@ export default function OrganizationsPage() {
             <Card className="border-blue-500/20 bg-blue-500/5">
               <CardHeader className="text-center">
                 <DollarSign className="h-12 w-12 text-blue-600 dark:text-blue-400 mx-auto mb-4" />
-                <CardTitle className="text-blue-600 dark:text-blue-400">Increase Funding Success</CardTitle>
+                <CardTitle className="text-blue-600 dark:text-blue-400">Increase Participant Funding</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground text-center">
@@ -355,7 +355,7 @@ export default function OrganizationsPage() {
           </div>
           
           <div className="border-t pt-8 mt-8 text-center text-sm text-muted-foreground">
-            <p>&copy; 2025 SHELTR-AI. Built with ❤️ in memory of Gunnar Blaze.</p>
+            <p>&copy; 2025 SHELTR. Built with ❤️ in memory of Gunnar Blaze.</p>
           </div>
         </div>
       </footer>

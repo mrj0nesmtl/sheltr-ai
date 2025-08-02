@@ -8,108 +8,123 @@
    - Environments: .env.local
 
  ✓ Starting...
- ✓ Compiled middleware in 148ms
+ ✓ Compiled middleware in 155ms
  ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
- ✓ Ready in 1492ms
+ ✓ Ready in 1829ms
  ○ Compiling / ...
  ✓ Compiled / in 2.4s
- GET / 200 in 2858ms
- ○ Compiling /dashboard ...
- ✓ Compiled /dashboard in 571ms
- GET /dashboard 200 in 805ms
- GET /dashboard 200 in 112ms
- ✓ Compiled /dashboard/participant in 321ms
- GET /dashboard/participant 200 in 383ms
- GET /dashboard/participant 200 in 55ms
- GET /dashboard/participant 200 in 44ms
- GET /dashboard/participant 200 in 50ms
- ✓ Compiled /dashboard/participant/profile in 251ms
- GET /dashboard/participant/profile 200 in 289ms
- ✓ Compiled /dashboard/participant/services in 213ms
- GET /dashboard/participant/services 200 in 252ms
- ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
- GET /dashboard/participant/services 200 in 384ms
- GET /dashboard/participant/profile 200 in 145ms
- GET /dashboard/participant/services 200 in 58ms
- GET /dashboard/participant/services 200 in 81ms
- ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
- ✓ Compiled in 191ms
- ⚠ Fast Refresh had to perform a full reload due to a runtime error.
- GET /dashboard/participant/services 200 in 447ms
- ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
- ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
- ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
- ✓ Compiled in 82ms
- ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
- ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
- ✓ Compiled in 171ms
- GET /dashboard/participant/services 200 in 289ms
- ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
- ✓ Compiled in 229ms
- ✓ Compiled in 77ms
- ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
- ✓ Compiled in 69ms
- ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
- GET /dashboard/participant/services 200 in 289ms
- ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
- ✓ Compiled in 226ms
- GET /dashboard/participant/services 200 in 273ms
- GET /dashboard/participant/services 200 in 130ms
- ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
- ✓ Compiled in 211ms
- ✓ Compiled in 77ms
- ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
- ✓ Compiled in 83ms
- ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
- GET /dashboard/participant/services 200 in 384ms
- GET /dashboard/participant/services 200 in 77ms
- ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
- ✓ Compiled in 200ms
- ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
- ✓ Compiled in 258ms
- ✓ Compiled in 74ms
- ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
- GET /dashboard/participant/services 200 in 494ms
- GET / 200 in 141ms
- ✓ Compiled /login in 466ms
- GET /login 200 in 518ms
- GET /login 200 in 80ms
- GET /dashboard 200 in 66ms
- GET /login 200 in 208ms
- GET /login 200 in 222ms
- GET /dashboard/participant 200 in 106ms
- GET /dashboard/participant 200 in 82ms
- GET /dashboard/participant 200 in 60ms
- GET /dashboard/participant 200 in 57ms
- GET /dashboard/participant/profile 200 in 51ms
- GET /dashboard/participant/services 200 in 41ms
- GET /dashboard/participant/services 200 in 85ms
- GET / 200 in 66ms
- GET /login 200 in 92ms
- GET /login 200 in 72ms
- GET /login 200 in 96ms
- GET /dashboard 200 in 91ms
- GET /login 200 in 242ms
- GET /login 200 in 98ms
- GET /dashboard 200 in 58ms
- GET /dashboard/participant 200 in 134ms
+ GET / 200 in 2874ms
+ ✓ Compiled /dashboard in 327ms
+ GET /dashboard 200 in 445ms
+ GET / 200 in 211ms
+ ○ Compiling /login ...
+ ✓ Compiled /login in 528ms
+ GET /login 200 in 638ms
+ GET /login 200 in 84ms
+ GET / 200 in 175ms
+ GET /login 200 in 44ms
+ GET /dashboard 200 in 69ms
+ GET /login 200 in 68ms
+ GET /login 200 in 48ms
+ GET /dashboard 200 in 51ms
+ ✓ Compiled /dashboard/donor in 385ms
+ GET /dashboard/donor 200 in 475ms
+ GET /dashboard/donor 200 in 74ms
+ GET /dashboard/donor 200 in 54ms
+ GET /dashboard/donor 200 in 45ms
+ ✓ Compiled /dashboard/donor/donations in 386ms
+ GET /dashboard/donor/donations 200 in 463ms
+ ✓ Compiled /dashboard/donor/impact in 365ms
+ GET /dashboard/donor/impact 200 in 444ms
+ ✓ Compiled /dashboard/donor/tax-documents in 369ms
+ GET /dashboard/donor/tax-documents 200 in 450ms
+ ✓ Compiled /dashboard/donor/sheltr-portfolio in 340ms
+ GET /dashboard/donor/sheltr-portfolio 200 in 434ms
+ ✓ Compiled /dashboard/donor/settings in 331ms
+ GET /dashboard/donor/settings 200 in 418ms
+ GET / 200 in 112ms
+ GET /login 200 in 104ms
+ GET /login 200 in 54ms
+ GET /dashboard 200 in 60ms
+ GET /login 200 in 56ms
+ GET /login 200 in 48ms
+ GET /dashboard 200 in 68ms
+ ○ Compiling /dashboard/participant ...
+ ✓ Compiled /dashboard/participant in 506ms
+ GET /dashboard/participant 200 in 578ms
  GET /dashboard/participant 200 in 79ms
+ GET /dashboard/participant 200 in 68ms
  GET /dashboard/participant 200 in 74ms
- GET /dashboard/participant 200 in 55ms
- GET /dashboard/participant/profile 200 in 70ms
- GET /dashboard/participant/services 200 in 49ms
- GET /dashboard/participant/services 200 in 94ms
- GET /dashboard/participant 200 in 70ms
- ✓ Compiled /dashboard/participant/wallet in 423ms
- GET /dashboard/participant/wallet 200 in 474ms
- ✓ Compiled /dashboard/participant/support in 267ms
- GET /dashboard/participant/support 200 in 341ms
- GET /dashboard/participant 200 in 50ms
- GET /dashboard/participant/profile 200 in 56ms
- GET /dashboard/participant/services 200 in 37ms
- GET /dashboard/participant/services 200 in 263ms
- GET / 200 in 78ms
- GET /login 200 in 116ms
- GET /login 200 in 64ms
- GET /login 200 in 89ms
-[?25h
+ ✓ Compiled /dashboard/participant/profile in 329ms
+ GET /dashboard/participant/profile 200 in 373ms
+ ✓ Compiled /dashboard/participant/services in 302ms
+ GET /dashboard/participant/services 200 in 349ms
+ ✓ Compiled /dashboard/participant/wallet in 415ms
+ GET /dashboard/participant/wallet 200 in 470ms
+ GET /dashboard/participant 200 in 48ms
+ GET /dashboard/participant/profile 200 in 52ms
+ ○ Compiling /dashboard/participant/support ...
+ ✓ Compiled /dashboard/participant/support in 737ms
+ GET /dashboard/participant/support 200 in 880ms
+ GET / 200 in 52ms
+ GET /login 200 in 50ms
+ GET /dashboard 200 in 56ms
+ GET /dashboard 200 in 53ms
+ GET /dashboard/participant 200 in 74ms
+ GET /dashboard/participant 200 in 54ms
+ GET /dashboard/participant 200 in 58ms
+ GET /dashboard/participant 200 in 119ms
+ GET / 200 in 83ms
+ GET /login 200 in 107ms
+ GET /login 200 in 52ms
+ GET / 200 in 48ms
+ ✓ Compiled /_not-found/page in 211ms
+ GET /invertor-access 404 in 323ms
+ ✓ Compiled /investor-access in 243ms
+ GET /investor-access 200 in 382ms
+ ✓ Compiled /investor-relations in 375ms
+ GET /investor-relations 200 in 439ms
+ GET / 200 in 63ms
+ ✓ Compiled /solutions in 499ms
+ GET /solutions 200 in 628ms
+ ✓ Compiled /impact in 310ms
+ GET /impact 200 in 389ms
+ ✓ Compiled /docs in 347ms
+ GET /docs 200 in 449ms
+ GET /docs 200 in 87ms
+ ✓ Compiled /docs/whitepaper in 291ms
+ GET /docs/whitepaper 200 in 363ms
+ ✓ Compiled /tokenomics in 333ms
+ GET /tokenomics 200 in 415ms
+ GET /docs 200 in 253ms
+ ✓ Compiled /docs/hacking-homelessness in 268ms
+ GET /docs/hacking-homelessness 200 in 365ms
+ GET /docs/whitepaper 200 in 54ms
+ ✓ Compiled /docs/blockchain in 291ms
+ GET /docs/blockchain 200 in 371ms
+ GET / 200 in 50ms
+ GET /solutions 200 in 51ms
+ ✓ Compiled /solutions/organizations in 293ms
+ GET /solutions/organizations 200 in 471ms
+ GET /tokenomics 200 in 51ms
+ ○ Compiling /about ...
+ ✓ Compiled /about in 558ms
+ GET /about 200 in 757ms
+ GET /impact 200 in 72ms
+ GET /impact 200 in 49ms
+ GET /tokenomics 200 in 98ms
+ GET /impact 200 in 178ms
+ GET /about 200 in 48ms
+ GET /solutions 200 in 68ms
+ GET / 200 in 48ms
+ ○ Compiling /register ...
+ ✓ Compiled /register in 558ms
+ GET /register 200 in 830ms
+ GET / 200 in 55ms
+ GET /about 200 in 44ms
+ ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
+ ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
+ ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
+ ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
+ ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
+ ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export

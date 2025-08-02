@@ -18,6 +18,7 @@ from routers.auth import router as auth_router
 from routers.analytics import router as analytics_router
 from routers.chatbot import router as chatbot_router
 from routers.services import router as services_router
+from routers.users import router as users_router
 
 # Set up logging
 logging.basicConfig(
@@ -177,6 +178,7 @@ app.include_router(auth_router)
 app.include_router(analytics_router)
 app.include_router(chatbot_router)
 app.include_router(services_router)
+app.include_router(users_router)
 
 # Health check endpoints
 @app.get("/", tags=["Health"])

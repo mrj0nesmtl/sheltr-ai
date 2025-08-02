@@ -6,7 +6,8 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { profileService, type UserProfile, type PersonalInfo } from '@/services/profileService';
 import { 
   User, 
   Camera,
@@ -110,8 +111,34 @@ const mockProfile = {
 export default function ParticipantProfile() {
   const { user, hasRole } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
-  const [profile, setProfile] = useState(mockProfile);
+  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [activeSection, setActiveSection] = useState('personal');
+
+  // Load user profile on component mount
+  useEffect(() => {
+    async function loadProfile() {
+      if (!user) return;
+      
+      try {
+        setLoading(true);
+        setError(null);
+        const userProfile = await profileService.getUserProfile();
+        setProfile(userProfile);
+      } catch (err) {
+        console.error('Failed to load profile:', err);
+        setError('Failed to load profile. Using default data.');
+        // Fallback to mock data
+        setProfile(profileService.getMockProfile());
+      } finally {
+        setLoading(false);
+      }
+    }
+    
+    loadProfile();
+  }, [user]);
 
   // Check if user has participant or super admin access
   if (!hasRole('participant') && !hasRole('super_admin')) {
@@ -127,6 +154,36 @@ export default function ParticipantProfile() {
     );
   }
 
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="text-center py-12">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+        <p className="mt-2 text-gray-600 dark:text-gray-400">Loading profile...</p>
+      </div>
+    );
+  }
+
+  // Show error state or return if no profile
+  if (!profile) {
+    return (
+      <div className="text-center py-12">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+          Profile Not Found
+        </h2>
+        <p className="text-gray-600 dark:text-gray-400">
+          {error || 'Unable to load profile.'}
+        </p>
+        <Button 
+          onClick={() => window.location.reload()} 
+          className="mt-4"
+        >
+          Retry
+        </Button>
+      </div>
+    );
+  }
+
   // Get user display name
   const getUserDisplayName = () => {
     if (user?.displayName) return user.displayName;
@@ -138,10 +195,34 @@ export default function ParticipantProfile() {
     return 'Participant';
   };
 
-  const handleSave = () => {
-    // Implement save logic here
-    setIsEditing(false);
-    // Show success message
+  const handleSave = async () => {
+    if (!profile) return;
+    
+    try {
+      setSaving(true);
+      setError(null);
+      
+      // Save the profile
+      const result = await profileService.updateUserProfile({
+        personalInfo: profile.personalInfo,
+        emergencyContacts: profile.emergencyContacts,
+        goals: profile.goals,
+        preferences: profile.preferences
+      });
+      
+      if (result.success) {
+        setIsEditing(false);
+        alert('Profile updated successfully!');
+      } else {
+        throw new Error(result.message);
+      }
+    } catch (err) {
+      console.error('Failed to save profile:', err);
+      setError('Failed to save profile. Please try again.');
+      alert('Failed to save profile. Please try again.');
+    } finally {
+      setSaving(false);
+    }
   };
 
   const addGoal = () => {
@@ -183,10 +264,14 @@ export default function ParticipantProfile() {
         <div className="flex space-x-2">
           {isEditing ? (
             <>
-              <Button onClick={handleSave} className="bg-green-600 hover:bg-green-700">
-                <Save className="w-4 h-4 mr-2" />
-                Save Changes
-              </Button>
+                              <Button 
+                  onClick={handleSave} 
+                  className="bg-green-600 hover:bg-green-700"
+                  disabled={saving}
+                >
+                  <Save className="w-4 h-4 mr-2" />
+                  {saving ? 'Saving...' : 'Save Changes'}
+                </Button>
               <Button variant="outline" onClick={() => setIsEditing(false)}>
                 Cancel
               </Button>

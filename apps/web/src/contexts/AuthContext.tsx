@@ -113,6 +113,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const shelterId = firestoreData?.shelterId || customClaims.shelter_id;
       
       console.log('🔐 User role detected:', role);
+      console.log('🔍 Full user data debug:', {
+        email: firebaseUser.email,
+        displayName: firebaseUser.displayName,
+        firestoreRole: firestoreData?.role,
+        customClaimsRole: customClaims.role,
+        finalRole: role,
+        tenantId,
+        shelterId
+      });
       
       return {
         ...firebaseUser,

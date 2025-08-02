@@ -8,22 +8,21 @@
    - Environments: .env.local
 
  ✓ Starting...
- ✓ Compiled middleware in 128ms
+ ✓ Compiled middleware in 148ms
  ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
- ✓ Ready in 1685ms
+ ✓ Ready in 1566ms
  ○ Compiling / ...
- ✓ Compiled / in 2.7s
- GET / 200 in 3265ms
- GET / 200 in 201ms
- GET / 200 in 151ms
- ○ Compiling /login ...
- ✓ Compiled /login in 555ms
- GET /login 200 in 713ms
- GET /login 200 in 91ms
- ✓ Compiled /dashboard in 399ms
- GET /dashboard 200 in 512ms
- GET /dashboard 200 in 102ms
- ✓ Compiled /dashboard/analytics in 325ms
- GET /dashboard/analytics 200 in 380ms
- GET /dashboard/analytics 200 in 138ms
- ✓ Compiled in 169ms
+ ✓ Compiled / in 2.6s
+ GET / 200 in 3131ms
+ GET / 200 in 70ms
+ GET / 200 in 123ms
+ ✓ Compiled /login in 358ms
+ GET /login 200 in 527ms
+ ✓ Compiled /dashboard in 423ms
+ GET /dashboard 200 in 539ms
+ GET /dashboard 200 in 84ms
+ ✓ Compiled /dashboard/platform in 282ms
+ GET /dashboard/platform 200 in 378ms
+ ○ Compiling /dashboard/users ...
+ ✓ Compiled /dashboard/users in 668ms
+ GET /dashboard/users 200 in 745ms

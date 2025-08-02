@@ -8,6 +8,7 @@ import { db } from '@/lib/firebase';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { ChatbotWidget } from '@/components/ChatbotWidget';
 import { 
   Users, 
   Building, 
@@ -251,6 +252,9 @@ export default function DashboardPage() {
         <DashboardRouter>
           <div></div>
         </DashboardRouter>
+        
+        {/* AI Chatbot Widget */}
+        <ChatbotWidget />
       </div>
     );
   }

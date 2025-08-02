@@ -6,15 +6,15 @@
    - Environments: .env.local
 
    Creating an optimized production build ...
- ✓ Compiled successfully in 2000ms
+ ✓ Compiled successfully in 5.0s
    Skipping linting
    Checking validity of types ...
    Collecting page data ...
-   Generating static pages (0/40) ...
-   Generating static pages (10/40) 
-   Generating static pages (20/40) 
-   Generating static pages (30/40) 
- ✓ Generating static pages (40/40)
+   Generating static pages (0/54) ...
+   Generating static pages (13/54) 
+   Generating static pages (26/54) 
+   Generating static pages (40/54) 
+ ✓ Generating static pages (54/54)
    Finalizing page optimization ...
    Collecting build traces ...
  ⚠ Statically exporting a Next.js application via `next export` disables API routes and middleware.
@@ -24,52 +24,66 @@ Learn more: https://nextjs.org/docs/messages/api-routes-static-export
    Exporting (0/3) ...
  ✓ Exporting (3/3)
 
-Route (app)                                 Size  First Load JS
-┌ ○ /                                    6.74 kB         119 kB
-├ ○ /_not-found                            998 B         101 kB
-├ ○ /about                               8.47 kB         121 kB
-├ ƒ /api/calendar/create-event             128 B        99.9 kB
-├ ƒ /api/email/send-confirmation           128 B        99.9 kB
-├ ○ /dashboard                            1.4 kB         231 kB
-├ ○ /dashboard/analytics                 6.45 kB         121 kB
-├ ○ /dashboard/donor                     7.36 kB         234 kB
-├ ○ /dashboard/financial                 5.96 kB         121 kB
-├ ○ /dashboard/participant               8.34 kB         235 kB
-├ ○ /dashboard/platform                  5.33 kB         114 kB
-├ ○ /dashboard/security                  6.12 kB         121 kB
-├ ○ /dashboard/shelter-admin             6.22 kB         233 kB
-├ ○ /dashboard/shelters                  15.8 kB         351 kB
-├ ○ /dashboard/users                     9.06 kB         344 kB
-├ ○ /docs                                4.86 kB         122 kB
-├ ○ /docs/api                            2.06 kB         119 kB
-├ ○ /docs/blockchain                      7.5 kB         120 kB
-├ ○ /docs/hacking-homelessness           9.55 kB         122 kB
-├ ○ /docs/participant-guide              2.49 kB         119 kB
-├ ○ /docs/roadmap                        2.86 kB         120 kB
-├ ○ /docs/whitepaper                     6.77 kB         119 kB
-├ ○ /impact                                10 kB         123 kB
-├ ○ /investor-access                     5.82 kB         118 kB
-├ ○ /investor-relations                  24.1 kB         143 kB
-├ ○ /login                               4.94 kB         223 kB
-├ ○ /privacy                             10.4 kB         123 kB
-├ ○ /register                            5.54 kB         223 kB
-├ ○ /scan-give                           6.62 kB         119 kB
-├ ○ /solutions                           7.99 kB         120 kB
-├ ○ /solutions/donors                    2.75 kB         115 kB
-├ ○ /solutions/government                2.75 kB         115 kB
-├ ○ /solutions/government/policy-brief   9.92 kB         122 kB
-├ ○ /solutions/organizations             2.75 kB         115 kB
-├ ○ /solutions/organizations/case-study  9.16 kB         122 kB
-├ ○ /solutions/participants              2.75 kB         115 kB
-├ ○ /terms                               9.91 kB         122 kB
-└ ○ /tokenomics                          13.2 kB         126 kB
-+ First Load JS shared by all            99.7 kB
-  ├ chunks/4bd1b696-602635ee57868870.js  54.1 kB
-  ├ chunks/5964-71b4770e07aae77a.js      43.7 kB
-  └ other shared chunks (total)          1.95 kB
+Route (app)                                   Size  First Load JS
+┌ ○ /                                      6.73 kB         119 kB
+├ ○ /_not-found                               1 kB         101 kB
+├ ○ /about                                 8.45 kB         121 kB
+├ ƒ /api/calendar/create-event               129 B         100 kB
+├ ƒ /api/email/send-confirmation             129 B         100 kB
+├ ○ /dashboard                             3.67 kB         234 kB
+├ ○ /dashboard/analytics                   6.04 kB         121 kB
+├ ○ /dashboard/donor                       6.83 kB         234 kB
+├ ○ /dashboard/donor/donations             3.58 kB         241 kB
+├ ○ /dashboard/donor/impact                8.45 kB         242 kB
+├ ○ /dashboard/donor/settings               7.6 kB         241 kB
+├ ○ /dashboard/donor/sheltr-portfolio      6.67 kB         244 kB
+├ ○ /dashboard/donor/tax-documents          3.7 kB         241 kB
+├ ○ /dashboard/financial                   5.58 kB         121 kB
+├ ○ /dashboard/participant                 4.47 kB         236 kB
+├ ○ /dashboard/participant/profile          8.3 kB         236 kB
+├ ○ /dashboard/participant/services        5.75 kB         237 kB
+├ ○ /dashboard/participant/support         4.98 kB         242 kB
+├ ○ /dashboard/participant/wallet          9.06 kB         241 kB
+├ ○ /dashboard/platform                    4.76 kB         114 kB
+├ ○ /dashboard/security                    5.68 kB         121 kB
+├ ○ /dashboard/shelter-admin               5.73 kB         233 kB
+├ ○ /dashboard/shelter-admin/participants  4.89 kB         120 kB
+├ ○ /dashboard/shelter-admin/reports       6.03 kB         121 kB
+├ ○ /dashboard/shelter-admin/resources     6.48 kB         122 kB
+├ ○ /dashboard/shelter-admin/services      5.21 kB         120 kB
+├ ○ /dashboard/shelter-admin/settings      7.77 kB         123 kB
+├ ○ /dashboard/shelters                    15.5 kB         351 kB
+├ ○ /dashboard/users                       9.12 kB         344 kB
+├ ○ /docs                                  4.83 kB         122 kB
+├ ○ /docs/api                              2.07 kB         119 kB
+├ ○ /docs/blockchain                       7.53 kB         120 kB
+├ ○ /docs/hacking-homelessness             9.56 kB         122 kB
+├ ○ /docs/participant-guide                2.51 kB         120 kB
+├ ○ /docs/roadmap                          2.87 kB         120 kB
+├ ○ /docs/whitepaper                       6.78 kB         120 kB
+├ ○ /impact                                  10 kB         123 kB
+├ ○ /investor-access                       5.82 kB         119 kB
+├ ○ /investor-relations                    23.9 kB         143 kB
+├ ○ /login                                  5.7 kB         227 kB
+├ ○ /privacy                               10.5 kB         123 kB
+├ ○ /register                               6.3 kB         228 kB
+├ ○ /scan-give                             6.62 kB         119 kB
+├ ○ /solutions                             8.02 kB         121 kB
+├ ○ /solutions/donors                      2.76 kB         116 kB
+├ ○ /solutions/government                  2.76 kB         116 kB
+├ ○ /solutions/government/policy-brief     9.99 kB         123 kB
+├ ○ /solutions/organizations               2.76 kB         116 kB
+├ ○ /solutions/organizations/case-study     9.2 kB         122 kB
+├ ○ /solutions/participants                2.76 kB         116 kB
+├ ○ /terms                                 9.93 kB         123 kB
+└ ○ /tokenomics                            13.3 kB         126 kB
++ First Load JS shared by all               100 kB
+  ├ chunks/4bd1b696-cc729d47eba2cee4.js    54.1 kB
+  ├ chunks/5964-944ef7993092802f.js        43.9 kB
+  └ other shared chunks (total)            1.95 kB
 
 
-ƒ Middleware                             32.9 kB
+ƒ Middleware                               32.9 kB
 
 ○  (Static)   prerendered as static content
 ƒ  (Dynamic)  server-rendered on demand

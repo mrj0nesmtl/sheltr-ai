@@ -15,6 +15,8 @@ from contextlib import asynccontextmanager
 
 # Import routers
 from routers.auth import router as auth_router
+from routers.analytics import router as analytics_router
+from routers.chatbot import router as chatbot_router
 
 # Set up logging
 logging.basicConfig(
@@ -171,6 +173,8 @@ async def general_exception_handler(request: Request, exc: Exception):
 
 # Include routers
 app.include_router(auth_router)
+app.include_router(analytics_router)
+app.include_router(chatbot_router)
 
 # Health check endpoints
 @app.get("/", tags=["Health"])

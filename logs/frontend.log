@@ -8,89 +8,36 @@
    - Environments: .env.local
 
  ✓ Starting...
- ✓ Compiled middleware in 265ms
+ ✓ Compiled middleware in 157ms
  ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
- ✓ Ready in 2.1s
+ ✓ Ready in 1554ms
  ○ Compiling / ...
- ✓ Compiled / in 3s
- GET / 200 in 3636ms
- GET / 200 in 142ms
- ✓ Compiled /login in 305ms
- GET /login 200 in 375ms
- ✓ Compiled /dashboard in 385ms
- GET /dashboard 200 in 471ms
- GET /dashboard 200 in 272ms
- GET /dashboard 200 in 133ms
- ✓ Compiled /dashboard/shelter-admin in 384ms
- GET /dashboard/shelter-admin 200 in 443ms
- GET /dashboard/shelter-admin 200 in 43ms
- GET /dashboard/shelter-admin 200 in 41ms
- GET /dashboard/shelter-admin 200 in 37ms
- ✓ Compiled /_not-found/page in 369ms
- GET /dashboard/shelter-admin/participants 404 in 611ms
- GET /dashboard/shelter-admin/participants 404 in 101ms
- GET /dashboard/shelter-admin 200 in 91ms
- GET /dashboard/shelter-admin/services 404 in 53ms
- GET /dashboard/shelter-admin/services 404 in 80ms
- GET /dashboard/shelter-admin 200 in 88ms
- ✓ Compiled middleware in 14ms
- ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
- GET /dashboard/shelter-admin 200 in 246ms
- GET /dashboard/shelter-admin 200 in 56ms
- ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
- ✓ Compiled in 292ms
- ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
- ✓ Compiled middleware in 1ms
- ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
- GET /dashboard/shelter-admin 200 in 180ms
- GET /dashboard/shelter-admin 200 in 78ms
- ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
- ✓ Compiled in 302ms
- ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
- ○ Compiling /dashboard/shelter-admin/participants ...
- ✓ Compiled /dashboard/shelter-admin/participants in 547ms
- GET /dashboard/shelter-admin/participants 200 in 616ms
- ✓ Compiled /dashboard/shelter-admin/services in 435ms
- GET /dashboard/shelter-admin/services 200 in 516ms
- GET /dashboard/shelter-admin/resources 404 in 86ms
- GET /dashboard/shelter-admin/resources 404 in 309ms
- GET /dashboard/shelter-admin/services 200 in 153ms
- GET /dashboard/shelter-admin/participants 200 in 56ms
- GET /dashboard/shelter-admin 200 in 61ms
- ✓ Compiled middleware in 2ms
- ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
- GET /dashboard/shelter-admin 200 in 152ms
- GET /dashboard/shelter-admin 200 in 58ms
- ✓ Compiled in 130ms
- ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
- ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
- GET /dashboard/shelter-admin/participants 200 in 83ms
- GET /dashboard/shelter-admin/services 200 in 368ms
- ✓ Compiled /dashboard/shelter-admin/resources in 466ms
- GET /dashboard/shelter-admin/resources 200 in 550ms
- GET /dashboard/shelter-admin/reports 404 in 97ms
- GET /dashboard/shelter-admin/reports 404 in 281ms
- GET /dashboard/shelter-admin/resources 200 in 167ms
- ✓ Compiled middleware in 1ms
- ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
- GET /dashboard/shelter-admin/resources 200 in 197ms
- GET /dashboard/shelter-admin/resources 200 in 83ms
- ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
- ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
- ○ Compiling /dashboard/shelter-admin/reports ...
- ✓ Compiled /dashboard/shelter-admin/reports in 570ms
- GET /dashboard/shelter-admin/reports 200 in 730ms
- ✓ Compiled middleware in 2ms
- ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
- GET /dashboard/shelter-admin/reports 200 in 194ms
- GET /dashboard/shelter-admin/reports 200 in 96ms
- ✓ Compiled in 154ms
- ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
- ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
- GET /dashboard/shelter-admin/reports 200 in 339ms
- GET /login 200 in 160ms
- GET / 200 in 215ms
- GET /login 200 in 99ms
- ✓ Compiled in 119ms
- ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
-[?25h
+ ✓ Compiled / in 2.6s
+ GET / 200 in 3080ms
+ ✓ Compiled /login in 365ms
+ GET /login 200 in 560ms
+ ○ Compiling /dashboard ...
+ ✓ Compiled /dashboard in 516ms
+ GET /dashboard 200 in 646ms
+ GET /login 200 in 90ms
+ GET /login 200 in 61ms
+ GET /login 200 in 119ms
+ GET /login 200 in 96ms
+ GET /login 200 in 154ms
+ GET /dashboard 200 in 84ms
+ GET /login 200 in 171ms
+ GET /login 200 in 71ms
+ GET /dashboard 200 in 55ms
+ GET /dashboard 200 in 48ms
+ ✓ Compiled in 309ms
+ ✓ Compiled in 136ms
+ ○ Compiling /dashboard/analytics ...
+ ✓ Compiled /dashboard/analytics in 636ms
+ GET /dashboard/analytics 200 in 721ms
+ GET /dashboard 200 in 213ms
+ GET /dashboard 200 in 316ms
+ ✓ Compiled /dashboard/platform in 402ms
+ GET /dashboard/platform 200 in 450ms
+ ○ Compiling /dashboard/users ...
+ ✓ Compiled /dashboard/users in 757ms
+ GET /dashboard/users 200 in 806ms

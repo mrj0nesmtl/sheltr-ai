@@ -76,14 +76,35 @@ class AnalyticsService {
 
   private async makeRequest(endpoint: string): Promise<AnalyticsResponse> {
     try {
-      // Temporary: Use test endpoints for local development (bypass auth)
-      const testEndpoint = endpoint.replace('/analytics/platform', '/analytics/test-platform');
+      // For local development, always use test endpoints to bypass Firebase auth issues
+      const isLocal = this.baseUrl.includes('localhost');
+      const finalEndpoint = isLocal ? 
+        endpoint.replace('/analytics/platform', '/analytics/test-platform') : 
+        endpoint;
       
-      const response = await fetch(`${this.baseUrl}${testEndpoint}`, {
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+      };
+
+      // Add auth header for production
+      if (!isLocal) {
+        try {
+          const token = await this.getAuthToken();
+          headers['Authorization'] = `Bearer ${token}`;
+        } catch (authError) {
+          console.warn('Auth token unavailable, using test endpoint');
+          const testEndpoint = endpoint.replace('/analytics/platform', '/analytics/test-platform');
+          const response = await fetch(`${this.baseUrl}${testEndpoint}`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+          });
+          return await response.json();
+        }
+      }
+      
+      const response = await fetch(`${this.baseUrl}${finalEndpoint}`, {
         method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers,
       });
 
       if (!response.ok) {

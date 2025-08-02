@@ -8,15 +8,250 @@ INFO:__main__:📚 API documentation: http://localhost:8000/docs
 INFO:__main__:🏥 Health check: http://localhost:8000/health
 INFO:     Will watch for changes in these directories: ['/Users/mrjones/Github/Projects/sheltr-ai/apps/api']
 INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-INFO:     Started reloader process [3179] using WatchFiles
+INFO:     Started reloader process [26045] using WatchFiles
 /Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
   warnings.warn(
 INFO:services.analytics_service:Analytics Service: Firebase initialized successfully
 INFO:services.chatbot.orchestrator:🤖 Chatbot Orchestrator initialized
-INFO:     Started server process [3192]
+INFO:     Started server process [26113]
 INFO:     Waiting for application startup.
 INFO:main:🚀 SHELTR-AI API starting up...
 INFO:main:🔐 Authentication system initialized
 INFO:main:🏢 Multi-tenant architecture ready
 INFO:     Application startup complete.
-INFO:     127.0.0.1:61853 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51876 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52171 - "OPTIONS /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52172 - "OPTIONS /services/available HTTP/1.1" 200 OK
+/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/cloud/firestore_v1/base_collection.py:295: UserWarning: Detected filter using positional arguments. Prefer using the 'filter' keyword argument instead.
+  return query.where(field_path, op_string, value)
+/Users/mrjones/Github/Projects/sheltr-ai/apps/api/routers/services.py:119: UserWarning: Detected filter using positional arguments. Prefer using the 'filter' keyword argument instead.
+  bookings_ref = firebase_service.db.collection('appointments')\
+INFO:     127.0.0.1:52175 - "GET /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52172 - "GET /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52175 - "OPTIONS /services/appointments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52175 - "GET /services/appointments HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:52172 - "GET /services/appointments HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:52900 - "GET /services/appointments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53086 - "GET /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53086 - "GET /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53088 - "GET /services/appointments HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:53088 - "GET /services/appointments HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:53723 - "GET /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53729 - "GET /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53723 - "GET /services/appointments HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:53723 - "GET /services/appointments HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:53723 - "GET /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53729 - "GET /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53723 - "GET /services/appointments HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:53723 - "GET /services/appointments HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:54106 - "GET /services/appointments HTTP/1.1" 200 OK
+INFO:watchfiles.main:1 change detected
+WARNING:  WatchFiles detected changes in 'routers/services.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:main:🛑 SHELTR-AI API shutting down...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [26113]
+/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:services.analytics_service:Analytics Service: Firebase initialized successfully
+INFO:services.chatbot.orchestrator:🤖 Chatbot Orchestrator initialized
+INFO:     Started server process [27161]
+INFO:     Waiting for application startup.
+INFO:main:🚀 SHELTR-AI API starting up...
+INFO:main:🔐 Authentication system initialized
+INFO:main:🏢 Multi-tenant architecture ready
+INFO:     Application startup complete.
+/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/cloud/firestore_v1/base_collection.py:295: UserWarning: Detected filter using positional arguments. Prefer using the 'filter' keyword argument instead.
+  return query.where(field_path, op_string, value)
+/Users/mrjones/Github/Projects/sheltr-ai/apps/api/routers/services.py:119: UserWarning: Detected filter using positional arguments. Prefer using the 'filter' keyword argument instead.
+  bookings_ref = firebase_service.db.collection('appointments')\
+WARNING:main:Slow request: GET http://localhost:8000/services/available took 1.02s
+INFO:     127.0.0.1:54279 - "GET /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54279 - "GET /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54611 - "GET /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54611 - "GET /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55251 - "OPTIONS /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55253 - "GET /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55391 - "GET /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55391 - "GET /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55397 - "GET /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55397 - "GET /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55576 - "GET /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55757 - "GET /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56301 - "POST /services/book HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:56479 - "GET /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56479 - "GET /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56481 - "OPTIONS /services/appointments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56481 - "GET /services/appointments HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:56479 - "GET /services/appointments HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:56522 - "OPTIONS /services/book HTTP/1.1" 200 OK
+/Users/mrjones/Github/Projects/sheltr-ai/apps/api/routers/services.py:153: UserWarning: Detected filter using positional arguments. Prefer using the 'filter' keyword argument instead.
+  bookings_ref = firebase_service.db.collection('appointments')\
+INFO:     127.0.0.1:56522 - "POST /services/book HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56522 - "GET /services/appointments HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:56579 - "GET /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56579 - "GET /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56581 - "GET /services/appointments HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:56581 - "GET /services/appointments HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:56634 - "POST /services/book HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56634 - "GET /services/appointments HTTP/1.1" 500 Internal Server Error
+INFO:watchfiles.main:1 change detected
+WARNING:  WatchFiles detected changes in 'routers/services.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:main:🛑 SHELTR-AI API shutting down...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [27161]
+/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:services.analytics_service:Analytics Service: Firebase initialized successfully
+INFO:services.chatbot.orchestrator:🤖 Chatbot Orchestrator initialized
+INFO:     Started server process [30486]
+INFO:     Waiting for application startup.
+INFO:main:🚀 SHELTR-AI API starting up...
+INFO:main:🔐 Authentication system initialized
+INFO:main:🏢 Multi-tenant architecture ready
+INFO:     Application startup complete.
+Traceback (most recent call last):
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/firebase_admin/_token_gen.py", line 414, in _decode_unverified
+    header = jwt.decode_header(token)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/jwt.py", line 184, in decode_header
+    header, _, _, _ = _unverified_decode(token)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/jwt.py", line 146, in _unverified_decode
+    raise exceptions.MalformedError(
+google.auth.exceptions.MalformedError: Wrong number of segments in token: b'fake-token'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/services/firebase_service.py", line 113, in verify_token
+    decoded_token = self.auth.verify_id_token(token)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/firebase_admin/auth.py", line 221, in verify_id_token
+    return client.verify_id_token(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/firebase_admin/_auth_client.py", line 129, in verify_id_token
+    verified_claims = self._token_verifier.verify_id_token(id_token, clock_skew_seconds)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/firebase_admin/_token_gen.py", line 293, in verify_id_token
+    return self.id_token_verifier.verify(id_token, self.request, clock_skew_seconds)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/firebase_admin/_token_gen.py", line 336, in verify
+    header, payload = self._decode_unverified(token)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/firebase_admin/_token_gen.py", line 418, in _decode_unverified
+    raise self._invalid_token_error(str(error), cause=error)
+firebase_admin._auth_utils.InvalidIdTokenError: Wrong number of segments in token: b'fake-token'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/routers/services.py", line 217, in get_user_appointments
+    current_user = await firebase_service.verify_token(token)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/services/firebase_service.py", line 116, in verify_token
+    raise auth.InvalidIdTokenError(f"Invalid token: {str(e)}")
+firebase_admin._auth_utils.InvalidIdTokenError: Invalid token: Wrong number of segments in token: b'fake-token'
+🔍 Attempting to verify token: fake-token...
+❌ Auth error in appointments: Invalid token: Wrong number of segments in token: b'fake-token'
+INFO:     127.0.0.1:59160 - "GET /services/appointments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59216 - "OPTIONS /services/available HTTP/1.1" 200 OK
+/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/cloud/firestore_v1/base_collection.py:295: UserWarning: Detected filter using positional arguments. Prefer using the 'filter' keyword argument instead.
+  return query.where(field_path, op_string, value)
+/Users/mrjones/Github/Projects/sheltr-ai/apps/api/routers/services.py:119: UserWarning: Detected filter using positional arguments. Prefer using the 'filter' keyword argument instead.
+  bookings_ref = firebase_service.db.collection('appointments')\
+INFO:     127.0.0.1:59216 - "GET /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59216 - "OPTIONS /services/appointments HTTP/1.1" 200 OK
+🔍 Attempting to verify token: eyJhbGciOi...
+✅ Token verified, user: dFJNlIh2g4R8vAvxvIvWZtwu8zw1
+INFO:     127.0.0.1:59216 - "GET /services/appointments HTTP/1.1" 500 Internal Server Error
+INFO:watchfiles.main:1 change detected
+WARNING:  WatchFiles detected changes in 'routers/services.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:main:🛑 SHELTR-AI API shutting down...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [30486]
+/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:services.analytics_service:Analytics Service: Firebase initialized successfully
+INFO:services.chatbot.orchestrator:🤖 Chatbot Orchestrator initialized
+INFO:     Started server process [30862]
+INFO:     Waiting for application startup.
+INFO:main:🚀 SHELTR-AI API starting up...
+INFO:main:🔐 Authentication system initialized
+INFO:main:🏢 Multi-tenant architecture ready
+INFO:     Application startup complete.
+INFO:     127.0.0.1:59456 - "GET /services/appointments HTTP/1.1" 200 OK
+/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/cloud/firestore_v1/base_collection.py:295: UserWarning: Detected filter using positional arguments. Prefer using the 'filter' keyword argument instead.
+  return query.where(field_path, op_string, value)
+/Users/mrjones/Github/Projects/sheltr-ai/apps/api/routers/services.py:119: UserWarning: Detected filter using positional arguments. Prefer using the 'filter' keyword argument instead.
+  bookings_ref = firebase_service.db.collection('appointments')\
+WARNING:main:Slow request: GET http://localhost:8000/services/available took 1.05s
+INFO:     127.0.0.1:59523 - "GET /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59523 - "GET /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59533 - "GET /services/appointments HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:59533 - "GET /services/appointments HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:59686 - "GET /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59686 - "GET /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59688 - "GET /services/appointments HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:59688 - "GET /services/appointments HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:59853 - "GET /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59853 - "GET /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59855 - "GET /services/appointments HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:59855 - "GET /services/appointments HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:59991 - "OPTIONS /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59993 - "OPTIONS /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59993 - "GET /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59991 - "GET /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59993 - "OPTIONS /services/appointments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59993 - "GET /services/appointments HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:59991 - "GET /services/appointments HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60451 - "GET /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60457 - "GET /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60451 - "GET /services/appointments HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60457 - "GET /services/appointments HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60718 - "GET /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60718 - "GET /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60720 - "GET /services/appointments HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:60720 - "GET /services/appointments HTTP/1.1" 500 Internal Server Error
+INFO:watchfiles.main:1 change detected
+WARNING:  WatchFiles detected changes in 'routers/services.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:main:🛑 SHELTR-AI API shutting down...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [30862]
+/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:services.analytics_service:Analytics Service: Firebase initialized successfully
+INFO:services.chatbot.orchestrator:🤖 Chatbot Orchestrator initialized
+INFO:     Started server process [31977]
+INFO:     Waiting for application startup.
+INFO:main:🚀 SHELTR-AI API starting up...
+INFO:main:🔐 Authentication system initialized
+INFO:main:🏢 Multi-tenant architecture ready
+INFO:     Application startup complete.
+INFO:     127.0.0.1:63002 - "OPTIONS /services/available HTTP/1.1" 200 OK
+/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/cloud/firestore_v1/base_collection.py:295: UserWarning: Detected filter using positional arguments. Prefer using the 'filter' keyword argument instead.
+  return query.where(field_path, op_string, value)
+/Users/mrjones/Github/Projects/sheltr-ai/apps/api/routers/services.py:119: UserWarning: Detected filter using positional arguments. Prefer using the 'filter' keyword argument instead.
+  bookings_ref = firebase_service.db.collection('appointments')\
+INFO:     127.0.0.1:63002 - "GET /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63002 - "OPTIONS /services/appointments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63002 - "GET /services/appointments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65481 - "GET /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65481 - "GET /services/appointments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51603 - "OPTIONS /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51603 - "GET /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51603 - "OPTIONS /services/appointments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51603 - "GET /services/appointments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54155 - "OPTIONS /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54155 - "GET /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54155 - "OPTIONS /services/appointments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54155 - "GET /services/appointments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55785 - "GET /services/appointments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55853 - "GET /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55853 - "GET /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55856 - "GET /services/appointments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55856 - "GET /services/appointments HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:main:🛑 SHELTR-AI API shutting down...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [31977]

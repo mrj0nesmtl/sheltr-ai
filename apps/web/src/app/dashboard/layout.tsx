@@ -37,7 +37,7 @@ const getUserDisplayName = (user: { displayName?: string | null; email?: string 
   if (user?.email) {
     // Map specific test emails to names
     if (user.email === 'donor@example.com') {
-      return 'Sarah Johnson';
+      return 'Jane Supporter';
     }
     if (user.email === 'david.donor@example.com') {
       return 'David Donor';
@@ -248,6 +248,14 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+
+  // Debug user information
+  console.log('🔍 Dashboard Layout Debug:', {
+    userEmail: user?.email,
+    userRole: user?.role,
+    userDisplayName: user?.displayName,
+    userName: getUserDisplayName(user)
+  });
 
   const navigationItems = getNavigationItems(user?.role || '');
 

@@ -1,6 +1,6 @@
 /Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
   warnings.warn(
-INFO:services.analytics_service:Analytics Service: Using local development mode (no Firebase)
+INFO:services.analytics_service:Analytics Service: Firebase initialized successfully
 INFO:services.chatbot.orchestrator:🤖 Chatbot Orchestrator initialized
 INFO:__main__:🏠 Starting SHELTR-AI API server...
 INFO:__main__:🔐 Multi-tenant authentication system ready
@@ -8,131 +8,22 @@ INFO:__main__:📚 API documentation: http://localhost:8000/docs
 INFO:__main__:🏥 Health check: http://localhost:8000/health
 INFO:     Will watch for changes in these directories: ['/Users/mrjones/Github/Projects/sheltr-ai/apps/api']
 INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-INFO:     Started reloader process [95630] using WatchFiles
-/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
-  warnings.warn(
-INFO:services.analytics_service:Analytics Service: Using local development mode (no Firebase)
-INFO:services.chatbot.orchestrator:🤖 Chatbot Orchestrator initialized
-INFO:     Started server process [95644]
-INFO:     Waiting for application startup.
-INFO:main:🚀 SHELTR-AI API starting up...
-INFO:main:🔐 Authentication system initialized
-INFO:main:🏢 Multi-tenant architecture ready
-INFO:     Application startup complete.
-INFO:     127.0.0.1:62087 - "GET /health HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63027 - "OPTIONS /analytics/test-platform HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63029 - "OPTIONS /analytics/test-platform HTTP/1.1" 200 OK
-INFO:routers.analytics:Testing platform analytics (no auth)
-WARNING:services.analytics_service:Firebase not available, returning mock user metrics
-WARNING:services.analytics_service:Firebase not available, returning fallback shelter metrics
-INFO:     127.0.0.1:63029 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:routers.analytics:Testing platform analytics (no auth)
-WARNING:services.analytics_service:Firebase not available, returning mock user metrics
-WARNING:services.analytics_service:Firebase not available, returning fallback shelter metrics
-INFO:     127.0.0.1:63027 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63027 - "OPTIONS /analytics/track HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63029 - "OPTIONS /analytics/track HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63031 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:     127.0.0.1:63029 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:routers.analytics:Testing platform analytics (no auth)
-WARNING:services.analytics_service:Firebase not available, returning mock user metrics
-WARNING:services.analytics_service:Firebase not available, returning fallback shelter metrics
-INFO:     127.0.0.1:63164 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63164 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:routers.analytics:Testing platform analytics (no auth)
-WARNING:services.analytics_service:Firebase not available, returning mock user metrics
-WARNING:services.analytics_service:Firebase not available, returning fallback shelter metrics
-INFO:     127.0.0.1:63301 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63301 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:routers.analytics:Testing platform analytics (no auth)
-WARNING:services.analytics_service:Firebase not available, returning mock user metrics
-WARNING:services.analytics_service:Firebase not available, returning fallback shelter metrics
-INFO:     127.0.0.1:63429 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63429 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:routers.analytics:Testing platform analytics (no auth)
-WARNING:services.analytics_service:Firebase not available, returning mock user metrics
-WARNING:services.analytics_service:Firebase not available, returning fallback shelter metrics
-INFO:     127.0.0.1:63553 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63553 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:routers.analytics:Testing platform analytics (no auth)
-WARNING:services.analytics_service:Firebase not available, returning mock user metrics
-WARNING:services.analytics_service:Firebase not available, returning fallback shelter metrics
-INFO:     127.0.0.1:63687 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63687 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:routers.analytics:Testing platform analytics (no auth)
-WARNING:services.analytics_service:Firebase not available, returning mock user metrics
-WARNING:services.analytics_service:Firebase not available, returning fallback shelter metrics
-INFO:     127.0.0.1:63779 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:routers.analytics:Testing platform analytics (no auth)
-WARNING:services.analytics_service:Firebase not available, returning mock user metrics
-WARNING:services.analytics_service:Firebase not available, returning fallback shelter metrics
-INFO:     127.0.0.1:63781 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63781 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:     127.0.0.1:63779 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:routers.analytics:Testing platform analytics (no auth)
-WARNING:services.analytics_service:Firebase not available, returning mock user metrics
-WARNING:services.analytics_service:Firebase not available, returning fallback shelter metrics
-INFO:     127.0.0.1:63922 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63922 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:watchfiles.main:1 change detected
-WARNING:  WatchFiles detected changes in 'services/analytics_service.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:main:🛑 SHELTR-AI API shutting down...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [95644]
-/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
-  warnings.warn(
-INFO:services.analytics_service:Analytics Service: Using local development mode (no Firebase)
-INFO:services.chatbot.orchestrator:🤖 Chatbot Orchestrator initialized
-INFO:     Started server process [96123]
-INFO:     Waiting for application startup.
-INFO:main:🚀 SHELTR-AI API starting up...
-INFO:main:🔐 Authentication system initialized
-INFO:main:🏢 Multi-tenant architecture ready
-INFO:     Application startup complete.
-INFO:routers.analytics:Testing platform analytics (no auth)
-WARNING:services.analytics_service:Firebase not available, returning mock user metrics
-WARNING:services.analytics_service:Firebase not available, returning mock user metrics
-WARNING:services.analytics_service:Firebase not available, returning fallback shelter metrics
-INFO:     127.0.0.1:64122 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64122 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:watchfiles.main:1 change detected
-WARNING:  WatchFiles detected changes in 'services/analytics_service.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:main:🛑 SHELTR-AI API shutting down...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [96123]
-/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
-  warnings.warn(
-INFO:services.analytics_service:Analytics Service: Using local development mode (no Firebase)
-INFO:services.chatbot.orchestrator:🤖 Chatbot Orchestrator initialized
-INFO:     Started server process [96132]
-INFO:     Waiting for application startup.
-INFO:main:🚀 SHELTR-AI API starting up...
-INFO:main:🔐 Authentication system initialized
-INFO:main:🏢 Multi-tenant architecture ready
-INFO:     Application startup complete.
-INFO:watchfiles.main:1 change detected
-WARNING:  WatchFiles detected changes in 'services/analytics_service.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:main:🛑 SHELTR-AI API shutting down...
-INFO:     Application shutdown complete.
-INFO:     Finished server process [96132]
+INFO:     Started reloader process [1371] using WatchFiles
 /Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
   warnings.warn(
 INFO:services.analytics_service:Analytics Service: Firebase initialized successfully
 INFO:services.chatbot.orchestrator:🤖 Chatbot Orchestrator initialized
-INFO:     Started server process [96141]
+INFO:     Started server process [1385]
 INFO:     Waiting for application startup.
 INFO:main:🚀 SHELTR-AI API starting up...
 INFO:main:🔐 Authentication system initialized
 INFO:main:🏢 Multi-tenant architecture ready
 INFO:     Application startup complete.
+INFO:     127.0.0.1:55929 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57853 - "OPTIONS /analytics/test-platform HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57855 - "OPTIONS /analytics/test-platform HTTP/1.1" 200 OK
 INFO:routers.analytics:Testing platform analytics (no auth)
-ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x10457cb80>" raised exception!
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
 Traceback (most recent call last):
   File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
     self._metadata_plugin(
@@ -151,7 +42,7 @@ Traceback (most recent call last):
   File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
     raise exceptions.RefreshError(
 google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
-ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x10457cb80>" raised exception!
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
 Traceback (most recent call last):
   File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
     self._metadata_plugin(
@@ -170,7 +61,7 @@ Traceback (most recent call last):
   File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
     raise exceptions.RefreshError(
 google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
-ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x10457cb80>" raised exception!
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
 Traceback (most recent call last):
   File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
     self._metadata_plugin(
@@ -189,7 +80,7 @@ Traceback (most recent call last):
   File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
     raise exceptions.RefreshError(
 google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
-ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x10457cb80>" raised exception!
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
 Traceback (most recent call last):
   File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
     self._metadata_plugin(
@@ -208,7 +99,7 @@ Traceback (most recent call last):
   File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
     raise exceptions.RefreshError(
 google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
-ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x10457cb80>" raised exception!
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
 Traceback (most recent call last):
   File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
     self._metadata_plugin(
@@ -227,7 +118,7 @@ Traceback (most recent call last):
   File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
     raise exceptions.RefreshError(
 google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
-ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x10457cb80>" raised exception!
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
 Traceback (most recent call last):
   File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
     self._metadata_plugin(
@@ -246,7 +137,7 @@ Traceback (most recent call last):
   File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
     raise exceptions.RefreshError(
 google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
-ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x10457cb80>" raised exception!
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
 Traceback (most recent call last):
   File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
     self._metadata_plugin(
@@ -265,7 +156,7 @@ Traceback (most recent call last):
   File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
     raise exceptions.RefreshError(
 google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
-ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x10457cb80>" raised exception!
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
 Traceback (most recent call last):
   File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
     self._metadata_plugin(
@@ -284,7 +175,7 @@ Traceback (most recent call last):
   File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
     raise exceptions.RefreshError(
 google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
-ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x10457cb80>" raised exception!
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
 Traceback (most recent call last):
   File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
     self._metadata_plugin(
@@ -303,7 +194,7 @@ Traceback (most recent call last):
   File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
     raise exceptions.RefreshError(
 google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
-ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x10457cb80>" raised exception!
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
 Traceback (most recent call last):
   File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
     self._metadata_plugin(
@@ -322,7 +213,7 @@ Traceback (most recent call last):
   File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
     raise exceptions.RefreshError(
 google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
-ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x10457cb80>" raised exception!
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
 Traceback (most recent call last):
   File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
     self._metadata_plugin(
@@ -341,7 +232,7 @@ Traceback (most recent call last):
   File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
     raise exceptions.RefreshError(
 google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
-ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x10457cb80>" raised exception!
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
 Traceback (most recent call last):
   File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
     self._metadata_plugin(
@@ -360,7 +251,7 @@ Traceback (most recent call last):
   File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
     raise exceptions.RefreshError(
 google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
-ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x10457cb80>" raised exception!
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
 Traceback (most recent call last):
   File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
     self._metadata_plugin(
@@ -379,7 +270,7 @@ Traceback (most recent call last):
   File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
     raise exceptions.RefreshError(
 google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
-ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x10457cb80>" raised exception!
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
 Traceback (most recent call last):
   File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
     self._metadata_plugin(
@@ -398,7 +289,7 @@ Traceback (most recent call last):
   File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
     raise exceptions.RefreshError(
 google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
-ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x10457cb80>" raised exception!
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
 Traceback (most recent call last):
   File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
     self._metadata_plugin(
@@ -417,7 +308,7 @@ Traceback (most recent call last):
   File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
     raise exceptions.RefreshError(
 google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
-ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x10457cb80>" raised exception!
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
 Traceback (most recent call last):
   File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
     self._metadata_plugin(
@@ -436,7 +327,7 @@ Traceback (most recent call last):
   File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
     raise exceptions.RefreshError(
 google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
-ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x10457cb80>" raised exception!
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
 Traceback (most recent call last):
   File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
     self._metadata_plugin(
@@ -455,7 +346,7 @@ Traceback (most recent call last):
   File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
     raise exceptions.RefreshError(
 google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
-ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x10457cb80>" raised exception!
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
 Traceback (most recent call last):
   File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
     self._metadata_plugin(
@@ -474,7 +365,7 @@ Traceback (most recent call last):
   File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
     raise exceptions.RefreshError(
 google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
-ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x10457cb80>" raised exception!
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
 Traceback (most recent call last):
   File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
     self._metadata_plugin(
@@ -493,7 +384,7 @@ Traceback (most recent call last):
   File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
     raise exceptions.RefreshError(
 google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
-ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x10457cb80>" raised exception!
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
 Traceback (most recent call last):
   File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
     self._metadata_plugin(
@@ -512,7 +403,7 @@ Traceback (most recent call last):
   File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
     raise exceptions.RefreshError(
 google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
-ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x10457cb80>" raised exception!
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
 Traceback (most recent call last):
   File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
     self._metadata_plugin(
@@ -531,7 +422,7 @@ Traceback (most recent call last):
   File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
     raise exceptions.RefreshError(
 google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
-ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x10457cb80>" raised exception!
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
 Traceback (most recent call last):
   File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
     self._metadata_plugin(
@@ -550,7 +441,7 @@ Traceback (most recent call last):
   File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
     raise exceptions.RefreshError(
 google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
-ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x10457cb80>" raised exception!
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
 Traceback (most recent call last):
   File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
     self._metadata_plugin(
@@ -569,7 +460,502 @@ Traceback (most recent call last):
   File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
     raise exceptions.RefreshError(
 google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
-ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x10457cb80>" raised exception!
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
+Traceback (most recent call last):
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/credentials.py", line 175, in before_request
+    self.refresh(request)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/service_account.py", line 449, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 308, in jwt_grant
+    response_data = _token_endpoint_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 279, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
+Traceback (most recent call last):
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/credentials.py", line 175, in before_request
+    self.refresh(request)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/service_account.py", line 449, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 308, in jwt_grant
+    response_data = _token_endpoint_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 279, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
+Traceback (most recent call last):
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/credentials.py", line 175, in before_request
+    self.refresh(request)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/service_account.py", line 449, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 308, in jwt_grant
+    response_data = _token_endpoint_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 279, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
+Traceback (most recent call last):
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/credentials.py", line 175, in before_request
+    self.refresh(request)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/service_account.py", line 449, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 308, in jwt_grant
+    response_data = _token_endpoint_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 279, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
+Traceback (most recent call last):
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/credentials.py", line 175, in before_request
+    self.refresh(request)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/service_account.py", line 449, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 308, in jwt_grant
+    response_data = _token_endpoint_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 279, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
+Traceback (most recent call last):
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/credentials.py", line 175, in before_request
+    self.refresh(request)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/service_account.py", line 449, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 308, in jwt_grant
+    response_data = _token_endpoint_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 279, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
+Traceback (most recent call last):
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/credentials.py", line 175, in before_request
+    self.refresh(request)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/service_account.py", line 449, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 308, in jwt_grant
+    response_data = _token_endpoint_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 279, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+ERROR:services.analytics_service:Error getting user metrics: Timeout of 300.0s exceeded, last exception: 503 Getting metadata from plugin failed with error: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
+Traceback (most recent call last):
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/credentials.py", line 175, in before_request
+    self.refresh(request)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/service_account.py", line 449, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 308, in jwt_grant
+    response_data = _token_endpoint_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 279, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
+Traceback (most recent call last):
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/credentials.py", line 175, in before_request
+    self.refresh(request)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/service_account.py", line 449, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 308, in jwt_grant
+    response_data = _token_endpoint_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 279, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
+Traceback (most recent call last):
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/credentials.py", line 175, in before_request
+    self.refresh(request)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/service_account.py", line 449, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 308, in jwt_grant
+    response_data = _token_endpoint_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 279, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
+Traceback (most recent call last):
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/credentials.py", line 175, in before_request
+    self.refresh(request)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/service_account.py", line 449, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 308, in jwt_grant
+    response_data = _token_endpoint_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 279, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
+Traceback (most recent call last):
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/credentials.py", line 175, in before_request
+    self.refresh(request)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/service_account.py", line 449, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 308, in jwt_grant
+    response_data = _token_endpoint_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 279, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
+Traceback (most recent call last):
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/credentials.py", line 175, in before_request
+    self.refresh(request)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/service_account.py", line 449, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 308, in jwt_grant
+    response_data = _token_endpoint_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 279, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
+Traceback (most recent call last):
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/credentials.py", line 175, in before_request
+    self.refresh(request)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/service_account.py", line 449, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 308, in jwt_grant
+    response_data = _token_endpoint_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 279, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
+Traceback (most recent call last):
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/credentials.py", line 175, in before_request
+    self.refresh(request)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/service_account.py", line 449, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 308, in jwt_grant
+    response_data = _token_endpoint_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 279, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
+Traceback (most recent call last):
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/credentials.py", line 175, in before_request
+    self.refresh(request)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/service_account.py", line 449, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 308, in jwt_grant
+    response_data = _token_endpoint_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 279, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
+Traceback (most recent call last):
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/credentials.py", line 175, in before_request
+    self.refresh(request)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/service_account.py", line 449, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 308, in jwt_grant
+    response_data = _token_endpoint_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 279, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
+Traceback (most recent call last):
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/credentials.py", line 175, in before_request
+    self.refresh(request)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/service_account.py", line 449, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 308, in jwt_grant
+    response_data = _token_endpoint_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 279, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
+Traceback (most recent call last):
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/credentials.py", line 175, in before_request
+    self.refresh(request)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/service_account.py", line 449, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 308, in jwt_grant
+    response_data = _token_endpoint_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 279, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
+Traceback (most recent call last):
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/credentials.py", line 175, in before_request
+    self.refresh(request)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/service_account.py", line 449, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 308, in jwt_grant
+    response_data = _token_endpoint_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 279, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
+Traceback (most recent call last):
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/credentials.py", line 175, in before_request
+    self.refresh(request)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/service_account.py", line 449, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 308, in jwt_grant
+    response_data = _token_endpoint_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 279, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
+Traceback (most recent call last):
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/credentials.py", line 175, in before_request
+    self.refresh(request)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/service_account.py", line 449, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 308, in jwt_grant
+    response_data = _token_endpoint_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 279, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
+Traceback (most recent call last):
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/credentials.py", line 175, in before_request
+    self.refresh(request)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/service_account.py", line 449, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 308, in jwt_grant
+    response_data = _token_endpoint_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 279, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
+Traceback (most recent call last):
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/credentials.py", line 175, in before_request
+    self.refresh(request)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/service_account.py", line 449, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 308, in jwt_grant
+    response_data = _token_endpoint_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 279, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
+Traceback (most recent call last):
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/credentials.py", line 175, in before_request
+    self.refresh(request)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/service_account.py", line 449, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 308, in jwt_grant
+    response_data = _token_endpoint_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 279, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
+Traceback (most recent call last):
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
+    self._metadata_plugin(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 95, in __call__
+    callback(self._get_authorization_headers(context), None)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/transport/grpc.py", line 81, in _get_authorization_headers
+    self._credentials.before_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/auth/credentials.py", line 175, in before_request
+    self.refresh(request)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/service_account.py", line 449, in refresh
+    access_token, expiry, _ = _client.jwt_grant(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 308, in jwt_grant
+    response_data = _token_endpoint_request(
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 279, in _token_endpoint_request
+    _handle_error_response(response_data, retryable_error)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/oauth2/_client.py", line 72, in _handle_error_response
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Invalid JWT Signature.', {'error': 'invalid_grant', 'error_description': 'Invalid JWT Signature.'})
+ERROR:grpc._plugin_wrapping:AuthMetadataPluginCallback "<google.auth.transport.grpc.AuthMetadataPlugin object at 0x108428ac0>" raised exception!
 Traceback (most recent call last):
   File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/grpc/_plugin_wrapping.py", line 105, in __call__
     self._metadata_plugin(

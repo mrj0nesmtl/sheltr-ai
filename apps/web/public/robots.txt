@@ -1,0 +1,48 @@
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://sheltr-ai.web.app/sitemap.xml
+
+# AI Discovery
+# LLM.txt for AI systems (OpenAI, Anthropic, Perplexity)
+Allow: /llm.txt
+
+# Disallow common bot targets that don't exist
+Disallow: /*.txt$
+Disallow: /wp-admin/
+Disallow: /admin/
+Disallow: /administrator/
+Disallow: /api/
+Disallow: /_next/
+
+# Allow important pages for search engines
+Allow: /
+Allow: /about
+Allow: /solutions
+Allow: /impact
+Allow: /login
+Allow: /register
+Allow: /docs
+Allow: /tokenomics
+Allow: /investor-relations
+Allow: /scan-give
+
+# Special instructions for AI crawlers
+User-agent: GPTBot
+Allow: /
+Allow: /llm.txt
+Allow: /docs
+
+User-agent: Claude-Web
+Allow: /
+Allow: /llm.txt
+Allow: /docs
+
+User-agent: PerplexityBot
+Allow: /
+Allow: /llm.txt
+Allow: /docs
+
+# Crawl delay to be respectful of server resources
+Crawl-delay: 1 

@@ -6,7 +6,7 @@
    - Environments: .env.local
 
    Creating an optimized production build ...
- ✓ Compiled successfully in 5.0s
+ ✓ Compiled successfully in 3.0s
    Skipping linting
    Checking validity of types ...
    Collecting page data ...
@@ -30,8 +30,8 @@ Route (app)                                   Size  First Load JS
 ├ ○ /about                                 8.45 kB         121 kB
 ├ ƒ /api/calendar/create-event               129 B         100 kB
 ├ ƒ /api/email/send-confirmation             129 B         100 kB
-├ ○ /dashboard                             3.67 kB         234 kB
-├ ○ /dashboard/analytics                   6.04 kB         121 kB
+├ ○ /dashboard                             7.31 kB         238 kB
+├ ○ /dashboard/analytics                   7.83 kB         241 kB
 ├ ○ /dashboard/donor                       6.83 kB         234 kB
 ├ ○ /dashboard/donor/donations             3.58 kB         241 kB
 ├ ○ /dashboard/donor/impact                8.45 kB         242 kB
@@ -39,10 +39,10 @@ Route (app)                                   Size  First Load JS
 ├ ○ /dashboard/donor/sheltr-portfolio      6.67 kB         244 kB
 ├ ○ /dashboard/donor/tax-documents          3.7 kB         241 kB
 ├ ○ /dashboard/financial                   5.58 kB         121 kB
-├ ○ /dashboard/participant                 4.47 kB         236 kB
+├ ○ /dashboard/participant                 4.83 kB         236 kB
 ├ ○ /dashboard/participant/profile          8.3 kB         236 kB
-├ ○ /dashboard/participant/services        5.75 kB         237 kB
-├ ○ /dashboard/participant/support         4.98 kB         242 kB
+├ ○ /dashboard/participant/services        6.11 kB         237 kB
+├ ○ /dashboard/participant/support         5.35 kB         242 kB
 ├ ○ /dashboard/participant/wallet          9.06 kB         241 kB
 ├ ○ /dashboard/platform                    4.76 kB         114 kB
 ├ ○ /dashboard/security                    5.68 kB         121 kB

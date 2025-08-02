@@ -35,6 +35,35 @@ class ErrorResponse(BaseModel):
     timestamp: str
 
 @router.get(
+    "/test-platform",
+    response_model=AnalyticsResponse,
+    summary="Get platform analytics (no auth)",
+    description="Get comprehensive platform analytics for local development"
+)
+async def get_test_platform_analytics():
+    """
+    Get platform analytics without authentication for local development
+    """
+    try:
+        logger.info("Testing platform analytics (no auth)")
+        
+        metrics = await analytics_service.get_platform_metrics()
+        
+        return AnalyticsResponse(
+            success=True,
+            data=metrics,
+            timestamp=datetime.now().isoformat(),
+            message="Platform analytics retrieved successfully (test mode)"
+        )
+        
+    except Exception as e:
+        logger.error(f"Error getting test platform analytics: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to retrieve platform analytics: {str(e)}"
+        )
+
+@router.get(
     "/platform",
     response_model=AnalyticsResponse,
     summary="Get platform analytics",

@@ -226,8 +226,10 @@ export default function ParticipantProfile() {
   };
 
   const addGoal = () => {
+    if (!profile) return;
+    
     const newGoal = {
-      id: profile.goals.length + 1,
+      id: profileService.generateGoalId(),
       title: '',
       description: '',
       category: 'Personal',
@@ -235,18 +237,20 @@ export default function ParticipantProfile() {
       progress: 0,
       status: 'active'
     };
-    setProfile(prev => ({
+    setProfile(prev => prev ? ({
       ...prev,
       goals: [...prev.goals, newGoal]
-    }));
+    }) : null);
     setIsEditing(true);
   };
 
-  const removeGoal = (goalId: number) => {
-    setProfile(prev => ({
+  const removeGoal = (goalId: string) => {
+    if (!profile) return;
+    
+    setProfile(prev => prev ? ({
       ...prev,
       goals: prev.goals.filter(goal => goal.id !== goalId)
-    }));
+    }) : null);
   };
 
   return (

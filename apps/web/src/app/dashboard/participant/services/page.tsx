@@ -6,7 +6,8 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { servicesService, type Service, type Appointment } from '@/services/servicesService';
 import { 
   Calendar,
   Clock,
@@ -33,178 +34,9 @@ import {
   X
 } from 'lucide-react';
 
-// Mock services data
-const availableServices = [
-  {
-    id: 1,
-    name: 'Individual Counseling',
-    category: 'Mental Health',
-    provider: 'Dr. Sarah Wilson, LCSW',
-    description: 'One-on-one counseling sessions to address personal challenges and develop coping strategies.',
-    duration: '50 minutes',
-    location: 'Counseling Room A',
-    nextAvailable: '2024-01-16T10:00:00Z',
-    slots: ['10:00 AM', '11:00 AM', '2:00 PM', '3:00 PM'],
-    rating: 4.8,
-    enrolledCount: 24,
-    maxCapacity: 1,
-    requirements: ['Initial intake required', 'Weekly commitment'],
-    icon: Heart,
-    color: 'bg-red-100 text-red-600'
-  },
-  {
-    id: 2,
-    name: 'Job Readiness Workshop',
-    category: 'Employment',
-    provider: 'Michael Chen, Career Counselor',
-    description: 'Learn resume writing, interview skills, and job search strategies.',
-    duration: '2 hours',
-    location: 'Training Room B',
-    nextAvailable: '2024-01-17T14:00:00Z',
-    slots: ['9:00 AM', '2:00 PM'],
-    rating: 4.9,
-    enrolledCount: 8,
-    maxCapacity: 12,
-    requirements: ['Must attend all 4 sessions', 'Bring valid ID'],
-    icon: Briefcase,
-    color: 'bg-blue-100 text-blue-600'
-  },
-  {
-    id: 3,
-    name: 'Housing Search Assistance',
-    category: 'Housing',
-    provider: 'Lisa Rodriguez, Housing Specialist',
-    description: 'Get help finding affordable housing options and completing applications.',
-    duration: '1 hour',
-    location: 'Housing Office',
-    nextAvailable: '2024-01-15T13:00:00Z',
-    slots: ['9:00 AM', '10:00 AM', '1:00 PM', '2:00 PM', '3:00 PM'],
-    rating: 4.7,
-    enrolledCount: 15,
-    maxCapacity: 1,
-    requirements: ['Bring income documentation', 'Photo ID required'],
-    icon: Home,
-    color: 'bg-green-100 text-green-600'
-  },
-  {
-    id: 4,
-    name: 'Financial Literacy Class',
-    category: 'Financial',
-    provider: 'David Kim, Financial Advisor',
-    description: 'Learn budgeting, saving, and money management skills.',
-    duration: '90 minutes',
-    location: 'Classroom C',
-    nextAvailable: '2024-01-18T10:00:00Z',
-    slots: ['10:00 AM', '6:00 PM'],
-    rating: 4.6,
-    enrolledCount: 18,
-    maxCapacity: 20,
-    requirements: ['6-week program', 'Weekly attendance'],
-    icon: DollarSign,
-    color: 'bg-yellow-100 text-yellow-600'
-  },
-  {
-    id: 5,
-    name: 'Health Screening',
-    category: 'Healthcare',
-    provider: 'Nurse Patricia Johnson, RN',
-    description: 'Basic health check-up and vaccination updates.',
-    duration: '30 minutes',
-    location: 'Health Clinic',
-    nextAvailable: '2024-01-16T09:00:00Z',
-    slots: ['9:00 AM', '10:00 AM', '11:00 AM', '1:00 PM', '2:00 PM'],
-    rating: 4.9,
-    enrolledCount: 5,
-    maxCapacity: 1,
-    requirements: ['Fasting not required', 'Bring insurance card if available'],
-    icon: Stethoscope,
-    color: 'bg-purple-100 text-purple-600'
-  },
-  {
-    id: 6,
-    name: 'Computer Skills Training',
-    category: 'Education',
-    provider: 'James Park, IT Instructor',
-    description: 'Basic computer and internet skills for job searching and daily life.',
-    duration: '2 hours',
-    location: 'Computer Lab',
-    nextAvailable: '2024-01-17T10:00:00Z',
-    slots: ['10:00 AM', '2:00 PM'],
-    rating: 4.8,
-    enrolledCount: 10,
-    maxCapacity: 15,
-    requirements: ['No experience needed', '4-week program'],
-    icon: GraduationCap,
-    color: 'bg-indigo-100 text-indigo-600'
-  },
-  {
-    id: 7,
-    name: 'Support Group',
-    category: 'Mental Health',
-    provider: 'Maria Gonzalez, LMFT',
-    description: 'Peer support group for sharing experiences and building community.',
-    duration: '75 minutes',
-    location: 'Community Room',
-    nextAvailable: '2024-01-15T18:00:00Z',
-    slots: ['6:00 PM'],
-    rating: 4.7,
-    enrolledCount: 12,
-    maxCapacity: 15,
-    requirements: ['Weekly commitment', 'Confidentiality agreement'],
-    icon: Users,
-    color: 'bg-pink-100 text-pink-600'
-  },
-  {
-    id: 8,
-    name: 'Nutrition Workshop',
-    category: 'Health & Wellness',
-    provider: 'Chef Anna Martinez',
-    description: 'Learn healthy cooking on a budget and meal planning.',
-    duration: '2 hours',
-    location: 'Teaching Kitchen',
-    nextAvailable: '2024-01-19T15:00:00Z',
-    slots: ['3:00 PM'],
-    rating: 4.9,
-    enrolledCount: 8,
-    maxCapacity: 12,
-    requirements: ['Hands-on cooking', 'All skill levels welcome'],
-    icon: Utensils,
-    color: 'bg-orange-100 text-orange-600'
-  }
-];
 
-const myAppointments = [
-  {
-    id: 1,
-    serviceName: 'Individual Counseling',
-    provider: 'Dr. Sarah Wilson, LCSW',
-    date: '2024-01-15T10:00:00Z',
-    duration: '50 minutes',
-    location: 'Counseling Room A',
-    status: 'confirmed',
-    notes: 'Follow-up session for goal setting'
-  },
-  {
-    id: 2,
-    serviceName: 'Job Readiness Workshop',
-    provider: 'Michael Chen, Career Counselor',
-    date: '2024-01-17T14:00:00Z',
-    duration: '2 hours',
-    location: 'Training Room B',
-    status: 'confirmed',
-    notes: 'Session 2 of 4 - Resume building'
-  },
-  {
-    id: 3,
-    serviceName: 'Housing Search Assistance',
-    provider: 'Lisa Rodriguez, Housing Specialist',
-    date: '2024-01-18T13:00:00Z',
-    duration: '1 hour',
-    location: 'Housing Office',
-    status: 'pending',
-    notes: 'Review apartment applications'
-  }
-];
+
+
 
 const categories = [
   'All',
@@ -222,8 +54,60 @@ export default function ParticipantServices() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [showBookingModal, setShowBookingModal] = useState(false);
-  const [selectedService, setSelectedService] = useState<any>(null);
+  const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [activeTab, setActiveTab] = useState('browse');
+  
+  // Real data state
+  const [availableServices, setAvailableServices] = useState<Service[]>([]);
+  const [userAppointments, setUserAppointments] = useState<Appointment[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  
+  // Booking state
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState<string>('');
+  const [bookingNotes, setBookingNotes] = useState<string>('');
+  const [isBooking, setIsBooking] = useState(false);
+
+  // Load real data from API
+  useEffect(() => {
+    async function loadData() {
+      if (!user) return;
+      
+      try {
+        setLoading(true);
+        setError(null);
+        
+        // Load available services (this should work)
+        try {
+          const services = await servicesService.getAvailableServices();
+          setAvailableServices(services);
+        } catch (serviceErr) {
+          console.error('Failed to load services:', serviceErr);
+          setError('Failed to load services. Using demo data.');
+          setAvailableServices(servicesService.getMockServices());
+        }
+        
+        // Load user appointments 
+        try {
+          console.log('🔄 Loading user appointments...');
+          const appointments = await servicesService.getUserAppointments();
+          console.log('✅ Appointments loaded:', appointments.length);
+          setUserAppointments(appointments);
+        } catch (appointmentErr) {
+          console.error('❌ Failed to load appointments:', appointmentErr);
+          // Don't show error for appointments, just keep empty array  
+          setUserAppointments([]);
+        }
+        
+      } catch (err) {
+        console.error('Unexpected error:', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    
+    loadData();
+  }, [user]);
 
   // Check if user has participant or super admin access
   if (!hasRole('participant') && !hasRole('super_admin')) {
@@ -239,6 +123,34 @@ export default function ParticipantServices() {
     );
   }
 
+  // Utility function to get icon for service category
+  const getServiceIcon = (category: string) => {
+    const iconMap: { [key: string]: React.ComponentType<{ className?: string }> } = {
+      'Mental Health': Heart,
+      'Employment': Briefcase,
+      'Housing': Home,
+      'Financial': DollarSign,
+      'Healthcare': Stethoscope,
+      'Education': GraduationCap,
+      'Health & Wellness': Utensils
+    };
+    return iconMap[category] || BookOpen;
+  };
+
+  // Utility function to get color for service category
+  const getServiceColor = (category: string) => {
+    const colorMap: { [key: string]: string } = {
+      'Mental Health': 'bg-red-100 text-red-600',
+      'Employment': 'bg-blue-100 text-blue-600',
+      'Housing': 'bg-green-100 text-green-600',
+      'Financial': 'bg-yellow-100 text-yellow-600',
+      'Healthcare': 'bg-purple-100 text-purple-600',
+      'Education': 'bg-indigo-100 text-indigo-600',
+      'Health & Wellness': 'bg-orange-100 text-orange-600'
+    };
+    return colorMap[category] || 'bg-gray-100 text-gray-600';
+  };
+
   const filteredServices = availableServices.filter(service => {
     const matchesSearch = service.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          service.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -247,9 +159,63 @@ export default function ParticipantServices() {
     return matchesSearch && matchesCategory;
   });
 
-  const handleBookService = (service: any) => {
+  const handleBookService = (service: Service) => {
     setSelectedService(service);
+    setSelectedTimeSlot('');
+    setBookingNotes('');
     setShowBookingModal(true);
+  };
+
+  const handleConfirmBooking = async () => {
+    if (!selectedService || !selectedTimeSlot) {
+      alert('Please select a time slot');
+      return;
+    }
+
+    setIsBooking(true);
+    try {
+      // Create a proper datetime for the selected slot
+      const today = new Date();
+      const [time, period] = selectedTimeSlot.split(' ');
+      const [hours, minutes] = time.split(':');
+      let hour = parseInt(hours);
+      if (period === 'PM' && hour !== 12) hour += 12;
+      if (period === 'AM' && hour === 12) hour = 0;
+      
+      const scheduledTime = new Date(today);
+      scheduledTime.setHours(hour, parseInt(minutes), 0, 0);
+      // If the time is in the past today, schedule for tomorrow
+      if (scheduledTime < new Date()) {
+        scheduledTime.setDate(scheduledTime.getDate() + 1);
+      }
+
+      // Call real booking API
+      const appointment = await servicesService.bookService({
+        service_id: selectedService.id,
+        scheduled_time: scheduledTime.toISOString(),
+        notes: bookingNotes || undefined
+      });
+
+      alert(`Booking confirmed for ${selectedService.name} at ${selectedTimeSlot}!`);
+      setShowBookingModal(false);
+      
+      // Refresh appointments to show the new booking
+      try {
+        console.log('🔄 Refreshing appointments after booking...');
+        const updatedAppointments = await servicesService.getUserAppointments();
+        console.log('✅ Appointments refreshed:', updatedAppointments.length);
+        setUserAppointments(updatedAppointments);
+      } catch (appointmentErr) {
+        console.log('⚠️ Could not refresh appointments:', appointmentErr);
+        // Don't fail the booking if we can't refresh appointments
+      }
+      
+    } catch (error) {
+      console.error('Booking failed:', error);
+      alert(`Booking failed: ${error instanceof Error ? error.message : 'Please try again.'}`);
+    } finally {
+      setIsBooking(false);
+    }
   };
 
   const formatDateTime = (dateString: string) => {
@@ -278,10 +244,10 @@ export default function ParticipantServices() {
       </div>
 
       {/* Navigation Tabs */}
-      <div className="flex space-x-1 bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
+                <div className="flex space-x-1 bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
         {[
           { id: 'browse', label: 'Browse Services', count: availableServices.length },
-          { id: 'appointments', label: 'My Appointments', count: myAppointments.length },
+          { id: 'appointments', label: 'My Appointments', count: userAppointments.length },
           { id: 'history', label: 'Service History', count: 12 }
         ].map((tab) => (
           <button
@@ -331,13 +297,23 @@ export default function ParticipantServices() {
 
           {/* Services Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredServices.map((service) => {
-              const Icon = service.icon;
+            {loading ? (
+              <div className="col-span-full text-center py-8">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+                <p className="mt-2 text-gray-600 dark:text-gray-400">Loading services...</p>
+              </div>
+            ) : error ? (
+              <div className="col-span-full text-center py-8">
+                <AlertCircle className="h-8 w-8 text-yellow-500 mx-auto mb-2" />
+                <p className="text-yellow-600">{error}</p>
+              </div>
+            ) : filteredServices.map((service) => {
+              const Icon = getServiceIcon(service.category);
               return (
                 <Card key={service.id} className="hover:shadow-lg transition-shadow">
                   <CardHeader>
                     <div className="flex items-start justify-between">
-                      <div className={`p-2 rounded-lg ${service.color}`}>
+                      <div className={`p-2 rounded-lg ${getServiceColor(service.category)}`}>
                         <Icon className="w-6 h-6" />
                       </div>
                       <div className="flex items-center space-x-1">
@@ -363,7 +339,7 @@ export default function ParticipantServices() {
                       
                       <div className="flex items-center space-x-2 text-sm text-gray-500">
                         <Clock className="w-4 h-4" />
-                        <span>{service.duration}</span>
+                        <span>{servicesService.formatDuration(service.duration_minutes)}</span>
                       </div>
                       
                       <div className="flex items-center space-x-2 text-sm text-gray-500">
@@ -373,10 +349,10 @@ export default function ParticipantServices() {
 
                       <div className="flex items-center justify-between text-sm">
                         <span className="text-gray-500">
-                          {service.enrolledCount}/{service.maxCapacity} enrolled
+                          {service.current_bookings}/{service.max_capacity} enrolled
                         </span>
                         <Badge variant="outline">
-                          Next: {new Date(service.nextAvailable).toLocaleDateString()}
+                          Next: {service.next_available ? servicesService.formatDate(service.next_available) : 'Available'}
                         </Badge>
                       </div>
 
@@ -413,14 +389,14 @@ export default function ParticipantServices() {
             </Button>
           </div>
 
-          {myAppointments.map((appointment) => (
+          {userAppointments.map((appointment) => (
             <Card key={appointment.id}>
               <CardContent className="pt-6">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center space-x-2 mb-2">
-                      <h3 className="font-semibold text-lg">{appointment.serviceName}</h3>
-                      <Badge className={getStatusColor(appointment.status)}>
+                      <h3 className="font-semibold text-lg">{appointment.service_name}</h3>
+                      <Badge className={servicesService.getStatusColor(appointment.status)}>
                         {appointment.status}
                       </Badge>
                     </div>
@@ -432,11 +408,11 @@ export default function ParticipantServices() {
                       </div>
                       <div className="flex items-center space-x-2">
                         <Calendar className="w-4 h-4" />
-                        <span>{formatDateTime(appointment.date)}</span>
+                        <span>{servicesService.formatDateTime(appointment.scheduled_time)}</span>
                       </div>
                       <div className="flex items-center space-x-2">
                         <Clock className="w-4 h-4" />
-                        <span>{appointment.duration}</span>
+                        <span>{servicesService.formatDuration(appointment.duration_minutes)}</span>
                       </div>
                       <div className="flex items-center space-x-2">
                         <MapPin className="w-4 h-4" />
@@ -510,8 +486,14 @@ export default function ParticipantServices() {
               <div>
                 <Label>Available Time Slots</Label>
                 <div className="grid grid-cols-2 gap-2 mt-2">
-                  {selectedService.slots.map((slot: string) => (
-                    <Button key={slot} variant="outline" size="sm">
+                  {['9:00 AM', '10:00 AM', '2:00 PM', '3:00 PM'].map((slot: string) => (
+                    <Button 
+                      key={slot} 
+                      variant={selectedTimeSlot === slot ? "default" : "outline"} 
+                      size="sm"
+                      onClick={() => setSelectedTimeSlot(slot)}
+                      className="cursor-pointer"
+                    >
                       {slot}
                     </Button>
                   ))}
@@ -532,10 +514,26 @@ export default function ParticipantServices() {
                 </div>
               )}
               
+              <div>
+                <Label htmlFor="notes">Additional Notes (Optional)</Label>
+                <textarea
+                  id="notes"
+                  className="w-full mt-1 p-2 border border-gray-300 rounded-md resize-none"
+                  rows={3}
+                  placeholder="Any special requests or notes..."
+                  value={bookingNotes}
+                  onChange={(e) => setBookingNotes(e.target.value)}
+                />
+              </div>
+              
               <div className="flex space-x-2 pt-4">
-                <Button className="flex-1">
+                <Button 
+                  className="flex-1" 
+                  onClick={handleConfirmBooking}
+                  disabled={!selectedTimeSlot || isBooking}
+                >
                   <CheckCircle className="w-4 h-4 mr-2" />
-                  Confirm Booking
+                  {isBooking ? 'Booking...' : 'Confirm Booking'}
                 </Button>
                 <Button variant="outline" onClick={() => setShowBookingModal(false)}>
                   Cancel

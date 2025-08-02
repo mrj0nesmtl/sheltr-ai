@@ -5,11 +5,15 @@ Handles authentication, custom claims, and Firestore operations
 
 import os
 import json
+import time
 from typing import Dict, Any, Optional, List
 import firebase_admin
 from firebase_admin import credentials, auth, firestore
 from pydantic import BaseModel
 from enum import Enum
+import logging
+
+logger = logging.getLogger(__name__)
 
 class UserRole(str, Enum):
     """User roles for RBAC system"""
@@ -29,14 +33,41 @@ class FirebaseService:
     """Firebase Admin SDK service for backend operations"""
     
     def __init__(self):
-        """Initialize Firebase Admin SDK"""
+        """Initialize Firebase Admin SDK with improved error handling"""
         if not firebase_admin._apps:
             # Try to load from service account file first
             service_account_path = "service-account-key.json"
             
             if os.path.exists(service_account_path):
-                cred = credentials.Certificate(service_account_path)
-                firebase_admin.initialize_app(cred)
+                try:
+                    # Load and validate service account key
+                    with open(service_account_path, 'r') as f:
+                        service_account_data = json.load(f)
+                    
+                    # Fix common private key formatting issues
+                    if 'private_key' in service_account_data:
+                        private_key = service_account_data['private_key']
+                        
+                        # Fix double-escaped newlines
+                        if '\\\\n' in private_key:
+                            private_key = private_key.replace('\\\\n', '\\n')
+                            service_account_data['private_key'] = private_key
+                            logger.info("Fixed double-escaped newlines in private key")
+                        
+                        # Ensure proper formatting
+                        if not private_key.endswith('\\n-----END PRIVATE KEY-----'):
+                            if not private_key.endswith('-----END PRIVATE KEY-----'):
+                                private_key += '\\n-----END PRIVATE KEY-----'
+                                service_account_data['private_key'] = private_key
+                                logger.info("Added missing END marker to private key")
+                    
+                    cred = credentials.Certificate(service_account_data)
+                    firebase_admin.initialize_app(cred)
+                    logger.info("✅ Firebase initialized successfully with service account file")
+                    
+                except Exception as e:
+                    logger.error(f"❌ Failed to initialize Firebase with service account file: {e}")
+                    raise Exception(f"Firebase service account initialization failed: {str(e)}")
             else:
                 # Fall back to environment variables
                 service_account_info = {
@@ -51,13 +82,19 @@ class FirebaseService:
                 }
                 
                 if all(service_account_info.values()):
-                    cred = credentials.Certificate(service_account_info)
-                    firebase_admin.initialize_app(cred)
+                    try:
+                        cred = credentials.Certificate(service_account_info)
+                        firebase_admin.initialize_app(cred)
+                        logger.info("✅ Firebase initialized successfully with environment variables")
+                    except Exception as e:
+                        logger.error(f"❌ Failed to initialize Firebase with environment variables: {e}")
+                        raise Exception(f"Firebase environment initialization failed: {str(e)}")
                 else:
                     raise Exception("Firebase credentials not found. Please set up service account key.")
         
         self.auth = auth
         self.db = firestore.client()
+        logger.info("🔥 Firebase service ready")
     
     async def verify_token(self, token: str) -> Dict[str, Any]:
         """

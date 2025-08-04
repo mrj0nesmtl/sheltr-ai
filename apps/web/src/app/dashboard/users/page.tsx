@@ -404,53 +404,115 @@ export default function UserManagement() {
           <Card className="border-2 border-purple-200 dark:border-purple-800">
             <CardContent className="p-0">
               {liveUserSession && (
-                <div className="flex items-center justify-between p-6 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20">
-                  <div className="flex items-center space-x-4">
-                    <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center shadow-lg">
-                      <Crown className="h-6 w-6 text-white" />
-                    </div>
-                    <div>
-                      <div className="font-bold text-lg text-purple-700 dark:text-purple-300">{liveUserSession.name}</div>
-                      <div className="text-sm text-purple-600 dark:text-purple-400">{liveUserSession.email}</div>
-                      <div className="text-sm text-muted-foreground flex items-center mt-1">
-                        <Building2 className="h-3 w-3 mr-1" />
-                        {liveUserSession.role} • Tenant: {liveUserSession.tenantId}
+                <div className="p-4 sm:p-6 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20">
+                  {/* Mobile Layout */}
+                  <div className="block sm:hidden space-y-4">
+                    {/* Top Row: Icon, Name, Status */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3 flex-1 min-w-0">
+                        <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center shadow-lg">
+                          <Crown className="h-6 w-6 text-white" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="font-bold text-base text-purple-700 dark:text-purple-300 truncate">{liveUserSession.name}</div>
+                          <div className="text-sm text-purple-600 dark:text-purple-400 truncate">{liveUserSession.email}</div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center space-x-6">
-                    <div className="text-center">
-                      <div className="text-sm font-medium">Session Started</div>
-                      <div className="text-xs text-muted-foreground">{liveUserSession.sessionStart}</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-sm font-medium flex items-center">
-                        <Activity className="h-3 w-3 mr-1 text-green-500" />
-                        Active Now
-                      </div>
-                      <div className="text-xs text-muted-foreground">{currentTime.toLocaleTimeString()}</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-sm font-medium flex items-center">
-                        <MapPin className="h-3 w-3 mr-1" />
-                        {liveUserSession.location}
-                      </div>
-                      <div className="text-xs text-muted-foreground">{liveUserSession.device}</div>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100">
+                      <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100 shrink-0">
                         Online
                       </Badge>
                     </div>
-                    <div className="flex space-x-1">
-                      <Button variant="ghost" size="sm">
-                        <Eye className="h-4 w-4" />
-                      </Button>
-                      <Button variant="ghost" size="sm">
-                        <Edit className="h-4 w-4" />
-                      </Button>
+                    
+                    {/* Role and Tenant */}
+                    <div className="text-sm text-muted-foreground flex items-center">
+                      <Building2 className="h-3 w-3 mr-1" />
+                      {liveUserSession.role} • Tenant: {liveUserSession.tenantId}
+                    </div>
+                    
+                    {/* Session Info */}
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                      <div>
+                        <div className="font-medium text-purple-700 dark:text-purple-300">Session Started</div>
+                        <div className="text-xs text-muted-foreground">{liveUserSession.sessionStart}</div>
+                      </div>
+                      <div>
+                        <div className="font-medium text-green-600 flex items-center">
+                          <Activity className="h-3 w-3 mr-1" />
+                          Active Now
+                        </div>
+                        <div className="text-xs text-muted-foreground">{currentTime.toLocaleTimeString()}</div>
+                      </div>
+                    </div>
+                    
+                    {/* Location & Actions */}
+                    <div className="flex items-center justify-between pt-2 border-t border-purple-200 dark:border-purple-700">
+                      <div className="text-sm">
+                        <div className="font-medium flex items-center">
+                          <MapPin className="h-3 w-3 mr-1" />
+                          {liveUserSession.location}
+                        </div>
+                        <div className="text-xs text-muted-foreground">{liveUserSession.device}</div>
+                      </div>
+                      <div className="flex space-x-1">
+                        <Button variant="ghost" size="sm">
+                          <Eye className="h-4 w-4" />
+                        </Button>
+                        <Button variant="ghost" size="sm">
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Desktop Layout */}
+                  <div className="hidden sm:flex items-center justify-between">
+                    <div className="flex items-center space-x-4">
+                      <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center shadow-lg">
+                        <Crown className="h-6 w-6 text-white" />
+                      </div>
+                      <div>
+                        <div className="font-bold text-lg text-purple-700 dark:text-purple-300">{liveUserSession.name}</div>
+                        <div className="text-sm text-purple-600 dark:text-purple-400">{liveUserSession.email}</div>
+                        <div className="text-sm text-muted-foreground flex items-center mt-1">
+                          <Building2 className="h-3 w-3 mr-1" />
+                          {liveUserSession.role} • Tenant: {liveUserSession.tenantId}
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center space-x-6">
+                      <div className="text-center">
+                        <div className="text-sm font-medium">Session Started</div>
+                        <div className="text-xs text-muted-foreground">{liveUserSession.sessionStart}</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-sm font-medium flex items-center">
+                          <Activity className="h-3 w-3 mr-1 text-green-500" />
+                          Active Now
+                        </div>
+                        <div className="text-xs text-muted-foreground">{currentTime.toLocaleTimeString()}</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-sm font-medium flex items-center">
+                          <MapPin className="h-3 w-3 mr-1" />
+                          {liveUserSession.location}
+                        </div>
+                        <div className="text-xs text-muted-foreground">{liveUserSession.device}</div>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <CheckCircle className="h-4 w-4 text-green-500" />
+                        <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100">
+                          Online
+                        </Badge>
+                      </div>
+                      <div className="flex space-x-1">
+                        <Button variant="ghost" size="sm">
+                          <Eye className="h-4 w-4" />
+                        </Button>
+                        <Button variant="ghost" size="sm">
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -515,46 +577,96 @@ export default function UserManagement() {
             <CardContent className="p-0">
               <div className="space-y-0">
                 {adminUsers.map((admin) => (
-                  <div key={admin.id} className="flex items-center justify-between p-6 border-b last:border-b-0">
-                    <div className="flex items-center space-x-4">
-                      <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
-                        <UserCog className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                      </div>
-                      <div>
-                        <div className="font-medium">{admin.name}</div>
-                        <div className="text-sm text-muted-foreground">{admin.email}</div>
-                        <div className="text-sm text-muted-foreground flex items-center mt-1">
-                          <Building2 className="h-3 w-3 mr-1" />
-                          {admin.shelter} • {admin.role}
+                  <div key={admin.id} className="p-4 sm:p-6 border-b last:border-b-0">
+                    {/* Mobile Layout */}
+                    <div className="block sm:hidden space-y-3">
+                      {/* Top Row: Icon, Name, Status */}
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-3 flex-1 min-w-0">
+                          <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
+                            <UserCog className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="font-medium truncate">{admin.name}</div>
+                            <div className="text-sm text-muted-foreground truncate">{admin.email}</div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center space-x-6">
-                      <div className="text-center">
-                        <div className="text-sm font-medium">{admin.participants}</div>
-                        <div className="text-xs text-muted-foreground">Participants</div>
-                      </div>
-                      <div className="text-center">
-                        <div className="text-sm font-medium">{admin.lastLogin}</div>
-                        <div className="text-xs text-muted-foreground">Last Login</div>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        {getStatusIcon(admin.status)}
-                        <Badge className={getStatusColor(admin.status)}>
+                        <Badge className={getStatusColor(admin.status)} variant="secondary">
                           {admin.status}
                         </Badge>
                       </div>
-                      <div className="flex space-x-1">
-                        <Button variant="ghost" size="sm">
-                          <Eye className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="sm">
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="sm">
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
+                      
+                      {/* Shelter and Role */}
+                      <div className="text-sm text-muted-foreground flex items-center">
+                        <Building2 className="h-3 w-3 mr-1" />
+                        {admin.shelter} • {admin.role}
+                      </div>
+                      
+                      {/* Metrics and Actions */}
+                      <div className="flex items-center justify-between">
+                        <div className="flex space-x-4">
+                          <div className="text-center">
+                            <div className="text-lg font-bold text-blue-600 dark:text-blue-400">{admin.participants}</div>
+                            <div className="text-xs text-muted-foreground">Participants</div>
+                          </div>
+                          <div className="text-center">
+                            <div className="text-sm font-medium">{admin.lastLogin}</div>
+                            <div className="text-xs text-muted-foreground">Last Login</div>
+                          </div>
+                        </div>
+                        <div className="flex space-x-1">
+                          <Button variant="ghost" size="sm">
+                            <Eye className="h-4 w-4" />
+                          </Button>
+                          <Button variant="ghost" size="sm">
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Desktop Layout */}
+                    <div className="hidden sm:flex items-center justify-between">
+                      <div className="flex items-center space-x-4">
+                        <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
+                          <UserCog className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                        </div>
+                        <div>
+                          <div className="font-medium">{admin.name}</div>
+                          <div className="text-sm text-muted-foreground">{admin.email}</div>
+                          <div className="text-sm text-muted-foreground flex items-center mt-1">
+                            <Building2 className="h-3 w-3 mr-1" />
+                            {admin.shelter} • {admin.role}
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center space-x-6">
+                        <div className="text-center">
+                          <div className="text-sm font-medium">{admin.participants}</div>
+                          <div className="text-xs text-muted-foreground">Participants</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-sm font-medium">{admin.lastLogin}</div>
+                          <div className="text-xs text-muted-foreground">Last Login</div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          {getStatusIcon(admin.status)}
+                          <Badge className={getStatusColor(admin.status)}>
+                            {admin.status}
+                          </Badge>
+                        </div>
+                        <div className="flex space-x-1">
+                          <Button variant="ghost" size="sm">
+                            <Eye className="h-4 w-4" />
+                          </Button>
+                          <Button variant="ghost" size="sm">
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button variant="ghost" size="sm">
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -584,50 +696,104 @@ export default function UserManagement() {
             <CardContent className="p-0">
               <div className="space-y-0">
                 {participantUsers.map((participant) => (
-                  <div key={participant.id} className="flex items-center justify-between p-6 border-b last:border-b-0">
-                    <div className="flex items-center space-x-4">
-                      <div className="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
-                        <UserCheck className="h-5 w-5 text-green-600 dark:text-green-400" />
-                      </div>
-                      <div>
-                        <div className="font-medium">{participant.name}</div>
-                        <div className="text-sm text-muted-foreground">{participant.email}</div>
-                        <div className="text-sm text-muted-foreground flex items-center mt-1">
-                          <Building2 className="h-3 w-3 mr-1" />
-                          {participant.shelter}
+                  <div key={participant.id} className="p-4 sm:p-6 border-b last:border-b-0">
+                    {/* Mobile Layout */}
+                    <div className="block sm:hidden space-y-3">
+                      {/* Top Row: Icon, Name, Status */}
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-3 flex-1 min-w-0">
+                          <div className="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
+                            <UserCheck className="h-5 w-5 text-green-600 dark:text-green-400" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="font-medium truncate">{participant.name}</div>
+                            <div className="text-sm text-muted-foreground truncate">{participant.email}</div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center space-x-6">
-                      <div className="text-center">
-                        <div className="text-sm font-medium">${participant.totalReceived.toLocaleString()}</div>
-                        <div className="text-xs text-muted-foreground">Total Received</div>
-                      </div>
-                      <div className="text-center">
-                        <div className="text-sm font-medium">{participant.qrScans}</div>
-                        <div className="text-xs text-muted-foreground">QR Scans</div>
-                      </div>
-                      <div className="text-center">
-                        <div className="text-sm font-medium">{participant.lastDonation}</div>
-                        <div className="text-xs text-muted-foreground">Last Donation</div>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        {getStatusIcon(participant.status)}
-                        <Badge className={getStatusColor(participant.status)}>
+                        <Badge className={getStatusColor(participant.status)} variant="secondary">
                           {participant.status.replace('_', ' ')}
                         </Badge>
                       </div>
-                      <div className="flex space-x-1">
+                      
+                      {/* Shelter */}
+                      <div className="text-sm text-muted-foreground flex items-center">
+                        <Building2 className="h-3 w-3 mr-1" />
+                        {participant.shelter}
+                      </div>
+                      
+                      {/* Metrics Grid */}
+                      <div className="grid grid-cols-3 gap-3 text-center">
+                        <div>
+                          <div className="text-lg font-bold text-green-600 dark:text-green-400">${participant.totalReceived.toLocaleString()}</div>
+                          <div className="text-xs text-muted-foreground">Total Received</div>
+                        </div>
+                        <div>
+                          <div className="text-lg font-bold text-blue-600 dark:text-blue-400">{participant.qrScans}</div>
+                          <div className="text-xs text-muted-foreground">QR Scans</div>
+                        </div>
+                        <div>
+                          <div className="text-sm font-medium">{participant.lastDonation}</div>
+                          <div className="text-xs text-muted-foreground">Last Donation</div>
+                        </div>
+                      </div>
+                      
+                      {/* Actions */}
+                      <div className="flex justify-end space-x-1 pt-2 border-t border-gray-200 dark:border-gray-700">
                         <Button variant="ghost" size="sm">
                           <Eye className="h-4 w-4" />
                         </Button>
                         <Button variant="ghost" size="sm">
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="sm">
                           <MoreHorizontal className="h-4 w-4" />
                         </Button>
+                      </div>
+                    </div>
+
+                    {/* Desktop Layout */}
+                    <div className="hidden sm:flex items-center justify-between">
+                      <div className="flex items-center space-x-4">
+                        <div className="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
+                          <UserCheck className="h-5 w-5 text-green-600 dark:text-green-400" />
+                        </div>
+                        <div>
+                          <div className="font-medium">{participant.name}</div>
+                          <div className="text-sm text-muted-foreground">{participant.email}</div>
+                          <div className="text-sm text-muted-foreground flex items-center mt-1">
+                            <Building2 className="h-3 w-3 mr-1" />
+                            {participant.shelter}
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center space-x-6">
+                        <div className="text-center">
+                          <div className="text-sm font-medium">${participant.totalReceived.toLocaleString()}</div>
+                          <div className="text-xs text-muted-foreground">Total Received</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-sm font-medium">{participant.qrScans}</div>
+                          <div className="text-xs text-muted-foreground">QR Scans</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-sm font-medium">{participant.lastDonation}</div>
+                          <div className="text-xs text-muted-foreground">Last Donation</div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          {getStatusIcon(participant.status)}
+                          <Badge className={getStatusColor(participant.status)}>
+                            {participant.status.replace('_', ' ')}
+                          </Badge>
+                        </div>
+                        <div className="flex space-x-1">
+                          <Button variant="ghost" size="sm">
+                            <Eye className="h-4 w-4" />
+                          </Button>
+                          <Button variant="ghost" size="sm">
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button variant="ghost" size="sm">
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -657,50 +823,104 @@ export default function UserManagement() {
             <CardContent className="p-0">
               <div className="space-y-0">
                 {donorUsers.map((donor) => (
-                  <div key={donor.id} className="flex items-center justify-between p-6 border-b last:border-b-0">
-                    <div className="flex items-center space-x-4">
-                      <div className="w-10 h-10 bg-red-100 dark:bg-red-900 rounded-full flex items-center justify-center">
-                        <Heart className="h-5 w-5 text-red-600 dark:text-red-400" />
-                      </div>
-                      <div>
-                        <div className="font-medium">{donor.name}</div>
-                        <div className="text-sm text-muted-foreground">{donor.email}</div>
-                        <div className="text-sm text-muted-foreground flex items-center mt-1">
-                          <Building2 className="h-3 w-3 mr-1" />
-                          Prefers: {donor.favoriteShelter}
+                  <div key={donor.id} className="p-4 sm:p-6 border-b last:border-b-0">
+                    {/* Mobile Layout */}
+                    <div className="block sm:hidden space-y-3">
+                      {/* Top Row: Icon, Name, Status */}
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-3 flex-1 min-w-0">
+                          <div className="w-10 h-10 bg-red-100 dark:bg-red-900 rounded-full flex items-center justify-center">
+                            <Heart className="h-5 w-5 text-red-600 dark:text-red-400" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="font-medium truncate">{donor.name}</div>
+                            <div className="text-sm text-muted-foreground truncate">{donor.email}</div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center space-x-6">
-                      <div className="text-center">
-                        <div className="text-sm font-medium">${donor.totalDonated.toLocaleString()}</div>
-                        <div className="text-xs text-muted-foreground">Total Donated</div>
-                      </div>
-                      <div className="text-center">
-                        <div className="text-sm font-medium">{donor.donationCount}</div>
-                        <div className="text-xs text-muted-foreground">Donations</div>
-                      </div>
-                      <div className="text-center">
-                        <div className="text-sm font-medium">{donor.lastDonation}</div>
-                        <div className="text-xs text-muted-foreground">Last Donation</div>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        {getStatusIcon(donor.status)}
-                        <Badge className={getStatusColor(donor.status)}>
+                        <Badge className={getStatusColor(donor.status)} variant="secondary">
                           {donor.status}
                         </Badge>
                       </div>
-                      <div className="flex space-x-1">
+                      
+                      {/* Preferred Shelter */}
+                      <div className="text-sm text-muted-foreground flex items-center">
+                        <Building2 className="h-3 w-3 mr-1" />
+                        Prefers: {donor.favoriteShelter}
+                      </div>
+                      
+                      {/* Metrics Grid */}
+                      <div className="grid grid-cols-3 gap-3 text-center">
+                        <div>
+                          <div className="text-lg font-bold text-green-600 dark:text-green-400">${donor.totalDonated.toLocaleString()}</div>
+                          <div className="text-xs text-muted-foreground">Total Donated</div>
+                        </div>
+                        <div>
+                          <div className="text-lg font-bold text-blue-600 dark:text-blue-400">{donor.donationCount}</div>
+                          <div className="text-xs text-muted-foreground">Donations</div>
+                        </div>
+                        <div>
+                          <div className="text-sm font-medium">{donor.lastDonation}</div>
+                          <div className="text-xs text-muted-foreground">Last Donation</div>
+                        </div>
+                      </div>
+                      
+                      {/* Actions */}
+                      <div className="flex justify-end space-x-1 pt-2 border-t border-gray-200 dark:border-gray-700">
                         <Button variant="ghost" size="sm">
                           <Eye className="h-4 w-4" />
                         </Button>
                         <Button variant="ghost" size="sm">
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="sm">
                           <MoreHorizontal className="h-4 w-4" />
                         </Button>
+                      </div>
+                    </div>
+
+                    {/* Desktop Layout */}
+                    <div className="hidden sm:flex items-center justify-between">
+                      <div className="flex items-center space-x-4">
+                        <div className="w-10 h-10 bg-red-100 dark:bg-red-900 rounded-full flex items-center justify-center">
+                          <Heart className="h-5 w-5 text-red-600 dark:text-red-400" />
+                        </div>
+                        <div>
+                          <div className="font-medium">{donor.name}</div>
+                          <div className="text-sm text-muted-foreground">{donor.email}</div>
+                          <div className="text-sm text-muted-foreground flex items-center mt-1">
+                            <Building2 className="h-3 w-3 mr-1" />
+                            Prefers: {donor.favoriteShelter}
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center space-x-6">
+                        <div className="text-center">
+                          <div className="text-sm font-medium">${donor.totalDonated.toLocaleString()}</div>
+                          <div className="text-xs text-muted-foreground">Total Donated</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-sm font-medium">{donor.donationCount}</div>
+                          <div className="text-xs text-muted-foreground">Donations</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-sm font-medium">{donor.lastDonation}</div>
+                          <div className="text-xs text-muted-foreground">Last Donation</div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          {getStatusIcon(donor.status)}
+                          <Badge className={getStatusColor(donor.status)}>
+                            {donor.status}
+                          </Badge>
+                        </div>
+                        <div className="flex space-x-1">
+                          <Button variant="ghost" size="sm">
+                            <Eye className="h-4 w-4" />
+                          </Button>
+                          <Button variant="ghost" size="sm">
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button variant="ghost" size="sm">
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </div>

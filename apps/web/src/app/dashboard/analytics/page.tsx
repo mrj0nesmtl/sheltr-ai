@@ -365,42 +365,122 @@ export default function Analytics() {
 
         {/* Overview Tab */}
         <TabsContent value="overview" className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Donation Trends */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Donation Trends</CardTitle>
-                <CardDescription>Monthly donation volume and growth</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {donationTrends.slice(-4).map((trend) => (
-                    <div key={trend.month} className="flex items-center justify-between p-3 border rounded-lg">
-                      <div className="font-medium">{trend.month} 2024</div>
-                      <div className="text-right">
-                        <div className="font-semibold">${trend.donations.toLocaleString()}</div>
-                        <div className="text-sm text-muted-foreground">{trend.count} donations</div>
+          {/* Donation Trends - Mobile Redesigned */}
+          <div className="space-y-3">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Donation Trends</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">Monthly donation volume and growth</p>
+            
+            {donationTrends.slice(-4).map((trend) => (
+              <Card key={trend.month} className="overflow-hidden">
+                <CardContent className="p-0 sm:p-6">
+                  {/* Mobile Layout */}
+                  <div className="block sm:hidden">
+                    <div className="p-4 bg-gradient-to-r from-green-50 via-white to-green-50 dark:from-green-950/30 dark:via-slate-900 dark:to-green-950/30">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg">
+                            <DollarSign className="h-6 w-6 text-white" />
+                          </div>
+                          <div>
+                            <h3 className="font-bold text-lg text-gray-900 dark:text-white">
+                              {trend.month} 2024
+                            </h3>
+                            <div className="text-sm text-gray-600 dark:text-gray-400">
+                              {trend.count} donations
+                            </div>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-xl font-bold text-green-600 dark:text-green-400">
+                            ${trend.donations.toLocaleString()}
+                          </div>
+                          <div className="text-sm text-gray-500 dark:text-gray-500">
+                            ${trend.avgAmount} avg
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+                  </div>
 
-            {/* Real-time Activity */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Real-time Activity</CardTitle>
-                <CardDescription>Live platform events and transactions</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {realTimeActivity.map((activity, index) => (
-                    <div key={index} className="flex items-center space-x-3">
+                  {/* Desktop Layout */}
+                  <div className="hidden sm:block">
+                    <div className="flex items-center justify-between p-6">
+                      <div className="flex items-center space-x-4">
+                        <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-sm">
+                          <DollarSign className="h-6 w-6 text-white" />
+                        </div>
+                        <div>
+                          <div className="font-bold text-lg">{trend.month} 2024</div>
+                          <div className="text-sm text-gray-600 dark:text-gray-400">{trend.count} donations</div>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-xl font-bold text-green-600 dark:text-green-400">
+                          ${trend.donations.toLocaleString()}
+                        </div>
+                        <div className="text-sm text-gray-500 dark:text-gray-500">
+                          ${trend.avgAmount} avg
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {/* Real-time Activity - Mobile Redesigned */}
+          <div className="space-y-3 mt-8">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Real-time Activity</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">Live platform events and transactions</p>
+            
+            {realTimeActivity.map((activity, index) => (
+              <Card key={index} className="overflow-hidden">
+                <CardContent className="p-0 sm:p-6">
+                  {/* Mobile Layout */}
+                  <div className="block sm:hidden">
+                    <div className="p-4 bg-gradient-to-r from-blue-50 via-white to-blue-50 dark:from-blue-950/30 dark:via-slate-900 dark:to-blue-950/30">
+                      <div className="flex items-start space-x-3">
+                        <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse mt-2 shrink-0"></div>
+                        <div className="flex-1 min-w-0">
+                          <div className="font-semibold text-base text-gray-900 dark:text-white">
+                            {activity.event}
+                          </div>
+                          <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                            <Clock className="h-3 w-3 inline mr-1" />
+                            {activity.time}
+                          </div>
+                          <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                            <MapPin className="h-3 w-3 inline mr-1" />
+                            {activity.location}
+                          </div>
+                          {activity.amount && (
+                            <div className="text-sm font-medium text-green-600 dark:text-green-400 mt-1">
+                              {activity.amount}
+                            </div>
+                          )}
+                          {activity.shelter && (
+                            <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                              {activity.shelter}
+                            </div>
+                          )}
+                          {activity.participant && (
+                            <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                              {activity.participant}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Desktop Layout */}
+                  <div className="hidden sm:block">
+                    <div className="flex items-center space-x-3 p-6">
                       <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                       <div className="flex-1">
                         <div className="text-sm font-medium">{activity.event}</div>
-                        <div className="text-xs text-muted-foreground">
+                        <div className="text-xs text-gray-500 dark:text-gray-400">
                           {activity.time} • {activity.location}
                           {activity.amount && ` • ${activity.amount}`}
                           {activity.shelter && ` • ${activity.shelter}`}
@@ -408,209 +488,512 @@ export default function Analytics() {
                         </div>
                       </div>
                     </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
           </div>
 
-          {/* Top Performers */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Top Performers</CardTitle>
-              <CardDescription>Leading contributors across the platform</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {topPerformers.map((performer, index) => (
-                  <div key={index} className="p-4 border rounded-lg">
-                    <div className="flex items-center justify-between mb-2">
-                      <Badge variant="secondary">{performer.type}</Badge>
-                      <div className={`flex items-center text-xs ${getGrowthColor(performer.growth)}`}>
-                        {getGrowthIcon(performer.growth)}
-                        <span className="ml-1">+{performer.growth}%</span>
+          {/* Top Performers - Mobile Redesigned */}
+          <div className="space-y-3 mt-8">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Top Performers</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">Leading contributors across the platform</p>
+            
+            {topPerformers.map((performer, index) => (
+              <Card key={index} className="overflow-hidden">
+                <CardContent className="p-0 sm:p-6">
+                  {/* Mobile Layout */}
+                  <div className="block sm:hidden">
+                    <div className="p-4 bg-gradient-to-r from-purple-50 via-white to-purple-50 dark:from-purple-950/30 dark:via-slate-900 dark:to-purple-950/30">
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex items-center space-x-3 flex-1 min-w-0">
+                          <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-blue-500 rounded-2xl flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                            {index + 1}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h3 className="font-bold text-base leading-tight text-gray-900 dark:text-white truncate">
+                              {performer.name}
+                            </h3>
+                            <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                              {performer.category}
+                            </div>
+                          </div>
+                        </div>
+                        <Badge variant="secondary" className="shrink-0 ml-2">
+                          {performer.type}
+                        </Badge>
+                      </div>
+                      
+                      <div className="grid grid-cols-2 gap-4 mt-3">
+                        <div>
+                          <div className="text-sm font-medium text-gray-900 dark:text-white">Value</div>
+                          <div className="text-lg font-bold text-purple-600 dark:text-purple-400">
+                            {performer.metric}
+                          </div>
+                        </div>
+                        <div>
+                          <div className="text-sm font-medium text-gray-900 dark:text-white">Growth</div>
+                          <div className={`flex items-center text-lg font-bold ${getGrowthColor(performer.growth)}`}>
+                            {getGrowthIcon(performer.growth)}
+                            <span className="ml-1">+{performer.growth}%</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    <div className="font-medium text-sm">{performer.name}</div>
-                    <div className="text-lg font-bold">{performer.metric}</div>
-                    <div className="text-xs text-muted-foreground">{performer.category}</div>
                   </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+
+                  {/* Desktop Layout */}
+                  <div className="hidden sm:block">
+                    <div className="p-6">
+                      <div className="flex items-center justify-between mb-2">
+                        <Badge variant="secondary">{performer.type}</Badge>
+                        <div className={`flex items-center text-xs ${getGrowthColor(performer.growth)}`}>
+                          {getGrowthIcon(performer.growth)}
+                          <span className="ml-1">+{performer.growth}%</span>
+                        </div>
+                      </div>
+                      <div className="font-medium text-sm">{performer.name}</div>
+                      <div className="text-lg font-bold text-purple-600 dark:text-purple-400">{performer.metric}</div>
+                      <div className="text-xs text-gray-500 dark:text-gray-400">{performer.category}</div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </TabsContent>
 
         {/* Donations Tab */}
         <TabsContent value="donations" className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <Card className="lg:col-span-2">
-              <CardHeader>
-                <CardTitle>Donation Volume Trends</CardTitle>
-                <CardDescription>Monthly donation amounts and transaction counts</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {donationTrends.map((trend) => (
-                    <div key={trend.month} className="flex items-center justify-between p-4 border rounded-lg">
-                      <div>
-                        <div className="font-medium">{trend.month} 2024</div>
-                        <div className="text-sm text-muted-foreground">{trend.count} transactions</div>
+          {/* Donation Volume Trends - Mobile Redesigned */}
+          <div className="space-y-3">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Donation Volume Trends</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">Monthly donation amounts and transaction counts</p>
+            
+            {donationTrends.map((trend) => (
+              <Card key={trend.month} className="overflow-hidden">
+                <CardContent className="p-0 sm:p-6">
+                  {/* Mobile Layout */}
+                  <div className="block sm:hidden">
+                    <div className="p-4 bg-gradient-to-r from-emerald-50 via-white to-emerald-50 dark:from-emerald-950/30 dark:via-slate-900 dark:to-emerald-950/30">
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl flex items-center justify-center shadow-lg">
+                            <BarChart3 className="h-6 w-6 text-white" />
+                          </div>
+                          <div>
+                            <h3 className="font-bold text-lg text-gray-900 dark:text-white">
+                              {trend.month} 2024
+                            </h3>
+                            <div className="text-sm text-gray-600 dark:text-gray-400">
+                              {trend.count} transactions
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      <div className="text-right">
-                        <div className="text-lg font-bold">${trend.donations.toLocaleString()}</div>
-                        <div className="text-sm text-muted-foreground">${trend.avgAmount} avg</div>
+                      
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <div className="text-sm font-medium text-gray-900 dark:text-white">Total Amount</div>
+                          <div className="text-xl font-bold text-emerald-600 dark:text-emerald-400">
+                            ${trend.donations.toLocaleString()}
+                          </div>
+                        </div>
+                        <div>
+                          <div className="text-sm font-medium text-gray-900 dark:text-white">Average</div>
+                          <div className="text-lg font-bold text-gray-700 dark:text-gray-300">
+                            ${trend.avgAmount}
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Donation Insights</CardTitle>
-                <CardDescription>Key donation metrics</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-6">
-                  <div className="text-center">
-                    <div className="text-2xl font-bold">${analyticsMetrics.avgDonationAmount}</div>
-                    <div className="text-sm text-muted-foreground">Average Donation</div>
-                  </div>
-                  
-                  <div className="text-center">
-                    <div className="text-2xl font-bold">{analyticsMetrics.donationFrequency}x</div>
-                    <div className="text-sm text-muted-foreground">Monthly Frequency</div>
                   </div>
 
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-green-600">${analyticsMetrics.platformRevenue.toLocaleString()}</div>
-                    <div className="text-sm text-muted-foreground">Platform Revenue</div>
+                  {/* Desktop Layout */}
+                  <div className="hidden sm:block">
+                    <div className="flex items-center justify-between p-6">
+                      <div className="flex items-center space-x-4">
+                        <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl flex items-center justify-center shadow-sm">
+                          <BarChart3 className="h-6 w-6 text-white" />
+                        </div>
+                        <div>
+                          <div className="font-bold text-lg">{trend.month} 2024</div>
+                          <div className="text-sm text-gray-600 dark:text-gray-400">{trend.count} transactions</div>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-xl font-bold text-emerald-600 dark:text-emerald-400">
+                          ${trend.donations.toLocaleString()}
+                        </div>
+                        <div className="text-sm text-gray-500 dark:text-gray-500">
+                          ${trend.avgAmount} avg
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {/* Donation Insights - Mobile Redesigned */}
+          <div className="space-y-3 mt-8">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Donation Insights</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">Key donation metrics</p>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {/* Average Donation */}
+              <Card className="overflow-hidden">
+                <CardContent className="p-0">
+                  <div className="p-4 bg-gradient-to-r from-blue-50 via-white to-blue-50 dark:from-blue-950/30 dark:via-slate-900 dark:to-blue-950/30 text-center">
+                    <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-lg">
+                      <DollarSign className="h-6 w-6 text-white" />
+                    </div>
+                    <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                      ${analyticsMetrics.avgDonationAmount}
+                    </div>
+                    <div className="text-sm text-gray-600 dark:text-gray-400">Average Donation</div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Monthly Frequency */}
+              <Card className="overflow-hidden">
+                <CardContent className="p-0">
+                  <div className="p-4 bg-gradient-to-r from-purple-50 via-white to-purple-50 dark:from-purple-950/30 dark:via-slate-900 dark:to-purple-950/30 text-center">
+                    <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-lg">
+                      <Activity className="h-6 w-6 text-white" />
+                    </div>
+                    <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
+                      {analyticsMetrics.donationFrequency}x
+                    </div>
+                    <div className="text-sm text-gray-600 dark:text-gray-400">Monthly Frequency</div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Platform Revenue */}
+              <Card className="overflow-hidden">
+                <CardContent className="p-0">
+                  <div className="p-4 bg-gradient-to-r from-green-50 via-white to-green-50 dark:from-green-950/30 dark:via-slate-900 dark:to-green-950/30 text-center">
+                    <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-lg">
+                      <TrendingUp className="h-6 w-6 text-white" />
+                    </div>
+                    <div className="text-2xl font-bold text-green-600 dark:text-green-400">
+                      ${analyticsMetrics.platformRevenue.toLocaleString()}
+                    </div>
+                    <div className="text-sm text-gray-600 dark:text-gray-400">Platform Revenue</div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </TabsContent>
 
         {/* Users Tab */}
         <TabsContent value="users" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>User Engagement Analytics</CardTitle>
-              <CardDescription>Engagement metrics across all user types</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {userEngagement.map((category) => (
-                  <div key={category.category} className="flex items-center justify-between p-4 border rounded-lg">
-                    <div className="flex items-center space-x-4">
-                      <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
-                        {category.category === 'Donors' && <Heart className="h-5 w-5 text-blue-600 dark:text-blue-400" />}
-                        {category.category === 'Participants' && <Users className="h-5 w-5 text-blue-600 dark:text-blue-400" />}
-                        {category.category === 'Admins' && <Building2 className="h-5 w-5 text-blue-600 dark:text-blue-400" />}
-                        {category.category === 'Shelters' && <Building2 className="h-5 w-5 text-blue-600 dark:text-blue-400" />}
-                      </div>
-                      <div>
-                        <div className="font-medium">{category.category}</div>
-                        <div className="text-sm text-muted-foreground">
-                          {category.active} of {category.total} active
+          {/* User Engagement Analytics - Mobile Redesigned */}
+          <div className="space-y-3">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">User Engagement Analytics</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">Engagement metrics across all user types</p>
+            
+            {userEngagement.map((category) => {
+              const getIcon = () => {
+                switch (category.category) {
+                  case 'Donors': return <Heart className="h-6 w-6 text-white" />;
+                  case 'Participants': return <Users className="h-6 w-6 text-white" />;
+                  case 'Admins': return <Building2 className="h-6 w-6 text-white" />;
+                  case 'Shelters': return <Building2 className="h-6 w-6 text-white" />;
+                  default: return <Users className="h-6 w-6 text-white" />;
+                }
+              };
+
+              const getColorTheme = () => {
+                switch (category.category) {
+                  case 'Donors': return 'from-pink-500 to-red-500';
+                  case 'Participants': return 'from-blue-500 to-indigo-500';
+                  case 'Admins': return 'from-green-500 to-emerald-500';
+                  case 'Shelters': return 'from-purple-500 to-violet-500';
+                  default: return 'from-blue-500 to-indigo-500';
+                }
+              };
+
+              const getBgTheme = () => {
+                switch (category.category) {
+                  case 'Donors': return 'from-pink-50 via-white to-pink-50 dark:from-pink-950/30 dark:via-slate-900 dark:to-pink-950/30';
+                  case 'Participants': return 'from-blue-50 via-white to-blue-50 dark:from-blue-950/30 dark:via-slate-900 dark:to-blue-950/30';
+                  case 'Admins': return 'from-green-50 via-white to-green-50 dark:from-green-950/30 dark:via-slate-900 dark:to-green-950/30';
+                  case 'Shelters': return 'from-purple-50 via-white to-purple-50 dark:from-purple-950/30 dark:via-slate-900 dark:to-purple-950/30';
+                  default: return 'from-blue-50 via-white to-blue-50 dark:from-blue-950/30 dark:via-slate-900 dark:to-blue-950/30';
+                }
+              };
+
+              return (
+                <Card key={category.category} className="overflow-hidden">
+                  <CardContent className="p-0 sm:p-6">
+                    {/* Mobile Layout */}
+                    <div className="block sm:hidden">
+                      {/* Header Section */}
+                      <div className={`p-4 bg-gradient-to-r ${getBgTheme()}`}>
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="flex items-center space-x-3">
+                            <div className={`w-14 h-14 bg-gradient-to-br ${getColorTheme()} rounded-2xl flex items-center justify-center shadow-lg`}>
+                              {getIcon()}
+                            </div>
+                            <div>
+                              <h3 className="font-bold text-lg text-gray-900 dark:text-white">
+                                {category.category}
+                              </h3>
+                              <div className="text-sm text-gray-600 dark:text-gray-400">
+                                {category.active} of {category.total} active
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {/* Metrics Grid */}
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <div className="text-sm font-medium text-gray-900 dark:text-white">Engagement</div>
+                            <div className="text-xl font-bold text-indigo-600 dark:text-indigo-400">
+                              {category.engagement}%
+                            </div>
+                          </div>
+                          <div>
+                            <div className="text-sm font-medium text-gray-900 dark:text-white">Growth</div>
+                            <div className={`flex items-center text-xl font-bold ${getGrowthColor(category.growth)}`}>
+                              {getGrowthIcon(category.growth)}
+                              <span className="ml-1">{category.growth}%</span>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
-                    
-                    <div className="flex items-center space-x-6">
-                      <div className="text-center">
-                        <div className="text-lg font-bold">{category.engagement}%</div>
-                        <div className="text-xs text-muted-foreground">Engagement</div>
-                      </div>
-                      <div className={`text-center ${getGrowthColor(category.growth)}`}>
-                        <div className="flex items-center text-lg font-bold">
-                          {getGrowthIcon(category.growth)}
-                          <span className="ml-1">{category.growth}%</span>
+
+                    {/* Desktop Layout */}
+                    <div className="hidden sm:block">
+                      <div className="flex items-center justify-between p-6">
+                        <div className="flex items-center space-x-4">
+                          <div className={`w-12 h-12 bg-gradient-to-br ${getColorTheme()} rounded-xl flex items-center justify-center shadow-sm`}>
+                            {getIcon()}
+                          </div>
+                          <div>
+                            <div className="font-bold text-lg">{category.category}</div>
+                            <div className="text-sm text-gray-600 dark:text-gray-400">
+                              {category.active} of {category.total} active
+                            </div>
+                          </div>
                         </div>
-                        <div className="text-xs text-muted-foreground">Growth</div>
+                        
+                        <div className="flex items-center space-x-6">
+                          <div className="text-center">
+                            <div className="text-lg font-bold text-indigo-600 dark:text-indigo-400">{category.engagement}%</div>
+                            <div className="text-xs text-gray-500 dark:text-gray-400">Engagement</div>
+                          </div>
+                          <div className={`text-center ${getGrowthColor(category.growth)}`}>
+                            <div className="flex items-center text-lg font-bold">
+                              {getGrowthIcon(category.growth)}
+                              <span className="ml-1">{category.growth}%</span>
+                            </div>
+                            <div className="text-xs text-gray-500 dark:text-gray-400">Growth</div>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
         </TabsContent>
 
         {/* Geographic Tab */}
         <TabsContent value="geographic" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Geographic Distribution</CardTitle>
-              <CardDescription>Platform reach and performance by region</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {geographicData.map((region) => (
-                  <div key={region.region} className="flex items-center justify-between p-4 border rounded-lg">
-                    <div className="flex items-center space-x-4">
-                      <div className="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
-                        <Globe className="h-5 w-5 text-green-600 dark:text-green-400" />
-                      </div>
-                      <div>
-                        <div className="font-medium">{region.region}</div>
-                        <div className="text-sm text-muted-foreground">
-                          {region.shelters} shelters • {region.participants} participants
+          {/* Geographic Distribution - Mobile Redesigned */}
+          <div className="space-y-3">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Geographic Distribution</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">Platform reach and performance by region</p>
+            
+            {geographicData.map((region) => (
+              <Card key={region.region} className="overflow-hidden">
+                <CardContent className="p-0 sm:p-6">
+                  {/* Mobile Layout */}
+                  <div className="block sm:hidden">
+                    {/* Header Section */}
+                    <div className="p-4 bg-gradient-to-r from-emerald-50 via-white to-emerald-50 dark:from-emerald-950/30 dark:via-slate-900 dark:to-emerald-950/30">
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-14 h-14 bg-gradient-to-br from-emerald-500 to-green-600 rounded-2xl flex items-center justify-center shadow-lg">
+                            <Globe className="h-7 w-7 text-white" />
+                          </div>
+                          <div>
+                            <h3 className="font-bold text-lg text-gray-900 dark:text-white">
+                              {region.region}
+                            </h3>
+                            <div className="text-sm text-gray-600 dark:text-gray-400">
+                              {region.shelters} shelters • {region.participants} participants
+                            </div>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    
-                    <div className="flex items-center space-x-6">
-                      <div className="text-center">
-                        <div className="text-lg font-bold">${region.donations.toLocaleString()}</div>
-                        <div className="text-xs text-muted-foreground">Donations</div>
-                      </div>
-                      <div className={`text-center ${getGrowthColor(region.growth)}`}>
-                        <div className="flex items-center text-lg font-bold">
-                          {getGrowthIcon(region.growth)}
-                          <span className="ml-1">{region.growth}%</span>
+                      
+                      {/* Metrics Grid */}
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <div className="text-sm font-medium text-gray-900 dark:text-white">Donations</div>
+                          <div className="text-xl font-bold text-emerald-600 dark:text-emerald-400">
+                            ${region.donations.toLocaleString()}
+                          </div>
                         </div>
-                        <div className="text-xs text-muted-foreground">Growth</div>
+                        <div>
+                          <div className="text-sm font-medium text-gray-900 dark:text-white">Growth</div>
+                          <div className={`flex items-center text-xl font-bold ${getGrowthColor(region.growth)}`}>
+                            {getGrowthIcon(region.growth)}
+                            <span className="ml-1">{region.growth}%</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+
+                  {/* Desktop Layout */}
+                  <div className="hidden sm:block">
+                    <div className="flex items-center justify-between p-6">
+                      <div className="flex items-center space-x-4">
+                        <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl flex items-center justify-center shadow-sm">
+                          <Globe className="h-6 w-6 text-white" />
+                        </div>
+                        <div>
+                          <div className="font-bold text-lg">{region.region}</div>
+                          <div className="text-sm text-gray-600 dark:text-gray-400">
+                            {region.shelters} shelters • {region.participants} participants
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center space-x-6">
+                        <div className="text-center">
+                          <div className="text-lg font-bold text-emerald-600 dark:text-emerald-400">${region.donations.toLocaleString()}</div>
+                          <div className="text-xs text-gray-500 dark:text-gray-400">Donations</div>
+                        </div>
+                        <div className={`text-center ${getGrowthColor(region.growth)}`}>
+                          <div className="flex items-center text-lg font-bold">
+                            {getGrowthIcon(region.growth)}
+                            <span className="ml-1">{region.growth}%</span>
+                          </div>
+                          <div className="text-xs text-gray-500 dark:text-gray-400">Growth</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </TabsContent>
 
         {/* Insights Tab */}
         <TabsContent value="insights" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>AI-Powered Insights</CardTitle>
-              <CardDescription>Data-driven recommendations for platform optimization</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {insights.map((insight, index) => (
-                  <div key={index} className="p-4 border rounded-lg">
-                    <div className="flex items-start justify-between mb-3">
-                      <div className="font-medium">{insight.title}</div>
-                      <Badge className={getImpactColor(insight.impact)}>
-                        {insight.impact} Impact
-                      </Badge>
+          {/* AI-Powered Insights - Mobile Redesigned */}
+          <div className="space-y-3">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">AI-Powered Insights</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">Data-driven recommendations for platform optimization</p>
+            
+            {insights.map((insight, index) => {
+              const getInsightIcon = () => {
+                switch (insight.impact) {
+                  case 'High': return <Zap className="h-6 w-6 text-white" />;
+                  case 'Medium': return <Target className="h-6 w-6 text-white" />;
+                  case 'Low': return <Eye className="h-6 w-6 text-white" />;
+                  default: return <Activity className="h-6 w-6 text-white" />;
+                }
+              };
+
+              const getColorTheme = () => {
+                switch (insight.impact) {
+                  case 'High': return 'from-red-500 to-orange-500';
+                  case 'Medium': return 'from-yellow-500 to-orange-500';
+                  case 'Low': return 'from-green-500 to-emerald-500';
+                  default: return 'from-blue-500 to-indigo-500';
+                }
+              };
+
+              const getBgTheme = () => {
+                switch (insight.impact) {
+                  case 'High': return 'from-red-50 via-white to-red-50 dark:from-red-950/30 dark:via-slate-900 dark:to-red-950/30';
+                  case 'Medium': return 'from-yellow-50 via-white to-yellow-50 dark:from-yellow-950/30 dark:via-slate-900 dark:to-yellow-950/30';
+                  case 'Low': return 'from-green-50 via-white to-green-50 dark:from-green-950/30 dark:via-slate-900 dark:to-green-950/30';
+                  default: return 'from-blue-50 via-white to-blue-50 dark:from-blue-950/30 dark:via-slate-900 dark:to-blue-950/30';
+                }
+              };
+
+              return (
+                <Card key={index} className="overflow-hidden">
+                  <CardContent className="p-0 sm:p-6">
+                    {/* Mobile Layout */}
+                    <div className="block sm:hidden">
+                      {/* Header Section */}
+                      <div className={`p-4 bg-gradient-to-r ${getBgTheme()}`}>
+                        <div className="flex items-start justify-between mb-3">
+                          <div className="flex items-center space-x-3 flex-1 min-w-0">
+                            <div className={`w-14 h-14 bg-gradient-to-br ${getColorTheme()} rounded-2xl flex items-center justify-center shadow-lg`}>
+                              {getInsightIcon()}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <h3 className="font-bold text-base leading-tight text-gray-900 dark:text-white">
+                                {insight.title}
+                              </h3>
+                            </div>
+                          </div>
+                          <Badge className={`${getImpactColor(insight.impact)} shrink-0 ml-2`} variant="secondary">
+                            {insight.impact} Impact
+                          </Badge>
+                        </div>
+                      </div>
+
+                      {/* Description Section */}
+                      <div className="px-4 py-3 bg-gray-50 dark:bg-slate-800/50 border-y border-gray-200 dark:border-gray-700">
+                        <div className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                          {insight.description}
+                        </div>
+                      </div>
+                      
+                      {/* Recommendation Section */}
+                      <div className="p-4">
+                        <div className="text-sm font-medium text-gray-900 dark:text-white mb-2">Recommendation</div>
+                        <div className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                          {insight.recommendation}
+                        </div>
+                      </div>
                     </div>
-                    <div className="text-sm text-muted-foreground mb-3">
-                      {insight.description}
+
+                    {/* Desktop Layout */}
+                    <div className="hidden sm:block">
+                      <div className="p-6">
+                        <div className="flex items-start justify-between mb-3">
+                          <div className="flex items-center space-x-4 flex-1">
+                            <div className={`w-12 h-12 bg-gradient-to-br ${getColorTheme()} rounded-xl flex items-center justify-center shadow-sm`}>
+                              {getInsightIcon()}
+                            </div>
+                            <div className="font-bold text-lg">{insight.title}</div>
+                          </div>
+                          <Badge className={getImpactColor(insight.impact)}>
+                            {insight.impact} Impact
+                          </Badge>
+                        </div>
+                        <div className="text-sm text-gray-600 dark:text-gray-400 mb-3 leading-relaxed">
+                          {insight.description}
+                        </div>
+                        <div className="text-sm">
+                          <strong className="text-gray-900 dark:text-white">Recommendation:</strong> <span className="text-gray-600 dark:text-gray-400">{insight.recommendation}</span>
+                        </div>
+                      </div>
                     </div>
-                    <div className="text-sm">
-                      <strong>Recommendation:</strong> {insight.recommendation}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
         </TabsContent>
       </Tabs>
     </div>

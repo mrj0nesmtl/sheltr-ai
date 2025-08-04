@@ -472,32 +472,37 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                 </div>
               </nav>
 
-              {/* Theme Toggle & Logout */}
-              <div className="p-4 border-t border-gray-200 dark:border-gray-700 space-y-2">
-                {/* Theme Toggle */}
-                <div className={`flex ${sidebarCollapsed ? 'justify-center' : 'justify-start items-center space-x-3'}`}>
-                  {!sidebarCollapsed && (
-                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                      Theme
-                    </span>
-                  )}
-                  <ThemeToggle />
-                </div>
-                
-                {/* Logout */}
-                <Button
-                  onClick={handleLogout}
-                  variant="ghost"
-                  className={`
-                    w-full transition-all duration-200 hover:bg-red-50 hover:text-red-700 dark:hover:bg-red-900/20 dark:hover:text-red-300
-                    ${sidebarCollapsed ? 'justify-center px-2' : 'justify-start'}
-                    text-gray-700 dark:text-gray-300
-                  `}
-                  title={sidebarCollapsed ? 'Sign Out' : undefined}
-                >
-                  <LogOut className={`h-5 w-5 transition-transform duration-200 hover:scale-110 ${sidebarCollapsed ? '' : 'mr-3'}`} />
-                  {!sidebarCollapsed && 'Sign Out'}
-                </Button>
+              {/* Logout & Theme Toggle */}
+              <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+                {sidebarCollapsed ? (
+                  /* Collapsed sidebar - stack vertically */
+                  <div className="space-y-2">
+                    <div className="flex justify-center">
+                      <ThemeToggle />
+                    </div>
+                    <Button
+                      onClick={handleLogout}
+                      variant="ghost"
+                      className="w-full justify-center px-2 transition-all duration-200 hover:bg-red-50 hover:text-red-700 dark:hover:bg-red-900/20 dark:hover:text-red-300 text-gray-700 dark:text-gray-300"
+                      title="Sign Out"
+                    >
+                      <LogOut className="h-5 w-5 transition-transform duration-200 hover:scale-110" />
+                    </Button>
+                  </div>
+                ) : (
+                  /* Expanded sidebar - theme toggle on same line as Sign Out */
+                  <div className="flex items-center justify-between">
+                    <Button
+                      onClick={handleLogout}
+                      variant="ghost"
+                      className="flex-1 justify-start transition-all duration-200 hover:bg-red-50 hover:text-red-700 dark:hover:bg-red-900/20 dark:hover:text-red-300 text-gray-700 dark:text-gray-300"
+                    >
+                      <LogOut className="h-5 w-5 transition-transform duration-200 hover:scale-110 mr-3" />
+                      Sign Out
+                    </Button>
+                    <ThemeToggle />
+                  </div>
+                )}
               </div>
             </div>
           </div>

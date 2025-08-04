@@ -11,9 +11,153 @@
    Skipping linting
    Collecting page data ...
    Generating static pages (0/54) ...
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
    Generating static pages (13/54) 
    Generating static pages (26/54) 
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
    Generating static pages (40/54) 
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
  ✓ Generating static pages (54/54)
    Finalizing page optimization ...
    Collecting build traces ...
@@ -30,30 +174,30 @@ Route (app)                                   Size  First Load JS
 ├ ○ /about                                 8.45 kB         121 kB
 ├ ƒ /api/calendar/create-event               129 B         100 kB
 ├ ƒ /api/email/send-confirmation             129 B         100 kB
-├ ○ /dashboard                             7.31 kB         238 kB
-├ ○ /dashboard/analytics                   7.93 kB         241 kB
-├ ○ /dashboard/donor                       6.83 kB         234 kB
+├ ○ /dashboard                             9.61 kB         240 kB
+├ ○ /dashboard/analytics                   9.55 kB         243 kB
+├ ○ /dashboard/donor                       6.89 kB         234 kB
 ├ ○ /dashboard/donor/donations             3.58 kB         241 kB
-├ ○ /dashboard/donor/impact                8.46 kB         242 kB
-├ ○ /dashboard/donor/settings               7.6 kB         241 kB
+├ ○ /dashboard/donor/impact                8.51 kB         242 kB
+├ ○ /dashboard/donor/settings              7.65 kB         241 kB
 ├ ○ /dashboard/donor/sheltr-portfolio      6.67 kB         244 kB
 ├ ○ /dashboard/donor/tax-documents          3.7 kB         241 kB
-├ ○ /dashboard/financial                   5.58 kB         121 kB
-├ ○ /dashboard/participant                 4.83 kB         236 kB
-├ ○ /dashboard/participant/profile         8.86 kB         236 kB
-├ ○ /dashboard/participant/services        6.91 kB         238 kB
-├ ○ /dashboard/participant/support         5.35 kB         242 kB
+├ ○ /dashboard/financial                   6.29 kB         122 kB
+├ ○ /dashboard/participant                 7.99 kB         235 kB
+├ ○ /dashboard/participant/profile         8.91 kB         236 kB
+├ ○ /dashboard/participant/services        9.75 kB         237 kB
+├ ○ /dashboard/participant/support         8.31 kB         241 kB
 ├ ○ /dashboard/participant/wallet          9.06 kB         241 kB
-├ ○ /dashboard/platform                    4.76 kB         114 kB
-├ ○ /dashboard/security                    5.68 kB         121 kB
-├ ○ /dashboard/shelter-admin               5.73 kB         233 kB
+├ ○ /dashboard/platform                    5.12 kB         115 kB
+├ ○ /dashboard/security                    6.64 kB         122 kB
+├ ○ /dashboard/shelter-admin               5.79 kB         233 kB
 ├ ○ /dashboard/shelter-admin/participants  4.89 kB         120 kB
 ├ ○ /dashboard/shelter-admin/reports       6.03 kB         121 kB
 ├ ○ /dashboard/shelter-admin/resources     6.48 kB         122 kB
 ├ ○ /dashboard/shelter-admin/services      5.21 kB         120 kB
 ├ ○ /dashboard/shelter-admin/settings      7.77 kB         123 kB
-├ ○ /dashboard/shelters                    15.5 kB         351 kB
-├ ○ /dashboard/users                       9.12 kB         344 kB
+├ ○ /dashboard/shelters                    16.4 kB         352 kB
+├ ○ /dashboard/users                        9.8 kB         345 kB
 ├ ○ /docs                                  4.83 kB         122 kB
 ├ ○ /docs/api                              2.07 kB         119 kB
 ├ ○ /docs/blockchain                       7.53 kB         120 kB
@@ -64,9 +208,9 @@ Route (app)                                   Size  First Load JS
 ├ ○ /impact                                  10 kB         123 kB
 ├ ○ /investor-access                       5.82 kB         119 kB
 ├ ○ /investor-relations                    23.9 kB         143 kB
-├ ○ /login                                  5.7 kB         227 kB
+├ ○ /login                                 5.75 kB         227 kB
 ├ ○ /privacy                               10.5 kB         123 kB
-├ ○ /register                               6.3 kB         228 kB
+├ ○ /register                              6.36 kB         228 kB
 ├ ○ /scan-give                             6.62 kB         119 kB
 ├ ○ /solutions                             8.02 kB         121 kB
 ├ ○ /solutions/donors                      2.76 kB         116 kB

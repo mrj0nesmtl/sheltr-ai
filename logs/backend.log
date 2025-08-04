@@ -8,177 +8,20 @@ INFO:__main__:📚 API documentation: http://localhost:8000/docs
 INFO:__main__:🏥 Health check: http://localhost:8000/health
 INFO:     Will watch for changes in these directories: ['/Users/mrjones/Github/Projects/sheltr-ai/apps/api']
 INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-INFO:     Started reloader process [81582] using WatchFiles
+INFO:     Started reloader process [89493] using WatchFiles
 /Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
   warnings.warn(
 INFO:services.analytics_service:Analytics Service: Firebase initialized successfully
 INFO:services.chatbot.orchestrator:🤖 Chatbot Orchestrator initialized
-INFO:     Started server process [81590]
+INFO:     Started server process [89520]
 INFO:     Waiting for application startup.
 INFO:main:🚀 SHELTR-AI API starting up...
 INFO:main:🔐 Authentication system initialized
 INFO:main:🏢 Multi-tenant architecture ready
 INFO:     Application startup complete.
-INFO:     127.0.0.1:53971 - "GET /health HTTP/1.1" 200 OK
-INFO:     127.0.0.1:55317 - "OPTIONS /analytics/test-platform HTTP/1.1" 200 OK
-INFO:     127.0.0.1:55319 - "OPTIONS /analytics/test-platform HTTP/1.1" 200 OK
-INFO:routers.analytics:Testing platform analytics (no auth)
-ERROR:services.analytics_service:Error getting user metrics: '>=' not supported between instances of 'str' and 'datetime.datetime'
-INFO:     127.0.0.1:55319 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:routers.analytics:Testing platform analytics (no auth)
-ERROR:services.analytics_service:Error getting user metrics: '>=' not supported between instances of 'str' and 'datetime.datetime'
-INFO:     127.0.0.1:55317 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:     127.0.0.1:55319 - "OPTIONS /analytics/track HTTP/1.1" 200 OK
-INFO:     127.0.0.1:55317 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:     127.0.0.1:55319 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:     127.0.0.1:55415 - "OPTIONS /analytics/test-platform HTTP/1.1" 200 OK
-INFO:     127.0.0.1:55418 - "OPTIONS /analytics/test-platform HTTP/1.1" 200 OK
-INFO:routers.analytics:Testing platform analytics (no auth)
-ERROR:services.analytics_service:Error getting user metrics: '>=' not supported between instances of 'str' and 'datetime.datetime'
-INFO:     127.0.0.1:55415 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:routers.analytics:Testing platform analytics (no auth)
-ERROR:services.analytics_service:Error getting user metrics: '>=' not supported between instances of 'str' and 'datetime.datetime'
-INFO:     127.0.0.1:55418 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:     127.0.0.1:55415 - "OPTIONS /analytics/track HTTP/1.1" 200 OK
-INFO:     127.0.0.1:55418 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:     127.0.0.1:55415 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:routers.analytics:Testing platform analytics (no auth)
-ERROR:services.analytics_service:Error getting user metrics: '>=' not supported between instances of 'str' and 'datetime.datetime'
-INFO:     127.0.0.1:55460 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:routers.analytics:Testing platform analytics (no auth)
-ERROR:services.analytics_service:Error getting user metrics: '>=' not supported between instances of 'str' and 'datetime.datetime'
-INFO:     127.0.0.1:55460 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:     127.0.0.1:55463 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:     127.0.0.1:55463 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:     127.0.0.1:59782 - "OPTIONS /analytics/test-platform HTTP/1.1" 200 OK
-INFO:     127.0.0.1:59784 - "OPTIONS /analytics/test-platform HTTP/1.1" 200 OK
-INFO:routers.analytics:Testing platform analytics (no auth)
-ERROR:services.analytics_service:Error getting user metrics: '>=' not supported between instances of 'str' and 'datetime.datetime'
-INFO:     127.0.0.1:59782 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:routers.analytics:Testing platform analytics (no auth)
-ERROR:services.analytics_service:Error getting user metrics: '>=' not supported between instances of 'str' and 'datetime.datetime'
-INFO:     127.0.0.1:59784 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:     127.0.0.1:59782 - "OPTIONS /analytics/track HTTP/1.1" 200 OK
-INFO:     127.0.0.1:59784 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:     127.0.0.1:59782 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:     127.0.0.1:55332 - "OPTIONS /analytics/test-platform HTTP/1.1" 200 OK
-INFO:     127.0.0.1:55334 - "OPTIONS /analytics/test-platform HTTP/1.1" 200 OK
-INFO:routers.analytics:Testing platform analytics (no auth)
-ERROR:services.analytics_service:Error getting user metrics: '>=' not supported between instances of 'str' and 'datetime.datetime'
-INFO:     127.0.0.1:55334 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:routers.analytics:Testing platform analytics (no auth)
-ERROR:services.analytics_service:Error getting user metrics: '>=' not supported between instances of 'str' and 'datetime.datetime'
-INFO:     127.0.0.1:55332 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:     127.0.0.1:55334 - "OPTIONS /analytics/track HTTP/1.1" 200 OK
-INFO:     127.0.0.1:55334 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:     127.0.0.1:55332 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:routers.analytics:Testing platform analytics (no auth)
-ERROR:services.analytics_service:Error getting user metrics: '>=' not supported between instances of 'str' and 'datetime.datetime'
-INFO:     127.0.0.1:55465 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:     127.0.0.1:55465 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:routers.analytics:Testing platform analytics (no auth)
-ERROR:services.analytics_service:Error getting user metrics: '>=' not supported between instances of 'str' and 'datetime.datetime'
-INFO:     127.0.0.1:55601 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:     127.0.0.1:55601 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:routers.analytics:Testing platform analytics (no auth)
-ERROR:services.analytics_service:Error getting user metrics: '>=' not supported between instances of 'str' and 'datetime.datetime'
-INFO:     127.0.0.1:55722 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:     127.0.0.1:55722 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:routers.analytics:Testing platform analytics (no auth)
-ERROR:services.analytics_service:Error getting user metrics: '>=' not supported between instances of 'str' and 'datetime.datetime'
-INFO:     127.0.0.1:55848 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:     127.0.0.1:55848 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:routers.analytics:Testing platform analytics (no auth)
-ERROR:services.analytics_service:Error getting user metrics: '>=' not supported between instances of 'str' and 'datetime.datetime'
-INFO:     127.0.0.1:55983 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:     127.0.0.1:55983 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:routers.analytics:Testing platform analytics (no auth)
-ERROR:services.analytics_service:Error getting user metrics: '>=' not supported between instances of 'str' and 'datetime.datetime'
-INFO:     127.0.0.1:56128 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56128 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:routers.analytics:Testing platform analytics (no auth)
-ERROR:services.analytics_service:Error getting user metrics: '>=' not supported between instances of 'str' and 'datetime.datetime'
-INFO:     127.0.0.1:56261 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56261 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:routers.analytics:Testing platform analytics (no auth)
-ERROR:services.analytics_service:Error getting user metrics: '>=' not supported between instances of 'str' and 'datetime.datetime'
-INFO:     127.0.0.1:56386 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56386 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:routers.analytics:Testing platform analytics (no auth)
-ERROR:services.analytics_service:Error getting user metrics: '>=' not supported between instances of 'str' and 'datetime.datetime'
-INFO:     127.0.0.1:56510 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56510 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:routers.analytics:Testing platform analytics (no auth)
-ERROR:services.analytics_service:Error getting user metrics: '>=' not supported between instances of 'str' and 'datetime.datetime'
-INFO:     127.0.0.1:56632 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56632 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:routers.analytics:Testing platform analytics (no auth)
-ERROR:services.analytics_service:Error getting user metrics: '>=' not supported between instances of 'str' and 'datetime.datetime'
-INFO:     127.0.0.1:56765 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56765 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:routers.analytics:Testing platform analytics (no auth)
-ERROR:services.analytics_service:Error getting user metrics: '>=' not supported between instances of 'str' and 'datetime.datetime'
-INFO:     127.0.0.1:56890 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:     127.0.0.1:56890 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:routers.analytics:Testing platform analytics (no auth)
-ERROR:services.analytics_service:Error getting user metrics: '>=' not supported between instances of 'str' and 'datetime.datetime'
-INFO:     127.0.0.1:57026 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57026 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:routers.analytics:Testing platform analytics (no auth)
-ERROR:services.analytics_service:Error getting user metrics: '>=' not supported between instances of 'str' and 'datetime.datetime'
-INFO:     127.0.0.1:57148 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57148 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:routers.analytics:Testing platform analytics (no auth)
-ERROR:services.analytics_service:Error getting user metrics: '>=' not supported between instances of 'str' and 'datetime.datetime'
-INFO:     127.0.0.1:57296 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57296 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:routers.analytics:Testing platform analytics (no auth)
-ERROR:services.analytics_service:Error getting user metrics: '>=' not supported between instances of 'str' and 'datetime.datetime'
-INFO:     127.0.0.1:57418 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57418 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:routers.analytics:Testing platform analytics (no auth)
-ERROR:services.analytics_service:Error getting user metrics: '>=' not supported between instances of 'str' and 'datetime.datetime'
-INFO:     127.0.0.1:57548 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57548 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:routers.analytics:Testing platform analytics (no auth)
-ERROR:services.analytics_service:Error getting user metrics: '>=' not supported between instances of 'str' and 'datetime.datetime'
-INFO:     127.0.0.1:57685 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57685 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:routers.analytics:Testing platform analytics (no auth)
-ERROR:services.analytics_service:Error getting user metrics: '>=' not supported between instances of 'str' and 'datetime.datetime'
-INFO:     127.0.0.1:57824 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57824 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:routers.analytics:Testing platform analytics (no auth)
-ERROR:services.analytics_service:Error getting user metrics: '>=' not supported between instances of 'str' and 'datetime.datetime'
-INFO:     127.0.0.1:57960 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57960 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:     127.0.0.1:58090 - "OPTIONS /analytics/test-platform HTTP/1.1" 200 OK
-INFO:routers.analytics:Testing platform analytics (no auth)
-ERROR:services.analytics_service:Error getting user metrics: '>=' not supported between instances of 'str' and 'datetime.datetime'
-INFO:     127.0.0.1:58090 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58090 - "OPTIONS /analytics/track HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58090 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:routers.analytics:Testing platform analytics (no auth)
-ERROR:services.analytics_service:Error getting user metrics: '>=' not supported between instances of 'str' and 'datetime.datetime'
-INFO:     127.0.0.1:58216 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58216 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:routers.analytics:Testing platform analytics (no auth)
-ERROR:services.analytics_service:Error getting user metrics: '>=' not supported between instances of 'str' and 'datetime.datetime'
-INFO:     127.0.0.1:58351 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58351 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:routers.analytics:Testing platform analytics (no auth)
-ERROR:services.analytics_service:Error getting user metrics: '>=' not supported between instances of 'str' and 'datetime.datetime'
-INFO:     127.0.0.1:58477 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58477 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:routers.analytics:Testing platform analytics (no auth)
-ERROR:services.analytics_service:Error getting user metrics: '>=' not supported between instances of 'str' and 'datetime.datetime'
-INFO:     127.0.0.1:58612 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58612 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:routers.analytics:Testing platform analytics (no auth)
-ERROR:services.analytics_service:Error getting user metrics: '>=' not supported between instances of 'str' and 'datetime.datetime'
-INFO:     127.0.0.1:58699 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:routers.analytics:Testing platform analytics (no auth)
-ERROR:services.analytics_service:Error getting user metrics: '>=' not supported between instances of 'str' and 'datetime.datetime'
-INFO:     127.0.0.1:58699 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58701 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:     127.0.0.1:58701 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
+INFO:     127.0.0.1:49769 - "GET /health HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:main:🛑 SHELTR-AI API shutting down...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [89520]

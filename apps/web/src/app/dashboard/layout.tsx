@@ -27,6 +27,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { ThemeToggle } from '@/components/theme-toggle';
 import { useState, useEffect } from 'react';
 
 // Helper function to get user display name
@@ -471,8 +472,19 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                 </div>
               </nav>
 
-              {/* Logout */}
-              <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+              {/* Theme Toggle & Logout */}
+              <div className="p-4 border-t border-gray-200 dark:border-gray-700 space-y-2">
+                {/* Theme Toggle */}
+                <div className={`flex ${sidebarCollapsed ? 'justify-center' : 'justify-start items-center space-x-3'}`}>
+                  {!sidebarCollapsed && (
+                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                      Theme
+                    </span>
+                  )}
+                  <ThemeToggle />
+                </div>
+                
+                {/* Logout */}
                 <Button
                   onClick={handleLogout}
                   variant="ghost"

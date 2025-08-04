@@ -252,47 +252,86 @@ export default function PlatformManagement() {
 
       {/* Tenant Management */}
       <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center">
+        <CardHeader className="pb-3">
+          <CardTitle className="flex items-center text-lg sm:text-xl">
             <Building2 className="mr-2 h-5 w-5" />
             Tenant Management
           </CardTitle>
-          <CardDescription>Overview of all platform tenants and their activity</CardDescription>
+          <CardDescription className="text-sm">Overview of all platform tenants and their activity</CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
+        <CardContent className="pt-3">
+          <div className="space-y-3">
             {tenantMetrics.map((tenant) => (
-              <div key={tenant.id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 border rounded-lg space-y-3 sm:space-y-0">
-                <div className="flex items-center space-x-4 flex-1">
-                  <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Building2 className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+              <div key={tenant.id} className="p-4 border rounded-xl bg-gradient-to-r from-slate-50 to-gray-50 dark:from-slate-900 dark:to-gray-900 hover:shadow-md transition-all duration-200">
+                {/* Mobile Layout */}
+                <div className="block sm:hidden space-y-3">
+                  {/* Top Row: Icon, Name, Status */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3 flex-1 min-w-0">
+                      <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-sm">
+                        <Building2 className="h-6 w-6 text-white" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-semibold text-base truncate">{tenant.name}</div>
+                        <div className="text-sm text-muted-foreground">{tenant.region}</div>
+                      </div>
+                    </div>
+                    <Badge className={getStatusColor(tenant.status)} variant="secondary">
+                      {tenant.status}
+                    </Badge>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="font-medium truncate">{tenant.name}</div>
-                    <div className="text-sm text-muted-foreground">{tenant.region}</div>
+                  
+                  {/* Bottom Row: Metrics and Button */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex space-x-6">
+                      <div className="text-center">
+                        <div className="text-lg font-bold text-blue-600 dark:text-blue-400">{tenant.participants}</div>
+                        <div className="text-xs text-muted-foreground">Participants</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-lg font-bold text-green-600 dark:text-green-400">${tenant.donations.toLocaleString()}</div>
+                        <div className="text-xs text-muted-foreground">Donations</div>
+                      </div>
+                    </div>
+                    <Button variant="outline" size="sm" className="shrink-0">
+                      Manage
+                    </Button>
+                  </div>
+                  
+                  {/* Last Activity */}
+                  <div className="text-xs text-muted-foreground pt-1 border-t border-gray-200 dark:border-gray-700">
+                    Last activity: {tenant.lastActivity}
                   </div>
                 </div>
-                
-                <div className="flex items-center justify-between sm:justify-end sm:space-x-6 space-x-4">
-                  <div className="text-center">
-                    <div className="text-lg font-semibold">{tenant.participants}</div>
-                    <div className="text-xs text-muted-foreground">Participants</div>
+
+                {/* Desktop Layout */}
+                <div className="hidden sm:flex items-center justify-between">
+                  <div className="flex items-center space-x-4 flex-1">
+                    <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-sm">
+                      <Building2 className="h-7 w-7 text-white" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="font-semibold text-lg truncate">{tenant.name}</div>
+                      <div className="text-sm text-muted-foreground">{tenant.region}</div>
+                    </div>
                   </div>
-                  <div className="text-center">
-                    <div className="text-lg font-semibold">${tenant.donations.toLocaleString()}</div>
-                    <div className="text-xs text-muted-foreground">Donations</div>
-                  </div>
-                  <div className="text-center hidden sm:block">
-                    <Badge className={getStatusColor(tenant.status)}>
-                      {tenant.status}
-                    </Badge>
-                    <div className="text-xs text-muted-foreground mt-1">{tenant.lastActivity}</div>
-                  </div>
-                  <div className="flex items-center space-x-2 sm:space-x-0">
-                    <Badge className={`${getStatusColor(tenant.status)} sm:hidden`}>
-                      {tenant.status}
-                    </Badge>
-                    <Button variant="outline" size="sm">
+                  
+                  <div className="flex items-center space-x-8">
+                    <div className="text-center">
+                      <div className="text-xl font-bold text-blue-600 dark:text-blue-400">{tenant.participants}</div>
+                      <div className="text-xs text-muted-foreground">Participants</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-xl font-bold text-green-600 dark:text-green-400">${tenant.donations.toLocaleString()}</div>
+                      <div className="text-xs text-muted-foreground">Donations</div>
+                    </div>
+                    <div className="text-center min-w-[100px]">
+                      <Badge className={getStatusColor(tenant.status)} variant="secondary">
+                        {tenant.status}
+                      </Badge>
+                      <div className="text-xs text-muted-foreground mt-1">{tenant.lastActivity}</div>
+                    </div>
+                    <Button variant="outline" size="sm" className="min-w-[80px]">
                       Manage
                     </Button>
                   </div>
@@ -301,13 +340,16 @@ export default function PlatformManagement() {
             ))}
           </div>
           
-          <div className="mt-6 flex justify-between">
-            <Button variant="outline">
+          {/* Action Buttons */}
+          <div className="mt-6 flex flex-col sm:flex-row gap-3 sm:justify-between">
+            <Button variant="outline" className="flex-1 sm:flex-none">
               <Building2 className="mr-2 h-4 w-4" />
-              Add New Tenant
+              <span className="hidden sm:inline">Add New Tenant</span>
+              <span className="sm:hidden">Add Tenant</span>
             </Button>
-            <Button variant="outline">
-              View All Tenants
+            <Button variant="outline" className="flex-1 sm:flex-none">
+              <span className="hidden sm:inline">View All Tenants</span>
+              <span className="sm:hidden">View All</span>
             </Button>
           </div>
         </CardContent>

@@ -307,57 +307,123 @@ export default function FinancialOversight() {
             </div>
           </div>
 
-          <Card>
-            <CardContent className="p-0">
-              <div className="space-y-0">
-                {recentTransactions.map((tx) => (
-                  <div key={tx.id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 sm:p-6 border-b last:border-b-0 space-y-3 sm:space-y-0">
-                    <div className="flex items-center space-x-4 flex-1">
-                      <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center flex-shrink-0">
-                        {tx.type === 'donation' ? (
-                          <DollarSign className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                        ) : (
-                          <Banknote className="h-5 w-5 text-green-600 dark:text-green-400" />
-                        )}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="font-medium">{tx.id}</div>
-                        <div className="text-sm text-muted-foreground truncate">
-                          {tx.type === 'donation' ? `${tx.donor} → ${tx.participant}` : 'Platform Payout'}
+          <div className="space-y-3">
+            {recentTransactions.map((tx) => (
+              <Card key={tx.id} className="overflow-hidden">
+                <CardContent className="p-0 sm:p-6">
+                  {/* Mobile Layout - Completely Redesigned */}
+                  <div className="block sm:hidden">
+                    {/* Header Section */}
+                    <div className="p-4 bg-gradient-to-r from-blue-50 via-white to-blue-50 dark:from-blue-950/30 dark:via-slate-900 dark:to-blue-950/30">
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex items-center space-x-3 flex-1 min-w-0">
+                          <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
+                            {tx.type === 'donation' ? (
+                              <DollarSign className="h-7 w-7 text-white" />
+                            ) : (
+                              <Banknote className="h-7 w-7 text-white" />
+                            )}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h3 className="font-bold text-lg leading-tight text-gray-900 dark:text-white">
+                              {tx.id}
+                            </h3>
+                            <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                              {tx.type === 'donation' ? `${tx.donor} → ${tx.participant}` : 'Platform Payout'}
+                            </div>
+                            <div className="text-sm text-gray-500 dark:text-gray-500 mt-0.5 truncate">
+                              {tx.shelter}
+                            </div>
+                          </div>
                         </div>
-                        <div className="text-xs text-muted-foreground truncate">{tx.shelter}</div>
+                        <Badge className={`${getStatusColor(tx.status)} shrink-0 ml-2`} variant="secondary">
+                          {tx.status}
+                        </Badge>
+                      </div>
+                    </div>
+
+                    {/* Amount & Fees Section */}
+                    <div className="px-4 py-3 bg-gray-50 dark:bg-slate-800/50 border-y border-gray-200 dark:border-gray-700">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="text-center">
+                          <div className="text-2xl font-bold text-green-600 dark:text-green-400">
+                            ${tx.amount.toLocaleString()}
+                          </div>
+                          <div className="text-xs font-medium text-green-700 dark:text-green-300 uppercase tracking-wide">Amount</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-xl font-bold text-gray-600 dark:text-gray-400">
+                            ${tx.fees.toLocaleString()}
+                          </div>
+                          <div className="text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wide">Fees</div>
+                        </div>
                       </div>
                     </div>
                     
-                    <div className="flex items-center justify-between sm:justify-end sm:space-x-6 space-x-4">
-                      <div className="text-center">
-                        <div className="text-sm font-medium">${tx.amount.toLocaleString()}</div>
-                        <div className="text-xs text-muted-foreground">Amount</div>
+                    {/* Timestamp & Actions Section */}
+                    <div className="p-4">
+                      <div className="flex items-center justify-between">
+                        <div className="text-sm text-gray-600 dark:text-gray-400">
+                          <div className="font-medium">{tx.timestamp.split(' ')[1]}</div>
+                          <div className="text-xs text-gray-500 dark:text-gray-500">{tx.timestamp.split(' ')[0]}</div>
+                        </div>
+                        <Button variant="outline" size="sm" className="bg-white dark:bg-slate-800">
+                          <Eye className="h-4 w-4 mr-2" />
+                          View Details
+                        </Button>
                       </div>
-                      <div className="text-center">
-                        <div className="text-sm font-medium">${tx.fees.toLocaleString()}</div>
-                        <div className="text-xs text-muted-foreground">Fees</div>
-                      </div>
-                      <div className="text-center hidden sm:block">
-                        <div className="text-sm font-medium">{tx.timestamp.split(' ')[1]}</div>
-                        <div className="text-xs text-muted-foreground">{tx.timestamp.split(' ')[0]}</div>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        {getStatusIcon(tx.status)}
-                        <Badge className={getStatusColor(tx.status)}>
-                          <span className="hidden sm:inline">{tx.status}</span>
-                          <span className="sm:hidden">{tx.status.slice(0,4)}</span>
-                        </Badge>
-                      </div>
-                      <Button variant="ghost" size="sm">
-                        <Eye className="h-4 w-4" />
-                      </Button>
                     </div>
                   </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+
+                  {/* Desktop Layout */}
+                  <div className="hidden sm:block">
+                    <div className="flex items-center justify-between p-6 border-b last:border-b-0">
+                      <div className="flex items-center space-x-4 flex-1">
+                        <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-sm">
+                          {tx.type === 'donation' ? (
+                            <DollarSign className="h-6 w-6 text-white" />
+                          ) : (
+                            <Banknote className="h-6 w-6 text-white" />
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="font-bold text-lg">{tx.id}</div>
+                          <div className="text-sm text-gray-600 dark:text-gray-400 truncate">
+                            {tx.type === 'donation' ? `${tx.donor} → ${tx.participant}` : 'Platform Payout'}
+                          </div>
+                          <div className="text-xs text-gray-500 dark:text-gray-500 truncate">{tx.shelter}</div>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center space-x-6">
+                        <div className="text-center">
+                          <div className="text-lg font-bold text-green-600 dark:text-green-400">${tx.amount.toLocaleString()}</div>
+                          <div className="text-xs text-gray-500 dark:text-gray-400">Amount</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-lg font-bold text-gray-600 dark:text-gray-400">${tx.fees.toLocaleString()}</div>
+                          <div className="text-xs text-gray-500 dark:text-gray-400">Fees</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-sm font-medium">{tx.timestamp.split(' ')[1]}</div>
+                          <div className="text-xs text-gray-500 dark:text-gray-400">{tx.timestamp.split(' ')[0]}</div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          {getStatusIcon(tx.status)}
+                          <Badge className={getStatusColor(tx.status)}>
+                            {tx.status}
+                          </Badge>
+                        </div>
+                        <Button variant="ghost" size="sm">
+                          <Eye className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </TabsContent>
 
         {/* Revenue Tab */}
@@ -431,32 +497,77 @@ export default function FinancialOversight() {
             </div>
           </div>
 
-          <Card>
-            <CardContent className="space-y-4">
-              {fraudAlerts.map((alert) => (
-                <div key={alert.id} className="flex items-start space-x-4 p-4 border rounded-lg">
-                  <div className="w-8 h-8 bg-red-100 dark:bg-red-900 rounded-full flex items-center justify-center">
-                    <AlertTriangle className="h-4 w-4 text-red-600 dark:text-red-400" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center space-x-2">
-                      <div className="font-medium">{alert.description}</div>
-                      <Badge className={getAlertColor(alert.level)}>
-                        {alert.level}
-                      </Badge>
+          <div className="space-y-3">
+            {fraudAlerts.map((alert) => (
+              <Card key={alert.id} className="overflow-hidden">
+                <CardContent className="p-0 sm:p-6">
+                  {/* Mobile Layout - Completely Redesigned */}
+                  <div className="block sm:hidden">
+                    {/* Header Section */}
+                    <div className="p-4 bg-gradient-to-r from-red-50 via-white to-red-50 dark:from-red-950/30 dark:via-slate-900 dark:to-red-950/30">
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex items-center space-x-3 flex-1 min-w-0">
+                          <div className="w-14 h-14 bg-gradient-to-br from-red-500 to-red-600 rounded-2xl flex items-center justify-center shadow-lg">
+                            <AlertTriangle className="h-7 w-7 text-white" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h3 className="font-bold text-lg leading-tight text-gray-900 dark:text-white">
+                              {alert.description}
+                            </h3>
+                            <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                              {alert.timestamp} • Status: {alert.status}
+                            </div>
+                          </div>
+                        </div>
+                        <Badge className={`${getAlertColor(alert.level)} shrink-0 ml-2`} variant="secondary">
+                          {alert.level}
+                        </Badge>
+                      </div>
                     </div>
-                    <div className="text-sm text-muted-foreground mt-1">{alert.details}</div>
-                    <div className="text-xs text-muted-foreground mt-2">
-                      {alert.timestamp} • Status: {alert.status}
+
+                    {/* Details Section */}
+                    <div className="px-4 py-3 bg-gray-50 dark:bg-slate-800/50 border-y border-gray-200 dark:border-gray-700">
+                      <div className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                        {alert.details}
+                      </div>
+                    </div>
+                    
+                    {/* Actions Section */}
+                    <div className="p-4">
+                      <Button variant="outline" size="sm" className="w-full bg-white dark:bg-slate-800">
+                        <AlertTriangle className="h-4 w-4 mr-2" />
+                        Investigate Alert
+                      </Button>
                     </div>
                   </div>
-                  <Button variant="outline" size="sm">
-                    Investigate
-                  </Button>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
+
+                  {/* Desktop Layout */}
+                  <div className="hidden sm:block">
+                    <div className="flex items-start space-x-4 p-6">
+                      <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center shadow-sm">
+                        <AlertTriangle className="h-6 w-6 text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-2 mb-2">
+                          <div className="font-bold text-lg">{alert.description}</div>
+                          <Badge className={getAlertColor(alert.level)}>
+                            {alert.level}
+                          </Badge>
+                        </div>
+                        <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">{alert.details}</div>
+                        <div className="text-xs text-gray-500 dark:text-gray-500">
+                          {alert.timestamp} • Status: {alert.status}
+                        </div>
+                      </div>
+                      <Button variant="outline" size="sm">
+                        Investigate
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </TabsContent>
 
         {/* Audit Trail Tab */}

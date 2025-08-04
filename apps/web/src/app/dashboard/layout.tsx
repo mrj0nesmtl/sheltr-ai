@@ -28,6 +28,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ThemeToggle } from '@/components/theme-toggle';
+import { MobileBottomNav } from '@/components/MobileBottomNav';
 import { useState, useEffect } from 'react';
 
 // Helper function to get user display name
@@ -546,12 +547,15 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             )}
             
             {/* Page content */}
-            <main className="flex-1 p-4 md:p-6 lg:p-8 transition-all duration-300">
+            <main className="flex-1 p-4 md:p-6 lg:p-8 pb-24 sm:pb-6 lg:pb-8 transition-all duration-300">
               <div className="max-w-7xl mx-auto">
                 {children}
               </div>
             </main>
           </div>
+
+          {/* Mobile Bottom Navigation - Fixed positioning outside main content */}
+          <MobileBottomNav />
         </div>
       </DashboardRouter>
     </ProtectedRoute>

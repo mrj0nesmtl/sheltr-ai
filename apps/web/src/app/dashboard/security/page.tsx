@@ -335,51 +335,116 @@ export default function SecurityCompliance() {
             </div>
           </div>
 
-          <Card>
-            <CardContent className="p-0">
-              <div className="space-y-0">
-                {recentAccessLogs.map((log) => (
-                  <div key={log.id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 sm:p-6 border-b last:border-b-0 space-y-3 sm:space-y-0">
-                    <div className="flex items-center space-x-4 flex-1">
-                      <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center flex-shrink-0">
-                        <User className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+          <div className="space-y-3">
+            {recentAccessLogs.map((log) => (
+              <Card key={log.id} className="overflow-hidden">
+                <CardContent className="p-0 sm:p-6">
+                  {/* Mobile Layout - Completely Redesigned */}
+                  <div className="block sm:hidden">
+                    {/* Header Section */}
+                    <div className="p-4 bg-gradient-to-r from-blue-50 via-white to-blue-50 dark:from-blue-950/30 dark:via-slate-900 dark:to-blue-950/30">
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex items-center space-x-3 flex-1 min-w-0">
+                          <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
+                            <User className="h-7 w-7 text-white" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h3 className="font-bold text-lg leading-tight text-gray-900 dark:text-white truncate">
+                              {log.user}
+                            </h3>
+                            <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                              {log.action}
+                            </div>
+                            <div className="text-sm text-gray-500 dark:text-gray-500 mt-0.5">
+                              {log.role}
+                            </div>
+                          </div>
+                        </div>
+                        <Badge className={`${getStatusColor(log.status)} shrink-0 ml-2`} variant="secondary">
+                          {log.status}
+                        </Badge>
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="font-medium truncate">{log.user}</div>
-                        <div className="text-sm text-muted-foreground">{log.action}</div>
-                        <div className="text-xs text-muted-foreground flex items-center mt-1">
-                          <MapPin className="h-3 w-3 mr-1" />
-                          <span className="truncate">{log.location} • {log.device}</span>
+                    </div>
+
+                    {/* Location & Device Section */}
+                    <div className="px-4 py-3 bg-gray-50 dark:bg-slate-800/50 border-y border-gray-200 dark:border-gray-700">
+                      <div className="space-y-2">
+                        <div className="flex items-center text-sm text-gray-700 dark:text-gray-300">
+                          <MapPin className="h-4 w-4 mr-2 shrink-0 text-blue-500" />
+                          <span className="font-medium">{log.location}</span>
+                        </div>
+                        <div className="flex items-center text-sm text-gray-700 dark:text-gray-300">
+                          <Globe className="h-4 w-4 mr-2 shrink-0 text-green-500" />
+                          <span className="font-medium">{log.device}</span>
                         </div>
                       </div>
                     </div>
                     
-                    <div className="flex items-center justify-between sm:justify-end sm:space-x-6 space-x-4">
-                      <div className="text-center">
-                        <div className="text-sm font-medium">{log.role}</div>
-                        <div className="text-xs text-muted-foreground">Role</div>
-                      </div>
-                      <div className="text-center hidden sm:block">
-                        <div className="text-sm font-medium">{log.ipAddress}</div>
-                        <div className="text-xs text-muted-foreground">IP Address</div>
-                      </div>
-                      <div className="text-center hidden sm:block">
-                        <div className="text-sm font-medium">{log.timestamp.split(' ')[1]}</div>
-                        <div className="text-xs text-muted-foreground">{log.timestamp.split(' ')[0]}</div>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        {getStatusIcon(log.status)}
-                        <Badge className={getStatusColor(log.status)}>
-                          <span className="hidden sm:inline">{log.status}</span>
-                          <span className="sm:hidden">{log.status.slice(0,4)}</span>
-                        </Badge>
+                    {/* IP & Timestamp Section */}
+                    <div className="p-4">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <div className="text-sm font-medium text-gray-900 dark:text-white">IP Address</div>
+                          <div className="text-sm text-gray-600 dark:text-gray-400 font-mono">
+                            {log.ipAddress}
+                          </div>
+                        </div>
+                        <div>
+                          <div className="text-sm font-medium text-gray-900 dark:text-white">Time</div>
+                          <div className="text-sm text-gray-600 dark:text-gray-400">
+                            {log.timestamp.split(' ')[1]}
+                          </div>
+                          <div className="text-xs text-gray-500 dark:text-gray-500">
+                            {log.timestamp.split(' ')[0]}
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+
+                  {/* Desktop Layout */}
+                  <div className="hidden sm:block">
+                    <div className="flex items-center justify-between p-6 border-b last:border-b-0">
+                      <div className="flex items-center space-x-4 flex-1">
+                        <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-sm">
+                          <User className="h-6 w-6 text-white" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="font-bold text-lg truncate">{log.user}</div>
+                          <div className="text-sm text-gray-600 dark:text-gray-400">{log.action}</div>
+                          <div className="text-xs text-gray-500 dark:text-gray-500 flex items-center mt-1">
+                            <MapPin className="h-3 w-3 mr-1" />
+                            <span className="truncate">{log.location} • {log.device}</span>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center space-x-6">
+                        <div className="text-center">
+                          <div className="text-sm font-medium">{log.role}</div>
+                          <div className="text-xs text-gray-500 dark:text-gray-400">Role</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-sm font-medium font-mono">{log.ipAddress}</div>
+                          <div className="text-xs text-gray-500 dark:text-gray-400">IP Address</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-sm font-medium">{log.timestamp.split(' ')[1]}</div>
+                          <div className="text-xs text-gray-500 dark:text-gray-400">{log.timestamp.split(' ')[0]}</div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          {getStatusIcon(log.status)}
+                          <Badge className={getStatusColor(log.status)}>
+                            {log.status}
+                          </Badge>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </TabsContent>
 
         {/* Security Incidents Tab */}
@@ -396,35 +461,100 @@ export default function SecurityCompliance() {
             </div>
           </div>
 
-          <Card>
-            <CardContent className="space-y-4">
-              {securityIncidents.map((incident) => (
-                <div key={incident.id} className="flex items-start space-x-4 p-4 border rounded-lg">
-                  <div className="w-8 h-8 bg-yellow-100 dark:bg-yellow-900 rounded-full flex items-center justify-center">
-                    <AlertTriangle className="h-4 w-4 text-yellow-600 dark:text-yellow-400" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center space-x-2">
-                      <div className="font-medium">{incident.title}</div>
-                      <Badge className={getSeverityColor(incident.severity)}>
-                        {incident.severity}
-                      </Badge>
-                      <Badge className={getStatusColor(incident.status)}>
-                        {incident.status}
-                      </Badge>
+          <div className="space-y-3">
+            {securityIncidents.map((incident) => (
+              <Card key={incident.id} className="overflow-hidden">
+                <CardContent className="p-0 sm:p-6">
+                  {/* Mobile Layout - Completely Redesigned */}
+                  <div className="block sm:hidden">
+                    {/* Header Section */}
+                    <div className="p-4 bg-gradient-to-r from-yellow-50 via-white to-yellow-50 dark:from-yellow-950/30 dark:via-slate-900 dark:to-yellow-950/30">
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex items-center space-x-3 flex-1 min-w-0">
+                          <div className="w-14 h-14 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg">
+                            <AlertTriangle className="h-7 w-7 text-white" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h3 className="font-bold text-lg leading-tight text-gray-900 dark:text-white">
+                              {incident.title}
+                            </h3>
+                            <div className="flex space-x-2 mt-2">
+                              <Badge className={getSeverityColor(incident.severity)} variant="secondary">
+                                {incident.severity}
+                              </Badge>
+                              <Badge className={getStatusColor(incident.status)} variant="secondary">
+                                {incident.status}
+                              </Badge>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <div className="text-sm text-muted-foreground mt-1">{incident.description}</div>
-                    <div className="text-xs text-muted-foreground mt-2">
-                      Assigned to: {incident.assignee} • Created: {incident.created} • Updated: {incident.updated}
+
+                    {/* Description Section */}
+                    <div className="px-4 py-3 bg-gray-50 dark:bg-slate-800/50 border-y border-gray-200 dark:border-gray-700">
+                      <div className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                        {incident.description}
+                      </div>
+                    </div>
+                    
+                    {/* Assignment & Timestamps Section */}
+                    <div className="p-4">
+                      <div className="space-y-3">
+                        <div>
+                          <div className="text-sm font-medium text-gray-900 dark:text-white">Assigned to</div>
+                          <div className="text-sm text-gray-600 dark:text-gray-400">{incident.assignee}</div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4 text-sm">
+                          <div>
+                            <div className="font-medium text-gray-900 dark:text-white">Created</div>
+                            <div className="text-gray-600 dark:text-gray-400">{incident.created.split(' ')[0]}</div>
+                            <div className="text-xs text-gray-500 dark:text-gray-500">{incident.created.split(' ')[1]}</div>
+                          </div>
+                          <div>
+                            <div className="font-medium text-gray-900 dark:text-white">Updated</div>
+                            <div className="text-gray-600 dark:text-gray-400">{incident.updated.split(' ')[0]}</div>
+                            <div className="text-xs text-gray-500 dark:text-gray-500">{incident.updated.split(' ')[1]}</div>
+                          </div>
+                        </div>
+                        <Button variant="outline" size="sm" className="w-full bg-white dark:bg-slate-800 mt-3">
+                          <AlertTriangle className="h-4 w-4 mr-2" />
+                          Manage Incident
+                        </Button>
+                      </div>
                     </div>
                   </div>
-                  <Button variant="outline" size="sm">
-                    Manage
-                  </Button>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
+
+                  {/* Desktop Layout */}
+                  <div className="hidden sm:block">
+                    <div className="flex items-start space-x-4 p-6">
+                      <div className="w-12 h-12 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-xl flex items-center justify-center shadow-sm">
+                        <AlertTriangle className="h-6 w-6 text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-2 mb-2">
+                          <div className="font-bold text-lg">{incident.title}</div>
+                          <Badge className={getSeverityColor(incident.severity)}>
+                            {incident.severity}
+                          </Badge>
+                          <Badge className={getStatusColor(incident.status)}>
+                            {incident.status}
+                          </Badge>
+                        </div>
+                        <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">{incident.description}</div>
+                        <div className="text-xs text-gray-500 dark:text-gray-500">
+                          Assigned to: {incident.assignee} • Created: {incident.created} • Updated: {incident.updated}
+                        </div>
+                      </div>
+                      <Button variant="outline" size="sm">
+                        Manage
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </TabsContent>
 
         {/* Compliance Tab */}
@@ -520,40 +650,101 @@ export default function SecurityCompliance() {
           </div>
 
           <Card>
-            <CardHeader>
-              <CardTitle>Vulnerability Assessment</CardTitle>
-              <CardDescription>Current system vulnerabilities and recommended actions</CardDescription>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg sm:text-xl">Vulnerability Assessment</CardTitle>
+              <CardDescription className="text-sm">Current system vulnerabilities and recommended actions</CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="pt-3">
               {systemVulnerabilities.length > 0 ? (
-                <div className="space-y-4">
+                <div className="space-y-3">
                   {systemVulnerabilities.map((vuln) => (
-                    <div key={vuln.id} className="flex items-start space-x-4 p-4 border rounded-lg">
-                      <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
-                        <Shield className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center space-x-2">
-                          <div className="font-medium">{vuln.title}</div>
-                          <Badge className={getSeverityColor(vuln.severity)}>
-                            {vuln.severity}
-                          </Badge>
+                    <Card key={vuln.id} className="overflow-hidden">
+                      <CardContent className="p-0 sm:p-6">
+                        {/* Mobile Layout - Completely Redesigned */}
+                        <div className="block sm:hidden">
+                          {/* Header Section */}
+                          <div className="p-4 bg-gradient-to-r from-blue-50 via-white to-blue-50 dark:from-blue-950/30 dark:via-slate-900 dark:to-blue-950/30">
+                            <div className="flex items-start justify-between mb-3">
+                              <div className="flex items-center space-x-3 flex-1 min-w-0">
+                                <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
+                                  <Shield className="h-7 w-7 text-white" />
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <h3 className="font-bold text-lg leading-tight text-gray-900 dark:text-white">
+                                    {vuln.title}
+                                  </h3>
+                                  <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                                    Timeline: {vuln.timeline}
+                                  </div>
+                                </div>
+                              </div>
+                              <Badge className={`${getSeverityColor(vuln.severity)} shrink-0 ml-2`} variant="secondary">
+                                {vuln.severity}
+                              </Badge>
+                            </div>
+                          </div>
+
+                          {/* Description Section */}
+                          <div className="px-4 py-3 bg-gray-50 dark:bg-slate-800/50 border-y border-gray-200 dark:border-gray-700">
+                            <div className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                              {vuln.description}
+                            </div>
+                          </div>
+                          
+                          {/* Impact & Remediation Section */}
+                          <div className="p-4">
+                            <div className="space-y-4">
+                              <div>
+                                <div className="text-sm font-medium text-gray-900 dark:text-white mb-1">Impact</div>
+                                <div className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                                  {vuln.impact}
+                                </div>
+                              </div>
+                              <div>
+                                <div className="text-sm font-medium text-gray-900 dark:text-white mb-1">Remediation</div>
+                                <div className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                                  {vuln.remediation}
+                                </div>
+                              </div>
+                              <Button variant="outline" size="sm" className="w-full bg-white dark:bg-slate-800 mt-3">
+                                <Shield className="h-4 w-4 mr-2" />
+                                Address Vulnerability
+                              </Button>
+                            </div>
+                          </div>
                         </div>
-                        <div className="text-sm text-muted-foreground mt-1">{vuln.description}</div>
-                        <div className="text-sm mt-2">
-                          <strong>Impact:</strong> {vuln.impact}
+
+                        {/* Desktop Layout */}
+                        <div className="hidden sm:block">
+                          <div className="flex items-start space-x-4 p-6">
+                            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-sm">
+                              <Shield className="h-6 w-6 text-white" />
+                            </div>
+                            <div className="flex-1">
+                              <div className="flex items-center space-x-2 mb-2">
+                                <div className="font-bold text-lg">{vuln.title}</div>
+                                <Badge className={getSeverityColor(vuln.severity)}>
+                                  {vuln.severity}
+                                </Badge>
+                              </div>
+                              <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">{vuln.description}</div>
+                              <div className="text-sm mb-2">
+                                <strong>Impact:</strong> {vuln.impact}
+                              </div>
+                              <div className="text-sm mb-2">
+                                <strong>Remediation:</strong> {vuln.remediation}
+                              </div>
+                              <div className="text-xs text-gray-500 dark:text-gray-500">
+                                Timeline: {vuln.timeline}
+                              </div>
+                            </div>
+                            <Button variant="outline" size="sm">
+                              Address
+                            </Button>
+                          </div>
                         </div>
-                        <div className="text-sm mt-1">
-                          <strong>Remediation:</strong> {vuln.remediation}
-                        </div>
-                        <div className="text-xs text-muted-foreground mt-2">
-                          Timeline: {vuln.timeline}
-                        </div>
-                      </div>
-                      <Button variant="outline" size="sm">
-                        Address
-                      </Button>
-                    </div>
+                      </CardContent>
+                    </Card>
                   ))}
                 </div>
               ) : (

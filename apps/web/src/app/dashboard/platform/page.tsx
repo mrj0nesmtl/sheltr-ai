@@ -119,11 +119,13 @@ export default function PlatformManagement() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Platform Management</h1>
-        <p className="text-gray-600 dark:text-gray-400 mt-2">
-          System configuration, monitoring, and tenant oversight
-        </p>
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">Platform Management</h1>
+          <p className="text-gray-600 dark:text-gray-400 mt-2 text-sm sm:text-base">
+            System configuration, monitoring, and tenant oversight
+          </p>
+        </div>
       </div>
 
       {/* System Health Overview */}
@@ -260,18 +262,18 @@ export default function PlatformManagement() {
         <CardContent>
           <div className="space-y-4">
             {tenantMetrics.map((tenant) => (
-              <div key={tenant.id} className="flex items-center justify-between p-4 border rounded-lg">
-                <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
+              <div key={tenant.id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 border rounded-lg space-y-3 sm:space-y-0">
+                <div className="flex items-center space-x-4 flex-1">
+                  <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center flex-shrink-0">
                     <Building2 className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                   </div>
-                  <div>
-                    <div className="font-medium">{tenant.name}</div>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-medium truncate">{tenant.name}</div>
                     <div className="text-sm text-muted-foreground">{tenant.region}</div>
                   </div>
                 </div>
                 
-                <div className="flex items-center space-x-6">
+                <div className="flex items-center justify-between sm:justify-end sm:space-x-6 space-x-4">
                   <div className="text-center">
                     <div className="text-lg font-semibold">{tenant.participants}</div>
                     <div className="text-xs text-muted-foreground">Participants</div>
@@ -280,15 +282,20 @@ export default function PlatformManagement() {
                     <div className="text-lg font-semibold">${tenant.donations.toLocaleString()}</div>
                     <div className="text-xs text-muted-foreground">Donations</div>
                   </div>
-                  <div className="text-center">
+                  <div className="text-center hidden sm:block">
                     <Badge className={getStatusColor(tenant.status)}>
                       {tenant.status}
                     </Badge>
                     <div className="text-xs text-muted-foreground mt-1">{tenant.lastActivity}</div>
                   </div>
-                  <Button variant="outline" size="sm">
-                    Manage
-                  </Button>
+                  <div className="flex items-center space-x-2 sm:space-x-0">
+                    <Badge className={`${getStatusColor(tenant.status)} sm:hidden`}>
+                      {tenant.status}
+                    </Badge>
+                    <Button variant="outline" size="sm">
+                      Manage
+                    </Button>
+                  </div>
                 </div>
               </div>
             ))}

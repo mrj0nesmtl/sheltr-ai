@@ -209,22 +209,24 @@ export default function UserManagement() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">User Management</h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-2">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">User Management</h1>
+          <p className="text-gray-600 dark:text-gray-400 mt-2 text-sm sm:text-base">
             Manage all user accounts and roles across the platform
           </p>
         </div>
         
-        <div className="flex space-x-3">
-          <Button variant="outline">
-            <Download className="mr-2 h-4 w-4" />
-            Export Users
+        <div className="flex space-x-2 sm:space-x-3">
+          <Button variant="outline" size="sm" className="flex-1 sm:flex-none">
+            <Download className="mr-1 sm:mr-2 h-4 w-4" />
+            <span className="hidden sm:inline">Export Users</span>
+            <span className="sm:hidden">Export</span>
           </Button>
-          <Button>
-            <Users className="mr-2 h-4 w-4" />
-            Add User
+          <Button size="sm" className="flex-1 sm:flex-none">
+            <Users className="mr-1 sm:mr-2 h-4 w-4" />
+            <span className="hidden sm:inline">Add User</span>
+            <span className="sm:hidden">Add</span>
           </Button>
         </div>
       </div>
@@ -314,28 +316,72 @@ export default function UserManagement() {
 
       {/* User Management Tabs - Updated with Super Admins */}
       <Tabs defaultValue="super-admins" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-5">
-          <TabsTrigger value="super-admins">
-            <Crown className="mr-2 h-4 w-4" />
-            Super Admins
-          </TabsTrigger>
-          <TabsTrigger value="admins">
-            <UserCog className="mr-2 h-4 w-4" />
-            Admin Users
-          </TabsTrigger>
-          <TabsTrigger value="participants">
-            <UserCheck className="mr-2 h-4 w-4" />
-            Participants
-          </TabsTrigger>
-          <TabsTrigger value="donors">
-            <Heart className="mr-2 h-4 w-4" />
-            Donors
-          </TabsTrigger>
-          <TabsTrigger value="map">
-            <Map className="mr-2 h-4 w-4" />
-            User Map
-          </TabsTrigger>
-        </TabsList>
+        {/* Desktop Tabs */}
+        <div className="hidden sm:block">
+          <TabsList className="grid w-full grid-cols-5">
+            <TabsTrigger value="super-admins" className="flex items-center">
+              <Crown className="mr-2 h-4 w-4" />
+              Super Admins
+            </TabsTrigger>
+            <TabsTrigger value="admins" className="flex items-center">
+              <UserCog className="mr-2 h-4 w-4" />
+              Admin Users
+            </TabsTrigger>
+            <TabsTrigger value="participants" className="flex items-center">
+              <UserCheck className="mr-2 h-4 w-4" />
+              Participants
+            </TabsTrigger>
+            <TabsTrigger value="donors" className="flex items-center">
+              <Heart className="mr-2 h-4 w-4" />
+              Donors
+            </TabsTrigger>
+            <TabsTrigger value="map" className="flex items-center">
+              <Map className="mr-2 h-4 w-4" />
+              User Map
+            </TabsTrigger>
+          </TabsList>
+        </div>
+
+        {/* Mobile Stacked Tabs */}
+        <div className="sm:hidden">
+          <TabsList className="grid grid-cols-5 gap-1 h-14 bg-muted p-1 rounded-md w-full">
+            <TabsTrigger 
+              value="super-admins" 
+              className="flex flex-col items-center justify-center h-full px-1 py-1 w-full"
+              title="Super Admins"
+            >
+              <Crown className="h-5 w-5" />
+            </TabsTrigger>
+            <TabsTrigger 
+              value="admins" 
+              className="flex flex-col items-center justify-center h-full px-1 py-1 w-full"
+              title="Admin Users"
+            >
+              <UserCog className="h-5 w-5" />
+            </TabsTrigger>
+            <TabsTrigger 
+              value="participants" 
+              className="flex flex-col items-center justify-center h-full px-1 py-1 w-full"
+              title="Participants"
+            >
+              <UserCheck className="h-5 w-5" />
+            </TabsTrigger>
+            <TabsTrigger 
+              value="donors" 
+              className="flex flex-col items-center justify-center h-full px-1 py-1 w-full"
+              title="Donors"
+            >
+              <Heart className="h-5 w-5" />
+            </TabsTrigger>
+            <TabsTrigger 
+              value="map" 
+              className="flex flex-col items-center justify-center h-full px-1 py-1 w-full"
+              title="User Map"
+            >
+              <Map className="h-5 w-5" />
+            </TabsTrigger>
+          </TabsList>
+        </div>
 
         {/* Super Admins Tab - NEW LIVE DATA */}
         <TabsContent value="super-admins" className="space-y-4">

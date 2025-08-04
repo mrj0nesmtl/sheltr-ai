@@ -180,22 +180,24 @@ export default function SecurityCompliance() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Security & Compliance</h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-2">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">Security & Compliance</h1>
+          <p className="text-gray-600 dark:text-gray-400 mt-2 text-sm sm:text-base">
             Security monitoring, compliance tracking, and incident management
           </p>
         </div>
         
-        <div className="flex space-x-3">
-          <Button variant="outline">
-            <Download className="mr-2 h-4 w-4" />
-            Security Report
+        <div className="flex space-x-2 sm:space-x-3">
+          <Button variant="outline" size="sm" className="flex-1 sm:flex-none">
+            <Download className="mr-1 sm:mr-2 h-4 w-4" />
+            <span className="hidden sm:inline">Security Report</span>
+            <span className="sm:hidden">Report</span>
           </Button>
-          <Button variant="outline">
-            <RefreshCw className="mr-2 h-4 w-4" />
-            Refresh Status
+          <Button variant="outline" size="sm" className="flex-1 sm:flex-none">
+            <RefreshCw className="mr-1 sm:mr-2 h-4 w-4" />
+            <span className="hidden sm:inline">Refresh Status</span>
+            <span className="sm:hidden">Refresh</span>
           </Button>
         </div>
       </div>
@@ -261,24 +263,61 @@ export default function SecurityCompliance() {
 
       {/* Security Management Tabs */}
       <Tabs defaultValue="access" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="access">
-            <Eye className="mr-2 h-4 w-4" />
-            Access Logs
-          </TabsTrigger>
-          <TabsTrigger value="incidents">
-            <AlertTriangle className="mr-2 h-4 w-4" />
-            Incidents
-          </TabsTrigger>
-          <TabsTrigger value="compliance">
-            <FileText className="mr-2 h-4 w-4" />
-            Compliance
-          </TabsTrigger>
-          <TabsTrigger value="vulnerabilities">
-            <Shield className="mr-2 h-4 w-4" />
-            Vulnerabilities
-          </TabsTrigger>
-        </TabsList>
+        {/* Desktop Tabs */}
+        <div className="hidden sm:block">
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="access" className="flex items-center">
+              <Eye className="mr-2 h-4 w-4" />
+              Access Logs
+            </TabsTrigger>
+            <TabsTrigger value="incidents" className="flex items-center">
+              <AlertTriangle className="mr-2 h-4 w-4" />
+              Incidents
+            </TabsTrigger>
+            <TabsTrigger value="compliance" className="flex items-center">
+              <FileText className="mr-2 h-4 w-4" />
+              Compliance
+            </TabsTrigger>
+            <TabsTrigger value="vulnerabilities" className="flex items-center">
+              <Shield className="mr-2 h-4 w-4" />
+              Vulnerabilities
+            </TabsTrigger>
+          </TabsList>
+        </div>
+
+        {/* Mobile Stacked Tabs */}
+        <div className="sm:hidden">
+          <TabsList className="grid grid-cols-4 gap-1 h-14 bg-muted p-1 rounded-md w-full">
+            <TabsTrigger 
+              value="access" 
+              className="flex flex-col items-center justify-center h-full px-1 py-1 w-full"
+              title="Access Logs"
+            >
+              <Eye className="h-5 w-5" />
+            </TabsTrigger>
+            <TabsTrigger 
+              value="incidents" 
+              className="flex flex-col items-center justify-center h-full px-1 py-1 w-full"
+              title="Incidents"
+            >
+              <AlertTriangle className="h-5 w-5" />
+            </TabsTrigger>
+            <TabsTrigger 
+              value="compliance" 
+              className="flex flex-col items-center justify-center h-full px-1 py-1 w-full"
+              title="Compliance"
+            >
+              <FileText className="h-5 w-5" />
+            </TabsTrigger>
+            <TabsTrigger 
+              value="vulnerabilities" 
+              className="flex flex-col items-center justify-center h-full px-1 py-1 w-full"
+              title="Vulnerabilities"
+            >
+              <Shield className="h-5 w-5" />
+            </TabsTrigger>
+          </TabsList>
+        </div>
 
         {/* Access Logs Tab */}
         <TabsContent value="access" className="space-y-4">
@@ -300,38 +339,39 @@ export default function SecurityCompliance() {
             <CardContent className="p-0">
               <div className="space-y-0">
                 {recentAccessLogs.map((log) => (
-                  <div key={log.id} className="flex items-center justify-between p-6 border-b last:border-b-0">
-                    <div className="flex items-center space-x-4">
-                      <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
+                  <div key={log.id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 sm:p-6 border-b last:border-b-0 space-y-3 sm:space-y-0">
+                    <div className="flex items-center space-x-4 flex-1">
+                      <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center flex-shrink-0">
                         <User className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                       </div>
-                      <div>
-                        <div className="font-medium">{log.user}</div>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-medium truncate">{log.user}</div>
                         <div className="text-sm text-muted-foreground">{log.action}</div>
                         <div className="text-xs text-muted-foreground flex items-center mt-1">
                           <MapPin className="h-3 w-3 mr-1" />
-                          {log.location} • {log.device}
+                          <span className="truncate">{log.location} • {log.device}</span>
                         </div>
                       </div>
                     </div>
                     
-                    <div className="flex items-center space-x-6">
+                    <div className="flex items-center justify-between sm:justify-end sm:space-x-6 space-x-4">
                       <div className="text-center">
                         <div className="text-sm font-medium">{log.role}</div>
                         <div className="text-xs text-muted-foreground">Role</div>
                       </div>
-                      <div className="text-center">
+                      <div className="text-center hidden sm:block">
                         <div className="text-sm font-medium">{log.ipAddress}</div>
                         <div className="text-xs text-muted-foreground">IP Address</div>
                       </div>
-                      <div className="text-center">
+                      <div className="text-center hidden sm:block">
                         <div className="text-sm font-medium">{log.timestamp.split(' ')[1]}</div>
                         <div className="text-xs text-muted-foreground">{log.timestamp.split(' ')[0]}</div>
                       </div>
                       <div className="flex items-center space-x-2">
                         {getStatusIcon(log.status)}
                         <Badge className={getStatusColor(log.status)}>
-                          {log.status}
+                          <span className="hidden sm:inline">{log.status}</span>
+                          <span className="sm:hidden">{log.status.slice(0,4)}</span>
                         </Badge>
                       </div>
                     </div>

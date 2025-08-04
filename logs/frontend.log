@@ -8,10 +8,22 @@
    - Environments: .env.local
 
  ✓ Starting...
- ✓ Compiled middleware in 142ms
+ ✓ Compiled middleware in 163ms
  ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
- ✓ Ready in 1831ms
- ○ Compiling / ...
- ✓ Compiled / in 2.7s
- GET / 200 in 3276ms
-[?25h
+ ✓ Ready in 2.1s
+ ○ Compiling /docs ...
+ ✓ Compiled /docs in 3.5s
+ GET /docs 200 in 4235ms
+ ✓ Compiled / in 385ms
+ GET / 200 in 557ms
+ ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
+ ✓ Compiled in 267ms
+ ✓ Compiled middleware in 5ms
+ ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
+ GET /docs 200 in 423ms
+ GET /docs 200 in 99ms
+ ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
+ ✓ Compiled in 307ms
+ ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
+ ✓ Compiled /docs/website-architecture in 429ms
+ GET /docs/website-architecture 200 in 648ms

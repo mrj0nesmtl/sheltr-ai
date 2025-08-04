@@ -72,6 +72,19 @@ export default function DocsPage() {
       lastUpdated: "January 25, 2025"
     },
     {
+      title: "Website Architecture & QA Guide",
+      description: "Complete site structure, role-based features, and comprehensive quality assurance testing framework",
+      icon: Building,
+      badge: "QA Framework",
+      badgeColor: "bg-indigo-500",
+      pages: "45 pages",
+      audience: "QA Engineers • Developers • Project Managers • Technical Teams",
+      topics: ["Site Architecture", "Role-Based Access", "Mobile Testing", "Authentication Flow", "Business Logic QA"],
+      link: "/docs/website-architecture",
+      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/website-architecture.md",
+      lastUpdated: "August 4, 2025"
+    },
+    {
       title: "API Documentation",
       description: "Comprehensive API reference for developers, integration guides, and technical specifications",
       icon: Code,

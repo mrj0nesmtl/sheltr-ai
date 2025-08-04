@@ -201,22 +201,24 @@ export default function ShelterNetwork() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Shelter Network</h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-2">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">Shelter Network</h1>
+          <p className="text-gray-600 dark:text-gray-400 mt-2 text-sm sm:text-base">
             Manage shelter directory, onboarding, and performance across the platform
           </p>
         </div>
         
-        <div className="flex space-x-3">
-          <Button variant="outline">
-            <Download className="mr-2 h-4 w-4" />
-            Export Data
+        <div className="flex space-x-2 sm:space-x-3">
+          <Button variant="outline" size="sm" className="flex-1 sm:flex-none">
+            <Download className="mr-1 sm:mr-2 h-4 w-4" />
+            <span className="hidden sm:inline">Export Data</span>
+            <span className="sm:hidden">Export</span>
           </Button>
-          <Button>
-            <Plus className="mr-2 h-4 w-4" />
-            Add Shelter
+          <Button size="sm" className="flex-1 sm:flex-none">
+            <Plus className="mr-1 sm:mr-2 h-4 w-4" />
+            <span className="hidden sm:inline">Add Shelter</span>
+            <span className="sm:hidden">Add</span>
           </Button>
         </div>
       </div>
@@ -328,7 +330,8 @@ export default function ShelterNetwork() {
           <CardDescription>Filter shelters across all views (Overview, Map, Directory)</CardDescription>
         </CardHeader>
         <CardContent className="p-4">
-          <div className="flex flex-wrap items-center gap-4">
+          <div className="space-y-4">
+            {/* Search Bar */}
             <div className="flex items-center space-x-2">
               <Search className="h-4 w-4 text-muted-foreground" />
               <input
@@ -336,69 +339,74 @@ export default function ShelterNetwork() {
                 placeholder="Search shelters..."
                 value={filters.searchTerm}
                 onChange={(e) => updateFilter('searchTerm', e.target.value)}
-                className="px-3 py-2 border rounded-md text-sm w-48 bg-background"
+                className="flex-1 px-3 py-2 border rounded-md text-sm bg-background"
               />
             </div>
             
-            <select
-              value={filters.location}
-              onChange={(e) => updateFilter('location', e.target.value)}
-              className="px-3 py-2 border rounded-md text-sm bg-background"
-            >
-              <option value="">All Locations</option>
-              {uniqueLocations.map(location => (
-                <option key={location} value={location}>{location}</option>
-              ))}
-            </select>
-            
-            <select
-              value={filters.type}
-              onChange={(e) => updateFilter('type', e.target.value)}
-              className="px-3 py-2 border rounded-md text-sm bg-background"
-            >
-              <option value="">All Types</option>
-              {uniqueTypes.map(type => (
-                <option key={type} value={type}>{type.replace('_', ' ')}</option>
-              ))}
-            </select>
-            
-            <select
-              value={filters.status}
-              onChange={(e) => updateFilter('status', e.target.value)}
-              className="px-3 py-2 border rounded-md text-sm bg-background"
-            >
-              <option value="">All Status</option>
-              {uniqueStatuses.map(status => (
-                <option key={status} value={status}>{status}</option>
-              ))}
-            </select>
-            
-            <select
-              value={filters.occupancyLevel}
-              onChange={(e) => updateFilter('occupancyLevel', e.target.value)}
-              className="px-3 py-2 border rounded-md text-sm bg-background"
-            >
-              <option value="">All Occupancy</option>
-              <option value="low">Low (&lt;50%)</option>
-              <option value="medium">Medium (50-80%)</option>
-              <option value="high">High (80-95%)</option>
-              <option value="at_capacity">At Capacity (95%+)</option>
-            </select>
-            
-            {(filters.searchTerm || filters.location || filters.status || filters.type || filters.occupancyLevel) && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={clearFilters}
-                className="flex items-center space-x-1"
+            {/* Filter Dropdowns */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              <select
+                value={filters.location}
+                onChange={(e) => updateFilter('location', e.target.value)}
+                className="px-3 py-2 border rounded-md text-sm bg-background"
               >
-                <X className="h-3 w-3" />
-                <span>Clear All</span>
-              </Button>
-            )}
+                <option value="">All Locations</option>
+                {uniqueLocations.map(location => (
+                  <option key={location} value={location}>{location}</option>
+                ))}
+              </select>
+              
+              <select
+                value={filters.type}
+                onChange={(e) => updateFilter('type', e.target.value)}
+                className="px-3 py-2 border rounded-md text-sm bg-background"
+              >
+                <option value="">All Types</option>
+                {uniqueTypes.map(type => (
+                  <option key={type} value={type}>{type.replace('_', ' ')}</option>
+                ))}
+              </select>
+              
+              <select
+                value={filters.status}
+                onChange={(e) => updateFilter('status', e.target.value)}
+                className="px-3 py-2 border rounded-md text-sm bg-background"
+              >
+                <option value="">All Status</option>
+                {uniqueStatuses.map(status => (
+                  <option key={status} value={status}>{status}</option>
+                ))}
+              </select>
+              
+              <select
+                value={filters.occupancyLevel}
+                onChange={(e) => updateFilter('occupancyLevel', e.target.value)}
+                className="px-3 py-2 border rounded-md text-sm bg-background"
+              >
+                <option value="">All Occupancy</option>
+                <option value="low">Low (&lt;50%)</option>
+                <option value="medium">Medium (50-80%)</option>
+                <option value="high">High (80-95%)</option>
+                <option value="at_capacity">At Capacity (95%+)</option>
+              </select>
+            </div>
             
-            <div className="text-sm text-muted-foreground font-medium">
-              Showing {filteredShelters.length} of {uniqueShelters.length} shelters
+            {/* Clear Filters and Results Count */}
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+              <div className="text-sm text-muted-foreground font-medium">
+                Showing {filteredShelters.length} of {uniqueShelters.length} shelters
+              </div>
+              {(filters.searchTerm || filters.location || filters.status || filters.type || filters.occupancyLevel) && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={clearFilters}
+                  className="flex items-center space-x-1 w-fit"
+                >
+                  <X className="h-3 w-3" />
+                  <span>Clear All</span>
+                </Button>
+              )}
             </div>
           </div>
         </CardContent>
@@ -406,28 +414,72 @@ export default function ShelterNetwork() {
 
       {/* Main Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-5">
-          <TabsTrigger value="overview">
-            <Activity className="mr-2 h-4 w-4" />
-            Overview
-          </TabsTrigger>
-          <TabsTrigger value="map">
-            <Map className="mr-2 h-4 w-4" />
-            Map View
-          </TabsTrigger>
-          <TabsTrigger value="directory">
-            <Building2 className="mr-2 h-4 w-4" />
-            Directory
-          </TabsTrigger>
-          <TabsTrigger value="applications">
-            <FileText className="mr-2 h-4 w-4" />
-            Applications
-          </TabsTrigger>
-          <TabsTrigger value="data">
-            <Database className="mr-2 h-4 w-4" />
-            Data
-          </TabsTrigger>
-        </TabsList>
+        {/* Desktop Tabs */}
+        <div className="hidden sm:block">
+          <TabsList className="grid w-full grid-cols-5">
+            <TabsTrigger value="overview" className="flex items-center">
+              <Activity className="mr-2 h-4 w-4" />
+              Overview
+            </TabsTrigger>
+            <TabsTrigger value="map" className="flex items-center">
+              <Map className="mr-2 h-4 w-4" />
+              Map View
+            </TabsTrigger>
+            <TabsTrigger value="directory" className="flex items-center">
+              <Building2 className="mr-2 h-4 w-4" />
+              Directory
+            </TabsTrigger>
+            <TabsTrigger value="applications" className="flex items-center">
+              <FileText className="mr-2 h-4 w-4" />
+              Applications
+            </TabsTrigger>
+            <TabsTrigger value="data" className="flex items-center">
+              <Database className="mr-2 h-4 w-4" />
+              Data
+            </TabsTrigger>
+          </TabsList>
+        </div>
+
+        {/* Mobile Stacked Tabs */}
+        <div className="sm:hidden">
+          <TabsList className="grid grid-cols-5 gap-1 h-14 bg-muted p-1 rounded-md w-full">
+            <TabsTrigger 
+              value="overview" 
+              className="flex flex-col items-center justify-center h-full px-1 py-1 w-full"
+              title="Overview"
+            >
+              <Activity className="h-5 w-5" />
+            </TabsTrigger>
+            <TabsTrigger 
+              value="map" 
+              className="flex flex-col items-center justify-center h-full px-1 py-1 w-full"
+              title="Map View"
+            >
+              <Map className="h-5 w-5" />
+            </TabsTrigger>
+            <TabsTrigger 
+              value="directory" 
+              className="flex flex-col items-center justify-center h-full px-1 py-1 w-full"
+              title="Directory"
+            >
+              <Building2 className="h-5 w-5" />
+            </TabsTrigger>
+            <TabsTrigger 
+              value="applications" 
+              className="flex flex-col items-center justify-center h-full px-1 py-1 w-full"
+              title="Applications"
+            >
+              <FileText className="h-5 w-5" />
+            </TabsTrigger>
+            <TabsTrigger 
+              value="data" 
+              className="flex flex-col items-center justify-center h-full px-1 py-1 w-full"
+              title="Data"
+            >
+              <Database className="h-5 w-5" />
+            </TabsTrigger>
+          </TabsList>
+        </div>
 
         {/* Overview Tab */}
         <TabsContent value="overview" className="space-y-6">

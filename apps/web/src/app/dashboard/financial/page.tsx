@@ -152,22 +152,24 @@ export default function FinancialOversight() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Financial Oversight</h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-2">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">Financial Oversight</h1>
+          <p className="text-gray-600 dark:text-gray-400 mt-2 text-sm sm:text-base">
             Transaction monitoring, revenue analytics, and fraud detection
           </p>
         </div>
         
-        <div className="flex space-x-3">
-          <Button variant="outline">
-            <Download className="mr-2 h-4 w-4" />
-            Export Report
+        <div className="flex space-x-2 sm:space-x-3">
+          <Button variant="outline" size="sm" className="flex-1 sm:flex-none">
+            <Download className="mr-1 sm:mr-2 h-4 w-4" />
+            <span className="hidden sm:inline">Export Report</span>
+            <span className="sm:hidden">Export</span>
           </Button>
-          <Button variant="outline">
-            <RefreshCw className="mr-2 h-4 w-4" />
-            Refresh Data
+          <Button variant="outline" size="sm" className="flex-1 sm:flex-none">
+            <RefreshCw className="mr-1 sm:mr-2 h-4 w-4" />
+            <span className="hidden sm:inline">Refresh Data</span>
+            <span className="sm:hidden">Refresh</span>
           </Button>
         </div>
       </div>
@@ -233,24 +235,61 @@ export default function FinancialOversight() {
 
       {/* Financial Oversight Tabs */}
       <Tabs defaultValue="transactions" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="transactions">
-            <Activity className="mr-2 h-4 w-4" />
-            Transactions
-          </TabsTrigger>
-          <TabsTrigger value="revenue">
-            <TrendingUp className="mr-2 h-4 w-4" />
-            Revenue
-          </TabsTrigger>
-          <TabsTrigger value="fraud">
-            <Shield className="mr-2 h-4 w-4" />
-            Fraud Detection
-          </TabsTrigger>
-          <TabsTrigger value="audit">
-            <FileText className="mr-2 h-4 w-4" />
-            Audit Trail
-          </TabsTrigger>
-        </TabsList>
+        {/* Desktop Tabs */}
+        <div className="hidden sm:block">
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="transactions" className="flex items-center">
+              <Activity className="mr-2 h-4 w-4" />
+              Transactions
+            </TabsTrigger>
+            <TabsTrigger value="revenue" className="flex items-center">
+              <TrendingUp className="mr-2 h-4 w-4" />
+              Revenue
+            </TabsTrigger>
+            <TabsTrigger value="fraud" className="flex items-center">
+              <Shield className="mr-2 h-4 w-4" />
+              Fraud Detection
+            </TabsTrigger>
+            <TabsTrigger value="audit" className="flex items-center">
+              <FileText className="mr-2 h-4 w-4" />
+              Audit Trail
+            </TabsTrigger>
+          </TabsList>
+        </div>
+
+        {/* Mobile Stacked Tabs */}
+        <div className="sm:hidden">
+          <TabsList className="grid grid-cols-4 gap-1 h-14 bg-muted p-1 rounded-md w-full">
+            <TabsTrigger 
+              value="transactions" 
+              className="flex flex-col items-center justify-center h-full px-1 py-1 w-full"
+              title="Transactions"
+            >
+              <Activity className="h-5 w-5" />
+            </TabsTrigger>
+            <TabsTrigger 
+              value="revenue" 
+              className="flex flex-col items-center justify-center h-full px-1 py-1 w-full"
+              title="Revenue"
+            >
+              <TrendingUp className="h-5 w-5" />
+            </TabsTrigger>
+            <TabsTrigger 
+              value="fraud" 
+              className="flex flex-col items-center justify-center h-full px-1 py-1 w-full"
+              title="Fraud Detection"
+            >
+              <Shield className="h-5 w-5" />
+            </TabsTrigger>
+            <TabsTrigger 
+              value="audit" 
+              className="flex flex-col items-center justify-center h-full px-1 py-1 w-full"
+              title="Audit Trail"
+            >
+              <FileText className="h-5 w-5" />
+            </TabsTrigger>
+          </TabsList>
+        </div>
 
         {/* Transactions Tab */}
         <TabsContent value="transactions" className="space-y-4">
@@ -272,25 +311,25 @@ export default function FinancialOversight() {
             <CardContent className="p-0">
               <div className="space-y-0">
                 {recentTransactions.map((tx) => (
-                  <div key={tx.id} className="flex items-center justify-between p-6 border-b last:border-b-0">
-                    <div className="flex items-center space-x-4">
-                      <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
+                  <div key={tx.id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 sm:p-6 border-b last:border-b-0 space-y-3 sm:space-y-0">
+                    <div className="flex items-center space-x-4 flex-1">
+                      <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center flex-shrink-0">
                         {tx.type === 'donation' ? (
                           <DollarSign className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                         ) : (
                           <Banknote className="h-5 w-5 text-green-600 dark:text-green-400" />
                         )}
                       </div>
-                      <div>
+                      <div className="flex-1 min-w-0">
                         <div className="font-medium">{tx.id}</div>
-                        <div className="text-sm text-muted-foreground">
+                        <div className="text-sm text-muted-foreground truncate">
                           {tx.type === 'donation' ? `${tx.donor} → ${tx.participant}` : 'Platform Payout'}
                         </div>
-                        <div className="text-xs text-muted-foreground">{tx.shelter}</div>
+                        <div className="text-xs text-muted-foreground truncate">{tx.shelter}</div>
                       </div>
                     </div>
                     
-                    <div className="flex items-center space-x-6">
+                    <div className="flex items-center justify-between sm:justify-end sm:space-x-6 space-x-4">
                       <div className="text-center">
                         <div className="text-sm font-medium">${tx.amount.toLocaleString()}</div>
                         <div className="text-xs text-muted-foreground">Amount</div>
@@ -299,14 +338,15 @@ export default function FinancialOversight() {
                         <div className="text-sm font-medium">${tx.fees.toLocaleString()}</div>
                         <div className="text-xs text-muted-foreground">Fees</div>
                       </div>
-                      <div className="text-center">
+                      <div className="text-center hidden sm:block">
                         <div className="text-sm font-medium">{tx.timestamp.split(' ')[1]}</div>
                         <div className="text-xs text-muted-foreground">{tx.timestamp.split(' ')[0]}</div>
                       </div>
                       <div className="flex items-center space-x-2">
                         {getStatusIcon(tx.status)}
                         <Badge className={getStatusColor(tx.status)}>
-                          {tx.status}
+                          <span className="hidden sm:inline">{tx.status}</span>
+                          <span className="sm:hidden">{tx.status.slice(0,4)}</span>
                         </Badge>
                       </div>
                       <Button variant="ghost" size="sm">

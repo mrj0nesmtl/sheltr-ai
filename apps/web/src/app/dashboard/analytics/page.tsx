@@ -186,10 +186,10 @@ export default function Analytics() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
           <div className="flex items-center space-x-3">
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Analytics</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">Analytics</h1>
             {loading ? (
               <div className="flex items-center space-x-2 text-blue-600">
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
@@ -202,19 +202,21 @@ export default function Analytics() {
               </div>
             )}
           </div>
-          <p className="text-gray-600 dark:text-gray-400 mt-2">
+          <p className="text-gray-600 dark:text-gray-400 mt-2 text-sm sm:text-base">
             Real-time platform analytics, insights, and performance metrics
           </p>
         </div>
         
-        <div className="flex space-x-3">
-          <Button variant="outline">
-            <Download className="mr-2 h-4 w-4" />
-            Export Report
+        <div className="flex space-x-2 sm:space-x-3">
+          <Button variant="outline" size="sm" className="flex-1 sm:flex-none">
+            <Download className="mr-1 sm:mr-2 h-4 w-4" />
+            <span className="hidden sm:inline">Export Report</span>
+            <span className="sm:hidden">Export</span>
           </Button>
-          <Button variant="outline">
-            <RefreshCw className="mr-2 h-4 w-4" />
-            Refresh Data
+          <Button variant="outline" size="sm" className="flex-1 sm:flex-none">
+            <RefreshCw className="mr-1 sm:mr-2 h-4 w-4" />
+            <span className="hidden sm:inline">Refresh Data</span>
+            <span className="sm:hidden">Refresh</span>
           </Button>
         </div>
       </div>
@@ -294,28 +296,72 @@ export default function Analytics() {
 
       {/* Analytics Tabs */}
       <Tabs defaultValue="overview" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-5">
-          <TabsTrigger value="overview">
-            <BarChart3 className="mr-2 h-4 w-4" />
-            Overview
-          </TabsTrigger>
-          <TabsTrigger value="donations">
-            <DollarSign className="mr-2 h-4 w-4" />
-            Donations
-          </TabsTrigger>
-          <TabsTrigger value="users">
-            <Users className="mr-2 h-4 w-4" />
-            Users
-          </TabsTrigger>
-          <TabsTrigger value="geographic">
-            <Globe className="mr-2 h-4 w-4" />
-            Geographic
-          </TabsTrigger>
-          <TabsTrigger value="insights">
-            <Eye className="mr-2 h-4 w-4" />
-            Insights
-          </TabsTrigger>
-        </TabsList>
+        {/* Desktop Tabs */}
+        <div className="hidden sm:block">
+          <TabsList className="grid w-full grid-cols-5">
+            <TabsTrigger value="overview" className="flex items-center">
+              <BarChart3 className="mr-2 h-4 w-4" />
+              Overview
+            </TabsTrigger>
+            <TabsTrigger value="donations" className="flex items-center">
+              <DollarSign className="mr-2 h-4 w-4" />
+              Donations
+            </TabsTrigger>
+            <TabsTrigger value="users" className="flex items-center">
+              <Users className="mr-2 h-4 w-4" />
+              Users
+            </TabsTrigger>
+            <TabsTrigger value="geographic" className="flex items-center">
+              <Globe className="mr-2 h-4 w-4" />
+              Geographic
+            </TabsTrigger>
+            <TabsTrigger value="insights" className="flex items-center">
+              <Eye className="mr-2 h-4 w-4" />
+              Insights
+            </TabsTrigger>
+          </TabsList>
+        </div>
+
+        {/* Mobile Stacked Tabs */}
+        <div className="sm:hidden">
+          <TabsList className="grid grid-cols-5 gap-1 h-14 bg-muted p-1 rounded-md w-full">
+            <TabsTrigger 
+              value="overview" 
+              className="flex flex-col items-center justify-center h-full px-1 py-1 w-full"
+              title="Overview"
+            >
+              <BarChart3 className="h-5 w-5" />
+            </TabsTrigger>
+            <TabsTrigger 
+              value="donations" 
+              className="flex flex-col items-center justify-center h-full px-1 py-1 w-full"
+              title="Donations"
+            >
+              <DollarSign className="h-5 w-5" />
+            </TabsTrigger>
+            <TabsTrigger 
+              value="users" 
+              className="flex flex-col items-center justify-center h-full px-1 py-1 w-full"
+              title="Users"
+            >
+              <Users className="h-5 w-5" />
+            </TabsTrigger>
+            <TabsTrigger 
+              value="geographic" 
+              className="flex flex-col items-center justify-center h-full px-1 py-1 w-full"
+              title="Geographic"
+            >
+              <Globe className="h-5 w-5" />
+            </TabsTrigger>
+            <TabsTrigger 
+              value="insights" 
+              className="flex flex-col items-center justify-center h-full px-1 py-1 w-full"
+              title="Insights"
+            >
+              <Eye className="h-5 w-5" />
+            </TabsTrigger>
+          </TabsList>
+        </div>
 
         {/* Overview Tab */}
         <TabsContent value="overview" className="space-y-6">

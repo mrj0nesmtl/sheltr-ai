@@ -78,6 +78,7 @@ SHELTR-AI Website (https://sheltr-ai.web.app)
 │   ├── /hacking-homelessness (Mission Guide)
 │   ├── /participant-guide (User Documentation)
 │   ├── /roadmap (Development Timeline)
+│   ├── /website-architecture (QA Testing Framework)
 │   └── /whitepaper (Technical Whitepaper)
 │
 ├── 🔐 /login

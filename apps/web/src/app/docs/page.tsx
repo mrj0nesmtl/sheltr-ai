@@ -227,15 +227,15 @@ export default function DocsPage() {
               SHELTR Documentation Hub
             </h1>
             <p className="text-xl mb-8 text-white/90">
-              Comprehensive technical documentation, investment materials, and implementation guides 
+              Comprehensive technical documentation and implementation guides 
               for the world&rsquo;s first dual-token charitable ecosystem.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" variant="secondary" className="bg-white text-black hover:bg-white/90">
+              <Button size="lg" variant="secondary" className="bg-white text-black hover:bg-white/90 dark:bg-white dark:text-black dark:hover:bg-white/90">
                 <Download className="h-5 w-5 mr-2" />
                 Download All Documents
               </Button>
-              <Button size="lg" variant="outline" className="border-white text-black bg-white/10 hover:bg-white hover:text-black">
+              <Button size="lg" variant="outline" className="border-white text-white bg-white/10 hover:bg-white hover:text-black dark:border-white dark:text-white dark:bg-white/10 dark:hover:bg-white dark:hover:text-black">
                 <Building className="h-5 w-5 mr-2" />
                 View GitHub Repository
               </Button>

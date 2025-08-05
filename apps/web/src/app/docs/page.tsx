@@ -255,11 +255,39 @@ export default function DocsPage() {
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-1 gap-8 max-w-5xl mx-auto">
+          <div className="grid lg:grid-cols-1 gap-6 max-w-5xl mx-auto">
             {coreDocuments.map((doc, index) => (
-              <Card key={index} className="hover:shadow-xl transition-all duration-300 border-2 hover:border-primary/20">
+              <Card key={index} className="hover:shadow-xl transition-all duration-300 border-2 hover:border-primary/20 bg-gradient-to-r from-slate-50 to-gray-50 dark:from-slate-900 dark:to-gray-900">
                 <CardHeader className="pb-4">
-                  <div className="flex items-start justify-between">
+                  {/* Mobile Layout */}
+                  <div className="block sm:hidden space-y-4">
+                    {/* Top Row: Icon and Badge */}
+                    <div className="flex items-center justify-between">
+                      <div className="w-14 h-14 bg-gradient-to-br from-primary/30 to-primary/10 rounded-xl flex items-center justify-center shadow-sm">
+                        <doc.icon className="h-7 w-7 text-primary" />
+                      </div>
+                      <Badge className={`${doc.badgeColor} text-white text-xs px-2 py-1 font-medium`}>
+                        {doc.badge}
+                      </Badge>
+                    </div>
+                    
+                    {/* Title and Description */}
+                    <div>
+                      <CardTitle className="text-xl font-bold mb-2 leading-tight">{doc.title}</CardTitle>
+                      <CardDescription className="text-sm leading-relaxed">
+                        {doc.description}
+                      </CardDescription>
+                    </div>
+                    
+                    {/* Page Count and Update Date */}
+                    <div className="flex items-center justify-between text-xs bg-muted/50 rounded-lg px-3 py-2">
+                      <span className="font-semibold text-foreground">{doc.pages}</span>
+                      <span className="text-muted-foreground">Updated {doc.lastUpdated}</span>
+                    </div>
+                  </div>
+                  
+                  {/* Desktop Layout */}
+                  <div className="hidden sm:flex items-start justify-between">
                     <div className="flex items-center gap-4">
                       <div className="w-16 h-16 bg-gradient-to-br from-primary/20 to-primary/10 rounded-xl flex items-center justify-center">
                         <doc.icon className="h-8 w-8 text-primary" />
@@ -283,8 +311,33 @@ export default function DocsPage() {
                   </div>
                 </CardHeader>
                 <CardContent className="pt-0">
-                  <div className="space-y-6">
-                    <div className="grid md:grid-cols-2 gap-6">
+                  <div className="space-y-4 sm:space-y-6">
+                    {/* Mobile: Stacked Layout */}
+                    <div className="block sm:hidden space-y-4">
+                      <div>
+                        <h4 className="font-semibold mb-2 text-foreground text-sm">Target Audience</h4>
+                        <p className="text-xs text-muted-foreground leading-relaxed">{doc.audience}</p>
+                      </div>
+                      
+                      <div>
+                        <h4 className="font-semibold mb-2 text-foreground text-sm">Key Topics</h4>
+                        <div className="flex flex-wrap gap-1">
+                          {doc.topics.slice(0, 3).map((topic, topicIndex) => (
+                            <Badge key={topicIndex} variant="outline" className="text-xs px-2 py-1 hover:bg-primary/10 transition-colors">
+                              {topic}
+                            </Badge>
+                          ))}
+                          {doc.topics.length > 3 && (
+                            <Badge variant="outline" className="text-xs px-2 py-1 text-muted-foreground">
+                              +{doc.topics.length - 3} more
+                            </Badge>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Desktop: Grid Layout */}
+                    <div className="hidden sm:grid md:grid-cols-2 gap-6">
                       <div>
                         <h4 className="font-semibold mb-3 text-foreground">Target Audience</h4>
                         <p className="text-sm text-muted-foreground leading-relaxed">{doc.audience}</p>
@@ -302,17 +355,20 @@ export default function DocsPage() {
                       </div>
                     </div>
                     
-                    <div className="flex gap-4 pt-4 border-t">
+                    {/* Action Buttons */}
+                    <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4 border-t">
                       <Link href={doc.link} className="flex-1">
-                        <Button className="w-full h-12 text-base">
-                          <FileText className="h-5 w-5 mr-2" />
-                          View Online
+                        <Button className="w-full h-10 sm:h-12 text-sm sm:text-base">
+                          <FileText className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
+                          <span className="hidden sm:inline">View Online</span>
+                          <span className="sm:hidden">View</span>
                         </Button>
                       </Link>
                       <a href={doc.downloadLink} target="_blank" rel="noopener noreferrer" className="flex-1">
-                        <Button variant="outline" className="w-full h-12 text-base border-2 hover:border-primary">
-                          <Download className="h-5 w-5 mr-2" />
-                          View on GitHub
+                        <Button variant="outline" className="w-full h-10 sm:h-12 text-sm sm:text-base border-2 hover:border-primary">
+                          <Download className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
+                          <span className="hidden sm:inline">View on GitHub</span>
+                          <span className="sm:hidden">GitHub</span>
                         </Button>
                       </a>
                     </div>
@@ -334,32 +390,36 @@ export default function DocsPage() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {additionalResources.map((resource, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <resource.icon className="h-8 w-8 text-primary" />
-                    <Badge variant="outline" className="text-xs">
+              <Card key={index} className="hover:shadow-lg transition-shadow bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-gray-800 border-2 hover:border-primary/20">
+                <CardHeader className="pb-3">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-primary/20 to-primary/10 rounded-lg flex items-center justify-center">
+                      <resource.icon className="h-5 w-5 text-primary" />
+                    </div>
+                    <Badge variant="outline" className="text-xs px-2 py-1">
                       {resource.badge}
                     </Badge>
                   </div>
-                  <CardTitle className="text-lg">{resource.title}</CardTitle>
-                  <CardDescription>{resource.description}</CardDescription>
+                  <CardTitle className="text-base sm:text-lg font-semibold leading-tight">{resource.title}</CardTitle>
+                  <CardDescription className="text-sm leading-relaxed">{resource.description}</CardDescription>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="pt-0">
                   {resource.isInternal ? (
                     <Link href={resource.link}>
-                      <Button variant="outline" className="w-full">
-                        View Resource
-                        <ArrowRight className="h-4 w-4 ml-2" />
+                      <Button variant="outline" className="w-full h-9 text-sm hover:bg-primary/10">
+                        <span className="hidden sm:inline">View Resource</span>
+                        <span className="sm:hidden">View</span>
+                        <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4 ml-2" />
                       </Button>
                     </Link>
                   ) : (
                     <a href={resource.link} target="_blank" rel="noopener noreferrer">
-                      <Button variant="outline" className="w-full">
-                        Open External
-                        <ExternalLink className="h-4 w-4 ml-2" />
+                      <Button variant="outline" className="w-full h-9 text-sm hover:bg-primary/10">
+                        <span className="hidden sm:inline">Open External</span>
+                        <span className="sm:hidden">Open</span>
+                        <ExternalLink className="h-3 w-3 sm:h-4 sm:w-4 ml-2" />
                       </Button>
                     </a>
                   )}

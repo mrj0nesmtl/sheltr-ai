@@ -6,61 +6,11 @@
    - Environments: .env.local
 
    Creating an optimized production build ...
- ✓ Compiled successfully in 2000ms
+ ✓ Compiled successfully in 4.0s
    Skipping validation of types
    Skipping linting
    Collecting page data ...
-   Generating static pages (0/54) ...
-🔍 Dashboard Layout Debug: {
-  userEmail: undefined,
-  userRole: undefined,
-  userDisplayName: undefined,
-  userName: 'User'
-}
-🔍 Dashboard Layout Debug: {
-  userEmail: undefined,
-  userRole: undefined,
-  userDisplayName: undefined,
-  userName: 'User'
-}
-🔍 Dashboard Layout Debug: {
-  userEmail: undefined,
-  userRole: undefined,
-  userDisplayName: undefined,
-  userName: 'User'
-}
-🔍 Dashboard Layout Debug: {
-  userEmail: undefined,
-  userRole: undefined,
-  userDisplayName: undefined,
-  userName: 'User'
-}
-🔍 Dashboard Layout Debug: {
-  userEmail: undefined,
-  userRole: undefined,
-  userDisplayName: undefined,
-  userName: 'User'
-}
-🔍 Dashboard Layout Debug: {
-  userEmail: undefined,
-  userRole: undefined,
-  userDisplayName: undefined,
-  userName: 'User'
-}
-🔍 Dashboard Layout Debug: {
-  userEmail: undefined,
-  userRole: undefined,
-  userDisplayName: undefined,
-  userName: 'User'
-}
-🔍 Dashboard Layout Debug: {
-  userEmail: undefined,
-  userRole: undefined,
-  userDisplayName: undefined,
-  userName: 'User'
-}
-   Generating static pages (13/54) 
-   Generating static pages (26/54) 
+   Generating static pages (0/55) ...
 🔍 Dashboard Layout Debug: {
   userEmail: undefined,
   userRole: undefined,
@@ -121,7 +71,32 @@
   userDisplayName: undefined,
   userName: 'User'
 }
-   Generating static pages (40/54) 
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+   Generating static pages (13/55) 
+   Generating static pages (27/55) 
 🔍 Dashboard Layout Debug: {
   userEmail: undefined,
   userRole: undefined,
@@ -158,7 +133,32 @@
   userDisplayName: undefined,
   userName: 'User'
 }
- ✓ Generating static pages (54/54)
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+   Generating static pages (41/55) 
+ ✓ Generating static pages (55/55)
    Finalizing page optimization ...
    Collecting build traces ...
  ⚠ Statically exporting a Next.js application via `next export` disables API routes and middleware.
@@ -198,12 +198,13 @@ Route (app)                                   Size  First Load JS
 ├ ○ /dashboard/shelter-admin/settings      7.77 kB         123 kB
 ├ ○ /dashboard/shelters                    16.4 kB         352 kB
 ├ ○ /dashboard/users                        9.8 kB         345 kB
-├ ○ /docs                                  4.83 kB         122 kB
+├ ○ /docs                                     5 kB         122 kB
 ├ ○ /docs/api                              2.07 kB         119 kB
 ├ ○ /docs/blockchain                       7.53 kB         120 kB
 ├ ○ /docs/hacking-homelessness             9.56 kB         122 kB
 ├ ○ /docs/participant-guide                2.51 kB         120 kB
 ├ ○ /docs/roadmap                          2.87 kB         120 kB
+├ ○ /docs/website-architecture             4.18 kB         121 kB
 ├ ○ /docs/whitepaper                       6.78 kB         120 kB
 ├ ○ /impact                                  10 kB         123 kB
 ├ ○ /investor-access                       5.82 kB         119 kB
@@ -211,7 +212,7 @@ Route (app)                                   Size  First Load JS
 ├ ○ /login                                 5.75 kB         227 kB
 ├ ○ /privacy                               10.5 kB         123 kB
 ├ ○ /register                              6.36 kB         228 kB
-├ ○ /scan-give                             6.62 kB         119 kB
+├ ○ /scan-give                             2.66 kB         120 kB
 ├ ○ /solutions                             8.02 kB         121 kB
 ├ ○ /solutions/donors                      2.76 kB         116 kB
 ├ ○ /solutions/government                  2.76 kB         116 kB

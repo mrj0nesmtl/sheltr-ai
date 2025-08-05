@@ -8,11 +8,11 @@
 
 SHELTR represents a revolutionary breakthrough in addressing homelessness through cutting-edge dual-token blockchain technology. By combining QR-code enabled direct donations, blockchain verification, and AI-driven insights, SHELTR creates the world's most transparent, efficient, and impactful charitable giving ecosystem.
 
-**Investment Opportunity**: Currently raising $150,000 in pre-seed funding through SHELTR token sales, with clear path to $1M seed round and institutional Series A expansion. Our token-based investment structure offers direct utility exposure, governance rights, and significant growth potential while creating measurable social impact.
-
 Our revolutionary **SmartFund™ distribution model** ensures 80% of donations reach participants as stable SHELTR-S tokens, 15% builds sustainable housing solutions, and 5% maintains platform operations. Every new participant receives 100 SHELTR-S tokens ($100 value) as a welcome bonus, creating immediate engagement and platform adoption.
 
-We're not just building software—we're **"hacking homelessness"** by merging technological innovation with compassionate action, creating verifiable impact through blockchain transparency, and fostering an engaged community of donors, participants, and investors aligned for sustainable change.
+We're not just building software—we're **"hacking homelessness"** by merging technological innovation with compassionate action, creating verifiable impact through blockchain transparency, and fostering an engaged community of donors, participants, and stakeholders aligned for sustainable change.
+
+This document provides a comprehensive overview of our mission, technology, and impact framework. For qualified investors interested in supporting this revolutionary platform, please visit our dedicated [Investor Relations Portal](https://sheltr-ai.web.app/investor-relations) for detailed financial information and partnership opportunities.
 
 ---
 
@@ -153,76 +153,29 @@ interface HousingFundAllocation {
 
 ---
 
-## 💰 Investment Opportunity: Token-Based Social Impact Investing
+## 💡 Platform Sustainability & Growth Framework
 
-### Revolutionary Investment Structure
+SHELTR's innovative dual-token economic model ensures long-term sustainability while maintaining our core mission focus. Our platform growth is designed around community value creation rather than traditional profit extraction models.
 
-**Why Token Investment Trumps Traditional Equity**:
+### Sustainable Economics Model
 
-Traditional venture capital models fail to capture value in decentralized charitable networks. SHELTR's token-based investment provides:
+**Community-Driven Value Creation**:
+The SHELTR platform creates value through network effects and utility rather than speculative investment. Our token economics are designed to:
 
-1. **Direct Utility Exposure**: Tokens have inherent platform value vs. distant equity claims
-2. **Immediate Liquidity**: DeFi markets provide 24/7 trading vs. 7-10 year equity locks  
-3. **Governance Participation**: Direct influence on platform direction vs. limited board observer rights
-4. **Global Accessibility**: International investors can participate without complex legal structures
-5. **Regulatory Clarity**: Utility tokens avoid securities complications with proper design
+1. **Direct Utility Focus**: Tokens serve specific platform functions rather than investment vehicles
+2. **Community Governance**: Platform direction guided by stakeholders who use the system daily
+3. **Transparent Operations**: All platform economics visible through blockchain verification
+4. **Mission Alignment**: Growth metrics tied to social impact rather than purely financial returns
 
-### Pre-Seed Funding Round: $150,000
+### Platform Growth Strategy
 
-**Investment Terms & Structure**:
+**Organic Expansion Model**:
+- **Community-Led Growth**: Participants and partners drive platform adoption
+- **Service Excellence**: Superior user experience creates natural network effects  
+- **Partnership Integration**: Shelter and NGO partnerships expand platform reach
+- **Technology Innovation**: Continuous platform improvement attracts new stakeholders
 
-| Investment Details | Value | Strategic Advantage |
-|-------------------|-------|---------------------|
-| **Token Price** | $0.05 per SHELTR | 50% discount to public launch ($0.10) |
-| **Minimum Investment** | $5,000 | 100,000 SHELTR tokens |
-| **Maximum Investment** | $37,500 | 750,000 SHELTR tokens |
-| **Total Available** | 3,000,000 tokens | 3% of total supply |
-| **Vesting Schedule** | 25% at TGE, 75% over 12 months | No cliff period |
-
-**Use of Funds Allocation**:
-```
-Platform Development     40%  ($60,000)  ← Core feature completion, security
-Blockchain Infrastructure 25%  ($37,500)  ← Smart contracts, Base integration  
-Regulatory & Compliance  15%  ($22,500)  ← Legal framework, token classification
-Marketing & Partnerships 10%  ($15,000)  ← Community building, shelter partnerships
-Operations & Legal       10%  ($15,000)  ← Team expansion, incorporation
-```
-
-### Multi-Round Growth Strategy
-
-**Seed Round (Q4 2025 - $1,000,000)**:
-- **Purpose**: Market expansion and operational scaling
-- **Token price**: $0.15 (50% premium to launch, 200% from pre-seed)
-- **Targets**: 10,000 participants, $500K monthly donations, multi-city expansion
-
-**Series A (2026 - $5,000,000+)**:
-- **Purpose**: Global scaling and institutional adoption  
-- **Token price**: Market-determined (projected $0.50-$1.00)
-- **Targets**: 100,000 participants, $5M monthly donations, international expansion
-
-### ROI Projections & Value Drivers
-
-**Conservative Case** (50th percentile outcome):
-```
-Pre-seed: $0.05 → Year 5: $0.45 = 800% total return (19% IRR)
-```
-
-**Base Case** (70th percentile outcome):
-```  
-Pre-seed: $0.05 → Year 5: $0.85 = 1,600% total return (30% IRR)
-```
-
-**Growth Case** (90th percentile outcome):
-```
-Pre-seed: $0.05 → Year 5: $1.50 = 2,900% total return (40% IRR)
-```
-
-**Value Appreciation Mechanisms**:
-1. **Network Effects**: Each participant increases platform value exponentially
-2. **Deflationary Pressure**: 2% annual token burns reduce circulating supply
-3. **Utility Demand**: Platform fees and governance require SHELTR holdings
-4. **Staking Rewards**: 8% APY creates holding incentives and reduces liquid supply
-5. **Partnership Premiums**: Strategic acquisitions drive immediate demand spikes
+*For detailed financial information including funding rounds, token economics, and investment opportunities, qualified investors can access our comprehensive materials through the [Investor Relations Portal](https://sheltr-ai.web.app/investor-relations).*
 
 ---
 
@@ -508,35 +461,27 @@ function processDonation(address donor, address participant, uint256 amount)
 - **Community engagement** via governance participation and social features
 - **Tax optimization** through blockchain-verified donation receipts
 
-**For Investors**: SHELTR offers:
-- **Revolutionary exposure** to charitable technology disruption
-- **Multiple value drivers** including network effects and deflationary mechanics
-- **Governance participation** in platform direction and strategy
-- **Immediate liquidity** through DeFi markets and token trading
-- **Social impact alignment** creating both returns and measurable good
+**For Strategic Partners & Supporters**: SHELTR offers:
+- **Revolutionary participation** in charitable technology transformation
+- **Multiple value creation mechanisms** including network effects and community governance
+- **Platform governance participation** in strategic direction and policy development
+- **Community engagement** through transparent operations and measurable impact
+- **Social impact alignment** creating sustainable change and measurable good
 
 ### Call to Action: Join the Revolution
 
-**For Potential Investors**:
-We invite qualified investors to participate in our $150,000 pre-seed round at $0.05 per SHELTR token (50% discount to public launch). This represents an opportunity to:
-
-1. **Generate exceptional returns** through our dual-token economic model with 30x potential
-2. **Create lasting social change** by addressing homelessness systematically
-3. **Pioneer a new investment category** at the intersection of DeFi and social impact
-4. **Build a sustainable platform** that grows stronger with every participant
-
-**Next Steps for Investment**:
-1. **Visit our Investor Portal**: [sheltr-ai.web.app/investor-access](https://sheltr-ai.web.app/investor-access)
-2. **Use access code**: `SHELTR2025` for demonstration access
-3. **Schedule confidential discussion** with our founding team
-4. **Complete accredited investor verification** and due diligence
-5. **Participate in pre-seed token allocation** with preferential terms
-
-**For Partners and Stakeholders**:
-- **Shelter Organizations**: Integrate SHELTR into your service delivery for enhanced efficiency
-- **Technology Partners**: Collaborate on platform development and feature enhancement  
-- **Community Members**: Join our mission to hack homelessness through innovative technology
+**For Community Partners and Stakeholders**:
+- **Shelter Organizations**: Integrate SHELTR into your service delivery for enhanced efficiency and impact
+- **Technology Partners**: Collaborate on platform development and innovative feature enhancement  
+- **Community Members**: Join our mission to hack homelessness through transformative technology
 - **Advisory Participation**: Contribute expertise to platform governance and strategic direction
+- **Development Community**: Participate in our open-source initiative and help build the future of charitable technology
+
+**For Mission-Aligned Supporters**:
+We welcome individuals and organizations who share our vision of creating lasting change in how we address homelessness. Whether you're a donor, volunteer, advocate, or simply someone who believes technology can create positive social impact, there are many ways to get involved in the SHELTR community.
+
+**For Investment Opportunities**:
+Qualified investors interested in supporting SHELTR's revolutionary approach to charitable technology can access comprehensive financial information, investment terms, and partnership opportunities through our dedicated [Investor Relations Portal](https://sheltr-ai.web.app/investor-relations). This separate portal provides detailed materials for those seeking to understand the business and financial aspects of our platform.
 
 ### Final Commitment: Technology in Service of Humanity
 
@@ -552,7 +497,7 @@ We are not just building a platform; we are creating a movement that proves tech
 
 **🏠 SHELTR-AI: Building a Better Future Through Technology 🚀**
 
-[Investment Portal](https://sheltr-ai.web.app/investor-access) • [Technical Documentation](https://docs.sheltr.dev) • [GitHub Repository](https://github.com/mrj0nesmtl/sheltr-ai) • [Community](https://bsky.app/profile/sheltrops.bsky.social)
+[Platform Overview](https://sheltr-ai.web.app) • [Technical Documentation](https://sheltr-ai.web.app/docs) • [GitHub Repository](https://github.com/mrj0nesmtl/sheltr-ai) • [Investor Relations](https://sheltr-ai.web.app/investor-relations) • [Community](https://bsky.app/profile/sheltrops.bsky.social)
 
 *"Innovation meets compassion at the intersection of technology and social change."*
 

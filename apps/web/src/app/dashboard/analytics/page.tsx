@@ -298,28 +298,28 @@ export default function Analytics() {
       <Tabs defaultValue="overview" className="space-y-6">
         {/* Desktop Tabs */}
         <div className="hidden sm:block">
-          <TabsList className="grid w-full grid-cols-5">
+        <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="overview" className="flex items-center">
-              <BarChart3 className="mr-2 h-4 w-4" />
-              Overview
-            </TabsTrigger>
+            <BarChart3 className="mr-2 h-4 w-4" />
+            Overview
+          </TabsTrigger>
             <TabsTrigger value="donations" className="flex items-center">
-              <DollarSign className="mr-2 h-4 w-4" />
-              Donations
-            </TabsTrigger>
+            <DollarSign className="mr-2 h-4 w-4" />
+            Donations
+          </TabsTrigger>
             <TabsTrigger value="users" className="flex items-center">
-              <Users className="mr-2 h-4 w-4" />
-              Users
-            </TabsTrigger>
+            <Users className="mr-2 h-4 w-4" />
+            Users
+          </TabsTrigger>
             <TabsTrigger value="geographic" className="flex items-center">
-              <Globe className="mr-2 h-4 w-4" />
-              Geographic
-            </TabsTrigger>
+            <Globe className="mr-2 h-4 w-4" />
+            Geographic
+          </TabsTrigger>
             <TabsTrigger value="insights" className="flex items-center">
-              <Eye className="mr-2 h-4 w-4" />
-              Insights
-            </TabsTrigger>
-          </TabsList>
+            <Eye className="mr-2 h-4 w-4" />
+            Insights
+          </TabsTrigger>
+        </TabsList>
         </div>
 
         {/* Mobile Stacked Tabs */}
@@ -370,7 +370,7 @@ export default function Analytics() {
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Donation Trends</h3>
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">Monthly donation volume and growth</p>
             
-            {donationTrends.slice(-4).map((trend) => (
+                  {donationTrends.slice(-4).map((trend) => (
               <Card key={trend.month} className="overflow-hidden">
                 <CardContent className="p-0 sm:p-6">
                   {/* Mobile Layout */}
@@ -423,9 +423,9 @@ export default function Analytics() {
                         </div>
                       </div>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
+                </div>
+              </CardContent>
+            </Card>
             ))}
           </div>
 
@@ -434,7 +434,7 @@ export default function Analytics() {
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Real-time Activity</h3>
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">Live platform events and transactions</p>
             
-            {realTimeActivity.map((activity, index) => (
+                  {realTimeActivity.map((activity, index) => (
               <Card key={index} className="overflow-hidden">
                 <CardContent className="p-0 sm:p-6">
                   {/* Mobile Layout */}
@@ -488,9 +488,9 @@ export default function Analytics() {
                         </div>
                       </div>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
+                </div>
+              </CardContent>
+            </Card>
             ))}
           </div>
 
@@ -499,7 +499,7 @@ export default function Analytics() {
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Top Performers</h3>
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">Leading contributors across the platform</p>
             
-            {topPerformers.map((performer, index) => (
+                {topPerformers.map((performer, index) => (
               <Card key={index} className="overflow-hidden">
                 <CardContent className="p-0 sm:p-6">
                   {/* Mobile Layout */}
@@ -545,22 +545,22 @@ export default function Analytics() {
                   {/* Desktop Layout */}
                   <div className="hidden sm:block">
                     <div className="p-6">
-                      <div className="flex items-center justify-between mb-2">
-                        <Badge variant="secondary">{performer.type}</Badge>
-                        <div className={`flex items-center text-xs ${getGrowthColor(performer.growth)}`}>
-                          {getGrowthIcon(performer.growth)}
-                          <span className="ml-1">+{performer.growth}%</span>
-                        </div>
+                    <div className="flex items-center justify-between mb-2">
+                      <Badge variant="secondary">{performer.type}</Badge>
+                      <div className={`flex items-center text-xs ${getGrowthColor(performer.growth)}`}>
+                        {getGrowthIcon(performer.growth)}
+                        <span className="ml-1">+{performer.growth}%</span>
                       </div>
-                      <div className="font-medium text-sm">{performer.name}</div>
+                    </div>
+                    <div className="font-medium text-sm">{performer.name}</div>
                       <div className="text-lg font-bold text-purple-600 dark:text-purple-400">{performer.metric}</div>
                       <div className="text-xs text-gray-500 dark:text-gray-400">{performer.category}</div>
                     </div>
                   </div>
                 </CardContent>
               </Card>
-            ))}
-          </div>
+                ))}
+              </div>
         </TabsContent>
 
         {/* Donations Tab */}
@@ -570,7 +570,7 @@ export default function Analytics() {
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Donation Volume Trends</h3>
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">Monthly donation amounts and transaction counts</p>
             
-            {donationTrends.map((trend) => (
+                  {donationTrends.map((trend) => (
               <Card key={trend.month} className="overflow-hidden">
                 <CardContent className="p-0 sm:p-6">
                   {/* Mobile Layout */}
@@ -616,7 +616,7 @@ export default function Analytics() {
                         <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl flex items-center justify-center shadow-sm">
                           <BarChart3 className="h-6 w-6 text-white" />
                         </div>
-                        <div>
+                      <div>
                           <div className="font-bold text-lg">{trend.month} 2024</div>
                           <div className="text-sm text-gray-600 dark:text-gray-400">{trend.count} transactions</div>
                         </div>
@@ -630,9 +630,9 @@ export default function Analytics() {
                         </div>
                       </div>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
+                </div>
+              </CardContent>
+            </Card>
             ))}
           </div>
 
@@ -683,9 +683,9 @@ export default function Analytics() {
                       ${analyticsMetrics.platformRevenue.toLocaleString()}
                     </div>
                     <div className="text-sm text-gray-600 dark:text-gray-400">Platform Revenue</div>
-                  </div>
-                </CardContent>
-              </Card>
+                </div>
+              </CardContent>
+            </Card>
             </div>
           </div>
         </TabsContent>
@@ -739,8 +739,8 @@ export default function Analytics() {
                           <div className="flex items-center space-x-3">
                             <div className={`w-14 h-14 bg-gradient-to-br ${getColorTheme()} rounded-2xl flex items-center justify-center shadow-lg`}>
                               {getIcon()}
-                            </div>
-                            <div>
+                      </div>
+                      <div>
                               <h3 className="font-bold text-lg text-gray-900 dark:text-white">
                                 {category.category}
                               </h3>
@@ -780,28 +780,28 @@ export default function Analytics() {
                           <div>
                             <div className="font-bold text-lg">{category.category}</div>
                             <div className="text-sm text-gray-600 dark:text-gray-400">
-                              {category.active} of {category.total} active
-                            </div>
-                          </div>
+                          {category.active} of {category.total} active
                         </div>
-                        
-                        <div className="flex items-center space-x-6">
-                          <div className="text-center">
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center space-x-6">
+                      <div className="text-center">
                             <div className="text-lg font-bold text-indigo-600 dark:text-indigo-400">{category.engagement}%</div>
                             <div className="text-xs text-gray-500 dark:text-gray-400">Engagement</div>
-                          </div>
-                          <div className={`text-center ${getGrowthColor(category.growth)}`}>
-                            <div className="flex items-center text-lg font-bold">
-                              {getGrowthIcon(category.growth)}
-                              <span className="ml-1">{category.growth}%</span>
-                            </div>
+                      </div>
+                      <div className={`text-center ${getGrowthColor(category.growth)}`}>
+                        <div className="flex items-center text-lg font-bold">
+                          {getGrowthIcon(category.growth)}
+                          <span className="ml-1">{category.growth}%</span>
+                        </div>
                             <div className="text-xs text-gray-500 dark:text-gray-400">Growth</div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
+              </div>
+            </CardContent>
+          </Card>
               );
             })}
           </div>
@@ -814,7 +814,7 @@ export default function Analytics() {
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Geographic Distribution</h3>
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">Platform reach and performance by region</p>
             
-            {geographicData.map((region) => (
+                {geographicData.map((region) => (
               <Card key={region.region} className="overflow-hidden">
                 <CardContent className="p-0 sm:p-6">
                   {/* Mobile Layout */}
@@ -844,8 +844,8 @@ export default function Analytics() {
                           <div className="text-xl font-bold text-emerald-600 dark:text-emerald-400">
                             ${region.donations.toLocaleString()}
                           </div>
-                        </div>
-                        <div>
+                      </div>
+                      <div>
                           <div className="text-sm font-medium text-gray-900 dark:text-white">Growth</div>
                           <div className={`flex items-center text-xl font-bold ${getGrowthColor(region.growth)}`}>
                             {getGrowthIcon(region.growth)}
@@ -867,20 +867,20 @@ export default function Analytics() {
                           <div className="font-bold text-lg">{region.region}</div>
                           <div className="text-sm text-gray-600 dark:text-gray-400">
                             {region.shelters} shelters • {region.participants} participants
-                          </div>
                         </div>
                       </div>
-                      
-                      <div className="flex items-center space-x-6">
-                        <div className="text-center">
+                    </div>
+                    
+                    <div className="flex items-center space-x-6">
+                      <div className="text-center">
                           <div className="text-lg font-bold text-emerald-600 dark:text-emerald-400">${region.donations.toLocaleString()}</div>
                           <div className="text-xs text-gray-500 dark:text-gray-400">Donations</div>
+                      </div>
+                      <div className={`text-center ${getGrowthColor(region.growth)}`}>
+                        <div className="flex items-center text-lg font-bold">
+                          {getGrowthIcon(region.growth)}
+                          <span className="ml-1">{region.growth}%</span>
                         </div>
-                        <div className={`text-center ${getGrowthColor(region.growth)}`}>
-                          <div className="flex items-center text-lg font-bold">
-                            {getGrowthIcon(region.growth)}
-                            <span className="ml-1">{region.growth}%</span>
-                          </div>
                           <div className="text-xs text-gray-500 dark:text-gray-400">Growth</div>
                         </div>
                       </div>
@@ -888,8 +888,8 @@ export default function Analytics() {
                   </div>
                 </CardContent>
               </Card>
-            ))}
-          </div>
+                ))}
+              </div>
         </TabsContent>
 
         {/* Insights Tab */}
@@ -970,27 +970,27 @@ export default function Analytics() {
                     {/* Desktop Layout */}
                     <div className="hidden sm:block">
                       <div className="p-6">
-                        <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-start justify-between mb-3">
                           <div className="flex items-center space-x-4 flex-1">
                             <div className={`w-12 h-12 bg-gradient-to-br ${getColorTheme()} rounded-xl flex items-center justify-center shadow-sm`}>
                               {getInsightIcon()}
                             </div>
                             <div className="font-bold text-lg">{insight.title}</div>
                           </div>
-                          <Badge className={getImpactColor(insight.impact)}>
-                            {insight.impact} Impact
-                          </Badge>
-                        </div>
+                      <Badge className={getImpactColor(insight.impact)}>
+                        {insight.impact} Impact
+                      </Badge>
+                    </div>
                         <div className="text-sm text-gray-600 dark:text-gray-400 mb-3 leading-relaxed">
-                          {insight.description}
-                        </div>
-                        <div className="text-sm">
+                      {insight.description}
+                    </div>
+                    <div className="text-sm">
                           <strong className="text-gray-900 dark:text-white">Recommendation:</strong> <span className="text-gray-600 dark:text-gray-400">{insight.recommendation}</span>
                         </div>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
+              </div>
+            </CardContent>
+          </Card>
               );
             })}
           </div>

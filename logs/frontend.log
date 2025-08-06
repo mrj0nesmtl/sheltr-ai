@@ -8,23 +8,77 @@
    - Environments: .env.local
 
  ✓ Starting...
- ✓ Compiled middleware in 153ms
+ ✓ Compiled middleware in 122ms
  ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
- ✓ Ready in 1970ms
+ ✓ Ready in 1738ms
  ○ Compiling / ...
- ✓ Compiled / in 2.8s
- GET / 200 in 3392ms
- ✓ Compiled /docs in 327ms
- GET /docs 200 in 601ms
- ✓ Compiled /docs/whitepaper in 413ms
- GET /docs/whitepaper 200 in 576ms
- ✓ Compiled in 207ms
+ ✓ Compiled / in 3s
+ GET / 200 in 3587ms
+ GET / 200 in 124ms
+ ○ Compiling /login ...
+ ✓ Compiled /login in 513ms
+ GET /login 200 in 663ms
+ ✓ Compiled /dashboard in 342ms
+ GET /dashboard 200 in 398ms
+ GET /dashboard 200 in 62ms
+ ✓ Compiled /docs in 239ms
+ GET /docs 200 in 485ms
+ ✓ Compiled /docs/website-architecture in 208ms
+ GET /docs/website-architecture 200 in 259ms
+ ○ Compiling /dashboard/platform ...
+ ✓ Compiled /dashboard/platform in 610ms
+ GET /dashboard/platform 200 in 709ms
+ ○ Compiling /dashboard/users ...
+ ✓ Compiled /dashboard/users in 552ms
+ GET /dashboard/users 200 in 613ms
+ ✓ Compiled /dashboard/shelters in 286ms
+ GET /dashboard/shelters 200 in 332ms
+ GET /dashboard 200 in 55ms
+ GET /dashboard/platform 200 in 48ms
+ GET /dashboard/users 200 in 47ms
+ GET /dashboard/shelters 200 in 46ms
+ GET /dashboard/platform 200 in 34ms
+ GET /dashboard/platform 200 in 46ms
+ GET /dashboard 200 in 45ms
+ GET /dashboard 200 in 48ms
+ GET /dashboard 200 in 37ms
+ GET /dashboard 200 in 46ms
+ GET /dashboard/platform 200 in 43ms
+ GET /dashboard/shelters 200 in 46ms
+ GET /dashboard 200 in 50ms
+ GET /dashboard 200 in 49ms
  ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
- ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
- ✓ Compiled in 189ms
- ✓ Compiled /docs/blockchain in 397ms
- GET /docs/blockchain 200 in 598ms
- GET /docs/blockchain 200 in 209ms
- GET /docs 200 in 123ms
- ✓ Compiled /docs/hacking-homelessness in 370ms
- GET /docs/hacking-homelessness 200 in 432ms
+ GET /login 200 in 141ms
+ GET / 200 in 209ms
+ GET /login 200 in 106ms
+ GET /dashboard 200 in 57ms
+ GET /login 200 in 45ms
+ GET /login 200 in 60ms
+ ✓ Compiled /dashboard/shelter-admin in 289ms
+ GET /dashboard/shelter-admin 200 in 336ms
+ GET /dashboard/shelter-admin 200 in 39ms
+ GET /dashboard/shelter-admin 200 in 33ms
+ GET /dashboard/shelter-admin 200 in 36ms
+ GET /dashboard 200 in 72ms
+ GET /dashboard/platform 200 in 54ms
+ GET /dashboard/users 200 in 35ms
+ GET /dashboard 200 in 47ms
+ GET /dashboard/platform 200 in 45ms
+ GET /dashboard/users 200 in 45ms
+ GET /dashboard/shelters 200 in 49ms
+ ✓ Compiled /dashboard/financial in 339ms
+ GET /dashboard/financial 200 in 389ms
+ ✓ Compiled /dashboard/security in 226ms
+ GET /dashboard/security 200 in 272ms
+ GET /dashboard/financial 200 in 51ms
+ GET /dashboard/security 200 in 55ms
+ ✓ Compiled /dashboard/analytics in 246ms
+ GET /dashboard/analytics 200 in 296ms
+ GET /dashboard 200 in 46ms
+ GET / 200 in 58ms
+ GET /login 200 in 55ms
+ GET /login 200 in 35ms
+ GET /dashboard 200 in 48ms
+ GET /dashboard/shelter-admin 200 in 57ms
+ GET /dashboard/shelter-admin 200 in 38ms
+ GET /dashboard/shelter-admin 200 in 36ms

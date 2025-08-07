@@ -1,8 +1,21 @@
 # SHELTR-AI Investor Relations Portal
+*Updated: August 2025 - Q4 2025 Token Launch Strategy*
 
 ## Overview
 
-The SHELTR-AI Investor Relations portal is a secure, invitation-only section designed for qualified, vetted investors interested in participating in our **$150,000 Pre-Seed funding round**.
+The SHELTR-AI Investor Relations portal is a secure, invitation-only section designed for qualified, vetted investors interested in participating in our **September 2025 Seed Funding Round** leading to the **December 2025 Public ICO**.
+
+## 🚀 **NEW: Q4 2025 FUNDING STRATEGY**
+
+### **Strategic Leadership**
+- **Industry Expertise**: 20+ years in high-level payments sector
+- **SHELTR Connection**: Original Founder returning as CFO
+- **Partnership Pipeline**: Direct introduction to strategic payment partner
+- **Funding Leadership**: Driving institutional investor outreach and due diligence
+
+### **Two-Phase Launch Strategy**
+1. **September 2025**: Private Seed Round (this document)
+2. **December 2025**: Public ICO with exchange listings
 
 ## Portal Structure
 
@@ -14,11 +27,13 @@ The SHELTR-AI Investor Relations portal is a secure, invitation-only section des
 
 ### 📊 Investment Opportunity
 
-#### **Pre-Seed Round Details**
-- **Target Amount**: $150,000 USD
-- **Timeline**: 3 months development completion
-- **Dual-Token Launch**: SHELTR-S (stable) + SHELTR (growth)
-- **Structure**: Token sale with governance rights (not equity)
+#### **September 2025 Seed Round Details** 🎯
+- **Target Amount**: $500,000 - $1,000,000 USD *(Updated from pre-seed)*
+- **Current Status**: Private Beta operational with Adyen payment integration
+- **Platform Readiness**: 75%+ complete, proven payment rails, live user testing
+- **Timeline**: Q4 2025 public beta launch → December ICO
+- **Dual-Token Launch**: SHELTR-S (stable) + SHELTR (governance) 
+- **Structure**: Token pre-sale with governance rights + strategic partnership equity
 
 #### **Use of Funds**
 ```

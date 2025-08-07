@@ -7,18 +7,20 @@
 
 ---
 
-## 📊 Roadmap Overview
+## 📊 Roadmap Overview - Q3 2025 UPDATE
 
-### **Phase Overview**
-| Phase | Duration | Focus | Deliverables |
-|-------|----------|-------|--------------|
-| **Foundation** | Week 1 | Repository & Architecture | ✅ Complete |
-| **Website Launch** | Week 1-2 | Live Website & Firebase | ✅ **EXCEEDED** - Session 02 |
-| **Intelligence Platform** | Week 3 | Analytics & AI Chatbot | ✅ **COMPLETE** - Session 07 |
-| **Core Business Logic** | Week 4 | Service Booking & Forms | 🔄 **ACTIVE** - Session 08 |
-| **Advanced Features** | Week 5-8 | Blockchain & Mobile | 🔵 Planned |
-| **Testing & Polish** | Week 9-10 | QA & Performance | 🔵 Planned |
-| **Production Launch** | Week 11-12 | Full Deployment & Marketing | 🔵 Planned |
+### **Current Development Status: Q3 2025**
+**SHELTR MVP Status**: 🚀 **Private Beta in Production** - Gaining momentum with core features operational
+
+### **Updated Phase Timeline**
+| Phase | Timeline | Focus | Status |
+|-------|----------|-------|--------|
+| **Foundation & MVP** | Q1-Q2 2025 | Repository, Website, Core Features | ✅ **COMPLETE** |
+| **Private Beta (Current)** | Q3 2025 | Service Booking, Payment Rails, User Testing | 🔄 **ACTIVE** |
+| **Pre-Sale & Funding** | September 2025 | Seed Round with Doug K. (CFO) | 🎯 **PLANNED** |
+| **Public Beta Launch** | Q4 2025 | Public Release, Community Growth | 🚀 **TARGET** |
+| **Token ICO (Public)** | December 2025 | SHELTR Token Public Launch | 💎 **MILESTONE** |
+| **Scaling & Expansion** | Q1 2026+ | Multi-city, Enterprise Features | 🔵 **FUTURE** |
 
 ### **Success Metrics by Phase**
 ```mermaid
@@ -46,71 +48,94 @@ gantt
 
 ---
 
-## 🏗️ **Phase 1: Foundation** ✅ **COMPLETE**
+## 🏗️ **PHASE SUMMARY: Q1-Q3 2025 ACCOMPLISHMENTS** ✅ **COMPLETE**
 
-### **Week 1: July 22, 2025**
-- ✅ **Session 01**: Repository establishment, architecture documentation
-- ✅ **Session 02**: Website launch, Firebase integration *(this evening)*
+### **Q1 2025: Foundation & Architecture**
+- ✅ **Sessions 01-02**: Repository, website launch, Firebase integration
+- ✅ **Live Platform**: https://sheltr-ai.web.app deployed and operational
+- ✅ **Documentation**: Comprehensive technical and business documentation
+- ✅ **Architecture**: Monorepo with FastAPI backend, Next.js frontend
 
-#### **Completed Deliverables**
-- [x] GitHub repository: `github.com/mrj0nesmtl/sheltr-ai`
-- [x] Monorepo structure with apps/, docs/, packages/
-- [x] Python 3.11 + FastAPI backend foundation
-- [x] Comprehensive documentation framework
-- [x] Legacy content migration strategy
-- [x] Cursor IDE development environment
-- [x] Gunnar Blaze memorial integration
+### **Q2 2025: Core Development**
+- ✅ **Sessions 03-07**: Authentication system, role-based dashboards
+- ✅ **Multi-Role System**: SuperAdmin, ShelterAdmin, Participant, Donor dashboards
+- ✅ **AI Integration**: GPT-powered chatbot and analytics platform
+- ✅ **Mobile Optimization**: Responsive design with Apple Liquid Glass UI
 
-#### **Session 02 Goals** ✅ **COMPLETED & EXCEEDED**
-- [x] Firebase project configuration
-- [x] Next.js 15 frontend application  
-- [x] **EXCEEDED**: Complete website with 13 pages (not just core pages)
-- [x] Firebase hosting deployment
-- [x] **LIVE**: https://sheltr-ai.web.app
-- [x] **BONUS**: Complete stakeholder experience (4 solution pages)
-- [x] **BONUS**: Comprehensive tokenomics documentation
-- [x] **BONUS**: Impact dashboard with compelling statistics
-- [x] **BONUS**: Professional theme system with dark/light toggle
-- [x] **BONUS**: Mobile-responsive design with Shadcn UI
+### **Q3 2025: Business Logic & Payment Rails** 🔄 **CURRENT FOCUS**
+- ✅ **Sessions 08-09**: Service booking system, form persistence
+- ✅ **Adyen Integration**: Payment processing with Doug K. (CFO) partnership [[memory:5408380]]
+- ✅ **Demo QR System**: Full donation flow with blockchain SmartFund (80-15-5)
+- 🔄 **Database Connectivity**: Real data integration across all dashboards
+- 🔄 **Production Optimization**: Performance, security, scalability
 
----
-
-## 🌐 **Phase 2: Website & Infrastructure** 
-
-### **Week 2: July 23-29, 2025**
-
-#### **Session 03-05: Core Website Development** ✅ **COMPLETED**
-- **Authentication System**: Firebase Auth + custom claims ✅
-- **Role-Based Navigation**: 4-role system implementation ✅
-- **Content Management**: Dynamic pages with MDX ✅
-- **Performance Optimization**: Loading, SEO, mobile ✅
-- **Mobile Navigation**: Hamburger menu on all public pages ✅ **NEW**
-- **Theme System**: Dynamic logo switching ✅ **NEW**
-- **Footer Standardization**: Global component ✅ **NEW**
-
-#### **Session 05: GitHub Security + Advanced Super Admin** 🔄 **IN PROGRESS**
-- **GitHub Security Setup**: Repository security hardening 🔄
-- **Advanced Super Admin Dashboard**: User management, analytics, system admin 🔄
-- **Security Monitoring**: Real-time security and compliance oversight 🔄
-- **Platform Administration**: Global settings and feature management 🔄
-
-#### **Session 06-07: Backend Integration**
-- **FastAPI Development**: Core endpoints, health checks
-- **Database Schema**: Multi-tenant Firestore structure
-- **API Documentation**: Auto-generated with FastAPI
-- **Security Implementation**: RBAC, rate limiting
-
-#### **Week 2 Deliverables**
-- [x] Complete website with all core pages
-- [x] User authentication system
-- [ ] Basic API endpoints operational
-- [x] Mobile-responsive design
-- [x] SEO optimization complete
-- [ ] Analytics integration
+### **Major Achievements to Date**
+- [x] **Private Beta Platform**: Fully functional MVP in production
+- [x] **Payment Processing**: Adyen-powered donation system operational
+- [x] **Strategic Partnership**: Doug K. as CFO, 20+ years payments expertise
+- [x] **Mobile Excellence**: Best-in-class responsive design and UX
+- [x] **AI-Powered Analytics**: Real-time insights and chatbot support
+- [x] **Blockchain Ready**: Smart contract architecture for transparent giving
 
 ---
 
-## ⚙️ **Phase 3: Core Application Development**
+## 🚀 **Q4 2025: PUBLIC BETA & TOKEN LAUNCH ROADMAP**
+
+### **September 2025: Pre-Sale & Seed Funding** 🎯 **CRITICAL MILESTONE**
+- **Doug K. Led Seed Round**: CFO partnership drives institutional investment
+- **Adyen Partnership Formalization**: Payment rail integration for scale
+- **Private Beta Expansion**: Invite-only user growth to 1,000+ participants
+- **Security Audit**: Third-party smart contract and platform security review
+- **Regulatory Compliance**: Legal framework for token launch preparation
+
+### **October-November 2025: Public Beta Launch** 🚀 **TARGET**
+- **Public Platform Release**: Open registration for all user types
+- **Montreal Pilot Launch**: First city deployment with partner shelters
+- **Mobile App Beta**: iOS/Android applications in App Store beta
+- **Community Growth**: User acquisition campaigns, social media presence
+- **Partnership Onboarding**: Shelter and service provider integrations
+
+### **December 2025: SHELTR Token ICO** 💎 **MAJOR MILESTONE**
+- **Public Token Launch**: SHELTR utility token available for purchase
+- **Smart Contract Mainnet**: Production blockchain deployment on Base
+- **DAO Governance Launch**: Community voting on platform decisions
+- **Exchange Listings**: Major DEX/CEX partnerships for liquidity
+- **Marketing Campaign**: Global launch with impact stories and metrics
+
+### **Q4 2025 Success Metrics**
+| Metric | Target | Current Status |
+|--------|---------|----------------|
+| **Active Participants** | 5,000+ | ~100 (Private Beta) |
+| **Monthly Donations** | $500K+ | TBD (Demo Phase) |
+| **Partner Shelters** | 50+ | 10 (Test Data) |
+| **Token Holders** | 10,000+ | 0 (Pre-Launch) |
+| **Cities Deployed** | 3 | 1 (Montreal Pilot) |
+
+---
+
+## 📋 **CRITICAL PATH: September-December 2025**
+
+### **Week-by-Week September Focus**
+1. **Week 1**: Seed funding presentations, investor meetings
+2. **Week 2**: Due diligence, legal documentation, compliance review
+3. **Week 3**: Funding close, team expansion, development acceleration
+4. **Week 4**: Platform optimization, security hardening, beta expansion
+
+### **October-November: Public Beta Execution**
+- **Platform Stability**: 99.9% uptime, sub-2s page loads
+- **User Onboarding**: Streamlined registration, intuitive dashboards
+- **Real-World Testing**: Actual donations, shelter partnerships, impact tracking
+- **Feedback Integration**: Rapid iteration based on user feedback
+
+### **December: Token Launch Preparation**
+- **Smart Contract Finalization**: Audited, tested, deployed contracts
+- **Tokenomics Implementation**: Staking, governance, utility functions
+- **Marketing Blitz**: Press releases, influencer partnerships, community events
+- **Exchange Integration**: DEX/CEX listings for immediate liquidity
+
+---
+
+## ⚙️ **LEGACY: Core Application Development (COMPLETED Q1-Q3 2025)**
 
 ### **Week 3-4: Authentication & User Management**
 

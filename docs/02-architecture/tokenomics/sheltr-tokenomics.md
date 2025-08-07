@@ -1,6 +1,20 @@
 # 🪙 SHELTR Tokenomics: Dual-Token Architecture
-*Version: 1.0.0 - July 22, 2025*
-*Status: In-Development* ✅
+*Version: 2.0.0 - August 2025*
+*Status: Pre-ICO Launch* 🚀
+
+## 🎯 **Q4 2025 TOKEN LAUNCH TIMELINE**
+
+### **September 2025: Pre-Sale (Seed Round)**
+- **Private Sale**: Accredited investors and strategic partners
+- **Doug K. (CFO) Led**: 20+ years payments expertise driving institutional adoption
+- **Target Raise**: Initial funding for public beta scaling
+- **Token Allocation**: Early investor pricing with vesting schedule
+
+### **December 2025: Public ICO Launch** 💎
+- **Public Token Sale**: SHELTR utility token available to all
+- **Exchange Listings**: Major DEX/CEX partnerships for immediate liquidity  
+- **Mainnet Deployment**: Production smart contracts on Base network
+- **DAO Activation**: Community governance and voting rights begin
 
 ## Abstract
 

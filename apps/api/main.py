@@ -19,6 +19,7 @@ from routers.analytics import router as analytics_router
 from routers.chatbot import router as chatbot_router
 from routers.services import router as services_router
 from routers.users import router as users_router
+from routers.demo_donations import router as demo_donations_router
 
 # Set up logging
 logging.basicConfig(
@@ -52,6 +53,7 @@ app = FastAPI(
     * **👥 User Management** - Role-based user operations
     * **🏠 Shelter Management** - Shelter administration
     * **💝 Donation Processing** - Transparent donation tracking
+    * **🎭 Demo Donations** - Adyen-powered QR donation demonstrations
     * **📊 Analytics & Reporting** - Real-time impact metrics
     
     ### Authentication
@@ -179,6 +181,7 @@ app.include_router(analytics_router)
 app.include_router(chatbot_router)
 app.include_router(services_router)
 app.include_router(users_router)
+app.include_router(demo_donations_router)
 
 # Health check endpoints
 @app.get("/", tags=["Health"])

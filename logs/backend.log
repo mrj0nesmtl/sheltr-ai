@@ -8,26 +8,273 @@ INFO:__main__:📚 API documentation: http://localhost:8000/docs
 INFO:__main__:🏥 Health check: http://localhost:8000/health
 INFO:     Will watch for changes in these directories: ['/Users/mrjones/Github/Projects/sheltr-ai/apps/api']
 INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-INFO:     Started reloader process [7079] using WatchFiles
+INFO:     Started reloader process [29879] using WatchFiles
 /Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
   warnings.warn(
 INFO:services.analytics_service:Analytics Service: Firebase initialized successfully
 INFO:services.chatbot.orchestrator:🤖 Chatbot Orchestrator initialized
-INFO:     Started server process [7104]
+INFO:     Started server process [29895]
 INFO:     Waiting for application startup.
 INFO:main:🚀 SHELTR-AI API starting up...
 INFO:main:🔐 Authentication system initialized
 INFO:main:🏢 Multi-tenant architecture ready
 INFO:     Application startup complete.
-INFO:     127.0.0.1:55511 - "GET /health HTTP/1.1" 200 OK
-INFO:     127.0.0.1:61876 - "OPTIONS /analytics/test-platform HTTP/1.1" 200 OK
-INFO:     127.0.0.1:61878 - "OPTIONS /analytics/test-platform HTTP/1.1" 200 OK
-INFO:routers.analytics:Testing platform analytics (no auth)
-ERROR:services.analytics_service:Error getting user metrics: '>=' not supported between instances of 'str' and 'datetime.datetime'
-INFO:     127.0.0.1:61878 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:routers.analytics:Testing platform analytics (no auth)
-ERROR:services.analytics_service:Error getting user metrics: '>=' not supported between instances of 'str' and 'datetime.datetime'
-INFO:     127.0.0.1:61876 - "GET /analytics/test-platform HTTP/1.1" 200 OK
-INFO:     127.0.0.1:61878 - "OPTIONS /analytics/track HTTP/1.1" 200 OK
-INFO:     127.0.0.1:61878 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
-INFO:     127.0.0.1:61876 - "POST /analytics/track HTTP/1.1" 422 Unprocessable Entity
+INFO:     127.0.0.1:65326 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49509 - "OPTIONS /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49510 - "OPTIONS /services/available HTTP/1.1" 200 OK
+/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/cloud/firestore_v1/base_collection.py:295: UserWarning: Detected filter using positional arguments. Prefer using the 'filter' keyword argument instead.
+  return query.where(field_path, op_string, value)
+/Users/mrjones/Github/Projects/sheltr-ai/apps/api/routers/services.py:119: UserWarning: Detected filter using positional arguments. Prefer using the 'filter' keyword argument instead.
+  bookings_ref = firebase_service.db.collection('appointments')\
+INFO:     127.0.0.1:49510 - "GET /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49509 - "GET /services/available HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49510 - "OPTIONS /services/appointments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49510 - "GET /services/appointments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49509 - "GET /services/appointments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49519 - "OPTIONS /users/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49522 - "OPTIONS /users/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49522 - "GET /users/profile HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49524 - "GET /users/profile HTTP/1.1" 200 OK
+INFO:watchfiles.main:1 change detected
+INFO:watchfiles.main:1 change detected
+INFO:watchfiles.main:1 change detected
+WARNING:  WatchFiles detected changes in 'services/adyen_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:main:🛑 SHELTR-AI API shutting down...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [29895]
+INFO:watchfiles.main:1 change detected
+WARNING:  WatchFiles detected changes in 'services/adyen_service.py'. Reloading...
+/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:services.analytics_service:Analytics Service: Firebase initialized successfully
+INFO:services.chatbot.orchestrator:🤖 Chatbot Orchestrator initialized
+INFO:     Started server process [39314]
+INFO:     Waiting for application startup.
+INFO:main:🚀 SHELTR-AI API starting up...
+INFO:main:🔐 Authentication system initialized
+INFO:main:🏢 Multi-tenant architecture ready
+INFO:     Application startup complete.
+INFO:watchfiles.main:1 change detected
+WARNING:  WatchFiles detected changes in 'services/adyen_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:main:🛑 SHELTR-AI API shutting down...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [39314]
+/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:services.analytics_service:Analytics Service: Firebase initialized successfully
+INFO:services.chatbot.orchestrator:🤖 Chatbot Orchestrator initialized
+INFO:     Started server process [39353]
+INFO:     Waiting for application startup.
+INFO:main:🚀 SHELTR-AI API starting up...
+INFO:main:🔐 Authentication system initialized
+INFO:main:🏢 Multi-tenant architecture ready
+INFO:     Application startup complete.
+INFO:watchfiles.main:1 change detected
+WARNING:  WatchFiles detected changes in 'services/demo_participant_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:main:🛑 SHELTR-AI API shutting down...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [39353]
+INFO:watchfiles.main:1 change detected
+WARNING:  WatchFiles detected changes in 'services/demo_participant_service.py'. Reloading...
+/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:services.analytics_service:Analytics Service: Firebase initialized successfully
+INFO:services.chatbot.orchestrator:🤖 Chatbot Orchestrator initialized
+INFO:     Started server process [39385]
+INFO:     Waiting for application startup.
+INFO:main:🚀 SHELTR-AI API starting up...
+INFO:main:🔐 Authentication system initialized
+INFO:main:🏢 Multi-tenant architecture ready
+INFO:     Application startup complete.
+INFO:watchfiles.main:1 change detected
+WARNING:  WatchFiles detected changes in 'services/demo_participant_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:main:🛑 SHELTR-AI API shutting down...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [39385]
+/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:services.analytics_service:Analytics Service: Firebase initialized successfully
+INFO:services.chatbot.orchestrator:🤖 Chatbot Orchestrator initialized
+INFO:     Started server process [39472]
+INFO:     Waiting for application startup.
+INFO:main:🚀 SHELTR-AI API starting up...
+INFO:main:🔐 Authentication system initialized
+INFO:main:🏢 Multi-tenant architecture ready
+INFO:     Application startup complete.
+INFO:watchfiles.main:1 change detected
+WARNING:  WatchFiles detected changes in 'routers/demo_donations.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:main:🛑 SHELTR-AI API shutting down...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [39472]
+INFO:watchfiles.main:1 change detected
+WARNING:  WatchFiles detected changes in 'routers/demo_donations.py'. Reloading...
+/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:services.analytics_service:Analytics Service: Firebase initialized successfully
+INFO:services.chatbot.orchestrator:🤖 Chatbot Orchestrator initialized
+INFO:     Started server process [39511]
+INFO:     Waiting for application startup.
+INFO:main:🚀 SHELTR-AI API starting up...
+INFO:main:🔐 Authentication system initialized
+INFO:main:🏢 Multi-tenant architecture ready
+INFO:     Application startup complete.
+INFO:watchfiles.main:1 change detected
+WARNING:  WatchFiles detected changes in 'main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:main:🛑 SHELTR-AI API shutting down...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [39511]
+/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:services.analytics_service:Analytics Service: Firebase initialized successfully
+INFO:services.chatbot.orchestrator:🤖 Chatbot Orchestrator initialized
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/multiprocessing/spawn.py", line 116, in spawn_main
+    exitcode = _main(fd, parent_sentinel)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/multiprocessing/spawn.py", line 125, in _main
+    prepare(preparation_data)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/multiprocessing/spawn.py", line 236, in prepare
+    _fixup_main_from_path(data['init_main_from_path'])
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/multiprocessing/spawn.py", line 287, in _fixup_main_from_path
+    main_content = runpy.run_path(main_path,
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/runpy.py", line 268, in run_path
+    return _run_module_code(code, init_globals, run_name,
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/runpy.py", line 97, in _run_module_code
+    _run_code(code, mod_globals, init_globals,
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/runpy.py", line 87, in _run_code
+    exec(code, run_globals)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/main.py", line 22, in <module>
+    from routers.demo_donations import router as demo_donations_router
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/routers/demo_donations.py", line 12, in <module>
+    from services.adyen_service import AdyenPaymentService
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/services/adyen_service.py", line 12, in <module>
+    import Adyen
+ModuleNotFoundError: No module named 'Adyen'
+INFO:watchfiles.main:2 changes detected
+WARNING:  WatchFiles detected changes in 'routers/demo_donations.py', 'main.py'. Reloading...
+/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:services.analytics_service:Analytics Service: Firebase initialized successfully
+INFO:services.chatbot.orchestrator:🤖 Chatbot Orchestrator initialized
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/multiprocessing/spawn.py", line 116, in spawn_main
+    exitcode = _main(fd, parent_sentinel)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/multiprocessing/spawn.py", line 125, in _main
+    prepare(preparation_data)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/multiprocessing/spawn.py", line 236, in prepare
+    _fixup_main_from_path(data['init_main_from_path'])
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/multiprocessing/spawn.py", line 287, in _fixup_main_from_path
+    main_content = runpy.run_path(main_path,
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/runpy.py", line 268, in run_path
+    return _run_module_code(code, init_globals, run_name,
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/runpy.py", line 97, in _run_module_code
+    _run_code(code, mod_globals, init_globals,
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/runpy.py", line 87, in _run_code
+    exec(code, run_globals)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/main.py", line 22, in <module>
+    from routers.demo_donations import router as demo_donations_router
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/routers/demo_donations.py", line 12, in <module>
+    from services.adyen_service import AdyenPaymentService
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/services/adyen_service.py", line 12, in <module>
+    import Adyen
+ModuleNotFoundError: No module named 'Adyen'
+INFO:watchfiles.main:1 change detected
+WARNING:  WatchFiles detected changes in 'main.py'. Reloading...
+/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:services.analytics_service:Analytics Service: Firebase initialized successfully
+INFO:services.chatbot.orchestrator:🤖 Chatbot Orchestrator initialized
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/multiprocessing/spawn.py", line 116, in spawn_main
+    exitcode = _main(fd, parent_sentinel)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/multiprocessing/spawn.py", line 125, in _main
+    prepare(preparation_data)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/multiprocessing/spawn.py", line 236, in prepare
+    _fixup_main_from_path(data['init_main_from_path'])
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/multiprocessing/spawn.py", line 287, in _fixup_main_from_path
+    main_content = runpy.run_path(main_path,
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/runpy.py", line 268, in run_path
+    return _run_module_code(code, init_globals, run_name,
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/runpy.py", line 97, in _run_module_code
+    _run_code(code, mod_globals, init_globals,
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/runpy.py", line 87, in _run_code
+    exec(code, run_globals)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/main.py", line 22, in <module>
+    from routers.demo_donations import router as demo_donations_router
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/routers/demo_donations.py", line 12, in <module>
+    from services.adyen_service import AdyenPaymentService
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/services/adyen_service.py", line 12, in <module>
+    import Adyen
+ModuleNotFoundError: No module named 'Adyen'
+INFO:watchfiles.main:1 change detected
+WARNING:  WatchFiles detected changes in 'main.py'. Reloading...
+/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:services.analytics_service:Analytics Service: Firebase initialized successfully
+INFO:services.chatbot.orchestrator:🤖 Chatbot Orchestrator initialized
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/multiprocessing/spawn.py", line 116, in spawn_main
+    exitcode = _main(fd, parent_sentinel)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/multiprocessing/spawn.py", line 125, in _main
+    prepare(preparation_data)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/multiprocessing/spawn.py", line 236, in prepare
+    _fixup_main_from_path(data['init_main_from_path'])
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/multiprocessing/spawn.py", line 287, in _fixup_main_from_path
+    main_content = runpy.run_path(main_path,
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/runpy.py", line 268, in run_path
+    return _run_module_code(code, init_globals, run_name,
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/runpy.py", line 97, in _run_module_code
+    _run_code(code, mod_globals, init_globals,
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/runpy.py", line 87, in _run_code
+    exec(code, run_globals)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/main.py", line 22, in <module>
+    from routers.demo_donations import router as demo_donations_router
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/routers/demo_donations.py", line 12, in <module>
+    from services.adyen_service import AdyenPaymentService
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/services/adyen_service.py", line 12, in <module>
+    import Adyen
+ModuleNotFoundError: No module named 'Adyen'
+INFO:watchfiles.main:1 change detected
+WARNING:  WatchFiles detected changes in 'main.py'. Reloading...
+/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
+INFO:services.analytics_service:Analytics Service: Firebase initialized successfully
+INFO:services.chatbot.orchestrator:🤖 Chatbot Orchestrator initialized
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/multiprocessing/spawn.py", line 116, in spawn_main
+    exitcode = _main(fd, parent_sentinel)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/multiprocessing/spawn.py", line 125, in _main
+    prepare(preparation_data)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/multiprocessing/spawn.py", line 236, in prepare
+    _fixup_main_from_path(data['init_main_from_path'])
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/multiprocessing/spawn.py", line 287, in _fixup_main_from_path
+    main_content = runpy.run_path(main_path,
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/runpy.py", line 268, in run_path
+    return _run_module_code(code, init_globals, run_name,
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/runpy.py", line 97, in _run_module_code
+    _run_code(code, mod_globals, init_globals,
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/runpy.py", line 87, in _run_code
+    exec(code, run_globals)
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/main.py", line 22, in <module>
+    from routers.demo_donations import router as demo_donations_router
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/routers/demo_donations.py", line 12, in <module>
+    from services.adyen_service import AdyenPaymentService
+  File "/Users/mrjones/Github/Projects/sheltr-ai/apps/api/services/adyen_service.py", line 12, in <module>
+    import Adyen
+ModuleNotFoundError: No module named 'Adyen'

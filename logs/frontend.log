@@ -8,77 +8,163 @@
    - Environments: .env.local
 
  ✓ Starting...
- ✓ Compiled middleware in 122ms
+ ✓ Compiled middleware in 137ms
  ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
- ✓ Ready in 1738ms
+ ✓ Ready in 1975ms
  ○ Compiling / ...
- ✓ Compiled / in 3s
- GET / 200 in 3587ms
- GET / 200 in 124ms
- ○ Compiling /login ...
- ✓ Compiled /login in 513ms
- GET /login 200 in 663ms
- ✓ Compiled /dashboard in 342ms
- GET /dashboard 200 in 398ms
- GET /dashboard 200 in 62ms
- ✓ Compiled /docs in 239ms
- GET /docs 200 in 485ms
- ✓ Compiled /docs/website-architecture in 208ms
- GET /docs/website-architecture 200 in 259ms
- ○ Compiling /dashboard/platform ...
- ✓ Compiled /dashboard/platform in 610ms
- GET /dashboard/platform 200 in 709ms
- ○ Compiling /dashboard/users ...
- ✓ Compiled /dashboard/users in 552ms
- GET /dashboard/users 200 in 613ms
- ✓ Compiled /dashboard/shelters in 286ms
- GET /dashboard/shelters 200 in 332ms
- GET /dashboard 200 in 55ms
- GET /dashboard/platform 200 in 48ms
- GET /dashboard/users 200 in 47ms
- GET /dashboard/shelters 200 in 46ms
- GET /dashboard/platform 200 in 34ms
- GET /dashboard/platform 200 in 46ms
- GET /dashboard 200 in 45ms
- GET /dashboard 200 in 48ms
- GET /dashboard 200 in 37ms
- GET /dashboard 200 in 46ms
- GET /dashboard/platform 200 in 43ms
- GET /dashboard/shelters 200 in 46ms
- GET /dashboard 200 in 50ms
- GET /dashboard 200 in 49ms
+ ✓ Compiled / in 2.8s
+ GET / 200 in 3385ms
+ GET / 200 in 123ms
+ ✓ Compiled /about in 251ms
+ GET /about 200 in 307ms
+ ✓ Compiled /solutions in 223ms
+ GET /solutions 200 in 271ms
+ ✓ Compiled /impact in 240ms
+ GET /impact 200 in 289ms
+ GET /impact 200 in 44ms
+ ✓ Compiled /scan-give in 196ms
+ GET /scan-give 200 in 248ms
+ GET / 200 in 47ms
+ GET /about 200 in 48ms
+ GET /solutions 200 in 51ms
+ ✓ Compiled /solutions/organizations in 222ms
+ GET /solutions/organizations 200 in 366ms
+ ✓ Compiled /solutions/organizations/case-study in 230ms
+ GET /solutions/organizations/case-study 200 in 278ms
+ GET /solutions/organizations 200 in 79ms
+ GET /solutions 200 in 46ms
+ ✓ Compiled /solutions/donors in 190ms
+ GET /solutions/donors 200 in 315ms
+ GET / 200 in 72ms
+ ✓ Compiled /login in 282ms
+ GET /login 200 in 474ms
+ ✓ Compiled /dashboard in 290ms
+ GET /dashboard 200 in 499ms
+ GET /dashboard 200 in 54ms
+ ✓ Compiled /dashboard/participant in 243ms
+ GET /dashboard/participant 200 in 298ms
+ GET /dashboard/participant 200 in 47ms
+ GET /dashboard/participant 200 in 42ms
+ GET /dashboard/participant 200 in 38ms
+ ✓ Compiled /dashboard/participant/services in 246ms
+ GET /dashboard/participant/services 200 in 301ms
+ ✓ Compiled /dashboard/participant/profile in 235ms
+ GET /dashboard/participant/profile 200 in 287ms
+ GET /login 200 in 144ms
+ GET /dashboard 200 in 53ms
+ GET /dashboard/participant 200 in 52ms
+ GET /dashboard/participant 200 in 54ms
+ GET /dashboard/participant 200 in 46ms
+ GET /dashboard/participant 200 in 41ms
+ ✓ Compiled /dashboard/participant/wallet in 376ms
+ GET /dashboard/participant/wallet 200 in 432ms
+ ✓ Compiled /dashboard/participant/support in 309ms
+ GET /dashboard/participant/support 200 in 476ms
+ GET /dashboard/participant 200 in 48ms
+ GET / 200 in 165ms
  ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
- GET /login 200 in 141ms
- GET / 200 in 209ms
- GET /login 200 in 106ms
- GET /dashboard 200 in 57ms
- GET /login 200 in 45ms
- GET /login 200 in 60ms
- ✓ Compiled /dashboard/shelter-admin in 289ms
- GET /dashboard/shelter-admin 200 in 336ms
- GET /dashboard/shelter-admin 200 in 39ms
- GET /dashboard/shelter-admin 200 in 33ms
- GET /dashboard/shelter-admin 200 in 36ms
- GET /dashboard 200 in 72ms
- GET /dashboard/platform 200 in 54ms
- GET /dashboard/users 200 in 35ms
- GET /dashboard 200 in 47ms
- GET /dashboard/platform 200 in 45ms
- GET /dashboard/users 200 in 45ms
- GET /dashboard/shelters 200 in 49ms
- ✓ Compiled /dashboard/financial in 339ms
- GET /dashboard/financial 200 in 389ms
- ✓ Compiled /dashboard/security in 226ms
- GET /dashboard/security 200 in 272ms
- GET /dashboard/financial 200 in 51ms
- GET /dashboard/security 200 in 55ms
- ✓ Compiled /dashboard/analytics in 246ms
- GET /dashboard/analytics 200 in 296ms
- GET /dashboard 200 in 46ms
- GET / 200 in 58ms
- GET /login 200 in 55ms
- GET /login 200 in 35ms
- GET /dashboard 200 in 48ms
- GET /dashboard/shelter-admin 200 in 57ms
- GET /dashboard/shelter-admin 200 in 38ms
- GET /dashboard/shelter-admin 200 in 36ms
+ ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
+ ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
+ ⨯ ./src/app/scan-give/page.tsx:12:1
+Module not found: Can't resolve '@/components/demo/DemoQRModal'
+[0m [90m 10 |[39m [36mimport[39m [33mThemeLogo[39m [36mfrom[39m [32m'@/components/ThemeLogo'[39m[33m;[39m
+ [90m 11 |[39m [36mimport[39m { useState } [36mfrom[39m [32m'react'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 12 |[39m [36mimport[39m { [33mDemoQRModal[39m } [36mfrom[39m [32m'@/components/demo/DemoQRModal'[39m[33m;[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 13 |[39m
+ [90m 14 |[39m [36mexport[39m [36mdefault[39m [36mfunction[39m [33mScanGivePage[39m() {
+ [90m 15 |[39m   [36mconst[39m [mobileMenuOpen[33m,[39m setMobileMenuOpen] [33m=[39m useState([36mfalse[39m)[33m;[39m[0m
+
+Import map: aliased to relative './src/components/demo/DemoQRModal' inside of [project]/
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/scan-give/page.tsx [Client Component Browser]
+    ./src/app/scan-give/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/scan-give/page.tsx [Client Component SSR]
+    ./src/app/scan-give/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./src/app/scan-give/page.tsx:12:1
+Module not found: Can't resolve '@/components/demo/DemoQRModal'
+[0m [90m 10 |[39m [36mimport[39m [33mThemeLogo[39m [36mfrom[39m [32m'@/components/ThemeLogo'[39m[33m;[39m
+ [90m 11 |[39m [36mimport[39m { useState } [36mfrom[39m [32m'react'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 12 |[39m [36mimport[39m { [33mDemoQRModal[39m } [36mfrom[39m [32m'@/components/demo/DemoQRModal'[39m[33m;[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 13 |[39m
+ [90m 14 |[39m [36mexport[39m [36mdefault[39m [36mfunction[39m [33mScanGivePage[39m() {
+ [90m 15 |[39m   [36mconst[39m [mobileMenuOpen[33m,[39m setMobileMenuOpen] [33m=[39m useState([36mfalse[39m)[33m;[39m[0m
+
+Import map: aliased to relative './src/components/demo/DemoQRModal' inside of [project]/
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/scan-give/page.tsx [Client Component Browser]
+    ./src/app/scan-give/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/scan-give/page.tsx [Client Component SSR]
+    ./src/app/scan-give/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./src/app/scan-give/page.tsx:12:1
+Module not found: Can't resolve '@/components/demo/DemoQRModal'
+[0m [90m 10 |[39m [36mimport[39m [33mThemeLogo[39m [36mfrom[39m [32m'@/components/ThemeLogo'[39m[33m;[39m
+ [90m 11 |[39m [36mimport[39m { useState } [36mfrom[39m [32m'react'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 12 |[39m [36mimport[39m { [33mDemoQRModal[39m } [36mfrom[39m [32m'@/components/demo/DemoQRModal'[39m[33m;[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 13 |[39m
+ [90m 14 |[39m [36mexport[39m [36mdefault[39m [36mfunction[39m [33mScanGivePage[39m() {
+ [90m 15 |[39m   [36mconst[39m [mobileMenuOpen[33m,[39m setMobileMenuOpen] [33m=[39m useState([36mfalse[39m)[33m;[39m[0m
+
+Import map: aliased to relative './src/components/demo/DemoQRModal' inside of [project]/
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/scan-give/page.tsx [Client Component Browser]
+    ./src/app/scan-give/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/scan-give/page.tsx [Client Component SSR]
+    ./src/app/scan-give/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ ./src/app/scan-give/page.tsx:12:1
+Module not found: Can't resolve '@/components/demo/DemoQRModal'
+[0m [90m 10 |[39m [36mimport[39m [33mThemeLogo[39m [36mfrom[39m [32m'@/components/ThemeLogo'[39m[33m;[39m
+ [90m 11 |[39m [36mimport[39m { useState } [36mfrom[39m [32m'react'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 12 |[39m [36mimport[39m { [33mDemoQRModal[39m } [36mfrom[39m [32m'@/components/demo/DemoQRModal'[39m[33m;[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 13 |[39m
+ [90m 14 |[39m [36mexport[39m [36mdefault[39m [36mfunction[39m [33mScanGivePage[39m() {
+ [90m 15 |[39m   [36mconst[39m [mobileMenuOpen[33m,[39m setMobileMenuOpen] [33m=[39m useState([36mfalse[39m)[33m;[39m[0m
+
+Import map: aliased to relative './src/components/demo/DemoQRModal' inside of [project]/
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/scan-give/page.tsx [Client Component Browser]
+    ./src/app/scan-give/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/scan-give/page.tsx [Client Component SSR]
+    ./src/app/scan-give/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
+ ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
+[?25h

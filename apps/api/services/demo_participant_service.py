@@ -234,19 +234,28 @@ class DemoParticipantService:
         try:
             participant = await self.get_demo_participant(participant_id)
             
-            # Get recent demo donations
+            # Get recent demo donations (simplified query to avoid index requirement)
             donations_query = self.db.collection('demo_donations')\
                 .where('participant_id', '==', participant_id)\
-                .order_by('created_at', direction='DESCENDING')\
-                .limit(5)
+                .limit(10)  # Remove order_by to avoid composite index requirement
             
             recent_donations = []
             total_demo_amount = 0
             
+            # Get all donations and sort in memory (for demo purposes)
+            all_donations = []
             for doc in donations_query.stream():
                 donation = doc.to_dict()
+                donation['id'] = doc.id
+                all_donations.append(donation)
+            
+            # Sort by created_at in memory
+            all_donations.sort(key=lambda x: x.get('created_at', datetime.min), reverse=True)
+            
+            # Take the 5 most recent
+            for donation in all_donations[:5]:
                 recent_donations.append({
-                    "id": doc.id,
+                    "id": donation['id'],
                     "amount": donation.get("amount", {}).get("total", 0),
                     "created_at": donation.get("created_at"),
                     "status": donation.get("payment_data", {}).get("status", "unknown")

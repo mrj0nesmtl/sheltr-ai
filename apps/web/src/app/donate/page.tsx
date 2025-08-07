@@ -44,8 +44,8 @@ function DonatePageContent() {
       
       try {
         const endpoint = isDemo 
-          ? `/api/demo/donations/participant/${participantId}`
-          : `/api/participants/${participantId}`;
+          ? `${process.env.NEXT_PUBLIC_API_BASE_URL}/demo/donations/participant/${participantId}`
+          : `${process.env.NEXT_PUBLIC_API_BASE_URL}/participants/${participantId}`;
           
         const response = await fetch(endpoint);
         const result = await response.json();
@@ -80,7 +80,7 @@ function DonatePageContent() {
       }
 
       // Create payment session
-      const response = await fetch('/api/demo/donations/payment-session', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/demo/donations/payment-session`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

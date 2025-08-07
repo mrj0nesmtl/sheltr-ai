@@ -21,7 +21,7 @@ export default function ScanGivePage() {
   const handleTryDemo = async () => {
     setLoading(true);
     try {
-      const response = await fetch('/api/demo/donations/generate-qr', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/demo/donations/generate-qr`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -474,7 +474,7 @@ export default function TokenomicsPage() {
 
             <Card className="border-2 border-purple-500/20 bg-purple-500/5">
               <CardHeader>
-                <CardTitle className="text-xl text-purple-600 dark:text-purple-400">🎯 Public Launch (Q2 2025)</CardTitle>
+                <CardTitle className="text-xl text-purple-600 dark:text-purple-400">🎯 Public Launch (Q4 2025)</CardTitle>
                 <CardDescription>Fair market launch with full platform utility</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">

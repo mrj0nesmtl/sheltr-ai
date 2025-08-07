@@ -141,7 +141,7 @@ export default function RoadmapPage() {
                     <div>
                       <h4 className="font-semibold mb-2">Current Focus</h4>
                       <ul className="space-y-1 text-sm text-muted-foreground">
-                        <li>✅ Adyen payment integration (Doug K. partnership)</li>
+                        <li>✅ Adyen payment integration (New partnership)</li>
                         <li>✅ QR code donation system operational</li>
                         <li>✅ SmartFund 80-15-5 distribution demo</li>
                         <li>🔄 Real database connectivity</li>
@@ -151,7 +151,7 @@ export default function RoadmapPage() {
                     <div>
                       <h4 className="font-semibold mb-2">Team & Strategy</h4>
                       <ul className="space-y-1 text-sm text-muted-foreground">
-                        <li>✅ Doug K. (CFO) - 20+ years payments expertise</li>
+                        <li>✅ CFO - 20+ years payments expertise</li>
                         <li>✅ Private beta user testing</li>
                         <li>🔄 Seed funding preparation (September)</li>
                         <li>🔄 Security audit preparation</li>
@@ -254,7 +254,7 @@ export default function RoadmapPage() {
                 </div>
                 <div>
                   <h4 className="font-semibold mb-2">Business Milestones</h4>
-                  <p className="text-sm text-muted-foreground">September: Seed funding with Doug K.</p>
+                  <p className="text-sm text-muted-foreground">September: Seed funding</p>
                   <p className="text-sm text-muted-foreground">October: Public beta launch</p>
                   <p className="text-sm font-medium text-green-600">December: SHELTR Token ICO</p>
                 </div>

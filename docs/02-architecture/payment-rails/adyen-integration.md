@@ -534,7 +534,7 @@ class SmartFundDistribution:
 
 ---
 
-## 🚀 **Doug's Adyen Meeting Prep**
+## 🚀 **Payment Prep**
 
 ### **Key Selling Points for Adyen**
 1. **Social Impact**: Revolutionary approach to homelessness

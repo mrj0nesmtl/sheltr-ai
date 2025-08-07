@@ -6,7 +6,7 @@
 
 ### **September 2025: Pre-Sale (Seed Round)**
 - **Private Sale**: Accredited investors and strategic partners
-- **Doug K. (CFO) Led**: 20+ years payments expertise driving institutional adoption
+- **CFO-Led Initiative**: 20+ years payments expertise driving institutional adoption
 - **Target Raise**: Initial funding for public beta scaling
 - **Token Allocation**: Early investor pricing with vesting schedule
 

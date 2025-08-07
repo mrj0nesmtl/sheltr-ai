@@ -17,7 +17,7 @@
 |-------|----------|-------|--------|
 | **Foundation & MVP** | Q1-Q2 2025 | Repository, Website, Core Features | ✅ **COMPLETE** |
 | **Private Beta (Current)** | Q3 2025 | Service Booking, Payment Rails, User Testing | 🔄 **ACTIVE** |
-| **Pre-Sale & Funding** | September 2025 | Seed Round with Doug K. (CFO) | 🎯 **PLANNED** |
+| **Pre-Sale & Funding** | September 2025 | CFO-Led Seed Round | 🎯 **PLANNED** |
 | **Public Beta Launch** | Q4 2025 | Public Release, Community Growth | 🚀 **TARGET** |
 | **Token ICO (Public)** | December 2025 | SHELTR Token Public Launch | 💎 **MILESTONE** |
 | **Scaling & Expansion** | Q1 2026+ | Multi-city, Enterprise Features | 🔵 **FUTURE** |
@@ -64,7 +64,7 @@ gantt
 
 ### **Q3 2025: Business Logic & Payment Rails** 🔄 **CURRENT FOCUS**
 - ✅ **Sessions 08-09**: Service booking system, form persistence
-- ✅ **Adyen Integration**: Payment processing with Doug K. (CFO) partnership [[memory:5408380]]
+- ✅ **Strategic Payment Integration**: Payment processing with CFO partnership [[memory:5408380]]
 - ✅ **Demo QR System**: Full donation flow with blockchain SmartFund (80-15-5)
 - 🔄 **Database Connectivity**: Real data integration across all dashboards
 - 🔄 **Production Optimization**: Performance, security, scalability
@@ -72,7 +72,7 @@ gantt
 ### **Major Achievements to Date**
 - [x] **Private Beta Platform**: Fully functional MVP in production
 - [x] **Payment Processing**: Adyen-powered donation system operational
-- [x] **Strategic Partnership**: Doug K. as CFO, 20+ years payments expertise
+- [x] **Strategic Partnership**: CFO with 20+ years payments expertise
 - [x] **Mobile Excellence**: Best-in-class responsive design and UX
 - [x] **AI-Powered Analytics**: Real-time insights and chatbot support
 - [x] **Blockchain Ready**: Smart contract architecture for transparent giving
@@ -82,7 +82,7 @@ gantt
 ## 🚀 **Q4 2025: PUBLIC BETA & TOKEN LAUNCH ROADMAP**
 
 ### **September 2025: Pre-Sale & Seed Funding** 🎯 **CRITICAL MILESTONE**
-- **Doug K. Led Seed Round**: CFO partnership drives institutional investment
+- **CFO-Led Seed Round**: Strategic partnership drives institutional investment
 - **Adyen Partnership Formalization**: Payment rail integration for scale
 - **Private Beta Expansion**: Invite-only user growth to 1,000+ participants
 - **Security Audit**: Third-party smart contract and platform security review

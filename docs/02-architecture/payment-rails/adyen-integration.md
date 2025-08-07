@@ -3,7 +3,7 @@
 ## 🎯 **Integration Overview**
 
 **Strategic Partnership**: Adyen as primary payment rails for SHELTR platform  
-**CFO Champion**: Doug K. (Original Founder, 20 years payments expertise)  
+**CFO Champion**: Original Founder with 20+ years payments expertise  
 **Demo Target**: QR Code donation flow with SmartFund™ distribution  
 **Implementation**: https://sheltr-ai.web.app/scan-give
 

@@ -137,12 +137,22 @@ export default function ScanGivePage() {
             <QrCode className="h-4 w-4 mr-2" />
             {loading ? 'Generating...' : 'Try Demo QR Code'}
           </Button>
-          <Link href="/register">
-            <Button variant="outline" size="lg">
+          <div className="relative inline-block">
+            <Button 
+              variant="outline" 
+              size="lg" 
+              disabled
+              className="cursor-not-allowed opacity-60 pr-6"
+            >
               <Smartphone className="h-4 w-4 mr-2" />
               Download App
             </Button>
-          </Link>
+            <Badge 
+              className="absolute -top-3 -right-3 bg-orange-500 hover:bg-orange-500 text-white text-xs px-2 py-1 rounded-full border-2 border-background shadow-lg z-10 transform translate-x-1/2 -translate-y-1/2"
+            >
+              Coming Soon
+            </Badge>
+          </div>
         </div>
       </section>
 

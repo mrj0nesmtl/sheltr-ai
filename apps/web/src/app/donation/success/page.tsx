@@ -2,7 +2,7 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { CheckCircle, Heart, Home, Share2, Mail, ArrowRight, Sparkles } from 'lucide-react';
+import { CheckCircle, Heart, Home, Share2, Mail, ArrowRight, Sparkles, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -256,12 +256,23 @@ function SuccessPageContent() {
 
           {/* Call to Action */}
           <div className="text-center space-y-4">
-            <Link href="/scan-give">
-              <Button variant="outline" size="lg">
-                <Home className="h-4 w-4 mr-2" />
-                Back to Scan & Give
-              </Button>
-            </Link>
+            <div className="flex gap-4 justify-center">
+              <Link href="/scan-give">
+                <Button variant="outline" size="lg">
+                  <Home className="h-4 w-4 mr-2" />
+                  Back to Scan & Give
+                </Button>
+              </Link>
+              
+              {participantName && (
+                <Link href={`/participant/demo-participant-001`}>
+                  <Button variant="outline" size="lg" className="border-green-500 text-green-600 hover:bg-green-50">
+                    <User className="h-4 w-4 mr-2" />
+                    View {participantName}'s Profile
+                  </Button>
+                </Link>
+              )}
+            </div>
             
             <div className="text-sm text-muted-foreground">
               Help us end homelessness, one scan at a time.

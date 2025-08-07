@@ -3,106 +3,14 @@
 > next build
 
    ▲ Next.js 15.4.3
-   - Environments: .env.local
+   - Environments: .env.local, .env.production
 
    Creating an optimized production build ...
- ✓ Compiled successfully in 4.0s
+ ✓ Compiled successfully in 2000ms
    Skipping validation of types
    Skipping linting
    Collecting page data ...
-   Generating static pages (0/55) ...
-🔍 Dashboard Layout Debug: {
-  userEmail: undefined,
-  userRole: undefined,
-  userDisplayName: undefined,
-  userName: 'User'
-}
-🔍 Dashboard Layout Debug: {
-  userEmail: undefined,
-  userRole: undefined,
-  userDisplayName: undefined,
-  userName: 'User'
-}
-🔍 Dashboard Layout Debug: {
-  userEmail: undefined,
-  userRole: undefined,
-  userDisplayName: undefined,
-  userName: 'User'
-}
-🔍 Dashboard Layout Debug: {
-  userEmail: undefined,
-  userRole: undefined,
-  userDisplayName: undefined,
-  userName: 'User'
-}
-🔍 Dashboard Layout Debug: {
-  userEmail: undefined,
-  userRole: undefined,
-  userDisplayName: undefined,
-  userName: 'User'
-}
-🔍 Dashboard Layout Debug: {
-  userEmail: undefined,
-  userRole: undefined,
-  userDisplayName: undefined,
-  userName: 'User'
-}
-🔍 Dashboard Layout Debug: {
-  userEmail: undefined,
-  userRole: undefined,
-  userDisplayName: undefined,
-  userName: 'User'
-}
-🔍 Dashboard Layout Debug: {
-  userEmail: undefined,
-  userRole: undefined,
-  userDisplayName: undefined,
-  userName: 'User'
-}
-   Generating static pages (13/55) 
-🔍 Dashboard Layout Debug: {
-  userEmail: undefined,
-  userRole: undefined,
-  userDisplayName: undefined,
-  userName: 'User'
-}
-🔍 Dashboard Layout Debug: {
-  userEmail: undefined,
-  userRole: undefined,
-  userDisplayName: undefined,
-  userName: 'User'
-}
-🔍 Dashboard Layout Debug: {
-  userEmail: undefined,
-  userRole: undefined,
-  userDisplayName: undefined,
-  userName: 'User'
-}
-🔍 Dashboard Layout Debug: {
-  userEmail: undefined,
-  userRole: undefined,
-  userDisplayName: undefined,
-  userName: 'User'
-}
-🔍 Dashboard Layout Debug: {
-  userEmail: undefined,
-  userRole: undefined,
-  userDisplayName: undefined,
-  userName: 'User'
-}
-🔍 Dashboard Layout Debug: {
-  userEmail: undefined,
-  userRole: undefined,
-  userDisplayName: undefined,
-  userName: 'User'
-}
-🔍 Dashboard Layout Debug: {
-  userEmail: undefined,
-  userRole: undefined,
-  userDisplayName: undefined,
-  userName: 'User'
-}
-   Generating static pages (27/55) 
+   Generating static pages (0/58) ...
 🔍 Dashboard Layout Debug: {
   userEmail: undefined,
   userRole: undefined,
@@ -157,8 +65,100 @@
   userDisplayName: undefined,
   userName: 'User'
 }
-   Generating static pages (41/55) 
- ✓ Generating static pages (55/55)
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+   Generating static pages (14/58) 
+   Generating static pages (28/58) 
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+   Generating static pages (43/58) 
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+ ✓ Generating static pages (58/58)
    Finalizing page optimization ...
    Collecting build traces ...
  ⚠ Statically exporting a Next.js application via `next export` disables API routes and middleware.
@@ -174,7 +174,7 @@ Route (app)                                   Size  First Load JS
 ├ ○ /about                                 8.45 kB         121 kB
 ├ ƒ /api/calendar/create-event               129 B         100 kB
 ├ ƒ /api/email/send-confirmation             129 B         100 kB
-├ ○ /dashboard                             9.61 kB         240 kB
+├ ○ /dashboard                              9.3 kB         240 kB
 ├ ○ /dashboard/analytics                   9.55 kB         243 kB
 ├ ○ /dashboard/donor                       6.89 kB         234 kB
 ├ ○ /dashboard/donor/donations             3.58 kB         241 kB
@@ -182,54 +182,59 @@ Route (app)                                   Size  First Load JS
 ├ ○ /dashboard/donor/settings              7.65 kB         241 kB
 ├ ○ /dashboard/donor/sheltr-portfolio      6.67 kB         244 kB
 ├ ○ /dashboard/donor/tax-documents          3.7 kB         241 kB
-├ ○ /dashboard/financial                   6.29 kB         122 kB
+├ ○ /dashboard/financial                   6.28 kB         122 kB
 ├ ○ /dashboard/participant                 7.99 kB         235 kB
-├ ○ /dashboard/participant/profile         8.91 kB         236 kB
-├ ○ /dashboard/participant/services        9.75 kB         237 kB
-├ ○ /dashboard/participant/support         8.31 kB         241 kB
-├ ○ /dashboard/participant/wallet          9.06 kB         241 kB
+├ ○ /dashboard/participant/profile         8.95 kB         236 kB
+├ ○ /dashboard/participant/services        9.79 kB         237 kB
+├ ○ /dashboard/participant/support         8.31 kB         242 kB
+├ ○ /dashboard/participant/wallet           9.1 kB         241 kB
 ├ ○ /dashboard/platform                    5.12 kB         115 kB
 ├ ○ /dashboard/security                    6.64 kB         122 kB
 ├ ○ /dashboard/shelter-admin               5.79 kB         233 kB
-├ ○ /dashboard/shelter-admin/participants  4.89 kB         120 kB
-├ ○ /dashboard/shelter-admin/reports       6.03 kB         121 kB
+├ ○ /dashboard/shelter-admin/participants  4.88 kB         120 kB
+├ ○ /dashboard/shelter-admin/reports       6.03 kB         122 kB
 ├ ○ /dashboard/shelter-admin/resources     6.48 kB         122 kB
-├ ○ /dashboard/shelter-admin/services      5.21 kB         120 kB
+├ ○ /dashboard/shelter-admin/services      5.21 kB         121 kB
 ├ ○ /dashboard/shelter-admin/settings      7.77 kB         123 kB
 ├ ○ /dashboard/shelters                    16.4 kB         352 kB
 ├ ○ /dashboard/users                        9.8 kB         345 kB
 ├ ○ /docs                                  5.39 kB         122 kB
 ├ ○ /docs/api                              2.07 kB         119 kB
 ├ ○ /docs/blockchain                       7.53 kB         120 kB
-├ ○ /docs/hacking-homelessness             9.56 kB         122 kB
+├ ○ /docs/hacking-homelessness             9.67 kB         122 kB
 ├ ○ /docs/participant-guide                2.51 kB         120 kB
 ├ ○ /docs/roadmap                          2.87 kB         120 kB
-├ ○ /docs/website-architecture             4.18 kB         121 kB
+├ ○ /docs/website-architecture             8.09 kB         121 kB
 ├ ○ /docs/whitepaper                       6.78 kB         120 kB
-├ ○ /impact                                  10 kB         123 kB
-├ ○ /investor-access                       5.82 kB         119 kB
+├ ○ /donate                                 5.5 kB         118 kB
+├ ○ /donation/success                      8.96 kB         122 kB
+├ ○ /impact                                10.1 kB         123 kB
+├ ○ /investor-access                       5.86 kB         119 kB
 ├ ○ /investor-relations                    23.9 kB         143 kB
 ├ ○ /login                                 5.75 kB         227 kB
+├ ● /participant/[id]                      9.55 kB         122 kB
+├   └ /participant/demo-participant-001
 ├ ○ /privacy                               10.5 kB         123 kB
 ├ ○ /register                              6.36 kB         228 kB
-├ ○ /scan-give                             2.66 kB         120 kB
+├ ○ /scan-give                             18.3 kB         138 kB
 ├ ○ /solutions                             8.02 kB         121 kB
 ├ ○ /solutions/donors                      2.76 kB         116 kB
 ├ ○ /solutions/government                  2.76 kB         116 kB
-├ ○ /solutions/government/policy-brief     9.99 kB         123 kB
+├ ○ /solutions/government/policy-brief     10.1 kB         123 kB
 ├ ○ /solutions/organizations               2.76 kB         116 kB
-├ ○ /solutions/organizations/case-study     9.2 kB         122 kB
+├ ○ /solutions/organizations/case-study     9.3 kB         122 kB
 ├ ○ /solutions/participants                2.76 kB         116 kB
 ├ ○ /terms                                 9.93 kB         123 kB
-└ ○ /tokenomics                            13.3 kB         126 kB
+└ ○ /tokenomics                            13.4 kB         126 kB
 + First Load JS shared by all               100 kB
   ├ chunks/4bd1b696-cc729d47eba2cee4.js    54.1 kB
   ├ chunks/5964-944ef7993092802f.js        43.9 kB
-  └ other shared chunks (total)            1.95 kB
+  └ other shared chunks (total)            1.96 kB
 
 
 ƒ Middleware                               32.9 kB
 
 ○  (Static)   prerendered as static content
+●  (SSG)      prerendered as static HTML (uses generateStaticParams)
 ƒ  (Dynamic)  server-rendered on demand
 

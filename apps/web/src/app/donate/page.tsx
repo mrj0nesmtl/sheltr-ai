@@ -96,18 +96,29 @@ function DonatePageContent() {
 
       if (result.success) {
         // In a real implementation, this would redirect to Adyen payment page
-        // For demo, show success message and redirect to success page
-        alert(`Demo payment session created! Amount: $${donationAmount}\nReference: ${result.data.reference}\n\nIn production, this would redirect to Adyen payment processing.`);
+        // For demo, simulate successful payment and redirect to success page
+        console.log('Demo payment session created:', result.data);
         
-        // Simulate payment success after 2 seconds
+        // Simulate payment success after 1 second
         setTimeout(() => {
-          window.location.href = `/donation/success?demo=true&amount=${donationAmount}&participant=${participant.firstName}`;
-        }, 2000);
+          window.location.href = `/donation/success?demo=true&amount=${donationAmount}&participant=${participant.firstName}&reference=${result.data.reference}`;
+        }, 1000);
       } else {
         throw new Error(result.message || 'Payment session creation failed');
       }
     } catch (error) {
       console.error('Payment error:', error);
+      
+      // In demo mode, if payment fails, offer to skip to success
+      if (isDemo) {
+        const skipToSuccess = confirm('Demo payment failed (expected without live Adyen). Skip to success page to see full flow?');
+        if (skipToSuccess) {
+          const donationAmount = isCustom ? parseFloat(customAmount) : selectedAmount;
+          window.location.href = `/donation/success?demo=true&amount=${donationAmount}&participant=${participant.firstName}&reference=DEMO-FALLBACK-${Date.now()}`;
+          return;
+        }
+      }
+      
       alert('Payment failed. Please try again.');
     } finally {
       setProcessing(false);
@@ -294,6 +305,35 @@ function DonatePageContent() {
                       </div>
                     </div>
                     
+                    {/* Housing Fund Impact Preview */}
+                    {breakdown.housing > 0 && (
+                      <div className="mt-4 p-3 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20 rounded-lg border border-green-200/50 dark:border-green-800/50">
+                        <div className="text-sm font-medium text-green-800 dark:text-green-200 mb-1">
+                          🏠 Housing Fund Impact
+                        </div>
+                        <div className="text-xs text-green-700 dark:text-green-300">
+                          Your ${breakdown.housing} contribution gets {participant.firstName} closer to a $5,000 emergency housing deposit.
+                        </div>
+                        {(() => {
+                          const currentHousingFund = Math.round(participant.total_received * 0.15);
+                          const newTotal = currentHousingFund + breakdown.housing;
+                          const tinyHomeTarget = 5000;
+                          const newPercentage = Math.min((newTotal / tinyHomeTarget) * 100, 100);
+                          const oldPercentage = Math.min((currentHousingFund / tinyHomeTarget) * 100, 100);
+                          const progressIncrease = newPercentage - oldPercentage;
+                          
+                          return (
+                            <div className="mt-2 text-xs text-green-600 dark:text-green-400">
+                              Progress: {oldPercentage.toFixed(1)}% → {newPercentage.toFixed(1)}% 
+                              {progressIncrease > 0 && (
+                                <span className="font-medium"> (+{progressIncrease.toFixed(1)}%)</span>
+                              )}
+                            </div>
+                          );
+                        })()}
+                      </div>
+                    )}
+                    
                     <div className="flex justify-between items-center">
                       <div>
                         <div className="font-semibold">Operations</div>
@@ -392,6 +432,21 @@ function DonatePageContent() {
                     <Heart className="h-5 w-5 mr-2" />
                     {processing ? 'Processing...' : `Donate $${breakdown.total}`}
                   </Button>
+
+                  {/* Demo Skip Button */}
+                  {isDemo && (
+                    <Button 
+                      onClick={() => {
+                        const amount = breakdown.total;
+                        window.location.href = `/donation/success?demo=true&amount=${amount}&participant=${participant.firstName}&reference=DEMO-${Date.now()}`;
+                      }}
+                      variant="outline"
+                      className="w-full h-10 text-sm border-orange-500 text-orange-600 hover:bg-orange-50 dark:hover:bg-orange-950"
+                      size="sm"
+                    >
+                      🎭 Demo: Skip to Success Page
+                    </Button>
+                  )}
 
                   {/* Security Notice */}
                   <div className="text-center text-xs text-muted-foreground">

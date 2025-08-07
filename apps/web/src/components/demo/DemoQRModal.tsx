@@ -162,22 +162,33 @@ export function DemoQRModal({ open, onOpenChange, participant, qrCodeUrl }: Demo
           </div>
 
           {/* Action Buttons */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <Button 
-              onClick={handleCameraScan}
-              className="h-12"
+          <div className="space-y-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <Button 
+                onClick={handleCameraScan}
+                className="h-12"
+                variant="outline"
+                disabled={scanningMode}
+              >
+                <Camera className="h-4 w-4 mr-2" />
+                {scanningMode ? 'Scanning...' : 'Scan with Camera'}
+              </Button>
+              <Button 
+                onClick={handleSimulateScan}
+                className="h-12 bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90"
+              >
+                <Heart className="h-4 w-4 mr-2" />
+                Simulate Donation
+              </Button>
+            </div>
+            
+            <Button
+              onClick={() => window.open(`/participant/${participant.id}`, '_blank')}
               variant="outline"
-              disabled={scanningMode}
-            >
-              <Camera className="h-4 w-4 mr-2" />
-              {scanningMode ? 'Scanning...' : 'Scan with Camera'}
-            </Button>
-            <Button 
-              onClick={handleSimulateScan}
-              className="h-12 bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90"
+              className="w-full h-10 border-green-500 text-green-600 hover:bg-green-50 dark:hover:bg-green-950"
             >
               <ExternalLink className="h-4 w-4 mr-2" />
-              Simulate Donation
+              View Public Profile
             </Button>
           </div>
 

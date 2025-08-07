@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Home, QrCode, Heart, Shield, Smartphone, ArrowRight, Check, LogIn, Menu, X } from 'lucide-react';
+import { Home, QrCode, Heart, Shield, Smartphone, ArrowRight, Check, LogIn, Menu, X, Camera, Share2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -9,9 +9,42 @@ import { ThemeToggle } from '@/components/theme-toggle';
 import Footer from '@/components/Footer';
 import ThemeLogo from '@/components/ThemeLogo';
 import { useState } from 'react';
+import { DemoQRModal } from '@/components/demo/DemoQRModal';
 
 export default function ScanGivePage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showDemoQR, setShowDemoQR] = useState(false);
+  const [demoParticipant, setDemoParticipant] = useState(null);
+  const [qrCodeUrl, setQrCodeUrl] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleTryDemo = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch('/api/demo/donations/generate-qr', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        setDemoParticipant(result.data.participant);
+        setQrCodeUrl(result.data.qr_code_url);
+        setShowDemoQR(true);
+      } else {
+        console.error('Failed to generate demo QR:', result.message);
+        alert('Failed to generate demo QR code. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error generating demo QR:', error);
+      alert('Error generating demo QR code. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
       {/* Navigation */}
@@ -95,12 +128,15 @@ export default function ScanGivePage() {
             Revolutionary QR-code based donations that put money directly into the hands 
             of those who need it most.
           </p>
-          <Link href="/register">
-            <Button size="lg" className="mr-4">
-              <QrCode className="h-4 w-4 mr-2" />
-              Try Demo QR Code
-            </Button>
-          </Link>
+          <Button 
+            size="lg" 
+            className="mr-4" 
+            onClick={handleTryDemo}
+            disabled={loading}
+          >
+            <QrCode className="h-4 w-4 mr-2" />
+            {loading ? 'Generating...' : 'Try Demo QR Code'}
+          </Button>
           <Link href="/register">
             <Button variant="outline" size="lg">
               <Smartphone className="h-4 w-4 mr-2" />
@@ -257,6 +293,14 @@ export default function ScanGivePage() {
       </section>
 
       <Footer />
+
+      {/* Demo QR Modal */}
+      <DemoQRModal 
+        open={showDemoQR}
+        onOpenChange={setShowDemoQR}
+        participant={demoParticipant}
+        qrCodeUrl={qrCodeUrl}
+      />
     </div>
   );
 } 

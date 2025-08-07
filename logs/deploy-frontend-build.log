@@ -6,7 +6,7 @@
    - Environments: .env.local
 
    Creating an optimized production build ...
- ✓ Compiled successfully in 2000ms
+ ✓ Compiled successfully in 4.0s
    Skipping validation of types
    Skipping linting
    Collecting page data ...
@@ -60,6 +60,48 @@
   userName: 'User'
 }
    Generating static pages (13/55) 
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
    Generating static pages (27/55) 
 🔍 Dashboard Layout Debug: {
   userEmail: undefined,
@@ -103,61 +145,19 @@
   userDisplayName: undefined,
   userName: 'User'
 }
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
    Generating static pages (41/55) 
-🔍 Dashboard Layout Debug: {
-  userEmail: undefined,
-  userRole: undefined,
-  userDisplayName: undefined,
-  userName: 'User'
-}
-🔍 Dashboard Layout Debug: {
-  userEmail: undefined,
-  userRole: undefined,
-  userDisplayName: undefined,
-  userName: 'User'
-}
-🔍 Dashboard Layout Debug: {
-  userEmail: undefined,
-  userRole: undefined,
-  userDisplayName: undefined,
-  userName: 'User'
-}
-🔍 Dashboard Layout Debug: {
-  userEmail: undefined,
-  userRole: undefined,
-  userDisplayName: undefined,
-  userName: 'User'
-}
-🔍 Dashboard Layout Debug: {
-  userEmail: undefined,
-  userRole: undefined,
-  userDisplayName: undefined,
-  userName: 'User'
-}
-🔍 Dashboard Layout Debug: {
-  userEmail: undefined,
-  userRole: undefined,
-  userDisplayName: undefined,
-  userName: 'User'
-}
-🔍 Dashboard Layout Debug: {
-  userEmail: undefined,
-  userRole: undefined,
-  userDisplayName: undefined,
-  userName: 'User'
-}
-🔍 Dashboard Layout Debug: {
-  userEmail: undefined,
-  userRole: undefined,
-  userDisplayName: undefined,
-  userName: 'User'
-}
-🔍 Dashboard Layout Debug: {
-  userEmail: undefined,
-  userRole: undefined,
-  userDisplayName: undefined,
-  userName: 'User'
-}
  ✓ Generating static pages (55/55)
    Finalizing page optimization ...
    Collecting build traces ...

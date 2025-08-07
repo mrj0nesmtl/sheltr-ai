@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **🎭 LIVE QR DONATION DEMO**: Working end-to-end donation flow from QR scan to payment
 - **🏗️ PRODUCTION-READY ARCHITECTURE**: Environment-aware API configuration for seamless deployment
 - **📊 REAL PARTICIPANT DATA**: Live demo with Alex Thompson (former chef) and authentic progress tracking
-- **🔗 CFO CHAMPION INTEGRATION**: Doug K. (Original Founder, payments expert) strategic partnership
+- **🔗 CFO CHAMPION INTEGRATION**: Original Founder with payments expertise driving strategic partnerships
 - **🎨 PROFESSIONAL PAYMENT UX**: Apple-inspired design with transparent SmartFund breakdown
 
 #### 💳 Complete Adyen Payment Integration
@@ -46,7 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Mock Processing**: Demonstrates complete flow without requiring live Adyen credentials
 
 #### 🔗 Strategic Partnership Integration
-- **Doug K. Champion**: Original Founder with 20 years payments expertise now recommending Adyen
+- **Strategic Champion**: Original Founder with 20+ years payments expertise driving strategic partnerships
 - **Adyen Integration Documentation**: Complete technical specification in `adyen-integration.md`
 - **Demo Implementation Plan**: Detailed user flow and technical architecture in `sheltr-demo-implementation.md`
 - **Payment Rails Strategy**: Professional documentation ready for Adyen partnership discussions

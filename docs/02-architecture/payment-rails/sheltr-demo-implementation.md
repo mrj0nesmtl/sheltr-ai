@@ -930,7 +930,7 @@ npm start
 - [ ] Performance optimization
 
 ### **Week 4: Launch Preparation**
-- [ ] Doug's Adyen demo preparation
+- [ ] Strategic payment demo preparation
 - [ ] Documentation completion
 - [ ] Security audit
 - [ ] Production deployment

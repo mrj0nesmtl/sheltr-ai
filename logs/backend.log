@@ -10,23 +10,32 @@ INFO:__main__:📚 API documentation: http://localhost:8000/docs
 INFO:__main__:🏥 Health check: http://localhost:8000/health
 INFO:     Will watch for changes in these directories: ['/Users/mrjones/Github/Projects/sheltr-ai/apps/api']
 INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-INFO:     Started reloader process [46285] using WatchFiles
+INFO:     Started reloader process [49295] using WatchFiles
 /Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
   warnings.warn(
 INFO:services.analytics_service:Analytics Service: Firebase initialized successfully
 INFO:services.chatbot.orchestrator:🤖 Chatbot Orchestrator initialized
 INFO:services.firebase_service:🔥 Firebase service ready
 INFO:services.firebase_service:🔥 Firebase service ready
-INFO:     Started server process [46305]
+INFO:     Started server process [49302]
 INFO:     Waiting for application startup.
 INFO:main:🚀 SHELTR-AI API starting up...
 INFO:main:🔐 Authentication system initialized
 INFO:main:🏢 Multi-tenant architecture ready
 INFO:     Application startup complete.
-INFO:     127.0.0.1:52795 - "GET /health HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52862 - "OPTIONS /demo/donations/generate-qr HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53519 - "GET /health HTTP/1.1" 200 OK
 INFO:services.demo_participant_service:Retrieved demo participant: demo-participant-001
 INFO:services.demo_participant_service:QR code image generated successfully
 INFO:services.demo_participant_service:QR generation tracked for demo-participant-001
 INFO:routers.demo_donations:Tracked demo event: qr_generated
-INFO:     127.0.0.1:52862 - "POST /demo/donations/generate-qr HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53540 - "POST /demo/donations/generate-qr HTTP/1.1" 200 OK
+INFO:services.demo_participant_service:Retrieved demo participant: demo-participant-001
+INFO:services.demo_participant_service:Retrieved demo participant: demo-participant-001
+/Users/mrjones/Github/Projects/sheltr-ai/apps/api/.venv/lib/python3.9/site-packages/google/cloud/firestore_v1/base_collection.py:295: UserWarning: Detected filter using positional arguments. Prefer using the 'filter' keyword argument instead.
+  return query.where(field_path, op_string, value)
+INFO:     127.0.0.1:53645 - "GET /demo/donations/participant/demo-participant-001 HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:main:🛑 SHELTR-AI API shutting down...
+INFO:     Application shutdown complete.
+INFO:     Finished server process [49302]

@@ -43,9 +43,35 @@ function DonatePageContent() {
       if (!participantId) return;
       
       try {
+        const isProduction = process.env.NODE_ENV === 'production';
+        const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+        
+        // Use mock data for production or demo participant
+        if ((isProduction && apiBaseUrl?.includes('api.sheltr-ai.com')) || participantId === 'demo-participant-001') {
+          const mockParticipant = {
+            id: "demo-participant-001",
+            firstName: "Alex",
+            lastName: "Thompson",
+            age: 28,
+            story: "Former chef who lost housing due to medical emergency. Working towards stability through SHELTR services.",
+            shelter_name: "Downtown Community Shelter",
+            location: { city: "San Francisco", state: "CA", zipcode: "94102" },
+            total_received: 2847.5,
+            donation_count: 52,
+            services_completed: 8,
+            progress: 65,
+            qr_code: "SHELTR-DEMO-2D88F",
+            featured: true,
+            demo: true
+          };
+          
+          setParticipant(mockParticipant);
+          return;
+        }
+        
         const endpoint = isDemo 
-          ? `${process.env.NEXT_PUBLIC_API_BASE_URL}/demo/donations/participant/${participantId}`
-          : `${process.env.NEXT_PUBLIC_API_BASE_URL}/participants/${participantId}`;
+          ? `${apiBaseUrl}/demo/donations/participant/${participantId}`
+          : `${apiBaseUrl}/participants/${participantId}`;
           
         const response = await fetch(endpoint);
         const result = await response.json();
@@ -57,6 +83,28 @@ function DonatePageContent() {
         }
       } catch (error) {
         console.error('Failed to load participant:', error);
+        
+        // Fallback to mock data for demo participant
+        if (participantId === 'demo-participant-001') {
+          const mockParticipant = {
+            id: "demo-participant-001",
+            firstName: "Alex",
+            lastName: "Thompson",
+            age: 28,
+            story: "Former chef who lost housing due to medical emergency. Working towards stability through SHELTR services.",
+            shelter_name: "Downtown Community Shelter",
+            location: { city: "San Francisco", state: "CA", zipcode: "94102" },
+            total_received: 2847.5,
+            donation_count: 52,
+            services_completed: 8,
+            progress: 65,
+            qr_code: "SHELTR-DEMO-2D88F",
+            featured: true,
+            demo: true
+          };
+          
+          setParticipant(mockParticipant);
+        }
       } finally {
         setLoading(false);
       }

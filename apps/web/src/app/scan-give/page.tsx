@@ -21,7 +21,47 @@ export default function ScanGivePage() {
   const handleTryDemo = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/demo/donations/generate-qr`, {
+      // Check if we're in production and backend is not available
+      const isProduction = process.env.NODE_ENV === 'production';
+      const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+      
+      if (isProduction && apiBaseUrl?.includes('api.sheltr-ai.com')) {
+        // Use mock data for production demo until backend is deployed
+        const mockParticipant = {
+          id: "demo-participant-001",
+          firstName: "Alex",
+          lastName: "Thompson",
+          age: 28,
+          story: "Former chef who lost housing due to medical emergency. Working towards stability through SHELTR services. Alex is passionate about cooking and hopes to open a food truck once housing is secured.",
+          shelter_name: "Downtown Community Shelter",
+          location: { city: "San Francisco", state: "CA", zipcode: "94102" },
+          goals: [
+            { id: "housing-goal", title: "Secure Stable Housing", description: "Find permanent housing solution", progress: 75, status: "in_progress", target_date: "2024-09-01" },
+            { id: "employment-goal", title: "Find Employment", description: "Secure full-time work in food service", progress: 60, status: "in_progress", target_date: "2024-08-15" },
+            { id: "financial-goal", title: "Financial Stability", description: "Build emergency fund and credit score", progress: 40, status: "in_progress", target_date: "2024-12-01" }
+          ],
+          skills: ["Cooking", "Food Safety", "Customer Service", "Team Leadership"],
+          interests: ["Culinary Arts", "Nutrition", "Community Gardening"],
+          total_received: 2847.5,
+          donation_count: 52,
+          services_completed: 8,
+          progress: 65,
+          qr_code: "SHELTR-DEMO-2D88F",
+          featured: true,
+          demo: true
+        };
+        
+        // Generate QR code URL directly
+        const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(`https://sheltr-ai.web.app/donate?demo=true&participant=demo-participant-001`)}&format=png`;
+        
+        setDemoParticipant(mockParticipant);
+        setQrCodeUrl(qrCodeUrl);
+        setShowDemoQR(true);
+        return;
+      }
+      
+      // Try to call backend API (development mode)
+      const response = await fetch(`${apiBaseUrl}/demo/donations/generate-qr`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -40,7 +80,37 @@ export default function ScanGivePage() {
       }
     } catch (error) {
       console.error('Error generating demo QR:', error);
-      alert('Error generating demo QR code. Please try again.');
+      
+      // Fallback to mock data if API call fails
+      const mockParticipant = {
+        id: "demo-participant-001",
+        firstName: "Alex",
+        lastName: "Thompson",
+        age: 28,
+        story: "Former chef who lost housing due to medical emergency. Working towards stability through SHELTR services. Alex is passionate about cooking and hopes to open a food truck once housing is secured.",
+        shelter_name: "Downtown Community Shelter",
+        location: { city: "San Francisco", state: "CA", zipcode: "94102" },
+        goals: [
+          { id: "housing-goal", title: "Secure Stable Housing", description: "Find permanent housing solution", progress: 75, status: "in_progress", target_date: "2024-09-01" },
+          { id: "employment-goal", title: "Find Employment", description: "Secure full-time work in food service", progress: 60, status: "in_progress", target_date: "2024-08-15" },
+          { id: "financial-goal", title: "Financial Stability", description: "Build emergency fund and credit score", progress: 40, status: "in_progress", target_date: "2024-12-01" }
+        ],
+        skills: ["Cooking", "Food Safety", "Customer Service", "Team Leadership"],
+        interests: ["Culinary Arts", "Nutrition", "Community Gardening"],
+        total_received: 2847.5,
+        donation_count: 52,
+        services_completed: 8,
+        progress: 65,
+        qr_code: "SHELTR-DEMO-2D88F",
+        featured: true,
+        demo: true
+      };
+      
+      const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(`https://sheltr-ai.web.app/donate?demo=true&participant=demo-participant-001`)}&format=png`;
+      
+      setDemoParticipant(mockParticipant);
+      setQrCodeUrl(qrCodeUrl);
+      setShowDemoQR(true);
     } finally {
       setLoading(false);
     }

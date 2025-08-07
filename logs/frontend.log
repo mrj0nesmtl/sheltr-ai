@@ -8,10 +8,11 @@
    - Environments: .env.local
 
  ✓ Starting...
- ✓ Compiled middleware in 102ms
+ ✓ Compiled middleware in 156ms
  ⨯ Middleware cannot be used with "output: export". See more info here: https://nextjs.org/docs/advanced-features/static-html-export
- ✓ Ready in 1228ms
+ ✓ Ready in 1873ms
  ○ Compiling / ...
- ✓ Compiled / in 3.1s
- GET / 200 in 3568ms
-[?25h
+ ✓ Compiled / in 2.4s
+ GET / 200 in 2839ms
+ ✓ Compiled /scan-give in 339ms
+ GET /scan-give 200 in 382ms

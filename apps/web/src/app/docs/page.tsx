@@ -36,14 +36,14 @@ export default function DocsPage() {
       title: "Technical White Paper",
       description: "Comprehensive technical documentation covering dual-token architecture, smart contracts, and implementation details",
       icon: FileText,
-      badge: "Investment Grade",
+      badge: "Published",
       badgeColor: "bg-blue-500",
       pages: "67 pages",
-      audience: "Investors • Technical Teams • Partners",
+      audience: "Technical Teams • Partners",
       topics: ["Dual-Token Economics", "Smart Contract Architecture", "Base Network Integration", "Security Framework", "Financial Projections"],
       link: "/docs/whitepaper",
       downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/whitepaper_final.md",
-      lastUpdated: "January 25, 2025"
+      lastUpdated: "February 16, 2025"
     },
     {
       title: "Blockchain Architecture",
@@ -59,20 +59,20 @@ export default function DocsPage() {
       lastUpdated: "January 25, 2025"
     },
     {
-      title: "Hacking Homelessness",
+      title: "Hacking Homelessness and the Theory of Change",
       description: "Executive overview of our theory of change, market analysis, and social impact framework",
       icon: Users,
-      badge: "Executive Summary",
+      badge: "Thesis",
       badgeColor: "bg-purple-500",
       pages: "25 pages",
       audience: "Executives • Impact Investors • Media • Partners",
       topics: ["Theory of Change", "Market Analysis", "Social Impact", "Investment Thesis", "Implementation Roadmap"],
       link: "/docs/hacking-homelessness",
       downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/01-overview/hacking_homelessness.md",
-      lastUpdated: "January 25, 2025"
+      lastUpdated: "Summer 2024"
     },
     {
-      title: "Website Architecture & QA Guide",
+      title: "SHELTR Platform Architecture",
       description: "Complete site structure, role-based features, and comprehensive quality assurance testing framework",
       icon: Building,
       badge: "QA Framework",
@@ -257,7 +257,7 @@ export default function DocsPage() {
 
           <div className="grid lg:grid-cols-1 gap-6 max-w-5xl mx-auto">
             {coreDocuments.map((doc, index) => (
-              <Card key={index} className="hover:shadow-xl transition-all duration-300 border-2 hover:border-primary/20 bg-gradient-to-r from-slate-50 to-gray-50 dark:from-slate-900 dark:to-gray-900">
+              <Card key={index} className="border-2 border-gray-200 dark:border-gray-800 hover:border-primary/50 dark:hover:border-primary/70 hover:shadow-xl transition-all duration-300 bg-gradient-to-r from-slate-50 to-gray-50 dark:from-slate-900 dark:to-gray-900">
                 <CardHeader className="pb-4">
                   {/* Mobile Layout */}
                   <div className="block sm:hidden space-y-4">
@@ -358,14 +358,14 @@ export default function DocsPage() {
                     {/* Action Buttons */}
                     <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4 border-t">
                       <Link href={doc.link} className="flex-1">
-                        <Button className="w-full h-10 sm:h-12 text-sm sm:text-base">
+                        <Button className="w-full h-10 sm:h-12 text-sm sm:text-base bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200">
                           <FileText className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
                           <span className="hidden sm:inline">View Online</span>
                           <span className="sm:hidden">View</span>
                         </Button>
                       </Link>
                       <a href={doc.downloadLink} target="_blank" rel="noopener noreferrer" className="flex-1">
-                        <Button variant="outline" className="w-full h-10 sm:h-12 text-sm sm:text-base border-2 hover:border-primary">
+                        <Button variant="outline" className="w-full h-10 sm:h-12 text-sm sm:text-base border-2 border-black text-black hover:bg-black hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black">
                           <Download className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
                           <span className="hidden sm:inline">View on GitHub</span>
                           <span className="sm:hidden">GitHub</span>
@@ -392,7 +392,7 @@ export default function DocsPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {additionalResources.map((resource, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-gray-800 border-2 hover:border-primary/20">
+              <Card key={index} className="border-2 border-gray-200 dark:border-gray-800 hover:border-primary/50 dark:hover:border-primary/70 hover:shadow-lg transition-all duration-300 bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-gray-800">
                 <CardHeader className="pb-3">
                   <div className="flex items-center justify-between mb-3">
                     <div className="w-10 h-10 bg-gradient-to-br from-primary/20 to-primary/10 rounded-lg flex items-center justify-center">
@@ -408,7 +408,7 @@ export default function DocsPage() {
                 <CardContent className="pt-0">
                   {resource.isInternal ? (
                     <Link href={resource.link}>
-                      <Button variant="outline" className="w-full h-9 text-sm hover:bg-primary/10">
+                      <Button variant="outline" className="w-full h-9 text-sm border-2 border-black text-black hover:bg-black hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black">
                         <span className="hidden sm:inline">View Resource</span>
                         <span className="sm:hidden">View</span>
                         <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4 ml-2" />
@@ -416,7 +416,7 @@ export default function DocsPage() {
                     </Link>
                   ) : (
                     <a href={resource.link} target="_blank" rel="noopener noreferrer">
-                      <Button variant="outline" className="w-full h-9 text-sm hover:bg-primary/10">
+                      <Button variant="outline" className="w-full h-9 text-sm border-2 border-black text-black hover:bg-black hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black">
                         <span className="hidden sm:inline">Open External</span>
                         <span className="sm:hidden">Open</span>
                         <ExternalLink className="h-3 w-3 sm:h-4 sm:w-4 ml-2" />

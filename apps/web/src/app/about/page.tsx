@@ -246,8 +246,9 @@ export default function AboutPage() {
                 </div>
                 <h3 className="text-xl font-semibold mb-3">Direct to Participants</h3>
                 <p className="text-muted-foreground">
-                  Goes directly to participant crypto wallets as SHELTR-S stable tokens, 
-                  providing immediate purchasing power for essentials.
+                  Goes directly to participant crypto wallets as SHELTR-S stable tokens for immediate needs. 
+                  Zero volatility risk ensures purchasing power remains stable at $1.00 USD value. 
+                  Participants maintain complete autonomy over spending decisions and essential purchases.
                 </p>
               </div>
 
@@ -255,10 +256,11 @@ export default function AboutPage() {
                 <div className="bg-green-600 text-white rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4 text-2xl font-bold">
                   15%
                 </div>
-                <h3 className="text-xl font-semibold mb-3">SmartFund™ Distribution</h3>
+                <h3 className="text-xl font-semibold mb-3">SmartFund™ Allocation</h3>
                 <p className="text-muted-foreground">
-                  Automatically funds emergency housing providers and essential services 
-                  through blockchain smart contracts.
+                  Smart contracts automatically save 15% towards participants' emergency housing goals like tiny homes. 
+                  AI-optimized token staking compounds these funds over time. 
+                  Each participant builds their housing fund through every donation received.
                 </p>
               </div>
 
@@ -268,8 +270,9 @@ export default function AboutPage() {
                 </div>
                 <h3 className="text-xl font-semibold mb-3">Platform Operations</h3>
                 <p className="text-muted-foreground">
-                  Covers technology infrastructure, security, and platform development 
-                  to ensure reliable service delivery.
+                  Covers technology infrastructure, security audits, and continuous platform development for reliability. 
+                  Ensures 99.99% uptime through distributed cloud architecture and automated monitoring systems. 
+                  Funds regulatory compliance, customer support, and global scaling capabilities.
                 </p>
               </div>
             </div>

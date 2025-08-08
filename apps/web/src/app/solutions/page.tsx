@@ -108,7 +108,7 @@ export default function SolutionsPage() {
 
           <div className="grid md:grid-cols-2 gap-8">
             {/* Shelters & NGOs */}
-            <Card className="border-2 hover:shadow-xl transition-all duration-300">
+            <Card className="border-2 border-gray-200 dark:border-gray-800 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-xl transition-all duration-300">
               <CardHeader className="text-center pb-4">
                 <div className="w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Building2 className="h-8 w-8 text-blue-600 dark:text-blue-400" />
@@ -143,7 +143,7 @@ export default function SolutionsPage() {
                   </div>
                 </div>
                 <Link href="/solutions/organizations">
-                  <Button className="w-full mt-6">
+                  <Button className="w-full mt-6 border-2 border-black text-black hover:bg-black hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black" variant="outline">
                     <Building2 className="h-4 w-4 mr-2" />
                     Learn More for Organizations
                   </Button>
@@ -152,7 +152,7 @@ export default function SolutionsPage() {
             </Card>
 
             {/* Government */}
-            <Card className="border-2 hover:shadow-xl transition-all duration-300">
+            <Card className="border-2 border-gray-200 dark:border-gray-800 hover:border-purple-300 dark:hover:border-purple-700 hover:shadow-xl transition-all duration-300">
               <CardHeader className="text-center pb-4">
                 <div className="w-16 h-16 bg-purple-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
                   <MapPin className="h-8 w-8 text-purple-600 dark:text-purple-400" />
@@ -187,7 +187,7 @@ export default function SolutionsPage() {
                   </div>
                 </div>
                 <Link href="/solutions/government">
-                  <Button className="w-full mt-6" variant="outline">
+                  <Button className="w-full mt-6 border-2 border-black text-black hover:bg-black hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black" variant="outline">
                     <MapPin className="h-4 w-4 mr-2" />
                     Government Solutions
                   </Button>
@@ -196,7 +196,7 @@ export default function SolutionsPage() {
             </Card>
 
             {/* Participants (Homeless) */}
-            <Card className="border-2 hover:shadow-xl transition-all duration-300">
+            <Card className="border-2 border-gray-200 dark:border-gray-800 hover:border-green-300 dark:hover:border-green-700 hover:shadow-xl transition-all duration-300">
               <CardHeader className="text-center pb-4">
                 <div className="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Users className="h-8 w-8 text-green-600 dark:text-green-400" />
@@ -231,7 +231,7 @@ export default function SolutionsPage() {
                   </div>
                 </div>
                 <Link href="/solutions/participants">
-                  <Button className="w-full mt-6" variant="outline">
+                  <Button className="w-full mt-6 border-2 border-black text-black hover:bg-black hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black" variant="outline">
                     <Users className="h-4 w-4 mr-2" />
                     Participant Support
                   </Button>
@@ -240,7 +240,7 @@ export default function SolutionsPage() {
             </Card>
 
             {/* Donors */}
-            <Card className="border-2 hover:shadow-xl transition-all duration-300">
+            <Card className="border-2 border-gray-200 dark:border-gray-800 hover:border-orange-300 dark:hover:border-orange-700 hover:shadow-xl transition-all duration-300">
               <CardHeader className="text-center pb-4">
                 <div className="w-16 h-16 bg-orange-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Heart className="h-8 w-8 text-orange-600 dark:text-orange-400" />
@@ -275,7 +275,7 @@ export default function SolutionsPage() {
                   </div>
                 </div>
                 <Link href="/solutions/donors">
-                  <Button className="w-full mt-6">
+                  <Button className="w-full mt-6 border-2 border-black text-black hover:bg-black hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black" variant="outline">
                     <Heart className="h-4 w-4 mr-2" />
                     Start Giving Today
                   </Button>
@@ -292,22 +292,31 @@ export default function SolutionsPage() {
           <h2 className="text-3xl font-bold mb-6">Why Trust SHELTR?</h2>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="space-y-4">
-              <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
-                <Shield className="h-6 w-6 text-primary" />
+              <div className="relative w-20 h-20 mx-auto">
+                <div className="w-full h-full bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg ring-4 ring-blue-500/20">
+                  <Shield className="h-10 w-10 text-white" />
+                </div>
+                <div className="absolute -inset-1 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full opacity-20 blur-sm"></div>
               </div>
               <h3 className="text-xl font-semibold">100% Transparent</h3>
               <p className="text-muted-foreground">Blockchain tech ensures every transaction is visible and verified</p>
             </div>
             <div className="space-y-4">
-              <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
-                <BarChart3 className="h-6 w-6 text-primary" />
+              <div className="relative w-20 h-20 mx-auto">
+                <div className="w-full h-full bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center shadow-lg ring-4 ring-green-500/20">
+                  <BarChart3 className="h-10 w-10 text-white" />
+                </div>
+                <div className="absolute -inset-1 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full opacity-20 blur-sm"></div>
               </div>
               <h3 className="text-xl font-semibold">Data-Driven</h3>
               <p className="text-muted-foreground">Real-time analytics help optimize resource allocation and impact</p>
             </div>
             <div className="space-y-4">
-              <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
-                <Heart className="h-6 w-6 text-primary" />
+              <div className="relative w-20 h-20 mx-auto">
+                <div className="w-full h-full bg-gradient-to-br from-red-500 to-pink-600 rounded-full flex items-center justify-center shadow-lg ring-4 ring-red-500/20">
+                  <Heart className="h-10 w-10 text-white" />
+                </div>
+                <div className="absolute -inset-1 bg-gradient-to-br from-red-500 to-pink-600 rounded-full opacity-20 blur-sm"></div>
               </div>
               <h3 className="text-xl font-semibold">Human-Centered</h3>
               <p className="text-muted-foreground">Built with dignity and respect for all participants in the system</p>

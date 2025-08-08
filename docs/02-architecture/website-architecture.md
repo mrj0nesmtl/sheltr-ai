@@ -1,4 +1,4 @@
-# 🌐 SHELTR-AI Website Architecture & QA Testing Guide
+# 🌐 SHELTR Platform Architecture
 
 **Complete Site Structure, Role-Based Features, and Quality Assurance Framework**
 

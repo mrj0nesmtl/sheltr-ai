@@ -6,13 +6,20 @@
 
 ## 📝 Executive Abstract
 
-SHELTR represents a revolutionary breakthrough in addressing homelessness through cutting-edge dual-token blockchain technology. By combining QR-code enabled direct donations, blockchain verification, and AI-driven insights, SHELTR creates the world's most transparent, efficient, and impactful charitable giving ecosystem.
+SHELTR was born from a simple but powerful realization: **"It's better to solve than to manage."** This philosophy, inspired by Malcolm Gladwell's groundbreaking essay "Million-Dollar Murray" in The New Yorker, became the foundation of our approach to addressing homelessness through technology.
+
+This journey into tech-for-good wasn't born in a boardroom—it emerged from witnessing the disconnect between charitable intentions and measurable impact. Too often, well-meaning donations disappeared into administrative overhead, leaving both donors frustrated and those in need still struggling.
+
+SHELTR represents an attempt to join the brilliant collective of Internet Angels doing transformative work—creators who use their platforms and influence to directly help those in need, proving that technology and social media can be forces for genuine, lasting change.
 
 Our revolutionary **SmartFund™ distribution model** ensures 80% of donations reach participants as stable SHELTR-S tokens, 15% builds sustainable housing solutions, and 5% maintains platform operations. Every new participant receives 100 SHELTR-S tokens ($100 value) as a welcome bonus, creating immediate engagement and platform adoption.
 
-We're not just building software—we're **"hacking homelessness"** by merging technological innovation with compassionate action, creating verifiable impact through blockchain transparency, and fostering an engaged community of donors, participants, and stakeholders aligned for sustainable change.
+We're not just building software—we're **"hacking homelessness"** by merging technological innovation with compassionate action, creating verifiable impact through blockchain transparency, and fostering an engaged community of like-minded partners, creators, and stakeholders aligned for sustainable change.
 
-This document provides a comprehensive overview of our mission, technology, and impact framework. For qualified investors interested in supporting this revolutionary platform, please visit our dedicated [Investor Relations Portal](https://sheltr-ai.web.app/investor-relations) for detailed financial information and partnership opportunities.
+This document provides a comprehensive overview of our mission, technology, and impact framework. We're always interested in partnerships with organizations, influencers, and community leaders who share our vision of moving the platform and shelter framework forward into the future.
+
+> *"It costs a lot more to manage a problem than it does to solve it."*  
+> — Malcolm Gladwell, ["Million-Dollar Murray,"](https://www.newyorker.com/magazine/2006/02/13/million-dollar-murray) The New Yorker (2006)
 
 ---
 
@@ -175,7 +182,7 @@ The SHELTR platform creates value through network effects and utility rather tha
 - **Partnership Integration**: Shelter and NGO partnerships expand platform reach
 - **Technology Innovation**: Continuous platform improvement attracts new stakeholders
 
-*For detailed financial information including funding rounds, token economics, and investment opportunities, qualified investors can access our comprehensive materials through the [Investor Relations Portal](https://sheltr-ai.web.app/investor-relations).*
+*For organizations, influencers, and community leaders interested in strategic partnerships to expand our platform reach and impact, we welcome collaboration opportunities that align with our mission to revolutionize charitable giving and support systems.*
 
 ---
 
@@ -327,7 +334,7 @@ function processDonation(address donor, address participant, uint256 amount)
 
 ## 🚀 Implementation Roadmap: Path to Global Impact
 
-### Phase 1: Foundation (Q1 2025) - $150K Pre-Seed ✅
+### Phase 1: Foundation (Q1 2025) - Community Launch ✅
 
 **Technical Deliverables**:
 - ✅ Smart contract deployment and security audits
@@ -336,8 +343,8 @@ function processDonation(address donor, address participant, uint256 amount)
 - 🟡 QR donation system with automatic distribution
 - 🔵 Participant onboarding with 100 token welcome bonus
 
-**Business Milestones**:
-- 🟡 $150,000 raised from qualified investors
+**Community Milestones**:
+- 🟡 Strategic partnerships with key shelter organizations established
 - 🔵 100 initial participants across 5 Montreal shelters
 - 🔵 $50,000 monthly donation volume
 - 🔵 Platform beta launch with mobile optimization
@@ -355,9 +362,9 @@ function processDonation(address donor, address participant, uint256 amount)
 - 2,500 active participants across 25 partner shelters
 - $150,000 monthly donation volume
 - Housing fund growth to $135,000 with 6%+ yields
-- Preparation for $1M seed round fundraising
+- Partnership expansion with regional shelter networks
 
-### Phase 3: Scale (Q4 2025-Q1 2026) - $1M Seed Round
+### Phase 3: Scale (Q4 2025-Q1 2026) - National Expansion
 
 **Platform Evolution**:
 - Native mobile applications (iOS/Android)
@@ -370,9 +377,9 @@ function processDonation(address donor, address participant, uint256 amount)
 - 10,000 active participants
 - 100 partner organizations across North America
 - $600,000 monthly donation volume  
-- Series A preparation with institutional investors
+- Strategic partnerships with major foundations and corporate programs
 
-### Phase 4: Global Expansion (2026+) - Series A & Beyond
+### Phase 4: Global Expansion (2026+) - International Impact
 
 **International Scaling**:
 - Multi-currency support and localized tokens
@@ -383,7 +390,7 @@ function processDonation(address donor, address participant, uint256 amount)
 **Strategic Objectives**:
 - 100,000+ participants globally
 - $5M+ monthly donation volume
-- IPO or major acquisition consideration
+- Platform sustainability through diverse partnership revenue
 - Industry leadership in blockchain charitable technology
 
 ---
@@ -480,8 +487,8 @@ function processDonation(address donor, address participant, uint256 amount)
 **For Mission-Aligned Supporters**:
 We welcome individuals and organizations who share our vision of creating lasting change in how we address homelessness. Whether you're a donor, volunteer, advocate, or simply someone who believes technology can create positive social impact, there are many ways to get involved in the SHELTR community.
 
-**For Investment Opportunities**:
-Qualified investors interested in supporting SHELTR's revolutionary approach to charitable technology can access comprehensive financial information, investment terms, and partnership opportunities through our dedicated [Investor Relations Portal](https://sheltr-ai.web.app/investor-relations). This separate portal provides detailed materials for those seeking to understand the business and financial aspects of our platform.
+**For Partnership Opportunities**:
+Organizations, foundations, and community leaders interested in supporting SHELTR's revolutionary approach to charitable technology can explore collaboration opportunities that align with our mission. We welcome partnerships that help expand our platform reach, enhance our impact, and move the shelter framework forward into the future.
 
 ### Final Commitment: Technology in Service of Humanity
 
@@ -497,7 +504,7 @@ We are not just building a platform; we are creating a movement that proves tech
 
 **🏠 SHELTR-AI: Building a Better Future Through Technology 🚀**
 
-[Platform Overview](https://sheltr-ai.web.app) • [Technical Documentation](https://sheltr-ai.web.app/docs) • [GitHub Repository](https://github.com/mrj0nesmtl/sheltr-ai) • [Investor Relations](https://sheltr-ai.web.app/investor-relations) • [Community](https://bsky.app/profile/sheltrops.bsky.social)
+[Platform Overview](https://sheltr-ai.web.app) • [Technical Documentation](https://sheltr-ai.web.app/docs) • [GitHub Repository](https://github.com/mrj0nesmtl/sheltr-ai) • [Community](https://bsky.app/profile/sheltrops.bsky.social)
 
 *"Innovation meets compassion at the intersection of technology and social change."*
 
@@ -509,6 +516,6 @@ We are not just building a platform; we are creating a movement that proves tech
 ---
 
 *Document Classification: Investment Grade Overview*  
-*Last Updated: January 25, 2025*  
-*Version: 1.0.0*  
+*Last Updated: Aug 7, 2025*  
+*Version: 1.3.0*  
 *Status: PRODUCTION READY* ✅

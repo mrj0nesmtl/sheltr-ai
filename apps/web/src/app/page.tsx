@@ -158,7 +158,7 @@ export default function HomePage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               
               {/* Direct Impact */}
-              <div className="bg-card rounded-lg border p-6 text-center">
+              <div className="bg-card rounded-lg border-2 border-gray-200 dark:border-gray-800 hover:border-purple-300 dark:hover:border-purple-700 transition-colors p-6 text-center">
                 <div className="flex items-center justify-center mx-auto mb-4">
                   <Heart className="w-8 h-8 text-purple-400" />
                 </div>
@@ -169,7 +169,7 @@ export default function HomePage() {
               </div>
 
               {/* Smart Allocation */}
-              <div className="bg-card rounded-lg border p-6 text-center">
+              <div className="bg-card rounded-lg border-2 border-gray-200 dark:border-gray-800 hover:border-purple-300 dark:hover:border-purple-700 transition-colors p-6 text-center">
                 <div className="flex items-center justify-center mx-auto mb-4">
                   <Wallet className="w-8 h-8 text-purple-400" />
                 </div>
@@ -180,7 +180,7 @@ export default function HomePage() {
               </div>
 
               {/* Housing Focus */}
-              <div className="bg-card rounded-lg border p-6 text-center">
+              <div className="bg-card rounded-lg border-2 border-gray-200 dark:border-gray-800 hover:border-blue-300 dark:hover:border-blue-700 transition-colors p-6 text-center">
                 <div className="flex items-center justify-center mx-auto mb-4">
                   <Home className="w-8 h-8 text-blue-400" />
                 </div>
@@ -191,7 +191,7 @@ export default function HomePage() {
               </div>
 
               {/* QR Technology */}
-              <div className="bg-card rounded-lg border p-6 text-center">
+              <div className="bg-card rounded-lg border-2 border-gray-200 dark:border-gray-800 hover:border-green-300 dark:hover:border-green-700 transition-colors p-6 text-center">
                 <div className="flex items-center justify-center mx-auto mb-4">
                   <QrCode className="w-8 h-8 text-green-400" />
                 </div>
@@ -202,7 +202,7 @@ export default function HomePage() {
               </div>
 
               {/* Blockchain Security */}
-              <div className="bg-card rounded-lg border p-6 text-center">
+              <div className="bg-card rounded-lg border-2 border-gray-200 dark:border-gray-800 hover:border-red-300 dark:hover:border-red-700 transition-colors p-6 text-center">
                 <div className="flex items-center justify-center mx-auto mb-4">
                   <Shield className="w-8 h-8 text-red-400" />
                 </div>
@@ -213,7 +213,7 @@ export default function HomePage() {
               </div>
 
               {/* Impact Tracking */}
-              <div className="bg-card rounded-lg border p-6 text-center">
+              <div className="bg-card rounded-lg border-2 border-gray-200 dark:border-gray-800 hover:border-yellow-300 dark:hover:border-yellow-700 transition-colors p-6 text-center">
                 <div className="flex items-center justify-center mx-auto mb-4">
                   <BarChart3 className="w-8 h-8 text-yellow-400" />
                 </div>
@@ -238,7 +238,7 @@ export default function HomePage() {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="text-center p-6 bg-card rounded-lg border">
+              <div className="text-center p-6 bg-card rounded-lg border-2 border-gray-200 dark:border-gray-800 hover:border-primary/50 transition-colors">
                 <div className="flex items-center justify-center mx-auto mb-4">
                   <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -250,7 +250,7 @@ export default function HomePage() {
                 </p>
               </div>
               
-              <div className="text-center p-6 bg-card rounded-lg border">
+              <div className="text-center p-6 bg-card rounded-lg border-2 border-gray-200 dark:border-gray-800 hover:border-primary/50 transition-colors">
                 <div className="flex items-center justify-center mx-auto mb-4">
                   <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
@@ -262,7 +262,7 @@ export default function HomePage() {
                 </p>
               </div>
               
-              <div className="text-center p-6 bg-card rounded-lg border">
+              <div className="text-center p-6 bg-card rounded-lg border-2 border-gray-200 dark:border-gray-800 hover:border-primary/50 transition-colors">
                 <div className="flex items-center justify-center mx-auto mb-4">
                   <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />

@@ -6,23 +6,11 @@
    - Environments: .env.local, .env.production
 
    Creating an optimized production build ...
- ✓ Compiled successfully in 2000ms
+ ✓ Compiled successfully in 4.0s
    Skipping validation of types
    Skipping linting
    Collecting page data ...
    Generating static pages (0/58) ...
-🔍 Dashboard Layout Debug: {
-  userEmail: undefined,
-  userRole: undefined,
-  userDisplayName: undefined,
-  userName: 'User'
-}
-🔍 Dashboard Layout Debug: {
-  userEmail: undefined,
-  userRole: undefined,
-  userDisplayName: undefined,
-  userName: 'User'
-}
 🔍 Dashboard Layout Debug: {
   userEmail: undefined,
   userRole: undefined,
@@ -139,25 +127,37 @@
   userDisplayName: undefined,
   userName: 'User'
 }
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
+🔍 Dashboard Layout Debug: {
+  userEmail: undefined,
+  userRole: undefined,
+  userDisplayName: undefined,
+  userName: 'User'
+}
    Generating static pages (43/58) 
-🔍 Dashboard Layout Debug: {
-  userEmail: undefined,
-  userRole: undefined,
-  userDisplayName: undefined,
-  userName: 'User'
-}
-🔍 Dashboard Layout Debug: {
-  userEmail: undefined,
-  userRole: undefined,
-  userDisplayName: undefined,
-  userName: 'User'
-}
-🔍 Dashboard Layout Debug: {
-  userEmail: undefined,
-  userRole: undefined,
-  userDisplayName: undefined,
-  userName: 'User'
-}
  ✓ Generating static pages (58/58)
    Finalizing page optimization ...
    Collecting build traces ...
@@ -203,20 +203,20 @@ Route (app)                                   Size  First Load JS
 ├ ○ /docs/blockchain                       7.53 kB         120 kB
 ├ ○ /docs/hacking-homelessness             9.67 kB         122 kB
 ├ ○ /docs/participant-guide                2.51 kB         120 kB
-├ ○ /docs/roadmap                          2.87 kB         120 kB
+├ ○ /docs/roadmap                          3.26 kB         120 kB
 ├ ○ /docs/website-architecture             8.09 kB         121 kB
 ├ ○ /docs/whitepaper                       6.78 kB         120 kB
-├ ○ /donate                                 5.5 kB         118 kB
+├ ○ /donate                                5.77 kB         119 kB
 ├ ○ /donation/success                      8.96 kB         122 kB
 ├ ○ /impact                                10.1 kB         123 kB
 ├ ○ /investor-access                       5.86 kB         119 kB
 ├ ○ /investor-relations                    23.9 kB         143 kB
 ├ ○ /login                                 5.75 kB         227 kB
-├ ● /participant/[id]                      9.55 kB         122 kB
+├ ● /participant/[id]                      10.1 kB         123 kB
 ├   └ /participant/demo-participant-001
 ├ ○ /privacy                               10.5 kB         123 kB
 ├ ○ /register                              6.36 kB         228 kB
-├ ○ /scan-give                             18.3 kB         138 kB
+├ ○ /scan-give                               19 kB         139 kB
 ├ ○ /solutions                             8.02 kB         121 kB
 ├ ○ /solutions/donors                      2.76 kB         116 kB
 ├ ○ /solutions/government                  2.76 kB         116 kB

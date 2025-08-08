@@ -91,8 +91,8 @@ export default function HackingHomelessnessPage() {
                 👔 Executive Overview
               </h3>
               <p className="text-purple-700 dark:text-purple-300 text-sm">
-                This executive summary presents SHELTR's vision, theory of change, and market opportunity 
-                for executives, impact investors, media, and strategic partners.
+                This executive summary presents SHELTR's vision, theory of change, and partnership opportunities 
+                for organizations, influencers, community leaders, media, and strategic partners.
               </p>
             </div>
 
@@ -102,22 +102,38 @@ export default function HackingHomelessnessPage() {
                 <h2 className="text-3xl font-bold mb-6">Executive Abstract</h2>
                 <div className="prose prose-lg max-w-none dark:prose-invert">
                   <p>
-                    SHELTR represents a revolutionary breakthrough in addressing homelessness through cutting-edge 
-                    dual-token blockchain technology. By combining QR-code enabled direct donations, blockchain verification, 
-                    and AI-driven insights, SHELTR creates the world's most transparent, efficient, and impactful 
-                    charitable giving ecosystem.
+                    SHELTR was born from a simple but powerful realization: <strong>"It's better to solve than to manage."</strong> 
+                    This philosophy, inspired by Malcolm Gladwell's groundbreaking essay "Million-Dollar Murray" in The New Yorker, 
+                    became the foundation of our approach to addressing homelessness through technology.
                   </p>
                   <p>
-                    <strong>Investment Opportunity</strong>: Currently raising $150,000 in pre-seed funding through 
-                    SHELTR token sales, with clear path to $1M seed round and institutional Series A expansion. 
-                    Our token-based investment structure offers direct utility exposure, governance rights, 
-                    and significant growth potential while creating measurable social impact.
+                    This journey into tech-for-good wasn't born in a boardroom—it emerged from witnessing 
+                    the disconnect between charitable intentions and measurable impact. Too often, well-meaning donations 
+                    disappeared into administrative overhead, leaving both donors frustrated and those in need still struggling.
+                  </p>
+                  <p>
+                    SHELTR represents an attempt to join the brilliant collective of Internet Angels doing transformative work—
+                    creators who use their platforms and influence to directly help those in need, proving that technology 
+                    and social media can be forces for genuine, lasting change.
+                  </p>
+                  <p>
+                    Our revolutionary <strong>SmartFund™ distribution model</strong> ensures 80% of donations reach participants as 
+                    stable SHELTR-S tokens, 15% builds sustainable housing solutions, and 5% maintains platform operations. 
+                    Every new participant receives 100 SHELTR-S tokens ($100 value) as a welcome bonus, creating immediate 
+                    engagement and platform adoption.
                   </p>
                   <p>
                     We're not just building software—we're <strong>"hacking homelessness"</strong> by merging 
                     technological innovation with compassionate action, creating verifiable impact through 
-                    blockchain transparency, and fostering an engaged community aligned for sustainable change.
+                    blockchain transparency, and fostering an engaged community of like-minded partners, creators, 
+                    and stakeholders aligned for sustainable change.
                   </p>
+                  
+                  <blockquote className="border-l-4 border-purple-500 pl-4 italic text-purple-700 dark:text-purple-300 my-6">
+                    "It costs a lot more to manage a problem than it does to solve it."
+                    <br />
+                    <cite className="text-sm font-normal">— Malcolm Gladwell, "Million-Dollar Murray," The New Yorker (2006)</cite>
+                  </blockquote>
                 </div>
               </div>
 

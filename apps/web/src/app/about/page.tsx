@@ -143,7 +143,7 @@ export default function AboutPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/docs">
-                <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-black">
+                <Button variant="outline" size="lg" className="border-2 border-white text-white bg-white/10 hover:bg-white hover:text-black backdrop-blur-sm">
                   <Shield className="h-5 w-5 mr-2" />
                   Technical Docs
                 </Button>
@@ -168,7 +168,7 @@ export default function AboutPage() {
             </div>
 
             <div className="grid md:grid-cols-3 gap-8 mb-12">
-              <Card className="border-2 hover:shadow-lg transition-shadow">
+              <Card className="border-2 border-gray-200 dark:border-gray-800 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-lg transition-all">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <QrCode className="h-6 w-6 text-blue-600" />
@@ -186,7 +186,7 @@ export default function AboutPage() {
                 </CardContent>
               </Card>
 
-              <Card className="border-2 hover:shadow-lg transition-shadow">
+              <Card className="border-2 border-gray-200 dark:border-gray-800 hover:border-green-300 dark:hover:border-green-700 hover:shadow-lg transition-all">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Shield className="h-6 w-6 text-green-600" />
@@ -204,7 +204,7 @@ export default function AboutPage() {
                 </CardContent>
               </Card>
 
-              <Card className="border-2 hover:shadow-lg transition-shadow">
+              <Card className="border-2 border-gray-200 dark:border-gray-800 hover:border-purple-300 dark:hover:border-purple-700 hover:shadow-lg transition-all">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Users className="h-6 w-6 text-purple-600" />
@@ -281,14 +281,13 @@ export default function AboutPage() {
                   Every transaction is recorded on the blockchain. Donors can track their impact in real-time, 
                   and participants maintain full control over their funds.
                 </p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
-                    <Target className="h-5 w-5 mr-2" />
-                    Track Your Impact
-                  </Button>
-                  <Button variant="outline" size="lg">
-                    Learn About Blockchain
-                  </Button>
+                <div className="flex justify-center">
+                  <Link href="/solutions">
+                    <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
+                      <Heart className="h-5 w-5 mr-2" />
+                      Explore Solutions
+                    </Button>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -355,7 +354,7 @@ export default function AboutPage() {
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-              <Card className="hover:shadow-lg transition-shadow">
+              <Card className="border-2 border-gray-200 dark:border-gray-800 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-lg transition-all">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Database className="h-6 w-6 text-blue-600" />
@@ -373,7 +372,7 @@ export default function AboutPage() {
                 </CardContent>
               </Card>
 
-              <Card className="hover:shadow-lg transition-shadow">
+              <Card className="border-2 border-gray-200 dark:border-gray-800 hover:border-purple-300 dark:hover:border-purple-700 hover:shadow-lg transition-all">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Coins className="h-6 w-6 text-purple-600" />
@@ -391,7 +390,7 @@ export default function AboutPage() {
                 </CardContent>
               </Card>
 
-              <Card className="hover:shadow-lg transition-shadow">
+              <Card className="border-2 border-gray-200 dark:border-gray-800 hover:border-green-300 dark:hover:border-green-700 hover:shadow-lg transition-all">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <QrCode className="h-6 w-6 text-green-600" />
@@ -409,7 +408,7 @@ export default function AboutPage() {
                 </CardContent>
               </Card>
 
-              <Card className="hover:shadow-lg transition-shadow">
+              <Card className="border-2 border-gray-200 dark:border-gray-800 hover:border-orange-300 dark:hover:border-orange-700 hover:shadow-lg transition-all">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Zap className="h-6 w-6 text-orange-600" />
@@ -445,13 +444,13 @@ export default function AboutPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/solutions">
-                <Button size="lg" variant="secondary" className="w-full sm:w-auto bg-background text-foreground hover:bg-background/90">
+                <Button size="lg" variant="secondary" className="w-full sm:w-auto bg-white text-black border-2 border-white hover:bg-gray-100">
                   <Heart className="h-5 w-5 mr-2" />
                   Explore Solutions
                 </Button>
               </Link>
               <Link href="/scan-give">
-                <Button variant="outline" size="lg" className="w-full sm:w-auto border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary">
+                <Button variant="outline" size="lg" className="w-full sm:w-auto border-2 border-white text-white bg-white/10 hover:bg-white hover:text-black backdrop-blur-sm">
                   Start Giving Today
                 </Button>
               </Link>

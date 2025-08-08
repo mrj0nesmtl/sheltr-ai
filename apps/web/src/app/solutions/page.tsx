@@ -22,7 +22,6 @@ export default function SolutionsPage() {
               <ThemeLogo />
             </Link>
             <div className="hidden md:flex space-x-8">
-              <Link href="/" className="text-muted-foreground hover:text-primary transition-colors">Home</Link>
               <Link href="/about" className="text-muted-foreground hover:text-primary transition-colors">About</Link>
               <Link href="/solutions" className="text-foreground hover:text-primary transition-colors">Solutions</Link>
               <Link href="/scan-give" className="text-muted-foreground hover:text-primary transition-colors">Scan & Give</Link>

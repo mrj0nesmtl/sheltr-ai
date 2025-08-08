@@ -25,38 +25,37 @@ export default function AboutPage() {
             </div>
             
             {/* Desktop Navigation */}
-            <div className="hidden md:block">
-              <div className="ml-10 flex items-baseline space-x-4">
-                <Link href="/about" className="text-primary px-3 py-2 text-sm font-medium">
-                  About
+            <div className="hidden md:flex space-x-8">
+              <Link href="/about" className="text-foreground hover:text-primary transition-colors">
+                About
+              </Link>
+              <Link href="/solutions" className="text-muted-foreground hover:text-primary transition-colors">
+                Solutions
+              </Link>
+              <Link href="/scan-give" className="text-muted-foreground hover:text-primary transition-colors">
+                Scan & Give
+              </Link>
+              <Link href="/impact" className="text-muted-foreground hover:text-primary transition-colors">
+                Impact
+              </Link>
+            </div>
+
+            <div className="flex items-center space-x-4">
+              <ThemeToggle />
+              <div className="hidden md:flex items-center space-x-4">
+                <Link href="/login">
+                  <Button variant="ghost" size="sm">
+                    <LogIn className="h-4 w-4 mr-2" />
+                    Sign In
+                  </Button>
                 </Link>
-                <Link href="/solutions" className="hover:text-primary px-3 py-2 text-sm font-medium">
-                  Solutions
-                </Link>
-                <Link href="/scan-give" className="hover:text-primary px-3 py-2 text-sm font-medium">
-                  Scan & Give
-                </Link>
-                <Link href="/impact" className="hover:text-primary px-3 py-2 text-sm font-medium">
-                  Impact
+                <Link href="/register">
+                  <Button size="sm">Get Started</Button>
                 </Link>
               </div>
-            </div>
-
-            <div className="hidden md:flex items-center space-x-4">
-              <Link href="/login">
-                <Button variant="ghost" size="sm">
-                  <LogIn className="h-4 w-4 mr-2" />
-                  Sign In
-                </Button>
-              </Link>
-              <Link href="/register">
-                <Button size="sm">Get Started</Button>
-              </Link>
-              <ThemeToggle />
-            </div>
 
             {/* Mobile menu button */}
-            <div className="md:hidden flex items-center space-x-2">
+            <div className="md:hidden">
               <ThemeToggle />
               <Button
                 variant="ghost"

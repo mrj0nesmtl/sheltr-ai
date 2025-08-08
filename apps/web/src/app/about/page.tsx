@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Menu, X, LogIn, Coins, Shield, Zap, QrCode, UserCheck, CreditCard, Database, Smartphone, Building2, Handshake, Globe, ArrowRight, Users, Heart, Target } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { ThemeToggle } from '@/components/theme-toggle';
 import Footer from '@/components/Footer';
 import ThemeLogo from '@/components/ThemeLogo';
@@ -53,18 +54,13 @@ export default function AboutPage() {
                   <Button size="sm">Get Started</Button>
                 </Link>
               </div>
-
-            {/* Mobile menu button */}
-            <div className="md:hidden">
-              <ThemeToggle />
-              <Button
-                variant="ghost"
-                size="sm"
+              {/* Mobile menu button */}
+              <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="p-2"
+                className="md:hidden p-2 text-muted-foreground hover:text-foreground"
               >
-                {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-              </Button>
+                {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              </button>
             </div>
           </div>
 
@@ -100,9 +96,9 @@ export default function AboutPage() {
                 >
                   Impact
                 </Link>
-                <div className="px-3 py-2 space-y-2">
+                <div className="border-t pt-2 mt-2">
                   <Link href="/login" onClick={() => setIsMenuOpen(false)}>
-                    <Button variant="ghost" size="sm" className="w-full justify-start">
+                    <Button variant="ghost" size="sm" className="w-full justify-start mb-2">
                       <LogIn className="h-4 w-4 mr-2" />
                       Sign In
                     </Button>
@@ -297,166 +293,126 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* The Story Behind SHELTR - Enhanced */}
-      <section className="py-20 bg-background">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Enterprise-Grade Technology */}
+      <section className="py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">The Story Behind SHELTR</h2>
-            <p className="text-xl text-muted-foreground">From concept to community-driven solution</p>
-          </div>
-          
-          <div className="space-y-8">
-            <div className="prose prose-lg mx-auto dark:prose-invert">
-              <p className="text-lg leading-relaxed">
-                SHELTR was born from a simple but powerful realization: <strong>&ldquo;It&rsquo;s better to solve than to manage.&rdquo;</strong> 
-                This philosophy, inspired by Malcolm Gladwell&rsquo;s groundbreaking essay <em>&ldquo;Million-Dollar Murray&rdquo;</em> in The New Yorker, 
-                became the foundation of our approach to addressing homelessness through technology.
-              </p>
-              
-              <p className="text-lg leading-relaxed">
-                This journey into tech-for-good wasn&rsquo;t born in a boardroom—it emerged from witnessing 
-                the disconnect between charitable intentions and measurable impact. Too often, well-meaning donations 
-                disappeared into administrative overhead, leaving both donors frustrated and those in need still struggling.
-              </p>
-              
-              <p className="text-lg leading-relaxed">
-                SHELTR represents an attempt to join the brilliant collective of Internet Angels doing transformative work—
-                creators who use their platforms and influence to directly help those in need, proving that technology 
-                and social media can be forces for genuine, lasting change.
-              </p>
-            </div>
-            
-            {/* Malcolm Gladwell Reference Card */}
-            <div className="bg-card rounded-lg p-6 border-l-4 border-primary">
-              <blockquote className="text-lg italic mb-4">
-                &ldquo;It costs a lot more to manage a problem than it does to solve it.&rdquo;
-              </blockquote>
-              <cite className="text-sm text-muted-foreground">
-                — Malcolm Gladwell, <a href="https://www.newyorker.com/magazine/2006/02/13/million-dollar-murray" 
-                target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-                &ldquo;Million-Dollar Murray,&rdquo; The New Yorker (2006)
-                </a>
-              </cite>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Technology Stack */}
-      <section className="py-20 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                Enterprise-Grade Technology
-              </h2>
-              <p className="text-xl text-muted-foreground">
-                Built on Google Cloud with AI embeddings, Base blockchain, and modern web technologies
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-              <Card className="border-2 border-gray-200 dark:border-gray-800 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-lg transition-all">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Database className="h-6 w-6 text-blue-600" />
-                    Cloud Infrastructure
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground mb-3">
-                    Google Cloud Platform with AI trimmings for intelligent donor-participant matching
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    <span className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs px-2 py-1 rounded">Google Cloud AI</span>
-                    <span className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs px-2 py-1 rounded">Firebase</span>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="border-2 border-gray-200 dark:border-gray-800 hover:border-purple-300 dark:hover:border-purple-700 hover:shadow-lg transition-all">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Coins className="h-6 w-6 text-purple-600" />
-                    Blockchain Layer
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground mb-3">
-                    Base network integration with dual-token architecture
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    <span className="bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 text-xs px-2 py-1 rounded">Base Network</span>
-                    <span className="bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 text-xs px-2 py-1 rounded">SHELTR Tokens</span>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="border-2 border-gray-200 dark:border-gray-800 hover:border-green-300 dark:hover:border-green-700 hover:shadow-lg transition-all">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <QrCode className="h-6 w-6 text-green-600" />
-                    QR Code System
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground mb-3">
-                    Secure QR codes for instant donations and participant identification
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    <span className="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs px-2 py-1 rounded">Encrypted QR</span>
-                    <span className="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs px-2 py-1 rounded">Instant Payments</span>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="border-2 border-gray-200 dark:border-gray-800 hover:border-orange-300 dark:hover:border-orange-700 hover:shadow-lg transition-all">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Zap className="h-6 w-6 text-orange-600" />
-                    AI & Automation
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground mb-3">
-                    Intelligent systems for impact measurement and resource allocation
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    <span className="bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200 text-xs px-2 py-1 rounded">AI Analytics</span>
-                    <span className="bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200 text-xs px-2 py-1 rounded">Smart Distribution</span>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </div>
-      </section>
-
-
-
-      {/* Seamless Flow to Solutions - New CTA Section */}
-      <section className="py-20 bg-primary text-primary-foreground">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-primary-foreground">
-              Ready to See How It Works?
-            </h2>
-            <p className="text-xl mb-8 text-primary-foreground/90">
-              Discover our solutions for donors, participants, shelter organizations, and government agencies
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">Enterprise-Grade Technology</h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              Built on the world's most secure and scalable infrastructure
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/solutions">
-                <Button size="lg" variant="secondary" className="w-full sm:w-auto bg-white text-black border-2 border-white hover:bg-gray-100">
-                  <Heart className="h-5 w-5 mr-2" />
-                  Explore Solutions
-                </Button>
-              </Link>
-              <Link href="/scan-give">
-                <Button variant="outline" size="lg" className="w-full sm:w-auto border-2 border-white text-white bg-white/10 hover:bg-white hover:text-black backdrop-blur-sm">
-                  Start Giving Today
-                </Button>
-              </Link>
-            </div>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <Card className="text-center border-2 hover:border-primary/30 transition-all duration-300 hover:shadow-lg">
+              <CardHeader>
+                <Shield className="mx-auto h-12 w-12 text-primary mb-4" />
+                <CardTitle className="text-lg">Blockchain Security</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  Immutable transaction records and smart contract automation
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="text-center border-2 hover:border-primary/30 transition-all duration-300 hover:shadow-lg">
+              <CardHeader>
+                <Database className="mx-auto h-12 w-12 text-primary mb-4" />
+                <CardTitle className="text-lg">Real-Time Data</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  Live tracking of donations, distributions, and impact metrics
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="text-center border-2 hover:border-primary/30 transition-all duration-300 hover:shadow-lg">
+              <CardHeader>
+                <Smartphone className="mx-auto h-12 w-12 text-primary mb-4" />
+                <CardTitle className="text-lg">Mobile-First</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  Native apps for iOS and Android with offline capabilities
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="text-center border-2 hover:border-primary/30 transition-all duration-300 hover:shadow-lg">
+              <CardHeader>
+                <Globe className="mx-auto h-12 w-12 text-primary mb-4" />
+                <CardTitle className="text-lg">Global Scale</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  Multi-region deployment with 99.9% uptime guarantee
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Roadmap */}
+      <section className="py-16 bg-muted/30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">The Path Forward</h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              Our roadmap to transforming charitable giving across North America
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            <Card className="text-center border-2 hover:border-primary/30 transition-all duration-300 hover:shadow-lg">
+              <CardHeader>
+                <Badge className="mx-auto mb-4 bg-green-500/10 text-green-600 border-green-500/20">Phase 1</Badge>
+                <CardTitle>Foundation & Pilot</CardTitle>
+                <CardDescription>Montreal Market Entry</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ul className="text-sm text-muted-foreground space-y-2 text-left">
+                  <li>• Platform development & testing</li>
+                  <li>• Local shelter partnerships</li>
+                  <li>• Community pilot programs</li>
+                  <li>• User feedback integration</li>
+                </ul>
+              </CardContent>
+            </Card>
+
+            <Card className="text-center border-2 hover:border-primary/30 transition-all duration-300 hover:shadow-lg">
+              <CardHeader>
+                <Badge className="mx-auto mb-4 bg-blue-500/10 text-blue-600 border-blue-500/20">Phase 2</Badge>
+                <CardTitle>Regional Expansion</CardTitle>
+                <CardDescription>Canadian Network</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ul className="text-sm text-muted-foreground space-y-2 text-left">
+                  <li>• Toronto, Vancouver expansion</li>
+                  <li>• Provincial government partnerships</li>
+                  <li>• Mobile app launch</li>
+                  <li>• Corporate sponsorship program</li>
+                </ul>
+              </CardContent>
+            </Card>
+
+            <Card className="text-center border-2 hover:border-primary/30 transition-all duration-300 hover:shadow-lg">
+              <CardHeader>
+                <Badge className="mx-auto mb-4 bg-purple-500/10 text-purple-600 border-purple-500/20">Phase 3</Badge>
+                <CardTitle>Continental Impact</CardTitle>
+                <CardDescription>North American Network</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ul className="text-sm text-muted-foreground space-y-2 text-left">
+                  <li>• US market entry</li>
+                  <li>• International partnerships</li>
+                  <li>• AI-driven impact optimization</li>
+                  <li>• Global replication framework</li>
+                </ul>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
@@ -464,4 +420,4 @@ export default function AboutPage() {
       <Footer />
     </div>
   );
-} 
+}

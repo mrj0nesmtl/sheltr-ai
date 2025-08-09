@@ -82,14 +82,23 @@ export default function ImpactPage() {
       </nav>
 
       {/* Hero Section - Redesigned to be forward-looking */}
-      <section className="py-24 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-orange-500/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section 
+        className="py-24 relative"
+        style={{
+          backgroundImage: "url('/backgrounds/impact-bg.jpg')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      >
+        <div className="absolute inset-0 bg-black/50"></div>
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <Badge variant="secondary" className="mb-4 bg-gradient-to-r from-blue-500/10 to-purple-500/10 border-blue-500/20">Future Impact Vision</Badge>
-            <h1 className="text-4xl font-bold mb-6 text-foreground">
+            <Badge variant="secondary" className="mb-4 bg-white/20 text-white border-white/30 backdrop-blur-sm">Future Impact Vision</Badge>
+            <h1 className="text-4xl font-bold mb-6 text-white">
               Transforming Lives Through Technology
             </h1>
-            <p className="text-xl text-muted-foreground mb-12 max-w-4xl mx-auto">
+            <p className="text-xl text-gray-200 mb-12 max-w-4xl mx-auto">
               Our mission is to create systematic, scalable solutions that amplify the incredible work 
               of Internet Angels and ensure every act of kindness creates lasting, measurable impact.
             </p>
@@ -253,17 +262,21 @@ export default function ImpactPage() {
           
           <div className="space-y-8">
             <div className="prose prose-lg mx-auto dark:prose-invert">
-              <p className="text-lg leading-relaxed">
+              <p className="text-lg leading-relaxed mb-8">
                 When we first discovered Ryan and Tiny Tiny Homes in Toronto, we saw the future of homelessness solutions. 
                 Their mobile emergency shelters replace unsafe tent encampments with dignified, secure alternatives. 
                 Creators like this inspire our vision for what&rsquo;s possible when technology meets compassion.
               </p>
               
-              <p className="text-lg leading-relaxed">
+              <p className="text-lg leading-relaxed mb-8">
                 SHELTR builds on the legacy of digital humanitarians who prove that social media platforms can be 
                 forces for genuine change, creating systematic, scalable solutions that ensure every act of kindness 
-                creates lasting impact through blockchain transparency and AI-driven insights. These Internet Angels will 
-                all benefit from SHELTR&rsquo;s direct funding distribution as we energize and contribute to their already incredible efforts.
+                creates lasting impact through blockchain transparency and AI-driven insights.
+              </p>
+              
+              <p className="text-lg leading-relaxed mb-8">
+                These Internet Angels will all benefit from SHELTR&rsquo;s direct funding distribution as we energize 
+                and contribute to their already incredible efforts.
               </p>
             </div>
             
@@ -363,69 +376,7 @@ export default function ImpactPage() {
         </div>
       </section>
 
-      {/* Future Technology Integration */}
-      <section className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4">Technology Roadmap</h2>
-            <p className="text-xl text-muted-foreground">Building the future of social impact technology</p>
-          </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <Card>
-              <CardContent className="p-6 text-center">
-                <div className="relative">
-                  <Badge variant="secondary" className="absolute -top-3 -right-3 bg-green-500/10 text-green-600 border-green-500/20">
-                    Q1 2025
-                  </Badge>
-                  <Shield className="h-8 w-8 text-green-600 dark:text-green-400 mx-auto mb-4" />
-                  <h3 className="text-xl font-bold mb-2">Smart Contracts</h3>
-                  <p className="text-muted-foreground text-sm">Automated fund distribution and transparency</p>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="p-6 text-center">
-                <div className="relative">
-                  <Badge variant="secondary" className="absolute -top-3 -right-3 bg-blue-500/10 text-blue-600 border-blue-500/20">
-                    Q2 2025
-                  </Badge>
-                  <Users className="h-8 w-8 text-blue-600 dark:text-blue-400 mx-auto mb-4" />
-                  <h3 className="text-xl font-bold mb-2">Mobile Platform</h3>
-                  <p className="text-muted-foreground text-sm">Native apps for all stakeholders</p>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="p-6 text-center">
-                <div className="relative">
-                  <Badge variant="secondary" className="absolute -top-3 -right-3 bg-purple-500/10 text-purple-600 border-purple-500/20">
-                    Q3 2025
-                  </Badge>
-                  <BarChart3 className="h-8 w-8 text-purple-600 dark:text-purple-400 mx-auto mb-4" />
-                  <h3 className="text-xl font-bold mb-2">AI Analytics</h3>
-                  <p className="text-muted-foreground text-sm">Predictive insights and optimization</p>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="p-6 text-center">
-                <div className="relative">
-                  <Badge variant="secondary" className="absolute -top-3 -right-3 bg-orange-500/10 text-orange-600 border-orange-500/20">
-                    2026
-                  </Badge>
-                  <Globe className="h-8 w-8 text-orange-600 dark:text-orange-400 mx-auto mb-4" />
-                  <h3 className="text-xl font-bold mb-2">Global Scale</h3>
-                  <p className="text-muted-foreground text-sm">Worldwide deployment and impact</p>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
 
       {/* Call to Action */}
       <section className="py-24 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-orange-500/10">

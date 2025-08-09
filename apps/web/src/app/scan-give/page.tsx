@@ -14,7 +14,7 @@ import { DemoQRModal } from '@/components/demo/DemoQRModal';
 export default function ScanGivePage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showDemoQR, setShowDemoQR] = useState(false);
-  const [demoParticipant, setDemoParticipant] = useState(null);
+  const [demoParticipant, setDemoParticipant] = useState<any>(null);
   const [qrCodeUrl, setQrCodeUrl] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -184,18 +184,26 @@ export default function ScanGivePage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="py-24">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
-            <QrCode className="h-8 w-8 text-primary" />
+      <section 
+        className="py-24 relative"
+        style={{
+          backgroundImage: "url('/backgrounds/hero-bg.jpg')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      >
+        <div className="absolute inset-0 bg-black/50"></div>
+        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-6">
+            <QrCode className="h-8 w-8 text-white" />
           </div>
-          <Badge variant="secondary" className="mb-4">Instant Impact</Badge>
-          <h1 className="text-4xl font-bold mb-6">
+          <Badge variant="secondary" className="mb-4 bg-white/20 text-white border-white/30 backdrop-blur-sm">Instant Impact</Badge>
+          <h1 className="text-4xl font-bold mb-6 text-white">
             Scan & Give in Seconds
           </h1>
-          <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
-            Revolutionary QR-code based donations that put money directly into the hands 
-            of those who need it most.
+          <p className="text-xl text-gray-200 mb-8 max-w-3xl mx-auto">
+            Put money directly into the hands of those who need it most.
           </p>
           <Button 
             size="lg" 
@@ -236,66 +244,71 @@ export default function ScanGivePage() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            <Card className="text-center border-2 hover:shadow-lg transition-shadow">
+            {/* Red for Scan QR Code */}
+            <Card className="group text-center border-2 border-gray-200 dark:border-gray-800 hover:border-red-300 dark:hover:border-red-700 hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer">
               <CardHeader>
-                <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <QrCode className="h-6 w-6 text-primary" />
+                <div className="w-12 h-12 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-red-500/20 transition-colors">
+                  <QrCode className="h-6 w-6 text-red-600 dark:text-red-400 group-hover:scale-110 transition-transform" />
                 </div>
-                <CardTitle>1. Scan QR Code</CardTitle>
+                <CardTitle className="group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">1. Scan QR Code</CardTitle>
                 <CardDescription>
                   Use your phone camera to scan a participant&apos;s unique QR code
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="w-32 h-32 bg-gradient-to-br from-primary/20 to-primary/10 rounded-lg mx-auto flex items-center justify-center">
-                  <QrCode className="h-16 w-16 text-primary" />
+                <div className="w-32 h-32 bg-gradient-to-br from-red-500/20 to-red-500/10 rounded-lg mx-auto flex items-center justify-center group-hover:from-red-500/30 group-hover:to-red-500/20 transition-all">
+                  <QrCode className="h-16 w-16 text-red-600 dark:text-red-400 group-hover:scale-110 transition-transform" />
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="text-center border-2 hover:shadow-lg transition-shadow">
+            {/* Yellow for Choose Amount */}
+            <Card className="group text-center border-2 border-gray-200 dark:border-gray-800 hover:border-yellow-300 dark:hover:border-yellow-700 hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer">
               <CardHeader>
-                <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Heart className="h-6 w-6 text-primary" />
+                <div className="w-12 h-12 bg-yellow-500/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-yellow-500/20 transition-colors">
+                  <Heart className="h-6 w-6 text-yellow-600 dark:text-yellow-400 group-hover:scale-110 transition-transform" />
                 </div>
-                <CardTitle>2. Choose Amount</CardTitle>
+                <CardTitle className="group-hover:text-yellow-600 dark:group-hover:text-yellow-400 transition-colors">2. Choose Amount</CardTitle>
                 <CardDescription>
                   Select your donation amount with transparent breakdown
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
-                  <div className="bg-primary/20 rounded-lg p-3">
+                  <div className="bg-yellow-500/20 rounded-lg p-3 group-hover:bg-yellow-500/30 transition-colors">
                     <div className="text-sm font-medium">$10 Donation</div>
-                    <div className="text-xs text-muted-foreground">$8.00 Direct • $1.50 Housing • $0.50 Operations</div>
+                    <div className="text-xs text-muted-foreground">$8.00 Direct • $1.50 Housing • $0.50 Shelter Operations</div>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="text-center border-2 hover:shadow-lg transition-shadow">
+            {/* Green for Instant Transfer */}
+            <Card className="group text-center border-2 border-gray-200 dark:border-gray-800 hover:border-green-300 dark:hover:border-green-700 hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer">
               <CardHeader>
-                <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Shield className="h-6 w-6 text-primary" />
+                <div className="w-12 h-12 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-green-500/20 transition-colors">
+                  <Shield className="h-6 w-6 text-green-600 dark:text-green-400 group-hover:scale-110 transition-transform" />
                 </div>
-                <CardTitle>3. Instant Transfer</CardTitle>
+                <CardTitle className="group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">3. Instant Transfer</CardTitle>
                 <CardDescription>
                   Secure blockchain transaction delivers funds immediately
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-2">
-                  <div className="flex items-center justify-center space-x-2 text-sm">
-                    <Check className="h-4 w-4 text-green-500" />
-                    <span>Verified Transfer</span>
-                  </div>
-                  <div className="flex items-center justify-center space-x-2 text-sm">
-                    <Check className="h-4 w-4 text-green-500" />
-                    <span>Blockchain Recorded</span>
-                  </div>
-                  <div className="flex items-center justify-center space-x-2 text-sm">
-                    <Check className="h-4 w-4 text-green-500" />
-                    <span>Instant Notification</span>
+                <div className="w-48 h-32 bg-gradient-to-br from-green-500/20 to-green-500/10 rounded-lg mx-auto flex items-center justify-center mb-4 group-hover:from-green-500/30 group-hover:to-green-500/20 transition-all">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-center space-x-2 text-sm">
+                      <Check className="h-4 w-4 text-green-500 group-hover:scale-110 transition-transform" />
+                      <span>Verified Transfer</span>
+                    </div>
+                    <div className="flex items-center justify-center space-x-2 text-sm">
+                      <Check className="h-4 w-4 text-green-500 group-hover:scale-110 transition-transform" />
+                      <span>Blockchain Recorded</span>
+                    </div>
+                    <div className="flex items-center justify-center space-x-2 text-sm">
+                      <Check className="h-4 w-4 text-green-500 group-hover:scale-110 transition-transform" />
+                      <span>Instant Notification</span>
+                    </div>
                   </div>
                 </div>
               </CardContent>
@@ -335,8 +348,8 @@ export default function ScanGivePage() {
 
                 <div className="flex items-center justify-between p-4 bg-gray-500/10 rounded-lg border border-gray-500/20">
                   <div>
-                    <div className="font-semibold text-gray-700 dark:text-gray-400">Operations</div>
-                    <div className="text-sm text-muted-foreground">Platform maintenance & security</div>
+                    <div className="font-semibold text-gray-700 dark:text-gray-400">Shelter Operations</div>
+                    <div className="text-sm text-muted-foreground">In-house Platform maintenance & security</div>
                   </div>
                   <div className="text-2xl font-bold text-gray-700 dark:text-gray-400">5%</div>
                 </div>

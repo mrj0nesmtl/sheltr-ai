@@ -41,6 +41,7 @@ export interface UserRegistrationData {
   role: UserRole;
   shelterId?: string;
   phone?: string;
+  shelterOnboardingData?: any; // Will be properly typed when we import the interface
 }
 
 interface AuthContextType {
@@ -178,6 +179,112 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     return null;
   };
 
+  // Handle shelter admin registration with onboarding data
+  const handleShelterAdminRegistration = async (user: any, userData: UserRegistrationData): Promise<void> => {
+    const { shelterOnboardingData } = userData;
+    
+    // Generate a unique shelter ID
+    const shelterId = shelterOnboardingData.shelterName.toLowerCase()
+      .replace(/[^a-z0-9]/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-|-$/g, '') + '-' + Date.now().toString(36);
+
+    // Create pending shelter admin user
+    const userDocData = {
+      uid: user.uid,
+      email: userData.email,
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      role: 'admin',
+      phone: userData.phone || '',
+      shelter_id: shelterId,
+      tenant_id: `shelter-${shelterId}`,
+      adminRole: shelterOnboardingData.adminRole,
+      yearsOfExperience: shelterOnboardingData.yearsOfExperience,
+      previousShelterExperience: shelterOnboardingData.previousShelterExperience,
+      createdAt: new Date().toISOString(),
+      emailVerified: false,
+      profileComplete: false,
+      lastLoginAt: new Date().toISOString(),
+      status: 'pending_approval', // Different status for shelter admins
+      applicationStatus: 'pending_review',
+      submittedAt: new Date().toISOString()
+    };
+
+    // Create shelter application document
+    const shelterApplicationData = {
+      id: shelterId,
+      adminUserId: user.uid,
+      adminEmail: userData.email,
+      adminName: `${userData.firstName} ${userData.lastName}`,
+      
+      // Basic shelter info
+      shelterName: shelterOnboardingData.shelterName,
+      shelterType: shelterOnboardingData.shelterType,
+      description: shelterOnboardingData.description,
+      
+      // Location
+      address: shelterOnboardingData.address,
+      city: shelterOnboardingData.city,
+      province: shelterOnboardingData.province,
+      postalCode: shelterOnboardingData.postalCode,
+      
+      // Contact
+      phone: shelterOnboardingData.phone,
+      website: shelterOnboardingData.website,
+      emergencyContact: shelterOnboardingData.emergencyContact,
+      
+      // Capacity & Services
+      totalCapacity: shelterOnboardingData.totalCapacity,
+      currentOccupancy: shelterOnboardingData.currentOccupancy,
+      services: shelterOnboardingData.services,
+      specializations: shelterOnboardingData.specializations,
+      
+      // Operations
+      operatingHours: shelterOnboardingData.operatingHours,
+      checkInTime: shelterOnboardingData.checkInTime,
+      checkOutTime: shelterOnboardingData.checkOutTime,
+      genderRestrictions: shelterOnboardingData.genderRestrictions,
+      ageRestrictions: shelterOnboardingData.ageRestrictions,
+      
+      // Additional info
+      specialNeeds: shelterOnboardingData.specialNeeds,
+      languages: shelterOnboardingData.languages,
+      accessibilityFeatures: shelterOnboardingData.accessibilityFeatures,
+      
+      // Application details
+      reason: shelterOnboardingData.reason,
+      goals: shelterOnboardingData.goals,
+      timeline: shelterOnboardingData.timeline,
+      
+      // License info
+      licenseNumber: shelterOnboardingData.licenseNumber,
+      registrationNumber: shelterOnboardingData.registrationNumber,
+      
+      // Status
+      status: 'pending_review',
+      submittedAt: new Date().toISOString(),
+      reviewedAt: null,
+      reviewedBy: null,
+      rejectionReason: null,
+      
+      // Platform admin will review
+      requiresReview: true,
+      notificationSent: false
+    };
+
+    // Store both documents
+    await Promise.all([
+      setDoc(doc(db, 'users', user.uid), userDocData),
+      setDoc(doc(db, 'shelter_applications', shelterId), shelterApplicationData)
+    ]);
+
+    // TODO: Send notification to super admins
+    // TODO: Update platform metrics for pending applications
+    
+    console.log('✅ Shelter admin application submitted:', shelterId);
+  };
+
   // Register user directly with Firebase Auth and Firestore
   const register = async (userData: UserRegistrationData): Promise<void> => {
     try {
@@ -193,24 +300,29 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         displayName: `${userData.firstName} ${userData.lastName}`
       });
 
-      // Create user document in Firestore with role and additional data
-      const userDocData = {
-        uid: user.uid,
-        email: userData.email,
-        firstName: userData.firstName,
-        lastName: userData.lastName,
-        role: userData.role || 'participant',
-        phone: userData.phone || '',
-        shelterId: userData.shelterId || null,
-        createdAt: new Date().toISOString(),
-        emailVerified: false,
-        profileComplete: false,
-        lastLoginAt: new Date().toISOString(),
-        status: 'active'
-      };
+      // Handle shelter admin registration differently
+      if (userData.role === 'admin' && userData.shelterOnboardingData) {
+        await handleShelterAdminRegistration(user, userData);
+      } else {
+        // Regular user registration
+        const userDocData = {
+          uid: user.uid,
+          email: userData.email,
+          firstName: userData.firstName,
+          lastName: userData.lastName,
+          role: userData.role || 'participant',
+          phone: userData.phone || '',
+          shelterId: userData.shelterId || null,
+          createdAt: new Date().toISOString(),
+          emailVerified: false,
+          profileComplete: false,
+          lastLoginAt: new Date().toISOString(),
+          status: 'active'
+        };
 
-      // Store user data in Firestore
-      await setDoc(doc(db, 'users', user.uid), userDocData);
+        // Store user data in Firestore
+        await setDoc(doc(db, 'users', user.uid), userDocData);
+      }
 
       // Send email verification
       await sendEmailVerification(user);

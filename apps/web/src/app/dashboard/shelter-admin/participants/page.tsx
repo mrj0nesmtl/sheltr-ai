@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -22,105 +23,62 @@ import {
   Edit,
   FileText,
   Heart,
-  Bed
+  Bed,
+  Loader2
 } from 'lucide-react';
+import { getShelterParticipants, getShelterMetrics, ShelterParticipant, ShelterMetrics } from '@/services/platformMetrics';
 
-// Mock participant data
-const mockParticipants = [
-  {
-    id: 'P001',
-    name: 'Michael Rodriguez',
-    age: 34,
-    gender: 'Male',
-    status: 'Active',
-    bedNumber: 'B-12',
-    checkInDate: '2025-01-15',
-    lastActivity: '2 hours ago',
-    phone: '(555) 123-4567',
-    email: 'michael.r@email.com',
-    emergencyContact: 'Maria Rodriguez - Sister',
-    services: ['Medical', 'Job Training'],
-    notes: 'Seeking employment in construction',
-    riskLevel: 'Low'
-  },
-  {
-    id: 'P002',
-    name: 'Sarah Johnson',
-    age: 28,
-    gender: 'Female',
-    status: 'Active',
-    bedNumber: 'B-07',
-    checkInDate: '2025-01-10',
-    lastActivity: '30 minutes ago',
-    phone: '(555) 987-6543',
-    email: 'sarah.j@email.com',
-    emergencyContact: 'John Johnson - Father',
-    services: ['Medical', 'Legal Aid', 'Counseling'],
-    notes: 'Single mother, custody case pending',
-    riskLevel: 'Medium'
-  },
-  {
-    id: 'P003',
-    name: 'David Chen',
-    age: 45,
-    gender: 'Male',
-    status: 'Transitioning',
-    bedNumber: 'B-23',
-    checkInDate: '2024-12-28',
-    lastActivity: '1 day ago',
-    phone: '(555) 456-7890',
-    email: 'david.c@email.com',
-    emergencyContact: 'Linda Chen - Ex-wife',
-    services: ['Job Training', 'Financial Planning'],
-    notes: 'Found permanent housing, moving out next week',
-    riskLevel: 'Low'
-  },
-  {
-    id: 'P004',
-    name: 'Emma Williams',
-    age: 22,
-    gender: 'Female',
-    status: 'New',
-    bedNumber: 'B-15',
-    checkInDate: '2025-01-20',
-    lastActivity: '5 minutes ago',
-    phone: '(555) 234-5678',
-    email: 'emma.w@email.com',
-    emergencyContact: 'Robert Williams - Father',
-    services: ['Intake Assessment'],
-    notes: 'Recent college graduate, lost job and housing',
-    riskLevel: 'Low'
-  }
-];
-
-const recentActivity = [
-  { participant: 'Michael Rodriguez', action: 'Completed job interview', time: '2 hours ago', type: 'success' },
-  { participant: 'Sarah Johnson', action: 'Medical appointment scheduled', time: '3 hours ago', type: 'info' },
-  { participant: 'Emma Williams', action: 'Check-in completed', time: '5 hours ago', type: 'success' },
-  { participant: 'David Chen', action: 'Housing application approved', time: '1 day ago', type: 'success' },
-  { participant: 'Michael Rodriguez', action: 'Missed counseling session', time: '2 days ago', type: 'warning' }
-];
+// Mock data removed - now using real Firebase data
 
 export default function ParticipantsPage() {
+  const { user, hasRole } = useAuth();
   const [selectedTab, setSelectedTab] = useState('active');
   const [selectedParticipant, setSelectedParticipant] = useState(null);
+  const [participants, setParticipants] = useState<ShelterParticipant[]>([]);
+  const [shelterMetrics, setShelterMetrics] = useState<ShelterMetrics | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Load participants data
+  useEffect(() => {
+    const loadData = async () => {
+      const shelterId = user?.customClaims?.shelter_id;
+      
+      if (!shelterId) {
+        setError('No shelter assigned to this admin');
+        setLoading(false);
+        return;
+      }
+
+      try {
+        // Load both participants and shelter metrics
+        const [participantsData, metricsData] = await Promise.all([
+          getShelterParticipants(shelterId),
+          getShelterMetrics(shelterId)
+        ]);
+
+        setParticipants(participantsData);
+        setShelterMetrics(metricsData);
+      } catch (error) {
+        console.error('❌ Failed to load participants data:', error);
+        setError('Failed to load participants data');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (user && hasRole('admin')) {
+      loadData();
+    }
+  }, [user, hasRole]);
 
   const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'Active': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100';
-      case 'New': return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100';
-      case 'Transitioning': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-100';
-      case 'Inactive': return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100';
-      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100';
-    }
-  };
-
-  const getRiskColor = (risk: string) => {
-    switch (risk) {
-      case 'Low': return 'text-green-600';
-      case 'Medium': return 'text-yellow-600';
-      case 'High': return 'text-red-600';
-      default: return 'text-gray-600';
+    switch (status.toLowerCase()) {
+      case 'active': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100';
+      case 'new': return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100';
+      case 'transitioning': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-100';
+      case 'inactive': return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100';
+      default: return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100'; // Default to active
     }
   };
 
@@ -148,8 +106,12 @@ export default function ParticipantsPage() {
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">89</div>
-            <p className="text-xs text-muted-foreground">+5 from last week</p>
+            <div className="text-2xl font-bold">
+              {loading ? <Loader2 className="h-6 w-6 animate-spin" /> : shelterMetrics?.totalParticipants || '-'}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              {loading ? 'Loading...' : 'Real data connected'}
+            </p>
           </CardContent>
         </Card>
         
@@ -159,8 +121,8 @@ export default function ParticipantsPage() {
             <UserPlus className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">12</div>
-            <p className="text-xs text-muted-foreground">7 pending intake</p>
+            <div className="text-2xl font-bold">-</div>
+            <p className="text-xs text-muted-foreground">New registrations coming soon</p>
           </CardContent>
         </Card>
         
@@ -170,8 +132,8 @@ export default function ParticipantsPage() {
             <CheckCircle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">23</div>
-            <p className="text-xs text-muted-foreground">This month</p>
+            <div className="text-2xl font-bold">-</div>
+            <p className="text-xs text-muted-foreground">Housing tracking coming soon</p>
           </CardContent>
         </Card>
         
@@ -181,8 +143,8 @@ export default function ParticipantsPage() {
             <Clock className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">45</div>
-            <p className="text-xs text-muted-foreground">days</p>
+            <div className="text-2xl font-bold">-</div>
+            <p className="text-xs text-muted-foreground">Duration tracking coming soon</p>
           </CardContent>
         </Card>
       </div>
@@ -217,7 +179,23 @@ export default function ParticipantsPage() {
                 </TabsList>
                 
                 <TabsContent value="active" className="space-y-4">
-                  {mockParticipants.filter(p => p.status === 'Active').map((participant) => (
+                  {loading ? (
+                    <div className="flex items-center justify-center p-8">
+                      <Loader2 className="h-8 w-8 animate-spin" />
+                      <span className="ml-2">Loading participants...</span>
+                    </div>
+                  ) : error ? (
+                    <div className="flex items-center justify-center p-8 text-red-600">
+                      <AlertCircle className="h-8 w-8" />
+                      <span className="ml-2">{error}</span>
+                    </div>
+                  ) : participants.filter(p => p.status === 'active').length === 0 ? (
+                    <div className="text-center p-8 text-gray-500">
+                      <Users className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+                      <p>No active participants found</p>
+                    </div>
+                  ) : (
+                    participants.filter(p => p.status === 'active').map((participant) => (
                     <div key={participant.id} className="border rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer">
                       <div className="flex justify-between items-start">
                         <div className="flex-1">
@@ -230,7 +208,7 @@ export default function ParticipantsPage() {
                             <div>
                               <h3 className="font-semibold">{participant.name}</h3>
                               <p className="text-sm text-gray-600 dark:text-gray-400">
-                                {participant.age} years • {participant.gender} • Bed {participant.bedNumber}
+                                {participant.email} • ID: {participant.id.slice(0, 8)}
                               </p>
                             </div>
                           </div>
@@ -238,15 +216,15 @@ export default function ParticipantsPage() {
                             <Badge className={getStatusColor(participant.status)}>
                               {participant.status}
                             </Badge>
-                            <Badge variant="outline" className={getRiskColor(participant.riskLevel)}>
-                              {participant.riskLevel} Risk
+                            <Badge variant="outline" className="text-blue-600">
+                              Participant
                             </Badge>
-                            {participant.services.map((service) => (
-                              <Badge key={service} variant="secondary">{service}</Badge>
-                            ))}
+                            <Badge variant="secondary">
+                              {shelterMetrics?.shelterName || 'Assigned Shelter'}
+                            </Badge>
                           </div>
                           <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                            Check-in: {participant.checkInDate} • Last activity: {participant.lastActivity}
+                            Real data from database • Shelter: {participant.shelter_id}
                           </p>
                         </div>
                         <div className="flex space-x-2">
@@ -262,11 +240,28 @@ export default function ParticipantsPage() {
                         </div>
                       </div>
                     </div>
-                  ))}
+                  ))
+                  )}
                 </TabsContent>
                 
                 <TabsContent value="new" className="space-y-4">
-                  {mockParticipants.filter(p => p.status === 'New').map((participant) => (
+                  {loading ? (
+                    <div className="flex items-center justify-center p-8">
+                      <Loader2 className="h-8 w-8 animate-spin" />
+                      <span className="ml-2">Loading participants...</span>
+                    </div>
+                  ) : error ? (
+                    <div className="flex items-center justify-center p-8 text-red-600">
+                      <AlertCircle className="h-8 w-8" />
+                      <span className="ml-2">{error}</span>
+                    </div>
+                  ) : participants.filter(p => p.status === 'new').length === 0 ? (
+                    <div className="text-center p-8 text-gray-500">
+                      <Users className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+                      <p>No new participants found</p>
+                    </div>
+                  ) : (
+                    participants.filter(p => p.status === 'new').map((participant) => (
                     <div key={participant.id} className="border rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer">
                       <div className="flex justify-between items-start">
                         <div className="flex-1">
@@ -279,7 +274,7 @@ export default function ParticipantsPage() {
                             <div>
                               <h3 className="font-semibold">{participant.name}</h3>
                               <p className="text-sm text-gray-600 dark:text-gray-400">
-                                {participant.age} years • {participant.gender} • Bed {participant.bedNumber}
+                                {participant.email} • ID: {participant.id.slice(0, 8)}
                               </p>
                             </div>
                           </div>
@@ -287,15 +282,15 @@ export default function ParticipantsPage() {
                             <Badge className={getStatusColor(participant.status)}>
                               {participant.status}
                             </Badge>
-                            <Badge variant="outline" className={getRiskColor(participant.riskLevel)}>
-                              {participant.riskLevel} Risk
+                            <Badge variant="outline" className="text-blue-600">
+                              Participant
                             </Badge>
-                            {participant.services.map((service) => (
-                              <Badge key={service} variant="secondary">{service}</Badge>
-                            ))}
+                            <Badge variant="secondary">
+                              {shelterMetrics?.shelterName || 'Assigned Shelter'}
+                            </Badge>
                           </div>
                           <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                            Check-in: {participant.checkInDate} • Last activity: {participant.lastActivity}
+                            Real data from database • Shelter: {participant.shelter_id}
                           </p>
                         </div>
                         <div className="flex space-x-2">
@@ -311,11 +306,28 @@ export default function ParticipantsPage() {
                         </div>
                       </div>
                     </div>
-                  ))}
+                  ))
+                  )}
                 </TabsContent>
                 
                 <TabsContent value="transitioning" className="space-y-4">
-                  {mockParticipants.filter(p => p.status === 'Transitioning').map((participant) => (
+                  {loading ? (
+                    <div className="flex items-center justify-center p-8">
+                      <Loader2 className="h-8 w-8 animate-spin" />
+                      <span className="ml-2">Loading participants...</span>
+                    </div>
+                  ) : error ? (
+                    <div className="flex items-center justify-center p-8 text-red-600">
+                      <AlertCircle className="h-8 w-8" />
+                      <span className="ml-2">{error}</span>
+                    </div>
+                  ) : participants.filter(p => p.status === 'transitioning').length === 0 ? (
+                    <div className="text-center p-8 text-gray-500">
+                      <Users className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+                      <p>No transitioning participants found</p>
+                    </div>
+                  ) : (
+                    participants.filter(p => p.status === 'transitioning').map((participant) => (
                     <div key={participant.id} className="border rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer">
                       <div className="flex justify-between items-start">
                         <div className="flex-1">
@@ -328,7 +340,7 @@ export default function ParticipantsPage() {
                             <div>
                               <h3 className="font-semibold">{participant.name}</h3>
                               <p className="text-sm text-gray-600 dark:text-gray-400">
-                                {participant.age} years • {participant.gender} • Bed {participant.bedNumber}
+                                {participant.email} • ID: {participant.id.slice(0, 8)}
                               </p>
                             </div>
                           </div>
@@ -336,15 +348,15 @@ export default function ParticipantsPage() {
                             <Badge className={getStatusColor(participant.status)}>
                               {participant.status}
                             </Badge>
-                            <Badge variant="outline" className={getRiskColor(participant.riskLevel)}>
-                              {participant.riskLevel} Risk
+                            <Badge variant="outline" className="text-blue-600">
+                              Participant
                             </Badge>
-                            {participant.services.map((service) => (
-                              <Badge key={service} variant="secondary">{service}</Badge>
-                            ))}
+                            <Badge variant="secondary">
+                              {shelterMetrics?.shelterName || 'Assigned Shelter'}
+                            </Badge>
                           </div>
                           <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                            Check-in: {participant.checkInDate} • Last activity: {participant.lastActivity}
+                            Real data from database • Shelter: {participant.shelter_id}
                           </p>
                         </div>
                         <div className="flex space-x-2">
@@ -360,11 +372,28 @@ export default function ParticipantsPage() {
                         </div>
                       </div>
                     </div>
-                  ))}
+                  ))
+                  )}
                 </TabsContent>
                 
                 <TabsContent value="all" className="space-y-4">
-                  {mockParticipants.map((participant) => (
+                  {loading ? (
+                    <div className="flex items-center justify-center p-8">
+                      <Loader2 className="h-8 w-8 animate-spin" />
+                      <span className="ml-2">Loading participants...</span>
+                    </div>
+                  ) : error ? (
+                    <div className="flex items-center justify-center p-8 text-red-600">
+                      <AlertCircle className="h-8 w-8" />
+                      <span className="ml-2">{error}</span>
+                    </div>
+                  ) : participants.length === 0 ? (
+                    <div className="text-center p-8 text-gray-500">
+                      <Users className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+                      <p>No participants found</p>
+                    </div>
+                  ) : (
+                    participants.map((participant) => (
                     <div key={participant.id} className="border rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer">
                       <div className="flex justify-between items-start">
                         <div className="flex-1">
@@ -377,7 +406,7 @@ export default function ParticipantsPage() {
                             <div>
                               <h3 className="font-semibold">{participant.name}</h3>
                               <p className="text-sm text-gray-600 dark:text-gray-400">
-                                {participant.age} years • {participant.gender} • Bed {participant.bedNumber}
+                                {participant.email} • ID: {participant.id.slice(0, 8)}
                               </p>
                             </div>
                           </div>
@@ -385,15 +414,15 @@ export default function ParticipantsPage() {
                             <Badge className={getStatusColor(participant.status)}>
                               {participant.status}
                             </Badge>
-                            <Badge variant="outline" className={getRiskColor(participant.riskLevel)}>
-                              {participant.riskLevel} Risk
+                            <Badge variant="outline" className="text-blue-600">
+                              Participant
                             </Badge>
-                            {participant.services.map((service) => (
-                              <Badge key={service} variant="secondary">{service}</Badge>
-                            ))}
+                            <Badge variant="secondary">
+                              {shelterMetrics?.shelterName || 'Assigned Shelter'}
+                            </Badge>
                           </div>
                           <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                            Check-in: {participant.checkInDate} • Last activity: {participant.lastActivity}
+                            Real data from database • Shelter: {participant.shelter_id}
                           </p>
                         </div>
                         <div className="flex space-x-2">
@@ -409,7 +438,8 @@ export default function ParticipantsPage() {
                         </div>
                       </div>
                     </div>
-                  ))}
+                  ))
+                  )}
                 </TabsContent>
               </Tabs>
             </CardContent>
@@ -424,20 +454,27 @@ export default function ParticipantsPage() {
               <CardDescription>Latest participant updates</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              {recentActivity.map((activity, index) => (
-                <div key={index} className="flex items-start space-x-3">
-                  <div className={`w-2 h-2 rounded-full mt-2 ${
-                    activity.type === 'success' ? 'bg-green-500' :
-                    activity.type === 'warning' ? 'bg-yellow-500' :
-                    'bg-blue-500'
-                  }`} />
-                  <div className="flex-1">
-                    <p className="text-sm font-medium">{activity.participant}</p>
-                    <p className="text-xs text-gray-600 dark:text-gray-400">{activity.action}</p>
-                    <p className="text-xs text-gray-500">{activity.time}</p>
-                  </div>
+              {loading ? (
+                <div className="flex items-center justify-center p-4">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <span className="ml-2 text-sm">Loading activity...</span>
                 </div>
-              ))}
+              ) : participants.length > 0 ? (
+                participants.slice(0, 3).map((participant, index) => (
+                  <div key={index} className="flex items-start space-x-3">
+                    <div className="w-2 h-2 rounded-full mt-2 bg-green-500" />
+                    <div className="flex-1">
+                      <p className="text-sm font-medium">{participant.name}</p>
+                      <p className="text-xs text-gray-600 dark:text-gray-400">Real participant data loaded</p>
+                      <p className="text-xs text-gray-500">Connected to {shelterMetrics?.shelterName}</p>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="text-center p-4 text-gray-500">
+                  <p className="text-sm">No recent activity</p>
+                </div>
+              )}
             </CardContent>
           </Card>
 

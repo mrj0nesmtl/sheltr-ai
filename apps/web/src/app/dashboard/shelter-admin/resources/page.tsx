@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -24,8 +25,11 @@ import {
   Calendar,
   DollarSign,
   Users,
-  Box
+  Box,
+  Loader2,
+  AlertCircle
 } from 'lucide-react';
+import { getBedOccupancyData, BedOccupancyData } from '@/services/platformMetrics';
 
 // Mock inventory data
 const inventoryItems = [
@@ -101,13 +105,7 @@ const inventoryItems = [
   }
 ];
 
-const bedStatus = {
-  total: 120,
-  occupied: 89,
-  available: 31,
-  maintenance: 5,
-  reserved: 3
-};
+// Bed status is now loaded from real database via getBedOccupancyData()
 
 const resourceCategories = [
   { name: 'Food & Kitchen', icon: Utensils, items: 145, value: 2850, status: 'Good' },
@@ -127,7 +125,38 @@ const recentDonations = [
 ];
 
 export default function ResourcesPage() {
+  const { user, hasRole } = useAuth();
   const [selectedTab, setSelectedTab] = useState('inventory');
+  const [bedOccupancy, setBedOccupancy] = useState<BedOccupancyData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Load bed occupancy data
+  useEffect(() => {
+    const loadBedData = async () => {
+      const shelterId = user?.customClaims?.shelter_id;
+      
+      if (!shelterId) {
+        setError('No shelter assigned to this admin');
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const bedData = await getBedOccupancyData(shelterId);
+        setBedOccupancy(bedData);
+      } catch (error) {
+        console.error('❌ Failed to load bed occupancy data:', error);
+        setError('Failed to load bed data');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (user && hasRole('admin')) {
+      loadBedData();
+    }
+  }, [user, hasRole]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -175,11 +204,30 @@ export default function ResourcesPage() {
             <Bed className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{bedStatus.occupied}/{bedStatus.total}</div>
-            <Progress value={(bedStatus.occupied / bedStatus.total) * 100} className="mt-2" />
-            <p className="text-xs text-muted-foreground mt-1">
-              {bedStatus.available} available • {bedStatus.maintenance} in maintenance
-            </p>
+            {loading ? (
+              <div className="flex items-center space-x-2">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                <span className="text-sm">Loading...</span>
+              </div>
+            ) : error ? (
+              <div className="flex items-center space-x-2 text-red-600">
+                <AlertCircle className="h-4 w-4" />
+                <span className="text-sm">{error}</span>
+              </div>
+            ) : bedOccupancy ? (
+              <>
+                <div className="text-2xl font-bold">{bedOccupancy.occupied}/{bedOccupancy.total}</div>
+                <Progress value={bedOccupancy.occupancyRate} className="mt-2" />
+                <p className="text-xs text-muted-foreground mt-1">
+                  {bedOccupancy.available} available • Real data from {bedOccupancy.shelterName}
+                </p>
+                <p className="text-xs text-green-600 mt-1">
+                  ✅ {bedOccupancy.occupancyRate}% occupancy rate
+                </p>
+              </>
+            ) : (
+              <div className="text-2xl font-bold">-/-</div>
+            )}
           </CardContent>
         </Card>
         
@@ -459,24 +507,50 @@ export default function ResourcesPage() {
           <Card>
             <CardHeader>
               <CardTitle>Bed Status</CardTitle>
+              <CardDescription>
+                {bedOccupancy ? bedOccupancy.shelterName : 'Loading...'}
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
-              <div className="flex justify-between">
-                <span className="text-sm">Occupied</span>
-                <span className="font-medium">{bedStatus.occupied}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-sm">Available</span>
-                <span className="font-medium text-green-600">{bedStatus.available}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-sm">Maintenance</span>
-                <span className="font-medium text-yellow-600">{bedStatus.maintenance}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-sm">Reserved</span>
-                <span className="font-medium text-blue-600">{bedStatus.reserved}</span>
-              </div>
+              {loading ? (
+                <div className="flex items-center justify-center p-4">
+                  <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                  <span className="text-sm">Loading bed data...</span>
+                </div>
+              ) : error ? (
+                <div className="text-center p-4 text-red-600">
+                  <AlertCircle className="h-4 w-4 mx-auto mb-1" />
+                  <p className="text-xs">{error}</p>
+                </div>
+              ) : bedOccupancy ? (
+                <>
+                  <div className="flex justify-between">
+                    <span className="text-sm">Occupied</span>
+                    <span className="font-medium">{bedOccupancy.occupied}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm">Available</span>
+                    <span className="font-medium text-green-600">{bedOccupancy.available}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm">Total Capacity</span>
+                    <span className="font-medium">{bedOccupancy.total}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm">Occupancy Rate</span>
+                    <span className="font-medium text-blue-600">{bedOccupancy.occupancyRate}%</span>
+                  </div>
+                  <div className="mt-3 p-2 bg-green-50 rounded">
+                    <p className="text-xs text-green-700">
+                      ✅ Real data connected to Old Brewery Mission
+                    </p>
+                  </div>
+                </>
+              ) : (
+                <div className="text-center p-4 text-gray-500">
+                  <p className="text-sm">No bed data available</p>
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>

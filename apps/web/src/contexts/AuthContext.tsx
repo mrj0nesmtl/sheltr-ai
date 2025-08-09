@@ -108,9 +108,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       
       // Merge Firebase custom claims with Firestore data (Firestore takes priority for newer users)
       const role = firestoreData?.role || customClaims.role;
-      const tenantId = firestoreData?.tenantId || customClaims.tenant_id;
+      const tenantId = firestoreData?.tenant_id || customClaims.tenant_id;
       const permissions = firestoreData?.permissions || customClaims.permissions || [];
-      const shelterId = firestoreData?.shelterId || customClaims.shelter_id;
+      const shelterId = firestoreData?.shelter_id || customClaims.shelter_id;
       
       console.log('🔐 User role detected:', role);
       console.log('🔍 Full user data debug:', {

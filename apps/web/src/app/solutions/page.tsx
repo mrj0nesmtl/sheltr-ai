@@ -292,6 +292,16 @@ export default function SolutionsPage() {
           <div className="grid md:grid-cols-3 gap-8">
             <div className="space-y-4">
               <div className="relative w-20 h-20 mx-auto">
+                <div className="w-full h-full bg-gradient-to-br from-red-500 to-pink-600 rounded-full flex items-center justify-center shadow-lg ring-4 ring-red-500/20">
+                  <Heart className="h-10 w-10 text-white" />
+                </div>
+                <div className="absolute -inset-1 bg-gradient-to-br from-red-500 to-pink-600 rounded-full opacity-20 blur-sm"></div>
+              </div>
+              <h3 className="text-xl font-semibold">Human-Centered</h3>
+              <p className="text-muted-foreground">Built with dignity and respect for all participants in the system</p>
+            </div>
+            <div className="space-y-4">
+              <div className="relative w-20 h-20 mx-auto">
                 <div className="w-full h-full bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg ring-4 ring-blue-500/20">
                   <Shield className="h-10 w-10 text-white" />
                 </div>
@@ -309,16 +319,6 @@ export default function SolutionsPage() {
               </div>
               <h3 className="text-xl font-semibold">Data-Driven</h3>
               <p className="text-muted-foreground">Real-time analytics help optimize resource allocation and impact</p>
-            </div>
-            <div className="space-y-4">
-              <div className="relative w-20 h-20 mx-auto">
-                <div className="w-full h-full bg-gradient-to-br from-red-500 to-pink-600 rounded-full flex items-center justify-center shadow-lg ring-4 ring-red-500/20">
-                  <Heart className="h-10 w-10 text-white" />
-                </div>
-                <div className="absolute -inset-1 bg-gradient-to-br from-red-500 to-pink-600 rounded-full opacity-20 blur-sm"></div>
-              </div>
-              <h3 className="text-xl font-semibold">Human-Centered</h3>
-              <p className="text-muted-foreground">Built with dignity and respect for all participants in the system</p>
             </div>
           </div>
         </div>

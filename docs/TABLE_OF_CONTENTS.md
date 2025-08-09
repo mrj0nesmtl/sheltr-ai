@@ -9,13 +9,13 @@
 | Section | Files | Purpose | Status |
 |---------|--------|---------|--------|
 | [**Overview**](#-overview) | 4 | Platform vision & mission | ✅ Active |
-| [**Architecture**](#-architecture) | 4 | Technical design & tokenomics | ✅ Active |
-| [**API**](#-api-documentation) | 1 | FastAPI endpoints | 🔄 Growing |
-| [**Development**](#-development) | 10 | Dev guides & session logs | ✅ Active |
-| [**User Guides**](#-user-guides) | 1 | User documentation | 🔄 Growing |
+| [**Architecture**](#-architecture) | 7 | Technical design & tokenomics | ✅ Active |
+| [**API**](#-api-documentation) | 3 | FastAPI endpoints & database | ✅ Complete |
+| [**Development**](#-development) | 15 | Dev guides & session logs | ✅ Active |
+| [**User Guides**](#-user-guides) | 3 | Complete user documentation | ✅ Complete |
 | [**Migration**](#-migration) | 3 | Database & system migrations | ✅ Complete |
 | [**AI Agent**](#-ai-agent-documentation) | 2 | Claude AI briefings | ✅ Active |
-| [**Legacy**](#-legacy-migration) | 14 | Historical content | 📚 Reference |
+| [**Legacy**](#-legacy-migration) | 15 | Historical content | 📚 Reference |
 
 ---
 
@@ -51,13 +51,22 @@
    - Complete platform whitepaper
    - Technical specifications and vision
 
-3. [**🔗 Blockchain Integration**](02-architecture/technical/blockchain.md)
+3. [**🌐 Website Architecture**](02-architecture/website-architecture.md)
+   - Site structure and component design
+   - Frontend architecture and user flows
+
+4. [**🔗 Blockchain Integration**](02-architecture/technical/blockchain.md)
    - Blockchain technical details
    - Smart contract architecture
 
-4. [**🪙 SHELTR Tokenomics**](02-architecture/tokenomics/sheltr-tokenomics.md)
+5. [**🪙 SHELTR Tokenomics**](02-architecture/tokenomics/sheltr-tokenomics.md)
    - Token economics and SmartFund™
    - Distribution mechanisms and governance
+
+6. [**💳 Payment Rails**](02-architecture/payment-rails/)
+   - [Adyen Integration](02-architecture/payment-rails/adyen-integration.md)
+   - [Production Deployment](02-architecture/payment-rails/production-deployment.md)
+   - [SHELTR Demo Implementation](02-architecture/payment-rails/sheltr-demo-implementation.md)
 
 ---
 
@@ -68,6 +77,14 @@
    - FastAPI endpoints and integration
    - Authentication and usage examples
 
+2. [**🗄️ Database Schema**](03-api/database-schema.md)
+   - Session 9 clean database structure
+   - Real implementation examples and data services
+
+3. [**🔥 Firestore Setup**](03-api/firestore-setup.md)
+   - Firebase configuration and rules
+   - Index optimization and security
+
 ---
 
 ## 👩‍💻 Development
@@ -77,56 +94,67 @@
    - Complete development strategy
    - 14-week roadmap and milestones
 
-2. [**🎨 Session 5.5: About & Solutions Redesign**](04-development/SESSION-05.5-ABOUT-SOLUTIONS-REDESIGN.md)
-   - Latest session achievements
-   - About page redesign and Solutions enhancement
+### 🚀 Session Documentation
 
-3. [**📊 Session 6: Multi-Dashboard Development**](04-development/SESSION-06-MULTI-DASHBOARD-DEVELOPMENT.md)
-   - Next phase planning
-   - Multi-dashboard architecture and implementation
+2. [**📊 Session 10: Handoff & Progress**](04-development/)
+   - [Claude Handoff](04-development/SESSION-10-CLAUDE-HANDOFF.md)
+   - [Kickoff Prompt](04-development/SESSION-10-KICKOFF-PROMPT.md)
+   - [Testing Checklist](04-development/SESSION-10-TESTING-CHECKLIST.md)
+   - [Progress Assessment](04-development/SESSION-10-PROGRESS-ASSESSMENT.md)
 
-4. [**🔒 Session 5: GitHub Security + Super Admin**](04-development/SESSION-05-GITHUB-SECURITY-SUPER-ADMIN.md)
-   - GitHub security setup and repository hardening
-   - Advanced Super Admin dashboard development
+3. [**🔗 Session 9: Data Connectivity Revolution**](04-development/)
+   - [Claude Handoff](04-development/SESSION-09-CLAUDE-HANDOFF.md) 
+   - [Data Connectivity](04-development/SESSION-09-DATA-CONNECTIVITY.md)
+   - [Kickoff Prompt](04-development/SESSION-09-KICKOFF-PROMPT.md)
+   - [Testing Checklist](04-development/SESSION-09-TESTING-CHECKLIST.md)
+   - [Technical Debt](04-development/SESSION-09-TECHNICAL-DEBT.md)
 
-5. [**👑 Session 4: Super Admin Dashboard**](04-development/SESSION-04-SUPER-ADMIN-DASHBOARD.md)
-   - Super Admin dashboard implementation
-   - Mobile navigation & theme system implementation
+4. [**💼 Session 8: Core Business Logic**](04-development/SESSION-08-CORE-BUSINESS-LOGIC.md)
+   - Business logic implementation
+   - Core platform functionality
 
-6. [**🔐 Session 3: Authentication & RBAC**](04-development/SESSION-03-AUTHENTICATION-RBAC.md)
-   - Authentication system implementation
-   - Role-based access control setup
+5. [**🤖 Session 7: Chatbot Implementation**](04-development/)
+   - [Chatbot Implementation](04-development/SESSION-07-CHATBOT-IMPLEMENTATION.md)
+   - [Testing Analytics Chatbot](04-development/SESSION-07-TESTING-ANALYTICS-CHATBOT.md)
+   - [Testing Checklist](04-development/SESSION-07-TESTING-CHECKLIST.md)
+   - [Kickoff Prompt](04-development/SESSION-07-KICKOFF-PROMPT.md)
 
-7. [**🎯 Session 6 Planning**](04-development/) 
-   - [Session 6 Checklist](04-development/SESSION-06-CHECKLIST.md)
-   - [Session 6 Kickoff Prompt](04-development/SESSION-06-KICKOFF-PROMPT.md)
+### 🔧 Tools & Setup
 
-8. [**🎯 Session 3 Planning**](04-development/) 
-   - [FastAPI Planning](04-development/SESSION-03-FASTAPI-PLANNING.md)
-   - [Kickoff Prompt](04-development/SESSION-03-KICKOFF-PROMPT.md)
+6. [**🔧 Development Tools**](04-development/)
+   - [Quick MacBook Sync](04-development/QUICK-MACBOOK-SYNC.md)
 
-9. [**🔧 MCP Integration**](04-development/GOOGLE-CALENDAR-MCP-SETUP.md)
-   - Google Calendar MCP configuration
-   - OAuth setup and integration guides
+### 📚 Development Archive
 
-10. [**📚 Development Archive**](04-development/development_archive/)
-    - Historical session documentation
-    - Legacy development materials
+7. [**📚 Development Archive**](04-development/development_archive/)
+   - Complete historical session documentation
+   - Legacy development materials and setup guides
 
 ---
 
 ## 👥 User Guides
-*User-specific guidance and tutorials*
+*Complete user-specific guidance and tutorials*
 
 1. [**👤 Participant Guide**](06-user-guides/participant-guide.md)
-   - Guide for homeless participants
-   - Registration and usage instructions
+   - Complete guide for homeless participants
+   - QR code usage, wallet management, and service access
+   - Registration and platform onboarding
+
+2. [**🏢 Shelter Administrator Guide**](06-user-guides/shelter-admin-guide.md) ✅ **NEW**
+   - Comprehensive 400+ page admin guide  
+   - Real Session 9 implementation features
+   - Dashboard management, participant registration, service coordination
+   - Resource management, analytics, and compliance
+
+3. [**💝 Donor Guide**](06-user-guides/donor-guide.md) ✅ **NEW**
+   - Complete 450+ page donor guide
+   - QR code giving and SmartFund model (80-15-5)
+   - Impact tracking, payment security, community building
+   - Corporate partnerships and advocacy opportunities
 
 ### 🔄 Coming Soon
-- **👨‍💼 Shelter Admin Guide** - Management interface documentation
-- **💝 Donor Guide** - Donation platform usage
-- **👑 SuperAdmin Guide** - Platform administration
-- **📱 Mobile App Guide** - iOS/Android app usage
+- **👑 SuperAdmin Guide** - Platform administration and oversight
+- **📱 Mobile App Guide** - iOS/Android app usage and features
 
 ---
 
@@ -158,6 +186,10 @@
    - Communication protocols and patterns
    - Session management guidelines
 
+3. [**🔍 SEO Keywords Strategy**](SEO-KEYWORDS-STRATEGY.md)
+   - Search engine optimization strategy
+   - Keyword research and content optimization
+
 ---
 
 ## 📚 Legacy Migration
@@ -184,16 +216,19 @@
 - [**📄 Whitepaper (EN)**](legacy-migration/reference/whitepaper_en.md) - English whitepaper
 - [**📄 Whitepaper (FR)**](legacy-migration/reference/whitepaper_fr.md) - French whitepaper
 
+### Migration Tools (1 file)
+- [**🔧 Migration Guide**](legacy-migration/MIGRATION-GUIDE.md) - Migration process documentation
+
 ---
 
 ## 📊 Documentation Statistics
 
 | Category | Count | Status | Last Updated |
 |----------|--------|--------|--------------|
-| **Active Docs** | 25 files | ✅ Current | Session 5.5 |
-| **Legacy Docs** | 14 files | 📚 Reference | Pre-migration |
-| **Total Files** | 39 files | 📚 Complete | January 25, 2025 |
-| **Directories** | 12 folders | 🗂️ Organized | Structured |
+| **Active Docs** | 32 files | ✅ Current | Session 9 Complete |
+| **Legacy Docs** | 16 files | 📚 Reference | Pre-migration |
+| **Total Files** | 48 files | 📚 Complete | August 9, 2025 |
+| **Directories** | 14 folders | 🗂️ Organized | Structured |
 
 ---
 
@@ -220,10 +255,11 @@
 
 - **🏠 Main Repository**: [README.md](../README.md)
 - **🌐 Live Website**: [sheltr-ai.web.app](https://sheltr-ai.web.app)
-- **🔒 Latest Session**: [Session 5.5 About & Solutions Redesign](04-development/SESSION-05.5-ABOUT-SOLUTIONS-REDESIGN.md)
+- **🔒 Latest Session**: [Session 9 Data Connectivity Revolution](04-development/SESSION-09-DATA-CONNECTIVITY.md)
 - **🗺️ Development Plan**: [Roadmap](04-development/dev-roadmap.md)
 - **🔧 API Reference**: [FastAPI Docs](03-api/README.md)
+- **👥 User Guides**: [Complete User Documentation](06-user-guides/)
 
 ---
 
-*Last Updated: January 25, 2025 - Post Session 5.5 Documentation Enhancement* 
+*Last Updated: August 9, 2025 - Post Session 9 Data Connectivity + Complete User Guide Suite* 

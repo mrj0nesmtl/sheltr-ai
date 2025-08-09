@@ -1,11 +1,15 @@
-# 🔌 SHELTR-AI API Documentation
+# 🔌 SHELTR-AI API Documentation - Session 9 Implementation
 
-**FastAPI Multi-Tenant Backend for Charitable Giving Platform**
+**FastAPI Backend for Shelter Management Platform**
 
-*Base URL: `https://api.sheltr.ai/v2`*  
-*Authentication: Bearer JWT tokens with custom claims* ✅ **OPERATIONAL**  
-*Multi-Tenant: X-Tenant-ID header required*  
-*Live System: https://sheltr-ai.web.app* ✅ **AUTHENTICATION ACTIVE**
+*Base URL: `http://localhost:8000` (Development) | `https://api.sheltr.ai` (Production)*  
+*Authentication: Firebase ID tokens* ✅ **OPERATIONAL**  
+*Current Version: 2.0.0*  
+*Live Frontend: https://sheltr-ai.web.app* ✅ **AUTHENTICATION ACTIVE**
+
+**🎯 Last Updated**: Session 9 (August 9, 2025)  
+**📊 Current Status**: Production-ready with 6 operational routers  
+**🔗 Data Integration**: Connected to clean Firestore structure
 
 ---
 
@@ -13,176 +17,211 @@
 
 ### Authentication
 
-All API requests require authentication via Firebase JWT tokens with custom claims:
+All API requests require Firebase ID token authentication:
 
 ```bash
 # Example authenticated request
 curl -X GET \
-  'https://api.sheltr.ai/v2/participants/' \
-  -H 'Authorization: Bearer YOUR_JWT_TOKEN' \
-  -H 'X-Tenant-ID: shelter-abc123' \
+  'http://localhost:8000/auth/profile' \
+  -H 'Authorization: Bearer <firebase-id-token>' \
   -H 'Content-Type: application/json'
 ```
 
-### API Response Format
+### Standard API Response Format
 
 ```json
 {
   "success": true,
   "data": { /* Response data */ },
   "message": "Operation completed successfully",
-  "timestamp": "2025-07-22T12:00:00Z",
-  "tenant_id": "shelter-abc123"
+  "timestamp": 1691827200.0
 }
 ```
 
----
-
-## 🏗️ Multi-Tenant Architecture
-
-### Tenant Types & Access
-
-| Tenant Type | ID Format | Purpose | API Access |
-|-------------|-----------|---------|------------|
-| **Platform** | `platform` | SHELTR administration | All endpoints |
-| **Shelter** | `shelter-{uuid}` | Individual shelter management | Shelter-specific data |
-| **Participant Network** | `participant-network` | Independent participants | Participant data |
-| **Donor Network** | `donor-network` | Donor community | Donation tracking |
-
-### Tenant Header
-
-```http
-X-Tenant-ID: shelter-abc123
-```
-
-Required for all requests. Determines data isolation and access permissions.
-
----
-
-## 🎯 Four-Role System
-
-### Role-Based Endpoints ✅ **OPERATIONAL**
-
-| Role | Permissions | Accessible Endpoints | Live Status |
-|------|-------------|---------------------|-------------|
-| **SuperAdmin** | Full system access | `/admin/*`, `/analytics/global/*`, `/system/*` | ✅ **Joel's Dashboard Active** |
-| **Admin** | Shelter management | `/shelter/*`, `/participants/*`, `/analytics/shelter/*` | 🔄 Ready for deployment |
-| **Participant** | Personal data | `/participant/profile/*`, `/participant/donations/*` | 🔄 Ready for deployment |
-| **Donor** | Donation tracking | `/donor/*`, `/donations/history/*`, `/impact/*` | 🔄 Ready for deployment |
-
----
-
-## 📚 API Endpoints Overview
-
-### 🔐 Authentication
-- `POST /auth/login` - User authentication
-- `POST /auth/refresh` - Token refresh
-- `POST /auth/logout` - User logout
-- `GET /auth/verify` - Token verification
-
-### 👥 User Management
-- `GET /users/profile` - Get user profile
-- `PUT /users/profile` - Update user profile
-- `POST /users/register` - User registration
-- `DELETE /users/account` - Account deletion
-
-### 🏠 Tenant Management
-- `GET /tenants/` - List accessible tenants
-- `GET /tenants/{tenant_id}` - Get tenant details
-- `PUT /tenants/{tenant_id}` - Update tenant settings
-- `POST /tenants/` - Create new tenant (SuperAdmin only)
-
-### 👤 Participant Management
-- `GET /participants/` - List participants
-- `POST /participants/` - Register new participant
-- `GET /participants/{participant_id}` - Get participant details
-- `PUT /participants/{participant_id}` - Update participant
-- `POST /participants/{participant_id}/qr` - Generate QR code
-- `POST /participants/{participant_id}/verify` - Verify participant
-
-### 💰 Donation System
-- `POST /donations/` - Process new donation
-- `GET /donations/` - List donations
-- `GET /donations/{donation_id}` - Get donation details
-- `POST /donations/verify` - Verify QR code donation
-- `GET /donations/participant/{participant_id}` - Participant donation history
-
-### 📱 QR Code Management
-- `POST /qr/generate` - Generate QR code
-- `POST /qr/verify` - Verify QR code
-- `GET /qr/{qr_id}` - Get QR code details
-- `PUT /qr/{qr_id}` - Update QR code
-
-### ⛓️ Blockchain Integration
-- `POST /blockchain/process` - Process blockchain transaction
-- `GET /blockchain/status/{tx_hash}` - Check transaction status
-- `GET /blockchain/wallet/{address}` - Get wallet information
-- `POST /blockchain/wallet/create` - Create new wallet
-
-### 📊 Analytics & Reporting
-- `GET /analytics/overview` - Platform overview
-- `GET /analytics/donations` - Donation analytics
-- `GET /analytics/impact` - Impact metrics
-- `GET /analytics/participants` - Participant statistics
-- `POST /analytics/report` - Generate custom report
-
-### 🤖 AI & Insights
-- `POST /ai/analyze` - Generate AI insights
-- `GET /ai/predictions` - Get donation predictions
-- `POST /ai/report` - Generate AI-powered impact report
-
----
-
-## 🔒 Authentication & Security
-
-### JWT Token Structure ✅ **LIVE IMPLEMENTATION**
+### Error Response Format
 
 ```json
 {
-  "sub": "user_uuid",
-  "role": "super_admin",  // ✅ Joel's actual role
-  "tenant_id": "platform",  // ✅ Platform tenant for SuperAdmin
-  "permissions": ["read:all", "write:all", "admin:system"],  // ✅ Full access
-  "email": "joel.yaffe@gmail.com",  // ✅ Joel's verified email
-  "verified": true,  // ✅ Account verified
-  "iat": 1690000000,
-  "exp": 1690086400
+  "success": false,
+  "error": "HTTPException",
+  "message": "Detailed error message",
+  "status_code": 400
 }
 ```
 
-**🎯 Live Example**: Joel's Super Admin token provides full platform access with real Firebase authentication.
+---
 
-### Permission System
+## 🏗️ Data Architecture (Session 9 Implementation)
 
-Permissions follow the pattern: `action:resource`
+### Clean Database Structure
 
-```typescript
-// Example permissions
-const permissions = [
-  'read:participants',
-  'write:participants', 
-  'delete:participants',
-  'read:donations',
-  'write:donations',
-  'admin:system'
-];
+Our API connects to the **clean Firestore structure** implemented in Session 9:
+
+```
+/shelters/{shelter-id}     ← Root-level shelter collection
+/users/{user-id}           ← Universal user management  
+/services/{service-id}     ← Service management
 ```
 
-### Rate Limiting
+### User-Shelter Associations
 
-| Endpoint Category | Rate Limit | Window |
-|------------------|------------|--------|
-| **Authentication** | 5 requests | 1 minute |
-| **General API** | 100 requests | 1 minute |
-| **Donations** | 50 requests | 1 minute |
-| **Analytics** | 20 requests | 1 minute |
-| **AI/ML** | 10 requests | 1 minute |
+Data isolation is achieved through **user-shelter linking**:
+- `shelter_id`: Links users to specific shelters ("old-brewery-mission")
+- `tenant_id`: Provides tenant isolation ("shelter-old-brewery-mission")
+- `role`: Determines access level ("super_admin", "admin", "participant", "donor")
 
 ---
 
-## 🏥 Health & Status
+## 🎯 Four-Role System (Operational)
 
-### Health Check
+### Role-Based Access Control ✅ **LIVE**
+
+| Role | Access Level | Current Status | Test Account |
+|------|--------------|----------------|--------------|
+| **Super Admin** | Platform-wide access | ✅ **Joel's Dashboard Active** | `joel.yaffe@gmail.com` |
+| **Shelter Admin** | Shelter-specific data | ✅ **Old Brewery Mission Active** | `shelteradmin@example.com` |
+| **Participant** | Personal profile + shelter data | ✅ **Real Shelter Association** | `participant@example.com` |
+| **Donor** | Donation tracking | 🔄 **Ready for Session 10** | `donor@example.com` |
+
+---
+
+## 📚 API Endpoints (Session 9 Implementation)
+
+### 🔐 Authentication (`/auth`)
+**Router**: `routers/auth.py` - User registration, login, and role management
+
+- `POST /auth/register` - Register new user with role-based tenant assignment
+- `POST /auth/login` - User authentication with Firebase ID tokens
+- `GET /auth/profile` - Get current user profile (requires auth)
+- `PUT /auth/profile` - Update user profile (requires auth)
+- `GET /auth/users` - List users (admin/super_admin only)
+- `PUT /auth/role/{user_id}` - Update user role (super_admin only)
+- `DELETE /auth/user/{user_id}` - Delete user (super_admin only)
+
+### 📊 Analytics (`/analytics`)
+**Router**: `routers/analytics.py` - Platform and shelter analytics
+
+- `GET /analytics/platform` - Platform-wide metrics (super_admin only)
+- `GET /analytics/shelter/{shelter_id}` - Shelter-specific analytics (admin access)
+- `GET /analytics/user/{user_id}` - User activity analytics
+- `POST /analytics/report` - Generate custom analytics report
+
+### 💬 Chatbot (`/chatbot`)
+**Router**: `routers/chatbot.py` - AI-powered chat assistance
+
+- `POST /chatbot/message` - Send message to chatbot
+- `GET /chatbot/history/{user_id}` - Get chat history
+- `DELETE /chatbot/history/{user_id}` - Clear chat history
+
+### 🛠️ Services (`/services`)
+**Router**: `routers/services.py` - Shelter service management
+
+- `GET /services/` - List services (filtered by user's shelter)
+- `POST /services/` - Create new service (admin access)
+- `GET /services/{service_id}` - Get service details
+- `PUT /services/{service_id}` - Update service (admin access)
+- `DELETE /services/{service_id}` - Delete service (admin access)
+
+### 👥 Users (`/users`)
+**Router**: `routers/users.py` - User profile and management
+
+- `GET /users/profile` - Get current user profile
+- `PUT /users/profile` - Update current user profile
+- `GET /users/{user_id}` - Get specific user profile (admin access)
+- `PUT /users/{user_id}` - Update specific user profile (admin access)
+
+### 🎭 Demo Donations (`/demo/donations`)
+**Router**: `routers/demo_donations.py` - Adyen-powered QR donation demo
+
+- `GET /demo/donations/participant/{participant_id}` - Get demo participant info
+- `POST /demo/donations/create-session` - Create Adyen payment session
+- `POST /demo/donations/finalize/{payment_id}` - Finalize payment with details
+- `POST /demo/donations/webhook` - Adyen webhook handler
+- `GET /demo/donations/stats/{participant_id}` - Get demo participant statistics
+
+---
+
+## 🔒 Authentication & Security (Session 9 Implementation)
+
+### Firebase ID Token Authentication ✅ **OPERATIONAL**
+
+```bash
+# Real authentication flow
+curl -X GET 'http://localhost:8000/auth/profile' \
+  -H 'Authorization: Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6...' \
+  -H 'Content-Type: application/json'
+```
+
+### Custom Claims Structure (Real Implementation)
+
+```json
+{
+  "uid": "user_uuid_123",
+  "email": "shelteradmin@example.com",
+  "role": "admin",
+  "shelter_id": "old-brewery-mission",
+  "tenant_id": "shelter-old-brewery-mission",
+  "iat": 1691827200,
+  "exp": 1691913600
+}
+```
+
+**🎯 Live Examples**:
+- **Joel**: `joel.yaffe@gmail.com` → `role: "super_admin"` (platform-wide access)
+- **Shelter Admin**: `shelteradmin@example.com` → `role: "admin"`, `shelter_id: "old-brewery-mission"`
+- **Participant**: `participant@example.com` → `role: "participant"`, `shelter_id: "old-brewery-mission"`
+
+### CORS Configuration
+
+```python
+# Production CORS settings
+allow_origins=[
+    "http://localhost:3000",           # Next.js dev
+    "https://sheltr-ai.web.app",      # Firebase hosting
+    "https://api.sheltr.ai",          # Production API
+]
+```
+
+### Middleware Stack
+
+```python
+# Performance monitoring
+@app.middleware("http")
+async def add_process_time_header(request: Request, call_next):
+    # Adds X-Process-Time header
+    # Logs slow requests (>1.0s)
+
+# Global exception handling
+@app.exception_handler(HTTPException)
+async def http_exception_handler(request: Request, exc: HTTPException):
+    # Standardized error responses
+```
+
+---
+
+## 🏥 Health & Status (Session 9 Implementation)
+
+### Root Health Check
+
+```http
+GET /
+```
+
+```json
+{
+  "success": true,
+  "message": "SHELTR-AI API is running",
+  "version": "2.0.0",
+  "status": "healthy",
+  "services": {
+    "authentication": "✅ operational",
+    "database": "✅ operational", 
+    "multi_tenant": "✅ operational"
+  }
+}
+```
+
+### Detailed Health Check
 
 ```http
 GET /health
@@ -190,60 +229,59 @@ GET /health
 
 ```json
 {
+  "success": true,
+  "timestamp": 1691827200.0,
   "status": "healthy",
   "version": "2.0.0",
-  "timestamp": "2025-07-22T12:00:00Z",
+  "environment": "development",
   "services": {
-    "database": "healthy",
-    "blockchain": "healthy",
-    "ai": "healthy",
-    "cache": "healthy"
-  }
-}
-```
-
-### System Status
-
-```http
-GET /status
-```
-
-```json
-{
-  "platform": {
-    "version": "2.0.0",
-    "uptime": "15d 4h 23m",
-    "total_participants": 1250,
-    "total_donations": 8945,
-    "total_amount": "$125,430.50"
+    "api": "✅ operational",
+    "firebase_auth": "✅ operational",
+    "firestore": "✅ operational",
+    "storage": "✅ operational"
   },
-  "blockchain": {
-    "network": "ethereum",
-    "last_block": 18234567,
-    "contract_address": "0x742d35cc6638c532532e3783d6f1e2f1a9a4f8c7"
+  "metrics": {
+    "uptime": 1691827200.0,
+    "memory_usage": "unknown",
+    "response_time": "< 50ms"
   }
 }
 ```
 
----
-
-## 📝 Request/Response Examples
-
-### Register New Participant
+### Interactive API Documentation
 
 ```http
-POST /participants/
-X-Tenant-ID: shelter-abc123
-Authorization: Bearer JWT_TOKEN
+GET /docs
+```
+
+**Live Swagger UI** with SHELTR-AI branding at `http://localhost:8000/docs`
+
+### OpenAPI Schema
+
+```http
+GET /openapi.json
+```
+
+Complete OpenAPI 3.0 specification for all endpoints.
+
+---
+
+## 📝 Request/Response Examples (Real Implementation)
+
+### User Registration
+
+```http
+POST /auth/register
+Authorization: Bearer <firebase-id-token>
 Content-Type: application/json
 
 {
-  "name": "John Doe",
-  "age": 34,
-  "shelter_affiliation": "abc123",
-  "verification_documents": ["id_scan.jpg"],
-  "needs": ["food", "shelter", "medical"],
-  "bio": "Seeking support to get back on my feet"
+  "email": "newuser@example.com",
+  "password": "securepassword123",
+  "first_name": "Jane",
+  "last_name": "Smith",
+  "role": "participant",
+  "shelter_id": "old-brewery-mission"
 }
 ```
 
@@ -251,41 +289,60 @@ Content-Type: application/json
 {
   "success": true,
   "data": {
-    "id": "part_123456",
-    "name": "John Doe",
-    "qr_code": {
-      "id": "qr_789012",
-      "hash": "sha256:abcd1234...",
-      "url": "https://api.sheltr.ai/qr/qr_789012",
-      "image_url": "https://cdn.sheltr.ai/qr/qr_789012.png"
+    "user": {
+      "uid": "user_uuid_789",
+      "email": "newuser@example.com",
+      "role": "participant",
+      "shelter_id": "old-brewery-mission",
+      "tenant_id": "shelter-old-brewery-mission"
     },
-    "wallet": {
-      "address": "0x1234567890abcdef...",
-      "network": "ethereum",
-      "balance": "0.00"
-    },
-    "created_at": "2025-07-22T12:00:00Z",
-    "status": "pending_verification"
+    "custom_claims": {
+      "role": "participant",
+      "shelter_id": "old-brewery-mission",
+      "tenant_id": "shelter-old-brewery-mission"
+    }
+  },
+  "message": "User registered successfully"
+}
+```
+
+### Get User Profile
+
+```http
+GET /auth/profile
+Authorization: Bearer <firebase-id-token>
+```
+
+```json
+{
+  "success": true,
+  "data": {
+    "uid": "user_uuid_123",
+    "email": "shelteradmin@example.com",
+    "first_name": "Admin",
+    "last_name": "User", 
+    "role": "admin",
+    "shelter_id": "old-brewery-mission",
+    "tenant_id": "shelter-old-brewery-mission",
+    "status": "active",
+    "created_at": "2025-08-09T...",
+    "last_active": "2025-08-09T..."
   }
 }
 ```
 
-### Process Donation
+### Demo Donation (Adyen Integration)
 
 ```http
-POST /donations/
-X-Tenant-ID: donor-network
-Authorization: Bearer JWT_TOKEN
+POST /demo/donations/create-session
 Content-Type: application/json
 
 {
-  "participant_id": "part_123456",
-  "amount": "25.00",
-  "currency": "USD",
-  "purpose": "food",
-  "message": "Hope this helps!",
-  "payment_method": "blockchain",
-  "donor_wallet": "0x987654321fedcba..."
+  "participant_id": "alex-thompson-demo",
+  "amount": 25.0,
+  "donor_info": {
+    "name": "Anonymous Donor"
+  }
 }
 ```
 
@@ -293,164 +350,158 @@ Content-Type: application/json
 {
   "success": true,
   "data": {
-    "donation_id": "don_345678",
-    "status": "processing",
-    "blockchain_tx": "0xabcdef123456...",
-    "distribution": {
-      "to_participant": "20.00",
-      "to_housing_fund": "3.75", 
-      "to_operations": "1.25"
-    },
-    "estimated_confirmation": "2025-07-22T12:05:00Z"
+    "session_id": "CS_123456789",
+    "session_data": "eyJjb3VudHJ5Q29kZSI6IkNBIiw...",
+    "payment_id": "payment_uuid_456",
+    "participant": {
+      "id": "alex-thompson-demo",
+      "name": "Alex Thompson",
+      "story": "Former chef working toward housing goals",
+      "progress": {
+        "housing": 75,
+        "employment": 60,
+        "financial_stability": 40
+      }
+    }
   }
 }
 ```
 
 ---
 
-## 🚨 Error Handling
+## 🚨 Error Handling (Session 9 Implementation)
 
 ### Standard Error Response
 
 ```json
 {
   "success": false,
-  "error": {
-    "code": "PARTICIPANT_NOT_FOUND",
-    "message": "Participant with ID part_123456 not found",
-    "details": {
-      "participant_id": "part_123456",
-      "tenant_id": "shelter-abc123"
-    }
-  },
-  "timestamp": "2025-07-22T12:00:00Z"
+  "error": "HTTPException",
+  "message": "User not found or access denied",
+  "status_code": 404
 }
 ```
 
-### Common Error Codes
+### Global Exception Handling
 
-| Code | HTTP Status | Description |
-|------|-------------|-------------|
-| `INVALID_TOKEN` | 401 | JWT token invalid or expired |
-| `INSUFFICIENT_PERMISSIONS` | 403 | User lacks required permissions |
-| `TENANT_ACCESS_DENIED` | 403 | User cannot access specified tenant |
-| `PARTICIPANT_NOT_FOUND` | 404 | Participant does not exist |
-| `DONATION_FAILED` | 400 | Donation processing failed |
-| `BLOCKCHAIN_ERROR` | 503 | Blockchain network issue |
-| `RATE_LIMIT_EXCEEDED` | 429 | API rate limit exceeded |
+```python
+# HTTP exceptions
+@app.exception_handler(HTTPException)
+async def http_exception_handler(request: Request, exc: HTTPException):
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={
+            "success": False,
+            "error": "HTTPException", 
+            "message": exc.detail,
+            "status_code": exc.status_code
+        }
+    )
+
+# Internal server errors
+@app.exception_handler(Exception)
+async def general_exception_handler(request: Request, exc: Exception):
+    logger.error(f"Unhandled exception: {str(exc)}", exc_info=True)
+    return JSONResponse(
+        status_code=500,
+        content={
+            "success": False,
+            "error": "InternalServerError",
+            "message": "An internal server error occurred",
+            "status_code": 500
+        }
+    )
+```
+
+### Common Error Scenarios
+
+| Error | HTTP Status | Description | Example |
+|-------|-------------|-------------|---------|
+| **Authentication Failed** | 401 | Invalid Firebase ID token | Missing or expired token |
+| **Authorization Failed** | 403 | Insufficient role permissions | Participant trying to access admin endpoint |
+| **Resource Not Found** | 404 | Requested resource doesn't exist | User profile not found |
+| **Validation Error** | 422 | Invalid request data | Missing required fields |
+| **Service Unavailable** | 503 | External service down | Adyen service not configured |
 
 ---
 
-## 📊 Pagination
+## 🚀 Development & Deployment
 
-### Request Parameters
+### Local Development Setup
 
-```http
-GET /participants/?page=2&limit=50&sort=created_at&order=desc
+```bash
+# 1. Start FastAPI development server
+cd apps/api
+python main.py
+
+# 2. API available at
+http://localhost:8000
+
+# 3. Interactive docs at  
+http://localhost:8000/docs
+
+# 4. Health check
+curl http://localhost:8000/health
 ```
 
-### Response Format
+### Environment Configuration
 
-```json
-{
-  "success": true,
-  "data": {
-    "items": [ /* Array of participants */ ],
-    "pagination": {
-      "page": 2,
-      "limit": 50,
-      "total_items": 1250,
-      "total_pages": 25,
-      "has_next": true,
-      "has_prev": true
-    }
-  }
-}
+```python
+# Required environment variables
+FIREBASE_PROJECT_ID=sheltr-ai
+FIREBASE_PRIVATE_KEY_ID=your_key_id
+FIREBASE_PRIVATE_KEY=your_private_key
+FIREBASE_CLIENT_EMAIL=your_service_account_email
+
+# Optional (Adyen demo)
+ADYEN_API_KEY=your_adyen_key
+ADYEN_MERCHANT_ACCOUNT=your_merchant_account
 ```
+
+### Production Deployment
+
+- **Backend**: FastAPI on Google Cloud Run
+- **Database**: Firebase Firestore with clean Session 9 structure
+- **Authentication**: Firebase Auth with custom claims
+- **Frontend Integration**: CORS-enabled for https://sheltr-ai.web.app
 
 ---
 
-## 🔍 Filtering & Search
+## 📊 Current Implementation Status
 
-### Query Parameters
+### ✅ **Completed (Session 9)**
+- **6 Operational Routers**: Auth, Analytics, Chatbot, Services, Users, Demo Donations
+- **Firebase Integration**: Complete authentication and Firestore connectivity
+- **Role-Based Access**: 4-role system (Super Admin, Admin, Participant, Donor)
+- **Data Connectivity**: Real database integration with clean structure
+- **Adyen Demo**: Working QR donation system with payment processing
 
-```http
-GET /participants/?status=verified&shelter_id=abc123&search=john&created_after=2025-01-01
-```
-
-### Available Filters
-
-| Resource | Filters | Example |
-|----------|---------|---------|
-| **Participants** | `status`, `shelter_id`, `verified`, `created_after`, `search` | `?status=verified&search=john` |
-| **Donations** | `amount_min`, `amount_max`, `purpose`, `status`, `date_range` | `?amount_min=10&purpose=food` |
-| **QR Codes** | `active`, `created_after`, `participant_id` | `?active=true` |
-
----
-
-## 🚀 WebSocket Real-Time Updates
-
-### Connection
-
-```javascript
-const ws = new WebSocket('wss://api.sheltr.ai/ws');
-
-// Authentication
-ws.send(JSON.stringify({
-  type: 'auth',
-  token: 'JWT_TOKEN',
-  tenant_id: 'shelter-abc123'
-}));
-```
-
-### Event Types
-
-```javascript
-// Donation received
-{
-  "type": "donation_received",
-  "data": {
-    "donation_id": "don_123456",
-    "participant_id": "part_789012",
-    "amount": "25.00",
-    "status": "confirmed"
-  }
-}
-
-// Participant registered
-{
-  "type": "participant_registered", 
-  "data": {
-    "participant_id": "part_345678",
-    "shelter_id": "abc123"
-  }
-}
-```
+### 🔄 **Session 10 Priorities**
+- **Inventory Management API**: Resource tracking endpoints
+- **Appointment System API**: Service booking and calendar endpoints  
+- **Enhanced Analytics**: More detailed reporting endpoints
+- **Real Donation Processing**: Production payment system integration
 
 ---
 
-## 📚 Additional Resources
+## 🛠️ Tools & Resources
 
-### Detailed Endpoint Documentation
-- [Authentication](authentication.md) - Complete auth flow and security
-- [User Management](user-management.md) - User CRUD operations
-- [Tenant Management](tenant-management.md) - Multi-tenant operations
-- [Donation System](donation-system.md) - Donation processing and tracking
-- [QR Management](qr-management.md) - QR code generation and verification
-- [Blockchain API](blockchain-api.md) - Smart contract integration
-- [Analytics API](analytics-api.md) - Reporting and insights
-- [Webhooks](webhooks.md) - External system integration
+### Development Tools
+- **Interactive API Docs**: `http://localhost:8000/docs` (Swagger UI)
+- **OpenAPI Schema**: `http://localhost:8000/openapi.json`
+- **Health Monitoring**: `http://localhost:8000/health`
 
-### Code Examples
-- [cURL Examples](examples/curl-examples.md)
-- [JavaScript SDK](examples/sdk-examples.md)
-- [Postman Collection](examples/postman-collection.json)
+### Frontend Integration
+- **CORS Configured**: For Next.js development and production
+- **Performance Monitoring**: Request timing headers
+- **Error Handling**: Standardized error responses
+- **Authentication**: Firebase ID token validation
 
-### Tools & Testing
-- **Interactive API Docs**: `https://api.sheltr.ai/docs`
-- **OpenAPI Spec**: `https://api.sheltr.ai/openapi.json`
-- **Postman Collection**: [Download](examples/postman-collection.json)
+### Testing & Validation
+- **Role-Based Testing**: 4 test accounts for each user role
+- **Real Data**: Connected to Session 9 clean database structure
+- **Production Ready**: Deployed and operational backend
 
 ---
 
-**This API powers the next generation of charitable giving - transparent, efficient, and globally scalable.** 🚀✨ 
+**This FastAPI backend powers the SHELTR-AI platform with clean architecture, real data connectivity, and production-ready shelter management capabilities.** 🏠✨ 

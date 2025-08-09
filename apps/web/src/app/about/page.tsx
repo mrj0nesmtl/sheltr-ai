@@ -222,14 +222,23 @@ export default function AboutPage() {
       </section>
 
       {/* How We Fund Change - New Section */}
-      <section className="py-20 bg-muted/30">
-        <div className="container mx-auto px-4">
+      <section 
+        className="py-20 relative"
+        style={{
+          backgroundImage: "url('/backgrounds/impact-bg.jpg')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      >
+        <div className="absolute inset-0 bg-black/60"></div>
+        <div className="relative z-10 container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">
+              <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">
                 How Donations Create Change
               </h2>
-              <p className="text-xl text-muted-foreground">
+              <p className="text-xl text-gray-200">
                 Our transparent 80/15/5 distribution model ensures maximum impact
               </p>
             </div>
@@ -239,8 +248,8 @@ export default function AboutPage() {
                 <div className="bg-blue-600 text-white rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4 text-2xl font-bold">
                   80%
                 </div>
-                <h3 className="text-xl font-semibold mb-3">Direct to Participants</h3>
-                <p className="text-muted-foreground">
+                <h3 className="text-xl font-semibold mb-3 text-white">Direct to Participants</h3>
+                <p className="text-gray-200">
                   Goes directly to participant crypto wallets as SHELTR-S stable tokens for immediate needs. 
                   Zero volatility risk ensures purchasing power remains stable at $1.00 USD value. 
                   Participants maintain complete autonomy over spending decisions and essential purchases.
@@ -251,8 +260,8 @@ export default function AboutPage() {
                 <div className="bg-green-600 text-white rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4 text-2xl font-bold">
                   15%
                 </div>
-                <h3 className="text-xl font-semibold mb-3">SmartFund™ Allocation</h3>
-                <p className="text-muted-foreground">
+                <h3 className="text-xl font-semibold mb-3 text-white">SmartFund™ Allocation</h3>
+                <p className="text-gray-200">
                   Smart contracts automatically save 15% towards participants' emergency housing goals like tiny homes. 
                   AI-optimized token staking compounds these funds over time. 
                   Each participant builds their housing fund through every donation received.
@@ -263,8 +272,8 @@ export default function AboutPage() {
                 <div className="bg-orange-600 text-white rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4 text-2xl font-bold">
                   5%
                 </div>
-                <h3 className="text-xl font-semibold mb-3">Platform Operations</h3>
-                <p className="text-muted-foreground">
+                <h3 className="text-xl font-semibold mb-3 text-white">Platform Operations</h3>
+                <p className="text-gray-200">
                   Covers technology infrastructure, security audits, and continuous platform development for reliability. 
                   Ensures 99.99% uptime through distributed cloud architecture and automated monitoring systems. 
                   Funds regulatory compliance, customer support, and global scaling capabilities.
@@ -272,10 +281,10 @@ export default function AboutPage() {
               </div>
             </div>
 
-            <div className="bg-card rounded-lg p-8 border-2">
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-8 border-2 border-white/20">
               <div className="text-center">
-                <h3 className="text-2xl font-bold mb-4">Complete Transparency</h3>
-                <p className="text-lg text-muted-foreground mb-6">
+                <h3 className="text-2xl font-bold mb-4 text-white">Complete Transparency</h3>
+                <p className="text-lg text-gray-200 mb-6">
                   Every transaction is recorded on the blockchain. Donors can track their impact in real-time, 
                   and participants maintain full control over their funds.
                 </p>

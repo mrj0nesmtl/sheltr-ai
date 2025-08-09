@@ -132,7 +132,7 @@ export default function HomePage() {
                 Transform Donations into Impact
               </h1>
               <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto">
-                Transform donations into meaningful actions using blockchain technology and smart contracts 
+                Transform meaningful actions using blockchain technology and smart contracts 
                 to directly support homeless individuals with transparency and accountability.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">

@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ThemeToggle } from '@/components/theme-toggle';
+import Footer from '@/components/Footer';
 
 export default function ParticipantsPage() {
   return (
@@ -321,66 +322,25 @@ export default function ParticipantsPage() {
                 SHELTR provides the tools and support to make it happen.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" className="bg-green-600 hover:bg-green-700">
-                  <MapPin className="h-4 w-4 mr-2" />
-                  Find Services Near Me
-                </Button>
-                <Button variant="outline" size="lg" className="border-green-500/20 text-green-600 dark:text-green-400">
-                  <Heart className="h-4 w-4 mr-2" />
-                  Get Support Now
-                </Button>
+                <Link href="/register">
+                  <Button size="lg" className="bg-green-600 hover:bg-green-700">
+                    <Users className="h-4 w-4 mr-2" />
+                    Join SHELTR Today
+                  </Button>
+                </Link>
+                <Link href="/docs/participant-guide">
+                  <Button variant="outline" size="lg" className="border-green-500/20 text-green-600 dark:text-green-400">
+                    <Heart className="h-4 w-4 mr-2" />
+                    Get Support Guide
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-muted py-12">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <Link href="/" className="flex items-center mb-4">
-                <img src="/logo.svg" alt="SHELTR-AI" className="h-6 w-auto hover:opacity-80 transition-opacity" />
-              </Link>
-              <p className="text-muted-foreground text-sm">
-                Hacking homelessness through technology.
-              </p>
-            </div>
-            
-            <div>
-              <h3 className="font-semibold mb-4">Platform</h3>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><Link href="/solutions" className="hover:text-foreground">Solutions</Link></li>
-                <li><Link href="/about" className="hover:text-foreground">About</Link></li>
-                <li><Link href="/scan-give" className="hover:text-foreground">Scan & Give</Link></li>
-              </ul>
-            </div>
-            
-            <div>
-              <h3 className="font-semibold mb-4">Community</h3>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-foreground">GitHub</a></li>
-                <li><a href="#" className="hover:text-foreground">Discord</a></li>
-                <li><a href="#" className="hover:text-foreground">Twitter</a></li>
-              </ul>
-            </div>
-            
-            <div>
-              <h3 className="font-semibold mb-4">Support</h3>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-foreground">Documentation</a></li>
-                <li><a href="#" className="hover:text-foreground">Help Center</a></li>
-                <li><a href="#" className="hover:text-foreground">Contact</a></li>
-              </ul>
-            </div>
-          </div>
-          
-          <div className="border-t pt-8 mt-8 text-center text-sm text-muted-foreground">
-            <p>&copy; 2025 SHELTR. Built with ❤️ in memory of Gunnar Blaze.</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 } 

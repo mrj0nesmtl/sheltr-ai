@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth, UserRole, UserRegistrationData } from '../../contexts/AuthContext';
+import { ShelterOnboardingForm, ShelterOnboardingData } from './ShelterOnboardingForm';
 
 interface RegisterFormProps {
   onToggleMode?: () => void;
@@ -15,6 +16,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
   showLoginLink = true,
   defaultRole = 'participant'
 }) => {
+  const [showShelterOnboarding, setShowShelterOnboarding] = useState(false);
   const [formData, setFormData] = useState<UserRegistrationData>({
     email: '',
     password: '',
@@ -97,6 +99,12 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
       return;
     }
 
+    // If user selected Shelter Admin, show the shelter onboarding form
+    if (formData.role === 'admin') {
+      setShowShelterOnboarding(true);
+      return;
+    }
+
     setIsLoading(true);
     clearError();
 
@@ -110,6 +118,41 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
       setIsLoading(false);
     }
   };
+
+  const handleShelterOnboardingSubmit = async (shelterData: ShelterOnboardingData) => {
+    setIsLoading(true);
+    clearError();
+
+    try {
+      // Create the user account first
+      await register({
+        ...formData,
+        shelterOnboardingData: shelterData
+      });
+      
+      // Show success message and redirect
+      router.push('/register/shelter-pending');
+    } catch (error) {
+      console.error('Shelter registration failed:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleBackToBasicRegistration = () => {
+    setShowShelterOnboarding(false);
+  };
+
+  // Show shelter onboarding form if user selected Shelter Admin
+  if (showShelterOnboarding) {
+    return (
+      <ShelterOnboardingForm
+        onSubmit={handleShelterOnboardingSubmit}
+        onBack={handleBackToBasicRegistration}
+        isLoading={isLoading}
+      />
+    );
+  }
 
   return (
     <div className="w-full max-w-lg mx-auto">

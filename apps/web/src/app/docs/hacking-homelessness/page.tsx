@@ -91,7 +91,7 @@ export default function HackingHomelessnessPage() {
                 👔 Executive Overview
               </h3>
               <p className="text-purple-700 dark:text-purple-300 text-sm">
-                This executive summary presents SHELTR's vision, theory of change, and partnership opportunities 
+                This executive summary presents SHELTR's vision, our Theory of Change, and partnership opportunities 
                 for organizations, influencers, community leaders, media, and strategic partners.
               </p>
             </div>

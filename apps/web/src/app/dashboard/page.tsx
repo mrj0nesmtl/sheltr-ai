@@ -1,7 +1,7 @@
 "use client";
 
 import { useAuth } from '@/contexts/AuthContext';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { DashboardRouter } from '@/components/auth/DashboardRouter';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ChatbotWidget } from '@/components/ChatbotWidget';
+import { getPlatformMetrics, PlatformMetrics } from '@/services/platformMetrics';
 import { 
   Users, 
   Building, 
@@ -17,17 +18,51 @@ import {
   AlertTriangle, 
   Activity,
   Settings,
-  BarChart3
+  BarChart3,
+  Loader2
 } from 'lucide-react';
 
 export default function DashboardPage() {
   const { user } = useAuth();
+  const [platformMetrics, setPlatformMetrics] = useState<PlatformMetrics | null>(null);
+  const [metricsLoading, setMetricsLoading] = useState(false);
 
   useEffect(() => {
     console.log('🔍 Dashboard Debug - Current user:', user);
     console.log('🔍 Dashboard Debug - User role:', user?.role);
     console.log('🔍 Dashboard Debug - User UID:', user?.uid);
   }, [user]);
+
+  // Load real platform metrics for super admin
+  useEffect(() => {
+    if (user?.role === 'super_admin') {
+      loadPlatformMetrics();
+    }
+  }, [user?.role]);
+
+  const loadPlatformMetrics = async () => {
+    setMetricsLoading(true);
+    try {
+      console.log('📊 Loading real platform metrics...');
+      const metrics = await getPlatformMetrics();
+      setPlatformMetrics(metrics);
+      console.log('✅ Platform metrics loaded:', metrics);
+    } catch (error) {
+      console.error('❌ Failed to load platform metrics:', error);
+      // Set fallback metrics with dashes/zeros
+      setPlatformMetrics({
+        totalOrganizations: 0,
+        totalUsers: 0,
+        activeParticipants: 0,
+        totalDonations: 0,
+        platformUptime: 0,
+        issuesOpen: 0,
+        recentActivity: []
+      });
+    } finally {
+      setMetricsLoading(false);
+    }
+  };
 
   const debugUserData = async () => {
     if (!user?.uid) {
@@ -128,22 +163,27 @@ export default function DashboardPage() {
 
   // Show Super Admin Dashboard for super_admin users
   if (user?.role === 'super_admin') {
-    // Mock data for Super Admin dashboard
-    const platformStats = {
-      totalOrganizations: 47,
-      totalUsers: 1284,
-      activeParticipants: 892,
-      totalDonations: 487200,
-      platformUptime: 99.9,
-      issuesOpen: 3
-    };
-
-    const recentActivity = [
-      { action: 'New shelter registered', details: 'Hope Haven Shelter - Montreal', time: '2 hours ago' },
-      { action: 'System maintenance completed', details: 'Database optimization', time: '6 hours ago' },
-      { action: 'Security scan completed', details: 'No vulnerabilities found', time: '1 day ago' },
-      { action: 'Backup completed', details: 'Daily backup successful', time: '1 day ago' }
-    ];
+    // Loading state while fetching real data
+    if (metricsLoading || !platformMetrics) {
+      return (
+        <div className="p-6">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h1 className="text-3xl font-bold">Super Admin Dashboard</h1>
+              <p className="text-gray-600">Loading platform metrics...</p>
+            </div>
+            <Badge variant="secondary" className="bg-purple-100 text-purple-800">
+              <Shield className="w-4 h-4 mr-1" />
+              Super Admin
+            </Badge>
+          </div>
+          <div className="flex items-center justify-center py-8">
+            <Loader2 className="h-8 w-8 animate-spin mr-2" />
+            <span>Loading real platform data...</span>
+          </div>
+        </div>
+      );
+    }
 
     return (
       <div className="p-6">
@@ -166,8 +206,8 @@ export default function DashboardPage() {
               <Building className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{platformStats.totalOrganizations}</div>
-              <p className="text-xs text-muted-foreground">+3 this month</p>
+              <div className="text-2xl font-bold">{platformMetrics.totalOrganizations || '-'}</div>
+              <p className="text-xs text-muted-foreground">Real database count</p>
             </CardContent>
           </Card>
 
@@ -177,8 +217,8 @@ export default function DashboardPage() {
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{platformStats.totalUsers.toLocaleString()}</div>
-              <p className="text-xs text-muted-foreground">+127 this week</p>
+              <div className="text-2xl font-bold">{platformMetrics.totalUsers?.toLocaleString() || '-'}</div>
+              <p className="text-xs text-muted-foreground">All platform users</p>
             </CardContent>
           </Card>
 
@@ -188,7 +228,7 @@ export default function DashboardPage() {
               <Activity className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{platformStats.activeParticipants}</div>
+              <div className="text-2xl font-bold">{platformMetrics.activeParticipants || '-'}</div>
               <p className="text-xs text-muted-foreground">Currently in system</p>
             </CardContent>
           </Card>
@@ -199,7 +239,7 @@ export default function DashboardPage() {
               <TrendingUp className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">${platformStats.totalDonations.toLocaleString()}</div>
+              <div className="text-2xl font-bold">${platformMetrics.totalDonations?.toLocaleString() || '-'}</div>
               <p className="text-xs text-muted-foreground">This quarter</p>
             </CardContent>
           </Card>
@@ -210,7 +250,7 @@ export default function DashboardPage() {
               <BarChart3 className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{platformStats.platformUptime}%</div>
+              <div className="text-2xl font-bold">{platformMetrics.platformUptime || '-'}%</div>
               <p className="text-xs text-muted-foreground">Last 30 days</p>
             </CardContent>
           </Card>
@@ -221,7 +261,7 @@ export default function DashboardPage() {
               <AlertTriangle className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{platformStats.issuesOpen}</div>
+              <div className="text-2xl font-bold">{platformMetrics.issuesOpen || '-'}</div>
               <p className="text-xs text-muted-foreground">Require attention</p>
             </CardContent>
           </Card>
@@ -235,16 +275,20 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {recentActivity.map((activity, index) => (
-                <div key={index} className="flex items-start space-x-3 pb-3 border-b last:border-b-0">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
-                  <div className="flex-1">
-                    <p className="font-medium">{activity.action}</p>
-                    <p className="text-sm text-gray-600">{activity.details}</p>
-                    <p className="text-xs text-gray-400 mt-1">{activity.time}</p>
+              {platformMetrics.recentActivity?.length > 0 ? (
+                platformMetrics.recentActivity.map((activity, index) => (
+                  <div key={index} className="flex items-start space-x-3 pb-3 border-b last:border-b-0">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                    <div className="flex-1">
+                      <p className="font-medium">{activity.action}</p>
+                      <p className="text-sm text-gray-600">{activity.details}</p>
+                      <p className="text-xs text-gray-400 mt-1">{activity.time}</p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))
+              ) : (
+                <p className="text-gray-500 text-center py-4">No recent activity</p>
+              )}
             </div>
           </CardContent>
         </Card>

@@ -6,8 +6,6 @@
 
 SHELTR implements the world's first **dual-token charitable ecosystem** on Base network, combining participant protection through SHELTR-S (stable token) with community governance via SHELTR (growth token). Our revolutionary architecture ensures 80% of donations reach participants as stable value while building sustainable long-term solutions through smart contract-governed fund allocation.
 
-**Investment Opportunity**: Currently raising $150,000 in pre-seed funding through SHELTR token sales at $0.05 (50% discount to public launch), with clear path to $1M seed round and institutional Series A scaling.
-
 ## Theory of Change: Blockchain-Verified Social Impact
 
 ### Problem Statement
@@ -729,7 +727,7 @@ contract EmergencyRecovery {
 
 SHELTR's blockchain architecture represents a breakthrough in charitable technology, combining the transparency and efficiency of distributed systems with the stability and protection vulnerable populations require. Our dual-token model solves the fundamental trade-off between participant safety and investor returns, creating aligned incentives across all stakeholders.
 
-**For Investors**: SHELTR offers direct exposure to a revolutionary charitable platform with clear utility value, deflationary mechanics, and governance rights. Our token-based investment structure provides immediate liquidity and transparent value tracking.
+**Impact Investors**: SHELTR offers direct exposure to a revolutionary charitable platform with clear utility value, deflationary mechanics, and governance rights. Our token-based investment structure provides immediate liquidity and transparent value tracking. SHELTR is  currently raising $150,000 in pre-seed funding through SHELTR token sales at $0.05 (50% discount to public launch), with clear path to $1M seed round and institutional Series A scaling.
 
 **For Participants**: SHELTR ensures stable value preservation through SHELTR-S tokens while offering optional exposure to platform growth through SHELTR token conversion. Every participant receives $100 in stable value upon signup, creating immediate engagement and platform adoption.
 

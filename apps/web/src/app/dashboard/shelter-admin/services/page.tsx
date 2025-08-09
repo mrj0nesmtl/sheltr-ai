@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -21,8 +22,10 @@ import {
   AlertCircle,
   CheckCircle,
   Edit,
-  Trash2
+  Trash2,
+  Loader2
 } from 'lucide-react';
+import { getServiceCategoryStats, getShelterServices, ServiceCategoryStats, ShelterService } from '@/services/platformMetrics';
 
 // Mock services data
 const mockServices = [
@@ -112,7 +115,45 @@ const todaysSchedule = [
 ];
 
 export default function ServicesPage() {
+  const { user, hasRole } = useAuth();
   const [selectedTab, setSelectedTab] = useState('today');
+  const [categoryStats, setCategoryStats] = useState<ServiceCategoryStats[]>([]);
+  const [services, setServices] = useState<ShelterService[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Load services data
+  useEffect(() => {
+    const loadServicesData = async () => {
+      const shelterId = user?.customClaims?.shelter_id;
+      
+      if (!shelterId) {
+        setError('No shelter assigned to this admin');
+        setLoading(false);
+        return;
+      }
+
+      try {
+        // Load both category stats and services
+        const [statsData, servicesData] = await Promise.all([
+          getServiceCategoryStats(shelterId),
+          getShelterServices(shelterId)
+        ]);
+
+        setCategoryStats(statsData);
+        setServices(servicesData);
+      } catch (error) {
+        console.error('❌ Failed to load services data:', error);
+        setError('Failed to load services data');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (user && hasRole('admin')) {
+      loadServicesData();
+    }
+  }, [user, hasRole]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -149,25 +190,57 @@ export default function ServicesPage() {
         </Button>
       </div>
 
-      {/* Service Categories Overview */}
+      {/* Service Categories Overview - Real Data */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-        {serviceCategories.map((category) => {
-          const IconComponent = category.icon;
-          return (
-            <Card key={category.name} className="text-center">
+        {loading ? (
+          // Loading state
+          Array.from({ length: 6 }).map((_, index) => (
+            <Card key={index} className="text-center">
               <CardContent className="p-4">
                 <div className="flex justify-center mb-2">
-                  <div className={`p-2 rounded-lg ${category.color}`}>
-                    <IconComponent className="h-6 w-6" />
+                  <div className="p-2 rounded-lg bg-gray-100">
+                    <Loader2 className="h-6 w-6 animate-spin" />
                   </div>
                 </div>
-                <h3 className="font-semibold text-sm">{category.name}</h3>
-                <p className="text-2xl font-bold">{category.count}</p>
-                <p className="text-xs text-muted-foreground">This week</p>
+                <h3 className="font-semibold text-sm">Loading...</h3>
+                <p className="text-2xl font-bold">-</p>
+                <p className="text-xs text-muted-foreground">Loading data</p>
               </CardContent>
             </Card>
-          );
-        })}
+          ))
+        ) : error ? (
+          // Error state
+          <Card className="col-span-full text-center">
+            <CardContent className="p-4">
+              <AlertCircle className="h-8 w-8 mx-auto mb-2 text-red-500" />
+              <p className="text-red-600">{error}</p>
+            </CardContent>
+          </Card>
+        ) : (
+          // Real data from database
+          serviceCategories.map((category) => {
+            const IconComponent = category.icon;
+            const realStats = categoryStats.find(stat => stat.category.toLowerCase() === category.name.toLowerCase());
+            const count = realStats?.count || 0;
+            
+            return (
+              <Card key={category.name} className="text-center">
+                <CardContent className="p-4">
+                  <div className="flex justify-center mb-2">
+                    <div className={`p-2 rounded-lg ${category.color}`}>
+                      <IconComponent className="h-6 w-6" />
+                    </div>
+                  </div>
+                  <h3 className="font-semibold text-sm">{category.name}</h3>
+                  <p className="text-2xl font-bold">{count}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {count > 0 ? 'Real data connected' : 'No services yet'}
+                  </p>
+                </CardContent>
+              </Card>
+            );
+          })
+        )}
       </div>
 
       {/* Main Content */}

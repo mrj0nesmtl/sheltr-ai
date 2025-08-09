@@ -1,10 +1,10 @@
 # Hacking Homelessness Through Technology
-### January 25, 2025
-### Status: PRODUCTION READY ✅
+### February 16, 2016
+### Status: Published ✅
 
 ---
 
-## 📝 Executive Abstract
+## 📝 Thesis Abstract
 
 SHELTR was born from a simple but powerful realization: **"It's better to solve than to manage."** This philosophy, inspired by Malcolm Gladwell's groundbreaking essay "Million-Dollar Murray" in The New Yorker, became the foundation of our approach to addressing homelessness through technology.
 
@@ -229,7 +229,7 @@ function processDonation(address donor, address participant, uint256 amount)
     
     uint256 directSupport = (amount * 80) / 100;      // 80% to participant
     uint256 housingFund = (amount * 15) / 100;        // 15% to housing
-    uint256 operations = (amount * 5) / 100;          // 5% to platform
+    uint256 operations = (amount * 5) / 100;          // 5% to platform or shelter
     
     sheltrStable.mint(participant, directSupport);    // Instant SHELTR-S
     housingFundContract.deposit(housingFund);         // Automated allocation

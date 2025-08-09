@@ -18,7 +18,9 @@ import {
   ArrowRight,
   Lock,
   Rocket,
-  Heart
+  Heart,
+  Building2,
+  UserPlus
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -32,32 +34,6 @@ export default function DocsPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const coreDocuments = [
-    {
-      title: "Technical White Paper",
-      description: "Comprehensive technical documentation covering dual-token architecture, smart contracts, and implementation details",
-      icon: FileText,
-      badge: "Published",
-      badgeColor: "bg-blue-500",
-      pages: "67 pages",
-      audience: "Technical Teams • Partners",
-      topics: ["Dual-Token Economics", "Smart Contract Architecture", "Base Network Integration", "Security Framework", "Financial Projections"],
-      link: "/docs/whitepaper",
-      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/whitepaper_final.md",
-      lastUpdated: "February 16, 2025"
-    },
-    {
-      title: "Blockchain Architecture",
-      description: "Deep technical dive into our Base network implementation, smart contracts, and verification systems",
-      icon: Shield,
-      badge: "Technical",
-      badgeColor: "bg-green-500",
-      pages: "45 pages",
-      audience: "Developers • Blockchain Engineers • Security Auditors",
-      topics: ["Smart Contract Code", "Base Network Integration", "Security Protocols", "Oracle Systems", "Token Utilities"],
-      link: "/docs/blockchain",
-      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/technical/blockchain.md",
-      lastUpdated: "January 25, 2025"
-    },
     {
       title: "Hacking Homelessness and the Theory of Change",
       description: "Executive overview of our theory of change, market analysis, and social impact framework",
@@ -85,6 +61,32 @@ export default function DocsPage() {
       lastUpdated: "August 4, 2025"
     },
     {
+      title: "Technical White Paper",
+      description: "Comprehensive technical documentation covering dual-token architecture, smart contracts, and implementation details",
+      icon: FileText,
+      badge: "Published",
+      badgeColor: "bg-blue-500",
+      pages: "67 pages",
+      audience: "Technical Teams • Partners",
+      topics: ["Dual-Token Economics", "Smart Contract Architecture", "Base Network Integration", "Security Framework", "Financial Projections"],
+      link: "/docs/whitepaper",
+      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/whitepaper_final.md",
+      lastUpdated: "February 16, 2025"
+    },
+    {
+      title: "Blockchain Architecture",
+      description: "Deep technical dive into our Base network implementation, smart contracts, and verification systems",
+      icon: Shield,
+      badge: "Technical",
+      badgeColor: "bg-green-500",
+      pages: "45 pages",
+      audience: "Developers • Blockchain Engineers • Security Auditors",
+      topics: ["Smart Contract Code", "Base Network Integration", "Security Protocols", "Oracle Systems", "Token Utilities"],
+      link: "/docs/blockchain",
+      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/technical/blockchain.md",
+      lastUpdated: "January 25, 2025"
+    },
+    {
       title: "API Documentation",
       description: "Comprehensive API reference for developers, integration guides, and technical specifications",
       icon: Code,
@@ -96,6 +98,32 @@ export default function DocsPage() {
       link: "/docs/api",
       downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/03-api/README.md",
       lastUpdated: "January 25, 2025"
+    },
+    {
+      title: "Shelter Administrator Guide",
+      description: "Comprehensive guide for shelter administrators managing operations, participants, and services with SHELTR-AI",
+      icon: Building2,
+      badge: "Admin Guide",
+      badgeColor: "bg-blue-600",
+      pages: "400+ pages",
+      audience: "Shelter Administrators • Operations Managers • Staff",
+      topics: ["Dashboard Management", "Participant Registration", "Service Coordination", "Resource Management", "Analytics & Reporting"],
+      link: "/docs/shelter-admin-guide",
+      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/06-user-guides/shelter-admin-guide.md",
+      lastUpdated: "August 9, 2025"
+    },
+    {
+      title: "Donor Guide",
+      description: "Complete guide for donors making transparent, impactful donations through QR codes and the SmartFund model",
+      icon: Heart,
+      badge: "Donor Guide",
+      badgeColor: "bg-red-600",
+      pages: "450+ pages",
+      audience: "Donors • Community Supporters • Corporate Partners",
+      topics: ["QR Code Giving", "SmartFund Model", "Impact Tracking", "Payment Security", "Community Building"],
+      link: "/docs/donor-guide",
+      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/06-user-guides/donor-guide.md",
+      lastUpdated: "August 9, 2025"
     },
     {
       title: "Participant User Guide",
@@ -227,18 +255,39 @@ export default function DocsPage() {
               SHELTR Documentation Hub
             </h1>
             <p className="text-xl mb-8 text-white/90">
-              Comprehensive technical documentation and implementation guides 
-              for the world&rsquo;s first dual-token charitable ecosystem.
+              The next generation platform for transparent charitable giving and homelessness support built on modern cloud infrastructure.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" variant="secondary" className="bg-white text-black hover:bg-white/90 dark:bg-white dark:text-black dark:hover:bg-white/90">
-                <Download className="h-5 w-5 mr-2" />
-                Download All Documents
-              </Button>
-              <Button size="lg" variant="outline" className="border-white text-white bg-white/10 hover:bg-white hover:text-black dark:border-white dark:text-white dark:bg-white/10 dark:hover:bg-white dark:hover:text-black">
-                <Building className="h-5 w-5 mr-2" />
-                View GitHub Repository
-              </Button>
+            
+            {/* Tech Stack Badges */}
+            <div className="flex flex-wrap justify-center gap-2 mb-6">
+              <Badge className="bg-amber-500 hover:bg-amber-600 text-white font-semibold px-3 py-1">
+                🔥 FIREBASE
+              </Badge>
+              <Badge className="bg-teal-600 hover:bg-teal-700 text-white font-semibold px-3 py-1">
+                ⚡ FASTAPI
+              </Badge>
+              <Badge className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-3 py-1">
+                ⚛️ REACT
+              </Badge>
+              <Badge className="bg-gray-800 hover:bg-gray-900 text-white font-semibold px-3 py-1">
+                📱 EXPO
+              </Badge>
+              <Badge className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-3 py-1">
+                ⭐ STARS 2
+              </Badge>
+              <Badge className="bg-yellow-600 hover:bg-yellow-700 text-white font-semibold px-3 py-1">
+                📄 LICENSE MIT
+              </Badge>
+              <Badge className="bg-blue-700 hover:bg-blue-800 text-white font-semibold px-3 py-1">
+                🐍 PYTHON 3.11+
+              </Badge>
+            </div>
+            
+            {/* Last Updated Badge */}
+            <div className="flex justify-center">
+              <Badge className="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 text-sm">
+                📅 LAST UPDATED: AUGUST 9, 2025
+              </Badge>
             </div>
           </div>
         </div>

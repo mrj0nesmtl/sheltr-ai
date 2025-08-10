@@ -207,29 +207,12 @@ export default function ScanGivePage() {
           </p>
           <Button 
             size="lg" 
-            className="mr-4" 
             onClick={handleTryDemo}
             disabled={loading}
           >
             <QrCode className="h-4 w-4 mr-2" />
             {loading ? 'Generating...' : 'Try Demo QR Code'}
           </Button>
-          <div className="relative inline-block">
-            <Button 
-              variant="outline" 
-              size="lg" 
-              disabled
-              className="cursor-not-allowed opacity-60 pr-6"
-            >
-              <Smartphone className="h-4 w-4 mr-2" />
-              Download App
-            </Button>
-            <Badge 
-              className="absolute -top-3 -right-3 bg-orange-500 hover:bg-orange-500 text-white text-xs px-2 py-1 rounded-full border-2 border-background shadow-lg z-10 transform translate-x-1/2 -translate-y-1/2"
-            >
-              Coming Soon
-            </Badge>
-          </div>
         </div>
       </section>
 
@@ -245,7 +228,7 @@ export default function ScanGivePage() {
 
           <div className="grid md:grid-cols-3 gap-8">
             {/* Red for Scan QR Code */}
-            <Card className="group text-center border-2 border-gray-200 dark:border-gray-800 hover:border-red-300 dark:hover:border-red-700 hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer">
+            <Card className="group text-center border-2 border-gray-200 dark:border-gray-800 hover:border-red-300 dark:hover:border-red-700 active:border-red-400 dark:active:border-red-600 hover:shadow-xl hover:scale-105 active:scale-105 transition-all duration-300 cursor-pointer">
               <CardHeader>
                 <div className="w-12 h-12 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-red-500/20 transition-colors">
                   <QrCode className="h-6 w-6 text-red-600 dark:text-red-400 group-hover:scale-110 transition-transform" />
@@ -263,7 +246,7 @@ export default function ScanGivePage() {
             </Card>
 
             {/* Yellow for Choose Amount */}
-            <Card className="group text-center border-2 border-gray-200 dark:border-gray-800 hover:border-yellow-300 dark:hover:border-yellow-700 hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer">
+            <Card className="group text-center border-2 border-gray-200 dark:border-gray-800 hover:border-yellow-300 dark:hover:border-yellow-700 active:border-yellow-400 dark:active:border-yellow-600 hover:shadow-xl hover:scale-105 active:scale-105 transition-all duration-300 cursor-pointer">
               <CardHeader>
                 <div className="w-12 h-12 bg-yellow-500/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-yellow-500/20 transition-colors">
                   <Heart className="h-6 w-6 text-yellow-600 dark:text-yellow-400 group-hover:scale-110 transition-transform" />
@@ -284,7 +267,7 @@ export default function ScanGivePage() {
             </Card>
 
             {/* Green for Instant Transfer */}
-            <Card className="group text-center border-2 border-gray-200 dark:border-gray-800 hover:border-green-300 dark:hover:border-green-700 hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer">
+            <Card className="group text-center border-2 border-gray-200 dark:border-gray-800 hover:border-green-300 dark:hover:border-green-700 active:border-green-400 dark:active:border-green-600 hover:shadow-xl hover:scale-105 active:scale-105 transition-all duration-300 cursor-pointer">
               <CardHeader>
                 <div className="w-12 h-12 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-green-500/20 transition-colors">
                   <Shield className="h-6 w-6 text-green-600 dark:text-green-400 group-hover:scale-110 transition-transform" />

@@ -189,7 +189,7 @@ export default function HomePage() {
 
         {/* Hero Section - Transform Donations into Impact */}
         <section 
-          className="relative py-20 bg-gradient-to-r from-slate-900 to-slate-800"
+          className="relative py-24 bg-gradient-to-r from-slate-900 to-slate-800"
           style={{
             backgroundImage: "url('/backgrounds/hero-bg.jpg')",
             backgroundSize: 'cover',
@@ -197,7 +197,7 @@ export default function HomePage() {
             backgroundRepeat: 'no-repeat'
           }}
         >
-          <div className="absolute inset-0 bg-black/60"></div>
+          <div className="absolute inset-0 bg-black/40"></div>
           <div className="relative z-10 container mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center">
               <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">

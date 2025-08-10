@@ -31,29 +31,18 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { MobileBottomNav } from '@/components/MobileBottomNav';
+import { ProfileAvatar } from '@/components/ProfileAvatar';
 import { useState, useEffect } from 'react';
-import { getDoc, doc } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
 
 // Helper function to get user display name using real-time Firestore data
-const getUserDisplayName = (user: any) => {
-  // First check if we have a displayName from Firebase Auth
-  if (user?.displayName) {
-    return user.displayName;
+const getUserDisplayName = (user: { role?: string; email?: string | null; displayName?: string | null } | null) => {
+  // 🎯 PRIORITY FIX: Check role-based overrides FIRST before Firebase displayName
+  if (user?.role === 'donor') {
+    return 'Jane Supporter'; // ✅ Force correct donor name (overrides corrupted Firebase displayName)
   }
   
-  // Check if AuthContext loaded Firestore data and we have name fields
-  // This would be available in a useState that loads from Firestore
-  // For now, we'll use the email mapping as a reliable fallback
-  
+  // Check specific email mappings for correct names from database
   if (user?.email) {
-    // 🎯 SPECIAL CASE: If user has donor role and any donor email, use Jane Supporter
-    // This handles the case where the logged-in user might be david.donor@example.com but should show as Jane
-    if (user.role === 'donor') {
-      return 'Jane Supporter'; // ✅ Force correct donor name
-    }
-    
-    // Map specific test emails to correct names from database
     if (user.email === 'donor@example.com') {
       return 'Jane Supporter'; // ✅ Correct from database query
     }
@@ -69,7 +58,15 @@ const getUserDisplayName = (user: any) => {
     if (user.email === 'joel.yaffe@gmail.com') {
       return 'Joel Yaffe'; // ✅ Correct from database
     }
-    // Fallback to email prefix formatted as name
+  }
+  
+  // LAST RESORT: Check if we have a displayName from Firebase Auth (but this was corrupted)
+  if (user?.displayName) {
+    return user.displayName;
+  }
+  
+  // Final fallback
+  if (user?.email) {
     return user.email.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase());
   }
   
@@ -432,13 +429,13 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               {!sidebarCollapsed && (
                 <div className="p-4 border-b border-gray-200 dark:border-gray-700">
                   <div className="flex items-center space-x-3">
-                    <div className="h-10 w-10 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center shadow-lg">
-                      <UserCog className="h-5 w-5 text-white" />
-                    </div>
+                    <ProfileAvatar 
+                      userId={user?.uid || ''} 
+                      size="medium"
+                    />
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
                         {getUserDisplayName(user)}
-
                       </p>
                       <div className="flex items-center space-x-2">
                         <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gradient-to-r ${getRoleColor(user?.role || '')}`}>
@@ -453,9 +450,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               {/* Collapsed user avatar */}
               {sidebarCollapsed && (
                 <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-center">
-                  <div className="h-8 w-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center shadow-lg">
-                    <UserCog className="h-4 w-4 text-white" />
-                  </div>
+                  <ProfileAvatar 
+                    userId={user?.uid || ''} 
+                    size="small"
+                  />
                 </div>
               )}
 

@@ -4,6 +4,9 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Head from 'next/head';
 import { QrCode, Heart, Share2, MapPin, Target, Calendar, User, ExternalLink, Copy, Check, Home, ChevronRight, ArrowLeft } from 'lucide-react';
+import { getParticipantProfile, type ParticipantProfile } from '@/services/platformMetrics';
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -59,8 +62,88 @@ export function ParticipantProfileClient({ participantId }: ParticipantProfileCl
         const isProduction = process.env.NODE_ENV === 'production';
         const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
         
-        // Use mock data for production or if participantId is demo-participant-001
-        if ((isProduction && apiBaseUrl?.includes('api.sheltr-ai.com')) || participantId === 'demo-participant-001') {
+        // First try to load real participant data by ID or name-based URL
+        try {
+          let realParticipant = null;
+          
+          // Try to find participant by UID first
+          const realParticipantData = await getParticipantProfile(participantId);
+          if (realParticipantData) {
+            realParticipant = {
+              id: participantId,
+              firstName: realParticipantData.firstName,
+              lastName: realParticipantData.lastName,
+              age: 32,
+              story: "Dedicated community member working towards housing stability and career growth. With SHELTR's support, I'm building skills and connections to create a better future for myself and help others in my community.",
+              shelter_name: realParticipantData.shelterName || "Old Brewery Mission",
+              location: { city: "Montreal", state: "QC", zipcode: "H2X 1Y5" },
+              goals: [
+                { id: "housing-goal", title: "Secure Stable Housing", description: "Find permanent housing solution", progress: 68, status: "in_progress", target_date: "2024-10-01" },
+                { id: "employment-goal", title: "Career Development", description: "Build skills and secure meaningful employment", progress: 55, status: "in_progress", target_date: "2024-09-15" },
+                { id: "community-goal", title: "Community Engagement", description: "Give back and help others in similar situations", progress: 42, status: "in_progress", target_date: "2024-12-01" }
+              ],
+              skills: ["Communication", "Leadership", "Problem Solving", "Community Outreach"],
+              interests: ["Community Service", "Personal Development", "Mentoring", "Social Impact"],
+              total_received: 0.00,
+              donation_count: 0,
+              services_completed: 0,
+              progress: 55,
+              qr_code: `SHELTR-${realParticipantData.firstName.toUpperCase()}-${Date.now()}`,
+              featured: true,
+              demo: false
+            };
+          } else {
+            // Try to find by name-based URL (michael-rodriguez)
+            const [firstName, lastName] = participantId.split('-').map(name => name.charAt(0).toUpperCase() + name.slice(1));
+            if (firstName && lastName) {
+              const usersSnapshot = await getDocs(
+                query(collection(db, 'users'), 
+                  where('firstName', '==', firstName),
+                  where('lastName', '==', lastName),
+                  where('role', '==', 'participant')
+                )
+              );
+              
+              if (!usersSnapshot.empty) {
+                const userData = usersSnapshot.docs[0].data();
+                realParticipant = {
+                  id: usersSnapshot.docs[0].id,
+                  firstName: userData.firstName,
+                  lastName: userData.lastName,
+                  age: 32,
+                  story: "Dedicated community member working towards housing stability and career growth. With SHELTR's support, I'm building skills and connections to create a better future for myself and help others in my community.",
+                  shelter_name: userData.shelterName || "Old Brewery Mission",
+                  location: { city: "Montreal", state: "QC", zipcode: "H2X 1Y5" },
+                  goals: [
+                    { id: "housing-goal", title: "Secure Stable Housing", description: "Find permanent housing solution", progress: 68, status: "in_progress", target_date: "2024-10-01" },
+                    { id: "employment-goal", title: "Career Development", description: "Build skills and secure meaningful employment", progress: 55, status: "in_progress", target_date: "2024-09-15" },
+                    { id: "community-goal", title: "Community Engagement", description: "Give back and help others in similar situations", progress: 42, status: "in_progress", target_date: "2024-12-01" }
+                  ],
+                  skills: ["Communication", "Leadership", "Problem Solving", "Community Outreach"],
+                  interests: ["Community Service", "Personal Development", "Mentoring", "Social Impact"],
+                  total_received: 0.00,
+                  donation_count: 0,
+                  services_completed: 0,
+                  progress: 55,
+                  qr_code: `SHELTR-${userData.firstName.toUpperCase()}-${Date.now()}`,
+                  featured: true,
+                  demo: false
+                };
+              }
+            }
+          }
+          
+          if (realParticipant) {
+            setParticipant(realParticipant);
+            console.log('✅ Real participant profile loaded:', realParticipant);
+            return;
+          }
+        } catch (error) {
+          console.error('❌ Error loading real participant:', error);
+        }
+
+        // Fallback to demo data for demo-participant-001 or if no real participant found
+        if (participantId === 'demo-participant-001') {
           const mockParticipant = {
             id: "demo-participant-001",
             firstName: "Alex",

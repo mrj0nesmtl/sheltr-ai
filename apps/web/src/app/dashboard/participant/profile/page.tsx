@@ -9,6 +9,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useState, useEffect } from 'react';
 import { profileService, type UserProfile, type PersonalInfo, type EmergencyContact, type Goal } from '@/services/profileService';
+import { getParticipantProfile, type ParticipantProfile } from '@/services/platformMetrics';
+import { doc, updateDoc } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 import { 
   User, 
   Camera,
@@ -26,8 +29,17 @@ import {
   CheckCircle,
   AlertCircle,
   Plus,
-  X
+  X,
+  Share2,
+  QrCode,
+  Eye,
+  Copy,
+  ExternalLink,
+  Download,
+  Upload,
+  FileText
 } from 'lucide-react';
+import { FileUpload } from '@/components/FileUpload';
 
 // Extended interface to include shelter info for the participant page
 interface ExtendedUserProfile extends UserProfile {
@@ -137,8 +149,60 @@ export default function ParticipantProfile() {
       try {
         setLoading(true);
         setError(null);
-        const userProfile = await profileService.getUserProfile();
-        setProfile(userProfile);
+        
+        // Load real participant data using the platformMetrics service
+        const participantData = await getParticipantProfile(user.uid);
+        
+        if (participantData) {
+          // Convert ParticipantProfile to ExtendedUserProfile format
+          const profileWithData: ExtendedUserProfile = {
+            personalInfo: {
+              firstName: participantData.firstName || '',
+              lastName: participantData.lastName || '',
+              email: participantData.email || '',
+              phone: participantData.phone || '',
+              dateOfBirth: participantData.dateOfBirth || '',
+              pronouns: '',
+              preferredLanguage: 'en'
+            },
+            shelter: {
+              currentShelter: participantData.shelterName || 'Old Brewery Mission',
+              checkInDate: '2024-11-01',
+              bedNumber: 'B-23',
+              roomType: 'Standard',
+              caseWorker: participantData.caseWorkerName || 'Sarah Johnson'
+            },
+            preferences: {
+              notifications: {
+                email: true,
+                sms: false,
+                inApp: true
+              },
+              communication: {
+                preferredMethod: 'email',
+                language: 'en',
+                timezone: 'America/Toronto'
+              },
+              privacy: {
+                shareProgress: true,
+                allowPhotos: false,
+                publicProfile: false
+              }
+            },
+            emergencyContacts: participantData.emergencyContact ? [{
+              name: participantData.emergencyContact.name,
+              phone: participantData.emergencyContact.phone,
+              relationship: participantData.emergencyContact.relationship
+            }] : [],
+            goals: []
+          };
+          
+          setProfile(profileWithData);
+          console.log('✅ Real participant profile loaded:', profileWithData);
+        } else {
+          // Fallback to mock data if no participant found
+          throw new Error('Participant not found');
+        }
       } catch (err) {
         console.error('Failed to load profile:', err);
         setError('Failed to load profile. Using default data.');
@@ -222,20 +286,32 @@ export default function ParticipantProfile() {
       setSaving(true);
       setError(null);
       
-      // Save the profile
-      const result = await profileService.updateUserProfile({
-        personalInfo: profile.personalInfo,
-        emergencyContacts: profile.emergencyContacts,
-        goals: profile.goals,
-        preferences: profile.preferences
-      });
+      // Save the profile to Firestore
+      console.log('💾 Saving participant profile to Firestore...');
       
-      if (result.success) {
-        setIsEditing(false);
-        alert('Profile updated successfully!');
-      } else {
-        throw new Error(result.message);
-      }
+      const userRef = doc(db, 'users', user!.uid);
+      const updateData = {
+        firstName: profile.personalInfo.firstName,
+        lastName: profile.personalInfo.lastName,
+        email: profile.personalInfo.email,
+        phone: profile.personalInfo.phone,
+        dateOfBirth: profile.personalInfo.dateOfBirth,
+        // Add emergency contact if exists
+        ...(profile.emergencyContacts && profile.emergencyContacts.length > 0 && {
+          emergencyContact: {
+            name: profile.emergencyContacts[0].name,
+            phone: profile.emergencyContacts[0].phone,
+            relationship: profile.emergencyContacts[0].relationship
+          }
+        }),
+        updated_at: new Date().toISOString()
+      };
+      
+      await updateDoc(userRef, updateData);
+      
+      setIsEditing(false);
+      console.log('✅ Profile updated successfully in Firestore');
+      alert('Profile saved successfully!');
     } catch (err) {
       console.error('Failed to save profile:', err);
       setError('Failed to save profile. Please try again.');
@@ -315,7 +391,9 @@ export default function ParticipantProfile() {
           { id: 'personal', label: 'Personal Info', icon: User },
           { id: 'goals', label: 'Goals & Progress', icon: Target },
           { id: 'emergency', label: 'Emergency Contacts', icon: Phone },
-          { id: 'preferences', label: 'Preferences', icon: Settings }
+          { id: 'preferences', label: 'Preferences', icon: Settings },
+          { id: 'documents', label: 'Documents', icon: FileText },
+          { id: 'public', label: 'Public Profile', icon: Share2 }
         ].map((tab) => {
           const Icon = tab.icon;
           return (
@@ -367,7 +445,7 @@ export default function ParticipantProfile() {
                   <Label htmlFor="firstName">First Name</Label>
                   <Input
                     id="firstName"
-                    value={profile.personalInfo.firstName}
+                    value={profile.personalInfo.firstName || ''}
                     disabled={!isEditing}
                     onChange={(e) => setProfile(prev => ({
                       ...prev,
@@ -379,7 +457,7 @@ export default function ParticipantProfile() {
                   <Label htmlFor="lastName">Last Name</Label>
                   <Input
                     id="lastName"
-                    value={profile.personalInfo.lastName}
+                    value={profile.personalInfo.lastName || ''}
                     disabled={!isEditing}
                     onChange={(e) => setProfile(prev => ({
                       ...prev,
@@ -394,7 +472,7 @@ export default function ParticipantProfile() {
                 <Input
                   id="email"
                   type="email"
-                  value={profile.personalInfo.email}
+                  value={profile.personalInfo.email || ''}
                   disabled={!isEditing}
                   onChange={(e) => setProfile(prev => ({
                     ...prev,
@@ -407,7 +485,7 @@ export default function ParticipantProfile() {
                 <Label htmlFor="phone">Phone Number</Label>
                 <Input
                   id="phone"
-                  value={profile.personalInfo.phone}
+                  value={profile.personalInfo.phone || ''}
                   disabled={!isEditing}
                   onChange={(e) => setProfile(prev => ({
                     ...prev,
@@ -421,7 +499,7 @@ export default function ParticipantProfile() {
                   <Label htmlFor="pronouns">Pronouns</Label>
                   <Input
                     id="pronouns"
-                    value={profile.personalInfo.pronouns}
+                    value={profile.personalInfo.pronouns || ''}
                     disabled={!isEditing}
                     onChange={(e) => setProfile(prev => ({
                       ...prev,
@@ -433,7 +511,7 @@ export default function ParticipantProfile() {
                   <Label htmlFor="language">Preferred Language</Label>
                   <Input
                     id="language"
-                    value={profile.personalInfo.preferredLanguage}
+                    value={profile.personalInfo.preferredLanguage || ''}
                     disabled={!isEditing}
                     onChange={(e) => setProfile(prev => ({
                       ...prev,
@@ -456,27 +534,27 @@ export default function ParticipantProfile() {
                 <div className="flex items-center space-x-2 mb-2">
                   <MapPin className="w-5 h-5 text-blue-600" />
                   <span className="font-medium text-blue-800 dark:text-blue-200">
-                    {profile.shelter.currentShelter}
+                    {profile.shelter?.currentShelter || 'Old Brewery Mission'}
                   </span>
                 </div>
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
                     <span className="text-gray-600 dark:text-gray-400">Check-in Date:</span>
                     <div className="font-medium">
-                      {new Date(profile.shelter.checkInDate).toLocaleDateString()}
+                      {profile.shelter?.checkInDate ? new Date(profile.shelter.checkInDate).toLocaleDateString() : 'Not available'}
                     </div>
                   </div>
                   <div>
                     <span className="text-gray-600 dark:text-gray-400">Bed Assignment:</span>
-                    <div className="font-medium">{profile.shelter.bedNumber}</div>
+                    <div className="font-medium">{profile.shelter?.bedNumber || 'Not assigned'}</div>
                   </div>
                   <div>
                     <span className="text-gray-600 dark:text-gray-400">Room Type:</span>
-                    <div className="font-medium">{profile.shelter.roomType}</div>
+                    <div className="font-medium">{profile.shelter?.roomType || 'Standard'}</div>
                   </div>
                   <div>
                     <span className="text-gray-600 dark:text-gray-400">Case Worker:</span>
-                    <div className="font-medium">{profile.shelter.caseWorker}</div>
+                    <div className="font-medium">{profile.shelter?.caseWorker || 'Sarah Johnson'}</div>
                   </div>
                 </div>
               </div>
@@ -630,7 +708,7 @@ export default function ParticipantProfile() {
               <CardDescription>Choose how you want to be contacted</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              {Object.entries(profile.preferences.notifications).map(([key, value]) => (
+              {Object.entries(profile.preferences?.notifications || {}).map(([key, value]) => (
                 <div key={key} className="flex items-center justify-between">
                   <div>
                     <span className="font-medium capitalize">{key.replace(/([A-Z])/g, ' $1')}</span>
@@ -643,16 +721,19 @@ export default function ParticipantProfile() {
                     size="sm"
                     disabled={!isEditing}
                     onClick={() => {
-                      setProfile(prev => ({
-                        ...prev,
-                        preferences: {
-                          ...prev.preferences,
-                          notifications: {
-                            ...prev.preferences.notifications,
-                            [key]: !value
+                      setProfile(prev => {
+                        if (!prev) return prev;
+                        return {
+                          ...prev,
+                          preferences: {
+                            ...prev.preferences,
+                            notifications: {
+                              ...prev.preferences?.notifications,
+                              [key]: !value
+                            }
                           }
-                        }
-                      }));
+                        };
+                      });
                     }}
                   >
                     {value ? (
@@ -673,7 +754,7 @@ export default function ParticipantProfile() {
               <CardDescription>Control your data and visibility</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              {Object.entries(profile.preferences.privacy).map(([key, value]) => (
+              {Object.entries(profile.preferences?.privacy || {}).map(([key, value]) => (
                 <div key={key} className="flex items-center justify-between">
                   <div>
                     <span className="font-medium capitalize">
@@ -690,16 +771,19 @@ export default function ParticipantProfile() {
                     size="sm"
                     disabled={!isEditing}
                     onClick={() => {
-                      setProfile(prev => ({
-                        ...prev,
-                        preferences: {
-                          ...prev.preferences,
-                          privacy: {
-                            ...prev.preferences.privacy,
-                            [key]: !value
+                      setProfile(prev => {
+                        if (!prev) return prev;
+                        return {
+                          ...prev,
+                          preferences: {
+                            ...prev.preferences,
+                            privacy: {
+                              ...prev.preferences?.privacy,
+                              [key]: !value
+                            }
                           }
-                        }
-                      }));
+                        };
+                      });
                     }}
                   >
                     {value ? (
@@ -710,6 +794,320 @@ export default function ParticipantProfile() {
                   </Button>
                 </div>
               ))}
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {/* Documents */}
+      {activeSection === 'documents' && (
+        <div className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Document Management</CardTitle>
+              <CardDescription>
+                Upload and manage your personal documents securely. Only you, your case worker, and authorized shelter staff can access these files.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Profile Picture Upload */}
+                <div>
+                  <h4 className="text-lg font-semibold mb-4">Profile Picture</h4>
+                  <FileUpload
+                    uploadType="profile"
+                    userId={user?.uid || ''}
+                    showFileList={true}
+                    onUploadComplete={(downloadURL) => {
+                      console.log('Profile picture uploaded:', downloadURL);
+                      // Optionally update the profile state here
+                    }}
+                    onUploadError={(error) => {
+                      console.error('Upload error:', error);
+                      alert('Upload failed: ' + error);
+                    }}
+                  />
+                </div>
+
+                {/* Personal Documents */}
+                <div>
+                  <h4 className="text-lg font-semibold mb-4">Personal Documents</h4>
+                  <FileUpload
+                    uploadType="participant"
+                    userId={user?.uid || ''}
+                    documentType="personal"
+                    showFileList={true}
+                    onUploadComplete={(downloadURL) => {
+                      console.log('Document uploaded:', downloadURL);
+                    }}
+                    onUploadError={(error) => {
+                      console.error('Upload error:', error);
+                      alert('Upload failed: ' + error);
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* ID Documents */}
+              <div className="mt-6">
+                <h4 className="text-lg font-semibold mb-4">Identification Documents</h4>
+                <FileUpload
+                  uploadType="participant"
+                  userId={user?.uid || ''}
+                  documentType="identification"
+                  showFileList={true}
+                  onUploadComplete={(downloadURL) => {
+                    console.log('ID document uploaded:', downloadURL);
+                  }}
+                  onUploadError={(error) => {
+                    console.error('Upload error:', error);
+                    alert('Upload failed: ' + error);
+                  }}
+                />
+              </div>
+
+              {/* Medical Documents */}
+              <div className="mt-6">
+                <h4 className="text-lg font-semibold mb-4">Medical Documents</h4>
+                <FileUpload
+                  uploadType="participant"
+                  userId={user?.uid || ''}
+                  documentType="medical"
+                  showFileList={true}
+                  onUploadComplete={(downloadURL) => {
+                    console.log('Medical document uploaded:', downloadURL);
+                  }}
+                  onUploadError={(error) => {
+                    console.error('Upload error:', error);
+                    alert('Upload failed: ' + error);
+                  }}
+                />
+              </div>
+
+              {/* Security Notice */}
+              <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+                <div className="flex items-start space-x-2">
+                  <Shield className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5" />
+                  <div>
+                    <h5 className="font-medium text-blue-900 dark:text-blue-100">Secure & Private</h5>
+                    <p className="text-sm text-blue-700 dark:text-blue-200 mt-1">
+                      Your documents are encrypted and only accessible by you, your assigned shelter staff, and system administrators. 
+                      All uploads are logged for security purposes.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {/* Public Profile */}
+      {activeSection === 'public' && (
+        <div className="space-y-6">
+          {/* Public Profile Configuration */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Public Profile Settings</CardTitle>
+              <CardDescription>
+                Configure your public profile page that supporters can view and donate through
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {/* Profile URL Configuration */}
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="publicUrl">Custom Public URL</Label>
+                  <div className="space-y-2 mt-1">
+                    <div className="px-4 py-3 rounded-md border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
+                      <span className="text-sm font-mono">
+                        https://sheltr-ai.web.app/participant/
+                      </span>
+                    </div>
+                    <Input
+                      id="publicUrl"
+                      value={profile?.personalInfo.firstName?.toLowerCase() + '-' + profile?.personalInfo.lastName?.toLowerCase() || 'my-profile'}
+                      disabled={!isEditing}
+                      placeholder="my-name"
+                      className="font-mono"
+                    />
+                  </div>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                    Choose a custom URL for your public profile (letters, numbers, and hyphens only)
+                  </p>
+                </div>
+
+                {/* QR Code Display */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <Label>Your QR Code</Label>
+                    <div className="mt-2 p-4 border rounded-lg text-center bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700">
+                      <div className="w-32 h-32 mx-auto bg-white rounded flex items-center justify-center p-2">
+                        <img 
+                          src={`https://api.qrserver.com/v1/create-qr-code/?size=128x128&data=${encodeURIComponent(`https://sheltr-ai.web.app/participant/${profile?.personalInfo.firstName?.toLowerCase() + '-' + profile?.personalInfo.lastName?.toLowerCase() || 'demo'}`)}&format=png`}
+                          alt="Your QR Code"
+                          className="w-full h-full object-cover rounded"
+                        />
+                      </div>
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                        Supporters can scan this to donate directly
+                      </p>
+                      <Button variant="outline" size="sm" className="mt-2" onClick={() => {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        const img = new Image();
+                        img.crossOrigin = 'anonymous';
+                        img.onload = () => {
+                          canvas.width = img.width;
+                          canvas.height = img.height;
+                          ctx?.drawImage(img, 0, 0);
+                          const link = document.createElement('a');
+                          link.download = 'my-qr-code.png';
+                          link.href = canvas.toDataURL();
+                          link.click();
+                        };
+                        img.src = `https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=${encodeURIComponent(`https://sheltr-ai.web.app/participant/${profile?.personalInfo.firstName?.toLowerCase() + '-' + profile?.personalInfo.lastName?.toLowerCase() || 'demo'}`)}&format=png`;
+                      }}>
+                        <Download className="w-4 h-4 mr-2" />
+                        Download QR
+                      </Button>
+                    </div>
+                  </div>
+
+                  <div>
+                    <Label>Profile Stats</Label>
+                    <div className="mt-2 space-y-3">
+                      <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded">
+                        <span className="text-sm text-gray-600 dark:text-gray-400">Total Supporters</span>
+                        <Badge variant="secondary">0</Badge>
+                      </div>
+                      <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded">
+                        <span className="text-sm text-gray-600 dark:text-gray-400">Profile Views</span>
+                        <Badge variant="secondary">0</Badge>
+                      </div>
+                      <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded">
+                        <span className="text-sm text-gray-600 dark:text-gray-400">Total Received</span>
+                        <Badge variant="secondary">$0.00</Badge>
+                      </div>
+                      <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded">
+                        <span className="text-sm text-gray-600 dark:text-gray-400">Goal Progress</span>
+                        <Badge variant="secondary">68%</Badge>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Public Story */}
+                <div>
+                  <Label htmlFor="publicStory">Your Public Story</Label>
+                  <textarea
+                    id="publicStory"
+                    rows={4}
+                    disabled={!isEditing}
+                    className="mt-1 w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-50 dark:disabled:bg-gray-800 disabled:text-gray-500 dark:disabled:text-gray-400 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
+                    placeholder="Share your story with potential supporters..."
+                    defaultValue="Working towards stability and independence. Every donation helps me take another step forward in my journey."
+                  />
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                    This will be displayed on your public profile page
+                  </p>
+                </div>
+
+                {/* Privacy Settings */}
+                <div className="border-t pt-4">
+                  <Label>Privacy & Visibility</Label>
+                  <div className="mt-2 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <span className="font-medium">Public Profile Enabled</span>
+                        <p className="text-sm text-gray-600">Allow people to view your profile and donate</p>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        disabled={!isEditing}
+                      >
+                        <CheckCircle className="w-5 h-5 text-green-500" />
+                      </Button>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <span className="font-medium">Show Real Name</span>
+                        <p className="text-sm text-gray-600">Display your full name publicly</p>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        disabled={!isEditing}
+                      >
+                        <CheckCircle className="w-5 h-5 text-green-500" />
+                      </Button>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <span className="font-medium">Show Donation Amounts</span>
+                        <p className="text-sm text-gray-600">Display total amount received</p>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        disabled={!isEditing}
+                      >
+                        <AlertCircle className="w-5 h-5 text-gray-400" />
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex space-x-3 pt-4 border-t">
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      const participantId = profile?.personalInfo.firstName?.toLowerCase() + '-' + profile?.personalInfo.lastName?.toLowerCase() || 'demo';
+                      const baseUrl = window.location.origin; // This will use localhost:3000 in dev, production URL in prod
+                      const url = `${baseUrl}/participant/${participantId}`;
+                      window.open(url, '_blank');
+                    }}
+                  >
+                    <Eye className="w-4 h-4 mr-2" />
+                    Preview Profile
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      const participantId = profile?.personalInfo.firstName?.toLowerCase() + '-' + profile?.personalInfo.lastName?.toLowerCase() || 'demo';
+                      const baseUrl = 'https://sheltr-ai.web.app'; // Use production URL for sharing
+                      const url = `${baseUrl}/participant/${participantId}`;
+                      navigator.clipboard.writeText(url);
+                      alert('Profile URL copied to clipboard!');
+                    }}
+                  >
+                    <Copy className="w-4 h-4 mr-2" />
+                    Copy Link
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      const participantId = profile?.personalInfo.firstName?.toLowerCase() + '-' + profile?.personalInfo.lastName?.toLowerCase() || 'demo';
+                      const baseUrl = 'https://sheltr-ai.web.app'; // Use production URL for sharing
+                      const url = `${baseUrl}/participant/${participantId}`;
+                      if (navigator.share) {
+                        navigator.share({
+                          title: `Support ${profile?.personalInfo.firstName} ${profile?.personalInfo.lastName}`,
+                          text: 'Help support someone on their journey to stability',
+                          url: url
+                        });
+                      } else {
+                        alert('Sharing not supported on this device');
+                      }
+                    }}
+                  >
+                    <Share2 className="w-4 h-4 mr-2" />
+                    Share Profile
+                  </Button>
+                </div>
+              </div>
             </CardContent>
           </Card>
         </div>

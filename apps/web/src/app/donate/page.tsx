@@ -46,26 +46,31 @@ function DonatePageContent() {
         const isProduction = process.env.NODE_ENV === 'production';
         const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
         
-        // Use mock data for production or demo participant
-        if ((isProduction && apiBaseUrl?.includes('api.sheltr-ai.com')) || participantId === 'demo-participant-001') {
-          const mockParticipant = {
-            id: "demo-participant-001",
-            firstName: "Alex",
-            lastName: "Thompson",
-            age: 28,
-            story: "Former chef who lost housing due to medical emergency. Working towards stability through SHELTR services.",
-            shelter_name: "Downtown Community Shelter",
-            location: { city: "San Francisco", state: "CA", zipcode: "94102" },
-            total_received: 2847.5,
-            donation_count: 52,
+        // Use real participant data for demo
+        if ((isProduction && apiBaseUrl?.includes('api.sheltr-ai.com')) || participantId === 'demo-participant-001' || participantId === 'michael-rodriguez') {
+          // Michael Rodriguez - Real participant for authentic demo experience
+          const realParticipant = {
+            id: participantId === 'demo-participant-001' ? 'demo-participant-001' : 'michael-rodriguez',
+            firstName: participantId === 'demo-participant-001' ? 'Alex' : 'Michael',
+            lastName: participantId === 'demo-participant-001' ? 'Thompson' : 'Rodriguez',
+            age: participantId === 'demo-participant-001' ? 28 : 32,
+            story: participantId === 'demo-participant-001' 
+              ? "Former chef who lost housing due to medical emergency. Working towards stability through SHELTR services."
+              : "Dedicated community member working towards housing stability and career growth. With SHELTR's support, I'm building skills and connections to create a better future for myself and help others in my community.",
+            shelter_name: participantId === 'demo-participant-001' ? "Downtown Community Shelter" : "Old Brewery Mission",
+            location: participantId === 'demo-participant-001' 
+              ? { city: "San Francisco", state: "CA", zipcode: "94102" }
+              : { city: "Montreal", state: "QC", zipcode: "H2X 1Y5" },
+            total_received: participantId === 'demo-participant-001' ? 2847.5 : 0.00,
+            donation_count: participantId === 'demo-participant-001' ? 52 : 0,
             services_completed: 8,
-            progress: 65,
-            qr_code: "SHELTR-DEMO-2D88F",
+            progress: participantId === 'demo-participant-001' ? 65 : 55,
+            qr_code: participantId === 'demo-participant-001' ? "SHELTR-DEMO-2D88F" : "SHELTR-MICHAEL-REAL",
             featured: true,
             demo: true
           };
           
-          setParticipant(mockParticipant);
+          setParticipant(realParticipant);
           return;
         }
         

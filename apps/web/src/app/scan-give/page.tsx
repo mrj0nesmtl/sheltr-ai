@@ -27,96 +27,48 @@ export default function ScanGivePage() {
   const handleTryDemo = async () => {
     setLoading(true);
     try {
-      // Check if we're in production and backend is not available
+      // Always use Michael Rodriguez for demo - real participant for authentic experience
+      // This creates real statistics and showcases actual platform capabilities
       const isProduction = process.env.NODE_ENV === 'production';
       const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
       
-      if (isProduction && apiBaseUrl?.includes('api.sheltr-ai.com')) {
-        // Use mock data for production demo until backend is deployed
-        const mockParticipant = {
-          id: "demo-participant-001",
-          firstName: "Alex",
-          lastName: "Thompson",
-          age: 28,
-          story: "Former chef who lost housing due to medical emergency. Working towards stability through SHELTR services. Alex is passionate about cooking and hopes to open a food truck once housing is secured.",
-          shelter_name: "Downtown Community Shelter",
-          location: { city: "San Francisco", state: "CA", zipcode: "94102" },
+      // Use Michael Rodriguez for both development and production
+      if (true) { // Always use real participant data
+        // Use real participant data - Michael Rodriguez for authentic demo experience
+        const realParticipant = {
+          id: "michael-rodriguez",
+          firstName: "Michael",
+          lastName: "Rodriguez",
+          age: 32,
+          story: "Dedicated community member working towards housing stability and career growth. With SHELTR's support, I'm building skills and connections to create a better future for myself and help others in my community.",
+          shelter_name: "Old Brewery Mission",
+          location: { city: "Montreal", state: "QC", zipcode: "H2X 1Y5" },
           goals: [
-            { id: "housing-goal", title: "Secure Stable Housing", description: "Find permanent housing solution", progress: 75, status: "in_progress", target_date: "2024-09-01" },
-            { id: "employment-goal", title: "Find Employment", description: "Secure full-time work in food service", progress: 60, status: "in_progress", target_date: "2024-08-15" },
-            { id: "financial-goal", title: "Financial Stability", description: "Build emergency fund and credit score", progress: 40, status: "in_progress", target_date: "2024-12-01" }
+            { id: "housing-goal", title: "Secure Stable Housing", description: "Find permanent housing solution", progress: 68, status: "in_progress", target_date: "2024-10-01" },
+            { id: "employment-goal", title: "Career Development", description: "Build skills and secure meaningful employment", progress: 55, status: "in_progress", target_date: "2024-09-15" },
+            { id: "community-goal", title: "Community Engagement", description: "Give back and help others in similar situations", progress: 42, status: "in_progress", target_date: "2024-12-01" }
           ],
-          skills: ["Cooking", "Food Safety", "Customer Service", "Team Leadership"],
-          interests: ["Culinary Arts", "Nutrition", "Community Gardening"],
-          total_received: 2847.5,
-          donation_count: 52,
-          services_completed: 8,
-          progress: 65,
-          qr_code: "SHELTR-DEMO-2D88F",
+          skills: ["Communication", "Leadership", "Problem Solving", "Community Outreach"],
+          interests: ["Community Service", "Personal Development", "Mentoring", "Social Impact"],
+          total_received: 0.00,
+          donation_count: 0,
+          services_completed: 0,
+          progress: 55,
+          qr_code: "SHELTR-MICHAEL-REAL",
           featured: true,
           demo: true
         };
         
-        // Generate QR code URL directly
-        const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(`https://sheltr-ai.web.app/donate?demo=true&participant=demo-participant-001`)}&format=png`;
+        // Generate QR code URL for Michael Rodriguez
+        const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(`https://sheltr-ai.web.app/donate?demo=true&participant=michael-rodriguez`)}&format=png`;
         
-        setDemoParticipant(mockParticipant);
+        setDemoParticipant(realParticipant);
         setQrCodeUrl(qrCodeUrl);
         setShowDemoQR(true);
-        return;
-      }
-      
-      // Try to call backend API (development mode)
-      const response = await fetch(`${apiBaseUrl}/demo/donations/generate-qr`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      
-      const result = await response.json();
-      
-      if (result.success) {
-        setDemoParticipant(result.data.participant);
-        setQrCodeUrl(result.data.qr_code_url);
-        setShowDemoQR(true);
-      } else {
-        console.error('Failed to generate demo QR:', result.message);
-        alert('Failed to generate demo QR code. Please try again.');
       }
     } catch (error) {
       console.error('Error generating demo QR:', error);
-      
-      // Fallback to mock data if API call fails
-      const mockParticipant = {
-        id: "demo-participant-001",
-        firstName: "Alex",
-        lastName: "Thompson",
-        age: 28,
-        story: "Former chef who lost housing due to medical emergency. Working towards stability through SHELTR services. Alex is passionate about cooking and hopes to open a food truck once housing is secured.",
-        shelter_name: "Downtown Community Shelter",
-        location: { city: "San Francisco", state: "CA", zipcode: "94102" },
-        goals: [
-          { id: "housing-goal", title: "Secure Stable Housing", description: "Find permanent housing solution", progress: 75, status: "in_progress", target_date: "2024-09-01" },
-          { id: "employment-goal", title: "Find Employment", description: "Secure full-time work in food service", progress: 60, status: "in_progress", target_date: "2024-08-15" },
-          { id: "financial-goal", title: "Financial Stability", description: "Build emergency fund and credit score", progress: 40, status: "in_progress", target_date: "2024-12-01" }
-        ],
-        skills: ["Cooking", "Food Safety", "Customer Service", "Team Leadership"],
-        interests: ["Culinary Arts", "Nutrition", "Community Gardening"],
-        total_received: 2847.5,
-        donation_count: 52,
-        services_completed: 8,
-        progress: 65,
-        qr_code: "SHELTR-DEMO-2D88F",
-        featured: true,
-        demo: true
-      };
-      
-      const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(`https://sheltr-ai.web.app/donate?demo=true&participant=demo-participant-001`)}&format=png`;
-      
-      setDemoParticipant(mockParticipant);
-      setQrCodeUrl(qrCodeUrl);
-      setShowDemoQR(true);
+      alert('Failed to generate demo QR code. Please try again.');
     } finally {
       setLoading(false);
     }

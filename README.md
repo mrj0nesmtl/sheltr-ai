@@ -1,5 +1,5 @@
-# 🏠 SHELTR-AI
-**Hacking homelessness through technology.** 
+# 🏠 SHELTR
+**Better to Solve than Manage.** 
 
 The next generation platform for transparent charitable giving and homelessness support built on modern cloud infrastructure.
 
@@ -16,11 +16,11 @@ The next generation platform for transparent charitable giving and homelessness 
 
 ## 🎯 Mission
 
-**Hacking homelessness through technology.** SHELTR-AI empowers direct, transparent charitable giving through QR-code enabled donations, blockchain verification, and AI-driven insights. Every donation follows our SmartFund™ distribution: 80% direct to participants, 15% to sustainable housing, 5% to platform operations.
+**Sheltr is Hacking homelessness.** SHELTR empowers direct, transparent charitable giving through QR-code enabled donations, blockchain verification, and AI-driven insights. Every donation follows our SmartFund™ distribution: 80% direct to participants, 15% to sustainable housing, 5% to shelter platform operations.
 
 ## 🚀 Quick Start
 
-- **New to SHELTR-AI?** → Start with [Overview & Vision](docs/01-overview/README.md)
+- **New to SHELTR?** → Start with [Overview & Vision](docs/01-overview/README.md)
 - **Want to develop?** → Check [Development Roadmap](docs/04-development/dev-roadmap.md)
 - **Need API docs?** → Visit [API Documentation](docs/03-api/README.md)
 - **User guidance?** → See [Complete User Guides](docs/06-user-guides/) (Participant, Admin, Donor)
@@ -91,7 +91,7 @@ Participants can now register **independently** of shelters, creating a more inc
 
 ---
 
-## 🪙 SHELTR Token & Blockchain System
+## 🪙 $SHELTR Token & Blockchain System
 
 ### **🆕 Enhanced Token Architecture**
 
@@ -132,7 +132,7 @@ function processDonation(address participant, uint256 amount) external {
 
 ## 🛠️ Technology Stack
 
-### **🆕 Updated Stack - SHELTR-AI 2.0**
+### **🆕 Updated Stack - SHELTR 2.0**
 
 #### Frontend & Mobile
 - **Web**: Next.js 15 + React 18 + TypeScript 5.0+
@@ -262,6 +262,6 @@ function processDonation(address participant, uint256 amount) external {
 
 **📖 "Great documentation is the foundation of great software - and great impact."**
 
-*Last Updated: August 9, 2025 - Session 9 Complete: Data Connectivity Revolution + Complete User Guide Suite*
+*Last Updated: August 10, 2025 - Session 9 Complete: Data Connectivity Revolution + Complete User Guide Suite*
 
 **🌐 [Visit Live Site](https://sheltr-ai.web.app) | 🚀 [Get Started](docs/01-overview/README.md) | 🤝 [Contribute](CONTRIBUTING.md) | 💝 [Donate](https://sheltr-ai.web.app/scan-give) | 📖 [Documentation Hub](docs/TABLE_OF_CONTENTS.md)**

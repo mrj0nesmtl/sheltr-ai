@@ -1,6 +1,6 @@
-# 📚 SHELTR-AI Documentation Table of Contents
+# 📚 SHELTR Documentation Table of Contents
 
-**Complete navigation for all SHELTR-AI documentation**
+**Complete navigation for all SHELTR documentation**
 
 ---
 

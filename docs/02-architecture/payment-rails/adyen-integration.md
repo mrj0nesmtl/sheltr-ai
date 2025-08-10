@@ -1,4 +1,4 @@
-# SHELTR-AI x Adyen Payment Integration
+# SHELTR x Adyen Payment Integration
 
 ## 🎯 **Integration Overview**
 

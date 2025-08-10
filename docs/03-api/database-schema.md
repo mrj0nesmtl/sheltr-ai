@@ -1,4 +1,4 @@
-# SHELTR-AI Database Schema - Production Implementation
+# SHELTR Database Schema - Production Implementation
 
 ## Overview
 This document outlines the **actual database structure** implemented in Session 9 - clean, production-ready, and optimized for real-world shelter management.

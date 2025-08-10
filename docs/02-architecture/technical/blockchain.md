@@ -1,6 +1,6 @@
 # ⛓️ SHELTR Blockchain Architecture
-*Version: 1.0.0 - January 25, 2025*
-*Status: Production Ready* ✅
+*Version: 1.3.0 - August, 2025*
+*Status: In Peer-Review* 🤓
 
 ## Executive Summary
 

@@ -1,16 +1,13 @@
-# SHELTR Technical White Paper
-*Hacking Homelessness Through Direct-Impact Technology*
+# SHELTR White Paper
+*Hacking Homelessness - Direct-Impact Technology*
+Joel Yaffe, Montreal, Canada
 Version 1.3.0
-February 16, 2025
+August 9, 2025
 Status: LIVE DOCUMENT ✅
 
 ## Abstract
 
-SHELTR represents a paradigm shift in addressing homelessness through technology-driven charitable giving and dual-token economics. By seamlessly integrating blockchain transparency, AI-powered financial guidance, and location-based services, SHELTR creates a direct bridge between donors and individuals experiencing homelessness while building sustainable long-term solutions.
-
-Our revolutionary dual-token architecture combines **SHELTR-S** (stable utility token) for participant protection with **SHELTR** (community governance token) for ecosystem growth. This innovative approach ensures that 80% of donations reach participants as stable value, 15% funds housing solutions, and 5% supports operations—all verified on-chain for complete transparency.
-
-Our platform launches with 100 SHELTR-S tokens ($100 value) gifted to every new participant, creating immediate engagement and platform adoption.
+SHELTR represents a paradigm shift in addressing homelessness through technology-driven charitable giving and dual-token economics. By seamlessly integrating blockchain transparency, AI-powered financial guidance, and location-based services, SHELTR creates a direct bridge between donors and individuals experiencing homelessness while building sustainable long-term solutions. Our revolutionary dual-token architecture combines **SHELTR-S** (stable utility token) for participant protection with **SHELTR** (community governance token) for ecosystem growth. This innovative approach ensures that 80% of donations reach participants as stable value, 15% funds housing solutions, and 5% supports operations—all verified on-chain for complete transparency. Our platform launches with 100 SHELTR-S tokens ($100 value) gifted to every new participant, creating immediate engagement and platform adoption.
 
 ## Executive Summary
 

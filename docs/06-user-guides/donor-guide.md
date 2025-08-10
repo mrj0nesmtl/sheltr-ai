@@ -1,6 +1,6 @@
 # 💝 Donor Guide
 
-**Your Complete Guide to Making Impact Through SHELTR-AI**
+**Your Complete Guide to Making Impact Through SHELTR**
 
 *Version: 2.0 | Updated: August 2025*
 
@@ -8,11 +8,11 @@
 
 ## 🌟 Welcome to Transparent Giving
 
-Welcome to SHELTR-AI! As a donor, you're joining a revolutionary approach to charitable giving that prioritizes **transparency**, **efficiency**, and **direct impact**. This guide will help you understand how to make meaningful contributions that directly transform lives while building stronger communities.
+Welcome to SHELTR! As a donor, you're joining a revolutionary approach to charitable giving that prioritizes **transparency**, **efficiency**, and **direct impact**. This guide will help you understand how to make meaningful contributions that directly transform lives while building stronger communities.
 
-### What Makes SHELTR-AI Different?
+### What Makes SHELTR Different?
 
-SHELTR-AI revolutionizes charitable giving through:
+SHELTR revolutionizes charitable giving through:
 - **Direct Impact**: 80% of your donation goes directly to participants
 - **Transparency**: Blockchain technology tracks every dollar
 - **Efficiency**: No administrative overhead or delayed processing
@@ -77,7 +77,7 @@ Every donation is automatically distributed:
 ### QR Code Donations ✅ **INSTANT IMPACT**
 
 #### How QR Code Giving Works
-1. **Encounter a participant** with their SHELTR-AI QR code
+1. **Encounter a participant** with their SHELTR QR code
 2. **Open your smartphone camera** or QR code reader
 3. **Scan the QR code** to access their profile
 4. **Review their story** and current needs
@@ -96,7 +96,7 @@ Every donation is automatically distributed:
 ### Online Giving Platform
 
 #### Web-Based Donations
-- **Browse participant profiles** on the SHELTR-AI platform
+- **Browse participant profiles** on the SHELTR platform
 - **Search by location** or specific needs
 - **Read participant stories** and goals
 - **Make donations** with full payment security
@@ -239,7 +239,7 @@ Access your personal impact dashboard to see:
 - **Celebrate achievements** together
 
 #### Community Events
-- **Attend local** SHELTR-AI community events
+- **Attend local** SHELTR community events
 - **Meet participants** in safe, structured environments
 - **Volunteer opportunities** at partner shelters
 - **Corporate giving** events and challenges
@@ -348,7 +348,7 @@ Every donation contributes to sustainable housing through:
 ### Expanding Your Impact
 
 #### Referral Program
-- **Invite friends** and family to join SHELTR-AI
+- **Invite friends** and family to join SHELTR
 - **Share impact** stories and experiences
 - **Organize group** giving campaigns
 - **Corporate introduction** and partnership development
@@ -421,7 +421,7 @@ Every donation contributes to sustainable housing through:
 - **Keep records** of all charitable giving for taxes
 
 #### Scam Prevention
-- **Verify QR codes** lead to official SHELTR-AI platform
+- **Verify QR codes** lead to official SHELTR platform
 - **Be cautious** of requests outside the platform
 - **Don't download** apps from unofficial sources
 - **Report fake** QR codes or fraudulent requests
@@ -541,7 +541,7 @@ Every donation contributes to sustainable housing through:
 >
 > — **Anonymous Donor, Seattle**
 
-> *"Our company started a monthly giving campaign through SHELTR-AI. In one year, we helped 25 people find housing and our employees feel more connected to our community impact."*
+> *"Our company started a monthly giving campaign through SHELTR. In one year, we helped 25 people find housing and our employees feel more connected to our community impact."*
 >
 > — **Maria Rodriguez, Corporate Social Responsibility Manager**
 
@@ -586,6 +586,6 @@ Every donation contributes to sustainable housing through:
 
 ---
 
-**Thank you for joining the SHELTR-AI community. Your generosity, combined with innovative technology, is transforming lives and building stronger, more compassionate communities. Together, we're proving that direct, transparent giving can solve homelessness one person at a time.** 🏠✨
+**Thank you for joining the SHELTR community. Your generosity, combined with innovative technology, is transforming lives and building stronger, more compassionate communities. Together, we're proving that direct, transparent giving can solve homelessness one person at a time.** 🏠✨
 
 *For more resources and to connect with the donor community, visit our [Donor Resource Center](../donor-resources/) or join our monthly community calls.*

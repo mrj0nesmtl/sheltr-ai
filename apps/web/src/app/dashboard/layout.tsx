@@ -279,13 +279,15 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
-  // Debug user information
-  console.log('🔍 Dashboard Layout Debug:', {
-    userEmail: user?.email,
-    userRole: user?.role,
-    userDisplayName: user?.displayName,
-    userName: getUserDisplayName(user)
-  });
+  // Debug user information (development only)
+  if (process.env.NODE_ENV === 'development') {
+    console.log('🔍 Dashboard Layout Debug:', {
+      userEmail: user?.email,
+      userRole: user?.role,
+      userDisplayName: user?.displayName,
+      userName: getUserDisplayName(user)
+    });
+  }
 
   const navigationItems = getNavigationItems(user?.role || '');
 

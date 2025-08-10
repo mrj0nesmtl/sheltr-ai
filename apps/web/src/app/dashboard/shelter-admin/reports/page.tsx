@@ -1,11 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { getAnalyticsData, AnalyticsData, getShelterMetrics } from '@/services/platformMetrics';
 import { 
   BarChart3, 
   TrendingUp, 
@@ -24,95 +26,67 @@ import {
   CheckCircle,
   AlertCircle,
   Filter,
-  Search
+  Search,
+  Loader2
 } from 'lucide-react';
 
-// Mock data for reports
-const occupancyData = [
-  { month: 'Jul', occupancy: 78, capacity: 120 },
-  { month: 'Aug', occupancy: 82, capacity: 120 },
-  { month: 'Sep', occupancy: 85, capacity: 120 },
-  { month: 'Oct', occupancy: 91, capacity: 120 },
-  { month: 'Nov', occupancy: 89, capacity: 120 },
-  { month: 'Dec', occupancy: 94, capacity: 120 },
-  { month: 'Jan', occupancy: 89, capacity: 120 }
-];
-
-const outcomesData = [
-  { outcome: 'Permanent Housing', count: 23, percentage: 38 },
-  { outcome: 'Transitional Housing', count: 15, percentage: 25 },
-  { outcome: 'Family Reunification', count: 8, percentage: 13 },
-  { outcome: 'Treatment Program', count: 6, percentage: 10 },
-  { outcome: 'Other Support', count: 8, percentage: 14 }
-];
-
-const servicesData = [
-  { service: 'Medical Care', provided: 145, requested: 178, satisfaction: 4.2 },
-  { service: 'Mental Health', provided: 89, requested: 95, satisfaction: 4.5 },
-  { service: 'Job Training', provided: 67, requested: 85, satisfaction: 4.1 },
-  { service: 'Legal Aid', provided: 34, requested: 42, satisfaction: 4.3 },
-  { service: 'Financial Planning', provided: 56, requested: 61, satisfaction: 4.0 },
-  { service: 'Substance Abuse', provided: 28, requested: 35, satisfaction: 4.4 }
-];
-
-const demographicsData = [
-  { category: 'Age 18-25', count: 12, percentage: 13 },
-  { category: 'Age 26-35', count: 28, percentage: 31 },
-  { category: 'Age 36-50', count: 31, percentage: 35 },
-  { category: 'Age 51+', count: 18, percentage: 21 },
-  { category: 'Male', count: 52, percentage: 58 },
-  { category: 'Female', count: 34, percentage: 38 },
-  { category: 'Non-binary', count: 3, percentage: 4 },
-  { category: 'Veterans', count: 15, percentage: 17 },
-  { category: 'Families', count: 8, percentage: 9 }
-];
-
-const keyMetrics = [
-  {
-    title: 'Average Stay Duration',
-    value: '45 days',
-    change: '-3 days',
-    trend: 'down',
-    icon: Clock,
-    description: 'Compared to last month'
-  },
-  {
-    title: 'Success Rate',
-    value: '76%',
-    change: '+5%',
-    trend: 'up',
-    icon: CheckCircle,
-    description: 'Positive outcomes'
-  },
-  {
-    title: 'Bed Utilization',
-    value: '89%',
-    change: '+2%',
-    trend: 'up',
-    icon: Bed,
-    description: 'Average occupancy'
-  },
-  {
-    title: 'Service Satisfaction',
-    value: '4.3/5',
-    change: '+0.2',
-    trend: 'up',
-    icon: Heart,
-    description: 'Average rating'
-  }
-];
-
-const recentReports = [
-  { name: 'Monthly Operations Report', type: 'Operational', date: '2025-01-15', size: '2.4 MB' },
-  { name: 'Quarterly Impact Analysis', type: 'Impact', date: '2025-01-10', size: '1.8 MB' },
-  { name: 'Funding Utilization Report', type: 'Financial', date: '2025-01-08', size: '956 KB' },
-  { name: 'Service Delivery Assessment', type: 'Program', date: '2025-01-05', size: '1.2 MB' },
-  { name: 'Participant Demographics', type: 'Statistical', date: '2025-01-03', size: '745 KB' }
-];
-
 export default function ReportsPage() {
+  const { user, hasRole } = useAuth();
   const [selectedTab, setSelectedTab] = useState('overview');
   const [selectedPeriod, setSelectedPeriod] = useState('month');
+  const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [shelterName, setShelterName] = useState<string>('Your Shelter');
+
+  // Load real analytics data based on user's shelter_id
+  useEffect(() => {
+    const loadAnalyticsData = async () => {
+      const shelterId = user?.customClaims?.shelter_id || user?.shelterId;
+      
+      if (!shelterId) {
+        setError('No shelter assigned to this admin');
+        setLoading(false);
+        return;
+      }
+
+      try {
+        console.log('📊 Loading analytics data for shelter:', shelterId);
+        
+        // Get analytics data and shelter info in parallel
+        const [analytics, shelterMetrics] = await Promise.all([
+          getAnalyticsData(shelterId),
+          getShelterMetrics(shelterId)
+        ]);
+        
+        if (analytics && shelterMetrics) {
+          setAnalyticsData(analytics);
+          setShelterName(shelterMetrics.shelterName);
+          console.log('✅ Analytics data loaded:', analytics);
+        } else {
+          setError('Failed to load analytics data');
+        }
+      } catch (error) {
+        console.error('❌ Failed to load analytics data:', error);
+        setError('Failed to load analytics data');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (user && hasRole('admin')) {
+      loadAnalyticsData();
+    }
+  }, [user, hasRole]);
+
+  // Recent reports - these would come from a reports collection in the future
+  const recentReports = [
+    { name: 'Monthly Operations Report', type: 'Operational', date: '2025-01-15', size: '2.4 MB' },
+    { name: 'Quarterly Impact Analysis', type: 'Impact', date: '2025-01-10', size: '1.8 MB' },
+    { name: 'Funding Utilization Report', type: 'Financial', date: '2025-01-08', size: '956 KB' },
+    { name: 'Service Delivery Assessment', type: 'Program', date: '2025-01-05', size: '1.2 MB' },
+    { name: 'Participant Demographics', type: 'Statistical', date: '2025-01-03', size: '745 KB' }
+  ];
 
   const getOccupancyPercentage = (occupancy: number, capacity: number) => {
     return (occupancy / capacity) * 100;
@@ -130,6 +104,64 @@ export default function ReportsPage() {
     return trend === 'up' ? 'text-green-600' : 'text-red-600';
   };
 
+  // Check if user has shelter admin or super admin access
+  if (!hasRole('admin') && !hasRole('super_admin')) {
+    return (
+      <div className="text-center py-12">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+          Access Restricted
+        </h2>
+        <p className="text-gray-600 dark:text-gray-400">
+          Shelter Admin access required for this dashboard.
+        </p>
+      </div>
+    );
+  }
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <div className="flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Reports & Analytics</h1>
+            <p className="text-gray-600 dark:text-gray-400 mt-1">
+              Loading analytics data...
+            </p>
+          </div>
+        </div>
+        <div className="flex items-center justify-center py-8">
+          <Loader2 className="h-8 w-8 animate-spin mr-2" />
+          <span>Loading shelter analytics...</span>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error || !analyticsData) {
+    return (
+      <div className="space-y-6">
+        <div className="flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Reports & Analytics Error</h1>
+            <p className="text-gray-600 dark:text-gray-400 mt-1">
+              Unable to load analytics data
+            </p>
+          </div>
+        </div>
+        <div className="text-center py-8">
+          <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+          <h2 className="text-xl font-bold mb-2">Unable to Load Analytics</h2>
+          <p className="text-gray-600 mb-4">{error}</p>
+          <Button onClick={() => window.location.reload()}>
+            Retry Loading
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -137,7 +169,7 @@ export default function ReportsPage() {
         <div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Reports & Analytics</h1>
           <p className="text-gray-600 dark:text-gray-400 mt-1">
-            Comprehensive insights into shelter operations and outcomes
+            {shelterName} • Real Data Analytics • Status: ✅ Live Analytics Connected
           </p>
         </div>
         <div className="flex space-x-2">
@@ -154,26 +186,49 @@ export default function ReportsPage() {
 
       {/* Key Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {keyMetrics.map((metric, index) => {
-          const IconComponent = metric.icon;
-          const TrendIcon = getTrendIcon(metric.trend);
-          return (
-            <Card key={index}>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">{metric.title}</CardTitle>
-                <IconComponent className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{metric.value}</div>
-                <div className={`flex items-center text-xs ${getTrendColor(metric.trend)}`}>
-                  <TrendIcon className="h-3 w-3 mr-1" />
-                  {metric.change}
-                </div>
-                <p className="text-xs text-muted-foreground mt-1">{metric.description}</p>
-              </CardContent>
-            </Card>
-          );
-        })}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Average Stay Duration</CardTitle>
+            <Clock className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{analyticsData.keyMetrics.averageStayDuration}</div>
+            <p className="text-xs text-muted-foreground mt-1">Based on real participant data</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Success Rate</CardTitle>
+            <CheckCircle className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{analyticsData.keyMetrics.successRate}</div>
+            <p className="text-xs text-muted-foreground mt-1">Positive outcomes</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Bed Utilization</CardTitle>
+            <Bed className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{analyticsData.keyMetrics.bedUtilization}</div>
+            <p className="text-xs text-muted-foreground mt-1">Real occupancy data</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Service Satisfaction</CardTitle>
+            <Heart className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{analyticsData.keyMetrics.serviceSatisfaction}</div>
+            <p className="text-xs text-muted-foreground mt-1">Average rating</p>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Main Content */}
@@ -226,7 +281,7 @@ export default function ReportsPage() {
                       </CardHeader>
                       <CardContent>
                         <div className="space-y-3">
-                          {occupancyData.slice(-3).map((data, index) => (
+                          {analyticsData.occupancyTrend.slice(-3).map((data, index) => (
                             <div key={index} className="space-y-2">
                               <div className="flex justify-between text-sm">
                                 <span>{data.month}</span>
@@ -245,7 +300,7 @@ export default function ReportsPage() {
                       </CardHeader>
                       <CardContent>
                         <div className="space-y-3">
-                          {demographicsData.slice(0, 6).map((demo, index) => (
+                          {analyticsData.demographics.slice(0, 6).map((demo, index) => (
                             <div key={index} className="flex justify-between items-center">
                               <span className="text-sm">{demo.category}</span>
                               <div className="flex items-center space-x-2">
@@ -264,11 +319,11 @@ export default function ReportsPage() {
                   <Card>
                     <CardHeader>
                       <CardTitle className="text-lg">Monthly Occupancy Analysis</CardTitle>
-                      <CardDescription>Bed utilization over the past 7 months</CardDescription>
+                      <CardDescription>Real bed utilization data from {shelterName}</CardDescription>
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-4">
-                        {occupancyData.map((data, index) => (
+                        {analyticsData.occupancyTrend.map((data, index) => (
                           <div key={index} className="space-y-2">
                             <div className="flex justify-between">
                               <span className="font-medium">{data.month} 2025</span>
@@ -288,11 +343,11 @@ export default function ReportsPage() {
                   <Card>
                     <CardHeader>
                       <CardTitle className="text-lg">Service Delivery Analysis</CardTitle>
-                      <CardDescription>Services provided vs. requested with satisfaction ratings</CardDescription>
+                      <CardDescription>Real service statistics from {shelterName}</CardDescription>
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-4">
-                        {servicesData.map((service, index) => (
+                        {analyticsData.serviceStats.map((service, index) => (
                           <div key={index} className="space-y-2">
                             <div className="flex justify-between items-center">
                               <span className="font-medium">{service.service}</span>
@@ -320,11 +375,11 @@ export default function ReportsPage() {
                   <Card>
                     <CardHeader>
                       <CardTitle className="text-lg">Participant Outcomes</CardTitle>
-                      <CardDescription>Exit destinations and success metrics</CardDescription>
+                      <CardDescription>Real exit destinations and success metrics from {shelterName}</CardDescription>
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-4">
-                        {outcomesData.map((outcome, index) => (
+                        {analyticsData.participantOutcomes.map((outcome, index) => (
                           <div key={index} className="space-y-2">
                             <div className="flex justify-between">
                               <span className="font-medium">{outcome.outcome}</span>
@@ -338,11 +393,11 @@ export default function ReportsPage() {
                         <div className="flex items-center space-x-2">
                           <CheckCircle className="h-5 w-5 text-green-600" />
                           <span className="font-medium text-green-800 dark:text-green-200">
-                            76% Success Rate
+                            {analyticsData.keyMetrics.successRate} Success Rate
                           </span>
                         </div>
                         <p className="text-sm text-green-700 dark:text-green-300 mt-1">
-                          Positive outcomes (permanent housing, transitional housing, family reunification)
+                          Real success metrics based on participant outcomes data
                         </p>
                       </div>
                     </CardContent>

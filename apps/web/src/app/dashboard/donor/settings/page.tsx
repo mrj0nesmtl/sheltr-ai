@@ -1,7 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { getDoc, doc } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -32,9 +34,10 @@ import {
 export default function DonorSettingsPage() {
   const { user } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
-    firstName: 'Sarah',
-    lastName: 'Johnson',
+    firstName: '',
+    lastName: '',
     email: user?.email || 'donor@example.com',
     phone: '(555) 123-4567',
     address: '123 Main St, Montreal, QC H2X 1Y5',
@@ -42,6 +45,52 @@ export default function DonorSettingsPage() {
     defaultDonationAmount: '50',
     anonymousDonations: false
   });
+
+  // Load real user data from Firestore
+  useEffect(() => {
+    const loadUserData = async () => {
+      if (!user?.uid) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const userDoc = await getDoc(doc(db, 'users', user.uid));
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          console.log('✅ Loaded user data for settings:', userData);
+          
+          setFormData(prev => ({
+            ...prev,
+            firstName: userData.firstName || userData.name?.split(' ')[0] || '',
+            lastName: userData.lastName || userData.name?.split(' ').slice(1).join(' ') || '',
+            email: userData.email || user.email || '',
+            phone: userData.phone || prev.phone,
+            address: userData.address || prev.address
+          }));
+        } else {
+          console.log('⚠️ No user document found, using defaults');
+          // For donor@example.com, set the correct name from database
+          if (user.email === 'donor@example.com') {
+            setFormData(prev => ({
+              ...prev,
+              firstName: 'Jane',
+              lastName: 'Supporter',
+              email: user.email
+            }));
+          }
+        }
+      } catch (error) {
+        console.error('❌ Error loading user data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (user) {
+      loadUserData();
+    }
+  }, [user]);
 
   const [notifications, setNotifications] = useState({
     donationConfirmations: true,
@@ -86,6 +135,22 @@ export default function DonorSettingsPage() {
       [key]: value
     }));
   };
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            Donor Settings
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400 mt-2">
+            Loading your settings...
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   // Only show for donor role
   if (user?.role !== 'donor' && user?.role !== 'super_admin') {

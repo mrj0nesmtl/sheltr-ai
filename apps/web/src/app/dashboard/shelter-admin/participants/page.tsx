@@ -6,6 +6,13 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { collection, addDoc, Timestamp } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 import { 
   Users, 
   UserPlus, 
@@ -24,7 +31,9 @@ import {
   FileText,
   Heart,
   Bed,
-  Loader2
+  Loader2,
+  Save,
+  X
 } from 'lucide-react';
 import { getShelterParticipants, getShelterMetrics, ShelterParticipant, ShelterMetrics } from '@/services/platformMetrics';
 
@@ -38,6 +47,23 @@ export default function ParticipantsPage() {
   const [shelterMetrics, setShelterMetrics] = useState<ShelterMetrics | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  
+  // Registration form state
+  const [showRegistrationModal, setShowRegistrationModal] = useState(false);
+  const [registrationLoading, setRegistrationLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    dateOfBirth: '',
+    emergencyContactName: '',
+    emergencyContactPhone: '',
+    emergencyContactRelationship: '',
+    medicalNotes: '',
+    housingGoals: '',
+    intake_notes: ''
+  });
 
   // Load participants data
   useEffect(() => {
@@ -72,6 +98,92 @@ export default function ParticipantsPage() {
     }
   }, [user, hasRole]);
 
+  // Registration function
+  const handleRegistration = async () => {
+    const shelterId = user?.customClaims?.shelter_id;
+    
+    if (!shelterId) {
+      alert('Error: No shelter assigned to this admin');
+      return;
+    }
+
+    // Basic validation
+    if (!formData.firstName || !formData.lastName) {
+      alert('Please fill in required fields (First Name and Last Name)');
+      return;
+    }
+
+    setRegistrationLoading(true);
+    
+    try {
+      console.log('👤 Registering new participant...');
+      
+      // Create participant document
+      const participantData = {
+        firstName: formData.firstName.trim(),
+        lastName: formData.lastName.trim(),
+        email: formData.email.trim() || null,
+        phone: formData.phone.trim() || null,
+        dateOfBirth: formData.dateOfBirth || null,
+        shelter_id: shelterId,
+        tenant_id: `shelter-${shelterId}`,
+        role: 'participant',
+        status: 'new',
+        emergencyContact: formData.emergencyContactName ? {
+          name: formData.emergencyContactName.trim(),
+          phone: formData.emergencyContactPhone.trim(),
+          relationship: formData.emergencyContactRelationship.trim()
+        } : null,
+        medicalNotes: formData.medicalNotes.trim() || null,
+        housingGoals: formData.housingGoals.trim() || null,
+        intake_notes: formData.intake_notes.trim() || null,
+        created_at: Timestamp.now(),
+        updated_at: Timestamp.now(),
+        createdBy: user.uid,
+        profileComplete: false
+      };
+
+      // Add to Firestore
+      const docRef = await addDoc(collection(db, 'users'), participantData);
+      
+      console.log('✅ Participant registered with ID:', docRef.id);
+      
+      // Reset form
+      setFormData({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        dateOfBirth: '',
+        emergencyContactName: '',
+        emergencyContactPhone: '',
+        emergencyContactRelationship: '',
+        medicalNotes: '',
+        housingGoals: '',
+        intake_notes: ''
+      });
+      
+      // Close modal
+      setShowRegistrationModal(false);
+      
+      // Reload participants data
+      const updatedParticipants = await getShelterParticipants(shelterId);
+      setParticipants(updatedParticipants);
+      
+      // Reload shelter metrics
+      const updatedMetrics = await getShelterMetrics(shelterId);
+      setShelterMetrics(updatedMetrics);
+      
+      alert('✅ Participant registered successfully!');
+      
+    } catch (error) {
+      console.error('❌ Error registering participant:', error);
+      alert('Error registering participant. Please try again.');
+    } finally {
+      setRegistrationLoading(false);
+    }
+  };
+
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
       case 'active': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100';
@@ -92,10 +204,181 @@ export default function ParticipantsPage() {
             Manage participant registrations, profiles, and services
           </p>
         </div>
-        <Button className="bg-blue-600 hover:bg-blue-700">
-          <UserPlus className="mr-2 h-4 w-4" />
-          Register New Participant
-        </Button>
+        <Dialog open={showRegistrationModal} onOpenChange={setShowRegistrationModal}>
+          <DialogTrigger asChild>
+            <Button className="bg-blue-600 hover:bg-blue-700">
+              <UserPlus className="mr-2 h-4 w-4" />
+              Register New Participant
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>Register New Participant</DialogTitle>
+              <DialogDescription>
+                Add a new participant to your shelter. All information will be stored securely.
+              </DialogDescription>
+            </DialogHeader>
+            
+            <div className="grid gap-4 py-4">
+              {/* Basic Information */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-medium">Basic Information</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="firstName">First Name *</Label>
+                    <Input
+                      id="firstName"
+                      value={formData.firstName}
+                      onChange={(e) => setFormData({...formData, firstName: e.target.value})}
+                      placeholder="Enter first name"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="lastName">Last Name *</Label>
+                    <Input
+                      id="lastName"
+                      value={formData.lastName}
+                      onChange={(e) => setFormData({...formData, lastName: e.target.value})}
+                      placeholder="Enter last name"
+                    />
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={(e) => setFormData({...formData, email: e.target.value})}
+                      placeholder="participant@example.com"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="phone">Phone</Label>
+                    <Input
+                      id="phone"
+                      type="tel"
+                      value={formData.phone}
+                      onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                      placeholder="(555) 123-4567"
+                    />
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="dateOfBirth">Date of Birth</Label>
+                  <Input
+                    id="dateOfBirth"
+                    type="date"
+                    value={formData.dateOfBirth}
+                    onChange={(e) => setFormData({...formData, dateOfBirth: e.target.value})}
+                  />
+                </div>
+              </div>
+
+              {/* Emergency Contact */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-medium">Emergency Contact</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="emergencyContactName">Contact Name</Label>
+                    <Input
+                      id="emergencyContactName"
+                      value={formData.emergencyContactName}
+                      onChange={(e) => setFormData({...formData, emergencyContactName: e.target.value})}
+                      placeholder="Contact name"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="emergencyContactPhone">Contact Phone</Label>
+                    <Input
+                      id="emergencyContactPhone"
+                      type="tel"
+                      value={formData.emergencyContactPhone}
+                      onChange={(e) => setFormData({...formData, emergencyContactPhone: e.target.value})}
+                      placeholder="(555) 123-4567"
+                    />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="emergencyContactRelationship">Relationship</Label>
+                  <Select value={formData.emergencyContactRelationship} onValueChange={(value) => setFormData({...formData, emergencyContactRelationship: value})}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select relationship" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="parent">Parent</SelectItem>
+                      <SelectItem value="sibling">Sibling</SelectItem>
+                      <SelectItem value="spouse">Spouse/Partner</SelectItem>
+                      <SelectItem value="friend">Friend</SelectItem>
+                      <SelectItem value="other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              {/* Additional Information */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-medium">Additional Information</h3>
+                <div className="space-y-2">
+                  <Label htmlFor="medicalNotes">Medical Notes</Label>
+                  <Textarea
+                    id="medicalNotes"
+                    value={formData.medicalNotes}
+                    onChange={(e) => setFormData({...formData, medicalNotes: e.target.value})}
+                    placeholder="Any medical conditions, allergies, or medications"
+                    rows={3}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="housingGoals">Housing Goals</Label>
+                  <Textarea
+                    id="housingGoals"
+                    value={formData.housingGoals}
+                    onChange={(e) => setFormData({...formData, housingGoals: e.target.value})}
+                    placeholder="Participant's housing and life goals"
+                    rows={3}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="intake_notes">Intake Notes</Label>
+                  <Textarea
+                    id="intake_notes"
+                    value={formData.intake_notes}
+                    onChange={(e) => setFormData({...formData, intake_notes: e.target.value})}
+                    placeholder="Initial assessment notes"
+                    rows={3}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-end space-x-2">
+              <Button 
+                variant="outline" 
+                onClick={() => setShowRegistrationModal(false)}
+                disabled={registrationLoading}
+              >
+                <X className="mr-2 h-4 w-4" />
+                Cancel
+              </Button>
+              <Button 
+                onClick={handleRegistration}
+                disabled={registrationLoading}
+                className="bg-blue-600 hover:bg-blue-700"
+              >
+                {registrationLoading ? (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                  <Save className="mr-2 h-4 w-4" />
+                )}
+                {registrationLoading ? 'Registering...' : 'Register Participant'}
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
 
       {/* Quick Stats */}

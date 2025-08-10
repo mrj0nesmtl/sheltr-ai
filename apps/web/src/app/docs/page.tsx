@@ -8,7 +8,6 @@ import {
   Users, 
   Shield, 
   Coins, 
-  BarChart3,
   Book,
   Code,
   Building,
@@ -16,22 +15,56 @@ import {
   Menu,
   X,
   ArrowRight,
-  Lock,
   Rocket,
   Heart,
   Building2,
-  UserPlus
+  Mail,
+  Send
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
 import { ThemeToggle } from '@/components/theme-toggle';
 import Footer from '@/components/Footer';
 import ThemeLogo from '@/components/ThemeLogo';
 import { useState } from 'react';
+import { collection, addDoc, Timestamp } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 
 export default function DocsPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [email, setEmail] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState('');
+
+  const handleEmailSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email.trim()) return;
+
+    setIsSubmitting(true);
+    setSubmitMessage('');
+
+    try {
+      await addDoc(collection(db, 'newsletter_signups'), {
+        email: email.trim(),
+        source: 'docs_page_cta',
+        page: 'documentation_hub',
+        signup_date: Timestamp.now(),
+        user_agent: navigator.userAgent,
+        status: 'active'
+      });
+
+      setSubmitMessage('✅ Thank you! We\'ll be in touch soon.');
+      setEmail('');
+    } catch (error) {
+      console.error('Error saving email:', error);
+      setSubmitMessage('❌ Something went wrong. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+      setTimeout(() => setSubmitMessage(''), 5000);
+    }
+  };
 
   const coreDocuments = [
     {
@@ -45,7 +78,7 @@ export default function DocsPage() {
       topics: ["Theory of Change", "Market Analysis", "Social Impact", "Investment Thesis", "Implementation Roadmap"],
       link: "/docs/hacking-homelessness",
       downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/01-overview/hacking_homelessness.md",
-      lastUpdated: "Summer 2024"
+      lastUpdated: "July 20, 2025"
     },
     {
       title: "SHELTR Platform Architecture",
@@ -71,20 +104,20 @@ export default function DocsPage() {
       topics: ["Dual-Token Economics", "Smart Contract Architecture", "Base Network Integration", "Security Framework", "Financial Projections"],
       link: "/docs/whitepaper",
       downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/whitepaper_final.md",
-      lastUpdated: "February 16, 2025"
+      lastUpdated: "January 25, 2025"
     },
     {
       title: "Blockchain Architecture",
       description: "Deep technical dive into our Base network implementation, smart contracts, and verification systems",
       icon: Shield,
-      badge: "Technical",
+      badge: "Peer Review",
       badgeColor: "bg-green-500",
       pages: "45 pages",
       audience: "Developers • Blockchain Engineers • Security Auditors",
       topics: ["Smart Contract Code", "Base Network Integration", "Security Protocols", "Oracle Systems", "Token Utilities"],
       link: "/docs/blockchain",
       downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/technical/blockchain.md",
-      lastUpdated: "January 25, 2025"
+      lastUpdated: "August 2025"
     },
     {
       title: "API Documentation",
@@ -97,7 +130,7 @@ export default function DocsPage() {
       topics: ["REST API Endpoints", "Authentication", "Rate Limiting", "Error Handling", "SDK Integration"],
       link: "/docs/api",
       downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/03-api/README.md",
-      lastUpdated: "January 25, 2025"
+      lastUpdated: "August 9, 2025"
     },
     {
       title: "Shelter Administrator Guide",
@@ -105,12 +138,12 @@ export default function DocsPage() {
       icon: Building2,
       badge: "Admin Guide",
       badgeColor: "bg-blue-600",
-      pages: "400+ pages",
+      pages: "25 pages",
       audience: "Shelter Administrators • Operations Managers • Staff",
       topics: ["Dashboard Management", "Participant Registration", "Service Coordination", "Resource Management", "Analytics & Reporting"],
       link: "/docs/shelter-admin-guide",
       downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/06-user-guides/shelter-admin-guide.md",
-      lastUpdated: "August 9, 2025"
+      lastUpdated: "August 2025"
     },
     {
       title: "Donor Guide",
@@ -118,12 +151,12 @@ export default function DocsPage() {
       icon: Heart,
       badge: "Donor Guide",
       badgeColor: "bg-red-600",
-      pages: "450+ pages",
+      pages: "28 pages",
       audience: "Donors • Community Supporters • Corporate Partners",
       topics: ["QR Code Giving", "SmartFund Model", "Impact Tracking", "Payment Security", "Community Building"],
       link: "/docs/donor-guide",
       downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/06-user-guides/donor-guide.md",
-      lastUpdated: "August 9, 2025"
+      lastUpdated: "August 2025"
     },
     {
       title: "Participant User Guide",
@@ -136,7 +169,7 @@ export default function DocsPage() {
       topics: ["Platform Onboarding", "QR Code Usage", "Wallet Management", "Service Access", "Support Resources"],
       link: "/docs/participant-guide",
       downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/06-user-guides/participant-guide.md",
-      lastUpdated: "January 25, 2025"
+      lastUpdated: "July 2025"
     }
   ];
 
@@ -252,10 +285,10 @@ export default function DocsPage() {
               <Book className="h-16 w-16 text-white/90" />
             </div>
             <h1 className="text-5xl font-bold mb-6 text-white">
-              SHELTR Documentation Hub
+              Documentation Hub
             </h1>
             <p className="text-xl mb-8 text-white/90">
-              The next generation platform for transparent charitable giving and homelessness support built on modern cloud infrastructure.
+              Built on modern cloud infrastructure.
             </p>
             
             {/* Tech Stack Badges */}
@@ -273,7 +306,7 @@ export default function DocsPage() {
                 📱 EXPO
               </Badge>
               <Badge className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-3 py-1">
-                ⭐ STARS 2
+                ⭐ STARS 12
               </Badge>
               <Badge className="bg-yellow-600 hover:bg-yellow-700 text-white font-semibold px-3 py-1">
                 📄 LICENSE MIT
@@ -286,7 +319,7 @@ export default function DocsPage() {
             {/* Last Updated Badge */}
             <div className="flex justify-center">
               <Badge className="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 text-sm">
-                📅 LAST UPDATED: AUGUST 9, 2025
+                📅 LAST UPDATED: AUGUST 10, 2025
               </Badge>
             </div>
           </div>
@@ -297,10 +330,10 @@ export default function DocsPage() {
       <section className="py-16">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Core Documentation</h2>
+            <h2 className="text-3xl font-bold mb-4">Core Project Documentation</h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              Investment-grade documentation covering technical architecture, market analysis, 
-              and implementation strategy for SHELTR&rsquo;s revolutionary approach to charitable technology.
+              Covering technical architecture, market analysis, 
+              and implementation strategy for SHELTR&rsquo;s unique approach to charitable technology.
             </p>
           </div>
 
@@ -483,20 +516,66 @@ export default function DocsPage() {
       <section className="py-16">
         <div className="container mx-auto px-4 text-center">
           <div className="max-w-2xl mx-auto">
-            <h2 className="text-3xl font-bold mb-6">Need More Information?</h2>
+            <h2 className="text-3xl font-bold mb-6">Get Updates & Technical Support</h2>
             <p className="text-lg text-muted-foreground mb-8">
-              Contact our team for technical support, partnership opportunities, 
-              or platform integration inquiries.
+              Stay informed about platform updates, API changes, and new documentation. 
+              Our team will personally reach out for technical support, partnership opportunities, 
+              or integration inquiries.
             </p>
+            
+            {/* Email Capture Form */}
+            <form onSubmit={handleEmailSubmit} className="max-w-md mx-auto mb-6">
+              <div className="flex gap-3">
+                <div className="flex-1">
+                  <Input
+                    type="email"
+                    placeholder="Enter your email for updates"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="h-12 text-base"
+                    required
+                    disabled={isSubmitting}
+                  />
+                </div>
+                <Button 
+                  type="submit" 
+                  size="lg" 
+                  className="bg-blue-600 hover:bg-blue-700 px-6"
+                  disabled={isSubmitting || !email.trim()}
+                >
+                  {isSubmitting ? (
+                    <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full" />
+                  ) : (
+                    <>
+                      <Send className="h-4 w-4 mr-2" />
+                      Subscribe
+                    </>
+                  )}
+                </Button>
+              </div>
+            </form>
+            
+            {/* Status Message */}
+            {submitMessage && (
+              <div className={`text-sm mb-6 p-3 rounded-lg ${
+                submitMessage.includes('✅') 
+                  ? 'bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-300'
+                  : 'bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-300'
+              }`}>
+                {submitMessage}
+              </div>
+            )}
+            
+            {/* Contact Options */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a href="mailto:joel@arcanaconcept.com">
-                <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
-                  <Users className="h-5 w-5 mr-2" />
-                  Contact Team
+                <Button size="lg" variant="outline" className="border-2">
+                  <Mail className="h-5 w-5 mr-2" />
+                  Direct Contact
                 </Button>
               </a>
               <a href="https://github.com/mrj0nesmtl/sheltr-ai" target="_blank" rel="noopener noreferrer">
-                <Button size="lg" variant="outline">
+                <Button size="lg" variant="outline" className="border-2">
                   <ExternalLink className="h-5 w-5 mr-2" />
                   View on GitHub
                 </Button>

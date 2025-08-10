@@ -49,7 +49,7 @@ export default function APIDocumentationPage() {
                 <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
                   <span>Version 1.0.0</span>
                   <span>•</span>
-                  <span>January 25, 2025</span>
+                  <span>August 9, 2025</span>
                   <span>•</span>
                   <span>32 pages</span>
                   <span>•</span>

@@ -1,4 +1,4 @@
-# 🔌 SHELTR-AI API Documentation - Session 9 Implementation
+# 🔌 SHELTR API Documentation - Session 9 Implementation
 
 **FastAPI Backend for Shelter Management Platform**
 

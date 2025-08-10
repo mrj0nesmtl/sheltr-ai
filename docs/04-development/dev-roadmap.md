@@ -1,4 +1,4 @@
-# 🗺️ SHELTR-AI Development Roadmap
+# 🗺️ SHELTR Development Roadmap
 ## Complete Rebuild Strategy: Legacy to Enterprise Platform
 
 > **Vision**: Transform SHELTR from a prototype to an enterprise-grade SaaS platform  

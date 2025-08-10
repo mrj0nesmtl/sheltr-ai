@@ -1,5 +1,5 @@
 # 🪙 SHELTR Tokenomics: Dual-Token Architecture
-*Version: 2.0.0 - August 2025*
+*Version: 1.3.0 - August 2025*
 *Status: Pre-ICO Launch* 🚀
 
 ## 🎯 **Q4 2025 TOKEN LAUNCH TIMELINE**

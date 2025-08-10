@@ -1,4 +1,4 @@
-# 🌟 SHELTR-AI Overview
+# 🌟 SHELTR Overview
 
 **Revolutionizing charitable giving through technology-driven transparency and direct impact**
 
@@ -21,12 +21,12 @@ A world where every act of giving is transparent, every donation reaches its int
 
 ---
 
-## 🏠 The SHELTR-AI Difference
+## 🏠 The SHELTR Difference
 
 ### What Makes Us Unique
 
 #### 🎯 Four-Role Ecosystem
-Unlike traditional donation platforms, SHELTR-AI recognizes four distinct user types:
+Unlike traditional donation platforms, SHELTR recognizes four distinct user types:
 - **SuperAdmin**: Platform founders and operators
 - **Admin**: Shelter operators and staff
 - **Participant**: Individuals receiving donations (the heart of our platform)
@@ -90,7 +90,7 @@ Every donation automatically distributes through blockchain smart contracts:
 
 ```mermaid
 graph TD
-    A[Individual in Need] -->|QR Code Registration| B[SHELTR-AI Platform]
+    A[Individual in Need] -->|QR Code Registration| B[SHELTR Platform]
     C[Compassionate Donor] -->|Scans QR Code| B
     B -->|Smart Contract Distribution| D[80% Direct Support]
     B -->|Automated Allocation| E[15% Housing Fund]
@@ -123,11 +123,11 @@ graph TD
 
 ---
 
-## 🔄 From Legacy to SHELTR-AI
+## 🔄 From Legacy to SHELTr
 
 ### Evolution from Original SHELTR
 
-| Aspect | Legacy SHELTR | SHELTR-AI |
+| Aspect | Legacy SHELTR | SHELTR |
 |--------|---------------|-----------|
 | **Architecture** | Supabase + Single-tenant | Firebase + Multi-tenant SaaS |
 | **User Roles** | 3 roles (Admin, Donor, basic users) | 4 roles (SuperAdmin, Admin, Participant, Donor) |
@@ -158,7 +158,7 @@ graph TD
 - **Transparency**: Every transaction publicly verifiable
 - **Automation**: Smart contracts eliminate manual processes
 - **Trust**: Immutable records build donor confidence
-- **Innovation**: Position SHELTR-AI as a technology leader
+- **Innovation**: Position SHELTR as a technology leader
 
 ### Why Mobile-First?
 - **Accessibility**: Participants often rely on mobile devices
@@ -234,4 +234,4 @@ graph TD
 
 ---
 
-**SHELTR-AI represents the future of charitable giving - where technology amplifies compassion and every donation creates lasting change.** 🏠✨ 
+**SHELTR represents the future of charitable giving - where technology amplifies compassion and every donation creates lasting change.** 🏠✨ 

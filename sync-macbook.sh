@@ -3,8 +3,8 @@
 # 🍎 MacBook Sync Script for SHELTR-AI
 # Run this script to sync your MacBook with all Mac Mini development
 echo "🍎 Starting MacBook sync for SHELTR-AI..."
-echo "📅 Mac Mini has been primary development environment for weeks"
-echo "🚀 Syncing Sessions 02-05 progress..."
+echo "📅 Mac Mini has been primary development environment for months"
+echo "🚀 Syncing Sessions 02-08 progress + Adyen Integration..."
 
 # Check if we're in the right directory
 if [ ! -f "README.md" ] || [ ! -d "apps" ]; then
@@ -105,10 +105,22 @@ else
 fi
 
 if [ ! -f "apps/web/.env.local" ]; then
-    echo "❌ Missing: apps/web/.env.local (Firebase config)"
+    echo "❌ Missing: apps/web/.env.local (Firebase config + API URL)"
     missing_files=$((missing_files + 1))
 else
     echo "✅ Found: apps/web/.env.local"
+fi
+
+if [ ! -f "apps/web/.env.production" ]; then
+    echo "⚠️ Optional: apps/web/.env.production (Production config template)"
+else
+    echo "✅ Found: apps/web/.env.production"
+fi
+
+if [ ! -f "apps/api/.env.demo" ]; then
+    echo "⚠️ Optional: apps/api/.env.demo (Adyen demo config)"
+else
+    echo "✅ Found: apps/api/.env.demo"
 fi
 
 if [ ! -f "apps/api/service-account-key.json" ]; then
@@ -150,29 +162,34 @@ fi
 
 echo ""
 echo "📁 New files/directories added since Session 01:"
-echo "   📂 apps/web/ - Complete Next.js 15 application"
+echo "   📂 apps/web/ - Complete Next.js 15 application with Adyen demo"
+echo "   📂 apps/api/ - FastAPI backend with payment processing"
 echo "   📂 functions/ - Firebase Cloud Functions"
 echo "   📄 firebase.json - Firebase configuration"
 echo "   📄 firestore.rules - Database security rules"
 echo "   📂 scripts/ - Database migration tools"
-echo "   📚 Multiple new docs in docs/04-development/"
+echo "   📚 Complete documentation suite in docs/"
+echo "   💳 Adyen payment integration (sessions 02-08)"
 
 echo ""
-echo "🎯 What Mac Mini accomplished (Sessions 02-05):"
+echo "🎯 What Mac Mini accomplished (Sessions 02-08):"
 echo "   ✅ Live website: https://sheltr-ai.web.app"
 echo "   ✅ Firebase Authentication + RBAC"
-echo "   ✅ Super Admin dashboard with maps"
-echo "   ✅ Investor Relations portal"
-echo "   ✅ Mobile navigation + theme system"
-echo "   ✅ Legal pages + documentation"
-echo "   ✅ Database migration completed"
+echo "   ✅ Complete multi-role dashboard system"
+echo "   ✅ AI chatbot with pop-out functionality"
+echo "   ✅ Apple Liquid Glass mobile navigation"
+echo "   ✅ QR donation demo with Adyen integration"
+echo "   ✅ Participant profile pages with housing fund tracking"
+echo "   ✅ Dark mode default + polished UI across all pages"
+echo "   ✅ Production-ready architecture"
 
 echo ""
-echo "📋 Next steps (Session 06 planned):"
-echo "   🏗️ Multi-dashboard development"
-echo "   ⛓️ Base blockchain integration"
-echo "   👥 Participant onboarding system"
-echo "   📱 QR code architecture"
+echo "📋 Next steps (Session 09+ planned):"
+echo "   🔗 Real data connectivity (mock → database)"
+echo "   🏠 Shelter admin assignment system"
+echo "   ⛓️ Enhanced blockchain integration"
+echo "   📊 Advanced analytics and reporting"
+echo "   🌐 Public beta preparation"
 
 echo ""
 if [ $missing_files -gt 0 ]; then
@@ -181,7 +198,7 @@ if [ $missing_files -gt 0 ]; then
 else
     echo "🎉 MacBook sync complete!"
     echo "🍎 Your MacBook is now up to date with Mac Mini development"
-    echo "🚀 Ready for Session 06 coordination or development work"
+    echo "🚀 Ready for Session 09+ coordination or development work"
 fi
 
 # Check final status
@@ -192,9 +209,10 @@ git status --short
 if [ $missing_files -gt 0 ]; then
     echo ""
     echo "🚨 NEXT STEPS REQUIRED:"
-    echo "   1. Read: cat MACBOOK-SETUP-GUIDE.md"
+    echo "   1. Read: cat docs/04-development/MACBOOK-SETUP-GUIDE.md"
     echo "   2. Setup environment files"
     echo "   3. Test: npm run build --prefix apps/web"
     echo "   4. Test: python apps/api/test_setup.py"
+    echo "   5. Optional: Setup Adyen demo (apps/api/.env.demo)"
     exit 1
 fi 

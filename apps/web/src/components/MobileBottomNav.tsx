@@ -21,12 +21,14 @@ export function MobileBottomNav({ className = '' }: MobileBottomNavProps) {
       case 'super_admin':
         return [
           '/dashboard',                    // Overview
+          '/dashboard/notifications',      // Notifications
           '/dashboard/platform',           // Platform Management  
           '/dashboard/users',              // User Management
           '/dashboard/shelters',           // Shelter Network
           '/dashboard/financial',          // Financial Oversight
           '/dashboard/security',           // Security & Compliance
-          '/dashboard/analytics'           // Analytics
+          '/dashboard/analytics',          // Analytics
+          '/dashboard/settings'            // System Settings (last)
         ];
       case 'admin':
       case 'shelter_admin':

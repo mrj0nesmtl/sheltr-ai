@@ -2,6 +2,7 @@
 
 import { useAuth } from '@/contexts/AuthContext';
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { DashboardRouter } from '@/components/auth/DashboardRouter';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
@@ -10,6 +11,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { ChatbotWidget } from '@/components/ChatbotWidget';
 import { getPlatformMetrics, PlatformMetrics } from '@/services/platformMetrics';
+import { getNotificationCounts, getRecentEmailSignups, NotificationCounts, EmailSignup, formatRelativeTime } from '@/services/notificationService';
 import { 
   Users, 
   Building, 
@@ -19,13 +21,18 @@ import {
   Activity,
   Settings,
   BarChart3,
-  Loader2
+  Loader2,
+  Mail,
+  Bell
 } from 'lucide-react';
 
 export default function DashboardPage() {
   const { user } = useAuth();
   const [platformMetrics, setPlatformMetrics] = useState<PlatformMetrics | null>(null);
   const [metricsLoading, setMetricsLoading] = useState(false);
+  const [notificationCounts, setNotificationCounts] = useState<NotificationCounts | null>(null);
+  const [recentEmailSignups, setRecentEmailSignups] = useState<EmailSignup[]>([]);
+  const [notificationsLoading, setNotificationsLoading] = useState(false);
 
   useEffect(() => {
     console.log('🔍 Dashboard Debug - Current user:', user);
@@ -37,6 +44,7 @@ export default function DashboardPage() {
   useEffect(() => {
     if (user?.role === 'super_admin') {
       loadPlatformMetrics();
+      loadNotifications();
     }
   }, [user?.role]);
 
@@ -61,6 +69,36 @@ export default function DashboardPage() {
       });
     } finally {
       setMetricsLoading(false);
+    }
+  };
+
+  const loadNotifications = async () => {
+    setNotificationsLoading(true);
+    try {
+      console.log('🔔 Loading notifications...');
+      
+      // Load notification counts and recent email signups in parallel
+      const [counts, emailSignups] = await Promise.all([
+        getNotificationCounts(),
+        getRecentEmailSignups(5) // Get last 5 signups
+      ]);
+      
+      setNotificationCounts(counts);
+      setRecentEmailSignups(emailSignups);
+      console.log('✅ Notifications loaded:', { counts, emailSignups });
+      
+    } catch (error) {
+      console.error('❌ Failed to load notifications:', error);
+      // Set fallback data
+      setNotificationCounts({
+        totalEmailSignups: 0,
+        recentEmailSignups: 0,
+        pendingShelterapplications: 0,
+        totalNotifications: 0
+      });
+      setRecentEmailSignups([]);
+    } finally {
+      setNotificationsLoading(false);
     }
   };
 
@@ -187,15 +225,31 @@ export default function DashboardPage() {
 
     return (
       <div className="p-6">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h1 className="text-3xl font-bold">Super Admin Dashboard</h1>
-            <p className="text-gray-600">Platform overview and system management</p>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
+          <div className="flex-1">
+            <h1 className="text-2xl sm:text-3xl font-bold">Super Admin Dashboard</h1>
+            <p className="text-gray-600 text-sm sm:text-base">Platform overview and system management</p>
           </div>
-          <Badge variant="secondary" className="bg-purple-100 text-purple-800">
-            <Shield className="w-4 h-4 mr-1" />
-            Super Admin
-          </Badge>
+          <div className="flex items-center justify-between sm:justify-end space-x-3">
+            {/* Notification Badge */}
+            {notificationCounts && notificationCounts.totalNotifications > 0 && (
+              <div className="relative">
+                <Link href="/dashboard/notifications">
+                  <Button variant="outline" size="sm" className="relative">
+                    <Bell className="w-4 h-4 sm:mr-2" />
+                    <span className="hidden sm:inline">Notifications</span>
+                    <Badge className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full min-w-[20px] h-[20px] flex items-center justify-center">
+                      {notificationCounts.totalNotifications}
+                    </Badge>
+                  </Button>
+                </Link>
+              </div>
+            )}
+            <Badge variant="secondary" className="bg-purple-100 text-purple-800">
+              <Shield className="w-4 h-4 mr-1" />
+              <span className="hidden sm:inline">Super Admin</span>
+            </Badge>
+          </div>
         </div>
 
         {/* Platform Statistics */}
@@ -265,33 +319,119 @@ export default function DashboardPage() {
               <p className="text-xs text-muted-foreground">Require attention</p>
             </CardContent>
           </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Email Signups</CardTitle>
+              <Mail className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{notificationCounts?.totalEmailSignups || '-'}</div>
+              <p className="text-xs text-muted-foreground">
+                {notificationCounts?.recentEmailSignups || 0} new this week
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Pending Applications</CardTitle>
+              <Building className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{notificationCounts?.pendingShelterapplications || '-'}</div>
+              <p className="text-xs text-muted-foreground">Shelter admin requests</p>
+            </CardContent>
+          </Card>
         </div>
 
-        {/* Recent Activity */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Platform Activity</CardTitle>
-            <CardDescription>Latest system events and updates</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {platformMetrics.recentActivity?.length > 0 ? (
-                platformMetrics.recentActivity.map((activity, index) => (
-                  <div key={index} className="flex items-start space-x-3 pb-3 border-b last:border-b-0">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
-                    <div className="flex-1">
-                      <p className="font-medium">{activity.action}</p>
-                      <p className="text-sm text-gray-600">{activity.details}</p>
-                      <p className="text-xs text-gray-400 mt-1">{activity.time}</p>
+        {/* Activity and Notifications Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          {/* Recent Activity */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Recent Platform Activity</CardTitle>
+              <CardDescription>Latest system events and updates</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {platformMetrics.recentActivity?.length > 0 ? (
+                  platformMetrics.recentActivity.map((activity, index) => (
+                    <div key={index} className="flex items-start space-x-3 pb-3 border-b last:border-b-0">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                      <div className="flex-1">
+                        <p className="font-medium">{activity.action}</p>
+                        <p className="text-sm text-gray-600">{activity.details}</p>
+                        <p className="text-xs text-gray-400 mt-1">{activity.time}</p>
+                      </div>
                     </div>
+                  ))
+                ) : (
+                  <p className="text-gray-500 text-center py-4">No recent activity</p>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Recent Email Signups */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <Mail className="w-5 h-5 mr-2" />
+                Recent Email Signups
+                {notificationCounts && notificationCounts.recentEmailSignups > 0 && (
+                  <Badge className="ml-2 bg-green-500 text-white">
+                    {notificationCounts.recentEmailSignups} new
+                  </Badge>
+                )}
+              </CardTitle>
+              <CardDescription>Latest newsletter subscribers from mobile app teaser</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {notificationsLoading ? (
+                  <div className="flex items-center justify-center py-4">
+                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                    <span className="text-sm text-gray-500">Loading signups...</span>
                   </div>
-                ))
-              ) : (
-                <p className="text-gray-500 text-center py-4">No recent activity</p>
+                ) : recentEmailSignups.length > 0 ? (
+                  recentEmailSignups.map((signup) => (
+                    <div key={signup.id} className="flex items-start space-x-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                      <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium text-sm truncate">{signup.email}</p>
+                        <p className="text-xs text-gray-500">
+                          Source: {signup.source} • Page: {signup.page}
+                        </p>
+                        <p className="text-xs text-gray-400">
+                          {signup.signup_date?.toDate ? formatRelativeTime(signup.signup_date.toDate()) : 'Recently'}
+                        </p>
+                      </div>
+                      <Badge variant="outline" className="text-xs">
+                        {signup.status}
+                      </Badge>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center py-6">
+                    <Mail className="h-8 w-8 text-gray-400 mx-auto mb-2" />
+                    <p className="text-gray-500 text-sm">No email signups yet</p>
+                    <p className="text-xs text-gray-400">New signups will appear here</p>
+                  </div>
+                )}
+              </div>
+              {recentEmailSignups.length > 0 && (
+                <div className="mt-4 pt-4 border-t">
+                  <Link href="/dashboard/notifications">
+                    <Button variant="outline" size="sm" className="w-full">
+                      View All Email Signups
+                    </Button>
+                  </Link>
+                </div>
               )}
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </div>
 
         <DashboardRouter>
           <div></div>

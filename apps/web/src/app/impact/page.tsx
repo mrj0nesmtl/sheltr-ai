@@ -219,8 +219,8 @@ export default function ImpactPage() {
                       <p className="font-medium">Base Network Integration</p>
                       <p className="text-sm text-muted-foreground">Low-cost, fast transactions</p>
                     </div>
-                    <Badge variant="secondary" className="bg-green-500/10 text-green-600 dark:text-green-400">
-                      Ready
+                    <Badge variant="secondary" className="bg-purple-500/10 text-purple-600 dark:text-purple-400">
+                      In Development
                     </Badge>
                   </div>
 
@@ -229,8 +229,8 @@ export default function ImpactPage() {
                       <p className="font-medium">Smart Contract Automation</p>
                       <p className="text-sm text-muted-foreground">Instant fund distribution</p>
                     </div>
-                    <Badge variant="secondary" className="bg-blue-500/10 text-blue-600 dark:text-blue-400">
-                      Deployed
+                    <Badge variant="secondary" className="bg-yellow-500/10 text-yellow-600 dark:text-yellow-400">
+                      Peer Review
                     </Badge>
                   </div>
 
@@ -239,8 +239,8 @@ export default function ImpactPage() {
                       <p className="font-medium">Real-time Analytics</p>
                       <p className="text-sm text-muted-foreground">Live impact tracking</p>
                     </div>
-                    <Badge variant="secondary" className="bg-purple-500/10 text-purple-600 dark:text-purple-400">
-                      In Development
+                    <Badge variant="secondary" className="bg-green-500/10 text-green-600 dark:text-green-400">
+                      Live
                     </Badge>
                   </div>
                 </div>

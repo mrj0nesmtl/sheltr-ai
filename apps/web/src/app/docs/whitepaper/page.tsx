@@ -142,6 +142,14 @@ export default function WhitepaperPage() {
                     Our platform launches with 100 SHELTR-S tokens ($100 value) gifted to every new participant, 
                     creating immediate engagement and platform adoption through direct empowerment.
                   </p>
+                  <div className="mt-6">
+                    <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/whitepaper_final.md" target="_blank" rel="noopener noreferrer">
+                      <Button className="bg-blue-600 hover:bg-blue-700">
+                        <Code className="h-4 w-4 mr-2" />
+                        Read Full Paper on GitHub
+                      </Button>
+                    </a>
+                  </div>
                 </div>
               </div>
 

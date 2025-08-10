@@ -41,7 +41,7 @@ export default function BlockchainPage() {
               <div>
                 <div className="flex items-center gap-2 mb-2">
                   <h1 className="text-4xl font-bold">SHELTR Blockchain Architecture</h1>
-                  <Badge className="bg-green-500 text-white">Technical</Badge>
+                  <Badge className="bg-green-500 text-white">Peer Review</Badge>
                 </div>
                 <p className="text-lg text-muted-foreground">
                   Dual-Token Smart Contract Implementation on Base Network
@@ -59,10 +59,10 @@ export default function BlockchainPage() {
             </div>
             
             <div className="flex gap-4">
-              <a href="https://github.com/mrj0nesmtl/sheltr-ai/raw/main/docs/02-architecture/technical/blockchain.md">
+              <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/technical/blockchain.md" target="_blank" rel="noopener noreferrer">
                 <Button className="bg-green-600 hover:bg-green-700">
-                  <Download className="h-4 w-4 mr-2" />
-                  Download PDF
+                  <Code className="h-4 w-4 mr-2" />
+                  View on GitHub
                 </Button>
               </a>
               <Button variant="outline">
@@ -107,6 +107,14 @@ export default function BlockchainPage() {
                   participants as stable value while building sustainable long-term solutions through 
                   smart contract-governed fund allocation.
                 </p>
+                <div className="mt-6">
+                  <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/technical/blockchain.md" target="_blank" rel="noopener noreferrer">
+                    <Button className="bg-green-600 hover:bg-green-700">
+                      <Code className="h-4 w-4 mr-2" />
+                      Read Full Paper on GitHub
+                    </Button>
+                  </a>
+                </div>
               </div>
             </div>
 

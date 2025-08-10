@@ -49,7 +49,7 @@ export default function BlockchainPage() {
                 <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
                   <span>Version 1.0.0</span>
                   <span>•</span>
-                  <span>January 25, 2025</span>
+                  <span>August 2025</span>
                   <span>•</span>
                   <span>45 pages</span>
                   <span>•</span>
@@ -90,7 +90,7 @@ export default function BlockchainPage() {
                 🔧 Technical Documentation
               </h3>
               <p className="text-blue-700 dark:text-blue-300 text-sm">
-                This document provides deep technical analysis of SHELTR's blockchain implementation, 
+                This document provides deep technical analysis of SHELTR&rsquo;s blockchain implementation, 
                 smart contract architecture, and security protocols. Designed for developers, 
                 blockchain engineers, and security auditors.
               </p>
@@ -101,7 +101,7 @@ export default function BlockchainPage() {
               <h2 className="text-3xl font-bold mb-6">Executive Summary</h2>
               <div className="prose prose-lg max-w-none dark:prose-invert">
                 <p>
-                  SHELTR implements the world's first <strong>dual-token charitable ecosystem</strong> on Base network, 
+                  SHELTR implements the world&rsquo;s first <strong>dual-token charitable ecosystem</strong> on Base network, 
                   combining participant protection through SHELTR-S (stable token) with community governance 
                   via SHELTR (growth token). Our revolutionary architecture ensures 80% of donations reach 
                   participants as stable value while building sustainable long-term solutions through 

@@ -234,7 +234,7 @@ export default function SystemSettingsPage() {
                     id="platformVersion"
                     value={generalSettings.platformVersion}
                     disabled
-                    className="bg-gray-50"
+                    className="bg-muted text-muted-foreground cursor-not-allowed"
                   />
                 </div>
                 <div>
@@ -341,7 +341,7 @@ export default function SystemSettingsPage() {
                     id="encryptionLevel"
                     value={securitySettings.encryptionLevel}
                     disabled
-                    className="bg-gray-50"
+                    className="bg-muted text-muted-foreground cursor-not-allowed"
                   />
                 </div>
               </div>

@@ -115,7 +115,7 @@ export default function AboutPage() {
 
       {/* Hero Section - Redesigned with cleaner aesthetic */}
       <section 
-        className="relative py-20"
+        className="relative py-24"
         style={{
           backgroundImage: "url('/backgrounds/about-bg.jpg')",
           backgroundSize: 'cover',

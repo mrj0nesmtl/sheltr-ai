@@ -13,8 +13,8 @@ export async function generateStaticParams() {
   ];
 }
 
-// Enable dynamic routes for development
-export const dynamicParams = true;
+// Disable dynamic routes for production static export
+export const dynamicParams = false;
 
 interface PageProps {
   params: {

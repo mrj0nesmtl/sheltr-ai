@@ -1,10 +1,110 @@
 rules_version = '2';
 
-// Craft rules based on data in your Firestore database
-// allow write: if firestore.get(
-//    /databases/(default)/documents/users/$(request.auth.uid)).data.isAdmin;
 service firebase.storage {
   match /b/{bucket}/o {
+    
+    // Helper function to get user data from Firestore
+    function getUserData() {
+      return firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data;
+    }
+    
+    // Helper function to check if user is super admin
+    function isSuperAdmin() {
+      return request.auth != null && getUserData().role == 'super_admin';
+    }
+    
+    // Helper function to check if user is shelter admin for specific shelter
+    function isShelterAdmin(shelterId) {
+      return request.auth != null && 
+             getUserData().role == 'shelter_admin' && 
+             getUserData().shelter_id == shelterId;
+    }
+    
+    // Helper function to check if user owns the resource
+    function isOwner(userId) {
+      return request.auth != null && request.auth.uid == userId;
+    }
+
+    // =================================================================
+    // PARTICIPANT FILES - Private & Secure
+    // Only accessible by: Owner, their shelter admin, super admin
+    // =================================================================
+    match /participants/{participantId}/{document=**} {
+      // Read access: Owner, their shelter admin, or super admin
+      allow read: if isOwner(participantId) || 
+                     isSuperAdmin() ||
+                     (getUserData().role == 'shelter_admin' && 
+                      firestore.get(/databases/(default)/documents/users/$(participantId)).data.shelter_id == getUserData().shelter_id);
+      
+      // Write access: Owner only (participants upload their own files)
+      allow write: if isOwner(participantId);
+    }
+
+    // =================================================================
+    // SHELTER FILES - Shelter-Specific Access
+    // Accessible by: Shelter admins of that shelter, super admin
+    // =================================================================
+    match /shelters/{shelterId}/{document=**} {
+      // Read/Write access: Shelter admin of this shelter or super admin
+      allow read, write: if isShelterAdmin(shelterId) || isSuperAdmin();
+    }
+
+    // =================================================================
+    // USER PROFILE PICTURES - Public within organization
+    // Accessible by: Owner, shelter admins, super admin
+    // =================================================================
+    match /profiles/{userId}/{document=**} {
+      // Read access: Owner, any shelter admin, super admin
+      allow read: if isOwner(userId) || 
+                     getUserData().role == 'shelter_admin' || 
+                     isSuperAdmin();
+      
+      // Write access: Owner only (with file type and size validation)
+      allow write: if isOwner(userId) && 
+                      request.resource.size < 5 * 1024 * 1024; // 5MB limit
+    }
+
+    // =================================================================
+    // DONOR FILES - Private to donor and super admin
+    // Accessible by: Owner, super admin only
+    // =================================================================
+    match /donors/{donorId}/{document=**} {
+      // Read/Write access: Owner or super admin only
+      allow read, write: if isOwner(donorId) || isSuperAdmin();
+    }
+
+    // =================================================================
+    // SYSTEM REPORTS - Super Admin Only
+    // Generated reports and platform-wide documents
+    // =================================================================
+    match /system/{document=**} {
+      // Super admin only
+      allow read, write: if isSuperAdmin();
+    }
+
+    // =================================================================
+    // PUBLIC ASSETS - Read-only for all authenticated users
+    // QR codes, logos, public documents
+    // =================================================================
+    match /public/{document=**} {
+      // Read access: Any authenticated user
+      allow read: if request.auth != null;
+      
+      // Write access: Super admin only
+      allow write: if isSuperAdmin();
+    }
+
+    // =================================================================
+    // TEMP UPLOADS - For processing before moving to final location
+    // Short-term storage during upload processing
+    // =================================================================
+    match /temp/{userId}/{document=**} {
+      // Owner only, 1 hour expiry
+      allow read, write: if isOwner(userId) && 
+                            request.time < resource.timeCreated + duration.value(1, 'h');
+    }
+
+    // Default deny all other paths
     match /{allPaths=**} {
       allow read, write: if false;
     }

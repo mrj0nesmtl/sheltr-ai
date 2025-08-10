@@ -143,19 +143,19 @@ export function DemoQRModal({ open, onOpenChange, participant, qrCodeUrl }: Demo
           <div className="grid grid-cols-3 gap-4 p-4 bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-950/30 dark:to-blue-950/30 rounded-lg">
             <div className="text-center">
               <div className="text-2xl font-bold text-green-600">
-                ${participant.total_received?.toLocaleString() || '2,847'}
+                ${participant.total_received?.toLocaleString() || '0'}
               </div>
               <div className="text-xs text-muted-foreground">Total Received</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-blue-600">
-                {participant.donation_count || 52}
+                {participant.donation_count || 0}
               </div>
               <div className="text-xs text-muted-foreground">Donations</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-purple-600">
-                {participant.services_completed || 8}
+                {participant.services_completed || 0}
               </div>
               <div className="text-xs text-muted-foreground">Services Used</div>
             </div>

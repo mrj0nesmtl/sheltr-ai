@@ -502,8 +502,8 @@ export default function SystemSettingsPage() {
                       <p className="text-sm text-gray-500">Payment Processing</p>
                     </div>
                   </div>
-                  <Badge className={integrationSettings.adyenConfigured ? "bg-green-500" : "bg-red-500"}>
-                    {integrationSettings.adyenConfigured ? "Connected" : "Disconnected"}
+                  <Badge className="bg-yellow-500">
+                    In Development
                   </Badge>
                 </div>
 
@@ -515,8 +515,8 @@ export default function SystemSettingsPage() {
                       <p className="text-sm text-gray-500">Transactional Emails</p>
                     </div>
                   </div>
-                  <Badge className={integrationSettings.emailServiceConfigured ? "bg-green-500" : "bg-red-500"}>
-                    {integrationSettings.emailServiceConfigured ? "Connected" : "Disconnected"}
+                  <Badge className="bg-blue-500">
+                    Testing
                   </Badge>
                 </div>
 

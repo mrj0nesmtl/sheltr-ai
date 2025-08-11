@@ -1,4 +1,4 @@
-import { collection, getDocs, query, where, getDoc, doc } from 'firebase/firestore';
+import { collection, getDocs, query, where, getDoc, doc, updateDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
 export interface PlatformMetrics {
@@ -756,6 +756,76 @@ export const updateFeatureFlag = async (flagId: string, enabled: boolean): Promi
   } catch (error) {
     console.error('❌ Error updating feature flag:', error);
     return false;
+  }
+};
+
+/**
+ * Update shelter total donations when a donation is processed
+ * This connects the demo donation system to shelter statistics
+ */
+export const updateShelterDonationTotal = async (
+  shelterId: string, 
+  donationAmount: number
+): Promise<void> => {
+  try {
+    console.log(`💰 Updating shelter ${shelterId} donation total: +$${donationAmount}`);
+    
+    // Get the shelter document
+    const shelterDoc = await getDocs(
+      query(collection(db, 'shelters'), where('id', '==', shelterId))
+    );
+    
+    if (shelterDoc.empty) {
+      console.error(`❌ Shelter ${shelterId} not found for donation update`);
+      return;
+    }
+    
+    const shelter = shelterDoc.docs[0];
+    const currentData = shelter.data();
+    const currentTotal = currentData.totalDonations || 0;
+    const newTotal = currentTotal + donationAmount;
+    
+    // Update the shelter document
+    await updateDoc(shelter.ref, {
+      totalDonations: newTotal,
+      updated_at: new Date()
+    });
+    
+    console.log(`✅ Updated shelter ${shelterId} total donations: $${currentTotal} → $${newTotal}`);
+    
+  } catch (error) {
+    console.error('❌ Error updating shelter donation total:', error);
+    throw error;
+  }
+};
+
+/**
+ * Get real donation data for Old Brewery Mission (for demo purposes)
+ * This connects to the demo_donations collection to show real totals
+ */
+export const getOldBreweryMissionDonations = async (): Promise<number> => {
+  try {
+    // Get all donations for Michael Rodriguez (Old Brewery Mission participant)
+    const donationsSnapshot = await getDocs(
+      query(
+        collection(db, 'demo_donations'),
+        where('shelter_id', '==', 'old-brewery-mission'),
+        where('status', '==', 'completed')
+      )
+    );
+    
+    let total = 0;
+    donationsSnapshot.docs.forEach(doc => {
+      const donation = doc.data();
+      total += donation.amount?.total || 0;
+    });
+    
+    console.log(`💰 Old Brewery Mission real donation total: $${total}`);
+    return total;
+    
+  } catch (error) {
+    console.error('❌ Error fetching Old Brewery Mission donations:', error);
+    return 0;
   }
 };
 

@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useState, useEffect } from 'react';
 import { firestoreService, Shelter, PendingApplication } from '@/services/firestore';
-import { doc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { doc, updateDoc, deleteDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import ShelterMap from '@/components/ShelterMap';
 import DataPopulator from '@/components/DataPopulator';
@@ -53,6 +53,9 @@ export default function ShelterNetwork() {
   });
   const [isSaving, setIsSaving] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState<{ shelterId: string; shelterName: string } | null>(null);
+  const [activeEditTab, setActiveEditTab] = useState<'details' | 'administrators'>('details');
+  const [shelterAdmins, setShelterAdmins] = useState<any[]>([]);
+  const [availableAdmins, setAvailableAdmins] = useState<any[]>([]);
   
   // Filtering state
   const [filters, setFilters] = useState({
@@ -127,7 +130,7 @@ export default function ShelterNetwork() {
   };
 
   // Edit shelter
-  const editShelter = (shelter: Shelter) => {
+  const editShelter = async (shelter: Shelter) => {
     setSelectedShelterForEdit(shelter);
     setEditFormData({
       name: shelter.name || '',
@@ -136,7 +139,96 @@ export default function ShelterNetwork() {
       phone: shelter.contact.phone || '',
       capacity: shelter.capacity || 0
     });
+    
+    // Load administrators for this shelter
+    await loadShelterAdministrators(shelter.id);
+    await loadAvailableAdministrators();
+    
     console.log(`✏️ Editing shelter:`, shelter.name);
+  };
+
+  // Load administrators assigned to this shelter
+  const loadShelterAdministrators = async (shelterId: string) => {
+    try {
+      const adminsQuery = query(
+        collection(db, 'users'),
+        where('shelter_id', '==', shelterId),
+        where('role', 'in', ['admin', 'shelteradmin'])
+      );
+      const snapshot = await getDocs(adminsQuery);
+      const admins = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setShelterAdmins(admins);
+      console.log(`✅ Loaded ${admins.length} administrators for shelter ${shelterId}`);
+    } catch (error) {
+      console.error('❌ Error loading shelter administrators:', error);
+      setShelterAdmins([]);
+    }
+  };
+
+  // Load available administrators (not assigned to any shelter)
+  const loadAvailableAdministrators = async () => {
+    try {
+      const adminsQuery = query(
+        collection(db, 'users'),
+        where('role', 'in', ['admin', 'shelteradmin'])
+      );
+      const snapshot = await getDocs(adminsQuery);
+      const allAdmins = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      
+      // Filter out admins that already have a shelter assigned
+      const unassignedAdmins = allAdmins.filter(admin => !admin.shelter_id || admin.shelter_id === '');
+      setAvailableAdmins(unassignedAdmins);
+      console.log(`✅ Loaded ${unassignedAdmins.length} available administrators`);
+    } catch (error) {
+      console.error('❌ Error loading available administrators:', error);
+      setAvailableAdmins([]);
+    }
+  };
+
+  // Assign administrator to shelter
+  const assignAdministrator = async (adminId: string) => {
+    if (!selectedShelterForEdit) return;
+    
+    try {
+      console.log(`🔗 Assigning administrator ${adminId} to shelter ${selectedShelterForEdit.id}`);
+      
+      await updateDoc(doc(db, 'users', adminId), {
+        shelter_id: selectedShelterForEdit.id,
+        updated_at: new Date()
+      });
+
+      // Refresh the lists
+      await loadShelterAdministrators(selectedShelterForEdit.id);
+      await loadAvailableAdministrators();
+      
+      console.log(`✅ Administrator assigned successfully`);
+    } catch (error) {
+      console.error('❌ Error assigning administrator:', error);
+      alert('Error assigning administrator. Please try again.');
+    }
+  };
+
+  // Remove administrator from shelter
+  const removeAdministrator = async (adminId: string) => {
+    if (!selectedShelterForEdit) return;
+    
+    try {
+      console.log(`🔗 Removing administrator ${adminId} from shelter ${selectedShelterForEdit.id}`);
+      
+      await updateDoc(doc(db, 'users', adminId), {
+        shelter_id: null,
+        updated_at: new Date()
+      });
+
+      // Refresh the lists
+      await loadShelterAdministrators(selectedShelterForEdit.id);
+      await loadAvailableAdministrators();
+      
+      console.log(`✅ Administrator removed successfully`);
+    } catch (error) {
+      console.error('❌ Error removing administrator:', error);
+      alert('Error removing administrator. Please try again.');
+    }
   };
 
   // Save shelter changes
@@ -1224,74 +1316,163 @@ export default function ShelterNetwork() {
       {/* Edit Shelter Modal */}
       {selectedShelterForEdit && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-lg mx-4">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
             <h3 className="text-lg font-semibold mb-4">Edit Shelter</h3>
             <p className="text-sm text-muted-foreground mb-4">
               Editing: {selectedShelterForEdit.name}
             </p>
             
-            <div className="space-y-4">
-              {/* Name */}
-              <div>
-                <label className="block text-sm font-medium mb-1">Shelter Name</label>
-                <input
-                  type="text"
-                  value={editFormData.name}
-                  onChange={(e) => setEditFormData(prev => ({ ...prev, name: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                  placeholder="Enter shelter name"
-                />
-              </div>
-
-              {/* Location */}
-              <div>
-                <label className="block text-sm font-medium mb-1">Location</label>
-                <input
-                  type="text"
-                  value={editFormData.location}
-                  onChange={(e) => setEditFormData(prev => ({ ...prev, location: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                  placeholder="Enter location"
-                />
-              </div>
-
-              {/* Capacity */}
-              <div>
-                <label className="block text-sm font-medium mb-1">Capacity</label>
-                <input
-                  type="number"
-                  value={editFormData.capacity}
-                  onChange={(e) => setEditFormData(prev => ({ ...prev, capacity: parseInt(e.target.value) || 0 }))}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                  placeholder="Enter capacity"
-                  min="0"
-                />
-              </div>
-
-              {/* Email */}
-              <div>
-                <label className="block text-sm font-medium mb-1">Contact Email</label>
-                <input
-                  type="email"
-                  value={editFormData.email}
-                  onChange={(e) => setEditFormData(prev => ({ ...prev, email: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                  placeholder="Enter email address"
-                />
-              </div>
-
-              {/* Phone */}
-              <div>
-                <label className="block text-sm font-medium mb-1">Contact Phone</label>
-                <input
-                  type="tel"
-                  value={editFormData.phone}
-                  onChange={(e) => setEditFormData(prev => ({ ...prev, phone: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                  placeholder="Enter phone number"
-                />
+            {/* Tabs */}
+            <div className="mb-4">
+              <div className="flex space-x-1 border-b border-gray-200 dark:border-gray-700">
+                <button
+                  onClick={() => setActiveEditTab('details')}
+                  className={`px-4 py-2 text-sm font-medium rounded-t-md ${
+                    activeEditTab === 'details'
+                      ? 'bg-blue-100 text-blue-700 border-b-2 border-blue-500 dark:bg-blue-900 dark:text-blue-300'
+                      : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
+                  }`}
+                >
+                  Shelter Details
+                </button>
+                <button
+                  onClick={() => setActiveEditTab('administrators')}
+                  className={`px-4 py-2 text-sm font-medium rounded-t-md ${
+                    activeEditTab === 'administrators'
+                      ? 'bg-blue-100 text-blue-700 border-b-2 border-blue-500 dark:bg-blue-900 dark:text-blue-300'
+                      : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
+                  }`}
+                >
+                  Administrators ({shelterAdmins.length})
+                </button>
               </div>
             </div>
+
+            {/* Tab Content */}
+            {activeEditTab === 'details' && (
+              <div className="space-y-4">
+                {/* Name */}
+                <div>
+                  <label className="block text-sm font-medium mb-1">Shelter Name</label>
+                  <input
+                    type="text"
+                    value={editFormData.name}
+                    onChange={(e) => setEditFormData(prev => ({ ...prev, name: e.target.value }))}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    placeholder="Enter shelter name"
+                  />
+                </div>
+
+                {/* Location */}
+                <div>
+                  <label className="block text-sm font-medium mb-1">Location</label>
+                  <input
+                    type="text"
+                    value={editFormData.location}
+                    onChange={(e) => setEditFormData(prev => ({ ...prev, location: e.target.value }))}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    placeholder="Enter location"
+                  />
+                </div>
+
+                {/* Capacity */}
+                <div>
+                  <label className="block text-sm font-medium mb-1">Capacity</label>
+                  <input
+                    type="number"
+                    value={editFormData.capacity}
+                    onChange={(e) => setEditFormData(prev => ({ ...prev, capacity: parseInt(e.target.value) || 0 }))}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    placeholder="Enter capacity"
+                    min="0"
+                  />
+                </div>
+
+                {/* Email */}
+                <div>
+                  <label className="block text-sm font-medium mb-1">Contact Email</label>
+                  <input
+                    type="email"
+                    value={editFormData.email}
+                    onChange={(e) => setEditFormData(prev => ({ ...prev, email: e.target.value }))}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    placeholder="Enter email address"
+                  />
+                </div>
+
+                {/* Phone */}
+                <div>
+                  <label className="block text-sm font-medium mb-1">Contact Phone</label>
+                  <input
+                    type="tel"
+                    value={editFormData.phone}
+                    onChange={(e) => setEditFormData(prev => ({ ...prev, phone: e.target.value }))}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    placeholder="Enter phone number"
+                  />
+                </div>
+              </div>
+            )}
+
+            {activeEditTab === 'administrators' && (
+              <div className="space-y-4">
+                {/* Current Administrators */}
+                <div>
+                  <h4 className="text-sm font-medium mb-2">Current Administrators</h4>
+                  {shelterAdmins.length === 0 ? (
+                    <p className="text-sm text-gray-500 dark:text-gray-400 italic">No administrators assigned to this shelter.</p>
+                  ) : (
+                    <div className="space-y-2">
+                      {shelterAdmins.map((admin) => (
+                        <div key={admin.id} className="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-700 rounded-md bg-gray-50 dark:bg-gray-800">
+                          <div>
+                            <p className="font-medium">{admin.name || `${admin.firstName || ''} ${admin.lastName || ''}`.trim() || admin.email}</p>
+                            <p className="text-sm text-gray-500 dark:text-gray-400">{admin.email}</p>
+                            <p className="text-xs text-gray-400 dark:text-gray-500 capitalize">{admin.role}</p>
+                          </div>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => removeAdministrator(admin.id)}
+                            className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900"
+                          >
+                            Remove
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Available Administrators */}
+                <div>
+                  <h4 className="text-sm font-medium mb-2">Available Administrators</h4>
+                  {availableAdmins.length === 0 ? (
+                    <p className="text-sm text-gray-500 dark:text-gray-400 italic">No unassigned administrators available.</p>
+                  ) : (
+                    <div className="space-y-2">
+                      {availableAdmins.map((admin) => (
+                        <div key={admin.id} className="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-700 rounded-md">
+                          <div>
+                            <p className="font-medium">{admin.name || `${admin.firstName || ''} ${admin.lastName || ''}`.trim() || admin.email}</p>
+                            <p className="text-sm text-gray-500 dark:text-gray-400">{admin.email}</p>
+                            <p className="text-xs text-gray-400 dark:text-gray-500 capitalize">{admin.role}</p>
+                          </div>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => assignAdministrator(admin.id)}
+                            className="text-green-600 hover:text-green-700 hover:bg-green-50 dark:hover:bg-green-900"
+                          >
+                            Assign
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
 
             <div className="flex justify-end space-x-2 mt-6">
               <Button 
@@ -1299,17 +1480,20 @@ export default function ShelterNetwork() {
                 onClick={() => {
                   setSelectedShelterForEdit(null);
                   setEditFormData({ name: '', location: '', email: '', phone: '', capacity: 0 });
+                  setActiveEditTab('details');
                 }}
                 disabled={isSaving}
               >
                 Cancel
               </Button>
-              <Button 
-                onClick={saveShelterChanges}
-                disabled={isSaving || !editFormData.name || !editFormData.location || !editFormData.email}
-              >
-                {isSaving ? 'Saving...' : 'Save Changes'}
-              </Button>
+              {activeEditTab === 'details' && (
+                <Button 
+                  onClick={saveShelterChanges}
+                  disabled={isSaving || !editFormData.name || !editFormData.location || !editFormData.email}
+                >
+                  {isSaving ? 'Saving...' : 'Save Changes'}
+                </Button>
+              )}
             </div>
           </div>
         </div>

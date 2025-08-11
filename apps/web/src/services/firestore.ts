@@ -84,14 +84,23 @@ export class FirestoreService {
     try {
       // Use the migrated structure for the primary tenant
       if (tenantId === 'platform') {
+        console.log('🏠 Fetching shelters from migrated path:', MIGRATION_CONFIG.sheltersCollectionPath);
         const sheltersRef = collection(db, MIGRATION_CONFIG.sheltersCollectionPath);
         const q = query(sheltersRef, orderBy('createdAt', 'desc'));
         const querySnapshot = await getDocs(q);
         
-        return querySnapshot.docs.map(doc => ({
+        const sheltersFromMigration = querySnapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data()
         })) as Shelter[];
+        
+        // If no shelters from migration path, fallback to tenant organizations
+        if (sheltersFromMigration.length === 0) {
+          console.log('📊 No shelters found in migration path, falling back to shelter organizations...');
+          return this.getShelterOrganizations();
+        }
+        
+        return sheltersFromMigration;
       } else {
         // For other tenants, use their specific structure (when implemented)
         const sheltersRef = collection(db, `tenants/${tenantId}/platform/shelters/data`);
@@ -105,8 +114,8 @@ export class FirestoreService {
       }
     } catch (error) {
       console.error('Error fetching shelters:', error);
-      console.log('💡 Using migrated path:', MIGRATION_CONFIG.sheltersCollectionPath);
-      return [];
+      console.log('💡 Falling back to shelter organizations due to error...');
+      return this.getShelterOrganizations();
     }
   }
 
@@ -143,8 +152,8 @@ export class FirestoreService {
           },
           type: 'Emergency Shelter',
           capacity: data.subscription?.limits?.maxParticipants || 100,
-          currentOccupancy: Math.floor(Math.random() * (data.subscription?.limits?.maxParticipants || 100) * 0.8),
-          participants: Math.floor(Math.random() * (data.subscription?.limits?.maxParticipants || 100) * 0.8),
+          currentOccupancy: 0,
+          participants: 0,
           totalDonations: 0,
           status: data.status === 'active' ? 'active' : 'inactive',
           complianceScore: Math.floor(Math.random() * 20) + 80,

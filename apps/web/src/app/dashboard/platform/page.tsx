@@ -21,81 +21,81 @@ import {
   TrendingUp,
   DollarSign
 } from 'lucide-react';
-import { useState } from 'react';
-
-// Mock data for platform management
-const systemHealth = {
-  uptime: '99.98%',
-  apiResponseTime: '125ms',
-  databaseConnections: 45,
-  activeUsers: 234,
-  queueSize: 12,
-  errorRate: '0.02%'
-};
-
-const featureFlags = [
-  { id: 'donation_processing', name: 'Donation Processing', enabled: true, description: 'Core donation functionality' },
-  { id: 'qr_generation', name: 'QR Code Generation', enabled: true, description: 'Participant QR code system' },
-  { id: 'blockchain_integration', name: 'Blockchain Integration', enabled: false, description: 'Smart contract integration' },
-  { id: 'ai_analytics', name: 'AI Analytics', enabled: true, description: 'Advanced analytics features' },
-  { id: 'mobile_app', name: 'Mobile App', enabled: false, description: 'Mobile application access' },
-  { id: 'multi_language', name: 'Multi-Language Support', enabled: false, description: 'Internationalization features' }
-];
-
-const tenantMetrics = [
-  { 
-    id: 1, 
-    name: 'Downtown Hope Center', 
-    region: 'North America', 
-    participants: 145, 
-    donations: 15234.67, 
-    status: 'active',
-    lastActivity: '2 hours ago'
-  },
-  { 
-    id: 2, 
-    name: 'Riverside Shelter', 
-    region: 'North America', 
-    participants: 89, 
-    donations: 8743.21, 
-    status: 'active',
-    lastActivity: '15 minutes ago'
-  },
-  { 
-    id: 3, 
-    name: 'Community Outreach', 
-    region: 'Europe', 
-    participants: 67, 
-    donations: 12456.89, 
-    status: 'pending',
-    lastActivity: '1 day ago'
-  },
-  { 
-    id: 4, 
-    name: 'Safe Harbor Foundation', 
-    region: 'Asia Pacific', 
-    participants: 203, 
-    donations: 23567.45, 
-    status: 'active',
-    lastActivity: '30 minutes ago'
-  }
-];
-
-const systemAlerts = [
-  { id: 1, level: 'warning', message: 'High donation volume detected - consider scaling', time: '5 minutes ago' },
-  { id: 2, level: 'info', message: 'Weekly backup completed successfully', time: '2 hours ago' },
-  { id: 3, level: 'success', message: 'New shelter onboarded: Community Center', time: '1 day ago' }
-];
+import { useState, useEffect } from 'react';
+import { 
+  getFeatureFlags, 
+  getSystemAlerts, 
+  getPlatformTenants, 
+  getRealTimePlatformMetrics,
+  updateFeatureFlag,
+  type FeatureFlag,
+  type SystemAlert,
+  type PlatformTenant,
+  type RealTimePlatformMetrics
+} from '@/services/platformMetrics';
 
 export default function PlatformManagement() {
-  const [flags, setFlags] = useState(featureFlags);
+  // Real-time data state
+  const [flags, setFlags] = useState<FeatureFlag[]>([]);
+  const [alerts, setAlerts] = useState<SystemAlert[]>([]);
+  const [tenants, setTenants] = useState<PlatformTenant[]>([]);
+  const [realTimeMetrics, setRealTimeMetrics] = useState<RealTimePlatformMetrics | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const toggleFeature = (featureId: string) => {
+  // Load all data on component mount
+  useEffect(() => {
+    const loadPlatformData = async () => {
+      try {
+        console.log('🚀 Loading platform management data...');
+        
+        const [flagsData, alertsData, tenantsData, metricsData] = await Promise.all([
+          getFeatureFlags(),
+          getSystemAlerts(),
+          getPlatformTenants(),
+          getRealTimePlatformMetrics()
+        ]);
+
+        setFlags(flagsData);
+        setAlerts(alertsData);
+        setTenants(tenantsData);
+        setRealTimeMetrics(metricsData);
+        
+        console.log('✅ Platform management data loaded successfully');
+      } catch (error) {
+        console.error('❌ Error loading platform data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadPlatformData();
+  }, []);
+
+  const toggleFeature = async (featureId: string) => {
+    // Optimistically update the UI
+    const currentFlag = flags.find(f => f.id === featureId);
+    if (!currentFlag) return;
+
+    const newEnabled = !currentFlag.enabled;
+    
     setFlags(prev => prev.map(flag => 
       flag.id === featureId 
-        ? { ...flag, enabled: !flag.enabled }
+        ? { ...flag, enabled: newEnabled }
         : flag
     ));
+
+    // Attempt to update the backend
+    const success = await updateFeatureFlag(featureId, newEnabled);
+    
+    if (!success) {
+      // Revert the change if the update failed
+      setFlags(prev => prev.map(flag => 
+        flag.id === featureId 
+          ? { ...flag, enabled: currentFlag.enabled }
+          : flag
+      ));
+      console.error('Failed to update feature flag, reverting change');
+    }
   };
 
   const getStatusColor = (status: string) => {
@@ -107,13 +107,27 @@ export default function PlatformManagement() {
     }
   };
 
-  const getAlertIcon = (level: string) => {
-    switch (level) {
+  const getAlertIcon = (type: string) => {
+    switch (type) {
       case 'warning': return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
       case 'success': return <CheckCircle className="h-4 w-4 text-green-500" />;
       case 'info': return <Activity className="h-4 w-4 text-blue-500" />;
+      case 'error': return <AlertTriangle className="h-4 w-4 text-red-500" />;
       default: return <AlertTriangle className="h-4 w-4 text-gray-500" />;
     }
+  };
+
+  const formatTime = (timestamp: string) => {
+    const now = new Date();
+    const alertTime = new Date(timestamp);
+    const diffMs = now.getTime() - alertTime.getTime();
+    const diffMins = Math.floor(diffMs / (1000 * 60));
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+    if (diffMins < 60) return `${diffMins} minutes ago`;
+    if (diffHours < 24) return `${diffHours} hours ago`;
+    return `${diffDays} days ago`;
   };
 
   return (
@@ -136,7 +150,9 @@ export default function PlatformManagement() {
             <Server className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">{systemHealth.uptime}</div>
+            <div className="text-2xl font-bold text-green-600">
+              {loading ? '--' : `${realTimeMetrics?.uptime || 0}%`}
+            </div>
           </CardContent>
         </Card>
 
@@ -146,7 +162,9 @@ export default function PlatformManagement() {
             <Zap className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-blue-600">{systemHealth.apiResponseTime}</div>
+            <div className="text-2xl font-bold text-blue-600">
+              {loading ? '--' : `${realTimeMetrics?.apiResponseTime || 0}ms`}
+            </div>
           </CardContent>
         </Card>
 
@@ -156,7 +174,9 @@ export default function PlatformManagement() {
             <Database className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{systemHealth.databaseConnections}</div>
+            <div className="text-2xl font-bold">
+              {loading ? '--' : realTimeMetrics?.dbConnections || 0}
+            </div>
           </CardContent>
         </Card>
 
@@ -166,7 +186,9 @@ export default function PlatformManagement() {
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{systemHealth.activeUsers}</div>
+            <div className="text-2xl font-bold">
+              {loading ? '--' : realTimeMetrics?.activeUsers || 0}
+            </div>
           </CardContent>
         </Card>
 
@@ -176,7 +198,9 @@ export default function PlatformManagement() {
             <Clock className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{systemHealth.queueSize}</div>
+            <div className="text-2xl font-bold">
+              {loading ? '--' : realTimeMetrics?.queueSize || 0}
+            </div>
           </CardContent>
         </Card>
 
@@ -186,7 +210,9 @@ export default function PlatformManagement() {
             <Shield className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">{systemHealth.errorRate}</div>
+            <div className="text-2xl font-bold text-green-600">
+              {loading ? '--' : `${realTimeMetrics?.errorRate || 0}%`}
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -234,15 +260,22 @@ export default function PlatformManagement() {
             <CardDescription>Recent system notifications and alerts</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            {systemAlerts.map((alert) => (
-              <div key={alert.id} className="flex items-start space-x-3">
-                {getAlertIcon(alert.level)}
-                <div className="flex-1">
-                  <p className="text-sm text-gray-900 dark:text-gray-100">{alert.message}</p>
-                  <p className="text-xs text-muted-foreground">{alert.time}</p>
+            {loading ? (
+              <div className="text-center py-4 text-muted-foreground">Loading alerts...</div>
+            ) : alerts.length === 0 ? (
+              <div className="text-center py-4 text-muted-foreground">No recent alerts</div>
+            ) : (
+              alerts.slice(0, 3).map((alert) => (
+                <div key={alert.id} className="flex items-start space-x-3">
+                  {getAlertIcon(alert.type)}
+                  <div className="flex-1">
+                    <p className="text-sm text-gray-900 dark:text-gray-100">{alert.title}</p>
+                    <p className="text-xs text-muted-foreground">{alert.message}</p>
+                    <p className="text-xs text-muted-foreground">{formatTime(alert.timestamp)}</p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
             <Button variant="outline" className="w-full">
               View All Alerts
             </Button>
@@ -261,7 +294,12 @@ export default function PlatformManagement() {
         </CardHeader>
         <CardContent className="pt-3">
           <div className="space-y-3">
-            {tenantMetrics.map((tenant) => (
+            {loading ? (
+              <div className="text-center py-8 text-muted-foreground">Loading tenants...</div>
+            ) : tenants.length === 0 ? (
+              <div className="text-center py-8 text-muted-foreground">No tenants found</div>
+            ) : (
+              tenants.map((tenant) => (
               <div key={tenant.id} className="p-4 border rounded-xl bg-gradient-to-r from-slate-50 to-gray-50 dark:from-slate-900 dark:to-gray-900 hover:shadow-md transition-all duration-200">
                 {/* Mobile Layout */}
                 <div className="block sm:hidden space-y-3">
@@ -273,7 +311,7 @@ export default function PlatformManagement() {
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="font-semibold text-base truncate">{tenant.name}</div>
-                        <div className="text-sm text-muted-foreground">{tenant.region}</div>
+                        <div className="text-sm text-muted-foreground">{tenant.location}</div>
                       </div>
                     </div>
                     <Badge className={getStatusColor(tenant.status)} variant="secondary">
@@ -300,7 +338,7 @@ export default function PlatformManagement() {
                   
                   {/* Last Activity */}
                   <div className="text-xs text-muted-foreground pt-1 border-t border-gray-200 dark:border-gray-700">
-                    Last activity: {tenant.lastActivity}
+                    Last activity: {formatTime(tenant.lastActivity)}
                   </div>
                 </div>
 
@@ -312,7 +350,7 @@ export default function PlatformManagement() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="font-semibold text-lg truncate">{tenant.name}</div>
-                      <div className="text-sm text-muted-foreground">{tenant.region}</div>
+                      <div className="text-sm text-muted-foreground">{tenant.location}</div>
                     </div>
                   </div>
                   
@@ -329,7 +367,7 @@ export default function PlatformManagement() {
                       <Badge className={getStatusColor(tenant.status)} variant="secondary">
                         {tenant.status}
                       </Badge>
-                      <div className="text-xs text-muted-foreground mt-1">{tenant.lastActivity}</div>
+                      <div className="text-xs text-muted-foreground mt-1">{formatTime(tenant.lastActivity)}</div>
                     </div>
                     <Button variant="outline" size="sm" className="min-w-[80px]">
                       Manage
@@ -337,7 +375,8 @@ export default function PlatformManagement() {
                   </div>
                 </div>
               </div>
-            ))}
+              ))
+            )}
           </div>
           
           {/* Action Buttons */}

@@ -6,6 +6,8 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useState, useEffect } from 'react';
 import { firestoreService, Shelter, PendingApplication } from '@/services/firestore';
+import { doc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 import ShelterMap from '@/components/ShelterMap';
 import DataPopulator from '@/components/DataPopulator';
 import { 
@@ -32,7 +34,9 @@ import {
   Phone,
   Mail,
   Map,
-  Database
+  Database,
+  Trash2,
+  Ban
 } from 'lucide-react';
 
 export default function ShelterNetwork() {
@@ -40,6 +44,15 @@ export default function ShelterNetwork() {
   const [pendingApplications, setPendingApplications] = useState<PendingApplication[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
+  
+  // Edit state
+  const [selectedShelterForView, setSelectedShelterForView] = useState<Shelter | null>(null);
+  const [selectedShelterForEdit, setSelectedShelterForEdit] = useState<Shelter | null>(null);
+  const [editFormData, setEditFormData] = useState<{ name: string; location: string; email: string; phone: string; capacity: number; }>({ 
+    name: '', location: '', email: '', phone: '', capacity: 0 
+  });
+  const [isSaving, setIsSaving] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState<{ shelterId: string; shelterName: string } | null>(null);
   
   // Filtering state
   const [filters, setFilters] = useState({
@@ -105,6 +118,127 @@ export default function ShelterNetwork() {
       occupancyLevel: '',
       searchTerm: ''
     });
+  };
+
+  // View shelter details
+  const viewShelter = (shelter: Shelter) => {
+    setSelectedShelterForView(shelter);
+    console.log(`👁️ Viewing shelter:`, shelter.name);
+  };
+
+  // Edit shelter
+  const editShelter = (shelter: Shelter) => {
+    setSelectedShelterForEdit(shelter);
+    setEditFormData({
+      name: shelter.name || '',
+      location: shelter.location || '',
+      email: shelter.contact.email || '',
+      phone: shelter.contact.phone || '',
+      capacity: shelter.capacity || 0
+    });
+    console.log(`✏️ Editing shelter:`, shelter.name);
+  };
+
+  // Save shelter changes
+  const saveShelterChanges = async () => {
+    if (!selectedShelterForEdit) return;
+    
+    setIsSaving(true);
+    try {
+      console.log(`💾 Saving changes for shelter: ${selectedShelterForEdit.id}`);
+      
+      // Update shelter in Firebase (note: may need to adjust path based on collection structure)
+      await updateDoc(doc(db, 'shelters', selectedShelterForEdit.id), {
+        name: editFormData.name,
+        location: editFormData.location,
+        capacity: editFormData.capacity,
+        'contact.email': editFormData.email,
+        'contact.phone': editFormData.phone,
+        updatedAt: new Date()
+      });
+
+      // Update local state optimistically
+      setShelters(prev => prev.map(shelter => 
+        shelter.id === selectedShelterForEdit.id 
+          ? { 
+              ...shelter, 
+              name: editFormData.name,
+              location: editFormData.location,
+              capacity: editFormData.capacity,
+              contact: {
+                ...shelter.contact,
+                email: editFormData.email,
+                phone: editFormData.phone
+              }
+            }
+          : shelter
+      ));
+
+      console.log(`✅ Successfully updated shelter: ${editFormData.name}`);
+      setSelectedShelterForEdit(null);
+      setEditFormData({ name: '', location: '', email: '', phone: '', capacity: 0 });
+      alert(`Shelter "${editFormData.name}" updated successfully!`);
+      
+    } catch (error) {
+      console.error('❌ Error updating shelter:', error);
+      alert('Error updating shelter. Please try again.');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  // Delete shelter
+  const deleteShelter = (shelterId: string, shelterName: string) => {
+    setShowDeleteConfirm({ shelterId, shelterName });
+  };
+
+  // Confirm shelter deletion
+  const confirmDeleteShelter = async () => {
+    if (!showDeleteConfirm) return;
+    
+    const { shelterId, shelterName } = showDeleteConfirm;
+    
+    try {
+      console.log(`🗑️ Deleting shelter: ${shelterName} (${shelterId})`);
+      
+      // Delete from Firebase
+      await deleteDoc(doc(db, 'shelters', shelterId));
+
+      // Remove from local state
+      setShelters(prev => prev.filter(shelter => shelter.id !== shelterId));
+
+      console.log(`✅ Successfully deleted shelter: ${shelterName}`);
+      setShowDeleteConfirm(null);
+      alert(`Shelter "${shelterName}" has been permanently deleted.`);
+      
+    } catch (error) {
+      console.error('❌ Error deleting shelter:', error);
+      alert('Error deleting shelter. Please try again.');
+    }
+  };
+
+  // Toggle shelter status
+  const toggleShelterStatus = async (shelterId: string, currentStatus: string) => {
+    try {
+      const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
+      console.log(`🔄 Toggling shelter ${shelterId} from ${currentStatus} to ${newStatus}...`);
+      
+      // Update Firebase document
+      await updateDoc(doc(db, 'shelters', shelterId), { 
+        status: newStatus,
+        updatedAt: new Date()
+      });
+      
+      // Update local state optimistically
+      setShelters(prev => prev.map(shelter => 
+        shelter.id === shelterId ? { ...shelter, status: newStatus as Shelter['status'] } : shelter
+      ));
+      
+      console.log(`✅ Shelter status updated to ${newStatus} in Firebase`);
+    } catch (error) {
+      console.error('❌ Error updating shelter status:', error);
+      alert('Error updating shelter status. Please try again.');
+    }
   };
 
   // Load data from Firestore
@@ -735,12 +869,44 @@ export default function ShelterNetwork() {
                       {/* Actions Section */}
                       <div className="px-4 pb-4">
                         <div className="flex space-x-2">
-                          <Button variant="outline" size="sm" className="flex-1 bg-white dark:bg-slate-800">
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="flex-1 bg-white dark:bg-slate-800"
+                            onClick={() => viewShelter(shelter)}
+                          >
                             <Eye className="h-4 w-4 mr-2" />
                             View Details
                           </Button>
-                          <Button variant="ghost" size="sm" className="px-3">
-                            <MoreHorizontal className="h-4 w-4" />
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            className="px-3"
+                            onClick={() => editShelter(shelter)}
+                            title="Edit Shelter"
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            className="px-3"
+                            onClick={() => toggleShelterStatus(shelter.id, shelter.status)}
+                            title={shelter.status === 'active' ? 'Deactivate' : 'Activate'}
+                          >
+                            {shelter.status === 'active' ? 
+                              <Ban className="h-4 w-4 text-red-500" /> : 
+                              <CheckCircle className="h-4 w-4 text-green-500" />
+                            }
+                          </Button>
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            className="px-3"
+                            onClick={() => deleteShelter(shelter.id, shelter.name)}
+                            title="Delete Shelter"
+                          >
+                            <Trash2 className="h-4 w-4 text-red-500" />
                           </Button>
                         </div>
                       </div>
@@ -802,14 +968,40 @@ export default function ShelterNetwork() {
                             </Badge>
                           </div>
                           <div className="flex space-x-1">
-                            <Button variant="ghost" size="sm">
+                            <Button 
+                              variant="ghost" 
+                              size="sm"
+                              onClick={() => viewShelter(shelter)}
+                              title="View Details"
+                            >
                               <Eye className="h-4 w-4" />
                             </Button>
-                            <Button variant="ghost" size="sm">
+                            <Button 
+                              variant="ghost" 
+                              size="sm"
+                              onClick={() => editShelter(shelter)}
+                              title="Edit Shelter"
+                            >
                               <Edit className="h-4 w-4" />
                             </Button>
-                            <Button variant="ghost" size="sm">
-                              <MoreHorizontal className="h-4 w-4" />
+                            <Button 
+                              variant="ghost" 
+                              size="sm"
+                              onClick={() => toggleShelterStatus(shelter.id, shelter.status)}
+                              title={shelter.status === 'active' ? 'Deactivate' : 'Activate'}
+                            >
+                              {shelter.status === 'active' ? 
+                                <Ban className="h-4 w-4 text-red-500" /> : 
+                                <CheckCircle className="h-4 w-4 text-green-500" />
+                              }
+                            </Button>
+                            <Button 
+                              variant="ghost" 
+                              size="sm"
+                              onClick={() => deleteShelter(shelter.id, shelter.name)}
+                              title="Delete Shelter"
+                            >
+                              <Trash2 className="h-4 w-4 text-red-500" />
                             </Button>
                           </div>
                         </div>
@@ -953,6 +1145,209 @@ export default function ShelterNetwork() {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* View Shelter Modal */}
+      {selectedShelterForView && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
+            <h3 className="text-lg font-semibold mb-4">Shelter Details</h3>
+            
+            <div className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Name</label>
+                  <p className="mt-1 text-sm text-gray-900 dark:text-white">{selectedShelterForView.name}</p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Location</label>
+                  <p className="mt-1 text-sm text-gray-900 dark:text-white">{selectedShelterForView.location}</p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Type</label>
+                  <p className="mt-1 text-sm text-gray-900 dark:text-white">{selectedShelterForView.type}</p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Status</label>
+                  <Badge className={getStatusColor(selectedShelterForView.status)}>{selectedShelterForView.status}</Badge>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Capacity</label>
+                  <p className="mt-1 text-sm text-gray-900 dark:text-white">{selectedShelterForView.capacity}</p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Current Occupancy</label>
+                  <p className="mt-1 text-sm text-gray-900 dark:text-white">{selectedShelterForView.currentOccupancy} ({getOccupancyPercentage(selectedShelterForView)}%)</p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
+                  <p className="mt-1 text-sm text-gray-900 dark:text-white">{selectedShelterForView.contact.email}</p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Phone</label>
+                  <p className="mt-1 text-sm text-gray-900 dark:text-white">{selectedShelterForView.contact.phone || 'N/A'}</p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Total Donations</label>
+                  <p className="mt-1 text-sm text-gray-900 dark:text-white">${selectedShelterForView.totalDonations.toLocaleString()}</p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Compliance Score</label>
+                  <p className={`mt-1 text-sm font-medium ${getComplianceColor(selectedShelterForView.complianceScore)}`}>{selectedShelterForView.complianceScore}%</p>
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Address</label>
+                <p className="mt-1 text-sm text-gray-900 dark:text-white">{selectedShelterForView.address}</p>
+              </div>
+            </div>
+
+            <div className="flex justify-end space-x-2 mt-6">
+              <Button 
+                variant="outline" 
+                onClick={() => setSelectedShelterForView(null)}
+              >
+                Close
+              </Button>
+              <Button 
+                onClick={() => {
+                  setSelectedShelterForView(null);
+                  editShelter(selectedShelterForView);
+                }}
+              >
+                Edit Shelter
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Shelter Modal */}
+      {selectedShelterForEdit && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-lg mx-4">
+            <h3 className="text-lg font-semibold mb-4">Edit Shelter</h3>
+            <p className="text-sm text-muted-foreground mb-4">
+              Editing: {selectedShelterForEdit.name}
+            </p>
+            
+            <div className="space-y-4">
+              {/* Name */}
+              <div>
+                <label className="block text-sm font-medium mb-1">Shelter Name</label>
+                <input
+                  type="text"
+                  value={editFormData.name}
+                  onChange={(e) => setEditFormData(prev => ({ ...prev, name: e.target.value }))}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  placeholder="Enter shelter name"
+                />
+              </div>
+
+              {/* Location */}
+              <div>
+                <label className="block text-sm font-medium mb-1">Location</label>
+                <input
+                  type="text"
+                  value={editFormData.location}
+                  onChange={(e) => setEditFormData(prev => ({ ...prev, location: e.target.value }))}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  placeholder="Enter location"
+                />
+              </div>
+
+              {/* Capacity */}
+              <div>
+                <label className="block text-sm font-medium mb-1">Capacity</label>
+                <input
+                  type="number"
+                  value={editFormData.capacity}
+                  onChange={(e) => setEditFormData(prev => ({ ...prev, capacity: parseInt(e.target.value) || 0 }))}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  placeholder="Enter capacity"
+                  min="0"
+                />
+              </div>
+
+              {/* Email */}
+              <div>
+                <label className="block text-sm font-medium mb-1">Contact Email</label>
+                <input
+                  type="email"
+                  value={editFormData.email}
+                  onChange={(e) => setEditFormData(prev => ({ ...prev, email: e.target.value }))}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  placeholder="Enter email address"
+                />
+              </div>
+
+              {/* Phone */}
+              <div>
+                <label className="block text-sm font-medium mb-1">Contact Phone</label>
+                <input
+                  type="tel"
+                  value={editFormData.phone}
+                  onChange={(e) => setEditFormData(prev => ({ ...prev, phone: e.target.value }))}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  placeholder="Enter phone number"
+                />
+              </div>
+            </div>
+
+            <div className="flex justify-end space-x-2 mt-6">
+              <Button 
+                variant="outline" 
+                onClick={() => {
+                  setSelectedShelterForEdit(null);
+                  setEditFormData({ name: '', location: '', email: '', phone: '', capacity: 0 });
+                }}
+                disabled={isSaving}
+              >
+                Cancel
+              </Button>
+              <Button 
+                onClick={saveShelterChanges}
+                disabled={isSaving || !editFormData.name || !editFormData.location || !editFormData.email}
+              >
+                {isSaving ? 'Saving...' : 'Save Changes'}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteConfirm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md mx-4">
+            <h3 className="text-lg font-semibold mb-4 text-red-600">Delete Shelter</h3>
+            <p className="text-sm text-muted-foreground mb-4">
+              Are you sure you want to permanently delete:
+            </p>
+            <div className="p-3 bg-red-50 dark:bg-red-900/20 rounded-md mb-4">
+              <p className="font-semibold">{showDeleteConfirm.shelterName}</p>
+              <p className="text-sm text-muted-foreground">Shelter</p>
+            </div>
+            <p className="text-sm text-red-600 mb-6">
+              ⚠️ This action cannot be undone. All shelter data will be permanently deleted.
+            </p>
+            
+            <div className="flex justify-end space-x-2">
+              <Button 
+                variant="outline" 
+                onClick={() => setShowDeleteConfirm(null)}
+              >
+                Cancel
+              </Button>
+              <Button 
+                variant="destructive"
+                onClick={confirmDeleteShelter}
+              >
+                Delete Permanently
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 } 

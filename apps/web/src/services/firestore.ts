@@ -145,7 +145,7 @@ export class FirestoreService {
           capacity: data.subscription?.limits?.maxParticipants || 100,
           currentOccupancy: Math.floor(Math.random() * (data.subscription?.limits?.maxParticipants || 100) * 0.8),
           participants: Math.floor(Math.random() * (data.subscription?.limits?.maxParticipants || 100) * 0.8),
-          totalDonations: Math.floor(Math.random() * 50000) + 10000,
+          totalDonations: 0,
           status: data.status === 'active' ? 'active' : 'inactive',
           complianceScore: Math.floor(Math.random() * 20) + 80,
           lastInspection: '2024-01-15',

@@ -82,7 +82,7 @@ export default function DonorGuidePage() {
     },
     {
       title: 'SmartFund Distribution',
-      description: '80% direct, 15% housing fund, 5% platform operations',
+      description: '85% direct, 10% housing fund, 5% shelter operations',
       icon: Wallet,
       status: 'Transparent'
     },
@@ -94,7 +94,7 @@ export default function DonorGuidePage() {
     },
     {
       title: 'Housing Impact',
-      description: '15% of every donation builds long-term housing solutions',
+      description: '10% of every donation builds long-term housing solutions',
       icon: Home,
       status: 'Long-term'
     },
@@ -112,35 +112,14 @@ export default function DonorGuidePage() {
     }
   ];
 
-  const impactStats = [
-    {
-      value: '$2.3M',
-      label: 'Total Donated',
-      description: 'Through the SHELTR-AI platform'
-    },
-    {
-      value: '1,200+',
-      label: 'People Supported',
-      description: 'Direct participant impact'
-    },
-    {
-      value: '850+',
-      label: 'Housing Placements',
-      description: 'Long-term stability achieved'
-    },
-    {
-      value: '95%',
-      label: 'Satisfaction Rate',
-      description: 'Participant happiness with support'
-    }
-  ];
+
 
   const quickActions = [
     {
-      title: 'Download PDF Guide',
-      description: 'Complete 450+ page donor guide for comprehensive reference',
-      icon: Download,
-      action: '/docs/donor-guide.pdf'
+      title: 'Preview Donor Wallet',
+      description: 'See what your donor experience will look like in action',
+      icon: Wallet,
+      action: '/demo/donor-wallet'
     },
     {
       title: 'Start Giving Today',
@@ -149,10 +128,10 @@ export default function DonorGuidePage() {
       action: '/register?role=donor'
     },
     {
-      title: 'View Impact Stories',
-      description: 'See real success stories from community giving',
-      icon: Star,
-      action: '/impact/stories'
+      title: 'Download PDF Guide',
+      description: 'Complete 28-page donor guide for comprehensive reference',
+      icon: Download,
+      action: '/docs/donor-guide.pdf'
     },
     {
       title: 'Join Donor Community',
@@ -189,17 +168,17 @@ export default function DonorGuidePage() {
                 </Badge>
                 <Badge variant="secondary" className="bg-blue-100 text-blue-800">
                   <Clock className="h-3 w-3 mr-1" />
-                  August 2025
+                  January 25, 2025
                 </Badge>
                 <Badge variant="secondary" className="bg-purple-100 text-purple-800">
                   <Star className="h-3 w-3 mr-1" />
-                  450+ Pages
+                  28 Pages
                 </Badge>
               </div>
             </div>
             <div className="text-right">
               <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                Version 2.0 • Revolutionary Giving Platform
+                Version 1.4.0 • Revolutionary Giving Platform
               </p>
               <Button className="bg-red-600 hover:bg-red-700">
                 <Heart className="h-4 w-4 mr-2" />
@@ -217,20 +196,20 @@ export default function DonorGuidePage() {
             <CardHeader>
               <CardTitle className="flex items-center space-x-2 text-blue-800 dark:text-blue-400">
                 <Wallet className="h-5 w-5" />
-                <span>The SmartFund Model (80-15-5)</span>
+                <span>The SmartFund Model (85-10-5)</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="text-center p-4 bg-white dark:bg-gray-800 rounded-lg border">
-                  <div className="text-4xl font-bold text-green-600 dark:text-green-400 mb-2">80%</div>
+                  <div className="text-4xl font-bold text-green-600 dark:text-green-400 mb-2">85%</div>
                   <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Direct Impact</h4>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Goes directly to the participant you're supporting
+                    Goes directly to the participant you&apos;re supporting
                   </p>
                 </div>
                 <div className="text-center p-4 bg-white dark:bg-gray-800 rounded-lg border">
-                  <div className="text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2">15%</div>
+                  <div className="text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2">10%</div>
                   <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Housing Fund</h4>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
                     Builds long-term housing solutions for the community
@@ -238,9 +217,9 @@ export default function DonorGuidePage() {
                 </div>
                 <div className="text-center p-4 bg-white dark:bg-gray-800 rounded-lg border">
                   <div className="text-4xl font-bold text-purple-600 dark:text-purple-400 mb-2">5%</div>
-                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Platform</h4>
+                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Shelter Support</h4>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Maintains technology and platform operations
+                    Supports the participant&apos;s registered shelter operations
                   </p>
                 </div>
               </div>
@@ -275,28 +254,164 @@ export default function DonorGuidePage() {
           </div>
         </div>
 
-        {/* Impact Statistics */}
+        {/* Distance Giving & Participant Connection */}
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-            Community Impact & Results
+            Give at a Distance, Stay Connected
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {impactStats.map((stat, index) => (
-              <Card key={index} className="text-center hover:shadow-lg transition-shadow">
-                <CardContent className="p-6">
-                  <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">
-                    {stat.value}
-                  </div>
-                  <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
-                    {stat.label}
-                  </h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    {stat.description}
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Users className="h-5 w-5 text-blue-600" />
+                  Participant Check-ins
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                  Stay connected with participants you&apos;ve supported. Receive progress updates, milestones, and success stories directly from those you&apos;ve helped.
+                </p>
+                <Badge className="bg-green-100 text-green-800">Real-time Updates</Badge>
+              </CardContent>
+            </Card>
+            
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Clock className="h-5 w-5 text-purple-600" />
+                  Recurring Donations
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                  Set up automatic recurring donations to provide consistent support. Choose weekly, monthly, or custom schedules that work for your budget.
+                </p>
+                <Badge className="bg-purple-100 text-purple-800">Automated Support</Badge>
+              </CardContent>
+            </Card>
+            
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Shield className="h-5 w-5 text-orange-600" />
+                  Remote Support
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                  Support participants from anywhere in the world. Technology bridges distance, allowing meaningful connections across cities, states, or countries.
+                </p>
+                <Badge className="bg-orange-100 text-orange-800">Global Impact</Badge>
+              </CardContent>
+            </Card>
           </div>
+          
+          <div className="mt-8 p-6 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg border">
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
+              🌟 The Power of Distance Giving
+            </h3>
+            <p className="text-gray-700 dark:text-gray-300 mb-4">
+              One of SHELTR&apos;s most innovative features is enabling meaningful relationships between donors and participants regardless of geographic distance. Through secure, privacy-respecting technology:
+            </p>
+            <div className="grid md:grid-cols-2 gap-4">
+              <div>
+                <h4 className="font-medium text-gray-900 dark:text-white mb-2">✓ Follow Their Journey</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Receive opt-in progress updates and milestone notifications</p>
+              </div>
+              <div>
+                <h4 className="font-medium text-gray-900 dark:text-white mb-2">✓ Secure Communication</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Privacy-first messaging system protects both parties</p>
+              </div>
+              <div>
+                <h4 className="font-medium text-gray-900 dark:text-white mb-2">✓ Housing Fund Growth</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Watch their automated savings grow toward permanent housing</p>
+              </div>
+              <div>
+                <h4 className="font-medium text-gray-900 dark:text-white mb-2">✓ Success Celebrations</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Be notified when they achieve housing independence</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Donor Wallet Preview Callout */}
+        <div className="mb-8">
+          <Card className="bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/20 border-red-200 dark:border-red-800">
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2 text-red-800 dark:text-red-400">
+                <Wallet className="h-5 w-5" />
+                <span>Experience Your Future Donor Wallet</span>
+              </CardTitle>
+              <CardDescription>
+                See exactly what your donor experience will look like with real data and interactions
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <h4 className="font-semibold text-gray-900 dark:text-white mb-3">What You&apos;ll See in the Preview</h4>
+                  <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                    <li className="flex items-start gap-2">
+                      <span className="text-red-500 mt-1">•</span>
+                      <span>Real-time participant progress tracking</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-red-500 mt-1">•</span>
+                      <span>Recurring donation management dashboard</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-red-500 mt-1">•</span>
+                      <span>SmartFund™ distribution transparency</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-red-500 mt-1">•</span>
+                      <span>Milestone celebrations and success stories</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-red-500 mt-1">•</span>
+                      <span>Distance giving across multiple cities</span>
+                    </li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-gray-900 dark:text-white mb-3">Interactive Features</h4>
+                  <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                    <li className="flex items-start gap-2">
+                      <span className="text-red-500 mt-1">•</span>
+                      <span>One-click donation buttons</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-red-500 mt-1">•</span>
+                      <span>QR code scanning simulation</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-red-500 mt-1">•</span>
+                      <span>Impact score and statistics</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-red-500 mt-1">•</span>
+                      <span>Notification and settings management</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-red-500 mt-1">•</span>
+                      <span>Housing fund growth visualization</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                <a href="/demo/donor-wallet" target="_blank" rel="noopener noreferrer">
+                  <Button className="bg-red-600 hover:bg-red-700 w-full sm:w-auto">
+                    <Wallet className="h-4 w-4 mr-2" />
+                    Preview Donor Wallet
+                  </Button>
+                </a>
+                <p className="text-sm text-gray-600 dark:text-gray-400 flex items-center">
+                  💡 Based on 6 months of realistic donor activity
+                </p>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Guide Sections */}
@@ -342,24 +457,26 @@ export default function DonorGuidePage() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {quickActions.map((action, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow cursor-pointer group">
-                <CardContent className="p-6 text-center">
-                  <div className="flex justify-center mb-4">
-                    <div className="p-3 bg-red-100 dark:bg-red-900 rounded-full group-hover:bg-red-200 dark:group-hover:bg-red-800 transition-colors">
-                      <action.icon className="h-6 w-6 text-red-600 dark:text-red-400" />
+              <a key={index} href={action.action} target={action.action.startsWith('http') ? '_blank' : '_self'} rel={action.action.startsWith('http') ? 'noopener noreferrer' : undefined}>
+                <Card className="hover:shadow-lg transition-shadow cursor-pointer group h-full">
+                  <CardContent className="p-6 text-center">
+                    <div className="flex justify-center mb-4">
+                      <div className="p-3 bg-red-100 dark:bg-red-900 rounded-full group-hover:bg-red-200 dark:group-hover:bg-red-800 transition-colors">
+                        <action.icon className="h-6 w-6 text-red-600 dark:text-red-400" />
+                      </div>
                     </div>
-                  </div>
-                  <h3 className="font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-red-600 transition-colors">
-                    {action.title}
-                  </h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                    {action.description}
-                  </p>
-                  <Button variant="outline" size="sm" className="w-full">
-                    <ArrowRight className="h-4 w-4 ml-2" />
-                  </Button>
-                </CardContent>
-              </Card>
+                    <h3 className="font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-red-600 transition-colors">
+                      {action.title}
+                    </h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                      {action.description}
+                    </p>
+                    <Button variant="outline" size="sm" className="w-full">
+                      <ArrowRight className="h-4 w-4 ml-2" />
+                    </Button>
+                  </CardContent>
+                </Card>
+              </a>
             ))}
           </div>
         </div>
@@ -374,9 +491,9 @@ export default function DonorGuidePage() {
           </CardHeader>
           <CardContent>
             <blockquote className="text-lg italic text-gray-700 dark:text-gray-300 mb-4">
-              "I started with $10 donations and watched Sarah go from sleeping in her car to getting her own apartment. 
+              &ldquo;I started with $10 donations and watched Sarah go from sleeping in her car to getting her own apartment. 
               Seeing that transformation made me realize how powerful direct giving can be. The transparency of knowing 
-              exactly where my money goes and seeing real results has completely changed how I think about charity."
+              exactly where my money goes and seeing real results has completely changed how I think about charity.&rdquo;
             </blockquote>
             <div className="flex items-center justify-between">
               <p className="text-sm text-gray-600 dark:text-gray-400">

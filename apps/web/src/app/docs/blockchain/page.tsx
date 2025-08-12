@@ -47,13 +47,13 @@ export default function BlockchainPage() {
                   Dual-Token Smart Contract Implementation on Base Network
                 </p>
                 <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
-                  <span>Version 1.0.0</span>
+                  <span>Version 1.4.0</span>
                   <span>•</span>
-                  <span>August 2025</span>
+                  <span>January 25, 2025</span>
                   <span>•</span>
                   <span>45 pages</span>
                   <span>•</span>
-                  <Badge variant="outline" className="text-green-600 border-green-600">Production Ready</Badge>
+                  <Badge variant="outline" className="text-orange-600 border-orange-600">Under Peer Review</Badge>
                 </div>
               </div>
             </div>
@@ -103,9 +103,9 @@ export default function BlockchainPage() {
                 <p>
                   SHELTR implements the world&rsquo;s first <strong>dual-token charitable ecosystem</strong> on Base network, 
                   combining participant protection through SHELTR-S (stable token) with community governance 
-                  via SHELTR (growth token). Our revolutionary architecture ensures 80% of donations reach 
-                  participants as stable value while building sustainable long-term solutions through 
-                  smart contract-governed fund allocation.
+                  via SHELTR (growth token). Our revolutionary architecture ensures 85% of donations reach 
+                  participants as stable value, 10% funds housing solutions, and 5% supports the participant&apos;s 
+                  registered shelter operations through smart contract-governed fund allocation.
                 </p>
                 <div className="mt-6">
                   <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/technical/blockchain.md" target="_blank" rel="noopener noreferrer">
@@ -159,7 +159,7 @@ export default function BlockchainPage() {
                     SHELTR (Governance Token)
                   </CardTitle>
                   <CardDescription>
-                    Community governance and investor returns
+                    Community governance and ecosystem sustainability
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -171,6 +171,14 @@ export default function BlockchainPage() {
                     <div className="flex justify-between">
                       <span className="text-sm">Pre-seed Price:</span>
                       <span className="text-sm font-mono">$0.05</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-sm">ICO Price:</span>
+                      <span className="text-sm font-mono">$0.10</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-sm">Release Schedule:</span>
+                      <span className="text-sm font-mono">3-year vesting</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm">Deflationary Rate:</span>
@@ -196,9 +204,12 @@ pragma solidity ^0.8.19;
 
 contract SHELTRCore is AccessControl, ReentrancyGuard, Pausable {
     // Distribution constants (immutable for security)
-    uint256 public constant DIRECT_SUPPORT = 80;
-    uint256 public constant HOUSING_FUND = 15;
-    uint256 public constant OPERATIONS = 5;
+    uint256 public constant DIRECT_SUPPORT = 85;
+    uint256 public constant HOUSING_FUND = 10;
+    uint256 public constant SHELTER_OPERATIONS = 5;
+    
+    // Participant-shelter mapping for 5% allocation
+    mapping(address => address) public participantShelter;
     uint256 public constant WELCOME_BONUS = 100 * 1e18; // 100 SHELTR-S
     
     function processDonation(
@@ -208,15 +219,83 @@ contract SHELTRCore is AccessControl, ReentrancyGuard, Pausable {
     ) external onlyRole(DISTRIBUTOR_ROLE) nonReentrant whenNotPaused {
         uint256 directSupport = (amount * DIRECT_SUPPORT) / 100;
         uint256 housingContribution = (amount * HOUSING_FUND) / 100;
-        uint256 operationsFee = (amount * OPERATIONS) / 100;
+        uint256 shelterOperations = (amount * SHELTER_OPERATIONS) / 100;
         
         // Mint SHELTR-S tokens for participant (1:1 with USDC)
         ISheltrStable(address(sheltrStable)).mint(participant, directSupport);
+        
+        // Handle 5% allocation: shelter ops or additional housing fund
+        if (participantShelter[participant] != address(0)) {
+            IERC20(usdc).transfer(participantShelter[participant], shelterOperations);
+        } else {
+            housingContribution += shelterOperations; // Add to housing fund
+        }
         
         emit DonationProcessed(donor, participant, amount, directSupport, housingContribution);
     }
 }`}
                 </pre>
+              </div>
+            </div>
+
+            {/* Distribution Flow Architecture */}
+            <div className="mb-8">
+              <h2 className="text-3xl font-bold mb-6">SmartFund™ Distribution Architecture</h2>
+              <div className="bg-muted/20 rounded-lg p-6">
+                <div className="space-y-4">
+                  <div className="text-center font-semibold text-lg mb-4">On-Chain Distribution Flow</div>
+                  <div className="flex flex-col space-y-4">
+                    <div className="flex items-center justify-between p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border">
+                      <span className="font-medium">💰 Donation Input</span>
+                      <span className="text-sm text-muted-foreground">QR Scan → Smart Contract Execution</span>
+                    </div>
+                    
+                    <div className="flex justify-center">
+                      <div className="w-px h-8 bg-border"></div>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border text-center">
+                        <div className="font-bold text-green-600 text-xl">85%</div>
+                        <div className="text-sm font-medium">Direct Support</div>
+                        <div className="text-xs text-muted-foreground mt-1">SHELTR-S → Participant Wallet</div>
+                        <div className="text-xs text-muted-foreground">Immediate access, 0% volatility</div>
+                      </div>
+                      
+                      <div className="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg border text-center">
+                        <div className="font-bold text-purple-600 text-xl">10%</div>
+                        <div className="text-sm font-medium">Housing Fund</div>
+                        <div className="text-xs text-muted-foreground mt-1">USDC → DeFi Yield Strategy</div>
+                        <div className="text-xs text-muted-foreground">Compound interest for housing</div>
+                      </div>
+                      
+                      <div className="p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg border text-center">
+                        <div className="font-bold text-orange-600 text-xl">5%</div>
+                        <div className="text-sm font-medium">Shelter Operations</div>
+                        <div className="text-xs text-muted-foreground mt-1">USDC → Registered Shelter</div>
+                        <div className="text-xs text-muted-foreground">*Or Housing Fund if independent</div>
+                      </div>
+                    </div>
+                    
+                    <div className="flex justify-center">
+                      <div className="w-px h-8 bg-border"></div>
+                    </div>
+                    
+                    <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg border">
+                      <span className="font-medium">⛓️ Blockchain Verification</span>
+                      <span className="text-sm text-muted-foreground">Immutable transaction record on Base</span>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-6 p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
+                    <h4 className="font-semibold text-amber-800 dark:text-amber-200 mb-2">Special Rule Implementation</h4>
+                    <p className="text-sm text-amber-700 dark:text-amber-300">
+                      If participant is not registered through a shelter, the 5% shelter allocation 
+                      is automatically redirected to their individual housing fund account, ensuring 
+                      100% efficiency regardless of onboarding path.
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
 

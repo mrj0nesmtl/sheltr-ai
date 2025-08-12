@@ -7,7 +7,7 @@ Status: LIVE DOCUMENT ✅
 
 ## Abstract
 
-SHELTR represents a paradigm shift in addressing homelessness through technology-driven charitable giving and dual-token economics. By seamlessly integrating blockchain transparency, AI-powered financial guidance, and location-based services, SHELTR creates a direct bridge between donors and individuals experiencing homelessness while building sustainable long-term solutions. Our revolutionary dual-token architecture combines **SHELTR-S** (stable utility token) for participant protection with **SHELTR** (community governance token) for ecosystem growth. This innovative approach ensures that 80% of donations reach participants as stable value, 15% funds housing solutions, and 5% supports operations—all verified on-chain for complete transparency. Our platform launches with 100 SHELTR-S tokens ($100 value) gifted to every new participant, creating immediate engagement and platform adoption.
+SHELTR represents a paradigm shift in addressing homelessness through technology-driven charitable giving and dual-token economics. By seamlessly integrating blockchain transparency, AI-powered financial guidance, and location-based services, SHELTR creates a direct bridge between donors and individuals experiencing homelessness while building sustainable long-term solutions. Our revolutionary dual-token architecture combines **SHELTR-S** (stable utility token) for participant protection with **SHELTR** (community governance token) for ecosystem growth. This innovative approach ensures that 85% of donations reach participants as stable value, 10% funds housing solutions, and 5% supports the participant's registered shelter operations—all verified on-chain for complete transparency. Our platform launches with 100 SHELTR-S tokens ($100 value) gifted to every new participant, creating immediate engagement and platform adoption.
 
 ## Executive Summary
 
@@ -19,7 +19,7 @@ To eliminate barriers between compassionate donors and vulnerable populations wh
 
 1. **Immediate Impact**: Direct peer-to-peer donations via QR codes with instant SHELTR-S token delivery
 2. **Transparent Accountability**: Blockchain verification of every transaction and outcome
-3. **Sustainable Scaling**: SmartFund™ housing initiative funded by 15% of every donation, growing through DeFi strategies
+3. **Sustainable Scaling**: SmartFund™ housing initiative funded by 10% of every donation, plus 5% shelter operations support, growing through DeFi strategies
 
 ### Market Opportunity
 - **Total Addressable Market**: $45B annual global homelessness spending
@@ -61,7 +61,7 @@ To eliminate barriers between compassionate donors and vulnerable populations wh
 
 ### 1.2 Our Theory of Change
 
-**Core Hypothesis**: Direct, transparent, blockchain-verified transactions combined with sustainable token economics can increase charitable efficiency from 60% to 95% while building long-term solutions.
+**Core Hypothesis**: Direct, transparent, blockchain-verified transactions combined with sustainable token economics can increase charitable efficiency from 60% to 100% while building long-term solutions. Every dollar donated reaches its intended purpose: 85% participant support + 10% housing + 5% shelter operations.
 
 ```mermaid
 graph TD
@@ -69,7 +69,7 @@ graph TD
     B -->|Result| C[60-70% Efficiency]
     
     D[SHELTR Model] -->|Solution| E[Direct P2P + Blockchain]
-    E -->|Result| F[95% Efficiency]
+    E -->|Result| F[100% Efficiency]
     
     G[Donor Intention] -->|Via SHELTR| H[Immediate Impact]
     H -->|Plus| I[Long-term Housing Fund]
@@ -82,7 +82,7 @@ graph TD
 
 ### 1.3 Three-Pillar Impact Framework
 
-#### Pillar 1: Immediate Dignity (80% allocation)
+#### Pillar 1: Immediate Dignity (85% allocation)
 **Objective**: Preserve human dignity through instant, stable value delivery
 - **SHELTR-S tokens** maintain $1.00 USD value regardless of market conditions
 - **Zero transaction fees** for participants using essential services
@@ -94,9 +94,9 @@ graph TD
 - Purchasing power preservation: 100% (no volatility risk)
 - Participant autonomy: Complete control over fund utilization
 
-#### Pillar 2: Sustainable Solutions (15% allocation)
+#### Pillar 2: Sustainable Solutions (10% allocation)
 **Objective**: Build long-term housing infrastructure through smart contract governance
-- **SmartFund™ housing initiative** automatically allocates 15% of donations
+- **SmartFund™ housing initiative** automatically allocates 10% of donations
 - **DeFi yield strategies** targeting 6-8% annual growth
 - **Community governance** via SHELTR token voting on fund allocation
 - **Transparent tracking** of housing placements and success rates
@@ -109,12 +109,14 @@ Permanent Solutions     20% ($45,000/participant long-term)
 Support Services        5%  ($2,000/participant wraparound)
 ```
 
-#### Pillar 3: Platform Sustainability (5% allocation)
-**Objective**: Ensure long-term platform viability and continuous innovation
-- **Development and security** infrastructure maintenance
-- **Regulatory compliance** and legal framework adherence
-- **Community support** and participant onboarding
-- **Technology scaling** for global expansion
+#### Pillar 3: Shelter Operations Support (5% allocation)
+**Objective**: Support the participant's registered shelter operations and infrastructure
+- **Shelter infrastructure** maintenance and technology upgrades
+- **Staff development** training programs and operational support
+- **Program expansion** new service offerings and enhanced capacity
+- **Technology integration** platform adoption and system optimization
+
+**Special Rule**: If a participant was not onboarded via a registered shelter, this 5% allocation is automatically redirected to their individual housing fund account, creating a 15% total housing allocation for independent participants.
 
 ### 1.4 Behavioral Economics Integration
 
@@ -218,13 +220,13 @@ contract SHELTRStable {
 ```mermaid
 graph LR
     A[$100 Donation] -->|Smart Contract| B[Automatic Split]
-    B -->|80%| C[80 SHELTR-S tokens]
-    B -->|15%| D[Housing Fund USDC]
-    B -->|5%| E[Operations USDC]
+    B -->|85%| C[85 SHELTR-S tokens]
+    B -->|10%| D[Housing Fund USDC]
+    B -->|5%| E[Shelter Operations USDC]
     
     C -->|Instant| F[Participant Wallet]
     D -->|DeFi| G[Yield Generation]
-    E -->|Platform| H[Sustainability]
+    E -->|Shelter| H[Operations Support]
     
     style C fill:#e8f5e8
     style D fill:#fff3e0
@@ -247,7 +249,7 @@ graph LR
 
 **Break-even Analysis**:
 - **Monthly donations needed**: $50,000 (achievable with 500 active participants)
-- **Platform sustainability**: $2,500/month from 5% allocation
+- **Shelter operations support**: $2,500/month from 5% allocation to registered shelters
 - **Growth funding**: Token appreciation provides expansion capital
 - **Scaling economics**: Marginal cost approaches zero as adoption increases
 
@@ -601,15 +603,32 @@ SHELTR's economic model is designed for long-term sustainability through diversi
 | **Premium Features** | Advanced analytics and reporting tools | Value-added services |
 | **Partnership Revenue** | Integration and API access fees | Ecosystem expansion |
 
-### 7.2 Token Economics & Distribution
+### 7.2 Token Economics & ICO Timeline
+
+**SHELTR Token Launch Strategy**:
+```
+📅 Pre-Seed Round (September 2025)
+├── Token Price: $0.05 (50% discount to public launch)
+├── Allocation: 3,000,000 SHELTR tokens
+├── Target Raise: $150,000
+├── Use of Funds: Legal framework, Coinbase integration, tech development
+└── Vesting: 3-year release schedule (33% annually)
+
+🚀 Public ICO (December 2025)
+├── Launch Price: $0.10
+├── Progressive Pricing: $0.10 → $0.20 → $0.40 over 3 years
+├── Market Cap Targets: $1.5M → $6.7M → $13.3M
+└── Exchange Listings: Major DEX/CEX partnerships
+```
 
 **SHELTR Token Supply & Distribution**:
 ```
 Total Supply: 100,000,000 SHELTR
-├── Community Rewards (35%): 35,000,000 tokens
-├── Platform Development (25%): 25,000,000 tokens
-├── Team & Advisors (20%): 20,000,000 tokens
-├── Treasury Reserve (15%): 15,000,000 tokens
+├── Public Sale (50%): 50,000,000 tokens
+├── SHELTR Operations (11%): 11,000,000 tokens
+├── Team & Advisors (12%): 12,000,000 tokens (1% each)
+├── Participant Onboarding (5%): 5,000,000 tokens
+├── Treasury Reserve (5%): 5,000,000 tokens (staked)
 └── Strategic Partnerships (5%): 5,000,000 tokens
 ```
 
@@ -742,7 +761,7 @@ Based on consultation with blockchain regulatory experts, SHELTR tokens qualify 
 - **Third-Party Audits**: Quarterly independent fund verification
 
 **Fund Allocation Tracking**:
-- **Distribution Accuracy**: 100% compliance with 80/15/5 model
+- **Distribution Accuracy**: 100% compliance with 85/10/5 model
 - **Housing Fund Growth**: 8% annual yield target achievement
 - **Operational Efficiency**: <5% total operational costs
 - **Transparency Score**: 95%+ rating from charity watchdog organizations
@@ -765,7 +784,7 @@ SHELTR represents more than a technological innovation—it embodies a fundament
 - **Scalable infrastructure** supporting global deployment
 
 **For Social Impact Organizations**: SHELTR creates a new paradigm where charitable giving becomes transparent, efficient, and sustainable:
-- **95% efficiency** compared to 60-70% in traditional charity
+- **100% efficiency** with every dollar reaching its intended purpose (vs. 60-70% in traditional charity)
 - **Immediate impact** through direct peer-to-peer token transfers
 - **Long-term solutions** via smart contract-governed housing fund
 - **Community governance** ensuring stakeholder alignment
@@ -814,7 +833,7 @@ We are not just building a platform—we are creating a movement that proves tec
 *This whitepaper contains forward-looking statements based on current expectations and assumptions. Actual results may differ materially. Platform participation and token usage carry inherent risks in emerging technology implementations. Please consult with qualified technical and legal advisors before platform integration. This document is for informational purposes and does not constitute financial advice.*
 
 ---
-*Document Version: 1.3.0*  
-*Last Updated: February 16, 2025*  
+*Document Version: 1.4.0*  
+*Last Updated: January 25, 2025*  
 *Status: PRODUCTION READY* ✅  
-*Classification: Published Documentation*
+*Classification: Investment Grade Documentation*

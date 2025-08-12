@@ -34,9 +34,9 @@ Unlike traditional donation platforms, SHELTR recognizes four distinct user type
 
 #### 🪙 SmartFund™ Distribution
 Every donation automatically distributes through blockchain smart contracts:
-- **80%** → Direct to participant's digital wallet
-- **15%** → Sustainable housing fund for long-term solutions
-- **5%** → Platform operations and sustainability
+- **85%** → Direct to participant's digital wallet
+- **10%** → Sustainable housing fund for long-term solutions
+- **5%** → Participant's registered shelter operations support
 
 #### 📱 QR-Powered Direct Giving
 - Instant scan-and-give technology
@@ -92,9 +92,9 @@ Every donation automatically distributes through blockchain smart contracts:
 graph TD
     A[Individual in Need] -->|QR Code Registration| B[SHELTR Platform]
     C[Compassionate Donor] -->|Scans QR Code| B
-    B -->|Smart Contract Distribution| D[80% Direct Support]
-    B -->|Automated Allocation| E[15% Housing Fund]
-    B -->|Sustainability| F[5% Operations]
+    B -->|Smart Contract Distribution| D[85% Direct Support]
+    B -->|Automated Allocation| E[10% Housing Fund]
+    B -->|Shelter Support| F[5% Shelter Operations]
     
     D -->|Immediate Relief| G[Basic Needs Met]
     E -->|Long-term Investment| H[Sustainable Housing]

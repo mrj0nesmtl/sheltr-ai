@@ -16,7 +16,7 @@ The next generation platform for transparent charitable giving and homelessness 
 
 ## 🎯 Mission
 
-**Sheltr is Hacking homelessness.** SHELTR empowers direct, transparent charitable giving through QR-code enabled donations, blockchain verification, and AI-driven insights. Every donation follows our SmartFund™ distribution: 80% direct to participants, 15% to sustainable housing, 5% to shelter platform operations.
+**Sheltr is Hacking homelessness.** SHELTR empowers direct, transparent charitable giving through QR-code enabled donations, blockchain verification, and AI-driven insights. Every donation follows our SmartFund™ distribution: 85% direct to participants, 10% to sustainable housing, 5% to participant's registered shelter operations.
 
 ## 🚀 Quick Start
 
@@ -97,10 +97,13 @@ Participants can now register **independently** of shelters, creating a more inc
 
 We've expanded our blockchain integration with multiple token options and enhanced smart contract functionality:
 
-#### **Token Options**
-1. **🔵 USDC Integration** - Price-stable donations with immediate utility
-2. **🟢 Custom SHLTR Token** - Platform-native with governance features  
-3. **🟡 Hybrid System** - USDC for donations + SHLTR for governance + NFT impact certificates
+#### **Token Architecture & ICO Timeline**
+1. **🔵 SHELTR-S Stablecoin** - Price-stable donations with 1:1 USDC backing
+2. **🟢 SHELTR Governance Token** - Platform governance with DeFi integration
+   - **Pre-Seed**: September 2025 - $0.05/token ($150K raise for 3M tokens)
+   - **Public ICO**: December 2025 - $0.10/token launch price
+   - **3-Year Release**: 33% annually with progressive price targets
+3. **🟡 Dual-Token System** - SHELTR-S for stability + SHELTR for governance + NFT certificates
 
 #### **SmartFund™ Smart Contracts**
 Every donation automatically distributes through audited smart contracts:
@@ -108,14 +111,14 @@ Every donation automatically distributes through audited smart contracts:
 ```solidity
 // SmartFund™ Distribution
 function processDonation(address participant, uint256 amount) external {
-    uint256 toParticipant = (amount * 80) / 100;  // 80% direct
-    uint256 toHousing = (amount * 15) / 100;      // 15% housing fund
-    uint256 toOperations = (amount * 5) / 100;    // 5% platform ops
+    uint256 toParticipant = (amount * 85) / 100;  // 85% direct
+    uint256 toHousing = (amount * 10) / 100;      // 10% housing fund
+    uint256 toShelterOps = (amount * 5) / 100;    // 5% shelter operations
     
     // Instant, transparent distribution
     token.transfer(participant, toParticipant);
     token.transfer(housingFund, toHousing);
-    token.transfer(operationsFund, toOperations);
+    token.transfer(shelterOperations, toShelterOps);
 }
 ```
 
@@ -177,7 +180,7 @@ function processDonation(address participant, uint256 amount) external {
 ✅ **AI-Powered Analytics** - Data-driven impact insights  
 ✅ **Mobile-First Design** - Native iOS/Android experience  
 ✅ **Real-Time Dashboards** - Live donation tracking  
-✅ **SmartFund™ Distribution** - Automated 80/15/5 allocation  
+✅ **SmartFund™ Distribution** - Automated 85/10/5 allocation  
 ✅ **Role-Based Access** - Four-tier permission system  
 
 ### **🆕 New Features in SHELTR-AI 2.0**
@@ -262,6 +265,6 @@ function processDonation(address participant, uint256 amount) external {
 
 **📖 "Great documentation is the foundation of great software - and great impact."**
 
-*Last Updated: August 10, 2025 - Session 9 Complete: Data Connectivity Revolution + Complete User Guide Suite*
+*Last Updated: January 25, 2025 - Updated Tokenomics: 85/10/5 Distribution + ICO Timeline*
 
 **🌐 [Visit Live Site](https://sheltr-ai.web.app) | 🚀 [Get Started](docs/01-overview/README.md) | 🤝 [Contribute](CONTRIBUTING.md) | 💝 [Donate](https://sheltr-ai.web.app/scan-give) | 📖 [Documentation Hub](docs/TABLE_OF_CONTENTS.md)**

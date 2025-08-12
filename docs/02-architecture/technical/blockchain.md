@@ -4,7 +4,7 @@
 
 ## Executive Summary
 
-SHELTR implements the world's first **dual-token charitable ecosystem** on Base network, combining participant protection through SHELTR-S (stable token) with community governance via SHELTR (growth token). Our revolutionary architecture ensures 80% of donations reach participants as stable value while building sustainable long-term solutions through smart contract-governed fund allocation.
+SHELTR implements the world's first **dual-token charitable ecosystem** on Base network, combining participant protection through SHELTR-S (stable token) with community governance via SHELTR (growth token). Our revolutionary architecture ensures 85% of donations reach participants as stable value, 10% funds housing solutions, and 5% supports the participant's registered shelter operations through smart contract-governed fund allocation.
 
 ## Theory of Change: Blockchain-Verified Social Impact
 
@@ -18,7 +18,7 @@ Traditional charitable systems suffer from:
 ### SHELTR Solution
 Our dual-token architecture solves these fundamental issues:
 - **Complete Transparency**: Every transaction verified on-chain
-- **Maximum Efficiency**: 95% of funds reach intended purposes
+- **Maximum Efficiency**: 100% of funds reach intended purposes (85% participant support + 10% housing + 5% shelter operations)
 - **Risk Protection**: SHELTR-S stable token eliminates volatility for participants
 - **Decentralized Governance**: Community-controlled through SHELTR token voting
 
@@ -71,14 +71,15 @@ contract SHELTRCore is AccessControl, ReentrancyGuard, Pausable {
     IERC20 public immutable usdcReserve;    // Backing token
     
     // Distribution constants (immutable for security)
-    uint256 public constant DIRECT_SUPPORT = 80;
-    uint256 public constant HOUSING_FUND = 15;
-    uint256 public constant OPERATIONS = 5;
+    uint256 public constant DIRECT_SUPPORT = 85;
+    uint256 public constant HOUSING_FUND = 10;
+    uint256 public constant SHELTER_OPERATIONS = 5;
     uint256 public constant WELCOME_BONUS = 100 * 1e18; // 100 SHELTR-S
     
     // State tracking
     mapping(address => uint256) public participantBalances;
     mapping(address => bool) public hasReceivedWelcomeBonus;
+    mapping(address => address) public participantShelter; // Maps participant to their registered shelter
     uint256 public totalHousingFund;
     uint256 public totalDistributed;
     
@@ -100,6 +101,12 @@ contract SHELTRCore is AccessControl, ReentrancyGuard, Pausable {
     event WelcomeBonusDistributed(
         address indexed participant,
         uint256 amount,
+        uint256 timestamp
+    );
+    
+    event ParticipantRegistered(
+        address indexed participant,
+        address indexed shelter,
         uint256 timestamp
     );
     
@@ -147,7 +154,7 @@ contract SHELTRCore is AccessControl, ReentrancyGuard, Pausable {
         // Calculate distribution
         uint256 directSupport = (amount * DIRECT_SUPPORT) / 100;
         uint256 housingContribution = (amount * HOUSING_FUND) / 100;
-        uint256 operationsFee = (amount * OPERATIONS) / 100;
+        uint256 shelterOperations = (amount * SHELTER_OPERATIONS) / 100;
         
         // Transfer USDC from donor
         require(
@@ -159,7 +166,21 @@ contract SHELTRCore is AccessControl, ReentrancyGuard, Pausable {
         ISheltrStable(address(sheltrStable)).mint(participant, directSupport);
         
         // Allocate to housing fund
-        totalHousingFund += housingContribution;
+        uint256 totalHousingAllocation = housingContribution;
+        
+        // Handle shelter operations or redirect to housing fund
+        if (participantShelter[participant] != address(0)) {
+            // Send shelter operations to registered shelter
+            require(
+                usdcReserve.transfer(participantShelter[participant], shelterOperations),
+                "Shelter transfer failed"
+            );
+        } else {
+            // No registered shelter - add to housing fund
+            totalHousingAllocation += shelterOperations;
+        }
+        
+        totalHousingFund += totalHousingAllocation;
         
         // Update tracking
         participantBalances[participant] += directSupport;
@@ -170,9 +191,26 @@ contract SHELTRCore is AccessControl, ReentrancyGuard, Pausable {
             participant,
             amount,
             directSupport,
-            housingContribution,
-            operationsFee
+            totalHousingAllocation,
+            shelterOperations
         );
+    }
+    
+    /**
+     * @notice Register participant with a shelter
+     * @param participant Address of participant
+     * @param shelter Address of registered shelter
+     */
+    function registerParticipantWithShelter(
+        address participant,
+        address shelter
+    ) external onlyRole(DISTRIBUTOR_ROLE) {
+        require(participant != address(0), "Invalid participant");
+        require(shelter != address(0), "Invalid shelter");
+        
+        participantShelter[participant] = shelter;
+        
+        emit ParticipantRegistered(participant, shelter, block.timestamp);
     }
     
     /**
@@ -413,15 +451,18 @@ graph TD
     D --> E[Distribution Logic]
     E --> F[SHELTR-S Minting]
     E --> G[Housing Fund Allocation]
-    E --> H[Operations Fee]
+    E --> H[Shelter Operations]
     F --> I[Participant Wallet]
     G --> J[DeFi Strategy]
-    H --> K[Platform Treasury]
-    I --> L[Blockchain Verification]
-    J --> L
-    K --> L
-    L --> M[Event Emission]
-    M --> N[Analytics Update]
+    H --> K{Registered Shelter?}
+    K -->|Yes| L[Shelter Treasury]
+    K -->|No| M[Additional Housing Fund]
+    I --> N[Blockchain Verification]
+    J --> N
+    L --> N
+    M --> N
+    N --> O[Event Emission]
+    O --> P[Analytics Update]
 ```
 
 ### Verification Events

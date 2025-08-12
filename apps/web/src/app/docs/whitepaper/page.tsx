@@ -46,13 +46,13 @@ export default function WhitepaperPage() {
                   Hacking Homelessness Through Direct-Impact Technology
                 </p>
                 <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
-                  <span>Version 1.0.0</span>
+                  <span>Version 1.4.0</span>
                   <span>•</span>
                   <span>January 25, 2025</span>
                   <span>•</span>
                   <span>67 pages</span>
                   <span>•</span>
-                  <Badge variant="outline" className="text-green-600 border-green-600">Production Ready</Badge>
+                  <Badge variant="outline" className="text-orange-600 border-orange-600">Under Peer Review</Badge>
                 </div>
               </div>
             </div>
@@ -135,12 +135,71 @@ export default function WhitepaperPage() {
                   <p>
                     Our revolutionary dual-token architecture combines <strong>SHELTR-S</strong> (stable utility token) 
                     for participant protection with <strong>SHELTR</strong> (community governance token) for ecosystem growth. 
-                    This innovative approach ensures that 80% of donations reach participants as stable value, 
-                    15% funds housing solutions, and 5% supports operations—all verified on-chain for complete transparency.
+                    This innovative approach ensures that 85% of donations reach participants as stable value, 
+                    10% funds housing solutions, and 5% supports the participant&apos;s registered shelter operations—all verified on-chain for complete transparency.
                   </p>
                   <p>
                     Our platform launches with 100 SHELTR-S tokens ($100 value) gifted to every new participant, 
                     creating immediate engagement and platform adoption through direct empowerment.
+                  </p>
+                  
+                  <h3 className="text-xl font-semibold mb-4 mt-6">Technical Architecture Overview</h3>
+                  <p>
+                    SHELTR&apos;s technical foundation is built on Base network (Coinbase L2) for ultra-low transaction fees (~$0.01) 
+                    and 2-second finality. Our smart contract architecture implements OpenZeppelin security standards with 
+                    multi-signature governance (3-of-5 consensus) and emergency pause capabilities for maximum security.
+                  </p>
+                  <p>
+                    The platform integrates Firebase Firestore for real-time multi-tenant data management, FastAPI for 
+                    high-performance backend services, and Next.js 15 for enterprise-grade frontend experiences. 
+                    Our QR code system utilizes AES-256-GCM encryption with 24-hour key rotation for participant privacy protection.
+                  </p>
+
+                  <h3 className="text-xl font-semibold mb-4 mt-6">SmartFund™ Distribution Flow</h3>
+                  <div className="bg-muted/20 rounded-lg p-6 my-6">
+                    <div className="space-y-4">
+                      <div className="text-center font-semibold text-lg mb-4">Donation Processing Architecture</div>
+                      <div className="flex flex-col space-y-3">
+                        <div className="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-900/20 rounded">
+                          <span className="font-medium">💰 $100 Donation Input</span>
+                          <span className="text-sm text-muted-foreground">QR Code → Smart Contract</span>
+                        </div>
+                        <div className="flex justify-center">
+                          <div className="w-px h-8 bg-border"></div>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                          <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded text-center">
+                            <div className="font-bold text-green-600">85%</div>
+                            <div className="text-sm">$85 → SHELTR-S</div>
+                            <div className="text-xs text-muted-foreground">Participant Wallet</div>
+                          </div>
+                          <div className="p-3 bg-purple-50 dark:bg-purple-900/20 rounded text-center">
+                            <div className="font-bold text-purple-600">10%</div>
+                            <div className="text-sm">$10 → Housing Fund</div>
+                            <div className="text-xs text-muted-foreground">DeFi Yield Strategy</div>
+                          </div>
+                          <div className="p-3 bg-orange-50 dark:bg-orange-900/20 rounded text-center">
+                            <div className="font-bold text-orange-600">5%</div>
+                            <div className="text-sm">$5 → Shelter Ops</div>
+                            <div className="text-xs text-muted-foreground">*Or Housing if Independent</div>
+                          </div>
+                        </div>
+                        <div className="flex justify-center">
+                          <div className="w-px h-8 bg-border"></div>
+                        </div>
+                        <div className="flex items-center justify-between p-3 bg-muted/30 rounded">
+                          <span className="font-medium">⛓️ Blockchain Verification</span>
+                          <span className="text-sm text-muted-foreground">Immutable Record</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <h3 className="text-xl font-semibold mb-4 mt-6">Security & Compliance Framework</h3>
+                  <p>
+                    Every transaction is secured through multi-layer protection including formal verification of smart contracts, 
+                    quarterly security audits, and $1M insurance coverage. Our compliance framework adheres to CFTC utility token 
+                    classification, AML screening for transactions &gt;$1000, and GDPR/CCPA data protection standards.
                   </p>
                   <div className="mt-6">
                     <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/whitepaper_final.md" target="_blank" rel="noopener noreferrer">
@@ -156,7 +215,7 @@ export default function WhitepaperPage() {
               <div className="grid md:grid-cols-3 gap-6">
                 <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-6">
                   <h3 className="font-bold text-blue-800 dark:text-blue-200 mb-2">Platform Efficiency</h3>
-                  <div className="text-2xl font-bold text-blue-600 mb-1">95%</div>
+                  <div className="text-2xl font-bold text-blue-600 mb-1">100%</div>
                   <p className="text-sm text-blue-700 dark:text-blue-300">
                     Of donations reach intended purposes vs. 60-70% traditional
                   </p>

@@ -1,6 +1,6 @@
 # Hacking Homelessness - Better to Solve than Manage.
-### Created:February 16, 2016
-### Updated: July 20, 2025
+### Author: Joel Yaffe
+### Updated: Aug 11, 2025
 ### Status: Published ✅
 
 ---
@@ -13,7 +13,7 @@ This journey into tech-for-good wasn't born in a boardroom—it emerged from wit
 
 SHELTR represents an attempt to join the brilliant collective of Internet Angels doing transformative work—creators who use their platforms and influence to directly help those in need, proving that technology and social media can be forces for genuine, lasting change.
 
-Our revolutionary **SmartFund™ distribution model** ensures 80% of donations reach participants as stable SHELTR-S tokens, 15% builds sustainable housing solutions, and 5% maintains platform operations. Every new participant receives 100 SHELTR-S tokens ($100 value) as a welcome bonus, creating immediate engagement and platform adoption.
+Our revolutionary **SmartFund™ distribution model** ensures 85% of donations reach participants as stable SHELTR-S tokens, 10% builds sustainable housing solutions, and 5% supports the participant's registered shelter operations. Every new participant receives 100 SHELTR-S tokens ($100 value) as a welcome bonus, creating immediate engagement and platform adoption.
 
 We're not just building software—we're **"hacking homelessness"** by merging technological innovation with compassionate action, creating verifiable impact through blockchain transparency, and fostering an engaged community of like-minded partners, creators, and stakeholders aligned for sustainable change.
 
@@ -45,7 +45,7 @@ Traditional charitable systems are fundamentally broken, creating a crisis of ef
 
 ### SHELTR's Revolutionary Solution
 
-**Core Hypothesis**: Direct, transparent, blockchain-verified transactions combined with sustainable dual-token economics can increase charitable efficiency from 60% to 95% while building long-term solutions.
+**Core Hypothesis**: Direct, transparent, blockchain-verified transactions combined with sustainable dual-token economics can increase charitable efficiency from 60% to 100% while building long-term solutions. Every dollar donated reaches its intended purpose: 85% participant support + 10% housing + 5% shelter operations.
 
 ```mermaid
 graph TD
@@ -53,11 +53,11 @@ graph TD
     B -->|Result| C[60-70% Efficiency]
     
     D[SHELTR Model] -->|Solution| E[Blockchain + Dual Tokens]
-    E -->|Result| F[95% Efficiency]
+    E -->|Result| F[100% Efficiency]
     
-    G[Immediate Impact] -->|80%| H[SHELTR-S Stable Tokens]
-    G -->|15%| I[Housing Fund Growth]
-    G -->|5%| J[Platform Sustainability]
+    G[Immediate Impact] -->|85%| H[SHELTR-S Stable Tokens]
+    G -->|10%| I[Housing Fund Growth]
+    G -->|5%| J[Shelter Operations Support]
     
     H -->|Plus| K[100 Token Welcome Bonus]
     I -->|Plus| L[DeFi Yield Generation]
@@ -74,7 +74,7 @@ graph TD
 
 ### Three-Pillar Impact Framework
 
-#### Pillar 1: Immediate Dignity & Stability (80% + Welcome Bonus)
+#### Pillar 1: Immediate Dignity & Stability (85% + Welcome Bonus)
 
 **Objective**: Preserve human dignity through instant, stable value delivery with zero volatility risk.
 
@@ -97,12 +97,12 @@ graph TD
 - Emergency response time: <5 minutes for critical needs
 - Financial autonomy score: 85% participant satisfaction target
 
-#### Pillar 2: Sustainable Solutions & Long-term Impact (15% allocation)
+#### Pillar 2: Sustainable Solutions & Long-term Impact (10% allocation)
 
 **Objective**: Build permanent housing infrastructure through smart contract governance and DeFi yield strategies.
 
 **SmartFund™ Housing Initiative**:
-- **Automatic allocation**: 15% of every donation flows to housing fund
+- **Automatic allocation**: 10% of every donation flows to housing fund
 - **DeFi optimization**: Conservative (60%) + growth (40%) investment strategies
 - **Community governance**: SHELTR token holders vote on fund allocation priorities
 - **Transparent tracking**: Real-time blockchain verification of housing placements
@@ -143,15 +143,17 @@ interface HousingFundAllocation {
 - **Risk management**: Conservative approach prioritizes capital preservation
 - **Governance oversight**: Community voting on investment strategy adjustments
 
-#### Pillar 3: Platform Sustainability & Innovation (5% allocation)
+#### Pillar 3: Shelter Operations Support (5% allocation)
 
-**Objective**: Ensure long-term platform viability, continuous innovation, and global scalability.
+**Objective**: Support the participant's registered shelter operations and infrastructure.
 
-**Operational Excellence**:
-- **Development infrastructure**: Security audits, performance optimization, feature development
-- **Regulatory compliance**: Legal framework maintenance, multi-jurisdiction adaptation
-- **Community support**: 24/7 multilingual assistance, educational programs
-- **Technology scaling**: Global expansion capabilities, mobile optimization
+**Shelter Support Excellence**:
+- **Infrastructure support**: Shelter maintenance, technology upgrades, facility improvements
+- **Staff development**: Training programs, professional development, operational support
+- **Program expansion**: New service offerings, enhanced capacity, community outreach
+- **Technology integration**: Platform adoption, staff training, system optimization
+
+**Special Rule**: If a participant was not onboarded via a registered shelter, this 5% allocation is automatically redirected to their individual housing fund account, creating a 15% total housing allocation for independent participants.
 
 **Innovation Pipeline**:
 - **AI enhancement**: Predictive analytics for personalized support recommendations
@@ -201,6 +203,9 @@ The SHELTR platform creates value through network effects and utility rather tha
 **SHELTR (Community Governance Token)**:
 - **Purpose**: Platform governance, investor returns, ecosystem growth
 - **Total Supply**: 100,000,000 (fixed for scarcity value)
+- **Pre-Seed Price**: $0.05 (September 2025 - $150K raise for 3M tokens)
+- **Public Launch**: $0.10 (December 2025 ICO)
+- **3-Year Release**: 33% annually with progressive price targets ($0.10 → $0.20 → $0.40)
 - **Deflationary Rate**: 2% annually through buyback and burn
 - **Staking Yield**: 8% APY target from platform revenue sharing
 - **Governance Rights**: Voting on housing fund allocation and platform direction
@@ -228,13 +233,13 @@ The SHELTR platform creates value through network effects and utility rather tha
 function processDonation(address donor, address participant, uint256 amount) 
     external onlyRole(DISTRIBUTOR_ROLE) nonReentrant whenNotPaused {
     
-    uint256 directSupport = (amount * 80) / 100;      // 80% to participant
-    uint256 housingFund = (amount * 15) / 100;        // 15% to housing
-    uint256 operations = (amount * 5) / 100;          // 5% to platform or shelter
+    uint256 directSupport = (amount * 85) / 100;      // 85% to participant
+    uint256 housingFund = (amount * 10) / 100;        // 10% to housing
+    uint256 shelterOps = (amount * 5) / 100;          // 5% to shelter operations
     
     sheltrStable.mint(participant, directSupport);    // Instant SHELTR-S
     housingFundContract.deposit(housingFund);         // Automated allocation
-    operationsVault.deposit(operations);              // Platform sustainability
+    shelterOperationsVault.deposit(shelterOps);       // Shelter support
     
     emit DonationProcessed(donor, participant, amount, directSupport, housingFund);
 }
@@ -265,7 +270,7 @@ function processDonation(address donor, address participant, uint256 amount)
 | **Homeless Focus** | ✅ Primary Mission | ❌ Generic | ❌ Water Only | ❌ General |
 | **Dual-Token Model** | ✅ Revolutionary | ❌ Single Token | ❌ No Tokens | ❌ No Crypto |
 | **QR Instant Donations** | ✅ Core Feature | ❌ Traditional | ❌ Traditional | ❌ Traditional |
-| **Automatic Distribution** | ✅ 80/15/5 Split | ❌ Manual | ✅ Limited | ❌ Manual |
+| **Automatic Distribution** | ✅ 85/10/5 Split | ❌ Manual | ✅ Limited | ❌ Manual |
 | **Participant Welcome Bonus** | ✅ $100 Signup | ❌ None | ❌ None | ❌ None |
 | **Blockchain Verification** | ✅ Base Network | ✅ Ethereum | ❌ None | ❌ None |
 | **Stable Token Protection** | ✅ SHELTR-S | ❌ Volatile | ❌ No Crypto | ❌ No Crypto |
@@ -448,7 +453,7 @@ function processDonation(address donor, address participant, uint256 amount)
 ### Transformational Impact Potential
 
 **For Society**: SHELTR creates a new paradigm where charitable giving becomes:
-- **95% efficient** compared to 60-70% traditional charity overhead
+- **100% efficient** with every dollar reaching its intended purpose (vs. 60-70% traditional charity overhead)
 - **Completely transparent** through blockchain verification
 - **Immediately impactful** via direct peer-to-peer token transfers
 - **Sustainably growing** through smart contract-governed housing funds
@@ -517,6 +522,6 @@ We are not just building a platform; we are creating a movement that proves tech
 ---
 
 *Document Classification: Investment Grade Overview*  
-*Last Updated: Aug 7, 2025*  
+*Last Updated: January 25, 2025*  
 *Version: 1.3.9*  
 *Status: PRODUCTION READY* ✅

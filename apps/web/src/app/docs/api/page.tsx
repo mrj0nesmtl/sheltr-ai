@@ -36,39 +36,39 @@ export default function APIDocumentationPage() {
       <section className="py-12 bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <div className="flex items-center gap-4 mb-6">
-              <Code className="h-12 w-12 text-orange-600" />
-              <div>
-                <div className="flex items-center gap-2 mb-2">
-                  <h1 className="text-4xl font-bold">API Documentation</h1>
-                  <Badge className="bg-orange-500 text-white">Technical</Badge>
+            <div className="flex items-start gap-4 mb-6">
+              <Code className="h-12 w-12 text-orange-600 mt-1" />
+              <div className="flex-1">
+                <div className="mb-3">
+                  <h1 className="text-3xl sm:text-4xl font-bold mb-2 leading-tight">API Documentation</h1>
+                  <Badge className="bg-orange-500 text-white text-sm">Technical</Badge>
                 </div>
-                <p className="text-lg text-muted-foreground">
-                  Comprehensive API reference for SHELTR platform integration
+                <p className="text-lg text-muted-foreground mb-3">
+                  Comprehensive API reference for developers, integration guides, and technical specifications
                 </p>
-                <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
+                <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground mb-4">
                   <span>Version 1.0.0</span>
                   <span>•</span>
                   <span>August 9, 2025</span>
                   <span>•</span>
                   <span>32 pages</span>
-                  <span>•</span>
-                  <Badge variant="outline" className="text-green-600 border-green-600">Production Ready</Badge>
+                </div>
+                
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                  <Link href="/docs">
+                    <Button className="bg-orange-600 hover:bg-orange-700">
+                      <Code className="h-4 w-4 mr-2" />
+                      View Online
+                    </Button>
+                  </Link>
+                  <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/03-api/README.md" target="_blank" rel="noopener noreferrer">
+                    <Button variant="outline">
+                      <Download className="h-4 w-4 mr-2" />
+                      View on GitHub
+                    </Button>
+                  </a>
                 </div>
               </div>
-            </div>
-            
-            <div className="flex gap-4">
-              <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/03-api/README.md" target="_blank" rel="noopener noreferrer">
-                <Button className="bg-orange-600 hover:bg-orange-700">
-                  <Download className="h-4 w-4 mr-2" />
-                  View on GitHub
-                </Button>
-              </a>
-              <Button variant="outline">
-                <ExternalLink className="h-4 w-4 mr-2" />
-                Interactive API Explorer
-              </Button>
             </div>
           </div>
         </div>

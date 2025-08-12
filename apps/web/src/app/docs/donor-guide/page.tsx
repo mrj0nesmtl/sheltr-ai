@@ -168,7 +168,7 @@ export default function DonorGuidePage() {
                 </Badge>
                 <Badge variant="secondary" className="bg-blue-100 text-blue-800">
                   <Clock className="h-3 w-3 mr-1" />
-                  January 25, 2025
+                  August 2025
                 </Badge>
                 <Badge variant="secondary" className="bg-purple-100 text-purple-800">
                   <Star className="h-3 w-3 mr-1" />

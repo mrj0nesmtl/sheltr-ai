@@ -36,39 +36,39 @@ export default function RoadmapPage() {
       <section className="py-12 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <div className="flex items-center gap-4 mb-6">
-              <Rocket className="h-12 w-12 text-purple-600" />
-              <div>
-                <div className="flex items-center gap-2 mb-2">
-                  <h1 className="text-4xl font-bold">Development Roadmap</h1>
-                  <Badge className="bg-purple-500 text-white">Planning</Badge>
+            <div className="flex items-start gap-4 mb-6">
+              <Rocket className="h-12 w-12 text-purple-600 mt-1" />
+              <div className="flex-1">
+                <div className="mb-3">
+                  <h1 className="text-3xl sm:text-4xl font-bold mb-2 leading-tight">Development Roadmap</h1>
+                  <Badge className="bg-purple-500 text-white text-sm">Planning</Badge>
                 </div>
-                <p className="text-lg text-muted-foreground">
-                  SHELTR platform development timeline and milestones
+                <p className="text-lg text-muted-foreground mb-3">
+                  Detailed development timeline, milestones, and feature planning
                 </p>
-                <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
+                <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground mb-4">
                   <span>Version 2.0.0</span>
                   <span>•</span>
                   <span>August 2025</span>
                   <span>•</span>
                   <span>Updated Quarterly</span>
-                  <span>•</span>
-                  <Badge variant="outline" className="text-blue-600 border-blue-600">Live Document</Badge>
+                </div>
+                
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                  <Link href="/docs">
+                    <Button className="bg-purple-600 hover:bg-purple-700">
+                      <Rocket className="h-4 w-4 mr-2" />
+                      View Online
+                    </Button>
+                  </Link>
+                  <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/04-development/dev-roadmap.md" target="_blank" rel="noopener noreferrer">
+                    <Button variant="outline">
+                      <Download className="h-4 w-4 mr-2" />
+                      View on GitHub
+                    </Button>
+                  </a>
                 </div>
               </div>
-            </div>
-            
-            <div className="flex gap-4">
-              <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/04-development/dev-roadmap.md" target="_blank" rel="noopener noreferrer">
-                <Button className="bg-purple-600 hover:bg-purple-700">
-                  <Download className="h-4 w-4 mr-2" />
-                  View on GitHub
-                </Button>
-              </a>
-              <Button variant="outline">
-                <Calendar className="h-4 w-4 mr-2" />
-                Interactive Timeline
-              </Button>
             </div>
           </div>
         </div>

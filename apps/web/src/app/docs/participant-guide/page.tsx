@@ -36,39 +36,39 @@ export default function ParticipantGuidePage() {
       <section className="py-12 bg-gradient-to-r from-teal-50 to-cyan-50 dark:from-teal-900/20 dark:to-cyan-900/20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <div className="flex items-center gap-4 mb-6">
-              <Users className="h-12 w-12 text-teal-600" />
-              <div>
-                <div className="flex items-center gap-2 mb-2">
-                  <h1 className="text-4xl font-bold">Participant User Guide</h1>
-                  <Badge className="bg-teal-500 text-white">User Guide</Badge>
+            <div className="flex items-start gap-4 mb-6">
+              <Users className="h-12 w-12 text-teal-600 mt-1" />
+              <div className="flex-1">
+                <div className="mb-3">
+                  <h1 className="text-3xl sm:text-4xl font-bold mb-2 leading-tight">Participant User Guide</h1>
+                  <Badge className="bg-teal-500 text-white text-sm">User Guide</Badge>
                 </div>
-                <p className="text-lg text-muted-foreground">
-                  Complete guide for using the SHELTR platform
+                <p className="text-lg text-muted-foreground mb-3">
+                  Complete guide for participants using the SHELTR platform, from onboarding to advanced features
                 </p>
-                <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
+                <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground mb-4">
                   <span>Version 1.4.0</span>
                   <span>•</span>
-                  <span>January 25, 2025</span>
+                  <span>July 2025</span>
                   <span>•</span>
                   <span>28 pages</span>
-                  <span>•</span>
-                  <Badge variant="outline" className="text-green-600 border-green-600">Production Ready</Badge>
+                </div>
+                
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                  <Link href="/docs">
+                    <Button className="bg-teal-600 hover:bg-teal-700">
+                      <Users className="h-4 w-4 mr-2" />
+                      View Online
+                    </Button>
+                  </Link>
+                  <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/06-user-guides/participant-guide.md" target="_blank" rel="noopener noreferrer">
+                    <Button variant="outline">
+                      <Download className="h-4 w-4 mr-2" />
+                      View on GitHub
+                    </Button>
+                  </a>
                 </div>
               </div>
-            </div>
-            
-            <div className="flex gap-4">
-              <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/06-user-guides/participant-guide.md" target="_blank" rel="noopener noreferrer">
-                <Button className="bg-teal-600 hover:bg-teal-700">
-                  <Download className="h-4 w-4 mr-2" />
-                  View on GitHub
-                </Button>
-              </a>
-              <Button variant="outline">
-                <QrCode className="h-4 w-4 mr-2" />
-                QR Code Demo
-              </Button>
             </div>
           </div>
         </div>

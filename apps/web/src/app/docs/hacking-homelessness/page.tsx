@@ -37,45 +37,39 @@ export default function HackingHomelessnessPage() {
       <section className="py-12 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <div className="flex items-center gap-4 mb-6">
-              <Users className="h-12 w-12 text-purple-600" />
-              <div>
-                <div className="flex items-center gap-2 mb-2">
-                  <h1 className="text-4xl font-bold">Hacking Homelessness Through Technology</h1>
-                  <Badge className="bg-purple-500 text-white">Executive Summary</Badge>
+            <div className="flex items-start gap-4 mb-6">
+              <Users className="h-12 w-12 text-purple-600 mt-1" />
+              <div className="flex-1">
+                <div className="mb-3">
+                  <h1 className="text-3xl sm:text-4xl font-bold mb-2 leading-tight">Hacking Homelessness and the Theory of Change</h1>
+                  <Badge className="bg-purple-500 text-white text-sm">Thesis</Badge>
                 </div>
-                <p className="text-lg text-muted-foreground">
-                  Revolutionary approach to charitable technology and social impact
+                <p className="text-lg text-muted-foreground mb-3">
+                  Executive overview of our theory of change, market analysis, and social impact framework
                 </p>
-                <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
+                <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground mb-4">
                   <span>Version 1.4.0</span>
                   <span>•</span>
-                  <span>January 25, 2025</span>
+                  <span>July 20, 2025</span>
                   <span>•</span>
                   <span>25 pages</span>
-                  <span>•</span>
-                  <Badge variant="outline" className="text-green-600 border-green-600">Production Ready</Badge>
+                </div>
+                
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                  <Link href="/docs">
+                    <Button className="bg-purple-600 hover:bg-purple-700">
+                      <Users className="h-4 w-4 mr-2" />
+                      View Online
+                    </Button>
+                  </Link>
+                  <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/01-overview/hacking_homelessness.md">
+                    <Button variant="outline">
+                      <Download className="h-4 w-4 mr-2" />
+                      View on GitHub
+                    </Button>
+                  </a>
                 </div>
               </div>
-            </div>
-            
-            <div className="flex gap-4">
-              <a href="https://github.com/mrj0nesmtl/sheltr-ai/raw/main/docs/01-overview/hacking_homelessness.md">
-                <Button className="bg-purple-600 hover:bg-purple-700">
-                  <Download className="h-4 w-4 mr-2" />
-                  Download PDF
-                </Button>
-              </a>
-              <Button variant="outline">
-                <Share className="h-4 w-4 mr-2" />
-                Share Document
-              </Button>
-              <Link href="/impact">
-                <Button variant="outline">
-                  <TrendingUp className="h-4 w-4 mr-2" />
-                  View Impact Metrics
-                </Button>
-              </Link>
             </div>
           </div>
         </div>
@@ -100,36 +94,40 @@ export default function HackingHomelessnessPage() {
               {/* Executive Abstract */}
               <div>
                 <h2 className="text-3xl font-bold mb-6">Executive Abstract</h2>
-                <div className="prose prose-lg max-w-none dark:prose-invert">
-                  <p>
+                <div className="space-y-4 text-lg leading-relaxed">
+                  <p className="mb-4">
                     SHELTR was born from a simple but powerful realization: <strong>&ldquo;It&apos;s better to solve than to manage.&rdquo;</strong> 
                     This philosophy, inspired by Malcolm Gladwell&apos;s groundbreaking essay &ldquo;Million-Dollar Murray&rdquo; in The New Yorker, 
                     became the foundation of our approach to addressing homelessness through technology.
                   </p>
-                  <p>
+                  
+                  <p className="mb-4">
                     This journey into tech-for-good wasn&apos;t born in a boardroom—it emerged from witnessing 
                     the disconnect between charitable intentions and measurable impact. Too often, well-meaning donations 
                     disappeared into administrative overhead, leaving both donors frustrated and those in need still struggling.
                   </p>
-                  <p>
+                  
+                  <p className="mb-4">
                     SHELTR represents an attempt to join the brilliant collective of Internet Angels doing transformative work—
                     creators who use their platforms and influence to directly help those in need, proving that technology 
                     and social media can be forces for genuine, lasting change.
                   </p>
-                  <p>
+                  
+                  <p className="mb-4">
                     Our revolutionary <strong>SmartFund™ distribution model</strong> ensures 85% of donations reach participants as 
                     stable SHELTR-S tokens, 10% builds sustainable housing solutions, and 5% supports the participant&apos;s registered shelter operations. 
                     Every new participant receives 100 SHELTR-S tokens ($100 value) as a welcome bonus, creating immediate 
                     engagement and platform adoption.
                   </p>
-                  <p>
+                  
+                  <p className="mb-6">
                     We&apos;re not just building software—we&apos;re <strong>&ldquo;hacking homelessness&rdquo;</strong> by merging 
                     technological innovation with compassionate action, creating verifiable impact through 
                     blockchain transparency, and fostering an engaged community of like-minded partners, creators, 
                     and stakeholders aligned for sustainable change.
                   </p>
                   
-                  <blockquote className="border-l-4 border-purple-500 pl-4 italic text-purple-700 dark:text-purple-300 my-6">
+                  <blockquote className="border-l-4 border-purple-500 pl-4 italic text-purple-700 dark:text-purple-300 my-6 bg-purple-50 dark:bg-purple-900/20 py-4 rounded-r-lg">
                     &ldquo;It costs a lot more to manage a problem than it does to solve it.&rdquo;
                     <br />
                     <cite className="text-sm font-normal">— Malcolm Gladwell, &ldquo;Million-Dollar Murray,&rdquo; The New Yorker (2006)</cite>

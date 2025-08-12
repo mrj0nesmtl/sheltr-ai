@@ -47,9 +47,9 @@ export default function ParticipantGuidePage() {
                   Complete guide for using the SHELTR platform
                 </p>
                 <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
-                  <span>Version 1.0.0</span>
+                  <span>Version 1.4.0</span>
                   <span>•</span>
-                  <span>July 2025</span>
+                  <span>January 25, 2025</span>
                   <span>•</span>
                   <span>28 pages</span>
                   <span>•</span>
@@ -87,75 +87,245 @@ export default function ParticipantGuidePage() {
               </p>
             </div>
 
+            {/* SmartFund Flow Chart */}
+            <div className="mb-12">
+              <h2 className="text-3xl font-bold mb-6 text-center">How SHELTR SmartFund™ Works for You</h2>
+              <div className="bg-gradient-to-br from-teal-50 to-cyan-50 dark:from-teal-900/20 dark:to-cyan-900/20 rounded-lg p-8">
+                <div className="space-y-6">
+                  <div className="text-center mb-6">
+                    <p className="text-lg text-muted-foreground">
+                      Every donation automatically builds your future - no effort required!
+                    </p>
+                  </div>
+                  
+                  <div className="flex flex-col space-y-4">
+                    <div className="flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm border">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10 bg-teal-100 dark:bg-teal-900 rounded-full flex items-center justify-center">
+                          <QrCode className="w-5 h-5 text-teal-600" />
+                        </div>
+                        <div>
+                          <div className="font-medium">1. Show Your QR Code</div>
+                          <div className="text-sm text-muted-foreground">Your unique, secure digital ID</div>
+                        </div>
+                      </div>
+                      <div className="text-sm text-teal-600 font-medium">Ready instantly</div>
+                    </div>
+                    
+                    <div className="flex justify-center">
+                      <div className="w-px h-8 bg-teal-300"></div>
+                    </div>
+                    
+                    <div className="flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm border">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
+                          <span className="text-blue-600 font-bold text-sm">💰</span>
+                        </div>
+                        <div>
+                          <div className="font-medium">2. Receive Donation</div>
+                          <div className="text-sm text-muted-foreground">Someone scans and donates any amount</div>
+                        </div>
+                      </div>
+                      <div className="text-sm text-blue-600 font-medium">Instant & secure</div>
+                    </div>
+                    
+                    <div className="flex justify-center">
+                      <div className="w-px h-8 bg-teal-300"></div>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border text-center">
+                        <div className="font-bold text-green-600 text-xl">85%</div>
+                        <div className="text-sm font-medium">Your Immediate Access</div>
+                        <div className="text-xs text-muted-foreground mt-1">Stable SHELTR-S tokens</div>
+                        <div className="text-xs text-muted-foreground">Use right away for needs</div>
+                      </div>
+                      
+                      <div className="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg border text-center">
+                        <div className="font-bold text-purple-600 text-xl">10%</div>
+                        <div className="text-sm font-medium">Your Housing Savings</div>
+                        <div className="text-xs text-muted-foreground mt-1">Automatically invested</div>
+                        <div className="text-xs text-muted-foreground">Growing towards permanent housing</div>
+                      </div>
+                      
+                      <div className="p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg border text-center">
+                        <div className="font-bold text-orange-600 text-xl">5%</div>
+                        <div className="text-sm font-medium">Shelter Support</div>
+                        <div className="text-xs text-muted-foreground mt-1">Supports your shelter</div>
+                        <div className="text-xs text-muted-foreground">Better services for everyone</div>
+                      </div>
+                    </div>
+                    
+                    <div className="flex justify-center">
+                      <div className="w-px h-8 bg-teal-300"></div>
+                    </div>
+                    
+                    <div className="flex items-center justify-between p-4 bg-gradient-to-r from-purple-100 to-green-100 dark:from-purple-900/20 dark:to-green-900/20 rounded-lg border">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-green-500 rounded-full flex items-center justify-center">
+                          <span className="text-white font-bold text-sm">🏠</span>
+                        </div>
+                        <div>
+                          <div className="font-medium">3. Your Housing Fund Grows</div>
+                          <div className="text-sm text-muted-foreground">Passive savings accumulating for your transition out</div>
+                        </div>
+                      </div>
+                      <div className="text-sm text-purple-600 font-medium">Automatic & compound</div>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-6 p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
+                    <h4 className="font-semibold text-amber-800 dark:text-amber-200 mb-2">💡 The Magic</h4>
+                    <p className="text-sm text-amber-700 dark:text-amber-300">
+                      You don&apos;t have to do anything special. Every donation automatically creates immediate support 
+                      AND builds your future housing fund. The more people who donate, the faster you reach housing independence!
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <div className="grid md:grid-cols-2 gap-8 mb-12">
-              <Card>
+              <Card className="hover:shadow-lg transition-shadow duration-300 hover:border-teal-200 dark:hover:border-teal-800">
                 <CardHeader>
-                  <CardTitle>Platform Onboarding</CardTitle>
+                  <CardTitle className="flex items-center gap-2">
+                    <Users className="w-5 h-5 text-teal-600" />
+                    Platform Onboarding
+                  </CardTitle>
                   <CardDescription>
                     Step-by-step registration and setup process
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <ul className="space-y-2 text-sm">
-                    <li>• Account creation and verification</li>
-                    <li>• Profile setup and documentation</li>
-                    <li>• Welcome bonus activation</li>
-                    <li>• Security settings configuration</li>
-                    <li>• Platform tutorial walkthrough</li>
+                  <ul className="space-y-3 text-sm">
+                    <li className="flex items-start gap-2">
+                      <span className="text-teal-500 mt-1">✓</span>
+                      <span>Account creation and verification</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-teal-500 mt-1">✓</span>
+                      <span>Profile setup and documentation</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-teal-500 mt-1">✓</span>
+                      <span>Welcome bonus activation (100 SHELTR-S tokens)</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-teal-500 mt-1">✓</span>
+                      <span>Security settings configuration</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-teal-500 mt-1">✓</span>
+                      <span>Interactive platform tutorial walkthrough</span>
+                    </li>
                   </ul>
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card className="hover:shadow-lg transition-shadow duration-300 hover:border-blue-200 dark:hover:border-blue-800">
                 <CardHeader>
-                  <CardTitle>QR Code & Wallet</CardTitle>
+                  <CardTitle className="flex items-center gap-2">
+                    <QrCode className="w-5 h-5 text-blue-600" />
+                    QR Code & Digital Wallet
+                  </CardTitle>
                   <CardDescription>
-                    Managing your digital identity and funds
+                    Managing your digital identity and funds securely
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <ul className="space-y-2 text-sm">
-                    <li>• Understanding your unique QR code</li>
-                    <li>• SHELTR-S wallet management</li>
-                    <li>• Receiving and spending tokens</li>
-                    <li>• Transaction history tracking</li>
-                    <li>• Security best practices</li>
+                  <ul className="space-y-3 text-sm">
+                    <li className="flex items-start gap-2">
+                      <span className="text-blue-500 mt-1">✓</span>
+                      <span>Understanding your unique QR code (your digital ID)</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-blue-500 mt-1">✓</span>
+                      <span>SHELTR-S wallet management (stable, secure tokens)</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-blue-500 mt-1">✓</span>
+                      <span>Receiving donations instantly</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-blue-500 mt-1">✓</span>
+                      <span>Transaction history tracking</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-blue-500 mt-1">✓</span>
+                      <span>Privacy protection & security best practices</span>
+                    </li>
                   </ul>
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card className="hover:shadow-lg transition-shadow duration-300 hover:border-purple-200 dark:hover:border-purple-800">
                 <CardHeader>
-                  <CardTitle>Service Access</CardTitle>
+                  <CardTitle className="flex items-center gap-2">
+                    <Book className="w-5 h-5 text-purple-600" />
+                    Service Access
+                  </CardTitle>
                   <CardDescription>
-                    Discovering and using available services
+                    Discovering and using available support services
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <ul className="space-y-2 text-sm">
-                    <li>• Service directory navigation</li>
-                    <li>• Booking appointments and resources</li>
-                    <li>• Emergency assistance access</li>
-                    <li>• Progress tracking and goals</li>
-                    <li>• Feedback and rating system</li>
+                  <ul className="space-y-3 text-sm">
+                    <li className="flex items-start gap-2">
+                      <span className="text-purple-500 mt-1">✓</span>
+                      <span>Service directory navigation</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-purple-500 mt-1">✓</span>
+                      <span>Booking appointments and resources</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-purple-500 mt-1">✓</span>
+                      <span>Emergency assistance access</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-purple-500 mt-1">✓</span>
+                      <span>Progress tracking towards housing goals</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-purple-500 mt-1">✓</span>
+                      <span>Feedback and rating system</span>
+                    </li>
                   </ul>
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card className="hover:shadow-lg transition-shadow duration-300 hover:border-green-200 dark:hover:border-green-800">
                 <CardHeader>
-                  <CardTitle>Support Resources</CardTitle>
+                  <CardTitle className="flex items-center gap-2">
+                    <span className="text-green-600">🆘</span>
+                    Support Resources
+                  </CardTitle>
                   <CardDescription>
                     Getting help when you need it most
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <ul className="space-y-2 text-sm">
-                    <li>• 24/7 support hotline access</li>
-                    <li>• Case worker communication</li>
-                    <li>• Peer support groups</li>
-                    <li>• Crisis intervention services</li>
-                    <li>• Community resource directory</li>
+                  <ul className="space-y-3 text-sm">
+                    <li className="flex items-start gap-2">
+                      <span className="text-green-500 mt-1">✓</span>
+                      <span>24/7 support hotline access</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-green-500 mt-1">✓</span>
+                      <span>Direct case worker communication</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-green-500 mt-1">✓</span>
+                      <span>Peer support groups and community</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-green-500 mt-1">✓</span>
+                      <span>Crisis intervention services</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-green-500 mt-1">✓</span>
+                      <span>Comprehensive community resource directory</span>
+                    </li>
                   </ul>
                 </CardContent>
               </Card>
@@ -179,6 +349,58 @@ export default function ParticipantGuidePage() {
                   <p className="text-sm text-muted-foreground">100 SHELTR-S tokens ($100 value)</p>
                   <p className="text-sm text-muted-foreground">Available immediately upon registration</p>
                 </div>
+              </div>
+            </div>
+
+            {/* Call to Action */}
+            <div className="bg-gradient-to-r from-teal-600 to-cyan-600 text-white rounded-lg p-8 text-center mb-12">
+              <h2 className="text-3xl font-bold mb-4">Ready to Join a New Paradigm in Emergency Assistance?</h2>
+              <p className="text-lg mb-6 opacity-90">
+                SHELTR isn&apos;t just another charity platform - it&apos;s your pathway to housing independence. 
+                Every donation received automatically builds your future while meeting your immediate needs.
+              </p>
+              
+              <div className="grid md:grid-cols-3 gap-6 mb-8">
+                <div className="bg-white/10 rounded-lg p-4">
+                  <div className="text-2xl font-bold">$100</div>
+                  <div className="text-sm opacity-80">Welcome bonus in SHELTR-S tokens</div>
+                  <div className="text-xs opacity-70 mt-1">Available immediately upon registration</div>
+                </div>
+                <div className="bg-white/10 rounded-lg p-4">
+                  <div className="text-2xl font-bold">0%</div>
+                  <div className="text-sm opacity-80">Platform fees for participants</div>
+                  <div className="text-xs opacity-70 mt-1">Everything goes to you and your future</div>
+                </div>
+                <div className="bg-white/10 rounded-lg p-4">
+                  <div className="text-2xl font-bold">24/7</div>
+                  <div className="text-sm opacity-80">Support and assistance</div>
+                  <div className="text-xs opacity-70 mt-1">Help when you need it most</div>
+                </div>
+              </div>
+              
+              <div className="space-y-4">
+                <p className="text-base opacity-90">
+                  🎯 <strong>Your goal:</strong> Stable housing and independence<br />
+                  💡 <strong>Our method:</strong> Smart technology that automatically saves for your future<br />
+                  🤝 <strong>Community support:</strong> Real people who understand your journey
+                </p>
+                
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <Link href="/register">
+                    <Button size="lg" className="bg-white text-teal-600 hover:bg-teal-50 px-8">
+                      <Users className="h-5 w-5 mr-2" />
+                      Get Started Today
+                    </Button>
+                  </Link>
+                  <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-teal-600 px-8">
+                    <QrCode className="h-5 w-5 mr-2" />
+                    See QR Demo
+                  </Button>
+                </div>
+                
+                <p className="text-sm opacity-75 mt-4">
+                  Join thousands already building their path to housing independence through SHELTR
+                </p>
               </div>
             </div>
 

@@ -62,18 +62,18 @@ Built on Base network with Visa MCP integration, our tokenomics ensure 80% of al
 
 ```mermaid
 pie title SmartFund Distribution
-    "Direct Support (SHELTR-S)" : 80
-    "Housing Fund" : 15
-    "Platform Operations" : 5
+    "Direct Support (SHELTR-S)" : 85
+    "Housing Fund" : 10
+    "Shelter Operations" : 5
 ```
 
-### 1. Direct Participant Support (80%)
+### 1. Direct Participant Support (85%)
 - **Immediate conversion** to SHELTR-S tokens
 - **Zero volatility risk** for essential needs
 - **Direct access** through QR codes and wallets
 - **Use cases**: Food, clothing, transportation, healthcare, emergency expenses
 
-### 2. Housing Fund Initiative (15%)
+### 2. Housing Fund Initiative (10%)
 - **Smart contract governed** long-term investment
 - **DeFi yield strategies** for fund growth
 - **Transparent allocation** to housing programs:
@@ -82,13 +82,14 @@ pie title SmartFund Distribution
   - Permanent solutions (20%)
   - Support services (5%)
 
-### 3. Platform Operations (5%)
-- **Sustainable development** funding
-- **Revenue streams**:
-  - Technical development and security
-  - Community support and outreach
-  - Platform scaling and infrastructure
-  - Legal and regulatory compliance
+### 3. Shelter Operations Support (5%)
+- **Direct support** for participant's registered shelter
+- **Operational funding** for:
+  - Shelter infrastructure and maintenance
+  - Staff support and training
+  - Program expansion and enhancement
+  - Technology integration and support
+- **Special Rule**: If participant was not onboarded via a registered shelter, this 5% allocation is redirected to their individual housing fund account
 
 ---
 
@@ -130,9 +131,9 @@ contract SHELTRSmartFund {
     IERC20 public sheltrCommunity; // SHELTR
     
     // Distribution constants
-    uint256 public constant DIRECT_SUPPORT = 80;
-    uint256 public constant HOUSING_FUND = 15;
-    uint256 public constant OPERATIONS = 5;
+    uint256 public constant DIRECT_SUPPORT = 85;
+    uint256 public constant HOUSING_FUND = 10;
+    uint256 public constant SHELTER_OPERATIONS = 5;
     
     // Core distribution function
     function processDonation(
@@ -142,7 +143,7 @@ contract SHELTRSmartFund {
     ) external returns (bool) {
         uint256 directSupport = (amount * DIRECT_SUPPORT) / 100;
         uint256 housingContribution = (amount * HOUSING_FUND) / 100;
-        uint256 operationsFee = (amount * OPERATIONS) / 100;
+        uint256 shelterOperations = (amount * SHELTER_OPERATIONS) / 100;
         
         // Mint stable tokens for participant
         sheltrStable.mint(participant, directSupport);
@@ -150,8 +151,12 @@ contract SHELTRSmartFund {
         // Allocate to housing fund
         housingFund.deposit(housingContribution);
         
-        // Platform operations
-        treasury.deposit(operationsFee);
+        // Shelter operations or additional housing fund
+        if (participantShelter[participant] != address(0)) {
+            shelterTreasury.deposit(participantShelter[participant], shelterOperations);
+        } else {
+            housingFund.deposit(shelterOperations); // Redirect to housing fund
+        }
         
         emit DonationProcessed(
             donor, 
@@ -272,9 +277,9 @@ Funding Source:
 Input: $100 USD donation via QR code
 
 Distribution:
-├── $80.00 → 80 SHELTR-S tokens (to participant wallet)
-├── $15.00 → Housing Fund (smart contract allocation)
-└── $5.00 → Platform Operations (sustainable development)
+├── $85.00 → 85 SHELTR-S tokens (to participant wallet)
+├── $10.00 → Housing Fund (smart contract allocation)
+└── $5.00 → Shelter Operations (participant's registered shelter)
 
 Blockchain Records:
 ├── Transaction Hash: 0xa1b2c3d4e5f6789...

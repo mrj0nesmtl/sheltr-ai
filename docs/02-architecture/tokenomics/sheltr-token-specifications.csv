@@ -1,0 +1,81 @@
+Category,Property,SHELTR Token,ICO,,TOKEN LAUNCH - 33%,,TOKEN Release - 33%,,TOKEN Release - 33%,,SHELTR-S Stablecoin,Notes,Smart Contract Requirements
+,,,Pre-Seed Round (Sep 2025),Value,Dec 2025,Market Cap,Dec 2026,Market Cap,Dec 2027,Market Cap,,,
+Basic Specifications,Symbol,$SHELTR,,,,,,,,,SHELTR-S,Community governance vs stable utility,Different ERC-20 contracts
+Basic Specifications,Type,Utility + Governance Token,,,,,,,,,USD-Pegged Stablecoin,Growth vs stability focus,Separate contract architectures
+Basic Specifications,Network,Base (Coinbase L2),,,,,,,,,Base (Coinbase L2),Both on same network for efficiency,Same deployment network
+Basic Specifications,Standard,ERC-20,,,,,,,,,ERC-20,Standard token implementations,OpenZeppelin base contracts
+Basic Specifications,Total Supply (3 YR Release Schedule @ 33%),"100,000,000","3,000,000","$150,000","30,333,333.33","$1,516,667","33,333,333.33","2,183,333","33,333,333.33","4,850,000",Unlimited (Minted on demand),Fixed vs elastic supply,Supply control mechanisms
+Basic Specifications,Initial Price,$0.10,,,$0.10,,$0.20,,$0.40,,$1.00 USD (Always),Market-driven vs pegged,Price stability mechanisms
+Economic Model,Backing Mechanism,Utility + Network Effects,,,,,,,,,USDC Reserve Pool,Value from usage vs reserve,Reserve management contract
+Economic Model,Price Stability,Market-driven with growth potential,,,,,,,,,100% stable ($1.00 USD),Growth vs stability trade-off,Stability oracle integration
+Economic Model,Volatility Target,Growth-oriented,,,,,,,,,0% target,Investment vs protection,Risk management protocols
+Economic Model,Deflationary Rate,2% annually,,,,,,,,,N/A (Stable),Burn mechanisms vs mint/burn,Deflationary contract logic
+Economic Model,Staking Yield,8% APY target,,,,,,,,,N/A,Revenue sharing vs no yield,Staking reward distribution
+Use Cases,Primary Purpose,Governance and community engagement,,,,,,,,,Daily transactions and essential needs,Different utility focuses,Separate access control logic
+Use Cases,Target Users,"Donors, Organizations, Community members",,,,,,,,,"Participants, Merchants, Basic transactions",User role differentiation,Role-based permissions
+Use Cases,Transaction Fees,2% platform fee,,,,,,,,,Zero fees for participants,Revenue model vs accessibility,Fee structure implementation
+Use Cases,Welcome Bonus (Participant Only),N/A,,,,,,,,,100 SHELTR-S tokens ($100 value),No bonus vs immediate value,Welcome bonus minting logic
+Use Cases,Marketplace,Premium features and discounts,,,,,,,,,Primary payment method,Enhanced vs basic access,Payment processing logic
+Governance,Voting Rights,1 SHELTR = 1 Vote,,,,,,,,,No voting rights,Democratic vs non-participatory,Governance contract integration
+Governance,Proposal Creation,1% of total supply minimum,,,,,,,,,N/A,Stake requirement vs no participation,Proposal threshold logic
+Governance,Quorum Requirement,10% participation for passage,,,,,,,,,N/A,Democratic legitimacy vs simplicity,Voting participation tracking
+Governance,Delegation,Available for inactive holders,,,,,,,,,N/A,Flexibility vs direct use,Delegation contract logic
+Governance,Emergency Actions,Core team with time-locks,,,,,,,,,N/A,Security vs operational needs,Emergency pause mechanisms
+Technical Implementation,Contract Address,TBD (Governance Contract),,,,,,,,,TBD (Stable Contract),Separate contract deployments,Multi-contract architecture
+Technical Implementation,Mint Function,Fixed supply (no minting),,,,,,,,,Mint on donation/welcome bonus,Different supply mechanics,Mint permission controls
+Technical Implementation,Burn Function,1% annual burn mechanism,,,,,,,,,N/A,Deflationary vs stable,Burn execution logic
+Technical Implementation,Transfer Function,Standard ERC-20 + governance hooks,,,,,,,,,Standard ERC-20 + fee exemptions,Enhanced vs streamlined,Custom transfer logic
+Technical Implementation,Pause Function,Emergency pause capability,,,,,,,, ,Emergency pause capability,Security for both tokens,Pausable contract inheritance
+Technical Implementation,Upgrade Function,Community governance required,,,,,,,,,Multi-sig admin control,Democratic vs operational,Upgrade authorization logic
+Distribution,Public Sale,50%,0.00,0,"15,166,666.67","$1,516,667","16,666,666.67","$3,333,333","16,666,666.67","$6,666,666.67",N/A,Community incentivization,Distribution contract logic
+Distribution,"SHELTR Ops. (Tech, Legal, Subs, Travel)",11%,"3,000,000.00","$150,000","3,336,666.67","$166,833","3,666,666.67","$733,333","3,666,666.67","$1,466,666.67",N/A,Development funding,Vesting schedule implementation
+,Legal Framework,,,"10,000",,,,,,,,,
+,Coinbase,,,"25,000",,,,,,,,,
+,Tech,,,"50,000",,,,,,,,,
+,Launch,,,"50,000",,,,,,,,,
+Distribution,Participant Onboarding Rewards,5%,100$/Participant >,"1,517","1,516,666.67","$151,667","1,666,666.67","$333,333","1,666,666.67","$666,666.67",N/A,Community incentivization,Distribution contract logic
+Distribution,Team & Advisors,12%,Comp Package,,"3,640,000.00","$364,000","4,000,000.00","$800,000","4,000,000.00","$1,600,000.00",N/A,Team alignment,Vesting and cliff periods
+,Joel Yaffe,1%,Platform Development,,"303,333.33","$30,333","333,333.33","$66,667","333,333.33","$133,333.33",,,
+,DK,1%,Finance Legal,,"303,333.33","$30,333","333,333.33","$66,667","333,333.33","$133,333.33",,,
+,SD,1%,Investment Advisor,,"303,333.33","$30,333","333,333.33","$66,667","333,333.33","$133,333.33",,,
+,AK,1%,Mission Control,,"303,333.33","$30,333","333,333.33","$66,667","333,333.33","$133,333.33",,,
+,TM,1%,Angel/Advisor,,"303,333.33","$30,333","333,333.33","$66,667","333,333.33","$133,333.33",,,
+,JC,1%,Crypto Advisor,,"303,333.33","$30,333","333,333.33","$66,667","333,333.33","$133,333.33",,,
+,ZL,1%,"PR, Sales, Implementations, Onboarding",,"303,333.33","$30,333","333,333.33","$66,667","333,333.33","$133,333.33",,,
+,AR,1%,Blockchain Advisor,,"303,333.33","$30,333","333,333.33","$66,667","333,333.33","$133,333.33",,,
+,MR,1%,Angel/Advisor,,"303,333.33","$30,333","333,333.33","$66,667","333,333.33","$133,333.33",,,
+,MH,1%,Support Services,,"303,333.33","$30,333","333,333.33","$66,667","333,333.33","$133,333.33",,,
+,DL,1%,AI + Blockchain Advisor,,"303,333.33","$30,333","333,333.33","$66,667","333,333.33","$133,333.33",,,
+,SS,1%,Angel/Advisor,,"303,333.33","$30,333","333,333.33","$66,667","333,333.33","$133,333.33",,,
+Distribution,Treasury Reserve ($SHELTR - STAKED),5%,,,"1,516,666.67","$151,667","1,666,666.67","$333,333","1,666,666.67","$666,666.67",N/A,Strategic reserves,Treasury management
+Distribution,Strategic Partnerships,5%,,,"1,516,666.67","$151,667","1,666,666.67","$333,333","1,666,666.67","$666,666.67",N/A,Partnership incentives,Partnership distribution logic
+Security Features,Multi-Signature,3-of-5 for admin functions,,,"30,333,333.33","$2,866,500","33,333,333.33","$6,666,667","33,333,333.33","$13,333,333.33",3-of-5 for admin functions,Enhanced security for both,Gnosis Safe integration
+Security Features,Time Locks,24-48 hour delays for major changes,,,"1,516,667","$151,667","3,183,333","$636,667","4,850,000","$1,940,000",Immediate for stability functions,Balance security vs responsiveness,TimeLock contract usage
+Security Features,Circuit Breakers,Emergency pause on unusual activity,,,,,,,,,Emergency pause on unusual activity,Risk mitigation,Automated pause triggers
+Security Features,Audit Requirements,Multi-firm security audits,,,,,,,,,Multi-firm security audits,Professional validation,Audit compliance tracking
+Security Features,Bug Bounty,Active program with SHELTR rewards,,,,,,,,,Active program with SHELTR rewards,Community security testing,Bounty payment mechanisms
+Token Economics,Value Drivers,Network effects + deflationary pressure,,,,,,,,,Reserve backing + stability,Growth vs protection mechanisms,Value accrual logic
+Token Economics,Conversion Mechanism,Market-rate conversion to/from SHELTR-S,,,,,,,,,Market-rate conversion to/from SHELTR,Bi-directional liquidity,Conversion rate oracles
+Token Economics,Minimum Conversion,1 SHELTR minimum,,,,,,,,,10 SHELTR-S minimum,Different thresholds,Minimum amount validation
+Token Economics,Emergency Conversion,Standard rate and fees,,,,,,,,,Zero fees for participants,Participant protection,Emergency conversion logic
+Token Economics,Platform Revenue Share,Yes (via staking),,,,,,,,,No,Investment incentive vs simplicity,Revenue distribution logic
+Regulatory Compliance,Token Classification,Utility Token,,,,,,,,,Utility Token,Non-security classification,Compliance validation
+Regulatory Compliance,KYC Requirements,>$5000 purchases,,,,,,,,,Not required for participants,Regulatory balance,KYC integration points
+Regulatory Compliance,AML Monitoring,Automated screening >$1000,,,,,,,,,Automated screening >$1000,Anti-money laundering,AML compliance hooks
+Regulatory Compliance,Reporting Requirements,FinCEN monthly reports,,,,,,,,,FinCEN monthly reports,Regulatory compliance,Reporting data collection
+Regulatory Compliance,International Compliance,GDPR + CCPA compliant,,,,,,,,,GDPR + CCPA compliant,Global operation capability,Privacy compliance logic
+Integration Points,DeFi Protocols,Aave + Compound for yield,,,,,,,,,USDC reserves for stability,Different DeFi strategies,Protocol integration contracts
+Integration Points,Oracle Requirements,Chainlink price feeds,,,,,,,,,Chainlink USDC/USD feed,Price data reliability,Oracle failure handling
+Integration Points,Wallet Integration,BASE Coinbase Wallet + WalletConnect,,,,,,,,,Coinbase Wallet + WalletConnect,User accessibility,Wallet compatibility
+Integration Points,Exchange Listings,Major DEX/CEX partnerships (Coinbase),,,,,,,,,Stable value (no trading needed),Liquidity vs stability,Exchange integration APIs
+Integration Points,Payment Rails,AYDEN - Visa MCP Agent integration?,,,,,,,,,Visa MCP Agent integration,Traditional payment bridge,Payment processor integration
+SmartFund Distribution,Direct Participant Support (CASH IN DIGITAL WALLET),N/A,,,,,,,,,85% of donations (auto-mint),Not applicable vs automatic,Distribution automation logic
+SmartFund Distribution,Housing Fund,10% of donations ($SHELTR Token > DeFi Strategy),,,,,,,,,N/A,Community investment vs direct use,Fund allocation contracts
+SmartFund Distribution,Shelter Operations,5% of donations ,,,,,,,,,N/A,Sustainability vs operational,Operations funding logic
+SmartFund Distribution,Automation Level,Manual governance decisions,,,,,,,,,Fully automated on donation,Democratic vs immediate,Automation vs control balance
+SmartFund Distribution,Transparency,Blockchain governance records,,,,,,,,,Blockchain transaction records,Different transparency needs,Record keeping requirements
+Performance Targets,Transaction Speed,<5 seconds,,,,,,,,,<5 seconds,User experience priority,Gas optimization requirements
+Performance Targets,Scalability,100K concurrent users,,,,,,,,,100K concurrent users,High-scale operation,Scalability architecture
+Performance Targets,Uptime Target,99.99%,,,,,,,,,99.99%,Enterprise reliability,High availability design
+Performance Targets,Gas Optimization,Minimize transaction costs,,,,,,,,,Minimize transaction costs,Cost efficiency,Gas optimization techniques
+Performance Targets,Error Handling,Graceful degradation,,,,,,,,,Graceful degradation,Robust operation,Error recovery mechanisms

@@ -44,6 +44,7 @@ export default function Footer() {
           <div>
             <h3 className="text-sm font-semibold mb-3">Community & Support</h3>
             <ul className="space-y-1 text-xs text-muted-foreground">
+              <li><Link href="/angels" className="hover:text-foreground">Angels</Link></li>
               <li>
                 <a href="https://bsky.app/profile/sheltrops.bsky.social" target="_blank" className="hover:text-foreground">
                   BlueSky

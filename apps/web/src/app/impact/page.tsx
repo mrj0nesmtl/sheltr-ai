@@ -176,28 +176,28 @@ export default function ImpactPage() {
                   <div>
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-sm font-medium">Direct Support (SHELTR-S)</span>
-                      <span className="text-sm text-green-600 dark:text-green-400 font-semibold">80% - Direct to participants</span>
+                      <span className="text-sm text-green-600 dark:text-green-400 font-semibold">85% - Direct to participants</span>
                     </div>
-                    <Progress value={80} className="h-3" />
+                    <Progress value={85} className="h-3" />
                     <p className="text-xs text-muted-foreground mt-1">Immediate participant relief</p>
                   </div>
 
                   <div>
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-sm font-medium">Housing Fund</span>
-                      <span className="text-sm text-blue-600 dark:text-blue-400 font-semibold">15% - Long-term solutions</span>
+                      <span className="text-sm text-blue-600 dark:text-blue-400 font-semibold">10% - Long-term solutions</span>
                     </div>
-                    <Progress value={15} className="h-3" />
+                    <Progress value={10} className="h-3" />
                     <p className="text-xs text-muted-foreground mt-1">Sustainable housing programs</p>
                   </div>
 
                   <div>
                     <div className="flex justify-between items-center mb-2">
-                      <span className="text-sm font-medium">Platform Operations</span>
-                      <span className="text-sm text-purple-600 dark:text-purple-400 font-semibold">5% - Infrastructure</span>
+                      <span className="text-sm font-medium">Shelter Operations</span>
+                      <span className="text-sm text-purple-600 dark:text-purple-400 font-semibold">5% - Shelter support</span>
                     </div>
                     <Progress value={5} className="h-3" />
-                    <p className="text-xs text-muted-foreground mt-1">Sustainable platform growth</p>
+                    <p className="text-xs text-muted-foreground mt-1">Participant's registered shelter operations</p>
                   </div>
                 </div>
               </CardContent>
@@ -256,18 +256,12 @@ export default function ImpactPage() {
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">Internet Angels</h2>
             <p className="text-xl text-muted-foreground">
-              Social impact creators who inspire our mission and will benefit from direct shelter funding distribution
+              Social impact creators who inspire our mission
             </p>
           </div>
           
           <div className="space-y-8">
             <div className="prose prose-lg mx-auto dark:prose-invert">
-              <p className="text-lg leading-relaxed mb-8">
-                When we first discovered Ryan and Tiny Tiny Homes in Toronto, we saw the future of homelessness solutions. 
-                Their mobile emergency shelters replace unsafe tent encampments with dignified, secure alternatives. 
-                Creators like this inspire our vision for what&rsquo;s possible when technology meets compassion.
-              </p>
-              
               <p className="text-lg leading-relaxed mb-8">
                 SHELTR builds on the legacy of digital humanitarians who prove that social media platforms can be 
                 forces for genuine change, creating systematic, scalable solutions that ensure every act of kindness 
@@ -275,9 +269,12 @@ export default function ImpactPage() {
               </p>
               
               <p className="text-lg leading-relaxed mb-8">
-                These Internet Angels will all benefit from SHELTR&rsquo;s direct funding distribution as we energize 
-                and contribute to their already incredible efforts.
+                When we first discovered Ryan and Tiny Tiny Homes in Toronto, we saw the future of homelessness solutions. 
+                Their mobile emergency shelters replace unsafe tent encampments with dignified, secure alternatives. 
+                Creators like this inspire our vision for what&rsquo;s possible when technology meets compassion.
               </p>
+              
+              <h2 className="text-2xl font-bold text-center mb-8">Angels Amongst Us</h2>
             </div>
             
             {/* Social Impact Creators Grid */}

@@ -1290,13 +1290,136 @@ export interface OrphanedUser {
   updated_at?: any;
 }
 
+// Debug function to check for users in other collections
+export const debugAllCollections = async (): Promise<void> => {
+  try {
+    console.log('🔍 DEBUGGING: Checking all possible user storage locations...');
+    
+    // Check common collection names where users might be stored
+    const collectionsToCheck = [
+      'users',
+      'participants', 
+      'admins',
+      'donors',
+      'shelterAdmins',
+      'user_profiles',
+      'pending_users',
+      'auth_users',
+      // Tenant-based collections (new architecture)
+      'tenants/platform/users',
+      'tenants/donor-network/users',
+      'tenants/participant-network/users'
+    ];
+    
+    for (const collectionName of collectionsToCheck) {
+      try {
+        const snapshot = await getDocs(collection(db, collectionName));
+        if (snapshot.size > 0) {
+          console.log(`📁 Collection '${collectionName}': ${snapshot.size} documents`);
+          const docs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as any));
+          const usersWithEmail = docs.filter(doc => doc.email);
+          if (usersWithEmail.length > 0) {
+            console.log(`   📧 Users with emails:`, usersWithEmail.map(u => u.email));
+            const mysteryUser = usersWithEmail.find(u => u.email === 'brokers.licence.4d@icloud.com');
+            if (mysteryUser) {
+              console.log(`🎯 FOUND MYSTERY USER in '${collectionName}':`, mysteryUser);
+            }
+          }
+        }
+      } catch (error) {
+        // Collection doesn't exist or permission denied
+        console.log(`📁 Collection '${collectionName}': Not accessible or doesn't exist`);
+      }
+    }
+  } catch (error) {
+    console.error('❌ Error debugging collections:', error);
+  }
+};
+
+// Function to check for Firebase Auth users not in Firestore
+export const debugFirebaseAuthVsFirestore = async (): Promise<void> => {
+  try {
+    console.log('🔍 DEBUGGING: Comparing Firebase Auth users vs Firestore users...');
+    
+    // Try to get all users from backend API (which has access to Firebase Auth)
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
+    
+    // Get the current user's token for API authentication
+    const auth = (await import('../lib/firebase')).auth;
+    if (!auth.currentUser) {
+      console.warn('⚠️ Not authenticated - cannot call backend API');
+      return;
+    }
+    
+    const token = await auth.currentUser.getIdToken();
+    
+    try {
+      const response = await fetch(`${apiBaseUrl}/auth/users?per_page=100`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        console.log('🔍 Backend API users:', data);
+        
+        // Check if mystery user exists in API response
+        const mysteryUserInApi = data.users?.find((u: any) => u.email === 'brokers.licence.4d@icloud.com');
+        if (mysteryUserInApi) {
+          console.log('🎯 MYSTERY USER FOUND in Backend API:', mysteryUserInApi);
+        } else {
+          console.warn('⚠️ Mystery user NOT found in backend API either');
+        }
+      } else {
+        console.warn('⚠️ Backend API call failed:', response.status, response.statusText);
+      }
+    } catch (apiError) {
+      console.warn('⚠️ Could not reach backend API:', apiError);
+    }
+    
+  } catch (error) {
+    console.error('❌ Error debugging Firebase Auth vs Firestore:', error);
+  }
+};
+
 export const getOrphanedUsers = async (): Promise<OrphanedUser[]> => {
   try {
     console.log('🚨 Fetching orphaned users (users with missing/invalid roles)...');
     
+    // DEEP DEBUG: Check all collections for the mystery user
+    await debugAllCollections();
+    
+    // DEEP DEBUG: Check Firebase Auth vs Firestore discrepancy
+    await debugFirebaseAuthVsFirestore();
+    
     // Get ALL users from database
     const usersSnapshot = await getDocs(collection(db, 'users'));
     const allUsers = usersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as any));
+    
+    console.log(`🔍 DEBUG: Found ${allUsers.length} total users in Firestore 'users' collection`);
+    console.log('🔍 DEBUG: All users with emails:', allUsers.map(u => ({ 
+      email: u.email, 
+      role: u.role, 
+      id: u.id,
+      status: u.status 
+    })));
+    
+    // CHECK FOR MYSTERY USER SPECIFICALLY
+    const mysteryUser = allUsers.find(u => u.email === 'brokers.licence.4d@icloud.com');
+    if (mysteryUser) {
+      console.log('🎯 FOUND MYSTERY USER IN FIRESTORE:', mysteryUser);
+    } else {
+      console.warn('⚠️ MYSTERY USER NOT FOUND IN FIRESTORE users collection');
+      console.log('🔍 Checking if any users contain "brokers" or "licence"...');
+      const similarUsers = allUsers.filter(u => 
+        u.email?.toLowerCase().includes('brokers') || 
+        u.email?.toLowerCase().includes('licence') ||
+        u.email?.toLowerCase().includes('4d')
+      );
+      console.log('🔍 Similar users found:', similarUsers);
+    }
     
     // Filter for users without proper roles
     const validRoles = ['superadmin', 'super_admin', 'admin', 'shelteradmin', 'participant', 'donor'];

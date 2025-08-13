@@ -35,10 +35,12 @@ import {
   getAdminUsers,
   getParticipantUsers,
   getDonorUsers,
+  getOrphanedUsers,
   type UserStats,
   type AdminUser,
   type ParticipantUser,
-  type DonorUser
+  type DonorUser,
+  type OrphanedUser
 } from '@/services/platformMetrics';
 import { doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
@@ -52,6 +54,7 @@ export default function UserManagement() {
   const [adminUsers, setAdminUsers] = useState<AdminUser[]>([]);
   const [participantUsers, setParticipantUsers] = useState<ParticipantUser[]>([]);
   const [donorUsers, setDonorUsers] = useState<DonorUser[]>([]);
+  const [orphanedUsers, setOrphanedUsers] = useState<OrphanedUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddUserModal, setShowAddUserModal] = useState(false);
   const [selectedUserForView, setSelectedUserForView] = useState<(AdminUser | ParticipantUser | DonorUser) & { userType: string } | null>(null);
@@ -71,7 +74,7 @@ export default function UserManagement() {
   }, []);
 
   // Export users functionality
-  const exportUsers = async (userType: 'all' | 'admins' | 'participants' | 'donors') => {
+  const exportUsers = async (userType: 'all' | 'admins' | 'participants' | 'donors' | 'orphaned') => {
     try {
       console.log(`📤 Exporting ${userType} users...`);
       
@@ -116,12 +119,25 @@ export default function UserManagement() {
           }));
           filename = 'donors.csv';
           break;
+        case 'orphaned':
+          exportData = orphanedUsers.map(user => ({
+            Name: user.name,
+            Email: user.email,
+            Role: user.role || 'MISSING',
+            Status: user.status,
+            JoinDate: user.joinDate,
+            RegistrationMethod: user.registrationMethod,
+            NeedsAttention: user.needsAttention ? 'YES' : 'NO'
+          }));
+          filename = 'orphaned-users.csv';
+          break;
         default:
           // Export all users combined
           exportData = [
             ...adminUsers.map(u => ({ ...u, UserType: 'Admin' })),
             ...participantUsers.map(u => ({ ...u, UserType: 'Participant' })),
-            ...donorUsers.map(u => ({ ...u, UserType: 'Donor' }))
+            ...donorUsers.map(u => ({ ...u, UserType: 'Donor' })),
+            ...orphanedUsers.map(u => ({ ...u, UserType: 'Orphaned', needsAttention: u.needsAttention ? 'YES' : 'NO' }))
           ];
           filename = 'all-users.csv';
       }
@@ -358,17 +374,19 @@ export default function UserManagement() {
       try {
         console.log('👥 Loading user management data...');
         
-        const [statsData, adminsData, participantsData, donorsData] = await Promise.all([
+        const [statsData, adminsData, participantsData, donorsData, orphanedData] = await Promise.all([
           getUserStats(),
           getAdminUsers(),
           getParticipantUsers(),
-          getDonorUsers()
+          getDonorUsers(),
+          getOrphanedUsers()
         ]);
 
         setUserStats(statsData);
         setAdminUsers(adminsData);
         setParticipantUsers(participantsData);
         setDonorUsers(donorsData);
+        setOrphanedUsers(orphanedData);
         
         console.log('✅ User management data loaded successfully');
       } catch (error) {
@@ -556,7 +574,7 @@ export default function UserManagement() {
       <Tabs defaultValue="super-admins" className="space-y-6">
         {/* Desktop Tabs */}
         <div className="hidden sm:block">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="super-admins" className="flex items-center">
               <Crown className="mr-2 h-4 w-4" />
               Super Admins
@@ -573,6 +591,15 @@ export default function UserManagement() {
               <Heart className="mr-2 h-4 w-4" />
               Donors
             </TabsTrigger>
+            <TabsTrigger value="orphaned" className="flex items-center">
+              <AlertCircle className="mr-2 h-4 w-4" />
+              Orphaned
+              {orphanedUsers.length > 0 && (
+                <Badge variant="destructive" className="ml-2 text-xs">
+                  {orphanedUsers.length}
+                </Badge>
+              )}
+            </TabsTrigger>
             <TabsTrigger value="map" className="flex items-center">
               <Map className="mr-2 h-4 w-4" />
               User Map
@@ -582,7 +609,7 @@ export default function UserManagement() {
 
         {/* Mobile Stacked Tabs */}
         <div className="sm:hidden">
-          <TabsList className="grid grid-cols-5 gap-1 h-14 bg-muted p-1 rounded-md w-full">
+          <TabsList className="grid grid-cols-6 gap-1 h-14 bg-muted p-1 rounded-md w-full">
             <TabsTrigger 
               value="super-admins" 
               className="flex flex-col items-center justify-center h-full px-1 py-1 w-full"
@@ -610,6 +637,18 @@ export default function UserManagement() {
               title="Donors"
             >
               <Heart className="h-5 w-5" />
+            </TabsTrigger>
+            <TabsTrigger 
+              value="orphaned" 
+              className="flex flex-col items-center justify-center h-full px-1 py-1 w-full relative"
+              title="Orphaned Users"
+            >
+              <AlertCircle className="h-5 w-5" />
+              {orphanedUsers.length > 0 && (
+                <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                  {orphanedUsers.length}
+                </div>
+              )}
             </TabsTrigger>
             <TabsTrigger 
               value="map" 
@@ -1307,6 +1346,110 @@ export default function UserManagement() {
               )}
             </CardContent>
           </Card>
+        </TabsContent>
+
+        {/* Orphaned Users Tab - NEW DEBUGGING FEATURE */}
+        <TabsContent value="orphaned" className="space-y-4">
+          <div className="flex justify-between items-center">
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight">Orphaned Users</h2>
+              <p className="text-muted-foreground">
+                Users with missing or invalid role assignments that need attention
+              </p>
+            </div>
+            <div className="flex gap-2">
+              <Button variant="outline" size="sm" onClick={() => exportUsers('orphaned')}>
+                <Download className="mr-2 h-4 w-4" />
+                Export CSV
+              </Button>
+            </div>
+          </div>
+
+          {orphanedUsers.length === 0 ? (
+            <Card>
+              <CardContent className="p-8 text-center">
+                <CheckCircle className="mx-auto h-12 w-12 text-green-500 mb-4" />
+                <h3 className="text-lg font-semibold mb-2">All Users Have Proper Roles!</h3>
+                <p className="text-muted-foreground">
+                  Every user in the system has been assigned a valid role. Great job! 🎉
+                </p>
+              </CardContent>
+            </Card>
+          ) : (
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle className="flex items-center">
+                      <AlertCircle className="mr-2 h-5 w-5 text-red-500" />
+                      {orphanedUsers.length} Users Need Role Assignment
+                    </CardTitle>
+                    <CardDescription>
+                      These users registered but don't have proper roles assigned. They may have registered via OAuth or direct signup without completing role selection.
+                    </CardDescription>
+                  </div>
+                  <Badge variant="destructive">
+                    {orphanedUsers.length} Orphaned
+                  </Badge>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {orphanedUsers.map((user) => (
+                    <div key={user.id} className="flex items-center justify-between border rounded-lg p-4 bg-red-50 border-red-200">
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2">
+                          <h4 className="font-semibold">{user.name}</h4>
+                          <Badge variant="outline" className="bg-red-100 text-red-800 border-red-300">
+                            {user.role || 'NO ROLE'}
+                          </Badge>
+                        </div>
+                        <div className="text-sm text-gray-600 space-y-1">
+                          <div><strong>Email:</strong> {user.email}</div>
+                          <div><strong>Registration:</strong> {user.registrationMethod}</div>
+                          <div><strong>Join Date:</strong> {user.joinDate}</div>
+                          <div><strong>Status:</strong> {user.status}</div>
+                        </div>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => viewUser(user as any, 'orphaned')}
+                        >
+                          <Eye className="mr-2 h-4 w-4" />
+                          Inspect
+                        </Button>
+                        <Button
+                          variant="default"
+                          size="sm"
+                          onClick={() => editUser(user as any, 'orphaned')}
+                        >
+                          <Edit className="mr-2 h-4 w-4" />
+                          Assign Role
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                
+                {orphanedUsers.length > 0 && (
+                  <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                    <div className="flex items-start gap-2">
+                      <AlertCircle className="h-5 w-5 text-yellow-600 mt-0.5" />
+                      <div>
+                        <h4 className="font-semibold text-yellow-800">Action Required</h4>
+                        <p className="text-sm text-yellow-700 mt-1">
+                          These users won't appear in role-specific views and can't access dashboard features until roles are assigned.
+                          This is likely why <code className="bg-yellow-200 px-1 rounded">brokers.licence.4d@icloud.com</code> wasn't visible in your user management interface.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          )}
         </TabsContent>
 
         {/* User Map Tab */}

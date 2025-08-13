@@ -1046,13 +1046,30 @@ export const getUserStats = async (): Promise<UserStats> => {
     
     // Get all users
     const usersSnapshot = await getDocs(collection(db, 'users'));
-    const users = usersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const users = usersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as any));
+    
+    console.log(`🔍 DEBUG: Found ${users.length} total users in database`);
+    console.log('🔍 DEBUG: User roles breakdown:', users.map(u => ({ email: u.email, role: u.role })));
     
     // Count by role
     const superAdmins = users.filter(user => user.role === 'superadmin' || user.role === 'super_admin');
     const admins = users.filter(user => user.role === 'admin' || user.role === 'shelteradmin');
     const participants = users.filter(user => user.role === 'participant');
     const donors = users.filter(user => user.role === 'donor');
+    
+    // Find users with missing or invalid roles
+    const usersWithoutRoles = users.filter(user => 
+      !user.role || 
+      !['superadmin', 'super_admin', 'admin', 'shelteradmin', 'participant', 'donor'].includes(user.role)
+    );
+    
+    if (usersWithoutRoles.length > 0) {
+      console.warn('⚠️ FOUND USERS WITH MISSING/INVALID ROLES:', usersWithoutRoles.map(u => ({ 
+        email: u.email, 
+        role: u.role || 'MISSING', 
+        id: u.id 
+      })));
+    }
     
     // Calculate active/pending status
     const stats: UserStats = {
@@ -1253,6 +1270,83 @@ export const getDonorUsers = async (): Promise<DonorUser[]> => {
     return donorUsers.sort((a, b) => new Date(b.created_at?.seconds || 0).getTime() - new Date(a.created_at?.seconds || 0).getTime());
   } catch (error) {
     console.error('❌ Error fetching donor users:', error);
+    return [];
+  }
+};
+
+// NEW: Get orphaned users (users without proper roles or invalid roles)
+export interface OrphanedUser {
+  id: string;
+  name: string;
+  firstName?: string;
+  lastName?: string;
+  email: string;
+  role: string | null;
+  status: string;
+  joinDate: string;
+  registrationMethod: string;
+  needsAttention: boolean;
+  created_at?: any;
+  updated_at?: any;
+}
+
+export const getOrphanedUsers = async (): Promise<OrphanedUser[]> => {
+  try {
+    console.log('🚨 Fetching orphaned users (users with missing/invalid roles)...');
+    
+    // Get ALL users from database
+    const usersSnapshot = await getDocs(collection(db, 'users'));
+    const allUsers = usersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as any));
+    
+    // Filter for users without proper roles
+    const validRoles = ['superadmin', 'super_admin', 'admin', 'shelteradmin', 'participant', 'donor'];
+    const orphanedUsers: OrphanedUser[] = [];
+    
+    allUsers.forEach(user => {
+      const hasValidRole = user.role && validRoles.includes(user.role);
+      
+      if (!hasValidRole) {
+        const name = user.name || 
+                     `${user.firstName || ''} ${user.lastName || ''}`.trim() || 
+                     user.email?.split('@')[0] || 'Unknown User';
+        
+        // Determine registration method
+        let registrationMethod = 'Unknown';
+        if (user.email?.includes('gmail.com') || user.email?.includes('icloud.com')) {
+          registrationMethod = 'OAuth (Google/Apple)';
+        } else if (user.email && !user.role) {
+          registrationMethod = 'Direct Registration';
+        }
+        
+        orphanedUsers.push({
+          id: user.id,
+          name,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email || '',
+          role: user.role || null,
+          status: user.status || 'unknown',
+          joinDate: user.created_at ? new Date(user.created_at.seconds * 1000).toLocaleDateString() : 'Unknown',
+          registrationMethod,
+          needsAttention: true, // All orphaned users need attention
+          created_at: user.created_at,
+          updated_at: user.updated_at
+        });
+      }
+    });
+
+    console.log(`🚨 Found ${orphanedUsers.length} orphaned users that need role assignment`);
+    if (orphanedUsers.length > 0) {
+      console.warn('⚠️ ORPHANED USERS DETAILS:', orphanedUsers.map(u => ({ 
+        email: u.email, 
+        role: u.role || 'MISSING',
+        registrationMethod: u.registrationMethod
+      })));
+    }
+    
+    return orphanedUsers.sort((a, b) => new Date(b.created_at?.seconds || 0).getTime() - new Date(a.created_at?.seconds || 0).getTime());
+  } catch (error) {
+    console.error('❌ Error fetching orphaned users:', error);
     return [];
   }
 };

@@ -36,6 +36,7 @@ import {
   getParticipantUsers,
   getDonorUsers,
   getOrphanedUsers,
+  deleteOrphanedUser,
   type UserStats,
   type AdminUser,
   type ParticipantUser,
@@ -63,6 +64,7 @@ export default function UserManagement() {
   const [isSaving, setIsSaving] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState<Set<string>>(new Set());
   const [showDeleteConfirm, setShowDeleteConfirm] = useState<{ userId: string; userName: string; userType: string } | null>(null);
+  const [deletingOrphanedUser, setDeletingOrphanedUser] = useState<string | null>(null);
 
   // Update current time every minute for live session tracking
   useEffect(() => {
@@ -368,36 +370,64 @@ export default function UserManagement() {
     }
   };
 
+  // Load user management data function
+  const loadUserData = async () => {
+    try {
+      console.log('👥 Loading user management data...');
+      
+      const [statsData, adminsData, participantsData, donorsData, orphanedData] = await Promise.all([
+        getUserStats(),
+        getAdminUsers(),
+        getParticipantUsers(),
+        getDonorUsers(),
+        getOrphanedUsers()
+      ]);
+
+      setUserStats(statsData);
+      setAdminUsers(adminsData);
+      setParticipantUsers(participantsData);
+      setDonorUsers(donorsData);
+      setOrphanedUsers(orphanedData);
+      
+      console.log('✅ User management data loaded successfully');
+    } catch (error) {
+      console.error('❌ Error loading user data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Load user management data on component mount
   useEffect(() => {
-    const loadUserData = async () => {
-      try {
-        console.log('👥 Loading user management data...');
-        
-        const [statsData, adminsData, participantsData, donorsData, orphanedData] = await Promise.all([
-          getUserStats(),
-          getAdminUsers(),
-          getParticipantUsers(),
-          getDonorUsers(),
-          getOrphanedUsers()
-        ]);
-
-        setUserStats(statsData);
-        setAdminUsers(adminsData);
-        setParticipantUsers(participantsData);
-        setDonorUsers(donorsData);
-        setOrphanedUsers(orphanedData);
-        
-        console.log('✅ User management data loaded successfully');
-      } catch (error) {
-        console.error('❌ Error loading user data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     loadUserData();
   }, []);
+
+  // Handle orphaned user deletion
+  const handleDeleteOrphanedUser = async (userEmail: string) => {
+    if (!userEmail) return;
+    
+    setDeletingOrphanedUser(userEmail);
+    try {
+      console.log(`🗑️ Deleting orphaned user: ${userEmail}`);
+      
+      const success = await deleteOrphanedUser(userEmail);
+      
+      if (success) {
+        console.log('✅ Orphaned user deleted successfully');
+        // Refresh data to show updated list
+        await loadUserData();
+        alert(`✅ Successfully deleted orphaned user: ${userEmail}`);
+      } else {
+        console.error('❌ Failed to delete orphaned user');
+        alert(`❌ Failed to delete orphaned user: ${userEmail}. Check console for details.`);
+      }
+    } catch (error) {
+      console.error('❌ Error deleting orphaned user:', error);
+      alert(`❌ Error deleting orphaned user: ${userEmail}`);
+    } finally {
+      setDeletingOrphanedUser(null);
+    }
+  };
 
   // Create live Super Admin data from current user
   const liveUserSession = user ? {
@@ -1403,31 +1433,68 @@ export default function UserManagement() {
                           <Badge variant="outline" className="bg-red-100 text-red-800 border-red-300">
                             {user.role || 'NO ROLE'}
                           </Badge>
+                          {user.status === 'firebase_auth_only' && (
+                            <Badge variant="destructive" className="text-xs">
+                              FIREBASE AUTH ONLY
+                            </Badge>
+                          )}
                         </div>
                         <div className="text-sm text-gray-600 space-y-1">
                           <div><strong>Email:</strong> {user.email}</div>
                           <div><strong>Registration:</strong> {user.registrationMethod}</div>
                           <div><strong>Join Date:</strong> {user.joinDate}</div>
                           <div><strong>Status:</strong> {user.status}</div>
+                          {user.status === 'firebase_auth_only' && (
+                            <div className="text-red-600 font-medium">
+                              ⚠️ This user exists in Firebase Auth but has no Firestore profile
+                            </div>
+                          )}
                         </div>
                       </div>
                       <div className="flex gap-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => viewUser(user as any, 'orphaned')}
-                        >
-                          <Eye className="mr-2 h-4 w-4" />
-                          Inspect
-                        </Button>
-                        <Button
-                          variant="default"
-                          size="sm"
-                          onClick={() => editUser(user as any, 'orphaned')}
-                        >
-                          <Edit className="mr-2 h-4 w-4" />
-                          Assign Role
-                        </Button>
+                        {user.status === 'firebase_auth_only' ? (
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            disabled={deletingOrphanedUser === user.email}
+                            onClick={() => {
+                              if (confirm(`Are you sure you want to DELETE ${user.email} from Firebase Auth? This cannot be undone.`)) {
+                                handleDeleteOrphanedUser(user.email);
+                              }
+                            }}
+                          >
+                            {deletingOrphanedUser === user.email ? (
+                              <>
+                                <Activity className="mr-2 h-4 w-4 animate-spin" />
+                                Deleting...
+                              </>
+                            ) : (
+                              <>
+                                <Trash2 className="mr-2 h-4 w-4" />
+                                Delete from Firebase Auth
+                              </>
+                            )}
+                          </Button>
+                        ) : (
+                          <>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => viewUser(user as any, 'orphaned')}
+                            >
+                              <Eye className="mr-2 h-4 w-4" />
+                              Inspect
+                            </Button>
+                            <Button
+                              variant="default"
+                              size="sm"
+                              onClick={() => editUser(user as any, 'orphaned')}
+                            >
+                              <Edit className="mr-2 h-4 w-4" />
+                              Assign Role
+                            </Button>
+                          </>
+                        )}
                       </div>
                     </div>
                   ))}

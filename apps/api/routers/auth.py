@@ -436,6 +436,149 @@ async def delete_user(
             detail=f"Failed to delete user: {str(e)}"
         )
 
+@router.get(
+    "/orphaned-users",
+    response_model=StandardResponse,
+    summary="Find orphaned Firebase Auth users",
+    description="Find users in Firebase Auth that don't have Firestore profiles (Super Admin only)"
+)
+async def find_orphaned_users(
+    current_user: dict = Depends(require_super_admin())
+):
+    """
+    Find orphaned Firebase Auth users (users without Firestore profiles)
+    """
+    try:
+        # Get all Firebase Auth users
+        auth_users = []
+        page_token = None
+        
+        while True:
+            result = firebase_service.auth.list_users(page_token=page_token)
+            auth_users.extend(result.users)
+            
+            if not result.has_next_page:
+                break
+            page_token = result.next_page_token
+        
+        # Check which users don't have Firestore profiles
+        orphaned_users = []
+        
+        for auth_user in auth_users:
+            # Check if user has profile in any tenant
+            has_profile = False
+            
+            # Check common tenant locations
+            tenant_paths = [
+                f"tenants/platform/users",
+                f"tenants/donor-network/users", 
+                f"tenants/participant-network/users",
+                f"users"  # Legacy location
+            ]
+            
+            for tenant_path in tenant_paths:
+                try:
+                    doc = firebase_service.db.collection(tenant_path).document(auth_user.uid).get()
+                    if doc.exists:
+                        has_profile = True
+                        break
+                except:
+                    continue
+            
+            if not has_profile:
+                orphaned_users.append({
+                    "uid": auth_user.uid,
+                    "email": auth_user.email,
+                    "display_name": auth_user.display_name,
+                    "email_verified": auth_user.email_verified,
+                    "creation_timestamp": auth_user.user_metadata.creation_timestamp.isoformat() if auth_user.user_metadata.creation_timestamp else None,
+                    "last_sign_in_timestamp": auth_user.user_metadata.last_sign_in_timestamp.isoformat() if auth_user.user_metadata.last_sign_in_timestamp else None,
+                    "provider_data": [{"provider_id": p.provider_id, "email": p.email} for p in auth_user.provider_data]
+                })
+        
+        logger.info(f"Found {len(orphaned_users)} orphaned Firebase Auth users")
+        
+        return StandardResponse(
+            success=True,
+            message=f"Found {len(orphaned_users)} orphaned users",
+            data={
+                "orphaned_users": orphaned_users,
+                "total_auth_users": len(auth_users),
+                "orphaned_count": len(orphaned_users)
+            }
+        )
+        
+    except Exception as e:
+        logger.error(f"Failed to find orphaned users: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to find orphaned users: {str(e)}"
+        )
+
+@router.delete(
+    "/orphaned-users/{user_email}",
+    response_model=StandardResponse,
+    summary="Delete orphaned Firebase Auth user",
+    description="Delete a user from Firebase Auth by email (Super Admin only)"
+)
+async def delete_orphaned_user(
+    user_email: str,
+    current_user: dict = Depends(require_super_admin())
+):
+    """
+    Delete orphaned Firebase Auth user by email
+    """
+    try:
+        # Get user by email
+        auth_user = firebase_service.auth.get_user_by_email(user_email)
+        
+        # Verify user is actually orphaned (no Firestore profile)
+        has_profile = False
+        tenant_paths = [
+            f"tenants/platform/users",
+            f"tenants/donor-network/users", 
+            f"tenants/participant-network/users",
+            f"users"  # Legacy location
+        ]
+        
+        for tenant_path in tenant_paths:
+            try:
+                doc = firebase_service.db.collection(tenant_path).document(auth_user.uid).get()
+                if doc.exists:
+                    has_profile = True
+                    break
+            except:
+                continue
+        
+        if has_profile:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="User is not orphaned - has Firestore profile"
+            )
+        
+        # Delete from Firebase Auth
+        firebase_service.auth.delete_user(auth_user.uid)
+        
+        logger.info(f"Orphaned user {user_email} (UID: {auth_user.uid}) deleted by {current_user['uid']}")
+        
+        return StandardResponse(
+            success=True,
+            message=f"Orphaned user {user_email} deleted successfully",
+            data={
+                "deleted_user": {
+                    "uid": auth_user.uid,
+                    "email": user_email
+                }
+            }
+        )
+        
+    except Exception as e:
+        logger.error(f"Failed to delete orphaned user {user_email}: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to delete orphaned user: {str(e)}"
+        )
+
 @router.post(
     "/verify-token",
     response_model=StandardResponse,

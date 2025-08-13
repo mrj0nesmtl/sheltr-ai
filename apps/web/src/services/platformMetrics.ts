@@ -1336,25 +1336,24 @@ export const debugAllCollections = async (): Promise<void> => {
   }
 };
 
-// Function to check for Firebase Auth users not in Firestore
-export const debugFirebaseAuthVsFirestore = async (): Promise<void> => {
+// Function to get orphaned users from backend API
+export const getFirebaseAuthOrphanedUsers = async (): Promise<any[]> => {
   try {
-    console.log('🔍 DEBUGGING: Comparing Firebase Auth users vs Firestore users...');
+    console.log('🔍 BACKEND: Getting orphaned Firebase Auth users...');
     
-    // Try to get all users from backend API (which has access to Firebase Auth)
     const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
     
     // Get the current user's token for API authentication
     const auth = (await import('../lib/firebase')).auth;
     if (!auth.currentUser) {
       console.warn('⚠️ Not authenticated - cannot call backend API');
-      return;
+      return [];
     }
     
     const token = await auth.currentUser.getIdToken();
     
     try {
-      const response = await fetch(`${apiBaseUrl}/auth/users?per_page=100`, {
+      const response = await fetch(`${apiBaseUrl}/auth/orphaned-users`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -1363,24 +1362,65 @@ export const debugFirebaseAuthVsFirestore = async (): Promise<void> => {
       
       if (response.ok) {
         const data = await response.json();
-        console.log('🔍 Backend API users:', data);
-        
-        // Check if mystery user exists in API response
-        const mysteryUserInApi = data.users?.find((u: any) => u.email === 'brokers.licence.4d@icloud.com');
-        if (mysteryUserInApi) {
-          console.log('🎯 MYSTERY USER FOUND in Backend API:', mysteryUserInApi);
-        } else {
-          console.warn('⚠️ Mystery user NOT found in backend API either');
-        }
+        console.log('🎯 FOUND ORPHANED FIREBASE AUTH USERS:', data);
+        return data.data?.orphaned_users || [];
       } else {
         console.warn('⚠️ Backend API call failed:', response.status, response.statusText);
+        return [];
       }
     } catch (apiError) {
       console.warn('⚠️ Could not reach backend API:', apiError);
+      return [];
     }
     
   } catch (error) {
-    console.error('❌ Error debugging Firebase Auth vs Firestore:', error);
+    console.error('❌ Error getting orphaned users from backend:', error);
+    return [];
+  }
+};
+
+// Function to delete orphaned user via backend API
+export const deleteOrphanedUser = async (userEmail: string): Promise<boolean> => {
+  try {
+    console.log(`🗑️ BACKEND: Deleting orphaned user: ${userEmail}`);
+    
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
+    
+    // Get the current user's token for API authentication
+    const auth = (await import('../lib/firebase')).auth;
+    if (!auth.currentUser) {
+      console.warn('⚠️ Not authenticated - cannot call backend API');
+      return false;
+    }
+    
+    const token = await auth.currentUser.getIdToken();
+    
+    try {
+      const response = await fetch(`${apiBaseUrl}/auth/orphaned-users/${encodeURIComponent(userEmail)}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        console.log('✅ ORPHANED USER DELETED:', data);
+        return true;
+      } else {
+        const errorData = await response.json().catch(() => ({}));
+        console.error('❌ Failed to delete orphaned user:', response.status, errorData);
+        return false;
+      }
+    } catch (apiError) {
+      console.warn('⚠️ Could not reach backend API:', apiError);
+      return false;
+    }
+    
+  } catch (error) {
+    console.error('❌ Error deleting orphaned user:', error);
+    return false;
   }
 };
 
@@ -1391,8 +1431,8 @@ export const getOrphanedUsers = async (): Promise<OrphanedUser[]> => {
     // DEEP DEBUG: Check all collections for the mystery user
     await debugAllCollections();
     
-    // DEEP DEBUG: Check Firebase Auth vs Firestore discrepancy
-    await debugFirebaseAuthVsFirestore();
+    // Get Firebase Auth orphaned users from backend
+    const firebaseAuthOrphans = await getFirebaseAuthOrphanedUsers();
     
     // Get ALL users from database
     const usersSnapshot = await getDocs(collection(db, 'users'));
@@ -1458,11 +1498,28 @@ export const getOrphanedUsers = async (): Promise<OrphanedUser[]> => {
       }
     });
 
-    console.log(`🚨 Found ${orphanedUsers.length} orphaned users that need role assignment`);
+    // Add Firebase Auth orphans to the list
+    firebaseAuthOrphans.forEach(authOrphan => {
+      orphanedUsers.push({
+        id: authOrphan.uid,
+        name: authOrphan.display_name || authOrphan.email?.split('@')[0] || 'Firebase Auth User',
+        email: authOrphan.email || '',
+        role: null,
+        status: 'firebase_auth_only',
+        joinDate: authOrphan.creation_timestamp ? new Date(authOrphan.creation_timestamp).toLocaleDateString() : 'Unknown',
+        registrationMethod: authOrphan.provider_data?.length > 0 ? `OAuth (${authOrphan.provider_data.map((p: any) => p.provider_id).join(', ')})` : 'Unknown',
+        needsAttention: true,
+        created_at: authOrphan.creation_timestamp ? { seconds: new Date(authOrphan.creation_timestamp).getTime() / 1000 } : null,
+        updated_at: authOrphan.last_sign_in_timestamp ? { seconds: new Date(authOrphan.last_sign_in_timestamp).getTime() / 1000 } : null
+      });
+    });
+
+    console.log(`🚨 Found ${orphanedUsers.length} total orphaned users (${firebaseAuthOrphans.length} Firebase Auth only, ${orphanedUsers.length - firebaseAuthOrphans.length} Firestore role issues)`);
     if (orphanedUsers.length > 0) {
       console.warn('⚠️ ORPHANED USERS DETAILS:', orphanedUsers.map(u => ({ 
         email: u.email, 
         role: u.role || 'MISSING',
+        status: u.status,
         registrationMethod: u.registrationMethod
       })));
     }

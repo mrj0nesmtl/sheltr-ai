@@ -2,6 +2,8 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { sendPasswordResetEmail } from 'firebase/auth';
+import { auth } from '../../lib/firebase';
 import { useAuth } from '../../contexts/AuthContext';
 
 interface LoginFormProps {
@@ -17,6 +19,8 @@ export const LoginForm: React.FC<LoginFormProps> = ({
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [isResetLoading, setIsResetLoading] = useState(false);
+  const [resetSuccess, setResetSuccess] = useState(false);
   
   const { login, loginWithGoogle, error, clearError } = useAuth();
   const router = useRouter();
@@ -57,6 +61,45 @@ export const LoginForm: React.FC<LoginFormProps> = ({
     }
   };
 
+  const handleForgotPassword = async () => {
+    if (!email) {
+      alert('Please enter your email address first.');
+      return;
+    }
+
+    setIsResetLoading(true);
+    clearError();
+
+    try {
+      await sendPasswordResetEmail(auth, email, {
+        url: `${window.location.origin}/login`, // Redirect back to login after reset
+        handleCodeInApp: false, // Use the action URL we set up in Firebase
+      });
+      
+      setResetSuccess(true);
+      alert(`Password reset email sent to ${email}. Please check your inbox and follow the instructions.`);
+    } catch (error: any) {
+      console.error('Password reset failed:', error);
+      let errorMessage = 'Failed to send password reset email.';
+      
+      switch (error.code) {
+        case 'auth/user-not-found':
+          errorMessage = 'No account found with this email address.';
+          break;
+        case 'auth/invalid-email':
+          errorMessage = 'Please enter a valid email address.';
+          break;
+        case 'auth/too-many-requests':
+          errorMessage = 'Too many password reset attempts. Please try again later.';
+          break;
+      }
+      
+      alert(errorMessage);
+    } finally {
+      setIsResetLoading(false);
+    }
+  };
+
   return (
     <div className="w-full max-w-md mx-auto">
       <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 space-y-6">
@@ -69,6 +112,27 @@ export const LoginForm: React.FC<LoginFormProps> = ({
             Sign in to access your SHELTR account
           </p>
         </div>
+
+        {/* Success Message for Password Reset */}
+        {resetSuccess && (
+          <div className="bg-green-50 border border-green-200 rounded-md p-4">
+            <div className="flex">
+              <div className="flex-shrink-0">
+                <svg className="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div className="ml-3">
+                <h3 className="text-sm font-medium text-green-800">
+                  Password Reset Email Sent
+                </h3>
+                <div className="mt-2 text-sm text-green-700">
+                  Please check your inbox and follow the instructions to reset your password.
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Error Message */}
         {error && (
@@ -187,9 +251,14 @@ export const LoginForm: React.FC<LoginFormProps> = ({
             </div>
 
             <div className="text-sm">
-              <a href="#" className="font-medium text-blue-600 hover:text-blue-500">
-                Forgot password?
-              </a>
+              <button
+                type="button"
+                onClick={handleForgotPassword}
+                disabled={isResetLoading || !email}
+                className="font-medium text-blue-600 hover:text-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isResetLoading ? 'Sending...' : 'Forgot password?'}
+              </button>
             </div>
           </div>
 

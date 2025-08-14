@@ -33,7 +33,7 @@ cryptography==41.0.7
 
 # HTTP Client and Async
 httpx==0.25.2
-aiohttp==3.9.1
+aiohttp==3.12.15
 requests==2.31.0
 
 # Data Processing

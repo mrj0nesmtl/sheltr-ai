@@ -32,7 +32,7 @@ eth-account==0.10.0
 cryptography==41.0.7
 
 # HTTP Client and Async
-httpx==0.25.2
+httpx==0.28.1
 aiohttp==3.9.1
 requests==2.31.0
 

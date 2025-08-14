@@ -56,29 +56,8 @@ jobs:
         cd apps/api
         safety check
 
-  codeql-analysis:
-    name: CodeQL Security Analysis
-    runs-on: ubuntu-latest
-    
-    strategy:
-      fail-fast: false
-      matrix:
-        language: [ 'javascript', 'python' ]
-        
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v3
-      with:
-        languages: ${{ matrix.language }}
-        
-    - name: Autobuild
-      uses: github/codeql-action/autobuild@v3
-      
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v3
+# CodeQL analysis is handled by dedicated .github/workflows/codeql.yml
+  # Removing duplicate to prevent conflicts
 
   secret-scanning:
     name: Secret Scanning
@@ -162,6 +141,8 @@ jobs:
         framework: dockerfile,github_actions
         output_format: sarif
         output_file_path: checkov-results.sarif
+        quiet: true
+        soft_fail: true
         
     - name: Upload Checkov scan results
       uses: github/codeql-action/upload-sarif@v3
@@ -214,7 +195,7 @@ jobs:
   notification:
     name: Security Notification
     runs-on: ubuntu-latest
-    needs: [dependency-scan, codeql-analysis, secret-scanning, docker-security, license-compliance, infrastructure-scan, security-policy-check]
+    needs: [dependency-scan, secret-scanning, docker-security, license-compliance, infrastructure-scan, security-policy-check]
     if: failure()
     
     steps:

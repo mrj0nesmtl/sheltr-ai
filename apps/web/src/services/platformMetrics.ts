@@ -1,5 +1,6 @@
 import { collection, getDocs, query, where, getDoc, doc, updateDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import { secureLog, sanitizeForLogging } from '@/utils/secureLogging';
 
 export interface PlatformMetrics {
   totalOrganizations: number;
@@ -100,7 +101,7 @@ export const getPlatformMetrics = async (): Promise<PlatformMetrics> => {
  */
 export const getShelterMetrics = async (shelterId: string): Promise<ShelterMetrics | null> => {
   try {
-    console.log(`🏠 Fetching metrics for shelter: ${shelterId}`);
+    secureLog.shelter('Fetching metrics', shelterId);
     
     // Get shelter info
     const sheltersSnapshot = await getDocs(collection(db, 'shelters'));
@@ -247,7 +248,7 @@ export interface ShelterParticipant {
 // New function to get detailed participant list for a shelter
 export const getShelterParticipants = async (shelterId: string): Promise<ShelterParticipant[]> => {
   try {
-    console.log(`👥 Fetching participants for shelter: ${shelterId}`);
+    secureLog.shelter('Fetching participants', shelterId);
     
     const participantsSnapshot = await getDocs(
       query(collection(db, 'users'), where('shelter_id', '==', shelterId), where('role', '==', 'participant'))
@@ -271,7 +272,7 @@ export const getShelterParticipants = async (shelterId: string): Promise<Shelter
       });
     });
 
-    console.log(`✅ Found ${participants.length} participants for shelter ${shelterId}`);
+    secureLog.shelter('Found participants', shelterId, `Count: ${participants.length}`);
     return participants;
   } catch (error) {
     console.error('❌ Error fetching shelter participants:', error);
@@ -458,7 +459,7 @@ export interface DonationRecord {
 // Function to get donor metrics for donor dashboard
 export const getDonorMetrics = async (donorId: string): Promise<DonorMetrics | null> => {
   try {
-    console.log(`💰 Fetching donor metrics for: ${donorId}`);
+    secureLog.info('Fetching donor metrics', donorId);
     
     // TODO: Replace with real donation collection queries when donations are implemented
     // For now, return placeholder data that will be replaced with real data

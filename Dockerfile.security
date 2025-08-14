@@ -1,0 +1,148 @@
+# Security-focused Dockerfile for SHELTR production deployment
+# Multi-stage build with security hardening
+
+# Build stage for frontend
+FROM node:18-alpine AS frontend-builder
+
+# Install security updates
+RUN apk update && apk upgrade && \
+    apk add --no-cache dumb-init
+
+# Create non-root user
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S nextjs -u 1001
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files
+COPY apps/web/package*.json ./
+COPY apps/web/tsconfig.json ./
+COPY apps/web/next.config.ts ./
+COPY apps/web/tailwind.config.ts ./
+COPY apps/web/postcss.config.mjs ./
+
+# Install dependencies with security audit
+RUN npm ci --only=production && \
+    npm audit fix && \
+    npm cache clean --force
+
+# Copy source code
+COPY apps/web/src ./src
+COPY apps/web/public ./public
+
+# Build application
+RUN npm run build
+
+# Production stage
+FROM node:18-alpine AS frontend-production
+
+# Install security updates and security tools
+RUN apk update && apk upgrade && \
+    apk add --no-cache \
+    dumb-init \
+    tini \
+    && rm -rf /var/cache/apk/*
+
+# Create non-root user
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S nextjs -u 1001
+
+# Set working directory
+WORKDIR /app
+
+# Copy built application
+COPY --from=frontend-builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=frontend-builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=frontend-builder --chown=nextjs:nodejs /app/public ./public
+
+# Set security headers and environment
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+
+# Use non-root user
+USER nextjs
+
+# Expose port
+EXPOSE 3000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:3000/api/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })"
+
+# Use tini as init system for proper signal handling
+ENTRYPOINT ["/sbin/tini", "--"]
+
+# Start application
+CMD ["node", "server.js"]
+
+# Backend stage
+FROM python:3.11-alpine AS backend-builder
+
+# Install security updates and build dependencies
+RUN apk update && apk upgrade && \
+    apk add --no-cache \
+    gcc \
+    musl-dev \
+    libffi-dev \
+    openssl-dev \
+    && rm -rf /var/cache/apk/*
+
+# Create non-root user
+RUN adduser -D -s /bin/sh fastapi
+
+# Set working directory
+WORKDIR /app
+
+# Copy requirements
+COPY apps/api/requirements.txt .
+
+# Install Python dependencies with security checks
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir safety && \
+    pip install --no-cache-dir -r requirements.txt && \
+    safety check
+
+# Production backend stage
+FROM python:3.11-alpine AS backend-production
+
+# Install security updates
+RUN apk update && apk upgrade && \
+    apk add --no-cache \
+    dumb-init \
+    tini \
+    && rm -rf /var/cache/apk/*
+
+# Create non-root user
+RUN adduser -D -s /bin/sh fastapi
+
+# Set working directory
+WORKDIR /app
+
+# Copy Python dependencies from builder
+COPY --from=backend-builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
+COPY --from=backend-builder /usr/local/bin /usr/local/bin
+
+# Copy application code
+COPY --chown=fastapi:fastapi apps/api .
+
+# Set environment variables
+ENV PYTHONPATH=/app
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+# Use non-root user
+USER fastapi
+
+# Expose port
+EXPOSE 8000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD python -c "import requests; requests.get('http://localhost:8000/health')"
+
+# Use tini as init system
+ENTRYPOINT ["/sbin/tini", "--"]
+
+# Start application
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]

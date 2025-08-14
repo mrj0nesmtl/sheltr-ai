@@ -1,0 +1,120 @@
+# Dependabot configuration for SHELTR-AI
+# Automatically checks for dependency updates and security vulnerabilities
+
+version: 2
+
+updates:
+  # Frontend dependencies (Next.js app)
+  - package-ecosystem: "npm"
+    directory: "/apps/web"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "America/New_York"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "mrj0nesmtl"
+    assignees:
+      - "mrj0nesmtl"
+    commit-message:
+      prefix: "deps(web)"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "security"
+      - "frontend"
+    allow:
+      - dependency-type: "direct"
+      - dependency-type: "indirect"
+    ignore:
+      # Ignore major version updates for stable packages
+      - dependency-name: "react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "next"
+        update-types: ["version-update:semver-major"]
+
+  # Backend dependencies (FastAPI)
+  - package-ecosystem: "pip"
+    directory: "/apps/api"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "America/New_York"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "mrj0nesmtl"
+    assignees:
+      - "mrj0nesmtl"
+    commit-message:
+      prefix: "deps(api)"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "security"
+      - "backend"
+    allow:
+      - dependency-type: "direct"
+      - dependency-type: "indirect"
+
+  # Firebase Functions dependencies
+  - package-ecosystem: "npm"
+    directory: "/functions"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/New_York"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "mrj0nesmtl"
+    assignees:
+      - "mrj0nesmtl"
+    commit-message:
+      prefix: "deps(functions)"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "security"
+      - "firebase-functions"
+
+  # GitHub Actions dependencies
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/New_York"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "mrj0nesmtl"
+    assignees:
+      - "mrj0nesmtl"
+    commit-message:
+      prefix: "deps(actions)"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "security"
+      - "github-actions"
+
+  # Database scripts dependencies
+  - package-ecosystem: "npm"
+    directory: "/scripts"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/New_York"
+    open-pull-requests-limit: 3
+    reviewers:
+      - "mrj0nesmtl"
+    assignees:
+      - "mrj0nesmtl"
+    commit-message:
+      prefix: "deps(scripts)"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "security"
+      - "database-scripts"

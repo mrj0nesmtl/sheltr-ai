@@ -46,7 +46,7 @@ sendgrid==6.10.0
 twilio==8.10.0
 
 # Image and QR Code Processing
-qrcode[pil]==7.4.2
+qrcode[pil]==8.2
 pillow==10.1.0
 
 # Payment Processing (Adyen)

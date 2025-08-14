@@ -908,11 +908,22 @@ export const getPlatformTenants = async (): Promise<PlatformTenant[]> => {
     const demoDonationsSnapshot = await getDocs(collection(db, 'demo_donations'));
     const donationsByShelter: Record<string, number> = {};
     
+    console.log(`🔍 DEBUG: Found ${demoDonationsSnapshot.docs.length} demo donations`);
+    
     // Aggregate donations by shelter_id
-    demoDonationsSnapshot.docs.forEach(doc => {
+    demoDonationsSnapshot.docs.forEach((doc, index) => {
       const donationData = doc.data();
       const shelterId = donationData?.shelter_id;
+      const participantId = donationData?.participant_id;
       const amount = donationData?.amount?.total || 0;
+      
+      console.log(`🔍 DEBUG: Donation ${index + 1}:`, {
+        id: doc.id,
+        participant_id: participantId,
+        shelter_id: shelterId,
+        amount: amount,
+        status: donationData?.status
+      });
       
       if (shelterId && amount > 0) {
         donationsByShelter[shelterId] = (donationsByShelter[shelterId] || 0) + amount;
@@ -925,6 +936,8 @@ export const getPlatformTenants = async (): Promise<PlatformTenant[]> => {
     for (const shelterDoc of sheltersSnapshot.docs) {
       const shelterData = shelterDoc.data();
       
+      console.log(`🏠 DEBUG: Processing shelter ${shelterDoc.id} (${shelterData.name})`);
+      
       // Get participant count for this shelter
       const participantsQuery = query(
         collection(db, 'users'),
@@ -933,6 +946,12 @@ export const getPlatformTenants = async (): Promise<PlatformTenant[]> => {
       );
       const participantsSnapshot = await getDocs(participantsQuery);
       const participantCount = participantsSnapshot.size;
+      
+      // Debug: Log participants for this shelter
+      participantsSnapshot.docs.forEach(participantDoc => {
+        const participantData = participantDoc.data();
+        console.log(`👤 DEBUG: Participant ${participantDoc.id} (${participantData.firstName} ${participantData.lastName}) in shelter ${shelterDoc.id}`);
+      });
       
       // Calculate occupancy rate
       const capacity = shelterData.capacity || 0;

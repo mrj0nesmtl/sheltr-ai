@@ -50,9 +50,12 @@ export const getPlatformMetrics = async (): Promise<PlatformMetrics> => {
     const participantsSnapshot = await getDocs(participantsQuery);
     const activeParticipants = participantsSnapshot.size;
     
-    // Get donations total (placeholder - no real donations yet)
-    // TODO: Replace with actual donation collection when implemented
-    const totalDonations = 0;
+    // Get real donations total from demo_donations collection
+    const demoDonationsSnapshot = await getDocs(collection(db, 'demo_donations'));
+    const totalDonations = demoDonationsSnapshot.docs.reduce((total, doc) => {
+      const donationData = doc.data();
+      return total + (donationData?.amount?.total || 0);
+    }, 0);
     
     // Generate recent activity from real data
     const recentActivity = await generateRecentActivity(sheltersSnapshot.docs);
@@ -642,7 +645,7 @@ export interface PlatformTenant {
   location: string;
   region: string;
   participants: number;
-  donations: number;
+  donations: number | string; // Allow string for "-" when no donations
   status: 'active' | 'pending' | 'inactive';
   lastActivity: string;
   capacity?: number;
@@ -901,6 +904,23 @@ export const getPlatformTenants = async (): Promise<PlatformTenant[]> => {
     const sheltersSnapshot = await getDocs(collection(db, 'shelters'));
     const tenants: PlatformTenant[] = [];
     
+    // Get all demo donations once to aggregate by shelter
+    const demoDonationsSnapshot = await getDocs(collection(db, 'demo_donations'));
+    const donationsByShelter: Record<string, number> = {};
+    
+    // Aggregate donations by shelter_id
+    demoDonationsSnapshot.docs.forEach(doc => {
+      const donationData = doc.data();
+      const shelterId = donationData?.shelter_id;
+      const amount = donationData?.amount?.total || 0;
+      
+      if (shelterId && amount > 0) {
+        donationsByShelter[shelterId] = (donationsByShelter[shelterId] || 0) + amount;
+      }
+    });
+    
+    console.log('💰 Donations by shelter:', donationsByShelter);
+    
     // Process each shelter to get participant counts and donations
     for (const shelterDoc of sheltersSnapshot.docs) {
       const shelterData = shelterDoc.data();
@@ -918,8 +938,8 @@ export const getPlatformTenants = async (): Promise<PlatformTenant[]> => {
       const capacity = shelterData.capacity || 0;
       const occupancyRate = capacity > 0 ? Math.round((participantCount / capacity) * 100) : 0;
       
-      // Set donations to zero as requested - no real donations yet
-      const donations = 0;
+      // Get real donation data for this shelter
+      const donations = donationsByShelter[shelterDoc.id] || 0;
       
       tenants.push({
         id: shelterDoc.id,
@@ -927,7 +947,7 @@ export const getPlatformTenants = async (): Promise<PlatformTenant[]> => {
         location: shelterData.address || 'Unknown Location',
         region: shelterData.city || 'North America',
         participants: participantCount,
-        donations: donations,
+        donations: donations > 0 ? donations : '-', // Show dash when no donations
         status: shelterData.status === 'inactive' ? 'inactive' : 'active',
         lastActivity: new Date(Date.now() - Math.random() * 30 * 60 * 1000).toISOString(), // Last 30 minutes
         capacity,
@@ -936,7 +956,12 @@ export const getPlatformTenants = async (): Promise<PlatformTenant[]> => {
     }
 
     console.log(`✅ Found ${tenants.length} platform tenants`);
-    return tenants.sort((a, b) => b.donations - a.donations); // Sort by donation volume
+    // Sort by donation volume (handle string dashes)
+    return tenants.sort((a, b) => {
+      const aAmount = typeof a.donations === 'number' ? a.donations : 0;
+      const bAmount = typeof b.donations === 'number' ? b.donations : 0;
+      return bAmount - aAmount;
+    });
   } catch (error) {
     console.error('❌ Error fetching platform tenants:', error);
     return [];

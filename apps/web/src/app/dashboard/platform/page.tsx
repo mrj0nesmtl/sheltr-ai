@@ -19,7 +19,6 @@ import {
   Shield,
   Globe,
   TrendingUp,
-  DollarSign,
   ExternalLink
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -140,7 +139,7 @@ export default function PlatformManagement() {
   };
 
   // Handle Manage Tenant
-  const handleManageTenant = (tenantId: string) => {
+  const handleManageTenant = () => {
     router.push('/dashboard/shelters');
   };
 
@@ -342,7 +341,9 @@ export default function PlatformManagement() {
                         <div className="text-xs text-muted-foreground">Participants</div>
                       </div>
                       <div className="text-center">
-                        <div className="text-lg font-bold text-green-600 dark:text-green-400">${tenant.donations.toLocaleString()}</div>
+                        <div className="text-lg font-bold text-green-600 dark:text-green-400">
+                          {typeof tenant.donations === 'number' ? `$${tenant.donations.toLocaleString()}` : tenant.donations}
+                        </div>
                         <div className="text-xs text-muted-foreground">Donations</div>
                       </div>
                     </div>
@@ -350,7 +351,7 @@ export default function PlatformManagement() {
                       variant="outline" 
                       size="sm" 
                       className="shrink-0"
-                      onClick={() => handleManageTenant(tenant.id)}
+                      onClick={handleManageTenant}
                     >
                       <ExternalLink className="mr-1 h-3 w-3" />
                       Manage
@@ -381,7 +382,9 @@ export default function PlatformManagement() {
                       <div className="text-xs text-muted-foreground">Participants</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-xl font-bold text-green-600 dark:text-green-400">${tenant.donations.toLocaleString()}</div>
+                      <div className="text-xl font-bold text-green-600 dark:text-green-400">
+                        {typeof tenant.donations === 'number' ? `$${tenant.donations.toLocaleString()}` : tenant.donations}
+                      </div>
                       <div className="text-xs text-muted-foreground">Donations</div>
                     </div>
                     <div className="text-center min-w-[100px]">
@@ -394,7 +397,7 @@ export default function PlatformManagement() {
                       variant="outline" 
                       size="sm" 
                       className="min-w-[80px]"
-                      onClick={() => handleManageTenant(tenant.id)}
+                      onClick={handleManageTenant}
                     >
                       <ExternalLink className="mr-1 h-3 w-3" />
                       Manage

@@ -19,8 +19,10 @@ import {
   Shield,
   Globe,
   TrendingUp,
-  DollarSign
+  DollarSign,
+  ExternalLink
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { 
   getFeatureFlags, 
@@ -35,6 +37,8 @@ import {
 } from '@/services/platformMetrics';
 
 export default function PlatformManagement() {
+  const router = useRouter();
+  
   // Real-time data state
   const [flags, setFlags] = useState<FeatureFlag[]>([]);
   const [alerts, setAlerts] = useState<SystemAlert[]>([]);
@@ -128,6 +132,16 @@ export default function PlatformManagement() {
     if (diffMins < 60) return `${diffMins} minutes ago`;
     if (diffHours < 24) return `${diffHours} hours ago`;
     return `${diffDays} days ago`;
+  };
+
+  // Handle View All Alerts
+  const handleViewAllAlerts = () => {
+    router.push('/dashboard/notifications');
+  };
+
+  // Handle Manage Tenant
+  const handleManageTenant = (tenantId: string) => {
+    router.push('/dashboard/shelters');
   };
 
   return (
@@ -276,7 +290,8 @@ export default function PlatformManagement() {
                 </div>
               ))
             )}
-            <Button variant="outline" className="w-full">
+            <Button variant="outline" className="w-full" onClick={handleViewAllAlerts}>
+              <ExternalLink className="mr-2 h-4 w-4" />
               View All Alerts
             </Button>
           </CardContent>
@@ -331,7 +346,13 @@ export default function PlatformManagement() {
                         <div className="text-xs text-muted-foreground">Donations</div>
                       </div>
                     </div>
-                    <Button variant="outline" size="sm" className="shrink-0">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="shrink-0"
+                      onClick={() => handleManageTenant(tenant.id)}
+                    >
+                      <ExternalLink className="mr-1 h-3 w-3" />
                       Manage
                     </Button>
                   </div>
@@ -369,7 +390,13 @@ export default function PlatformManagement() {
                       </Badge>
                       <div className="text-xs text-muted-foreground mt-1">{formatTime(tenant.lastActivity)}</div>
                     </div>
-                    <Button variant="outline" size="sm" className="min-w-[80px]">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="min-w-[80px]"
+                      onClick={() => handleManageTenant(tenant.id)}
+                    >
+                      <ExternalLink className="mr-1 h-3 w-3" />
                       Manage
                     </Button>
                   </div>

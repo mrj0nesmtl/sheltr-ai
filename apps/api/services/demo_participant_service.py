@@ -12,8 +12,9 @@ from typing import Dict, Any, Optional, List
 
 from services.firebase_service import FirebaseService
 import logging
+from utils.secure_logging import get_secure_logger, log_participant_action, sanitize_for_logging
 
-logger = logging.getLogger(__name__)
+logger = get_secure_logger(__name__)
 
 class DemoParticipantService:
     """
@@ -32,7 +33,7 @@ class DemoParticipantService:
         try:
             # Special handling for Michael Rodriguez - get from real users collection
             if participant_id == "michael-rodriguez":
-                logger.info(f"Getting real participant data for: {participant_id}")
+                log_participant_action("Getting real participant data", participant_id)
                 return await self.get_real_participant_as_demo(participant_id)
             
             # Try to get existing demo participant
@@ -41,7 +42,7 @@ class DemoParticipantService:
             
             if doc.exists:
                 participant_data = doc.to_dict()
-                logger.info(f"Retrieved demo participant: {participant_id}")
+                log_participant_action("Retrieved demo participant", participant_id)
                 return participant_data
             else:
                 # Create default demo participant

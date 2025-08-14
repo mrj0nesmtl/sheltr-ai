@@ -27,8 +27,14 @@ class DemoParticipantService:
     async def get_demo_participant(self, participant_id: str = "demo-participant-001") -> Dict[str, Any]:
         """
         Get demo participant data, creating default if doesn't exist
+        For real participants like michael-rodriguez, fetch from users collection
         """
         try:
+            # Special handling for Michael Rodriguez - get from real users collection
+            if participant_id == "michael-rodriguez":
+                logger.info(f"Getting real participant data for: {participant_id}")
+                return await self.get_real_participant_as_demo(participant_id)
+            
             # Try to get existing demo participant
             doc_ref = self.db.collection('demo_participants').document(participant_id)
             doc = doc_ref.get()
@@ -45,6 +51,84 @@ class DemoParticipantService:
         except Exception as e:
             logger.error(f"Failed to get demo participant {participant_id}: {e}")
             raise
+    
+    async def get_real_participant_as_demo(self, participant_id: str) -> Dict[str, Any]:
+        """
+        Get real participant data from users collection and format for demo use
+        """
+        try:
+            # Query users collection for Michael Rodriguez
+            users_query = self.db.collection('users').where('role', '==', 'participant')
+            users_docs = list(users_query.stream())
+            
+            for user_doc in users_docs:
+                user_data = user_doc.to_dict()
+                if (user_data.get('firstName', '').lower() == 'michael' and 
+                    user_data.get('lastName', '').lower() == 'rodriguez'):
+                    
+                    logger.info(f"Found real participant: {user_doc.id}")
+                    
+                    # Format as demo participant with real shelter_id
+                    demo_participant = {
+                        "id": participant_id,
+                        "firstName": user_data.get('firstName', 'Michael'),
+                        "lastName": user_data.get('lastName', 'Rodriguez'),
+                        "age": 32,
+                        "story": "Dedicated community member working towards housing stability and career growth. With SHELTR's support, I'm building skills and connections to create a better future for myself and help others in my community.",
+                        "photo_url": "/images/demo/michael-rodriguez.jpg",
+                        "qr_code": f"SHELTR-{user_data.get('firstName', 'MICHAEL').upper()}-REAL",
+                        "shelter_id": user_data.get('shelter_id', 'old-brewery-mission'),  # Use real shelter_id
+                        "shelter_name": "Old Brewery Mission",
+                        "goals": [
+                            {
+                                "id": "housing-goal",
+                                "title": "Secure Stable Housing",
+                                "description": "Find permanent housing solution",
+                                "progress": 68,
+                                "status": "in_progress",
+                                "target_date": "2024-10-01"
+                            },
+                            {
+                                "id": "employment-goal", 
+                                "title": "Career Development",
+                                "description": "Build skills and secure meaningful employment",
+                                "progress": 55,
+                                "status": "in_progress",
+                                "target_date": "2024-09-15"
+                            },
+                            {
+                                "id": "community-goal",
+                                "title": "Community Engagement", 
+                                "description": "Give back and help others in similar situations",
+                                "progress": 42,
+                                "status": "in_progress",
+                                "target_date": "2024-12-01"
+                            }
+                        ],
+                        "skills": ["Communication", "Leadership", "Problem Solving", "Community Outreach"],
+                        "interests": ["Community Service", "Personal Development", "Mentoring", "Social Impact"],
+                        "total_received": 0.00,
+                        "donation_count": 0,
+                        "services_completed": 0,
+                        "progress": 55,
+                        "featured": True,
+                        "demo": True,
+                        "created_at": datetime.now(timezone.utc),
+                        "updated_at": datetime.now(timezone.utc),
+                        "status": "active"
+                    }
+                    
+                    logger.info(f"Created demo participant from real user with shelter_id: {demo_participant['shelter_id']}")
+                    return demo_participant
+            
+            # Fallback if Michael Rodriguez not found
+            logger.warning(f"Real participant {participant_id} not found, using fallback")
+            return await self.create_default_demo_participant(participant_id)
+            
+        except Exception as e:
+            logger.error(f"Failed to get real participant {participant_id}: {e}")
+            # Fallback to default
+            return await self.create_default_demo_participant(participant_id)
     
     async def create_default_demo_participant(self, participant_id: str = "demo-participant-001") -> Dict[str, Any]:
         """

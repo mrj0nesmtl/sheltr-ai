@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { applyActionCode, confirmPasswordReset, verifyPasswordResetCode } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
@@ -12,7 +12,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { CheckCircle, XCircle, Mail, Lock, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 
-export default function AuthActionPage() {
+function AuthActionContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   
@@ -243,5 +243,22 @@ export default function AuthActionPage() {
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+export default function AuthActionPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+        <Card className="w-full max-w-md">
+          <CardContent className="text-center py-8">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading...</p>
+          </CardContent>
+        </Card>
+      </div>
+    }>
+      <AuthActionContent />
+    </Suspense>
   );
 }

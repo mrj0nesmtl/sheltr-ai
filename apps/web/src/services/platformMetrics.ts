@@ -918,8 +918,8 @@ export const getPlatformTenants = async (): Promise<PlatformTenant[]> => {
       const capacity = shelterData.capacity || 0;
       const occupancyRate = capacity > 0 ? Math.round((participantCount / capacity) * 100) : 0;
       
-      // TODO: Get real donation data when donation collection is implemented
-      const mockDonations = Math.floor(Math.random() * 50000) + 5000; // $5K-$55K range
+      // Set donations to zero as requested - no real donations yet
+      const donations = 0;
       
       tenants.push({
         id: shelterDoc.id,
@@ -927,7 +927,7 @@ export const getPlatformTenants = async (): Promise<PlatformTenant[]> => {
         location: shelterData.address || 'Unknown Location',
         region: shelterData.city || 'North America',
         participants: participantCount,
-        donations: mockDonations,
+        donations: donations,
         status: shelterData.status === 'inactive' ? 'inactive' : 'active',
         lastActivity: new Date(Date.now() - Math.random() * 30 * 60 * 1000).toISOString(), // Last 30 minutes
         capacity,

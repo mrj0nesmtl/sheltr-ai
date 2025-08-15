@@ -130,11 +130,11 @@ export default function AboutPage() {
               POWERED BY AI & BLOCKCHAIN
             </div>
             <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-              Better to <span className="text-blue-400">Solve</span> than Manage
+              Transform Donations into Impact
             </h1>
             <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-4xl mx-auto">
-              An ecosystem where every donation creates immediate, transparent impact 
-              through direct participant empowerment.
+              Transform meaningful actions using blockchain technology and smart contracts 
+              to directly support homeless individuals with transparency and accountability.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/docs">

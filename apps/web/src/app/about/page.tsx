@@ -115,7 +115,7 @@ export default function AboutPage() {
 
       {/* Hero Section - Redesigned with cleaner aesthetic */}
       <section 
-        className="relative py-24"
+        className="relative py-24 min-h-[80vh] flex items-center"
         style={{
           backgroundImage: "url('/backgrounds/about-bg.jpg')",
           backgroundSize: 'cover',
@@ -130,7 +130,7 @@ export default function AboutPage() {
               POWERED BY AI & BLOCKCHAIN
             </div>
             <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-              Transform Donations into Impact
+              Transform Donations into <span className="text-blue-400">Impact</span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-4xl mx-auto">
               Transform meaningful actions using blockchain technology and smart contracts 

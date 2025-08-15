@@ -50,6 +50,7 @@ SHELTR is committed to maintaining security across our platform. We currently su
 - **Dependabot**: Automated dependency vulnerability scanning
 - **CodeQL**: Static application security testing (SAST)
 - **Secret Scanning**: Prevents accidental secret commits
+- **Container Security**: Docker image vulnerability scanning
 - **Supply Chain**: Software composition analysis
 
 ### Manual Reviews
@@ -70,7 +71,7 @@ We believe in responsible disclosure and will:
 ### Bug Bounty Program
 - **Scope**: Production environment (`sheltr-ai.web.app`)
 - **Rewards**: $100 - $5,000 based on severity
-- **Platform**: HackerOne program (launching Q2 2025)
+- **Platform**: HackerOne program (launching Q4 2025)
 
 ## Security Contact
 
@@ -93,7 +94,7 @@ We thank the following researchers for responsibly disclosing security issues:
 
 ---
 
-**Last Updated**: January 2025  
+**Last Updated**: August 2025  
 **Next Review**: Quarterly
 
 > 🔒 Security is fundamental to SHELTR's mission of safely serving vulnerable populations. We take all security reports seriously and appreciate the security community's help in keeping our platform safe.

@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { sendPasswordResetEmail } from 'firebase/auth';
 import { auth } from '../../lib/firebase';
 import { useAuth } from '../../contexts/AuthContext';
@@ -150,6 +151,16 @@ export const LoginForm: React.FC<LoginFormProps> = ({
                 <div className="mt-2 text-sm text-red-700">
                   {error}
                 </div>
+                {error.includes('Please register for a SHELTR account first') && (
+                  <div className="mt-3">
+                    <Link 
+                      href="/register" 
+                      className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+                    >
+                      Create SHELTR Account
+                    </Link>
+                  </div>
+                )}
               </div>
             </div>
           </div>

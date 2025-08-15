@@ -29,7 +29,7 @@ textblob==0.17.1
 # Blockchain and Crypto
 web3==6.12.0
 eth-account==0.10.0
-cryptography==41.0.7
+cryptography==44.0.1
 
 # HTTP Client and Async
 httpx==0.28.1

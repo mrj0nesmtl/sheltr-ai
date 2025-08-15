@@ -189,7 +189,7 @@ export default function HomePage() {
 
         {/* Hero Section - Transform Donations into Impact */}
         <section 
-          className="relative py-24 bg-gradient-to-r from-slate-900 to-slate-800"
+          className="relative py-24 min-h-[80vh] flex items-center bg-gradient-to-r from-slate-900 to-slate-800"
           style={{
             backgroundImage: "url('/backgrounds/hero-bg.jpg')",
             backgroundSize: 'cover',

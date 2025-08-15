@@ -1,6 +1,69 @@
-import { collection, getDocs, query, where, getDoc, doc, updateDoc } from 'firebase/firestore';
+import { collection, getDocs, query, where, getDoc, doc, updateDoc, Timestamp, DocumentData, QueryDocumentSnapshot } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import { secureLog, sanitizeForLogging } from '@/utils/secureLogging';
+import { secureLog } from '@/utils/secureLogging';
+
+// Firestore timestamp type
+export interface FirestoreTimestamp {
+  seconds: number;
+  nanoseconds?: number;
+}
+
+// Generic Firestore document interface
+export interface FirestoreDocument extends DocumentData {
+  id: string;
+  created_at?: FirestoreTimestamp | Timestamp;
+  updated_at?: FirestoreTimestamp | Timestamp;
+}
+
+// Shelter document from Firestore
+export interface ShelterDocument extends FirestoreDocument {
+  name: string;
+  address?: string;
+  city?: string;
+  capacity?: number;
+  status?: 'active' | 'inactive' | 'pending';
+  totalDonations?: number;
+}
+
+// User document from Firestore
+export interface UserDocument extends FirestoreDocument {
+  email: string;
+  firstName?: string;
+  lastName?: string;
+  name?: string;
+  role: string;
+  status?: string;
+  shelter_id?: string;
+  tenant_id?: string;
+  phone?: string;
+  dateOfBirth?: string;
+  goals?: string[];
+  caseWorkerId?: string;
+  caseWorkerName?: string;
+  emergencyContact?: {
+    name: string;
+    phone: string;
+    relationship: string;
+  };
+}
+
+// Provider data for Firebase Auth
+export interface ProviderData {
+  provider_id: string;
+  uid?: string;
+  display_name?: string;
+  email?: string;
+}
+
+// Firebase Auth user data
+export interface FirebaseAuthUser {
+  uid: string;
+  email?: string;
+  display_name?: string;
+  creation_timestamp?: string;
+  last_sign_in_timestamp?: string;
+  provider_data?: ProviderData[];
+}
 
 export interface PlatformMetrics {
   totalOrganizations: number;
@@ -74,8 +137,8 @@ export const getPlatformMetrics = async (): Promise<PlatformMetrics> => {
     console.log('✅ Platform metrics loaded:', metrics);
     return metrics;
     
-  } catch (error) {
-    console.error('❌ Error fetching platform metrics:', error);
+  } catch (err) {
+    console.error('❌ Error fetching platform metrics:', err);
     
     // Return safe fallback with dashes/zeros as requested
     return {
@@ -164,7 +227,7 @@ export const getShelterMetrics = async (shelterId: string): Promise<ShelterMetri
 /**
  * Generate recent activity from real database events
  */
-async function generateRecentActivity(shelterDocs: any[]): Promise<ActivityItem[]> {
+async function generateRecentActivity(shelterDocs: QueryDocumentSnapshot<DocumentData>[]): Promise<ActivityItem[]> {
   const activity: ActivityItem[] = [];
   
   // Add shelter-based activity
@@ -222,7 +285,7 @@ export const validateDataConsistency = async (): Promise<{
       issues
     };
     
-  } catch (error) {
+  } catch {
     return {
       consistent: false,
       issues: ['Failed to validate data consistency']
@@ -241,8 +304,8 @@ export interface ShelterParticipant {
   role: string;
   shelter_id: string;
   tenant_id: string;
-  created_at?: any;
-  updated_at?: any;
+  created_at?: FirestoreTimestamp | Timestamp;
+  updated_at?: FirestoreTimestamp | Timestamp;
 }
 
 // New function to get detailed participant list for a shelter
@@ -292,8 +355,8 @@ export interface ShelterService {
   location?: string;
   duration?: number;
   isActive: boolean;
-  created_at?: any;
-  updated_at?: any;
+  created_at?: FirestoreTimestamp | Timestamp;
+  updated_at?: FirestoreTimestamp | Timestamp;
 }
 
 // Service category statistics
@@ -559,8 +622,8 @@ export interface ParticipantProfile {
     phone: string;
     relationship: string;
   };
-  created_at?: any;
-  updated_at?: any;
+  created_at?: FirestoreTimestamp | Timestamp;
+  updated_at?: FirestoreTimestamp | Timestamp;
 }
 
 // Function to get detailed participant profile
@@ -624,8 +687,8 @@ export interface FeatureFlag {
   description: string;
   enabled: boolean;
   category: 'core' | 'experimental' | 'integration';
-  created_at?: any;
-  updated_at?: any;
+  created_at?: FirestoreTimestamp | Timestamp;
+  updated_at?: FirestoreTimestamp | Timestamp;
 }
 
 // System alert interface
@@ -1028,8 +1091,8 @@ export interface AdminUser {
   lastLogin: string;
   participants: number;
   joinDate: string;
-  created_at?: any;
-  updated_at?: any;
+  created_at?: FirestoreTimestamp | Timestamp;
+  updated_at?: FirestoreTimestamp | Timestamp;
 }
 
 export interface ParticipantUser {
@@ -1045,8 +1108,8 @@ export interface ParticipantUser {
   totalReceived: number;
   lastDonation: string | null;
   qrScans: number;
-  created_at?: any;
-  updated_at?: any;
+  created_at?: FirestoreTimestamp | Timestamp;
+  updated_at?: FirestoreTimestamp | Timestamp;
 }
 
 export interface DonorUser {
@@ -1061,8 +1124,8 @@ export interface DonorUser {
   donationCount: number;
   lastDonation: string | null;
   favoriteShelter: string;
-  created_at?: any;
-  updated_at?: any;
+  created_at?: FirestoreTimestamp | Timestamp;
+  updated_at?: FirestoreTimestamp | Timestamp;
 }
 
 // Get user statistics for user management dashboard
@@ -1072,7 +1135,7 @@ export const getUserStats = async (): Promise<UserStats> => {
     
     // Get all users
     const usersSnapshot = await getDocs(collection(db, 'users'));
-    const users = usersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as any));
+    const users = usersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as UserDocument));
     
     console.log(`🔍 DEBUG: Found ${users.length} total users in database`);
     console.log('🔍 DEBUG: User roles breakdown:', users.map(u => ({ email: u.email, role: u.role })));
@@ -1312,8 +1375,8 @@ export interface OrphanedUser {
   joinDate: string;
   registrationMethod: string;
   needsAttention: boolean;
-  created_at?: any;
-  updated_at?: any;
+  created_at?: FirestoreTimestamp | Timestamp;
+  updated_at?: FirestoreTimestamp | Timestamp;
 }
 
 // Debug function to check for users in other collections
@@ -1342,7 +1405,7 @@ export const debugAllCollections = async (): Promise<void> => {
         const snapshot = await getDocs(collection(db, collectionName));
         if (snapshot.size > 0) {
           console.log(`📁 Collection '${collectionName}': ${snapshot.size} documents`);
-          const docs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as any));
+          const docs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as DocumentData & { id: string }));
           const usersWithEmail = docs.filter(doc => doc.email);
           if (usersWithEmail.length > 0) {
             console.log(`   📧 Users with emails:`, usersWithEmail.map(u => u.email));
@@ -1352,7 +1415,7 @@ export const debugAllCollections = async (): Promise<void> => {
             }
           }
         }
-      } catch (error) {
+      } catch {
         // Collection doesn't exist or permission denied
         console.log(`📁 Collection '${collectionName}': Not accessible or doesn't exist`);
       }
@@ -1363,7 +1426,7 @@ export const debugAllCollections = async (): Promise<void> => {
 };
 
 // Function to get orphaned users from backend API
-export const getFirebaseAuthOrphanedUsers = async (): Promise<any[]> => {
+export const getFirebaseAuthOrphanedUsers = async (): Promise<FirebaseAuthUser[]> => {
   try {
     console.log('🔍 BACKEND: Getting orphaned Firebase Auth users...');
     
@@ -1462,7 +1525,7 @@ export const getOrphanedUsers = async (): Promise<OrphanedUser[]> => {
     
     // Get ALL users from database
     const usersSnapshot = await getDocs(collection(db, 'users'));
-    const allUsers = usersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as any));
+    const allUsers = usersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as UserDocument));
     
     console.log(`🔍 DEBUG: Found ${allUsers.length} total users in Firestore 'users' collection`);
     console.log('🔍 DEBUG: All users with emails:', allUsers.map(u => ({ 
@@ -1533,10 +1596,10 @@ export const getOrphanedUsers = async (): Promise<OrphanedUser[]> => {
         role: null,
         status: 'firebase_auth_only',
         joinDate: authOrphan.creation_timestamp ? new Date(authOrphan.creation_timestamp).toLocaleDateString() : 'Unknown',
-        registrationMethod: authOrphan.provider_data?.length > 0 ? `OAuth (${authOrphan.provider_data.map((p: any) => p.provider_id).join(', ')})` : 'Unknown',
+        registrationMethod: authOrphan.provider_data && authOrphan.provider_data.length > 0 ? `OAuth (${authOrphan.provider_data.map((p: ProviderData) => p.provider_id).join(', ')})` : 'Unknown',
         needsAttention: true,
-        created_at: authOrphan.creation_timestamp ? { seconds: new Date(authOrphan.creation_timestamp).getTime() / 1000 } : null,
-        updated_at: authOrphan.last_sign_in_timestamp ? { seconds: new Date(authOrphan.last_sign_in_timestamp).getTime() / 1000 } : null
+        created_at: authOrphan.creation_timestamp ? { seconds: new Date(authOrphan.creation_timestamp).getTime() / 1000 } : undefined,
+        updated_at: authOrphan.last_sign_in_timestamp ? { seconds: new Date(authOrphan.last_sign_in_timestamp).getTime() / 1000 } : undefined
       });
     });
 

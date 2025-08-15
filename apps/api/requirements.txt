@@ -22,7 +22,7 @@ python-multipart==0.0.18
 
 # AI and ML
 openai==1.99.9
-langchain==0.0.350
+langchain==0.2.5
 anthropic==0.8.1
 textblob==0.17.1
 
@@ -47,7 +47,7 @@ twilio==8.10.0
 
 # Image and QR Code Processing
 qrcode[pil]==8.2
-pillow==10.1.0
+pillow==10.3.0
 
 # Payment Processing (Adyen)
 Adyen==10.0.0
@@ -63,7 +63,7 @@ pytest-asyncio==0.21.1
 pytest-cov==4.1.0
 
 # Development Tools
-black==23.11.0
+black==24.3.0
 isort==5.12.0
 flake8==6.1.0
 mypy==1.7.1

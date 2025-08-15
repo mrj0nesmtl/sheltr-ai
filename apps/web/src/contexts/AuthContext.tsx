@@ -377,6 +377,18 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
       
+      // Check if user exists in SHELTR system by looking for their profile in Firestore
+      const userDocRef = doc(db, 'users', user.uid);
+      const userDoc = await getDoc(userDocRef);
+      
+      // If user doesn't exist in SHELTR system, sign them out and show error
+      if (!userDoc.exists()) {
+        console.log('🚫 User not found in SHELTR system - signing out');
+        await signOut(auth);
+        setError('Account not found. Please register for a SHELTR account first before signing in with Google.');
+        throw new Error('User must register first');
+      }
+      
       // Check if this is a new user or existing user
       const existingUser = await auth.currentUser?.getIdTokenResult();
       
@@ -406,9 +418,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         }
       }
       
+      console.log('✅ Google login successful for existing SHELTR user');
+      
     } catch (error: any) {
       console.error('Google login error:', error);
-      setError(error.message || 'Google login failed');
+      if (error.message === 'User must register first') {
+        // Keep the specific error message for unregistered users
+        setError('Account not found. Please register for a SHELTR account first before signing in with Google.');
+      } else {
+        setError(error.message || 'Google login failed');
+      }
       throw error;
     } finally {
       setLoading(false);

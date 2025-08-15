@@ -87,16 +87,7 @@ function RegisterPageContent() {
         <RegisterForm defaultRole={defaultRole} />
 
         {/* Additional Information */}
-        <div className="mt-8 text-center space-y-4">
-          <div className="bg-blue-50 dark:bg-gray-700 rounded-lg p-4 max-w-md mx-auto">
-            <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">
-              🚀 Join the Revolution
-            </h3>
-            <p className="text-sm text-blue-700 dark:text-blue-200">
-              SHELTR is transforming how we support individuals experiencing homelessness through technology, transparency, and direct action.
-            </p>
-          </div>
-          
+        <div className="mt-8 text-center">
           <p className="text-sm text-gray-600 dark:text-gray-400">
             Need help?{' '}
             <a 

@@ -24,7 +24,7 @@ python-multipart==0.0.18
 openai==1.99.9
 langchain==0.2.5
 anthropic==0.8.1
-textblob==0.17.1
+textblob==0.19.0
 
 # Blockchain and Crypto
 web3==6.12.0

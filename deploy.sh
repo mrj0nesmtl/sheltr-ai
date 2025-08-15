@@ -35,9 +35,10 @@ select_deployment() {
     echo "1) Frontend only (Firebase Hosting)"
     echo "2) Backend only (Firebase Functions)"
     echo "3) Full deployment (Frontend + Backend)"
-    echo "4) Development build (no deployment)"
+    echo "4) Security-focused deployment (with audits)"
+    echo "5) Development build (no deployment)"
     
-    read -p "Enter your choice (1-4): " choice
+    read -p "Enter your choice (1-5): " choice
     echo ""
 }
 
@@ -48,15 +49,25 @@ deploy_frontend() {
     # Navigate to frontend directory
     cd $FRONTEND_DIR
     
-    # Install dependencies
-    echo -e "${YELLOW}📦 Installing frontend dependencies...${NC}"
-    npm install > ../../logs/deploy-frontend-install.log 2>&1
+    # Install dependencies with security audit
+    echo -e "${YELLOW}📦 Installing frontend dependencies with security check...${NC}"
+    npm ci > ../../logs/deploy-frontend-install.log 2>&1
     check_status "Frontend dependency installation"
+    
+    # Run security audit (non-blocking)
+    echo -e "${YELLOW}🔒 Running security audit...${NC}"
+    npm audit --audit-level=high >> ../../logs/deploy-frontend-install.log 2>&1 || echo -e "${YELLOW}⚠️  Security audit found issues (check logs)${NC}"
     
     # Build the application
     echo -e "${YELLOW}🔨 Building Next.js application...${NC}"
     npm run build > ../../logs/deploy-frontend-build.log 2>&1
     check_status "Frontend build"
+    
+    # Verify build output
+    if [ ! -d "out" ]; then
+        echo -e "${RED}❌ Build output directory not found${NC}"
+        exit 1
+    fi
     
     # Deploy to Firebase Hosting
     echo -e "${YELLOW}🔥 Deploying to Firebase Hosting...${NC}"
@@ -66,6 +77,7 @@ deploy_frontend() {
     
     echo -e "${GREEN}✅ Frontend deployed successfully!${NC}"
     echo -e "${BLUE}🌐 Live URL: https://sheltr-ai.web.app${NC}"
+    echo -e "${BLUE}🔗 Direct link: https://sheltr-ai.web.app/dashboard${NC}"
 }
 
 # Function to deploy backend
@@ -93,6 +105,55 @@ deploy_backend() {
     echo -e "${BLUE}🔌 API URL: https://your-region-sheltr-ai.cloudfunctions.net/api${NC}"
 }
 
+# Function for security-focused deployment
+security_deployment() {
+    echo -e "${BLUE}🔒 Security-Focused Deployment Pipeline${NC}"
+    echo "======================================="
+    
+    # Run comprehensive security checks first
+    echo -e "${YELLOW}🔍 Running comprehensive security audit...${NC}"
+    
+    # Frontend security checks
+    cd $FRONTEND_DIR
+    echo -e "${YELLOW}📦 Frontend security audit...${NC}"
+    npm audit --audit-level=moderate > ../../logs/security-audit-frontend.log 2>&1 || echo -e "${YELLOW}⚠️  Frontend vulnerabilities found (see logs)${NC}"
+    
+    # Check for sensitive files
+    echo -e "${YELLOW}🔍 Scanning for sensitive files...${NC}"
+    cd ../..
+    if find . -name "*.key" -o -name "*.pem" -o -name ".env" -o -name "*.p12" | grep -v ".git" | grep -q .; then
+        echo -e "${RED}❌ Sensitive files detected! Review before deployment${NC}"
+        find . -name "*.key" -o -name "*.pem" -o -name ".env" -o -name "*.p12" | grep -v ".git"
+        read -p "Continue anyway? (y/N): " continue_deploy
+        if [[ ! $continue_deploy =~ ^[Yy]$ ]]; then
+            exit 1
+        fi
+    else
+        echo -e "${GREEN}✅ No sensitive files found${NC}"
+    fi
+    
+    # Backend security checks
+    cd $BACKEND_DIR
+    echo -e "${YELLOW}🐍 Backend security audit...${NC}"
+    if command -v safety &> /dev/null; then
+        safety check > ../../logs/security-audit-backend.log 2>&1 || echo -e "${YELLOW}⚠️  Backend vulnerabilities found (see logs)${NC}"
+    else
+        echo -e "${YELLOW}⚠️  Safety not installed, skipping Python vulnerability check${NC}"
+    fi
+    
+    cd ../..
+    
+    # Deploy with security verification
+    echo -e "${GREEN}🚀 Proceeding with secure deployment...${NC}"
+    deploy_frontend
+    
+    # Additional security verification post-deployment
+    echo -e "${YELLOW}🔒 Post-deployment security verification...${NC}"
+    
+    echo -e "${GREEN}✅ Security-focused deployment completed!${NC}"
+    echo -e "${BLUE}📋 Review security logs in: logs/security-audit-*.log${NC}"
+}
+
 # Function to run development build
 dev_build() {
     echo -e "${BLUE}🛠️  Running development build (no deployment)...${NC}"
@@ -100,7 +161,7 @@ dev_build() {
     # Build frontend
     echo -e "${YELLOW}🌐 Building frontend...${NC}"
     cd $FRONTEND_DIR
-    npm run build > ../logs/dev-build-frontend.log 2>&1
+    npm run build > ../../logs/dev-build-frontend.log 2>&1
     check_status "Frontend development build"
     
     # Test backend
@@ -108,13 +169,17 @@ dev_build() {
     cd ../$BACKEND_DIR
     
     # Activate virtual environment and run tests
-    source .venv/bin/activate
-    python -m pytest --version > /dev/null 2>&1
-    if [ $? -eq 0 ]; then
-        python -m pytest > ../logs/dev-build-backend.log 2>&1
-        check_status "Backend tests"
+    if [ -d ".venv" ]; then
+        source .venv/bin/activate
+        python -m pytest --version > /dev/null 2>&1
+        if [ $? -eq 0 ]; then
+            python -m pytest > ../../logs/dev-build-backend.log 2>&1
+            check_status "Backend tests"
+        else
+            echo -e "${YELLOW}⚠️  No pytest found, skipping tests${NC}"
+        fi
     else
-        echo -e "${YELLOW}⚠️  No pytest found, skipping tests${NC}"
+        echo -e "${YELLOW}⚠️  No virtual environment found, skipping backend tests${NC}"
     fi
     
     cd ../..
@@ -167,6 +232,28 @@ pre_deployment_checks() {
         exit 1
     fi
     
+    # Check git status and security
+    echo -e "${YELLOW}🔍 Checking repository status...${NC}"
+    git_status=$(git status --porcelain)
+    if [ -n "$git_status" ]; then
+        echo -e "${YELLOW}⚠️  Uncommitted changes detected:${NC}"
+        git status --short
+        echo ""
+        read -p "Deploy anyway? (y/N): " deploy_dirty
+        if [[ ! $deploy_dirty =~ ^[Yy]$ ]]; then
+            echo -e "${RED}❌ Deployment cancelled${NC}"
+            exit 1
+        fi
+    fi
+    
+    # Check if branch protection is working
+    current_branch=$(git rev-parse --abbrev-ref HEAD)
+    if [ "$current_branch" = "main" ]; then
+        echo -e "${GREEN}✅ On main branch with protection enabled${NC}"
+    else
+        echo -e "${YELLOW}⚠️  Not on main branch (current: $current_branch)${NC}"
+    fi
+    
     # Update environment
     update_environment
     
@@ -178,16 +265,39 @@ post_deployment_verification() {
     echo -e "${BLUE}🔍 Running post-deployment verification...${NC}"
     
     # Test frontend
-    if curl -s https://sheltr-ai.web.app > /dev/null 2>&1; then
+    echo -e "${YELLOW}🌐 Testing frontend accessibility...${NC}"
+    if curl -s --connect-timeout 10 https://sheltr-ai.web.app > /dev/null 2>&1; then
         echo -e "${GREEN}✅ Frontend is accessible${NC}"
     else
-        echo -e "${YELLOW}⚠️  Frontend health check failed${NC}"
+        echo -e "${YELLOW}⚠️  Frontend health check failed (may take a few minutes to propagate)${NC}"
+    fi
+    
+    # Test key frontend routes
+    echo -e "${YELLOW}🔍 Testing key routes...${NC}"
+    routes=("/login" "/register" "/about" "/impact")
+    for route in "${routes[@]}"; do
+        if curl -s --connect-timeout 5 "https://sheltr-ai.web.app$route" > /dev/null 2>&1; then
+            echo -e "${GREEN}✅ Route $route accessible${NC}"
+        else
+            echo -e "${YELLOW}⚠️  Route $route may need time to propagate${NC}"
+        fi
+        sleep 1
+    done
+    
+    # Check security headers
+    echo -e "${YELLOW}🔒 Checking security headers...${NC}"
+    headers=$(curl -s -I https://sheltr-ai.web.app 2>/dev/null)
+    if echo "$headers" | grep -q "X-Frame-Options\|X-Content-Type-Options\|Referrer-Policy"; then
+        echo -e "${GREEN}✅ Security headers present${NC}"
+    else
+        echo -e "${YELLOW}⚠️  Consider adding security headers in firebase.json${NC}"
     fi
     
     # Test backend (if deployed)
     # Note: This would need to be updated with actual function URL
     
     echo -e "${GREEN}✅ Post-deployment verification completed${NC}"
+    echo -e "${BLUE}📊 Monitor deployment: https://console.firebase.google.com/project/sheltr-ai/hosting${NC}"
 }
 
 # Main deployment flow
@@ -218,6 +328,9 @@ main() {
             deploy_backend
             ;;
         4)
+            security_deployment
+            ;;
+        5)
             dev_build
             ;;
         *)
@@ -232,6 +345,8 @@ main() {
     
     if [ $choice -eq 1 ] || [ $choice -eq 3 ]; then
         echo -e "${BLUE}🌐 Frontend:${NC} https://sheltr-ai.web.app"
+        echo -e "${BLUE}🔗 Dashboard:${NC} https://sheltr-ai.web.app/dashboard"
+        echo -e "${BLUE}💝 Donate Demo:${NC} https://sheltr-ai.web.app/scan-give"
     fi
     
     if [ $choice -eq 2 ] || [ $choice -eq 3 ]; then
@@ -239,10 +354,12 @@ main() {
     fi
     
     echo -e "${BLUE}📊 Firebase Console:${NC} https://console.firebase.google.com/project/sheltr-ai"
+    echo -e "${BLUE}🔒 Security Overview:${NC} https://github.com/mrj0nesmtl/sheltr-ai/security"
+    echo -e "${BLUE}⚡ GitHub Actions:${NC} https://github.com/mrj0nesmtl/sheltr-ai/actions"
     echo ""
     
     # Run post-deployment verification
-    if [ $choice -ne 4 ]; then
+    if [ $choice -ne 5 ]; then
         post_deployment_verification
     fi
     

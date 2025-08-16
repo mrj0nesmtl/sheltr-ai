@@ -60,6 +60,7 @@ jobs:
 
 # CodeQL analysis is handled by dedicated .github/workflows/codeql.yml
 # This prevents duplicate CodeQL runs and configuration conflicts
+# The upload-sarif actions below are for OTHER security tools (Trivy, Checkov), NOT CodeQL
 
   secrets-scan:
     name: Secret Scanning
@@ -106,6 +107,7 @@ jobs:
       if: always()
       with:
         sarif_file: 'trivy-results.sarif'
+        category: 'trivy-results'
 
   license-compliance:
     name: License Compliance Check
@@ -158,6 +160,7 @@ jobs:
       if: always()
       with:
         sarif_file: checkov-results.sarif
+        category: 'checkov-results'
 
   security-policy-check:
     name: Security Policy Validation

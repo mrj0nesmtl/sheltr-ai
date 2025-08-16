@@ -1,0 +1,9 @@
+[submodule "sheltr-tokens/lib/forge-std"]
+	path = sheltr-tokens/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "sheltr-tokens/lib/openzeppelin-contracts"]
+	path = sheltr-tokens/lib/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts
+[submodule "sheltr-tokens/lib/v4-core"]
+	path = sheltr-tokens/lib/v4-core
+	url = https://github.com/Uniswap/v4-core

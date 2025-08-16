@@ -98,10 +98,10 @@ export default function TokenomicsPage() {
           </div>
           <Badge variant="secondary" className="mb-4 bg-gradient-to-r from-blue-500/10 to-purple-500/10 border-blue-500/20">$SHLTR Tokenomics</Badge>
           <h1 className="text-4xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            SHELTR SmartFund™ & Dual-Token Economy
+            SmartFund™ Tokenomics
           </h1>
           <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
-            Revolutionary dual-token architecture combining stability for participants with growth potential for the community. 
+            Sheltr's pioneering dual-token architecture combines both stability and growth potential for Participants and the Community. 
             Built on Base network with enterprise-grade infrastructure for seamless real-world utility.
           </p>
           
@@ -110,13 +110,13 @@ export default function TokenomicsPage() {
             <Link href="/docs/whitepaper">
               <Button variant="outline" size="lg">
                 <FileText className="h-4 w-4 mr-2" />
-                Technical Whitepaper
+                Whitepaper
               </Button>
             </Link>
             <Link href="/docs" target="_blank" rel="noopener noreferrer">
               <Button variant="outline" size="lg">
                 <BookOpen className="h-4 w-4 mr-2" />
-                Hacking Homelessness
+                Thesis
               </Button>
             </Link>
           </div>
@@ -165,7 +165,7 @@ export default function TokenomicsPage() {
 
             <Card className="border-2 border-green-500/20 bg-green-500/5">
               <CardHeader>
-                <CardTitle className="text-xl text-green-600 dark:text-green-400">✅ SHELTR Dual-Token Model</CardTitle>
+                <CardTitle className="text-xl text-green-600 dark:text-green-400">✅ SHELTR Model</CardTitle>
                 <CardDescription>Revolutionary blockchain-verified transparency</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -202,13 +202,13 @@ export default function TokenomicsPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold mb-4">Dual-Token Architecture</h2>
-            <p className="text-xl text-muted-foreground">Two tokens, one mission: stability for participants, growth for community</p>
+            <p className="text-xl text-muted-foreground">Two tokens, one mission: stability and growth for Participants and Community</p>
           </div>
 
           {/* Interactive Token Comparison Chart */}
           <Card className="mb-12 border-2">
             <CardHeader>
-              <CardTitle className="text-center">Token Architecture Overview</CardTitle>
+              <CardTitle className="text-center">Architecture Overview</CardTitle>
               <CardDescription className="text-center">Complete breakdown of SHELTR&apos;s revolutionary dual-token system</CardDescription>
             </CardHeader>
             <CardContent>
@@ -220,7 +220,7 @@ export default function TokenomicsPage() {
                     <div className="bg-blue-500/10 p-3 rounded-lg">
                       <div className="text-2xl font-bold text-blue-600">80%</div>
                       <div className="text-sm">→ SHELTR-S Tokens</div>
-                      <div className="text-xs text-muted-foreground">Direct participant support</div>
+                      <div className="text-xs text-muted-foreground">Direct participant suppor</div>
                     </div>
                     <div className="bg-green-500/10 p-3 rounded-lg">
                       <div className="text-2xl font-bold text-green-600">15%</div>
@@ -229,7 +229,7 @@ export default function TokenomicsPage() {
                     </div>
                     <div className="bg-purple-500/10 p-3 rounded-lg">
                       <div className="text-2xl font-bold text-purple-600">5%</div>
-                      <div className="text-sm">→ Operations</div>
+                      <div className="text-sm">→ Shelter Operations</div>
                       <div className="text-xs text-muted-foreground">Platform sustainability</div>
                     </div>
                   </div>
@@ -245,13 +245,13 @@ export default function TokenomicsPage() {
                       <div className="text-xs text-muted-foreground">USDC 1:1 backing</div>
                     </div>
                     <div className="bg-purple-500/10 p-3 rounded-lg">
-                      <div className="text-lg font-bold text-purple-600">SHELTR</div>
+                      <div className="text-lg font-bold text-purple-600">$SHELTR</div>
                       <div className="text-sm">100M Fixed Supply</div>
                       <div className="text-xs text-muted-foreground">Deflationary mechanics</div>
                     </div>
                     <div className="bg-orange-500/10 p-3 rounded-lg">
-                      <div className="text-lg font-bold text-orange-600">Welcome Bonus</div>
-                      <div className="text-sm">100 SHELTR-S</div>
+                      <div className="text-lg font-bold text-orange-600">Participant Welcome</div>
+                      <div className="text-sm">100 $SHELTR</div>
                       <div className="text-xs text-muted-foreground">Per new participant</div>
                     </div>
                   </div>
@@ -355,14 +355,14 @@ export default function TokenomicsPage() {
                     <TrendingUp className="h-6 w-6 text-purple-600 dark:text-purple-400" />
                   </div>
                   <div>
-                    <CardTitle className="text-2xl text-purple-600 dark:text-purple-400">SHELTR</CardTitle>
+                    <CardTitle className="text-2xl text-purple-600 dark:text-purple-400">$SHELTR</CardTitle>
                     <CardDescription className="text-purple-600/70">Community & Governance Token</CardDescription>
                   </div>
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="bg-purple-500/10 p-4 rounded-lg border border-purple-500/20">
-                  <div className="text-2xl font-bold text-purple-600 dark:text-purple-400 mb-1">Market Price</div>
+                  <div className="text-2xl font-bold text-purple-600 dark:text-purple-400 mb-1">Market Value</div>
                   <p className="text-sm text-purple-600/70">Growth potential with community engagement</p>
                 </div>
                 
@@ -418,22 +418,22 @@ export default function TokenomicsPage() {
       <section className="py-20 bg-gradient-to-r from-orange-500/5 to-red-500/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4">Token Launch & ICO Information</h2>
-            <p className="text-xl text-muted-foreground">Investment opportunity in revolutionary social impact technology</p>
+            <h2 className="text-3xl font-bold mb-4">Token Launch Information</h2>
+            <p className="text-xl text-muted-foreground">Invest in revolutionary social impact technology</p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8 mb-12">
             <Card className="border-2 border-orange-500/20 bg-orange-500/5">
               <CardHeader>
-                <CardTitle className="text-xl text-orange-600 dark:text-orange-400">🚀 Pre-Seed Round (Current)</CardTitle>
-                <CardDescription>Early investor opportunity with maximum upside</CardDescription>
+                <CardTitle className="text-xl text-orange-600 dark:text-orange-400">🚀 Pre-Seed (Current)</CardTitle>
+                <CardDescription>Supports Platform Completion & Launch</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="bg-orange-500/10 p-3 rounded-lg">
                     <div className="font-semibold">Token Price</div>
                     <div className="text-2xl font-bold text-orange-600">$0.05</div>
-                    <div className="text-xs text-muted-foreground">50% discount to public</div>
+                    <div className="text-xs text-muted-foreground">50% discount to qualified parties</div>
                   </div>
                   <div className="bg-orange-500/10 p-3 rounded-lg">
                     <div className="font-semibold">Target Raise</div>
@@ -445,7 +445,7 @@ export default function TokenomicsPage() {
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span>Progress</span>
-                    <span className="font-semibold">$45K / $150K</span>
+                    <span className="font-semibold">$25K / $150K</span>
                   </div>
                   <Progress value={30} className="h-2" />
                 </div>
@@ -485,7 +485,7 @@ export default function TokenomicsPage() {
                   </div>
                   <div className="bg-purple-500/10 p-3 rounded-lg">
                     <div className="font-semibold">Public Allocation</div>
-                    <div className="text-2xl font-bold text-purple-600">30M</div>
+                    <div className="text-2xl font-bold text-purple-600">50M</div>
                     <div className="text-xs text-muted-foreground">Tokens available</div>
                   </div>
                 </div>
@@ -526,22 +526,22 @@ export default function TokenomicsPage() {
                     <div className="flex items-center justify-between p-3 bg-blue-500/10 rounded-lg">
                       <span>Public Sale</span>
                       <div className="text-right">
-                        <div className="font-semibold">30M (30%)</div>
+                        <div className="font-semibold">50M (50%)</div>
                         <div className="text-xs text-muted-foreground">Community ownership</div>
                       </div>
                     </div>
                     <div className="flex items-center justify-between p-3 bg-green-500/10 rounded-lg">
-                      <span>Housing Fund</span>
+                      <span>Reserve Fund</span>
                       <div className="text-right">
-                        <div className="font-semibold">25M (25%)</div>
-                        <div className="text-xs text-muted-foreground">Long-term impact</div>
+                        <div className="font-semibold">5M (5%)</div>
+                        <div className="text-xs text-muted-foreground">Long-term Defi Staking</div>
                       </div>
                     </div>
                     <div className="flex items-center justify-between p-3 bg-purple-500/10 rounded-lg">
                       <span>Team & Advisors</span>
                       <div className="text-right">
-                        <div className="font-semibold">20M (20%)</div>
-                        <div className="text-xs text-muted-foreground">4-year vesting</div>
+                        <div className="font-semibold">15M (15%)</div>
+                        <div className="text-xs text-muted-foreground">-3.15C17-year vesting</div>
                       </div>
                     </div>
                     <div className="flex items-center justify-between p-3 bg-orange-500/10 rounded-lg">
@@ -554,7 +554,7 @@ export default function TokenomicsPage() {
                     <div className="flex items-center justify-between p-3 bg-yellow-500/10 rounded-lg">
                       <span>Community Rewards</span>
                       <div className="text-right">
-                        <div className="font-semibold">10M (10%)</div>
+                        <div className="font-semibold">15M (15%)</div>
                         <div className="text-xs text-muted-foreground">Incentives & airdrops</div>
                       </div>
                     </div>
@@ -604,7 +604,7 @@ export default function TokenomicsPage() {
       <section className="py-20 bg-gradient-to-r from-blue-500/5 to-purple-500/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4">SmartFund™ Distribution Model</h2>
+            <h2 className="text-3xl font-bold mb-4">SmartFund™ Donation Model</h2>
             <p className="text-xl text-muted-foreground">Transparent, automated allocation ensuring maximum impact</p>
           </div>
 
@@ -662,19 +662,19 @@ export default function TokenomicsPage() {
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-center space-x-2">
                     <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
-                    <span>Emergency housing (40%)</span>
+                    <span>Emergency housing</span>
                   </li>
                   <li className="flex items-center space-x-2">
                     <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
-                    <span>Transitional programs (35%)</span>
+                    <span>Transitional programs</span>
                   </li>
                   <li className="flex items-center space-x-2">
                     <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
-                    <span>Permanent solutions (20%)</span>
+                    <span>Permanent solutions</span>
                   </li>
                   <li className="flex items-center space-x-2">
                     <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
-                    <span>Support services (5%)</span>
+                    <span>Support services</span>
                   </li>
                 </ul>
                 
@@ -691,7 +691,7 @@ export default function TokenomicsPage() {
                   <Zap className="h-8 w-8 text-purple-600 dark:text-purple-400" />
                 </div>
                 <CardTitle className="text-3xl font-bold text-purple-600 dark:text-purple-400">5%</CardTitle>
-                <CardDescription className="text-purple-600/70">Platform Operations</CardDescription>
+                <CardDescription className="text-purple-600/70">Shelter Operations</CardDescription>
               </CardHeader>
               <CardContent>
                 <p className="text-center text-muted-foreground mb-4">
@@ -700,25 +700,24 @@ export default function TokenomicsPage() {
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-center space-x-2">
                     <CheckCircle className="h-4 w-4 text-purple-600 dark:text-purple-400" />
-                    <span>Technical development</span>
+                    <span>Onboarding Program</span>
                   </li>
                   <li className="flex items-center space-x-2">
                     <CheckCircle className="h-4 w-4 text-purple-600 dark:text-purple-400" />
-                    <span>Security audits</span>
+                    <span>Financial audits</span>
                   </li>
                   <li className="flex items-center space-x-2">
                     <CheckCircle className="h-4 w-4 text-purple-600 dark:text-purple-400" />
-                    <span>Community support</span>
+                    <span>Tech support</span>
                   </li>
                   <li className="flex items-center space-x-2">
                     <CheckCircle className="h-4 w-4 text-purple-600 dark:text-purple-400" />
-                    <span>Platform scaling</span>
+                    <span>Support materials</span>
                   </li>
                 </ul>
                 
                 <div className="mt-6 p-3 bg-purple-500/10 rounded-lg border">
-                  <div className="text-sm font-semibold text-purple-600">Break-even</div>
-                  <div className="text-xs text-muted-foreground">$50K monthly donations</div>
+                  <div className="text-sm font-semibold text-purple-600">SHELTR for Shelters.</div>
                 </div>
               </CardContent>
             </Card>

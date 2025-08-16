@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
+import { isSecureDomain } from '@/lib/urlSecurity';
 
 // Demo donation amounts
 const DEMO_AMOUNTS = [25, 50, 100, 200];
@@ -47,7 +48,7 @@ function DonatePageContent() {
         const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
         
         // Use real participant data for demo
-        if ((isProduction && apiBaseUrl?.includes('api.sheltr-ai.com')) || participantId === 'demo-participant-001' || participantId === 'michael-rodriguez') {
+        if ((isProduction && isSecureDomain(apiBaseUrl, 'api.sheltr-ai.com')) || participantId === 'demo-participant-001' || participantId === 'michael-rodriguez') {
           // Michael Rodriguez - Real participant for authentic demo experience
           const realParticipant = {
             id: participantId === 'demo-participant-001' ? 'demo-participant-001' : 'michael-rodriguez',

@@ -2,7 +2,7 @@
 fastapi==0.104.1
 uvicorn[standard]==0.24.0
 pydantic==2.5.0
-pydantic-settings==2.1.0
+pydantic-settings==2.10.1
 
 # Firebase and Google Cloud
 firebase-admin==6.4.0

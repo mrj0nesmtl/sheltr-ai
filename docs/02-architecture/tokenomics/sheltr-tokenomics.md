@@ -22,6 +22,8 @@ SHELTR implements a revolutionary dual-token architecture that balances particip
 
 Built on Base network with Visa MCP integration, our tokenomics ensure 80% of all donations reach participants as stable value, 15% funds long-term housing solutions, and 5% supports platform operations - all verified on-chain for complete transparency.
 
+**Total Token Supply**: 100,000,000 SHELTR tokens with comprehensive distribution across public sale, team vesting, and treasury management.
+
 ---
 
 ## 🎯 Token Overview
@@ -62,20 +64,20 @@ Built on Base network with Visa MCP integration, our tokenomics ensure 80% of al
 
 ```mermaid
 pie title SmartFund Distribution
-    "Direct Support (SHELTR-S)" : 85
-    "Housing Fund" : 10
+    "Direct Support (SHELTR-S)" : 80
+    "Housing Fund" : 15
     "Shelter Operations" : 5
 ```
 
-### 1. Direct Participant Support (85%)
+### 1. Direct Participant Support (80%)
 - **Immediate conversion** to SHELTR-S tokens
 - **Zero volatility risk** for essential needs
 - **Direct access** through QR codes and wallets
 - **Use cases**: Food, clothing, transportation, healthcare, emergency expenses
 
-### 2. Housing Fund Initiative (10%)
+### 2. Housing Fund Initiative (15%)
 - **Smart contract governed** long-term investment
-- **DeFi yield strategies** for fund growth
+- **DeFi yield strategies** for fund growth (6-8% APY target)
 - **Transparent allocation** to housing programs:
   - Emergency housing (40%)
   - Transitional programs (35%)
@@ -90,6 +92,43 @@ pie title SmartFund Distribution
   - Program expansion and enhancement
   - Technology integration and support
 - **Special Rule**: If participant was not onboarded via a registered shelter, this 5% allocation is redirected to their individual housing fund account
+
+---
+
+## 📊 Token Distribution & Capital Timeline
+
+### **Total Supply: 100,000,000 SHELTR**
+
+| **Allocation** | **Tokens** | **Percentage** | **Release Strategy** |
+|----------------|------------|----------------|---------------------|
+| **Public Sale** | 50,000,000 | 50% | Staggered over 3 years |
+| **Team & Advisors** | 15,000,000 | 15% | 3-year vesting (Jan 2026) |
+| **Reserve Fund** | 5,000,000 | 5% | Immediate access |
+| **Strategic Partnerships** | 15,000,000 | 15% | 3-year distribution |
+| **Platform Development** | 15,000,000 | 15% | 3-year distribution |
+
+### **Capital Generation Timeline**
+
+#### **Year 1 (December 2025)**
+- **Pre-Seed Sale**: 3M tokens × $0.05 = **$150K USD**
+- **Public Sale (Year 1)**: ~15.7M tokens × $0.10 = **$1.57M USD**
+- **Total Year 1 Capital**: **$1.72M USD**
+
+#### **Year 2 (December 2026)**
+- **Public Sale (Year 2)**: ~15.7M tokens × $0.10 = **$1.57M USD**
+
+#### **Year 3 (December 2027)**
+- **Public Sale (Year 3)**: ~15.6M tokens × $0.10 = **$1.56M USD**
+
+#### **Total 3-Year Capital Raise**
+- **Total Commitment**: **$4.85M USD**
+- **Actual Capital**: **$4.85M USD** (staggered over 3 years)
+
+### **Investment Limits**
+- **Minimum Investment**: $500 USDC
+- **Maximum Investment**: $50,000 USDC per person/entity
+- **Pre-Seed Vesting**: 12-month vesting with 30-day cliff
+- **Public Sale**: Immediate delivery (no vesting)
 
 ---
 

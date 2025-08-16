@@ -1,22 +1,24 @@
 # 🏠 SHELTR
 **Better to Solve than Manage.** 
 
-The next generation platform for transparent charitable giving and homelessness support built on modern cloud infrastructure.
+The next generation platform for transparent charitable giving and homelessness support built on modern cloud infrastructure and blockchain technology.
 
 [![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com)
 [![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org)
 [![Expo](https://img.shields.io/badge/Expo-000020?style=for-the-badge&logo=expo&logoColor=white)](https://expo.dev)
+[![Solidity](https://img.shields.io/badge/Solidity-363636?style=for-the-badge&logo=solidity&logoColor=white)](https://soliditylang.org)
+[![Foundry](https://img.shields.io/badge/Foundry-FF6B35?style=for-the-badge&logo=foundry&logoColor=white)](https://getfoundry.sh)
 [![GitHub Stars](https://img.shields.io/github/stars/mrj0nesmtl/sheltr-ai?style=for-the-badge)](https://github.com/mrj0nesmtl/sheltr-ai)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg?style=for-the-badge)](https://www.python.org/downloads/)
-[![Last Updated](https://img.shields.io/badge/Last%20Updated-August%204%2C%202025-brightgreen?style=for-the-badge)](https://github.com/mrj0nesmtl/sheltr-ai)
+[![Last Updated](https://img.shields.io/badge/Last%20Updated-August%2016%2C%202025-brightgreen?style=for-the-badge)](https://github.com/mrj0nesmtl/sheltr-ai)
 
 ---
 
 ## 🎯 Mission
 
-**Sheltr is Hacking homelessness.** SHELTR empowers direct, transparent charitable giving through QR-code enabled donations, blockchain verification, and AI-driven insights. Every donation follows our SmartFund™ distribution: 85% direct to participants, 10% to sustainable housing, 5% to participant's registered shelter operations.
+**Sheltr is Hacking homelessness.** SHELTR empowers direct, transparent charitable giving through QR-code enabled donations, blockchain verification, and AI-driven insights. Every donation follows our SmartFund™ distribution: **80% direct to participants, 15% to sustainable housing fund, 5% to shelter operations**.
 
 ## 🚀 Quick Start
 
@@ -24,6 +26,7 @@ The next generation platform for transparent charitable giving and homelessness 
 - **Want to develop?** → Check [Development Roadmap](docs/04-development/dev-roadmap.md)
 - **Need API docs?** → Visit [API Documentation](docs/03-api/README.md)
 - **User guidance?** → See [Complete User Guides](docs/06-user-guides/) (Participant, Admin, Donor)
+- **🆕 Blockchain/Tokens?** → Explore [SHELTR Token Ecosystem](sheltr-tokens/docs/README.md)
 
 ---
 
@@ -49,11 +52,16 @@ The next generation platform for transparent charitable giving and homelessness 
 
 ### 👩‍💻 [04. Development](docs/04-development/)
 - [Development Roadmap](docs/04-development/dev-roadmap.md)
-- [Session 5.5: About & Solutions Redesign](docs/04-development/SESSION-05.5-ABOUT-SOLUTIONS-REDESIGN.md)
-- [Session 6: Multi-Dashboard Development](docs/04-development/SESSION-06-MULTI-DASHBOARD-DEVELOPMENT.md)
-- [Session 5: GitHub Security & Super Admin](docs/04-development/SESSION-05-GITHUB-SECURITY-SUPER-ADMIN.md)
-- [Session 4: Super Admin Dashboard](docs/04-development/SESSION-04-SUPER-ADMIN-DASHBOARD.md)
-- [Session 3: Authentication & RBAC](docs/04-development/SESSION-03-AUTHENTICATION-RBAC.md)
+- [Session 12: Technical Perfection](docs/04-development/SESSION-12-KICKOFF-PROMPT.md)
+- [Session 11: Advanced Features](docs/04-development/SESSION-11-KICKOFF-PROMPT.md)
+- [Session 10: Production Readiness](docs/04-development/SESSION-10-KICKOFF-PROMPT.md)
+- [Session 9: Data Connectivity](docs/04-development/SESSION-09-DATA-CONNECTIVITY.md)
+- [Session 8: Core Business Logic](docs/04-development/development_archive/SESSION-08-CORE-BUSINESS-LOGIC.md)
+- [Session 7: Chatbot & Analytics](docs/04-development/development_archive/SESSION-07-CHATBOT-IMPLEMENTATION.md)
+- [Session 6: Multi-Dashboard Development](docs/04-development/development_archive/SESSION-06-MULTI-DASHBOARD-DEVELOPMENT.md)
+- [Session 5: GitHub Security & Super Admin](docs/04-development/development_archive/SESSION-05-GITHUB-SECURITY-SUPER-ADMIN.md)
+- [Session 4: Super Admin Dashboard](docs/04-development/development_archive/SESSION-04-SUPER-ADMIN-DASHBOARD.md)
+- [Session 3: Authentication & RBAC](docs/04-development/development_archive/SESSION-03-AUTHENTICATION-RBAC.md)
 
 ### 👥 [06. User Guides](docs/06-user-guides/)
 - [Participant Guide](docs/06-user-guides/participant-guide.md) - Complete guide for homeless participants  
@@ -69,6 +77,11 @@ The next generation platform for transparent charitable giving and homelessness 
 ### 🤖 AI Agent Documentation
 - [Claude Agent Briefing](docs/CLAUDE-AGENT-BRIEFING.md)
 - [Agent Communication Protocols](docs/CLAUDE-AGENT-COMMUNICATION.md)
+
+### 🪙 **🆕 [SHELTR Token Ecosystem](sheltr-tokens/docs/)**
+- [Token Ecosystem Overview](sheltr-tokens/docs/README.md) - Complete blockchain architecture
+- [Tokenomics Strategy](sheltr-tokens/docs/SHELTR-TOKENOMICS-STRATEGY.md) - 100M supply, 80/15/5 distribution
+- [Technical Implementation Guide](sheltr-tokens/docs/TECHNICAL-IMPLEMENTATION-GUIDE.md) - Smart contracts & deployment
 
 ---
 
@@ -91,45 +104,50 @@ Participants can now register **independently** of shelters, creating a more inc
 
 ---
 
-## 🪙 $SHELTR Token & Blockchain System
+## 🪙 **🆕 SHELTR Token & Blockchain Ecosystem**
 
-### **🆕 Enhanced Token Architecture**
+### **Complete Token Architecture**
 
-We've expanded our blockchain integration with multiple token options and enhanced smart contract functionality:
+We've built a comprehensive blockchain ecosystem with multiple interconnected smart contracts:
 
-#### **Token Architecture & ICO Timeline**
-1. **🔵 SHELTR-S Stablecoin** - Price-stable donations with 1:1 USDC backing
-2. **🟢 SHELTR Governance Token** - Platform governance with DeFi integration
-   - **Pre-Seed**: September 2025 - $0.05/token ($150K raise for 3M tokens)
-   - **Public ICO**: December 2025 - $0.10/token launch price
-   - **3-Year Release**: 33% annually with progressive price targets
-3. **🟡 Dual-Token System** - SHELTR-S for stability + SHELTR for governance + NFT certificates
+#### **🆕 Token System Overview**
+- **🟢 SHELTR Governance Token** - 100M total supply with governance rights
+- **🔵 SHELTR-S Stablecoin** - USD-pegged stablecoin for participants
+- **🟡 SmartFund Distribution** - Automated 80/15/5 donation allocation
+- **🏦 Treasury Management** - 10 sub-accounts for strategic fund allocation
 
-#### **SmartFund™ Smart Contracts**
+#### **🆕 SmartFund™ Distribution (Updated)**
 Every donation automatically distributes through audited smart contracts:
 
 ```solidity
-// SmartFund™ Distribution
-function processDonation(address participant, uint256 amount) external {
-    uint256 toParticipant = (amount * 85) / 100;  // 85% direct
-    uint256 toHousing = (amount * 10) / 100;      // 10% housing fund
+// SmartFund™ Distribution - 80/15/5 Model
+function distributeDonation(address participant, uint256 amount) external {
+    uint256 toParticipant = (amount * 80) / 100;  // 80% direct support
+    uint256 toHousing = (amount * 15) / 100;      // 15% housing fund
     uint256 toShelterOps = (amount * 5) / 100;    // 5% shelter operations
     
     // Instant, transparent distribution
     token.transfer(participant, toParticipant);
-    token.transfer(housingFund, toHousing);
-    token.transfer(shelterOperations, toShelterOps);
+    housingFund.addParticipantContribution(participant, toHousing);
+    shelterOperations.distributePlatformFee(participant, toShelterOps);
 }
 ```
 
-#### **🆕 Blockchain Features**
-- **🔍 Public Explorer**: Real-time transaction tracking
-- **🏆 Impact NFTs**: Donation certificates and achievement badges
-- **🗳️ DAO Governance**: Community-driven platform decisions
-- **⚡ Layer 2**: Polygon integration for low-cost transactions
-- **🛡️ Multi-sig**: Enhanced security for fund management
+#### **🆕 Key Blockchain Features**
+- **🔍 Multi-Currency Support**: CAD, USD, EUR, USDC donations
+- **🏆 Team Accountability**: Exile voting mechanism for non-performing members
+- **🗳️ Governance System**: Community voting with founder veto power
+- **⚡ Gasless Transactions**: ERC-20Permit for efficient operations
+- **🛡️ Security**: ReentrancyGuard, Pausable, multi-sig capabilities
+- **📊 Yield Generation**: Housing fund with 6-8% APY targets
 
-**→ [Complete Blockchain Documentation](docs/02-architecture/technical/blockchain.md)**
+#### **🆕 Token Sale Structure**
+- **Pre-Seed Sale**: 3M tokens at $0.05 (12-month vesting)
+- **Public ICO**: 47M tokens at $0.10 (staggered over 3 years)
+- **Investment Limits**: $500 minimum, $50,000 maximum per investor
+- **Capital Generation**: $4.85M total commitment over 3 years
+
+**→ [Complete Token Documentation](sheltr-tokens/docs/README.md)**
 
 ---
 
@@ -151,11 +169,17 @@ function processDonation(address participant, uint256 amount) external {
 - **Storage**: Firebase Storage + Google Cloud Storage
 - **Queue**: Google Cloud Tasks + Pub/Sub
 
-#### **🆕 Blockchain & AI**
-- **Blockchain**: Ethereum + Polygon + Smart Contracts (Solidity)
-- **Token**: Multi-option system (USDC/SHLTR/Hybrid)
+#### **🆕 Blockchain & Smart Contracts**
+- **Framework**: Foundry + Solidity 0.8.24 + OpenZeppelin
+- **Tokens**: SHELTR (governance) + SHELTR-S (stablecoin) + USDC integration
+- **DeFi**: Uniswap V4 integration + liquidity pools + yield farming
+- **Governance**: On-chain voting + proposal system + veto mechanisms
+- **Security**: Multi-sig wallets + reentrancy protection + pausable contracts
+
+#### **🆕 AI & Analytics**
 - **AI**: OpenAI GPT-4 + LangChain + Custom analytics
 - **ML**: Google Cloud AI for predictive insights
+- **Analytics**: Real-time dashboards + impact modeling
 
 #### **🆕 Infrastructure & DevOps**
 - **Hosting**: Firebase Hosting + Google Cloud Run (serverless)
@@ -167,7 +191,7 @@ function processDonation(address participant, uint256 amount) external {
 #### **🆕 Development Tools**
 - **IDE**: Cursor (Claude 4 Sonnet integration) + VS Code settings
 - **Monorepo**: TurboRepo + shared packages + optimized builds
-- **Testing**: Jest + Cypress + Playwright + Python pytest
+- **Testing**: Jest + Cypress + Playwright + Python pytest + Foundry tests
 - **Code Quality**: ESLint + Prettier + Black + MyPy + pre-commit hooks
 
 ---
@@ -180,14 +204,16 @@ function processDonation(address participant, uint256 amount) external {
 ✅ **AI-Powered Analytics** - Data-driven impact insights  
 ✅ **Mobile-First Design** - Native iOS/Android experience  
 ✅ **Real-Time Dashboards** - Live donation tracking  
-✅ **SmartFund™ Distribution** - Automated 85/10/5 allocation  
+✅ **SmartFund™ Distribution** - Automated 80/15/5 allocation  
 ✅ **Role-Based Access** - Four-tier permission system  
 
 ### **🆕 New Features in SHELTR-AI 2.0**
 🆕 **Independent Participant Registration** - No shelter requirement  
 🆕 **Firebase Real-time Sync** - Live updates across all platforms  
 🆕 **Google Cloud Run Backend** - Serverless, auto-scaling API  
-🆕 **Enhanced Blockchain Integration** - Multi-token support + NFTs  
+🆕 **Complete Blockchain Ecosystem** - 10 smart contracts + governance  
+🆕 **Multi-Currency Support** - CAD, USD, EUR, USDC donations  
+🆕 **Team Accountability System** - Exile voting mechanism  
 🆕 **Advanced AI Analytics** - Predictive insights + impact modeling  
 🆕 **Monorepo Architecture** - Streamlined development workflow  
 🆕 **Docker Containerization** - Consistent deployment environments  
@@ -199,7 +225,7 @@ function processDonation(address participant, uint256 amount) external {
 
 ## 🚀 **Development Status & Roadmap**
 
-### **🎯 Current Phase: SESSION 9 COMPLETE ✅ - Data Connectivity Revolution + Complete User Guide Suite**
+### **🎯 Current Phase: SESSION 12 COMPLETE ✅ - Technical Perfection + Complete Blockchain Ecosystem**
 - ✅ Repository structure and documentation
 - ✅ Python virtual environment setup  
 - ✅ FastAPI backend foundation
@@ -229,17 +255,24 @@ function processDonation(address participant, uint256 amount) external {
 - ✅ **📊 REAL-TIME DASHBOARDS**: All 6 dashboards connected to live Firestore data
 - ✅ **👥 COMPLETE USER GUIDE SUITE**: 850+ pages across 3 comprehensive guides
 - ✅ **🔧 DATABASE MIGRATION**: Clean architecture ready for engineering audits
+- ✅ **🪙 COMPLETE BLOCKCHAIN ECOSYSTEM**: 10 smart contracts with Foundry
+- ✅ **📈 UPDATED TOKENOMICS**: 100M supply, 80/15/5 distribution model
+- ✅ **🏦 TREASURY MANAGEMENT**: 10 sub-accounts for strategic allocation
+- ✅ **👥 TEAM ACCOUNTABILITY**: Exile voting mechanism for governance
+- ✅ **💱 MULTI-CURRENCY SUPPORT**: CAD, USD, EUR, USDC integration
+- ✅ **🗳️ GOVERNANCE SYSTEM**: Community voting with founder veto power
+- ✅ **📚 COMPREHENSIVE DOCUMENTATION**: Technical guides and deployment scripts
 - 🔄 Advanced API endpoints expansion
-- ⏳ Blockchain integration phase
+- ⏳ Production deployment and testing
 
 ### **📅 Upcoming Milestones**
 - **Week 3-4**: ✅ **COMPLETED EARLY** - Authentication system fully operational
 - **Week 5-6**: ✅ **COMPLETED** - Session 5.5 About & Solutions redesign  
 - **Week 7-8**: ✅ **COMPLETED** - Session 8 Core Business Logic + Mobile Dashboard Polish
 - **Week 9-10**: ✅ **COMPLETED** - Session 9 Data Connectivity Revolution + Complete User Guides
-- **Week 11-12**: Advanced API endpoints + File upload system + Donation processing
-- **Week 13-14**: Blockchain integration + Smart contracts deployment
-- **Week 15-16**: Production scaling + Stakeholder onboarding + Mobile app development
+- **Week 11-12**: ✅ **COMPLETED** - Session 12 Technical Perfection + Complete Blockchain Ecosystem
+- **Week 13-14**: Production deployment + Smart contract testing + Base testnet deployment
+- **Week 15-16**: Stakeholder onboarding + Mobile app development + Public launch
 
 **→ [Complete Roadmap](docs/04-development/dev-roadmap.md)**
 
@@ -260,11 +293,12 @@ function processDonation(address participant, uint256 amount) external {
 - 💬 **Discussions**: [GitHub Discussions](https://github.com/mrj0nesmtl/sheltr-ai/discussions)
 - 🔧 **API Reference**: [FastAPI Docs](docs/03-api/README.md)
 - 🏗️ **Development Guide**: [Development Roadmap](docs/04-development/dev-roadmap.md)
+- 🪙 **Blockchain Docs**: [Token Ecosystem](sheltr-tokens/docs/README.md)
 
 ---
 
 **📖 "Great documentation is the foundation of great software - and great impact."**
 
-*Last Updated: January 25, 2025 - Updated Tokenomics: 85/10/5 Distribution + ICO Timeline*
+*Last Updated: August 16, 2025 - Complete Blockchain Ecosystem: 10 Smart Contracts + 100M Token Supply + 80/15/5 Distribution*
 
-**🌐 [Visit Live Site](https://sheltr-ai.web.app) | 🚀 [Get Started](docs/01-overview/README.md) | 🤝 [Contribute](CONTRIBUTING.md) | 💝 [Donate](https://sheltr-ai.web.app/scan-give) | 📖 [Documentation Hub](docs/TABLE_OF_CONTENTS.md)**
+**🌐 [Visit Live Site](https://sheltr-ai.web.app) | 🚀 [Get Started](docs/01-overview/README.md) | 🤝 [Contribute](CONTRIBUTING.md) | 💝 [Donate](https://sheltr-ai.web.app/scan-give) | 📖 [Documentation Hub](docs/TABLE_OF_CONTENTS.md) | 🪙 [Token Ecosystem](sheltr-tokens/docs/README.md)**

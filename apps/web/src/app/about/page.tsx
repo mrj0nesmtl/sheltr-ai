@@ -130,11 +130,10 @@ export default function AboutPage() {
               POWERED BY AI & BLOCKCHAIN
             </div>
             <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-              Transform Donations into <span className="text-blue-400">Impact</span>
+              Transforming Donations into <span className="text-blue-400">Impact</span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-4xl mx-auto">
-              Transform meaningful actions using blockchain technology and smart contracts 
-              to directly support homeless individuals with transparency and accountability.
+              Turn meaningful actions into direct support with transparency and accountability.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/docs">
@@ -157,8 +156,8 @@ export default function AboutPage() {
                 What is SHELTR?
               </h2>
               <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                A blockchain-powered platform that enables direct participant empowerment 
-                through transparent donations and crypto wallets
+                We&apos;re a blockchain-powered platform that enables <strong>direct participant empowerment </strong> 
+                through transparent donations and smart contracts.
               </p>
             </div>
 
@@ -175,8 +174,8 @@ export default function AboutPage() {
                 </CardHeader>
                 <CardContent>
                   <p className="text-sm text-muted-foreground">
-                    Participants receive unique QR codes linked to their crypto wallets. 
-                    Donors scan and give instantly, with funds flowing directly to those who need them most.
+                    <strong>Participants</strong> receive donations via unique QR codes linked to their profiles. 
+                    <strong> Donors</strong> scan and give instantly, with funds flowing directly to those who need them most.
                   </p>
                 </CardContent>
               </Card>
@@ -236,10 +235,10 @@ export default function AboutPage() {
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">
-                How Donations Create Change
+                How We Create Change
               </h2>
               <p className="text-xl text-gray-200">
-                Our transparent 80/15/5 distribution model ensures maximum impact
+                Our transparent SmartFund donation distribution model ensures maximum impact
               </p>
             </div>
 
@@ -250,7 +249,7 @@ export default function AboutPage() {
                 </div>
                 <h3 className="text-xl font-semibold mb-3 text-white">Direct to Participants</h3>
                 <p className="text-gray-200">
-                  Goes directly to participant crypto wallets as SHELTR-S stable tokens for immediate needs. 
+                  Deposited and immediately accessible to Participants. 
                   Zero volatility risk ensures purchasing power remains stable at $1.00 USD value. 
                   Participants maintain complete autonomy over spending decisions and essential purchases.
                 </p>
@@ -260,9 +259,9 @@ export default function AboutPage() {
                 <div className="bg-green-600 text-white rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4 text-2xl font-bold">
                   15%
                 </div>
-                <h3 className="text-xl font-semibold mb-3 text-white">SmartFund™ Allocation</h3>
+                <h3 className="text-xl font-semibold mb-3 text-white">Housing Allocation</h3>
                 <p className="text-gray-200">
-                  Smart contracts automatically save 15% towards participants' emergency housing goals like tiny homes. 
+                  SmartFund contracts automatically direct 15% towards participants&apos; emergency housing goals like tiny homes. 
                   AI-optimized token staking compounds these funds over time. 
                   Each participant builds their housing fund through every donation received.
                 </p>
@@ -272,18 +271,17 @@ export default function AboutPage() {
                 <div className="bg-orange-600 text-white rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4 text-2xl font-bold">
                   5%
                 </div>
-                <h3 className="text-xl font-semibold mb-3 text-white">Platform Operations</h3>
+                <h3 className="text-xl font-semibold mb-3 text-white">Shelter Operations</h3>
                 <p className="text-gray-200">
-                  Covers technology infrastructure, security audits, and continuous platform development for reliability. 
-                  Ensures 99.99% uptime through distributed cloud architecture and automated monitoring systems. 
-                  Funds regulatory compliance, customer support, and global scaling capabilities.
+                  Covers the shelter&apos;s onboarding, participant training materials, audits, and continuous platform upgrades.  
+                  Ensures 99.99% uptime through distributed cloud architecture and automated monitoring systems.
                 </p>
               </div>
             </div>
 
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-8 border-2 border-white/20">
               <div className="text-center">
-                <h3 className="text-2xl font-bold mb-4 text-white">Complete Transparency</h3>
+                <h3 className="text-2xl font-bold mb-4 text-white">Transparency, Dignity, Accountability</h3>
                 <p className="text-lg text-gray-200 mb-6">
                   Every transaction is recorded on the blockchain. Donors can track their impact in real-time, 
                   and participants maintain full control over their funds.
@@ -308,11 +306,11 @@ export default function AboutPage() {
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">Enterprise-Grade Technology</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Built on the world's most secure and scalable infrastructure
+              Built on the world&apos;s most secure and scalable infrastructure
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
             <Card className="text-center border-2 hover:border-primary/30 transition-all duration-300 hover:shadow-lg">
               <CardHeader>
                 <Shield className="mx-auto h-12 w-12 text-primary mb-4" />
@@ -361,6 +359,70 @@ export default function AboutPage() {
               </CardContent>
             </Card>
           </div>
+
+          {/* Technology Partners */}
+          <div className="text-center mb-8">
+            <h3 className="text-2xl font-bold mb-4">Powered By Industry Leaders</h3>
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+              Built on the world&apos;s most trusted and innovative technology platforms
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            <Card className="text-center border-2 hover:border-blue-300 dark:hover:border-blue-700 transition-all duration-300 hover:shadow-lg">
+              <CardHeader>
+                <div className="mx-auto mb-4 flex items-center justify-center h-16">
+                  <img 
+                    src="/Google_Cloud_logo.svg" 
+                    alt="Google Cloud" 
+                    className="h-12 w-auto max-w-full"
+                  />
+                </div>
+                <CardTitle className="text-lg">Google Cloud</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  Enterprise-grade cloud infrastructure with global scale and security
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="text-center border-2 hover:border-orange-300 dark:hover:border-orange-700 transition-all duration-300 hover:shadow-lg">
+              <CardHeader>
+                <div className="mx-auto mb-4 flex items-center justify-center h-16">
+                  <img 
+                    src="/New_Firebase_logo.svg" 
+                    alt="Firebase" 
+                    className="h-12 w-auto max-w-full"
+                  />
+                </div>
+                <CardTitle className="text-lg">Firebase</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  Real-time database, authentication, and hosting for seamless development
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="text-center border-2 hover:border-purple-300 dark:hover:border-purple-700 transition-all duration-300 hover:shadow-lg">
+              <CardHeader>
+                <div className="mx-auto mb-4 flex items-center justify-center h-16">
+                  <img 
+                    src="/Anthropic_logo.svg" 
+                    alt="Anthropic" 
+                    className="h-12 w-auto max-w-full"
+                  />
+                </div>
+                <CardTitle className="text-lg">Anthropic Claude</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  Advanced AI assistance for intelligent platform interactions and support
+                </p>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </section>
 
@@ -368,7 +430,7 @@ export default function AboutPage() {
       <section className="py-16 bg-muted/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">The Path Forward</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">A Path Forward</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               Our roadmap to transforming charitable giving across North America
             </p>
@@ -379,7 +441,7 @@ export default function AboutPage() {
               <CardHeader>
                 <Badge className="mx-auto mb-4 bg-green-500/10 text-green-600 border-green-500/20">Phase 1</Badge>
                 <CardTitle>Foundation & Pilot</CardTitle>
-                <CardDescription>Montreal Market Entry</CardDescription>
+                <CardDescription>Local Market Entry</CardDescription>
               </CardHeader>
               <CardContent>
                 <ul className="text-sm text-muted-foreground space-y-2 text-left">
@@ -395,11 +457,11 @@ export default function AboutPage() {
               <CardHeader>
                 <Badge className="mx-auto mb-4 bg-blue-500/10 text-blue-600 border-blue-500/20">Phase 2</Badge>
                 <CardTitle>Regional Expansion</CardTitle>
-                <CardDescription>Canadian Network</CardDescription>
+                <CardDescription>Network Scaling</CardDescription>
               </CardHeader>
               <CardContent>
                 <ul className="text-sm text-muted-foreground space-y-2 text-left">
-                  <li>• Toronto, Vancouver expansion</li>
+                  <li>• National expansion</li>
                   <li>• Provincial government partnerships</li>
                   <li>• Mobile app launch</li>
                   <li>• Corporate sponsorship program</li>

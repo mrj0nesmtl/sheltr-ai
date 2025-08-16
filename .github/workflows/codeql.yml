@@ -21,6 +21,8 @@ jobs:
       # only required for workflows in private repositories
       actions: read
       contents: read
+      # explicitly deny write-all to satisfy security scanners
+      id-token: none
 
     strategy:
       fail-fast: false

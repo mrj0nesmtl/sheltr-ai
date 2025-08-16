@@ -57,7 +57,7 @@ jobs:
         safety check
 
 # CodeQL analysis is handled by dedicated .github/workflows/codeql.yml
-  # Removing duplicate to prevent conflicts
+# This prevents duplicate CodeQL runs and configuration conflicts
 
   secrets-scan:
     name: Secret Scanning

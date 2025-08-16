@@ -1,6 +1,7 @@
 import { collection, getDocs, query, where, getDoc, doc, updateDoc, Timestamp, DocumentData, QueryDocumentSnapshot } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { secureLog } from '@/utils/secureLogging';
+import { getEmailUsername } from '@/lib/urlSecurity';
 
 // Firestore timestamp type
 export interface FirestoreTimestamp {
@@ -322,7 +323,7 @@ export const getShelterParticipants = async (shelterId: string): Promise<Shelter
       const data = doc.data();
       participants.push({
         id: doc.id,
-        name: `${data.firstName || ''} ${data.lastName || ''}`.trim() || data.email?.split('@')[0] || 'Unknown',
+        name: `${data.firstName || ''} ${data.lastName || ''}`.trim() || getEmailUsername(data.email, 'Unknown'),
         email: data.email || '',
         firstName: data.firstName,
         lastName: data.lastName,
@@ -537,7 +538,7 @@ export const getDonorMetrics = async (donorId: string): Promise<DonorMetrics | n
         // Use the 'name' field if available, otherwise construct from firstName/lastName
         donorName = userData.name || 
                    `${userData.firstName || ''} ${userData.lastName || ''}`.trim() || 
-                   userData.email?.split('@')[0] || 'Donor';
+                   getEmailUsername(userData.email, 'Donor');
         console.log('✅ Found user document:', { donorId, name: donorName, userData });
       } else {
         // Fallback: query by email or other identifier
@@ -549,7 +550,7 @@ export const getDonorMetrics = async (donorId: string): Promise<DonorMetrics | n
           const userData = usersSnapshot.docs[0].data();
           donorName = userData.name || 
                      `${userData.firstName || ''} ${userData.lastName || ''}`.trim() || 
-                     userData.email?.split('@')[0] || 'Donor';
+                     getEmailUsername(userData.email, 'Donor');
           console.log('✅ Found user by email query:', { name: donorName, userData });
         }
       }
@@ -1237,7 +1238,7 @@ export const getAdminUsers = async (): Promise<AdminUser[]> => {
       
       const name = adminData.name || 
                    `${adminData.firstName || ''} ${adminData.lastName || ''}`.trim() || 
-                   adminData.email?.split('@')[0] || 'Unknown Admin';
+                   getEmailUsername(adminData.email, 'Unknown Admin');
       
       adminUsers.push({
         id: adminDoc.id,
@@ -1290,7 +1291,7 @@ export const getParticipantUsers = async (): Promise<ParticipantUser[]> => {
       
       const name = data.name || 
                    `${data.firstName || ''} ${data.lastName || ''}`.trim() || 
-                   data.email?.split('@')[0] || 'Anonymous';
+                   getEmailUsername(data.email, 'Anonymous');
       
       participantUsers.push({
         id: doc.id,
@@ -1336,7 +1337,7 @@ export const getDonorUsers = async (): Promise<DonorUser[]> => {
       
       const name = data.name || 
                    `${data.firstName || ''} ${data.lastName || ''}`.trim() || 
-                   data.email?.split('@')[0] || 'Anonymous Donor';
+                   getEmailUsername(data.email, 'Anonymous Donor');
       
       donorUsers.push({
         id: doc.id,
@@ -1560,7 +1561,7 @@ export const getOrphanedUsers = async (): Promise<OrphanedUser[]> => {
       if (!hasValidRole) {
         const name = user.name || 
                      `${user.firstName || ''} ${user.lastName || ''}`.trim() || 
-                     user.email?.split('@')[0] || 'Unknown User';
+                     getEmailUsername(user.email, 'Unknown User');
         
         // Determine registration method
         let registrationMethod = 'Unknown';
@@ -1591,7 +1592,7 @@ export const getOrphanedUsers = async (): Promise<OrphanedUser[]> => {
     firebaseAuthOrphans.forEach(authOrphan => {
       orphanedUsers.push({
         id: authOrphan.uid,
-        name: authOrphan.display_name || authOrphan.email?.split('@')[0] || 'Firebase Auth User',
+        name: authOrphan.display_name || getEmailUsername(authOrphan.email, 'Firebase Auth User'),
         email: authOrphan.email || '',
         role: null,
         status: 'firebase_auth_only',

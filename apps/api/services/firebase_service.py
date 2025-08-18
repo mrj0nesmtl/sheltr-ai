@@ -62,8 +62,13 @@ class FirebaseService:
                                 logger.info("Added missing END marker to private key")
                     
                     cred = credentials.Certificate(service_account_data)
-                    firebase_admin.initialize_app(cred)
-                    logger.info("✅ Firebase initialized successfully with service account file")
+                    
+                    # Initialize with storage bucket
+                    storage_bucket = os.getenv("FIREBASE_STORAGE_BUCKET", "sheltr-ai.firebasestorage.app")
+                    firebase_admin.initialize_app(cred, {
+                        'storageBucket': storage_bucket
+                    })
+                    logger.info(f"✅ Firebase initialized successfully with service account file and storage bucket: {storage_bucket}")
                     
                 except Exception as e:
                     logger.error(f"❌ Failed to initialize Firebase with service account file: {e}")
@@ -84,8 +89,13 @@ class FirebaseService:
                 if all(service_account_info.values()):
                     try:
                         cred = credentials.Certificate(service_account_info)
-                        firebase_admin.initialize_app(cred)
-                        logger.info("✅ Firebase initialized successfully with environment variables")
+                        
+                        # Initialize with storage bucket
+                        storage_bucket = os.getenv("FIREBASE_STORAGE_BUCKET", "sheltr-ai.firebasestorage.app")
+                        firebase_admin.initialize_app(cred, {
+                            'storageBucket': storage_bucket
+                        })
+                        logger.info(f"✅ Firebase initialized successfully with environment variables and storage bucket: {storage_bucket}")
                     except Exception as e:
                         logger.error(f"❌ Failed to initialize Firebase with environment variables: {e}")
                         raise Exception(f"Firebase environment initialization failed: {str(e)}")

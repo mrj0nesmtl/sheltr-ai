@@ -1,6 +1,7 @@
 """
 SHELTR-AI Chatbot Orchestrator
 Master agent that routes user inquiries to specialized AI agents
+Enhanced with OpenAI intelligence for contextual responses
 """
 
 from typing import Dict, Any, List, Optional
@@ -9,6 +10,10 @@ import logging
 import json
 import re
 from enum import Enum
+
+# Import OpenAI service and prompts
+from services.openai_service import openai_service
+from services.chatbot.prompts import get_enhanced_prompt, SYSTEM_PROMPTS
 
 logger = logging.getLogger(__name__)
 
@@ -324,7 +329,121 @@ class ChatbotOrchestrator:
         context: ConversationContext, 
         agent: str
     ) -> ChatResponse:
-        """Generate response based on intent and selected agent"""
+        """Generate AI-enhanced response based on intent and selected agent"""
+        
+        try:
+            # Check if OpenAI is available for intelligent responses
+            if openai_service.is_available():
+                return await self._generate_ai_response(intent, context, agent)
+            else:
+                # Fallback to pattern-based responses
+                logger.warning("OpenAI unavailable, using fallback responses")
+                return await self._generate_fallback_response(intent, context, agent)
+                
+        except Exception as e:
+            logger.error(f"AI response generation failed: {str(e)}")
+            # Always fallback gracefully
+            return await self._generate_fallback_response(intent, context, agent)
+    
+    async def _generate_ai_response(
+        self, 
+        intent: Intent, 
+        context: ConversationContext, 
+        agent: str
+    ) -> ChatResponse:
+        """Generate intelligent AI response with RAG knowledge enhancement"""
+        
+        try:
+            # Get the last user message
+            current_message = ""
+            if context.message_history:
+                current_message = context.message_history[-1].get("user_message", "")
+            
+            # Prepare context for AI/RAG
+            conversation_context = {
+                "user_role": context.user_role,
+                "conversation_history": context.get_recent_context(3),
+                "urgency_level": intent.urgency.value,
+                "first_time_user": len(context.message_history) == 0,
+                "escalated": context.escalation_level > 0,
+                "emergency_detected": intent.category == IntentCategory.EMERGENCY,
+                "mobile_user": False,  # TODO: Detect from request headers
+                "shelter_id": getattr(context, 'shelter_id', None)
+            }
+            
+            # Try RAG-enhanced response first
+            try:
+                # Import RAG orchestrator (lazy import to avoid circular imports)
+                from services.chatbot.rag_orchestrator import rag_orchestrator
+                
+                # Generate RAG-enhanced response
+                rag_response = await rag_orchestrator.generate_knowledge_enhanced_response(
+                    user_message=current_message,
+                    user_role=context.user_role,
+                    conversation_context=conversation_context,
+                    agent_type=agent,
+                    intent=intent
+                )
+                
+                logger.info(f"RAG response generated with {rag_response.metadata.get('sources_used', 0)} knowledge sources")
+                return rag_response
+                
+            except Exception as rag_error:
+                logger.warning(f"RAG response failed, falling back to standard AI: {str(rag_error)}")
+                
+                # Fallback to standard AI response
+                ai_context = {
+                    "user_role": context.user_role,
+                    "intent_category": intent.category.value,
+                    "intent_subcategory": intent.subcategory,
+                    "conversation_history": context.get_recent_context(3),
+                    "urgency_level": intent.urgency.value,
+                    "first_time_user": len(context.message_history) == 0,
+                    "escalated": context.escalation_level > 0,
+                    "emergency_detected": intent.category == IntentCategory.EMERGENCY,
+                    "mobile_user": False
+                }
+                
+                # Get enhanced system prompt for this agent
+                system_prompt = get_enhanced_prompt(agent, ai_context)
+                
+                # Generate AI response
+                ai_response = await openai_service.generate_response(
+                    message=current_message,
+                    context=ai_context,
+                    system_prompt=system_prompt
+                )
+                
+                # Generate contextual actions based on agent and intent
+                actions = await self._generate_contextual_actions(intent, context, agent)
+                
+                # Determine if escalation is needed
+                escalation_triggered = (
+                    intent.requires_escalation or 
+                    intent.urgency == UrgencyLevel.CRITICAL or
+                    agent == "emergency"
+                )
+                
+                return ChatResponse(
+                    message=ai_response,
+                    actions=actions,
+                    agent_used=f"{agent}_ai_fallback",
+                    escalation_triggered=escalation_triggered,
+                    follow_up=await self._generate_follow_up(intent, ai_context),
+                    metadata={'rag_failed': True, 'fallback_used': True}
+                )
+            
+        except Exception as e:
+            logger.error(f"AI response generation failed: {str(e)}")
+            raise
+    
+    async def _generate_fallback_response(
+        self, 
+        intent: Intent, 
+        context: ConversationContext, 
+        agent: str
+    ) -> ChatResponse:
+        """Generate fallback pattern-based responses when AI is unavailable"""
         
         if agent == "emergency":
             return await self._handle_emergency_response(intent, context)
@@ -473,6 +592,137 @@ class ChatbotOrchestrator:
             agent_used="technical_support"
         )
     
+    async def _generate_contextual_actions(
+        self, 
+        intent: Intent, 
+        context: ConversationContext, 
+        agent: str
+    ) -> List[Dict[str, Any]]:
+        """Generate contextual actions based on agent, intent, and user context"""
+        
+        actions = []
+        
+        if agent == "emergency":
+            actions = [
+                {
+                    "type": "emergency_call",
+                    "label": "Call 911 Now",
+                    "data": {"phone": "911"}
+                },
+                {
+                    "type": "crisis_hotline", 
+                    "label": "Crisis Text Line",
+                    "data": {"phone": "741741", "message": "HOME"}
+                },
+                {
+                    "type": "escalate_human",
+                    "label": "Connect to Support Staff",
+                    "data": {"priority": "critical"}
+                }
+            ]
+        elif agent == "participant_support":
+            if intent.subcategory == "service_booking":
+                service_type = intent.entities.get("service_type", "service")
+                actions = [
+                    {
+                        "type": "view_services",
+                        "label": f"View Available {service_type.title()} Services",
+                        "data": {"service_type": service_type}
+                    },
+                    {
+                        "type": "find_shelter",
+                        "label": "Find Nearest Shelter",
+                        "data": {"service_needed": service_type}
+                    }
+                ]
+            else:
+                actions = [
+                    {
+                        "type": "view_profile",
+                        "label": "View My Profile",
+                        "data": {"action": "profile"}
+                    },
+                    {
+                        "type": "browse_services",
+                        "label": "Browse Available Services", 
+                        "data": {"action": "services"}
+                    }
+                ]
+        elif agent == "donor_relations":
+            actions = [
+                {
+                    "type": "make_donation",
+                    "label": "Make a Donation",
+                    "data": {"action": "donate"}
+                },
+                {
+                    "type": "view_impact",
+                    "label": "View My Impact",
+                    "data": {"action": "impact"}
+                },
+                {
+                    "type": "tax_documents",
+                    "label": "Get Tax Documents",
+                    "data": {"action": "tax_docs"}
+                }
+            ]
+        elif agent == "shelter_operations":
+            actions = [
+                {
+                    "type": "manage_participants",
+                    "label": "Manage Participants",
+                    "data": {"action": "participants"}
+                },
+                {
+                    "type": "view_reports",
+                    "label": "View Reports", 
+                    "data": {"action": "reports"}
+                },
+                {
+                    "type": "resource_management",
+                    "label": "Manage Resources",
+                    "data": {"action": "resources"}
+                }
+            ]
+        else:  # technical_support
+            actions = [
+                {
+                    "type": "troubleshoot",
+                    "label": "Start Troubleshooting",
+                    "data": {"action": "troubleshoot"}
+                },
+                {
+                    "type": "contact_tech_support",
+                    "label": "Contact Technical Support",
+                    "data": {"action": "tech_support"}
+                }
+            ]
+        
+        return actions
+    
+    async def _generate_follow_up(
+        self, 
+        intent: Intent, 
+        ai_context: Dict[str, Any]
+    ) -> Optional[str]:
+        """Generate appropriate follow-up questions or suggestions"""
+        
+        # Don't generate follow-ups for emergency situations
+        if intent.category == IntentCategory.EMERGENCY:
+            return None
+        
+        # Generate contextual follow-ups based on intent
+        if intent.category == IntentCategory.ACTION:
+            if intent.subcategory == "service_booking":
+                return "Would you like me to help you book one of these services?"
+            return "Is there anything else I can help you with today?"
+        elif intent.category == IntentCategory.INFORMATION:
+            return "Do you have any other questions I can help answer?"
+        elif intent.category == IntentCategory.SUPPORT:
+            return "Was this helpful? Let me know if you need additional assistance."
+        
+        return "How else can I assist you today?"
+
     async def _handle_escalation(self, context: ConversationContext, intent: Intent):
         """Handle escalation to human support"""
         context.escalation_level += 1

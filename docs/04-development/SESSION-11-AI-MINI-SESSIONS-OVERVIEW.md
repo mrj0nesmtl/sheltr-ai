@@ -22,7 +22,7 @@ Elevate SHELTR's chatbot capabilities from basic pattern matching to intelligent
 ## 🗂️ **SESSION BREAKDOWN**
 
 ### **Session 11.5 - Chatbot Investigation & Enhancement** 
-📅 **Duration**: 1-2 days  
+📅 **Duration**: 1-2 hours  
 📋 **Status**: Ready to Launch  
 🎯 **Objective**: Assess current implementation and prepare enhancement roadmap
 
@@ -57,7 +57,7 @@ ChatbotOrchestrator
 ---
 
 ### **Session 11.6 - OpenAI API Integration**
-📅 **Duration**: 2-3 days  
+📅 **Duration**: 2-3 hours  
 📋 **Status**: Planned  
 🎯 **Objective**: Replace pattern-based responses with intelligent AI
 
@@ -92,7 +92,7 @@ OpenAIService
 ---
 
 ### **Session 11.7 - SHELTR Knowledge Base & Firebase Embeddings**
-📅 **Duration**: 3-4 days  
+📅 **Duration**: 3-4 hours  
 📋 **Status**: Planned  
 🎯 **Objective**: Implement comprehensive knowledge base with semantic search
 
@@ -182,6 +182,7 @@ User Message → Intent Classification (AI) → Knowledge Search → RAG Respons
 - Integrate RAG with chatbot
 
 #### **Phase 4: Production Ready (Session 12)**
+docs/04-development/SESSION-12-KICKOFF-PROMPT.md
 - Performance optimization
 - Security hardening
 - Comprehensive testing

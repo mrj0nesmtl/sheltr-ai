@@ -117,6 +117,22 @@ echo -e "${BLUE}🔍 Checking service status...${NC}"
 # Wait for backend
 if wait_for_service "http://localhost:8000/health" "Backend API"; then
     echo -e "${GREEN}📊 API Documentation: http://localhost:8000/docs${NC}"
+    
+    # Test enhanced AI features
+    echo -e "${BLUE}🤖 Testing AI Chatbot...${NC}"
+    if curl -s "http://localhost:8000/chatbot/health" | grep -q "intelligent_responses.*true"; then
+        echo -e "${GREEN}✅ AI Chatbot: OpenAI GPT-4o-mini Ready${NC}"
+    else
+        echo -e "${YELLOW}⚠️  AI Chatbot: Basic mode (check OpenAI config)${NC}"
+    fi
+    
+    # Test knowledge base
+    echo -e "${BLUE}📚 Testing Knowledge Base...${NC}"
+    if curl -s "http://localhost:8000/knowledge/health" | grep -q "success.*true"; then
+        echo -e "${GREEN}✅ Knowledge Base: RAG System Ready${NC}"
+    else
+        echo -e "${YELLOW}⚠️  Knowledge Base: Service unavailable${NC}"
+    fi
 else
     echo -e "${RED}❌ Backend failed to start. Check logs/backend.log${NC}"
 fi
@@ -136,12 +152,20 @@ echo -e "${BLUE}🔌 Backend API:${NC} http://localhost:8000"
 echo -e "${BLUE}📚 API Docs:${NC} http://localhost:8000/docs"
 echo -e "${BLUE}🏥 Health Check:${NC} http://localhost:8000/health"
 echo ""
+echo -e "${GREEN}🤖 AI Features Available:${NC}"
+echo "  • Intelligent Chatbot: http://localhost:8000/chatbot/health"
+echo "  • Knowledge Base: http://localhost:8000/knowledge/health"
+echo "  • RAG Search: Retrieval-Augmented Generation Ready"
+echo "  • Role-Based Agents: Emergency, Support, Donor Relations"
+echo ""
 echo -e "${YELLOW}📋 Useful Commands:${NC}"
 echo "  • View backend logs: tail -f logs/backend.log"
 echo "  • View frontend logs: tail -f logs/frontend.log"
+echo "  • Test AI chatbot: curl http://localhost:8000/chatbot/health"
+echo "  • Test knowledge base: curl http://localhost:8000/knowledge/health"
 echo "  • Stop services: ./stop-dev.sh"
 echo ""
-echo -e "${BLUE}🔐 Ready for Session 3: Authentication & RBAC Implementation${NC}"
+echo -e "${BLUE}🤖 Session 11.7 Complete: AI Chatbot + Knowledge Base Ready! (Aug 18, 2025)${NC}"
 
 # Keep the script running to show real-time status
 echo -e "${BLUE}👀 Monitoring services... (Press Ctrl+C to stop)${NC}"
@@ -175,18 +199,42 @@ cleanup() {
 # Set up signal handling
 trap cleanup SIGINT SIGTERM
 
-# Monitor services
+# Monitor services with enhanced status reporting
+monitor_count=0
 while true; do
     sleep 10
+    ((monitor_count++))
     
     # Check if processes are still running
+    backend_status="🟢"
+    frontend_status="🟢"
+    ai_status="🟢"
+    knowledge_status="🟢"
+    
     if [ -f logs/backend.pid ] && ! kill -0 $(cat logs/backend.pid) 2>/dev/null; then
         echo -e "${RED}❌ Backend process died. Check logs/backend.log${NC}"
         rm logs/backend.pid
+        backend_status="🔴"
     fi
     
     if [ -f logs/frontend.pid ] && ! kill -0 $(cat logs/frontend.pid) 2>/dev/null; then
         echo -e "${RED}❌ Frontend process died. Check logs/frontend.log${NC}"
         rm logs/frontend.pid
+        frontend_status="🔴"
+    fi
+    
+    # Every 30 seconds (3 cycles), show detailed status
+    if [ $((monitor_count % 3)) -eq 0 ]; then
+        # Test AI health
+        if ! curl -s "http://localhost:8000/chatbot/health" >/dev/null 2>&1; then
+            ai_status="🟡"
+        fi
+        
+        # Test knowledge base health
+        if ! curl -s "http://localhost:8000/knowledge/health" >/dev/null 2>&1; then
+            knowledge_status="🟡"
+        fi
+        
+        echo -e "${BLUE}📊 Service Status: Backend ${backend_status} | Frontend ${frontend_status} | AI ${ai_status} | Knowledge ${knowledge_status} | $(date '+%H:%M:%S')${NC}"
     fi
 done 

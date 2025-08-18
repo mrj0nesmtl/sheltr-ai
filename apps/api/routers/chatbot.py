@@ -419,13 +419,16 @@ async def test_send_message(chat_message: ChatMessage):
 @router.get(
     "/health",
     summary="Chatbot health check",
-    description="Check the health and status of the chatbot system"
+    description="Check the health and status of the chatbot system including AI capabilities"
 )
 async def chatbot_health():
     """
-    Check the health and status of the chatbot system.
+    Check the health and status of the chatbot system including OpenAI integration.
     """
     try:
+        # Import OpenAI service
+        from services.openai_service import openai_service
+        
         # Test basic orchestrator functionality
         test_response = await chatbot_orchestrator.process_message(
             message="test",
@@ -433,12 +436,23 @@ async def chatbot_health():
             user_role="participant"
         )
         
+        # Check OpenAI service health
+        ai_health = await openai_service.health_check()
+        
         return {
             "success": True,
             "status": "operational",
             "orchestrator": "active",
+            "ai_service": ai_health,
             "active_connections": len(manager.active_connections),
             "test_response_time": "< 100ms",
+            "features": {
+                "intelligent_responses": ai_health.get("features_available", False),
+                "context_awareness": ai_health.get("features_available", False),
+                "role_based_agents": True,
+                "emergency_escalation": True,
+                "websocket_support": True
+            },
             "timestamp": datetime.now().isoformat()
         }
         

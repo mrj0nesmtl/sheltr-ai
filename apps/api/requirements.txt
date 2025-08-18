@@ -54,7 +54,7 @@ Adyen==13.4.0
 requests-oauthlib==2.0.0
 
 # Monitoring and Logging
-structlog==23.2.0
+structlog==25.4.0
 sentry-sdk[fastapi]==2.35.0
 
 # Testing

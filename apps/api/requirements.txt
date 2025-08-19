@@ -1,7 +1,7 @@
 # FastAPI and Web Framework
 fastapi==0.104.1
 uvicorn[standard]==0.24.0
-pydantic>=2.7.0,<3.0.0
+pydantic[email]>=2.7.0,<3.0.0
 pydantic-settings==2.10.1
 
 # Firebase and Google Cloud

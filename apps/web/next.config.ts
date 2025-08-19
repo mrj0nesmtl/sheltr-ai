@@ -8,6 +8,10 @@ const nextConfig: NextConfig = {
     skipTrailingSlashRedirect: true,
     distDir: 'out',
   }),
+  env: {
+    // Ensure environment variables are available at build time
+    NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
+  },
   images: {
     unoptimized: true
   },

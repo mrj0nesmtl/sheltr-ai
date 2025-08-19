@@ -133,7 +133,9 @@ app.add_middleware(
         "127.0.0.1",
         "*.sheltr.ai",
         "*.web.app",
-        "*.firebaseapp.com"
+        "*.firebaseapp.com",
+        "*.run.app",  # Cloud Run domains
+        "sheltr-api-714964620823.us-central1.run.app"  # Specific Cloud Run URL
     ]
 )
 

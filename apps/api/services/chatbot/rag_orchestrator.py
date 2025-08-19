@@ -135,7 +135,16 @@ class RAGOrchestrator:
                     limit=self.knowledge_search_limit
                 )
             
-            logger.info(f"Knowledge search returned {knowledge_results.get('total_found', 0)} results")
+            # Normalize knowledge_results to dict format if needed
+            if isinstance(knowledge_results, list):
+                knowledge_results = {
+                    'query': enhanced_query,
+                    'results': knowledge_results,
+                    'total_found': len(knowledge_results)
+                }
+            
+            total_results = knowledge_results.get('total_found', len(knowledge_results.get('results', [])))
+            logger.info(f"Knowledge search returned {total_results} results")
             return knowledge_results
             
         except Exception as e:

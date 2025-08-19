@@ -46,7 +46,7 @@ requests==2.32.4
 # Data Processing
 pandas==2.1.4
 numpy==1.25.2
-python-dateutil==2.8.2
+python-dateutil==2.9.0.post0
 
 # Email and Communications
 sendgrid==6.12.4

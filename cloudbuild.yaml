@@ -1,0 +1,39 @@
+# Cloud Build configuration for SHELTR FastAPI Backend
+steps:
+  # Build the FastAPI backend image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build',
+      '-t', 'gcr.io/$PROJECT_ID/sheltr-api:$BUILD_ID',
+      '-t', 'gcr.io/$PROJECT_ID/sheltr-api:latest',
+      '-f', 'Dockerfile.api',
+      '.'
+    ]
+
+  # Push the image to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/sheltr-api:$BUILD_ID']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/sheltr-api:latest']
+
+  # Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    args: [
+      'run', 'deploy', 'sheltr-api',
+      '--image', 'gcr.io/$PROJECT_ID/sheltr-api:$BUILD_ID',
+      '--region', 'us-central1',
+      '--platform', 'managed',
+      '--allow-unauthenticated',
+      '--memory', '2Gi',
+      '--cpu', '2',
+      '--max-instances', '10',
+      '--min-instances', '0',
+      '--port', '8000',
+      '--set-env-vars', 'GOOGLE_CLOUD_PROJECT=$PROJECT_ID,ENVIRONMENT=production'
+    ]
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+  machineType: 'E2_HIGHCPU_8'

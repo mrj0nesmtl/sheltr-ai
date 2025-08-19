@@ -2,7 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { MessageCircle, X, Send, Minimize2, Maximize2 } from 'lucide-react';
+import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface Message {
   id: string;
@@ -22,6 +24,10 @@ export const PublicChatbot: React.FC<PublicChatbotProps> = ({ className = '' }) 
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  
+  // Smart positioning detection
+  const { user } = useAuth();
+  const pathname = usePathname();
 
   // Check for mobile viewport
   useEffect(() => {
@@ -145,17 +151,45 @@ export const PublicChatbot: React.FC<PublicChatbotProps> = ({ className = '' }) 
     }]);
   };
 
-  // Mobile-specific styles to avoid footer overlap
-  const mobileStyles = isMobile ? {
-    bottom: '80px', // Leave space for bottom navigation
-    maxHeight: 'calc(100vh - 120px)', // Account for header and footer
-  } : {};
+  // Smart positioning: detect if mobile nav is present
+  const isAuthenticated = !!user;
+  const isDashboard = pathname.startsWith('/dashboard');
+  const hasMobileNav = isAuthenticated && isDashboard;
+  
+  // Debug logging for positioning
+  useEffect(() => {
+    console.log('PublicChatbot positioning:', {
+      isMobile,
+      isAuthenticated,
+      isDashboard,
+      hasMobileNav,
+      pathname,
+      user: user ? { role: user.role, email: user.email } : null
+    });
+  }, [isMobile, isAuthenticated, isDashboard, hasMobileNav, pathname, user]);
+  
+  // Mobile-specific styles with smart positioning
+  const mobileStyles = isMobile ? (
+    hasMobileNav ? {
+      bottom: '80px', // Leave space for mobile bottom navigation (dashboard pages)
+      maxHeight: 'calc(100vh - 120px)', // Account for header and mobile nav
+    } : {
+      bottom: '20px', // Normal mobile spacing (public pages)
+      maxHeight: 'calc(100vh - 60px)', // Account for header only
+    }
+  ) : {};
 
   if (!isOpen) {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className={`fixed ${isMobile ? 'bottom-20 right-4' : 'bottom-6 right-6'} bg-blue-600 hover:bg-blue-700 text-white rounded-full p-4 shadow-lg transition-all duration-200 z-40 group ${className}`}
+        className={`fixed ${
+          isMobile 
+            ? hasMobileNav 
+              ? 'bottom-20 right-4' // Dashboard pages with mobile nav
+              : 'bottom-6 right-4'   // Public pages without mobile nav
+            : 'bottom-6 right-6'     // Desktop
+        } bg-blue-600 hover:bg-blue-700 text-white rounded-full p-4 shadow-lg transition-all duration-200 z-40 group ${className}`}
         aria-label="Open SHELTR AI Assistant"
       >
         <MessageCircle className="h-6 w-6" />

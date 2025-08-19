@@ -10,6 +10,7 @@ from datetime import datetime
 # SHELTR services
 from services.knowledge_service import knowledge_service
 from services.openai_service import openai_service
+from services.embeddings_service import embeddings_service
 from services.chatbot.orchestrator import ChatResponse, Intent, IntentCategory, UrgencyLevel
 
 logger = logging.getLogger(__name__)
@@ -23,7 +24,7 @@ class RAGOrchestrator:
         
         # RAG configuration
         self.knowledge_search_limit = 3
-        self.similarity_threshold = 0.7
+        self.similarity_threshold = 0.3  # Lower threshold for better recall
         self.max_knowledge_tokens = 1500
     
     async def generate_knowledge_enhanced_response(
@@ -119,11 +120,11 @@ class RAGOrchestrator:
             
             # Perform knowledge search (direct embeddings search to bypass auth)
             try:
-                from services.embeddings_service import embeddings_service
                 knowledge_results = await embeddings_service.semantic_search(
                     query=enhanced_query,
                     user_role=user_role,
-                    limit=self.knowledge_search_limit
+                    limit=self.knowledge_search_limit,
+                    similarity_threshold=self.similarity_threshold
                 )
             except Exception as e:
                 logger.warning(f"Direct embeddings search failed, trying knowledge service: {e}")
@@ -177,26 +178,44 @@ class RAGOrchestrator:
     async def _enhance_search_query(self, query: str, agent_type: str, intent: Intent) -> str:
         """Enhance search query with context for better results"""
         
-        # Add agent-specific context
+        # First, check if query already contains specific SHELTR terms - if so, don't dilute it
+        sheltr_specific_terms = [
+            'smartfund', 'smart fund', 'smart-fund', 'tokenomics', 'donation distribution', 
+            'blockchain', 'sheltr', '80-15-5', '80/15/5', 'housing fund', 'participant wallet',
+            'smart contract', 'token', 'wallet', 'qr code', 'scan', 'give', 'donation',
+            'donate', 'fund', 'distribution', 'allocation'
+        ]
+        
+        query_lower = query.lower()
+        has_specific_terms = any(term.lower() in query_lower for term in sheltr_specific_terms)
+        
+        if has_specific_terms:
+            # For specific SHELTR queries, use minimal enhancement to preserve intent
+            logger.info(f"PRESERVING SPECIFIC QUERY: '{query}' (detected terms: {[term for term in sheltr_specific_terms if term.lower() in query_lower]})")
+            return query
+        
+        # Only enhance generic queries that need context
         query_enhancements = {
-            'emergency': 'crisis support emergency homeless',
-            'participant_support': 'participant services shelter booking',
-            'donor_relations': 'donation SmartFund impact transparency',
-            'shelter_operations': 'admin management operations shelter',
-            'technical_support': 'platform technical help troubleshooting'
+            'emergency': 'crisis support emergency',
+            'participant_support': 'participant services',
+            'donor_relations': 'donation giving',
+            'shelter_operations': 'admin management',
+            'technical_support': 'platform help'
         }
         
         enhancement = query_enhancements.get(agent_type, '')
         
-        # Add intent-specific terms
-        if intent.category == IntentCategory.ACTION:
-            enhancement += ' how to guide steps'
-        elif intent.category == IntentCategory.INFORMATION:
-            enhancement += ' information details about'
+        # Add minimal intent-specific terms only for generic queries
+        if intent.category == IntentCategory.ACTION and not has_specific_terms:
+            enhancement += ' guide'
         
-        # Combine query with enhancements
-        enhanced_query = f"{query} {enhancement}".strip()
-        logger.debug(f"Enhanced query: '{enhanced_query}'")
+        # Combine query with minimal enhancements
+        if enhancement:
+            enhanced_query = f"{query} {enhancement}".strip()
+        else:
+            enhanced_query = query
+            
+        logger.info(f"ENHANCED QUERY: original='{query}' -> enhanced='{enhanced_query}' (agent={agent_type})")
         
         return enhanced_query
     

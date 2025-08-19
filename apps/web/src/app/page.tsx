@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/theme-toggle';
 import Footer from '@/components/Footer';
 import ThemeLogo from '@/components/ThemeLogo';
+import { PublicChatbot } from '@/components/PublicChatbot';
 
 export default function HomePage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -375,6 +376,9 @@ export default function HomePage() {
         </section>
       
       <Footer />
+      
+      {/* Public Chatbot */}
+      <PublicChatbot />
     </div>
   );
 } 

@@ -58,13 +58,15 @@ class ChatResponse:
         actions: List[Dict[str, Any]] = None,
         follow_up: Optional[str] = None,
         escalation_triggered: bool = False,
-        agent_used: Optional[str] = None
+        agent_used: Optional[str] = None,
+        metadata: Optional[Dict[str, Any]] = None
     ):
         self.message = message
         self.actions = actions or []
         self.follow_up = follow_up
         self.escalation_triggered = escalation_triggered
         self.agent_used = agent_used
+        self.metadata = metadata or {}
         self.timestamp = datetime.now().isoformat()
 
 class IntentClassifier:

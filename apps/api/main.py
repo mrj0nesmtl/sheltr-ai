@@ -23,6 +23,7 @@ from contextlib import asynccontextmanager
 from routers.auth import router as auth_router
 from routers.analytics import router as analytics_router
 from routers.chatbot import router as chatbot_router
+from routers.public_chatbot import router as public_chatbot_router
 from routers.knowledge import router as knowledge_router
 from routers.services import router as services_router
 from routers.users import router as users_router
@@ -186,6 +187,7 @@ async def general_exception_handler(request: Request, exc: Exception):
 app.include_router(auth_router)
 app.include_router(analytics_router)
 app.include_router(chatbot_router)
+app.include_router(public_chatbot_router)
 app.include_router(knowledge_router)
 app.include_router(services_router)
 app.include_router(users_router)

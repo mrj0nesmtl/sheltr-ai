@@ -126,6 +126,11 @@ temp/
 tmp/
 *.tmp
 
+# Firebase exports (contain sensitive data)
+auth_config.json
+firestore_export.json
+*_export.json
+
 # Editor backup files
 *~
 *.bak

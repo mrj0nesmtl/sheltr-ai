@@ -135,7 +135,11 @@ export const PublicChatbot: React.FC<PublicChatbotProps> = ({ className = '' }) 
   const getSessionId = (): string => {
     let sessionId = localStorage.getItem('sheltr-chat-session');
     if (!sessionId) {
-      sessionId = `guest_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      // Generate cryptographically secure random string
+      const randomBytes = new Uint32Array(1);
+      crypto.getRandomValues(randomBytes);
+      const randomString = randomBytes[0].toString(36);
+      sessionId = `guest_${Date.now()}_${randomString}`;
       localStorage.setItem('sheltr-chat-session', sessionId);
     }
     return sessionId;

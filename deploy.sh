@@ -58,9 +58,9 @@ deploy_frontend() {
     echo -e "${YELLOW}🔒 Running security audit...${NC}"
     npm audit --audit-level=high >> ../../logs/deploy-frontend-install.log 2>&1 || echo -e "${YELLOW}⚠️  Security audit found issues (check logs)${NC}"
     
-    # Build the application
-    echo -e "${YELLOW}🔨 Building Next.js application...${NC}"
-    npm run build > ../../logs/deploy-frontend-build.log 2>&1
+    # Build the application with production API URL
+    echo -e "${YELLOW}🔨 Building Next.js application with production API...${NC}"
+    NEXT_PUBLIC_API_BASE_URL=https://sheltr-api-714964620823.us-central1.run.app npm run build > ../../logs/deploy-frontend-build.log 2>&1
     check_status "Frontend build"
     
     # Verify build output
@@ -82,27 +82,43 @@ deploy_frontend() {
 
 # Function to deploy backend
 deploy_backend() {
-    echo -e "${BLUE}🔌 Deploying Backend to Firebase Functions...${NC}"
+    echo -e "${BLUE}🔌 Deploying Backend to Google Cloud Run...${NC}"
     
-    # Navigate to backend directory
-    cd $BACKEND_DIR
-    
-    # Create requirements.txt for functions if it doesn't exist
-    if [ ! -f "requirements.txt" ]; then
-        echo -e "${YELLOW}📝 Creating requirements.txt for deployment...${NC}"
-        pip freeze > requirements.txt
+    # Check if gcloud is installed and authenticated
+    if ! command -v gcloud &> /dev/null; then
+        echo -e "${RED}❌ Google Cloud CLI not found${NC}"
+        echo -e "${YELLOW}💡 Install with: curl https://sdk.cloud.google.com | bash${NC}"
+        exit 1
     fi
     
-    # Navigate back to project root
-    cd ../..
+    # Set correct project
+    echo -e "${YELLOW}🔧 Setting Google Cloud project...${NC}"
+    gcloud config set project sheltr-ai > logs/deploy-backend.log 2>&1
     
-    # Deploy Firebase Functions
-    echo -e "${YELLOW}🔥 Deploying to Firebase Functions...${NC}"
-    firebase deploy --only functions > logs/deploy-backend.log 2>&1
-    check_status "Backend deployment"
+    # Build and deploy with Cloud Build
+    echo -e "${YELLOW}🏗️  Building Docker image...${NC}"
+    gcloud builds submit --config cloudbuild.yaml . >> logs/deploy-backend.log 2>&1
+    check_status "Docker image build"
+    
+    # Deploy to Cloud Run
+    echo -e "${YELLOW}🚀 Deploying to Cloud Run...${NC}"
+    gcloud run deploy sheltr-api \
+        --image gcr.io/sheltr-ai/sheltr-api:latest \
+        --region us-central1 \
+        --platform managed \
+        --allow-unauthenticated \
+        --memory 2Gi \
+        --cpu 2 \
+        --max-instances 10 \
+        --min-instances 0 \
+        --timeout 300 \
+        --service-account firebase-adminsdk-fbsvc@sheltr-ai.iam.gserviceaccount.com \
+        --set-env-vars="GOOGLE_CLOUD_PROJECT=sheltr-ai,ENVIRONMENT=production" \
+        >> logs/deploy-backend.log 2>&1
+    check_status "Cloud Run deployment"
     
     echo -e "${GREEN}✅ Backend deployed successfully!${NC}"
-    echo -e "${BLUE}🔌 API URL: https://your-region-sheltr-ai.cloudfunctions.net/api${NC}"
+    echo -e "${BLUE}🔌 API URL: https://sheltr-api-714964620823.us-central1.run.app${NC}"
 }
 
 # Function for security-focused deployment
@@ -161,7 +177,7 @@ dev_build() {
     # Build frontend
     echo -e "${YELLOW}🌐 Building frontend...${NC}"
     cd $FRONTEND_DIR
-    npm run build > ../../logs/dev-build-frontend.log 2>&1
+    NEXT_PUBLIC_API_BASE_URL=http://localhost:8000 npm run build > ../../logs/dev-build-frontend.log 2>&1
     check_status "Frontend development build"
     
     # Test backend
@@ -350,7 +366,8 @@ main() {
     fi
     
     if [ $choice -eq 2 ] || [ $choice -eq 3 ]; then
-        echo -e "${BLUE}🔌 Backend:${NC} Check Firebase Console for function URL"
+        echo -e "${BLUE}🔌 Backend API:${NC} https://sheltr-api-714964620823.us-central1.run.app"
+        echo -e "${BLUE}📚 API Docs:${NC} https://sheltr-api-714964620823.us-central1.run.app/docs"
     fi
     
     echo -e "${BLUE}📊 Firebase Console:${NC} https://console.firebase.google.com/project/sheltr-ai"

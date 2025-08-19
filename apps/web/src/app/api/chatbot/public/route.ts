@@ -11,9 +11,15 @@ interface ChatRequest {
 }
 
 export async function POST(request: NextRequest) {
+  let message = '';
+  let sessionId = '';
+  let context: { page?: string; userAgent?: string; timestamp?: string } = {};
+  
   try {
     const body: ChatRequest = await request.json();
-    const { message, sessionId, context } = body;
+    message = body.message;
+    sessionId = body.sessionId;
+    context = body.context || {};
 
     // Validate input
     if (!message || !sessionId) {
@@ -23,9 +29,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Rate limiting check (simple implementation)
-    const rateLimitKey = `public_chat_${sessionId}`;
-    // In production, use Redis or similar for rate limiting
+    // Note: Rate limiting would be implemented here in production with Redis
     
     // Call backend API
     const backendUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';

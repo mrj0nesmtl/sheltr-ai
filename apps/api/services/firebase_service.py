@@ -100,7 +100,17 @@ class FirebaseService:
                         logger.error(f"❌ Failed to initialize Firebase with environment variables: {e}")
                         raise Exception(f"Firebase environment initialization failed: {str(e)}")
                 else:
-                    raise Exception("Firebase credentials not found. Please set up service account key.")
+                    # Try Application Default Credentials (for Cloud Run)
+                    try:
+                        # Use default credentials when running on Google Cloud
+                        storage_bucket = os.getenv("FIREBASE_STORAGE_BUCKET", "sheltr-ai.firebasestorage.app")
+                        firebase_admin.initialize_app(options={
+                            'storageBucket': storage_bucket
+                        })
+                        logger.info(f"✅ Firebase initialized with Application Default Credentials and storage bucket: {storage_bucket}")
+                    except Exception as e:
+                        logger.error(f"❌ Failed to initialize Firebase with default credentials: {e}")
+                        raise Exception("Firebase credentials not found. Please set up service account key.")
         
         self.auth = auth
         self.db = firestore.client()

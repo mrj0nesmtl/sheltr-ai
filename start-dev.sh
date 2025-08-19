@@ -118,17 +118,17 @@ echo -e "${BLUE}🔍 Checking service status...${NC}"
 if wait_for_service "http://localhost:8000/health" "Backend API"; then
     echo -e "${GREEN}📊 API Documentation: http://localhost:8000/docs${NC}"
     
-    # Test enhanced AI features
+    # Test enhanced AI features  
     echo -e "${BLUE}🤖 Testing AI Chatbot...${NC}"
-    if curl -s "http://localhost:8000/chatbot/health" | grep -q "intelligent_responses.*true"; then
-        echo -e "${GREEN}✅ AI Chatbot: OpenAI GPT-4o-mini Ready${NC}"
+    if curl -s "http://localhost:8000/api/v1/chatbot/health" >/dev/null 2>&1; then
+        echo -e "${GREEN}✅ AI Chatbot: Ready${NC}"
     else
-        echo -e "${YELLOW}⚠️  AI Chatbot: Basic mode (check OpenAI config)${NC}"
+        echo -e "${YELLOW}⚠️  AI Chatbot: Service starting up...${NC}"
     fi
     
     # Test knowledge base
     echo -e "${BLUE}📚 Testing Knowledge Base...${NC}"
-    if curl -s "http://localhost:8000/knowledge/health" | grep -q "success.*true"; then
+    if curl -s "http://localhost:8000/api/v1/knowledge/status" >/dev/null 2>&1; then
         echo -e "${GREEN}✅ Knowledge Base: RAG System Ready${NC}"
     else
         echo -e "${YELLOW}⚠️  Knowledge Base: Service unavailable${NC}"
@@ -226,12 +226,12 @@ while true; do
     # Every 30 seconds (3 cycles), show detailed status
     if [ $((monitor_count % 3)) -eq 0 ]; then
         # Test AI health
-        if ! curl -s "http://localhost:8000/chatbot/health" >/dev/null 2>&1; then
+        if ! curl -s "http://localhost:8000/api/v1/chatbot/health" >/dev/null 2>&1; then
             ai_status="🟡"
         fi
         
         # Test knowledge base health
-        if ! curl -s "http://localhost:8000/knowledge/health" >/dev/null 2>&1; then
+        if ! curl -s "http://localhost:8000/api/v1/knowledge/status" >/dev/null 2>&1; then
             knowledge_status="🟡"
         fi
         

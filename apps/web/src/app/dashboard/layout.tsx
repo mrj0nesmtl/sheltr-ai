@@ -594,7 +594,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           </div>
 
           {/* Mobile Bottom Navigation - Fixed positioning outside main content */}
-          <MobileBottomNav />
+          <MobileBottomNav sidebarOpen={sidebarOpen} />
         </div>
       </DashboardRouter>
     </ProtectedRoute>

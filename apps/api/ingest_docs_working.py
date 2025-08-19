@@ -75,6 +75,41 @@ async def ingest_sheltr_documents():
                 'categories': ['user_guides', 'donors'],
                 'access_level': 'public',
                 'tags': ['guide', 'donors']
+            },
+            {
+                'path': '/Users/mrjones/Github/Projects/sheltr-ai/docs/02-architecture/tokenomics/sheltr-tokenomics.md',
+                'title': 'SHELTR Tokenomics and SmartFund Model',
+                'categories': ['tokenomics', 'smartfund', 'blockchain'],
+                'access_level': 'public',
+                'tags': ['tokenomics', 'smartfund', 'donation', 'distribution']
+            },
+            {
+                'path': '/Users/mrjones/Github/Projects/sheltr-ai/docs/06-user-guides/shelter-admin-guide.md',
+                'title': 'Shelter Admin Guide',
+                'categories': ['user_guides', 'admins'],
+                'access_level': 'public',
+                'tags': ['guide', 'admin', 'shelter']
+            },
+            {
+                'path': '/Users/mrjones/Github/Projects/sheltr-ai/docs/02-architecture/system-design.md',
+                'title': 'SHELTR System Design and Architecture',
+                'categories': ['architecture', 'technical'],
+                'access_level': 'public',
+                'tags': ['architecture', 'design', 'technical']
+            },
+            {
+                'path': '/Users/mrjones/Github/Projects/sheltr-ai/docs/02-architecture/whitepaper_final.md',
+                'title': 'SHELTR White Paper',
+                'categories': ['whitepaper', 'technical'],
+                'access_level': 'public',
+                'tags': ['whitepaper', 'blockchain', 'technical']
+            },
+            {
+                'path': '/Users/mrjones/Github/Projects/sheltr-ai/docs/02-architecture/technical/blockchain.md',
+                'title': 'SHELTR Blockchain Technical Documentation',
+                'categories': ['blockchain', 'technical'],
+                'access_level': 'public',
+                'tags': ['blockchain', 'smart-contracts', 'technical']
             }
         ]
         

@@ -287,12 +287,15 @@ class ChatbotOrchestrator:
             # Get or create conversation context
             context = await self._get_conversation_context(user_id, user_role)
             
+            # Store current message in context for handlers to use
+            context.current_message = message
+            
             # Classify the intent
             intent = await self.intent_classifier.classify(message, user_role)
             context.current_intent = intent
             
-            # Log the interaction
-            logger.info(f"Processing message from {user_role} user {user_id}: {intent.category.value}")
+            # Debug logging to track message flow
+            logger.info(f"🔍 DEBUG: Processing message='{message}' from {user_role} user {user_id}: {intent.category.value}")
             
             # Route to appropriate agent
             selected_agent = self.agent_router.select_agent(intent, user_role)
@@ -356,9 +359,9 @@ class ChatbotOrchestrator:
         """Generate intelligent AI response with RAG knowledge enhancement"""
         
         try:
-            # Get the last user message
-            current_message = ""
-            if context.message_history:
+            # Get the current message being processed (from context since it's not in history yet)
+            current_message = getattr(context, 'current_message', '')
+            if not current_message and context.message_history:
                 current_message = context.message_history[-1].get("user_message", "")
             
             # Prepare context for AI/RAG

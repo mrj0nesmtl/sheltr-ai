@@ -225,7 +225,16 @@ class AgentRouter:
             else:
                 return "shelter_operations"
         
-        # Default to technical support
+        elif user_role == "public":
+            # Public users get knowledge-enhanced responses
+            if intent.category == IntentCategory.INFORMATION:
+                return "public_information"
+            elif intent.category == IntentCategory.ACTION:
+                return "public_support"
+            else:
+                return "public_information"  # Default to information for public
+        
+        # Default to technical support for unknown roles
         return "technical_support"
 
 class ConversationContext:
@@ -458,6 +467,10 @@ class ChatbotOrchestrator:
             return await self._handle_donor_relations(intent, context)
         elif agent == "shelter_operations":
             return await self._handle_shelter_operations(intent, context)
+        elif agent == "public_information":
+            return await self._handle_public_information(intent, context)
+        elif agent == "public_support":
+            return await self._handle_public_support(intent, context)
         else:
             return await self._handle_technical_support(intent, context)
     
@@ -577,6 +590,94 @@ class ChatbotOrchestrator:
             ],
             agent_used="shelter_operations"
         )
+    
+    async def _handle_public_information(self, intent: Intent, context: ConversationContext) -> ChatResponse:
+        """Handle public information requests with RAG-enhanced responses"""
+        try:
+            # Import RAG orchestrator
+            from services.chatbot.rag_orchestrator import rag_orchestrator
+            
+            # Get current message from context
+            current_message = getattr(context, 'current_message', '')
+            if not current_message and context.message_history:
+                current_message = context.message_history[-1].get("user_message", "")
+            
+            # Use RAG for enhanced public information responses
+            rag_response = await rag_orchestrator.generate_knowledge_enhanced_response(
+                user_message=current_message,
+                user_role="public", 
+                conversation_context={"session_type": "public", "anonymous": True},
+                agent_type="public_information",
+                intent=intent
+            )
+            
+            # Enhance response with public-specific actions
+            if not rag_response.actions:
+                rag_response.actions = [
+                    {"type": "link", "text": "About SHELTR", "url": "/about"},
+                    {"type": "link", "text": "How to Donate", "url": "/scan-give"},
+                    {"type": "link", "text": "Learn More", "url": "/solutions"}
+                ]
+            
+            rag_response.agent_used = "public_information"
+            return rag_response
+            
+        except Exception as e:
+            logger.error(f"RAG public information failed: {e}")
+            # Fallback to basic public response
+            return ChatResponse(
+                message="I'm here to help you learn about SHELTR's platform for transparent charitable giving. I can explain how our SmartFund donation system works, tell you about blockchain-powered donations, or help you understand our impact. What would you like to know?",
+                actions=[
+                    {"type": "link", "text": "About SHELTR", "url": "/about"},
+                    {"type": "link", "text": "SmartFund Info", "url": "/tokenomics"}, 
+                    {"type": "link", "text": "Start Donating", "url": "/scan-give"}
+                ],
+                agent_used="public_information"
+            )
+    
+    async def _handle_public_support(self, intent: Intent, context: ConversationContext) -> ChatResponse:
+        """Handle public support requests (getting started, donations, etc.)"""
+        try:
+            # Import RAG orchestrator
+            from services.chatbot.rag_orchestrator import rag_orchestrator
+            
+            # Get current message from context
+            current_message = getattr(context, 'current_message', '')
+            if not current_message and context.message_history:
+                current_message = context.message_history[-1].get("user_message", "")
+            
+            # Use RAG for enhanced public support responses
+            rag_response = await rag_orchestrator.generate_knowledge_enhanced_response(
+                user_message=current_message,
+                user_role="public",
+                conversation_context={"session_type": "public", "anonymous": True},
+                agent_type="public_support", 
+                intent=intent
+            )
+            
+            # Enhance response with action-oriented links
+            if not rag_response.actions:
+                rag_response.actions = [
+                    {"type": "link", "text": "Get Started", "url": "/register"},
+                    {"type": "link", "text": "Scan & Donate", "url": "/scan-give"},
+                    {"type": "link", "text": "Contact Support", "url": "/about#contact"}
+                ]
+            
+            rag_response.agent_used = "public_support"
+            return rag_response
+            
+        except Exception as e:
+            logger.error(f"RAG public support failed: {e}")
+            # Fallback to basic public support response
+            return ChatResponse(
+                message="I can help you get started with SHELTR! Whether you want to make your first donation, learn about creating an account, or understand how our platform works, I'm here to guide you through it.",
+                actions=[
+                    {"type": "link", "text": "Start Donating", "url": "/scan-give"},
+                    {"type": "link", "text": "Create Account", "url": "/register"},
+                    {"type": "link", "text": "Learn How It Works", "url": "/about"}
+                ],
+                agent_used="public_support"
+            )
     
     async def _handle_technical_support(self, intent: Intent, context: ConversationContext) -> ChatResponse:
         """Handle technical support requests"""

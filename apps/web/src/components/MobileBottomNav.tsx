@@ -9,9 +9,10 @@ import { useState, useEffect } from 'react';
 
 interface MobileBottomNavProps {
   className?: string;
+  sidebarOpen?: boolean;
 }
 
-export function MobileBottomNav({ className = '' }: MobileBottomNavProps) {
+export function MobileBottomNav({ className = '', sidebarOpen = false }: MobileBottomNavProps) {
   const router = useRouter();
   const { user } = useAuth();
 
@@ -103,7 +104,6 @@ export function MobileBottomNav({ className = '' }: MobileBottomNavProps) {
 
   // Only show on mobile screens
   const [isMobile, setIsMobile] = useState(false);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -115,33 +115,9 @@ export function MobileBottomNav({ className = '' }: MobileBottomNavProps) {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Check if sidebar is open by looking for the sidebar overlay or sidebar visibility
-  useEffect(() => {
-    const checkSidebarState = () => {
-      // Look for mobile sidebar overlay (when sidebar is open)
-      const sidebarOverlay = document.querySelector('[data-sidebar-overlay]');
-      // Look for sidebar element and check if it's visible
-      const sidebarElement = document.querySelector('aside');
-      const isVisible = sidebarElement && !sidebarElement.classList.contains('-translate-x-full');
-      
-      setSidebarOpen(!!sidebarOverlay || !!isVisible);
-    };
 
-    // Check initially
-    checkSidebarState();
 
-    // Set up observer for DOM changes (sidebar toggle)
-    const observer = new MutationObserver(checkSidebarState);
-    observer.observe(document.body, { 
-      childList: true, 
-      subtree: true, 
-      attributes: true, 
-      attributeFilter: ['class'] 
-    });
-
-    return () => observer.disconnect();
-  }, []);
-
+  // Hide when not mobile, or when sidebar is open
   if (!isMobile || sidebarOpen) return null;
 
   return (

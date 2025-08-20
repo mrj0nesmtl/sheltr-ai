@@ -130,36 +130,35 @@ contract SHELTRS {
 #### **Immediate Allocations (No Vesting)**
 | **Team Member** | **Allocation** | **Tokens** | **Role** | **Release** |
 |-----------------|----------------|------------|----------|-------------|
-| **Joel** | 1% | 1,000,000 | Founder & CEO | Immediate |
-| **Doug** | 1% | 1,000,000 | CFO | Immediate |
-| **Alex** | 1% | 1,000,000 | COO | Immediate |
+| **JY** | 1% | 1,000,000 | Founder & CEO | Immediate |
+| **DK** | 1% | 1,000,000 | CFO | Immediate |
+| **AK** | 1% | 1,000,000 | COO | Immediate |
 
 #### **Vesting Allocations (3-Year Schedule)**
 | **Team Member** | **Allocation** | **Tokens** | **Role** | **Vesting** |
 |-----------------|----------------|------------|----------|-------------|
-| **Sasko** | 1% | 1,000,000 | CTO | 3-year vesting |
-
-| **Courtnal** | 1% | 1,000,000 | Leadership | 3-year vesting |
-| **Zaffia** | 1% | 1,000,000 | Leadership | 3-year vesting |
-| **Ami** | 1% | 1,000,000 | Leadership | 3-year vesting |
-| **Marc** | 1% | 1,000,000 | Leadership | 3-year vesting |
-| **Morgan** | 1% | 1,000,000 | Leadership | 3-year vesting |
-| **Dominique** | 1% | 1,000,000 | Leadership | 3-year vesting |
-| **Sara** | 1% | 1,000,000 | Leadership | 3-year vesting |
-| **Sen** | 1% | 1,000,000 | Leadership | 3-year vesting |
+| **SD** | 1% | 1,000,000 | CTO | 3-year vesting |
+| **JC** | 1% | 1,000,000 | Leadership | 3-year vesting |
+| **ZL** | 1% | 1,000,000 | Leadership | 3-year vesting |
+| **AR** | 1% | 1,000,000 | Leadership | 3-year vesting |
+| **MR** | 1% | 1,000,000 | Leadership | 3-year vesting |
+| **MH** | 1% | 1,000,000 | Leadership | 3-year vesting |
+| **DL** | 1% | 1,000,000 | Leadership | 3-year vesting |
+| **SS** | 1% | 1,000,000 | Leadership | 3-year vesting |
+| **SW** | 1% | 1,000,000 | Leadership | 3-year vesting |
 
 ### **Vesting Schedule**
 - **Start Date**: January 1, 2026
 - **Duration**: 3 years (36 months)
 - **Cliff**: 30 days
 - **Release**: Linear monthly distribution
-- **Applicable To**: 10 team members (excluding Joel, Doug, Alex)
+- **Applicable To**: 9 team members (excluding Joel, Doug, Alex)
 
 ### **Immediate Allocations**
-- **Joel (Founder)**: 3M SHELTR - Immediate transfer
+- **Joel (Founder)**: 1M SHELTR - Immediate transfer
 - **Doug (CFO)**: 1M SHELTR - Immediate transfer
 - **Alex (COO)**: 1M SHELTR - Immediate transfer
-- **Total Immediate**: 5M SHELTR (5% of total supply)
+- **Total Immediate**: 3M SHELTR (3% of total supply)
 
 ### **Team Accountability Mechanism**
 - **Exile Voting**: Any team member can initiate exile vote
@@ -170,7 +169,7 @@ contract SHELTRS {
 
 ## 🏦 Treasury Management System
 
-### **Main Allocations (35M SHELTR)**
+### **Main Allocations (50M SHELTR)**
 
 #### **Reserve Fund (5M SHELTR)**
 ```
@@ -189,12 +188,12 @@ contract SHELTRS {
 └─────────────────────────────────────────────────────────────┘
 ```
 
-#### **Strategic Partnerships (15M SHELTR)**
+#### **Strategic Partnerships (10M SHELTR)**
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                STRATEGIC PARTNERSHIPS                       │
 ├─────────────────────────────────────────────────────────────┤
-│ Partnership Rewards: 10,000,000 SHELTR (10%)               │
+│ Partnership Rewards: 5,000,000 SHELTR (10%)               │
 │ • Partner incentives                                        │
 │ • Collaboration rewards                                     │
 │ • Strategic alliance funding                               │
@@ -206,7 +205,7 @@ contract SHELTRS {
 └─────────────────────────────────────────────────────────────┘
 ```
 
-#### **Platform Development (15M SHELTR)**
+#### **Platform Development / Onboarding (23M SHELTR)**
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                 PLATFORM DEVELOPMENT                        │
@@ -221,7 +220,7 @@ contract SHELTRS {
 │ • User retention programs                                   │
 │ • Community building incentives                             │
 ├─────────────────────────────────────────────────────────────┤
-│ Development Operations: 5,000,000 SHELTR (5%)              │
+│ Development Operations: 13,000,000 SHELTR (13%)              │
 │ • Platform development                                      │
 │ • Technical operations                                      │
 │ • Infrastructure maintenance                                │

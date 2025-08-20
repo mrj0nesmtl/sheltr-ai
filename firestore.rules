@@ -1,18 +1,255 @@
-rules_version='2'
+rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
+    
+    // =================================================================
+    // HELPER FUNCTIONS FOR ROLE-BASED ACCESS CONTROL
+    // =================================================================
+    
+    // Check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Get user data from the users collection
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+    
+    // Check user roles
+    function isSuperAdmin() {
+      return isAuthenticated() && getUserData().role == 'super_admin';
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && getUserData().role == 'admin';
+    }
+    
+    function isParticipant() {
+      return isAuthenticated() && getUserData().role == 'participant';
+    }
+    
+    function isDonor() {
+      return isAuthenticated() && getUserData().role == 'donor';
+    }
+    
+    // Check if user owns the resource
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    // Check if admin manages this shelter
+    function canManageShelter(shelterId) {
+      return isSuperAdmin() || 
+             (isAdmin() && getUserData().shelter_id == shelterId);
+    }
+    
+    // =================================================================
+    // USERS COLLECTION - Core user profiles
+    // =================================================================
+    match /users/{userId} {
+      // Read: Users can read their own profile, admins can read users in their shelter, super_admin can read all
+      allow read: if isOwner(userId) || 
+                     isSuperAdmin() ||
+                     (isAdmin() && resource.data.shelter_id == getUserData().shelter_id);
+      
+      // Write: Users can update their own profile, admins can update users in their shelter, super_admin can update all
+      allow write: if isOwner(userId) || 
+                      isSuperAdmin() ||
+                      (isAdmin() && resource.data.shelter_id == getUserData().shelter_id);
+      
+      // Create: Anyone authenticated can create their own user profile
+      allow create: if isAuthenticated() && isOwner(userId);
+    }
+    
+    // =================================================================
+    // SHELTERS COLLECTION - Shelter information and management
+    // =================================================================
+    match /shelters/{shelterId} {
+      // Read: Super admin can read all, admins can read their own shelter, participants/donors can read basic info
+      allow read: if isAuthenticated();
+      
+      // Write: Super admin can write all, admins can write their own shelter
+      allow write: if canManageShelter(shelterId);
+    }
+    
+    // =================================================================
+    // PARTICIPANTS COLLECTION - Participant profiles and data
+    // =================================================================
+    match /participants/{participantId} {
+      // Read: Owner, their shelter admin, super admin
+      allow read: if isOwner(participantId) || 
+                     isSuperAdmin() ||
+                     (isAdmin() && resource.data.shelter_id == getUserData().shelter_id);
+      
+      // Write: Owner, their shelter admin, super admin
+      allow write: if isOwner(participantId) || 
+                      isSuperAdmin() ||
+                      (isAdmin() && resource.data.shelter_id == getUserData().shelter_id);
+      
+      // Create: Authenticated users can create their own participant profile
+      allow create: if isAuthenticated() && isOwner(participantId);
+    }
+    
+    // =================================================================
+    // DONATIONS COLLECTION - Donation records and tracking
+    // =================================================================
+    match /donations/{donationId} {
+      // Read: Donors can read their own donations, participants can read donations to them, 
+      // admins can read donations in their shelter, super admin can read all
+      allow read: if isSuperAdmin() ||
+                     (isDonor() && resource.data.donor_id == request.auth.uid) ||
+                     (isParticipant() && resource.data.participant_id == request.auth.uid) ||
+                     (isAdmin() && resource.data.shelter_id == getUserData().shelter_id);
+      
+      // Write: System creates donations (via backend), super admin can modify
+      allow write: if isSuperAdmin();
+      
+      // Create: Authenticated users can create donations (validated by backend)
+      allow create: if isAuthenticated();
+    }
+    
+    // =================================================================
+    // QR_CODES COLLECTION - QR code management
+    // =================================================================
+    match /qr_codes/{qrCodeId} {
+      // Read: Owner, their shelter admin, super admin
+      allow read: if isOwner(resource.data.participant_id) || 
+                     isSuperAdmin() ||
+                     (isAdmin() && resource.data.shelter_id == getUserData().shelter_id);
+      
+      // Write: Owner, their shelter admin, super admin
+      allow write: if isOwner(resource.data.participant_id) || 
+                      isSuperAdmin() ||
+                      (isAdmin() && resource.data.shelter_id == getUserData().shelter_id);
+      
+      // Create: Participants can create their own QR codes
+      allow create: if isAuthenticated();
+    }
+    
+    // =================================================================
+    // ANALYTICS COLLECTION - Platform analytics and insights
+    // =================================================================
+    match /analytics/{analyticsId} {
+      // Read: Admins can read analytics for their shelter, super admin can read all
+      allow read: if isSuperAdmin() ||
+                     (isAdmin() && resource.data.shelter_id == getUserData().shelter_id);
+      
+      // Write: Super admin only (analytics generated by system)
+      allow write: if isSuperAdmin();
+    }
+    
+    // =================================================================
+    // SERVICES COLLECTION - Available services and resources
+    // =================================================================
+    match /services/{serviceId} {
+      // Read: All authenticated users can read services
+      allow read: if isAuthenticated();
+      
+      // Write: Admins can write services for their shelter, super admin can write all
+      allow write: if isSuperAdmin() ||
+                      (isAdmin() && resource.data.shelter_id == getUserData().shelter_id);
+      
+      // Create: Admins can create services
+      allow create: if isAdmin() || isSuperAdmin();
+    }
+    
+    // =================================================================
+    // KNOWLEDGE_BASE COLLECTION - AI chatbot knowledge base
+    // =================================================================
+    match /knowledge_base/{docId} {
+      // Read: All authenticated users can read public knowledge
+      allow read: if isAuthenticated();
+      
+      // Write: Super admin only
+      allow write: if isSuperAdmin();
+    }
+    
+    // =================================================================
+    // CHAT_SESSIONS COLLECTION - Chatbot conversation history
+    // =================================================================
+    match /chat_sessions/{sessionId} {
+      // Read: Owner, super admin
+      allow read: if isOwner(resource.data.user_id) || isSuperAdmin();
+      
+      // Write: Owner, super admin
+      allow write: if isOwner(resource.data.user_id) || isSuperAdmin();
+      
+      // Create: Authenticated users can create their own chat sessions
+      allow create: if isAuthenticated();
+    }
+    
+    // =================================================================
+    // SYSTEM CONFIGURATION - Platform-wide settings
+    // =================================================================
+    match /system/{configId} {
+      // Read: Super admin only
+      allow read: if isSuperAdmin();
+      
+      // Write: Super admin only
+      allow write: if isSuperAdmin();
+    }
+    
+    // =================================================================
+    // AUDIT_LOGS COLLECTION - Security and audit logging
+    // =================================================================
+    match /audit_logs/{logId} {
+      // Read: Super admin only
+      allow read: if isSuperAdmin();
+      
+      // Write: System only (no client writes)
+      allow write: if false;
+      
+      // Create: System only
+      allow create: if false;
+    }
+    
+    // =================================================================
+    // PARTICIPANT SUB-COLLECTIONS
+    // =================================================================
+    
+    // Participant services history
+    match /participants/{participantId}/services/{serviceId} {
+      allow read, write: if isOwner(participantId) || 
+                            isSuperAdmin() ||
+                            (isAdmin() && get(/databases/$(database)/documents/participants/$(participantId)).data.shelter_id == getUserData().shelter_id);
+    }
+    
+    // Participant donation history
+    match /participants/{participantId}/donations/{donationId} {
+      allow read: if isOwner(participantId) || 
+                     isSuperAdmin() ||
+                     (isAdmin() && get(/databases/$(database)/documents/participants/$(participantId)).data.shelter_id == getUserData().shelter_id);
+      allow write: if false; // Donations created by system only
+    }
+    
+    // =================================================================
+    // SHELTER SUB-COLLECTIONS
+    // =================================================================
+    
+    // Shelter staff
+    match /shelters/{shelterId}/staff/{staffId} {
+      allow read, write: if canManageShelter(shelterId);
+    }
+    
+    // Shelter services
+    match /shelters/{shelterId}/services/{serviceId} {
+      allow read: if isAuthenticated();
+      allow write: if canManageShelter(shelterId);
+    }
+    
+    // Shelter analytics
+    match /shelters/{shelterId}/analytics/{analyticsId} {
+      allow read: if canManageShelter(shelterId);
+      allow write: if isSuperAdmin();
+    }
+    
+    // =================================================================
+    // FALLBACK RULE - Deny all other access
+    // =================================================================
     match /{document=**} {
-      // This rule allows anyone with your database reference to view, edit,
-      // and delete all data in your database. It is useful for getting
-      // started, but it is configured to expire after 30 days because it
-      // leaves your app open to attackers. At that time, all client
-      // requests to your database will be denied.
-      //
-      // Make sure to write security rules for your app before that time, or
-      // else all client requests to your database will be denied until you
-      // update your rules.
-      allow read, write: if request.time < timestamp.date(2025, 8, 21);
+      allow read, write: if false;
     }
   }
 }

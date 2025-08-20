@@ -1698,8 +1698,18 @@ export default function InvestorRelationsPage() {
       </header>
 
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-r from-blue-900 via-purple-900 to-indigo-900 text-white">
-        <div className="container mx-auto px-4 text-center">
+      <section className="relative py-20 text-white overflow-hidden">
+        {/* Background Image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: 'url(/backgrounds/hero-bg.jpg)',
+          }}
+        />
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-900/80 via-purple-900/80 to-indigo-900/80" />
+        {/* Content */}
+        <div className="relative z-10 container mx-auto px-4 text-center">
           <div className="max-w-4xl mx-auto">
             <Badge className="mb-4 bg-amber-600 text-black">PRE-SEED FUNDING ROUND</Badge>
             <h1 className="text-5xl font-bold mb-6">

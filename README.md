@@ -79,9 +79,9 @@ The next generation platform for transparent charitable giving and homelessness 
 - [Agent Communication Protocols](docs/CLAUDE-AGENT-COMMUNICATION.md)
 
 ### 🪙 **🆕 [SHELTR Token Ecosystem](sheltr-tokens/docs/)**
-- [Token Ecosystem Overview](sheltr-tokens/docs/README.md) - Complete blockchain architecture
-- [Tokenomics Strategy](sheltr-tokens/docs/SHELTR-TOKENOMICS-STRATEGY.md) - 100M supply, 80/15/5 distribution
-- [Technical Implementation Guide](sheltr-tokens/docs/TECHNICAL-IMPLEMENTATION-GUIDE.md) - Smart contracts & deployment
+- [Token Ecosystem Overview](sheltr-tokens/docs/README.md) - Complete blockchain architecture  
+- [Tokenomics Strategy](sheltr-tokens/docs/SHELTR-TOKENOMICS-STRATEGY.md) - 100M supply, **12% team allocation**, 3-year release schedule
+- [Technical Implementation Guide](sheltr-tokens/docs/TECHNICAL-IMPLEMENTATION-GUIDE.md) - Smart contracts & deployment guide
 
 ---
 
@@ -142,10 +142,12 @@ function distributeDonation(address participant, uint256 amount) external {
 - **📊 Yield Generation**: Housing fund with 6-8% APY targets
 
 #### **🆕 Token Sale Structure**
-- **Pre-Seed Sale**: 3M tokens at $0.05 (12-month vesting)
-- **Public ICO**: 47M tokens at $0.10 (staggered over 3 years)
-- **Investment Limits**: $500 minimum, $50,000 maximum per investor
-- **Capital Generation**: $4.85M total commitment over 3 years
+- **Public Sale**: 50M tokens (50%) - Staggered over 3 years
+- **Team & Advisors**: 12M tokens (12%) - 3-year vesting starting January 2026
+- **SHELTR Operations**: 13M tokens (13%) - Platform sustainability
+- **Participant Onboarding Rewards**: 10M tokens (10%) - User growth incentives
+- **Strategic Partnerships**: 10M tokens (10%) - Ecosystem expansion
+- **Treasury Reserve**: 5M tokens (5%) - Emergency fund and governance
 
 **→ [Complete Token Documentation](sheltr-tokens/docs/README.md)**
 

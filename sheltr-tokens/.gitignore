@@ -7,8 +7,7 @@ out/
 /broadcast/*/31337/
 /broadcast/**/dry-run/
 
-# Docs
-docs/
+# Note: docs/ should be committed to share tokenomics documentation
 
 # Dotenv file
 .env

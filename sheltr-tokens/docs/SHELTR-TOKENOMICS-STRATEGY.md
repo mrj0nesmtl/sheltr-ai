@@ -155,9 +155,9 @@ contract SHELTRS {
 - **Applicable To**: 9 team members (excluding Joel, Doug, Alex)
 
 ### **Immediate Allocations**
-- **Joel (Founder)**: 1M SHELTR - Immediate transfer
-- **Doug (CFO)**: 1M SHELTR - Immediate transfer
-- **Alex (COO)**: 1M SHELTR - Immediate transfer
+- **JY (Founder)**: 1M SHELTR - Immediate transfer
+- **DK (CFO)**: 1M SHELTR - Immediate transfer
+- **AK (COO)**: 1M SHELTR - Immediate transfer
 - **Total Immediate**: 3M SHELTR (3% of total supply)
 
 ### **Team Accountability Mechanism**

@@ -540,22 +540,29 @@ export default function TokenomicsPage() {
                     <div className="flex items-center justify-between p-3 bg-purple-500/10 rounded-lg">
                       <span>Team & Advisors</span>
                       <div className="text-right">
-                        <div className="font-semibold">15M (15%)</div>
-                        <div className="text-xs text-muted-foreground">-3.15C17-year vesting</div>
+                        <div className="font-semibold">12M (12%)</div>
+                        <div className="text-xs text-muted-foreground">3-year vesting</div>
                       </div>
                     </div>
                     <div className="flex items-center justify-between p-3 bg-orange-500/10 rounded-lg">
-                      <span>Platform Development</span>
+                      <span>SHELTR Operations</span>
                       <div className="text-right">
-                        <div className="font-semibold">15M (15%)</div>
+                        <div className="font-semibold">13M (13%)</div>
                         <div className="text-xs text-muted-foreground">Operations & growth</div>
                       </div>
                     </div>
                     <div className="flex items-center justify-between p-3 bg-yellow-500/10 rounded-lg">
-                      <span>Community Rewards</span>
+                      <span>Participant Onboarding Rewards</span>
                       <div className="text-right">
-                        <div className="font-semibold">15M (15%)</div>
+                        <div className="font-semibold">10M (10%)</div>
                         <div className="text-xs text-muted-foreground">Incentives & airdrops</div>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between p-3 bg-cyan-500/10 rounded-lg">
+                      <span>Strategic Partnerships</span>
+                      <div className="text-right">
+                        <div className="font-semibold">10M (10%)</div>
+                        <div className="text-xs text-muted-foreground">Growth partnerships</div>
                       </div>
                     </div>
                   </div>

@@ -625,11 +625,11 @@ SHELTR's economic model is designed for long-term sustainability through diversi
 ```
 Total Supply: 100,000,000 SHELTR
 ├── Public Sale (50%): 50,000,000 tokens
-├── SHELTR Operations (11%): 11,000,000 tokens
+├── SHELTR Operations (13%): 13,000,000 tokens
 ├── Team & Advisors (12%): 12,000,000 tokens (1% each)
-├── Participant Onboarding (5%): 5,000,000 tokens
-├── Treasury Reserve (5%): 5,000,000 tokens (staked)
-└── Strategic Partnerships (5%): 5,000,000 tokens
+├── Participant Onboarding Rewards (10%): 10,000,000 tokens
+├── Strategic Partnerships (10%): 10,000,000 tokens
+└── Treasury Reserve (5%): 5,000,000 tokens (staked)
 ```
 
 **Value Appreciation Mechanisms**:

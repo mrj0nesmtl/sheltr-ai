@@ -2299,24 +2299,28 @@ export default function InvestorRelationsPage() {
                       <h4 className="font-semibold">Token Distribution</h4>
                       <div className="space-y-2">
                         <div className="flex justify-between items-center">
-                          <span>Public Sale (40%)</span>
-                          <span className="font-mono">40,000,000 $SHLTR</span>
+                          <span>Public Sale (50%)</span>
+                          <span className="font-mono">50,000,000 $SHLTR</span>
                         </div>
                         <div className="flex justify-between items-center">
-                          <span>Team & Advisors (20%)</span>
-                          <span className="font-mono">20,000,000 $SHLTR</span>
+                          <span>Team & Advisors (12%)</span>
+                          <span className="font-mono">12,000,000 $SHLTR</span>
                         </div>
                         <div className="flex justify-between items-center">
-                          <span>Platform Rewards (15%)</span>
-                          <span className="font-mono">15,000,000 $SHLTR</span>
+                          <span>SHELTR Operations (13%)</span>
+                          <span className="font-mono">13,000,000 $SHLTR</span>
                         </div>
                         <div className="flex justify-between items-center">
-                          <span>Development Fund (15%)</span>
-                          <span className="font-mono">15,000,000 $SHLTR</span>
-                        </div>
-                        <div className="flex justify-between items-center">
-                          <span>Reserve Fund (10%)</span>
+                          <span>Participant Onboarding Rewards (10%)</span>
                           <span className="font-mono">10,000,000 $SHLTR</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span>Strategic Partnerships (10%)</span>
+                          <span className="font-mono">10,000,000 $SHLTR</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span>Reserve Fund (5%)</span>
+                          <span className="font-mono">5,000,000 $SHLTR</span>
                         </div>
                       </div>
                     </div>

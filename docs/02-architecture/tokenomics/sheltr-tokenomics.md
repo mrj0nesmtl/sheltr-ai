@@ -102,10 +102,11 @@ pie title SmartFund Distribution
 | **Allocation** | **Tokens** | **Percentage** | **Release Strategy** |
 |----------------|------------|----------------|---------------------|
 | **Public Sale** | 50,000,000 | 50% | Staggered over 3 years |
-| **Team & Advisors** | 15,000,000 | 15% | 3-year vesting (Jan 2026) |
+| **Team & Advisors** | 12,000,000 | 12% | 3-year vesting (Jan 2026) |
+| **SHELTR Operations** | 13,000,000 | 13% | 3-year distribution |
+| **Participant Onboarding Rewards** | 10,000,000 | 10% | 3-year distribution |
+| **Strategic Partnerships** | 10,000,000 | 10% | 3-year distribution |
 | **Reserve Fund** | 5,000,000 | 5% | Immediate access |
-| **Strategic Partnerships** | 15,000,000 | 15% | 3-year distribution |
-| **Platform Development** | 15,000,000 | 15% | 3-year distribution |
 
 ### **Capital Generation Timeline**
 

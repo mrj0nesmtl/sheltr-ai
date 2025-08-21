@@ -39,7 +39,11 @@ import {
   ExternalLink,
   Copy,
   Maximize2,
-  Minimize2
+  Minimize2,
+  Shield,
+  Users,
+  Lock,
+  AlertTriangle
 } from 'lucide-react';
 import { knowledgeDashboardService, KnowledgeDocument, KnowledgeStats } from '@/services/knowledgeDashboardService';
 import { useAuth } from '@/contexts/AuthContext';
@@ -76,7 +80,13 @@ export default function KnowledgeDashboard() {
     content: '',
     category: '',
     tags: [] as string[],
-    status: 'active' as 'active' | 'archived' | 'processing'
+    status: 'active' as 'active' | 'archived' | 'processing',
+    // New sharing controls
+    sharing_level: 'public' as 'public' | 'shelter_specific' | 'super_admin_only' | 'role_based',
+    shared_with: [] as string[],
+    access_roles: [] as string[],
+    is_live: false,
+    confidentiality_level: 'public' as 'public' | 'internal' | 'confidential' | 'restricted'
   });
 
   // Web scraping form state
@@ -118,6 +128,41 @@ export default function KnowledgeDashboard() {
     }
   };
 
+  // Sharing control helpers
+  const getSharingBadge = (doc: KnowledgeDocument) => {
+    if (doc.is_live) {
+      return { color: 'bg-green-500', text: 'LIVE', icon: Zap };
+    }
+    
+    switch (doc.sharing_level) {
+      case 'public':
+        return { color: 'bg-blue-500', text: 'Public', icon: Globe };
+      case 'shelter_specific':
+        return { color: 'bg-purple-500', text: 'Shelter', icon: Target };
+      case 'super_admin_only':
+        return { color: 'bg-red-500', text: 'Internal', icon: Shield };
+      case 'role_based':
+        return { color: 'bg-orange-500', text: 'Role-Based', icon: Users };
+      default:
+        return { color: 'bg-gray-500', text: 'Unknown', icon: FileText };
+    }
+  };
+
+  const getConfidentialityBadge = (level: string) => {
+    switch (level) {
+      case 'public':
+        return { color: 'bg-green-100 text-green-800', text: 'Public', icon: Globe };
+      case 'internal':
+        return { color: 'bg-blue-100 text-blue-800', text: 'Internal', icon: Shield };
+      case 'confidential':
+        return { color: 'bg-yellow-100 text-yellow-800', text: 'Confidential', icon: Lock };
+      case 'restricted':
+        return { color: 'bg-red-100 text-red-800', text: 'Restricted', icon: AlertTriangle };
+      default:
+        return { color: 'bg-gray-100 text-gray-800', text: 'Unknown', icon: FileText };
+    }
+  };
+
   const openViewDialog = (doc: KnowledgeDocument) => {
     setViewingDocument(doc);
     setShowViewDialog(true);
@@ -149,7 +194,12 @@ export default function KnowledgeDashboard() {
       content: '',
       category: '',
       tags: [],
-      status: 'active'
+      status: 'active',
+      sharing_level: 'public',
+      shared_with: [],
+      access_roles: [],
+      is_live: false,
+      confidentiality_level: 'public'
     });
     setEditingDocument(null);
   };
@@ -208,7 +258,12 @@ export default function KnowledgeDashboard() {
       content: document.content,
       category: document.category,
       tags: document.tags,
-      status: document.status
+      status: document.status,
+      sharing_level: document.sharing_level || 'public',
+      shared_with: document.shared_with || [],
+      access_roles: document.access_roles || [],
+      is_live: document.is_live || false,
+      confidentiality_level: document.confidentiality_level || 'public'
     });
     setShowEditDialog(true);
   };
@@ -400,6 +455,10 @@ export default function KnowledgeDashboard() {
             const qualityScore = getQualityScore(doc);
             const qualityBadge = getQualityBadge(qualityScore);
             const QualityIcon = qualityBadge.icon;
+            const sharingBadge = getSharingBadge(doc);
+            const SharingIcon = sharingBadge.icon;
+            const confidentialityBadge = getConfidentialityBadge(doc.confidentiality_level || 'public');
+            const ConfidentialityIcon = confidentialityBadge.icon;
             
             return (
               <Card key={doc.id} className="hover:shadow-lg transition-shadow">
@@ -412,6 +471,10 @@ export default function KnowledgeDashboard() {
                           <QualityIcon className="h-3 w-3 mr-1" />
                           {qualityBadge.text}
                         </Badge>
+                        <Badge className={`${sharingBadge.color} text-white text-xs`}>
+                          <SharingIcon className="h-3 w-3 mr-1" />
+                          {sharingBadge.text}
+                        </Badge>
                       </CardTitle>
                       <div className="flex items-center gap-2 mt-2">
                         <Badge variant={doc.status === 'active' ? 'default' : 'secondary'}>
@@ -420,6 +483,10 @@ export default function KnowledgeDashboard() {
                         <Badge variant={doc.embedding_status === 'completed' ? 'default' : 'outline'}>
                           {getEmbeddingStatusIcon(doc.embedding_status)}
                           <span className="ml-1">{doc.embedding_status}</span>
+                        </Badge>
+                        <Badge className={`${confidentialityBadge.color} text-xs`}>
+                          <ConfidentialityIcon className="h-3 w-3 mr-1" />
+                          {confidentialityBadge.text}
                         </Badge>
                       </div>
                     </div>
@@ -648,6 +715,79 @@ export default function KnowledgeDashboard() {
                   placeholder="Enter tags separated by commas"
                 />
               </div>
+            </div>
+
+            {/* Sharing Controls Section */}
+            <Separator />
+            <div>
+              <h3 className="text-lg font-semibold mb-4">Sharing & Access Controls</h3>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label className="text-sm font-medium">Sharing Level</label>
+                  <Select value={formData.sharing_level} onValueChange={(value: 'public' | 'shelter_specific' | 'super_admin_only' | 'role_based') => setFormData({...formData, sharing_level: value})}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="public">Public - Available to all users</SelectItem>
+                      <SelectItem value="shelter_specific">Shelter Specific - Only specific shelters</SelectItem>
+                      <SelectItem value="super_admin_only">Super Admin Only - Internal use</SelectItem>
+                      <SelectItem value="role_based">Role Based - Specific user roles</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div>
+                  <label className="text-sm font-medium">Confidentiality Level</label>
+                  <Select value={formData.confidentiality_level} onValueChange={(value: 'public' | 'internal' | 'confidential' | 'restricted') => setFormData({...formData, confidentiality_level: value})}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="public">Public - No restrictions</SelectItem>
+                      <SelectItem value="internal">Internal - Organization only</SelectItem>
+                      <SelectItem value="confidential">Confidential - Limited access</SelectItem>
+                      <SelectItem value="restricted">Restricted - Highest security</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              
+              <div className="flex items-center space-x-2 mb-4">
+                <input
+                  type="checkbox"
+                  id="is_live"
+                  checked={formData.is_live}
+                  onChange={(e) => setFormData({...formData, is_live: e.target.checked})}
+                  className="rounded"
+                />
+                <label htmlFor="is_live" className="text-sm font-medium">
+                  Mark as Live/Public Document
+                </label>
+              </div>
+              
+              {formData.sharing_level === 'shelter_specific' && (
+                <div>
+                  <label className="text-sm font-medium">Share with Specific Shelters</label>
+                  <Input
+                    value={formData.shared_with.join(', ')}
+                    onChange={(e) => setFormData({...formData, shared_with: e.target.value.split(',').map(t => t.trim()).filter(Boolean)})}
+                    placeholder="Enter shelter IDs separated by commas"
+                  />
+                </div>
+              )}
+              
+              {formData.sharing_level === 'role_based' && (
+                <div>
+                  <label className="text-sm font-medium">Access Roles</label>
+                  <Input
+                    value={formData.access_roles.join(', ')}
+                    onChange={(e) => setFormData({...formData, access_roles: e.target.value.split(',').map(t => t.trim()).filter(Boolean)})}
+                    placeholder="Enter roles: super_admin, shelter_admin, participant"
+                  />
+                </div>
+              )}
             </div>
 
             <div className="flex justify-end gap-2">

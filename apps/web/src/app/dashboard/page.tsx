@@ -70,7 +70,7 @@ export default function DashboardPage() {
           recentActivity: [
             {
               action: 'Platform metrics loaded',
-              details: `Connected to ${apiMetrics.shelters?.total_shelters || 0} shelters`,
+              details: `Connected to ${apiMetrics.shelters?.total_shelters || 0} shelters with ${apiMetrics.users?.total || 0} users`,
               time: 'Just now'
             }
           ]

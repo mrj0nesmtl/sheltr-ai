@@ -144,12 +144,15 @@ export default function PlatformManagement() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="p-6 max-w-7xl mx-auto space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">Platform Management</h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-2 text-sm sm:text-base">
+          <h1 className="text-2xl sm:text-3xl font-bold flex items-center">
+            <Settings className="h-8 w-8 mr-3" />
+            Platform Management
+          </h1>
+          <p className="text-gray-600 text-sm sm:text-base">
             System configuration, monitoring, and tenant oversight
           </p>
         </div>

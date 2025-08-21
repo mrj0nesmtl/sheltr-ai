@@ -184,12 +184,15 @@ export default function Analytics() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="p-6 max-w-7xl mx-auto space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
         <div>
           <div className="flex items-center space-x-3">
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">Analytics</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold flex items-center">
+              <BarChart3 className="h-8 w-8 mr-3" />
+              Analytics
+            </h1>
             {loading ? (
               <div className="flex items-center space-x-2 text-blue-600">
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
@@ -202,7 +205,7 @@ export default function Analytics() {
               </div>
             )}
           </div>
-          <p className="text-gray-600 dark:text-gray-400 mt-2 text-sm sm:text-base">
+          <p className="text-gray-600 text-sm sm:text-base">
             Real-time platform analytics, insights, and performance metrics
           </p>
         </div>

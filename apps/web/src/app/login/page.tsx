@@ -49,11 +49,11 @@ export default function LoginPage() {
         </div>
       </div>
 
-      <div className="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="relative flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         {/* Back Button */}
         <Link 
           href="/"
-          className="fixed top-28 left-6 flex items-center text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors z-10"
+          className="absolute top-8 left-6 flex items-center text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors z-10"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           <span className="text-sm">Back to Home</span>

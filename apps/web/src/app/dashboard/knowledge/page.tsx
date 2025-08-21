@@ -25,7 +25,21 @@ import {
   Database,
   Globe,
   Clock,
-  Hash
+  Hash,
+  CheckCircle,
+  AlertCircle,
+  XCircle,
+  Star,
+  Zap,
+  BookOpen,
+  Target,
+  TrendingUp,
+  FileCode,
+  FileText as FileTextIcon,
+  ExternalLink,
+  Copy,
+  Maximize2,
+  Minimize2
 } from 'lucide-react';
 import { knowledgeDashboardService, KnowledgeDocument, KnowledgeStats } from '@/services/knowledgeDashboardService';
 import { useAuth } from '@/contexts/AuthContext';
@@ -50,8 +64,11 @@ export default function KnowledgeDashboard() {
   const [viewMode, setViewMode] = useState<'list' | 'cards'>('cards');
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [showEditDialog, setShowEditDialog] = useState(false);
+  const [showViewDialog, setShowViewDialog] = useState(false);
   const [editingDocument, setEditingDocument] = useState<KnowledgeDocument | null>(null);
+  const [viewingDocument, setViewingDocument] = useState<KnowledgeDocument | null>(null);
   const [showWebScrapingDialog, setShowWebScrapingDialog] = useState(false);
+  const [isFullScreen, setIsFullScreen] = useState(false);
 
   // Form state for new/edit document
   const [formData, setFormData] = useState({
@@ -73,6 +90,38 @@ export default function KnowledgeDashboard() {
   useEffect(() => {
     loadKnowledgeData();
   }, []);
+
+  // Helper functions for quality indicators
+  const getQualityScore = (doc: KnowledgeDocument) => {
+    let score = 0;
+    if (doc.chunk_count > 0) score += 30;
+    if (doc.word_count > 100) score += 20;
+    if (doc.embedding_status === 'completed') score += 30;
+    if (doc.status === 'active') score += 10;
+    if (doc.tags && doc.tags.length > 0) score += 10;
+    return Math.min(score, 100);
+  };
+
+  const getQualityBadge = (score: number) => {
+    if (score >= 90) return { color: 'bg-green-500', text: 'Excellent', icon: Star };
+    if (score >= 70) return { color: 'bg-blue-500', text: 'Good', icon: CheckCircle };
+    if (score >= 50) return { color: 'bg-yellow-500', text: 'Fair', icon: AlertCircle };
+    return { color: 'bg-red-500', text: 'Poor', icon: XCircle };
+  };
+
+  const getEmbeddingStatusIcon = (status: string) => {
+    switch (status) {
+      case 'completed': return <CheckCircle className="h-4 w-4 text-green-500" />;
+      case 'processing': return <RefreshCw className="h-4 w-4 text-yellow-500 animate-spin" />;
+      case 'pending': return <Clock className="h-4 w-4 text-gray-500" />;
+      default: return <XCircle className="h-4 w-4 text-red-500" />;
+    }
+  };
+
+  const openViewDialog = (doc: KnowledgeDocument) => {
+    setViewingDocument(doc);
+    setShowViewDialog(true);
+  };
 
   const loadKnowledgeData = async () => {
     try {
@@ -347,29 +396,50 @@ export default function KnowledgeDashboard() {
       {/* Documents Display */}
       {viewMode === 'cards' ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredDocuments.map((doc) => (
-            <Card key={doc.id} className="hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <div className="flex items-center justify-between mb-2">
-                  <Badge 
-                    variant={doc.status === 'active' ? 'default' : 'secondary'}
-                  >
-                    {doc.status}
-                  </Badge>
-                  <Badge 
-                    variant={doc.embedding_status === 'completed' ? 'default' : 'outline'}
-                    className="ml-2"
-                  >
-                    {doc.embedding_status}
-                  </Badge>
-                </div>
-                
-                <CardTitle className="text-lg line-clamp-2">
-                  {doc.title}
-                </CardTitle>
-              </CardHeader>
+          {filteredDocuments.map((doc) => {
+            const qualityScore = getQualityScore(doc);
+            const qualityBadge = getQualityBadge(qualityScore);
+            const QualityIcon = qualityBadge.icon;
+            
+            return (
+              <Card key={doc.id} className="hover:shadow-lg transition-shadow">
+                <CardHeader>
+                  <div className="flex items-start justify-between mb-2">
+                    <div className="flex-1">
+                      <CardTitle className="text-lg line-clamp-2 flex items-center gap-2">
+                        {doc.title}
+                        <Badge className={`${qualityBadge.color} text-white text-xs`}>
+                          <QualityIcon className="h-3 w-3 mr-1" />
+                          {qualityBadge.text}
+                        </Badge>
+                      </CardTitle>
+                      <div className="flex items-center gap-2 mt-2">
+                        <Badge variant={doc.status === 'active' ? 'default' : 'secondary'}>
+                          {doc.status}
+                        </Badge>
+                        <Badge variant={doc.embedding_status === 'completed' ? 'default' : 'outline'}>
+                          {getEmbeddingStatusIcon(doc.embedding_status)}
+                          <span className="ml-1">{doc.embedding_status}</span>
+                        </Badge>
+                      </div>
+                    </div>
+                  </div>
+                </CardHeader>
               
               <CardContent>
+                <div className="mb-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-medium">Quality Score</span>
+                    <span className="text-sm font-bold">{qualityScore}/100</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div 
+                      className={`h-2 rounded-full ${qualityBadge.color}`}
+                      style={{ width: `${qualityScore}%` }}
+                    ></div>
+                  </div>
+                </div>
+                
                 <p className="text-muted-foreground mb-4 line-clamp-3">
                   {doc.content.substring(0, 150)}...
                 </p>
@@ -411,6 +481,15 @@ export default function KnowledgeDashboard() {
                   <Button
                     variant="outline"
                     size="sm"
+                    onClick={() => openViewDialog(doc)}
+                    className="flex-1"
+                  >
+                    <Eye className="h-3 w-3 mr-1" />
+                    View
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
                     onClick={() => openEditDialog(doc)}
                     className="flex-1"
                   >
@@ -428,7 +507,8 @@ export default function KnowledgeDashboard() {
                 </div>
               </CardContent>
             </Card>
-          ))}
+          );
+        })}
         </div>
       ) : (
         <div className="space-y-4">
@@ -548,7 +628,7 @@ export default function KnowledgeDashboard() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="text-sm font-medium">Status</label>
-                <Select value={formData.status} onValueChange={(value: any) => setFormData({...formData, status: value})}>
+                <Select value={formData.status} onValueChange={(value: 'active' | 'archived' | 'processing') => setFormData({...formData, status: value})}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -630,7 +710,7 @@ export default function KnowledgeDashboard() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="text-sm font-medium">Status</label>
-                <Select value={formData.status} onValueChange={(value: any) => setFormData({...formData, status: value})}>
+                <Select value={formData.status} onValueChange={(value: 'active' | 'archived' | 'processing') => setFormData({...formData, status: value})}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -662,6 +742,107 @@ export default function KnowledgeDashboard() {
               </Button>
             </div>
           </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* View Document Dialog */}
+      <Dialog open={showViewDialog} onOpenChange={setShowViewDialog}>
+        <DialogContent className={`${isFullScreen ? 'max-w-full max-h-full' : 'max-w-4xl max-h-[90vh]'} overflow-y-auto`}>
+          <DialogHeader>
+            <div className="flex items-center justify-between">
+              <DialogTitle className="flex items-center gap-2">
+                <FileTextIcon className="h-5 w-5" />
+                {viewingDocument?.title}
+              </DialogTitle>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setIsFullScreen(!isFullScreen)}
+                >
+                  {isFullScreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    if (viewingDocument) {
+                      navigator.clipboard.writeText(viewingDocument.content);
+                    }
+                  }}
+                >
+                  <Copy className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          </DialogHeader>
+          
+          {viewingDocument && (
+            <div className="space-y-6">
+              {/* Document Metadata */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 bg-muted/50 rounded-lg">
+                <div>
+                  <p className="text-sm font-medium">Status</p>
+                  <Badge variant={viewingDocument.status === 'active' ? 'default' : 'secondary'}>
+                    {viewingDocument.status}
+                  </Badge>
+                </div>
+                <div>
+                  <p className="text-sm font-medium">Embeddings</p>
+                  <Badge variant={viewingDocument.embedding_status === 'completed' ? 'default' : 'outline'}>
+                    {getEmbeddingStatusIcon(viewingDocument.embedding_status)}
+                    <span className="ml-1">{viewingDocument.embedding_status}</span>
+                  </Badge>
+                </div>
+                <div>
+                  <p className="text-sm font-medium">Chunks</p>
+                  <p className="text-sm">{viewingDocument.chunk_count}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium">Words</p>
+                  <p className="text-sm">{viewingDocument.word_count}</p>
+                </div>
+              </div>
+              
+              {/* Quality Score */}
+              <div className="p-4 bg-muted/50 rounded-lg">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-medium">Quality Score</span>
+                  <span className="text-sm font-bold">{getQualityScore(viewingDocument)}/100</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-3">
+                  <div 
+                    className={`h-3 rounded-full ${getQualityBadge(getQualityScore(viewingDocument)).color}`}
+                    style={{ width: `${getQualityScore(viewingDocument)}%` }}
+                  ></div>
+                </div>
+              </div>
+              
+              {/* Full Content */}
+              <div>
+                <h3 className="text-lg font-semibold mb-4">Document Content</h3>
+                <div className="bg-muted/30 p-6 rounded-lg max-h-96 overflow-y-auto">
+                  <pre className="whitespace-pre-wrap text-sm font-mono">
+                    {viewingDocument.content}
+                  </pre>
+                </div>
+              </div>
+              
+              {/* Tags */}
+              {viewingDocument.tags && viewingDocument.tags.length > 0 && (
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">Tags</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {viewingDocument.tags.map((tag, index) => (
+                      <Badge key={index} variant="outline">
+                        {tag}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </DialogContent>
       </Dialog>
 

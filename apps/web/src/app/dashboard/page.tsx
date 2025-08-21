@@ -12,6 +12,7 @@ import { Badge } from '@/components/ui/badge';
 import { ChatbotWidget } from '@/components/ChatbotWidget';
 import { getPlatformMetrics, PlatformMetrics } from '@/services/platformMetrics';
 import { getNotificationCounts, getRecentEmailSignups, NotificationCounts, EmailSignup, formatRelativeTime } from '@/services/notificationService';
+import { analyticsService } from '@/services/analyticsService';
 import { 
   Users, 
   Building, 
@@ -51,10 +52,41 @@ export default function DashboardPage() {
   const loadPlatformMetrics = async () => {
     setMetricsLoading(true);
     try {
-      console.log('📊 Loading real platform metrics...');
+      console.log('📊 Loading real platform metrics from API...');
+      
+      // Try API first, fallback to direct Firestore calls
+      try {
+        const apiMetrics = await analyticsService.getPlatformAnalytics();
+        console.log('📊 API metrics received:', apiMetrics);
+        
+        // Transform API data to match PlatformMetrics interface
+        const transformedMetrics: PlatformMetrics = {
+          totalOrganizations: apiMetrics.shelters?.total_shelters || 0,
+          totalUsers: apiMetrics.users?.total || 0,
+          activeParticipants: apiMetrics.shelters?.participants_served || 0,
+          totalDonations: apiMetrics.donations?.total_amount || 0,
+          platformUptime: 99.9, // Keep as operational metric
+          issuesOpen: 0, // Keep as operational metric
+          recentActivity: [
+            {
+              action: 'Platform metrics loaded',
+              details: `Connected to ${apiMetrics.shelters?.total_shelters || 0} shelters`,
+              time: 'Just now'
+            }
+          ]
+        };
+        
+        setPlatformMetrics(transformedMetrics);
+        console.log('✅ Platform metrics loaded from API:', transformedMetrics);
+        return;
+      } catch (apiError) {
+        console.warn('⚠️ API call failed, falling back to direct Firestore calls:', apiError);
+      }
+      
+      // Fallback to direct Firestore calls
       const metrics = await getPlatformMetrics();
       setPlatformMetrics(metrics);
-      console.log('✅ Platform metrics loaded:', metrics);
+      console.log('✅ Platform metrics loaded from Firestore:', metrics);
     } catch (error) {
       console.error('❌ Failed to load platform metrics:', error);
       // Set fallback metrics with dashes/zeros
@@ -65,7 +97,13 @@ export default function DashboardPage() {
         totalDonations: 0,
         platformUptime: 0,
         issuesOpen: 0,
-        recentActivity: []
+        recentActivity: [
+          {
+            action: 'Data loading error',
+            details: 'Please check database connection',
+            time: 'Just now'
+          }
+        ]
       });
     } finally {
       setMetricsLoading(false);

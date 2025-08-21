@@ -58,9 +58,7 @@ class ChatbotService {
   private messageHandlers: Array<(message: any) => void> = [];
 
   constructor() {
-    this.baseUrl = process.env.NODE_ENV === 'production' 
-      ? 'https://api.sheltr.ai' 
-      : 'http://localhost:8000';
+    this.baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
   }
 
   private async getAuthToken(): Promise<string> {

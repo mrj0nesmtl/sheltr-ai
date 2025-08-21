@@ -1,15 +1,16 @@
-# 🔌 SHELTR API Documentation - Session 9 Implementation
+# 🔌 SHELTR API Documentation - Current Implementation
 
 **FastAPI Backend for Shelter Management Platform**
 
-*Base URL: `http://localhost:8000` (Development) | `https://api.sheltr.ai` (Production)*  
+*Base URL: `http://localhost:8000` (Development) | `https://sheltr-api-714964620823.us-central1.run.app` (Production)*  
 *Authentication: Firebase ID tokens* ✅ **OPERATIONAL**  
-*Current Version: 2.0.0*  
+*Current Version: 2.1.0*  
 *Live Frontend: https://sheltr-ai.web.app* ✅ **AUTHENTICATION ACTIVE**
 
-**🎯 Last Updated**: Session 9 (August 9, 2025)  
+**🎯 Last Updated**: Current Session (December 2024)  
 **📊 Current Status**: Production-ready with 6 operational routers  
-**🔗 Data Integration**: Connected to clean Firestore structure
+**🔗 Data Integration**: Connected to clean Firestore structure  
+**🚀 Deployment**: Google Cloud Run (Containerized)
 
 ---
 
@@ -460,23 +461,29 @@ ADYEN_MERCHANT_ACCOUNT=your_merchant_account
 
 ### Production Deployment
 
-- **Backend**: FastAPI on Google Cloud Run
-- **Database**: Firebase Firestore with clean Session 9 structure
+- **Backend**: FastAPI on Google Cloud Run (Containerized)
+- **Database**: Firebase Firestore with clean structure
 - **Authentication**: Firebase Auth with custom claims
 - **Frontend Integration**: CORS-enabled for https://sheltr-ai.web.app
+- **Container Registry**: Google Container Registry (gcr.io/sheltr-ai/sheltr-api)
+- **Auto-scaling**: 0-10 instances based on demand
 
 ---
 
 ## 📊 Current Implementation Status
 
-### ✅ **Completed (Session 9)**
+### ✅ **Completed (Current Session)**
 - **6 Operational Routers**: Auth, Analytics, Chatbot, Services, Users, Demo Donations
 - **Firebase Integration**: Complete authentication and Firestore connectivity
 - **Role-Based Access**: 4-role system (Super Admin, Admin, Participant, Donor)
 - **Data Connectivity**: Real database integration with clean structure
 - **Adyen Demo**: Working QR donation system with payment processing
+- **Production Deployment**: Google Cloud Run containerized deployment
+- **Enhanced Chatbot**: RAG-powered intelligent responses with knowledge base
+- **Security Improvements**: Cryptographically secure session management
+- **Tokenomics Updates**: Updated allocation strategies and documentation
 
-### 🔄 **Session 10 Priorities**
+### 🔄 **Next Session Priorities**
 - **Inventory Management API**: Resource tracking endpoints
 - **Appointment System API**: Service booking and calendar endpoints  
 - **Enhanced Analytics**: More detailed reporting endpoints

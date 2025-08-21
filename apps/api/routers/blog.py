@@ -8,7 +8,6 @@ from typing import List, Optional, Dict, Any
 import logging
 from services.blog_service import BlogService
 from middleware.auth_middleware import get_current_user, require_super_admin
-from models.user import User
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +20,7 @@ async def get_blog_posts(
     tag: Optional[str] = None,
     limit: int = 10,
     offset: int = 0,
-    current_user: User = Depends(get_current_user)
+    current_user: Dict[str, Any] = Depends(get_current_user)
 ):
     """Get blog posts with filtering and pagination"""
     
@@ -52,7 +51,7 @@ async def get_blog_posts(
 @router.get("/posts/{slug}")
 async def get_blog_post(
     slug: str,
-    current_user: User = Depends(get_current_user)
+    current_user: Dict[str, Any] = Depends(get_current_user)
 ):
     """Get a single blog post by slug"""
     
@@ -92,7 +91,7 @@ async def create_blog_post(
     seo_description: Optional[str] = Form(None),
     seo_keywords: Optional[str] = Form(None),  # Comma-separated keywords
     featured_image: Optional[UploadFile] = File(None),
-    current_user: User = Depends(require_super_admin)
+    current_user: Dict[str, Any] = Depends(require_super_admin)
 ):
     """Create a new blog post (Super Admin only)"""
     
@@ -115,8 +114,8 @@ async def create_blog_post(
             title=title,
             content=content,
             excerpt=excerpt,
-            author_id=current_user.uid,
-            author_name=current_user.display_name or current_user.email,
+            author_id=current_user['uid'],
+            author_name=current_user.get('display_name') or current_user.get('email'),
             category=category,
             tags=tag_list,
             featured_image=featured_image_url,
@@ -150,7 +149,7 @@ async def update_blog_post(
     seo_title: Optional[str] = Form(None),
     seo_description: Optional[str] = Form(None),
     seo_keywords: Optional[str] = Form(None),
-    current_user: User = Depends(require_super_admin)
+    current_user: Dict[str, Any] = Depends(require_super_admin)
 ):
     """Update an existing blog post (Super Admin only)"""
     
@@ -203,7 +202,7 @@ async def update_blog_post(
 @router.delete("/posts/{post_id}")
 async def delete_blog_post(
     post_id: str,
-    current_user: User = Depends(require_super_admin)
+    current_user: Dict[str, Any] = Depends(require_super_admin)
 ):
     """Delete a blog post (Super Admin only)"""
     
@@ -229,7 +228,7 @@ async def delete_blog_post(
 
 @router.get("/categories")
 async def get_categories(
-    current_user: User = Depends(get_current_user)
+    current_user: Dict[str, Any] = Depends(get_current_user)
 ):
     """Get all blog categories"""
     
@@ -253,7 +252,7 @@ async def create_category(
     name: str = Form(...),
     description: str = Form(...),
     color: str = Form("#3B82F6"),
-    current_user: User = Depends(require_super_admin)
+    current_user: Dict[str, Any] = Depends(require_super_admin)
 ):
     """Create a new blog category (Super Admin only)"""
     
@@ -279,7 +278,7 @@ async def create_category(
 
 @router.get("/tags")
 async def get_tags(
-    current_user: User = Depends(get_current_user)
+    current_user: Dict[str, Any] = Depends(get_current_user)
 ):
     """Get all blog tags with usage counts"""
     

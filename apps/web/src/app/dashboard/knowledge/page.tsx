@@ -579,53 +579,152 @@ export default function KnowledgeDashboard() {
         </div>
       ) : (
         <div className="space-y-4">
-          {filteredDocuments.map((doc) => (
-            <Card key={doc.id}>
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-4 mb-2">
-                      <h3 className="font-semibold">{doc.title}</h3>
-                      <Badge variant={doc.status === 'active' ? 'default' : 'secondary'}>
-                        {doc.status}
-                      </Badge>
-                      <Badge variant={doc.embedding_status === 'completed' ? 'default' : 'outline'}>
-                        {doc.embedding_status}
-                      </Badge>
+          {filteredDocuments.map((doc) => {
+            const qualityScore = getQualityScore(doc);
+            const qualityBadge = getQualityBadge(qualityScore);
+            const QualityIcon = qualityBadge.icon;
+            const sharingBadge = getSharingBadge(doc);
+            const SharingIcon = sharingBadge.icon;
+            const confidentialityBadge = getConfidentialityBadge(doc.confidentiality_level || 'public');
+            const ConfidentialityIcon = confidentialityBadge.icon;
+            
+            return (
+              <Card key={doc.id} className="hover:shadow-md transition-shadow">
+                <CardContent className="p-4">
+                  {/* Mobile-friendly layout */}
+                  <div className="flex flex-col lg:flex-row lg:items-start gap-4">
+                    {/* Main content area */}
+                    <div className="flex-1 min-w-0">
+                      {/* Header with title and badges */}
+                      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3">
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-semibold text-lg mb-2 line-clamp-2">
+                            {doc.title}
+                          </h3>
+                          <div className="flex flex-wrap items-center gap-2 mb-2">
+                            <Badge className={`${qualityBadge.color} text-white text-xs`}>
+                              <QualityIcon className="h-3 w-3 mr-1" />
+                              {qualityBadge.text}
+                            </Badge>
+                            <Badge className={`${sharingBadge.color} text-white text-xs`}>
+                              <SharingIcon className="h-3 w-3 mr-1" />
+                              {sharingBadge.text}
+                            </Badge>
+                            <Badge variant={doc.status === 'active' ? 'default' : 'secondary'} className="text-xs">
+                              {doc.status}
+                            </Badge>
+                            <Badge variant={doc.embedding_status === 'completed' ? 'default' : 'outline'} className="text-xs">
+                              {getEmbeddingStatusIcon(doc.embedding_status)}
+                              <span className="ml-1">{doc.embedding_status}</span>
+                            </Badge>
+                            <Badge className={`${confidentialityBadge.color} text-xs`}>
+                              <ConfidentialityIcon className="h-3 w-3 mr-1" />
+                              {confidentialityBadge.text}
+                            </Badge>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Quality score */}
+                      <div className="mb-3">
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-sm font-medium">Quality Score</span>
+                          <span className="text-sm font-bold">{qualityScore}/100</span>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div 
+                            className={`h-2 rounded-full ${qualityBadge.color}`}
+                            style={{ width: `${qualityScore}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                      
+                      {/* Content preview */}
+                      <p className="text-muted-foreground text-sm mb-3 line-clamp-2">
+                        {doc.content.substring(0, 200)}...
+                      </p>
+                      
+                      {/* Tags */}
+                      {doc.tags && doc.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-1 mb-3">
+                          {doc.tags.slice(0, 3).map((tag, index) => (
+                            <Badge key={index} variant="outline" className="text-xs">
+                              {tag}
+                            </Badge>
+                          ))}
+                          {doc.tags.length > 3 && (
+                            <Badge variant="outline" className="text-xs">
+                              +{doc.tags.length - 3} more
+                            </Badge>
+                          )}
+                        </div>
+                      )}
+                      
+                      {/* Metadata grid - mobile responsive */}
+                      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 text-xs text-muted-foreground mb-3">
+                        <div className="flex items-center gap-1">
+                          <FileText className="h-3 w-3" />
+                          <span>{formatFileSize(doc.file_size)}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Hash className="h-3 w-3" />
+                          <span>{doc.chunk_count} chunks</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <BookOpen className="h-3 w-3" />
+                          <span>{doc.word_count} words</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Eye className="h-3 w-3" />
+                          <span>{doc.view_count} views</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Clock className="h-3 w-3" />
+                          <span>{formatDate(doc.updated_at)}</span>
+                        </div>
+                      </div>
+                      
+                      {/* Category */}
+                      <div className="text-sm text-muted-foreground mb-3">
+                        <span className="font-medium">Category:</span> {doc.category}
+                      </div>
                     </div>
-                    <p className="text-muted-foreground text-sm mb-2">
-                      {doc.content.substring(0, 200)}...
-                    </p>
-                    <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                      <span>{doc.category}</span>
-                      <span>{formatFileSize(doc.file_size)}</span>
-                      <span>{doc.chunk_count} chunks</span>
-                      <span>{doc.view_count} views</span>
-                      <span>{formatDate(doc.updated_at)}</span>
+                    
+                    {/* Action buttons - mobile responsive */}
+                    <div className="flex flex-col sm:flex-row lg:flex-col gap-2 lg:gap-1">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => openViewDialog(doc)}
+                        className="w-full sm:w-auto lg:w-full"
+                      >
+                        <Eye className="h-3 w-3 mr-1" />
+                        <span className="hidden sm:inline lg:hidden">View</span>
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => openEditDialog(doc)}
+                        className="w-full sm:w-auto lg:w-full"
+                      >
+                        <Edit className="h-3 w-3 mr-1" />
+                        <span className="hidden sm:inline lg:hidden">Edit</span>
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleDeleteDocument(doc.id)}
+                        className="text-red-500 hover:text-red-700 w-full sm:w-auto lg:w-full"
+                      >
+                        <Trash2 className="h-3 w-3" />
+                        <span className="hidden sm:inline lg:hidden">Delete</span>
+                      </Button>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => openEditDialog(doc)}
-                    >
-                      <Edit className="h-3 w-3 mr-1" />
-                      Edit
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleDeleteDocument(doc.id)}
-                      className="text-red-500 hover:text-red-700"
-                    >
-                      <Trash2 className="h-3 w-3" />
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
       )}
 

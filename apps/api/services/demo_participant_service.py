@@ -58,69 +58,72 @@ class DemoParticipantService:
         Get real participant data from users collection and format for demo use
         """
         try:
-            # Query users collection for Michael Rodriguez
-            users_query = self.db.collection('users').where('role', '==', 'participant')
+            # Query users collection for Michael Rodriguez by email
+            users_query = self.db.collection('users').where('email', '==', 'participant@example.com')
             users_docs = list(users_query.stream())
             
-            for user_doc in users_docs:
+            if users_docs:
+                user_doc = users_docs[0]  # Get the first (and should be only) match
                 user_data = user_doc.to_dict()
-                if (user_data.get('firstName', '').lower() == 'michael' and 
-                    user_data.get('lastName', '').lower() == 'rodriguez'):
-                    
-                    logger.info(f"Found real participant: {user_doc.id}")
-                    
-                    # Format as demo participant with real shelter_id
-                    demo_participant = {
-                        "id": participant_id,
-                        "firstName": user_data.get('firstName', 'Michael'),
-                        "lastName": user_data.get('lastName', 'Rodriguez'),
-                        "age": 32,
-                        "story": "Dedicated community member working towards housing stability and career growth. With SHELTR's support, I'm building skills and connections to create a better future for myself and help others in my community.",
-                        "photo_url": "/images/demo/michael-rodriguez.jpg",
-                        "qr_code": f"SHELTR-{user_data.get('firstName', 'MICHAEL').upper()}-REAL",
-                        "shelter_id": user_data.get('shelter_id', 'old-brewery-mission'),  # Use real shelter_id
-                        "shelter_name": "Old Brewery Mission",
-                        "goals": [
-                            {
-                                "id": "housing-goal",
-                                "title": "Secure Stable Housing",
-                                "description": "Find permanent housing solution",
-                                "progress": 68,
-                                "status": "in_progress",
-                                "target_date": "2024-10-01"
-                            },
-                            {
-                                "id": "employment-goal", 
-                                "title": "Career Development",
-                                "description": "Build skills and secure meaningful employment",
-                                "progress": 55,
-                                "status": "in_progress",
-                                "target_date": "2024-09-15"
-                            },
-                            {
-                                "id": "community-goal",
-                                "title": "Community Engagement", 
-                                "description": "Give back and help others in similar situations",
-                                "progress": 42,
-                                "status": "in_progress",
-                                "target_date": "2024-12-01"
-                            }
-                        ],
-                        "skills": ["Communication", "Leadership", "Problem Solving", "Community Outreach"],
-                        "interests": ["Community Service", "Personal Development", "Mentoring", "Social Impact"],
-                        "total_received": 0.00,
-                        "donation_count": 0,
-                        "services_completed": 0,
-                        "progress": 55,
-                        "featured": True,
-                        "demo": True,
-                        "created_at": datetime.now(timezone.utc),
-                        "updated_at": datetime.now(timezone.utc),
-                        "status": "active"
-                    }
-                    
-                    logger.info(f"Created demo participant from real user with shelter_id: {demo_participant['shelter_id']}")
-                    return demo_participant
+                
+                logger.info(f"Found real participant: {user_doc.id} - {user_data.get('firstName')} {user_data.get('lastName')}")
+                
+                # Get actual donation data for this user
+                total_received, donation_count = await self.get_user_donation_stats(user_doc.id)
+                
+                # Format as demo participant with real data
+                demo_participant = {
+                    "id": user_doc.id,  # Use real user ID
+                    "firstName": user_data.get('firstName', 'Michael'),
+                    "lastName": user_data.get('lastName', 'Rodriguez'),
+                    "age": 32,
+                    "story": "Dedicated community member working towards housing stability and career growth. With SHELTR's support, I'm building skills and connections to create a better future for myself and help others in my community.",
+                    "photo_url": "/images/demo/michael-rodriguez.jpg",
+                    "qr_code": f"SHELTR-{user_data.get('firstName', 'MICHAEL').upper()}-REAL",
+                    "shelter_id": user_data.get('shelter_id', 'old-brewery-mission'),
+                    "shelter_name": "Old Brewery Mission",
+                    "goals": [
+                        {
+                            "id": "housing-goal",
+                            "title": "Secure Stable Housing",
+                            "description": "Find permanent housing solution",
+                            "progress": 68,
+                            "status": "in_progress",
+                            "target_date": "2024-10-01"
+                        },
+                        {
+                            "id": "employment-goal", 
+                            "title": "Career Development",
+                            "description": "Build skills and secure meaningful employment",
+                            "progress": 55,
+                            "status": "in_progress",
+                            "target_date": "2024-09-15"
+                        },
+                        {
+                            "id": "community-goal",
+                            "title": "Community Engagement", 
+                            "description": "Give back and help others in similar situations",
+                            "progress": 42,
+                            "status": "in_progress",
+                            "target_date": "2024-12-01"
+                        }
+                    ],
+                    "skills": ["Communication", "Leadership", "Problem Solving", "Community Outreach"],
+                    "interests": ["Community Service", "Personal Development", "Mentoring", "Social Impact"],
+                    "total_received": total_received,
+                    "donation_count": donation_count,
+                    "services_completed": 8,
+                    "progress": 55,
+                    "featured": True,
+                    "demo": False,  # This is a real user, not demo
+                    "created_at": datetime.now(timezone.utc),
+                    "updated_at": datetime.now(timezone.utc),
+                    "status": "active",
+                    "real_user_id": user_doc.id  # Store the real user ID
+                }
+                
+                logger.info(f"Created participant data from real user {user_doc.id} with total_received: ${total_received}")
+                return demo_participant
             
             # Fallback if Michael Rodriguez not found
             logger.warning(f"Real participant {participant_id} not found, using fallback")
@@ -130,6 +133,38 @@ class DemoParticipantService:
             logger.error(f"Failed to get real participant {participant_id}: {e}")
             # Fallback to default
             return await self.create_default_demo_participant(participant_id)
+    
+    async def get_user_donation_stats(self, user_id: str) -> tuple[float, int]:
+        """
+        Get actual donation statistics for a real user from demo_donations collection
+        """
+        try:
+            # Query demo_donations collection for donations to this user
+            donations_query = self.db.collection('demo_donations').where('participant_id', '==', user_id)
+            donations_docs = list(donations_query.stream())
+            
+            total_received = 0.0
+            donation_count = len(donations_docs)
+            
+            for donation_doc in donations_docs:
+                donation_data = donation_doc.to_dict()
+                amount = donation_data.get('amount', {})
+                
+                # Handle different amount formats
+                if isinstance(amount, dict):
+                    donation_value = amount.get('total', 0) or amount.get('amount', 0)
+                else:
+                    donation_value = amount or 0
+                
+                if donation_value > 0:
+                    total_received += float(donation_value)
+            
+            logger.info(f"Found {donation_count} donations for user {user_id}, total: ${total_received}")
+            return total_received, donation_count
+            
+        except Exception as e:
+            logger.error(f"Failed to get donation stats for user {user_id}: {e}")
+            return 0.0, 0
     
     async def create_default_demo_participant(self, participant_id: str = "demo-participant-001") -> Dict[str, Any]:
         """

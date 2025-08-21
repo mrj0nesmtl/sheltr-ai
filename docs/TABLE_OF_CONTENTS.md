@@ -10,8 +10,8 @@
 |---------|--------|---------|--------|
 | [**Overview**](#-overview) | 4 | Platform vision & mission | ✅ Active |
 | [**Architecture**](#-architecture) | 7 | Technical design & tokenomics | ✅ Active |
-| [**API**](#-api-documentation) | 3 | FastAPI endpoints & database | ✅ Complete |
-| [**Development**](#-development) | 15 | Dev guides & session logs | ✅ Active |
+| [**API**](#-api-documentation) | 4 | FastAPI endpoints & database | ✅ Complete |
+| [**Development**](#-development) | 20 | Dev guides & session logs | ✅ Active |
 | [**User Guides**](#-user-guides) | 3 | Complete user documentation | ✅ Complete |
 | [**Migration**](#-migration) | 3 | Database & system migrations | ✅ Complete |
 | [**AI Agent**](#-ai-agent-documentation) | 2 | Claude AI briefings | ✅ Active |
@@ -85,6 +85,11 @@
    - Firebase configuration and rules
    - Index optimization and security
 
+4. [**📝 Blog System Schema**](03-api/blog-schema.md) ✅ **NEW**
+   - Blog post management and API
+   - Markdown import and media embedding
+   - LLM search index implementation
+
 ---
 
 ## 👩‍💻 Development
@@ -96,24 +101,36 @@
 
 ### 🚀 Session Documentation
 
-2. [**📊 Session 10: Handoff & Progress**](04-development/)
+2. [**🤖 Session 12: Technical Perfection**](04-development/)
+   - [Kickoff Prompt](04-development/SESSION-12-KICKOFF-PROMPT.md) ✅ **NEW**
+   - [Testing Checklist](04-development/SESSION-12-TESTING-CHECKLIST.md) ✅ **NEW**
+
+3. [**🧠 Session 11: AI Enhancement Series**](04-development/)
+   - [AI Mini-Sessions Overview](04-development/SESSION-11-AI-MINI-SESSIONS-OVERVIEW.md) ✅ **NEW**
+   - [Session 11.5: Chatbot Investigation](04-development/SESSION-11.5-CHATBOT-INVESTIGATION.md) ✅ **NEW**
+   - [Session 11.6: OpenAI Integration](04-development/SESSION-11.6-OPENAI-INTEGRATION.md) ✅ **NEW**
+   - [Session 11.7: Knowledge Base Implementation](04-development/SESSION-11.7-SHELTR-KNOWLEDGEBASE.md) ✅ **NEW**
+   - [Kickoff Prompt](04-development/SESSION-11-KICKOFF-PROMPT.md)
+   - [Testing Checklist](04-development/SESSION-11-TESTING-CHECKLIST.md)
+
+4. [**📊 Session 10: Production Readiness**](04-development/)
    - [Claude Handoff](04-development/SESSION-10-CLAUDE-HANDOFF.md)
    - [Kickoff Prompt](04-development/SESSION-10-KICKOFF-PROMPT.md)
    - [Testing Checklist](04-development/SESSION-10-TESTING-CHECKLIST.md)
    - [Progress Assessment](04-development/SESSION-10-PROGRESS-ASSESSMENT.md)
+   - [Completion Summary](04-development/SESSION-10-COMPLETION-SUMMARY.md)
 
-3. [**🔗 Session 9: Data Connectivity Revolution**](04-development/)
-   - [Claude Handoff](04-development/SESSION-09-CLAUDE-HANDOFF.md) 
+5. [**🔗 Session 9: Data Connectivity Revolution**](04-development/)
    - [Data Connectivity](04-development/SESSION-09-DATA-CONNECTIVITY.md)
    - [Kickoff Prompt](04-development/SESSION-09-KICKOFF-PROMPT.md)
    - [Testing Checklist](04-development/SESSION-09-TESTING-CHECKLIST.md)
    - [Technical Debt](04-development/SESSION-09-TECHNICAL-DEBT.md)
 
-4. [**💼 Session 8: Core Business Logic**](04-development/SESSION-08-CORE-BUSINESS-LOGIC.md)
+6. [**💼 Session 8: Core Business Logic**](04-development/SESSION-08-CORE-BUSINESS-LOGIC.md)
    - Business logic implementation
    - Core platform functionality
 
-5. [**🤖 Session 7: Chatbot Implementation**](04-development/)
+7. [**🤖 Session 7: Chatbot Implementation**](04-development/)
    - [Chatbot Implementation](04-development/SESSION-07-CHATBOT-IMPLEMENTATION.md)
    - [Testing Analytics Chatbot](04-development/SESSION-07-TESTING-ANALYTICS-CHATBOT.md)
    - [Testing Checklist](04-development/SESSION-07-TESTING-CHECKLIST.md)
@@ -121,14 +138,21 @@
 
 ### 🔧 Tools & Setup
 
-6. [**🔧 Development Tools**](04-development/)
+8. [**🔧 Development Tools**](04-development/)
    - [Quick MacBook Sync](04-development/QUICK-MACBOOK-SYNC.md)
+
+### 🤖 AI & Chatbot Documentation
+
+9. [**🤖 Chatbot Agent Architecture**](04-development/CHATBOT-AGENT-ARCHITECTURE.md) ✅ **NEW**
+   - Complete chatbot system documentation
+   - Multi-agent architecture overview
+   - Public vs Super Admin chatbot systems
 
 ### 📚 Development Archive
 
-7. [**📚 Development Archive**](04-development/development_archive/)
-   - Complete historical session documentation
-   - Legacy development materials and setup guides
+10. [**📚 Development Archive**](04-development/development_archive/)
+    - Complete historical session documentation
+    - Legacy development materials and setup guides
 
 ---
 
@@ -225,9 +249,9 @@
 
 | Category | Count | Status | Last Updated |
 |----------|--------|--------|--------------|
-| **Active Docs** | 32 files | ✅ Current | Session 9 Complete |
+| **Active Docs** | 40 files | ✅ Current | August 21, 2025 |
 | **Legacy Docs** | 16 files | 📚 Reference | Pre-migration |
-| **Total Files** | 48 files | 📚 Complete | August 9, 2025 |
+| **Total Files** | 56 files | 📚 Complete | August 21, 2025 |
 | **Directories** | 14 folders | 🗂️ Organized | Structured |
 
 ---
@@ -255,11 +279,13 @@
 
 - **🏠 Main Repository**: [README.md](../README.md)
 - **🌐 Live Website**: [sheltr-ai.web.app](https://sheltr-ai.web.app)
-- **🔒 Latest Session**: [Session 9 Data Connectivity Revolution](04-development/SESSION-09-DATA-CONNECTIVITY.md)
+- **🔒 Latest Session**: [Session 12 Technical Perfection](04-development/SESSION-12-KICKOFF-PROMPT.md)
 - **🗺️ Development Plan**: [Roadmap](04-development/dev-roadmap.md)
 - **🔧 API Reference**: [FastAPI Docs](03-api/README.md)
 - **👥 User Guides**: [Complete User Documentation](06-user-guides/)
+- **🤖 Chatbot System**: [Agent Architecture](04-development/CHATBOT-AGENT-ARCHITECTURE.md)
+- **📝 Blog System**: [Blog Schema](03-api/blog-schema.md)
 
 ---
 
-*Last Updated: August 9, 2025 - Post Session 9 Data Connectivity + Complete User Guide Suite* 
+*Last Updated: August 21, 2025 - Complete Documentation Suite: Blog System, Knowledge Base, Chatbot Control Panel, Session 11-12 Documentation* 

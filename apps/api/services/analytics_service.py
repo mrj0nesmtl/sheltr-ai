@@ -161,14 +161,43 @@ class AnalyticsService:
                     ]
                 }
             
-            # TODO: Implement real Firestore donation queries when donations collection exists
+            # Get real demo donations from demo_donations collection
+            demo_donations_ref = self.db.collection('demo_donations')
+            demo_donations = demo_donations_ref.stream()
+            
+            total_amount = 0.0
+            total_count = 0
+            donation_amounts = []
+            
+            for donation in demo_donations:
+                donation_data = donation.to_dict()
+                amount = donation_data.get('amount', {})
+                
+                # Handle different amount formats
+                if isinstance(amount, dict):
+                    donation_value = amount.get('total', 0) or amount.get('amount', 0)
+                else:
+                    donation_value = amount or 0
+                
+                if donation_value > 0:
+                    total_amount += float(donation_value)
+                    total_count += 1
+                    donation_amounts.append(donation_value)
+            
+            # Calculate average
+            average_amount = total_amount / max(total_count, 1)
+            
+            # Calculate today's donations (mock for now)
+            today_amount = total_amount * 0.1  # 10% of total for today
+            today_count = max(1, int(total_count * 0.1))
+            
             return {
-                "total_amount": 89234.67,
-                "total_count": 2847,
-                "average_amount": 31.35,
-                "today_amount": 1567.89,
-                "today_count": 23,
-                "growth_rate": 15.4
+                "total_amount": round(total_amount, 2),
+                "total_count": total_count,
+                "average_amount": round(average_amount, 2),
+                "today_amount": round(today_amount, 2),
+                "today_count": today_count,
+                "growth_rate": 15.4 if total_count > 0 else 0.0
             }
             
         except Exception as e:
@@ -218,7 +247,6 @@ class AnalyticsService:
             total_capacity = 0
             current_occupancy = 0
             services_count = 0
-            participants_served = 0
             
             for shelter in shelters:
                 shelter_data = shelter.to_dict()
@@ -239,10 +267,12 @@ class AnalyticsService:
                 # Count services
                 services = shelter_data.get('services', [])
                 services_count += len(services) if services else 3  # Default 3 services
-                
-                # Estimate participants served
-                served = shelter_data.get('participants_served', capacity * 0.7)
-                participants_served += int(served)
+            
+            # Get actual participant count from users collection
+            users_ref = self.db.collection('users')
+            participants_query = users_ref.where('role', '==', 'participant')
+            participants = participants_query.stream()
+            participants_served = len(list(participants))
             
             # Calculate overall occupancy rate
             overall_occupancy_rate = (current_occupancy / max(total_capacity, 1)) * 100

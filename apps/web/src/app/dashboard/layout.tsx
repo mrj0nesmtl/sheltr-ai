@@ -108,28 +108,34 @@ const getNavigationItems = (userRole: string) => {
         description: 'System configuration and settings'
       },
       {
-        title: 'User Management',
-        href: '/dashboard/users',
-        icon: Users,
-        description: 'Manage all user accounts and roles'
-      },
-      {
         title: 'Shelter Network',
         href: '/dashboard/shelters',
         icon: Building2,
         description: 'Shelter directory and onboarding'
       },
       {
+        title: 'User Management',
+        href: '/dashboard/users',
+        icon: Users,
+        description: 'Manage all user accounts and roles'
+      },
+      {
+        title: 'Knowledge Base',
+        href: '/dashboard/knowledge',
+        icon: Brain,
+        description: 'Manage knowledge documents and embeddings'
+      },
+      {
+        title: 'Chatbot Control',
+        href: '/dashboard/chatbots',
+        icon: MessageSquare,
+        description: 'AI chatbot control panel and conversations'
+      },
+      {
         title: 'Financial Oversight',
         href: '/dashboard/financial',
         icon: DollarSign,
         description: 'Transaction monitoring and analytics'
-      },
-      {
-        title: 'Security & Compliance',
-        href: '/dashboard/security',
-        icon: Shield,
-        description: 'Security monitoring and compliance'
       },
       {
         title: 'Analytics',
@@ -144,23 +150,17 @@ const getNavigationItems = (userRole: string) => {
         description: 'Create and manage blog posts'
       },
       {
-        title: 'Knowledge Base',
-        href: '/dashboard/knowledge',
-        icon: Brain,
-        description: 'Manage knowledge documents and embeddings'
-      },
-      {
-        title: 'Chatbots',
-        href: '/dashboard/chatbots',
-        icon: MessageSquare,
-        description: 'AI chatbot control panel and conversations'
-      },
-      {
         title: 'System Settings',
         href: '/dashboard/settings',
         icon: Cog,
         description: 'Configure system settings and integrations',
         separator: true
+      },
+      {
+        title: 'Security & Compliance',
+        href: '/dashboard/security',
+        icon: Shield,
+        description: 'Security monitoring and compliance'
       }
     ];
   }
@@ -492,7 +492,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                         {/* Add separator before this item if it has separator: true */}
                         {item.separator && (
                           <div className="my-4">
-                            <div className="border-t border-gray-200 dark:border-gray-600"></div>
+                            <div className="border-t border-gray-400 dark:border-gray-600 h-px"></div>
                           </div>
                         )}
                         <Link

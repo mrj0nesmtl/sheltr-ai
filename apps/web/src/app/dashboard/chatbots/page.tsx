@@ -416,8 +416,19 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex gap-6 h-[calc(100vh-200px)]">
+    <div className="p-6 max-w-7xl mx-auto">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-bold flex items-center">
+            <MessageSquare className="h-8 w-8 mr-3" />
+            Chatbot Control Panel
+          </h1>
+          <p className="text-gray-600 text-sm sm:text-base">AI chatbot management and conversations</p>
+        </div>
+      </div>
+      
+      <div className="flex gap-6 h-[calc(100vh-300px)]">
         {/* Left Sidebar - Chat Sessions */}
         <div className="w-80 flex flex-col">
           <Card>

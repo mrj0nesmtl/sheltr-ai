@@ -176,12 +176,15 @@ export default function BlogManagementPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="p-6 max-w-7xl mx-auto">
       {/* Header */}
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
         <div>
-          <h1 className="text-3xl font-bold">Blog Management</h1>
-          <p className="text-muted-foreground">Create and manage blog posts</p>
+          <h1 className="text-2xl sm:text-3xl font-bold flex items-center">
+            <FileText className="h-8 w-8 mr-3" />
+            Blog Management
+          </h1>
+          <p className="text-gray-600 text-sm sm:text-base">Create and manage blog posts</p>
         </div>
         
         <div className="flex gap-2">

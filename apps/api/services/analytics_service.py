@@ -93,13 +93,33 @@ class AnalyticsService:
                 
                 # Check if active today (has lastLogin today)
                 last_login = user_data.get('lastLogin')
-                if last_login and last_login.date() == now.date():
-                    active_today += 1
+                if last_login:
+                    try:
+                        if hasattr(last_login, 'date'):
+                            if last_login.date() == now.date():
+                                active_today += 1
+                        elif isinstance(last_login, str):
+                            # Handle string dates
+                            login_date = datetime.fromisoformat(last_login.replace('Z', '+00:00'))
+                            if login_date.date() == now.date():
+                                active_today += 1
+                    except Exception as e:
+                        logger.warning(f"Error parsing lastLogin for user {user.id}: {e}")
                 
                 # Check if created this week
                 created_at = user_data.get('createdAt')
-                if created_at and created_at >= week_ago:
-                    new_this_week += 1
+                if created_at:
+                    try:
+                        if hasattr(created_at, 'date'):
+                            if created_at >= week_ago:
+                                new_this_week += 1
+                        elif isinstance(created_at, str):
+                            # Handle string dates
+                            created_date = datetime.fromisoformat(created_at.replace('Z', '+00:00'))
+                            if created_date >= week_ago:
+                                new_this_week += 1
+                    except Exception as e:
+                        logger.warning(f"Error parsing createdAt for user {user.id}: {e}")
             
             return {
                 "total": total_users,

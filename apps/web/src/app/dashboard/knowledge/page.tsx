@@ -463,7 +463,7 @@ export default function KnowledgeDashboard() {
 
       {/* Documents Display */}
       {viewMode === 'cards' ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {filteredDocuments.map((doc) => {
             const qualityScore = getQualityScore(doc);
             const qualityBadge = getQualityBadge(qualityScore);
@@ -474,124 +474,135 @@ export default function KnowledgeDashboard() {
             const ConfidentialityIcon = confidentialityBadge.icon;
             
             return (
-              <Card key={doc.id} className="hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <div className="flex items-start justify-between mb-2">
-                    <div className="flex-1">
-                      <CardTitle className="text-lg line-clamp-2 flex items-center gap-2">
-                        {doc.title}
-                        <Badge className={`${qualityBadge.color} text-white text-xs`}>
-                          <QualityIcon className="h-3 w-3 mr-1" />
-                          {qualityBadge.text}
-                        </Badge>
-                        <Badge className={`${sharingBadge.color} text-white text-xs`}>
-                          <SharingIcon className="h-3 w-3 mr-1" />
-                          {sharingBadge.text}
-                        </Badge>
-                      </CardTitle>
-                      <div className="flex items-center gap-2 mt-2">
-                        <Badge variant={doc.status === 'active' ? 'default' : 'secondary'}>
-                          {doc.status}
-                        </Badge>
-                        <Badge variant={doc.embedding_status === 'completed' ? 'default' : 'outline'}>
-                          {getEmbeddingStatusIcon(doc.embedding_status)}
-                          <span className="ml-1">{doc.embedding_status}</span>
-                        </Badge>
-                        <Badge className={`${confidentialityBadge.color} text-xs`}>
-                          <ConfidentialityIcon className="h-3 w-3 mr-1" />
-                          {confidentialityBadge.text}
-                        </Badge>
-                      </div>
+              <Card key={doc.id} className="hover:shadow-lg transition-shadow flex flex-col h-full">
+                <CardHeader className="pb-3">
+                  {/* Title and main badges - improved responsive layout */}
+                  <div className="space-y-3">
+                    <CardTitle className="text-base sm:text-lg line-clamp-2 leading-tight">
+                      {doc.title}
+                    </CardTitle>
+                    
+                    {/* Quality and sharing badges - better mobile layout */}
+                    <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                      <Badge className={`${qualityBadge.color} text-white text-xs px-2 py-0.5`}>
+                        <QualityIcon className="h-3 w-3 mr-1 flex-shrink-0" />
+                        <span className="truncate">{qualityBadge.text}</span>
+                      </Badge>
+                      <Badge className={`${sharingBadge.color} text-white text-xs px-2 py-0.5`}>
+                        <SharingIcon className="h-3 w-3 mr-1 flex-shrink-0" />
+                        <span className="truncate">{sharingBadge.text}</span>
+                      </Badge>
+                    </div>
+                    
+                    {/* Status badges - improved mobile stacking */}
+                    <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                      <Badge variant={doc.status === 'active' ? 'default' : 'secondary'} className="text-xs px-2 py-0.5">
+                        <span className="truncate">{doc.status}</span>
+                      </Badge>
+                      <Badge variant={doc.embedding_status === 'completed' ? 'default' : 'outline'} className="text-xs px-2 py-0.5">
+                        {getEmbeddingStatusIcon(doc.embedding_status)}
+                        <span className="ml-1 truncate">{doc.embedding_status}</span>
+                      </Badge>
+                      <Badge className={`${confidentialityBadge.color} text-xs px-2 py-0.5`}>
+                        <ConfidentialityIcon className="h-3 w-3 mr-1 flex-shrink-0" />
+                        <span className="truncate">{confidentialityBadge.text}</span>
+                      </Badge>
                     </div>
                   </div>
                 </CardHeader>
               
-              <CardContent>
-                <div className="mb-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium">Quality Score</span>
-                    <span className="text-sm font-bold">{qualityScore}/100</span>
+                <CardContent className="flex-1 flex flex-col pt-0">
+                  {/* Quality score - improved mobile layout */}
+                  <div className="mb-3 sm:mb-4">
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="text-xs sm:text-sm font-medium">Quality Score</span>
+                      <span className="text-xs sm:text-sm font-bold">{qualityScore}/100</span>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-1.5 sm:h-2">
+                      <div 
+                        className={`h-1.5 sm:h-2 rounded-full ${qualityBadge.color}`}
+                        style={{ width: `${qualityScore}%` }}
+                      ></div>
+                    </div>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div 
-                      className={`h-2 rounded-full ${qualityBadge.color}`}
-                      style={{ width: `${qualityScore}%` }}
-                    ></div>
+                  
+                  {/* Content preview - better mobile text handling */}
+                  <p className="text-muted-foreground text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-3 leading-relaxed">
+                    {doc.content.substring(0, 120)}...
+                  </p>
+                  
+                  {/* Tags - improved mobile wrapping */}
+                  <div className="flex flex-wrap gap-1 mb-3 sm:mb-4">
+                    {doc.tags.slice(0, 2).map((tag) => (
+                      <Badge key={tag} variant="outline" className="text-xs px-1.5 py-0.5">
+                        <span className="truncate">{tag}</span>
+                      </Badge>
+                    ))}
+                    {doc.tags.length > 2 && (
+                      <Badge variant="outline" className="text-xs px-1.5 py-0.5">
+                        +{doc.tags.length - 2}
+                      </Badge>
+                    )}
                   </div>
-                </div>
-                
-                <p className="text-muted-foreground mb-4 line-clamp-3">
-                  {doc.content.substring(0, 150)}...
-                </p>
-                
-                <div className="flex flex-wrap gap-1 mb-4">
-                  {doc.tags.slice(0, 3).map((tag) => (
-                    <Badge key={tag} variant="outline" className="text-xs">
-                      {tag}
-                    </Badge>
-                  ))}
-                  {doc.tags.length > 3 && (
-                    <Badge variant="outline" className="text-xs">
-                      +{doc.tags.length - 3} more
-                    </Badge>
-                  )}
-                </div>
-                
-                <div className="space-y-2 text-sm text-muted-foreground mb-4">
-                  <div className="flex items-center gap-2">
-                    <FileText className="h-3 w-3" />
-                    <span>{formatFileSize(doc.file_size)}</span>
+                  
+                  {/* Metadata - improved mobile grid */}
+                  <div className="space-y-1.5 sm:space-y-2 text-xs text-muted-foreground mb-3 sm:mb-4">
+                    <div className="flex items-center gap-1.5">
+                      <FileText className="h-3 w-3 flex-shrink-0" />
+                      <span className="truncate">{formatFileSize(doc.file_size)}</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <Hash className="h-3 w-3 flex-shrink-0" />
+                      <span className="truncate">{doc.chunk_count} chunks</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <Eye className="h-3 w-3 flex-shrink-0" />
+                      <span className="truncate">{doc.view_count} views</span>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Hash className="h-3 w-3" />
-                    <span>{doc.chunk_count} chunks</span>
+                  
+                  {/* Category and date - improved mobile layout */}
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between text-xs text-muted-foreground mb-4">
+                    <span className="truncate">{doc.category}</span>
+                    <span className="truncate">{formatDate(doc.updated_at)}</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Eye className="h-3 w-3" />
-                    <span>{doc.view_count} views</span>
+                  
+                  {/* Action buttons - improved mobile layout */}
+                  <div className="flex items-center gap-1.5 sm:gap-2 mt-auto">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => openViewDialog(doc)}
+                      className="flex-1 text-xs px-2 py-1 h-8"
+                    >
+                      <Eye className="h-3 w-3 mr-1 flex-shrink-0" />
+                      <span className="hidden sm:inline">View</span>
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => openEditDialog(doc)}
+                      className="flex-1 text-xs px-2 py-1 h-8"
+                    >
+                      <Edit className="h-3 w-3 mr-1 flex-shrink-0" />
+                      <span className="hidden sm:inline">Edit</span>
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleDeleteDocument(doc.id)}
+                      className="text-red-500 hover:text-red-700 text-xs px-2 py-1 h-8"
+                    >
+                      <Trash2 className="h-3 w-3" />
+                    </Button>
                   </div>
-                </div>
-                
-                <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
-                  <span>{doc.category}</span>
-                  <span>{formatDate(doc.updated_at)}</span>
-                </div>
-                
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => openViewDialog(doc)}
-                    className="flex-1"
-                  >
-                    <Eye className="h-3 w-3 mr-1" />
-                    View
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => openEditDialog(doc)}
-                    className="flex-1"
-                  >
-                    <Edit className="h-3 w-3 mr-1" />
-                    Edit
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleDeleteDocument(doc.id)}
-                    className="text-red-500 hover:text-red-700"
-                  >
-                    <Trash2 className="h-3 w-3" />
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          );
-        })}
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           {filteredDocuments.map((doc) => {
             const qualityScore = getQualityScore(doc);
             const qualityBadge = getQualityBadge(qualityScore);
@@ -603,133 +614,137 @@ export default function KnowledgeDashboard() {
             
             return (
               <Card key={doc.id} className="hover:shadow-md transition-shadow">
-                <CardContent className="p-4">
-                  {/* Mobile-friendly layout */}
-                  <div className="flex flex-col lg:flex-row lg:items-start gap-4">
+                <CardContent className="p-3 sm:p-4">
+                  {/* Improved mobile-friendly layout */}
+                  <div className="flex flex-col lg:flex-row lg:items-start gap-3 sm:gap-4">
                     {/* Main content area */}
                     <div className="flex-1 min-w-0">
-                      {/* Header with title and badges */}
-                      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3">
-                        <div className="flex-1 min-w-0">
-                          <h3 className="font-semibold text-lg mb-2 line-clamp-2">
-                            {doc.title}
-                          </h3>
-                          <div className="flex flex-wrap items-center gap-2 mb-2">
-                            <Badge className={`${qualityBadge.color} text-white text-xs`}>
-                              <QualityIcon className="h-3 w-3 mr-1" />
-                              {qualityBadge.text}
-                            </Badge>
-                            <Badge className={`${sharingBadge.color} text-white text-xs`}>
-                              <SharingIcon className="h-3 w-3 mr-1" />
-                              {sharingBadge.text}
-                            </Badge>
-                            <Badge variant={doc.status === 'active' ? 'default' : 'secondary'} className="text-xs">
-                              {doc.status}
-                            </Badge>
-                            <Badge variant={doc.embedding_status === 'completed' ? 'default' : 'outline'} className="text-xs">
-                              {getEmbeddingStatusIcon(doc.embedding_status)}
-                              <span className="ml-1">{doc.embedding_status}</span>
-                            </Badge>
-                            <Badge className={`${confidentialityBadge.color} text-xs`}>
-                              <ConfidentialityIcon className="h-3 w-3 mr-1" />
-                              {confidentialityBadge.text}
-                            </Badge>
-                          </div>
+                      {/* Header with title and badges - improved responsive layout */}
+                      <div className="space-y-2 sm:space-y-3 mb-3">
+                        <h3 className="font-semibold text-base sm:text-lg leading-tight line-clamp-2">
+                          {doc.title}
+                        </h3>
+                        
+                        {/* Quality and sharing badges - better mobile layout */}
+                        <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                          <Badge className={`${qualityBadge.color} text-white text-xs px-2 py-0.5`}>
+                            <QualityIcon className="h-3 w-3 mr-1 flex-shrink-0" />
+                            <span className="truncate">{qualityBadge.text}</span>
+                          </Badge>
+                          <Badge className={`${sharingBadge.color} text-white text-xs px-2 py-0.5`}>
+                            <SharingIcon className="h-3 w-3 mr-1 flex-shrink-0" />
+                            <span className="truncate">{sharingBadge.text}</span>
+                          </Badge>
+                        </div>
+                        
+                        {/* Status badges - improved mobile stacking */}
+                        <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                          <Badge variant={doc.status === 'active' ? 'default' : 'secondary'} className="text-xs px-2 py-0.5">
+                            <span className="truncate">{doc.status}</span>
+                          </Badge>
+                          <Badge variant={doc.embedding_status === 'completed' ? 'default' : 'outline'} className="text-xs px-2 py-0.5">
+                            {getEmbeddingStatusIcon(doc.embedding_status)}
+                            <span className="ml-1 truncate">{doc.embedding_status}</span>
+                          </Badge>
+                          <Badge className={`${confidentialityBadge.color} text-xs px-2 py-0.5`}>
+                            <ConfidentialityIcon className="h-3 w-3 mr-1 flex-shrink-0" />
+                            <span className="truncate">{confidentialityBadge.text}</span>
+                          </Badge>
                         </div>
                       </div>
                       
-                      {/* Quality score */}
+                      {/* Quality score - improved mobile layout */}
                       <div className="mb-3">
                         <div className="flex items-center justify-between mb-1">
-                          <span className="text-sm font-medium">Quality Score</span>
-                          <span className="text-sm font-bold">{qualityScore}/100</span>
+                          <span className="text-xs sm:text-sm font-medium">Quality Score</span>
+                          <span className="text-xs sm:text-sm font-bold">{qualityScore}/100</span>
                         </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div className="w-full bg-gray-200 rounded-full h-1.5 sm:h-2">
                           <div 
-                            className={`h-2 rounded-full ${qualityBadge.color}`}
+                            className={`h-1.5 sm:h-2 rounded-full ${qualityBadge.color}`}
                             style={{ width: `${qualityScore}%` }}
                           ></div>
                         </div>
                       </div>
                       
-                      {/* Content preview */}
-                      <p className="text-muted-foreground text-sm mb-3 line-clamp-2">
-                        {doc.content.substring(0, 200)}...
+                      {/* Content preview - better mobile text handling */}
+                      <p className="text-muted-foreground text-xs sm:text-sm mb-3 line-clamp-2 leading-relaxed">
+                        {doc.content.substring(0, 150)}...
                       </p>
                       
-                      {/* Tags */}
+                      {/* Tags - improved mobile wrapping */}
                       {doc.tags && doc.tags.length > 0 && (
                         <div className="flex flex-wrap gap-1 mb-3">
                           {doc.tags.slice(0, 3).map((tag, index) => (
-                            <Badge key={index} variant="outline" className="text-xs">
-                              {tag}
+                            <Badge key={index} variant="outline" className="text-xs px-1.5 py-0.5">
+                              <span className="truncate">{tag}</span>
                             </Badge>
                           ))}
                           {doc.tags.length > 3 && (
-                            <Badge variant="outline" className="text-xs">
-                              +{doc.tags.length - 3} more
+                            <Badge variant="outline" className="text-xs px-1.5 py-0.5">
+                              +{doc.tags.length - 3}
                             </Badge>
                           )}
                         </div>
                       )}
                       
-                      {/* Metadata grid - mobile responsive */}
-                      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 text-xs text-muted-foreground mb-3">
+                      {/* Metadata grid - improved mobile responsive */}
+                      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3 text-xs text-muted-foreground mb-3">
                         <div className="flex items-center gap-1">
-                          <FileText className="h-3 w-3" />
-                          <span>{formatFileSize(doc.file_size)}</span>
+                          <FileText className="h-3 w-3 flex-shrink-0" />
+                          <span className="truncate">{formatFileSize(doc.file_size)}</span>
                         </div>
                         <div className="flex items-center gap-1">
-                          <Hash className="h-3 w-3" />
-                          <span>{doc.chunk_count} chunks</span>
+                          <Hash className="h-3 w-3 flex-shrink-0" />
+                          <span className="truncate">{doc.chunk_count} chunks</span>
                         </div>
                         <div className="flex items-center gap-1">
-                          <BookOpen className="h-3 w-3" />
-                          <span>{doc.word_count} words</span>
+                          <BookOpen className="h-3 w-3 flex-shrink-0" />
+                          <span className="truncate">{doc.word_count} words</span>
                         </div>
                         <div className="flex items-center gap-1">
-                          <Eye className="h-3 w-3" />
-                          <span>{doc.view_count} views</span>
+                          <Eye className="h-3 w-3 flex-shrink-0" />
+                          <span className="truncate">{doc.view_count} views</span>
                         </div>
                         <div className="flex items-center gap-1">
-                          <Clock className="h-3 w-3" />
-                          <span>{formatDate(doc.updated_at)}</span>
+                          <Clock className="h-3 w-3 flex-shrink-0" />
+                          <span className="truncate">{formatDate(doc.updated_at)}</span>
                         </div>
                       </div>
                       
-                      {/* Category */}
-                      <div className="text-sm text-muted-foreground mb-3">
-                        <span className="font-medium">Category:</span> {doc.category}
+                      {/* Category - improved mobile layout */}
+                      <div className="text-xs sm:text-sm text-muted-foreground mb-3">
+                        <span className="font-medium">Category:</span> <span className="truncate">{doc.category}</span>
                       </div>
                     </div>
                     
-                    {/* Action buttons - mobile responsive */}
-                    <div className="flex flex-col sm:flex-row lg:flex-col gap-2 lg:gap-1">
+                    {/* Action buttons - improved mobile responsive */}
+                    <div className="flex flex-col sm:flex-row lg:flex-col gap-1.5 sm:gap-2 lg:gap-1">
                       <Button
                         variant="outline"
                         size="sm"
                         onClick={() => openViewDialog(doc)}
-                        className="w-full sm:w-auto lg:w-full"
+                        className="w-full sm:w-auto lg:w-full text-xs px-2 py-1 h-8"
                       >
-                        <Eye className="h-3 w-3 mr-1" />
+                        <Eye className="h-3 w-3 mr-1 flex-shrink-0" />
                         <span className="hidden sm:inline lg:hidden">View</span>
                       </Button>
                       <Button
                         variant="outline"
                         size="sm"
                         onClick={() => openEditDialog(doc)}
-                        className="w-full sm:w-auto lg:w-full"
+                        className="w-full sm:w-auto lg:w-full text-xs px-2 py-1 h-8"
                       >
-                        <Edit className="h-3 w-3 mr-1" />
+                        <Edit className="h-3 w-3 mr-1 flex-shrink-0" />
                         <span className="hidden sm:inline lg:hidden">Edit</span>
                       </Button>
                       <Button
                         variant="outline"
                         size="sm"
                         onClick={() => handleDeleteDocument(doc.id)}
-                        className="text-red-500 hover:text-red-700 w-full sm:w-auto lg:w-full"
+                        className="text-red-500 hover:text-red-700 w-full sm:w-auto lg:w-full text-xs px-2 py-1 h-8"
                       >
-                        <Trash2 className="h-3 w-3" />
+                        <Trash2 className="h-3 w-3 flex-shrink-0" />
                         <span className="hidden sm:inline lg:hidden">Delete</span>
                       </Button>
                     </div>

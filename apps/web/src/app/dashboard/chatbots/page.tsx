@@ -1,158 +1,177 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
+
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
+  Plus, 
   MessageSquare, 
-  Send, 
   Settings, 
   History, 
-  Search, 
-  Upload, 
-  Link, 
+  Send, 
+  Paperclip, 
   Globe, 
-  Brain, 
-  Bot, 
-  User, 
-  Clock, 
-  Trash2, 
-  Edit, 
-  Plus,
+  Upload,
+  Search,
+  Filter,
+  MoreHorizontal,
+  Bot,
+  User,
+  Clock,
+  Hash,
+  Zap,
+  Brain,
+  Target,
+  TrendingUp,
+  FileText,
+  Users,
+  Shield,
+  Star,
+  BookOpen,
+  Lightbulb,
+  Sparkles,
+  ArrowUp,
+  ArrowDown,
+  RefreshCw,
+  Trash2,
+  Edit,
+  Copy,
+  Download,
+  Share2,
+  Volume2,
+  Mic,
+  Video,
+  Image,
+  File,
+  Link,
+  ExternalLink,
   ChevronDown,
   ChevronUp,
-  Sparkles,
-  Zap,
-  BookOpen,
-  Target,
+  ChevronLeft,
+  Maximize2,
+  Minimize2,
+  Grid3X3,
+  List,
   BarChart3,
-  Save
+  Activity,
+  AlertCircle,
+  CheckCircle,
+  XCircle,
+  Info
 } from 'lucide-react';
+import { chatbotDashboardService, ChatSession, ChatMessage, AgentConfig } from '@/services/chatbotDashboardService';
 import { useAuth } from '@/contexts/AuthContext';
 
-interface ChatMessage {
-  id: string;
-  role: 'user' | 'assistant' | 'system';
-  content: string;
-  timestamp: Date;
-  attachments?: {
-    type: 'image' | 'link' | 'file';
-    url: string;
-    name?: string;
-  }[];
-  metadata?: {
-    model?: string;
-    tokens_used?: number;
-    response_time?: number;
-  };
-}
-
-interface ChatSession {
-  id: string;
-  title: string;
-  agent_type: string;
-  model: string;
-  created_at: Date;
-  updated_at: Date;
-  message_count: number;
-  last_message?: string;
-  status: 'active' | 'archived';
-}
-
-interface AgentConfig {
-  id: string;
-  name: string;
-  description: string;
-  instructions: string;
-  model: string;
-  knowledge_bases: string[];
-  temperature: number;
-  max_tokens: number;
-  status: 'active' | 'inactive';
-}
-
-interface ModelConfig {
-  id: string;
-  name: string;
-  provider: 'openai' | 'anthropic' | 'local';
-  max_tokens: number;
-  cost_per_1k_tokens: number;
-  capabilities: string[];
-}
-
-export default function ChatbotsPage() {
+export default function ChatbotDashboard() {
   const { user } = useAuth();
-  const [activeSession, setActiveSession] = useState<ChatSession | null>(null);
   const [sessions, setSessions] = useState<ChatSession[]>([]);
+  const [currentSession, setCurrentSession] = useState<ChatSession | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [inputMessage, setInputMessage] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [selectedModel, setSelectedModel] = useState('gpt-4o-mini');
-  const [selectedAgent, setSelectedAgent] = useState('general');
-  const [showHistory, setShowHistory] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
+  const [agents, setAgents] = useState<AgentConfig[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [newMessage, setNewMessage] = useState('');
+  const [selectedAgent, setSelectedAgent] = useState<string>('');
+  const [selectedModel, setSelectedModel] = useState<string>('gpt-4o-mini');
+  const [isTyping, setIsTyping] = useState(false);
   const [showAgentConfig, setShowAgentConfig] = useState(false);
-  
-  // Agent configurations
-  const [agents, setAgents] = useState<AgentConfig[]>([
-    {
-      id: 'general',
-      name: 'General Assistant',
-      description: 'Versatile AI assistant for general inquiries and task support',
-      instructions: `You are a helpful, knowledgeable AI assistant with expertise across multiple domains. Your role is to:
+  const [editingAgent, setEditingAgent] = useState<AgentConfig | null>(null);
+  const [viewMode, setViewMode] = useState<'chat' | 'analytics'>('chat');
+  const [isFullScreen, setIsFullScreen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [sessionFilter, setSessionFilter] = useState<string>('all');
 
-• Provide accurate, well-researched responses to general questions
-• Assist with problem-solving and analytical thinking
-• Offer clear explanations of complex topics
-• Maintain a helpful, professional tone
-• Ask clarifying questions when needed
-• Provide actionable advice and next steps
+  // Toolbar state
+  const [showToolbar, setShowToolbar] = useState(true);
+  const [layoutMode, setLayoutMode] = useState<'modern' | 'compact'>('modern');
+  const [quickActions, setQuickActions] = useState([
+    { id: 'new-chat', label: 'New Chat', icon: Plus, action: () => createNewSession() },
+    { id: 'search', label: 'Search', icon: Search, action: () => {} },
+    { id: 'analytics', label: 'Analytics', icon: BarChart3, action: () => setViewMode('analytics') },
+    { id: 'settings', label: 'Settings', icon: Settings, action: () => setShowAgentConfig(true) }
+  ]);
 
-Always be thorough, accurate, and genuinely helpful in your responses.`,
-      model: 'gpt-4o-mini',
-      knowledge_bases: ['general'],
-      temperature: 0.7,
-      max_tokens: 1000,
-      status: 'active'
-    },
-    {
-      id: 'sheltr_support',
-      name: 'SHELTR Support Agent',
-      description: 'Specialized platform support for SHELTR ecosystem',
-      instructions: `You are a SHELTR platform support specialist with deep knowledge of our social impact ecosystem. Your expertise includes:
+  useEffect(() => {
+    if (user) {
+      loadInitialData();
+    }
+  }, [user]);
 
-• SHELTR platform features and functionality
-• Donation flow and QR code system
-• Participant onboarding and management
-• Shelter operations and coordination
-• SmartFund distribution model (80-15-5)
-• Blockchain integration and tokenomics
-• Technical troubleshooting and user guidance
+  const loadInitialData = async () => {
+    try {
+      setLoading(true);
+      
+      // Load hardcoded agents (backend integration pending)
+      const hardcodedAgents: AgentConfig[] = [
+        {
+          id: 'general',
+          name: 'General Assistant',
+          description: 'Versatile AI assistant for general queries and support',
+          instructions: `You are a helpful and knowledgeable general assistant specializing in the SHELTR platform and homelessness support services. Your role is to:
 
-When helping users:
-• Provide step-by-step guidance for platform features
-• Explain SHELTR's mission and impact model
-• Troubleshoot technical issues with clear solutions
-• Connect users to appropriate resources
-• Maintain empathy for users working with vulnerable populations
+• Provide clear, accurate information about SHELTR's features and services
+• Assist users with platform navigation and basic troubleshooting
+• Offer guidance on donation processes, shelter services, and participant support
+• Maintain a compassionate, professional tone when discussing homelessness issues
+• Direct users to appropriate resources and specialized support when needed
+• Ensure all interactions prioritize dignity and respect for all individuals
 
-Always prioritize user success and platform adoption.`,
-      model: 'gpt-4o-mini',
-      knowledge_bases: ['sheltr_docs', 'user_guides', 'platform_features'],
-      temperature: 0.5,
-      max_tokens: 1500,
-      status: 'active'
-    },
-    {
-      id: 'technical_expert',
-      name: 'Technical Expert',
-      description: 'Advanced technical support and development guidance',
-      instructions: `You are a senior technical expert specializing in software development, system architecture, and technical documentation. Your expertise covers:
+When responding:
+• Be empathetic and understanding, especially when discussing sensitive topics
+• Provide actionable information and clear next steps
+• Use accessible language that's easy to understand
+• Acknowledge the complexity of homelessness while offering hope and practical solutions
+• Always respect privacy and confidentiality
+
+Remember that every interaction supports SHELTR's mission to create sustainable solutions for homelessness through technology, compassion, and community engagement.`,
+          model: 'gpt-4o-mini',
+          knowledge_bases: ['general', 'platform_help', 'shelter_info'],
+          temperature: 0.7,
+          max_tokens: 1000,
+          status: 'active'
+        },
+        {
+          id: 'sheltr_support',
+          name: 'SHELTR Support',
+          description: 'Specialized support for SHELTR platform features and processes',
+          instructions: `You are a specialized SHELTR platform support agent with deep knowledge of our systems, features, and processes. Your expertise includes:
+
+• Platform functionality and feature explanations
+• Donation processing and SmartFund distribution (80-15-5 model)
+• Shelter administrator tools and participant management
+• QR code systems and mobile functionality
+• Blockchain integration and token economics
+• Reporting, analytics, and impact measurement
+• Account management and security features
+• Integration with partner services and APIs
+
+When providing support:
+• Offer step-by-step guidance for platform features
+• Explain complex processes in simple, clear terms
+• Provide relevant links to documentation and resources
+• Troubleshoot technical issues methodically
+• Escalate complex technical problems when appropriate
+• Ensure users understand privacy and security measures
+• Help optimize their use of SHELTR's features
+
+Focus on enabling users to effectively leverage SHELTR's technology to maximize their impact in addressing homelessness.`,
+          model: 'gpt-4o',
+          knowledge_bases: ['sheltr_docs', 'user_guides', 'platform_features'],
+          temperature: 0.5,
+          max_tokens: 1500,
+          status: 'active'
+        },
+        {
+          id: 'technical_expert',
+          name: 'Technical Expert',
+          description: 'Advanced technical support and development guidance',
+          instructions: `You are a senior technical expert specializing in software development, system architecture, and technical documentation. Your expertise covers:
 
 • Full-stack development (Next.js, Python, FastAPI, Firebase)
 • Cloud infrastructure (Google Cloud, Firebase, Cloud Run)
@@ -172,17 +191,17 @@ When providing technical guidance:
 • Break down complex technical concepts clearly
 
 Always provide actionable, production-ready technical advice.`,
-      model: 'gpt-4o',
-      knowledge_bases: ['technical_docs', 'architecture', 'development_guides', 'api_docs'],
-      temperature: 0.3,
-      max_tokens: 2000,
-      status: 'active'
-    },
-    {
-      id: 'business_analyst',
-      name: 'Business Analyst',
-      description: 'Strategic business insights and social impact analytics',
-      instructions: `You are a business analyst specializing in social impact, nonprofit operations, and strategic planning. Your expertise includes:
+          model: 'gpt-4o',
+          knowledge_bases: ['technical_docs', 'architecture', 'development_guides', 'api_docs'],
+          temperature: 0.3,
+          max_tokens: 2000,
+          status: 'active'
+        },
+        {
+          id: 'business_analyst',
+          name: 'Business Analyst',
+          description: 'Strategic business insights and social impact analytics',
+          instructions: `You are a business analyst specializing in social impact, nonprofit operations, and strategic planning. Your expertise includes:
 
 • Social impact measurement and evaluation
 • Nonprofit business model analysis
@@ -202,17 +221,17 @@ When providing business insights:
 • Connect business decisions to mission alignment
 
 Focus on practical, actionable business intelligence that advances SHELTR's social mission.`,
-      model: 'gpt-4o-mini',
-      knowledge_bases: ['business', 'analytics', 'impact', 'financial_models', 'market_research'],
-      temperature: 0.6,
-      max_tokens: 1500,
-      status: 'active'
-    },
-    {
-      id: 'creative_writer',
-      name: 'Creative Writer',
-      description: 'Content creation and brand storytelling specialist',
-      instructions: `You are a creative writer and content specialist with expertise in storytelling, marketing, and strategic communication. Your skills include:
+          model: 'gpt-4o-mini',
+          knowledge_bases: ['business', 'analytics', 'impact', 'financial_models', 'market_research'],
+          temperature: 0.6,
+          max_tokens: 1500,
+          status: 'active'
+        },
+        {
+          id: 'creative_writer',
+          name: 'Creative Writer',
+          description: 'Content creation and brand storytelling specialist',
+          instructions: `You are a creative writer and content specialist with expertise in storytelling, marketing, and strategic communication. Your skills include:
 
 • Brand voice development and consistency
 • Compelling narrative creation for social impact
@@ -232,167 +251,133 @@ When creating content:
 • Balance creativity with clarity and purpose
 
 Help tell SHELTR's story in ways that inspire action and build community.`,
-      model: 'gpt-4o',
-      knowledge_bases: ['content', 'marketing', 'communications', 'brand_guidelines', 'storytelling'],
-      temperature: 0.8,
-      max_tokens: 1500,
-      status: 'active'
-    }
-  ]);
-
-  // Available models
-  const [models] = useState<ModelConfig[]>([
-    {
-      id: 'gpt-4o-mini',
-      name: 'GPT-4o Mini',
-      provider: 'openai',
-      max_tokens: 16384,
-      cost_per_1k_tokens: 0.00015,
-      capabilities: ['text', 'code', 'reasoning']
-    },
-    {
-      id: 'gpt-4o',
-      name: 'GPT-4o',
-      provider: 'openai',
-      max_tokens: 128000,
-      cost_per_1k_tokens: 0.005,
-      capabilities: ['text', 'code', 'reasoning', 'vision', 'audio']
-    },
-    {
-      id: 'claude-3-5-sonnet',
-      name: 'Claude 3.5 Sonnet',
-      provider: 'anthropic',
-      max_tokens: 200000,
-      cost_per_1k_tokens: 0.003,
-      capabilities: ['text', 'code', 'reasoning', 'vision']
-    }
-  ]);
-
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    loadChatSessions();
-    scrollToBottom();
-  }, [messages]);
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  const loadChatSessions = async () => {
-    // TODO: Load from API
-    const mockSessions: ChatSession[] = [
-      {
-        id: '1',
-        title: 'SHELTR Platform Discussion',
-        agent_type: 'sheltr_support',
-        model: 'gpt-4o-mini',
-        created_at: new Date('2025-01-20T10:00:00'),
-        updated_at: new Date('2025-01-20T15:30:00'),
-        message_count: 12,
-        last_message: 'How can I configure the donation flow?',
-        status: 'active'
-      },
-      {
-        id: '2',
-        title: 'Technical Architecture Review',
-        agent_type: 'technical_expert',
-        model: 'gpt-4o',
-        created_at: new Date('2025-01-19T14:00:00'),
-        updated_at: new Date('2025-01-19T16:45:00'),
-        message_count: 8,
-        last_message: 'The blockchain integration looks solid.',
-        status: 'active'
-      }
-    ];
-    setSessions(mockSessions);
-  };
-
-  const createNewSession = () => {
-    const newSession: ChatSession = {
-      id: Date.now().toString(),
-      title: `New Chat - ${new Date().toLocaleString()}`,
-      agent_type: selectedAgent,
-      model: selectedModel,
-      created_at: new Date(),
-      updated_at: new Date(),
-      message_count: 0,
-      status: 'active'
-    };
-    setActiveSession(newSession);
-    setMessages([]);
-    setSessions(prev => [newSession, ...prev]);
-  };
-
-  const loadSession = (session: ChatSession) => {
-    setActiveSession(session);
-    // TODO: Load messages from API
-    const mockMessages: ChatMessage[] = [
-      {
-        id: '1',
-        role: 'user',
-        content: 'Hello! I need help with the SHELTR platform.',
-        timestamp: new Date('2025-01-20T10:00:00')
-      },
-      {
-        id: '2',
-        role: 'assistant',
-        content: 'Hello! I\'m here to help you with the SHELTR platform. What specific questions do you have?',
-        timestamp: new Date('2025-01-20T10:00:05'),
-        metadata: {
-          model: 'gpt-4o-mini',
-          tokens_used: 25,
-          response_time: 1200
+          model: 'gpt-4o',
+          knowledge_bases: ['content', 'marketing', 'communications', 'brand_guidelines', 'storytelling'],
+          temperature: 0.8,
+          max_tokens: 1500,
+          status: 'active'
         }
+      ];
+      
+      setAgents(hardcodedAgents);
+      
+      // Set default agent if available
+      if (hardcodedAgents.length > 0) {
+        setSelectedAgent(hardcodedAgents[0].id);
       }
-    ];
-    setMessages(mockMessages);
+
+      // Load mock sessions for demonstration
+      const mockSessions: ChatSession[] = [
+        {
+          id: 'session-1',
+          title: 'New Chat 1',
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          agent_type: 'general',
+          message_count: 0,
+          last_message: 'No messages yet',
+          model: 'gpt-4o-mini',
+          status: 'active'
+        },
+        {
+          id: 'session-2',
+          title: 'New Chat 2',
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          agent_type: 'general',
+          message_count: 0,
+          last_message: 'No messages yet',
+          model: 'gpt-4o-mini',
+          status: 'active'
+        }
+      ];
+      
+      setSessions(mockSessions);
+      
+    } catch (error) {
+      console.error('Error loading chatbot data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const createNewSession = async () => {
+    try {
+      const newSession: ChatSession = {
+        id: `session-${Date.now()}`,
+        title: `New Chat ${sessions.length + 1}`,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        agent_type: selectedAgent || 'general',
+        message_count: 0,
+        last_message: 'No messages yet',
+        model: selectedModel,
+        status: 'active'
+      };
+      
+      setSessions(prev => [newSession, ...prev]);
+      setCurrentSession(newSession);
+      setMessages([]);
+    } catch (error) {
+      console.error('Error creating new session:', error);
+    }
+  };
+
+  const selectSession = async (session: ChatSession) => {
+    try {
+      setCurrentSession(session);
+      
+      // Load mock messages for demonstration
+      const mockMessages: ChatMessage[] = [];
+      setMessages(mockMessages);
+    } catch (error) {
+      console.error('Error loading session messages:', error);
+    }
   };
 
   const sendMessage = async () => {
-    if (!inputMessage.trim() || !activeSession) return;
-
-    const userMessage: ChatMessage = {
-      id: Date.now().toString(),
-      role: 'user',
-      content: inputMessage,
-      timestamp: new Date()
-    };
-
-    setMessages(prev => [...prev, userMessage]);
-    setInputMessage('');
-    setIsLoading(true);
+    if (!newMessage.trim() || !currentSession) return;
 
     try {
-      // TODO: Send to API
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
-
-      const assistantMessage: ChatMessage = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: `I understand you're asking about: "${inputMessage}". Let me help you with that. This is a simulated response from the ${selectedModel} model using the ${selectedAgent} agent configuration.`,
-        timestamp: new Date(),
+      setIsTyping(true);
+      
+      // Add user message
+      const userMessage: ChatMessage = {
+        id: `msg-${Date.now()}`,
+        content: newMessage.trim(),
+        role: 'user',
+        timestamp: new Date().toISOString(),
         metadata: {
           model: selectedModel,
-          tokens_used: Math.floor(Math.random() * 100) + 50,
-          response_time: Math.floor(Math.random() * 2000) + 500
+          tokens_used: 0,
+          response_time: 0
         }
       };
-
-      setMessages(prev => [...prev, assistantMessage]);
       
-      // Update session
-      setActiveSession(prev => prev ? {
-        ...prev,
-        updated_at: new Date(),
-        message_count: prev.message_count + 2,
-        last_message: inputMessage
-      } : null);
-
+      setMessages(prev => [...prev, userMessage]);
+      setNewMessage('');
+      
+      // Simulate AI response
+      setTimeout(() => {
+        const aiMessage: ChatMessage = {
+          id: `msg-${Date.now() + 1}`,
+          content: "I'm a mock response for demonstration. Backend integration is pending.",
+          role: 'assistant',
+          timestamp: new Date().toISOString(),
+          metadata: {
+            model: selectedModel,
+            tokens_used: 150,
+            response_time: 1.2
+          }
+        };
+        
+        setMessages(prev => [...prev, aiMessage]);
+        setIsTyping(false);
+      }, 1000);
+      
     } catch (error) {
       console.error('Error sending message:', error);
-    } finally {
-      setIsLoading(false);
+      setIsTyping(false);
     }
   };
 
@@ -403,515 +388,544 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
     }
   };
 
-  const formatTimestamp = (date: Date) => {
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const formatTimestamp = (timestamp: string) => {
+    return new Date(timestamp).toLocaleTimeString([], { 
+      hour: '2-digit', 
+      minute: '2-digit' 
+    });
   };
 
-  const getCurrentAgent = () => {
-    return agents.find(agent => agent.id === selectedAgent) || agents[0];
-  };
+  // Filter sessions based on search and filter
+  const filteredSessions = sessions.filter(session => {
+    const matchesSearch = searchQuery === '' || 
+      session.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (session.last_message && session.last_message.toLowerCase().includes(searchQuery.toLowerCase()));
+    
+    const matchesFilter = sessionFilter === 'all' || 
+      (sessionFilter === 'active' && session.message_count > 0) ||
+      (sessionFilter === 'archived' && session.message_count === 0);
+    
+    return matchesSearch && matchesFilter;
+  });
 
-  const getCurrentModel = () => {
-    return models.find(model => model.id === selectedModel) || models[0];
-  };
-
-  return (
-    <div className="p-6 max-w-7xl mx-auto">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-bold flex items-center">
-            <MessageSquare className="h-8 w-8 mr-3" />
-            Chatbot Control Panel
-          </h1>
-          <p className="text-gray-600 text-sm sm:text-base">AI chatbot management and conversations</p>
+  if (loading) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-center h-64">
+          <div className="text-center">
+            <RefreshCw className="h-8 w-8 animate-spin mx-auto mb-4" />
+            <p>Loading chatbot control panel...</p>
+          </div>
         </div>
       </div>
-      
-      {/* Mobile Toolbar */}
-      <div className="flex flex-col lg:flex-row gap-4">
-        {/* Chat Sessions Panel - Mobile First */}
-        <div className="w-full lg:w-80">
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle className="flex items-center gap-2">
-                  <MessageSquare className="h-5 w-5" />
-                  Chat Sessions
-                </CardTitle>
-                <Button size="sm" onClick={createNewSession}>
-                  <Plus className="h-4 w-4" />
+    );
+  }
+
+  return (
+    <div className={`h-screen flex flex-col ${isFullScreen ? 'fixed inset-0 z-50 bg-background' : ''}`}>
+      {/* Header */}
+      <div className="border-b bg-card/50 backdrop-blur-sm flex-shrink-0">
+        <div className="flex items-center justify-between px-4 py-4">
+          {/* Left side - Title and stats */}
+          <div className="flex items-center gap-3">
+            <MessageSquare className="h-6 w-6 text-primary" />
+            <div>
+              <h1 className="text-xl font-semibold">Chatbot Control</h1>
+              <div className="flex items-center gap-2 mt-1">
+                <Badge variant="outline" className="text-xs">
+                  {sessions.length} sessions
+                </Badge>
+                <Badge variant="outline" className="text-xs">
+                  {agents.length} agents
+                </Badge>
+                <Badge variant="secondary" className="text-xs">
+                  {agents.filter(a => a.status === 'active').length} active
+                </Badge>
+              </div>
+            </div>
+          </div>
+          
+          {/* Right side - Actions */}
+          <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setLayoutMode(layoutMode === 'modern' ? 'compact' : 'modern')}
+              className="h-9 w-9 p-0"
+            >
+              {layoutMode === 'modern' ? <List className="h-4 w-4" /> : <Grid3X3 className="h-4 w-4" />}
+            </Button>
+            
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setShowAgentConfig(true)}
+              className="h-9 px-3"
+            >
+              <Settings className="h-4 w-4 mr-2" />
+              <span className="hidden sm:inline">Agents</span>
+            </Button>
+            
+            <Button onClick={createNewSession} className="h-9">
+              <Plus className="h-4 w-4 mr-2" />
+              <span className="hidden sm:inline">New Chat</span>
+              <span className="sm:hidden">New</span>
+            </Button>
+          </div>
+        </div>
+
+        {/* Search and filters */}
+        <div className="px-4 pb-4">
+          <div className="flex flex-col sm:flex-row gap-3">
+            <div className="flex-1 relative">
+              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Search sessions..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10"
+              />
+            </div>
+            
+            <div className="flex gap-2">
+              <Select value={sessionFilter} onValueChange={setSessionFilter}>
+                <SelectTrigger className="w-full sm:w-32">
+                  <SelectValue placeholder="All Sessions" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Sessions</SelectItem>
+                  <SelectItem value="active">Active</SelectItem>
+                  <SelectItem value="archived">Archived</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Select value={selectedModel} onValueChange={setSelectedModel}>
+                <SelectTrigger className="w-full sm:w-32">
+                  <SelectValue placeholder="Model" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="gpt-4o">GPT-4o</SelectItem>
+                  <SelectItem value="gpt-4o-mini">GPT-4o Mini</SelectItem>
+                  <SelectItem value="claude-3-5-sonnet">Claude 3.5 Sonnet</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden min-h-0">
+        {/* Left Sidebar - Sessions (Hidden on mobile when chat is active) */}
+        <div className={`${currentSession ? 'hidden lg:flex' : 'flex'} w-full lg:w-80 border-r bg-muted/30 flex-col flex-shrink-0`}>
+          {/* Sessions Header */}
+          <div className="p-3 lg:p-4 border-b flex-shrink-0">
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="font-semibold text-base lg:text-lg">Chat Sessions</h2>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={createNewSession}
+                className="h-8 w-8 p-0"
+              >
+                <Plus className="h-4 w-4" />
+              </Button>
+            </div>
+            
+            {/* Agent Selection */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Active Agent</label>
+              <Select value={selectedAgent} onValueChange={setSelectedAgent}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select agent" />
+                </SelectTrigger>
+                <SelectContent>
+                  {agents.map((agent) => (
+                    <SelectItem key={agent.id} value={agent.id}>
+                      <div className="flex items-center gap-2">
+                        <Bot className="h-4 w-4" />
+                        {agent.name}
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          {/* Sessions List */}
+          <div className="flex-1 overflow-y-auto p-2 min-h-0">
+            {filteredSessions.length === 0 ? (
+              <div className="text-center py-8">
+                <MessageSquare className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                <p className="text-sm text-muted-foreground mb-4">No chat sessions found</p>
+                <Button onClick={createNewSession} size="sm">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Start New Chat
                 </Button>
               </div>
-            </CardHeader>
-            <CardContent className="max-h-[300px] lg:max-h-[calc(100vh-400px)] overflow-y-auto">
+            ) : (
               <div className="space-y-2">
-                {sessions.map(session => (
-                  <div
+                {filteredSessions.map((session) => (
+                  <Card
                     key={session.id}
-                    className={`p-3 rounded-lg cursor-pointer transition-colors ${
-                      activeSession?.id === session.id
-                        ? 'bg-primary/10 border border-primary/20'
-                        : 'bg-muted/50 hover:bg-muted'
+                    className={`cursor-pointer transition-all hover:shadow-md ${
+                      currentSession?.id === session.id ? 'ring-2 ring-primary bg-primary/5' : ''
                     }`}
-                    onClick={() => loadSession(session)}
+                    onClick={() => selectSession(session)}
                   >
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1 min-w-0">
-                        <h4 className="font-medium text-sm truncate">{session.title}</h4>
-                        <p className="text-xs text-muted-foreground mt-1 truncate">
-                          {session.last_message || 'No messages yet'}
-                        </p>
-                        <div className="flex items-center gap-2 mt-2">
+                    <CardContent className="p-3">
+                      <div className="flex items-start justify-between mb-2">
+                        <h3 className="font-medium text-sm line-clamp-1">{session.title}</h3>
+                        <span className="text-xs text-muted-foreground">
+                          {formatTimestamp(session.updated_at)}
+                        </span>
+                      </div>
+                      
+                      <p className="text-xs text-muted-foreground line-clamp-2 mb-2">
+                        {session.last_message || 'No messages yet'}
+                      </p>
+                      
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
                           <Badge variant="outline" className="text-xs">
-                            {session.agent_type.replace('_', ' ')}
+                            {session.agent_type || 'Unknown'}
                           </Badge>
-                          <span className="text-xs text-muted-foreground">
+                          <Badge variant="secondary" className="text-xs">
                             {session.message_count} messages
-                          </span>
+                          </Badge>
+                        </div>
+                        
+                        <div className="flex items-center gap-1">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-6 w-6 p-0"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              // TODO: Show session options
+                            }}
+                          >
+                            <MoreHorizontal className="h-3 w-3" />
+                          </Button>
                         </div>
                       </div>
-                      <div className="text-xs text-muted-foreground">
-                        {formatTimestamp(session.updated_at)}
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Right Content - Chat Interface */}
+        <div className={`${currentSession ? 'flex' : 'hidden lg:flex'} flex-1 flex-col min-h-0`}>
+          {currentSession ? (
+            <>
+              {/* Chat Header */}
+              <div className="border-b bg-card/50 backdrop-blur-sm flex-shrink-0">
+                <div className="flex items-center justify-between p-3">
+                  <div className="flex items-center gap-3">
+                    {/* Mobile back button */}
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setCurrentSession(null)}
+                      className="lg:hidden h-8 w-8 p-0"
+                    >
+                      <ChevronLeft className="h-4 w-4" />
+                    </Button>
+                    
+                    <div>
+                      <h2 className="font-semibold text-base">{currentSession.title}</h2>
+                      <div className="flex items-center gap-2 mt-1">
+                        <Badge variant="outline" className="text-xs">
+                          {currentSession.agent_type}
+                        </Badge>
+                        <Badge variant="secondary" className="text-xs">
+                          {selectedModel}
+                        </Badge>
+                        <Badge variant="outline" className="text-xs">
+                          {messages.length} messages
+                        </Badge>
                       </div>
                     </div>
                   </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Main Chat Area - Mobile First */}
-        <div className="flex-1">
-          <Card className="h-[500px] lg:h-[calc(100vh-400px)] flex flex-col">
-            <CardHeader>
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                <div className="flex items-center gap-2">
-                  <CardTitle className="flex items-center gap-2 text-sm sm:text-base">
-                    <Bot className="h-4 w-4 sm:h-5 sm:w-5" />
-                    {activeSession ? activeSession.title : 'Select a chat session'}
-                  </CardTitle>
-                </div>
-                {activeSession && (
-                  <div className="flex items-center gap-2">
-                    <Badge variant="outline" className="text-xs">{activeSession.agent_type}</Badge>
-                    <Badge variant="secondary" className="text-xs">{activeSession.model}</Badge>
-                  </div>
-                )}
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setShowHistory(!showHistory)}
-                    className="text-xs"
-                  >
-                    <History className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-                    <span className="hidden sm:inline">History</span>
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setShowSettings(!showSettings)}
-                    className="text-xs"
-                  >
-                    <Settings className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-                    <span className="hidden sm:inline">Settings</span>
-                  </Button>
-                </div>
-              </div>
-            </CardHeader>
-
-            <CardContent className="flex-1 flex flex-col">
-              {!activeSession ? (
-                <div className="flex-1 flex items-center justify-center">
-                  <div className="text-center">
-                    <MessageSquare className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                    <h3 className="text-lg font-medium mb-2">No chat session selected</h3>
-                    <p className="text-muted-foreground mb-4">
-                      Select a chat session from the sidebar or create a new one
-                    </p>
-                    <Button onClick={createNewSession}>
-                      <Plus className="h-4 w-4 mr-2" />
-                      Start New Chat
+                  
+                  <div className="flex items-center gap-1">
+                    <Button variant="ghost" size="sm" className="h-8 px-2 hidden sm:flex">
+                      <History className="h-3 w-3 mr-1" />
+                      <span className="text-xs">History</span>
+                    </Button>
+                    <Button variant="ghost" size="sm" className="h-8 px-2 hidden sm:flex">
+                      <Settings className="h-3 w-3 mr-1" />
+                      <span className="text-xs">Settings</span>
+                    </Button>
+                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                      <BarChart3 className="h-3 w-3" />
                     </Button>
                   </div>
                 </div>
-              ) : (
-                <>
-                  {/* Messages Area */}
-                  <div className="flex-1 overflow-y-auto space-y-4 mb-4">
-                    {messages.map(message => (
+              </div>
+
+              {/* Messages Area */}
+              <div className="flex-1 overflow-y-auto p-4 min-h-0 max-h-[calc(100vh-400px)]">
+                {messages.length === 0 ? (
+                  <div className="text-center py-8">
+                    <Bot className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                    <p className="text-sm text-muted-foreground mb-4">Start a conversation</p>
+                    <p className="text-xs text-muted-foreground">
+                      Agent: {agents.find(a => a.id === selectedAgent)?.name || 'Unknown'}
+                    </p>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {messages.map((message) => (
                       <div
                         key={message.id}
                         className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
                       >
                         <div
-                          className={`max-w-[80%] rounded-lg p-3 ${
+                          className={`max-w-[80%] p-3 rounded-lg ${
                             message.role === 'user'
                               ? 'bg-primary text-primary-foreground'
                               : 'bg-muted'
                           }`}
                         >
-                          <div className="flex items-start gap-2">
-                            {message.role === 'assistant' && (
-                              <Bot className="h-4 w-4 mt-0.5 flex-shrink-0" />
+                          <p className="text-sm">{message.content}</p>
+                          <div className="flex items-center gap-2 mt-2 text-xs opacity-70">
+                            <span>{formatTimestamp(message.timestamp)}</span>
+                            {message.metadata && (
+                              <>
+                                <span>•</span>
+                                <span>{message.metadata.model}</span>
+                                {message.metadata?.tokens_used && message.metadata.tokens_used > 0 && (
+                                  <>
+                                    <span>•</span>
+                                    <span>{message.metadata.tokens_used} tokens</span>
+                                  </>
+                                )}
+                                {message.metadata?.response_time && message.metadata.response_time > 0 && (
+                                  <>
+                                    <span>•</span>
+                                    <span>{message.metadata.response_time}s</span>
+                                  </>
+                                )}
+                              </>
                             )}
-                            {message.role === 'user' && (
-                              <User className="h-4 w-4 mt-0.5 flex-shrink-0" />
-                            )}
-                            <div className="flex-1">
-                              <p className="text-sm whitespace-pre-wrap">{message.content}</p>
-                              {message.metadata && (
-                                <div className="flex items-center gap-2 mt-2 text-xs opacity-70">
-                                  <span>{message.metadata.model}</span>
-                                  <span>•</span>
-                                  <span>{message.metadata.tokens_used} tokens</span>
-                                  <span>•</span>
-                                  <span>{message.metadata.response_time}ms</span>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                          <div className="text-xs opacity-70 mt-1">
-                            {formatTimestamp(message.timestamp)}
                           </div>
                         </div>
                       </div>
                     ))}
-                    {isLoading && (
+                    
+                    {isTyping && (
                       <div className="flex justify-start">
-                        <div className="bg-muted rounded-lg p-3">
-                          <div className="flex items-center gap-2">
-                            <Bot className="h-4 w-4" />
-                            <div className="flex space-x-1">
-                              <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce"></div>
-                              <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                              <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                            </div>
+                        <div className="bg-muted p-3 rounded-lg">
+                          <div className="flex items-center gap-1">
+                            <div className="w-2 h-2 bg-primary rounded-full animate-bounce"></div>
+                            <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                            <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                           </div>
                         </div>
                       </div>
                     )}
-                    <div ref={messagesEndRef} />
                   </div>
+                )}
+              </div>
 
-                  {/* Input Area */}
-                  <div className="border-t pt-4">
-                    <div className="flex items-end gap-2">
-                      <div className="flex-1">
-                        <Textarea
-                          value={inputMessage}
-                          onChange={(e) => setInputMessage(e.target.value)}
-                          onKeyPress={handleKeyPress}
-                          placeholder="Type your message... (Shift+Enter for new line)"
-                          className="min-h-[60px] max-h-[200px] resize-none"
-                          disabled={isLoading}
-                        />
-                      </div>
-                      <div className="flex flex-col gap-2">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          disabled={isLoading}
-                        >
-                          <Upload className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          disabled={isLoading}
-                        >
-                          <Link className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          disabled={isLoading}
-                        >
-                          <Globe className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          onClick={sendMessage}
-                          disabled={!inputMessage.trim() || isLoading}
-                          className="min-w-[60px]"
-                        >
-                          <Send className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </div>
+              {/* Message Input */}
+              <div className="border-t bg-card/50 backdrop-blur-sm p-3 flex-shrink-0">
+                <div className="flex items-end gap-2">
+                  <div className="flex-1">
+                    <Textarea
+                      value={newMessage}
+                      onChange={(e) => setNewMessage(e.target.value)}
+                      onKeyPress={handleKeyPress}
+                      placeholder="Type your message... (Shift+Enter for new line)"
+                      className="min-h-[50px] max-h-[100px] resize-none"
+                      rows={1}
+                    />
                   </div>
-                </>
-              )}
-            </CardContent>
-          </Card>
+                  
+                  <div className="flex items-center gap-1">
+                    <Button variant="ghost" size="sm" className="h-9 w-9 p-0 hidden sm:flex">
+                      <Upload className="h-4 w-4" />
+                    </Button>
+                    <Button variant="ghost" size="sm" className="h-9 w-9 p-0 hidden sm:flex">
+                      <Paperclip className="h-4 w-4" />
+                    </Button>
+                    <Button variant="ghost" size="sm" className="h-9 w-9 p-0 hidden sm:flex">
+                      <Globe className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      onClick={sendMessage}
+                      disabled={!newMessage.trim() || isTyping}
+                      className="h-9 px-3"
+                    >
+                      <Send className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+                
+                {/* Quick Actions */}
+                <div className="flex items-center justify-between mt-2 pt-2 border-t">
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                    <span>Model: {selectedModel}</span>
+                    <span className="hidden sm:inline">•</span>
+                    <span className="hidden sm:inline">Agent: {agents.find(a => a.id === selectedAgent)?.name || 'None'}</span>
+                  </div>
+                  
+                  <div className="flex items-center gap-1">
+                    <Button variant="ghost" size="sm" className="h-7 px-2 text-xs hidden sm:flex">
+                      <Mic className="h-3 w-3 mr-1" />
+                      Voice
+                    </Button>
+                    <Button variant="ghost" size="sm" className="h-7 px-2 text-xs hidden sm:flex">
+                      <Image className="h-3 w-3 mr-1" />
+                      Image
+                    </Button>
+                    <Button variant="ghost" size="sm" className="h-7 px-2 text-xs hidden sm:flex">
+                      <File className="h-3 w-3 mr-1" />
+                      File
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : (
+            <div className="flex-1 flex items-center justify-center p-8">
+              <div className="text-center">
+                <MessageSquare className="h-16 w-16 mx-auto mb-4 text-muted-foreground" />
+                <h3 className="text-lg font-semibold mb-2">Welcome to Chatbot Control</h3>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Select a session or create a new chat to get started
+                </p>
+                <Button onClick={createNewSession}>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Start New Chat
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
+      </div>
 
-        {/* Right Sidebar - Settings & Configuration */}
-        {(showSettings || showHistory) && (
-          <div className="w-80 flex flex-col gap-4">
-            {showSettings && (
+      {/* Agent Configuration Dialog */}
+      <Dialog open={showAgentConfig} onOpenChange={setShowAgentConfig}>
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Agent Configuration</DialogTitle>
+          </DialogHeader>
+          
+          <Tabs defaultValue="agents" className="space-y-4">
+            <TabsList>
+              <TabsTrigger value="agents">Agents</TabsTrigger>
+              <TabsTrigger value="models">Models</TabsTrigger>
+              <TabsTrigger value="settings">Settings</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="agents" className="space-y-4">
+              <div className="grid gap-4">
+                {agents.map((agent) => (
+                  <Card key={agent.id}>
+                    <CardHeader>
+                      <div className="flex items-start justify-between">
+                        <div className="flex items-start gap-3">
+                          <Bot className="h-6 w-6 text-primary mt-1" />
+                          <div>
+                            <CardTitle className="text-lg">{agent.name}</CardTitle>
+                            <p className="text-sm text-muted-foreground">{agent.description}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Badge variant={agent.status === 'active' ? 'default' : 'secondary'}>
+                            {agent.status}
+                          </Badge>
+                          <Button variant="ghost" size="sm">
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-sm text-muted-foreground mb-3">{agent.instructions}</p>
+                      <div className="flex items-center gap-4 text-sm">
+                        <span>Model: {agent.model}</span>
+                        <span>Temperature: {agent.temperature}</span>
+                        <span>Max Tokens: {agent.max_tokens}</span>
+                        <span>Knowledge Bases: {agent.knowledge_bases?.length || 0}</span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="models" className="space-y-4">
               <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Settings className="h-5 w-5" />
-                    Chat Settings
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {/* Model Selection */}
-                  <div>
-                    <label className="text-sm font-medium mb-2 block">AI Model</label>
-                    <Select value={selectedModel} onValueChange={setSelectedModel}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {models.map(model => (
-                          <SelectItem key={model.id} value={model.id}>
-                            <div className="flex items-center justify-between w-full">
-                              <span>{model.name}</span>
-                              <Badge variant="outline" className="text-xs">
-                                ${model.cost_per_1k_tokens}
-                              </Badge>
-                            </div>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  {/* Agent Selection */}
-                  <div>
-                    <label className="text-sm font-medium mb-2 block">Agent Type</label>
-                    <Select value={selectedAgent} onValueChange={setSelectedAgent}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {agents.map(agent => (
-                          <SelectItem key={agent.id} value={agent.id}>
-                            <div className="flex items-center justify-between w-full gap-3">
-                              <span className="flex-1">{agent.name}</span>
-                              <Badge variant={agent.status === 'active' ? 'default' : 'secondary'} className="text-xs flex-shrink-0">
-                                {agent.status}
-                              </Badge>
-                            </div>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  {/* Current Agent Info */}
-                  <div className="bg-muted/50 rounded-lg p-3">
-                    <h4 className="font-medium text-sm mb-2">Current Agent: {getCurrentAgent().name}</h4>
-                    <p className="text-xs text-muted-foreground mb-2">{getCurrentAgent().description}</p>
-                    <div className="flex items-center gap-2">
-                      <Badge variant="outline" className="text-xs">
-                        {getCurrentModel().name}
-                      </Badge>
-                      <Badge variant="outline" className="text-xs">
-                        {getCurrentAgent().knowledge_bases.length} KBs
-                      </Badge>
-                    </div>
-                  </div>
-
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setShowAgentConfig(true)}
-                    className="w-full"
-                  >
-                    <Edit className="h-4 w-4 mr-2" />
-                    Configure Agents
-                  </Button>
-                </CardContent>
-              </Card>
-            )}
-
-            {showHistory && (
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <History className="h-5 w-5" />
-                    Chat History
-                  </CardTitle>
+                  <CardTitle>Available Models</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-2">
-                    {sessions.slice(0, 5).map(session => (
-                      <div
-                        key={session.id}
-                        className="p-2 rounded border cursor-pointer hover:bg-muted/50"
-                        onClick={() => loadSession(session)}
-                      >
-                        <div className="text-sm font-medium truncate">{session.title}</div>
-                        <div className="text-xs text-muted-foreground">
-                          {session.updated_at.toLocaleDateString()}
+                  <div className="grid gap-3">
+                    {[
+                      { id: 'gpt-4o', name: 'GPT-4o', description: 'Most capable model', status: 'Available' },
+                      { id: 'gpt-4o-mini', name: 'GPT-4o Mini', description: 'Fast and efficient', status: 'Available' },
+                      { id: 'claude-3-5-sonnet', name: 'Claude 3.5 Sonnet', description: 'Anthropic\'s latest', status: 'Available' }
+                    ].map((model) => (
+                      <div key={model.id} className="flex items-center justify-between p-3 border rounded-lg">
+                        <div>
+                          <h4 className="font-medium">{model.name}</h4>
+                          <p className="text-sm text-muted-foreground">{model.description}</p>
                         </div>
+                        <Badge variant="outline">{model.status}</Badge>
                       </div>
                     ))}
                   </div>
                 </CardContent>
               </Card>
-            )}
-          </div>
-        )}
-      </div>
-
-      {/* Agent Configuration Dialog */}
-      <Dialog open={showAgentConfig} onOpenChange={setShowAgentConfig}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <Brain className="h-5 w-5" />
-              Agent Configuration
-            </DialogTitle>
-          </DialogHeader>
-          
-          <div className="space-y-6">
-            {agents.map(agent => (
-              <Card key={agent.id}>
+            </TabsContent>
+            
+            <TabsContent value="settings" className="space-y-4">
+              <Card>
                 <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="text-lg">{agent.name}</CardTitle>
-                    <div className="flex items-center gap-2">
-                      <Badge variant={agent.status === 'active' ? 'default' : 'secondary'}>
-                        {agent.status}
-                      </Badge>
-                      <Button
-                        size="sm"
-                        variant={agent.status === 'active' ? 'outline' : 'default'}
-                        onClick={() => {
-                          setAgents(prev => prev.map(a => 
-                            a.id === agent.id ? { ...a, status: a.status === 'active' ? 'inactive' : 'active' } : a
-                          ));
-                        }}
-                      >
-                        {agent.status === 'active' ? 'Deactivate' : 'Activate'}
-                      </Button>
-                    </div>
-                  </div>
-                  <p className="text-sm text-muted-foreground">{agent.description}</p>
+                  <CardTitle>Chat Settings</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div>
-                    <label className="text-sm font-medium mb-2 block">Instructions</label>
-                    <Textarea
-                      value={agent.instructions}
-                      onChange={(e) => {
-                        setAgents(prev => prev.map(a => 
-                          a.id === agent.id ? { ...a, instructions: e.target.value } : a
-                        ));
-                      }}
-                      rows={4}
-                      placeholder="Enter agent instructions..."
-                    />
-                  </div>
-                  
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="text-sm font-medium mb-2 block">Model</label>
-                      <Select
-                        value={agent.model}
-                        onValueChange={(value) => {
-                          setAgents(prev => prev.map(a => 
-                            a.id === agent.id ? { ...a, model: value } : a
-                          ));
-                        }}
-                      >
+                      <label className="text-sm font-medium">Default Model</label>
+                      <Select value={selectedModel} onValueChange={setSelectedModel}>
                         <SelectTrigger>
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          {models.map(model => (
-                            <SelectItem key={model.id} value={model.id}>
-                              {model.name}
+                          <SelectItem value="gpt-4o">GPT-4o</SelectItem>
+                          <SelectItem value="gpt-4o-mini">GPT-4o Mini</SelectItem>
+                          <SelectItem value="claude-3-5-sonnet">Claude 3.5 Sonnet</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium">Default Agent</label>
+                      <Select value={selectedAgent} onValueChange={setSelectedAgent}>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {agents.map((agent) => (
+                            <SelectItem key={agent.id} value={agent.id}>
+                              {agent.name}
                             </SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
                     </div>
-                    
-                    <div>
-                      <label className="text-sm font-medium mb-2 block">Temperature</label>
-                      <Input
-                        type="number"
-                        min="0"
-                        max="2"
-                        step="0.1"
-                        value={agent.temperature}
-                        onChange={(e) => {
-                          setAgents(prev => prev.map(a => 
-                            a.id === agent.id ? { ...a, temperature: parseFloat(e.target.value) } : a
-                          ));
-                        }}
-                      />
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <label className="text-sm font-medium mb-2 block">Knowledge Bases</label>
-                    <div className="flex flex-wrap gap-2">
-                      {agent.knowledge_bases.map((kb, index) => (
-                        <Badge key={kb} variant="outline" className="cursor-pointer">
-                          {kb}
-                          <button
-                            onClick={() => {
-                              setAgents(prev => prev.map(a => 
-                                a.id === agent.id ? { 
-                                  ...a, 
-                                  knowledge_bases: a.knowledge_bases.filter((_, i) => i !== index)
-                                } : a
-                              ));
-                            }}
-                            className="ml-1 hover:text-destructive"
-                          >
-                            ×
-                          </button>
-                        </Badge>
-                      ))}
-                      <Button size="sm" variant="outline">
-                        <Plus className="h-3 w-3 mr-1" />
-                        Add KB
-                      </Button>
-                    </div>
                   </div>
                 </CardContent>
               </Card>
-            ))}
-            
-            {/* Save/Cancel Buttons */}
-            <div className="flex justify-end gap-3 pt-4 border-t">
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setShowAgentConfig(false);
-                  // TODO: Reset to original values if needed
-                }}
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={async () => {
-                  try {
-                    // TODO: Save to backend API
-                    console.log('Saving agent configurations:', agents);
-                    // await chatbotDashboardService.saveAgentConfigurations(agents);
-                    setShowAgentConfig(false);
-                    // TODO: Show success toast
-                  } catch (error) {
-                    console.error('Failed to save agent configurations:', error);
-                    // TODO: Show error toast
-                  }
-                }}
-              >
-                <Save className="h-4 w-4 mr-2" />
-                Save Changes
-              </Button>
-            </div>
-          </div>
+            </TabsContent>
+          </Tabs>
         </DialogContent>
       </Dialog>
     </div>

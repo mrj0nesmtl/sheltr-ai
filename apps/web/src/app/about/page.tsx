@@ -411,7 +411,7 @@ export default function AboutPage() {
                   <img 
                     src="/Anthropic_logo.svg" 
                     alt="Anthropic" 
-                    className="h-12 w-auto max-w-full"
+                    className="h-12 w-auto max-w-full filter invert dark:invert-0"
                   />
                 </div>
                 <CardTitle className="text-lg">Anthropic Claude</CardTitle>

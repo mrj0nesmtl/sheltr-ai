@@ -66,7 +66,7 @@ export default function NotificationsPage() {
         if (response.ok) {
           const data = await response.json();
           const userData = data.data.users;
-          activeUsersCount = userData.active_today || userData.total || 0;
+          activeUsersCount = userData.active_today !== undefined ? userData.active_today : (userData.total || 0);
         }
       } catch (apiError) {
         console.warn('⚠️ Could not fetch active users from API:', apiError);

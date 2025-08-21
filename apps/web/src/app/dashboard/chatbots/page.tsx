@@ -428,9 +428,10 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
         </div>
       </div>
       
-      <div className="flex gap-6 h-[calc(100vh-300px)]">
-        {/* Left Sidebar - Chat Sessions */}
-        <div className="w-80 flex flex-col">
+      {/* Mobile Toolbar */}
+      <div className="flex flex-col lg:flex-row gap-4">
+        {/* Chat Sessions Panel - Mobile First */}
+        <div className="w-full lg:w-80">
           <Card>
             <CardHeader>
               <div className="flex items-center justify-between">
@@ -443,7 +444,7 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
                 </Button>
               </div>
             </CardHeader>
-            <CardContent className="flex-1 overflow-y-auto">
+            <CardContent className="max-h-[300px] lg:max-h-[calc(100vh-400px)] overflow-y-auto">
               <div className="space-y-2">
                 {sessions.map(session => (
                   <div
@@ -481,39 +482,41 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
           </Card>
         </div>
 
-        {/* Main Chat Area */}
-        <div className="flex-1 flex flex-col">
-          <Card className="flex-1 flex flex-col">
+        {/* Main Chat Area - Mobile First */}
+        <div className="flex-1">
+          <Card className="h-[500px] lg:h-[calc(100vh-400px)] flex flex-col">
             <CardHeader>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <CardTitle className="flex items-center gap-2">
-                    <Bot className="h-5 w-5" />
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <CardTitle className="flex items-center gap-2 text-sm sm:text-base">
+                    <Bot className="h-4 w-4 sm:h-5 sm:w-5" />
                     {activeSession ? activeSession.title : 'Select a chat session'}
                   </CardTitle>
-                  {activeSession && (
-                    <div className="flex items-center gap-2">
-                      <Badge variant="outline">{activeSession.agent_type}</Badge>
-                      <Badge variant="secondary">{activeSession.model}</Badge>
-                    </div>
-                  )}
                 </div>
+                {activeSession && (
+                  <div className="flex items-center gap-2">
+                    <Badge variant="outline" className="text-xs">{activeSession.agent_type}</Badge>
+                    <Badge variant="secondary" className="text-xs">{activeSession.model}</Badge>
+                  </div>
+                )}
                 <div className="flex items-center gap-2">
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => setShowHistory(!showHistory)}
+                    className="text-xs"
                   >
-                    <History className="h-4 w-4 mr-2" />
-                    History
+                    <History className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                    <span className="hidden sm:inline">History</span>
                   </Button>
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => setShowSettings(!showSettings)}
+                    className="text-xs"
                   >
-                    <Settings className="h-4 w-4 mr-2" />
-                    Settings
+                    <Settings className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                    <span className="hidden sm:inline">Settings</span>
                   </Button>
                 </div>
               </div>

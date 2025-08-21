@@ -18,6 +18,12 @@ export interface KnowledgeDocument {
   view_count: number;
   chunk_count: number;
   word_count: number;
+  // New sharing controls
+  sharing_level: 'public' | 'shelter_specific' | 'super_admin_only' | 'role_based';
+  shared_with?: string[]; // Array of shelter IDs or user IDs
+  access_roles?: string[]; // Array of roles that can access
+  is_live?: boolean; // Whether document is live/public
+  confidentiality_level: 'public' | 'internal' | 'confidential' | 'restricted';
 }
 
 export interface KnowledgeStats {

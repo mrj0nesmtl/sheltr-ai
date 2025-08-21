@@ -113,7 +113,8 @@ deploy_backend() {
         --min-instances 0 \
         --timeout 300 \
         --service-account firebase-adminsdk-fbsvc@sheltr-ai.iam.gserviceaccount.com \
-        --set-env-vars="GOOGLE_CLOUD_PROJECT=sheltr-ai,ENVIRONMENT=production" \
+        --set-env-vars="GOOGLE_CLOUD_PROJECT=sheltr-ai,ENVIRONMENT=production,FIREBASE_STORAGE_BUCKET=sheltr-ai.firebasestorage.app,OPENAI_MODEL=gpt-4o-mini,OPENAI_MAX_TOKENS=150,OPENAI_TEMPERATURE=0.7,OPENAI_TIMEOUT=30,OPENAI_FALLBACK_MODEL=gpt-3.5-turbo,OPENAI_MAX_CONTEXT_TOKENS=4000,OPENAI_RATE_LIMIT_PER_MINUTE=60,FRONTEND_URL=https://sheltr-ai.web.app" \
+        --update-secrets="OPENAI_API_KEY=openai-api-key:latest" \
         >> logs/deploy-backend.log 2>&1
     check_status "Cloud Run deployment"
     

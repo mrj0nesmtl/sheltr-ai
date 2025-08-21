@@ -131,6 +131,28 @@ export default function ChatbotsPage() {
       temperature: 0.3,
       max_tokens: 2000,
       status: 'active'
+    },
+    {
+      id: 'business_analyst',
+      name: 'Business Analyst',
+      description: 'Business strategy and analytics support',
+      instructions: 'You are a business analyst specializing in social impact, nonprofit operations, and business strategy. Provide strategic insights and data-driven recommendations for SHELTR\'s mission.',
+      model: 'gpt-4o-mini',
+      knowledge_bases: ['business', 'analytics', 'impact'],
+      temperature: 0.6,
+      max_tokens: 1500,
+      status: 'active'
+    },
+    {
+      id: 'creative_writer',
+      name: 'Creative Writer',
+      description: 'Content creation and creative writing support',
+      instructions: 'You are a creative writer and content specialist with expertise in storytelling, marketing, and communication. Help create engaging, compelling content that resonates with audiences.',
+      model: 'gpt-4o',
+      knowledge_bases: ['content', 'marketing', 'communications'],
+      temperature: 0.8,
+      max_tokens: 1500,
+      status: 'active'
     }
   ]);
 

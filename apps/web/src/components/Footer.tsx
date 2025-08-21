@@ -6,7 +6,7 @@ export default function Footer() {
   return (
     <footer className="bg-background border-t py-8 mt-0">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid md:grid-cols-4 gap-6">
+        <div className="grid md:grid-cols-5 gap-6">
           {/* Brand Section */}
           <div>
             <ThemeLogo className="h-5 w-auto mb-3" />
@@ -23,7 +23,6 @@ export default function Footer() {
               <li><Link href="/solutions" className="hover:text-foreground">Solutions</Link></li>
               <li><Link href="/scan-give" className="hover:text-foreground">Scan & Give</Link></li>
               <li><Link href="/impact" className="hover:text-foreground">Impact</Link></li>
-              <li><Link href="/blog" className="hover:text-foreground">Blog</Link></li>
             </ul>
           </div>
           
@@ -41,16 +40,24 @@ export default function Footer() {
             </ul>
           </div>
           
-          {/* Community & Support Section */}
+          {/* Community Section */}
           <div>
-            <h3 className="text-sm font-semibold mb-3">Community & Support</h3>
+            <h3 className="text-sm font-semibold mb-3">Community</h3>
             <ul className="space-y-1 text-xs text-muted-foreground">
               <li><Link href="/angels" className="hover:text-foreground">Angels</Link></li>
+              <li><Link href="/blog" className="hover:text-foreground">Blog</Link></li>
               <li>
                 <a href="https://bsky.app/profile/sheltrops.bsky.social" target="_blank" className="hover:text-foreground">
                   BlueSky
                 </a>
               </li>
+            </ul>
+          </div>
+          
+          {/* Support Section */}
+          <div>
+            <h3 className="text-sm font-semibold mb-3">Support</h3>
+            <ul className="space-y-1 text-xs text-muted-foreground">
               <li><Link href="/terms" className="hover:text-foreground">Terms of Service</Link></li>
               <li><Link href="/privacy" className="hover:text-foreground">Privacy Policy</Link></li>
               <li><span className="text-muted-foreground/60">🤖 AI Support (Soon)</span></li>

@@ -75,9 +75,8 @@ We believe in responsible disclosure and will:
 
 ## Security Contact
 
-- **Security Team**: security@sheltr-ai.com
-- **Emergency**: security-emergency@sheltr-ai.com
-- **PGP Key**: [Download Public Key](https://sheltr-ai.com/pgp-key.txt)
+- **Security Team**: mrjonesmtl@icloud.com
+- **Emergency**: mrjonesmtl@icloud.com
 
 ## Security Acknowledgments
 
@@ -87,10 +86,8 @@ We thank the following researchers for responsibly disclosing security issues:
 
 ## Additional Resources
 
-- [SHELTR Privacy Policy](https://sheltr-ai.com/privacy)
-- [SHELTR Terms of Service](https://sheltr-ai.com/terms)
-- [Compliance Documentation](https://docs.sheltr-ai.com/compliance)
-- [Security Best Practices](https://docs.sheltr-ai.com/security)
+- [SHELTR Privacy Policy](https://sheltr-ai.web.app/privacy/)
+- [SHELTR Terms of Service](https://sheltr-ai.web.app/terms/)
 
 ---
 

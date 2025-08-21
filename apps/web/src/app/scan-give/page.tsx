@@ -27,15 +27,31 @@ export default function ScanGivePage() {
   const handleTryDemo = async () => {
     setLoading(true);
     try {
-      // Always use Michael Rodriguez for demo - real participant for authentic experience
-      // This creates real statistics and showcases actual platform capabilities
-      const isProduction = process.env.NODE_ENV === 'production';
-      const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+      // Fetch real Michael Rodriguez data from API
+      const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
       
-      // Use Michael Rodriguez for both development and production
-      if (true) { // Always use real participant data
-        // Use real participant data - Michael Rodriguez for authentic demo experience
-        const realParticipant = {
+      try {
+        // Fetch real participant data from API
+        const response = await fetch(`${apiBaseUrl}/demo/donations/participant/michael-rodriguez`);
+        if (response.ok) {
+          const data = await response.json();
+          const realParticipant = data.data.participant;
+          
+          // Generate QR code URL for Michael Rodriguez
+          const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(`https://sheltr-ai.web.app/donate?demo=true&participant=michael-rodriguez`)}&format=png`;
+          
+          setDemoParticipant(realParticipant);
+          setQrCodeUrl(qrCodeUrl);
+          setShowDemoQR(true);
+          console.log('✅ Loaded real Michael Rodriguez data:', realParticipant);
+        } else {
+          throw new Error('Failed to fetch participant data');
+        }
+      } catch (apiError) {
+        console.warn('⚠️ API call failed, using fallback data:', apiError);
+        
+        // Fallback to hardcoded data if API fails
+        const fallbackParticipant = {
           id: "michael-rodriguez",
           firstName: "Michael",
           lastName: "Rodriguez",
@@ -59,10 +75,9 @@ export default function ScanGivePage() {
           demo: true
         };
         
-        // Generate QR code URL for Michael Rodriguez
         const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(`https://sheltr-ai.web.app/donate?demo=true&participant=michael-rodriguez`)}&format=png`;
         
-        setDemoParticipant(realParticipant);
+        setDemoParticipant(fallbackParticipant);
         setQrCodeUrl(qrCodeUrl);
         setShowDemoQR(true);
       }

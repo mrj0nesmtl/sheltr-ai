@@ -1286,12 +1286,55 @@ export const getParticipantUsers = async (): Promise<ParticipantUser[]> => {
     
     const participantUsers: ParticipantUser[] = [];
     
-    participantsSnapshot.forEach(doc => {
+    // Process each participant
+    for (const doc of participantsSnapshot.docs) {
       const data = doc.data();
       
       const name = data.name || 
                    `${data.firstName || ''} ${data.lastName || ''}`.trim() || 
                    getEmailUsername(data.email, 'Anonymous');
+      
+      // Get donation data for this participant
+      let totalReceived = 0;
+      let lastDonation = null;
+      let qrScans = 0;
+      
+      try {
+        // Query demo_donations collection for this participant
+        const donationsQuery = query(
+          collection(db, 'demo_donations'),
+          where('participant_id', '==', doc.id)
+        );
+        const donationsSnapshot = await getDocs(donationsQuery);
+        
+        donationsSnapshot.forEach(donationDoc => {
+          const donationData = donationDoc.data();
+          const amount = donationData.amount || {};
+          
+          // Handle different amount formats
+          let donationValue = 0;
+          if (typeof amount === 'object') {
+            donationValue = amount.total || amount.amount || 0;
+          } else {
+            donationValue = amount || 0;
+          }
+          
+          if (donationValue > 0) {
+            totalReceived += donationValue;
+          }
+          
+          // Track last donation
+          const donationDate = donationData.created_at || donationData.timestamp;
+          if (donationDate && (!lastDonation || donationDate > lastDonation)) {
+            lastDonation = donationDate;
+          }
+        });
+        
+        qrScans = donationsSnapshot.size; // Use donation count as QR scans for now
+        
+      } catch (donationError) {
+        console.warn(`⚠️ Could not fetch donation data for participant ${doc.id}:`, donationError);
+      }
       
       participantUsers.push({
         id: doc.id,
@@ -1303,15 +1346,15 @@ export const getParticipantUsers = async (): Promise<ParticipantUser[]> => {
         shelter_id: data.shelter_id || '',
         status: data.status || 'verified',
         joinDate: data.created_at ? new Date(data.created_at.seconds * 1000).toLocaleDateString() : 'Unknown',
-        totalReceived: 0, // TODO: Calculate from donations when implemented
-        lastDonation: null, // TODO: Get from donations when implemented
-        qrScans: Math.floor(Math.random() * 50), // Placeholder until QR tracking implemented
+        totalReceived: totalReceived,
+        lastDonation: lastDonation,
+        qrScans: qrScans,
         created_at: data.created_at,
         updated_at: data.updated_at
       });
-    });
+    }
 
-    console.log(`✅ Found ${participantUsers.length} participant users`);
+    console.log(`✅ Found ${participantUsers.length} participant users with donation data`);
     return participantUsers.sort((a, b) => new Date(b.created_at?.seconds || 0).getTime() - new Date(a.created_at?.seconds || 0).getTime());
   } catch (error) {
     console.error('❌ Error fetching participant users:', error);

@@ -246,6 +246,28 @@ service cloud.firestore {
     }
     
     // =================================================================
+    // BLOG COLLECTIONS - Blog post management
+    // =================================================================
+    
+    // Blog posts - Super Admin can manage, all authenticated users can read published posts
+    match /blog_posts/{postId} {
+      allow read: if isAuthenticated() && (resource.data.status == 'published' || isSuperAdmin());
+      allow write: if isSuperAdmin();
+    }
+    
+    // Blog categories - Super Admin can manage, all authenticated users can read
+    match /blog_categories/{categoryId} {
+      allow read: if isAuthenticated();
+      allow write: if isSuperAdmin();
+    }
+    
+    // Blog tags - Super Admin can manage, all authenticated users can read
+    match /blog_tags/{tagId} {
+      allow read: if isAuthenticated();
+      allow write: if isSuperAdmin();
+    }
+    
+    // =================================================================
     // FALLBACK RULE - Deny all other access
     // =================================================================
     match /{document=**} {

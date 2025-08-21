@@ -25,7 +25,8 @@ import {
   Wallet,
   LucideIcon,
   Bell,
-  Cog
+  Cog,
+  FileText
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -133,6 +134,12 @@ const getNavigationItems = (userRole: string) => {
         href: '/dashboard/analytics',
         icon: BarChart3,
         description: 'Platform-wide analytics and insights'
+      },
+      {
+        title: 'Blog Management',
+        href: '/dashboard/blog',
+        icon: FileText,
+        description: 'Create and manage blog posts'
       },
       {
         title: 'System Settings',

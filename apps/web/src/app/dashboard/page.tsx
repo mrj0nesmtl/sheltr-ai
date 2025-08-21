@@ -262,10 +262,13 @@ export default function DashboardPage() {
     }
 
     return (
-      <div className="p-6">
+      <div className="p-6 max-w-7xl mx-auto">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
           <div className="flex-1">
-            <h1 className="text-2xl sm:text-3xl font-bold">Super Admin Dashboard</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold flex items-center">
+              <Shield className="h-8 w-8 mr-3" />
+              Super Admin Dashboard
+            </h1>
             <p className="text-gray-600 text-sm sm:text-base">Platform overview and system management</p>
           </div>
           <div className="flex items-center justify-between sm:justify-end space-x-3">

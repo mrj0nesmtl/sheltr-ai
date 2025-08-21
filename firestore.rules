@@ -64,6 +64,37 @@ service cloud.firestore {
     }
     
     // =================================================================
+    // TENANTS COLLECTION - Multi-tenant platform structure
+    // =================================================================
+    match /tenants/{tenantId} {
+      // Read: Super admin can read all tenants, admins can read their own tenant
+      allow read: if isSuperAdmin() || 
+                     (isAdmin() && getUserData().tenant_id == tenantId);
+      
+      // Write: Super admin can write all tenants, admins can write their own tenant
+      allow write: if isSuperAdmin() || 
+                      (isAdmin() && getUserData().tenant_id == tenantId);
+      
+      // Create: Super admin can create tenants
+      allow create: if isSuperAdmin();
+    }
+    
+    // Tenant sub-collections (platform data, shelters, etc.)
+    match /tenants/{tenantId}/{document=**} {
+      // Read: Super admin can read all tenant data, admins can read their own tenant data
+      allow read: if isSuperAdmin() || 
+                     (isAdmin() && getUserData().tenant_id == tenantId);
+      
+      // Write: Super admin can write all tenant data, admins can write their own tenant data
+      allow write: if isSuperAdmin() || 
+                      (isAdmin() && getUserData().tenant_id == tenantId);
+      
+      // Create: Super admin can create tenant data, admins can create data in their own tenant
+      allow create: if isSuperAdmin() || 
+                       (isAdmin() && getUserData().tenant_id == tenantId);
+    }
+    
+    // =================================================================
     // SHELTERS COLLECTION - Shelter information and management
     // =================================================================
     match /shelters/{shelterId} {
@@ -242,6 +273,28 @@ service cloud.firestore {
     // Shelter analytics
     match /shelters/{shelterId}/analytics/{analyticsId} {
       allow read: if canManageShelter(shelterId);
+      allow write: if isSuperAdmin();
+    }
+    
+    // =================================================================
+    // PLATFORM MANAGEMENT COLLECTIONS
+    // =================================================================
+    
+    // Feature flags - Super Admin can manage, all authenticated users can read
+    match /feature_flags/{flagId} {
+      allow read: if isAuthenticated();
+      allow write: if isSuperAdmin();
+    }
+    
+    // System alerts - Super Admin can manage, all authenticated users can read
+    match /system_alerts/{alertId} {
+      allow read: if isAuthenticated();
+      allow write: if isSuperAdmin();
+    }
+    
+    // Platform metrics - Super Admin can manage, all authenticated users can read
+    match /platform_metrics/{metricId} {
+      allow read: if isAuthenticated();
       allow write: if isSuperAdmin();
     }
     

@@ -312,25 +312,26 @@ export default function KnowledgeDashboard() {
   return (
     <div className="container mx-auto px-4 py-8">
       {/* Header */}
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6 sm:mb-8">
         <div>
-          <h1 className="text-3xl font-bold">Knowledge Base</h1>
-          <p className="text-muted-foreground">Manage and organize your knowledge documents</p>
+          <h1 className="text-2xl sm:text-3xl font-bold">Knowledge Base</h1>
+          <p className="text-muted-foreground text-sm sm:text-base">Manage and organize your knowledge documents</p>
         </div>
         
-        <div className="flex gap-2">
+        <div className="flex flex-col sm:flex-row gap-2">
           <Dialog open={showWebScrapingDialog} onOpenChange={setShowWebScrapingDialog}>
             <DialogTrigger asChild>
-              <Button variant="outline">
+              <Button variant="outline" className="w-full sm:w-auto">
                 <Globe className="h-4 w-4 mr-2" />
-                Web Scraping
+                <span className="hidden sm:inline">Web Scraping</span>
+                <span className="sm:hidden">Scraping</span>
               </Button>
             </DialogTrigger>
           </Dialog>
           
           <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
             <DialogTrigger asChild>
-              <Button onClick={() => resetForm()}>
+              <Button onClick={() => resetForm()} className="w-full sm:w-auto">
                 <Plus className="h-4 w-4 mr-2" />
                 Add Document
               </Button>
@@ -340,51 +341,51 @@ export default function KnowledgeDashboard() {
       </div>
 
       {/* Stats Row */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
         <Card>
-          <CardContent className="p-4">
+          <CardContent className="p-3 sm:p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Total Documents</p>
-                <p className="text-2xl font-bold">{stats.total_documents}</p>
+                <p className="text-xs sm:text-sm font-medium text-muted-foreground">Total Documents</p>
+                <p className="text-xl sm:text-2xl font-bold">{stats.total_documents}</p>
               </div>
-              <Database className="h-8 w-8 text-blue-500" />
+              <Database className="h-6 w-6 sm:h-8 sm:w-8 text-blue-500" />
             </div>
           </CardContent>
         </Card>
 
         <Card>
-          <CardContent className="p-4">
+          <CardContent className="p-3 sm:p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Active Documents</p>
-                <p className="text-2xl font-bold">{stats.active_documents}</p>
+                <p className="text-xs sm:text-sm font-medium text-muted-foreground">Active Documents</p>
+                <p className="text-xl sm:text-2xl font-bold">{stats.active_documents}</p>
               </div>
-              <FileText className="h-8 w-8 text-green-500" />
+              <FileText className="h-6 w-6 sm:h-8 sm:w-8 text-green-500" />
             </div>
           </CardContent>
         </Card>
 
         <Card>
-          <CardContent className="p-4">
+          <CardContent className="p-3 sm:p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Total Chunks</p>
-                <p className="text-2xl font-bold">{stats.total_chunks}</p>
+                <p className="text-xs sm:text-sm font-medium text-muted-foreground">Total Chunks</p>
+                <p className="text-xl sm:text-2xl font-bold">{stats.total_chunks}</p>
               </div>
-              <Hash className="h-8 w-8 text-purple-500" />
+              <Hash className="h-6 w-6 sm:h-8 sm:w-8 text-purple-500" />
             </div>
           </CardContent>
         </Card>
 
         <Card>
-          <CardContent className="p-4">
+          <CardContent className="p-3 sm:p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Pending Embeddings</p>
-                <p className="text-2xl font-bold">{stats.pending_embeddings}</p>
+                <p className="text-xs sm:text-sm font-medium text-muted-foreground">Pending Embeddings</p>
+                <p className="text-xl sm:text-2xl font-bold">{stats.pending_embeddings}</p>
               </div>
-              <Brain className="h-8 w-8 text-orange-500" />
+              <Brain className="h-6 w-6 sm:h-8 sm:w-8 text-orange-500" />
             </div>
           </CardContent>
         </Card>
@@ -392,8 +393,9 @@ export default function KnowledgeDashboard() {
 
       {/* Filters */}
       <Card className="mb-6">
-        <CardContent className="p-4">
-          <div className="flex flex-col md:flex-row gap-4">
+        <CardContent className="p-3 sm:p-4">
+          <div className="flex flex-col gap-3 sm:gap-4">
+            {/* Search bar */}
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
               <Input
@@ -404,35 +406,40 @@ export default function KnowledgeDashboard() {
               />
             </div>
             
-            <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-              <SelectTrigger className="w-full md:w-48">
-                <SelectValue placeholder="All Categories" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Categories</SelectItem>
-                <SelectItem value="Platform">Platform</SelectItem>
-                <SelectItem value="Technology">Technology</SelectItem>
-                <SelectItem value="AI">AI</SelectItem>
-              </SelectContent>
-            </Select>
+            {/* Filters row */}
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+                <SelectTrigger className="w-full sm:w-48">
+                  <SelectValue placeholder="All Categories" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Categories</SelectItem>
+                  <SelectItem value="Platform">Platform</SelectItem>
+                  <SelectItem value="Technology">Technology</SelectItem>
+                  <SelectItem value="AI">AI</SelectItem>
+                </SelectContent>
+              </Select>
 
-            <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-full md:w-48">
-                <SelectValue placeholder="All Status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
-                <SelectItem value="active">Active</SelectItem>
-                <SelectItem value="archived">Archived</SelectItem>
-                <SelectItem value="processing">Processing</SelectItem>
-              </SelectContent>
-            </Select>
-
+              <Select value={statusFilter} onValueChange={setStatusFilter}>
+                <SelectTrigger className="w-full sm:w-48">
+                  <SelectValue placeholder="All Status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Status</SelectItem>
+                  <SelectItem value="active">Active</SelectItem>
+                  <SelectItem value="archived">Archived</SelectItem>
+                  <SelectItem value="processing">Processing</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            {/* View toggle */}
             <div className="flex gap-2">
               <Button
                 variant={viewMode === 'cards' ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => setViewMode('cards')}
+                className="flex-1 sm:flex-none"
               >
                 Cards
               </Button>
@@ -440,6 +447,7 @@ export default function KnowledgeDashboard() {
                 variant={viewMode === 'list' ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => setViewMode('list')}
+                className="flex-1 sm:flex-none"
               >
                 List
               </Button>
@@ -986,20 +994,22 @@ export default function KnowledgeDashboard() {
 
       {/* View Document Dialog */}
       <Dialog open={showViewDialog} onOpenChange={setShowViewDialog}>
-        <DialogContent className={`${isFullScreen ? 'max-w-full max-h-full' : 'max-w-4xl max-h-[90vh]'} overflow-y-auto`}>
+        <DialogContent className={`${isFullScreen ? 'max-w-full max-h-full' : 'max-w-4xl max-h-[90vh]'} overflow-y-auto p-4 sm:p-6`}>
           <DialogHeader>
-            <div className="flex items-center justify-between">
-              <DialogTitle className="flex items-center gap-2">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <DialogTitle className="flex items-center gap-2 text-lg sm:text-xl">
                 <FileTextIcon className="h-5 w-5" />
-                {viewingDocument?.title}
+                <span className="line-clamp-2">{viewingDocument?.title}</span>
               </DialogTitle>
               <div className="flex items-center gap-2">
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={() => setIsFullScreen(!isFullScreen)}
+                  className="flex-1 sm:flex-none"
                 >
                   {isFullScreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
+                  <span className="ml-2 hidden sm:inline">Fullscreen</span>
                 </Button>
                 <Button
                   variant="outline"
@@ -1009,42 +1019,44 @@ export default function KnowledgeDashboard() {
                       navigator.clipboard.writeText(viewingDocument.content);
                     }
                   }}
+                  className="flex-1 sm:flex-none"
                 >
                   <Copy className="h-4 w-4" />
+                  <span className="ml-2 hidden sm:inline">Copy</span>
                 </Button>
               </div>
             </div>
           </DialogHeader>
           
           {viewingDocument && (
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               {/* Document Metadata */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 bg-muted/50 rounded-lg">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 p-3 sm:p-4 bg-muted/50 rounded-lg">
                 <div>
-                  <p className="text-sm font-medium">Status</p>
-                  <Badge variant={viewingDocument.status === 'active' ? 'default' : 'secondary'}>
+                  <p className="text-xs sm:text-sm font-medium">Status</p>
+                  <Badge variant={viewingDocument.status === 'active' ? 'default' : 'secondary'} className="text-xs">
                     {viewingDocument.status}
                   </Badge>
                 </div>
                 <div>
-                  <p className="text-sm font-medium">Embeddings</p>
-                  <Badge variant={viewingDocument.embedding_status === 'completed' ? 'default' : 'outline'}>
+                  <p className="text-xs sm:text-sm font-medium">Embeddings</p>
+                  <Badge variant={viewingDocument.embedding_status === 'completed' ? 'default' : 'outline'} className="text-xs">
                     {getEmbeddingStatusIcon(viewingDocument.embedding_status)}
                     <span className="ml-1">{viewingDocument.embedding_status}</span>
                   </Badge>
                 </div>
                 <div>
-                  <p className="text-sm font-medium">Chunks</p>
-                  <p className="text-sm">{viewingDocument.chunk_count}</p>
+                  <p className="text-xs sm:text-sm font-medium">Chunks</p>
+                  <p className="text-xs sm:text-sm">{viewingDocument.chunk_count}</p>
                 </div>
                 <div>
-                  <p className="text-sm font-medium">Words</p>
-                  <p className="text-sm">{viewingDocument.word_count}</p>
+                  <p className="text-xs sm:text-sm font-medium">Words</p>
+                  <p className="text-xs sm:text-sm">{viewingDocument.word_count}</p>
                 </div>
               </div>
               
               {/* Quality Score */}
-              <div className="p-4 bg-muted/50 rounded-lg">
+              <div className="p-3 sm:p-4 bg-muted/50 rounded-lg">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm font-medium">Quality Score</span>
                   <span className="text-sm font-bold">{getQualityScore(viewingDocument)}/100</span>
@@ -1059,9 +1071,9 @@ export default function KnowledgeDashboard() {
               
               {/* Full Content */}
               <div>
-                <h3 className="text-lg font-semibold mb-4">Document Content</h3>
-                <div className="bg-muted/30 p-6 rounded-lg max-h-96 overflow-y-auto">
-                  <pre className="whitespace-pre-wrap text-sm font-mono">
+                <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Document Content</h3>
+                <div className="bg-muted/30 p-3 sm:p-6 rounded-lg max-h-64 sm:max-h-96 overflow-y-auto">
+                  <pre className="whitespace-pre-wrap text-xs sm:text-sm font-mono leading-relaxed">
                     {viewingDocument.content}
                   </pre>
                 </div>
@@ -1070,10 +1082,10 @@ export default function KnowledgeDashboard() {
               {/* Tags */}
               {viewingDocument.tags && viewingDocument.tags.length > 0 && (
                 <div>
-                  <h3 className="text-lg font-semibold mb-4">Tags</h3>
+                  <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Tags</h3>
                   <div className="flex flex-wrap gap-2">
                     {viewingDocument.tags.map((tag, index) => (
-                      <Badge key={index} variant="outline">
+                      <Badge key={index} variant="outline" className="text-xs">
                         {tag}
                       </Badge>
                     ))}

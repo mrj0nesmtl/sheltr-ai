@@ -31,6 +31,7 @@ export default function NotificationsPage() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState('all');
+  const [activeUsers, setActiveUsers] = useState<number>(0);
 
   useEffect(() => {
     if (user?.role === 'super_admin') {
@@ -58,6 +59,19 @@ export default function NotificationsPage() {
     try {
       console.log('🔔 Loading all notifications...');
       
+      // Get API data for active users
+      let activeUsersCount = 0;
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000'}/analytics/test-platform`);
+        if (response.ok) {
+          const data = await response.json();
+          const userData = data.data.users;
+          activeUsersCount = userData.active_today || userData.total || 0;
+        }
+      } catch (apiError) {
+        console.warn('⚠️ Could not fetch active users from API:', apiError);
+      }
+      
       const [counts, emailSignups] = await Promise.all([
         getNotificationCounts(),
         getRecentEmailSignups(50) // Get more for the dedicated page
@@ -66,7 +80,8 @@ export default function NotificationsPage() {
       setNotificationCounts(counts);
       setAllEmailSignups(emailSignups);
       setFilteredSignups(emailSignups);
-      console.log('✅ All notifications loaded:', { counts, emailSignups });
+      setActiveUsers(activeUsersCount);
+      console.log('✅ All notifications loaded:', { counts, emailSignups, activeUsers: activeUsersCount });
       
     } catch (error) {
       console.error('❌ Failed to load notifications:', error);
@@ -171,7 +186,7 @@ export default function NotificationsPage() {
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">-</div>
+            <div className="text-2xl font-bold">{activeUsers}</div>
             <p className="text-xs text-muted-foreground">Last 24 hours</p>
           </CardContent>
         </Card>

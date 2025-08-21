@@ -44,10 +44,10 @@ function RegisterPageContent() {
       {/* Beta Banner */}
       <div className="bg-yellow-50 dark:bg-yellow-900/20 border-b border-yellow-200 dark:border-yellow-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-          <div className="flex items-center justify-center">
-            <div className="flex items-center">
-              <AlertTriangle className="h-5 w-5 text-yellow-600 dark:text-yellow-400 mr-2" />
-              <p className="text-sm text-yellow-800 dark:text-yellow-200 font-medium">
+          <div className="flex items-center justify-center text-center">
+            <div className="flex items-center justify-center max-w-4xl">
+              <AlertTriangle className="h-5 w-5 text-yellow-600 dark:text-yellow-400 mr-2 flex-shrink-0" />
+              <p className="text-sm text-yellow-800 dark:text-yellow-200 font-medium leading-relaxed">
                 <span className="font-semibold">BETA Platform:</span> SHELTR is currently in development with daily feature updates. 
                 User accounts may be reset during testing. Production launch targeted for December 2025.
               </p>
@@ -60,7 +60,7 @@ function RegisterPageContent() {
         {/* Back Button */}
         <Link 
           href="/"
-          className="fixed top-20 left-6 flex items-center text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors z-10"
+          className="fixed top-28 left-6 flex items-center text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors z-10"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           <span className="text-sm">Back to Home</span>

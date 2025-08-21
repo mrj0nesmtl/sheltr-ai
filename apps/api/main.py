@@ -30,6 +30,7 @@ from routers.users import router as users_router
 from routers.demo_donations import router as demo_donations_router
 from routers.blog import router as blog_router
 from routers.knowledge_dashboard import router as knowledge_dashboard_router
+from routers.chatbot_dashboard import router as chatbot_dashboard_router
 
 # Set up logging
 logging.basicConfig(
@@ -198,6 +199,7 @@ app.include_router(users_router)
 app.include_router(demo_donations_router)
 app.include_router(blog_router)
 app.include_router(knowledge_dashboard_router)
+app.include_router(chatbot_dashboard_router)
 
 # Health check endpoints
 @app.get("/", tags=["Health"])

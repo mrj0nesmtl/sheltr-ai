@@ -27,7 +27,8 @@ import {
   Bell,
   Cog,
   FileText,
-  Brain
+  Brain,
+  MessageSquare
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -147,6 +148,12 @@ const getNavigationItems = (userRole: string) => {
         href: '/dashboard/knowledge',
         icon: Brain,
         description: 'Manage knowledge documents and embeddings'
+      },
+      {
+        title: 'Chatbots',
+        href: '/dashboard/chatbots',
+        icon: MessageSquare,
+        description: 'AI chatbot control panel and conversations'
       },
       {
         title: 'System Settings',

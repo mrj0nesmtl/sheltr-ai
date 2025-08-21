@@ -49,6 +49,10 @@ deploy_frontend() {
     # Navigate to frontend directory
     cd $FRONTEND_DIR
     
+    # Clear Next.js cache to prevent build issues
+    echo -e "${YELLOW}🧹 Clearing Next.js cache...${NC}"
+    rm -rf .next out
+    
     # Install dependencies with security audit
     echo -e "${YELLOW}📦 Installing frontend dependencies with security check...${NC}"
     npm ci > ../../logs/deploy-frontend-install.log 2>&1

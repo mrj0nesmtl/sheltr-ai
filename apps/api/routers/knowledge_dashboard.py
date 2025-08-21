@@ -34,6 +34,8 @@ async def get_knowledge_documents(
         logger.error(f"Failed to get knowledge documents: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to retrieve knowledge documents")
 
+
+
 @router.get("/stats")
 async def get_knowledge_stats(
     current_user: Dict[str, Any] = Depends(get_current_user)

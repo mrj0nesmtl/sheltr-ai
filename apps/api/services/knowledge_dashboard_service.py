@@ -17,8 +17,7 @@ class KnowledgeDashboardService:
     
     def __init__(self):
         self.db = firestore.client()
-        self.storage_client = storage.client()
-        self.bucket = self.storage_client.bucket('sheltr-ai.firebasestorage.app')
+        self.bucket = storage.bucket('sheltr-ai.firebasestorage.app')
     
     async def get_knowledge_documents(self) -> List[Dict[str, Any]]:
         """Get all knowledge documents from Firebase Storage and Firestore"""
@@ -32,42 +31,33 @@ class KnowledgeDashboardService:
                 doc_data = doc.to_dict()
                 doc_data['id'] = doc.id
                 
-                # Get additional metadata from knowledge_chunks if available
-                chunks_query = self.db.collection('knowledge_chunks').where('document_id', '==', doc.id)
-                chunks = list(chunks_query.stream())
-                doc_data['chunk_count'] = len(chunks)
+                # Transform Firestore data to match frontend expectations
+                transformed_doc = {
+                    'id': doc_data.get('id', doc.id),
+                    'title': doc_data.get('title', 'Untitled'),
+                    'content': doc_data.get('description', ''),  # Use description as content
+                    'file_path': doc_data.get('file_path', ''),
+                    'file_type': doc_data.get('file_type', 'markdown'),
+                    'file_size': doc_data.get('metadata', {}).get('size', 0) if doc_data.get('metadata') else 0,
+                    'category': doc_data.get('category', 'Platform').title(),
+                    'tags': doc_data.get('tags', []),
+                    'status': 'active' if doc_data.get('processed', False) else 'processing',
+                    'embedding_status': 'completed' if doc_data.get('embedding_count', 0) > 0 else 'pending',
+                    'created_at': doc_data.get('uploaded_at', datetime.now().isoformat()),
+                    'updated_at': doc_data.get('updated_at', datetime.now().isoformat()),
+                    'created_by': doc_data.get('uploaded_by', 'System'),
+                    'view_count': 0,  # Not tracked in current system
+                    'chunk_count': doc_data.get('embedding_count', 0),
+                    'word_count': doc_data.get('word_count', 0)
+                }
                 
-                # Calculate word count from content
-                content = doc_data.get('content', '')
-                doc_data['word_count'] = len(content.split()) if content else 0
-                
-                # Get file size from Firebase Storage if available
-                file_path = doc_data.get('file_path', '')
-                if file_path:
-                    try:
-                        blob = self.bucket.blob(file_path)
-                        if blob.exists():
-                            doc_data['file_size'] = blob.size
-                        else:
-                            doc_data['file_size'] = len(content.encode('utf-8'))  # Fallback to content size
-                    except Exception as e:
-                        logger.warning(f"Could not get file size for {file_path}: {e}")
-                        doc_data['file_size'] = len(content.encode('utf-8'))
-                else:
-                    doc_data['file_size'] = len(content.encode('utf-8'))
-                
-                documents.append(doc_data)
-            
-            # If no Firestore documents, try to get from Firebase Storage directly
-            if not documents:
-                documents = await self._get_documents_from_storage()
+                documents.append(transformed_doc)
             
             return documents
             
         except Exception as e:
             logger.error(f"Failed to get knowledge documents: {str(e)}")
-            # Fallback to storage-only approach
-            return await self._get_documents_from_storage()
+            return []
     
     async def _get_documents_from_storage(self) -> List[Dict[str, Any]]:
         """Get documents directly from Firebase Storage knowledge-base/public folder"""

@@ -26,7 +26,8 @@ import {
   LucideIcon,
   Bell,
   Cog,
-  FileText
+  FileText,
+  Brain
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -140,6 +141,12 @@ const getNavigationItems = (userRole: string) => {
         href: '/dashboard/blog',
         icon: FileText,
         description: 'Create and manage blog posts'
+      },
+      {
+        title: 'Knowledge Base',
+        href: '/dashboard/knowledge',
+        icon: Brain,
+        description: 'Manage knowledge documents and embeddings'
       },
       {
         title: 'System Settings',

@@ -67,16 +67,7 @@ export default function Footer() {
         
         {/* Copyright */}
         <div className="border-t pt-6 mt-6 text-center text-xs text-muted-foreground">
-          <p>&copy; 2025 SHELTR. Built with ❤️ in memory of{' '}
-            <a 
-              href="https://www.perplexity.ai/search/toni-lane-cassery-StepkPjMTcObKp0iQ1nd1g#0" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="hover:text-foreground underline"
-            >
-              Toni Lane Casserly
-            </a>, Blockchain Pioneer and Humanitarian.
-          </p>
+          <p>&copy; 2025 SHELTR. Built with ❤️ for a better world.</p>
         </div>
       </div>
     </footer>

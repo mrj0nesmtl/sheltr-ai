@@ -363,6 +363,54 @@ class BlogService {
       throw error;
     }
   }
+
+  /**
+   * Import markdown file content as a blog post
+   */
+  async importMarkdownFile(fileContent: string): Promise<{ success: boolean; data: { post_id: string; message: string } }> {
+    try {
+      const formData = new FormData();
+      formData.append('file_content', fileContent);
+
+      const token = await this.getAuthToken();
+      const response = await fetch(`${this.baseUrl}/blog/import-markdown`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to import markdown file: ${response.statusText}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error importing markdown file:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get media embeds for a specific blog post
+   */
+  async getMediaEmbeds(postId: string): Promise<{ success: boolean; data: { embeds: any[] } }> {
+    try {
+      const response = await fetch(`${this.baseUrl}/blog/posts/${postId}/media-embeds`, {
+        headers: await this.getAuthHeaders(),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch media embeds: ${response.statusText}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching media embeds:', error);
+      throw error;
+    }
+  }
 }
 
 // Export singleton instance

@@ -10,7 +10,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
-import { Plus, Edit, Trash2, Eye, Calendar, User, Tag, Search, Filter } from 'lucide-react';
+import { Plus, Edit, Trash2, Eye, Calendar, User, Tag, Search, Filter, Upload, FileText } from 'lucide-react';
 import { blogService, BlogPost, BlogCategory, BlogTag } from '@/services/blogService';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -23,7 +23,9 @@ export default function BlogManagementPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [showCreateDialog, setShowCreateDialog] = useState(false);
+  const [showImportDialog, setShowImportDialog] = useState(false);
   const [editingPost, setEditingPost] = useState<BlogPost | null>(null);
+  const [markdownContent, setMarkdownContent] = useState('');
 
   // Form state
   const [formData, setFormData] = useState({
@@ -113,6 +115,24 @@ export default function BlogManagementPage() {
     }
   };
 
+  const handleImportMarkdown = async () => {
+    if (!markdownContent.trim()) {
+      alert('Please enter markdown content');
+      return;
+    }
+    
+    try {
+      await blogService.importMarkdownFile(markdownContent);
+      setShowImportDialog(false);
+      setMarkdownContent('');
+      loadBlogData(); // Refresh the list
+      alert('Markdown file imported successfully!');
+    } catch (error) {
+      console.error('Error importing markdown file:', error);
+      alert('Failed to import markdown file');
+    }
+  };
+
   const openEditDialog = (post: BlogPost) => {
     setEditingPost(post);
     setFormData({
@@ -164,13 +184,23 @@ export default function BlogManagementPage() {
           <p className="text-muted-foreground">Create and manage blog posts</p>
         </div>
         
-        <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
-          <DialogTrigger asChild>
-            <Button onClick={() => resetForm()}>
-              <Plus className="h-4 w-4 mr-2" />
-              Create Post
-            </Button>
-          </DialogTrigger>
+        <div className="flex gap-2">
+          <Dialog open={showImportDialog} onOpenChange={setShowImportDialog}>
+            <DialogTrigger asChild>
+              <Button variant="outline">
+                <Upload className="h-4 w-4 mr-2" />
+                Import Markdown
+              </Button>
+            </DialogTrigger>
+          </Dialog>
+          
+          <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
+            <DialogTrigger asChild>
+              <Button onClick={() => resetForm()}>
+                <Plus className="h-4 w-4 mr-2" />
+                Create Post
+              </Button>
+            </DialogTrigger>
           <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>
@@ -299,6 +329,7 @@ export default function BlogManagementPage() {
             </div>
           </DialogContent>
         </Dialog>
+        </div>
       </div>
 
       {/* Filters */}
@@ -426,6 +457,37 @@ export default function BlogManagementPage() {
           )}
         </div>
       )}
+
+      {/* Import Markdown Dialog */}
+      <Dialog open={showImportDialog} onOpenChange={setShowImportDialog}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Import Markdown File</DialogTitle>
+          </DialogHeader>
+          
+          <div className="space-y-4">
+            <div>
+              <label className="text-sm font-medium">Markdown Content</label>
+              <Textarea
+                value={markdownContent}
+                onChange={(e) => setMarkdownContent(e.target.value)}
+                placeholder="Paste your markdown content here...&#10;&#10;You can include frontmatter:&#10;---&#10;title: Your Post Title&#10;excerpt: Brief description&#10;category: Technology&#10;tags: tag1, tag2&#10;status: draft&#10;---&#10;&#10;# Your Content Here&#10;&#10;Supports media embeds:&#10;- YouTube: https://youtube.com/watch?v=VIDEO_ID&#10;- Vimeo: https://vimeo.com/VIDEO_ID&#10;- Audio: https://example.com/audio.mp3&#10;- Social: https://twitter.com/user/status/123"
+                rows={15}
+              />
+            </div>
+            
+            <div className="flex justify-end gap-2">
+              <Button variant="outline" onClick={() => setShowImportDialog(false)}>
+                Cancel
+              </Button>
+              <Button onClick={handleImportMarkdown}>
+                <FileText className="h-4 w-4 mr-2" />
+                Import Post
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

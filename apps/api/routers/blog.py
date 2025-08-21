@@ -296,3 +296,52 @@ async def get_tags(
     except Exception as e:
         logger.error(f"Failed to get blog tags: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to retrieve blog tags")
+
+@router.post("/import-markdown")
+async def import_markdown_file(
+    file_content: str = Form(...),
+    current_user: Dict[str, Any] = Depends(require_super_admin)
+):
+    """Import blog post from markdown file content (Super Admin only)"""
+    
+    try:
+        blog_service = BlogService()
+        post_id = await blog_service.import_markdown_file(
+            file_content=file_content,
+            author_id=current_user['uid'],
+            author_name=current_user.get('display_name') or current_user.get('email')
+        )
+        
+        return {
+            "success": True,
+            "data": {
+                "post_id": post_id,
+                "message": "Markdown file imported successfully"
+            }
+        }
+        
+    except Exception as e:
+        logger.error(f"Failed to import markdown file: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to import markdown file: {str(e)}")
+
+@router.get("/posts/{post_id}/media-embeds")
+async def get_post_media_embeds(
+    post_id: str,
+    current_user: Dict[str, Any] = Depends(get_current_user)
+):
+    """Get media embeds for a specific blog post"""
+    
+    try:
+        blog_service = BlogService()
+        embeds = await blog_service.get_media_embeds(post_id)
+        
+        return {
+            "success": True,
+            "data": {
+                "embeds": embeds
+            }
+        }
+        
+    except Exception as e:
+        logger.error(f"Failed to get media embeds for post {post_id}: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to retrieve media embeds")

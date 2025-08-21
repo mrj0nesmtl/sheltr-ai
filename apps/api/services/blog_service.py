@@ -5,10 +5,14 @@ Handles blog post management, categories, and tags
 
 import re
 import hashlib
+import os
+import base64
 from datetime import datetime
 from typing import List, Dict, Optional, Any
 from firebase_admin import firestore, storage
 import logging
+import markdown
+from urllib.parse import urlparse
 
 logger = logging.getLogger(__name__)
 
@@ -379,3 +383,174 @@ class BlogService:
         except Exception as e:
             logger.error(f"Failed to update tag usage counts: {str(e)}")
             # Don't raise - this is not critical for post creation/update
+
+    def _parse_markdown_file(self, file_content: str) -> Dict[str, Any]:
+        """Parse markdown file content and extract frontmatter and content"""
+        try:
+            # Split content into frontmatter and markdown
+            parts = file_content.split('---', 2)
+            
+            if len(parts) >= 3:
+                # Has frontmatter
+                frontmatter_text = parts[1].strip()
+                markdown_content = parts[2].strip()
+                
+                # Parse frontmatter (simple YAML-like parsing)
+                frontmatter = {}
+                for line in frontmatter_text.split('\n'):
+                    if ':' in line:
+                        key, value = line.split(':', 1)
+                        key = key.strip()
+                        value = value.strip().strip('"\'')
+                        frontmatter[key] = value
+                
+                return {
+                    'frontmatter': frontmatter,
+                    'content': markdown_content,
+                    'html_content': markdown.markdown(markdown_content)
+                }
+            else:
+                # No frontmatter, treat entire content as markdown
+                return {
+                    'frontmatter': {},
+                    'content': file_content,
+                    'html_content': markdown.markdown(file_content)
+                }
+                
+        except Exception as e:
+            logger.error(f"Failed to parse markdown file: {str(e)}")
+            return {
+                'frontmatter': {},
+                'content': file_content,
+                'html_content': markdown.markdown(file_content)
+            }
+
+    def _extract_title_from_markdown(self, content: str) -> str:
+        """Extract title from markdown content (first # heading)"""
+        lines = content.split('\n')
+        for line in lines:
+            if line.strip().startswith('# '):
+                return line.strip()[2:].strip()
+        return "Untitled Post"
+
+    def _detect_media_embeds(self, content: str) -> List[Dict[str, str]]:
+        """Detect and extract media embeds from content"""
+        embeds = []
+        
+        # YouTube video patterns
+        youtube_patterns = [
+            r'https?://(?:www\.)?youtube\.com/watch\?v=([a-zA-Z0-9_-]+)',
+            r'https?://(?:www\.)?youtu\.be/([a-zA-Z0-9_-]+)',
+            r'https?://(?:www\.)?youtube\.com/embed/([a-zA-Z0-9_-]+)'
+        ]
+        
+        for pattern in youtube_patterns:
+            matches = re.finditer(pattern, content)
+            for match in matches:
+                video_id = match.group(1)
+                embeds.append({
+                    'type': 'youtube',
+                    'url': match.group(0),
+                    'embed_id': video_id,
+                    'embed_code': f'<iframe width="560" height="315" src="https://www.youtube.com/embed/{video_id}" frameborder="0" allowfullscreen></iframe>'
+                })
+        
+        # Vimeo video patterns
+        vimeo_pattern = r'https?://(?:www\.)?vimeo\.com/(\d+)'
+        vimeo_matches = re.finditer(vimeo_pattern, content)
+        for match in vimeo_matches:
+            video_id = match.group(1)
+            embeds.append({
+                'type': 'vimeo',
+                'url': match.group(0),
+                'embed_id': video_id,
+                'embed_code': f'<iframe src="https://player.vimeo.com/video/{video_id}" width="560" height="315" frameborder="0" allowfullscreen></iframe>'
+            })
+        
+        # Audio file patterns
+        audio_pattern = r'https?://[^\s]+\.(mp3|wav|ogg|m4a)(?:\?[^\s]*)?'
+        audio_matches = re.finditer(audio_pattern, content)
+        for match in audio_matches:
+            audio_url = match.group(0)
+            embeds.append({
+                'type': 'audio',
+                'url': audio_url,
+                'embed_code': f'<audio controls><source src="{audio_url}" type="audio/{match.group(1)}">Your browser does not support the audio element.</audio>'
+            })
+        
+        # Social media patterns
+        social_patterns = {
+            'twitter': r'https?://(?:www\.)?twitter\.com/\w+/status/\d+',
+            'instagram': r'https?://(?:www\.)?instagram\.com/p/[a-zA-Z0-9_-]+',
+            'linkedin': r'https?://(?:www\.)?linkedin\.com/posts/[a-zA-Z0-9_-]+',
+            'facebook': r'https?://(?:www\.)?facebook\.com/\w+/posts/\d+'
+        }
+        
+        for platform, pattern in social_patterns.items():
+            matches = re.finditer(pattern, content)
+            for match in matches:
+                social_url = match.group(0)
+                embeds.append({
+                    'type': f'social_{platform}',
+                    'url': social_url,
+                    'embed_code': f'<div class="social-embed {platform}"><a href="{social_url}" target="_blank" rel="noopener noreferrer">{social_url}</a></div>'
+                })
+        
+        return embeds
+
+    async def import_markdown_file(self, file_content: str, author_id: str, author_name: str) -> str:
+        """Import blog post from markdown file content"""
+        try:
+            # Parse markdown file
+            parsed = self._parse_markdown_file(file_content)
+            frontmatter = frontmatter = parsed['frontmatter']
+            markdown_content = parsed['content']
+            
+            # Extract metadata from frontmatter or content
+            title = frontmatter.get('title') or self._extract_title_from_markdown(markdown_content)
+            excerpt = frontmatter.get('excerpt', '') or markdown_content[:200] + '...'
+            category = frontmatter.get('category', 'Uncategorized')
+            tags = [tag.strip() for tag in frontmatter.get('tags', '').split(',')] if frontmatter.get('tags') else []
+            status = frontmatter.get('status', 'draft')
+            
+            # Detect media embeds
+            media_embeds = self._detect_media_embeds(markdown_content)
+            
+            # Create the blog post
+            post_id = await self.create_blog_post(
+                title=title,
+                content=markdown_content,
+                excerpt=excerpt,
+                author_id=author_id,
+                author_name=author_name,
+                category=category,
+                tags=tags,
+                status=status,
+                seo_title=frontmatter.get('seo_title'),
+                seo_description=frontmatter.get('seo_description'),
+                seo_keywords=[kw.strip() for kw in frontmatter.get('seo_keywords', '').split(',')] if frontmatter.get('seo_keywords') else None
+            )
+            
+            # Store media embeds metadata
+            if media_embeds:
+                self.db.collection('blog_posts').document(post_id).update({
+                    'media_embeds': media_embeds
+                })
+            
+            logger.info(f"Successfully imported markdown file as blog post: {post_id}")
+            return post_id
+            
+        except Exception as e:
+            logger.error(f"Failed to import markdown file: {str(e)}")
+            raise Exception(f"Failed to import markdown file: {str(e)}")
+
+    async def get_media_embeds(self, post_id: str) -> List[Dict[str, str]]:
+        """Get media embeds for a blog post"""
+        try:
+            doc = self.db.collection('blog_posts').document(post_id).get()
+            if doc.exists:
+                return doc.to_dict().get('media_embeds', [])
+            return []
+        except Exception as e:
+            logger.error(f"Failed to get media embeds for post {post_id}: {str(e)}")
+            return []

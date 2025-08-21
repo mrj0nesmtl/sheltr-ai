@@ -30,7 +30,8 @@ import {
   Zap,
   BookOpen,
   Target,
-  BarChart3
+  BarChart3,
+  Save
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -102,8 +103,17 @@ export default function ChatbotsPage() {
     {
       id: 'general',
       name: 'General Assistant',
-      description: 'General purpose AI assistant for various tasks',
-      instructions: 'You are a helpful AI assistant. Provide accurate, helpful responses.',
+      description: 'Versatile AI assistant for general inquiries and task support',
+      instructions: `You are a helpful, knowledgeable AI assistant with expertise across multiple domains. Your role is to:
+
+• Provide accurate, well-researched responses to general questions
+• Assist with problem-solving and analytical thinking
+• Offer clear explanations of complex topics
+• Maintain a helpful, professional tone
+• Ask clarifying questions when needed
+• Provide actionable advice and next steps
+
+Always be thorough, accurate, and genuinely helpful in your responses.`,
       model: 'gpt-4o-mini',
       knowledge_bases: ['general'],
       temperature: 0.7,
@@ -113,10 +123,27 @@ export default function ChatbotsPage() {
     {
       id: 'sheltr_support',
       name: 'SHELTR Support Agent',
-      description: 'Specialized agent for SHELTR platform support',
-      instructions: 'You are a SHELTR platform support specialist. Help users with platform questions, technical issues, and guidance.',
+      description: 'Specialized platform support for SHELTR ecosystem',
+      instructions: `You are a SHELTR platform support specialist with deep knowledge of our social impact ecosystem. Your expertise includes:
+
+• SHELTR platform features and functionality
+• Donation flow and QR code system
+• Participant onboarding and management
+• Shelter operations and coordination
+• SmartFund distribution model (80-15-5)
+• Blockchain integration and tokenomics
+• Technical troubleshooting and user guidance
+
+When helping users:
+• Provide step-by-step guidance for platform features
+• Explain SHELTR's mission and impact model
+• Troubleshoot technical issues with clear solutions
+• Connect users to appropriate resources
+• Maintain empathy for users working with vulnerable populations
+
+Always prioritize user success and platform adoption.`,
       model: 'gpt-4o-mini',
-      knowledge_bases: ['sheltr_docs', 'user_guides'],
+      knowledge_bases: ['sheltr_docs', 'user_guides', 'platform_features'],
       temperature: 0.5,
       max_tokens: 1500,
       status: 'active'
@@ -124,10 +151,29 @@ export default function ChatbotsPage() {
     {
       id: 'technical_expert',
       name: 'Technical Expert',
-      description: 'Technical documentation and development support',
-      instructions: 'You are a technical expert specializing in software development, architecture, and technical documentation.',
+      description: 'Advanced technical support and development guidance',
+      instructions: `You are a senior technical expert specializing in software development, system architecture, and technical documentation. Your expertise covers:
+
+• Full-stack development (Next.js, Python, FastAPI, Firebase)
+• Cloud infrastructure (Google Cloud, Firebase, Cloud Run)
+• Database design and optimization (Firestore, PostgreSQL)
+• API development and integration
+• Security best practices and implementation
+• DevOps and deployment strategies
+• Blockchain and smart contract development
+• Performance optimization and scaling
+
+When providing technical guidance:
+• Offer detailed, implementable solutions
+• Explain architectural decisions and trade-offs
+• Provide code examples when relevant
+• Consider security, performance, and maintainability
+• Suggest best practices and industry standards
+• Break down complex technical concepts clearly
+
+Always provide actionable, production-ready technical advice.`,
       model: 'gpt-4o',
-      knowledge_bases: ['technical_docs', 'architecture'],
+      knowledge_bases: ['technical_docs', 'architecture', 'development_guides', 'api_docs'],
       temperature: 0.3,
       max_tokens: 2000,
       status: 'active'
@@ -135,10 +181,29 @@ export default function ChatbotsPage() {
     {
       id: 'business_analyst',
       name: 'Business Analyst',
-      description: 'Business strategy and analytics support',
-      instructions: 'You are a business analyst specializing in social impact, nonprofit operations, and business strategy. Provide strategic insights and data-driven recommendations for SHELTR\'s mission.',
+      description: 'Strategic business insights and social impact analytics',
+      instructions: `You are a business analyst specializing in social impact, nonprofit operations, and strategic planning. Your expertise includes:
+
+• Social impact measurement and evaluation
+• Nonprofit business model analysis
+• Financial modeling and sustainability planning
+• Stakeholder engagement and partnership development
+• Market analysis and competitive positioning
+• Operational efficiency and process optimization
+• Data-driven decision making and analytics
+• Grant writing and funding strategy
+
+When providing business insights:
+• Analyze data to identify trends and opportunities
+• Provide strategic recommendations with clear rationale
+• Consider social impact alongside financial sustainability
+• Suggest measurable KPIs and success metrics
+• Evaluate risks and mitigation strategies
+• Connect business decisions to mission alignment
+
+Focus on practical, actionable business intelligence that advances SHELTR's social mission.`,
       model: 'gpt-4o-mini',
-      knowledge_bases: ['business', 'analytics', 'impact'],
+      knowledge_bases: ['business', 'analytics', 'impact', 'financial_models', 'market_research'],
       temperature: 0.6,
       max_tokens: 1500,
       status: 'active'
@@ -146,10 +211,29 @@ export default function ChatbotsPage() {
     {
       id: 'creative_writer',
       name: 'Creative Writer',
-      description: 'Content creation and creative writing support',
-      instructions: 'You are a creative writer and content specialist with expertise in storytelling, marketing, and communication. Help create engaging, compelling content that resonates with audiences.',
+      description: 'Content creation and brand storytelling specialist',
+      instructions: `You are a creative writer and content specialist with expertise in storytelling, marketing, and strategic communication. Your skills include:
+
+• Brand voice development and consistency
+• Compelling narrative creation for social impact
+• Marketing copy and promotional content
+• Grant proposals and funding appeals
+• Social media content strategy
+• Press releases and media communications
+• User experience copy and interface text
+• Educational and training materials
+
+When creating content:
+• Craft emotionally resonant, mission-driven narratives
+• Maintain SHELTR's authentic, compassionate brand voice
+• Optimize content for target audiences and platforms
+• Include clear calls-to-action and engagement hooks
+• Ensure accessibility and inclusive language
+• Balance creativity with clarity and purpose
+
+Help tell SHELTR's story in ways that inspire action and build community.`,
       model: 'gpt-4o',
-      knowledge_bases: ['content', 'marketing', 'communications'],
+      knowledge_bases: ['content', 'marketing', 'communications', 'brand_guidelines', 'storytelling'],
       temperature: 0.8,
       max_tokens: 1500,
       status: 'active'
@@ -593,9 +677,9 @@ export default function ChatbotsPage() {
                       <SelectContent>
                         {agents.map(agent => (
                           <SelectItem key={agent.id} value={agent.id}>
-                            <div className="flex items-center justify-between w-full">
-                              <span>{agent.name}</span>
-                              <Badge variant={agent.status === 'active' ? 'default' : 'secondary'} className="text-xs">
+                            <div className="flex items-center justify-between w-full gap-3">
+                              <span className="flex-1">{agent.name}</span>
+                              <Badge variant={agent.status === 'active' ? 'default' : 'secondary'} className="text-xs flex-shrink-0">
                                 {agent.status}
                               </Badge>
                             </div>
@@ -678,9 +762,22 @@ export default function ChatbotsPage() {
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-lg">{agent.name}</CardTitle>
-                    <Badge variant={agent.status === 'active' ? 'default' : 'secondary'}>
-                      {agent.status}
-                    </Badge>
+                    <div className="flex items-center gap-2">
+                      <Badge variant={agent.status === 'active' ? 'default' : 'secondary'}>
+                        {agent.status}
+                      </Badge>
+                      <Button
+                        size="sm"
+                        variant={agent.status === 'active' ? 'outline' : 'default'}
+                        onClick={() => {
+                          setAgents(prev => prev.map(a => 
+                            a.id === agent.id ? { ...a, status: a.status === 'active' ? 'inactive' : 'active' } : a
+                          ));
+                        }}
+                      >
+                        {agent.status === 'active' ? 'Deactivate' : 'Activate'}
+                      </Button>
+                    </div>
                   </div>
                   <p className="text-sm text-muted-foreground">{agent.description}</p>
                 </CardHeader>
@@ -770,6 +867,36 @@ export default function ChatbotsPage() {
                 </CardContent>
               </Card>
             ))}
+            
+            {/* Save/Cancel Buttons */}
+            <div className="flex justify-end gap-3 pt-4 border-t">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setShowAgentConfig(false);
+                  // TODO: Reset to original values if needed
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={async () => {
+                  try {
+                    // TODO: Save to backend API
+                    console.log('Saving agent configurations:', agents);
+                    // await chatbotDashboardService.saveAgentConfigurations(agents);
+                    setShowAgentConfig(false);
+                    // TODO: Show success toast
+                  } catch (error) {
+                    console.error('Failed to save agent configurations:', error);
+                    // TODO: Show error toast
+                  }
+                }}
+              >
+                <Save className="h-4 w-4 mr-2" />
+                Save Changes
+              </Button>
+            </div>
           </div>
         </DialogContent>
       </Dialog>

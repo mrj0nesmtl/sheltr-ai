@@ -99,8 +99,9 @@ export const getPlatformMetrics = async (): Promise<PlatformMetrics> => {
   try {
     console.log('📊 Fetching real platform metrics...');
     
-    // Get shelters count (was hardcoded as 47)
-    const sheltersSnapshot = await getDocs(collection(db, 'shelters'));
+    // Get shelters count from migrated path (same as Shelter Network dashboard)
+    const migratedSheltersRef = collection(db, 'tenants/Vc48fjy0cajJrstbLQRr/platform/shelters/data');
+    const sheltersSnapshot = await getDocs(migratedSheltersRef);
     const totalOrganizations = sheltersSnapshot.size;
     
     // Get users count (was hardcoded as 1284)
@@ -966,7 +967,9 @@ export const getPlatformTenants = async (): Promise<PlatformTenant[]> => {
   try {
     console.log('🏢 Fetching platform tenants (real shelters)...');
     
-    const sheltersSnapshot = await getDocs(collection(db, 'shelters'));
+    // Use migrated path for consistency with Shelter Network dashboard
+    const migratedSheltersRef = collection(db, 'tenants/Vc48fjy0cajJrstbLQRr/platform/shelters/data');
+    const sheltersSnapshot = await getDocs(migratedSheltersRef);
     const tenants: PlatformTenant[] = [];
     
     // Get all demo donations once to aggregate by shelter

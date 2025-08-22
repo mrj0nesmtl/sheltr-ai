@@ -33,11 +33,20 @@ export default function AngelsPage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="py-16 bg-gradient-to-r from-purple-50 via-blue-50 to-pink-50 dark:from-purple-900/20 dark:via-blue-900/20 dark:to-pink-900/20">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
+      <section className="relative py-16 bg-cover bg-center bg-no-repeat" style={{backgroundImage: 'url(/backgrounds/hero-bg.jpg)'}}>
+        <div className="absolute inset-0 bg-black/40" />
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
             <Badge variant="secondary" className="mb-4 bg-purple-500/10 text-purple-600 border-purple-500/20">Internet Angels</Badge>
             <h1 className="text-4xl font-bold mb-6">Angels Amongst Us</h1>
+          </div>
+        </div>
+      </section>
+
+      {/* Stats Section */}
+      <section className="py-12 bg-muted/50">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-8">
             <p className="text-xl text-muted-foreground max-w-4xl mx-auto">
               Digital humanitarians who prove that social media platforms can be forces for genuine change. 
               These creators inspire our vision for systematic, scalable solutions that ensure every act of kindness 
@@ -46,7 +55,7 @@ export default function AngelsPage() {
           </div>
 
           {/* Impact Stats */}
-          <div className="grid md:grid-cols-4 gap-6 mb-12">
+          <div className="grid md:grid-cols-4 gap-6">
             <div className="text-center">
               <div className="text-3xl font-bold text-purple-600 mb-2">24.8M</div>
               <div className="text-sm text-muted-foreground">Combined Followers</div>

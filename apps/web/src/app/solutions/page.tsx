@@ -141,15 +141,15 @@ export default function SolutionsPage() {
                     </div>
                   </div>
                 </div>
-                <div className="space-y-2">
+                <div className="space-y-3">
                   <Link href="/solutions/organizations">
-                    <Button className="w-full border-2 border-black text-black hover:bg-black hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black" variant="outline">
+                    <Button className="w-full border-2 border-black text-black hover:bg-black hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black" variant="outline" size="sm">
                       <Building2 className="h-4 w-4 mr-2" />
                       Learn More for Organizations
                     </Button>
                   </Link>
                   <Link href="/user-journeys/shelters">
-                    <Button className="w-full" variant="secondary">
+                    <Button className="w-full" variant="secondary" size="sm">
                       <ArrowRight className="h-4 w-4 mr-2" />
                       View User Journey
                     </Button>
@@ -193,12 +193,20 @@ export default function SolutionsPage() {
                     </div>
                   </div>
                 </div>
-                <Link href="/solutions/government">
-                  <Button className="w-full mt-6 border-2 border-black text-black hover:bg-black hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black" variant="outline">
-                    <MapPin className="h-4 w-4 mr-2" />
-                    Government Solutions
-                  </Button>
-                </Link>
+                <div className="space-y-3">
+                  <Link href="/solutions/government">
+                    <Button className="w-full border-2 border-black text-black hover:bg-black hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black" variant="outline" size="sm">
+                      <MapPin className="h-4 w-4 mr-2" />
+                      Government Solutions
+                    </Button>
+                  </Link>
+                  <Link href="/user-journeys/government">
+                    <Button className="w-full" variant="secondary" size="sm">
+                      <ArrowRight className="h-4 w-4 mr-2" />
+                      View User Journey
+                    </Button>
+                  </Link>
+                </div>
               </CardContent>
             </Card>
 
@@ -237,15 +245,15 @@ export default function SolutionsPage() {
                     </div>
                   </div>
                 </div>
-                <div className="space-y-2">
+                <div className="space-y-3">
                   <Link href="/solutions/participants">
-                    <Button className="w-full border-2 border-black text-black hover:bg-black hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black" variant="outline">
+                    <Button className="w-full border-2 border-black text-black hover:bg-black hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black" variant="outline" size="sm">
                       <Users className="h-4 w-4 mr-2" />
                       Participant Support
                     </Button>
                   </Link>
                   <Link href="/user-journeys/participants">
-                    <Button className="w-full" variant="secondary">
+                    <Button className="w-full" variant="secondary" size="sm">
                       <ArrowRight className="h-4 w-4 mr-2" />
                       View User Journey
                     </Button>
@@ -289,15 +297,15 @@ export default function SolutionsPage() {
                     </div>
                   </div>
                 </div>
-                <div className="space-y-2">
+                <div className="space-y-3">
                   <Link href="/solutions/donors">
-                    <Button className="w-full border-2 border-black text-black hover:bg-black hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black" variant="outline">
+                    <Button className="w-full border-2 border-black text-black hover:bg-black hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black" variant="outline" size="sm">
                       <Heart className="h-4 w-4 mr-2" />
                       Start Giving Today
                     </Button>
                   </Link>
                   <Link href="/user-journeys/donors">
-                    <Button className="w-full" variant="secondary">
+                    <Button className="w-full" variant="secondary" size="sm">
                       <ArrowRight className="h-4 w-4 mr-2" />
                       View User Journey
                     </Button>

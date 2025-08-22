@@ -1,15 +1,15 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useEffect, useState, ReactNode, useCallback } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import mockBlockchainService, { MockWallet, MockTransaction, MockQRCode } from '@/services/mockBlockchainService';
 import realWalletService, { RealWalletData, RealTransaction } from '@/services/realWalletService';
 
 interface MockWalletContextType {
   // Wallet state
-  wallet: MockWallet | null;
+  wallet: MockWallet | RealWalletData | null;
   balance: { sheltrS: number; sheltr: number } | null;
-  transactions: MockTransaction[];
+  transactions: MockTransaction[] | RealTransaction[];
   qrCode: MockQRCode | null;
   loading: boolean;
   error: string | null;
@@ -92,8 +92,9 @@ export const MockWalletProvider: React.FC<MockWalletProviderProps> = ({ children
         refreshNetworkStatus()
       ]);
       
-    } catch (err: any) {
-      setError(err.message || 'Failed to create wallet');
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to create wallet';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -118,15 +119,16 @@ export const MockWalletProvider: React.FC<MockWalletProviderProps> = ({ children
         refreshNetworkStatus()
       ]);
       
-    } catch (err: any) {
-      setError(err.message || 'Failed to refresh wallet');
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to refresh wallet';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
   };
 
   // Refresh balance
-  const refreshBalance = async (): Promise<void> => {
+  const refreshBalance = useCallback(async (): Promise<void> => {
     if (!user?.uid) return;
     
     try {
@@ -138,10 +140,10 @@ export const MockWalletProvider: React.FC<MockWalletProviderProps> = ({ children
         const balanceData = await mockBlockchainService.getBalance(user.uid);
         setBalance(balanceData);
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Failed to refresh balance:', err);
     }
-  };
+  }, [user?.uid, user?.role]);
 
   // Refresh transactions
   const refreshTransactions = async (): Promise<void> => {
@@ -156,7 +158,7 @@ export const MockWalletProvider: React.FC<MockWalletProviderProps> = ({ children
         const txHistory = await mockBlockchainService.getTransactionHistory(user.uid);
         setTransactions(txHistory);
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Failed to refresh transactions:', err);
     }
   };
@@ -168,20 +170,20 @@ export const MockWalletProvider: React.FC<MockWalletProviderProps> = ({ children
     try {
       const qr = await mockBlockchainService.getQRCode(user.uid);
       setQrCode(qr);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Failed to refresh QR code:', err);
     }
   };
 
   // Refresh network status
-  const refreshNetworkStatus = async (): Promise<void> => {
+  const refreshNetworkStatus = useCallback(async (): Promise<void> => {
     try {
       const status = await mockBlockchainService.getNetworkStatus();
       setNetworkStatus(status);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Failed to refresh network status:', err);
     }
-  };
+  }, []);
 
   // Earn tokens for activities
   const earnTokens = async (activity: 'dailyCheckIn' | 'serviceCompletion' | 'goalAchievement' | 'peerSupport', description?: string): Promise<void> => {
@@ -201,8 +203,9 @@ export const MockWalletProvider: React.FC<MockWalletProviderProps> = ({ children
         refreshTransactions()
       ]);
       
-    } catch (err: any) {
-      setError(err.message || 'Failed to earn tokens');
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to earn tokens';
+      setError(errorMessage);
     }
   };
 
@@ -224,8 +227,9 @@ export const MockWalletProvider: React.FC<MockWalletProviderProps> = ({ children
       const qr = await mockBlockchainService.generateQRCode(user.uid, participantData);
       setQrCode(qr);
       
-    } catch (err: any) {
-      setError(err.message || 'Failed to generate QR code');
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to generate QR code';
+      setError(errorMessage);
     }
   };
 
@@ -236,8 +240,9 @@ export const MockWalletProvider: React.FC<MockWalletProviderProps> = ({ children
     try {
       const txHistory = await mockBlockchainService.getTransactionHistory(user.uid, limit);
       setTransactions(txHistory);
-    } catch (err: any) {
-      setError(err.message || 'Failed to get transaction history');
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to get transaction history';
+      setError(errorMessage);
     }
   };
 
@@ -284,9 +289,10 @@ export const MockWalletProvider: React.FC<MockWalletProviderProps> = ({ children
           ]);
         }
         
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error('Failed to initialize wallet:', err);
-        setError(err.message || 'Failed to initialize wallet');
+        const errorMessage = err instanceof Error ? err.message : 'Failed to initialize wallet';
+        setError(errorMessage);
       } finally {
         setLoading(false);
       }
@@ -305,7 +311,7 @@ export const MockWalletProvider: React.FC<MockWalletProviderProps> = ({ children
     }, 30000);
 
     return () => clearInterval(interval);
-  }, [user?.uid, wallet]);
+  }, [user?.uid, wallet, refreshBalance, refreshNetworkStatus]);
 
   const value: MockWalletContextType = {
     // State

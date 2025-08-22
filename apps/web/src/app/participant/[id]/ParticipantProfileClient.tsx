@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Head from 'next/head';
-import { QrCode, Heart, Share2, MapPin, Target, Calendar, User, ExternalLink, Copy, Check, Home, ChevronRight, ArrowLeft } from 'lucide-react';
+import { QrCode, Heart, Share2, MapPin, Target, Calendar, User, ExternalLink, Copy, Check, Home, ChevronRight, ArrowLeft, RefreshCw } from 'lucide-react';
 import { getParticipantProfile, type ParticipantProfile } from '@/services/platformMetrics';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
@@ -55,6 +55,7 @@ export function ParticipantProfileClient({ participantId }: ParticipantProfileCl
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
 
   // Function to fetch real donation data for a participant
   const fetchParticipantDonations = async (participantId: string): Promise<{ total_received: number; donation_count: number }> => {
@@ -103,6 +104,12 @@ export function ParticipantProfileClient({ participantId }: ParticipantProfileCl
       console.error(`❌ Error fetching donation data for ${participantId}:`, error);
       return { total_received: 0, donation_count: 0 };
     }
+  };
+
+  // Function to refresh participant data
+  const refreshParticipantData = async () => {
+    setLastRefresh(new Date());
+    await loadParticipant();
   };
 
   useEffect(() => {
@@ -383,6 +390,16 @@ export function ParticipantProfileClient({ participantId }: ParticipantProfileCl
               </div>
               
               <div className="flex items-center space-x-4">
+                <Button 
+                  onClick={refreshParticipantData} 
+                  variant="outline" 
+                  size="sm"
+                  disabled={loading}
+                  className="text-xs"
+                >
+                  <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+                  Refresh
+                </Button>
                 {participant.demo && (
                   <Badge variant="secondary" className="bg-orange-500 text-white">
                     Demo Profile

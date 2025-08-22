@@ -2467,11 +2467,11 @@ export default function InvestorRelationsPage() {
                           { year: '2029', roi: '30x', price: '$1.20', label: 'Leader' }
                         ].map((item, index) => (
                           <div key={item.year} className="text-center">
-                            <div className="relative">
+                            <div className="relative h-32 flex flex-col justify-end">
                               <div 
-                                className="bg-gradient-to-t from-green-500 to-blue-500 rounded-t-lg mx-auto transition-all duration-500"
+                                className="bg-gradient-to-b from-green-500 to-blue-500 rounded-t-lg mx-auto transition-all duration-500"
                                 style={{ 
-                                  height: `${Math.max(20, (parseInt(item.roi) / 30) * 80)}px`,
+                                  height: `${Math.max(20, (parseInt(item.roi) / 30) * 100)}px`,
                                   width: '70%'
                                 }}
                               ></div>
@@ -2501,8 +2501,17 @@ export default function InvestorRelationsPage() {
                           { year: 'Year 3', percentage: 25, description: 'Final Unlock' }
                         ].map((item, index) => (
                           <div key={item.year} className="text-center">
-                            <div className="h-32 bg-gradient-to-t from-blue-500 to-blue-300 rounded-lg mb-2 flex items-end justify-center pb-2">
-                              <span className="text-white font-bold">{item.percentage}%</span>
+                            <div className="relative h-32 flex flex-col justify-end">
+                              <div 
+                                className="bg-gradient-to-b from-blue-500 to-blue-300 rounded-t-lg mx-auto transition-all duration-500"
+                                style={{ 
+                                  height: `${(item.percentage / 40) * 100}px`,
+                                  width: '60%'
+                                }}
+                              ></div>
+                              <div className="absolute inset-0 flex items-end justify-center pb-2">
+                                <span className="text-white font-bold text-sm">{item.percentage}%</span>
+                              </div>
                             </div>
                             <span className="text-sm font-medium">{item.year}</span>
                             <div className="text-xs text-muted-foreground">{item.description}</div>
@@ -2558,11 +2567,11 @@ export default function InvestorRelationsPage() {
                       <div className="grid grid-cols-5 gap-2">
                         {tokenProjections.map((projection, index) => (
                           <div key={projection.year} className="text-center">
-                            <div className="relative">
+                            <div className="relative h-32 flex flex-col justify-end">
                               <div 
-                                className="bg-gradient-to-t from-blue-500 to-purple-500 rounded-t-lg mx-auto transition-all duration-500"
+                                className="bg-gradient-to-b from-blue-500 to-purple-500 rounded-t-lg mx-auto transition-all duration-500"
                                 style={{ 
-                                  height: `${Math.max(20, (projection.marketCap / 120000000) * 120)}px`,
+                                  height: `${Math.max(20, (projection.marketCap / 120000000) * 100)}px`,
                                   width: '60%'
                                 }}
                               ></div>

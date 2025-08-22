@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import mockBlockchainService, { MockWallet, MockTransaction, MockQRCode } from '@/services/mockBlockchainService';
+import realWalletService, { RealWalletData, RealTransaction } from '@/services/realWalletService';
 
 interface MockWalletContextType {
   // Wallet state
@@ -44,9 +45,9 @@ interface MockWalletProviderProps {
 
 export const MockWalletProvider: React.FC<MockWalletProviderProps> = ({ children }) => {
   const { user } = useAuth();
-  const [wallet, setWallet] = useState<MockWallet | null>(null);
+  const [wallet, setWallet] = useState<MockWallet | RealWalletData | null>(null);
   const [balance, setBalance] = useState<{ sheltrS: number; sheltr: number } | null>(null);
-  const [transactions, setTransactions] = useState<MockTransaction[]>([]);
+  const [transactions, setTransactions] = useState<MockTransaction[] | RealTransaction[]>([]);
   const [qrCode, setQrCode] = useState<MockQRCode | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -129,8 +130,14 @@ export const MockWalletProvider: React.FC<MockWalletProviderProps> = ({ children
     if (!user?.uid) return;
     
     try {
-      const balanceData = await mockBlockchainService.getBalance(user.uid);
-      setBalance(balanceData);
+      // Use real wallet service for participants, mock for others
+      if (user.role === 'participant') {
+        const balanceData = await realWalletService.getRealBalance(user.uid);
+        setBalance(balanceData);
+      } else {
+        const balanceData = await mockBlockchainService.getBalance(user.uid);
+        setBalance(balanceData);
+      }
     } catch (err: any) {
       console.error('Failed to refresh balance:', err);
     }
@@ -141,8 +148,14 @@ export const MockWalletProvider: React.FC<MockWalletProviderProps> = ({ children
     if (!user?.uid) return;
     
     try {
-      const txHistory = await mockBlockchainService.getTransactionHistory(user.uid);
-      setTransactions(txHistory);
+      // Use real wallet service for participants, mock for others
+      if (user.role === 'participant') {
+        const txHistory = await realWalletService.getRealTransactionHistory(user.uid);
+        setTransactions(txHistory);
+      } else {
+        const txHistory = await mockBlockchainService.getTransactionHistory(user.uid);
+        setTransactions(txHistory);
+      }
     } catch (err: any) {
       console.error('Failed to refresh transactions:', err);
     }
@@ -244,12 +257,19 @@ export const MockWalletProvider: React.FC<MockWalletProviderProps> = ({ children
         setLoading(true);
         setError(null);
         
-        // Check if wallet exists
-        let walletData = await mockBlockchainService.getWallet(user.uid);
+        let walletData;
         
-        // Create wallet if it doesn't exist for participants
-        if (!walletData && (user.role === 'participant' || user.role === 'donor')) {
-          walletData = await mockBlockchainService.createWallet(user.uid);
+        // Use real wallet service for participants, mock for others
+        if (user.role === 'participant') {
+          walletData = await realWalletService.getRealWallet(user.uid);
+        } else {
+          // Check if mock wallet exists
+          walletData = await mockBlockchainService.getWallet(user.uid);
+          
+          // Create mock wallet if it doesn't exist for donors
+          if (!walletData && user.role === 'donor') {
+            walletData = await mockBlockchainService.createWallet(user.uid);
+          }
         }
         
         setWallet(walletData);

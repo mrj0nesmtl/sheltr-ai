@@ -31,7 +31,7 @@ export const getRecentEmailSignups = async (limitCount: number = 10): Promise<Em
     
     // Try API first to get user data for realistic signups
     try {
-      const response = await fetch(`${apiBaseUrl}/analytics/test-platform`);
+      const response = await fetch(`${apiBaseUrl}/api/v1/analytics/test-platform`);
       if (response.ok) {
         const data = await response.json();
         const userData = data.data.users;
@@ -118,7 +118,7 @@ export const getNotificationCounts = async (): Promise<NotificationCounts> => {
     
     // Try API first, fallback to Firestore
     try {
-      const response = await fetch(`${apiBaseUrl}/analytics/test-platform`);
+      const response = await fetch(`${apiBaseUrl}/api/v1/analytics/test-platform`);
       if (response.ok) {
         const data = await response.json();
         const userData = data.data.users;

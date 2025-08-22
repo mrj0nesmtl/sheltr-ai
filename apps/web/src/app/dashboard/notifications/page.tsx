@@ -62,7 +62,7 @@ export default function NotificationsPage() {
       // Get API data for active users
       let activeUsersCount = 0;
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000'}/analytics/test-platform`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000'}/api/v1/analytics/test-platform`);
         if (response.ok) {
           const data = await response.json();
           const userData = data.data.users;

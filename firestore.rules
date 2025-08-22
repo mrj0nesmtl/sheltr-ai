@@ -298,6 +298,13 @@ service cloud.firestore {
       allow write: if isSuperAdmin();
     }
     
+    // Newsletter signups - Super Admin can manage, all authenticated users can read, anyone can create
+    match /newsletter_signups/{signupId} {
+      allow read: if isAuthenticated();
+      allow create: if true; // Allow anyone to sign up for newsletter
+      allow update, delete: if isSuperAdmin();
+    }
+    
     // =================================================================
     // BLOG COLLECTIONS - Blog post management
     // =================================================================

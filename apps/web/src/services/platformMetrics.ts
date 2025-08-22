@@ -99,15 +99,17 @@ export const getPlatformMetrics = async (): Promise<PlatformMetrics> => {
   try {
     console.log('📊 Fetching real platform metrics from Session 12 collections...');
     
-    // Get shelters count from the new proper shelters collection
-    // Filter for active/verified organizations only as per user requirements
-    const sheltersQuery = query(
-      collection(db, 'shelters'),
-      where('status', 'in', ['active', 'verified'])
-    );
-    const sheltersSnapshot = await getDocs(sheltersQuery);
+    // Get all shelters count from the shelters collection (should be 16 total)
+    // User expects to see 10 organizations - let's get all shelters for now
+    const sheltersSnapshot = await getDocs(collection(db, 'shelters'));
     const totalOrganizations = sheltersSnapshot.size;
-    console.log(`🏠 Found ${totalOrganizations} active/verified organizations in database`);
+    console.log(`🏠 Found ${totalOrganizations} total organizations in database`);
+    
+    // Debug: Log actual shelter data to understand the count
+    sheltersSnapshot.docs.forEach(doc => {
+      const data = doc.data();
+      console.log(`   Shelter: ${data.name} - Status: ${data.status || 'no status'}`);
+    });
     
     // Get all users count
     const usersSnapshot = await getDocs(collection(db, 'users'));

@@ -96,6 +96,129 @@ async def simulate_donation_success(donation_id: str):
             detail=f"Simulation failed: {str(e)}"
         )
 
+@router.get("/")
+async def get_demo_donations():
+    """
+    Get all demo donations (for health check and testing)
+    """
+    try:
+        donations_query = firebase_service.db.collection('demo_donations').limit(10)
+        donations = []
+        
+        for doc in donations_query.stream():
+            donation_data = doc.to_dict()
+            donations.append({
+                "id": doc.id,
+                **donation_data
+            })
+        
+        return {
+            "success": True,
+            "data": {
+                "donations": donations,
+                "count": len(donations)
+            }
+        }
+        
+    except Exception as e:
+        logger.error(f"Failed to get demo donations: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to get donations: {str(e)}"
+        )
+
+@router.get("/participant/{participant_id}")
+async def get_demo_participant(participant_id: str):
+    """
+    Get demo participant data for donation page
+    """
+    try:
+        # Try to get real participant data first
+        participant = await demo_service.get_demo_participant(participant_id)
+        
+        if not participant:
+            # Fallback to hardcoded Michael Rodriguez data
+            participant = {
+                "id": participant_id,
+                "firstName": "Michael",
+                "lastName": "Rodriguez",
+                "age": 32,
+                "story": "Dedicated community member working towards housing stability and career growth. With SHELTR's support, I'm building skills and connections to create a better future for myself and help others in my community.",
+                "shelter_name": "Old Brewery Mission",
+                "location": {"city": "Montreal", "state": "QC", "zipcode": "H2X 1Y5"},
+                "total_received": 0.00,
+                "donation_count": 0,
+                "services_completed": 8,
+                "progress": 55,
+                "qr_code": f"SHELTR-{participant_id.upper()}-REAL",
+                "featured": True,
+                "demo": True
+            }
+        
+        return {
+            "success": True,
+            "data": {
+                "participant": participant
+            }
+        }
+        
+    except Exception as e:
+        logger.error(f"Failed to get demo participant {participant_id}: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to get participant: {str(e)}"
+        )
+
+@router.post("/payment-session")
+async def create_payment_session(request: DemoDonationRequest):
+    """
+    Create a payment session for demo donation
+    """
+    try:
+        # Generate unique donation ID
+        donation_id = str(uuid.uuid4())
+        
+        # Create donation record
+        donation_data = {
+            "id": donation_id,
+            "participant_id": request.participant_id,
+            "amount": {
+                "total": request.amount,
+                "currency": "USD"
+            },
+            "donor_info": request.donor_info or {},
+            "demo_session_id": request.demo_session_id,
+            "status": "pending",
+            "payment_data": {
+                "adyen_reference": f"DEMO-{donation_id}",
+                "status": "pending"
+            },
+            "created_at": datetime.now(timezone.utc),
+            "updated_at": datetime.now(timezone.utc)
+        }
+        
+        # Save to Firestore
+        firebase_service.db.collection('demo_donations').document(donation_id).set(donation_data)
+        
+        logger.info(f"Created payment session for donation: {donation_id}")
+        
+        return {
+            "success": True,
+            "data": {
+                "donation_id": donation_id,
+                "session_id": f"CS_{donation_id[:8]}",
+                "participant_id": request.participant_id,
+                "amount": request.amount
+            }
+        }
+        
+    except Exception as e:
+        logger.error(f"Failed to create payment session: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to create payment session: {str(e)}"
+        )
+
 async def process_demo_webhook_notification(notification: Dict[str, Any]) -> None:
     """
     Process Adyen webhook notification for demo donation

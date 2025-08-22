@@ -1,4 +1,4 @@
-# 🔌 SHELTR API Documentation - Current Implementation
+# 🔌 SHELTR API Documentation - Current Implementation & Issues
 
 **FastAPI Backend for Shelter Management Platform**
 
@@ -7,10 +7,29 @@
 *Current Version: 2.1.0*  
 *Live Frontend: https://sheltr-ai.web.app* ✅ **AUTHENTICATION ACTIVE**
 
-**🎯 Last Updated**: Current Session (December 2024)  
-**📊 Current Status**: Production-ready with 6 operational routers  
-**🔗 Data Integration**: Connected to clean Firestore structure  
-**🚀 Deployment**: Google Cloud Run (Containerized)
+**🎯 Last Updated**: August 22, 2024  
+**📊 Current Status**: Production with data inconsistencies requiring audit  
+**🔗 Data Integration**: Partially working with frontend 404 errors  
+**🚨 Critical Issues**: Database audit required for Session 13  
+
+---
+
+## 🚨 Current Issues (August 22, 2024)
+
+### **Critical Problems Identified**
+1. **Data Discrepancies**: Local vs production environments show different data
+2. **Missing Collections**: Some documented collections don't exist in production
+3. **Incorrect Indexes**: Firestore indexes don't match current queries
+4. **Storage Structure Mismatches**: Firebase Storage organization inconsistent
+5. **Frontend 404 Errors**: Dashboard resources failing to load
+6. **Real-time Sync Issues**: Donations not updating across components
+
+### **Immediate Action Required**
+- **Session 13 Priority**: Comprehensive database audit
+- **Data Consistency**: Align local and production environments
+- **Collection Standardization**: Ensure all documented collections exist
+- **Index Optimization**: Fix Firestore query performance
+- **Storage Cleanup**: Organize Firebase Storage structure
 
 ---
 
@@ -23,7 +42,7 @@ All API requests require Firebase ID token authentication:
 ```bash
 # Example authenticated request
 curl -X GET \
-  'http://localhost:8000/auth/profile' \
+  'https://sheltr-api-714964620823.us-central1.run.app/auth/profile' \
   -H 'Authorization: Bearer <firebase-id-token>' \
   -H 'Content-Type: application/json'
 ```
@@ -52,16 +71,19 @@ curl -X GET \
 
 ---
 
-## 🏗️ Data Architecture (Session 9 Implementation)
+## 🏗️ Data Architecture (Current Implementation)
 
-### Clean Database Structure
+### Current Database Structure
 
-Our API connects to the **clean Firestore structure** implemented in Session 9:
+Our API connects to the **current Firestore structure** with known issues:
 
 ```
-/shelters/{shelter-id}     ← Root-level shelter collection
-/users/{user-id}           ← Universal user management  
-/services/{service-id}     ← Service management
+/shelters/{shelter-id}     ← Root-level shelter collection (✅ EXISTS)
+/users/{user-id}           ← Universal user management (✅ EXISTS)
+/services/{service-id}     ← Service management (✅ EXISTS)
+/demo_donations/{donation-id} ← Real donation tracking (✅ EXISTS)
+/tenants/{tenant-id}       ← Legacy nested structure (⚠️ LEGACY)
+/demo_participants/{participant-id} ← Partial data (⚠️ PARTIAL)
 ```
 
 ### User-Shelter Associations
@@ -86,7 +108,7 @@ Data isolation is achieved through **user-shelter linking**:
 
 ---
 
-## 📚 API Endpoints (Session 9 Implementation)
+## 📚 API Endpoints (Current Implementation)
 
 ### 🔐 Authentication (`/auth`)
 **Router**: `routers/auth.py` - User registration, login, and role management
@@ -134,21 +156,32 @@ Data isolation is achieved through **user-shelter linking**:
 ### 🎭 Demo Donations (`/demo/donations`)
 **Router**: `routers/demo_donations.py` - Adyen-powered QR donation demo
 
+- `GET /demo/donations/` - List all demo donations
 - `GET /demo/donations/participant/{participant_id}` - Get demo participant info
-- `POST /demo/donations/create-session` - Create Adyen payment session
-- `POST /demo/donations/finalize/{payment_id}` - Finalize payment with details
+- `POST /demo/donations/payment-session` - Create Adyen payment session
+- `POST /demo/donations/simulate-success/{donation_id}` - Simulate successful payment
 - `POST /demo/donations/webhook` - Adyen webhook handler
 - `GET /demo/donations/stats/{participant_id}` - Get demo participant statistics
 
+### 📚 Knowledge Base (`/knowledge`)
+**Router**: `routers/knowledge.py` - Document management for Super Admins
+
+- `GET /knowledge/` - List all knowledge base documents
+- `POST /knowledge/upload` - Upload new document
+- `GET /knowledge/{document_id}` - Get document details
+- `PUT /knowledge/{document_id}` - Update document
+- `DELETE /knowledge/{document_id}` - Delete document
+- `GET /knowledge/status` - Get knowledge base status
+
 ---
 
-## 🔒 Authentication & Security (Session 9 Implementation)
+## 🔒 Authentication & Security (Current Implementation)
 
 ### Firebase ID Token Authentication ✅ **OPERATIONAL**
 
 ```bash
 # Real authentication flow
-curl -X GET 'http://localhost:8000/auth/profile' \
+curl -X GET 'https://sheltr-api-714964620823.us-central1.run.app/auth/profile' \
   -H 'Authorization: Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6...' \
   -H 'Content-Type: application/json'
 ```
@@ -180,7 +213,7 @@ allow_origins=[
     "http://localhost:3000",           # Next.js dev
     "https://sheltr-ai.web.app",      # Firebase hosting
     "https://api.sheltr.ai",          # Production API
-]
+],
 ```
 
 ### Middleware Stack
@@ -200,7 +233,7 @@ async def http_exception_handler(request: Request, exc: HTTPException):
 
 ---
 
-## 🏥 Health & Status (Session 9 Implementation)
+## 🏥 Health & Status (Current Implementation)
 
 ### Root Health Check
 
@@ -212,11 +245,11 @@ GET /
 {
   "success": true,
   "message": "SHELTR-AI API is running",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "status": "healthy",
   "services": {
     "authentication": "✅ operational",
-    "database": "✅ operational", 
+    "database": "⚠️ needs audit", 
     "multi_tenant": "✅ operational"
   }
 }
@@ -233,13 +266,13 @@ GET /health
   "success": true,
   "timestamp": 1691827200.0,
   "status": "healthy",
-  "version": "2.0.0",
-  "environment": "development",
+  "version": "2.1.0",
+  "environment": "production",
   "services": {
     "api": "✅ operational",
     "firebase_auth": "✅ operational",
-    "firestore": "✅ operational",
-    "storage": "✅ operational"
+    "firestore": "⚠️ needs audit",
+    "storage": "⚠️ needs organization"
   },
   "metrics": {
     "uptime": 1691827200.0,
@@ -255,7 +288,7 @@ GET /health
 GET /docs
 ```
 
-**Live Swagger UI** with SHELTR-AI branding at `http://localhost:8000/docs`
+**Live Swagger UI** with SHELTR-AI branding at `https://sheltr-api-714964620823.us-central1.run.app/docs`
 
 ### OpenAPI Schema
 
@@ -335,11 +368,11 @@ Authorization: Bearer <firebase-id-token>
 ### Demo Donation (Adyen Integration)
 
 ```http
-POST /demo/donations/create-session
+POST /demo/donations/payment-session
 Content-Type: application/json
 
 {
-  "participant_id": "alex-thompson-demo",
+  "participant_id": "demo-participant-001",
   "amount": 25.0,
   "donor_info": {
     "name": "Anonymous Donor"
@@ -355,22 +388,47 @@ Content-Type: application/json
     "session_data": "eyJjb3VudHJ5Q29kZSI6IkNBIiw...",
     "payment_id": "payment_uuid_456",
     "participant": {
-      "id": "alex-thompson-demo",
-      "name": "Alex Thompson",
-      "story": "Former chef working toward housing goals",
+      "id": "demo-participant-001",
+      "name": "Michael Rodriguez",
+      "story": "Dedicated community member working towards housing stability",
       "progress": {
-        "housing": 75,
-        "employment": 60,
-        "financial_stability": 40
+        "housing": 68,
+        "employment": 55,
+        "financial_stability": 42
       }
     }
   }
 }
 ```
 
+### Simulate Successful Payment
+
+```http
+POST /demo/donations/simulate-success/{donation_id}
+Content-Type: application/json
+
+{
+  "status": "completed",
+  "amount": 100.00
+}
+```
+
+```json
+{
+  "success": true,
+  "data": {
+    "donation_id": "donation_uuid_123",
+    "status": "completed",
+    "participant_updated": true,
+    "wallet_updated": true
+  },
+  "message": "Payment simulation completed successfully"
+}
+```
+
 ---
 
-## 🚨 Error Handling (Session 9 Implementation)
+## 🚨 Error Handling (Current Implementation)
 
 ### Standard Error Response
 
@@ -462,7 +520,7 @@ ADYEN_MERCHANT_ACCOUNT=your_merchant_account
 ### Production Deployment
 
 - **Backend**: FastAPI on Google Cloud Run (Containerized)
-- **Database**: Firebase Firestore with clean structure
+- **Database**: Firebase Firestore with data inconsistencies
 - **Authentication**: Firebase Auth with custom claims
 - **Frontend Integration**: CORS-enabled for https://sheltr-ai.web.app
 - **Container Registry**: Google Container Registry (gcr.io/sheltr-ai/sheltr-api)
@@ -476,27 +534,39 @@ ADYEN_MERCHANT_ACCOUNT=your_merchant_account
 - **6 Operational Routers**: Auth, Analytics, Chatbot, Services, Users, Demo Donations
 - **Firebase Integration**: Complete authentication and Firestore connectivity
 - **Role-Based Access**: 4-role system (Super Admin, Admin, Participant, Donor)
-- **Data Connectivity**: Real database integration with clean structure
+- **Data Connectivity**: Real database integration with known issues
 - **Adyen Demo**: Working QR donation system with payment processing
 - **Production Deployment**: Google Cloud Run containerized deployment
 - **Enhanced Chatbot**: RAG-powered intelligent responses with knowledge base
 - **Security Improvements**: Cryptographically secure session management
 - **Tokenomics Updates**: Updated allocation strategies and documentation
 
-### 🔄 **Next Session Priorities**
-- **Inventory Management API**: Resource tracking endpoints
-- **Appointment System API**: Service booking and calendar endpoints  
-- **Enhanced Analytics**: More detailed reporting endpoints
-- **Real Donation Processing**: Production payment system integration
+### 🔄 **Current Issues Requiring Resolution**
+- **Data Discrepancies**: Local vs production environments show different data
+- **Missing Collections**: Some documented collections don't exist in production
+- **Incorrect Indexes**: Firestore indexes don't match current queries
+- **Storage Structure Mismatches**: Firebase Storage organization inconsistent
+- **Frontend 404 Errors**: Dashboard resources failing to load
+- **Real-time Sync Issues**: Donations not updating across components
+
+### 📋 **Session 13 Priorities**
+1. **Database Audit**: Comprehensive review of Firestore collections
+2. **Data Consistency**: Align local and production environments
+3. **Collection Standardization**: Ensure all documented collections exist
+4. **Index Optimization**: Fix Firestore query performance
+5. **Storage Cleanup**: Organize Firebase Storage structure
+6. **Frontend 404 Resolution**: Fix dashboard resource loading issues
+7. **Real-time Updates**: Ensure donation data syncs across all components
+8. **Error Handling**: Improve user experience for edge cases
 
 ---
 
 ## 🛠️ Tools & Resources
 
 ### Development Tools
-- **Interactive API Docs**: `http://localhost:8000/docs` (Swagger UI)
-- **OpenAPI Schema**: `http://localhost:8000/openapi.json`
-- **Health Monitoring**: `http://localhost:8000/health`
+- **Interactive API Docs**: `https://sheltr-api-714964620823.us-central1.run.app/docs` (Swagger UI)
+- **OpenAPI Schema**: `https://sheltr-api-714964620823.us-central1.run.app/openapi.json`
+- **Health Monitoring**: `https://sheltr-api-714964620823.us-central1.run.app/health`
 
 ### Frontend Integration
 - **CORS Configured**: For Next.js development and production
@@ -506,9 +576,58 @@ ADYEN_MERCHANT_ACCOUNT=your_merchant_account
 
 ### Testing & Validation
 - **Role-Based Testing**: 4 test accounts for each user role
-- **Real Data**: Connected to Session 9 clean database structure
+- **Real Data**: Connected to current database structure with issues
 - **Production Ready**: Deployed and operational backend
+
+### Database Audit Tools
+- **Audit Script**: `apps/api/scripts/database_audit.py`
+- **Collection Verification**: Firebase console and CLI tools
+- **Index Management**: Firebase console and CLI tools
+- **Storage Organization**: Firebase console and CLI tools
 
 ---
 
-**This FastAPI backend powers the SHELTR-AI platform with clean architecture, real data connectivity, and production-ready shelter management capabilities.** 🏠✨ 
+## 🚨 Session 13 Database Audit Plan
+
+### **Phase 1: Collection Audit**
+```bash
+# Audit script: apps/api/scripts/database_audit.py
+python apps/api/scripts/database_audit.py --audit-collections
+```
+
+**Tasks**:
+1. **List All Collections**: Document every collection in Firestore
+2. **Count Documents**: Verify document counts match expectations
+3. **Schema Validation**: Ensure documents match TypeScript interfaces
+4. **Index Verification**: Check if indexes support current queries
+5. **Data Consistency**: Compare local vs production data
+
+### **Phase 2: Data Migration & Cleanup**
+```bash
+# Migration script: apps/api/scripts/database_audit.py
+python apps/api/scripts/database_audit.py --migrate-data
+```
+
+**Tasks**:
+1. **Legacy Cleanup**: Remove old nested tenant structure
+2. **Data Standardization**: Ensure consistent field names and types
+3. **Missing Data**: Create missing collections and documents
+4. **Index Creation**: Add missing indexes for performance
+5. **Storage Organization**: Reorganize Firebase Storage structure
+
+### **Phase 3: Validation & Testing**
+```bash
+# Validation script: apps/api/scripts/database_audit.py
+python apps/api/scripts/database_audit.py --validate-system
+```
+
+**Tasks**:
+1. **Frontend Testing**: Verify all dashboard pages load correctly
+2. **API Testing**: Test all endpoints with real data
+3. **Real-time Testing**: Verify donation updates work
+4. **Performance Testing**: Check query response times
+5. **Security Testing**: Verify access control works
+
+---
+
+**This FastAPI backend powers the SHELTR-AI platform but requires immediate attention in Session 13 to resolve critical data inconsistencies and ensure proper system functionality.** 🚨🔧 

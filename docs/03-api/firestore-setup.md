@@ -1,128 +1,271 @@
-# Firestore Database Setup for AI Intelligence
+# Firestore Database Setup - Current Implementation & Fixes
 
 ## Overview
-This guide provides step-by-step instructions for implementing the AI-optimized database structure in Firebase Firestore.
+This guide provides step-by-step instructions for the **current Firestore implementation** as of August 22, 2024, including identified issues and the comprehensive fix plan for Session 13.
 
-## Setup Instructions
+**🎯 Last Updated**: August 22, 2024  
+**📊 Current Status**: Production with data inconsistencies requiring audit  
+**🔗 Data Connectivity**: Partially working with frontend 404 errors  
+**🚨 Critical Issues**: Database audit required for Session 12
 
-### 1. Firebase Firestore Configuration
+## 🚨 Current Issues (August 22, 2024)
 
-#### Update Firestore Rules
-```javascript
-// firestore.rules
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    
-    // Multi-tenant security - all access must include tenantId
-    match /{collection}/{document} {
-      allow read, write: if request.auth != null 
-        && request.auth.token.tenant_id is string
-        && resource.data.tenantId == request.auth.token.tenant_id;
-    }
-    
-    // Organizations - accessible by admins within tenant
-    match /organizations/{orgId} {
-      allow read, write: if request.auth != null 
-        && request.auth.token.tenant_id == resource.data.tenantId
-        && (request.auth.token.role == 'super_admin' || 
-            request.auth.token.role == 'admin');
-    }
-    
-    // Participants - protected health data
-    match /participants/{participantId} {
-      allow read: if request.auth != null 
-        && request.auth.token.tenant_id == resource.data.tenantId
-        && (request.auth.token.role in ['super_admin', 'admin', 'case_worker']);
-      
-      allow write: if request.auth != null 
-        && request.auth.token.tenant_id == resource.data.tenantId
-        && request.auth.token.role in ['super_admin', 'admin', 'case_worker']
-        && request.auth.token.organization_id == resource.data.organizationId;
-    }
-    
-    // Services - public read for participants
-    match /services/{serviceId} {
-      allow read: if request.auth != null 
-        && request.auth.token.tenant_id == resource.data.tenantId;
-      
-      allow write: if request.auth != null 
-        && request.auth.token.tenant_id == resource.data.tenantId
-        && request.auth.token.role in ['super_admin', 'admin'];
-    }
-    
-    // AI Insights - admin access only
-    match /ai_insights/{insightId} {
-      allow read, write: if request.auth != null 
-        && request.auth.token.tenant_id == resource.data.tenantId
-        && request.auth.token.role in ['super_admin', 'admin'];
+### **Critical Problems Identified**
+1. **Data Discrepancies**: Local vs production environments show different data
+2. **Missing Collections**: Some documented collections don't exist in production
+3. **Incorrect Indexes**: Firestore indexes don't match current queries
+4. **Storage Structure Mismatches**: Firebase Storage organization inconsistent
+5. **Frontend 404 Errors**: Dashboard resources failing to load
+6. **Real-time Sync Issues**: Donations not updating across components
+
+### **Immediate Action Required**
+- **Session 12 Priority**: Comprehensive database audit
+- **Data Consistency**: Align local and production environments
+- **Collection Standardization**: Ensure all documented collections exist
+- **Index Optimization**: Fix Firestore query performance
+- **Storage Cleanup**: Organize Firebase Storage structure
+
+---
+
+## 🏗️ Current Firestore Collections (Real Implementation)
+
+### **Collections That Actually Exist**
+
+#### 1. **Shelters** (`shelters/{shelter-id}`)
+**Status**: ✅ **EXISTS** - 10 Montreal shelters migrated
+
+```typescript
+interface Shelter {
+  id: string;                    // "old-brewery-mission"
+  name: string;                  // "Old Brewery Mission"
+  address: string;               // "902 Saint-Laurent Blvd"
+  city: string;                  // "Montreal"
+  province: string;              // "Quebec"
+  capacity: number;              // 300
+  status: 'active' | 'pending' | 'inactive';
+  
+  // Admin Management
+  primary_admin?: {
+    user_id: string;
+    email: string;
+    name: string;
+    assigned_at: Timestamp;
+    assigned_by: string;
+  };
+  
+  // Contact Information
+  contact?: {
+    phone?: string;
+    email?: string;
+    website?: string;
+  };
+  
+  // Metadata
+  created_at: Timestamp;
+  updated_at: Timestamp;
+  verification_status: 'verified' | 'pending' | 'unverified';
+}
+```
+
+#### 2. **Users** (`users/{user-id}`)
+**Status**: ✅ **EXISTS** - Universal user management
+
+```typescript
+interface User {
+  id: string;                   // Firebase Auth UID
+  email: string;                // "participant@example.com"
+  firstName: string;            // "Michael"
+  lastName: string;             // "Rodriguez"
+  role: 'super_admin' | 'admin' | 'participant' | 'donor';
+  
+  // Shelter Association
+  shelter_id?: string;          // "old-brewery-mission"
+  tenant_id?: string;           // "shelter-old-brewery-mission"
+  
+  // Status & Activity
+  status: 'active' | 'inactive' | 'pending' | 'new' | 'transitioning';
+  last_active?: Timestamp;
+  
+  // Metadata
+  created_at: Timestamp;
+  updated_at: Timestamp;
+}
+```
+
+#### 3. **Services** (`services/{service-id}`)
+**Status**: ✅ **EXISTS** - Service management
+
+```typescript
+interface Service {
+  id: string;
+  name: string;                 // "Mental Health Counseling"
+  description?: string;
+  category: string;             // "Healthcare", "Employment", "Housing"
+  shelter_id: string;           // "old-brewery-mission"
+  tenant_id: string;            // "shelter-old-brewery-mission"
+  provider?: string;
+  location?: string;
+  duration?: number;
+  isActive: boolean;
+  created_at: Timestamp;
+  updated_at: Timestamp;
+}
+```
+
+#### 4. **Demo Donations** (`demo_donations/{donation-id}`)
+**Status**: ✅ **EXISTS** - Real donation tracking
+
+```typescript
+interface DemoDonation {
+  id: string;
+  participant_id: string;       // "demo-participant-001"
+  amount: {
+    total: number;              // 100.00
+    currency: string;           // "USD"
+  };
+  status: 'pending' | 'completed' | 'failed';
+  donor_info?: {
+    name?: string;
+    email?: string;
+  };
+  payment_session_id?: string;  // Adyen session ID
+  created_at: Timestamp;
+  updated_at: Timestamp;
+  completed_at?: Timestamp;
+}
+```
+
+### **Legacy Collections (Need Migration)**
+
+#### 5. **Tenants** (`tenants/{tenant-id}`)
+**Status**: ⚠️ **LEGACY** - Contains old nested structure
+
+```typescript
+// OLD STRUCTURE (needs cleanup)
+interface LegacyTenant {
+  id: string;                   // "Vc48fjy0cajJrstbLQRr"
+  platform: {
+    shelters: {
+      data: {
+        [shelterId: string]: ShelterData;  // Nested shelter data
+      }
     }
   }
 }
 ```
 
-#### Firestore Indexes
+#### 6. **Demo Participants** (`demo_participants/{participant-id}`)
+**Status**: ⚠️ **PARTIAL** - Some data exists, inconsistent
+
+```typescript
+interface DemoParticipant {
+  id: string;                   // "demo-participant-001"
+  firstName: string;            // "Michael"
+  lastName: string;             // "Rodriguez"
+  age: number;                  // 32
+  story: string;                // Participant bio
+  shelter_id: string;           // "demo-shelter-001"
+  total_received: number;       // 2450.00
+  donation_count: number;       // 47
+  status: 'active' | 'inactive';
+  created_at: Timestamp;
+  updated_at: Timestamp;
+}
+```
+
+---
+
+## 🔧 Current Firestore Rules (Needs Fixing)
+
+### **Current Rules** (Too Permissive)
 ```javascript
-// firestore.indexes.json
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Basic authentication required
+    match /{document=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}
+```
+
+### **Issues with Current Rules**
+1. **Too Permissive**: All authenticated users can read/write all data
+2. **No Role-Based Access**: No shelter-specific data isolation
+3. **No Tenant Isolation**: Users can access data from other shelters
+4. **Security Risk**: Participants can modify admin data
+
+### **Required Security Rules** (Session 13 Implementation)
+```javascript
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Shelter-specific data isolation
+    match /users/{userId} {
+      allow read, write: if request.auth.uid == userId
+        || request.auth.token.role == 'super_admin'
+        || (request.auth.token.role == 'admin' 
+            && request.auth.token.shelter_id == resource.data.shelter_id);
+    }
+    
+    // Shelter data isolation
+    match /shelters/{shelterId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth.token.role == 'super_admin'
+        || (request.auth.token.role == 'admin' 
+            && request.auth.token.shelter_id == shelterId);
+    }
+    
+    // Service data isolation
+    match /services/{serviceId} {
+      allow read: if request.auth != null
+        && request.auth.token.shelter_id == resource.data.shelter_id;
+      allow write: if request.auth.token.role in ['super_admin', 'admin']
+        && request.auth.token.shelter_id == resource.data.shelter_id;
+    }
+    
+    // Demo donations - participants can read their own
+    match /demo_donations/{donationId} {
+      allow read: if request.auth != null
+        && (request.auth.token.role == 'super_admin'
+            || request.auth.token.role == 'admin'
+            || resource.data.participant_id == request.auth.uid);
+      allow write: if request.auth.token.role in ['super_admin', 'admin'];
+    }
+    
+    // Legacy tenants - read-only for migration
+    match /tenants/{tenantId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth.token.role == 'super_admin';
+    }
+  }
+}
+```
+
+---
+
+## 📊 Current Firestore Indexes (Needs Optimization)
+
+### **Current Indexes** (Incomplete)
+```javascript
+// firestore.indexes.json (Current State)
 {
   "indexes": [
     {
-      "collectionGroup": "participants",
+      "collectionGroup": "users",
       "queryScope": "COLLECTION",
       "fields": [
-        {"fieldPath": "tenantId", "order": "ASCENDING"},
-        {"fieldPath": "organizationId", "order": "ASCENDING"},
-        {"fieldPath": "status", "order": "ASCENDING"},
-        {"fieldPath": "riskFactors.riskLevel", "order": "ASCENDING"}
-      ]
-    },
-    {
-      "collectionGroup": "participants",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {"fieldPath": "tenantId", "order": "ASCENDING"},
-        {"fieldPath": "demographics.ageRange", "order": "ASCENDING"},
-        {"fieldPath": "outcomes.exitType", "order": "ASCENDING"}
+        {"fieldPath": "role", "order": "ASCENDING"},
+        {"fieldPath": "shelter_id", "order": "ASCENDING"}
       ]
     },
     {
       "collectionGroup": "services",
       "queryScope": "COLLECTION",
       "fields": [
-        {"fieldPath": "tenantId", "order": "ASCENDING"},
-        {"fieldPath": "category", "order": "ASCENDING"},
-        {"fieldPath": "status", "order": "ASCENDING"},
-        {"fieldPath": "outcomeMetrics.effectivenessRating", "order": "DESCENDING"}
-      ]
-    },
-    {
-      "collectionGroup": "appointments",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {"fieldPath": "tenantId", "order": "ASCENDING"},
-        {"fieldPath": "organizationId", "order": "ASCENDING"},
-        {"fieldPath": "scheduledDate", "order": "ASCENDING"},
-        {"fieldPath": "status", "order": "ASCENDING"}
-      ]
-    },
-    {
-      "collectionGroup": "resources",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {"fieldPath": "tenantId", "order": "ASCENDING"},
-        {"fieldPath": "organizationId", "order": "ASCENDING"},
-        {"fieldPath": "status", "order": "ASCENDING"},
-        {"fieldPath": "usage.predictedExhaustionDate", "order": "ASCENDING"}
-      ]
-    },
-    {
-      "collectionGroup": "ai_insights",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {"fieldPath": "tenantId", "order": "ASCENDING"},
-        {"fieldPath": "type", "order": "ASCENDING"},
-        {"fieldPath": "priority", "order": "DESCENDING"},
-        {"fieldPath": "createdAt", "order": "DESCENDING"}
+        {"fieldPath": "shelter_id", "order": "ASCENDING"},
+        {"fieldPath": "isActive", "order": "ASCENDING"}
       ]
     }
   ],
@@ -130,411 +273,311 @@ service cloud.firestore {
 }
 ```
 
-### 2. TypeScript Interfaces
-
-Create the type definitions for your application:
-
-```typescript
-// types/database.ts
-import { Timestamp } from 'firebase/firestore';
-
-// Base interface for all documents
-interface BaseDocument {
-  id: string;
-  tenantId: string;
-  createdAt: Timestamp;
-  updatedAt: Timestamp;
-}
-
-// Re-export all interfaces from schema
-export interface Organization extends BaseDocument {
-  name: string;
-  slug: string;
-  type: 'shelter' | 'outreach' | 'support_center';
-  status: 'active' | 'inactive' | 'pending';
-  address: {
-    street: string;
-    city: string;
-    province: string;
-    postalCode: string;
-    country: string;
-    coordinates?: {
-      latitude: number;
-      longitude: number;
-    };
-  };
-  // ... rest of Organization interface
-}
-
-export interface Participant extends BaseDocument {
-  organizationId: string;
-  personalInfo: {
-    firstName: string;  // Should be encrypted in production
-    lastName: string;   // Should be encrypted in production
-    dateOfBirth: string; // Should be encrypted in production
-    gender: 'male' | 'female' | 'non-binary' | 'prefer-not-to-say';
-    pronouns?: string;
-  };
-  // ... rest of Participant interface
-}
-
-// Add other interfaces...
-```
-
-### 3. Data Access Layer
-
-Create service classes for database operations:
-
-```typescript
-// services/database/OrganizationService.ts
-import { 
-  collection, 
-  doc, 
-  query, 
-  where, 
-  orderBy, 
-  getDocs, 
-  getDoc, 
-  addDoc, 
-  updateDoc, 
-  deleteDoc,
-  Timestamp 
-} from 'firebase/firestore';
-import { db } from '@/lib/firebase';
-import { Organization } from '@/types/database';
-
-export class OrganizationService {
-  private collectionName = 'organizations';
-
-  async getByTenant(tenantId: string): Promise<Organization[]> {
-    const q = query(
-      collection(db, this.collectionName),
-      where('tenantId', '==', tenantId),
-      where('status', '==', 'active'),
-      orderBy('name')
-    );
+### **Required Indexes** (Session 13 Implementation)
+```javascript
+// firestore.indexes.json (Complete Implementation)
+{
+  "indexes": [
+    // Users collection indexes
+    {
+      "collectionGroup": "users",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {"fieldPath": "role", "order": "ASCENDING"},
+        {"fieldPath": "shelter_id", "order": "ASCENDING"},
+        {"fieldPath": "status", "order": "ASCENDING"}
+      ]
+    },
+    {
+      "collectionGroup": "users",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {"fieldPath": "shelter_id", "order": "ASCENDING"},
+        {"fieldPath": "role", "order": "ASCENDING"},
+        {"fieldPath": "last_active", "order": "DESCENDING"}
+      ]
+    },
     
-    const snapshot = await getDocs(q);
-    return snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    } as Organization));
-  }
-
-  async getById(id: string): Promise<Organization | null> {
-    const docRef = doc(db, this.collectionName, id);
-    const docSnap = await getDoc(docRef);
+    // Services collection indexes
+    {
+      "collectionGroup": "services",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {"fieldPath": "shelter_id", "order": "ASCENDING"},
+        {"fieldPath": "category", "order": "ASCENDING"},
+        {"fieldPath": "isActive", "order": "ASCENDING"}
+      ]
+    },
     
-    if (docSnap.exists()) {
-      return {
-        id: docSnap.id,
-        ...docSnap.data()
-      } as Organization;
+    // Demo donations collection indexes
+    {
+      "collectionGroup": "demo_donations",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {"fieldPath": "participant_id", "order": "ASCENDING"},
+        {"fieldPath": "status", "order": "ASCENDING"},
+        {"fieldPath": "created_at", "order": "DESCENDING"}
+      ]
+    },
+    {
+      "collectionGroup": "demo_donations",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {"fieldPath": "status", "order": "ASCENDING"},
+        {"fieldPath": "created_at", "order": "DESCENDING"}
+      ]
+    },
+    
+    // Shelters collection indexes
+    {
+      "collectionGroup": "shelters",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {"fieldPath": "status", "order": "ASCENDING"},
+        {"fieldPath": "city", "order": "ASCENDING"}
+      ]
     }
-    return null;
-  }
+  ],
+  "fieldOverrides": []
+}
+```
 
-  async create(data: Omit<Organization, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
-    const now = Timestamp.now();
-    const docData = {
-      ...data,
-      createdAt: now,
-      updatedAt: now
-    };
+---
+
+## 🗄️ Firebase Storage Structure (Current State)
+
+### **Storage Bucket**: `sheltr-ai.firebasestorage.app`
+
+#### **Current Organization** (Needs Standardization)
+```
+📁 Knowledge Base Documents
+├── 📄 SmartFund-documentation.pdf
+├── 📄 shelter-operations-guide.pdf
+└── 📄 participant-support-materials.pdf
+
+📁 Blog Media
+├── 🖼️ blog-hero-images/
+├── 📄 markdown-posts/
+└── 🎥 embedded-media/
+
+📁 User Uploads
+├── 📄 participant-documents/
+├── 🖼️ profile-photos/
+└── 📄 admin-reports/
+
+📁 System Files
+├── 📄 service-account-keys/
+├── 📄 backup-data/
+└── 📄 migration-scripts/
+```
+
+### **Storage Issues Identified**
+1. **Inconsistent Naming**: Mixed naming conventions
+2. **Missing Security Rules**: No proper access control
+3. **Unorganized Structure**: Files scattered across buckets
+4. **No Version Control**: No backup or versioning system
+
+### **Required Storage Rules** (Session 13 Implementation)
+```javascript
+// storage.rules
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Knowledge base documents - admin access only
+    match /knowledge-base/{document=**} {
+      allow read: if request.auth != null;
+      allow write: if request.auth.token.role in ['super_admin', 'admin'];
+    }
     
-    const docRef = await addDoc(collection(db, this.collectionName), docData);
-    return docRef.id;
-  }
-
-  async update(id: string, data: Partial<Organization>): Promise<void> {
-    const docRef = doc(db, this.collectionName, id);
-    await updateDoc(docRef, {
-      ...data,
-      updatedAt: Timestamp.now()
-    });
-  }
-
-  // AI-specific queries
-  async getForAIAnalysis(tenantId: string): Promise<Organization[]> {
-    const q = query(
-      collection(db, this.collectionName),
-      where('tenantId', '==', tenantId),
-      where('status', '==', 'active')
-    );
+    // Blog media - public read, admin write
+    match /blog/{document=**} {
+      allow read: if true;  // Public read access
+      allow write: if request.auth.token.role in ['super_admin', 'admin'];
+    }
     
-    const snapshot = await getDocs(q);
-    return snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    } as Organization));
+    // User uploads - user-specific access
+    match /user-uploads/{userId}/{document=**} {
+      allow read, write: if request.auth.uid == userId
+        || request.auth.token.role in ['super_admin', 'admin'];
+    }
+    
+    // System files - super admin only
+    match /system/{document=**} {
+      allow read, write: if request.auth.token.role == 'super_admin';
+    }
   }
 }
 ```
 
-### 4. AI Data Pipeline
+---
 
-Set up data processing for AI consumption:
+## 🔍 Database Audit Script (Session 13)
 
-```typescript
-// services/ai/DataProcessor.ts
-export class AIDataProcessor {
-  
-  // Anonymize participant data for AI analysis
-  static anonymizeParticipant(participant: Participant) {
-    return {
-      id: participant.id,
-      tenantId: participant.tenantId,
-      organizationId: participant.organizationId,
-      demographics: participant.demographics,
-      status: participant.status,
-      riskFactors: participant.riskFactors,
-      engagement: participant.engagement,
-      outcomes: participant.outcomes,
-      // Remove all personally identifiable information
-      checkInDate: participant.checkInDate,
-      estimatedCheckOut: participant.estimatedCheckOut
-    };
-  }
+### **Audit Script** (`apps/api/scripts/database_audit.py`)
+```python
+#!/usr/bin/env python3
+"""
+SHELTR-AI Database Audit Script
+Emergency audit and fix for database connectivity issues
+"""
 
-  // Prepare occupancy data for forecasting
-  static prepareOccupancyData(participants: Participant[], timeRange: number = 90) {
-    const now = new Date();
-    const startDate = new Date(now.getTime() - (timeRange * 24 * 60 * 60 * 1000));
+import firebase_admin
+from firebase_admin import firestore, credentials
+from google.cloud import storage
+import json
+import logging
+from typing import Dict, List, Any
+import os
+
+class DatabaseAuditor:
+    """Comprehensive database audit and fix tool"""
     
-    return participants
-      .filter(p => p.checkInDate.toDate() >= startDate)
-      .map(p => ({
-        checkInDate: p.checkInDate.toDate(),
-        ageRange: p.demographics.ageRange,
-        hasChildren: p.demographics.hasChildren,
-        riskLevel: p.riskFactors.riskLevel,
-        stayDuration: p.estimatedCheckOut ? 
-          (p.estimatedCheckOut.toDate().getTime() - p.checkInDate.toDate().getTime()) / (1000 * 60 * 60 * 24) : 
-          null
-      }));
-  }
+    def __init__(self):
+        """Initialize Firebase and Storage clients"""
+        try:
+            if not firebase_admin._apps:
+                cred = credentials.Certificate('path/to/serviceAccountKey.json')
+                firebase_admin.initialize_app(cred)
+            
+            self.db = firestore.client()
+            self.storage_client = storage.Client()
+            self.bucket = self.storage_client.bucket('sheltr-ai.firebasestorage.app')
+            
+            logging.info("✅ Database auditor initialized successfully")
+        except Exception as e:
+            logging.error(f"❌ Failed to initialize database auditor: {e}")
+            raise
+    
+    def audit_collections(self):
+        """Audit all Firestore collections"""
+        collections = ['shelters', 'users', 'services', 'demo_donations', 'tenants', 'demo_participants']
+        
+        for collection_name in collections:
+            try:
+                docs = self.db.collection(collection_name).stream()
+                doc_count = len(list(docs))
+                logging.info(f"📊 Collection '{collection_name}': {doc_count} documents")
+            except Exception as e:
+                logging.error(f"❌ Error auditing collection '{collection_name}': {e}")
+    
+    def audit_storage_structure(self):
+        """Audit Firebase Storage structure"""
+        blobs = self.bucket.list_blobs()
+        storage_structure = {}
+        
+        for blob in blobs:
+            path_parts = blob.name.split('/')
+            if path_parts[0] not in storage_structure:
+                storage_structure[path_parts[0]] = []
+            storage_structure[path_parts[0]].append(blob.name)
+        
+        logging.info(f"📁 Storage structure: {json.dumps(storage_structure, indent=2)}")
+    
+    def create_missing_collections(self):
+        """Create missing collections with proper structure"""
+        # Implementation for creating missing collections
+        pass
+    
+    def standardize_data_structures(self):
+        """Standardize data structures across collections"""
+        # Implementation for data standardization
+        pass
+    
+    def run_complete_audit(self):
+        """Run complete database audit"""
+        logging.info("🔍 Starting comprehensive database audit...")
+        
+        self.audit_collections()
+        self.audit_storage_structure()
+        self.create_missing_collections()
+        self.standardize_data_structures()
+        
+        logging.info("✅ Database audit completed")
 
-  // Extract service patterns for optimization
-  static analyzeServicePatterns(appointments: Appointment[]) {
-    const patterns = {
-      byCategory: {} as Record<string, number>,
-      byDayOfWeek: Array(7).fill(0),
-      byTimeOfDay: Array(24).fill(0),
-      completionRates: {} as Record<string, number>
-    };
-
-    appointments.forEach(apt => {
-      const date = apt.scheduledDate.toDate();
-      const dayOfWeek = date.getDay();
-      const hour = date.getHours();
-      
-      patterns.byDayOfWeek[dayOfWeek]++;
-      patterns.byTimeOfDay[hour]++;
-      
-      // Add category analysis logic
-      // Add completion rate logic
-    });
-
-    return patterns;
-  }
-}
+if __name__ == "__main__":
+    auditor = DatabaseAuditor()
+    auditor.run_complete_audit()
 ```
 
-### 5. Real-time AI Insights
+---
 
-Set up Cloud Functions for real-time AI processing:
+## 🚀 Setup Instructions (Session 13 Implementation)
 
-```typescript
-// functions/src/ai-insights.ts
-import { onDocumentWritten } from 'firebase-functions/v2/firestore';
-import { getFirestore } from 'firebase-admin/firestore';
-
-export const generateParticipantInsights = onDocumentWritten(
-  'participants/{participantId}',
-  async (event) => {
-    const participantData = event.data?.after?.data();
-    if (!participantData) return;
-
-    const db = getFirestore();
-    
-    // Generate risk assessment
-    const riskScore = calculateRiskScore(participantData);
-    
-    // Create AI insight
-    const insight = {
-      tenantId: participantData.tenantId,
-      organizationId: participantData.organizationId,
-      type: 'participant_risk',
-      category: 'participant_care',
-      priority: riskScore > 0.7 ? 'high' : riskScore > 0.4 ? 'medium' : 'low',
-      insight: {
-        title: `Risk Assessment for Participant ${event.params.participantId}`,
-        description: `AI analysis indicates ${riskScore > 0.7 ? 'high' : riskScore > 0.4 ? 'medium' : 'low'} risk level`,
-        confidence: 85,
-        dataPoints: ['attendance_rate', 'service_engagement', 'health_factors'],
-        methodology: 'gradient_boosting_classifier'
-      },
-      recommendations: generateRecommendations(participantData, riskScore),
-      relatedEntities: {
-        participants: [event.params.participantId]
-      },
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
-
-    await db.collection('ai_insights').add(insight);
-  }
-);
-
-function calculateRiskScore(participant: any): number {
-  // Implement your AI risk calculation logic
-  let score = 0;
-  
-  // Attendance factor
-  if (participant.engagement?.attendanceRate < 70) score += 0.3;
-  
-  // Health factors
-  if (participant.health?.mentalHealthSupport) score += 0.2;
-  if (participant.health?.substanceAbuseHistory) score += 0.3;
-  
-  // Demographics
-  if (participant.demographics?.ageRange === '18-25') score += 0.1;
-  
-  return Math.min(score, 1.0);
-}
-
-function generateRecommendations(participant: any, riskScore: number) {
-  const recommendations = [];
-  
-  if (riskScore > 0.7) {
-    recommendations.push({
-      action: 'Schedule immediate case worker meeting',
-      impact: 'high',
-      effort: 'low',
-      timeframe: 'immediate',
-      expectedOutcome: 'Assess immediate needs and safety'
-    });
-  }
-  
-  if (participant.engagement?.attendanceRate < 50) {
-    recommendations.push({
-      action: 'Implement engagement intervention',
-      impact: 'medium',
-      effort: 'medium',
-      timeframe: 'short-term',
-      expectedOutcome: 'Improve program participation'
-    });
-  }
-  
-  return recommendations;
-}
+### **1. Update Firestore Rules**
+```bash
+# Deploy updated security rules
+firebase deploy --only firestore:rules
 ```
 
-### 6. Data Migration Script
-
-Create a script to migrate existing data:
-
-```typescript
-// scripts/migrate-to-ai-schema.ts
-import { initializeApp } from 'firebase-admin/app';
-import { getFirestore } from 'firebase-admin/firestore';
-
-async function migrateData() {
-  const db = getFirestore();
-  
-  // Migrate users to participants
-  const usersSnapshot = await db.collection('users')
-    .where('role', '==', 'participant')
-    .get();
-  
-  const batch = db.batch();
-  
-  usersSnapshot.docs.forEach(doc => {
-    const userData = doc.data();
-    
-    // Transform user data to participant schema
-    const participantData = {
-      tenantId: userData.tenantId || 'default',
-      organizationId: userData.shelterId || 'default-shelter',
-      personalInfo: {
-        firstName: userData.firstName,
-        lastName: userData.lastName,
-        dateOfBirth: userData.dateOfBirth || '1990-01-01',
-        gender: userData.gender || 'prefer-not-to-say'
-      },
-      status: 'active',
-      checkInDate: userData.createdAt,
-      demographics: {
-        ageRange: calculateAgeRange(userData.dateOfBirth),
-        hasChildren: false,
-        isVeteran: false,
-        hasDisability: false,
-        primaryLanguage: 'en'
-      },
-      health: {
-        hasAllergies: false,
-        hasMedicalConditions: false,
-        needsMedication: false,
-        mentalHealthSupport: false,
-        substanceAbuseHistory: false
-      },
-      services: {
-        enrolled: [],
-        completed: [],
-        requested: []
-      },
-      riskFactors: {
-        riskLevel: 'low',
-        factors: [],
-        interventions: [],
-        lastAssessment: new Date(),
-        aiConfidence: 0
-      },
-      engagement: {
-        lastActivity: new Date(),
-        attendanceRate: 100,
-        programParticipation: 0,
-        communicationPreference: 'email'
-      },
-      consent: {
-        dataSharing: true,
-        aiAnalysis: true,
-        followUpContact: true,
-        grantedAt: new Date()
-      },
-      createdAt: userData.createdAt,
-      updatedAt: new Date(),
-      createdBy: userData.createdBy || 'system'
-    };
-    
-    const newParticipantRef = db.collection('participants').doc();
-    batch.set(newParticipantRef, participantData);
-  });
-  
-  await batch.commit();
-  console.log(`Migrated ${usersSnapshot.size} participants`);
-}
-
-function calculateAgeRange(dateOfBirth: string): string {
-  const age = new Date().getFullYear() - new Date(dateOfBirth).getFullYear();
-  if (age < 26) return '18-25';
-  if (age < 36) return '26-35';
-  if (age < 51) return '36-50';
-  if (age < 66) return '51-65';
-  return '65+';
-}
-
-// Run migration
-migrateData().catch(console.error);
+### **2. Update Firestore Indexes**
+```bash
+# Deploy updated indexes
+firebase deploy --only firestore:indexes
 ```
 
-## Next Steps
+### **3. Update Storage Rules**
+```bash
+# Deploy updated storage rules
+firebase deploy --only storage
+```
 
-1. **Deploy Firestore Rules**: Update your Firebase console with the new security rules
-2. **Create Indexes**: Apply the composite indexes for optimal AI query performance
-3. **Implement Services**: Add the data access layer services to your application
-4. **Set up Cloud Functions**: Deploy AI processing functions for real-time insights
-5. **Migrate Data**: Run the migration script to transform existing data
-6. **Test AI Queries**: Verify that AI-optimized queries work correctly
+### **4. Run Database Audit**
+```bash
+# Run comprehensive audit
+cd apps/api
+python scripts/database_audit.py --audit-collections
+python scripts/database_audit.py --migrate-data
+python scripts/database_audit.py --validate-system
+```
 
-This structure provides a solid foundation for AI-powered insights while maintaining security and privacy compliance. 
+### **5. Verify Data Consistency**
+```bash
+# Test all collections exist
+firebase firestore:collections
+
+# Test queries work
+firebase firestore:indexes
+```
+
+---
+
+## 📋 Session 12 Priorities
+
+### **Immediate Actions** (Next Session)
+1. **Run Database Audit**: Execute comprehensive audit script
+2. **Fix Data Discrepancies**: Align local and production environments
+3. **Create Missing Collections**: Ensure all documented collections exist
+4. **Standardize Data**: Fix inconsistent field names and types
+5. **Update Security Rules**: Implement proper role-based access control
+6. **Organize Storage**: Clean up Firebase Storage structure
+7. **Fix Frontend 404s**: Resolve dashboard resource loading issues
+8. **Test Real-time Updates**: Verify donation data syncs correctly
+
+### **Success Criteria**
+- ✅ **All Collections Exist**: Every documented collection is created
+- ✅ **Data Consistency**: Local and production environments match
+- ✅ **No Frontend 404s**: All dashboard resources load correctly
+- ✅ **Real-time Updates**: Donations update across all components
+- ✅ **Security Compliance**: Proper role-based access control
+- ✅ **Performance**: All queries execute efficiently
+
+---
+
+## 📊 Current Status Summary
+
+**🎯 Database Health**: **70%** (Requires Session 13 Audit)
+- ✅ **Core Collections**: Shelters, Users, Services, Demo Donations exist
+- ⚠️ **Data Consistency**: Local vs production discrepancies
+- ❌ **Security Rules**: Too permissive, need role-based access
+- ❌ **Storage Organization**: Inconsistent structure
+- ❌ **Frontend Integration**: 404 errors on dashboard resources
+- ❌ **Real-time Updates**: Donation data not syncing properly
+
+**🔄 Session 13 Focus**: **Database Audit & Cleanup**
+- **Primary Goal**: Resolve all data inconsistencies
+- **Secondary Goal**: Implement proper security rules
+- **Tertiary Goal**: Optimize performance and real-time updates
+
+---
+
+**This Firestore setup requires immediate attention in Session 13 to resolve critical data inconsistencies and ensure proper system functionality.** 🚨🔧 

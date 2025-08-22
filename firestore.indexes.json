@@ -1,26 +1,59 @@
 {
-  // Example:
-  //
-  // "indexes": [
-  //   {
-  //     "collectionGroup": "widgets",
-  //     "queryScope": "COLLECTION",
-  //     "fields": [
-  //       { "fieldPath": "foo", "arrayConfig": "CONTAINS" },
-  //       { "fieldPath": "bar", "mode": "DESCENDING" }
-  //     ]
-  //   },
-  //
-  //  "fieldOverrides": [
-  //    {
-  //      "collectionGroup": "widgets",
-  //      "fieldPath": "baz",
-  //      "indexes": [
-  //        { "order": "ASCENDING", "queryScope": "COLLECTION" }
-  //      ]
-  //    },
-  //   ]
-  // ]
-  "indexes": [],
+  "indexes": [
+    {
+      "collectionGroup": "users",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {"fieldPath": "role", "order": "ASCENDING"},
+        {"fieldPath": "shelter_id", "order": "ASCENDING"},
+        {"fieldPath": "status", "order": "ASCENDING"}
+      ]
+    },
+    {
+      "collectionGroup": "shelters",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {"fieldPath": "status", "order": "ASCENDING"},
+        {"fieldPath": "city", "order": "ASCENDING"},
+        {"fieldPath": "verification_status", "order": "ASCENDING"}
+      ]
+    },
+    {
+      "collectionGroup": "services",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {"fieldPath": "shelter_id", "order": "ASCENDING"},
+        {"fieldPath": "category", "order": "ASCENDING"},
+        {"fieldPath": "isActive", "order": "ASCENDING"}
+      ]
+    },
+    {
+      "collectionGroup": "appointments",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {"fieldPath": "participant_id", "order": "ASCENDING"},
+        {"fieldPath": "status", "order": "ASCENDING"},
+        {"fieldPath": "date", "order": "DESCENDING"}
+      ]
+    },
+    {
+      "collectionGroup": "donations",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {"fieldPath": "participant_id", "order": "ASCENDING"},
+        {"fieldPath": "status", "order": "ASCENDING"},
+        {"fieldPath": "created_at", "order": "DESCENDING"}
+      ]
+    },
+    {
+      "collectionGroup": "knowledge_documents",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {"fieldPath": "access_level", "order": "ASCENDING"},
+        {"fieldPath": "categories", "arrayConfig": "CONTAINS"},
+        {"fieldPath": "uploaded_at", "order": "DESCENDING"}
+      ]
+    }
+  ],
   "fieldOverrides": []
 }

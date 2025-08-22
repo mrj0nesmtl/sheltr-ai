@@ -77,7 +77,7 @@ class AnalyticsService {
       // For local development, always use test endpoints to bypass Firebase auth issues
       const isLocal = this.baseUrl.includes('localhost');
       const finalEndpoint = isLocal ? 
-        endpoint.replace('/analytics/platform', '/analytics/test-platform') : 
+        endpoint.replace('/api/v1/analytics/platform', '/api/v1/analytics/test-platform') : 
         endpoint;
       
       const headers: Record<string, string> = {
@@ -91,7 +91,7 @@ class AnalyticsService {
           headers['Authorization'] = `Bearer ${token}`;
         } catch (authError) {
           console.warn('Auth token unavailable, using test endpoint');
-          const testEndpoint = endpoint.replace('/analytics/platform', '/analytics/test-platform');
+          const testEndpoint = endpoint.replace('/api/v1/analytics/platform', '/api/v1/analytics/test-platform');
           const response = await fetch(`${this.baseUrl}${testEndpoint}`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
@@ -121,7 +121,7 @@ class AnalyticsService {
    */
   async getPlatformAnalytics(): Promise<PlatformMetrics> {
     try {
-      const response = await this.makeRequest('/analytics/platform');
+      const response = await this.makeRequest('/api/v1/analytics/platform');
       return response.data;
     } catch (error) {
       console.error('Error fetching platform analytics:', error);

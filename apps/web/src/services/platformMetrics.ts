@@ -93,37 +93,55 @@ export interface ShelterMetrics {
 
 /**
  * Get platform-wide metrics for Super Admin dashboard
- * Uses the new clean database structure
+ * Uses the new clean database structure from Session 12
  */
 export const getPlatformMetrics = async (): Promise<PlatformMetrics> => {
   try {
-    console.log('📊 Fetching real platform metrics...');
+    console.log('📊 Fetching real platform metrics from Session 12 collections...');
     
-    // Get shelters count from migrated path (same as Shelter Network dashboard)
-    const migratedSheltersRef = collection(db, 'tenants/Vc48fjy0cajJrstbLQRr/platform/shelters/data');
-    const sheltersSnapshot = await getDocs(migratedSheltersRef);
+    // Get shelters count from the new proper shelters collection
+    // Filter for active/verified organizations only as per user requirements
+    const sheltersQuery = query(
+      collection(db, 'shelters'),
+      where('status', 'in', ['active', 'verified'])
+    );
+    const sheltersSnapshot = await getDocs(sheltersQuery);
     const totalOrganizations = sheltersSnapshot.size;
+    console.log(`🏠 Found ${totalOrganizations} active/verified organizations in database`);
     
-    // Get users count (was hardcoded as 1284)
+    // Get all users count
     const usersSnapshot = await getDocs(collection(db, 'users'));
     const totalUsers = usersSnapshot.size;
+    console.log(`👥 Found ${totalUsers} total users in database`);
     
-    // Get active participants count (was hardcoded as 892)
-    const participantsQuery = query(
+    // Get active participants count from the new participants collection + users with participant role
+    const participantsCollectionSnapshot = await getDocs(collection(db, 'participants'));
+    const userParticipantsQuery = query(
       collection(db, 'users'),
       where('role', '==', 'participant')
     );
-    const participantsSnapshot = await getDocs(participantsQuery);
-    const activeParticipants = participantsSnapshot.size;
+    const userParticipantsSnapshot = await getDocs(userParticipantsQuery);
+    const activeParticipants = participantsCollectionSnapshot.size + userParticipantsSnapshot.size;
+    console.log(`🧑‍🤝‍🧑 Found ${activeParticipants} total participants (${participantsCollectionSnapshot.size} in participants collection + ${userParticipantsSnapshot.size} user participants)`);
     
-    // Get real donations total from demo_donations collection
+    // Get real donations total from both demo_donations and new donations collection
     const demoDonationsSnapshot = await getDocs(collection(db, 'demo_donations'));
-    const totalDonations = demoDonationsSnapshot.docs.reduce((total, doc) => {
+    const donationsSnapshot = await getDocs(collection(db, 'donations'));
+    
+    const demoTotal = demoDonationsSnapshot.docs.reduce((total, doc) => {
       const donationData = doc.data();
       return total + (donationData?.amount?.total || 0);
     }, 0);
     
-    // Generate recent activity from real data
+    const realTotal = donationsSnapshot.docs.reduce((total, doc) => {
+      const donationData = doc.data();
+      return total + (donationData?.amount || 0);
+    }, 0);
+    
+    const totalDonations = demoTotal + realTotal;
+    console.log(`💰 Found total donations: $${totalDonations} (Demo: $${demoTotal} + Real: $${realTotal})`);
+    
+    // Generate recent activity from real shelter data
     const recentActivity = await generateRecentActivity(sheltersSnapshot.docs);
     
     const metrics: PlatformMetrics = {
@@ -136,7 +154,7 @@ export const getPlatformMetrics = async (): Promise<PlatformMetrics> => {
       recentActivity
     };
     
-    console.log('✅ Platform metrics loaded:', metrics);
+    console.log('✅ Platform metrics loaded from Session 12 collections:', metrics);
     return metrics;
     
   } catch (err) {

@@ -152,49 +152,60 @@ export function ParticipantProfileClient({ participantId }: ParticipantProfileCl
               demo: false
             };
           } else {
-            // Try to find by name-based URL (michael-rodriguez)
-            const [firstName, lastName] = participantId.split('-').map(name => name.charAt(0).toUpperCase() + name.slice(1));
-            if (firstName && lastName) {
-              const usersSnapshot = await getDocs(
-                query(collection(db, 'users'), 
-                  where('firstName', '==', firstName),
-                  where('lastName', '==', lastName),
-                  where('role', '==', 'participant')
-                )
-              );
-              
-              if (!usersSnapshot.empty) {
-                const userData = usersSnapshot.docs[0].data();
-                const userId = usersSnapshot.docs[0].id;
-                
-                // Fetch real donation data for this user
-                const donationData = await fetchParticipantDonations(userId);
-                
-                realParticipant = {
-                  id: userId,
-                  firstName: userData.firstName,
-                  lastName: userData.lastName,
-                  age: 32,
-                  story: "Dedicated community member working towards housing stability and career growth. With SHELTR's support, I'm building skills and connections to create a better future for myself and help others in my community.",
-                  shelter_name: userData.shelterName || "Old Brewery Mission",
-                  location: { city: "Montreal", state: "QC", zipcode: "H2X 1Y5" },
-                  goals: [
-                    { id: "housing-goal", title: "Secure Stable Housing", description: "Find permanent housing solution", progress: 68, status: "in_progress", target_date: "2024-10-01" },
-                    { id: "employment-goal", title: "Career Development", description: "Build skills and secure meaningful employment", progress: 55, status: "in_progress", target_date: "2024-09-15" },
-                    { id: "community-goal", title: "Community Engagement", description: "Give back and help others in similar situations", progress: 42, status: "in_progress", target_date: "2024-12-01" }
-                  ],
-                  skills: ["Communication", "Leadership", "Problem Solving", "Community Outreach"],
-                  interests: ["Community Service", "Personal Development", "Mentoring", "Social Impact"],
-                  total_received: donationData.total_received,
-                  donation_count: donationData.donation_count,
-                  services_completed: 0,
-                  progress: 55,
-                  qr_code: `SHELTR-${userData.firstName.toUpperCase()}-${Date.now()}`,
-                  featured: true,
-                  demo: false
-                };
-              }
-            }
+                    // Try to find by name-based URL (michael-rodriguez)
+        const [firstName, lastName] = participantId.split('-').map(name => name.charAt(0).toUpperCase() + name.slice(1));
+        if (firstName && lastName) {
+          // First try to find by exact name match
+          let usersSnapshot = await getDocs(
+            query(collection(db, 'users'), 
+              where('firstName', '==', firstName),
+              where('lastName', '==', lastName),
+              where('role', '==', 'participant')
+            )
+          );
+          
+          // If not found, try to find by email (for participant@example.com)
+          if (usersSnapshot.empty) {
+            usersSnapshot = await getDocs(
+              query(collection(db, 'users'), 
+                where('email', '==', 'participant@example.com'),
+                where('role', '==', 'participant')
+              )
+            );
+          }
+          
+          if (!usersSnapshot.empty) {
+            const userData = usersSnapshot.docs[0].data();
+            const userId = usersSnapshot.docs[0].id;
+            
+            // Fetch real donation data for this user
+            const donationData = await fetchParticipantDonations(userId);
+            
+            realParticipant = {
+              id: userId,
+              firstName: userData.firstName || firstName,
+              lastName: userData.lastName || lastName,
+              age: 32,
+              story: "Dedicated community member working towards housing stability and career growth. With SHELTR's support, I'm building skills and connections to create a better future for myself and help others in my community.",
+              shelter_name: userData.shelterName || "Old Brewery Mission",
+              location: { city: "Montreal", state: "QC", zipcode: "H2X 1Y5" },
+              goals: [
+                { id: "housing-goal", title: "Secure Stable Housing", description: "Find permanent housing solution", progress: 68, status: "in_progress", target_date: "2024-10-01" },
+                { id: "employment-goal", title: "Career Development", description: "Build skills and secure meaningful employment", progress: 55, status: "in_progress", target_date: "2024-09-15" },
+                { id: "community-goal", title: "Community Engagement", description: "Give back and help others in similar situations", progress: 42, status: "in_progress", target_date: "2024-12-01" }
+              ],
+              skills: ["Communication", "Leadership", "Problem Solving", "Community Outreach"],
+              interests: ["Community Service", "Personal Development", "Mentoring", "Social Impact"],
+              total_received: donationData.total_received,
+              donation_count: donationData.donation_count,
+              services_completed: 0,
+              progress: 55,
+              qr_code: `SHELTR-${userData.firstName?.toUpperCase() || firstName.toUpperCase()}-${Date.now()}`,
+              featured: true,
+              demo: false
+            };
+          }
+        }
           }
           
           if (realParticipant) {

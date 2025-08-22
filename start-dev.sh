@@ -86,6 +86,7 @@ echo -e "${BLUE}🔥 Starting FastAPI Backend...${NC}"
     source .venv/bin/activate
     
     # Install dependencies if needed
+    echo -e "${BLUE}📦 Installing Python dependencies...${NC}"
     pip install -r requirements.txt > ../../logs/backend-install.log 2>&1
     pip install 'pydantic[email]' >> ../../logs/backend-install.log 2>&1
     
@@ -100,6 +101,7 @@ echo -e "${BLUE}⚛️  Starting Next.js Frontend...${NC}"
     cd apps/web
     
     # Install dependencies if needed
+    echo -e "${BLUE}📦 Installing Node.js dependencies...${NC}"
     npm install > ../../logs/frontend-install.log 2>&1
     
     echo -e "${GREEN}🌐 Starting Next.js server on http://localhost:3000${NC}"
@@ -133,6 +135,14 @@ if wait_for_service "http://localhost:8000/health" "Backend API"; then
     else
         echo -e "${YELLOW}⚠️  Knowledge Base: Service unavailable${NC}"
     fi
+    
+    # Test donation system
+    echo -e "${BLUE}💰 Testing Donation System...${NC}"
+    if curl -s "http://localhost:8000/api/v1/demo/donations" >/dev/null 2>&1; then
+        echo -e "${GREEN}✅ Donation System: Ready${NC}"
+    else
+        echo -e "${YELLOW}⚠️  Donation System: Service starting up...${NC}"
+    fi
 else
     echo -e "${RED}❌ Backend failed to start. Check logs/backend.log${NC}"
 fi
@@ -153,19 +163,25 @@ echo -e "${BLUE}📚 API Docs:${NC} http://localhost:8000/docs"
 echo -e "${BLUE}🏥 Health Check:${NC} http://localhost:8000/health"
 echo ""
 echo -e "${GREEN}🤖 AI Features Available:${NC}"
-echo "  • Intelligent Chatbot: http://localhost:8000/chatbot/health"
-echo "  • Knowledge Base: http://localhost:8000/knowledge/health"
+echo "  • Intelligent Chatbot: http://localhost:8000/api/v1/chatbot/health"
+echo "  • Knowledge Base: http://localhost:8000/api/v1/knowledge/status"
 echo "  • RAG Search: Retrieval-Augmented Generation Ready"
 echo "  • Role-Based Agents: Emergency, Support, Donor Relations"
+echo ""
+echo -e "${GREEN}💰 Donation System:${NC}"
+echo "  • Demo Donations: http://localhost:3000/donate?demo=true&participant=demo-participant-001"
+echo "  • Participant Profile: http://localhost:3000/participant/demo-participant-001"
+echo "  • Real-time Updates: Click 'Refresh' button on profile pages"
 echo ""
 echo -e "${YELLOW}📋 Useful Commands:${NC}"
 echo "  • View backend logs: tail -f logs/backend.log"
 echo "  • View frontend logs: tail -f logs/frontend.log"
-echo "  • Test AI chatbot: curl http://localhost:8000/chatbot/health"
-echo "  • Test knowledge base: curl http://localhost:8000/knowledge/health"
+echo "  • Test AI chatbot: curl http://localhost:8000/api/v1/chatbot/health"
+echo "  • Test knowledge base: curl http://localhost:8000/api/v1/knowledge/status"
+echo "  • Test donation system: curl http://localhost:8000/api/v1/demo/donations"
 echo "  • Stop services: ./stop-dev.sh"
 echo ""
-echo -e "${BLUE}🤖 Session 11.7 Complete: AI Chatbot + Knowledge Base Ready! (Aug 18, 2025)${NC}"
+echo -e "${BLUE}🤖 Session 12.1 Complete: Donation System + Real-time Updates Ready! (Aug 21, 2025)${NC}"
 
 # Keep the script running to show real-time status
 echo -e "${BLUE}👀 Monitoring services... (Press Ctrl+C to stop)${NC}"
@@ -210,6 +226,7 @@ while true; do
     frontend_status="🟢"
     ai_status="🟢"
     knowledge_status="🟢"
+    donation_status="🟢"
     
     if [ -f logs/backend.pid ] && ! kill -0 $(cat logs/backend.pid) 2>/dev/null; then
         echo -e "${RED}❌ Backend process died. Check logs/backend.log${NC}"
@@ -235,6 +252,11 @@ while true; do
             knowledge_status="🟡"
         fi
         
-        echo -e "${BLUE}📊 Service Status: Backend ${backend_status} | Frontend ${frontend_status} | AI ${ai_status} | Knowledge ${knowledge_status} | $(date '+%H:%M:%S')${NC}"
+        # Test donation system health
+        if ! curl -s "http://localhost:8000/api/v1/demo/donations" >/dev/null 2>&1; then
+            donation_status="🟡"
+        fi
+        
+        echo -e "${BLUE}📊 Service Status: Backend ${backend_status} | Frontend ${frontend_status} | AI ${ai_status} | Knowledge ${knowledge_status} | Donations ${donation_status} | $(date '+%H:%M:%S')${NC}"
     fi
 done 

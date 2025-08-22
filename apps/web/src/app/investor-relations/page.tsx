@@ -83,8 +83,8 @@ const investmentSlides = [
     id: 3,
     type: 'solution',
     title: 'SHELTR Solution',
-    subtitle: 'Revolutionary dual-token architecture',
-    description: '95% efficiency through blockchain transparency',
+    subtitle: 'Revolutionary dual-token architecture with AI integration',
+    description: '100% efficiency through blockchain transparency and AI-powered insights',
     icon: Shield,
     bgGradient: 'from-green-600 to-blue-600',
     content: {
@@ -92,13 +92,16 @@ const investmentSlides = [
         'QR-code enabled direct donations',
         'Blockchain verification of every transaction',
         'Dual-token architecture (SHELTR-S + SHELTR)',
-        'Smart contract automated distribution',
-        'AI-powered analytics and insights'
+        'Smart contract automated distribution (85/10/5)',
+        'AI-powered chatbot with knowledge base integration',
+        'Multi-tenant shelter management platform',
+        'Real-time analytics and impact tracking',
+        'Visa MCP traditional payment integration'
       ],
       comparison: {
         traditional: '60-70% efficiency',
-        sheltr: '95% efficiency',
-        improvement: '35% increase'
+        sheltr: '100% efficiency',
+        improvement: '40% increase'
       }
     }
   },
@@ -153,7 +156,7 @@ const investmentSlides = [
     id: 6,
     type: 'tokens',
     title: 'Dual-Token Economics',
-    subtitle: 'Revolutionary token architecture',
+    subtitle: 'Revolutionary token architecture with updated distribution',
     description: 'Stability for participants, growth for investors',
     icon: Coins,
     bgGradient: 'from-green-600 to-purple-600',
@@ -173,8 +176,8 @@ const investmentSlides = [
         use: 'Governance and community growth'
       },
       distribution: {
-        participants: '80%',
-        housing: '15%',
+        participants: '85%',
+        housing: '10%',
         operations: '5%'
       }
     }
@@ -264,7 +267,7 @@ const investmentSlides = [
         progress: 30
       },
       public: {
-        round: 'Public Launch (Q2 2025)',
+        round: 'Public Launch (Q4 2025)',
         price: '$0.10 per token',
         allocation: '30M tokens',
         marketCap: '$3M'
@@ -293,9 +296,9 @@ const investmentSlides = [
       ],
       milestones: [
         'Q1 2025: Core platform launch',
-        'Q2 2025: Public token sale',
-        'Q3 2025: Marketplace integration',
-        'Q4 2025: International expansion'
+        'Q3 2025: AI & Knowledge Base',
+        'Q4 2025: Token launch ($SHLTR)',
+        'Q1-Q2 2026: Market expansion'
       ]
     }
   },
@@ -323,8 +326,8 @@ const investmentSlides = [
       ],
       timeline: {
         ico: 'Q1 2025 (Current)',
-        public: 'Q2 2025',
-        exchange: 'Q3 2025'
+        public: 'Q4 2025',
+        exchange: 'Q1 2026'
       }
     }
   },
@@ -1601,26 +1604,28 @@ export default function InvestorRelationsPage() {
   const calendarService = new CalendarService();
 
   const tokenProjections = [
-    { year: 2025, users: 1000, transactions: 50000, tokenValue: 0.10, marketCap: 100000 },
-    { year: 2026, users: 5000, transactions: 250000, tokenValue: 0.25, marketCap: 625000 },
-    { year: 2027, users: 15000, transactions: 750000, tokenValue: 0.50, marketCap: 1875000 },
-    { year: 2028, users: 40000, transactions: 2000000, tokenValue: 0.85, marketCap: 8500000 },
-    { year: 2029, users: 100000, transactions: 5000000, tokenValue: 1.20, marketCap: 30000000 }
+    { year: 2025, users: 2500, transactions: 125000, tokenValue: 0.10, marketCap: 250000, phase: 'Beta Launch' },
+    { year: 2026, users: 10000, transactions: 500000, tokenValue: 0.25, marketCap: 2500000, phase: 'Market Expansion' },
+    { year: 2027, users: 25000, transactions: 1250000, tokenValue: 0.50, marketCap: 12500000, phase: 'Scale Phase' },
+    { year: 2028, users: 50000, transactions: 2500000, tokenValue: 0.85, marketCap: 42500000, phase: 'International' },
+    { year: 2029, users: 100000, transactions: 5000000, tokenValue: 1.20, marketCap: 120000000, phase: 'Market Leader' }
   ];
 
   const fundingAllocation = [
     { category: 'Platform Development', percentage: 40, amount: 60000, color: 'bg-blue-500' },
-    { category: 'Blockchain Infrastructure', percentage: 25, amount: 37500, color: 'bg-green-500' },
+    { category: 'AI & Knowledge Base', percentage: 20, amount: 30000, color: 'bg-yellow-500' },
+    { category: 'Blockchain Infrastructure', percentage: 15, amount: 22500, color: 'bg-green-500' },
     { category: 'Regulatory & Compliance', percentage: 15, amount: 22500, color: 'bg-purple-500' },
-    { category: 'Marketing & Partnerships', percentage: 10, amount: 15000, color: 'bg-orange-500' },
-    { category: 'Operations & Legal', percentage: 10, amount: 15000, color: 'bg-red-500' }
+    { category: 'Marketing & Partnerships', percentage: 10, amount: 15000, color: 'bg-orange-500' }
   ];
 
   const milestones = [
     { quarter: 'Q1 2025', title: 'Platform Beta Launch', status: 'completed' },
     { quarter: 'Q2 2025', title: 'Blockchain Integration', status: 'in-progress' },
-    { quarter: 'Q3 2025', title: 'Token Launch ($SHLTR)', status: 'planned' },
-    { quarter: 'Q4 2025', title: 'Multi-City Expansion', status: 'planned' }
+    { quarter: 'Q3 2025', title: 'AI & Knowledge Base', status: 'planned' },
+    { quarter: 'Q4 2025', title: 'Token Launch ($SHLTR)', status: 'planned' },
+    { quarter: 'Q1-Q2 2026', title: 'Market Expansion', status: 'planned' },
+    { quarter: 'Q3-Q4 2026', title: 'Multi-City Rollout', status: 'planned' }
   ];
 
   const handleScheduleMeeting = async (e: React.FormEvent) => {
@@ -1995,6 +2000,14 @@ export default function InvestorRelationsPage() {
                           <CheckCircle className="h-4 w-4 text-green-500" />
                           Data fragmentation across agencies
                         </li>
+                        <li className="flex items-center gap-2">
+                          <CheckCircle className="h-4 w-4 text-green-500" />
+                          Limited shelter revenue opportunities
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <CheckCircle className="h-4 w-4 text-green-500" />
+                          No AI-powered support systems
+                        </li>
                       </ul>
                     </div>
                   </CardContent>
@@ -2024,6 +2037,14 @@ export default function InvestorRelationsPage() {
                       <div className="p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg">
                         <h4 className="font-semibold text-amber-700 dark:text-amber-300">Dignity-First Design</h4>
                         <p className="text-sm text-amber-600 dark:text-amber-400">Privacy-preserving participant experience</p>
+                      </div>
+                      <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
+                        <h4 className="font-semibold text-yellow-700 dark:text-yellow-300">AI-Powered Support</h4>
+                        <p className="text-sm text-yellow-600 dark:text-yellow-400">24/7 chatbot with knowledge base integration</p>
+                      </div>
+                      <div className="p-3 bg-cyan-50 dark:bg-cyan-900/20 rounded-lg">
+                        <h4 className="font-semibold text-cyan-700 dark:text-cyan-300">Shelter Revenue Model</h4>
+                        <p className="text-sm text-cyan-600 dark:text-cyan-400">Direct revenue generation for partner shelters</p>
                       </div>
                     </div>
                   </CardContent>
@@ -2124,7 +2145,7 @@ export default function InvestorRelationsPage() {
                   <CardTitle>Development Roadmap & Milestones</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid md:grid-cols-4 gap-4">
+                  <div className="grid md:grid-cols-3 lg:grid-cols-6 gap-4">
                     {milestones.map((milestone, index) => (
                       <div key={index} className="relative">
                         <div className={`p-4 rounded-lg border-2 ${
@@ -2211,6 +2232,14 @@ export default function InvestorRelationsPage() {
                           <Globe className="h-5 w-5 text-orange-500" />
                           <span className="font-medium">QR Code Integration</span>
                         </div>
+                        <div className="flex items-center gap-2">
+                          <Zap className="h-5 w-5 text-yellow-500" />
+                          <span className="font-medium">AI Chatbot Service</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <FileText className="h-5 w-5 text-pink-500" />
+                          <span className="font-medium">Knowledge Base</span>
+                        </div>
                       </div>
                       <div className="space-y-3">
                         <div className="flex items-center gap-2">
@@ -2228,6 +2257,14 @@ export default function InvestorRelationsPage() {
                         <div className="flex items-center gap-2">
                           <LineChart className="h-5 w-5 text-teal-500" />
                           <span className="font-medium">Predictive Modeling</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Building className="h-5 w-5 text-cyan-500" />
+                          <span className="font-medium">Shelter Revenue Model</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Mail className="h-5 w-5 text-emerald-500" />
+                          <span className="font-medium">Visa MCP Integration</span>
                         </div>
                       </div>
                     </div>
@@ -2261,7 +2298,7 @@ export default function InvestorRelationsPage() {
                           <span className="text-white font-bold">3</span>
                         </div>
                         <h4 className="font-semibold">Fund Allocation</h4>
-                        <p className="text-xs text-muted-foreground">80% direct, 20% housing</p>
+                        <p className="text-xs text-muted-foreground">85% direct, 10% housing, 5% operations</p>
                       </div>
                       <div className="space-y-2">
                         <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center mx-auto">
@@ -2276,6 +2313,54 @@ export default function InvestorRelationsPage() {
                         </div>
                         <h4 className="font-semibold">Donor Feedback</h4>
                         <p className="text-xs text-muted-foreground">Transparent reporting</p>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Zap className="h-5 w-5 text-yellow-500" />
+                    AI & Knowledge Base Integration
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div className="space-y-4">
+                      <h4 className="font-semibold text-blue-600">AI Chatbot Service</h4>
+                      <div className="space-y-3">
+                        <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                          <h5 className="font-semibold text-blue-700 dark:text-blue-300">Multi-Agent System</h5>
+                          <p className="text-sm text-blue-600 dark:text-blue-400">5 specialized AI agents for different user needs</p>
+                        </div>
+                        <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                          <h5 className="font-semibold text-green-700 dark:text-green-300">Knowledge Base Integration</h5>
+                          <p className="text-sm text-green-600 dark:text-green-400">RAG-powered responses with real-time document access</p>
+                        </div>
+                        <div className="p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+                          <h5 className="font-semibold text-purple-700 dark:text-purple-300">24/7 Support</h5>
+                          <p className="text-sm text-purple-600 dark:text-purple-400">Always-available assistance for participants and donors</p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-4">
+                      <h4 className="font-semibold text-green-600">Shelter Revenue Model</h4>
+                      <div className="space-y-3">
+                        <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                          <h5 className="font-semibold text-green-700 dark:text-green-300">Participant Onboarding</h5>
+                          <p className="text-sm text-green-600 dark:text-green-400">Shelters earn revenue by registering participants</p>
+                        </div>
+                        <div className="p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg">
+                          <h5 className="font-semibold text-amber-700 dark:text-amber-300">5% Operations Support</h5>
+                          <p className="text-sm text-amber-600 dark:text-amber-400">Direct funding from participant donations</p>
+                        </div>
+                        <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                          <h5 className="font-semibold text-blue-700 dark:text-blue-300">Platform Services</h5>
+                          <p className="text-sm text-blue-600 dark:text-blue-400">Management tools and analytics for shelter operations</p>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -2313,20 +2398,20 @@ export default function InvestorRelationsPage() {
                           <span className="font-mono">50,000,000 $SHLTR</span>
                         </div>
                         <div className="flex justify-between items-center">
-                          <span>Team & Advisors (12%)</span>
-                          <span className="font-mono">12,000,000 $SHLTR</span>
+                          <span>Team & Advisors (15%)</span>
+                          <span className="font-mono">15,000,000 $SHLTR</span>
                         </div>
                         <div className="flex justify-between items-center">
-                          <span>SHELTR Operations (13%)</span>
-                          <span className="font-mono">13,000,000 $SHLTR</span>
+                          <span>SHELTR Operations (15%)</span>
+                          <span className="font-mono">15,000,000 $SHLTR</span>
                         </div>
                         <div className="flex justify-between items-center">
                           <span>Participant Onboarding Rewards (10%)</span>
                           <span className="font-mono">10,000,000 $SHLTR</span>
                         </div>
                         <div className="flex justify-between items-center">
-                          <span>Strategic Partnerships (10%)</span>
-                          <span className="font-mono">10,000,000 $SHLTR</span>
+                          <span>Strategic Partnerships (5%)</span>
+                          <span className="font-mono">5,000,000 $SHLTR</span>
                         </div>
                         <div className="flex justify-between items-center">
                           <span>Reserve Fund (5%)</span>
@@ -2369,6 +2454,36 @@ export default function InvestorRelationsPage() {
                         <li>• Staking locks reduce circulating supply</li>
                       </ul>
                     </div>
+                    
+                    {/* ROI Visualization */}
+                    <div className="mt-6 p-4 bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 rounded-lg">
+                      <h4 className="font-semibold mb-4 text-center">Investment ROI Timeline</h4>
+                      <div className="grid grid-cols-5 gap-2">
+                        {[
+                          { year: '2025', roi: '1x', price: '$0.05', label: 'Pre-Seed' },
+                          { year: '2026', roi: '5x', price: '$0.25', label: 'Token Launch' },
+                          { year: '2027', roi: '10x', price: '$0.50', label: 'Scale' },
+                          { year: '2028', roi: '17x', price: '$0.85', label: 'Expand' },
+                          { year: '2029', roi: '30x', price: '$1.20', label: 'Leader' }
+                        ].map((item, index) => (
+                          <div key={item.year} className="text-center">
+                            <div className="relative">
+                              <div 
+                                className="bg-gradient-to-t from-green-500 to-blue-500 rounded-t-lg mx-auto transition-all duration-500"
+                                style={{ 
+                                  height: `${Math.max(20, (parseInt(item.roi) / 30) * 80)}px`,
+                                  width: '70%'
+                                }}
+                              ></div>
+                              <div className="text-xs font-bold mt-1 text-green-600">{item.roi}</div>
+                              <div className="text-xs text-muted-foreground">{item.price}</div>
+                              <div className="text-xs font-medium">{item.year}</div>
+                              <div className="text-xs text-muted-foreground">{item.label}</div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </CardContent>
                 </Card>
               </div>
@@ -2377,23 +2492,28 @@ export default function InvestorRelationsPage() {
                 <CardHeader>
                   <CardTitle>Token Release Schedule</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="grid md:grid-cols-5 gap-4">
-                      {['Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5'].map((year, index) => (
-                        <div key={year} className="text-center">
-                          <div className="h-32 bg-gradient-to-t from-blue-500 to-blue-300 rounded-lg mb-2 flex items-end justify-center pb-2">
-                            <span className="text-white font-bold">{20 + index * 5}%</span>
+                                  <CardContent>
+                    <div className="space-y-4">
+                      <div className="grid md:grid-cols-3 gap-4">
+                        {[
+                          { year: 'Year 1', percentage: 40, description: 'Initial Release' },
+                          { year: 'Year 2', percentage: 35, description: 'Growth Phase' },
+                          { year: 'Year 3', percentage: 25, description: 'Final Unlock' }
+                        ].map((item, index) => (
+                          <div key={item.year} className="text-center">
+                            <div className="h-32 bg-gradient-to-t from-blue-500 to-blue-300 rounded-lg mb-2 flex items-end justify-center pb-2">
+                              <span className="text-white font-bold">{item.percentage}%</span>
+                            </div>
+                            <span className="text-sm font-medium">{item.year}</span>
+                            <div className="text-xs text-muted-foreground">{item.description}</div>
                           </div>
-                          <span className="text-sm font-medium">{year}</span>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
+                      <p className="text-sm text-muted-foreground text-center">
+                        Three-year staggered release schedule ensures long-term value alignment and prevents market dumping
+                      </p>
                     </div>
-                    <p className="text-sm text-muted-foreground text-center">
-                      Progressive unlock schedule ensures long-term value alignment and prevents market dumping
-                    </p>
-                  </div>
-                </CardContent>
+                  </CardContent>
               </Card>
             </TabsContent>
 
@@ -2407,7 +2527,7 @@ export default function InvestorRelationsPage() {
                   <CardContent>
                     <div className="space-y-4">
                       {tokenProjections.map((projection, index) => (
-                        <div key={projection.year} className="grid grid-cols-4 gap-2 p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
+                        <div key={projection.year} className="grid grid-cols-5 gap-2 p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
                           <div className="text-center">
                             <div className="font-bold">{projection.year}</div>
                             <div className="text-xs text-muted-foreground">Year</div>
@@ -2424,8 +2544,34 @@ export default function InvestorRelationsPage() {
                             <div className="font-bold text-purple-600">${(projection.marketCap / 1000000).toFixed(1)}M</div>
                             <div className="text-xs text-muted-foreground">Market Cap</div>
                           </div>
+                          <div className="text-center">
+                            <div className="text-xs font-medium text-amber-600">{projection.phase}</div>
+                            <div className="text-xs text-muted-foreground">Phase</div>
+                          </div>
                         </div>
                       ))}
+                    </div>
+                    
+                    {/* Visual Growth Chart */}
+                    <div className="mt-6 p-4 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg">
+                      <h4 className="font-semibold mb-4 text-center">5-Year Growth Trajectory</h4>
+                      <div className="grid grid-cols-5 gap-2">
+                        {tokenProjections.map((projection, index) => (
+                          <div key={projection.year} className="text-center">
+                            <div className="relative">
+                              <div 
+                                className="bg-gradient-to-t from-blue-500 to-purple-500 rounded-t-lg mx-auto transition-all duration-500"
+                                style={{ 
+                                  height: `${Math.max(20, (projection.marketCap / 120000000) * 120)}px`,
+                                  width: '60%'
+                                }}
+                              ></div>
+                              <div className="text-xs font-bold mt-1">${(projection.marketCap / 1000000).toFixed(0)}M</div>
+                              <div className="text-xs text-muted-foreground">{projection.year}</div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
@@ -2549,47 +2695,59 @@ export default function InvestorRelationsPage() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-6">
-                    <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                      <h4 className="font-bold text-blue-700 dark:text-blue-300 mb-2">Dual-Token Investment Structure</h4>
-                      <div className="space-y-3 text-sm">
-                        <div className="border-b pb-2">
-                          <h5 className="font-semibold">SHELTR (Growth Token)</h5>
-                          <div className="flex justify-between">
-                            <span>Pre-Seed Price:</span>
-                            <span className="font-mono font-bold">$0.05/token</span>
+                                          <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                        <h4 className="font-bold text-blue-700 dark:text-blue-300 mb-2">Dual-Token Investment Structure</h4>
+                        <div className="space-y-3 text-sm">
+                          <div className="border-b pb-2">
+                            <h5 className="font-semibold">SHELTR (Growth Token)</h5>
+                            <div className="flex justify-between">
+                              <span>Pre-Seed Price:</span>
+                              <span className="font-mono font-bold">$0.05/token</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span>Public Launch Price:</span>
+                              <span className="font-mono">$0.10/token</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span>5-Year Target:</span>
+                              <span className="font-mono text-green-600">$1.20/token</span>
+                            </div>
                           </div>
-                          <div className="flex justify-between">
-                            <span>Public Launch Price:</span>
-                            <span className="font-mono">$0.10/token</span>
+                          <div className="border-b pb-2">
+                            <h5 className="font-semibold">SHELTR-S (Stable Token)</h5>
+                            <div className="flex justify-between">
+                              <span>Always Pegged:</span>
+                              <span className="font-mono">$1.00 USD</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span>Participant Welcome:</span>
+                              <span className="font-mono">100 tokens/signup</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span>USDC Backing:</span>
+                              <span className="font-mono text-green-600">100%</span>
+                            </div>
                           </div>
-                        </div>
-                        <div className="border-b pb-2">
-                          <h5 className="font-semibold">SHELTR-S (Stable Token)</h5>
-                          <div className="flex justify-between">
-                            <span>Always Pegged:</span>
-                            <span className="font-mono">$1.00 USD</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span>Participant Welcome:</span>
-                            <span className="font-mono">100 tokens/signup</span>
-                          </div>
-                        </div>
-                        <div>
-                          <div className="flex justify-between">
-                            <span>Minimum Investment:</span>
-                            <span className="font-mono">$5,000</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span>Maximum Investment:</span>
-                            <span className="font-mono">$37,500</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span>Total Pre-Seed:</span>
-                            <span className="font-mono font-bold">$150,000</span>
+                          <div>
+                            <div className="flex justify-between">
+                              <span>Minimum Investment:</span>
+                              <span className="font-mono">$5,000</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span>Maximum Investment:</span>
+                              <span className="font-mono">$37,500</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span>Total Pre-Seed:</span>
+                              <span className="font-mono font-bold">$150,000</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span>ROI Potential:</span>
+                              <span className="font-mono text-green-600 font-bold">30x (5 years)</span>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
 
                     <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
                       <h4 className="font-bold text-green-700 dark:text-green-300 mb-2">Investor Benefits</h4>

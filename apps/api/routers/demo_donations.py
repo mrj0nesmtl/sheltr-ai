@@ -290,6 +290,55 @@ async def demo_donation_webhook(
         logger.error(f"Webhook processing failed: {e}")
         return {"notificationResponse": "[failed]"}
 
+@router.post("/simulate-success/{donation_id}")
+async def simulate_donation_success(donation_id: str):
+    """
+    Simulate successful donation for demo purposes
+    """
+    try:
+        # Get the donation record
+        donation_doc = firebase_service.db.collection('demo_donations').document(donation_id).get()
+        
+        if not donation_doc.exists:
+            raise HTTPException(status_code=404, detail="Donation not found")
+        
+        donation_data = donation_doc.to_dict()
+        participant_id = donation_data.get('participant_id')
+        amount = donation_data.get('amount', {}).get('total', 0)
+        
+        # Create mock webhook notification
+        mock_notification = {
+            "merchantReference": donation_data.get('payment_data', {}).get('adyen_reference', f"DEMO-{donation_id}"),
+            "eventCode": "AUTHORISATION",
+            "success": "true",
+            "amount": {
+                "value": int(amount * 100),  # Convert to minor units
+                "currency": "USD"
+            }
+        }
+        
+        # Process the webhook notification
+        await process_demo_webhook_notification(mock_notification)
+        
+        logger.info(f"Simulated successful donation: {donation_id}")
+        
+        return DonationResponse(
+            success=True,
+            message="Donation success simulated",
+            data={
+                "donation_id": donation_id,
+                "participant_id": participant_id,
+                "amount": amount
+            }
+        )
+        
+    except Exception as e:
+        logger.error(f"Failed to simulate donation success: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Simulation failed: {str(e)}"
+        )
+
 @router.get("/analytics/{participant_id}")
 async def get_demo_analytics(participant_id: str):
     """

@@ -149,7 +149,25 @@ function DonatePageContent() {
         // For demo, simulate successful payment and redirect to success page
         console.log('Demo payment session created:', result.data);
         
-        // Simulate payment success after 1 second
+        // Simulate successful payment by calling the webhook simulation endpoint
+        try {
+          const simulateResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/demo/donations/simulate-success/${result.data.donation_id}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+          
+          if (simulateResponse.ok) {
+            console.log('✅ Donation success simulated, updating participant stats...');
+          } else {
+            console.warn('⚠️ Failed to simulate donation success, but continuing...');
+          }
+        } catch (simulateError) {
+          console.warn('⚠️ Error simulating donation success:', simulateError);
+        }
+        
+        // Redirect to success page after 1 second
         setTimeout(() => {
           window.location.href = `/donation/success?demo=true&amount=${donationAmount}&participant=${participant.firstName}&reference=${result.data.reference}`;
         }, 1000);

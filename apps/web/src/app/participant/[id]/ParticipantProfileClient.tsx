@@ -56,6 +56,55 @@ export function ParticipantProfileClient({ participantId }: ParticipantProfileCl
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
+  // Function to fetch real donation data for a participant
+  const fetchParticipantDonations = async (participantId: string): Promise<{ total_received: number; donation_count: number }> => {
+    try {
+      let total_received = 0;
+      let donation_count = 0;
+      
+      // For demo-participant-001, also check for donations with that ID
+      const participantIds = [participantId];
+      if (participantId === 'demo-participant-001') {
+        participantIds.push('demo-participant-001');
+      }
+      
+      // Query demo_donations collection for each possible participant ID
+      for (const pid of participantIds) {
+        const donationsQuery = query(
+          collection(db, 'demo_donations'),
+          where('participant_id', '==', pid),
+          where('status', '==', 'completed')
+        );
+        const donationsSnapshot = await getDocs(donationsQuery);
+        
+        donationsSnapshot.docs.forEach(doc => {
+          const donationData = doc.data();
+          const amount = donationData.amount || {};
+          
+          // Handle different amount formats
+          let donationValue = 0;
+          if (typeof amount === 'object') {
+            donationValue = amount.total || amount.amount || 0;
+          } else {
+            donationValue = amount || 0;
+          }
+          
+          if (donationValue > 0) {
+            total_received += donationValue;
+            donation_count++;
+          }
+        });
+      }
+      
+      console.log(`💰 Fetched donation data for ${participantId}: $${total_received} from ${donation_count} donations`);
+      return { total_received, donation_count };
+      
+    } catch (error) {
+      console.error(`❌ Error fetching donation data for ${participantId}:`, error);
+      return { total_received: 0, donation_count: 0 };
+    }
+  };
+
   useEffect(() => {
     const loadParticipant = async () => {
       try {
@@ -69,6 +118,9 @@ export function ParticipantProfileClient({ participantId }: ParticipantProfileCl
           // Try to find participant by UID first
           const realParticipantData = await getParticipantProfile(participantId);
           if (realParticipantData) {
+            // Fetch real donation data
+            const donationData = await fetchParticipantDonations(participantId);
+            
             realParticipant = {
               id: participantId,
               firstName: realParticipantData.firstName,
@@ -84,8 +136,8 @@ export function ParticipantProfileClient({ participantId }: ParticipantProfileCl
               ],
               skills: ["Communication", "Leadership", "Problem Solving", "Community Outreach"],
               interests: ["Community Service", "Personal Development", "Mentoring", "Social Impact"],
-              total_received: 0.00,
-              donation_count: 0,
+              total_received: donationData.total_received,
+              donation_count: donationData.donation_count,
               services_completed: 0,
               progress: 55,
               qr_code: `SHELTR-${realParticipantData.firstName.toUpperCase()}-${Date.now()}`,
@@ -106,8 +158,13 @@ export function ParticipantProfileClient({ participantId }: ParticipantProfileCl
               
               if (!usersSnapshot.empty) {
                 const userData = usersSnapshot.docs[0].data();
+                const userId = usersSnapshot.docs[0].id;
+                
+                // Fetch real donation data for this user
+                const donationData = await fetchParticipantDonations(userId);
+                
                 realParticipant = {
-                  id: usersSnapshot.docs[0].id,
+                  id: userId,
                   firstName: userData.firstName,
                   lastName: userData.lastName,
                   age: 32,
@@ -121,8 +178,8 @@ export function ParticipantProfileClient({ participantId }: ParticipantProfileCl
                   ],
                   skills: ["Communication", "Leadership", "Problem Solving", "Community Outreach"],
                   interests: ["Community Service", "Personal Development", "Mentoring", "Social Impact"],
-                  total_received: 0.00,
-                  donation_count: 0,
+                  total_received: donationData.total_received,
+                  donation_count: donationData.donation_count,
                   services_completed: 0,
                   progress: 55,
                   qr_code: `SHELTR-${userData.firstName.toUpperCase()}-${Date.now()}`,
@@ -144,6 +201,9 @@ export function ParticipantProfileClient({ participantId }: ParticipantProfileCl
 
         // Fallback to demo data for demo-participant-001 or if no real participant found
         if (participantId === 'demo-participant-001') {
+          // Fetch real donation data for demo participant
+          const donationData = await fetchParticipantDonations('demo-participant-001');
+          
           const mockParticipant = {
             id: "demo-participant-001",
             firstName: "Michael",
@@ -159,8 +219,8 @@ export function ParticipantProfileClient({ participantId }: ParticipantProfileCl
             ],
             skills: ["Community Outreach", "Leadership", "Communication", "Problem Solving"],
             interests: ["Community Development", "Social Work", "Education"],
-            total_received: 0.00,
-            donation_count: 0,
+            total_received: donationData.total_received,
+            donation_count: donationData.donation_count,
             services_completed: 8,
             progress: 55,
             qr_code: "SHELTR-DEMO-2D88F",
@@ -187,6 +247,9 @@ export function ParticipantProfileClient({ participantId }: ParticipantProfileCl
         
         // Fallback to mock data if participantId is demo-participant-001
         if (participantId === 'demo-participant-001') {
+          // Fetch real donation data for demo participant
+          const donationData = await fetchParticipantDonations('demo-participant-001');
+          
           const mockParticipant = {
             id: "demo-participant-001",
             firstName: "Michael",
@@ -202,8 +265,8 @@ export function ParticipantProfileClient({ participantId }: ParticipantProfileCl
             ],
             skills: ["Community Outreach", "Leadership", "Communication", "Problem Solving"],
             interests: ["Community Development", "Social Work", "Education"],
-            total_received: 0.00,
-            donation_count: 0,
+            total_received: donationData.total_received,
+            donation_count: donationData.donation_count,
             services_completed: 8,
             progress: 55,
             qr_code: "SHELTR-DEMO-2D88F",

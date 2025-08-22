@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -36,7 +37,8 @@ import {
   Wallet,
   Gift,
   Star,
-  Zap
+  Zap,
+  ChevronRight
 } from 'lucide-react';
 
 export default function ParticipantUserJourney() {
@@ -244,6 +246,24 @@ export default function ParticipantUserJourney() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 dark:from-gray-900 dark:to-gray-800">
+      {/* Breadcrumb Navigation */}
+      <div className="bg-white dark:bg-gray-900 border-b">
+        <div className="container mx-auto px-4 py-4">
+          <nav className="flex items-center space-x-2 text-sm text-muted-foreground">
+            <Link href="/" className="hover:text-primary transition-colors flex items-center gap-1">
+              <Home className="h-4 w-4" />
+              Home
+            </Link>
+            <ChevronRight className="h-4 w-4" />
+            <Link href="/solutions" className="hover:text-primary transition-colors">
+              Solutions
+            </Link>
+            <ChevronRight className="h-4 w-4" />
+            <span className="text-primary font-medium">Participant Journey</span>
+          </nav>
+        </div>
+      </div>
+
       {/* Header */}
       <div className="bg-white dark:bg-gray-900 border-b">
         <div className="container mx-auto px-4 py-8">

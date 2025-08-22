@@ -7,21 +7,21 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { 
-  Heart, 
-  Search, 
-  QrCode, 
-  DollarSign, 
+  MapPin, 
   BarChart3, 
+  DollarSign, 
+  Users, 
   CheckCircle, 
   ArrowRight, 
   Clock, 
   Shield, 
   FileText, 
+  Settings,
+  QrCode,
   MessageSquare,
   TrendingUp,
   Award,
   Calendar,
-  MapPin,
   Phone,
   Mail,
   Globe,
@@ -30,257 +30,250 @@ import {
   Smartphone,
   Tablet,
   Monitor,
-  Users,
-  Eye,
-  Share2,
-  Gift,
-  Star,
-  Zap,
-  Target,
-  Receipt,
-  Download,
-  Settings,
-  Bell,
-  Users2,
-  BookOpen,
-  Video,
-  MapPin as Location,
   ChevronRight,
-  Home
+  Home,
+  Building2,
+  Handshake,
+  Eye,
+  Target,
+  Database,
+  Network,
+  PieChart,
+  LineChart,
+  Activity,
+  Zap,
+  Star,
+  Lock,
+  Unlock,
+  Download,
+  Upload,
+  Share2,
+  Users2,
+  Briefcase,
+  Flag,
+  AlertTriangle,
+  CheckSquare,
+  FileCheck,
+  ClipboardList,
+  Presentation,
+  BookOpen,
+  Lightbulb,
+  Compass,
+  Layers
 } from 'lucide-react';
 
-export default function DonorUserJourney() {
+export default function GovernmentUserJourney() {
   const [activePhase, setActivePhase] = useState(1);
   const [activeStep, setActiveStep] = useState(1);
 
   const phases = [
     {
       id: 1,
-      title: "Discovery & Registration",
-      description: "Learn about SHELTR and create your account",
-      icon: Heart,
+      title: "Agency Onboarding",
+      description: "Registration and platform access setup",
+      icon: MapPin,
       steps: [
         {
           id: 1,
-          title: "Platform Discovery",
-          description: "Learn about SHELTR's mission and technology",
+          title: "Agency Registration",
+          description: "Complete government agency registration and verification",
           details: [
-            "Discover SHELTR through social media, search, or word of mouth",
-            "Visit sheltr-ai.web.app to learn about the mission",
-            "Read about blockchain transparency and impact",
-            "View participant success stories and testimonials",
-            "Understand the 85/10/5 fund distribution model",
-            "Review platform security and verification processes",
-            "Learn about QR code donation system",
-            "Explore impact metrics and transparency reports",
-            "Create free account to get started",
-            "Complete profile setup and preferences"
+            "Contact SHELTR government relations team",
+            "Complete agency registration form with official details",
+            "Provide government credentials and verification documents",
+            "Submit department/agency information and contact details",
+            "Agree to data sharing and privacy protocols",
+            "Receive platform access credentials",
+            "Complete security training and compliance review",
+            "Account activation and welcome orientation"
           ],
-          duration: "10-15 minutes",
-          requirements: ["Internet connection", "Email address", "Basic information"]
+          duration: "5-10 business days",
+          requirements: ["Government credentials", "Official documentation", "Security clearance"]
         },
         {
           id: 2,
-          title: "Account Setup",
-          description: "Complete registration and configure preferences",
+          title: "Platform Configuration",
+          description: "Set up agency-specific dashboards and access levels",
           details: [
-            "Fill out registration form with personal information",
-            "Verify email address and set up password",
-            "Configure security preferences and two-factor authentication",
-            "Add payment methods (credit card, bank account, crypto)",
-            "Set donation preferences and frequency",
-            "Choose privacy settings and communication preferences",
-            "Complete welcome tutorial and platform overview",
-            "Set up notification preferences",
-            "Explore dashboard features",
-            "Account ready for making donations"
+            "Configure agency-specific dashboard views",
+            "Set up user roles and access permissions",
+            "Define data access levels and restrictions",
+            "Configure reporting and analytics preferences",
+            "Set up notification and alert systems",
+            "Establish data sharing protocols",
+            "Configure integration with existing systems",
+            "Complete platform training and documentation"
           ],
-          duration: "15-20 minutes",
-          requirements: ["Valid payment method", "Email verification", "Security setup"]
+          duration: "2-3 days",
+          requirements: ["IT department coordination", "Security protocols", "System integration"]
         }
       ]
     },
     {
       id: 2,
-      title: "Finding & Connecting",
-      description: "Discover participants and build relationships",
-      icon: Search,
+      title: "Data Access & Analytics",
+      description: "Access comprehensive homelessness data and insights",
+      icon: BarChart3,
       steps: [
         {
           id: 1,
-          title: "Participant Discovery",
-          description: "Browse and find participants to support",
+          title: "Regional Data Access",
+          description: "Access comprehensive regional homelessness data",
           details: [
-            "Browse participants by location or category",
-            "Use search filters (veterans, families, youth, seniors)",
-            "Read participant stories and personal narratives",
-            "View progress updates and success metrics",
-            "Check impact metrics and housing progress",
-            "Review verified shelter partnerships",
-            "Select participants that resonate with you",
-            "Review detailed profiles and goals",
-            "Understand participant needs and aspirations",
-            "Prepare to make your first donation"
+            "View real-time homelessness statistics by region",
+            "Access demographic breakdowns and trends",
+            "Monitor shelter capacity and utilization rates",
+            "Track participant outcomes and success metrics",
+            "Analyze donation patterns and fund distribution",
+            "Review housing placement and stability rates",
+            "Access employment and education outcomes",
+            "Monitor health and wellness indicators"
           ],
-          duration: "5-10 minutes",
-          requirements: ["Account access", "Location preferences", "Cause interests"]
+          duration: "Real-time",
+          requirements: ["Authorized access", "Data privacy training", "Analytics tools"]
         },
         {
           id: 2,
-          title: "Connection Building",
-          description: "Build meaningful relationships with participants",
+          title: "Policy Insights & Trends",
+          description: "Generate insights for policy development and decision making",
           details: [
-            "Read full participant stories and background",
-            "View photos and personal updates",
-            "Check current goals and progress status",
-            "Review recent achievements and milestones",
-            "Send personalized message to participant",
-            "Receive response and build rapport",
-            "Establish ongoing relationship",
-            "Receive regular progress updates",
-            "Share encouragement and support",
-            "Maintain long-term connection"
+            "Identify regional homelessness trends and patterns",
+            "Analyze effectiveness of current programs and services",
+            "Generate predictive models for resource planning",
+            "Assess impact of policy changes and interventions",
+            "Compare performance across different regions",
+            "Identify gaps in service delivery and coverage",
+            "Track progress toward policy goals and objectives",
+            "Generate evidence-based policy recommendations"
           ],
-          duration: "Ongoing",
-          requirements: ["Communication skills", "Empathy", "Consistent engagement"]
+          duration: "Daily updates",
+          requirements: ["Analytics expertise", "Policy knowledge", "Data interpretation skills"]
         }
       ]
     },
     {
       id: 3,
-      title: "Making Donations",
-      description: "Donate securely and track your impact",
+      title: "Budget Transparency",
+      description: "Track public fund allocation and measure impact",
       icon: DollarSign,
       steps: [
         {
           id: 1,
-          title: "Donation Process",
-          description: "Complete secure donation transactions",
+          title: "Fund Allocation Tracking",
+          description: "Monitor how public funds are allocated and spent",
           details: [
-            "Scan participant's unique QR code",
-            "Select donation amount from preset options",
-            "Add personalized message of encouragement",
-            "Choose payment method (card, bank, crypto, mobile pay)",
-            "Review transaction details and fees",
-            "Confirm donation and authorize payment",
-            "Payment processed securely through blockchain",
-            "Smart contract executes fund distribution",
-            "Receive immediate confirmation email",
-            "Track real-time impact of your donation"
+            "Track public fund distribution across regions",
+            "Monitor allocation to different service providers",
+            "Analyze fund utilization and efficiency metrics",
+            "Track participant outcomes per dollar spent",
+            "Monitor administrative costs and overhead",
+            "Compare funding effectiveness across programs",
+            "Track return on investment for different interventions",
+            "Generate transparency reports for public review"
           ],
-          duration: "2-3 minutes",
-          requirements: ["QR code", "Payment method", "Internet connection"]
+          duration: "Real-time",
+          requirements: ["Financial data access", "Budget tracking tools", "Reporting capabilities"]
         },
         {
           id: 2,
-          title: "Payment Methods",
-          description: "Multiple secure payment options available",
+          title: "Impact Measurement",
+          description: "Measure and report on the impact of public investments",
           details: [
-            "Credit/Debit Cards: Instant processing with security",
-            "Bank Transfer (ACH): Lower fees, 2-3 day processing",
-            "Cryptocurrency: Bitcoin, Ethereum, other major coins",
-            "Mobile Pay: Apple Pay, Google Pay integration",
-            "Recurring Donations: Set up automatic monthly giving",
-            "Corporate Matching: Leverage employer programs",
-            "Tax Documentation: Automatic receipt generation",
-            "Payment History: Complete transaction records",
-            "Security Features: Fraud protection and encryption",
-            "Support: 24/7 payment assistance available"
+            "Calculate cost per participant served",
+            "Measure reduction in homelessness rates",
+            "Track housing stability and employment outcomes",
+            "Assess long-term cost savings and benefits",
+            "Compare outcomes across different funding models",
+            "Generate impact reports for stakeholders",
+            "Track progress toward policy objectives",
+            "Identify areas for funding optimization"
           ],
-          duration: "Instant to 3 days",
-          requirements: ["Valid payment method", "Account verification", "Sufficient funds"]
+          duration: "Monthly",
+          requirements: ["Impact measurement tools", "Data analysis capabilities", "Reporting systems"]
         }
       ]
     },
     {
       id: 4,
-      title: "Impact Tracking",
-      description: "Monitor your donations and see real results",
-      icon: BarChart3,
+      title: "Multi-Agency Coordination",
+      description: "Collaborate across departments and agencies",
+      icon: Users,
       steps: [
         {
           id: 1,
-          title: "Real-Time Impact",
-          description: "See immediate results of your donations",
+          title: "Inter-Agency Collaboration",
+          description: "Coordinate efforts across multiple government departments",
           details: [
-            "Receive immediate donation confirmation",
-            "Track fund distribution: 85% to participant, 10% to housing, 5% to shelter",
-            "See participant notification and thank you message",
-            "Monitor housing fund growth and investment strategy",
-            "Track shelter operational support impact",
-            "View participant progress updates",
-            "Receive success story notifications",
-            "Monitor long-term impact metrics",
-            "Track community-wide improvements",
-            "See transparency reports and audits"
+            "Share data and insights with partner agencies",
+            "Coordinate service delivery across departments",
+            "Align policy objectives and implementation strategies",
+            "Share best practices and successful interventions",
+            "Coordinate funding and resource allocation",
+            "Establish joint monitoring and evaluation frameworks",
+            "Facilitate cross-agency communication and coordination",
+            "Develop integrated service delivery models"
           ],
-          duration: "Real-time",
-          requirements: ["Account access", "Notification preferences", "Regular check-ins"]
+          duration: "Ongoing",
+          requirements: ["Inter-agency agreements", "Data sharing protocols", "Coordination tools"]
         },
         {
           id: 2,
-          title: "Ongoing Engagement",
-          description: "Stay connected and involved in the community",
+          title: "Stakeholder Engagement",
+          description: "Engage with community partners and stakeholders",
           details: [
-            "Receive regular progress reports from participants",
-            "Read success stories and transformation updates",
-            "View impact metrics and outcome data",
-            "Access financial transparency reports",
-            "Participate in community events and meetups",
-            "Join volunteer opportunities and programs",
-            "Engage in advocacy campaigns and awareness",
-            "Attend educational content and webinars",
-            "Network with other donors and supporters",
-            "Contribute to continued platform growth"
+            "Share insights with community organizations",
+            "Engage with advocacy groups and service providers",
+            "Facilitate public-private partnerships",
+            "Coordinate with academic and research institutions",
+            "Engage with media and public communication",
+            "Facilitate community feedback and input",
+            "Coordinate emergency response and crisis management",
+            "Develop community engagement strategies"
           ],
           duration: "Ongoing",
-          requirements: ["Active engagement", "Community participation", "Regular updates"]
+          requirements: ["Stakeholder management", "Communication tools", "Partnership frameworks"]
         }
       ]
     },
     {
       id: 5,
-      title: "Advanced Features",
-      description: "Access advanced tools and community features",
-      icon: Settings,
+      title: "Policy Development",
+      description: "Develop and implement evidence-based policies",
+      icon: FileText,
       steps: [
         {
           id: 1,
-          title: "Donor Dashboard",
-          description: "Comprehensive dashboard for managing your giving",
+          title: "Evidence-Based Policy Making",
+          description: "Use data and insights to inform policy development",
           details: [
-            "View complete donation history and records",
-            "Track impact metrics and participant progress",
-            "Manage recurring donations and payment methods",
-            "Download tax receipts and documentation",
-            "Share success stories on social media",
-            "Invite friends and family to join",
-            "Participate in fundraising campaigns",
-            "Set giving goals and track progress",
-            "Access donor-only content and updates",
-            "Connect with other donors in the community"
+            "Analyze data to identify policy gaps and opportunities",
+            "Develop evidence-based policy recommendations",
+            "Model potential impacts of policy changes",
+            "Engage stakeholders in policy development process",
+            "Draft policy proposals with supporting evidence",
+            "Conduct cost-benefit analysis of policy options",
+            "Develop implementation strategies and timelines",
+            "Establish monitoring and evaluation frameworks"
           ],
-          duration: "Real-time",
-          requirements: ["Account access", "Regular usage", "Community engagement"]
+          duration: "3-6 months",
+          requirements: ["Policy expertise", "Data analysis", "Stakeholder engagement"]
         },
         {
           id: 2,
-          title: "Community Building",
-          description: "Connect with other donors and build community",
+          title: "Implementation & Monitoring",
+          description: "Implement policies and monitor their effectiveness",
           details: [
-            "Join donor forums and discussion groups",
-            "Share success stories and experiences",
-            "Coordinate volunteer activities and events",
-            "Participate in advocacy and awareness campaigns",
-            "Access educational content and resources",
-            "Attend networking events and meetups",
-            "Contribute to impact reporting and feedback",
-            "Help shape platform development and features",
-            "Mentor new donors and share best practices",
-            "Build lasting relationships and community"
+            "Implement approved policies and programs",
+            "Monitor implementation progress and challenges",
+            "Track policy outcomes and effectiveness",
+            "Adjust implementation strategies as needed",
+            "Evaluate policy impact and success metrics",
+            "Generate implementation reports and updates",
+            "Share lessons learned and best practices",
+            "Plan for policy refinement and improvement"
           ],
           duration: "Ongoing",
-          requirements: ["Community participation", "Regular engagement", "Sharing mindset"]
+          requirements: ["Implementation expertise", "Monitoring tools", "Evaluation frameworks"]
         }
       ]
     }
@@ -289,24 +282,26 @@ export default function DonorUserJourney() {
   const currentPhase = phases.find(p => p.id === activePhase);
   const currentStep = currentPhase?.steps.find(s => s.id === activeStep);
 
-  const donationOptions = [
-    { name: "One-time", icon: Gift, description: "Immediate donations of any amount" },
-    { name: "Recurring", icon: Calendar, description: "Monthly, quarterly, or annual commitments" },
-    { name: "Campaign", icon: Target, description: "Special fundraising events or causes" },
-    { name: "Matching", icon: Users2, description: "Corporate matching programs" },
-    { name: "Crypto", icon: Zap, description: "Bitcoin, Ethereum, or other cryptocurrencies" }
+  const dataAccessCategories = [
+    { name: "Regional Statistics", icon: BarChart3, description: "Real-time homelessness data by region" },
+    { name: "Demographic Analysis", icon: PieChart, description: "Detailed demographic breakdowns and trends" },
+    { name: "Service Utilization", icon: Activity, description: "Shelter capacity and service usage metrics" },
+    { name: "Outcome Tracking", icon: Target, description: "Participant success and stability rates" },
+    { name: "Financial Transparency", icon: DollarSign, description: "Fund allocation and spending analysis" },
+    { name: "Policy Impact", icon: TrendingUp, description: "Effectiveness of policy interventions" }
   ];
 
-  const discoveryChannels = [
-    { name: "Social Media", icon: Share2, description: "Facebook, Instagram, Twitter campaigns" },
-    { name: "Word of Mouth", icon: Users, description: "Friend recommendations, community events" },
-    { name: "Search Engines", icon: Search, description: "SEO-optimized content, targeted ads" },
-    { name: "Partnerships", icon: Globe, description: "Corporate sponsorships, community organizations" },
-    { name: "Traditional Media", icon: Video, description: "News coverage, radio interviews" }
+  const collaborationTools = [
+    { name: "Data Sharing", icon: Share2, description: "Secure inter-agency data sharing protocols" },
+    { name: "Joint Planning", icon: Calendar, description: "Coordinated planning and resource allocation" },
+    { name: "Communication", icon: MessageSquare, description: "Multi-agency communication platforms" },
+    { name: "Monitoring", icon: Eye, description: "Shared monitoring and evaluation frameworks" },
+    { name: "Reporting", icon: FileCheck, description: "Integrated reporting and analytics" },
+    { name: "Stakeholder Engagement", icon: Users2, description: "Community and partner engagement tools" }
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-50 to-pink-100 dark:from-gray-900 dark:to-gray-800">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
       {/* Breadcrumb Navigation */}
       <div className="bg-white dark:bg-gray-900 border-b">
         <div className="container mx-auto px-4 py-4">
@@ -320,7 +315,7 @@ export default function DonorUserJourney() {
               Solutions
             </Link>
             <ChevronRight className="h-4 w-4" />
-            <span className="text-primary font-medium">Donor Journey</span>
+            <span className="text-primary font-medium">Government Journey</span>
           </nav>
         </div>
       </div>
@@ -329,15 +324,15 @@ export default function DonorUserJourney() {
       <div className="bg-white dark:bg-gray-900 border-b">
         <div className="container mx-auto px-4 py-8">
           <div className="flex items-center gap-4 mb-6">
-            <div className="p-3 bg-red-100 dark:bg-red-900 rounded-lg">
-              <Heart className="h-8 w-8 text-red-600 dark:text-red-400" />
+            <div className="p-3 bg-purple-100 dark:bg-purple-900 rounded-lg">
+              <MapPin className="h-8 w-8 text-purple-600 dark:text-purple-400" />
             </div>
             <div>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-                Donor User Journey
+                Government Agency User Journey
               </h1>
               <p className="text-gray-600 dark:text-gray-400 mt-2">
-                Your complete guide to making a difference through transparent, impactful giving
+                Complete guide to data-driven policy making and budget transparency
               </p>
             </div>
           </div>
@@ -347,10 +342,10 @@ export default function DonorUserJourney() {
             <Card>
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
-                  <Eye className="h-5 w-5 text-red-600" />
+                  <Shield className="h-5 w-5 text-purple-600" />
                   <div>
-                    <p className="text-sm text-gray-600">Transparency</p>
-                    <p className="font-semibold">100% Visible</p>
+                    <p className="text-sm text-gray-600">Security Level</p>
+                    <p className="font-semibold">Government Grade</p>
                   </div>
                 </div>
               </CardContent>
@@ -361,7 +356,7 @@ export default function DonorUserJourney() {
                   <Zap className="h-5 w-5 text-blue-600" />
                   <div>
                     <p className="text-sm text-gray-600">Setup Time</p>
-                    <p className="font-semibold">15-20 min</p>
+                    <p className="font-semibold">5-10 days</p>
                   </div>
                 </div>
               </CardContent>
@@ -369,10 +364,10 @@ export default function DonorUserJourney() {
             <Card>
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
-                  <DollarSign className="h-5 w-5 text-purple-600" />
+                  <Eye className="h-5 w-5 text-green-600" />
                   <div>
-                    <p className="text-sm text-gray-600">Direct Impact</p>
-                    <p className="font-semibold">85% to Participant</p>
+                    <p className="text-sm text-gray-600">Data Access</p>
+                    <p className="font-semibold">Real-time</p>
                   </div>
                 </div>
               </CardContent>
@@ -382,8 +377,8 @@ export default function DonorUserJourney() {
                 <div className="flex items-center gap-3">
                   <Star className="h-5 w-5 text-orange-600" />
                   <div>
-                    <p className="text-sm text-gray-600">Tax Benefits</p>
-                    <p className="font-semibold">Deductible</p>
+                    <p className="text-sm text-gray-600">Compliance</p>
+                    <p className="font-semibold">Full Audit Trail</p>
                   </div>
                 </div>
               </CardContent>
@@ -400,7 +395,7 @@ export default function DonorUserJourney() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Award className="h-5 w-5" />
-                  Your Journey
+                  Journey Phases
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-2">
@@ -453,7 +448,7 @@ export default function DonorUserJourney() {
                 <Card>
                   <CardHeader>
                     <div className="flex items-center gap-3">
-                      <currentPhase.icon className="h-8 w-8 text-red-600" />
+                      <currentPhase.icon className="h-8 w-8 text-purple-600" />
                       <div>
                         <CardTitle className="text-2xl">{currentPhase.title}</CardTitle>
                         <CardDescription className="text-lg">{currentPhase.description}</CardDescription>
@@ -485,7 +480,7 @@ export default function DonorUserJourney() {
                       <div className="space-y-3">
                         {currentStep.details.map((detail, index) => (
                           <div key={index} className="flex items-start gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                            <div className="flex-shrink-0 w-6 h-6 bg-red-600 text-white rounded-full flex items-center justify-center text-sm font-medium">
+                            <div className="flex-shrink-0 w-6 h-6 bg-purple-600 text-white rounded-full flex items-center justify-center text-sm font-medium">
                               {index + 1}
                             </div>
                             <p className="text-sm">{detail}</p>
@@ -546,26 +541,26 @@ export default function DonorUserJourney() {
                   </CardContent>
                 </Card>
 
-                {/* Donation Options */}
-                {activePhase === 3 && (
+                {/* Data Access Categories */}
+                {activePhase === 2 && (
                   <Card>
                     <CardHeader>
                       <CardTitle className="flex items-center gap-2">
-                        <Gift className="h-5 w-5 text-blue-600" />
-                        Donation Options
+                        <Database className="h-5 w-5 text-blue-600" />
+                        Data Access Categories
                       </CardTitle>
                       <CardDescription>
-                        Multiple ways to give and make an impact
+                        Comprehensive data and analytics available to government agencies
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {donationOptions.map((option, index) => (
+                        {dataAccessCategories.map((category, index) => (
                           <div key={index} className="flex items-start gap-3 p-4 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-                            <option.icon className="h-6 w-6 text-red-600 mt-1 flex-shrink-0" />
+                            <category.icon className="h-6 w-6 text-purple-600 mt-1 flex-shrink-0" />
                             <div>
-                              <h4 className="font-medium text-sm">{option.name}</h4>
-                              <p className="text-xs text-gray-600 mt-1">{option.description}</p>
+                              <h4 className="font-medium text-sm">{category.name}</h4>
+                              <p className="text-xs text-gray-600 mt-1">{category.description}</p>
                             </div>
                           </div>
                         ))}
@@ -574,26 +569,26 @@ export default function DonorUserJourney() {
                   </Card>
                 )}
 
-                {/* Discovery Channels */}
-                {activePhase === 1 && activeStep === 1 && (
+                {/* Collaboration Tools */}
+                {activePhase === 4 && (
                   <Card>
                     <CardHeader>
                       <CardTitle className="flex items-center gap-2">
-                        <Search className="h-5 w-5 text-blue-600" />
-                        Discovery Channels
+                        <Network className="h-5 w-5 text-blue-600" />
+                        Collaboration Tools
                       </CardTitle>
                       <CardDescription>
-                        How donors discover and learn about SHELTR
+                        Tools and platforms for multi-agency coordination
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {discoveryChannels.map((channel, index) => (
+                        {collaborationTools.map((tool, index) => (
                           <div key={index} className="flex items-start gap-3 p-4 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-                            <channel.icon className="h-6 w-6 text-red-600 mt-1 flex-shrink-0" />
+                            <tool.icon className="h-6 w-6 text-purple-600 mt-1 flex-shrink-0" />
                             <div>
-                              <h4 className="font-medium text-sm">{channel.name}</h4>
-                              <p className="text-xs text-gray-600 mt-1">{channel.description}</p>
+                              <h4 className="font-medium text-sm">{tool.name}</h4>
+                              <p className="text-xs text-gray-600 mt-1">{tool.description}</p>
                             </div>
                           </div>
                         ))}
@@ -613,31 +608,31 @@ export default function DonorUserJourney() {
                   <CardContent>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="flex items-start gap-3">
-                        <Eye className="h-5 w-5 text-blue-600 mt-1" />
+                        <BarChart3 className="h-5 w-5 text-blue-600 mt-1" />
                         <div>
-                          <h4 className="font-medium">100% Transparency</h4>
-                          <p className="text-sm text-gray-600">See exactly how your donation helps through blockchain tracking</p>
+                          <h4 className="font-medium">Data-Driven Decisions</h4>
+                          <p className="text-sm text-gray-600">Make evidence-based policy decisions with real-time data</p>
                         </div>
                       </div>
                       <div className="flex items-start gap-3">
-                        <QrCode className="h-5 w-5 text-green-600 mt-1" />
+                        <Eye className="h-5 w-5 text-green-600 mt-1" />
                         <div>
-                          <h4 className="font-medium">Direct Connection</h4>
-                          <p className="text-sm text-gray-600">Connect directly with participants and build meaningful relationships</p>
+                          <h4 className="font-medium">Budget Transparency</h4>
+                          <p className="text-sm text-gray-600">Track public fund allocation and measure impact</p>
                         </div>
                       </div>
                       <div className="flex items-start gap-3">
-                        <BarChart3 className="h-5 w-5 text-purple-600 mt-1" />
+                        <Users className="h-5 w-5 text-purple-600 mt-1" />
                         <div>
-                          <h4 className="font-medium">Real-time Impact</h4>
-                          <p className="text-sm text-gray-600">Track the immediate and long-term impact of your donations</p>
+                          <h4 className="font-medium">Multi-Agency Coordination</h4>
+                          <p className="text-sm text-gray-600">Coordinate efforts across departments and agencies</p>
                         </div>
                       </div>
                       <div className="flex items-start gap-3">
-                        <Receipt className="h-5 w-5 text-orange-600 mt-1" />
+                        <Shield className="h-5 w-5 text-orange-600 mt-1" />
                         <div>
-                          <h4 className="font-medium">Tax Benefits</h4>
-                          <p className="text-sm text-gray-600">Receive automatic tax receipts and documentation</p>
+                          <h4 className="font-medium">Security & Compliance</h4>
+                          <p className="text-sm text-gray-600">Government-grade security with full audit trails</p>
                         </div>
                       </div>
                     </div>

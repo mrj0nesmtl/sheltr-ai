@@ -12,8 +12,6 @@ from pydantic import BaseModel, Field
 
 from services.demo_participant_service import DemoParticipantService
 from services.firebase_service import FirebaseService
-from services.adyen_service import get_adyen_service
-
 logger = logging.getLogger(__name__)
 
 # Initialize services

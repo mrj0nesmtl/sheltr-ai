@@ -109,8 +109,21 @@ export default function BlogPage() {
       </header>
 
       {/* Hero Section */}
-      <section className="py-16 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950 dark:to-indigo-950">
-        <div className="container mx-auto px-4">
+      <section className="py-16 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950 dark:to-indigo-950 relative overflow-hidden">
+        {/* Background Image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-10 dark:opacity-5"
+          style={{
+            backgroundImage: 'url(/backgrounds/solutions-bg.jpg)',
+            backgroundPosition: 'center',
+            backgroundSize: 'cover'
+          }}
+        />
+        {/* Overlay for better text readability */}
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-50/80 to-indigo-50/80 dark:from-blue-950/80 dark:to-indigo-950/80" />
+        
+        {/* Content */}
+        <div className="container mx-auto px-4 relative z-10">
           <div className="text-center max-w-4xl mx-auto">
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
               SHELTR Blog
@@ -170,7 +183,7 @@ export default function BlogPage() {
             <div className="text-center py-16">
               <h3 className="text-2xl font-semibold mb-4">No posts found</h3>
               <p className="text-muted-foreground">
-                Try adjusting your search or filters to find what you're looking for.
+                Try adjusting your search or filters to find what you&apos;re looking for.
               </p>
             </div>
           ) : (

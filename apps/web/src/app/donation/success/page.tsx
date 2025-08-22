@@ -15,7 +15,7 @@ function SuccessPageContent() {
   
   const isDemo = searchParams.get('demo') === 'true';
   const amount = searchParams.get('amount') || '100';
-  const participantName = searchParams.get('participant') || 'Alex';
+  const participantName = searchParams.get('participant') || 'Michael';
   const reference = searchParams.get('ref') || 'DEMO-' + Date.now();
 
   // Calculate SmartFund breakdown

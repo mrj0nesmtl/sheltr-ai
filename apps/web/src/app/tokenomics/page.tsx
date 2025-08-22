@@ -91,18 +91,18 @@ export default function TokenomicsPage() {
       </div>
 
       {/* Hero Section */}
-      <section className="py-16 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-orange-500/10">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <section className="relative py-16 bg-cover bg-center bg-no-repeat" style={{backgroundImage: 'url(/backgrounds/hero-bg.jpg)'}}>
+        <div className="absolute inset-0 bg-black/40" />
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-6">
             <Coins className="h-10 w-10 text-white" />
           </div>
           <Badge variant="secondary" className="mb-4 bg-gradient-to-r from-blue-500/10 to-purple-500/10 border-blue-500/20">$SHLTR Tokenomics</Badge>
-          <h1 className="text-4xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          <h1 className="text-4xl font-bold mb-6 text-white">
             SmartFund™ Tokenomics
           </h1>
-          <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
-            Sheltr's pioneering dual-token architecture combines both stability and growth potential for Participants and the Community. 
-            Built on Base network with enterprise-grade infrastructure for seamless real-world utility.
+          <p className="text-xl text-gray-200 mb-8 max-w-3xl mx-auto">
+            Sheltr's pioneering dual-token architecture combines both stability and growth potential for Participants and the Community.
           </p>
           
           {/* Quick Links to Documentation */}
@@ -418,7 +418,7 @@ export default function TokenomicsPage() {
       <section className="py-20 bg-gradient-to-r from-orange-500/5 to-red-500/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4">Token Launch Information</h2>
+            <h2 className="text-3xl font-bold mb-4">SHELTR Blockchain Launch Information</h2>
             <p className="text-xl text-muted-foreground">Invest in revolutionary social impact technology</p>
           </div>
 
@@ -648,8 +648,8 @@ export default function TokenomicsPage() {
                 </ul>
                 
                 <div className="mt-6 p-3 bg-blue-500/10 rounded-lg border">
-                  <div className="text-sm font-semibold text-blue-600">Example: $100 Donation</div>
-                  <div className="text-xs text-muted-foreground">→ 80 SHELTR-S tokens instantly</div>
+                  <div className="text-sm font-semibold text-blue-600">Example: $1,000 Monthly Donations</div>
+                  <div className="text-xs text-muted-foreground">→ 800 SHELTR-S tokens instantly</div>
                 </div>
               </CardContent>
             </Card>
@@ -934,12 +934,12 @@ export default function TokenomicsPage() {
       {/* Revenue Model */}
       <section className="py-20 bg-muted/50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-6">Sustainable Revenue Model</h2>
+          <h2 className="text-3xl font-bold mb-6">Sustainable Technology</h2>
           <p className="text-xl text-muted-foreground mb-12">
-            Multiple revenue streams ensure platform growth while protecting participants
+            Ensuring platform growth while protecting participants
           </p>
           
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-2 gap-8 mb-8">
             <Card>
               <CardHeader>
                 <CardTitle>Participant Protection</CardTitle>
@@ -990,6 +990,13 @@ export default function TokenomicsPage() {
               </CardContent>
             </Card>
           </div>
+          
+          <Link href="/model">
+            <Button size="lg" className="bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200">
+              <ArrowRight className="h-4 w-4 mr-2" />
+              Learn More
+            </Button>
+          </Link>
         </div>
       </section>
 
@@ -1003,7 +1010,7 @@ export default function TokenomicsPage() {
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/register">
-              <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
+              <Button size="lg" className="bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200">
                 <Coins className="h-4 w-4 mr-2" />
                 Get SHELTR Tokens
               </Button>

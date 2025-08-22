@@ -141,7 +141,7 @@ export default function SolutionsPage() {
                     </div>
                   </div>
                 </div>
-                <div className="space-y-3">
+                <div className="space-y-4">
                   <Link href="/solutions/organizations">
                     <Button className="w-full border-2 border-black text-black hover:bg-black hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black" variant="outline" size="sm">
                       <Building2 className="h-4 w-4 mr-2" />
@@ -193,7 +193,7 @@ export default function SolutionsPage() {
                     </div>
                   </div>
                 </div>
-                <div className="space-y-3">
+                <div className="space-y-4">
                   <Link href="/solutions/government">
                     <Button className="w-full border-2 border-black text-black hover:bg-black hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black" variant="outline" size="sm">
                       <MapPin className="h-4 w-4 mr-2" />
@@ -245,7 +245,7 @@ export default function SolutionsPage() {
                     </div>
                   </div>
                 </div>
-                <div className="space-y-3">
+                <div className="space-y-4">
                   <Link href="/solutions/participants">
                     <Button className="w-full border-2 border-black text-black hover:bg-black hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black" variant="outline" size="sm">
                       <Users className="h-4 w-4 mr-2" />
@@ -297,7 +297,7 @@ export default function SolutionsPage() {
                     </div>
                   </div>
                 </div>
-                <div className="space-y-3">
+                <div className="space-y-4">
                   <Link href="/solutions/donors">
                     <Button className="w-full border-2 border-black text-black hover:bg-black hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black" variant="outline" size="sm">
                       <Heart className="h-4 w-4 mr-2" />

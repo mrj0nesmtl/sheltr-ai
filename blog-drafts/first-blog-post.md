@@ -107,7 +107,7 @@ https://example.com/sheltr-founder-interview.mp3
 
 Follow our journey on social media:
 
-https://twitter.com/sheltr_ai/status/1234567890123456789
+https://x.com/sheltrops/status/1234567890123456789
 
 ## Looking Forward
 

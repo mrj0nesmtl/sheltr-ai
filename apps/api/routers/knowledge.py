@@ -424,6 +424,16 @@ async def get_knowledge_stats(
         )
 
 @router.get(
+    "/status",
+    response_model=KnowledgeResponse,
+    summary="Knowledge base status check",
+    description="Check the status of the knowledge base system (alias for /health)"
+)
+async def knowledge_status():
+    """Check knowledge base system status (alias for health endpoint)"""
+    return await knowledge_health()
+
+@router.get(
     "/health",
     response_model=KnowledgeResponse,
     summary="Knowledge base health check",

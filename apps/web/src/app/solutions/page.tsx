@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Home, Building2, Users, Heart, DollarSign, BarChart3, Shield, QrCode, Handshake, MapPin, UserCheck, LogIn, Menu, X } from 'lucide-react';
+import { Home, Building2, Users, Heart, DollarSign, BarChart3, Shield, QrCode, Handshake, MapPin, UserCheck, LogIn, Menu, X, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -141,12 +141,20 @@ export default function SolutionsPage() {
                     </div>
                   </div>
                 </div>
-                <Link href="/solutions/organizations">
-                  <Button className="w-full mt-6 border-2 border-black text-black hover:bg-black hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black" variant="outline">
-                    <Building2 className="h-4 w-4 mr-2" />
-                    Learn More for Organizations
-                  </Button>
-                </Link>
+                <div className="space-y-2">
+                  <Link href="/solutions/organizations">
+                    <Button className="w-full border-2 border-black text-black hover:bg-black hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black" variant="outline">
+                      <Building2 className="h-4 w-4 mr-2" />
+                      Learn More for Organizations
+                    </Button>
+                  </Link>
+                  <Link href="/user-journeys/shelters">
+                    <Button className="w-full" variant="secondary">
+                      <ArrowRight className="h-4 w-4 mr-2" />
+                      View User Journey
+                    </Button>
+                  </Link>
+                </div>
               </CardContent>
             </Card>
 
@@ -229,12 +237,20 @@ export default function SolutionsPage() {
                     </div>
                   </div>
                 </div>
-                <Link href="/solutions/participants">
-                  <Button className="w-full mt-6 border-2 border-black text-black hover:bg-black hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black" variant="outline">
-                    <Users className="h-4 w-4 mr-2" />
-                    Participant Support
-                  </Button>
-                </Link>
+                <div className="space-y-2">
+                  <Link href="/solutions/participants">
+                    <Button className="w-full border-2 border-black text-black hover:bg-black hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black" variant="outline">
+                      <Users className="h-4 w-4 mr-2" />
+                      Participant Support
+                    </Button>
+                  </Link>
+                  <Link href="/user-journeys/participants">
+                    <Button className="w-full" variant="secondary">
+                      <ArrowRight className="h-4 w-4 mr-2" />
+                      View User Journey
+                    </Button>
+                  </Link>
+                </div>
               </CardContent>
             </Card>
 
@@ -273,12 +289,20 @@ export default function SolutionsPage() {
                     </div>
                   </div>
                 </div>
-                <Link href="/solutions/donors">
-                  <Button className="w-full mt-6 border-2 border-black text-black hover:bg-black hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black" variant="outline">
-                    <Heart className="h-4 w-4 mr-2" />
-                    Start Giving Today
-                  </Button>
-                </Link>
+                <div className="space-y-2">
+                  <Link href="/solutions/donors">
+                    <Button className="w-full border-2 border-black text-black hover:bg-black hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black" variant="outline">
+                      <Heart className="h-4 w-4 mr-2" />
+                      Start Giving Today
+                    </Button>
+                  </Link>
+                  <Link href="/user-journeys/donors">
+                    <Button className="w-full" variant="secondary">
+                      <ArrowRight className="h-4 w-4 mr-2" />
+                      View User Journey
+                    </Button>
+                  </Link>
+                </div>
               </CardContent>
             </Card>
           </div>

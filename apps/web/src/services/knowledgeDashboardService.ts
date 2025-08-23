@@ -190,7 +190,7 @@ class KnowledgeDashboardService {
       formData.append('status', updates.status);
 
       const token = await this.getAuthToken();
-      const response = await fetch(`${this.baseUrl}/knowledge-dashboard/documents/${documentId}`, {
+      const response = await fetch(`${this.baseUrl}/api/v1/knowledge-dashboard/documents/${documentId}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -210,12 +210,52 @@ class KnowledgeDashboardService {
   }
 
   /**
+   * Update knowledge document from file upload (with embedding regeneration)
+   */
+  async updateKnowledgeDocumentFromFile(
+    documentId: string,
+    file: File,
+    metadata?: {
+      title?: string;
+      category?: string;
+      tags?: string[];
+    }
+  ): Promise<{ success: boolean; data: { message: string } }> {
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      if (metadata?.title) formData.append('title', metadata.title);
+      if (metadata?.category) formData.append('category', metadata.category);
+      if (metadata?.tags) formData.append('tags', metadata.tags.join(', '));
+
+      const token = await this.getAuthToken();
+      const response = await fetch(`${this.baseUrl}/api/v1/knowledge-dashboard/documents/${documentId}/upload`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to update document from file: ${response.statusText}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error updating document from file:', error);
+      throw error;
+    }
+  }
+
+  /**
    * Delete a knowledge document
    */
   async deleteKnowledgeDocument(documentId: string): Promise<{ success: boolean; data: { message: string } }> {
     try {
       const token = await this.getAuthToken();
-      const response = await fetch(`${this.baseUrl}/knowledge-dashboard/documents/${documentId}`, {
+      const response = await fetch(`${this.baseUrl}/api/v1/knowledge-dashboard/documents/${documentId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,

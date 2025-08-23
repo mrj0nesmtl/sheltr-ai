@@ -3,10 +3,11 @@ Knowledge Dashboard Router for SHELTR-AI
 Handles knowledge document management and dashboard data
 """
 
-from fastapi import APIRouter, Depends, HTTPException, Form
+from fastapi import APIRouter, Depends, HTTPException, Form, UploadFile, File
 from typing import List, Dict, Any
 from services.knowledge_dashboard_service import KnowledgeDashboardService
 from middleware.auth_middleware import get_current_user, require_super_admin
+from firebase_admin import firestore
 import logging
 
 logger = logging.getLogger(__name__)
@@ -136,6 +137,114 @@ async def update_knowledge_document(
     except Exception as e:
         logger.error(f"Failed to update knowledge document: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Failed to update knowledge document: {str(e)}")
+
+@router.put("/documents/{document_id}/upload")
+async def update_knowledge_document_from_file(
+    document_id: str,
+    file: UploadFile = File(...),
+    title: str = Form(None),
+    category: str = Form(None),
+    tags: str = Form(""),
+    current_user: Dict[str, Any] = Depends(require_super_admin)
+):
+    """Update knowledge document from file upload with embedding regeneration"""
+    
+    try:
+        from services.knowledge_service import knowledge_service
+        from services.embeddings_service import EmbeddingsService
+        
+        logger.info(f"Updating document {document_id} from file: {file.filename}")
+        
+        # Read file content
+        content = await file.read()
+        if isinstance(content, bytes):
+            content = content.decode('utf-8')
+        
+        # Extract title from content if not provided
+        if not title:
+            lines = content.split('\n')
+            for line in lines:
+                if line.strip().startswith('# '):
+                    title = line.strip()[2:].strip()
+                    break
+            if not title:
+                title = file.filename.replace('.md', '').replace('-', ' ').replace('_', ' ').title()
+        
+        # Parse tags
+        tag_list = [tag.strip() for tag in tags.split(',') if tag.strip()] if tags else []
+        
+        # Update document
+        knowledge_service = KnowledgeDashboardService()
+        updates = {
+            'title': title,
+            'content': content,
+            'category': category or 'Platform',
+            'tags': tag_list,
+            'file_size': len(content.encode('utf-8')),
+            'word_count': len(content.split()),
+            'updated_at': firestore.SERVER_TIMESTAMP
+        }
+        
+        success = await knowledge_service.update_knowledge_document(document_id, updates)
+        
+        if not success:
+            raise HTTPException(status_code=404, detail="Document not found")
+        
+        # Regenerate embeddings
+        try:
+            embeddings_service = EmbeddingsService()
+            
+            # Delete existing chunks
+            chunks_query = knowledge_service.db.collection('knowledge_chunks').where('document_id', '==', document_id)
+            existing_chunks = list(chunks_query.stream())
+            
+            logger.info(f"Deleting {len(existing_chunks)} existing chunks")
+            for chunk in existing_chunks:
+                chunk.reference.delete()
+            
+            # Generate new embeddings
+            metadata = {
+                'document_id': document_id,
+                'title': title,
+                'category': category or 'Platform',
+                'access_level': 'public'
+            }
+            
+            chunk_ids = await embeddings_service.process_document_embeddings(
+                document_id=document_id,
+                content=content,
+                metadata=metadata
+            )
+            
+            # Update document with new chunk count
+            doc_ref = knowledge_service.db.collection('knowledge_documents').document(document_id)
+            doc_ref.update({
+                'embedding_count': len(chunk_ids),
+                'processed': True,
+                'embedding_status': 'completed'
+            })
+            
+            logger.info(f"Generated {len(chunk_ids)} new embedding chunks")
+            
+        except Exception as e:
+            logger.error(f"Failed to regenerate embeddings: {e}")
+            # Update document to show embedding failed
+            doc_ref = knowledge_service.db.collection('knowledge_documents').document(document_id)
+            doc_ref.update({
+                'embedding_status': 'failed',
+                'processed': False
+            })
+        
+        return {
+            "success": True,
+            "data": {
+                "message": f"Knowledge document updated successfully with {len(chunk_ids) if 'chunk_ids' in locals() else 0} new embeddings"
+            }
+        }
+        
+    except Exception as e:
+        logger.error(f"Failed to update document from file: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to update document from file: {str(e)}")
 
 @router.delete("/documents/{document_id}")
 async def delete_knowledge_document(

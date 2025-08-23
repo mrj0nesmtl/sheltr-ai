@@ -1,0 +1,65 @@
+[
+  {
+    "doc_id": "6HHoaWQMyp7U4i7TnGKy",
+    "title": "SHELTR System Design and Architecture",
+    "old_path": "knowledge-base/public/system-design.md",
+    "new_path": "knowledge-base/02-architecture/system-design.md",
+    "status": "success"
+  },
+  {
+    "doc_id": "7n7KvZTTPgPqwQrBxWY2",
+    "title": "Hacking Homelessness Strategy",
+    "old_path": "knowledge-base/public/hacking_homelessness.md",
+    "new_path": "knowledge-base/01-overview/hacking_homelessness.md",
+    "status": "success"
+  },
+  {
+    "doc_id": "8bzVehuA2tIOgVXwr3IN",
+    "title": "SHELTR Platform Overview",
+    "old_path": "knowledge-base/public/README.md",
+    "new_path": "knowledge-base/01-overview/README.md",
+    "status": "success"
+  },
+  {
+    "doc_id": "9Nv7wgBXHLUeHaK7rfVZ",
+    "title": "Donor User Guide",
+    "old_path": "knowledge-base/public/donor-guide.md",
+    "new_path": "knowledge-base/06-user-guides/donor-guide.md",
+    "status": "success"
+  },
+  {
+    "doc_id": "Ca1cOfhSTmJc23Mvr3LX",
+    "title": "SHELTR White Paper",
+    "old_path": "knowledge-base/public/whitepaper_final.md",
+    "new_path": "knowledge-base/02-architecture/whitepaper_final.md",
+    "status": "success"
+  },
+  {
+    "doc_id": "GeOlP2AEsF73zZjYWXrg",
+    "title": "Shelter Admin Guide",
+    "old_path": "knowledge-base/public/shelter-admin-guide.md",
+    "new_path": "knowledge-base/06-user-guides/shelter-admin-guide.md",
+    "status": "success"
+  },
+  {
+    "doc_id": "YfRBbdItc7oiL8UD3sL7",
+    "title": "SHELTR Tokenomics and SmartFund Model",
+    "old_path": "knowledge-base/public/sheltr-tokenomics.md",
+    "new_path": "knowledge-base/02-architecture/tokenomics/sheltr-tokenomics.md",
+    "status": "success"
+  },
+  {
+    "doc_id": "bPdJFLIz8GESxhqW4kz2",
+    "title": "SHELTR Blockchain Technical Documentation",
+    "old_path": "knowledge-base/public/blockchain.md",
+    "new_path": "knowledge-base/02-architecture/technical/blockchain.md",
+    "status": "success"
+  },
+  {
+    "doc_id": "e44raOpLpfixKA0hFDKo",
+    "title": "Participant User Guide",
+    "old_path": "knowledge-base/public/participant-guide.md",
+    "new_path": "knowledge-base/06-user-guides/participant-guide.md",
+    "status": "success"
+  }
+]

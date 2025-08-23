@@ -500,6 +500,18 @@ export default function KnowledgeDashboard() {
                   onNavigate={handleBreadcrumbNavigate}
                   className="flex-shrink-0"
                 />
+                
+                {/* Manual Refresh Button */}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={loadKnowledgeData}
+                  disabled={loading}
+                  className="flex-shrink-0"
+                >
+                  <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+                  Refresh
+                </Button>
               </div>
               <Select value={categoryFilter} onValueChange={setCategoryFilter}>
                 <SelectTrigger className="w-full sm:w-48">

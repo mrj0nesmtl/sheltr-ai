@@ -4,15 +4,20 @@ This section contains supplementary resources, templates, and guidelines for the
 
 ## 📋 Contents
 
-*This section is ready for content. Key areas to document:*
+### 🎨 Design & Brand Resources
+- **[Design System](./design-system.md)**: Complete UI/UX design system with components, colors, and guidelines
+- **[Brand Guidelines](./brand-guidelines.md)**: Brand identity, logo usage, and style guide
+- **[Accessibility Guide](./accessibility-guide.md)**: WCAG compliance and accessibility implementation standards
 
-- **Design System**: UI/UX design system and guidelines
-- **Brand Guidelines**: Brand identity and style guide
-- **Legal Compliance**: Legal and regulatory documentation
-- **Accessibility Guide**: Accessibility standards and implementation
-- **Performance Benchmarks**: Performance standards and metrics
-- **Security Checklist**: Security audit checklist and procedures
-- **Templates**: Document and code templates
+### 📊 Standards & Compliance
+- **[Performance Benchmarks](./performance-benchmarks.md)**: Performance standards, metrics, and optimization targets
+- **[Security Checklist](./security-checklist.md)**: Security audit checklist and compliance procedures
+- **[Legal Compliance](./legal-compliance.md)**: Legal requirements, privacy policies, and regulatory documentation
+
+### 📝 Templates & Tools
+- **[Templates Directory](./templates/README.md)**: Document templates, code scaffolding, and project templates
+- **[Code Standards](./code-standards.md)**: Coding conventions, linting rules, and best practices
+- **[Testing Guidelines](./testing-guidelines.md)**: Testing standards, frameworks, and quality assurance procedures
 
 ## 📁 Templates Directory
 

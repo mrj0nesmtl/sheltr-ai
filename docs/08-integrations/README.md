@@ -4,15 +4,25 @@ This section contains integration guides for external services and APIs.
 
 ## 📋 Contents
 
-*This section is ready for content. Key areas to document:*
+### ☁️ Core Platform Integrations
+- **[Firebase Integration](./firebase-integration.md)**: Complete Firebase service setup (Auth, Firestore, Storage, Hosting)
+- **[Google Cloud Integration](./google-cloud-integration.md)**: GCP service integration guides (Cloud Run, Functions, Storage)
+- **[OpenAI Integration](./openai-integration.md)**: AI chatbot and knowledge base integration
 
-- **Firebase Integration**: Complete Firebase service setup
-- **Google Cloud Integration**: GCP service integration guides
-- **Blockchain Integration**: Web3 and smart contract integration
-- **Payment Integration**: Stripe, PayPal, and other payment processors
-- **Analytics Integration**: Analytics and tracking setup
-- **Notification Integration**: Push notification services
-- **Third-Party APIs**: External API integration guides
+### 💳 Payment & Financial Integrations
+- **[Stripe Integration](./stripe-integration.md)**: Credit card and payment processing setup
+- **[Adyen Integration](./adyen-integration.md)**: Advanced payment rails and multi-currency support
+- **[Cryptocurrency Integration](./crypto-integration.md)**: Web3 wallet and crypto payment integration
+
+### ⛓️ Blockchain Integrations
+- **[Web3 Integration](./web3-integration.md)**: Ethereum and smart contract integration
+- **[Wallet Integration](./wallet-integration.md)**: MetaMask and other wallet providers
+- **[Token Integration](./token-integration.md)**: SHELTR token integration and management
+
+### 📊 Analytics & Monitoring Integrations
+- **[Google Analytics](./google-analytics.md)**: Web analytics and conversion tracking
+- **[Firebase Analytics](./firebase-analytics.md)**: Mobile and web app analytics
+- **[Sentry Integration](./sentry-integration.md)**: Error tracking and performance monitoring
 
 ## 🔧 Integration Categories
 

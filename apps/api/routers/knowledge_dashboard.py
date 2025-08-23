@@ -8,6 +8,7 @@ from typing import List, Dict, Any
 from services.knowledge_dashboard_service import KnowledgeDashboardService
 from middleware.auth_middleware import get_current_user, require_super_admin
 from firebase_admin import firestore
+from datetime import datetime
 import logging
 
 logger = logging.getLogger(__name__)
@@ -270,3 +271,88 @@ async def delete_knowledge_document(
     except Exception as e:
         logger.error(f"Failed to delete knowledge document: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Failed to delete knowledge document: {str(e)}")
+
+@router.post("/scan-github-changes")
+async def scan_github_changes(
+    current_user: Dict[str, Any] = Depends(require_super_admin)
+):
+    """Scan GitHub repository for documentation changes (placeholder implementation)"""
+    try:
+        # This is a placeholder implementation
+        # In production, this would integrate with GitHub API
+        
+        # Simulate scanning for changes based on recent documentation updates
+        mock_changes = {
+            "new": [
+                "05-deployment/firebase-hosting.md",
+                "05-deployment/google-cloud-run.md", 
+                "05-deployment/monitoring.md",
+                "05-deployment/security.md",
+                "07-reference/database-schema.md",
+                "07-reference/api-reference.md",
+                "08-integrations/firebase-integration.md",
+                "10-resources/design-system.md",
+                "10-resources/templates/bug-report.md",
+                "10-resources/templates/feature-request.md"
+            ],
+            "modified": [
+                "02-architecture/README.md",
+                "05-deployment/README.md",
+                "07-reference/README.md", 
+                "08-integrations/README.md",
+                "10-resources/README.md",
+                "10-resources/templates/README.md"
+            ],
+            "deleted": [],
+            "unchanged": [
+                "01-overview/README.md",
+                "03-api/README.md",
+                "04-development/README.md",
+                "06-user-guides/README.md"
+            ]
+        }
+        
+        return {
+            "success": True,
+            "changes": mock_changes,
+            "timestamp": datetime.utcnow().isoformat(),
+            "message": "GitHub scan completed (mock data)"
+        }
+        
+    except Exception as e:
+        logger.error(f"Error scanning GitHub changes: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/sync-github-files")
+async def sync_github_files(
+    request: Dict[str, List[str]],
+    current_user: Dict[str, Any] = Depends(require_super_admin)
+):
+    """Sync selected files from GitHub to knowledge base (placeholder implementation)"""
+    try:
+        files_to_sync = request.get("files", [])
+        
+        # This is a placeholder implementation
+        # In production, this would:
+        # 1. Fetch file content from GitHub API
+        # 2. Create/update Firestore documents
+        # 3. Generate embeddings for each file
+        
+        results = {
+            "successful": len(files_to_sync),
+            "failed": 0,
+            "details": [{"file": file, "status": "success"} for file in files_to_sync],
+            "message": f"Successfully synced {len(files_to_sync)} files (mock implementation)"
+        }
+        
+        logger.info(f"GitHub sync completed for {len(files_to_sync)} files")
+        
+        return {
+            "success": True,
+            "results": results,
+            "timestamp": datetime.utcnow().isoformat()
+        }
+        
+    except Exception as e:
+        logger.error(f"Error syncing GitHub files: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))

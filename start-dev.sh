@@ -240,8 +240,8 @@ while true; do
         frontend_status="🔴"
     fi
     
-    # Every 30 seconds (3 cycles), show detailed status
-    if [ $((monitor_count % 3)) -eq 0 ]; then
+    # Every 2 minutes (12 cycles), show detailed status
+    if [ $((monitor_count % 12)) -eq 0 ]; then
         # Test AI health
         if ! curl -s "http://localhost:8000/api/v1/chatbot/health" >/dev/null 2>&1; then
             ai_status="🟡"

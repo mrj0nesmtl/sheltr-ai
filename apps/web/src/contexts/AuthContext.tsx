@@ -273,7 +273,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       notificationSent: false
     };
 
-    // Store both documents
+    // Store both documents (using top-level collections)
     await Promise.all([
       setDoc(doc(db, 'users', user.uid), userDocData),
       setDoc(doc(db, 'shelter_applications', shelterId), shelterApplicationData)

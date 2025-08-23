@@ -54,7 +54,7 @@ class GitHubService:
             
             # Create mapping of existing files
             existing_files = {}
-            for doc in kb_documents.get('documents', []):
+            for doc in kb_documents:
                 file_path = doc.get('file_path', '')
                 if file_path.startswith('knowledge-base/public/'):
                     # Remove the knowledge-base/public/ prefix to match GitHub paths
@@ -116,6 +116,18 @@ class GitHubService:
             
             async with aiohttp.ClientSession() as session:
                 files = []
+                
+                # First check if the docs directory exists
+                async with session.get(url, headers=self._get_headers()) as response:
+                    if response.status == 404:
+                        logger.warning(f"Docs directory '{self.docs_path}' not found in repository")
+                        return []  # Return empty list instead of raising error
+                    elif response.status != 200:
+                        error_text = await response.text()
+                        logger.error(f"GitHub API error: {response.status} - {error_text}")
+                        return []
+                
+                # If directory exists, get files recursively
                 await self._get_files_recursive(session, url, files)
                 
                 # Filter for markdown files only
@@ -129,7 +141,7 @@ class GitHubService:
                 
         except Exception as e:
             logger.error(f"Error getting repository files: {str(e)}")
-            raise
+            return []  # Return empty list instead of raising error
     
     async def _get_files_recursive(self, session: aiohttp.ClientSession, url: str, files: List[Dict]):
         """Recursively get all files from a directory"""
@@ -152,12 +164,16 @@ class GitHubService:
                         elif item['type'] == 'dir':
                             # Recursively get files from subdirectory
                             await self._get_files_recursive(session, item['url'], files)
+                elif response.status == 404:
+                    logger.warning(f"Directory not found: {url}")
+                    # Don't raise error for 404, just log and continue
                 else:
-                    logger.error(f"GitHub API error: {response.status} - {await response.text()}")
+                    error_text = await response.text()
+                    logger.error(f"GitHub API error: {response.status} - {error_text}")
                     
         except Exception as e:
             logger.error(f"Error in recursive file fetch: {str(e)}")
-            raise
+            # Don't re-raise, just log the error
     
     async def get_file_content(self, file_path: str) -> Optional[str]:
         """Get the content of a specific file from GitHub"""
@@ -218,7 +234,7 @@ class GitHubService:
                     kb_documents = await kb_service.get_knowledge_documents()
                     existing_doc = None
                     
-                    for doc in kb_documents.get('documents', []):
+                    for doc in kb_documents:
                         doc_path = doc.get('file_path', '').replace('knowledge-base/public/', '')
                         if doc_path == file_path:
                             existing_doc = doc

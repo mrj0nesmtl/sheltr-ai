@@ -43,6 +43,7 @@ import { knowledgeDashboardService, KnowledgeDocument, KnowledgeStats } from '@/
 import { useAuth } from '@/contexts/AuthContext';
 import { FolderTree, buildFolderTree, FolderNode } from '@/components/knowledge/FolderTree';
 import { Breadcrumb, buildBreadcrumb } from '@/components/knowledge/Breadcrumb';
+import { GitHubSyncPanel } from '@/components/knowledge/GitHubSyncPanel';
 
 export default function KnowledgeDashboard() {
   const { user } = useAuth();
@@ -405,6 +406,9 @@ export default function KnowledgeDashboard() {
           </Dialog>
         </div>
       </div>
+
+      {/* GitHub Sync Panel */}
+      <GitHubSyncPanel onSyncComplete={loadKnowledgeData} />
 
       {/* Stats Row */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">

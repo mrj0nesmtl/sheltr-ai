@@ -1036,91 +1036,224 @@ export default function KnowledgeDashboard() {
         </DialogContent>
       </Dialog>
 
-      {/* Edit Document Dialog */}
+      {/* Enhanced Edit Document Dialog */}
       <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-6xl max-h-[95vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Edit Knowledge Document</DialogTitle>
+            <div className="flex items-center justify-between">
+              <DialogTitle className="flex items-center gap-2">
+                <Edit className="h-5 w-5" />
+                Edit Knowledge Document
+              </DialogTitle>
+              <div className="flex items-center gap-2">
+                <Badge variant={editingDocument?.embedding_status === 'completed' ? 'default' : 'secondary'}>
+                  {editingDocument?.embedding_status === 'completed' ? 'Embedded' : 'Pending'}
+                </Badge>
+                <Badge variant="outline">
+                  {editingDocument?.chunk_count || 0} chunks
+                </Badge>
+              </div>
+            </div>
           </DialogHeader>
           
-          <div className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Left Column - Document Info */}
+            <div className="lg:col-span-1 space-y-4">
+              <div className="bg-muted/50 p-4 rounded-lg space-y-3">
+                <h3 className="font-semibold flex items-center gap-2">
+                  <FileText className="h-4 w-4" />
+                  Document Info
+                </h3>
+                <div className="space-y-2 text-sm">
+                  <div>
+                    <span className="font-medium">File Path:</span>
+                    <p className="text-muted-foreground font-mono text-xs break-all">
+                      {editingDocument?.file_path || 'N/A'}
+                    </p>
+                  </div>
+                  <div>
+                    <span className="font-medium">Size:</span>
+                    <span className="text-muted-foreground ml-2">
+                      {editingDocument?.file_size ? `${(editingDocument.file_size / 1024).toFixed(1)} KB` : 'N/A'}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="font-medium">Words:</span>
+                    <span className="text-muted-foreground ml-2">
+                      {editingDocument?.word_count || 0}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="font-medium">Created:</span>
+                    <p className="text-muted-foreground text-xs">
+                      {editingDocument?.created_at ? new Date(editingDocument.created_at).toLocaleDateString() : 'N/A'}
+                    </p>
+                  </div>
+                  <div>
+                    <span className="font-medium">Updated:</span>
+                    <p className="text-muted-foreground text-xs">
+                      {editingDocument?.updated_at ? new Date(editingDocument.updated_at).toLocaleDateString() : 'N/A'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Privacy & Access Controls */}
+              <div className="bg-muted/50 p-4 rounded-lg space-y-3">
+                <h3 className="font-semibold flex items-center gap-2">
+                  <Shield className="h-4 w-4" />
+                  Privacy & Access
+                </h3>
+                
+                <div>
+                  <label className="text-sm font-medium">Access Level</label>
+                  <Select 
+                    value={formData.sharing_level} 
+                    onValueChange={(value) => setFormData({...formData, sharing_level: value as any})}
+                  >
+                    <SelectTrigger className="mt-1">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="public">🌐 Public (Chatbot)</SelectItem>
+                      <SelectItem value="super_admin_only">🔒 Super Admin Only</SelectItem>
+                      <SelectItem value="shelter_specific">🏠 Shelter Specific</SelectItem>
+                      <SelectItem value="role_based">👥 Role Based</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium">Confidentiality</label>
+                  <Select 
+                    value={formData.confidentiality_level} 
+                    onValueChange={(value) => setFormData({...formData, confidentiality_level: value as any})}
+                  >
+                    <SelectTrigger className="mt-1">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="public">📖 Public</SelectItem>
+                      <SelectItem value="internal">🏢 Internal</SelectItem>
+                      <SelectItem value="confidential">🔐 Confidential</SelectItem>
+                      <SelectItem value="restricted">⛔ Restricted</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="is_live"
+                    checked={formData.is_live}
+                    onChange={(e) => setFormData({...formData, is_live: e.target.checked})}
+                    className="rounded"
+                  />
+                  <label htmlFor="is_live" className="text-sm font-medium">
+                    Live in Chatbot
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column - Content */}
+            <div className="lg:col-span-2 space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-medium">Title *</label>
+                  <Input
+                    value={formData.title}
+                    onChange={(e) => setFormData({...formData, title: e.target.value})}
+                    placeholder="Enter document title"
+                    className="mt-1"
+                  />
+                </div>
+                
+                <div>
+                  <label className="text-sm font-medium">Category *</label>
+                  <Select value={formData.category} onValueChange={(value) => setFormData({...formData, category: value})}>
+                    <SelectTrigger className="mt-1">
+                      <SelectValue placeholder="Select category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Platform">📋 Platform</SelectItem>
+                      <SelectItem value="Architecture">🏗️ Architecture</SelectItem>
+                      <SelectItem value="API">🔌 API</SelectItem>
+                      <SelectItem value="Development">💻 Development</SelectItem>
+                      <SelectItem value="Deployment">🚀 Deployment</SelectItem>
+                      <SelectItem value="User Guides">👥 User Guides</SelectItem>
+                      <SelectItem value="Reference">📚 Reference</SelectItem>
+                      <SelectItem value="Integrations">🔗 Integrations</SelectItem>
+                      <SelectItem value="Migration">📦 Migration</SelectItem>
+                      <SelectItem value="Resources">🎯 Resources</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
               <div>
-                <label className="text-sm font-medium">Title *</label>
-                <Input
-                  value={formData.title}
-                  onChange={(e) => setFormData({...formData, title: e.target.value})}
-                  placeholder="Enter document title"
+                <label className="text-sm font-medium">Content *</label>
+                <Textarea
+                  value={formData.content}
+                  onChange={(e) => setFormData({...formData, content: e.target.value})}
+                  placeholder="Enter document content (Markdown supported)"
+                  rows={15}
+                  className="mt-1 font-mono text-sm"
                 />
+                <p className="text-xs text-muted-foreground mt-1">
+                  Supports Markdown formatting. Changes will regenerate embeddings.
+                </p>
               </div>
-              
-              <div>
-                <label className="text-sm font-medium">Category *</label>
-                <Select value={formData.category} onValueChange={(value) => setFormData({...formData, category: value})}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Platform">Platform</SelectItem>
-                    <SelectItem value="Technology">Technology</SelectItem>
-                    <SelectItem value="AI">AI</SelectItem>
-                    <SelectItem value="Documentation">Documentation</SelectItem>
-                  </SelectContent>
-                </Select>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-medium">Status</label>
+                  <Select value={formData.status} onValueChange={(value: 'active' | 'archived' | 'processing') => setFormData({...formData, status: value})}>
+                    <SelectTrigger className="mt-1">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="active">✅ Active</SelectItem>
+                      <SelectItem value="archived">📦 Archived</SelectItem>
+                      <SelectItem value="processing">⏳ Processing</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div>
+                  <label className="text-sm font-medium">Tags</label>
+                  <Input
+                    value={formData.tags.join(', ')}
+                    onChange={(e) => setFormData({...formData, tags: e.target.value.split(',').map(t => t.trim()).filter(Boolean)})}
+                    placeholder="Enter tags separated by commas"
+                    className="mt-1"
+                  />
+                </div>
               </div>
             </div>
+          </div>
 
-            <div>
-              <label className="text-sm font-medium">Content *</label>
-              <Textarea
-                value={formData.content}
-                onChange={(e) => setFormData({...formData, content: e.target.value})}
-                placeholder="Enter document content..."
-                rows={10}
-              />
+          <div className="flex justify-between items-center pt-4 border-t">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <AlertTriangle className="h-4 w-4" />
+              Changes will regenerate embeddings and update the chatbot knowledge
             </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="text-sm font-medium">Status</label>
-                <Select value={formData.status} onValueChange={(value: 'active' | 'archived' | 'processing') => setFormData({...formData, status: value})}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="active">Active</SelectItem>
-                    <SelectItem value="archived">Archived</SelectItem>
-                    <SelectItem value="processing">Processing</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              
-              <div>
-                <label className="text-sm font-medium">Tags</label>
-                <Input
-                  value={formData.tags.join(', ')}
-                  onChange={(e) => setFormData({...formData, tags: e.target.value.split(',').map(t => t.trim()).filter(Boolean)})}
-                  placeholder="Enter tags separated by commas"
-                />
-              </div>
-            </div>
-
-            <div className="flex justify-end gap-2">
+            <div className="flex gap-3">
               <Button variant="outline" onClick={() => setShowEditDialog(false)}>
                 Cancel
               </Button>
-              <Button onClick={handleUpdateDocument}>
-                <Edit className="h-4 w-4 mr-2" />
-                Update Document
+              <Button onClick={handleUpdateDocument} className="bg-blue-600 hover:bg-blue-700">
+                <RefreshCw className="h-4 w-4 mr-2" />
+                Update & Regenerate
               </Button>
             </div>
           </div>
         </DialogContent>
       </Dialog>
 
-      {/* View Document Dialog */}
+      {/* Enhanced View Document Dialog */}
       <Dialog open={showViewDialog} onOpenChange={setShowViewDialog}>
-        <DialogContent className={`${isFullScreen ? 'max-w-full max-h-full' : 'max-w-4xl max-h-[90vh]'} overflow-y-auto p-4 sm:p-6`}>
+        <DialogContent className={`${isFullScreen ? 'max-w-full max-h-full' : 'max-w-6xl max-h-[95vh]'} overflow-y-auto`}>
           <DialogHeader>
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <DialogTitle className="flex items-center gap-2 text-lg sm:text-xl">
@@ -1150,74 +1283,245 @@ export default function KnowledgeDashboard() {
                   <Copy className="h-4 w-4" />
                   <span className="ml-2 hidden sm:inline">Copy</span>
                 </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    if (viewingDocument) {
+                      openEditDialog(viewingDocument);
+                      setShowViewDialog(false);
+                    }
+                  }}
+                  className="flex-1 sm:flex-none"
+                >
+                  <Edit className="h-4 w-4" />
+                  <span className="ml-2 hidden sm:inline">Edit</span>
+                </Button>
               </div>
             </div>
           </DialogHeader>
           
           {viewingDocument && (
-            <div className="space-y-4 sm:space-y-6">
-              {/* Document Metadata */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 p-3 sm:p-4 bg-muted/50 rounded-lg">
-                <div>
-                  <p className="text-xs sm:text-sm font-medium">Status</p>
-                  <Badge variant={viewingDocument.status === 'active' ? 'default' : 'secondary'} className="text-xs">
-                    {viewingDocument.status}
-                  </Badge>
-                </div>
-                <div>
-                  <p className="text-xs sm:text-sm font-medium">Embeddings</p>
-                  <Badge variant={viewingDocument.embedding_status === 'completed' ? 'default' : 'outline'} className="text-xs">
-                    {getEmbeddingStatusIcon(viewingDocument.embedding_status)}
-                    <span className="ml-1">{viewingDocument.embedding_status}</span>
-                  </Badge>
-                </div>
-                <div>
-                  <p className="text-xs sm:text-sm font-medium">Chunks</p>
-                  <p className="text-xs sm:text-sm">{viewingDocument.chunk_count}</p>
-                </div>
-                <div>
-                  <p className="text-xs sm:text-sm font-medium">Words</p>
-                  <p className="text-xs sm:text-sm">{viewingDocument.word_count}</p>
-                </div>
-              </div>
-              
-              {/* Quality Score */}
-              <div className="p-3 sm:p-4 bg-muted/50 rounded-lg">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium">Quality Score</span>
-                  <span className="text-sm font-bold">{getQualityScore(viewingDocument)}/100</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-3">
-                  <div 
-                    className={`h-3 rounded-full ${getQualityBadge(getQualityScore(viewingDocument)).color}`}
-                    style={{ width: `${getQualityScore(viewingDocument)}%` }}
-                  ></div>
-                </div>
-              </div>
-              
-              {/* Full Content */}
-              <div>
-                <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Document Content</h3>
-                <div className="bg-muted/30 p-3 sm:p-6 rounded-lg max-h-64 sm:max-h-96 overflow-y-auto">
-                  <pre className="whitespace-pre-wrap text-xs sm:text-sm font-mono leading-relaxed">
-                    {viewingDocument.content}
-                  </pre>
-                </div>
-              </div>
-              
-              {/* Tags */}
-              {viewingDocument.tags && viewingDocument.tags.length > 0 && (
-                <div>
-                  <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Tags</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {viewingDocument.tags.map((tag, index) => (
-                      <Badge key={index} variant="outline" className="text-xs">
-                        {tag}
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+              {/* Left Sidebar - Metadata */}
+              <div className="lg:col-span-1 space-y-4">
+                {/* Document Info */}
+                <div className="bg-muted/50 p-4 rounded-lg space-y-3">
+                  <h3 className="font-semibold flex items-center gap-2">
+                    <FileText className="h-4 w-4" />
+                    Document Info
+                  </h3>
+                  <div className="space-y-2 text-sm">
+                    <div>
+                      <span className="font-medium">Category:</span>
+                      <Badge variant="outline" className="ml-2 text-xs">
+                        {viewingDocument.category}
                       </Badge>
-                    ))}
+                    </div>
+                    <div>
+                      <span className="font-medium">Status:</span>
+                      <Badge variant={viewingDocument.status === 'active' ? 'default' : 'secondary'} className="ml-2 text-xs">
+                        {viewingDocument.status}
+                      </Badge>
+                    </div>
+                    <div>
+                      <span className="font-medium">File Path:</span>
+                      <p className="text-muted-foreground font-mono text-xs break-all mt-1">
+                        {viewingDocument.file_path || 'N/A'}
+                      </p>
+                    </div>
+                    <div>
+                      <span className="font-medium">Size:</span>
+                      <span className="text-muted-foreground ml-2">
+                        {viewingDocument.file_size ? `${(viewingDocument.file_size / 1024).toFixed(1)} KB` : 'N/A'}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="font-medium">Words:</span>
+                      <span className="text-muted-foreground ml-2">
+                        {viewingDocument.word_count || 0}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="font-medium">Views:</span>
+                      <span className="text-muted-foreground ml-2">
+                        {viewingDocument.view_count || 0}
+                      </span>
+                    </div>
                   </div>
                 </div>
-              )}
+
+                {/* AI & Embeddings */}
+                <div className="bg-muted/50 p-4 rounded-lg space-y-3">
+                  <h3 className="font-semibold flex items-center gap-2">
+                    <Brain className="h-4 w-4" />
+                    AI & Embeddings
+                  </h3>
+                  <div className="space-y-2 text-sm">
+                    <div>
+                      <span className="font-medium">Embedding Status:</span>
+                      <Badge variant={viewingDocument.embedding_status === 'completed' ? 'default' : 'outline'} className="ml-2 text-xs">
+                        {getEmbeddingStatusIcon(viewingDocument.embedding_status)}
+                        <span className="ml-1">{viewingDocument.embedding_status}</span>
+                      </Badge>
+                    </div>
+                    <div>
+                      <span className="font-medium">Chunks:</span>
+                      <span className="text-muted-foreground ml-2">
+                        {viewingDocument.chunk_count || 0}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="font-medium">Quality Score:</span>
+                      <div className="mt-2">
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-xs">{getQualityScore(viewingDocument)}/100</span>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div 
+                            className={`h-2 rounded-full ${getQualityBadge(getQualityScore(viewingDocument)).color}`}
+                            style={{ width: `${getQualityScore(viewingDocument)}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Privacy & Access */}
+                <div className="bg-muted/50 p-4 rounded-lg space-y-3">
+                  <h3 className="font-semibold flex items-center gap-2">
+                    <Shield className="h-4 w-4" />
+                    Privacy & Access
+                  </h3>
+                  <div className="space-y-2 text-sm">
+                    <div>
+                      <span className="font-medium">Access Level:</span>
+                      <Badge variant="outline" className="ml-2 text-xs">
+                        {viewingDocument.sharing_level === 'public' ? '🌐 Public' :
+                         viewingDocument.sharing_level === 'super_admin_only' ? '🔒 Admin Only' :
+                         viewingDocument.sharing_level === 'shelter_specific' ? '🏠 Shelter' :
+                         '👥 Role Based'}
+                      </Badge>
+                    </div>
+                    <div>
+                      <span className="font-medium">Confidentiality:</span>
+                      <Badge variant="outline" className="ml-2 text-xs">
+                        {viewingDocument.confidentiality_level === 'public' ? '📖 Public' :
+                         viewingDocument.confidentiality_level === 'internal' ? '🏢 Internal' :
+                         viewingDocument.confidentiality_level === 'confidential' ? '🔐 Confidential' :
+                         '⛔ Restricted'}
+                      </Badge>
+                    </div>
+                    <div>
+                      <span className="font-medium">Chatbot Access:</span>
+                      <Badge variant={viewingDocument.is_live ? 'default' : 'secondary'} className="ml-2 text-xs">
+                        {viewingDocument.is_live ? '✅ Live' : '❌ Disabled'}
+                      </Badge>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Tags */}
+                {viewingDocument.tags && viewingDocument.tags.length > 0 && (
+                  <div className="bg-muted/50 p-4 rounded-lg space-y-3">
+                    <h3 className="font-semibold flex items-center gap-2">
+                      <Hash className="h-4 w-4" />
+                      Tags
+                    </h3>
+                    <div className="flex flex-wrap gap-2">
+                      {viewingDocument.tags.map((tag, index) => (
+                        <Badge key={index} variant="outline" className="text-xs">
+                          {tag}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Timestamps */}
+                <div className="bg-muted/50 p-4 rounded-lg space-y-3">
+                  <h3 className="font-semibold flex items-center gap-2">
+                    <Clock className="h-4 w-4" />
+                    Timeline
+                  </h3>
+                  <div className="space-y-2 text-sm">
+                    <div>
+                      <span className="font-medium">Created:</span>
+                      <p className="text-muted-foreground text-xs mt-1">
+                        {viewingDocument.created_at ? new Date(viewingDocument.created_at).toLocaleString() : 'N/A'}
+                      </p>
+                    </div>
+                    <div>
+                      <span className="font-medium">Updated:</span>
+                      <p className="text-muted-foreground text-xs mt-1">
+                        {viewingDocument.updated_at ? new Date(viewingDocument.updated_at).toLocaleString() : 'N/A'}
+                      </p>
+                    </div>
+                    <div>
+                      <span className="font-medium">Created By:</span>
+                      <p className="text-muted-foreground text-xs mt-1">
+                        {viewingDocument.created_by || 'System'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Main Content Area */}
+              <div className="lg:col-span-3 space-y-4">
+                {/* Content Preview */}
+                <div className="bg-muted/30 p-6 rounded-lg">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-semibold">Document Content</h3>
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <FileText className="h-4 w-4" />
+                      {viewingDocument.content?.length || 0} characters
+                    </div>
+                  </div>
+                  
+                  <div className="max-h-96 overflow-y-auto border rounded-lg bg-white p-4">
+                    <div className="prose prose-sm max-w-none">
+                      <pre className="whitespace-pre-wrap text-sm font-mono leading-relaxed">
+                        {viewingDocument.content || 'No content available'}
+                      </pre>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex justify-between items-center pt-4 border-t">
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Target className="h-4 w-4" />
+                    This document {viewingDocument.is_live ? 'is available' : 'is not available'} to the AI chatbot
+                  </div>
+                  <div className="flex gap-3">
+                    <Button 
+                      variant="outline" 
+                      onClick={() => {
+                        if (viewingDocument) {
+                          navigator.clipboard.writeText(viewingDocument.content);
+                        }
+                      }}
+                    >
+                      <Copy className="h-4 w-4 mr-2" />
+                      Copy Content
+                    </Button>
+                    <Button 
+                      onClick={() => {
+                        if (viewingDocument) {
+                          openEditDialog(viewingDocument);
+                          setShowViewDialog(false);
+                        }
+                      }}
+                      className="bg-blue-600 hover:bg-blue-700"
+                    >
+                      <Edit className="h-4 w-4 mr-2" />
+                      Edit Document
+                    </Button>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
         </DialogContent>

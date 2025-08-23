@@ -372,7 +372,8 @@ export default function KnowledgeDashboard() {
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        <div className="p-6 max-w-7xl mx-auto w-full">
+        <div className="flex-1 overflow-auto">
+          <div className="p-6 max-w-7xl mx-auto w-full">
           {/* Header */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
             <div>
@@ -1266,6 +1267,7 @@ export default function KnowledgeDashboard() {
           </div>
         </DialogContent>
       </Dialog>
+          </div>
         </div>
       </div>
     </div>

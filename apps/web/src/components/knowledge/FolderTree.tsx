@@ -39,7 +39,7 @@ export function FolderTree({
   className 
 }: FolderTreeProps) {
   const [expandedFolders, setExpandedFolders] = useState<Set<string>>(
-    new Set(['01-overview', '02-architecture', '03-api', '04-development', '06-user-guides', '09-migration'])
+    new Set(['01-overview', '02-architecture', '03-api', '04-development', '05-deployment', '06-user-guides', '07-reference', '08-integrations', '09-migration', '10-resources'])
   );
 
   const toggleFolder = (path: string) => {
@@ -179,23 +179,31 @@ export function buildFolderTree(documents: any[]): FolderNode[] {
   // Add documents to appropriate folders
   documents.forEach(doc => {
     if (doc.file_path) {
-      // Extract folder from file_path (e.g., "knowledge-base/01-overview/README.md" -> "01-overview")
+      // Extract folder from file_path 
+      // Handle both formats: "knowledge-base/01-overview/README.md" and "knowledge-base/public/01-overview/README.md"
       const pathParts = doc.file_path.split('/');
-      if (pathParts.length >= 2) {
-        const folderPath = pathParts[1]; // Get the folder part
-        const folder = folderMap.get(folderPath);
+      let folderPath = '';
+      
+      if (pathParts.length >= 3 && pathParts[1] === 'public') {
+        // New format: "knowledge-base/public/01-overview/README.md" -> "01-overview"
+        folderPath = pathParts[2];
+      } else if (pathParts.length >= 2) {
+        // Old format: "knowledge-base/01-overview/README.md" -> "01-overview"
+        folderPath = pathParts[1];
+      }
+      
+      const folder = folderMap.get(folderPath);
+      
+      if (folder) {
+        const docNode: FolderNode = {
+          id: doc.id,
+          name: doc.title || 'Untitled',
+          path: doc.file_path,
+          type: 'document'
+        };
         
-        if (folder) {
-          const docNode: FolderNode = {
-            id: doc.id,
-            name: doc.title || 'Untitled',
-            path: doc.file_path,
-            type: 'document'
-          };
-          
-          folder.children!.push(docNode);
-          folder.documentCount = (folder.documentCount || 0) + 1;
-        }
+        folder.children!.push(docNode);
+        folder.documentCount = (folder.documentCount || 0) + 1;
       }
     }
   });

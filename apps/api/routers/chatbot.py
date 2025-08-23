@@ -10,6 +10,7 @@ from pydantic import BaseModel
 from datetime import datetime
 import logging
 import json
+import os
 
 from services.chatbot.orchestrator import chatbot_orchestrator, ChatResponse
 from middleware.auth_middleware import get_current_user
@@ -423,32 +424,27 @@ async def test_send_message(chat_message: ChatMessage):
 )
 async def chatbot_health():
     """
-    Check the health and status of the chatbot system including OpenAI integration.
+    Lightweight health check for the chatbot system - no expensive AI calls.
     """
     try:
-        # Import OpenAI service
+        # Just check if services are importable and basic status
         from services.openai_service import openai_service
         
-        # Test basic orchestrator functionality
-        test_response = await chatbot_orchestrator.process_message(
-            message="test",
-            user_id="health_check",
-            user_role="participant"
-        )
-        
-        # Check OpenAI service health
-        ai_health = await openai_service.health_check()
+        # Quick status check without API calls
+        openai_configured = bool(os.getenv("OPENAI_API_KEY"))
         
         return {
             "success": True,
             "status": "operational",
             "orchestrator": "active",
-            "ai_service": ai_health,
+            "ai_service": {
+                "configured": openai_configured,
+                "status": "ready" if openai_configured else "not_configured"
+            },
             "active_connections": len(manager.active_connections),
-            "test_response_time": "< 100ms",
             "features": {
-                "intelligent_responses": ai_health.get("features_available", False),
-                "context_awareness": ai_health.get("features_available", False),
+                "intelligent_responses": openai_configured,
+                "context_awareness": openai_configured,
                 "role_based_agents": True,
                 "emergency_escalation": True,
                 "websocket_support": True

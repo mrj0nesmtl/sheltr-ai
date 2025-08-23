@@ -13,10 +13,9 @@ import {
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
-// Migration configuration
-const MIGRATION_CONFIG = {
-  tenantId: 'Vc48fjy0cajJrstbLQRr',
-  sheltersCollectionPath: 'tenants/Vc48fjy0cajJrstbLQRr/platform/shelters/data'
+// Simplified configuration - using top-level collections
+const CONFIG = {
+  sheltersCollectionPath: 'shelters'
 };
 
 // Types based on the migration document schema
@@ -84,8 +83,8 @@ export class FirestoreService {
     try {
       // Use the migrated structure for the primary tenant
       if (tenantId === 'platform') {
-        console.log('🏠 Fetching shelters from migrated path:', MIGRATION_CONFIG.sheltersCollectionPath);
-        const sheltersRef = collection(db, MIGRATION_CONFIG.sheltersCollectionPath);
+        console.log('🏠 Fetching shelters from migrated path:', CONFIG.sheltersCollectionPath);
+        const sheltersRef = collection(db, CONFIG.sheltersCollectionPath);
         const q = query(sheltersRef, orderBy('createdAt', 'desc'));
         const querySnapshot = await getDocs(q);
         
@@ -174,22 +173,14 @@ export class FirestoreService {
     }
   }
 
-  // Add a new shelter (updated for new structure)
-  async addShelter(shelterData: Omit<Shelter, 'id' | 'createdAt' | 'updatedAt'>, tenantId: string = 'platform'): Promise<string> {
+  // Add a new shelter (using top-level shelters collection)
+  async addShelter(shelterData: Omit<Shelter, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
     try {
-      let sheltersRef;
-      
-      if (tenantId === 'platform') {
-        sheltersRef = collection(db, MIGRATION_CONFIG.sheltersCollectionPath);
-      } else {
-        sheltersRef = collection(db, `tenants/${tenantId}/platform/shelters/data`);
-      }
-      
+      const sheltersRef = collection(db, CONFIG.sheltersCollectionPath);
       const now = Timestamp.now();
       
       const docRef = await addDoc(sheltersRef, {
         ...shelterData,
-        tenantId: tenantId === 'platform' ? MIGRATION_CONFIG.tenantId : tenantId,
         createdAt: now,
         updatedAt: now
       });
@@ -201,16 +192,10 @@ export class FirestoreService {
     }
   }
 
-  // Update shelter (updated for new structure)
-  async updateShelter(shelterId: string, updates: Partial<Shelter>, tenantId: string = 'platform'): Promise<void> {
+  // Update shelter (using top-level shelters collection)
+  async updateShelter(shelterId: string, updates: Partial<Shelter>): Promise<void> {
     try {
-      let shelterRef;
-      
-      if (tenantId === 'platform') {
-        shelterRef = doc(db, MIGRATION_CONFIG.sheltersCollectionPath, shelterId);
-      } else {
-        shelterRef = doc(db, `tenants/${tenantId}/platform/shelters/data`, shelterId);
-      }
+      const shelterRef = doc(db, CONFIG.sheltersCollectionPath, shelterId);
       
       await updateDoc(shelterRef, {
         ...updates,
@@ -228,7 +213,7 @@ export class FirestoreService {
       let shelterRef;
       
       if (tenantId === 'platform') {
-        shelterRef = doc(db, MIGRATION_CONFIG.sheltersCollectionPath, shelterId);
+        shelterRef = doc(db, CONFIG.sheltersCollectionPath, shelterId);
       } else {
         shelterRef = doc(db, `tenants/${tenantId}/platform/shelters/data`, shelterId);
       }
@@ -244,7 +229,7 @@ export class FirestoreService {
   async getPendingApplications(tenantId: string = 'platform'): Promise<PendingApplication[]> {
     try {
       // Applications remain in the old structure for now
-      const actualTenantId = tenantId === 'platform' ? MIGRATION_CONFIG.tenantId : tenantId;
+      const actualTenantId = tenantId === 'platform' ? CONFIG.tenantId : tenantId;
       const applicationsRef = collection(db, `tenants/${actualTenantId}/shelter_applications`);
       const q = query(applicationsRef, where('status', 'in', ['under_review', 'pending_documents']));
       const querySnapshot = await getDocs(q);
@@ -265,7 +250,7 @@ export class FirestoreService {
     tenantId: string = 'platform'
   ): Promise<string> {
     try {
-      const actualTenantId = tenantId === 'platform' ? MIGRATION_CONFIG.tenantId : tenantId;
+      const actualTenantId = tenantId === 'platform' ? CONFIG.tenantId : tenantId;
       const applicationsRef = collection(db, `tenants/${actualTenantId}/shelter_applications`);
       const now = Timestamp.now();
       
@@ -286,7 +271,7 @@ export class FirestoreService {
   // Approve application (move to shelters collection)
   async approveApplication(applicationId: string, tenantId: string = 'platform'): Promise<void> {
     try {
-      const actualTenantId = tenantId === 'platform' ? MIGRATION_CONFIG.tenantId : tenantId;
+      const actualTenantId = tenantId === 'platform' ? CONFIG.tenantId : tenantId;
       
       // Get the application
       const appRef = doc(db, `tenants/${actualTenantId}/shelter_applications`, applicationId);
@@ -347,7 +332,7 @@ export async function investigateDatabase() {
   try {
     // Check migrated shelter data
     console.log('1. MIGRATED SHELTER DATA:');
-    const migratedSheltersRef = collection(db, MIGRATION_CONFIG.sheltersCollectionPath);
+    const migratedSheltersRef = collection(db, CONFIG.sheltersCollectionPath);
     const migratedSheltersSnapshot = await getDocs(migratedSheltersRef);
     console.log(`   Migrated shelters: ${migratedSheltersSnapshot.size}`);
     
@@ -370,14 +355,14 @@ export async function investigateDatabase() {
     tenantsSnapshot.docs.forEach((doc, index) => {
       const data = doc.data();
       console.log(`   ${index + 1}. ${doc.id} - ${data.name || 'Unnamed'} (${data.type || 'unknown type'})`);
-      if (doc.id === MIGRATION_CONFIG.tenantId) {
+      if (doc.id === CONFIG.tenantId) {
         console.log(`      ✅ This is the primary tenant for migrated data`);
       }
     });
 
     console.log('\n🔍 Migration investigation complete!');
-    console.log(`📍 Primary tenant: ${MIGRATION_CONFIG.tenantId}`);
-    console.log(`📁 Shelters path: ${MIGRATION_CONFIG.sheltersCollectionPath}`);
+    console.log(`📍 Primary tenant: ${CONFIG.tenantId}`);
+    console.log(`📁 Shelters path: ${CONFIG.sheltersCollectionPath}`);
     
   } catch (error) {
     console.error('Error investigating database:', error);
@@ -390,7 +375,7 @@ export async function clearAllShelterData() {
   try {
     // Clear migrated shelters
     console.log('1. Clearing migrated shelters...');
-    const migratedSheltersRef = collection(db, MIGRATION_CONFIG.sheltersCollectionPath);
+    const migratedSheltersRef = collection(db, CONFIG.sheltersCollectionPath);
     const migratedSheltersSnapshot = await getDocs(migratedSheltersRef);
     
     for (const doc of migratedSheltersSnapshot.docs) {

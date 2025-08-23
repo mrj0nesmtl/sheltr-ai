@@ -40,13 +40,12 @@ import {
   Folder
 } from 'lucide-react';
 import { knowledgeDashboardService, KnowledgeDocument, KnowledgeStats } from '@/services/knowledgeDashboardService';
-import { useAuth } from '@/contexts/AuthContext';
+
 import { FolderTree, buildFolderTree, FolderNode } from '@/components/knowledge/FolderTree';
 import { Breadcrumb, buildBreadcrumb } from '@/components/knowledge/Breadcrumb';
 import { GitHubSyncPanel } from '@/components/knowledge/GitHubSyncPanel';
 
 export default function KnowledgeDashboard() {
-  const { user } = useAuth();
   const [documents, setDocuments] = useState<KnowledgeDocument[]>([]);
   const [stats, setStats] = useState<KnowledgeStats>({
     total_documents: 0,
@@ -1109,7 +1108,7 @@ export default function KnowledgeDashboard() {
                   <label className="text-sm font-medium">Access Level</label>
                   <Select 
                     value={formData.sharing_level} 
-                    onValueChange={(value) => setFormData({...formData, sharing_level: value as any})}
+                    onValueChange={(value: 'public' | 'super_admin_only' | 'shelter_specific' | 'role_based') => setFormData({...formData, sharing_level: value})}
                   >
                     <SelectTrigger className="mt-1">
                       <SelectValue />
@@ -1127,7 +1126,7 @@ export default function KnowledgeDashboard() {
                   <label className="text-sm font-medium">Confidentiality</label>
                   <Select 
                     value={formData.confidentiality_level} 
-                    onValueChange={(value) => setFormData({...formData, confidentiality_level: value as any})}
+                    onValueChange={(value: 'public' | 'internal' | 'confidential' | 'restricted') => setFormData({...formData, confidentiality_level: value})}
                   >
                     <SelectTrigger className="mt-1">
                       <SelectValue />
@@ -1253,11 +1252,11 @@ export default function KnowledgeDashboard() {
 
       {/* Enhanced View Document Dialog */}
       <Dialog open={showViewDialog} onOpenChange={setShowViewDialog}>
-        <DialogContent className={`${isFullScreen ? 'max-w-full max-h-full' : 'max-w-6xl max-h-[95vh]'} overflow-y-auto`}>
-          <DialogHeader>
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-              <DialogTitle className="flex items-center gap-2 text-lg sm:text-xl">
-                <FileTextIcon className="h-5 w-5" />
+        <DialogContent className={`${isFullScreen ? 'max-w-full max-h-full w-full h-full' : 'max-w-7xl max-h-[95vh] w-[95vw]'} overflow-hidden`}>
+          <DialogHeader className="pb-4 border-b">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <DialogTitle className="flex items-center gap-3 text-xl font-bold">
+                <FileTextIcon className="h-6 w-6 text-blue-600" />
                 <span className="line-clamp-2">{viewingDocument?.title}</span>
               </DialogTitle>
               <div className="flex items-center gap-2">
@@ -1265,7 +1264,7 @@ export default function KnowledgeDashboard() {
                   variant="outline"
                   size="sm"
                   onClick={() => setIsFullScreen(!isFullScreen)}
-                  className="flex-1 sm:flex-none"
+                  className="px-3 py-2"
                 >
                   {isFullScreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
                   <span className="ml-2 hidden sm:inline">Fullscreen</span>
@@ -1278,7 +1277,7 @@ export default function KnowledgeDashboard() {
                       navigator.clipboard.writeText(viewingDocument.content);
                     }
                   }}
-                  className="flex-1 sm:flex-none"
+                  className="px-3 py-2"
                 >
                   <Copy className="h-4 w-4" />
                   <span className="ml-2 hidden sm:inline">Copy</span>
@@ -1292,7 +1291,7 @@ export default function KnowledgeDashboard() {
                       setShowViewDialog(false);
                     }
                   }}
-                  className="flex-1 sm:flex-none"
+                  className="px-3 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200"
                 >
                   <Edit className="h-4 w-4" />
                   <span className="ml-2 hidden sm:inline">Edit</span>
@@ -1302,223 +1301,236 @@ export default function KnowledgeDashboard() {
           </DialogHeader>
           
           {viewingDocument && (
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-              {/* Left Sidebar - Metadata */}
-              <div className="lg:col-span-1 space-y-4">
-                {/* Document Info */}
-                <div className="bg-muted/50 p-4 rounded-lg space-y-3">
-                  <h3 className="font-semibold flex items-center gap-2">
-                    <FileText className="h-4 w-4" />
-                    Document Info
-                  </h3>
-                  <div className="space-y-2 text-sm">
-                    <div>
-                      <span className="font-medium">Category:</span>
-                      <Badge variant="outline" className="ml-2 text-xs">
-                        {viewingDocument.category}
-                      </Badge>
-                    </div>
-                    <div>
-                      <span className="font-medium">Status:</span>
-                      <Badge variant={viewingDocument.status === 'active' ? 'default' : 'secondary'} className="ml-2 text-xs">
-                        {viewingDocument.status}
-                      </Badge>
-                    </div>
-                    <div>
-                      <span className="font-medium">File Path:</span>
-                      <p className="text-muted-foreground font-mono text-xs break-all mt-1">
-                        {viewingDocument.file_path || 'N/A'}
-                      </p>
-                    </div>
-                    <div>
-                      <span className="font-medium">Size:</span>
-                      <span className="text-muted-foreground ml-2">
-                        {viewingDocument.file_size ? `${(viewingDocument.file_size / 1024).toFixed(1)} KB` : 'N/A'}
-                      </span>
-                    </div>
-                    <div>
-                      <span className="font-medium">Words:</span>
-                      <span className="text-muted-foreground ml-2">
-                        {viewingDocument.word_count || 0}
-                      </span>
-                    </div>
-                    <div>
-                      <span className="font-medium">Views:</span>
-                      <span className="text-muted-foreground ml-2">
-                        {viewingDocument.view_count || 0}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* AI & Embeddings */}
-                <div className="bg-muted/50 p-4 rounded-lg space-y-3">
-                  <h3 className="font-semibold flex items-center gap-2">
-                    <Brain className="h-4 w-4" />
-                    AI & Embeddings
-                  </h3>
-                  <div className="space-y-2 text-sm">
-                    <div>
-                      <span className="font-medium">Embedding Status:</span>
-                      <Badge variant={viewingDocument.embedding_status === 'completed' ? 'default' : 'outline'} className="ml-2 text-xs">
-                        {getEmbeddingStatusIcon(viewingDocument.embedding_status)}
-                        <span className="ml-1">{viewingDocument.embedding_status}</span>
-                      </Badge>
-                    </div>
-                    <div>
-                      <span className="font-medium">Chunks:</span>
-                      <span className="text-muted-foreground ml-2">
-                        {viewingDocument.chunk_count || 0}
-                      </span>
-                    </div>
-                    <div>
-                      <span className="font-medium">Quality Score:</span>
-                      <div className="mt-2">
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="text-xs">{getQualityScore(viewingDocument)}/100</span>
+            <div className="flex-1 overflow-hidden">
+              <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 h-full">
+                {/* Left Sidebar - Metadata */}
+                <div className="lg:col-span-2 overflow-y-auto pr-2">
+                  <div className="space-y-6 py-4">
+                    {/* Document Info */}
+                    <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 p-5 rounded-xl">
+                      <h3 className="font-bold text-lg flex items-center gap-2 mb-4 text-blue-900">
+                        <FileText className="h-5 w-5" />
+                        Document Info
+                      </h3>
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between">
+                          <span className="font-medium text-gray-700">Category</span>
+                          <Badge variant="outline" className="bg-white border-blue-200 text-blue-700">
+                            {viewingDocument.category}
+                          </Badge>
                         </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2">
-                          <div 
-                            className={`h-2 rounded-full ${getQualityBadge(getQualityScore(viewingDocument)).color}`}
-                            style={{ width: `${getQualityScore(viewingDocument)}%` }}
-                          ></div>
+                        <div className="flex items-center justify-between">
+                          <span className="font-medium text-gray-700">Status</span>
+                          <Badge variant={viewingDocument.status === 'active' ? 'default' : 'secondary'} className="bg-green-100 text-green-800 border-green-200">
+                            ✅ {viewingDocument.status}
+                          </Badge>
+                        </div>
+                        <div>
+                          <span className="font-medium text-gray-700 block mb-2">File Path</span>
+                          <div className="bg-white p-3 rounded-lg border border-gray-200">
+                            <p className="text-gray-600 font-mono text-xs break-all">
+                              {viewingDocument.file_path || 'N/A'}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="text-center p-3 bg-white rounded-lg border border-gray-200">
+                            <div className="font-bold text-lg text-blue-600">
+                              {viewingDocument.file_size ? `${(viewingDocument.file_size / 1024).toFixed(1)}` : '0'}
+                            </div>
+                            <div className="text-xs text-gray-500">KB</div>
+                          </div>
+                          <div className="text-center p-3 bg-white rounded-lg border border-gray-200">
+                            <div className="font-bold text-lg text-blue-600">
+                              {viewingDocument.word_count || 0}
+                            </div>
+                            <div className="text-xs text-gray-500">Words</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* AI & Embeddings */}
+                    <div className="bg-gradient-to-br from-purple-50 to-pink-50 border border-purple-200 p-5 rounded-xl">
+                      <h3 className="font-bold text-lg flex items-center gap-2 mb-4 text-purple-900">
+                        <Brain className="h-5 w-5" />
+                        AI & Embeddings
+                      </h3>
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between">
+                          <span className="font-medium text-gray-700">Status</span>
+                          <Badge variant={viewingDocument.embedding_status === 'completed' ? 'default' : 'outline'} className="bg-green-100 text-green-800 border-green-200">
+                            {getEmbeddingStatusIcon(viewingDocument.embedding_status)}
+                            <span className="ml-1">{viewingDocument.embedding_status}</span>
+                          </Badge>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="font-medium text-gray-700">Chunks</span>
+                          <div className="text-center p-2 bg-white rounded-lg border border-gray-200 min-w-[60px]">
+                            <div className="font-bold text-purple-600">
+                              {viewingDocument.chunk_count || 0}
+                            </div>
+                          </div>
+                        </div>
+                        <div>
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="font-medium text-gray-700">Quality Score</span>
+                            <span className="font-bold text-lg text-purple-600">{getQualityScore(viewingDocument)}/100</span>
+                          </div>
+                          <div className="w-full bg-gray-200 rounded-full h-3">
+                            <div 
+                              className={`h-3 rounded-full ${getQualityBadge(getQualityScore(viewingDocument)).color}`}
+                              style={{ width: `${getQualityScore(viewingDocument)}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Privacy & Access */}
+                    <div className="bg-gradient-to-br from-red-50 to-orange-50 border border-red-200 p-5 rounded-xl">
+                      <h3 className="font-bold text-lg flex items-center gap-2 mb-4 text-red-900">
+                        <Shield className="h-5 w-5" />
+                        Privacy & Access
+                      </h3>
+                      <div className="space-y-4">
+                        <div>
+                          <span className="font-medium text-gray-700 block mb-2">Access Level</span>
+                          <Badge variant="outline" className="w-full justify-center py-2 bg-white border-red-200 text-red-700">
+                            {viewingDocument.sharing_level === 'public' ? '🌐 Public' :
+                             viewingDocument.sharing_level === 'super_admin_only' ? '🔒 Admin Only' :
+                             viewingDocument.sharing_level === 'shelter_specific' ? '🏠 Shelter' :
+                             '👥 Role Based'}
+                          </Badge>
+                        </div>
+                        <div>
+                          <span className="font-medium text-gray-700 block mb-2">Confidentiality</span>
+                          <Badge variant="outline" className="w-full justify-center py-2 bg-white border-red-200 text-red-700">
+                            {viewingDocument.confidentiality_level === 'public' ? '📖 Public' :
+                             viewingDocument.confidentiality_level === 'internal' ? '🏢 Internal' :
+                             viewingDocument.confidentiality_level === 'confidential' ? '🔐 Confidential' :
+                             '⛔ Restricted'}
+                          </Badge>
+                        </div>
+                        <div>
+                          <span className="font-medium text-gray-700 block mb-2">Chatbot Access</span>
+                          <Badge variant={viewingDocument.is_live ? 'default' : 'secondary'} className={`w-full justify-center py-2 ${viewingDocument.is_live ? 'bg-green-100 text-green-800 border-green-200' : 'bg-gray-100 text-gray-600 border-gray-200'}`}>
+                            {viewingDocument.is_live ? '✅ Live & Available' : '❌ Disabled'}
+                          </Badge>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Tags */}
+                    {viewingDocument.tags && viewingDocument.tags.length > 0 && (
+                      <div className="bg-gradient-to-br from-green-50 to-teal-50 border border-green-200 p-5 rounded-xl">
+                        <h3 className="font-bold text-lg flex items-center gap-2 mb-4 text-green-900">
+                          <Hash className="h-5 w-5" />
+                          Tags
+                        </h3>
+                        <div className="flex flex-wrap gap-2">
+                          {viewingDocument.tags.map((tag, index) => (
+                            <Badge key={index} variant="outline" className="bg-white border-green-200 text-green-700 px-3 py-1">
+                              {tag}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Timestamps */}
+                    <div className="bg-gradient-to-br from-gray-50 to-slate-50 border border-gray-200 p-5 rounded-xl">
+                      <h3 className="font-bold text-lg flex items-center gap-2 mb-4 text-gray-900">
+                        <Clock className="h-5 w-5" />
+                        Timeline
+                      </h3>
+                      <div className="space-y-3">
+                        <div className="bg-white p-3 rounded-lg border border-gray-200">
+                          <span className="font-medium text-gray-700 block">Created</span>
+                          <p className="text-gray-600 text-sm mt-1">
+                            {viewingDocument.created_at ? new Date(viewingDocument.created_at).toLocaleString() : 'N/A'}
+                          </p>
+                        </div>
+                        <div className="bg-white p-3 rounded-lg border border-gray-200">
+                          <span className="font-medium text-gray-700 block">Last Updated</span>
+                          <p className="text-gray-600 text-sm mt-1">
+                            {viewingDocument.updated_at ? new Date(viewingDocument.updated_at).toLocaleString() : 'N/A'}
+                          </p>
+                        </div>
+                        <div className="bg-white p-3 rounded-lg border border-gray-200">
+                          <span className="font-medium text-gray-700 block">Created By</span>
+                          <p className="text-gray-600 text-sm mt-1">
+                            {viewingDocument.created_by || 'System'}
+                          </p>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Privacy & Access */}
-                <div className="bg-muted/50 p-4 rounded-lg space-y-3">
-                  <h3 className="font-semibold flex items-center gap-2">
-                    <Shield className="h-4 w-4" />
-                    Privacy & Access
-                  </h3>
-                  <div className="space-y-2 text-sm">
-                    <div>
-                      <span className="font-medium">Access Level:</span>
-                      <Badge variant="outline" className="ml-2 text-xs">
-                        {viewingDocument.sharing_level === 'public' ? '🌐 Public' :
-                         viewingDocument.sharing_level === 'super_admin_only' ? '🔒 Admin Only' :
-                         viewingDocument.sharing_level === 'shelter_specific' ? '🏠 Shelter' :
-                         '👥 Role Based'}
-                      </Badge>
+                {/* Main Content Area */}
+                <div className="lg:col-span-3 overflow-y-auto">
+                  <div className="py-4 space-y-6">
+                    {/* Content Preview */}
+                    <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+                      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-4">
+                        <div className="flex items-center justify-between">
+                          <h3 className="text-xl font-bold">Document Content</h3>
+                          <div className="flex items-center gap-2 text-blue-100">
+                            <FileText className="h-5 w-5" />
+                            <span className="font-medium">{viewingDocument.content?.length || 0} characters</span>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="p-6">
+                        <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 max-h-[500px] overflow-y-auto">
+                          <div className="prose prose-sm max-w-none">
+                            <pre className="whitespace-pre-wrap text-sm leading-relaxed text-gray-800 font-mono">
+                              {viewingDocument.content || 'No content available'}
+                            </pre>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <div>
-                      <span className="font-medium">Confidentiality:</span>
-                      <Badge variant="outline" className="ml-2 text-xs">
-                        {viewingDocument.confidentiality_level === 'public' ? '📖 Public' :
-                         viewingDocument.confidentiality_level === 'internal' ? '🏢 Internal' :
-                         viewingDocument.confidentiality_level === 'confidential' ? '🔐 Confidential' :
-                         '⛔ Restricted'}
-                      </Badge>
-                    </div>
-                    <div>
-                      <span className="font-medium">Chatbot Access:</span>
-                      <Badge variant={viewingDocument.is_live ? 'default' : 'secondary'} className="ml-2 text-xs">
-                        {viewingDocument.is_live ? '✅ Live' : '❌ Disabled'}
-                      </Badge>
-                    </div>
-                  </div>
-                </div>
 
-                {/* Tags */}
-                {viewingDocument.tags && viewingDocument.tags.length > 0 && (
-                  <div className="bg-muted/50 p-4 rounded-lg space-y-3">
-                    <h3 className="font-semibold flex items-center gap-2">
-                      <Hash className="h-4 w-4" />
-                      Tags
-                    </h3>
-                    <div className="flex flex-wrap gap-2">
-                      {viewingDocument.tags.map((tag, index) => (
-                        <Badge key={index} variant="outline" className="text-xs">
-                          {tag}
-                        </Badge>
-                      ))}
+                    {/* Action Buttons */}
+                    <div className="bg-white border border-gray-200 rounded-xl p-6">
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                        <div className="flex items-center gap-2 text-gray-600">
+                          <Target className="h-5 w-5" />
+                          <span className="font-medium">
+                            This document {viewingDocument.is_live ? 'is available' : 'is not available'} to the AI chatbot
+                          </span>
+                        </div>
+                        <div className="flex gap-3">
+                          <Button 
+                            variant="outline" 
+                            onClick={() => {
+                              if (viewingDocument) {
+                                navigator.clipboard.writeText(viewingDocument.content);
+                              }
+                            }}
+                            className="px-4 py-2"
+                          >
+                            <Copy className="h-4 w-4 mr-2" />
+                            Copy Content
+                          </Button>
+                          <Button 
+                            onClick={() => {
+                              if (viewingDocument) {
+                                openEditDialog(viewingDocument);
+                                setShowViewDialog(false);
+                              }
+                            }}
+                            className="bg-blue-600 hover:bg-blue-700 px-4 py-2"
+                          >
+                            <Edit className="h-4 w-4 mr-2" />
+                            Edit Document
+                          </Button>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                )}
-
-                {/* Timestamps */}
-                <div className="bg-muted/50 p-4 rounded-lg space-y-3">
-                  <h3 className="font-semibold flex items-center gap-2">
-                    <Clock className="h-4 w-4" />
-                    Timeline
-                  </h3>
-                  <div className="space-y-2 text-sm">
-                    <div>
-                      <span className="font-medium">Created:</span>
-                      <p className="text-muted-foreground text-xs mt-1">
-                        {viewingDocument.created_at ? new Date(viewingDocument.created_at).toLocaleString() : 'N/A'}
-                      </p>
-                    </div>
-                    <div>
-                      <span className="font-medium">Updated:</span>
-                      <p className="text-muted-foreground text-xs mt-1">
-                        {viewingDocument.updated_at ? new Date(viewingDocument.updated_at).toLocaleString() : 'N/A'}
-                      </p>
-                    </div>
-                    <div>
-                      <span className="font-medium">Created By:</span>
-                      <p className="text-muted-foreground text-xs mt-1">
-                        {viewingDocument.created_by || 'System'}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Main Content Area */}
-              <div className="lg:col-span-3 space-y-4">
-                {/* Content Preview */}
-                <div className="bg-muted/30 p-6 rounded-lg">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold">Document Content</h3>
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <FileText className="h-4 w-4" />
-                      {viewingDocument.content?.length || 0} characters
-                    </div>
-                  </div>
-                  
-                  <div className="max-h-96 overflow-y-auto border rounded-lg bg-white p-4">
-                    <div className="prose prose-sm max-w-none">
-                      <pre className="whitespace-pre-wrap text-sm font-mono leading-relaxed">
-                        {viewingDocument.content || 'No content available'}
-                      </pre>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Action Buttons */}
-                <div className="flex justify-between items-center pt-4 border-t">
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Target className="h-4 w-4" />
-                    This document {viewingDocument.is_live ? 'is available' : 'is not available'} to the AI chatbot
-                  </div>
-                  <div className="flex gap-3">
-                    <Button 
-                      variant="outline" 
-                      onClick={() => {
-                        if (viewingDocument) {
-                          navigator.clipboard.writeText(viewingDocument.content);
-                        }
-                      }}
-                    >
-                      <Copy className="h-4 w-4 mr-2" />
-                      Copy Content
-                    </Button>
-                    <Button 
-                      onClick={() => {
-                        if (viewingDocument) {
-                          openEditDialog(viewingDocument);
-                          setShowViewDialog(false);
-                        }
-                      }}
-                      className="bg-blue-600 hover:bg-blue-700"
-                    >
-                      <Edit className="h-4 w-4 mr-2" />
-                      Edit Document
-                    </Button>
                   </div>
                 </div>
               </div>

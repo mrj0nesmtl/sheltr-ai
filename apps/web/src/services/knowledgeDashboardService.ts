@@ -89,7 +89,10 @@ class KnowledgeDashboardService {
    */
   async getKnowledgeDocuments(): Promise<KnowledgeDocumentsResponse> {
     try {
-      const response = await fetch(`${this.baseUrl}/knowledge-dashboard/documents`, {
+      const apiUrl = `${this.baseUrl}/api/v1/knowledge-dashboard/documents`;
+      console.log('🔍 Fetching knowledge documents from:', apiUrl);
+      
+      const response = await fetch(apiUrl, {
         headers: await this.getAuthHeaders(),
       });
 
@@ -109,7 +112,10 @@ class KnowledgeDashboardService {
    */
   async getKnowledgeStats(): Promise<KnowledgeStatsResponse> {
     try {
-      const response = await fetch(`${this.baseUrl}/knowledge-dashboard/stats`, {
+      const apiUrl = `${this.baseUrl}/api/v1/knowledge-dashboard/stats`;
+      console.log('🔍 Fetching knowledge stats from:', apiUrl);
+      
+      const response = await fetch(apiUrl, {
         headers: await this.getAuthHeaders(),
       });
 

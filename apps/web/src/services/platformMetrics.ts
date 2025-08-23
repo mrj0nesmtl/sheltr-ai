@@ -987,9 +987,9 @@ export const getPlatformTenants = async (): Promise<PlatformTenant[]> => {
   try {
     console.log('🏢 Fetching platform tenants (real shelters)...');
     
-    // Use migrated path for consistency with Shelter Network dashboard
-    const migratedSheltersRef = collection(db, 'tenants/Vc48fjy0cajJrstbLQRr/platform/shelters/data');
-    const sheltersSnapshot = await getDocs(migratedSheltersRef);
+    // Use top-level shelters collection (simplified structure)
+    const sheltersRef = collection(db, 'shelters');
+    const sheltersSnapshot = await getDocs(sheltersRef);
     const tenants: PlatformTenant[] = [];
     
     // Get all demo donations once to aggregate by shelter

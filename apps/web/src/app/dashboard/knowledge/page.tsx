@@ -16,12 +16,8 @@ import {
   Eye, 
   FileText, 
   Search, 
-  Filter, 
   Brain, 
-  Upload, 
-  Download,
   RefreshCw,
-  BarChart3,
   Database,
   Globe,
   Clock,
@@ -33,20 +29,20 @@ import {
   Zap,
   BookOpen,
   Target,
-  TrendingUp,
-  FileCode,
   FileText as FileTextIcon,
-  ExternalLink,
   Copy,
   Maximize2,
   Minimize2,
   Shield,
   Users,
   Lock,
-  AlertTriangle
+  AlertTriangle,
+  Folder
 } from 'lucide-react';
 import { knowledgeDashboardService, KnowledgeDocument, KnowledgeStats } from '@/services/knowledgeDashboardService';
 import { useAuth } from '@/contexts/AuthContext';
+import { FolderTree, buildFolderTree, FolderNode } from '@/components/knowledge/FolderTree';
+import { Breadcrumb, buildBreadcrumb } from '@/components/knowledge/Breadcrumb';
 
 export default function KnowledgeDashboard() {
   const { user } = useAuth();
@@ -73,6 +69,11 @@ export default function KnowledgeDashboard() {
   const [viewingDocument, setViewingDocument] = useState<KnowledgeDocument | null>(null);
   const [showWebScrapingDialog, setShowWebScrapingDialog] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
+  
+  // Folder navigation state
+  const [selectedFolder, setSelectedFolder] = useState<string>('');
+  const [folderTree, setFolderTree] = useState<FolderNode[]>([]);
+  const [showFolderSidebar, setShowFolderSidebar] = useState(true);
 
   // Form state for new/edit document
   const [formData, setFormData] = useState({
@@ -180,6 +181,10 @@ export default function KnowledgeDashboard() {
       
       setDocuments(documentsResponse.data.documents);
       setStats(statsResponse.data);
+      
+      // Build folder tree from documents
+      const tree = buildFolderTree(documentsResponse.data.documents);
+      setFolderTree(tree);
 
     } catch (error) {
       console.error('Error loading knowledge data:', error);
@@ -202,6 +207,26 @@ export default function KnowledgeDashboard() {
       confidentiality_level: 'public'
     });
     setEditingDocument(null);
+  };
+
+  // Folder navigation handlers
+  const handleFolderSelect = (folderPath: string) => {
+    setSelectedFolder(folderPath);
+  };
+
+  const handleBreadcrumbNavigate = (path: string) => {
+    if (path === '/') {
+      setSelectedFolder('');
+    } else {
+      setSelectedFolder(path);
+    }
+  };
+
+  const handleDocumentSelect = (documentId: string) => {
+    const doc = documents.find(d => d.id === documentId);
+    if (doc) {
+      openViewDialog(doc);
+    }
   };
 
   const handleCreateDocument = async () => {
@@ -293,7 +318,11 @@ export default function KnowledgeDashboard() {
     const matchesCategory = categoryFilter === 'all' || doc.category === categoryFilter;
     const matchesStatus = statusFilter === 'all' || doc.status === statusFilter;
     
-    return matchesSearch && matchesCategory && matchesStatus;
+    // Folder filtering
+    const matchesFolder = !selectedFolder || 
+                         (doc.file_path && doc.file_path.includes(`/${selectedFolder}/`));
+    
+    return matchesSearch && matchesCategory && matchesStatus && matchesFolder;
   });
 
   if (loading) {
@@ -310,18 +339,50 @@ export default function KnowledgeDashboard() {
   }
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-bold flex items-center">
-            <Brain className="h-8 w-8 mr-3" />
-            Knowledge Base
-          </h1>
-          <p className="text-gray-600 text-sm sm:text-base">
-            Manage and organize your knowledge documents
-          </p>
+    <div className="flex h-screen bg-background">
+      {/* Folder Sidebar */}
+      {showFolderSidebar && (
+        <div className="w-80 border-r bg-card flex flex-col">
+          {/* Sidebar Header */}
+          <div className="p-4 border-b">
+            <div className="flex items-center justify-between">
+              <h2 className="font-semibold text-lg">📁 Folders</h2>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowFolderSidebar(false)}
+              >
+                <Minimize2 className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+          
+          {/* Folder Tree */}
+          <div className="flex-1 overflow-auto p-4">
+            <FolderTree
+              folders={folderTree}
+              selectedPath={selectedFolder}
+              onFolderSelect={handleFolderSelect}
+              onDocumentSelect={handleDocumentSelect}
+            />
+          </div>
         </div>
+      )}
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <div className="p-6 max-w-7xl mx-auto w-full">
+          {/* Header */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-bold flex items-center">
+                <Brain className="h-8 w-8 mr-3" />
+                Knowledge Base
+              </h1>
+              <p className="text-gray-600 text-sm sm:text-base">
+                Manage and organize your knowledge documents
+              </p>
+            </div>
         
         <div className="flex flex-col sm:flex-row gap-2">
           <Dialog open={showWebScrapingDialog} onOpenChange={setShowWebScrapingDialog}>
@@ -413,6 +474,28 @@ export default function KnowledgeDashboard() {
             
             {/* Filters row */}
             <div className="flex flex-col sm:flex-row gap-3">
+              {/* Navigation Controls */}
+              <div className="flex items-center gap-2">
+                {/* Folder Toggle Button */}
+                {!showFolderSidebar && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setShowFolderSidebar(true)}
+                    className="flex-shrink-0"
+                  >
+                    <Folder className="h-4 w-4 mr-2" />
+                    Show Folders
+                  </Button>
+                )}
+                
+                {/* Breadcrumb Navigation */}
+                <Breadcrumb
+                  items={buildBreadcrumb(selectedFolder)}
+                  onNavigate={handleBreadcrumbNavigate}
+                  className="flex-shrink-0"
+                />
+              </div>
               <Select value={categoryFilter} onValueChange={setCategoryFilter}>
                 <SelectTrigger className="w-full sm:w-48">
                   <SelectValue placeholder="All Categories" />
@@ -1179,6 +1262,8 @@ export default function KnowledgeDashboard() {
           </div>
         </DialogContent>
       </Dialog>
+        </div>
+      </div>
     </div>
   );
 }

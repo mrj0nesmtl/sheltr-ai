@@ -305,10 +305,11 @@ export const MockWalletProvider: React.FC<MockWalletProviderProps> = ({ children
   useEffect(() => {
     if (!user?.uid || !wallet) return;
     
+    // Refresh every 2 minutes instead of 30 seconds to reduce load
     const interval = setInterval(() => {
       refreshBalance();
       refreshNetworkStatus();
-    }, 30000);
+    }, 2 * 60 * 1000);
 
     return () => clearInterval(interval);
   }, [user?.uid, wallet, refreshBalance, refreshNetworkStatus]);

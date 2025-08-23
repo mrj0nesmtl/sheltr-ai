@@ -158,8 +158,8 @@ export default function Analytics() {
 
     loadAnalytics();
     
-    // Refresh data every 30 seconds
-    const interval = setInterval(loadAnalytics, 30000);
+    // Refresh data every 5 minutes instead of 30 seconds to reduce API calls
+    const interval = setInterval(loadAnalytics, 5 * 60 * 1000);
     return () => clearInterval(interval);
   }, []);
 

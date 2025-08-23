@@ -276,47 +276,22 @@ async def delete_knowledge_document(
 async def scan_github_changes(
     current_user: Dict[str, Any] = Depends(require_super_admin)
 ):
-    """Scan GitHub repository for documentation changes (placeholder implementation)"""
+    """Scan GitHub repository for documentation changes"""
     try:
-        # This is a placeholder implementation
-        # In production, this would integrate with GitHub API
+        from services.github_service import github_service
         
-        # Simulate scanning for changes based on recent documentation updates
-        mock_changes = {
-            "new": [
-                "05-deployment/firebase-hosting.md",
-                "05-deployment/google-cloud-run.md", 
-                "05-deployment/monitoring.md",
-                "05-deployment/security.md",
-                "07-reference/database-schema.md",
-                "07-reference/api-reference.md",
-                "08-integrations/firebase-integration.md",
-                "10-resources/design-system.md",
-                "10-resources/templates/bug-report.md",
-                "10-resources/templates/feature-request.md"
-            ],
-            "modified": [
-                "02-architecture/README.md",
-                "05-deployment/README.md",
-                "07-reference/README.md", 
-                "08-integrations/README.md",
-                "10-resources/README.md",
-                "10-resources/templates/README.md"
-            ],
-            "deleted": [],
-            "unchanged": [
-                "01-overview/README.md",
-                "03-api/README.md",
-                "04-development/README.md",
-                "06-user-guides/README.md"
-            ]
-        }
+        logger.info("Starting GitHub repository scan for documentation changes")
+        
+        # Scan the repository for changes
+        changes = await github_service.scan_repository_changes()
+        
+        total_changes = len(changes["new"]) + len(changes["modified"]) + len(changes["deleted"])
         
         return {
             "success": True,
-            "changes": mock_changes,
+            "changes": changes,
             "timestamp": datetime.utcnow().isoformat(),
-            "message": "GitHub scan completed (mock data)"
+            "message": f"GitHub scan completed - found {total_changes} changes"
         }
         
     except Exception as e:
@@ -328,24 +303,21 @@ async def sync_github_files(
     request: Dict[str, List[str]],
     current_user: Dict[str, Any] = Depends(require_super_admin)
 ):
-    """Sync selected files from GitHub to knowledge base (placeholder implementation)"""
+    """Sync selected files from GitHub to knowledge base"""
     try:
+        from services.github_service import github_service
+        
         files_to_sync = request.get("files", [])
         
-        # This is a placeholder implementation
-        # In production, this would:
-        # 1. Fetch file content from GitHub API
-        # 2. Create/update Firestore documents
-        # 3. Generate embeddings for each file
+        if not files_to_sync:
+            raise HTTPException(status_code=400, detail="No files specified for sync")
         
-        results = {
-            "successful": len(files_to_sync),
-            "failed": 0,
-            "details": [{"file": file, "status": "success"} for file in files_to_sync],
-            "message": f"Successfully synced {len(files_to_sync)} files (mock implementation)"
-        }
+        logger.info(f"Starting GitHub sync for {len(files_to_sync)} files")
         
-        logger.info(f"GitHub sync completed for {len(files_to_sync)} files")
+        # Sync files from GitHub to knowledge base
+        results = await github_service.sync_files_to_knowledge_base(files_to_sync)
+        
+        logger.info(f"GitHub sync completed: {results['successful']} successful, {results['failed']} failed")
         
         return {
             "success": True,

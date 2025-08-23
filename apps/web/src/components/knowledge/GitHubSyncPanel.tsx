@@ -102,9 +102,12 @@ export const GitHubSyncPanel: React.FC<GitHubSyncPanelProps> = ({ onSyncComplete
       const data = await response.json();
       setSyncResults(data.results);
       
-      // Call the callback to refresh the knowledge base
+      // Call the callback to refresh the knowledge base with a small delay
+      // to ensure the backend has finished processing
       if (onSyncComplete) {
-        onSyncComplete();
+        setTimeout(() => {
+          onSyncComplete();
+        }, 1000); // 1 second delay to ensure backend processing is complete
       }
       
     } catch (error) {

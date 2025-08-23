@@ -192,6 +192,68 @@ export function buildFolderTree(documents: any[]): FolderNode[] {
         folderPath = pathParts[1];
       }
       
+      // Handle emoji-prefixed files that don't have folder structure
+      // e.g., "knowledge-base/public/🔌-api-reference.md" should go to "07-reference"
+      if (!folderPath || !folderMap.get(folderPath)) {
+        const fileName = pathParts[pathParts.length - 1];
+        
+        // Map emoji/keyword patterns to folders
+        const fileToFolderMap: { [key: string]: string } = {
+          '🔌': '07-reference', // API reference
+          '📚': '07-reference', // Technical reference  
+          '🗄️': '07-reference', // Database schema
+          '🔥': '08-integrations', // Firebase integration
+          '🔗': '08-integrations', // Third-party integrations
+          '🚀': '05-deployment', // Deployment guides
+          '☁️': '05-deployment', // Cloud deployment
+          '📊': '05-deployment', // Monitoring
+          '🔒': '05-deployment', // Security
+          '👥': '06-user-guides', // User guides
+          '👤': '06-user-guides', // Participant guide
+          '💝': '06-user-guides', // Donor guide
+          '🏢': '06-user-guides', // Shelter admin guide
+          '🎨': '10-resources', // Design system
+          '📖': '10-resources', // Resources
+          '📝': '10-resources', // Templates
+          '✨': '10-resources', // Feature request
+          '🐛': '10-resources', // Bug report
+          '🌟': '01-overview', // Overview
+          '📚': '01-overview', // Documentation plan
+          '🚀': '01-overview', // Implementation plan
+          '🏗️': '02-architecture', // Architecture
+          '🌐': '02-architecture', // Platform architecture
+          '⛓️': '02-architecture', // Blockchain
+          '🪙': '02-architecture', // Tokenomics
+        };
+        
+        // Find matching emoji/keyword
+        for (const [emoji, targetFolder] of Object.entries(fileToFolderMap)) {
+          if (fileName.startsWith(emoji)) {
+            folderPath = targetFolder;
+            break;
+          }
+        }
+        
+        // Fallback: try to match keywords in filename
+        if (!folderPath || !folderMap.get(folderPath)) {
+          if (fileName.includes('api') || fileName.includes('database') || fileName.includes('reference')) {
+            folderPath = '07-reference';
+          } else if (fileName.includes('firebase') || fileName.includes('integration')) {
+            folderPath = '08-integrations';
+          } else if (fileName.includes('deployment') || fileName.includes('hosting') || fileName.includes('security') || fileName.includes('monitoring')) {
+            folderPath = '05-deployment';
+          } else if (fileName.includes('guide') || fileName.includes('user') || fileName.includes('donor') || fileName.includes('participant') || fileName.includes('admin')) {
+            folderPath = '06-user-guides';
+          } else if (fileName.includes('template') || fileName.includes('design') || fileName.includes('resource') || fileName.includes('bug') || fileName.includes('feature')) {
+            folderPath = '10-resources';
+          } else if (fileName.includes('overview') || fileName.includes('plan') || fileName.includes('documentation')) {
+            folderPath = '01-overview';
+          } else if (fileName.includes('architecture') || fileName.includes('system') || fileName.includes('blockchain') || fileName.includes('tokenomics')) {
+            folderPath = '02-architecture';
+          }
+        }
+      }
+      
       const folder = folderMap.get(folderPath);
       
       if (folder) {

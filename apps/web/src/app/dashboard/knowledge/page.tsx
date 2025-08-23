@@ -180,11 +180,17 @@ export default function KnowledgeDashboard() {
         knowledgeDashboardService.getKnowledgeStats()
       ]);
       
+      console.log('📊 Knowledge Data Debug:');
+      console.log(`Total documents received: ${documentsResponse.data.documents.length}`);
+      console.log('Sample document paths:', documentsResponse.data.documents.slice(0, 5).map(d => d.file_path));
+      console.log('Stats:', statsResponse.data);
+      
       setDocuments(documentsResponse.data.documents);
       setStats(statsResponse.data);
       
       // Build folder tree from documents
       const tree = buildFolderTree(documentsResponse.data.documents);
+      console.log('🌳 Folder tree built:', tree.map(f => `${f.name}: ${f.documentCount} docs`));
       setFolderTree(tree);
 
     } catch (error) {

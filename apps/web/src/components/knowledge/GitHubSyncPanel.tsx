@@ -117,12 +117,12 @@ export const GitHubSyncPanel: React.FC<GitHubSyncPanelProps> = ({ onSyncComplete
   const totalChanges = changes ? changes.new.length + changes.modified.length : 0;
 
   return (
-    <Card className="mb-6 border-2 border-dashed border-blue-200 bg-blue-50/50">
+    <Card className="mb-6 border-2 border-dashed border-red-500 bg-white dark:bg-gray-900">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-blue-700">
-          <Github className="h-5 w-5" />
+        <CardTitle className="flex items-center gap-2 text-foreground">
+          <Github className="h-5 w-5 text-red-500" />
           GitHub Documentation Sync
-          <Badge variant="outline" className="ml-auto">
+          <Badge variant="outline" className="ml-auto border-red-500 text-red-600">
             Beta
           </Badge>
         </CardTitle>
@@ -130,9 +130,9 @@ export const GitHubSyncPanel: React.FC<GitHubSyncPanelProps> = ({ onSyncComplete
       <CardContent className="space-y-4">
         
         {/* Info Alert */}
-        <Alert>
-          <GitBranch className="h-4 w-4" />
-          <AlertDescription>
+        <Alert className="border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800">
+          <GitBranch className="h-4 w-4 text-foreground" />
+          <AlertDescription className="text-foreground">
             Sync your latest documentation changes from GitHub to the Knowledge Base. 
             This will automatically generate embeddings for the chatbot.
           </AlertDescription>
@@ -144,7 +144,7 @@ export const GitHubSyncPanel: React.FC<GitHubSyncPanelProps> = ({ onSyncComplete
             onClick={scanForChanges} 
             disabled={isScanning || isSyncing}
             variant="outline"
-            className="flex-1"
+            className="flex-1 border-gray-300 hover:border-red-500 hover:text-red-600"
           >
             <RefreshCw className={`h-4 w-4 mr-2 ${isScanning ? 'animate-spin' : ''}`} />
             {isScanning ? 'Scanning GitHub...' : 'Scan for Changes'}
@@ -154,7 +154,7 @@ export const GitHubSyncPanel: React.FC<GitHubSyncPanelProps> = ({ onSyncComplete
             <Button 
               onClick={syncAllFiles}
               disabled={isSyncing}
-              className="flex-1"
+              className="flex-1 bg-red-600 hover:bg-red-700 text-white border-red-600"
             >
               <Download className={`h-4 w-4 mr-2 ${isSyncing ? 'animate-bounce' : ''}`} />
               {isSyncing ? 'Syncing...' : `Sync ${totalChanges} Files`}
@@ -174,19 +174,19 @@ export const GitHubSyncPanel: React.FC<GitHubSyncPanelProps> = ({ onSyncComplete
         {changes && (
           <div className="space-y-3">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-              <Badge variant="default" className="justify-center py-2">
+              <Badge variant="default" className="justify-center py-2 bg-green-600 text-white">
                 <FileText className="h-3 w-3 mr-1" />
                 {changes.new.length} New
               </Badge>
-              <Badge variant="secondary" className="justify-center py-2">
+              <Badge variant="outline" className="justify-center py-2 border-yellow-500 text-yellow-600">
                 <AlertCircle className="h-3 w-3 mr-1" />
                 {changes.modified.length} Modified
               </Badge>
-              <Badge variant="destructive" className="justify-center py-2">
+              <Badge variant="outline" className="justify-center py-2 border-red-500 text-red-600">
                 <XCircle className="h-3 w-3 mr-1" />
                 {changes.deleted.length} Deleted
               </Badge>
-              <Badge variant="outline" className="justify-center py-2">
+              <Badge variant="outline" className="justify-center py-2 border-gray-400 text-gray-600">
                 <CheckCircle className="h-3 w-3 mr-1" />
                 {changes.unchanged.length} Unchanged
               </Badge>
@@ -195,17 +195,21 @@ export const GitHubSyncPanel: React.FC<GitHubSyncPanelProps> = ({ onSyncComplete
             {/* File Lists */}
             {totalChanges > 0 && (
               <div className="space-y-2">
-                <h4 className="font-medium flex items-center gap-2">
-                  <Zap className="h-4 w-4" />
+                <h4 className="font-medium flex items-center gap-2 text-foreground">
+                  <Zap className="h-4 w-4 text-red-500" />
                   Files Ready to Sync:
                 </h4>
-                <div className="max-h-40 overflow-y-auto space-y-1 bg-white rounded border p-2">
+                <div className="max-h-40 overflow-y-auto space-y-1 bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 p-2">
                   {[...changes.new, ...changes.modified].map((file) => (
-                    <div key={file} className="flex items-center justify-between p-2 bg-gray-50 rounded text-sm">
-                      <span className="font-mono text-xs">{file}</span>
+                    <div key={file} className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded text-sm">
+                      <span className="font-mono text-xs text-foreground">{file}</span>
                       <Badge 
-                        variant={changes.new.includes(file) ? "default" : "secondary"}
-                        className="text-xs"
+                        variant="outline"
+                        className={`text-xs ${
+                          changes.new.includes(file) 
+                            ? "border-green-500 text-green-600 bg-green-50" 
+                            : "border-yellow-500 text-yellow-600 bg-yellow-50"
+                        }`}
                       >
                         {changes.new.includes(file) ? "New" : "Modified"}
                       </Badge>
@@ -226,12 +230,12 @@ export const GitHubSyncPanel: React.FC<GitHubSyncPanelProps> = ({ onSyncComplete
 
         {/* Sync Results */}
         {syncResults && (
-          <Alert className="border-green-200 bg-green-50">
-            <CheckCircle className="h-4 w-4 text-green-600" />
-            <AlertDescription className="text-green-800">
+          <Alert className="border-green-500 bg-green-50 dark:bg-green-900/20 dark:border-green-400">
+            <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
+            <AlertDescription className="text-green-800 dark:text-green-200">
               <strong>Sync Complete!</strong> {syncResults.successful} files synced successfully.
               {syncResults.failed > 0 && (
-                <span className="text-red-600 block">
+                <span className="text-red-600 dark:text-red-400 block">
                   ❌ {syncResults.failed} files failed to sync
                 </span>
               )}
@@ -240,9 +244,9 @@ export const GitHubSyncPanel: React.FC<GitHubSyncPanelProps> = ({ onSyncComplete
         )}
 
         {/* Quick Actions */}
-        <div className="pt-2 border-t">
+        <div className="pt-2 border-t border-gray-200 dark:border-gray-700">
           <p className="text-xs text-muted-foreground">
-            💡 <strong>Tip:</strong> After syncing, new documents will automatically generate embeddings for the AI chatbot.
+            💡 <strong className="text-foreground">Tip:</strong> After syncing, new documents will automatically generate embeddings for the AI chatbot.
           </p>
         </div>
       </CardContent>

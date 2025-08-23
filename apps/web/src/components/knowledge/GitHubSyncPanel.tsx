@@ -13,7 +13,8 @@ import {
   CheckCircle, 
   Download,
   Zap,
-  Github
+  Github,
+  XCircle
 } from 'lucide-react';
 
 interface SyncChanges {

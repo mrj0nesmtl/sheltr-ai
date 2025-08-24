@@ -13,6 +13,7 @@ import { ChatbotWidget } from '@/components/ChatbotWidget';
 import { getPlatformMetrics, PlatformMetrics } from '@/services/platformMetrics';
 import { getNotificationCounts, getRecentEmailSignups, NotificationCounts, EmailSignup, formatRelativeTime } from '@/services/notificationService';
 import { analyticsService } from '@/services/analyticsService';
+import { VisitorAreaChart } from '@/components/charts/VisitorAreaChart';
 import { 
   Users, 
   Building, 
@@ -24,7 +25,8 @@ import {
   BarChart3,
   Loader2,
   Mail,
-  Bell
+  Bell,
+  Heart
 } from 'lucide-react';
 
 export default function DashboardPage() {
@@ -64,6 +66,7 @@ export default function DashboardPage() {
           totalOrganizations: apiMetrics.shelters?.total_shelters || 0,
           totalUsers: apiMetrics.users?.total || 0,
           activeParticipants: apiMetrics.shelters?.participants_served || 0,
+          activeDonors: apiMetrics.users?.donors || 0,
           totalDonations: apiMetrics.donations?.total_amount || 0,
           platformUptime: 99.9, // Keep as operational metric
           issuesOpen: 0, // Keep as operational metric
@@ -94,6 +97,7 @@ export default function DashboardPage() {
         totalOrganizations: 0,
         totalUsers: 0,
         activeParticipants: 0,
+        activeDonors: 0,
         totalDonations: 0,
         platformUptime: 0,
         issuesOpen: 0,
@@ -294,96 +298,128 @@ export default function DashboardPage() {
         </div>
 
         {/* Platform Statistics */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          <Card>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <Link href="/dashboard/shelters">
+            <Card className="cursor-pointer hover:shadow-md transition-shadow">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Total Organizations</CardTitle>
+                <Building className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{platformMetrics.totalOrganizations || '-'}</div>
+                <p className="text-xs text-muted-foreground">Real database count</p>
+              </CardContent>
+            </Card>
+          </Link>
+
+          <Link href="/dashboard/users">
+            <Card className="cursor-pointer hover:shadow-md transition-shadow">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Platform Users</CardTitle>
+                <Users className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{platformMetrics.totalUsers?.toLocaleString() || '-'}</div>
+                <p className="text-xs text-muted-foreground">All platform users</p>
+              </CardContent>
+            </Card>
+          </Link>
+
+          <Link href="/dashboard/users">
+            <Card className="cursor-pointer hover:shadow-md transition-shadow">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Active Participants</CardTitle>
+                <Activity className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{platformMetrics.activeParticipants || '-'}</div>
+                <p className="text-xs text-muted-foreground">Currently in system</p>
+              </CardContent>
+            </Card>
+          </Link>
+
+          <Card className="cursor-pointer hover:shadow-md transition-shadow">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Organizations</CardTitle>
-              <Building className="h-4 w-4 text-muted-foreground" />
+              <CardTitle className="text-sm font-medium">Active Donors</CardTitle>
+              <Heart className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{platformMetrics.totalOrganizations || '-'}</div>
-              <p className="text-xs text-muted-foreground">Real database count</p>
+              <div className="text-2xl font-bold">{platformMetrics.activeDonors || '-'}</div>
+              <p className="text-xs text-muted-foreground">Contributing to platform</p>
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Platform Users</CardTitle>
-              <Users className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{platformMetrics.totalUsers?.toLocaleString() || '-'}</div>
-              <p className="text-xs text-muted-foreground">All platform users</p>
-            </CardContent>
-          </Card>
+          <Link href="/dashboard/financial">
+            <Card className="cursor-pointer hover:shadow-md transition-shadow">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Total Donations</CardTitle>
+                <TrendingUp className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">${platformMetrics.totalDonations?.toLocaleString() || '-'}</div>
+                <p className="text-xs text-muted-foreground">This quarter</p>
+              </CardContent>
+            </Card>
+          </Link>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Active Participants</CardTitle>
-              <Activity className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{platformMetrics.activeParticipants || '-'}</div>
-              <p className="text-xs text-muted-foreground">Currently in system</p>
-            </CardContent>
-          </Card>
+          <Link href="/dashboard/platform">
+            <Card className="cursor-pointer hover:shadow-md transition-shadow">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Platform Uptime</CardTitle>
+                <BarChart3 className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{platformMetrics.platformUptime || '-'}%</div>
+                <p className="text-xs text-muted-foreground">Last 30 days</p>
+              </CardContent>
+            </Card>
+          </Link>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Donations</CardTitle>
-              <TrendingUp className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">${platformMetrics.totalDonations?.toLocaleString() || '-'}</div>
-              <p className="text-xs text-muted-foreground">This quarter</p>
-            </CardContent>
-          </Card>
+          <Link href="/dashboard/notifications">
+            <Card className="cursor-pointer hover:shadow-md transition-shadow">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Open Issues</CardTitle>
+                <AlertTriangle className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{platformMetrics.issuesOpen || '-'}</div>
+                <p className="text-xs text-muted-foreground">Require attention</p>
+              </CardContent>
+            </Card>
+          </Link>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Platform Uptime</CardTitle>
-              <BarChart3 className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{platformMetrics.platformUptime || '-'}%</div>
-              <p className="text-xs text-muted-foreground">Last 30 days</p>
-            </CardContent>
-          </Card>
+          <Link href="/dashboard/notifications">
+            <Card className="cursor-pointer hover:shadow-md transition-shadow">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Email Signups</CardTitle>
+                <Mail className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{notificationCounts?.totalEmailSignups || '-'}</div>
+                <p className="text-xs text-muted-foreground">
+                  {notificationCounts?.recentEmailSignups || 0} new this week
+                </p>
+              </CardContent>
+            </Card>
+          </Link>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Open Issues</CardTitle>
-              <AlertTriangle className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{platformMetrics.issuesOpen || '-'}</div>
-              <p className="text-xs text-muted-foreground">Require attention</p>
-            </CardContent>
-          </Card>
+          <Link href="/dashboard/platform">
+            <Card className="cursor-pointer hover:shadow-md transition-shadow">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Pending Applications</CardTitle>
+                <Building className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{notificationCounts?.pendingShelterapplications || '-'}</div>
+                <p className="text-xs text-muted-foreground">Shelter admin requests</p>
+              </CardContent>
+            </Card>
+          </Link>
+        </div>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Email Signups</CardTitle>
-              <Mail className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{notificationCounts?.totalEmailSignups || '-'}</div>
-              <p className="text-xs text-muted-foreground">
-                {notificationCounts?.recentEmailSignups || 0} new this week
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Pending Applications</CardTitle>
-              <Building className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{notificationCounts?.pendingShelterapplications || '-'}</div>
-              <p className="text-xs text-muted-foreground">Shelter admin requests</p>
-            </CardContent>
-          </Card>
+        {/* Visitor Analytics Chart */}
+        <div className="mb-8">
+          <VisitorAreaChart />
         </div>
 
         {/* Activity and Notifications Grid */}

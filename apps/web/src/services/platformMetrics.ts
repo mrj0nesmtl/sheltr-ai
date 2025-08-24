@@ -70,6 +70,7 @@ export interface PlatformMetrics {
   totalOrganizations: number;
   totalUsers: number;
   activeParticipants: number;
+  activeDonors: number;
   totalDonations: number;
   platformUptime: number;
   issuesOpen: number;
@@ -126,6 +127,16 @@ export const getPlatformMetrics = async (): Promise<PlatformMetrics> => {
     const activeParticipants = participantsCollectionSnapshot.size + userParticipantsSnapshot.size;
     console.log(`🧑‍🤝‍🧑 Found ${activeParticipants} total participants (${participantsCollectionSnapshot.size} in participants collection + ${userParticipantsSnapshot.size} user participants)`);
     
+    // Get active donors count from users with donor role
+    const donorsQuery = query(
+      collection(db, 'users'),
+      where('role', '==', 'donor'),
+      where('status', '!=', 'inactive')
+    );
+    const donorsSnapshot = await getDocs(donorsQuery);
+    const activeDonors = donorsSnapshot.size;
+    console.log(`💝 Found ${activeDonors} active donors`);
+    
     // Get real donations total from both demo_donations and new donations collection
     const demoDonationsSnapshot = await getDocs(collection(db, 'demo_donations'));
     const donationsSnapshot = await getDocs(collection(db, 'donations'));
@@ -150,6 +161,7 @@ export const getPlatformMetrics = async (): Promise<PlatformMetrics> => {
       totalOrganizations,
       totalUsers,
       activeParticipants,
+      activeDonors,
       totalDonations,
       platformUptime: 99.9, // Keep as operational metric
       issuesOpen: 0, // Keep as operational metric
@@ -167,6 +179,7 @@ export const getPlatformMetrics = async (): Promise<PlatformMetrics> => {
       totalOrganizations: 0,
       totalUsers: 0,
       activeParticipants: 0,
+      activeDonors: 0,
       totalDonations: 0,
       platformUptime: 0,
       issuesOpen: 0,

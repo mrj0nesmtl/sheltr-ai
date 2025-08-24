@@ -23,18 +23,40 @@ This session focuses on transforming our beautiful interface into a fully functi
 **Priority**: 🔥 **CRITICAL**
 
 **Core Metrics Testing:**
-- [ ] **Total Organizations**: Verify count matches actual shelters in database
+- [ ] **Total Organizations**: Verify count matches actual shelters in database (should show 10)
 - [ ] **Platform Users**: Test real-time user count across all roles
 - [ ] **Active Participants**: Verify active participant count and status tracking
+- [ ] **Active Donors**: Test donor count with proper status filtering (new metric)
 - [ ] **Total Donations**: Test donation aggregation and real-time updates
-- [ ] **Success Rate**: Verify housing success rate calculation accuracy
-- [ ] **Monthly Growth**: Test growth metrics and trend calculations
+- [ ] **Platform Uptime**: Verify uptime percentage display and calculation
+- [ ] **Open Issues**: Test issue count and alert integration
+- [ ] **Email Signups**: Test newsletter signup count and recent activity
+- [ ] **Pending Applications**: Test shelter admin application count
 
 **Interactive Features Testing:**
-- [ ] **Metric Filters**: Test date range filters and metric recalculation
-- [ ] **Real-time Updates**: Verify metrics update when data changes
-- [ ] **Export Functions**: Test data export and report generation
-- [ ] **Drill-down Navigation**: Test navigation to detailed views
+- [ ] **Clickable Metric Cards**: Test navigation from each metric card to appropriate dashboard
+  - [ ] **Total Organizations** → `/dashboard/shelters` (Shelter Network page)
+  - [ ] **Platform Users** → `/dashboard/users` (User Management page)
+  - [ ] **Active Participants** → `/dashboard/users` (User Management page)
+  - [ ] **Active Donors** → Should link to donor management (currently no link)
+  - [ ] **Total Donations** → `/dashboard/financial` (Financial Oversight page)
+  - [ ] **Platform Uptime** → `/dashboard/platform` (Platform Management page)
+  - [ ] **Open Issues** → `/dashboard/notifications` (Notifications page)
+  - [ ] **Email Signups** → `/dashboard/notifications` (Notifications page)
+  - [ ] **Pending Applications** → `/dashboard/platform` (Platform Management page)
+- [ ] **Card Hover Effects**: Verify hover states and visual feedback
+- [ ] **Real-time Updates**: Verify metrics update when underlying data changes
+- [ ] **Responsive Layout**: Test 4-column grid layout on different screen sizes
+
+**User Growth Analytics Chart Testing:**
+- [ ] **Chart Display**: Verify interactive area chart shows participants, donors, and admins
+- [ ] **Real Data Integration**: Test chart uses actual user data from Firestore
+- [ ] **Time Range Selector**: Test 90d/30d/7d time range filtering functionality
+- [ ] **Color Scheme**: Verify black/white/gray color scheme (participants: black, donors: medium gray, admins: light gray)
+- [ ] **Interactive Features**: Test chart tooltips, legend, and hover effects
+- [ ] **Responsive Design**: Test chart responsiveness on different screen sizes
+- [ ] **Loading States**: Test chart loading indicators and error handling
+- [ ] **Growth Trends**: Verify trend indicators and statistics display correctly
 
 #### **Security Dashboard** (`/dashboard/security`)
 **Priority**: 🛡️ **HIGH**

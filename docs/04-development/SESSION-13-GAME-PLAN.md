@@ -46,8 +46,19 @@ Session 12 delivered an enterprise-grade Knowledge Base management system. Sessi
 - [ ] **Export Functions**: Test data export and report generation
 - [ ] **Performance Monitoring**: Test system performance tracking
 
+**Notifications Center Testing (15 minutes):**
+**Time**: 8:45 PM - 9:00 PM
+- [ ] **Access Control**: Test super admin only access and proper access denial
+- [ ] **Summary Cards**: Test all 4 notification metric cards (Total, Email Signups, Applications, Active Users)
+- [ ] **Tab Navigation**: Test 3-tab structure (All Notifications, Email Signups, Applications)
+- [ ] **Email Signups Tab**: Test complete email list, search functionality, and CSV export
+- [ ] **Applications Tab**: Test development placeholder and future requirements
+- [ ] **Search & Filter**: Test search functionality and filter button
+- [ ] **Data Integration**: Test Firestore integration and API fallback logic
+- [ ] **Responsive Design**: Test mobile, tablet, and desktop layouts
+
 #### **Shelter Admin Dashboard Deep Dive (30 minutes)**
-**Time**: 8:30 PM - 9:00 PM
+**Time**: 9:00 PM - 9:30 PM
 
 **Shelter Overview Testing (10 minutes):**
 - [ ] **Shelter Metrics**: Test bed occupancy, participant count, service utilization
@@ -69,7 +80,7 @@ Session 12 delivered an enterprise-grade Knowledge Base management system. Sessi
 - [ ] **Analytics**: Test service utilization metrics and reporting
 
 #### **Participant & Donor Dashboard Testing (30 minutes)**
-**Time**: 9:00 PM - 9:30 PM
+**Time**: 9:30 PM - 10:00 PM
 
 **Participant Dashboard Testing (15 minutes):**
 - [ ] **Profile Management**: Test profile viewing, editing, and document upload
@@ -86,7 +97,7 @@ Session 12 delivered an enterprise-grade Knowledge Base management system. Sessi
 ### **🔧 PHASE 2: CORE WORKFLOW IMPLEMENTATION (90 minutes)**
 
 #### **User Registration & Authentication (30 minutes)**
-**Time**: 9:30 PM - 10:00 PM
+**Time**: 10:00 PM - 10:30 PM
 
 **Multi-Role Registration Testing (15 minutes):**
 - [ ] **Super Admin Registration**: Test super admin account creation and setup
@@ -101,7 +112,7 @@ Session 12 delivered an enterprise-grade Knowledge Base management system. Sessi
 - [ ] **Session Management**: Test session handling and timeout management
 
 #### **Service Booking System Implementation (30 minutes)**
-**Time**: 10:00 PM - 10:30 PM
+**Time**: 10:30 PM - 11:00 PM
 
 **Service Discovery & Booking (15 minutes):**
 - [ ] **Service Categories**: Test browsing and filtering of all service types
@@ -116,7 +127,7 @@ Session 12 delivered an enterprise-grade Knowledge Base management system. Sessi
 - [ ] **Reminder System**: Test appointment reminders and alerts
 
 #### **Donation & Payment Processing (30 minutes)**
-**Time**: 10:30 PM - 11:00 PM
+**Time**: 11:00 PM - 11:30 PM
 
 **QR Code & Payment System (15 minutes):**
 - [ ] **QR Code Generation**: Test participant QR code creation and management
@@ -133,7 +144,7 @@ Session 12 delivered an enterprise-grade Knowledge Base management system. Sessi
 ### **🛡️ PHASE 3: SECURITY & PERMISSIONS VALIDATION (60 minutes)**
 
 #### **Role-Based Access Control Testing (30 minutes)**
-**Time**: 11:00 PM - 11:30 PM
+**Time**: 11:30 PM - 12:00 AM
 
 **Access Control Matrix Validation (15 minutes):**
 - [ ] **Super Admin Access**: Test full platform access and management
@@ -148,7 +159,7 @@ Session 12 delivered an enterprise-grade Knowledge Base management system. Sessi
 - [ ] **Cross-Tenant Security**: Test prevention of unauthorized data access
 
 #### **Knowledge Base Privacy Controls (30 minutes)**
-**Time**: 11:30 PM - 12:00 AM
+**Time**: 12:00 AM - 12:30 AM
 
 **Document Privacy Testing (15 minutes):**
 - [ ] **Access Level Controls**: Test Public/Admin Only/Shelter Specific/Role Based
@@ -165,7 +176,7 @@ Session 12 delivered an enterprise-grade Knowledge Base management system. Sessi
 ### **🎨 PHASE 4: UI/UX POLISH & PRODUCTION READINESS (60 minutes)**
 
 #### **Mobile Experience Optimization (30 minutes)**
-**Time**: 12:00 AM - 12:30 AM
+**Time**: 12:30 AM - 1:00 AM
 
 **Responsive Design Testing (15 minutes):**
 - [ ] **Touch Targets**: Test all buttons meet 44px minimum touch requirements
@@ -180,7 +191,7 @@ Session 12 delivered an enterprise-grade Knowledge Base management system. Sessi
 - [ ] **Offline Functionality**: Test offline capabilities and data sync
 
 #### **Production Readiness Validation (30 minutes)**
-**Time**: 12:30 AM - 1:00 AM
+**Time**: 1:00 AM - 1:30 AM
 
 **Error Handling & Recovery (15 minutes):**
 - [ ] **Network Errors**: Test handling of connectivity issues

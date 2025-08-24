@@ -58,6 +58,148 @@ This session focuses on transforming our beautiful interface into a fully functi
 - [ ] **Loading States**: Test chart loading indicators and error handling
 - [ ] **Growth Trends**: Verify trend indicators and statistics display correctly
 
+#### **Notifications Center Dashboard** (`/dashboard/notifications`)
+**Priority**: 🔔 **CRITICAL**
+
+**Access Control Testing:**
+- [ ] **Super Admin Only Access**: Verify only super admins can access notifications center
+- [ ] **Access Denied Display**: Test proper access denied message for non-super admin users
+- [ ] **Role-Based Routing**: Verify proper redirection for unauthorized access attempts
+
+**Notification Summary Cards Testing:**
+- [ ] **Total Notifications Card**: Test aggregated count of all active notifications
+  - [ ] **Real-time Updates**: Verify count updates when new notifications arrive
+  - [ ] **Calculation Logic**: Test total = recent email signups + pending applications
+  - [ ] **Icon Display**: Verify Bell icon displays correctly
+- [ ] **Email Signups Card**: Test email signup metrics and tracking
+  - [ ] **Total Count**: Verify total email signups from newsletter_signups collection
+  - [ ] **Recent Activity**: Test "X new this week" calculation (last 7 days)
+  - [ ] **Real Data Integration**: Verify data comes from Firestore newsletter_signups
+  - [ ] **Icon Display**: Verify Mail icon displays correctly
+- [ ] **Pending Applications Card**: Test shelter admin application tracking
+  - [ ] **Application Count**: Verify count from shelter_applications collection
+  - [ ] **Status Filtering**: Test filtering for 'pending_review' status only
+  - [ ] **Real-time Updates**: Verify count updates when applications are processed
+  - [ ] **Icon Display**: Verify Building icon displays correctly
+- [ ] **Active Users Card**: Test recent user activity tracking
+  - [ ] **24-Hour Activity**: Verify active users in last 24 hours calculation
+  - [ ] **User Activity Logic**: Test user activity detection and counting
+  - [ ] **Real-time Updates**: Verify count updates with user activity
+  - [ ] **Icon Display**: Verify Users icon displays correctly
+
+**Navigation Tabs Testing:**
+- [ ] **Tab Structure**: Test 3-tab layout (All Notifications, Email Signups, Applications)
+- [ ] **Tab Switching**: Verify smooth navigation between tabs without data loss
+- [ ] **Active Tab State**: Test proper visual indication of active tab
+- [ ] **Tab Content Loading**: Verify each tab loads appropriate content
+
+**Search and Filter Functionality:**
+- [ ] **Search Input**: Test search functionality across email signups
+  - [ ] **Email Search**: Test searching by email address (case-insensitive)
+  - [ ] **Source Search**: Test searching by signup source (website, contact, etc.)
+  - [ ] **Page Search**: Test searching by page where signup occurred
+  - [ ] **Real-time Filtering**: Verify search results update as user types
+  - [ ] **Search Icon**: Verify Search icon displays in input field
+- [ ] **Filter Button**: Test filter functionality (currently placeholder)
+  - [ ] **Filter Icon**: Verify Filter icon displays correctly
+  - [ ] **Future Enhancement**: Document filter implementation requirements
+
+**All Notifications Tab Testing:**
+- [ ] **Email Signups Preview Section**:
+  - [ ] **Recent Signups Display**: Test display of 3 most recent email signups
+  - [ ] **Signup Information**: Verify email, signup date, and source display
+  - [ ] **Status Indicators**: Test green dot indicators for active signups
+  - [ ] **Relative Time**: Test "X ago" time formatting (formatRelativeTime function)
+  - [ ] **Source Badges**: Test source badge display (website, contact, mobile_app, etc.)
+  - [ ] **View All Button**: Test navigation to Email Signups tab
+  - [ ] **New Count Badge**: Verify green badge shows recent signup count
+- [ ] **Pending Applications Preview Section**:
+  - [ ] **Application Count Display**: Test pending applications count and badge
+  - [ ] **Empty State**: Test "No pending applications" state with CheckCircle icon
+  - [ ] **Development State**: Test "Applications management coming soon" placeholder
+  - [ ] **Orange Badge**: Verify orange badge shows pending count
+  - [ ] **Future Enhancement**: Document application management implementation
+
+**Email Signups Tab Testing:**
+- [ ] **Complete Email List Display**:
+  - [ ] **All Signups**: Test display of all email signups with pagination/scrolling
+  - [ ] **Signup Details**: Verify comprehensive signup information display
+    - [ ] **Email Address**: Test email display and formatting
+    - [ ] **Source Badge**: Test source identification (website, contact, mobile_app, home, donate)
+    - [ ] **Page Badge**: Test page where signup occurred
+    - [ ] **Status Badge**: Test signup status (active, inactive, etc.)
+    - [ ] **Signup Date**: Test relative time display for signup date
+  - [ ] **Visual Indicators**: Test green dot status indicators
+  - [ ] **Hover Effects**: Test row hover states and transitions
+  - [ ] **External Link Button**: Test external link functionality (future enhancement)
+- [ ] **Search Integration**: Test search functionality within Email Signups tab
+  - [ ] **Filtered Results**: Verify search results display correctly
+  - [ ] **Result Count**: Test dynamic count update in tab title
+  - [ ] **No Results State**: Test empty search results display
+- [ ] **Export Functionality**: Test CSV export feature
+  - [ ] **Export Button**: Test Export CSV button functionality
+  - [ ] **Data Export**: Verify all signup data exports correctly
+  - [ ] **File Generation**: Test CSV file download and format
+  - [ ] **Button State**: Test disabled state when no signups available
+
+**Applications Tab Testing:**
+- [ ] **Development Placeholder**: Test applications management placeholder
+  - [ ] **Coming Soon State**: Verify "Applications Management" coming soon display
+  - [ ] **Building Icon**: Test Building icon display in placeholder
+  - [ ] **Description Text**: Verify development status messaging
+  - [ ] **Coming Soon Button**: Test placeholder button with Calendar icon
+- [ ] **Future Implementation Requirements**:
+  - [ ] **Application List**: Document requirements for application display
+  - [ ] **Application Details**: Document application information requirements
+  - [ ] **Approval Workflow**: Document application approval/rejection process
+  - [ ] **Status Management**: Document application status tracking
+
+**Header and Controls Testing:**
+- [ ] **Page Header**: Test Notifications Center title and description
+  - [ ] **Bell Icon**: Verify Bell icon displays in header
+  - [ ] **Responsive Layout**: Test header layout on different screen sizes
+- [ ] **Action Buttons**: Test header action buttons
+  - [ ] **Export CSV Button**: Test export functionality and disabled states
+  - [ ] **Refresh Button**: Test manual refresh functionality
+    - [ ] **Loading State**: Verify loading spinner during refresh
+    - [ ] **Data Reload**: Test complete data refresh on button click
+    - [ ] **Button Icons**: Test Download and Bell icons display
+
+**Data Integration Testing:**
+- [ ] **Firestore Integration**: Test direct Firestore queries
+  - [ ] **Newsletter Signups Collection**: Verify newsletter_signups collection access
+  - [ ] **Shelter Applications Collection**: Test shelter_applications collection queries
+  - [ ] **Real-time Updates**: Test Firestore real-time listeners (if implemented)
+- [ ] **API Integration**: Test backend API integration
+  - [ ] **Platform Analytics API**: Test /api/v1/analytics/test-platform endpoint
+  - [ ] **Fallback Logic**: Test Firestore fallback when API fails
+  - [ ] **Error Handling**: Test graceful error handling for API failures
+- [ ] **Data Calculations**: Test notification count calculations
+  - [ ] **Total Notifications**: Test sum of recent signups + pending applications
+  - [ ] **Recent Signups**: Test 7-day window calculation
+  - [ ] **Date Filtering**: Test Timestamp-based date filtering
+
+**Loading and Error States Testing:**
+- [ ] **Loading States**: Test loading indicators and states
+  - [ ] **Initial Load**: Test loading spinner on page load
+  - [ ] **Refresh Loading**: Test loading state during manual refresh
+  - [ ] **Tab Loading**: Test loading states when switching tabs
+- [ ] **Error Handling**: Test error scenarios and recovery
+  - [ ] **Network Errors**: Test handling of network connectivity issues
+  - [ ] **Firestore Errors**: Test handling of database connection errors
+  - [ ] **Permission Errors**: Test handling of insufficient permissions
+  - [ ] **Empty Data States**: Test graceful handling of empty collections
+
+**Responsive Design Testing:**
+- [ ] **Mobile Layout**: Test notifications center on mobile devices
+  - [ ] **Card Grid**: Test 1-column card layout on small screens
+  - [ ] **Tab Navigation**: Test mobile tab navigation and touch interactions
+  - [ ] **Search Input**: Test mobile search input and keyboard interactions
+  - [ ] **Button Layout**: Test mobile button layout and touch targets
+- [ ] **Tablet Layout**: Test medium screen layout (2-column cards)
+- [ ] **Desktop Layout**: Test full desktop layout (4-column cards)
+- [ ] **Header Responsiveness**: Test responsive header layout and button positioning
+
 #### **Security Dashboard** (`/dashboard/security`)
 **Priority**: 🛡️ **HIGH**
 

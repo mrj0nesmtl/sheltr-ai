@@ -6,19 +6,18 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useState, useEffect } from 'react';
 import { firestoreService, Shelter, PendingApplication } from '@/services/firestore';
+import { AdminUser } from '@/services/platformMetrics';
 import { doc, updateDoc, deleteDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import ShelterMap from '@/components/ShelterMap';
+import ShelterNetworkMap from '@/components/ShelterNetworkMap';
 import DataPopulator from '@/components/DataPopulator';
 import { 
   Building2, 
   MapPin,
   Users,
-  DollarSign,
   TrendingUp,
   Clock,
   CheckCircle,
-  AlertTriangle,
   Search,
   Filter,
   X,
@@ -26,10 +25,7 @@ import {
   Plus,
   Eye,
   Edit,
-  MoreHorizontal,
-  Star,
   Activity,
-  FileText,
   Shield,
   Phone,
   Mail,
@@ -43,7 +39,7 @@ export default function ShelterNetwork() {
   const [shelters, setShelters] = useState<Shelter[]>([]);
   const [pendingApplications, setPendingApplications] = useState<PendingApplication[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState('directory');
   
   // Edit state
   const [selectedShelterForView, setSelectedShelterForView] = useState<Shelter | null>(null);
@@ -54,8 +50,9 @@ export default function ShelterNetwork() {
   const [isSaving, setIsSaving] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState<{ shelterId: string; shelterName: string } | null>(null);
   const [activeEditTab, setActiveEditTab] = useState<'details' | 'administrators'>('details');
-  const [shelterAdmins, setShelterAdmins] = useState<any[]>([]);
-  const [availableAdmins, setAvailableAdmins] = useState<any[]>([]);
+  const [shelterAdmins, setShelterAdmins] = useState<AdminUser[]>([]);
+  const [availableAdmins, setAvailableAdmins] = useState<AdminUser[]>([]);
+  const [mapRefreshTrigger, setMapRefreshTrigger] = useState(0);
   
   // Filtering state
   const [filters, setFilters] = useState({
@@ -156,7 +153,7 @@ export default function ShelterNetwork() {
         where('role', 'in', ['admin', 'shelteradmin'])
       );
       const snapshot = await getDocs(adminsQuery);
-      const admins = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const admins = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as AdminUser));
       setShelterAdmins(admins);
       console.log(`✅ Loaded ${admins.length} administrators for shelter ${shelterId}`);
     } catch (error) {
@@ -173,7 +170,7 @@ export default function ShelterNetwork() {
         where('role', 'in', ['admin', 'shelteradmin'])
       );
       const snapshot = await getDocs(adminsQuery);
-      const allAdmins = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const allAdmins = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as AdminUser));
       
       // Filter out admins that already have a shelter assigned
       const unassignedAdmins = allAdmins.filter(admin => !admin.shelter_id || admin.shelter_id === '');
@@ -344,6 +341,8 @@ export default function ShelterNetwork() {
       
       setShelters(sheltersData);
       setPendingApplications(applicationsData);
+      // Trigger map refresh to re-geocode locations
+      setMapRefreshTrigger(prev => prev + 1);
     } catch (error) {
       console.error('Error loading shelter data:', error);
     } finally {
@@ -372,17 +371,7 @@ export default function ShelterNetwork() {
       : 0
   };
 
-  const performanceMetrics = filteredShelters
-    .filter(s => s.status === 'active')
-    .sort((a, b) => (b.rating || 0) - (a.rating || 0))
-    .map(shelter => ({
-      id: shelter.id,
-      shelter: shelter.name,
-      rating: shelter.rating || 0,
-      donations: shelter.totalDonations || 0,
-      participants: shelter.participants || 0,
-      efficiency: shelter.complianceScore || 0
-    }));
+
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -411,18 +400,7 @@ export default function ShelterNetwork() {
     return shelter.capacity > 0 ? Math.round((shelter.currentOccupancy / shelter.capacity) * 100) : 0;
   };
 
-  const renderStars = (rating: number) => {
-    return Array.from({ length: 5 }, (_, i) => (
-      <Star
-        key={i}
-        className={`h-3 w-3 ${
-          i < Math.floor(rating)
-            ? 'text-yellow-400 fill-current'
-            : 'text-gray-300'
-        }`}
-      />
-    ));
-  };
+
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
@@ -556,7 +534,7 @@ export default function ShelterNetwork() {
             <Filter className="mr-2 h-5 w-5" />
             Global Filters
           </CardTitle>
-          <CardDescription>Filter shelters across all views (Overview, Map, Directory)</CardDescription>
+          <CardDescription>Filter shelters across all views (Directory, Map, Data)</CardDescription>
         </CardHeader>
         <CardContent className="p-4">
           <div className="space-y-4">
@@ -645,22 +623,14 @@ export default function ShelterNetwork() {
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
         {/* Desktop Tabs */}
         <div className="hidden sm:block">
-          <TabsList className="grid w-full grid-cols-5">
-            <TabsTrigger value="overview" className="flex items-center">
-              <Activity className="mr-2 h-4 w-4" />
-              Overview
-            </TabsTrigger>
-            <TabsTrigger value="map" className="flex items-center">
-              <Map className="mr-2 h-4 w-4" />
-              Map View
-            </TabsTrigger>
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="directory" className="flex items-center">
               <Building2 className="mr-2 h-4 w-4" />
               Directory
             </TabsTrigger>
-            <TabsTrigger value="applications" className="flex items-center">
-              <FileText className="mr-2 h-4 w-4" />
-              Applications
+            <TabsTrigger value="map" className="flex items-center">
+              <Map className="mr-2 h-4 w-4" />
+              Map View
             </TabsTrigger>
             <TabsTrigger value="data" className="flex items-center">
               <Database className="mr-2 h-4 w-4" />
@@ -671,21 +641,7 @@ export default function ShelterNetwork() {
 
         {/* Mobile Stacked Tabs */}
         <div className="sm:hidden">
-          <TabsList className="grid grid-cols-5 gap-1 h-14 bg-muted p-1 rounded-md w-full">
-            <TabsTrigger 
-              value="overview" 
-              className="flex flex-col items-center justify-center h-full px-1 py-1 w-full"
-              title="Overview"
-            >
-              <Activity className="h-5 w-5" />
-            </TabsTrigger>
-            <TabsTrigger 
-              value="map" 
-              className="flex flex-col items-center justify-center h-full px-1 py-1 w-full"
-              title="Map View"
-            >
-              <Map className="h-5 w-5" />
-            </TabsTrigger>
+          <TabsList className="grid grid-cols-3 gap-1 h-14 bg-muted p-1 rounded-md w-full">
             <TabsTrigger 
               value="directory" 
               className="flex flex-col items-center justify-center h-full px-1 py-1 w-full"
@@ -694,11 +650,11 @@ export default function ShelterNetwork() {
               <Building2 className="h-5 w-5" />
             </TabsTrigger>
             <TabsTrigger 
-              value="applications" 
+              value="map" 
               className="flex flex-col items-center justify-center h-full px-1 py-1 w-full"
-              title="Applications"
+              title="Map View"
             >
-              <FileText className="h-5 w-5" />
+              <Map className="h-5 w-5" />
             </TabsTrigger>
             <TabsTrigger 
               value="data" 
@@ -710,95 +666,7 @@ export default function ShelterNetwork() {
           </TabsList>
         </div>
 
-        {/* Overview Tab */}
-        <TabsContent value="overview" className="space-y-6">
-          {/* Performance Metrics */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Top Performing Shelters</CardTitle>
-              <CardDescription>Ranked by overall performance and community impact</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {performanceMetrics.slice(0, 5).map((shelter, index) => (
-                  <div key={`performance-${shelter.id}`} className="p-4 border rounded-xl bg-gradient-to-r from-slate-50 to-gray-50 dark:from-slate-900 dark:to-gray-900 hover:shadow-md transition-all duration-200">
-                    {/* Mobile Layout */}
-                    <div className="block sm:hidden space-y-3">
-                      {/* Top Row: Rank, Name, Rating */}
-                      <div className="flex items-center space-x-3">
-                        <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-sm">
-                          {index + 1}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="font-semibold text-base truncate">{shelter.shelter}</div>
-                          <div className="flex items-center space-x-1 mt-1">
-                            {renderStars(shelter.rating)}
-                            <span className="text-xs text-muted-foreground ml-1">
-                              {shelter.rating > 0 ? shelter.rating.toFixed(1) : 'New'}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      {/* Metrics Grid */}
-                      <div className="grid grid-cols-3 gap-3 text-center">
-                        <div>
-                          <div className="text-lg font-bold text-green-600 dark:text-green-400">${shelter.donations.toLocaleString()}</div>
-                          <div className="text-xs text-muted-foreground">Donations</div>
-                        </div>
-                        <div>
-                          <div className="text-lg font-bold text-blue-600 dark:text-blue-400">{shelter.participants}</div>
-                          <div className="text-xs text-muted-foreground">Participants</div>
-                        </div>
-                        <div>
-                          <div className={`text-lg font-bold ${getComplianceColor(shelter.efficiency)}`}>
-                            {shelter.efficiency}%
-                          </div>
-                          <div className="text-xs text-muted-foreground">Efficiency</div>
-                        </div>
-                      </div>
-                    </div>
 
-                    {/* Desktop Layout */}
-                    <div className="hidden sm:flex items-center justify-between">
-                      <div className="flex items-center space-x-4">
-                        <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-sm">
-                          {index + 1}
-                        </div>
-                        <div>
-                          <div className="font-semibold text-lg">{shelter.shelter}</div>
-                          <div className="flex items-center space-x-1 mt-1">
-                            {renderStars(shelter.rating)}
-                            <span className="text-xs text-muted-foreground ml-1">
-                              {shelter.rating > 0 ? shelter.rating.toFixed(1) : 'New'}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <div className="grid grid-cols-3 gap-8 text-center">
-                        <div>
-                          <div className="text-lg font-bold text-green-600 dark:text-green-400">${shelter.donations.toLocaleString()}</div>
-                          <div className="text-xs text-muted-foreground">Donations</div>
-                        </div>
-                        <div>
-                          <div className="text-lg font-bold text-blue-600 dark:text-blue-400">{shelter.participants}</div>
-                          <div className="text-xs text-muted-foreground">Participants</div>
-                        </div>
-                        <div>
-                          <div className={`text-lg font-bold ${getComplianceColor(shelter.efficiency)}`}>
-                            {shelter.efficiency}%
-                          </div>
-                          <div className="text-xs text-muted-foreground">Efficiency</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
 
         {/* Map Tab */}
         <TabsContent value="map" className="space-y-6">
@@ -821,52 +689,20 @@ export default function ShelterNetwork() {
                   </div>
                 </div>
               ) : (
-                <ShelterMap shelters={shelters} height="600px" />
+                <ShelterNetworkMap height="600px" refreshTrigger={mapRefreshTrigger} />
               )}
             </CardContent>
           </Card>
 
-          {/* Map Legend */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Map Legend</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="flex items-center space-x-2">
-                  <div className="w-4 h-4 rounded-full bg-green-500"></div>
-                  <span className="text-sm">Active Shelters</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <div className="w-4 h-4 rounded-full bg-yellow-500"></div>
-                  <span className="text-sm">Pending Approval</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <div className="w-4 h-4 rounded-full bg-red-500"></div>
-                  <span className="text-sm">High Occupancy (90%+)</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <div className="w-4 h-4 rounded-full bg-blue-500"></div>
-                  <span className="text-sm">Low Occupancy (&lt;75%)</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+
         </TabsContent>
 
         {/* Directory Tab */}
         <TabsContent value="directory" className="space-y-4">
           <div className="flex justify-between items-center">
             <h3 className="text-lg font-medium">Shelter Directory</h3>
-            <div className="flex space-x-2">
-              <Button variant="outline" size="sm">
-                <Search className="mr-2 h-4 w-4" />
-                Search
-              </Button>
-              <Button variant="outline" size="sm">
-                <Filter className="mr-2 h-4 w-4" />
-                Filter
-              </Button>
+            <div className="text-sm text-muted-foreground">
+              Showing {filteredShelters.length} of {uniqueShelters.length} shelters
             </div>
           </div>
 
@@ -1109,83 +945,7 @@ export default function ShelterNetwork() {
           )}
         </TabsContent>
 
-        {/* Applications Tab */}
-        <TabsContent value="applications" className="space-y-4">
-          <div className="flex justify-between items-center">
-            <h3 className="text-lg font-medium">Pending Applications</h3>
-            <div className="text-sm text-muted-foreground">
-              {pendingApplications.length} applications awaiting review
-            </div>
-          </div>
 
-          {pendingApplications.length === 0 ? (
-            <Card>
-              <CardContent className="p-12 text-center">
-                <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No pending applications</h3>
-                <p className="text-gray-600 dark:text-gray-400">All shelter applications have been processed.</p>
-              </CardContent>
-            </Card>
-          ) : (
-            <div className="space-y-4">
-              {pendingApplications.map((application) => (
-                <Card key={application.id}>
-                  <CardContent className="p-6">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-4">
-                        <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900 rounded-lg flex items-center justify-center">
-                          <FileText className="h-6 w-6 text-orange-600 dark:text-orange-400" />
-                        </div>
-                        <div>
-                          <div className="font-bold text-lg">{application.name}</div>
-                          <div className="text-sm text-muted-foreground flex items-center">
-                            <MapPin className="h-3 w-3 mr-1" />
-                            {application.location} • {application.type}
-                          </div>
-                          <div className="text-sm text-muted-foreground flex items-center mt-1">
-                            <span>Applicant: {application.applicant}</span>
-                            <span className="mx-2">•</span>
-                            <Mail className="h-3 w-3 mr-1" />
-                            {application.email}
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-center space-x-6">
-                        <div className="text-center">
-                          <div className="text-sm font-medium">{application.capacity}</div>
-                          <div className="text-xs text-muted-foreground">Capacity</div>
-                        </div>
-                        <div className="text-center">
-                          <div className="text-sm font-medium">{application.documents.length}</div>
-                          <div className="text-xs text-muted-foreground">Documents</div>
-                        </div>
-                        <div className="text-center">
-                          <div className="text-sm font-medium">{application.submittedDate}</div>
-                          <div className="text-xs text-muted-foreground">Submitted</div>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <Badge className={getStatusColor(application.status)}>
-                            {application.status.replace('_', ' ')}
-                          </Badge>
-                        </div>
-                        <div className="flex space-x-1">
-                          <Button variant="ghost" size="sm">
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                          <Button variant="default" size="sm">
-                            <CheckCircle className="h-4 w-4 mr-1" />
-                            Review
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          )}
-        </TabsContent>
 
         {/* Data Tab */}
         <TabsContent value="data" className="space-y-6">

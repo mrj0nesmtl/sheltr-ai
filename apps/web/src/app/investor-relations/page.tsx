@@ -20,7 +20,6 @@ import {
   ArrowRight,
   Download,
   Calendar,
-  DollarSign,
   PieChart,
   LineChart,
   Building,
@@ -28,6 +27,7 @@ import {
   Mail,
   Clock,
   AlertCircle,
+  ShieldCheck,
   Eye,
   X,
   Play,
@@ -2188,20 +2188,40 @@ export default function InvestorRelationsPage() {
                       <div className="bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900 dark:to-purple-900 p-6 rounded-lg">
                         <h4 className="font-bold mb-3 text-center">SHELTR-AI Platform Stack</h4>
                         <div className="space-y-3">
-                          <div className="bg-white dark:bg-slate-800 p-3 rounded border text-center">
-                            <strong>Frontend:</strong> Next.js + React + TypeScript
+                          <div className="bg-white dark:bg-slate-800 p-4 rounded-lg border text-center shadow-sm">
+                            <div className="flex items-center justify-center space-x-2 mb-2">
+                              <Globe className="h-5 w-5 text-blue-600" />
+                              <strong className="text-gray-900 dark:text-white">Frontend:</strong>
+                            </div>
+                            <span className="text-gray-600 dark:text-gray-300">Next.js + React + TypeScript</span>
                           </div>
-                          <div className="bg-white dark:bg-slate-800 p-3 rounded border text-center">
-                            <strong>Backend:</strong> FastAPI + Python + Firebase
+                          <div className="bg-white dark:bg-slate-800 p-4 rounded-lg border text-center shadow-sm">
+                            <div className="flex items-center justify-center space-x-2 mb-2">
+                              <Building className="h-5 w-5 text-green-600" />
+                              <strong className="text-gray-900 dark:text-white">Backend:</strong>
+                            </div>
+                            <span className="text-gray-600 dark:text-gray-300">FastAPI + Python + Firebase</span>
                           </div>
-                          <div className="bg-white dark:bg-slate-800 p-3 rounded border text-center">
-                            <strong>Blockchain:</strong> Ethereum + Smart Contracts
+                          <div className="bg-white dark:bg-slate-800 p-4 rounded-lg border text-center shadow-sm">
+                            <div className="flex items-center justify-center space-x-2 mb-2">
+                              <Coins className="h-5 w-5 text-yellow-600" />
+                              <strong className="text-gray-900 dark:text-white">Blockchain:</strong>
+                            </div>
+                            <span className="text-gray-600 dark:text-gray-300">Ethereum + Smart Contracts</span>
                           </div>
-                          <div className="bg-white dark:bg-slate-800 p-3 rounded border text-center">
-                            <strong>Database:</strong> Firestore + Multi-Tenant Architecture
+                          <div className="bg-white dark:bg-slate-800 p-4 rounded-lg border text-center shadow-sm">
+                            <div className="flex items-center justify-center space-x-2 mb-2">
+                              <Shield className="h-5 w-5 text-purple-600" />
+                              <strong className="text-gray-900 dark:text-white">Database:</strong>
+                            </div>
+                            <span className="text-gray-600 dark:text-gray-300">Firestore + Multi-Tenant Architecture</span>
                           </div>
-                          <div className="bg-white dark:bg-slate-800 p-3 rounded border text-center">
-                            <strong>AI/ML:</strong> TensorFlow + Predictive Analytics
+                          <div className="bg-white dark:bg-slate-800 p-4 rounded-lg border text-center shadow-sm">
+                            <div className="flex items-center justify-center space-x-2 mb-2">
+                              <BarChart3 className="h-5 w-5 text-orange-600" />
+                              <strong className="text-gray-900 dark:text-white">AI/ML:</strong>
+                            </div>
+                            <span className="text-gray-600 dark:text-gray-300">OpenAI + Anthropic + Firestore Embeddings + Predictive Analytics</span>
                           </div>
                         </div>
                       </div>
@@ -2879,6 +2899,121 @@ export default function InvestorRelationsPage() {
 
       {/* Investment Deck Slideshow */}
       <InvestmentDeckSlideshow isOpen={deckOpen} onClose={() => setDeckOpen(false)} />
+
+      {/* Plan B - Alternative Funding Strategy */}
+      <section className="py-16 bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-900/20 dark:to-indigo-900/20">
+        <div className="container mx-auto px-4 text-center">
+          <div className="max-w-4xl mx-auto">
+            <div className="mb-8">
+              <Badge variant="outline" className="mb-4 bg-blue-50 text-blue-700 border-blue-200">
+                Alternative Investment Strategy
+              </Badge>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">
+                Plan B: Traditional Conservative Funding
+              </h2>
+              <p className="text-lg text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
+                For investors who prefer traditional equity structures over token-based offerings, 
+                we&apos;ve developed a comprehensive alternative funding strategy that addresses regulatory 
+                concerns while maintaining our growth potential through strategic partnerships.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-6 mb-10">
+              <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md border border-blue-200 dark:border-blue-800">
+                <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center mb-4 mx-auto">
+                  <ShieldCheck className="h-6 w-6 text-blue-600" />
+                </div>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Regulatory Compliance</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Traditional equity structure eliminates SEC token classification risks and regulatory uncertainty.
+                </p>
+              </div>
+
+              <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md border border-green-200 dark:border-green-800">
+                <div className="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center mb-4 mx-auto">
+                  <Handshake className="h-6 w-6 text-green-600" />
+                </div>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Strategic Partnerships</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Leverage established payment sector relationships for revenue-sharing and growth acceleration.
+                </p>
+              </div>
+
+              <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md border border-purple-200 dark:border-purple-800">
+                <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center mb-4 mx-auto">
+                  <TrendingUp className="h-6 w-6 text-purple-600" />
+                </div>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Proven Growth Model</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Traditional funding rounds with clear milestones: $150K → $500K → $2M over 18 months.
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-8 border-2 border-blue-300 dark:border-blue-700 mb-8">
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                Why Conservative Investors Choose Plan B
+              </h3>
+              <div className="grid md:grid-cols-2 gap-6 text-left">
+                <div className="space-y-3">
+                  <div className="flex items-start space-x-3">
+                    <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
+                    <span className="text-sm text-gray-700 dark:text-gray-300">
+                      <strong>No Cryptocurrency Exposure:</strong> Pure equity investment without token volatility
+                    </span>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
+                    <span className="text-sm text-gray-700 dark:text-gray-300">
+                      <strong>Institutional Grade:</strong> Delaware C-Corp structure with standard investor protections
+                    </span>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
+                    <span className="text-sm text-gray-700 dark:text-gray-300">
+                      <strong>Payment Sector Expertise:</strong> Strategic CFO with 20+ years industry experience
+                    </span>
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  <div className="flex items-start space-x-3">
+                    <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
+                    <span className="text-sm text-gray-700 dark:text-gray-300">
+                      <strong>Clear Exit Strategy:</strong> Traditional acquisition or IPO pathways
+                    </span>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
+                    <span className="text-sm text-gray-700 dark:text-gray-300">
+                      <strong>Proven Revenue Model:</strong> SaaS subscriptions + transaction processing fees
+                    </span>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
+                    <span className="text-sm text-gray-700 dark:text-gray-300">
+                      <strong>Municipal Contracts:</strong> Government partnerships provide stable recurring revenue
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <Button 
+                size="lg" 
+                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 text-lg"
+                onClick={() => window.open('/executive-access', '_blank')}
+              >
+                <FileText className="mr-2 h-5 w-5" />
+                Access Plan B: Traditional Funding Strategy
+              </Button>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                Confidential executive summary and partnership framework • Investment-grade documentation
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Footer */}
       <footer className="bg-slate-900 text-white py-12">

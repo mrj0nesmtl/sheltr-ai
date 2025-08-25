@@ -3,6 +3,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   Settings, 
   ToggleLeft, 
@@ -158,8 +159,8 @@ export default function PlatformManagement() {
         </div>
       </div>
 
-      {/* System Health Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
+      {/* System Health Overview - 3x2 Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Uptime</CardTitle>
@@ -300,21 +301,21 @@ export default function PlatformManagement() {
         </Card>
       </div>
 
-      {/* Tenant Management */}
+      {/* Shelter Management */}
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center text-lg sm:text-xl">
             <Building2 className="mr-2 h-5 w-5" />
-            Tenant Management
+            Shelter Management
           </CardTitle>
-          <CardDescription className="text-sm">Overview of all platform tenants and their activity</CardDescription>
+          <CardDescription className="text-sm">Overview of all platform shelters and their activity</CardDescription>
         </CardHeader>
         <CardContent className="pt-3">
           <div className="space-y-3">
             {loading ? (
-              <div className="text-center py-8 text-muted-foreground">Loading tenants...</div>
+              <div className="text-center py-8 text-muted-foreground">Loading shelters...</div>
             ) : tenants.length === 0 ? (
-              <div className="text-center py-8 text-muted-foreground">No tenants found</div>
+              <div className="text-center py-8 text-muted-foreground">No shelters found</div>
             ) : (
               tenants.map((tenant) => (
               <div key={tenant.id} className="p-4 border rounded-xl bg-gradient-to-r from-slate-50 to-gray-50 dark:from-slate-900 dark:to-gray-900 hover:shadow-md transition-all duration-200">
@@ -416,36 +417,141 @@ export default function PlatformManagement() {
           <div className="mt-6 flex flex-col sm:flex-row gap-3 sm:justify-between">
             <Button variant="outline" className="flex-1 sm:flex-none">
               <Building2 className="mr-2 h-4 w-4" />
-              <span className="hidden sm:inline">Add New Tenant</span>
-              <span className="sm:hidden">Add Tenant</span>
+              <span className="hidden sm:inline">Add New Shelter</span>
+              <span className="sm:hidden">Add Shelter</span>
             </Button>
             <Button variant="outline" className="flex-1 sm:flex-none">
-              <span className="hidden sm:inline">View All Tenants</span>
+              <span className="hidden sm:inline">View All Shelters</span>
               <span className="sm:hidden">View All</span>
             </Button>
           </div>
         </CardContent>
       </Card>
 
-      {/* Quick Actions */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Button className="h-20 flex-col space-y-2" variant="outline">
-          <Server className="h-6 w-6" />
-          <span>System Maintenance</span>
-        </Button>
-        <Button className="h-20 flex-col space-y-2" variant="outline">
-          <Database className="h-6 w-6" />
-          <span>Database Backup</span>
-        </Button>
-        <Button className="h-20 flex-col space-y-2" variant="outline">
-          <Globe className="h-6 w-6" />
-          <span>Deploy Update</span>
-        </Button>
-        <Button className="h-20 flex-col space-y-2" variant="outline">
-          <TrendingUp className="h-6 w-6" />
-          <span>Performance Report</span>
-        </Button>
-      </div>
+      {/* Platform Operations Tabs */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center">
+            <Settings className="mr-2 h-5 w-5" />
+            Platform Operations
+          </CardTitle>
+          <CardDescription>System maintenance, monitoring, and operational tools</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Tabs defaultValue="maintenance" className="w-full">
+            <TabsList className="grid w-full grid-cols-4">
+              <TabsTrigger value="maintenance" className="flex items-center gap-2">
+                <Server className="h-4 w-4" />
+                <span className="hidden sm:inline">Maintenance</span>
+              </TabsTrigger>
+              <TabsTrigger value="backup" className="flex items-center gap-2">
+                <Database className="h-4 w-4" />
+                <span className="hidden sm:inline">Backup</span>
+              </TabsTrigger>
+              <TabsTrigger value="deploy" className="flex items-center gap-2">
+                <Globe className="h-4 w-4" />
+                <span className="hidden sm:inline">Deploy</span>
+              </TabsTrigger>
+              <TabsTrigger value="reports" className="flex items-center gap-2">
+                <TrendingUp className="h-4 w-4" />
+                <span className="hidden sm:inline">Reports</span>
+              </TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="maintenance" className="mt-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <Server className="mr-2 h-5 w-5" />
+                    System Maintenance
+                  </CardTitle>
+                  <CardDescription>Manage system maintenance tasks and schedules</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-center py-8 text-muted-foreground">
+                    <Server className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+                    <h3 className="text-lg font-medium mb-2">System Maintenance Tools</h3>
+                    <p className="text-sm mb-4">Maintenance management features coming soon</p>
+                    <Button variant="outline">
+                      <Settings className="mr-2 h-4 w-4" />
+                      Configure Maintenance
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            
+            <TabsContent value="backup" className="mt-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <Database className="mr-2 h-5 w-5" />
+                    Database Backup
+                  </CardTitle>
+                  <CardDescription>Manage database backups and recovery</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-center py-8 text-muted-foreground">
+                    <Database className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+                    <h3 className="text-lg font-medium mb-2">Database Backup Management</h3>
+                    <p className="text-sm mb-4">Backup and recovery tools coming soon</p>
+                    <Button variant="outline">
+                      <Database className="mr-2 h-4 w-4" />
+                      Manage Backups
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            
+            <TabsContent value="deploy" className="mt-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <Globe className="mr-2 h-5 w-5" />
+                    Deploy Updates
+                  </CardTitle>
+                  <CardDescription>Manage platform deployments and updates</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-center py-8 text-muted-foreground">
+                    <Globe className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+                    <h3 className="text-lg font-medium mb-2">Deployment Management</h3>
+                    <p className="text-sm mb-4">Deployment tools and update management coming soon</p>
+                    <Button variant="outline">
+                      <Globe className="mr-2 h-4 w-4" />
+                      Deploy Updates
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            
+            <TabsContent value="reports" className="mt-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <TrendingUp className="mr-2 h-5 w-5" />
+                    Performance Reports
+                  </CardTitle>
+                  <CardDescription>View system performance metrics and reports</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-center py-8 text-muted-foreground">
+                    <TrendingUp className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+                    <h3 className="text-lg font-medium mb-2">Performance Analytics</h3>
+                    <p className="text-sm mb-4">Performance reporting and analytics coming soon</p>
+                    <Button variant="outline">
+                      <TrendingUp className="mr-2 h-4 w-4" />
+                      View Reports
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
+        </CardContent>
+      </Card>
     </div>
   );
 } 

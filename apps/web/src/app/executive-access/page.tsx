@@ -297,32 +297,32 @@ export default function ExecutiveAccess() {
           <CardHeader className="bg-green-50 dark:bg-green-900/20">
             <CardTitle className="flex items-center space-x-2">
               <Users className="w-5 h-5 text-green-600" />
-              <span>Doug&apos;s Strategic Partnership Role</span>
+              <span>Strategic Investor & Advisory Opportunity</span>
             </CardTitle>
             <CardDescription>
-              Leveraging 20+ years of payment sector expertise
+              Strategic advisory position with payment sector expertise
             </CardDescription>
           </CardHeader>
           <CardContent className="p-6 space-y-4">
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <h3 className="font-semibold mb-3">Core Responsibilities</h3>
+                <h3 className="font-semibold mb-3">Advisory Responsibilities</h3>
                 <div className="space-y-2">
                   <div className="flex items-start space-x-2">
                     <ArrowRight className="w-4 h-4 text-green-500 mt-0.5" />
-                    <span className="text-sm">Payment infrastructure design & implementation</span>
+                    <span className="text-sm">Strategic guidance on payment infrastructure & partnerships</span>
                   </div>
                   <div className="flex items-start space-x-2">
                     <ArrowRight className="w-4 h-4 text-green-500 mt-0.5" />
-                    <span className="text-sm">Strategic partnership development with payment networks</span>
+                    <span className="text-sm">Network introductions to payment sector contacts</span>
                   </div>
                   <div className="flex items-start space-x-2">
                     <ArrowRight className="w-4 h-4 text-green-500 mt-0.5" />
-                    <span className="text-sm">Institutional investor relations & fundraising strategy</span>
+                    <span className="text-sm">Advisory support for institutional fundraising</span>
                   </div>
                   <div className="flex items-start space-x-2">
                     <ArrowRight className="w-4 h-4 text-green-500 mt-0.5" />
-                    <span className="text-sm">Financial oversight & SmartFund 80-15-5 distribution</span>
+                    <span className="text-sm">Strategic counsel on financial partnerships</span>
                   </div>
                 </div>
               </div>
@@ -332,26 +332,26 @@ export default function ExecutiveAccess() {
                 <div className="space-y-3">
                   <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
                     <div className="flex justify-between items-center">
-                      <span className="font-medium">Founding Equity</span>
-                      <span className="text-green-600 font-bold">5-8%</span>
+                      <span className="font-medium">Strategic Equity</span>
+                      <span className="text-green-600 font-bold">3-5%</span>
                     </div>
-                    <div className="text-xs text-gray-500 mt-1">Vested over 4 years with 1-year cliff</div>
+                    <div className="text-xs text-gray-500 mt-1">Vested over 4 years with advisory milestones</div>
                   </div>
                   
                   <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
                     <div className="flex justify-between items-center">
-                      <span className="font-medium">Revenue Share</span>
-                      <span className="text-blue-600 font-bold">2-3%</span>
+                      <span className="font-medium">Partnership Bonus</span>
+                      <span className="text-blue-600 font-bold">1-2%</span>
                     </div>
-                    <div className="text-xs text-gray-500 mt-1">From payment processing partnerships</div>
+                    <div className="text-xs text-gray-500 mt-1">From successful partnerships facilitated</div>
                   </div>
                   
                   <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
                     <div className="flex justify-between items-center">
-                      <span className="font-medium">Advisory Fee</span>
-                      <span className="text-purple-600 font-bold">$5K/month</span>
+                      <span className="font-medium">Advisory Retainer</span>
+                      <span className="text-purple-600 font-bold">$2-3K/month</span>
                     </div>
-                    <div className="text-xs text-gray-500 mt-1">Until Series A completion</div>
+                    <div className="text-xs text-gray-500 mt-1">Flexible commitment, success-based escalation</div>
                   </div>
                 </div>
               </div>

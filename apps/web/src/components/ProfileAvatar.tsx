@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { getDownloadURL, ref } from 'firebase/storage';
+import { getDownloadURL, ref, getMetadata } from 'firebase/storage';
 import { storage } from '@/lib/firebase';
 import { UserCog } from 'lucide-react';
 
@@ -10,6 +10,10 @@ interface ProfileAvatarProps {
   size?: 'small' | 'medium' | 'large';
   className?: string;
 }
+
+// Simple cache to avoid repeated lookups
+const profilePicCache = new Map<string, { url: string | null; timestamp: number }>();
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
 export function ProfileAvatar({ userId, size = 'medium', className = '' }: ProfileAvatarProps) {
   const [profilePicUrl, setProfilePicUrl] = useState<string | null>(null);
@@ -36,6 +40,15 @@ export function ProfileAvatar({ userId, size = 'medium', className = '' }: Profi
         setLoading(true);
         setError(false);
 
+        // Check cache first
+        const cached = profilePicCache.get(userId);
+        if (cached && (Date.now() - cached.timestamp) < CACHE_DURATION) {
+          setProfilePicUrl(cached.url);
+          setError(cached.url === null);
+          setLoading(false);
+          return;
+        }
+
         // Try different possible file extensions and paths
         const possiblePaths = [
           `profiles/${userId}/avatar.jpg`,
@@ -51,19 +64,33 @@ export function ProfileAvatar({ userId, size = 'medium', className = '' }: Profi
 
         let foundUrl = null;
 
-        // Try each possible path
+        // Try each possible path with metadata check first to avoid 403 errors
         for (const path of possiblePaths) {
           try {
             const storageRef = ref(storage, path);
+            
+            // First check if file exists by getting metadata (more efficient)
+            await getMetadata(storageRef);
+            
+            // If metadata succeeds, file exists - now get download URL
             const url = await getDownloadURL(storageRef);
             foundUrl = url;
             console.log(`✅ Found profile picture at: ${path}`);
             break; // Stop searching once we find one
-          } catch (pathError) {
-            // Continue to next path
-            console.log(`❌ No file at: ${path}`);
+          } catch (pathError: any) {
+            // Only log actual errors, not "file not found" cases
+            if (pathError.code !== 'storage/object-not-found') {
+              console.log(`❌ Error accessing ${path}:`, pathError.code);
+            }
+            // Continue to next path silently for file-not-found errors
           }
         }
+
+        // Cache the result (whether found or not)
+        profilePicCache.set(userId, {
+          url: foundUrl,
+          timestamp: Date.now()
+        });
 
         if (foundUrl) {
           setProfilePicUrl(foundUrl);

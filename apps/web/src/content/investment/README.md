@@ -22,5 +22,5 @@ These documents support the `/executive-access` page and can be uploaded to the 
 ⚠️ **Confidential Information** - These documents contain proprietary business strategy, financial projections, and partnership terms. Distribution should be limited to authorized personnel and qualified investors only.
 
 ---
-*Last Updated: December 2024*
+*Last Updated: Aug 24 2025*
 *Document Status: Active - Alternative Funding Strategy*

@@ -575,8 +575,7 @@ export default function AngelsPage() {
             {/* Desktop Grid View - Hidden on Mobile */}
             <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {tiktokVideos.slice(0, 6).map((video) => (
-                <Card key={video.id} className="overflow-hidden hover:shadow-lg transition-all duration-300 hover:scale-105 bg-gradient-to-b from-slate-900 to-black border-slate-800 cursor-pointer"
-                  onClick={() => window.open(video.url, '_blank', 'noopener,noreferrer')}
+                <Card key={video.id} className="overflow-hidden hover:shadow-lg transition-all duration-300 hover:scale-105 bg-gradient-to-b from-slate-900 to-black border-slate-800"
                 >
                   <div className="aspect-[9/16] relative overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/80 z-10" />
@@ -596,11 +595,35 @@ export default function AngelsPage() {
                         ))}
                       </div>
                     </div>
-                    {/* TikTok-style background with gradient */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-purple-900 via-blue-900 to-pink-900" />
-                    <div className="absolute inset-0 bg-black/20" />
-                    {/* Simulated video preview overlay */}
-                    <div className="absolute inset-0 flex items-center justify-center">
+                    {/* TikTok Embed */}
+                    <iframe
+                      src={`https://www.tiktok.com/embed/v2/${video.id}`}
+                      width="100%"
+                      height="100%"
+                      frameBorder="0"
+                      scrolling="no"
+                      allowFullScreen
+                      className="absolute inset-0 w-full h-full pointer-events-auto"
+                      style={{
+                        border: 'none',
+                        borderRadius: '0',
+                      }}
+                      onError={() => {
+                        // Fallback to gradient if embed fails
+                        const iframe = document.querySelector(`iframe[src*="${video.id}"]`) as HTMLIFrameElement;
+                        if (iframe) {
+                          iframe.style.display = 'none';
+                          const fallbacks = iframe.parentElement?.querySelectorAll('.tiktok-fallback');
+                          fallbacks?.forEach((fallback) => {
+                            (fallback as HTMLElement).style.display = 'block';
+                          });
+                        }
+                      }}
+                    />
+                    {/* Fallback gradient (hidden by default) */}
+                    <div className="tiktok-fallback absolute inset-0 bg-gradient-to-br from-purple-900 via-blue-900 to-pink-900" style={{display: 'none'}} />
+                    <div className="tiktok-fallback absolute inset-0 bg-black/20" style={{display: 'none'}} />
+                    <div className="tiktok-fallback absolute inset-0 flex items-center justify-center" style={{display: 'none'}}>
                       <div className="bg-white/10 backdrop-blur-sm rounded-full p-4">
                         <Play className="w-8 h-8 text-white fill-white" />
                       </div>
@@ -622,8 +645,7 @@ export default function AngelsPage() {
                 <CarouselContent className="-ml-4">
                   {tiktokVideos.map((video) => (
                     <CarouselItem key={video.id} className="pl-4 basis-[85%]">
-                      <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 bg-gradient-to-b from-slate-900 to-black border-slate-800 mx-2 cursor-pointer"
-                        onClick={() => window.open(video.url, '_blank', 'noopener,noreferrer')}
+                      <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 bg-gradient-to-b from-slate-900 to-black border-slate-800 mx-2"
                       >
                         <div className="aspect-[9/16] relative overflow-hidden">
                           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/80 z-10" />
@@ -643,11 +665,35 @@ export default function AngelsPage() {
                               ))}
                             </div>
                           </div>
-                          {/* TikTok-style background with gradient */}
-                          <div className="absolute inset-0 bg-gradient-to-br from-purple-900 via-blue-900 to-pink-900" />
-                          <div className="absolute inset-0 bg-black/20" />
-                          {/* Simulated video preview overlay */}
-                          <div className="absolute inset-0 flex items-center justify-center">
+                          {/* TikTok Embed */}
+                          <iframe
+                            src={`https://www.tiktok.com/embed/v2/${video.id}`}
+                            width="100%"
+                            height="100%"
+                            frameBorder="0"
+                            scrolling="no"
+                            allowFullScreen
+                            className="absolute inset-0 w-full h-full pointer-events-auto"
+                            style={{
+                              border: 'none',
+                              borderRadius: '0',
+                            }}
+                            onError={() => {
+                              // Fallback to gradient if embed fails
+                              const iframe = document.querySelector(`iframe[src*="${video.id}"]`) as HTMLIFrameElement;
+                              if (iframe) {
+                                iframe.style.display = 'none';
+                                const fallbacks = iframe.parentElement?.querySelectorAll('.tiktok-fallback');
+                                fallbacks?.forEach((fallback) => {
+                                  (fallback as HTMLElement).style.display = 'block';
+                                });
+                              }
+                            }}
+                          />
+                          {/* Fallback gradient (hidden by default) */}
+                          <div className="tiktok-fallback absolute inset-0 bg-gradient-to-br from-purple-900 via-blue-900 to-pink-900" style={{display: 'none'}} />
+                          <div className="tiktok-fallback absolute inset-0 bg-black/20" style={{display: 'none'}} />
+                          <div className="tiktok-fallback absolute inset-0 flex items-center justify-center" style={{display: 'none'}}>
                             <div className="bg-white/10 backdrop-blur-sm rounded-full p-4">
                               <Play className="w-6 h-6 text-white fill-white" />
                             </div>

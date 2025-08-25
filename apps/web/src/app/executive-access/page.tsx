@@ -185,7 +185,7 @@ export default function ExecutiveAccess() {
                 <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
                   <h4 className="font-medium text-green-800 dark:text-green-300">Tier 1: Payment Processors</h4>
                   <p className="text-sm text-green-700 dark:text-green-400 mt-1">
-                    Partner with Doug&apos;s payment networks for transaction processing fees
+                    Partner with payment networks for transaction processing fees
                   </p>
                   <div className="text-xs text-green-600 mt-2">Revenue Share: 15-25%</div>
                 </div>
@@ -199,9 +199,9 @@ export default function ExecutiveAccess() {
                 </div>
                 
                 <div className="p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
-                  <h4 className="font-medium text-purple-800 dark:text-purple-300">Tier 3: Corporate CSR</h4>
+                  <h4 className="font-medium text-purple-800 dark:text-purple-300">Tier 3: HMIS & Shelter Networks</h4>
                   <p className="text-sm text-purple-700 dark:text-purple-400 mt-1">
-                    White-label employee giving platforms for enterprises
+                    Integration with HMIS platforms and shelter networks - money flows TO shelters, not from them
                   </p>
                   <div className="text-xs text-purple-600 mt-2">License Fee: $10K-50K annually</div>
                 </div>
@@ -477,7 +477,10 @@ export default function ExecutiveAccess() {
         <Card className="border-2 border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/10">
           <CardContent className="p-6">
             <div className="text-center space-y-4">
-              <h3 className="text-lg font-semibold">Supporting Documents</h3>
+              <div className="flex items-center justify-center space-x-3">
+                <h3 className="text-lg font-semibold">Supporting Documents</h3>
+                <Badge className="bg-orange-500 hover:bg-orange-600 text-white">Coming Soon</Badge>
+              </div>
               <p className="text-sm text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
                 Access detailed financial models, partnership agreements, and investor materials
               </p>

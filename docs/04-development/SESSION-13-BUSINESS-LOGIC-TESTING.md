@@ -354,6 +354,187 @@ This session focuses on transforming our beautiful interface into a fully functi
 - [ ] **Feature Flag Management**: Document requirements for advanced feature flag controls
 - [ ] **Alert Management**: Document requirements for alert configuration and notification
 
+#### **Shelter Network Dashboard** (`/dashboard/shelters`)
+**Priority**: 🏠 **CRITICAL**
+
+**Access Control Testing:**
+- [ ] **Super Admin Access**: Verify super admins can access shelter network management
+- [ ] **Shelter Network Overview**: Test access to shelter directory, onboarding, and performance monitoring
+- [ ] **Shelter Management Permissions**: Test shelter creation, editing, and management permissions
+
+**Shelter Network Metrics Testing (Top Cards):**
+- [ ] **Total Shelters Card**: Test shelter count display and real-time updates
+  - [ ] **Shelter Count**: Verify total shelter count (10) matches database
+  - [ ] **Active Status**: Test "1 Active" and "0 Pending" status indicators
+  - [ ] **Real Data Integration**: Verify data comes from Firestore shelters collection
+  - [ ] **Building2 Icon**: Verify Building2 icon displays correctly
+- [ ] **Platform Capacity Card**: Test platform-wide capacity metrics
+  - [ ] **Total Capacity**: Verify platform capacity calculation (1,305)
+  - [ ] **Occupied Count**: Test occupied beds count (911) and percentage (69.7%)
+  - [ ] **Average Calculation**: Test "Average" indicator for capacity utilization
+  - [ ] **Users Icon**: Verify Users icon displays correctly
+- [ ] **Platform Growth Card**: Test growth metrics and trends
+  - [ ] **Growth Percentage**: Verify monthly growth calculation (+8.2%)
+  - [ ] **Growth Indicator**: Test "Monthly Growth" and "New Partners" labels
+  - [ ] **Color Coding**: Test green color for positive growth
+  - [ ] **TrendingUp Icon**: Verify TrendingUp icon displays correctly
+- [ ] **Compliance Score Card**: Test platform compliance monitoring
+  - [ ] **Compliance Percentage**: Verify platform compliance score (85%)
+  - [ ] **Compliance Status**: Test "Platform Average" and "Excellent" indicators
+  - [ ] **Color Coding**: Test appropriate color coding for compliance levels
+  - [ ] **Shield Icon**: Verify Shield icon displays correctly
+
+**Global Filters Testing:**
+- [ ] **Filter Section Display**: Test Global Filters card and functionality
+  - [ ] **Filter Title**: Verify "Global Filters" title and Filter icon
+  - [ ] **Filter Description**: Test description "Filter shelters across all views (Directory, Map, Data)"
+  - [ ] **Live Data Indicator**: Test "LIVE FIRESTORE DATA - 10 unique shelters loaded from database" status
+  - [ ] **Refresh Button**: Test refresh functionality for real-time data updates
+- [ ] **Search Functionality**: Test shelter search across all views
+  - [ ] **Search Input**: Test search input field with placeholder "Search shelters..."
+  - [ ] **Real-time Search**: Verify search results update as user types
+  - [ ] **Search Icon**: Verify Search icon displays in input field
+  - [ ] **Cross-View Search**: Test search works across Directory, Map, and Data views
+- [ ] **Filter Dropdowns**: Test all filter dropdown functionality
+  - [ ] **All Locations Filter**: Test location-based filtering with unique location values
+  - [ ] **All Types Filter**: Test shelter type filtering (Emergency, Transitional, etc.)
+  - [ ] **All Status Filter**: Test status filtering (Active, Pending, Inactive)
+  - [ ] **All Occupancy Filter**: Test occupancy level filtering (Low, Medium, High, At Capacity)
+- [ ] **Filter Results**: Test filter application and results
+  - [ ] **Filter Combination**: Test multiple filters working together
+  - [ ] **Filter Reset**: Test clearing all filters functionality
+  - [ ] **Result Count**: Test "Showing X of Y shelters" counter updates with filters
+
+**Tab Navigation Testing (3 Tabs):**
+- [ ] **Tab Structure**: Test 3-tab layout (Directory, Map View, Data)
+  - [ ] **Tab Order**: Verify tabs display in correct order: Directory, Map View, Data
+  - [ ] **Default Tab**: Test "Directory" tab loads as default
+  - [ ] **Tab Icons**: Verify Building2, Map, Database icons display correctly
+  - [ ] **Tab Navigation**: Test smooth navigation between tabs without data loss
+- [ ] **Responsive Tab Design**: Test tab layout on different screen sizes
+  - [ ] **Desktop Tabs**: Test full tab layout with icons and text
+  - [ ] **Mobile Tabs**: Test mobile tab layout with icons only
+  - [ ] **Tab Grid**: Test 3-column grid layout (grid-cols-3) on desktop
+
+**Directory Tab Testing:**
+- [ ] **Directory Header**: Test directory section header and information
+  - [ ] **Directory Title**: Verify "Shelter Directory" title displays
+  - [ ] **Shelter Count**: Test "Showing X of Y shelters" counter with real-time updates
+  - [ ] **Filter Integration**: Verify directory respects global filter settings
+- [ ] **Shelter List Display**: Test comprehensive shelter information display
+  - [ ] **Shelter Cards**: Test individual shelter card layout and information
+  - [ ] **Shelter Information**: Verify all shelter details display correctly:
+    - [ ] **Shelter Name**: Test shelter name display (e.g., "YWCA Montreal")
+    - [ ] **Location**: Test location display with MapPin icon (e.g., "Montreal, QC")
+    - [ ] **Shelter Type**: Test type display (e.g., "Emergency Shelter")
+    - [ ] **Contact Email**: Test email display with Mail icon
+    - [ ] **Phone Number**: Test phone display with Phone icon
+    - [ ] **Capacity**: Test capacity number display (e.g., "95")
+    - [ ] **Occupancy**: Test occupancy percentage with color coding (e.g., "69%")
+    - [ ] **Donations**: Test donation amount display (e.g., "$2,937")
+    - [ ] **Compliance**: Test compliance percentage with color coding (e.g., "85%")
+    - [ ] **Status Badge**: Test status badge display and color coding (e.g., "pending")
+- [ ] **Shelter Action Buttons**: Test all action buttons for each shelter
+  - [ ] **View Button**: Test Eye icon button for viewing shelter details
+  - [ ] **Edit Button**: Test Edit icon button for shelter management
+  - [ ] **Approve Button**: Test CheckCircle icon button for shelter approval
+  - [ ] **Delete Button**: Test Trash icon button for shelter removal
+  - [ ] **Button Permissions**: Test action buttons display based on user permissions
+- [ ] **Responsive Design**: Test shelter directory responsive layout
+  - [ ] **Mobile Layout**: Test mobile-specific shelter card layout with stacked information
+  - [ ] **Desktop Layout**: Test desktop layout with horizontal information display
+  - [ ] **Card Hover Effects**: Test hover states and visual feedback
+
+**Map View Tab Testing:**
+- [ ] **Map Component**: Test shelter map display and functionality
+  - [ ] **Map Loading**: Test map component loads correctly
+  - [ ] **Shelter Markers**: Test shelter locations display as markers on map
+  - [ ] **Marker Information**: Test clicking markers shows shelter information
+  - [ ] **Map Controls**: Test zoom, pan, and other map controls
+- [ ] **Map Integration**: Test map integration with filter system
+  - [ ] **Filter Application**: Test map updates when filters are applied
+  - [ ] **Real-time Updates**: Test map reflects current shelter data
+  - [ ] **Location Accuracy**: Test shelter markers display at correct locations
+
+**Data Tab Testing:**
+- [ ] **Data Populator**: Test data management and population tools
+  - [ ] **Data Populator Component**: Test DataPopulator component functionality
+  - [ ] **Data Refresh**: Test onDataUpdated callback functionality
+  - [ ] **Data Management**: Test data import, export, and management features
+- [ ] **Data Integration**: Test data tab integration with shelter network
+  - [ ] **Real-time Data**: Test data tab shows current shelter information
+  - [ ] **Data Accuracy**: Test data consistency across all tabs
+
+**Shelter Management Actions Testing:**
+- [ ] **Add Shelter Functionality**: Test new shelter creation
+  - [ ] **Add Shelter Button**: Test "Add Shelter" button functionality
+  - [ ] **Shelter Form**: Test shelter creation form and validation
+  - [ ] **Data Persistence**: Test new shelter data saves to Firestore
+  - [ ] **Real-time Updates**: Test shelter list updates after adding new shelter
+- [ ] **Export Data Functionality**: Test shelter data export
+  - [ ] **Export Button**: Test "Export Data" button functionality
+  - [ ] **Data Format**: Test exported data format and completeness
+  - [ ] **Export Permissions**: Test export functionality based on user permissions
+
+**Shelter Detail Management Testing:**
+- [ ] **View Shelter Details**: Test shelter detail viewing functionality
+  - [ ] **Detail Modal**: Test shelter detail modal/dialog display
+  - [ ] **Complete Information**: Test all shelter information displays in detail view
+  - [ ] **Contact Information**: Test contact details display and formatting
+  - [ ] **Metrics Display**: Test capacity, occupancy, and performance metrics
+- [ ] **Edit Shelter Information**: Test shelter editing functionality
+  - [ ] **Edit Form**: Test shelter edit form with pre-populated data
+  - [ ] **Form Validation**: Test form validation for required fields
+  - [ ] **Data Updates**: Test shelter information updates save correctly
+  - [ ] **Real-time Sync**: Test changes reflect across all views immediately
+- [ ] **Shelter Status Management**: Test shelter status changes
+  - [ ] **Status Updates**: Test changing shelter status (Active, Pending, Inactive)
+  - [ ] **Status Validation**: Test status change permissions and validation
+  - [ ] **Status Display**: Test status changes reflect in UI immediately
+
+**Data Integration Testing:**
+- [ ] **Firestore Integration**: Test direct Firestore shelter data access
+  - [ ] **Shelters Collection**: Verify shelters collection access and queries
+  - [ ] **Real-time Listeners**: Test Firestore real-time data updates
+  - [ ] **Data Consistency**: Test data consistency across all components
+- [ ] **Performance Metrics**: Test shelter performance calculations
+  - [ ] **Capacity Calculations**: Test capacity and occupancy percentage calculations
+  - [ ] **Growth Metrics**: Test growth percentage and trend calculations
+  - [ ] **Compliance Scoring**: Test compliance score calculations and display
+- [ ] **Filter Performance**: Test filtering performance with large datasets
+  - [ ] **Filter Speed**: Test filter application speed and responsiveness
+  - [ ] **Search Performance**: Test search functionality performance
+  - [ ] **Data Loading**: Test initial data loading and caching
+
+**Loading and Error States Testing:**
+- [ ] **Loading States**: Test loading indicators and states
+  - [ ] **Initial Load**: Test loading state on page load
+  - [ ] **Tab Loading**: Test loading states when switching between tabs
+  - [ ] **Data Refresh**: Test loading indicators during data refresh
+- [ ] **Error Handling**: Test error scenarios and recovery
+  - [ ] **Network Errors**: Test handling of network connectivity issues
+  - [ ] **Firestore Errors**: Test handling of database connection errors
+  - [ ] **Permission Errors**: Test handling of insufficient permissions
+  - [ ] **Data Validation**: Test handling of invalid or corrupted data
+
+**Responsive Design Testing:**
+- [ ] **Mobile Layout**: Test shelter network on mobile devices
+  - [ ] **Metric Cards**: Test 4-card layout adaptation to mobile (single column)
+  - [ ] **Tab Navigation**: Test mobile tab navigation with icon-only display
+  - [ ] **Filter Interface**: Test mobile filter interface and usability
+  - [ ] **Shelter Cards**: Test mobile shelter card layout and information display
+- [ ] **Tablet Layout**: Test medium screen layout (2-column cards)
+- [ ] **Desktop Layout**: Test full desktop layout (4-column cards)
+- [ ] **Header Responsiveness**: Test responsive header and action button layout
+
+**Future Implementation Requirements:**
+- [ ] **Advanced Filtering**: Document requirements for advanced filter options
+- [ ] **Bulk Operations**: Document requirements for bulk shelter management
+- [ ] **Analytics Integration**: Document requirements for shelter performance analytics
+- [ ] **Notification System**: Document requirements for shelter status notifications
+- [ ] **Reporting Features**: Document requirements for shelter network reporting
+- [ ] **Integration APIs**: Document requirements for third-party integrations
+
 #### **Security Dashboard** (`/dashboard/security`)
 **Priority**: 🛡️ **HIGH**
 

@@ -55,11 +55,15 @@ The next generation platform for transparent charitable giving and homelessness 
 
 ### 👩‍💻 [04. Development](docs/04-development/)
 - [Development Roadmap](docs/04-development/dev-roadmap.md)
-- [🆕 Session 12: Technical Perfection](docs/04-development/SESSION-12-KICKOFF-PROMPT.md)
-- [🆕 Session 11: AI Enhancement Series](docs/04-development/SESSION-11-AI-MINI-SESSIONS-OVERVIEW.md)
+- [🔥 Session 13: Business Logic Testing](docs/04-development/SESSION-13-BUSINESS-LOGIC-TESTING.md)
+- [🎯 Session 13 Role-Based Testing Modules](docs/04-development/) - Super Admin, Shelter Admin, Participant, Donor
 - [🆕 Chatbot Agent Architecture](docs/04-development/CHATBOT-AGENT-ARCHITECTURE.md)
-- [Session 10: Production Readiness](docs/04-development/SESSION-10-KICKOFF-PROMPT.md)
-- [Session 9: Data Connectivity](docs/04-development/SESSION-09-DATA-CONNECTIVITY.md)
+- [🆕 Knowledge Base Management](docs/04-development/KNOWLEDGE-BASE-SYNC-SYSTEM.md)
+- [📚 Development Archive](docs/04-development/development_archive/) - Sessions 1-12 historical documentation
+- [🆕 Session 12: Technical Perfection](docs/04-development/development_archive/SESSION-12-KICKOFF-PROMPT.md)
+- [🆕 Session 11: AI Enhancement Series](docs/04-development/development_archive/SESSION-11-AI-MINI-SESSIONS-OVERVIEW.md)
+- [Session 10: Production Readiness](docs/04-development/development_archive/SESSION-10-KICKOFF-PROMPT.md)
+- [Session 9: Data Connectivity](docs/04-development/development_archive/SESSION-09-DATA-CONNECTIVITY.md)
 - [Session 8: Core Business Logic](docs/04-development/development_archive/SESSION-08-CORE-BUSINESS-LOGIC.md)
 - [Session 7: Chatbot & Analytics](docs/04-development/development_archive/SESSION-07-CHATBOT-IMPLEMENTATION.md)
 - [Session 6: Multi-Dashboard Development](docs/04-development/development_archive/SESSION-06-MULTI-DASHBOARD-DEVELOPMENT.md)

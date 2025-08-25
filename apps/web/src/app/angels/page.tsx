@@ -575,48 +575,38 @@ export default function AngelsPage() {
             {/* Desktop Grid View - Hidden on Mobile */}
             <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {tiktokVideos.slice(0, 6).map((video) => (
-                <a 
-                  key={video.id} 
-                  href={video.url} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="group block"
+                <Card key={video.id} className="overflow-hidden hover:shadow-lg transition-all duration-300 hover:scale-105 bg-gradient-to-b from-slate-900 to-black border-slate-800 cursor-pointer"
+                  onClick={() => window.open(video.url, '_blank', 'noopener,noreferrer')}
                 >
-                  <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 group-hover:scale-105 bg-gradient-to-b from-slate-900 to-black border-slate-800">
-                    <div className="aspect-[9/16] relative overflow-hidden">
-                      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/80 z-10" />
-                      <div className="absolute top-4 right-4 z-20">
-                        <div className="bg-black/70 rounded-full p-2">
-                          <Play className="w-6 h-6 text-white" />
-                        </div>
+                  <div className="aspect-[9/16] relative overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/80 z-10" />
+                    <div className="absolute top-4 right-4 z-20">
+                      <div className="bg-black/70 rounded-full p-2">
+                        <Play className="w-6 h-6 text-white" />
                       </div>
-                      <div className="absolute bottom-0 left-0 right-0 p-4 z-20 text-white">
-                        <p className="font-semibold text-sm mb-1">{video.displayName}</p>
-                        <p className="text-xs opacity-90 mb-2 line-clamp-3">{video.description}</p>
-                        <div className="flex flex-wrap gap-1">
-                          {video.tags.slice(0, 2).map((tag, index) => (
-                            <span key={index} className="text-xs bg-white/20 px-2 py-1 rounded-full">
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                      <iframe
-                        src={`https://www.tiktok.com/embed/v2/${video.id}`}
-                        width="100%"
-                        height="100%"
-                        frameBorder="0"
-                        scrolling="no"
-                        allowFullScreen
-                        className="absolute inset-0 w-full h-full"
-                        style={{
-                          border: 'none',
-                          borderRadius: '0',
-                        }}
-                      />
                     </div>
-                  </Card>
-                </a>
+                    <div className="absolute bottom-0 left-0 right-0 p-4 z-20 text-white">
+                      <p className="font-semibold text-sm mb-1">{video.displayName}</p>
+                      <p className="text-xs opacity-90 mb-2 line-clamp-3">{video.description}</p>
+                      <div className="flex flex-wrap gap-1">
+                        {video.tags.slice(0, 2).map((tag, index) => (
+                          <span key={index} className="text-xs bg-white/20 px-2 py-1 rounded-full">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    {/* TikTok-style background with gradient */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-purple-900 via-blue-900 to-pink-900" />
+                    <div className="absolute inset-0 bg-black/20" />
+                    {/* Simulated video preview overlay */}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="bg-white/10 backdrop-blur-sm rounded-full p-4">
+                        <Play className="w-8 h-8 text-white fill-white" />
+                      </div>
+                    </div>
+                  </div>
+                </Card>
               ))}
             </div>
 
@@ -632,47 +622,38 @@ export default function AngelsPage() {
                 <CarouselContent className="-ml-4">
                   {tiktokVideos.map((video) => (
                     <CarouselItem key={video.id} className="pl-4 basis-[85%]">
-                      <a 
-                        href={video.url} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="group block"
+                      <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 bg-gradient-to-b from-slate-900 to-black border-slate-800 mx-2 cursor-pointer"
+                        onClick={() => window.open(video.url, '_blank', 'noopener,noreferrer')}
                       >
-                        <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 bg-gradient-to-b from-slate-900 to-black border-slate-800 mx-2">
-                          <div className="aspect-[9/16] relative overflow-hidden">
-                            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/80 z-10" />
-                            <div className="absolute top-4 right-4 z-20">
-                              <div className="bg-black/70 rounded-full p-2">
-                                <Play className="w-5 h-5 text-white" />
-                              </div>
+                        <div className="aspect-[9/16] relative overflow-hidden">
+                          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/80 z-10" />
+                          <div className="absolute top-4 right-4 z-20">
+                            <div className="bg-black/70 rounded-full p-2">
+                              <Play className="w-5 h-5 text-white" />
                             </div>
-                            <div className="absolute bottom-0 left-0 right-0 p-4 z-20 text-white">
-                              <p className="font-semibold text-sm mb-1">{video.displayName}</p>
-                              <p className="text-xs opacity-90 mb-2 line-clamp-2">{video.description}</p>
-                              <div className="flex flex-wrap gap-1">
-                                {video.tags.slice(0, 2).map((tag, index) => (
-                                  <span key={index} className="text-xs bg-white/20 px-2 py-1 rounded-full">
-                                    {tag}
-                                  </span>
-                                ))}
-                              </div>
-                            </div>
-                            <iframe
-                              src={`https://www.tiktok.com/embed/v2/${video.id}`}
-                              width="100%"
-                              height="100%"
-                              frameBorder="0"
-                              scrolling="no"
-                              allowFullScreen
-                              className="absolute inset-0 w-full h-full"
-                              style={{
-                                border: 'none',
-                                borderRadius: '0',
-                              }}
-                            />
                           </div>
-                        </Card>
-                      </a>
+                          <div className="absolute bottom-0 left-0 right-0 p-4 z-20 text-white">
+                            <p className="font-semibold text-sm mb-1">{video.displayName}</p>
+                            <p className="text-xs opacity-90 mb-2 line-clamp-2">{video.description}</p>
+                            <div className="flex flex-wrap gap-1">
+                              {video.tags.slice(0, 2).map((tag, index) => (
+                                <span key={index} className="text-xs bg-white/20 px-2 py-1 rounded-full">
+                                  {tag}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                          {/* TikTok-style background with gradient */}
+                          <div className="absolute inset-0 bg-gradient-to-br from-purple-900 via-blue-900 to-pink-900" />
+                          <div className="absolute inset-0 bg-black/20" />
+                          {/* Simulated video preview overlay */}
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="bg-white/10 backdrop-blur-sm rounded-full p-4">
+                              <Play className="w-6 h-6 text-white fill-white" />
+                            </div>
+                          </div>
+                        </div>
+                      </Card>
                     </CarouselItem>
                   ))}
                 </CarouselContent>

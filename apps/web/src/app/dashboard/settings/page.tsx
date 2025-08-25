@@ -8,6 +8,8 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { ProfileAvatar } from '@/components/ProfileAvatar';
+import { FileUpload } from '@/components/FileUpload';
 import { 
   Settings, 
   Database, 
@@ -29,7 +31,13 @@ import {
   Code,
   FileText,
   Zap,
-  Activity
+  Activity,
+  User,
+  Camera,
+  Phone,
+  Calendar,
+  MapPin,
+  Briefcase
 } from 'lucide-react';
 
 export default function SystemSettingsPage() {
@@ -82,6 +90,25 @@ export default function SystemSettingsPage() {
     errorReporting: true,
     performanceMonitoring: true
   });
+
+  const [superAdminProfile, setSuperAdminProfile] = useState({
+    firstName: user?.displayName?.split(' ')[0] || 'Joel',
+    lastName: user?.displayName?.split(' ')[1] || 'Yaffe',
+    email: user?.email || 'joel.yaffe@gmail.com',
+    phone: '+1 (555) 123-4567',
+    jobTitle: 'Chief Executive Officer & Founder',
+    company: 'SHELTR-AI Technologies Inc.',
+    location: 'Montreal, QC, Canada',
+    bio: 'Passionate about leveraging technology to solve homelessness and create sustainable social impact.',
+    timezone: 'America/Montreal',
+    language: 'English',
+    twoFactorEnabled: false,
+    emailNotifications: true,
+    smsNotifications: false,
+    loginAlerts: true
+  });
+
+  const [avatarUploadOpen, setAvatarUploadOpen] = useState(false);
 
   const handleSaveSettings = async (settingsType: string) => {
     setSaveStatus('saving');
@@ -204,11 +231,12 @@ export default function SystemSettingsPage() {
 
       {/* Settings Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="general">General</TabsTrigger>
           <TabsTrigger value="security">Security</TabsTrigger>
           <TabsTrigger value="notifications">Notifications</TabsTrigger>
           <TabsTrigger value="integrations">Integrations</TabsTrigger>
+          <TabsTrigger value="admin">Super Admin</TabsTrigger>
         </TabsList>
 
         {/* General Settings */}
@@ -574,6 +602,314 @@ export default function SystemSettingsPage() {
               </Button>
             </CardContent>
           </Card>
+        </TabsContent>
+
+        {/* Super Admin Settings */}
+        <TabsContent value="admin" className="space-y-6">
+          {/* Profile Information */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <User className="h-5 w-5 mr-2" />
+                Profile Information
+              </CardTitle>
+              <CardDescription>Manage your super admin profile and contact information</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {/* Avatar Section */}
+              <div className="flex items-center space-x-6">
+                <div className="relative">
+                  <ProfileAvatar userId={user?.uid || ''} size="large" />
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="absolute -bottom-1 -right-1 h-8 w-8 rounded-full p-0"
+                    onClick={() => setAvatarUploadOpen(true)}
+                  >
+                    <Camera className="h-4 w-4" />
+                  </Button>
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-lg">Profile Picture</h3>
+                  <p className="text-sm text-gray-600 mb-2">
+                    Upload a professional headshot for your admin profile
+                  </p>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => setAvatarUploadOpen(true)}
+                  >
+                    <Camera className="h-4 w-4 mr-2" />
+                    Change Avatar
+                  </Button>
+                </div>
+              </div>
+
+              {/* Basic Information */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="firstName">First Name</Label>
+                  <Input
+                    id="firstName"
+                    value={superAdminProfile.firstName}
+                    onChange={(e) => setSuperAdminProfile({...superAdminProfile, firstName: e.target.value})}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="lastName">Last Name</Label>
+                  <Input
+                    id="lastName"
+                    value={superAdminProfile.lastName}
+                    onChange={(e) => setSuperAdminProfile({...superAdminProfile, lastName: e.target.value})}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="email">Email Address</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={superAdminProfile.email}
+                    onChange={(e) => setSuperAdminProfile({...superAdminProfile, email: e.target.value})}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="phone">Phone Number</Label>
+                  <Input
+                    id="phone"
+                    value={superAdminProfile.phone}
+                    onChange={(e) => setSuperAdminProfile({...superAdminProfile, phone: e.target.value})}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="jobTitle">Job Title</Label>
+                  <Input
+                    id="jobTitle"
+                    value={superAdminProfile.jobTitle}
+                    onChange={(e) => setSuperAdminProfile({...superAdminProfile, jobTitle: e.target.value})}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="company">Company</Label>
+                  <Input
+                    id="company"
+                    value={superAdminProfile.company}
+                    onChange={(e) => setSuperAdminProfile({...superAdminProfile, company: e.target.value})}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="location">Location</Label>
+                  <Input
+                    id="location"
+                    value={superAdminProfile.location}
+                    onChange={(e) => setSuperAdminProfile({...superAdminProfile, location: e.target.value})}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="timezone">Timezone</Label>
+                  <Input
+                    id="timezone"
+                    value={superAdminProfile.timezone}
+                    onChange={(e) => setSuperAdminProfile({...superAdminProfile, timezone: e.target.value})}
+                  />
+                </div>
+              </div>
+
+              {/* Bio */}
+              <div>
+                <Label htmlFor="bio">Bio</Label>
+                <textarea
+                  id="bio"
+                  className="w-full min-h-[100px] p-3 border border-gray-300 rounded-md resize-none"
+                  value={superAdminProfile.bio}
+                  onChange={(e) => setSuperAdminProfile({...superAdminProfile, bio: e.target.value})}
+                  placeholder="Write a brief bio about yourself..."
+                />
+              </div>
+
+              <Button onClick={() => handleSaveSettings('profile')} disabled={isLoading}>
+                {isLoading ? <RefreshCw className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
+                Save Profile
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Security & Access */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <Shield className="h-5 w-5 mr-2" />
+                Security & Access
+              </CardTitle>
+              <CardDescription>Configure your personal security settings and account access</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-3">
+                <h4 className="font-medium">Account Security</h4>
+                <div className="flex items-center justify-between p-4 border rounded-lg">
+                  <div>
+                    <p className="font-medium">Two-Factor Authentication</p>
+                    <p className="text-sm text-gray-500">Add an extra layer of security to your account</p>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      id="twoFactor"
+                      checked={superAdminProfile.twoFactorEnabled}
+                      onChange={(e) => setSuperAdminProfile({...superAdminProfile, twoFactorEnabled: e.target.checked})}
+                      className="rounded"
+                    />
+                    <Label htmlFor="twoFactor">Enabled</Label>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between p-4 border rounded-lg">
+                  <div>
+                    <p className="font-medium">Login Alerts</p>
+                    <p className="text-sm text-gray-500">Get notified of new sign-ins to your account</p>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      id="loginAlerts"
+                      checked={superAdminProfile.loginAlerts}
+                      onChange={(e) => setSuperAdminProfile({...superAdminProfile, loginAlerts: e.target.checked})}
+                      className="rounded"
+                    />
+                    <Label htmlFor="loginAlerts">Enabled</Label>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <h4 className="font-medium">Personal Notifications</h4>
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="adminEmailNotifications"
+                    checked={superAdminProfile.emailNotifications}
+                    onChange={(e) => setSuperAdminProfile({...superAdminProfile, emailNotifications: e.target.checked})}
+                    className="rounded"
+                  />
+                  <Label htmlFor="adminEmailNotifications">Email Notifications</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="adminSmsNotifications"
+                    checked={superAdminProfile.smsNotifications}
+                    onChange={(e) => setSuperAdminProfile({...superAdminProfile, smsNotifications: e.target.checked})}
+                    className="rounded"
+                  />
+                  <Label htmlFor="adminSmsNotifications">SMS Notifications</Label>
+                </div>
+              </div>
+
+              <Button onClick={() => handleSaveSettings('admin-security')} disabled={isLoading}>
+                {isLoading ? <RefreshCw className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
+                Save Security Settings
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Admin Access & Permissions */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <Key className="h-5 w-5 mr-2" />
+                Admin Access & Permissions
+              </CardTitle>
+              <CardDescription>Your current role and access levels within the platform</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="p-4 border rounded-lg">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <Users className="h-4 w-4 text-purple-600" />
+                    <span className="font-medium">Role</span>
+                  </div>
+                  <p className="text-sm text-gray-600">Super Administrator</p>
+                  <Badge className="mt-2 bg-purple-600">SUPER ADMIN</Badge>
+                </div>
+
+                <div className="p-4 border rounded-lg">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <Activity className="h-4 w-4 text-green-600" />
+                    <span className="font-medium">Account Status</span>
+                  </div>
+                  <p className="text-sm text-gray-600">Active & Verified</p>
+                  <Badge className="mt-2 bg-green-600">ACTIVE</Badge>
+                </div>
+
+                <div className="p-4 border rounded-lg">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <Calendar className="h-4 w-4 text-blue-600" />
+                    <span className="font-medium">Last Login</span>
+                  </div>
+                  <p className="text-sm text-gray-600">Today at {new Date().toLocaleTimeString()}</p>
+                </div>
+
+                <div className="p-4 border rounded-lg">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <MapPin className="h-4 w-4 text-orange-600" />
+                    <span className="font-medium">Login Location</span>
+                  </div>
+                  <p className="text-sm text-gray-600">Montreal, QC, Canada</p>
+                </div>
+              </div>
+
+              <div className="border-t pt-4">
+                <h4 className="font-medium mb-3">Access Permissions</h4>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                  {[
+                    'Full System Access',
+                    'User Management',
+                    'Shelter Administration',
+                    'Financial Oversight',
+                    'Analytics & Reports',
+                    'Security Configuration',
+                    'API Management',
+                    'Backup & Recovery',
+                    'Integration Management'
+                  ].map((permission) => (
+                    <div key={permission} className="flex items-center space-x-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      <span className="text-sm">{permission}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* File Upload Dialog */}
+          {avatarUploadOpen && (
+            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+              <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold">Upload Profile Picture</h3>
+                  <Button 
+                    variant="ghost" 
+                    size="sm"
+                    onClick={() => setAvatarUploadOpen(false)}
+                  >
+                    ✕
+                  </Button>
+                </div>
+                <FileUpload
+                  uploadType="profile"
+                  maxFiles={1}
+                  maxSize={5 * 1024 * 1024} // 5MB
+                  onUploadComplete={(files) => {
+                    console.log('Avatar uploaded:', files);
+                    setAvatarUploadOpen(false);
+                    // Refresh the page or trigger avatar reload
+                    window.location.reload();
+                  }}
+                  userId={user?.uid}
+                />
+              </div>
+            </div>
+          )}
         </TabsContent>
       </Tabs>
     </div>

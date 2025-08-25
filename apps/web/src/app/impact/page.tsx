@@ -329,6 +329,20 @@ export default function ImpactPage() {
               </div>
             </div>
             
+            {/* View All Angels Button */}
+            <div className="text-center mt-8">
+              <Link href="/angels">
+                <Button size="lg" className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700">
+                  <Heart className="h-4 w-4 mr-2" />
+                  See All Angels in Action
+                  <ArrowRight className="h-4 w-4 ml-2" />
+                </Button>
+              </Link>
+              <p className="text-sm text-muted-foreground mt-2">
+                Watch powerful videos from the streets and advocates
+              </p>
+            </div>
+            
             {/* Content Links */}
             <div className="grid md:grid-cols-2 gap-6 mt-12">
               <Card className="hover:shadow-lg transition-shadow">

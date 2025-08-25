@@ -3002,7 +3002,10 @@ export default function InvestorRelationsPage() {
               <Button 
                 size="lg" 
                 className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 text-lg"
-                onClick={() => window.open('/executive-access', '_blank')}
+                onClick={() => {
+                  sessionStorage.setItem('investor-relations-access', 'granted');
+                  window.open('/executive-access', '_blank');
+                }}
               >
                 <FileText className="mr-2 h-5 w-5" />
                 Access Plan B: Traditional Funding Strategy

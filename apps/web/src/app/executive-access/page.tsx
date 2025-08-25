@@ -1,5 +1,8 @@
 "use client";
 
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -15,13 +18,64 @@ import {
   BarChart3,
   CheckCircle,
   ArrowRight,
-  ExternalLink
+  ExternalLink,
+  ChevronRight,
+  Home
 } from 'lucide-react';
 
 export default function ExecutiveAccess() {
+  const router = useRouter();
+  const [hasAccess, setHasAccess] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Check if user came from investor relations page
+    const referrer = document.referrer;
+    const sessionAccess = sessionStorage.getItem('investor-relations-access');
+    
+    if (referrer.includes('/investor-relations') || sessionAccess === 'granted') {
+      setHasAccess(true);
+      sessionStorage.setItem('investor-relations-access', 'granted');
+    } else {
+      // Redirect to investor relations if no access
+      router.push('/investor-relations');
+      return;
+    }
+    
+    setIsLoading(false);
+  }, [router]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600 dark:text-gray-400">Verifying access...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!hasAccess) {
+    return null; // Will redirect
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 p-6">
       <div className="max-w-6xl mx-auto space-y-8">
+        
+        {/* Breadcrumbs */}
+        <nav className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400 mb-8">
+          <Link href="/" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+            <Home className="h-4 w-4" />
+          </Link>
+          <ChevronRight className="h-4 w-4" />
+          <Link href="/investor-relations" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+            Investor Relations
+          </Link>
+          <ChevronRight className="h-4 w-4" />
+          <span className="font-medium text-gray-900 dark:text-gray-100">Executive Access</span>
+        </nav>
         
         {/* Header */}
         <div className="text-center space-y-4">

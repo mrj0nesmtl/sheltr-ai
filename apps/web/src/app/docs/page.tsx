@@ -275,17 +275,20 @@ export default function DocsPage() {
       <section 
         className="py-20 relative"
         style={{
-          backgroundImage: "linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary)) 50%, hsl(var(--secondary)) 100%)"
+          backgroundImage: "url('/backgrounds/iamdocumentation.jpg')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
         }}
       >
-        <div className="absolute inset-0 bg-black/20"></div>
+        <div className="absolute inset-0 bg-black/55"></div>
         <div className="relative z-10 container mx-auto px-4 text-center">
           <div className="max-w-4xl mx-auto">
             <div className="flex justify-center mb-6">
               <Book className="h-16 w-16 text-white/90" />
             </div>
             <h1 className="text-5xl font-bold mb-6 text-white">
-              Documentation Hub
+              I am Documentation!
             </h1>
             <p className="text-xl mb-8 text-white/90">
               Built on modern cloud infrastructure.

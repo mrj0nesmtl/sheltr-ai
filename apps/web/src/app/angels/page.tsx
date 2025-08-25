@@ -6,13 +6,132 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ThemeToggle } from '@/components/theme-toggle';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@/components/ui/carousel';
 import Footer from '@/components/Footer';
 import ThemeLogo from '@/components/ThemeLogo';
-import Script from 'next/script';
+
+// TikTok video data for carousel - using clickable preview cards
+const tiktokVideos = [
+  {
+    id: '7539670401589218582',
+    url: 'https://www.tiktok.com/@london_news_exposed/video/7539670401589218582',
+    username: '@london_news_exposed',
+    displayName: 'London News Exposed',
+    description: 'Veteran homeless Phil speaks outside once of prison after being bailed',
+    tags: ['#londonnewsexposed', '#homeless', '#veteran'],
+    thumbnail: '/api/placeholder/300/534' // TikTok aspect ratio
+  },
+  {
+    id: '7534020508094942494',
+    url: 'https://www.tiktok.com/@hard.knock.gospel/video/7534020508094942494',
+    username: '@hard.knock.gospel',
+    displayName: 'Hard Knock Gospel',
+    description: 'HOW TO MAKE A HOMELESS SHELTER - Survival tactics from someone who lived it',
+    tags: ['#homelesspeople', '#lifehack', '#recovery'],
+    thumbnail: '/api/placeholder/300/534'
+  },
+  {
+    id: '7524300608296324383',
+    url: 'https://www.tiktok.com/@hard.knock.gospel/video/7524300608296324383',
+    username: '@hard.knock.gospel',
+    displayName: 'Hard Knock Gospel',
+    description: 'Street rules that kept me safe and out of jail for a year on the streets',
+    tags: ['#streetlife', '#homeless', '#recovery'],
+    thumbnail: '/api/placeholder/300/534'
+  },
+  {
+    id: '7540096124321860878',
+    url: 'https://www.tiktok.com/@truthonthestreets/video/7540096124321860878',
+    username: '@truthonthestreets',
+    displayName: 'Truth on the Streets',
+    description: 'Real talk about life on the streets',
+    tags: ['#homeless', '#truth'],
+    thumbnail: '/api/placeholder/300/534'
+  },
+  {
+    id: '7538894385593797902',
+    url: 'https://www.tiktok.com/@justknate/video/7538894385593797902',
+    username: '@justknate',
+    displayName: 'Just Knate',
+    description: 'Helping those in need - one person at a time',
+    tags: ['#teamjustus', '#kindness'],
+    thumbnail: '/api/placeholder/300/534'
+  },
+  {
+    id: '7538923245353864478',
+    url: 'https://www.tiktok.com/@pearlmania500/video/7538923245353864478',
+    username: '@pearlmania500',
+    displayName: 'Pearlmania500',
+    description: 'Food has never cost more, and our tank budget has never been higher',
+    tags: ['#economy', '#struggle'],
+    thumbnail: '/api/placeholder/300/534'
+  },
+  {
+    id: '7538685893805149458',
+    url: 'https://www.tiktok.com/@jonfromnova/video/7538685893805149458',
+    username: '@jonfromnova',
+    displayName: 'Jon from Nova',
+    description: 'Ever thought about it? 💭 AI and society',
+    tags: ['#ai', '#technology'],
+    thumbnail: '/api/placeholder/300/534'
+  },
+  {
+    id: '7538847495368002838',
+    url: 'https://www.tiktok.com/@officialmtclips/video/7538847495368002838',
+    username: '@officialmtclips',
+    displayName: 'Official MT Clips',
+    description: 'Levels of wealth and money mindset',
+    tags: ['#wealth', '#money', '#mindset'],
+    thumbnail: '/api/placeholder/300/534'
+  },
+  {
+    id: '7537778081012911391',
+    url: 'https://www.tiktok.com/@livenowfox/video/7537778081012911391',
+    username: '@livenowfox',
+    displayName: 'LiveNOW from FOX',
+    description: 'Trump promises to remove homeless people from DC under threat of jail',
+    tags: ['#politics', '#homeless'],
+    thumbnail: '/api/placeholder/300/534'
+  },
+  {
+    id: '7537396358668406046',
+    url: 'https://www.tiktok.com/@pearlmania500/video/7537396358668406046',
+    username: '@pearlmania500',
+    displayName: 'Pearlmania500',
+    description: 'Congress abandoned organizations doing real work at home',
+    tags: ['#politics', '#government'],
+    thumbnail: '/api/placeholder/300/534'
+  },
+  {
+    id: '7536168186941623574',
+    url: 'https://www.tiktok.com/@wateraid/video/7536168186941623574',
+    username: '@wateraid',
+    displayName: 'WaterAid',
+    description: 'In Colombia: Bicycle parts pulley system + MrBeast = Clean water for 1,000 people',
+    tags: ['#water', '#mrbeast', '#colombia'],
+    thumbnail: '/api/placeholder/300/534'
+  },
+  {
+    id: '7537678541589122318',
+    url: 'https://www.tiktok.com/@mohbd97/video/7537678541589122318',
+    username: '@mohbd97',
+    displayName: 'Mohbd97',
+    description: 'Breaking news and current events',
+    tags: ['#news', '#breaking'],
+    thumbnail: '/api/placeholder/300/534'
+  }
+];
 
 export default function AngelsPage() {
   return (
     <div className="min-h-screen bg-background">
+
       {/* Navigation */}
       <nav className="bg-background/95 backdrop-blur-sm sticky top-0 z-50 border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -451,289 +570,130 @@ export default function AngelsPage() {
             </p>
           </div>
 
-          {/* TikTok Videos Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            
-            {/* Video 1 - London News Exposed */}
-            <div className="flex justify-center">
-              <blockquote className="tiktok-embed" cite="https://www.tiktok.com/@london_news_exposed/video/7539670401589218582" data-video-id="7539670401589218582" style={{maxWidth: '605px', minWidth: '325px'}}>
-                <section>
-                  <a target="_blank" title="@london_news_exposed" href="https://www.tiktok.com/@london_news_exposed?refer=embed">@london_news_exposed</a> veteran homeless Phil speaks outside once of prison after being bailed
-                  <a title="londonnewsexposed" target="_blank" href="https://www.tiktok.com/tag/londonnewsexposed?refer=embed">#londonnewsexposed</a>
-                  <a title="wandsworthprison" target="_blank" href="https://www.tiktok.com/tag/wandsworthprison?refer=embed">#Wandsworthprison</a>
-                  <a title="vetetan" target="_blank" href="https://www.tiktok.com/tag/vetetan?refer=embed">#vetetan</a>
-                  <a title="phil" target="_blank" href="https://www.tiktok.com/tag/phil?refer=embed">#phil</a>
-                  <a title="homeless" target="_blank" href="https://www.tiktok.com/tag/homeless?refer=embed">#homeless</a>
-                  <a target="_blank" title="♬ original sound - London News Exposed" href="https://www.tiktok.com/music/original-sound-7539670421080197910?refer=embed">♬ original sound - London News Exposed</a>
-                </section>
-              </blockquote>
+          {/* TikTok Video Cards */}
+          <div className="max-w-full mx-auto">
+            {/* Desktop Grid View - Hidden on Mobile */}
+            <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {tiktokVideos.slice(0, 6).map((video) => (
+                <a 
+                  key={video.id} 
+                  href={video.url} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="group block"
+                >
+                  <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 group-hover:scale-105 bg-gradient-to-b from-slate-900 to-black border-slate-800">
+                    <div className="aspect-[9/16] relative overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/80 z-10" />
+                      <div className="absolute top-4 right-4 z-20">
+                        <div className="bg-black/70 rounded-full p-2">
+                          <Play className="w-6 h-6 text-white" />
+                        </div>
+                      </div>
+                      <div className="absolute bottom-0 left-0 right-0 p-4 z-20 text-white">
+                        <p className="font-semibold text-sm mb-1">{video.displayName}</p>
+                        <p className="text-xs opacity-90 mb-2 line-clamp-3">{video.description}</p>
+                        <div className="flex flex-wrap gap-1">
+                          {video.tags.slice(0, 2).map((tag, index) => (
+                            <span key={index} className="text-xs bg-white/20 px-2 py-1 rounded-full">
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      <iframe
+                        src={`https://www.tiktok.com/embed/v2/${video.id}`}
+                        width="100%"
+                        height="100%"
+                        frameBorder="0"
+                        scrolling="no"
+                        allowFullScreen
+                        className="absolute inset-0 w-full h-full"
+                        style={{
+                          border: 'none',
+                          borderRadius: '0',
+                        }}
+                      />
+                    </div>
+                  </Card>
+                </a>
+              ))}
             </div>
 
-            {/* Video 2 - Hard Knock Gospel */}
-            <div className="flex justify-center">
-              <blockquote className="tiktok-embed" cite="https://www.tiktok.com/@hard.knock.gospel/video/7534020508094942494" data-video-id="7534020508094942494" style={{maxWidth: '605px', minWidth: '325px'}}>
-                <section>
-                  <a target="_blank" title="@hard.knock.gospel" href="https://www.tiktok.com/@hard.knock.gospel?refer=embed">@hard.knock.gospel</a> HOW TO MAKE A HOMELESS SHELTER 💯 FOLLOW ME for more homeless survival tactics, and to hear more about my journey through homelessness and addiction
-                  <a title="homelesspeople" target="_blank" href="https://www.tiktok.com/tag/homelesspeople?refer=embed">#homelesspeople</a>
-                  <a title="lifehack" target="_blank" href="https://www.tiktok.com/tag/lifehack?refer=embed">#lifehack</a>
-                  <a title="recovery" target="_blank" href="https://www.tiktok.com/tag/recovery?refer=embed">#recovery</a>
-                  <a title="spencerbrooksotto" target="_blank" href="https://www.tiktok.com/tag/spencerbrooksotto?refer=embed">#spencerbrooksotto</a>
-                  <a target="_blank" title="♬ When I Get There - Big Wild" href="https://www.tiktok.com/music/When-I-Get-There-6966232552366180353?refer=embed">♬ When I Get There - Big Wild</a>
-                </section>
-              </blockquote>
+            {/* Mobile Carousel - Only on Mobile */}
+            <div className="md:hidden">
+              <Carousel
+                opts={{
+                  align: "center",
+                  loop: true,
+                }}
+                className="w-full mx-auto"
+              >
+                <CarouselContent className="-ml-4">
+                  {tiktokVideos.map((video) => (
+                    <CarouselItem key={video.id} className="pl-4 basis-[85%]">
+                      <a 
+                        href={video.url} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="group block"
+                      >
+                        <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 bg-gradient-to-b from-slate-900 to-black border-slate-800 mx-2">
+                          <div className="aspect-[9/16] relative overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/80 z-10" />
+                            <div className="absolute top-4 right-4 z-20">
+                              <div className="bg-black/70 rounded-full p-2">
+                                <Play className="w-5 h-5 text-white" />
+                              </div>
+                            </div>
+                            <div className="absolute bottom-0 left-0 right-0 p-4 z-20 text-white">
+                              <p className="font-semibold text-sm mb-1">{video.displayName}</p>
+                              <p className="text-xs opacity-90 mb-2 line-clamp-2">{video.description}</p>
+                              <div className="flex flex-wrap gap-1">
+                                {video.tags.slice(0, 2).map((tag, index) => (
+                                  <span key={index} className="text-xs bg-white/20 px-2 py-1 rounded-full">
+                                    {tag}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                            <iframe
+                              src={`https://www.tiktok.com/embed/v2/${video.id}`}
+                              width="100%"
+                              height="100%"
+                              frameBorder="0"
+                              scrolling="no"
+                              allowFullScreen
+                              className="absolute inset-0 w-full h-full"
+                              style={{
+                                border: 'none',
+                                borderRadius: '0',
+                              }}
+                            />
+                          </div>
+                        </Card>
+                      </a>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious className="left-2 bg-black/80 hover:bg-black border-white/20 text-white shadow-lg" />
+                <CarouselNext className="right-2 bg-black/80 hover:bg-black border-white/20 text-white shadow-lg" />
+              </Carousel>
+              
+              {/* Carousel Info */}
+              <div className="text-center mt-6">
+                <p className="text-sm text-muted-foreground">
+                  Swipe to navigate • {tiktokVideos.length} powerful stories
+                </p>
+              </div>
             </div>
-
-            {/* Video 3 - Hard Knock Gospel Street Rules */}
-            <div className="flex justify-center">
-              <blockquote className="tiktok-embed" cite="https://www.tiktok.com/@hard.knock.gospel/video/7524300608296324383" data-video-id="7524300608296324383" style={{maxWidth: '605px', minWidth: '325px'}}>
-                <section>
-                  <a target="_blank" title="@hard.knock.gospel" href="https://www.tiktok.com/@hard.knock.gospel?refer=embed">@hard.knock.gospel</a> These rules kept me safe, and out of jail, the entire year I lived on the streets💯 FULL VIDEO: YT@spencer_brooks_otto
-                  <a title="streetlife" target="_blank" href="https://www.tiktok.com/tag/streetlife?refer=embed">#streetlife</a>
-                  <a title="homeless" target="_blank" href="https://www.tiktok.com/tag/homeless?refer=embed">#homeless</a>
-                  <a title="recovery" target="_blank" href="https://www.tiktok.com/tag/recovery?refer=embed">#recovery</a>
-                  <a target="_blank" title="♬ original sound - Spencer Brooks Otto" href="https://www.tiktok.com/music/original-sound-7524300680518699806?refer=embed">♬ original sound - Spencer Brooks Otto</a>
-                </section>
-              </blockquote>
-            </div>
-
-            {/* Video 4 - Truth on the Streets */}
-            <div className="flex justify-center">
-              <blockquote className="tiktok-embed" cite="https://www.tiktok.com/@truthonthestreets/video/7540096124321860878" data-video-id="7540096124321860878" style={{maxWidth: '605px', minWidth: '325px'}}>
-                <section>
-                  <a target="_blank" title="@truthonthestreets" href="https://www.tiktok.com/@truthonthestreets?refer=embed">@truthonthestreets</a>
-                  <a title="homeless" target="_blank" href="https://www.tiktok.com/tag/homeless?refer=embed">#homeless</a>
-                  <a target="_blank" title="♬ original sound - KevinDahlgren" href="https://www.tiktok.com/music/original-sound-7540096161198115598?refer=embed">♬ original sound - KevinDahlgren</a>
-                </section>
-              </blockquote>
-            </div>
-
-            {/* Video 5 - Just Knate */}
-            <div className="flex justify-center">
-              <blockquote className="tiktok-embed" cite="https://www.tiktok.com/@justknate/video/7538894385593797902" data-video-id="7538894385593797902" style={{maxWidth: '605px', minWidth: '325px'}}>
-                <section>
-                  <a target="_blank" title="@justknate" href="https://www.tiktok.com/@justknate?refer=embed">@justknate</a>
-                  <a title="teamjustus" target="_blank" href="https://www.tiktok.com/tag/teamjustus?refer=embed">#teamjustus</a>
-                  <a target="_blank" title="♬ Pieces (Solo Piano Version) - Danilo Stankovic" href="https://www.tiktok.com/music/Pieces-Solo-Piano-Version-6777274113254754306?refer=embed">♬ Pieces (Solo Piano Version) - Danilo Stankovic</a>
-                </section>
-              </blockquote>
-            </div>
-
-            {/* Video 6 - Pearlmania500 */}
-            <div className="flex justify-center">
-              <blockquote className="tiktok-embed" cite="https://www.tiktok.com/@pearlmania500/video/7538923245353864478" data-video-id="7538923245353864478" style={{maxWidth: '605px', minWidth: '325px'}}>
-                <section>
-                  <a target="_blank" title="@pearlmania500" href="https://www.tiktok.com/@pearlmania500?refer=embed">@pearlmania500</a>
-                  <p>Food has never cost more, and our tank budget has never been higher</p>
-                  <a target="_blank" title="♬ original sound - Pearlmania500" href="https://www.tiktok.com/music/original-sound-7538928396525390622?refer=embed">♬ original sound - Pearlmania500</a>
-                </section>
-              </blockquote>
-            </div>
-
-            {/* Video 7 - Jon from Nova */}
-            <div className="flex justify-center">
-              <blockquote className="tiktok-embed" cite="https://www.tiktok.com/@jonfromnova/video/7538685893805149458" data-video-id="7538685893805149458" style={{maxWidth: '605px', minWidth: '325px'}}>
-                <section>
-                  <a target="_blank" title="@jonfromnova" href="https://www.tiktok.com/@jonfromnova?refer=embed">@jonfromnova</a> ever thought about it? 💭
-                  <a title="ai" target="_blank" href="https://www.tiktok.com/tag/ai?refer=embed">#ai</a>
-                  <a target="_blank" title="♬ original sound - Jonathan R. Halberg" href="https://www.tiktok.com/music/original-sound-7538685927695731457?refer=embed">♬ original sound - Jonathan R. Halberg</a>
-                </section>
-              </blockquote>
-            </div>
-
-            {/* Video 8 - Official MT Clips */}
-            <div className="flex justify-center">
-              <blockquote className="tiktok-embed" cite="https://www.tiktok.com/@officialmtclips/video/7538847495368002838" data-video-id="7538847495368002838" style={{maxWidth: '605px', minWidth: '325px'}}>
-                <section>
-                  <a target="_blank" title="@officialmtclips" href="https://www.tiktok.com/@officialmtclips?refer=embed">@officialmtclips</a>
-                  <a title="levelsofwealth" target="_blank" href="https://www.tiktok.com/tag/levelsofwealth?refer=embed">#levelsofwealth</a>
-                  <a title="moneyfacts" target="_blank" href="https://www.tiktok.com/tag/moneyfacts?refer=embed">#moneyfacts</a>
-                  <a title="moneymindset" target="_blank" href="https://www.tiktok.com/tag/moneymindset?refer=embed">#moneymindset</a>
-                  <a target="_blank" title="♬ original sound - TIME FOR EXPLANATION ⏳✔️" href="https://www.tiktok.com/music/original-sound-7538847625825405718?refer=embed">♬ original sound - TIME FOR EXPLANATION ⏳✔️</a>
-                </section>
-              </blockquote>
-            </div>
-
-            {/* Video 9 - LiveNOW from FOX */}
-            <div className="flex justify-center">
-              <blockquote className="tiktok-embed" cite="https://www.tiktok.com/@livenowfox/video/7537778081012911391" data-video-id="7537778081012911391" style={{maxWidth: '605px', minWidth: '325px'}}>
-                <section>
-                  <a target="_blank" title="@livenowfox" href="https://www.tiktok.com/@livenowfox?refer=embed">@livenowfox</a>
-                  <p>President Trump promises to remove homeless people from DC under threat of jail or removal from the city</p>
-                  <a target="_blank" title="♬ original sound - LiveNOW from FOX" href="https://www.tiktok.com/music/original-sound-7537778031176321823?refer=embed">♬ original sound - LiveNOW from FOX</a>
-                </section>
-              </blockquote>
-            </div>
-
-            {/* Video 10 - Pearlmania500 Congress */}
-            <div className="flex justify-center">
-              <blockquote className="tiktok-embed" cite="https://www.tiktok.com/@pearlmania500/video/7537396358668406046" data-video-id="7537396358668406046" style={{maxWidth: '605px', minWidth: '325px'}}>
-                <section>
-                  <a target="_blank" title="@pearlmania500" href="https://www.tiktok.com/@pearlmania500?refer=embed">@pearlmania500</a> Congress&apos;s abandoned the organizations that do the real work right here at home, then they abandoned DC to let us all know they abandoned their own principles
-                  <a title="food" target="_blank" href="https://www.tiktok.com/tag/food?refer=embed">#food</a>
-                  <a target="_blank" title="♬ original sound - Pearlmania500" href="https://www.tiktok.com/music/original-sound-7537396373004487454?refer=embed">♬ original sound - Pearlmania500</a>
-                </section>
-              </blockquote>
-            </div>
-
-            {/* Video 11 - WaterAid */}
-            <div className="flex justify-center">
-              <blockquote className="tiktok-embed" cite="https://www.tiktok.com/@wateraid/video/7536168186941623574" data-video-id="7536168186941623574" style={{maxWidth: '605px', minWidth: '325px'}}>
-                <section>
-                  <a target="_blank" title="@wateraid" href="https://www.tiktok.com/@wateraid?refer=embed">@wateraid</a> In Colombia, inventor Cristobal built a pulley system out of bicycle parts so his community could access water 💡 But the water wasn&apos;t safe to drink. So together with the community, @MrBeast @#TeamWater, installed a purification system, giving 1,000 people clean water 💧
-                  <a title="teamwater" target="_blank" href="https://www.tiktok.com/tag/teamwater?refer=embed">#TeamWater</a>
-                  <a title="wateraid" target="_blank" href="https://www.tiktok.com/tag/wateraid?refer=embed">#WaterAid</a>
-                  <a title="water" target="_blank" href="https://www.tiktok.com/tag/water?refer=embed">#water</a>
-                  <a title="mrbeast" target="_blank" href="https://www.tiktok.com/tag/mrbeast?refer=embed">#mrbeast</a>
-                  <a title="colombia" target="_blank" href="https://www.tiktok.com/tag/colombia?refer=embed">#colombia</a>
-                  <a target="_blank" title="♬ Way down We Go - KALEO" href="https://www.tiktok.com/music/Way-down-We-Go-6704985044194166786?refer=embed">♬ Way down We Go - KALEO</a>
-                </section>
-              </blockquote>
-            </div>
-
-            {/* Video 12 - mohbd97 */}
-            <div className="flex justify-center">
-              <blockquote className="tiktok-embed" cite="https://www.tiktok.com/@mohbd97/video/7537678541589122318" data-video-id="7537678541589122318" style={{maxWidth: '605px', minWidth: '325px'}}>
-                <section>
-                  <a target="_blank" title="@mohbd97" href="https://www.tiktok.com/@mohbd97?refer=embed">@mohbd97</a>
-                  <a title="tiktok" target="_blank" href="https://www.tiktok.com/tag/tiktok?refer=embed">#tiktok</a>
-                  <a title="news" target="_blank" href="https://www.tiktok.com/tag/news?refer=embed">#news</a>
-                  <a title="fouyou" target="_blank" href="https://www.tiktok.com/tag/fouyou?refer=embed">#fouyou</a>
-                  <a title="usa🇺🇸" target="_blank" href="https://www.tiktok.com/tag/usa%F0%9F%87%BA%F0%9F%87%B8?refer=embed">#usa🇺🇸</a>
-                  <a title="breakingnews" target="_blank" href="https://www.tiktok.com/tag/breakingnews?refer=embed">#breakingnews</a>
-                  <a title="tik" target="_blank" href="https://www.tiktok.com/tag/tik?refer=embed">#tik</a>
-                  <a target="_blank" title="♬ original sound - mohbd" href="https://www.tiktok.com/music/original-sound-7537678745449089805?refer=embed">♬ original sound - mohbd</a>
-                </section>
-              </blockquote>
-            </div>
-
-            {/* Video 13 - Aaron Parnas */}
-            <div className="flex justify-center">
-              <blockquote className="tiktok-embed" cite="https://www.tiktok.com/@aaronparnas1/video/7537080409121688887" data-video-id="7537080409121688887" style={{maxWidth: '605px', minWidth: '325px'}}>
-                <section>
-                  <a target="_blank" title="@aaronparnas1" href="https://www.tiktok.com/@aaronparnas1?refer=embed">@aaronparnas1</a>
-                  <p>8/10</p>
-                  <a target="_blank" title="♬ original sound - Aaron Parnas" href="https://www.tiktok.com/music/original-sound-7537080525641157431?refer=embed">♬ original sound - Aaron Parnas</a>
-                </section>
-              </blockquote>
-            </div>
-
-            {/* Video 14 - Mario Zelaya */}
-            <div className="flex justify-center">
-              <blockquote className="tiktok-embed" cite="https://www.tiktok.com/@officialmariozelaya/video/7533684445468052742" data-video-id="7533684445468052742" style={{maxWidth: '605px', minWidth: '325px'}}>
-                <section>
-                  <a target="_blank" title="@officialmariozelaya" href="https://www.tiktok.com/@officialmariozelaya?refer=embed">@officialmariozelaya</a> Toronto spends nearly the same amount on their police task force as they do on shelters. Every single year. And the Number keeps getting bigger with them employing over 1500 people, the majority of them making over $115,000 per year.
-                  <a title="toronto" target="_blank" href="https://www.tiktok.com/tag/toronto?refer=embed">#toronto</a>
-                  <a title="ontario" target="_blank" href="https://www.tiktok.com/tag/ontario?refer=embed">#ontario</a>
-                  <a title="tsss" target="_blank" href="https://www.tiktok.com/tag/tsss?refer=embed">#TSSS</a>
-                  <a target="_blank" title="♬ original sound - Mario Zelaya" href="https://www.tiktok.com/music/original-sound-7533684445960899334?refer=embed">♬ original sound - Mario Zelaya</a>
-                </section>
-              </blockquote>
-            </div>
-
-            {/* Video 15 - Adin Ross Clips */}
-            <div className="flex justify-center">
-              <blockquote className="tiktok-embed" cite="https://www.tiktok.com/@adin_clip/video/7533775068569029906" data-video-id="7533775068569029906" style={{maxWidth: '605px', minWidth: '325px'}}>
-                <section>
-                  <a target="_blank" title="@adin_clip" href="https://www.tiktok.com/@adin_clip?refer=embed">@adin_clip</a> Adin was nervous 💀
-                  <a title="adinross" target="_blank" href="https://www.tiktok.com/tag/adinross?refer=embed">#adinross</a>
-                  <a title="mrbeast" target="_blank" href="https://www.tiktok.com/tag/mrbeast?refer=embed">#mrbeast</a>
-                  <a title="viral" target="_blank" href="https://www.tiktok.com/tag/viral?refer=embed">#viral</a>
-                  <a title="foryoupage" target="_blank" href="https://www.tiktok.com/tag/foryoupage?refer=embed">#foryoupage</a>
-                  <a title="fyp" target="_blank" href="https://www.tiktok.com/tag/fyp?refer=embed">#fyp</a>
-                  <a target="_blank" title="♬ original sound - Adin Ross Clips" href="https://www.tiktok.com/music/original-sound-7533775192175201040?refer=embed">♬ original sound - Adin Ross Clips</a>
-                </section>
-              </blockquote>
-            </div>
-
-            {/* Video 16 - Victor The Good Boss */}
-            <div className="flex justify-center">
-              <blockquote className="tiktok-embed" cite="https://www.tiktok.com/@victorthegoodboss/video/7517401644951293214" data-video-id="7517401644951293214" style={{maxWidth: '605px', minWidth: '325px'}}>
-                <section>
-                  <a target="_blank" title="@victorthegoodboss" href="https://www.tiktok.com/@victorthegoodboss?refer=embed">@victorthegoodboss</a> Full video buying an RV for a homeless man and his dog!!!!!!
-                  <a title="fyp" target="_blank" href="https://www.tiktok.com/tag/fyp?refer=embed">#fyp</a>
-                  <a target="_blank" title="♬ original sound - THE GOOD BOSS" href="https://www.tiktok.com/music/original-sound-7517401687720561439?refer=embed">♬ original sound - THE GOOD BOSS</a>
-                </section>
-              </blockquote>
-            </div>
-
-            {/* Video 17 - Truth on the Streets 2 */}
-            <div className="flex justify-center">
-              <blockquote className="tiktok-embed" cite="https://www.tiktok.com/@truthonthestreets/video/7534008461068111118" data-video-id="7534008461068111118" style={{maxWidth: '605px', minWidth: '325px'}}>
-                <section>
-                  <a target="_blank" title="@truthonthestreets" href="https://www.tiktok.com/@truthonthestreets?refer=embed">@truthonthestreets</a>
-                  <a title="homeless" target="_blank" href="https://www.tiktok.com/tag/homeless?refer=embed">#homeless</a>
-                  <a target="_blank" title="♬ original sound - KevinDahlgren" href="https://www.tiktok.com/music/original-sound-7534008569265277709?refer=embed">♬ original sound - KevinDahlgren</a>
-                </section>
-              </blockquote>
-            </div>
-
-            {/* Video 18 - Truth on the Streets 3 */}
-            <div className="flex justify-center">
-              <blockquote className="tiktok-embed" cite="https://www.tiktok.com/@truthonthestreets/video/7534437418368273719" data-video-id="7534437418368273719" style={{maxWidth: '605px', minWidth: '325px'}}>
-                <section>
-                  <a target="_blank" title="@truthonthestreets" href="https://www.tiktok.com/@truthonthestreets?refer=embed">@truthonthestreets</a>
-                  <a title="homeless" target="_blank" href="https://www.tiktok.com/tag/homeless?refer=embed">#homeless</a>
-                  <a target="_blank" title="♬ original sound - KevinDahlgren" href="https://www.tiktok.com/music/original-sound-7534437442074495758?refer=embed">♬ original sound - KevinDahlgren</a>
-                </section>
-              </blockquote>
-            </div>
-
-            {/* Video 19 - MD Motivator */}
-            <div className="flex justify-center">
-              <blockquote className="tiktok-embed" cite="https://www.tiktok.com/@mdmotivator/video/7533438045299854648" data-video-id="7533438045299854648" style={{maxWidth: '605px', minWidth: '325px'}}>
-                <section>
-                  <a target="_blank" title="@mdmotivator" href="https://www.tiktok.com/@mdmotivator?refer=embed">@mdmotivator</a> &quot;I don&apos;t have a drivers license, but I have a heart&quot; 🥹❤️ (GoFundMe 1N B10)
-                  <a title="money" target="_blank" href="https://www.tiktok.com/tag/money?refer=embed">#money</a>
-                  <a title="art" target="_blank" href="https://www.tiktok.com/tag/art?refer=embed">#art</a>
-                  <a title="kindness" target="_blank" href="https://www.tiktok.com/tag/kindness?refer=embed">#kindness</a>
-                  <a title="work" target="_blank" href="https://www.tiktok.com/tag/work?refer=embed">#work</a>
-                  <a title="job" target="_blank" href="https://www.tiktok.com/tag/job?refer=embed">#job</a>
-                  <a title="crowdfund" target="_blank" href="https://www.tiktok.com/tag/crowdfund?refer=embed">#crowdfund</a>
-                  <a title="love" target="_blank" href="https://www.tiktok.com/tag/love?refer=embed">#love</a>
-                  <a title="familia" target="_blank" href="https://www.tiktok.com/tag/familia?refer=embed">#familia</a>
-                  <a target="_blank" title="♬ original sound - Zachery Dereniowski" href="https://www.tiktok.com/music/original-sound-7533438077747579704?refer=embed">♬ original sound - Zachery Dereniowski</a>
-                </section>
-              </blockquote>
-            </div>
-
-            {/* Video 20 - Sky News */}
-            <div className="flex justify-center">
-              <blockquote className="tiktok-embed" cite="https://www.tiktok.com/@skynews/video/7533563200642551062" data-video-id="7533563200642551062" style={{maxWidth: '605px', minWidth: '325px'}}>
-                <section>
-                  <a target="_blank" title="@skynews" href="https://www.tiktok.com/@skynews?refer=embed">@skynews</a> Working but #homeless: The #carpenter forced to sleep on #trains. Despite being a skilled worker, Daniel Wren is unable to afford somewhere to live.
-                  <a title="homeless" target="_blank" href="https://www.tiktok.com/tag/homeless?refer=embed">#homeless</a>
-                  <a title="carpenter" target="_blank" href="https://www.tiktok.com/tag/carpenter?refer=embed">#carpenter</a>
-                  <a title="trains" target="_blank" href="https://www.tiktok.com/tag/trains?refer=embed">#trains</a>
-                  <a title="homelessness" target="_blank" href="https://www.tiktok.com/tag/homelessness?refer=embed">#homelessness</a>
-                  <a title="charities" target="_blank" href="https://www.tiktok.com/tag/charities?refer=embed">#charities</a>
-                  <a target="_blank" title="♬ original sound  - Sky News" href="https://www.tiktok.com/music/original-sound-Sky-News-7533563266292517654?refer=embed">♬ original sound  - Sky News</a>
-                </section>
-              </blockquote>
-            </div>
-
-            {/* Video 21 - Broke Apprentice Rants */}
-            <div className="flex justify-center">
-              <blockquote className="tiktok-embed" cite="https://www.tiktok.com/@brokeapprenticerants/video/7511520136432520491" data-video-id="7511520136432520491" style={{maxWidth: '605px', minWidth: '325px'}}>
-                <section>
-                  <a target="_blank" title="@brokeapprenticerants" href="https://www.tiktok.com/@brokeapprenticerants?refer=embed">@brokeapprenticerants</a>
-                  <a title="fyp" target="_blank" href="https://www.tiktok.com/tag/fyp?refer=embed">#fyp</a>
-                  <a title="digitalrevolution" target="_blank" href="https://www.tiktok.com/tag/digitalrevolution?refer=embed">#digitalrevolution</a>
-                  <a target="_blank" title="♬ original sound - BrokeApprenticeRants" href="https://www.tiktok.com/music/original-sound-7511520197405068075?refer=embed">♬ original sound - BrokeApprenticeRants</a>
-                </section>
-              </blockquote>
-            </div>
-
           </div>
 
-          {/* Load More Button */}
-          <div className="text-center mt-12">
-            <p className="text-muted-foreground mb-6">
-              These are just a few voices. There are millions more stories that need to be heard.
-            </p>
-            <Button variant="outline" size="lg">
-              <Play className="h-4 w-4 mr-2" />
-              Load More Stories
-            </Button>
+          {/* Closing Quote */}
+          <div className="text-center mt-16">
+            <blockquote className="text-2xl md:text-3xl lg:text-4xl italic font-light text-foreground/90 max-w-4xl mx-auto leading-relaxed">
+              &ldquo;These are just a few voices. There are millions more stories that need to be heard.&rdquo;
+            </blockquote>
           </div>
         </div>
       </section>
@@ -800,12 +760,6 @@ export default function AngelsPage() {
       </section>
 
       <Footer />
-      
-      {/* TikTok Embed Script */}
-      <Script 
-        src="https://www.tiktok.com/embed.js" 
-        strategy="lazyOnload"
-      />
     </div>
   );
 }

@@ -59,50 +59,73 @@ graph TD
 
 ### Tenant Isolation Strategy
 
-#### Data Structure
+#### Data Structure (IMPLEMENTED ✅)
 ```
 Firebase Project: sheltr-ai-production
-├── tenants/
-│   ├── platform/                    # SHELTR platform administration
-│   │   ├── users/                   # Platform admins (SuperAdmin)
-│   │   ├── analytics/               # Global platform metrics
-│   │   ├── system_settings/         # Platform configuration
-│   │   └── blockchain_settings/     # Token & smart contract config
+├── tenants/                        # Each shelter = individual tenant
+│   ├── old-brewery-mission/        # Tenant 1 (Montreal Shelter)
+│   │   ├── settings/
+│   │   │   ├── shelter_profile/     # Name, address, capacity, FREE subscription
+│   │   │   ├── admin_config/        # Shelter admin settings
+│   │   │   └── platform_config/     # Free platform features enabled
+│   │   ├── participants/            # Shelter-specific participants
+│   │   ├── staff/                   # Shelter employees & volunteers
+│   │   ├── services/                # Shelter-specific services
+│   │   ├── donations/               # Donations TO this shelter
+│   │   ├── resources/               # Shelter resources & inventory
+│   │   ├── analytics/               # Shelter-specific metrics
+│   │   └── qr_codes/               # QR codes for this shelter
 │   │
-│   ├── shelter-{id}/                # Individual shelter tenants
-│   │   ├── users/                   # Shelter staff, volunteers (Admins)
-│   │   ├── participants/            # Shelter-affiliated participants
-│   │   ├── donations/               # Shelter-specific donations
-│   │   ├── qr_codes/               # Shelter QR code management
-│   │   ├── token_distributions/     # Shelter token allocations
-│   │   └── analytics/              # Shelter-specific metrics
+│   ├── ywca-montreal/              # Tenant 2 (Another Montreal Shelter)
+│   │   └── (same structure)
 │   │
-│   ├── participant-network/         # Independent participants
-│   │   ├── users/                   # Individual participants (non-shelter)
-│   │   ├── qr_codes/               # Personal QR codes
-│   │   ├── donations_received/      # Direct donations to participants
-│   │   ├── verification/            # Identity & needs verification
-│   │   └── token_wallets/          # Participant blockchain wallets
+│   ├── welcome-hall-mission/       # Tenant 3
+│   │   └── (same structure)
 │   │
-│   └── donor-network/              # Donor community tenant
-│       ├── users/                  # Donor profiles
-│       ├── donation_history/       # Cross-shelter donations
-│       ├── impact_tracking/        # Donor impact analytics
-│       ├── token_transactions/     # Blockchain transaction history
-│       └── social_features/        # Donor engagement
+│   ├── [any-new-shelter]/          # Infinite scalability
+│   │   └── (same structure)
+│   │
+│   └── [global-expansion]/         # Toronto, Vancouver, NYC, etc.
+│       └── (same structure)
 │
-├── public/                         # Non-tenant specific data
-│   ├── shelter_directory/          # Public shelter listings
-│   ├── participant_directory/      # Verified participant profiles
-│   ├── impact_metrics/             # Public impact data
-│   ├── qr_verification/            # QR code validation
-│   └── blockchain_explorer/        # Public transaction explorer
+├── global/                         # Cross-tenant platform data
+│   ├── platform_admin/             # SHELTR platform management
+│   │   ├── super_admins/            # Platform administrators
+│   │   ├── system_metrics/          # Cross-tenant analytics
+│   │   ├── tenant_directory/        # All shelter tenants
+│   │   └── platform_config/         # Global platform settings
+│   │
+│   ├── smartfund/                  # Global SmartFund pool
+│   │   ├── pool_balance/            # 15% global housing fund
+│   │   ├── distributions/           # Fund distribution records
+│   │   └── allocation_rules/        # Distribution algorithms
+│   │
+│   ├── cross_shelter_donations/    # Donations spanning shelters
+│   │   ├── donor_profiles/          # Global donor accounts
+│   │   ├── multi_shelter_campaigns/ # Cross-shelter fundraising
+│   │   └── global_impact/           # Platform-wide impact
+│   │
+│   ├── shared_services/            # Platform services
+│   │   ├── ai_chatbot/              # Shared AI system
+│   │   ├── knowledge_base/          # Platform documentation
+│   │   ├── emergency_services/      # Crisis response system
+│   │   └── compliance_tools/        # Shared compliance resources
+│   │
+│   └── blockchain/                 # Token & blockchain data
+│       ├── token_transactions/      # All SHELTR-S/SHELTR transactions
+│       ├── smart_contracts/         # Contract addresses & configs
+│       └── wallet_registry/         # All participant wallets
 │
-└── system/                         # System-level configuration
-    ├── tenant_configs/             # Tenant-specific settings
-    ├── global_settings/            # Platform-wide configuration
-    └── migration_logs/             # System upgrade tracking
+└── legacy/                         # Legacy collections (to be cleaned up)
+    ├── shelters/                   # Old top-level collection
+    └── tenants/Vc48fjy0cajJrstbLQRr/ # Old incorrect tenant structure
 ```
+
+#### FREE SAAS Business Model
+- **Zero Cost to Shelters**: All platform features provided free
+- **Revenue Model**: 5% SmartFund allocation + partnership revenue
+- **Global Scalability**: Each new shelter = new tenant (infinite scale)
+- **Features Included FREE**: Participant management, donations, QR codes, analytics, staff management, resource tracking, SmartFund integration
 
 #### Tenant Routing Implementation
 

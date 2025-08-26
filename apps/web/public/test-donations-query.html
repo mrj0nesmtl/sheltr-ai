@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SHELTR Donation Data Test</title>
+    <script type="module">
+        // This will help us test the exact donation queries
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, collection, query, where, getDocs } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        // Firebase config - replace with your config
+        const firebaseConfig = {
+            apiKey: "AIzaSyAg_5zDMfgVrfOI5JxGWwZGC8GmpLZSoRE",
+            authDomain: "sheltr-ai.firebaseapp.com",
+            projectId: "sheltr-ai",
+            storageBucket: "sheltr-ai.firebasestorage.app",
+            messagingSenderId: "891399570451",
+            appId: "1:891399570451:web:e3e9c94bc6e6df8aef3b48"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        async function testDonationQueries() {
+            console.log('🔍 Testing donation queries...');
+            
+            // Method 1: Query by participant_id (Michael's Profile method)
+            console.log('\n=== METHOD 1: By participant_id (Michael\'s Profile) ===');
+            const participantQuery = query(
+                collection(db, 'demo_donations'),
+                where('participant_id', '==', 'michael-rodriguez')
+            );
+            const participantSnapshot = await getDocs(participantQuery);
+            console.log(`Found ${participantSnapshot.size} donations for participant michael-rodriguez`);
+            
+            let participantTotal = 0;
+            participantSnapshot.docs.forEach(doc => {
+                const data = doc.data();
+                const amount = data.amount?.total || data.amount || 0;
+                console.log(`💰 Participant donation:`, {
+                    id: doc.id,
+                    amount: amount,
+                    participant_id: data.participant_id,
+                    shelter_id: data.shelter_id,
+                    created_at: data.created_at
+                });
+                participantTotal += amount;
+            });
+            console.log(`🎯 PARTICIPANT TOTAL: $${participantTotal}`);
+            
+            // Method 2: Query by shelter_id (Shelter Network method)
+            console.log('\n=== METHOD 2: By shelter_id (Shelter Network) ===');
+            const shelterQuery = query(
+                collection(db, 'demo_donations'),
+                where('shelter_id', '==', 'YDJCJnuLGMC9mWOWDSOa')
+            );
+            const shelterSnapshot = await getDocs(shelterQuery);
+            console.log(`Found ${shelterSnapshot.size} donations for Old Brewery Mission`);
+            
+            let shelterTotal = 0;
+            shelterSnapshot.docs.forEach(doc => {
+                const data = doc.data();
+                const amount = data.amount?.total || data.amount || 0;
+                console.log(`💰 Shelter donation:`, {
+                    id: doc.id,
+                    amount: amount,
+                    participant_id: data.participant_id,
+                    shelter_id: data.shelter_id,
+                    created_at: data.created_at
+                });
+                shelterTotal += amount;
+            });
+            console.log(`🏠 SHELTER TOTAL: $${shelterTotal}`);
+            
+            // Summary
+            console.log('\n=== SUMMARY ===');
+            console.log(`Michael's Profile sees: $${participantTotal}`);
+            console.log(`Shelter Network sees: $${shelterTotal}`);
+            if (participantTotal === shelterTotal) {
+                console.log('✅ TOTALS MATCH!');
+            } else {
+                console.log('❌ TOTALS DO NOT MATCH!');
+            }
+        }
+
+        // Run the test
+        testDonationQueries().catch(console.error);
+    </script>
+</head>
+<body>
+    <h1>SHELTR Donation Data Test</h1>
+    <p>Check the browser console for results...</p>
+</body>
+</html>

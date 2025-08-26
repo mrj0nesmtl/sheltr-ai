@@ -1,0 +1,482 @@
+[
+  {
+    "type": "Emergency Shelter",
+    "status": "pending",
+    "currentOccupancy": 42,
+    "tenantId": "platform",
+    "contact": {
+      "phone": "+1-514-555-0100",
+      "name": "Shelter Administrator",
+      "email": "admin@la-maison-beno-t-labre.sheltr.ai"
+    },
+    "totalDonations": 1580,
+    "createdAt": "2025-08-23 00:20:16.894000+00:00",
+    "participants": 42,
+    "migration_info": {
+      "migrated_from": "tenants/Vc48fjy0cajJrstbLQRr/platform/shelters/data/r5vcdvHGknygMA1I7V1P",
+      "original_id": "r5vcdvHGknygMA1I7V1P",
+      "migrated_at": "2025-08-09 03:00:32.707000+00:00"
+    },
+    "rating": 4.2,
+    "capacity": 60,
+    "primary_admin": null,
+    "province": "QC",
+    "created_at": "2025-08-09 03:00:32.707000+00:00",
+    "updated_at": "2025-08-09 03:00:32.707000+00:00",
+    "updatedAt": "2025-08-23 00:20:16.894000+00:00",
+    "city": "Montreal",
+    "id": "la-maison-beno-t-labre",
+    "admin_history": [],
+    "pending_admin_requests": [
+      {
+        "status": "awaiting_assignment",
+        "note": "Migrated shelter awaiting admin assignment",
+        "requested_at": "2025-08-09 03:00:32.592000+00:00"
+      }
+    ],
+    "name": "La Maison Beno\u00eet Labre",
+    "verification_status": "pending",
+    "location": "Montreal, QC",
+    "joinDate": "2024-01-15",
+    "coordinates": {
+      "lat": 45.5017,
+      "lng": -73.5673
+    },
+    "address": "1857 Boulevard de Maisonneuve Ouest, Montreal, QC H3H 1J9",
+    "lastInspection": "2024-06-15",
+    "complianceScore": 85,
+    "_doc_id": "la-maison-beno-t-labre"
+  },
+  {
+    "type": "Emergency Shelter",
+    "status": "pending",
+    "currentOccupancy": 56,
+    "tenantId": "platform",
+    "contact": {
+      "phone": "+1-514-555-0100",
+      "name": "Shelter Administrator",
+      "email": "admin@le-cha-non.sheltr.ai"
+    },
+    "totalDonations": 2000,
+    "createdAt": "2025-08-23 00:20:16.977000+00:00",
+    "participants": 56,
+    "migration_info": {
+      "migrated_from": "tenants/Vc48fjy0cajJrstbLQRr/platform/shelters/data/SLsqUwZHRHD4oWAZb9O6",
+      "original_id": "SLsqUwZHRHD4oWAZb9O6",
+      "migrated_at": "2025-08-09 03:00:32.707000+00:00"
+    },
+    "rating": 4.2,
+    "capacity": 80,
+    "primary_admin": null,
+    "province": "QC",
+    "created_at": "2025-08-09 03:00:32.707000+00:00",
+    "updated_at": "2025-08-09 03:00:32.707000+00:00",
+    "updatedAt": "2025-08-23 00:20:16.977000+00:00",
+    "city": "Montreal",
+    "id": "le-cha-non",
+    "admin_history": [],
+    "pending_admin_requests": [
+      {
+        "status": "awaiting_assignment",
+        "note": "Migrated shelter awaiting admin assignment",
+        "requested_at": "2025-08-09 03:00:32.592000+00:00"
+      }
+    ],
+    "name": "Le Cha\u00eenon",
+    "verification_status": "pending",
+    "location": "Montreal, QC",
+    "joinDate": "2024-01-15",
+    "coordinates": {
+      "lat": 45.5017,
+      "lng": -73.5673
+    },
+    "address": "4373 Avenue de l'Esplanade, Montreal, QC H2W 1T2",
+    "lastInspection": "2024-06-15",
+    "complianceScore": 85,
+    "_doc_id": "le-cha-non"
+  },
+  {
+    "type": "Emergency Shelter",
+    "status": "pending",
+    "currentOccupancy": 118,
+    "tenantId": "platform",
+    "contact": {
+      "phone": "+1-514-555-0100",
+      "name": "Shelter Administrator",
+      "email": "admin@maison-du-p-re.sheltr.ai"
+    },
+    "totalDonations": 3056,
+    "createdAt": "2025-08-23 00:20:17.056000+00:00",
+    "participants": 118,
+    "migration_info": {
+      "migrated_from": "tenants/Vc48fjy0cajJrstbLQRr/platform/shelters/data/xNY2WCqj7FVBDGy3sa3E",
+      "original_id": "xNY2WCqj7FVBDGy3sa3E",
+      "migrated_at": "2025-08-09 03:00:32.707000+00:00"
+    },
+    "rating": 4.2,
+    "capacity": 170,
+    "primary_admin": null,
+    "province": "QC",
+    "created_at": "2025-08-09 03:00:32.707000+00:00",
+    "updated_at": "2025-08-09 03:00:32.707000+00:00",
+    "updatedAt": "2025-08-23 00:20:17.056000+00:00",
+    "city": "Montreal",
+    "id": "maison-du-p-re",
+    "admin_history": [],
+    "pending_admin_requests": [
+      {
+        "status": "awaiting_assignment",
+        "note": "Migrated shelter awaiting admin assignment",
+        "requested_at": "2025-08-09 03:00:32.593000+00:00"
+      }
+    ],
+    "name": "Maison du P\u00e8re",
+    "verification_status": "pending",
+    "location": "Montreal, QC",
+    "joinDate": "2024-01-15",
+    "coordinates": {
+      "lat": 45.5017,
+      "lng": -73.5673
+    },
+    "address": "550 Boulevard Ren\u00e9-L\u00e9vesque East, Montreal, QC H2L 2L3",
+    "lastInspection": "2024-06-15",
+    "complianceScore": 85,
+    "_doc_id": "maison-du-p-re"
+  },
+  {
+    "type": "Emergency Shelter",
+    "status": "pending",
+    "currentOccupancy": 105,
+    "tenantId": "platform",
+    "contact": {
+      "phone": "+1-514-555-0100",
+      "name": "Shelter Administrator",
+      "email": "admin@montreal-spca-emergency-animal-shelter.sheltr.ai"
+    },
+    "totalDonations": 3967,
+    "createdAt": "2025-08-23 00:20:17.132000+00:00",
+    "participants": 105,
+    "migration_info": {
+      "migrated_from": "tenants/Vc48fjy0cajJrstbLQRr/platform/shelters/data/rEQetmfNnbYljmxUuKjD",
+      "original_id": "rEQetmfNnbYljmxUuKjD",
+      "migrated_at": "2025-08-09 03:00:32.707000+00:00"
+    },
+    "rating": 4.2,
+    "capacity": 150,
+    "primary_admin": null,
+    "province": "QC",
+    "created_at": "2025-08-09 03:00:32.707000+00:00",
+    "updated_at": "2025-08-09 03:00:32.707000+00:00",
+    "updatedAt": "2025-08-23 00:20:17.132000+00:00",
+    "city": "Montreal",
+    "id": "montreal-spca-emergency-animal-shelter",
+    "admin_history": [],
+    "pending_admin_requests": [
+      {
+        "status": "awaiting_assignment",
+        "note": "Migrated shelter awaiting admin assignment",
+        "requested_at": "2025-08-09 03:00:32.592000+00:00"
+      }
+    ],
+    "name": "Montreal SPCA (Emergency Animal Shelter)",
+    "verification_status": "pending",
+    "location": "Montreal, QC",
+    "joinDate": "2024-01-15",
+    "coordinates": {
+      "lat": 45.5017,
+      "lng": -73.5673
+    },
+    "address": "5215 Jean-Talon Street West, Montreal, QC H4P 1X4",
+    "lastInspection": "2024-06-15",
+    "complianceScore": 85,
+    "_doc_id": "montreal-spca-emergency-animal-shelter"
+  },
+  {
+    "type": "Emergency Shelter",
+    "status": "active",
+    "currentOccupancy": 210,
+    "tenantId": "platform",
+    "contact": {
+      "phone": "+1-514-555-0100",
+      "name": "Shelter Administrator",
+      "email": "admin@old-brewery-mission.sheltr.ai"
+    },
+    "totalDonations": 2461,
+    "createdAt": "2025-08-23 00:20:17.205000+00:00",
+    "participants": 210,
+    "migration_info": {
+      "migrated_from": "tenants/Vc48fjy0cajJrstbLQRr/platform/shelters/data/YDJCJnuLGMC9mWOWDSOa",
+      "original_id": "YDJCJnuLGMC9mWOWDSOa",
+      "migrated_at": "2025-08-09 03:00:32.707000+00:00"
+    },
+    "rating": 4.2,
+    "capacity": 300,
+    "primary_admin": {
+      "email": "shelteradmin@example.com",
+      "assigned_by": "system_migration",
+      "name": "Sarah Manager",
+      "user_id": "4uFBYGFWEehnsOzilYxZ0n2tif02",
+      "assigned_at": "2025-08-09 03:00:32.707000+00:00"
+    },
+    "province": "QC",
+    "created_at": "2025-08-09 03:00:32.707000+00:00",
+    "updated_at": "2025-08-09 03:00:32.707000+00:00",
+    "updatedAt": "2025-08-23 05:36:37.743000+00:00",
+    "city": "Montreal",
+    "id": "old-brewery-mission",
+    "admin_history": [],
+    "pending_admin_requests": [],
+    "name": "Old Brewery Mission",
+    "verification_status": "verified",
+    "location": "Montreal, QC",
+    "joinDate": "2024-01-15",
+    "coordinates": {
+      "lat": 45.5017,
+      "lng": -73.5673
+    },
+    "address": "915 Clark Street, Montreal, QC H2Z 1J8",
+    "lastInspection": "2024-06-15",
+    "complianceScore": 85,
+    "_doc_id": "old-brewery-mission"
+  },
+  {
+    "type": "Family Shelter",
+    "status": "pending",
+    "currentOccupancy": 59,
+    "tenantId": "platform",
+    "contact": {
+      "phone": "+1-514-555-0100",
+      "name": "Shelter Administrator",
+      "email": "admin@patricia-mackenzie-pavilion-women-s-shelter.sheltr.ai"
+    },
+    "totalDonations": 2334,
+    "createdAt": "2025-08-23 00:20:17.248000+00:00",
+    "participants": 59,
+    "migration_info": {
+      "migrated_from": "tenants/Vc48fjy0cajJrstbLQRr/platform/shelters/data/w9QRFH329vb3iD9B5mJ3",
+      "original_id": "w9QRFH329vb3iD9B5mJ3",
+      "migrated_at": "2025-08-09 03:00:32.707000+00:00"
+    },
+    "rating": 4.2,
+    "capacity": 85,
+    "primary_admin": null,
+    "province": "QC",
+    "created_at": "2025-08-09 03:00:32.707000+00:00",
+    "updated_at": "2025-08-09 03:00:32.707000+00:00",
+    "updatedAt": "2025-08-23 00:20:17.248000+00:00",
+    "city": "Montreal",
+    "id": "patricia-mackenzie-pavilion-women-s-shelter",
+    "admin_history": [],
+    "pending_admin_requests": [
+      {
+        "status": "awaiting_assignment",
+        "note": "Migrated shelter awaiting admin assignment",
+        "requested_at": "2025-08-09 03:00:32.593000+00:00"
+      }
+    ],
+    "name": "Patricia Mackenzie Pavilion (Women's Shelter)",
+    "verification_status": "pending",
+    "location": "Montreal, QC",
+    "joinDate": "2024-01-15",
+    "coordinates": {
+      "lat": 45.5017,
+      "lng": -73.5673
+    },
+    "address": "1301 Boulevard de Maisonneuve E, Montreal, QC H2L 2A5",
+    "lastInspection": "2024-06-15",
+    "complianceScore": 85,
+    "_doc_id": "patricia-mackenzie-pavilion-women-s-shelter"
+  },
+  {
+    "type": "Youth Shelter",
+    "status": "pending",
+    "currentOccupancy": 31,
+    "tenantId": "platform",
+    "contact": {
+      "phone": "+1-514-555-0100",
+      "name": "Shelter Administrator",
+      "email": "admin@refuge-des-jeunes-de-montr-al.sheltr.ai"
+    },
+    "totalDonations": 3071,
+    "createdAt": "2025-08-23 00:20:17.301000+00:00",
+    "participants": 31,
+    "migration_info": {
+      "migrated_from": "tenants/Vc48fjy0cajJrstbLQRr/platform/shelters/data/1yDQeRjTbyHx28or4AyY",
+      "original_id": "1yDQeRjTbyHx28or4AyY",
+      "migrated_at": "2025-08-09 03:00:32.707000+00:00"
+    },
+    "rating": 4.2,
+    "capacity": 45,
+    "primary_admin": null,
+    "province": "QC",
+    "created_at": "2025-08-09 03:00:32.707000+00:00",
+    "updated_at": "2025-08-09 03:00:32.707000+00:00",
+    "updatedAt": "2025-08-23 00:20:17.301000+00:00",
+    "city": "Montreal",
+    "id": "refuge-des-jeunes-de-montr-al",
+    "admin_history": [],
+    "pending_admin_requests": [
+      {
+        "status": "awaiting_assignment",
+        "note": "Migrated shelter awaiting admin assignment",
+        "requested_at": "2025-08-09 03:00:32.591000+00:00"
+      }
+    ],
+    "name": "Refuge des Jeunes de Montr\u00e9al",
+    "verification_status": "pending",
+    "location": "Montreal, QC",
+    "joinDate": "2024-01-15",
+    "coordinates": {
+      "lat": 45.5017,
+      "lng": -73.5673
+    },
+    "address": "1836 Sainte-Catherine St East, Montreal, QC H2K 2H5",
+    "lastInspection": "2024-06-15",
+    "complianceScore": 85,
+    "_doc_id": "refuge-des-jeunes-de-montr-al"
+  },
+  {
+    "type": "Emergency Shelter",
+    "status": "pending",
+    "currentOccupancy": 84,
+    "tenantId": "platform",
+    "contact": {
+      "phone": "+1-514-555-0100",
+      "name": "Shelter Administrator",
+      "email": "admin@resilience-montreal.sheltr.ai"
+    },
+    "totalDonations": 1152,
+    "createdAt": "2025-08-23 00:20:17.365000+00:00",
+    "participants": 84,
+    "migration_info": {
+      "migrated_from": "tenants/Vc48fjy0cajJrstbLQRr/platform/shelters/data/VHHjLHu2MSZn7hHxjbBi",
+      "original_id": "VHHjLHu2MSZn7hHxjbBi",
+      "migrated_at": "2025-08-09 03:00:32.707000+00:00"
+    },
+    "rating": 4.2,
+    "capacity": 120,
+    "primary_admin": null,
+    "province": "QC",
+    "created_at": "2025-08-09 03:00:32.707000+00:00",
+    "updated_at": "2025-08-09 03:00:32.707000+00:00",
+    "updatedAt": "2025-08-23 00:20:17.365000+00:00",
+    "city": "Westmount",
+    "id": "resilience-montreal",
+    "admin_history": [],
+    "pending_admin_requests": [
+      {
+        "status": "awaiting_assignment",
+        "note": "Migrated shelter awaiting admin assignment",
+        "requested_at": "2025-08-09 03:00:32.592000+00:00"
+      }
+    ],
+    "name": "Resilience Montreal",
+    "verification_status": "pending",
+    "location": "Westmount, QC",
+    "joinDate": "2024-01-15",
+    "coordinates": {
+      "lat": 45.4833,
+      "lng": -73.5978
+    },
+    "address": "4000 Sainte-Catherine St West, Westmount, QC, H3Z 1P1",
+    "lastInspection": "2024-06-15",
+    "complianceScore": 85,
+    "_doc_id": "resilience-montreal"
+  },
+  {
+    "type": "Emergency Shelter",
+    "status": "pending",
+    "currentOccupancy": 140,
+    "tenantId": "platform",
+    "contact": {
+      "phone": "+1-514-555-0100",
+      "name": "Shelter Administrator",
+      "email": "admin@welcome-hall-mission.sheltr.ai"
+    },
+    "totalDonations": 3002,
+    "createdAt": "2025-08-23 00:20:17.435000+00:00",
+    "participants": 140,
+    "migration_info": {
+      "migrated_from": "tenants/Vc48fjy0cajJrstbLQRr/platform/shelters/data/yKXpMJNAndzPcVfEI9dD",
+      "original_id": "yKXpMJNAndzPcVfEI9dD",
+      "migrated_at": "2025-08-09 03:00:32.707000+00:00"
+    },
+    "rating": 4.2,
+    "capacity": 200,
+    "primary_admin": null,
+    "province": "QC",
+    "created_at": "2025-08-09 03:00:32.707000+00:00",
+    "updated_at": "2025-08-09 03:00:32.707000+00:00",
+    "updatedAt": "2025-08-23 00:20:17.435000+00:00",
+    "city": "Montreal",
+    "id": "welcome-hall-mission",
+    "admin_history": [],
+    "pending_admin_requests": [
+      {
+        "status": "awaiting_assignment",
+        "note": "Migrated shelter awaiting admin assignment",
+        "requested_at": "2025-08-09 03:00:32.593000+00:00"
+      }
+    ],
+    "name": "Welcome Hall Mission",
+    "verification_status": "pending",
+    "location": "Montreal, QC",
+    "joinDate": "2024-01-15",
+    "coordinates": {
+      "lat": 45.5017,
+      "lng": -73.5673
+    },
+    "address": "4755 Acorn Street, Montreal, QC H4C 3L6",
+    "lastInspection": "2024-06-15",
+    "complianceScore": 85,
+    "_doc_id": "welcome-hall-mission"
+  },
+  {
+    "type": "Emergency Shelter",
+    "status": "pending",
+    "currentOccupancy": 66,
+    "tenantId": "platform",
+    "contact": {
+      "phone": "+1-514-555-0100",
+      "name": "Shelter Administrator",
+      "email": "admin@ywca-montreal.sheltr.ai"
+    },
+    "totalDonations": 2937,
+    "createdAt": "2025-08-23 00:20:17.486000+00:00",
+    "participants": 66,
+    "migration_info": {
+      "migrated_from": "tenants/Vc48fjy0cajJrstbLQRr/platform/shelters/data/9XnLJm9N5U6AAbhzsRze",
+      "original_id": "9XnLJm9N5U6AAbhzsRze",
+      "migrated_at": "2025-08-09 03:00:32.707000+00:00"
+    },
+    "rating": 4.2,
+    "capacity": 95,
+    "primary_admin": null,
+    "province": "QC",
+    "created_at": "2025-08-09 03:00:32.707000+00:00",
+    "updated_at": "2025-08-09 03:00:32.707000+00:00",
+    "updatedAt": "2025-08-23 00:20:17.486000+00:00",
+    "city": "Montreal",
+    "id": "ywca-montreal",
+    "admin_history": [],
+    "pending_admin_requests": [
+      {
+        "status": "awaiting_assignment",
+        "note": "Migrated shelter awaiting admin assignment",
+        "requested_at": "2025-08-09 03:00:32.592000+00:00"
+      }
+    ],
+    "name": "YWCA Montreal",
+    "verification_status": "pending",
+    "location": "Montreal, QC",
+    "joinDate": "2024-01-15",
+    "coordinates": {
+      "lat": 45.5017,
+      "lng": -73.5673
+    },
+    "address": "1355 Boulevard Ren\u00e9-L\u00e9vesque West, Montreal, QC H3G 1T3",
+    "lastInspection": "2024-06-15",
+    "complianceScore": 85,
+    "_doc_id": "ywca-montreal"
+  }
+]

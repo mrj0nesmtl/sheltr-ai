@@ -27,13 +27,13 @@ import { useState, useEffect } from 'react';
 import { 
   getFeatureFlags, 
   getSystemAlerts, 
-  getPlatformTenants, 
   getRealTimePlatformMetrics,
+  getShelterManagementMetrics,
   updateFeatureFlag,
   type FeatureFlag,
   type SystemAlert,
-  type PlatformTenant,
-  type RealTimePlatformMetrics
+  type RealTimePlatformMetrics,
+  type ShelterManagementMetrics
 } from '@/services/platformMetrics';
 
 export default function PlatformManagement() {
@@ -42,8 +42,8 @@ export default function PlatformManagement() {
   // Real-time data state
   const [flags, setFlags] = useState<FeatureFlag[]>([]);
   const [alerts, setAlerts] = useState<SystemAlert[]>([]);
-  const [tenants, setTenants] = useState<PlatformTenant[]>([]);
   const [realTimeMetrics, setRealTimeMetrics] = useState<RealTimePlatformMetrics | null>(null);
+  const [shelterMetrics, setShelterMetrics] = useState<ShelterManagementMetrics | null>(null);
   const [loading, setLoading] = useState(true);
 
   // Load all data on component mount
@@ -52,17 +52,17 @@ export default function PlatformManagement() {
       try {
         console.log('🚀 Loading platform management data...');
         
-        const [flagsData, alertsData, tenantsData, metricsData] = await Promise.all([
+        const [flagsData, alertsData, metricsData, shelterMetricsData] = await Promise.all([
           getFeatureFlags(),
           getSystemAlerts(),
-          getPlatformTenants(),
-          getRealTimePlatformMetrics()
+          getRealTimePlatformMetrics(),
+          getShelterManagementMetrics()
         ]);
 
         setFlags(flagsData);
         setAlerts(alertsData);
-        setTenants(tenantsData);
         setRealTimeMetrics(metricsData);
+        setShelterMetrics(shelterMetricsData);
         
         console.log('✅ Platform management data loaded successfully');
       } catch (error) {
@@ -102,14 +102,7 @@ export default function PlatformManagement() {
     }
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'active': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100';
-      case 'pending': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-100';
-      case 'inactive': return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100';
-      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100';
-    }
-  };
+
 
   const getAlertIcon = (type: string) => {
     switch (type) {
@@ -139,8 +132,15 @@ export default function PlatformManagement() {
     router.push('/dashboard/notifications');
   };
 
-  // Handle Manage Tenant
-  const handleManageTenant = () => {
+
+
+  // Handle Add New Shelter
+  const handleAddNewShelter = () => {
+    router.push('/dashboard/shelters?action=add');
+  };
+
+  // Handle View All Shelters
+  const handleViewAllShelters = () => {
     router.push('/dashboard/shelters');
   };
 
@@ -307,120 +307,125 @@ export default function PlatformManagement() {
           <CardTitle className="flex items-center text-lg sm:text-xl">
             <Building2 className="mr-2 h-5 w-5" />
             Shelter Management
+            <Badge variant="secondary" className="ml-3 bg-blue-100 text-blue-800 text-xs">
+              Metrics Overview
+            </Badge>
           </CardTitle>
-          <CardDescription className="text-sm">Overview of all platform shelters and their activity</CardDescription>
+          <CardDescription className="text-sm">Platform-wide shelter analytics and performance metrics</CardDescription>
         </CardHeader>
         <CardContent className="pt-3">
-          <div className="space-y-3">
-            {loading ? (
-              <div className="text-center py-8 text-muted-foreground">Loading shelters...</div>
-            ) : tenants.length === 0 ? (
-              <div className="text-center py-8 text-muted-foreground">No shelters found</div>
-            ) : (
-              tenants.map((tenant) => (
-              <div key={tenant.id} className="p-4 border rounded-xl bg-gradient-to-r from-slate-50 to-gray-50 dark:from-slate-900 dark:to-gray-900 hover:shadow-md transition-all duration-200">
-                {/* Mobile Layout */}
-                <div className="block sm:hidden space-y-3">
-                  {/* Top Row: Icon, Name, Status */}
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3 flex-1 min-w-0">
-                      <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-sm">
-                        <Building2 className="h-6 w-6 text-white" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="font-semibold text-base truncate">{tenant.name}</div>
-                        <div className="text-sm text-muted-foreground">{tenant.location}</div>
-                      </div>
-                    </div>
-                    <Badge className={getStatusColor(tenant.status)} variant="secondary">
-                      {tenant.status}
-                    </Badge>
-                  </div>
-                  
-                  {/* Bottom Row: Metrics and Button */}
-                  <div className="flex items-center justify-between">
-                    <div className="flex space-x-6">
-                      <div className="text-center">
-                        <div className="text-lg font-bold text-blue-600 dark:text-blue-400">{tenant.participants}</div>
-                        <div className="text-xs text-muted-foreground">Participants</div>
-                      </div>
-                      <div className="text-center">
-                        <div className="text-lg font-bold text-green-600 dark:text-green-400">
-                          {typeof tenant.donations === 'number' ? `$${tenant.donations.toLocaleString()}` : tenant.donations}
-                        </div>
-                        <div className="text-xs text-muted-foreground">Donations</div>
-                      </div>
-                    </div>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="shrink-0"
-                      onClick={handleManageTenant}
-                    >
-                      <ExternalLink className="mr-1 h-3 w-3" />
-                      Manage
-                    </Button>
-                  </div>
-                  
-                  {/* Last Activity */}
-                  <div className="text-xs text-muted-foreground pt-1 border-t border-gray-200 dark:border-gray-700">
-                    Last activity: {formatTime(tenant.lastActivity)}
+          {loading || !shelterMetrics ? (
+            <div className="text-center py-8 text-muted-foreground">Loading shelter metrics...</div>
+          ) : (
+            <div className="space-y-6">
+              {/* Metrics Grid */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                {/* Platform Utilization */}
+                <div className="p-4 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-xl border border-blue-200 dark:border-blue-800">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{shelterMetrics.platformUtilization}%</div>
+                    <div className="text-xs text-blue-700 dark:text-blue-300 mt-1">Platform Utilization</div>
+                    <div className="text-xs text-muted-foreground mt-1">{shelterMetrics.activeShelters}/{shelterMetrics.totalShelters} active</div>
                   </div>
                 </div>
 
-                {/* Desktop Layout */}
-                <div className="hidden sm:flex items-center justify-between">
-                  <div className="flex items-center space-x-4 flex-1">
-                    <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-sm">
-                      <Building2 className="h-7 w-7 text-white" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="font-semibold text-lg truncate">{tenant.name}</div>
-                      <div className="text-sm text-muted-foreground">{tenant.location}</div>
-                    </div>
+                {/* Occupancy Rate */}
+                <div className="p-4 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-xl border border-green-200 dark:border-green-800">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-green-600 dark:text-green-400">{shelterMetrics.occupancyRate}%</div>
+                    <div className="text-xs text-green-700 dark:text-green-300 mt-1">Occupancy Rate</div>
+                    <div className="text-xs text-muted-foreground mt-1">{shelterMetrics.totalOccupancy}/{shelterMetrics.totalCapacity} beds</div>
                   </div>
-                  
-                  <div className="flex items-center space-x-8">
-                    <div className="text-center">
-                      <div className="text-xl font-bold text-blue-600 dark:text-blue-400">{tenant.participants}</div>
-                      <div className="text-xs text-muted-foreground">Participants</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-xl font-bold text-green-600 dark:text-green-400">
-                        {typeof tenant.donations === 'number' ? `$${tenant.donations.toLocaleString()}` : tenant.donations}
-                      </div>
-                      <div className="text-xs text-muted-foreground">Donations</div>
-                    </div>
-                    <div className="text-center min-w-[100px]">
-                      <Badge className={getStatusColor(tenant.status)} variant="secondary">
-                        {tenant.status}
-                      </Badge>
-                      <div className="text-xs text-muted-foreground mt-1">{formatTime(tenant.lastActivity)}</div>
-                    </div>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="min-w-[80px]"
-                      onClick={handleManageTenant}
-                    >
-                      <ExternalLink className="mr-1 h-3 w-3" />
-                      Manage
-                    </Button>
+                </div>
+
+                {/* Total Donations */}
+                <div className="p-4 bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 rounded-xl border border-purple-200 dark:border-purple-800">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">${(shelterMetrics.totalDonations / 1000).toFixed(0)}K</div>
+                    <div className="text-xs text-purple-700 dark:text-purple-300 mt-1">Total Donations</div>
+                    <div className="text-xs text-muted-foreground mt-1">${shelterMetrics.averageDonationsPerShelter.toLocaleString()} avg</div>
+                  </div>
+                </div>
+
+                {/* Platform Growth */}
+                <div className="p-4 bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 rounded-xl border border-orange-200 dark:border-orange-800">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-orange-600 dark:text-orange-400">{shelterMetrics.platformGrowth}</div>
+                    <div className="text-xs text-orange-700 dark:text-orange-300 mt-1">Platform Growth</div>
+                    <div className="text-xs text-muted-foreground mt-1">{shelterMetrics.recentSignups} new this month</div>
                   </div>
                 </div>
               </div>
-              ))
-            )}
-          </div>
-          
+
+              {/* Feature Adoption & Performance */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Feature Adoption */}
+                <div className="p-4 border rounded-xl bg-gradient-to-r from-slate-50 to-gray-50 dark:from-slate-900 dark:to-gray-900">
+                  <h4 className="font-semibold text-sm mb-3 flex items-center">
+                    <Zap className="mr-2 h-4 w-4" />
+                    Feature Adoption
+                  </h4>
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span>QR Codes</span>
+                      <span className="font-medium">{shelterMetrics.featureAdoption.qrCodes}/{shelterMetrics.totalShelters}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span>Donations</span>
+                      <span className="font-medium">{shelterMetrics.featureAdoption.donations}/{shelterMetrics.totalShelters}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span>Analytics</span>
+                      <span className="font-medium">{shelterMetrics.featureAdoption.analytics}/{shelterMetrics.totalShelters}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span>Staff Mgmt</span>
+                      <span className="font-medium">{shelterMetrics.featureAdoption.staffManagement}/{shelterMetrics.totalShelters}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Top Performer */}
+                <div className="p-4 border rounded-xl bg-gradient-to-r from-slate-50 to-gray-50 dark:from-slate-900 dark:to-gray-900">
+                  <h4 className="font-semibold text-sm mb-3 flex items-center">
+                    <TrendingUp className="mr-2 h-4 w-4" />
+                    Top Performer
+                  </h4>
+                  <div className="space-y-2">
+                    <div className="text-sm">
+                      <div className="font-medium">{shelterMetrics.topPerformingShelter.name}</div>
+                      <div className="text-muted-foreground">Leading donations this month</div>
+                    </div>
+                    <div className="text-lg font-bold text-green-600 dark:text-green-400">
+                      ${shelterMetrics.topPerformingShelter.donationsThisMonth.toLocaleString()}
+                    </div>
+                    {shelterMetrics.sheltersAtCapacity > 0 && (
+                      <div className="text-xs text-amber-600 dark:text-amber-400">
+                        ⚠️ {shelterMetrics.sheltersAtCapacity} shelter(s) at capacity
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Action Buttons */}
           <div className="mt-6 flex flex-col sm:flex-row gap-3 sm:justify-between">
-            <Button variant="outline" className="flex-1 sm:flex-none">
+            <Button 
+              variant="outline" 
+              className="flex-1 sm:flex-none"
+              onClick={handleAddNewShelter}
+            >
               <Building2 className="mr-2 h-4 w-4" />
               <span className="hidden sm:inline">Add New Shelter</span>
               <span className="sm:hidden">Add Shelter</span>
             </Button>
-            <Button variant="outline" className="flex-1 sm:flex-none">
+            <Button 
+              variant="outline" 
+              className="flex-1 sm:flex-none"
+              onClick={handleViewAllShelters}
+            >
               <span className="hidden sm:inline">View All Shelters</span>
               <span className="sm:hidden">View All</span>
             </Button>

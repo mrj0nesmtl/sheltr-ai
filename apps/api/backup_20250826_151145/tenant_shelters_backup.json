@@ -1,0 +1,332 @@
+[
+  {
+    "type": "Youth Shelter",
+    "status": "active",
+    "tenantId": "platform",
+    "contact": {
+      "name": "Youth Services Coordinator",
+      "email": "info@refugejeunes.org",
+      "phone": "514-849-4221"
+    },
+    "totalDonations": 43335,
+    "createdAt": "2025-07-25 01:31:05.234000+00:00",
+    "_migration": {
+      "originalPath": "tenants/platform/shelters/1yDQeRjTbyHx28or4AyY",
+      "migrationVersion": "1.0",
+      "migratedAt": "2025-07-25 02:40:21.186000+00:00"
+    },
+    "capacity": 45,
+    "rating": 4,
+    "updatedAt": "2025-07-25 01:31:05.234000+00:00",
+    "joinDate": "2023-03-10",
+    "name": "Refuge des Jeunes de Montr\u00e9al",
+    "coordinates": {
+      "lat": 45.5237,
+      "lng": -73.5587
+    },
+    "location": "Montreal, QC",
+    "currentOccupancy": 15,
+    "participants": 33,
+    "lastInspection": "2024-10-22",
+    "address": "1836 Sainte-Catherine St East, Montreal, QC H2K 2H5",
+    "complianceScore": 95,
+    "_doc_id": "1yDQeRjTbyHx28or4AyY"
+  },
+  {
+    "type": "Family Shelter",
+    "status": "active",
+    "tenantId": "platform",
+    "contact": {
+      "name": "Program Coordinator",
+      "email": "info@ydesfemmesmtl.org",
+      "phone": "514-866-9941"
+    },
+    "totalDonations": 187875,
+    "createdAt": "2025-07-25 01:31:05.334000+00:00",
+    "_migration": {
+      "originalPath": "tenants/platform/shelters/9XnLJm9N5U6AAbhzsRze",
+      "migrationVersion": "1.0",
+      "migratedAt": "2025-07-25 02:40:21.252000+00:00"
+    },
+    "capacity": 95,
+    "rating": 5,
+    "updatedAt": "2025-07-25 01:31:05.334000+00:00",
+    "joinDate": "2023-02-28",
+    "name": "YWCA Montreal",
+    "coordinates": {
+      "lat": 45.4962,
+      "lng": -73.5731
+    },
+    "location": "Montreal, QC",
+    "currentOccupancy": 65,
+    "participants": 63,
+    "lastInspection": "2024-11-12",
+    "address": "1355 Boulevard Ren\u00e9-L\u00e9vesque West, Montreal, QC H3G 1T3",
+    "complianceScore": 98,
+    "_doc_id": "9XnLJm9N5U6AAbhzsRze"
+  },
+  {
+    "type": "Family Shelter",
+    "status": "active",
+    "tenantId": "platform",
+    "contact": {
+      "name": "Support Services Director",
+      "email": "info@chainon.org",
+      "phone": "514-845-0151"
+    },
+    "totalDonations": 88584,
+    "createdAt": "2025-07-25 01:31:05.294000+00:00",
+    "_migration": {
+      "originalPath": "tenants/platform/shelters/SLsqUwZHRHD4oWAZb9O6",
+      "migrationVersion": "1.0",
+      "migratedAt": "2025-07-25 02:40:21.320000+00:00"
+    },
+    "capacity": 80,
+    "rating": 4,
+    "updatedAt": "2025-07-25 01:31:05.294000+00:00",
+    "joinDate": "2023-01-20",
+    "name": "Le Cha\u00eenon",
+    "coordinates": {
+      "lat": 45.5208,
+      "lng": -73.5881
+    },
+    "location": "Montreal, QC",
+    "currentOccupancy": 75,
+    "participants": 34,
+    "lastInspection": "2024-11-08",
+    "address": "4373 Avenue de l'Esplanade, Montreal, QC H2W 1T2",
+    "complianceScore": 94,
+    "_doc_id": "SLsqUwZHRHD4oWAZb9O6"
+  },
+  {
+    "type": "Emergency Shelter",
+    "status": "active",
+    "tenantId": "platform",
+    "contact": {
+      "name": "Information Coordinator",
+      "email": "info@resiliencemontreal.com",
+      "phone": "Contact via website"
+    },
+    "totalDonations": 79754,
+    "createdAt": "2025-07-25 01:31:05.174000+00:00",
+    "_migration": {
+      "originalPath": "tenants/platform/shelters/VHHjLHu2MSZn7hHxjbBi",
+      "migrationVersion": "1.0",
+      "migratedAt": "2025-07-25 02:40:21.384000+00:00"
+    },
+    "capacity": 120,
+    "rating": 5,
+    "updatedAt": "2025-07-25 01:31:05.174000+00:00",
+    "joinDate": "2023-06-15",
+    "name": "Resilience Montreal",
+    "coordinates": {
+      "lat": 45.4871,
+      "lng": -73.5894
+    },
+    "location": "Westmount, QC",
+    "currentOccupancy": 80,
+    "participants": 25,
+    "lastInspection": "2024-11-15",
+    "address": "4000 Sainte-Catherine St West, Westmount, QC, H3Z 1P1",
+    "complianceScore": 90,
+    "_doc_id": "VHHjLHu2MSZn7hHxjbBi"
+  },
+  {
+    "type": "Emergency Shelter",
+    "status": "active",
+    "tenantId": "platform",
+    "contact": {
+      "name": "Operations Director",
+      "email": "info@oldbrewerymission.ca",
+      "phone": "514-798-2244"
+    },
+    "totalDonations": 153650,
+    "createdAt": "2025-07-25 01:31:05.522000+00:00",
+    "_migration": {
+      "originalPath": "tenants/platform/shelters/YDJCJnuLGMC9mWOWDSOa",
+      "migrationVersion": "1.0",
+      "migratedAt": "2025-07-25 02:40:21.440000+00:00"
+    },
+    "capacity": 300,
+    "rating": 4,
+    "updatedAt": "2025-07-25 01:31:05.522000+00:00",
+    "joinDate": "2023-01-05",
+    "name": "Old Brewery Mission",
+    "coordinates": {
+      "lat": 45.5052,
+      "lng": -73.5523
+    },
+    "location": "Montreal, QC",
+    "currentOccupancy": 158,
+    "participants": 130,
+    "lastInspection": "2024-11-25",
+    "address": "915 Clark Street, Montreal, QC H2Z 1J8",
+    "complianceScore": 96,
+    "_doc_id": "YDJCJnuLGMC9mWOWDSOa"
+  },
+  {
+    "type": "Emergency Shelter",
+    "status": "active",
+    "tenantId": "platform",
+    "contact": {
+      "name": "Shelter Coordinator",
+      "email": "info@maisonbenoitlabre.org",
+      "phone": "514-932-0314"
+    },
+    "totalDonations": 48888,
+    "createdAt": "2025-07-25 01:31:05.459000+00:00",
+    "_migration": {
+      "originalPath": "tenants/platform/shelters/r5vcdvHGknygMA1I7V1P",
+      "migrationVersion": "1.0",
+      "migratedAt": "2025-07-25 02:40:21.486000+00:00"
+    },
+    "capacity": 60,
+    "rating": 5,
+    "updatedAt": "2025-07-25 01:31:05.459000+00:00",
+    "joinDate": "2023-05-08",
+    "name": "La Maison Beno\u00eet Labre",
+    "coordinates": {
+      "lat": 45.4919,
+      "lng": -73.5804
+    },
+    "location": "Montreal, QC",
+    "currentOccupancy": 21,
+    "participants": 36,
+    "lastInspection": "2024-10-18",
+    "address": "1857 Boulevard de Maisonneuve Ouest, Montreal, QC H3H 1J9",
+    "complianceScore": 85,
+    "_doc_id": "r5vcdvHGknygMA1I7V1P"
+  },
+  {
+    "type": "Emergency Shelter",
+    "status": "active",
+    "tenantId": "platform",
+    "contact": {
+      "name": "Emergency Services Manager",
+      "email": "info@spca.com",
+      "phone": "514-735-2711"
+    },
+    "totalDonations": 134658,
+    "createdAt": "2025-07-25 01:31:05.624000+00:00",
+    "_migration": {
+      "originalPath": "tenants/platform/shelters/rEQetmfNnbYljmxUuKjD",
+      "migrationVersion": "1.0",
+      "migratedAt": "2025-07-25 02:40:21.534000+00:00"
+    },
+    "capacity": 150,
+    "rating": 4,
+    "updatedAt": "2025-07-25 01:31:05.624000+00:00",
+    "joinDate": "2023-07-22",
+    "name": "Montreal SPCA (Emergency Animal Shelter)",
+    "coordinates": {
+      "lat": 45.5347,
+      "lng": -73.6292
+    },
+    "location": "Montreal, QC",
+    "currentOccupancy": 84,
+    "participants": 43,
+    "lastInspection": "2024-11-10",
+    "address": "5215 Jean-Talon Street West, Montreal, QC H4P 1X4",
+    "complianceScore": 85,
+    "_doc_id": "rEQetmfNnbYljmxUuKjD"
+  },
+  {
+    "type": "Family Shelter",
+    "status": "active",
+    "tenantId": "platform",
+    "contact": {
+      "name": "Women's Services Coordinator",
+      "email": "women@oldbrewerymission.ca",
+      "phone": "514-526-6446"
+    },
+    "totalDonations": 143696,
+    "createdAt": "2025-07-25 01:31:05.580000+00:00",
+    "_migration": {
+      "originalPath": "tenants/platform/shelters/w9QRFH329vb3iD9B5mJ3",
+      "migrationVersion": "1.0",
+      "migratedAt": "2025-07-25 02:40:21.588000+00:00"
+    },
+    "capacity": 85,
+    "rating": 4,
+    "updatedAt": "2025-07-25 01:31:05.580000+00:00",
+    "joinDate": "2023-02-14",
+    "name": "Patricia Mackenzie Pavilion (Women's Shelter)",
+    "coordinates": {
+      "lat": 45.5168,
+      "lng": -73.5527
+    },
+    "location": "Montreal, QC",
+    "currentOccupancy": 61,
+    "participants": 73,
+    "lastInspection": "2024-11-18",
+    "address": "1301 Boulevard de Maisonneuve E, Montreal, QC H2L 2A5",
+    "complianceScore": 87,
+    "_doc_id": "w9QRFH329vb3iD9B5mJ3"
+  },
+  {
+    "type": "Emergency Shelter",
+    "status": "active",
+    "tenantId": "platform",
+    "contact": {
+      "name": "Services Manager",
+      "email": "info@maisondupere.org",
+      "phone": "514-845-0168"
+    },
+    "totalDonations": 224394,
+    "createdAt": "2025-07-25 01:31:05.408000+00:00",
+    "_migration": {
+      "originalPath": "tenants/platform/shelters/xNY2WCqj7FVBDGy3sa3E",
+      "migrationVersion": "1.0",
+      "migratedAt": "2025-07-25 02:40:21.637000+00:00"
+    },
+    "capacity": 170,
+    "rating": 4,
+    "updatedAt": "2025-07-25 01:31:05.408000+00:00",
+    "joinDate": "2023-04-12",
+    "name": "Maison du P\u00e8re",
+    "coordinates": {
+      "lat": 45.5127,
+      "lng": -73.554
+    },
+    "location": "Montreal, QC",
+    "currentOccupancy": 163,
+    "participants": 85,
+    "lastInspection": "2024-11-05",
+    "address": "550 Boulevard Ren\u00e9-L\u00e9vesque East, Montreal, QC H2L 2L3",
+    "complianceScore": 98,
+    "_doc_id": "xNY2WCqj7FVBDGy3sa3E"
+  },
+  {
+    "type": "Emergency Shelter",
+    "status": "active",
+    "tenantId": "platform",
+    "contact": {
+      "name": "Mission Director",
+      "email": "info@welcomehallmission.com",
+      "phone": "514-935-6396"
+    },
+    "totalDonations": 279725,
+    "createdAt": "2025-07-25 01:31:05.371000+00:00",
+    "_migration": {
+      "originalPath": "tenants/platform/shelters/yKXpMJNAndzPcVfEI9dD",
+      "migrationVersion": "1.0",
+      "migratedAt": "2025-07-25 02:40:21.678000+00:00"
+    },
+    "capacity": 200,
+    "rating": 5,
+    "updatedAt": "2025-07-25 01:31:05.371000+00:00",
+    "joinDate": "2023-01-15",
+    "name": "Welcome Hall Mission",
+    "coordinates": {
+      "lat": 45.4762,
+      "lng": -73.5895
+    },
+    "location": "Montreal, QC",
+    "currentOccupancy": 191,
+    "participants": 133,
+    "lastInspection": "2024-11-20",
+    "address": "4755 Acorn Street, Montreal, QC H4C 3L6",
+    "complianceScore": 94,
+    "_doc_id": "yKXpMJNAndzPcVfEI9dD"
+  }
+]

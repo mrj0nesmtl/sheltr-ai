@@ -1,0 +1,277 @@
+{
+  "timestamp": "2025-08-26T15:11:42.491097",
+  "collections": {
+    "agent_configurations": {
+      "name": "agent_configurations",
+      "document_count": 1
+    },
+    "appointments": {
+      "name": "appointments",
+      "document_count": 3
+    },
+    "blog_categories": {
+      "name": "blog_categories",
+      "document_count": 1
+    },
+    "blog_posts": {
+      "name": "blog_posts",
+      "document_count": 1
+    },
+    "blog_tags": {
+      "name": "blog_tags",
+      "document_count": 1
+    },
+    "chat_sessions": {
+      "name": "chat_sessions",
+      "document_count": 3
+    },
+    "demo_analytics": {
+      "name": "demo_analytics",
+      "document_count": 44
+    },
+    "demo_donations": {
+      "name": "demo_donations",
+      "document_count": 18
+    },
+    "demo_participants": {
+      "name": "demo_participants",
+      "document_count": 8
+    },
+    "donations": {
+      "name": "donations",
+      "document_count": 1
+    },
+    "feature_flags": {
+      "name": "feature_flags",
+      "document_count": 1
+    },
+    "knowledge_chunks": {
+      "name": "knowledge_chunks",
+      "document_count": 358
+    },
+    "knowledge_documents": {
+      "name": "knowledge_documents",
+      "document_count": 62
+    },
+    "newsletter_signups": {
+      "name": "newsletter_signups",
+      "document_count": 6
+    },
+    "participants": {
+      "name": "participants",
+      "document_count": 1
+    },
+    "platform_metrics": {
+      "name": "platform_metrics",
+      "document_count": 3
+    },
+    "services": {
+      "name": "services",
+      "document_count": 6
+    },
+    "shelter_services": {
+      "name": "shelter_services",
+      "document_count": 1
+    },
+    "shelters": {
+      "name": "shelters",
+      "document_count": 10
+    },
+    "system_alerts": {
+      "name": "system_alerts",
+      "document_count": 2
+    },
+    "system_health": {
+      "name": "system_health",
+      "document_count": 2
+    },
+    "tenants": {
+      "name": "tenants",
+      "document_count": 0
+    },
+    "test": {
+      "name": "test",
+      "document_count": 1
+    },
+    "transactions": {
+      "name": "transactions",
+      "document_count": 1
+    },
+    "translations": {
+      "name": "translations",
+      "document_count": 8
+    },
+    "user_profiles": {
+      "name": "user_profiles",
+      "document_count": 1
+    },
+    "users": {
+      "name": "users",
+      "document_count": 9
+    }
+  },
+  "tenant_data": {},
+  "shelter_data": {
+    "top_level": {
+      "count": 10,
+      "shelters": [
+        {
+          "id": "la-maison-beno-t-labre",
+          "name": "La Maison Beno\u00eet Labre",
+          "address": "1857 Boulevard de Maisonneuve Ouest, Montreal, QC H3H 1J9",
+          "type": "Emergency Shelter",
+          "created": "2025-08-23 00:20:16.894000+00:00"
+        },
+        {
+          "id": "le-cha-non",
+          "name": "Le Cha\u00eenon",
+          "address": "4373 Avenue de l'Esplanade, Montreal, QC H2W 1T2",
+          "type": "Emergency Shelter",
+          "created": "2025-08-23 00:20:16.977000+00:00"
+        },
+        {
+          "id": "maison-du-p-re",
+          "name": "Maison du P\u00e8re",
+          "address": "550 Boulevard Ren\u00e9-L\u00e9vesque East, Montreal, QC H2L 2L3",
+          "type": "Emergency Shelter",
+          "created": "2025-08-23 00:20:17.056000+00:00"
+        },
+        {
+          "id": "montreal-spca-emergency-animal-shelter",
+          "name": "Montreal SPCA (Emergency Animal Shelter)",
+          "address": "5215 Jean-Talon Street West, Montreal, QC H4P 1X4",
+          "type": "Emergency Shelter",
+          "created": "2025-08-23 00:20:17.132000+00:00"
+        },
+        {
+          "id": "old-brewery-mission",
+          "name": "Old Brewery Mission",
+          "address": "915 Clark Street, Montreal, QC H2Z 1J8",
+          "type": "Emergency Shelter",
+          "created": "2025-08-23 00:20:17.205000+00:00"
+        },
+        {
+          "id": "patricia-mackenzie-pavilion-women-s-shelter",
+          "name": "Patricia Mackenzie Pavilion (Women's Shelter)",
+          "address": "1301 Boulevard de Maisonneuve E, Montreal, QC H2L 2A5",
+          "type": "Family Shelter",
+          "created": "2025-08-23 00:20:17.248000+00:00"
+        },
+        {
+          "id": "refuge-des-jeunes-de-montr-al",
+          "name": "Refuge des Jeunes de Montr\u00e9al",
+          "address": "1836 Sainte-Catherine St East, Montreal, QC H2K 2H5",
+          "type": "Youth Shelter",
+          "created": "2025-08-23 00:20:17.301000+00:00"
+        },
+        {
+          "id": "resilience-montreal",
+          "name": "Resilience Montreal",
+          "address": "4000 Sainte-Catherine St West, Westmount, QC, H3Z 1P1",
+          "type": "Emergency Shelter",
+          "created": "2025-08-23 00:20:17.365000+00:00"
+        },
+        {
+          "id": "welcome-hall-mission",
+          "name": "Welcome Hall Mission",
+          "address": "4755 Acorn Street, Montreal, QC H4C 3L6",
+          "type": "Emergency Shelter",
+          "created": "2025-08-23 00:20:17.435000+00:00"
+        },
+        {
+          "id": "ywca-montreal",
+          "name": "YWCA Montreal",
+          "address": "1355 Boulevard Ren\u00e9-L\u00e9vesque West, Montreal, QC H3G 1T3",
+          "type": "Emergency Shelter",
+          "created": "2025-08-23 00:20:17.486000+00:00"
+        }
+      ]
+    },
+    "tenant_structure": {
+      "tenant_id": "Vc48fjy0cajJrstbLQRr",
+      "count": 10,
+      "shelters": [
+        {
+          "id": "1yDQeRjTbyHx28or4AyY",
+          "name": "Refuge des Jeunes de Montr\u00e9al",
+          "address": "1836 Sainte-Catherine St East, Montreal, QC H2K 2H5",
+          "type": "Youth Shelter",
+          "migration_date": "2025-07-25 02:40:21.186000+00:00",
+          "original_path": "tenants/platform/shelters/1yDQeRjTbyHx28or4AyY"
+        },
+        {
+          "id": "9XnLJm9N5U6AAbhzsRze",
+          "name": "YWCA Montreal",
+          "address": "1355 Boulevard Ren\u00e9-L\u00e9vesque West, Montreal, QC H3G 1T3",
+          "type": "Family Shelter",
+          "migration_date": "2025-07-25 02:40:21.252000+00:00",
+          "original_path": "tenants/platform/shelters/9XnLJm9N5U6AAbhzsRze"
+        },
+        {
+          "id": "SLsqUwZHRHD4oWAZb9O6",
+          "name": "Le Cha\u00eenon",
+          "address": "4373 Avenue de l'Esplanade, Montreal, QC H2W 1T2",
+          "type": "Family Shelter",
+          "migration_date": "2025-07-25 02:40:21.320000+00:00",
+          "original_path": "tenants/platform/shelters/SLsqUwZHRHD4oWAZb9O6"
+        },
+        {
+          "id": "VHHjLHu2MSZn7hHxjbBi",
+          "name": "Resilience Montreal",
+          "address": "4000 Sainte-Catherine St West, Westmount, QC, H3Z 1P1",
+          "type": "Emergency Shelter",
+          "migration_date": "2025-07-25 02:40:21.384000+00:00",
+          "original_path": "tenants/platform/shelters/VHHjLHu2MSZn7hHxjbBi"
+        },
+        {
+          "id": "YDJCJnuLGMC9mWOWDSOa",
+          "name": "Old Brewery Mission",
+          "address": "915 Clark Street, Montreal, QC H2Z 1J8",
+          "type": "Emergency Shelter",
+          "migration_date": "2025-07-25 02:40:21.440000+00:00",
+          "original_path": "tenants/platform/shelters/YDJCJnuLGMC9mWOWDSOa"
+        },
+        {
+          "id": "r5vcdvHGknygMA1I7V1P",
+          "name": "La Maison Beno\u00eet Labre",
+          "address": "1857 Boulevard de Maisonneuve Ouest, Montreal, QC H3H 1J9",
+          "type": "Emergency Shelter",
+          "migration_date": "2025-07-25 02:40:21.486000+00:00",
+          "original_path": "tenants/platform/shelters/r5vcdvHGknygMA1I7V1P"
+        },
+        {
+          "id": "rEQetmfNnbYljmxUuKjD",
+          "name": "Montreal SPCA (Emergency Animal Shelter)",
+          "address": "5215 Jean-Talon Street West, Montreal, QC H4P 1X4",
+          "type": "Emergency Shelter",
+          "migration_date": "2025-07-25 02:40:21.534000+00:00",
+          "original_path": "tenants/platform/shelters/rEQetmfNnbYljmxUuKjD"
+        },
+        {
+          "id": "w9QRFH329vb3iD9B5mJ3",
+          "name": "Patricia Mackenzie Pavilion (Women's Shelter)",
+          "address": "1301 Boulevard de Maisonneuve E, Montreal, QC H2L 2A5",
+          "type": "Family Shelter",
+          "migration_date": "2025-07-25 02:40:21.588000+00:00",
+          "original_path": "tenants/platform/shelters/w9QRFH329vb3iD9B5mJ3"
+        },
+        {
+          "id": "xNY2WCqj7FVBDGy3sa3E",
+          "name": "Maison du P\u00e8re",
+          "address": "550 Boulevard Ren\u00e9-L\u00e9vesque East, Montreal, QC H2L 2L3",
+          "type": "Emergency Shelter",
+          "migration_date": "2025-07-25 02:40:21.637000+00:00",
+          "original_path": "tenants/platform/shelters/xNY2WCqj7FVBDGy3sa3E"
+        },
+        {
+          "id": "yKXpMJNAndzPcVfEI9dD",
+          "name": "Welcome Hall Mission",
+          "address": "4755 Acorn Street, Montreal, QC H4C 3L6",
+          "type": "Emergency Shelter",
+          "migration_date": "2025-07-25 02:40:21.678000+00:00",
+          "original_path": "tenants/platform/shelters/yKXpMJNAndzPcVfEI9dD"
+        }
+      ]
+    }
+  }
+}

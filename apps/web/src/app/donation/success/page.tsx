@@ -265,7 +265,7 @@ function SuccessPageContent() {
               </Link>
               
               {participantName && (
-                <Link href={`/participant/demo-participant-001`}>
+                <Link href={`/participant/michael-rodriguez`}>
                   <Button variant="outline" size="lg" className="border-green-500 text-green-600 hover:bg-green-50">
                     <User className="h-4 w-4 mr-2" />
                     View {participantName}'s Profile
@@ -298,6 +298,50 @@ function SuccessPageContent() {
                     <div>✅ Adyen Payment Session Creation</div>
                     <div>✅ Success Flow & Impact Visualization</div>
                   </div>
+                  
+                  {/* Test Donation Button for Old Brewery Mission */}
+                  <button 
+                    onClick={async () => {
+                      console.log('🧪 Test donation button clicked!');
+                      try {
+                        console.log('📦 Importing Firebase...');
+                        const { addDoc, collection, serverTimestamp } = await import('firebase/firestore');
+                        const { db } = await import('@/lib/firebase');
+                        console.log('✅ Firebase imported successfully');
+                        
+                        const donationData = {
+                          participant_id: 'michael-rodriguez',
+                          shelter_id: 'YDJCJnuLGMC9mWOWDSOa', // Old Brewery Mission tenant ID
+                          recipient_id: 'YDJCJnuLGMC9mWOWDSOa', // Ensure both fields
+                          amount: { total: 100, currency: 'USD' },
+                          donor_info: { name: 'Demo User', email: 'demo.user@example.com' },
+                          status: 'completed',
+                          payment_data: { adyen_reference: `TEST-${Date.now()}`, status: 'completed' },
+                          created_at: serverTimestamp(),
+                          updated_at: serverTimestamp(),
+                          demo: true,
+                          source: 'scan-give-success-page'
+                        };
+                        
+                        console.log('📝 Creating donation with data:', donationData);
+                        const docRef = await addDoc(collection(db, 'demo_donations'), donationData);
+                        console.log('✅ Donation created with ID:', docRef.id);
+                        
+                        // Also add to tenant-specific collection
+                        console.log('📝 Adding to tenant collection...');
+                        await addDoc(collection(db, `tenants/YDJCJnuLGMC9mWOWDSOa/donations`), donationData);
+                        console.log('✅ Added to tenant collection!');
+                        
+                        alert('✅ Test donation added to Old Brewery Mission! Check shelter metrics.');
+                      } catch (error) {
+                        console.error('❌ Error creating test donation:', error);
+                        alert(`❌ Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+                      }
+                    }}
+                    className="w-full mt-4 px-4 py-2 border border-green-500 text-green-600 bg-white hover:bg-green-50 rounded-md text-sm font-medium transition-colors"
+                  >
+                    🧪 Add Test Donation to Metrics
+                  </button>
                 </div>
               </CardContent>
             </Card>

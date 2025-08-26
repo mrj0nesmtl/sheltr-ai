@@ -13,9 +13,12 @@ import {
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
-// Simplified configuration - using top-level collections
+// UPDATED: Multi-tenant configuration - each shelter is its own tenant
 const CONFIG = {
-  sheltersCollectionPath: 'shelters'
+  tenantsCollectionPath: 'tenants',
+  globalCollectionPath: 'global', 
+  legacySheltersPath: 'shelters', // Legacy collection (to be deprecated)
+  defaultTenant: 'old-brewery-mission' // Default for development
 };
 
 // Types based on the migration document schema
@@ -83,8 +86,8 @@ export class FirestoreService {
     try {
       // Use the migrated structure for the primary tenant
       if (tenantId === 'platform') {
-        console.log('🏠 Fetching shelters from migrated path:', CONFIG.sheltersCollectionPath);
-        const sheltersRef = collection(db, CONFIG.sheltersCollectionPath);
+        console.log('🏠 Fetching shelters from legacy path:', CONFIG.legacySheltersPath);
+        const sheltersRef = collection(db, CONFIG.legacySheltersPath);
         const q = query(sheltersRef, orderBy('createdAt', 'desc'));
         const querySnapshot = await getDocs(q);
         

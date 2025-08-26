@@ -237,7 +237,7 @@ export default function ParticipantSupportPage() {
         </div>
         <Button 
           variant="outline"
-          className="border-red-500 text-red-600 hover:scale-105 hover:border-red-600 hover:shadow-md transition-all duration-200 dark:border-red-400 dark:text-red-400 dark:hover:border-red-300"
+          className="border-red-500 text-red-600 bg-transparent hover:bg-transparent hover:scale-105 hover:border-red-600 hover:shadow-md transition-all duration-200 dark:border-red-400 dark:text-red-400 dark:hover:border-red-300 dark:hover:bg-transparent"
         >
           <Phone className="h-4 w-4 mr-2" />
           Emergency: 911
@@ -283,7 +283,7 @@ export default function ParticipantSupportPage() {
             <CardContent>
               <div className="space-y-4">
                 {emergencyResources.map((resource) => (
-                  <div key={resource.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50">
+                  <div key={resource.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-800/20 dark:hover:bg-gray-700/20">
                     <div className="flex items-center space-x-4">
                       <div className={`w-12 h-12 rounded-full flex items-center justify-center ${resource.urgent ? 'bg-red-100' : 'bg-orange-100'}`}>
                         <Phone className={`h-6 w-6 ${resource.urgent ? 'text-red-600' : 'text-orange-600'}`} />
@@ -304,7 +304,7 @@ export default function ParticipantSupportPage() {
                       <Button 
                         variant="outline" 
                         size="sm" 
-                        className="mt-2 border-red-500 text-red-600 hover:scale-105 hover:border-red-600 hover:shadow-md transition-all duration-200 dark:border-red-400 dark:text-red-400 dark:hover:border-red-300"
+                        className="mt-2 border-red-500 text-red-600 bg-transparent hover:bg-transparent hover:scale-105 hover:border-red-600 hover:shadow-md transition-all duration-200 dark:border-red-400 dark:text-red-400 dark:hover:border-red-300 dark:hover:bg-transparent"
                       >
                         <Phone className="h-4 w-4 mr-2" />
                         {resource.phone}

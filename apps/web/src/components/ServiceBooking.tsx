@@ -883,8 +883,16 @@ export function ServiceBooking({
           ) : myBookings.length === 0 ? (
             <Card>
               <CardContent className="pt-6">
-                <div className="text-center text-gray-500">
-                  No bookings found. Book your first service!
+                <div className="text-center space-y-4">
+                  <div className="text-gray-500">
+                    No bookings found. Book your first service!
+                  </div>
+                  <Button 
+                    onClick={() => setActiveView('browse')}
+                    className="mx-auto"
+                  >
+                    Create New Booking
+                  </Button>
                 </div>
               </CardContent>
             </Card>

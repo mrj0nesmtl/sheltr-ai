@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ChatbotWidget } from '@/components/ChatbotWidget';
-import { getPlatformMetrics, PlatformMetrics } from '@/services/platformMetrics';
+import { getPlatformMetrics, getPlatformMetricsFromTenants, PlatformMetrics } from '@/services/platformMetrics';
 import { getNotificationCounts, getRecentEmailSignups, NotificationCounts, EmailSignup, formatRelativeTime } from '@/services/notificationService';
 import { analyticsService } from '@/services/analyticsService';
 import { VisitorAreaChart } from '@/components/charts/VisitorAreaChart';
@@ -86,10 +86,11 @@ export default function DashboardPage() {
         console.warn('⚠️ API call failed, falling back to direct Firestore calls:', apiError);
       }
       
-      // Fallback to direct Firestore calls
-      const metrics = await getPlatformMetrics();
+      // Fallback to multi-tenant platform metrics (SESSION 13)
+      console.log('🏢 [SESSION 13] Using multi-tenant platform metrics...');
+      const metrics = await getPlatformMetricsFromTenants();
       setPlatformMetrics(metrics);
-      console.log('✅ Platform metrics loaded from Firestore:', metrics);
+      console.log('✅ [SESSION 13] Multi-tenant platform metrics loaded:', metrics);
     } catch (error) {
       console.error('❌ Failed to load platform metrics:', error);
       // Set fallback metrics with dashes/zeros
@@ -250,7 +251,7 @@ export default function DashboardPage() {
           <div className="flex items-center justify-between mb-6">
             <div>
               <h1 className="text-3xl font-bold">Super Admin Dashboard</h1>
-              <p className="text-gray-600">Loading platform metrics...</p>
+              <p className="text-gray-600">Loading multi-tenant platform data...</p>
             </div>
             <Badge variant="secondary" className="bg-purple-100 text-purple-800">
               <Shield className="w-4 h-4 mr-1" />
@@ -259,7 +260,7 @@ export default function DashboardPage() {
           </div>
           <div className="flex items-center justify-center py-8">
             <Loader2 className="h-8 w-8 animate-spin mr-2" />
-            <span>Loading real platform data...</span>
+            <span>Loading multi-tenant platform data...</span>
           </div>
         </div>
       );
@@ -272,8 +273,11 @@ export default function DashboardPage() {
             <h1 className="text-2xl sm:text-3xl font-bold flex items-center">
               <Shield className="h-8 w-8 mr-3" />
               Super Admin Dashboard
+              <Badge variant="secondary" className="ml-3 bg-green-100 text-green-800 text-xs">
+                Multi-Tenant
+              </Badge>
             </h1>
-            <p className="text-gray-600 text-sm sm:text-base">Platform overview and system management</p>
+            <p className="text-gray-600 text-sm sm:text-base">Multi-tenant platform oversight and cross-tenant management</p>
           </div>
           <div className="flex items-center justify-between sm:justify-end space-x-3">
             {/* Notification Badge */}

@@ -142,6 +142,20 @@ service cloud.firestore {
     }
     
     // =================================================================
+    // DEMO_DONATIONS COLLECTION - Demo/test donation records
+    // =================================================================
+    match /demo_donations/{donationId} {
+      // Read: All authenticated users can read demo donations for testing/analytics
+      allow read: if isAuthenticated();
+      
+      // Write: Super admin can modify demo donations
+      allow write: if isSuperAdmin();
+      
+      // Create: All authenticated users can create demo donations for testing
+      allow create: if isAuthenticated();
+    }
+    
+    // =================================================================
     // QR_CODES COLLECTION - QR code management
     // =================================================================
     match /qr_codes/{qrCodeId} {

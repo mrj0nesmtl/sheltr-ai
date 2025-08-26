@@ -24,58 +24,13 @@ export interface NotificationCounts {
 
 /**
  * Fetch recent email signups from newsletter_signups collection
+ * SESSION 13: MULTI-TENANT - Prioritize REAL database data over mock data
  */
 export const getRecentEmailSignups = async (limitCount: number = 10): Promise<EmailSignup[]> => {
   try {
-    console.log('🔔 Fetching recent email signups...');
+    console.log('🔔 [SESSION 13] Fetching REAL email signups from newsletter_signups collection...');
     
-    // Try API first to get user data for realistic signups
-    try {
-      const response = await fetch(`${apiBaseUrl}/api/v1/analytics/test-platform`);
-      if (response.ok) {
-        const data = await response.json();
-        const userData = data.data.users;
-        const totalUsers = userData.total || 0;
-        
-        // Generate realistic email signups based on user data
-        if (totalUsers > 0) {
-          const signups: EmailSignup[] = [];
-          const emailDomains = ['gmail.com', 'yahoo.com', 'outlook.com', 'hotmail.com'];
-          const sources = ['website', 'mobile_app', 'newsletter', 'social_media'];
-          const pages = ['home', 'about', 'donate', 'contact'];
-          
-          // Generate 2-3 signups per user
-          const numSignups = Math.min(limitCount, Math.max(2, totalUsers * 2));
-          
-          for (let i = 0; i < numSignups; i++) {
-            const domain = emailDomains[Math.floor(Math.random() * emailDomains.length)];
-            const source = sources[Math.floor(Math.random() * sources.length)];
-            const page = pages[Math.floor(Math.random() * pages.length)];
-            
-            const signupDate = new Date();
-            signupDate.setDate(signupDate.getDate() - Math.floor(Math.random() * 30)); // Random date within last 30 days
-            
-            signups.push({
-              id: `signup_${i + 1}`,
-              email: `user${i + 1}@${domain}`,
-              source: source,
-              page: page,
-              signup_date: Timestamp.fromDate(signupDate),
-              user_agent: 'Mozilla/5.0 (compatible; SHELTR-Web)',
-              status: 'active',
-              created_at: signupDate.toISOString()
-            });
-          }
-          
-          console.log(`✅ Generated ${signups.length} realistic email signups`);
-          return signups;
-        }
-      }
-    } catch (apiError) {
-      console.warn('⚠️ API call failed, falling back to Firestore:', apiError);
-    }
-    
-    // Fallback to Firestore queries
+    // PRIORITY 1: Real Firestore data from newsletter_signups collection
     const signupsRef = collection(db, 'newsletter_signups');
     const q = query(
       signupsRef,
@@ -100,8 +55,50 @@ export const getRecentEmailSignups = async (limitCount: number = 10): Promise<Em
       });
     });
     
-    console.log(`✅ Found ${signups.length} email signups from Firestore`);
-    return signups;
+    console.log(`✅ [SESSION 13] Found ${signups.length} REAL email signups from newsletter_signups collection`);
+    
+    // If we have real data, return it
+    if (signups.length > 0) {
+      console.log('📧 Real email signups:', signups.map(s => ({ email: s.email, source: s.source, page: s.page })));
+      return signups;
+    }
+    
+    // FALLBACK: Only use mock data if no real signups exist
+    console.log('⚠️ No real email signups found, checking API for backup data...');
+    
+    try {
+      const response = await fetch(`${apiBaseUrl}/api/v1/analytics/test-platform`);
+      if (response.ok) {
+        const data = await response.json();
+        const userData = data.data.users;
+        const totalUsers = userData.total || 0;
+        
+        // Only generate minimal mock data if absolutely no real data exists
+        if (totalUsers > 0) {
+          console.log('🎭 Generating minimal fallback data (no real signups found)');
+          const fallbackSignups: EmailSignup[] = [
+            {
+              id: 'fallback_1',
+              email: 'demo@sheltr.ai',
+              source: 'demo',
+              page: 'fallback',
+              signup_date: Timestamp.now(),
+              user_agent: 'SHELTR Demo System',
+              status: 'demo',
+              created_at: new Date().toISOString()
+            }
+          ];
+          
+          return fallbackSignups;
+        }
+      }
+    } catch (apiError) {
+      console.warn('⚠️ API also failed, returning empty array:', apiError);
+    }
+    
+    // Return empty array if no data available
+    console.log('ℹ️ No email signups available (neither real nor fallback)');
+    return [];
     
   } catch (error) {
     console.error('❌ Error fetching email signups:', error);
@@ -111,48 +108,16 @@ export const getRecentEmailSignups = async (limitCount: number = 10): Promise<Em
 
 /**
  * Get notification counts for Super Admin dashboard
+ * SESSION 13: MULTI-TENANT - Use REAL database data first
  */
 export const getNotificationCounts = async (): Promise<NotificationCounts> => {
   try {
-    console.log('🔔 Fetching notification counts from API...');
+    console.log('🔔 [SESSION 13] Fetching REAL notification counts from database...');
     
-    // Try API first, fallback to Firestore
-    try {
-      const response = await fetch(`${apiBaseUrl}/api/v1/analytics/test-platform`);
-      if (response.ok) {
-        const data = await response.json();
-        const userData = data.data.users;
-        
-        // Calculate realistic notification counts based on user data
-        const totalUsers = userData.total || 0;
-        const adminCount = userData.by_role?.admin || 0;
-        const participantCount = userData.by_role?.participant || 0;
-        const donorCount = userData.by_role?.donor || 0;
-        
-        // Generate realistic notification data
-        const totalEmailSignups = Math.max(0, totalUsers * 2); // 2x user count for email signups
-        const recentEmailSignups = Math.max(0, Math.floor(totalUsers * 0.3)); // 30% of users signed up recently
-        const pendingShelterapplications = Math.max(0, adminCount); // 1 application per admin
-        const totalNotifications = recentEmailSignups + pendingShelterapplications;
-        
-        const counts: NotificationCounts = {
-          totalEmailSignups,
-          recentEmailSignups,
-          pendingShelterapplications,
-          totalNotifications
-        };
-        
-        console.log('✅ Notification counts from API:', counts);
-        return counts;
-      }
-    } catch (apiError) {
-      console.warn('⚠️ API call failed, falling back to Firestore:', apiError);
-    }
+    // PRIORITY 1: Real Firestore data from actual collections
+    console.log('🔔 Getting real data from newsletter_signups and applications...');
     
-    // Fallback to Firestore queries
-    console.log('🔔 Falling back to Firestore queries...');
-    
-    // Get total email signups
+    // Get total email signups from real collection
     const signupsRef = collection(db, 'newsletter_signups');
     const totalSignupsSnapshot = await getDocs(signupsRef);
     const totalEmailSignups = totalSignupsSnapshot.size;
@@ -168,18 +133,25 @@ export const getNotificationCounts = async (): Promise<NotificationCounts> => {
     const recentSignupsSnapshot = await getDocs(recentSignupsQuery);
     const recentEmailSignups = recentSignupsSnapshot.size;
     
-    // Get pending shelter applications (if collection exists)
+    // Get pending shelter applications from multi-tenant structure
     let pendingShelterapplications = 0;
     try {
-      const applicationsRef = collection(db, 'shelter_applications');
+      // Try global applications collection first
+      const globalAppsRef = collection(db, 'global/platform_admin/applications');
+      const globalAppsSnapshot = await getDocs(globalAppsRef);
+      pendingShelterapplications += globalAppsSnapshot.size;
+      
+      // Also check legacy shelter_applications collection
+      const legacyAppsRef = collection(db, 'shelter_applications');
       const pendingQuery = query(
-        applicationsRef,
+        legacyAppsRef,
         where('status', '==', 'pending_review')
       );
       const pendingSnapshot = await getDocs(pendingQuery);
-      pendingShelterapplications = pendingSnapshot.size;
+      pendingShelterapplications += pendingSnapshot.size;
+      
     } catch (error) {
-      console.log('ℹ️ No shelter_applications collection found yet');
+      console.log('ℹ️ No applications collections found yet');
     }
     
     const totalNotifications = recentEmailSignups + pendingShelterapplications;
@@ -191,8 +163,24 @@ export const getNotificationCounts = async (): Promise<NotificationCounts> => {
       totalNotifications
     };
     
-    console.log('✅ Notification counts from Firestore:', counts);
-    return counts;
+    console.log('✅ [SESSION 13] Real notification counts from database:', counts);
+    console.log(`📧 Real signups: ${totalEmailSignups} total, ${recentEmailSignups} recent`);
+    console.log(`📋 Pending applications: ${pendingShelterapplications}`);
+    
+    // If we have some real data, return it
+    if (totalEmailSignups > 0 || pendingShelterapplications > 0) {
+      return counts;
+    }
+    
+    // FALLBACK: Only if absolutely no real data exists, use minimal mock data
+    console.log('⚠️ No real notification data found, using minimal fallback...');
+    
+    return {
+      totalEmailSignups: 0,
+      recentEmailSignups: 0,
+      pendingShelterapplications: 0,
+      totalNotifications: 0
+    };
     
   } catch (error) {
     console.error('❌ Error fetching notification counts:', error);

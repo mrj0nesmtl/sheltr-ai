@@ -57,6 +57,7 @@ function DonatePageContent() {
             age: 32,
             story: "Dedicated community member working towards housing stability and career growth. With SHELTR's support, I'm building skills and connections to create a better future for myself and help others in my community.",
             shelter_name: "Old Brewery Mission",
+            shelter_id: "YDJCJnuLGMC9mWOWDSOa", // Actual tenant ID from migration
             location: { city: "Montreal", state: "QC", zipcode: "H2X 1Y5" },
             total_received: 0.00,
             donation_count: 0,

@@ -58,6 +58,7 @@ export default function ScanGivePage() {
           age: 32,
           story: "Dedicated community member working towards housing stability and career growth. With SHELTR's support, I'm building skills and connections to create a better future for myself and help others in my community.",
           shelter_name: "Old Brewery Mission",
+          shelter_id: "YDJCJnuLGMC9mWOWDSOa", // Actual tenant ID from migration
           location: { city: "Montreal", state: "QC", zipcode: "H2X 1Y5" },
           goals: [
             { id: "housing-goal", title: "Secure Stable Housing", description: "Find permanent housing solution", progress: 68, status: "in_progress", target_date: "2024-10-01" },

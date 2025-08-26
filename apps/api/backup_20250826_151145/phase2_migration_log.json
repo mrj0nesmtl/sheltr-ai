@@ -1,0 +1,67 @@
+{
+  "timestamp": "2025-08-26T15:11:57.246119",
+  "phase": "tenant_creation",
+  "tenants_created": [
+    {
+      "tenant_id": "la-maison-beno\u00eet-labre",
+      "shelter_name": "La Maison Beno\u00eet Labre",
+      "original_id": "la-maison-beno-t-labre",
+      "created_at": "2025-08-26T15:11:58.086765"
+    },
+    {
+      "tenant_id": "le-cha\u00eenon",
+      "shelter_name": "Le Cha\u00eenon",
+      "original_id": "le-cha-non",
+      "created_at": "2025-08-26T15:11:58.512315"
+    },
+    {
+      "tenant_id": "maison-du-p\u00e8re",
+      "shelter_name": "Maison du P\u00e8re",
+      "original_id": "maison-du-p-re",
+      "created_at": "2025-08-26T15:11:59.003793"
+    },
+    {
+      "tenant_id": "montreal-spca-emergency-animal-shelter",
+      "shelter_name": "Montreal SPCA (Emergency Animal Shelter)",
+      "original_id": "montreal-spca-emergency-animal-shelter",
+      "created_at": "2025-08-26T15:11:59.440751"
+    },
+    {
+      "tenant_id": "old-brewery-mission",
+      "shelter_name": "Old Brewery Mission",
+      "original_id": "old-brewery-mission",
+      "created_at": "2025-08-26T15:11:59.851630"
+    },
+    {
+      "tenant_id": "patricia-mackenzie-pavilion-womens-shelter",
+      "shelter_name": "Patricia Mackenzie Pavilion (Women's Shelter)",
+      "original_id": "patricia-mackenzie-pavilion-women-s-shelter",
+      "created_at": "2025-08-26T15:12:00.210617"
+    },
+    {
+      "tenant_id": "refuge-des-jeunes-de-montr\u00e9al",
+      "shelter_name": "Refuge des Jeunes de Montr\u00e9al",
+      "original_id": "refuge-des-jeunes-de-montr-al",
+      "created_at": "2025-08-26T15:12:00.618335"
+    },
+    {
+      "tenant_id": "resilience-montreal",
+      "shelter_name": "Resilience Montreal",
+      "original_id": "resilience-montreal",
+      "created_at": "2025-08-26T15:12:01.007710"
+    },
+    {
+      "tenant_id": "welcome-hall-mission",
+      "shelter_name": "Welcome Hall Mission",
+      "original_id": "welcome-hall-mission",
+      "created_at": "2025-08-26T15:12:01.381665"
+    },
+    {
+      "tenant_id": "ywca-montreal",
+      "shelter_name": "YWCA Montreal",
+      "original_id": "ywca-montreal",
+      "created_at": "2025-08-26T15:12:01.748236"
+    }
+  ],
+  "errors": []
+}

@@ -63,41 +63,83 @@ export function ParticipantProfileClient({ participantId }: ParticipantProfileCl
       let total_received = 0;
       let donation_count = 0;
       
-      // For demo-participant-001, also check for donations with that ID
+      // For michael-rodriguez, also check for donations with that ID and demo-participant-001 for backwards compatibility
       const participantIds = [participantId];
-      if (participantId === 'demo-participant-001') {
-        participantIds.push('demo-participant-001');
+      if (participantId === 'michael-rodriguez') {
+        participantIds.push('demo-participant-001', 'michael-rodriguez');
+      } else if (participantId === 'demo-participant-001') {
+        participantIds.push('michael-rodriguez'); // Check both IDs for legacy support
       }
       
-      // Query demo_donations collection for each possible participant ID
-      for (const pid of participantIds) {
-        const donationsQuery = query(
-          collection(db, 'demo_donations'),
-          where('participant_id', '==', pid),
-          where('status', '==', 'completed')
-        );
-        const donationsSnapshot = await getDocs(donationsQuery);
+      // ALWAYS include michael-rodriguez for our test donations
+      if (!participantIds.includes('michael-rodriguez')) {
+        participantIds.push('michael-rodriguez');
+      }
+      
+      // NEW APPROACH: Query ALL Old Brewery Mission donations, then filter by participant
+      console.log(`🔍 [DEBUG] Querying ALL Old Brewery Mission donations...`);
+      
+      // Query by shelter_id for YDJCJnuLGMC9mWOWDSOa (removed status filter)
+      const obmQuery1 = query(
+        collection(db, 'demo_donations'),
+        where('shelter_id', '==', 'YDJCJnuLGMC9mWOWDSOa')
+      );
+      const obmSnapshot1 = await getDocs(obmQuery1);
+      console.log(`📊 [DEBUG] Found ${obmSnapshot1.size} donations for YDJCJnuLGMC9mWOWDSOa`);
+      
+      // Query by shelter_id for old-brewery-mission (removed status filter)
+      const obmQuery2 = query(
+        collection(db, 'demo_donations'),
+        where('shelter_id', '==', 'old-brewery-mission')
+      );
+      const obmSnapshot2 = await getDocs(obmQuery2);
+      console.log(`📊 [DEBUG] Found ${obmSnapshot2.size} donations for old-brewery-mission`);
+      
+      // Process both result sets
+      [obmSnapshot1, obmSnapshot2].forEach((snapshot, index) => {
+        const shelterIdQueried = index === 0 ? 'YDJCJnuLGMC9mWOWDSOa' : 'old-brewery-mission';
+        console.log(`🔄 [DEBUG] Processing donations from ${shelterIdQueried}...`);
         
-        donationsSnapshot.docs.forEach(doc => {
+        snapshot.docs.forEach(doc => {
           const donationData = doc.data();
-          const amount = donationData.amount || {};
+          const donationParticipantId = donationData?.participant_id;
           
-          // Handle different amount formats
-          let donationValue = 0;
-          if (typeof amount === 'object') {
-            donationValue = amount.total || amount.amount || 0;
+          // Only count donations for this specific participant
+          const isForThisParticipant = participantIds.includes(donationParticipantId);
+          
+          console.log(`💰 [DEBUG] Processing donation:`, {
+            id: doc.id,
+            participant_id: donationParticipantId,
+            shelter_id: donationData?.shelter_id,
+            isForThisParticipant
+          });
+          
+          if (isForThisParticipant) {
+            const amount = donationData.amount || {};
+            const status = donationData.status || 'unknown';
+            
+            // Handle different amount formats
+            let donationValue = 0;
+            if (typeof amount === 'object') {
+              donationValue = amount.total || amount.amount || 0;
+            } else {
+              donationValue = amount || 0;
+            }
+            
+            console.log(`💵 [DEBUG] Donation value: ${donationValue}, status: ${status} for participant ${donationParticipantId}`);
+            if (donationValue > 0) {
+              total_received += donationValue;
+              donation_count++;
+              console.log(`✅ [DEBUG] Added $${donationValue} (status: ${status}), total now: $${total_received}`);
+            }
           } else {
-            donationValue = amount || 0;
-          }
-          
-          if (donationValue > 0) {
-            total_received += donationValue;
-            donation_count++;
+            console.log(`⏭️ [DEBUG] Skipped donation for participant ${donationParticipantId} (not ${participantId})`);
           }
         });
-      }
+      });
       
-      console.log(`💰 Fetched donation data for ${participantId}: $${total_received} from ${donation_count} donations`);
+      console.log(`💰 [DEBUG] Fetched donation data for ${participantId}: $${total_received} from ${donation_count} donations`);
+      console.log(`💰 [DEBUG] Checked participant IDs:`, participantIds);
       return { total_received, donation_count };
       
     } catch (error) {
@@ -114,6 +156,7 @@ export function ParticipantProfileClient({ participantId }: ParticipantProfileCl
 
   useEffect(() => {
     const loadParticipant = async () => {
+      console.log(`🔄 [DEBUG] Loading participant data for ID: ${participantId}`);
       try {
         const isProduction = process.env.NODE_ENV === 'production';
         const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -121,6 +164,13 @@ export function ParticipantProfileClient({ participantId }: ParticipantProfileCl
         // First try to load real participant data by ID or name-based URL
         try {
           let realParticipant = null;
+          
+          // SKIP real participant loading for demo participants
+          if (participantId === 'michael-rodriguez' || participantId === 'demo-participant-001') {
+            console.log(`🎯 [DEBUG] Skipping real participant lookup for demo ID: ${participantId}`);
+            // Jump directly to demo data loading
+            throw new Error('Using demo data for michael-rodriguez');
+          }
           
           // Try to find participant by UID first
           const realParticipantData = await getParticipantProfile(participantId);
@@ -217,13 +267,13 @@ export function ParticipantProfileClient({ participantId }: ParticipantProfileCl
           console.error('❌ Error loading real participant:', error);
         }
 
-        // Fallback to demo data for demo-participant-001 or if no real participant found
-        if (participantId === 'demo-participant-001') {
-          // Fetch real donation data for demo participant
-          const donationData = await fetchParticipantDonations('demo-participant-001');
+        // Fallback to demo data for demo-participant-001, michael-rodriguez, or if no real participant found
+        if (participantId === 'demo-participant-001' || participantId === 'michael-rodriguez') {
+          // Fetch real donation data for this participant
+          const donationData = await fetchParticipantDonations(participantId);
           
           const mockParticipant = {
-            id: "demo-participant-001",
+            id: participantId, // Use the actual participant ID passed in
             firstName: "Michael",
             lastName: "Rodriguez",
             age: 32,
@@ -241,12 +291,14 @@ export function ParticipantProfileClient({ participantId }: ParticipantProfileCl
             donation_count: donationData.donation_count,
             services_completed: 8,
             progress: 55,
-            qr_code: "SHELTR-DEMO-2D88F",
+            qr_code: `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(`https://sheltr-ai.web.app/donate?demo=true&participant=${participantId}`)}&format=png`,
             featured: true,
             demo: true
           };
           
           setParticipant(mockParticipant);
+          console.log('✅ [DEBUG] Demo participant loaded:', mockParticipant);
+          console.log(`💰 [DEBUG] Participant total_received: $${mockParticipant.total_received}`);
           setLoading(false);
           return;
         }
@@ -263,13 +315,13 @@ export function ParticipantProfileClient({ participantId }: ParticipantProfileCl
       } catch (error) {
         console.error('Error loading participant:', error);
         
-        // Fallback to mock data if participantId is demo-participant-001
-        if (participantId === 'demo-participant-001') {
-          // Fetch real donation data for demo participant
-          const donationData = await fetchParticipantDonations('demo-participant-001');
+        // Fallback to mock data if participantId is demo-participant-001 or michael-rodriguez
+        if (participantId === 'demo-participant-001' || participantId === 'michael-rodriguez') {
+          // Fetch real donation data for this participant
+          const donationData = await fetchParticipantDonations(participantId);
           
           const mockParticipant = {
-            id: "demo-participant-001",
+            id: participantId, // Use the actual participant ID passed in
             firstName: "Michael",
             lastName: "Rodriguez",
             age: 32,
@@ -287,12 +339,14 @@ export function ParticipantProfileClient({ participantId }: ParticipantProfileCl
             donation_count: donationData.donation_count,
             services_completed: 8,
             progress: 55,
-            qr_code: "SHELTR-DEMO-2D88F",
+            qr_code: `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(`https://sheltr-ai.web.app/donate?demo=true&participant=${participantId}`)}&format=png`,
             featured: true,
             demo: true
           };
           
           setParticipant(mockParticipant);
+          console.log('✅ [DEBUG] Demo participant loaded in catch block:', mockParticipant);
+          console.log(`💰 [DEBUG] Participant total_received: $${mockParticipant.total_received}`);
         } else {
           setError('Failed to load participant profile');
         }
@@ -572,15 +626,19 @@ export function ParticipantProfileClient({ participantId }: ParticipantProfileCl
                   {/* QR Code Display */}
                   <div className="bg-white p-4 rounded-lg mx-auto w-fit">
                     <div className="w-32 h-32 bg-gray-100 flex items-center justify-center rounded overflow-hidden">
-                      {participant.demo ? (
+                      {(participant.demo || participant.id === 'michael-rodriguez' || participant.id === 'demo-participant-001') ? (
                         <img 
                           src={`https://api.qrserver.com/v1/create-qr-code/?size=128x128&data=${encodeURIComponent(`https://sheltr-ai.web.app/donate?demo=true&participant=${participant.id}`)}&format=png`}
-                          alt={`QR Code for ${participant.qr_code}`}
+                          alt={`QR Code for ${participant.firstName} ${participant.lastName}`}
                           className="w-full h-full object-cover"
                           onError={(e) => {
+                            console.log('🚫 QR Code image failed to load, showing fallback');
                             // Fallback to text display if QR service fails
                             e.currentTarget.style.display = 'none';
                             e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                          }}
+                          onLoad={() => {
+                            console.log('✅ QR Code image loaded successfully');
                           }}
                         />
                       ) : (

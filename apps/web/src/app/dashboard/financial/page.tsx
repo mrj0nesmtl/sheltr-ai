@@ -7,7 +7,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   DollarSign, 
   TrendingUp,
-  TrendingDown,
   AlertTriangle,
   Shield,
   Activity,
@@ -23,64 +22,53 @@ import {
   CheckCircle,
   XCircle
 } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { 
+  getFinancialMetrics, 
+  getRecentTransactions, 
+  getRevenueBreakdown,
+  type FinancialMetrics,
+  type Transaction,
+  type RevenueBreakdown
+} from '@/services/financialService';
+import { FinancialChart } from '@/components/charts/FinancialChart';
+import { TransactionChart } from '@/components/charts/TransactionChart';
 
-// Mock data for financial oversight
-const financialMetrics = {
-  totalRevenue: 4461.73,
-  monthlyGrowth: 18.2,
-  totalDonations: 89234.67,
-  platformFees: 4461.73,
-  processingFees: 892.35,
-  transactionCount: 1847,
-  avgDonation: 48.35,
-  fraudRate: 0.02
-};
-
-const recentTransactions = [
-  {
-    id: 'tx_001',
-    type: 'donation',
-    amount: 125.00,
-    participant: 'John D.',
-    donor: 'Jennifer W.',
-    shelter: 'Downtown Hope Center',
-    timestamp: '2024-07-24 14:30:15',
-    status: 'completed',
-    fees: 6.25
-  },
-  {
-    id: 'tx_002',
-    type: 'donation',
-    amount: 50.00,
-    participant: 'Maria S.',
-    donor: 'David T.',
-    shelter: 'Riverside Shelter',
-    timestamp: '2024-07-24 14:15:30',
-    status: 'completed',
-    fees: 2.50
-  },
-  {
-    id: 'tx_003',
-    type: 'donation',
-    amount: 500.00,
-    participant: 'Robert K.',
-    donor: 'Anonymous',
-    shelter: 'Safe Harbor Foundation',
-    timestamp: '2024-07-24 13:45:22',
-    status: 'pending',
-    fees: 25.00
-  },
-  {
-    id: 'tx_004',
-    type: 'payout',
-    amount: 1000.00,
-    participant: 'Multiple',
-    shelter: 'Downtown Hope Center',
-    timestamp: '2024-07-24 13:30:10',
-    status: 'completed',
-    fees: 5.00
-  }
-];
+export default function FinancialOversight() {
+  // Real data state
+  const [financialMetrics, setFinancialMetrics] = useState<FinancialMetrics | null>(null);
+  const [recentTransactions, setRecentTransactions] = useState<Transaction[]>([]);
+  const [revenueBreakdown, setRevenueBreakdown] = useState<RevenueBreakdown[]>([]);
+  const [loading, setLoading] = useState(true);
+  
+  // Load financial data
+  const loadFinancialData = async () => {
+    try {
+      console.log('💰 [FINANCIAL] Loading real financial data...');
+      setLoading(true);
+      
+      const [metrics, transactions, breakdown] = await Promise.all([
+        getFinancialMetrics(),
+        getRecentTransactions(10),
+        getRevenueBreakdown()
+      ]);
+      
+      setFinancialMetrics(metrics);
+      setRecentTransactions(transactions);
+      setRevenueBreakdown(breakdown);
+      
+      console.log('✅ [FINANCIAL] Financial data loaded successfully');
+    } catch (error) {
+      console.error('❌ Error loading financial data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  // Load data on component mount
+  useEffect(() => {
+    loadFinancialData();
+  }, []);
 
 const fraudAlerts = [
   {
@@ -109,19 +97,13 @@ const fraudAlerts = [
   }
 ];
 
-const revenueBreakdown = [
-  { category: 'Platform Fees (5%)', amount: 4461.73, percentage: 83.4 },
-  { category: 'Processing Fees', amount: 892.35, percentage: 16.6 }
-];
-
-const monthlyRevenueData = [
-  { month: 'Jan', revenue: 2850.25, donations: 57005.0 },
-  { month: 'Feb', revenue: 3240.80, donations: 64816.0 },
-  { month: 'Mar', revenue: 3920.15, donations: 78403.0 },
-  { month: 'Apr', revenue: 4461.73, donations: 89234.67 }
-];
-
-export default function FinancialOversight() {
+  // Mock data for charts (TODO: Replace with real data)
+  const monthlyRevenueData = [
+    { month: 'Jan', revenue: 2850.25, donations: 57005.0 },
+    { month: 'Feb', revenue: 3240.80, donations: 64816.0 },
+    { month: 'Mar', revenue: 3920.15, donations: 78403.0 },
+    { month: 'Apr', revenue: financialMetrics?.totalRevenue || 0, donations: financialMetrics?.totalDonations || 0 }
+  ];
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'completed': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100';
@@ -185,10 +167,12 @@ export default function FinancialOversight() {
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">${financialMetrics.totalRevenue.toLocaleString()}</div>
+            <div className="text-2xl font-bold">
+              {loading ? 'Loading...' : `$${financialMetrics?.totalRevenue.toLocaleString() || '0'}`}
+            </div>
             <div className="flex items-center text-xs text-green-600">
               <TrendingUp className="h-3 w-3 mr-1" />
-              +{financialMetrics.monthlyGrowth}% from last month
+              +{financialMetrics?.monthlyGrowth || 0}% from last month
             </div>
           </CardContent>
         </Card>
@@ -199,10 +183,12 @@ export default function FinancialOversight() {
             <Banknote className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">${financialMetrics.totalDonations.toLocaleString()}</div>
+            <div className="text-2xl font-bold">
+              {loading ? 'Loading...' : `$${financialMetrics?.totalDonations.toLocaleString() || '0'}`}
+            </div>
             <div className="flex items-center text-xs text-muted-foreground">
               <Activity className="h-3 w-3 mr-1" />
-              {financialMetrics.transactionCount} transactions
+              {financialMetrics?.transactionCount || 0} transactions
             </div>
           </CardContent>
         </Card>
@@ -213,7 +199,9 @@ export default function FinancialOversight() {
             <CreditCard className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">${financialMetrics.avgDonation}</div>
+            <div className="text-2xl font-bold">
+              {loading ? 'Loading...' : `$${financialMetrics?.avgDonation.toFixed(2) || '0.00'}`}
+            </div>
             <div className="flex items-center text-xs text-muted-foreground">
               <TrendingUp className="h-3 w-3 mr-1" />
               Per transaction
@@ -227,7 +215,9 @@ export default function FinancialOversight() {
             <Shield className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">{financialMetrics.fraudRate}%</div>
+            <div className="text-2xl font-bold text-green-600">
+              {loading ? 'Loading...' : `${financialMetrics?.fraudRate.toFixed(2) || '0.00'}%`}
+            </div>
             <div className="flex items-center text-xs text-green-600">
               <Shield className="h-3 w-3 mr-1" />
               Well below industry average
@@ -295,7 +285,10 @@ export default function FinancialOversight() {
         </div>
 
         {/* Transactions Tab */}
-        <TabsContent value="transactions" className="space-y-4">
+        <TabsContent value="transactions" className="space-y-6">
+          {/* Transaction Analytics Chart */}
+          <TransactionChart />
+          
           <div className="flex justify-between items-center">
             <h3 className="text-lg font-medium">Recent Transactions</h3>
             <div className="flex space-x-2">
@@ -430,7 +423,10 @@ export default function FinancialOversight() {
         </TabsContent>
 
         {/* Revenue Tab */}
-        <TabsContent value="revenue" className="space-y-4">
+        <TabsContent value="revenue" className="space-y-6">
+          {/* Financial Analytics Chart */}
+          <FinancialChart />
+          
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Revenue Breakdown */}
             <Card>

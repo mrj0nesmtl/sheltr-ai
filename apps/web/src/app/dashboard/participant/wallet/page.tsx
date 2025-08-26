@@ -2,27 +2,21 @@
 
 import { useAuth } from '@/contexts/AuthContext';
 import { useMockWallet } from '@/components/blockchain/MockWalletProvider';
-import { WalletDisplay } from '@/components/blockchain/WalletDisplay';
-import { QRCodeDisplay } from '@/components/blockchain/QRCodeDisplay';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useState, useEffect } from 'react';
-import { collection, query, where, getDocs, orderBy, limit } from 'firebase/firestore';
+import { collection, query, where, getDocs, limit } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import { generateProfileQRCodeUrl, getParticipantProfileUrl } from '@/utils/profileUrls';
 import { 
   Wallet,
-  TrendingUp,
-  TrendingDown,
-  Send,
-  QrCode,
   Copy,
   ExternalLink,
   Gift,
   Star,
-  Clock,
   CheckCircle,
   AlertCircle,
   RefreshCw,
@@ -839,7 +833,7 @@ export default function ParticipantWallet() {
               <div className="text-center space-y-4">
                 <div className="w-64 h-64 mx-auto bg-white rounded-lg border-2 border-gray-200 flex items-center justify-center p-4">
                   <img 
-                    src={`https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=${encodeURIComponent(`https://sheltr-ai.web.app/participant/${getParticipantId()}`)}&format=png`}
+                    src={generateProfileQRCodeUrl(getParticipantId(), 256)}
                     alt="Your QR Code"
                     className="w-full h-full object-contain rounded"
                   />
@@ -851,7 +845,7 @@ export default function ParticipantWallet() {
                     Old Brewery Mission Participant
                   </p>
                   <p className="text-xs text-gray-500 font-mono">
-                    {`https://sheltr-ai.web.app/participant/${getParticipantId()}`}
+                    {getParticipantProfileUrl(getParticipantId())}
                   </p>
                 </div>
 
@@ -859,7 +853,7 @@ export default function ParticipantWallet() {
                   <Button 
                     variant="outline" 
                     onClick={() => {
-                      const url = `https://sheltr-ai.web.app/participant/${getParticipantId()}`;
+                      const url = getParticipantProfileUrl(getParticipantId());
                       navigator.clipboard.writeText(url);
                       alert('Profile URL copied to clipboard!');
                     }}
@@ -870,7 +864,7 @@ export default function ParticipantWallet() {
                   <Button 
                     variant="outline"
                     onClick={() => {
-                      const url = `https://sheltr-ai.web.app/participant/${getParticipantId()}`;
+                      const url = getParticipantProfileUrl(getParticipantId());
                       window.open(url, '_blank');
                     }}
                   >

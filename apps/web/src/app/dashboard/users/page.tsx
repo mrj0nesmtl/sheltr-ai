@@ -27,7 +27,8 @@ import {
   Activity,
   MapPin,
   Shield,
-  Trash2
+  Trash2,
+  QrCode
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import {
@@ -65,6 +66,7 @@ export default function UserManagement() {
   const [selectedUsers, setSelectedUsers] = useState<Set<string>>(new Set());
   const [showDeleteConfirm, setShowDeleteConfirm] = useState<{ userId: string; userName: string; userType: string } | null>(null);
   const [deletingOrphanedUser, setDeletingOrphanedUser] = useState<string | null>(null);
+  const [showQRModal, setShowQRModal] = useState<{ participant: ParticipantUser; qrCodeUrl: string } | null>(null);
 
   // Update current time every minute for live session tracking
   useEffect(() => {
@@ -168,6 +170,16 @@ export default function UserManagement() {
       console.error('❌ Error exporting users:', error);
       alert('Error exporting users. Please try again.');
     }
+  };
+
+  // Generate and show QR code for participant
+  const showParticipantQR = (participant: ParticipantUser) => {
+    // Generate participant-specific URL - this should match Michael's profile URL pattern
+    const participantSlug = participant.name.toLowerCase().replace(/\s+/g, '-');
+    const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(`https://sheltr-ai.web.app/participant/${participantSlug}`)}&format=png`;
+    
+    setShowQRModal({ participant, qrCodeUrl });
+    console.log(`🔳 Showing QR code for participant: ${participant.name}`);
   };
 
   // View user details
@@ -1123,8 +1135,21 @@ export default function UserManagement() {
                       
                       {/* Actions */}
                       <div className="flex justify-end space-x-1 pt-2 border-t border-gray-200 dark:border-gray-700">
-                        <Button variant="ghost" size="sm">
+                        <Button 
+                          variant="ghost" 
+                          size="sm"
+                          onClick={() => viewUser(participant, 'participant')}
+                          title="View Details"
+                        >
                           <Eye className="h-4 w-4" />
+                        </Button>
+                        <Button 
+                          variant="ghost" 
+                          size="sm"
+                          onClick={() => showParticipantQR(participant)}
+                          title="Show QR Code"
+                        >
+                          <QrCode className="h-4 w-4" />
                         </Button>
                         <Button variant="ghost" size="sm">
                           <MoreHorizontal className="h-4 w-4" />
@@ -1175,6 +1200,14 @@ export default function UserManagement() {
                             title="View Details"
                           >
                             <Eye className="h-4 w-4" />
+                          </Button>
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            onClick={() => showParticipantQR(participant)}
+                            title="Show QR Code"
+                          >
+                            <QrCode className="h-4 w-4" />
                           </Button>
                           <Button 
                             variant="ghost" 
@@ -1706,6 +1739,67 @@ export default function UserManagement() {
                 onClick={confirmDeleteUser}
               >
                 Delete Permanently
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* QR Code Modal for Participants */}
+      {showQRModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md mx-4">
+            <div className="text-center">
+              <h3 className="text-lg font-semibold mb-2 flex items-center justify-center">
+                <QrCode className="mr-2 h-5 w-5" />
+                {showQRModal.participant.name}
+              </h3>
+              <p className="text-sm text-muted-foreground mb-4">
+                Participant QR Code for Donations
+              </p>
+              
+              {/* QR Code Display */}
+              <div className="bg-white p-4 rounded-lg mx-auto w-fit mb-4">
+                <img 
+                  src={showQRModal.qrCodeUrl}
+                  alt={`QR Code for ${showQRModal.participant.name}`}
+                  className="w-48 h-48 object-cover rounded"
+                  onError={(e) => {
+                    console.log('🚫 QR Code image failed to load');
+                    e.currentTarget.style.display = 'none';
+                  }}
+                />
+              </div>
+              
+              {/* Participant Info */}
+              <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 mb-4">
+                <div className="text-sm space-y-1">
+                  <div><strong>Shelter:</strong> {showQRModal.participant.shelter}</div>
+                  <div><strong>Total Received:</strong> ${showQRModal.participant.totalReceived.toLocaleString()}</div>
+                  <div><strong>QR Scans:</strong> {showQRModal.participant.qrScans}</div>
+                  <div><strong>Status:</strong> {showQRModal.participant.status.replace('_', ' ')}</div>
+                </div>
+              </div>
+
+              {/* Avatar Placeholder */}
+              <div className="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                <UserCheck className="h-8 w-8 text-green-600 dark:text-green-400" />
+              </div>
+            </div>
+            
+            <div className="flex justify-end space-x-2 mt-6">
+              <Button 
+                variant="outline" 
+                onClick={() => setShowQRModal(null)}
+              >
+                Close
+              </Button>
+              <Button onClick={() => {
+                // Copy QR code URL to clipboard
+                navigator.clipboard.writeText(showQRModal.qrCodeUrl);
+                alert('QR code URL copied to clipboard!');
+              }}>
+                Copy QR URL
               </Button>
             </div>
           </div>

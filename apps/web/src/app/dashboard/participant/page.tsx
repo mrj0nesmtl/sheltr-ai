@@ -691,7 +691,7 @@ export default function ParticipantDashboard() {
               <Button 
                 variant="outline" 
                 size="sm"
-                className="border-red-500 text-red-600 hover:scale-105 hover:border-red-600 hover:shadow-md transition-all duration-200 dark:border-red-400 dark:text-red-400 dark:hover:border-red-300"
+                className="border-red-500 text-red-600 bg-transparent hover:bg-transparent hover:scale-105 hover:border-red-600 hover:shadow-md transition-all duration-200 dark:border-red-400 dark:text-red-400 dark:hover:border-red-300 dark:hover:bg-transparent"
               >
                 <Phone className="h-4 w-4 mr-2" />
                 (555) 911-HELP

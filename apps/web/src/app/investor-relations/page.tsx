@@ -1723,18 +1723,11 @@ export default function InvestorRelationsPage() {
               <span className="bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent"> HMIS Technology</span>
             </h1>
             <p className="text-xl mb-8 text-blue-100">
-              Join us in revolutionizing homelessness support through our dual-token architecture: 
-              SHELTR-S (stable) for participant protection and SHELTR (growth) for community governance.
+              The homeless services industry is ripe for technological disruption. Our thesis is simple: 
+              <strong>it's better to solve than to manage</strong>. We're leveraging cutting-edge HMIS technology 
+              and blockchain innovation to transform how communities address homelessness at its root.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                size="lg" 
-                className="bg-amber-600 hover:bg-amber-700 text-black"
-                onClick={() => setDeckOpen(true)}
-              >
-                <Eye className="h-5 w-5 mr-2" />
-                View Investment Deck
-              </Button>
+            <div className="flex justify-center">
               <Button 
                 size="lg" 
                 variant="outline" 

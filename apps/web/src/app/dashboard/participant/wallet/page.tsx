@@ -258,19 +258,27 @@ export default function ParticipantWallet() {
       
       const transactions: RealTransaction[] = [];
       
-      // Query donations with ordering
+      // Query donations (removed orderBy to avoid index requirement)
       const donationsQuery = query(
         collection(db, 'demo_donations'),
         where('participant_id', '==', participantId),
-        orderBy('created_at', 'desc'),
         limit(20)
       );
       const donationsSnapshot = await getDocs(donationsQuery);
+      
+      console.log(`📄 [WALLET] Processing ${donationsSnapshot.docs.length} documents...`);
       
       donationsSnapshot.docs.forEach(doc => {
         const donationData = doc.data();
         const amount = donationData.amount?.total || donationData.amount || 0;
         const timestamp = donationData.created_at?.toDate() || new Date();
+        
+        console.log(`📝 [WALLET] Processing doc ${doc.id}:`, {
+          amount,
+          participant_id: donationData.participant_id,
+          shelter_id: donationData.shelter_id,
+          created_at: donationData.created_at
+        });
         
         if (amount > 0) {
           // Generate realistic transaction hash
@@ -288,8 +296,14 @@ export default function ParticipantWallet() {
           };
           
           transactions.push(transaction);
+          console.log(`✅ [WALLET] Added transaction:`, transaction);
+        } else {
+          console.log(`❌ [WALLET] Skipped transaction with $${amount}`);
         }
       });
+      
+      // Sort transactions by timestamp (newest first)
+      transactions.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
       
       console.log(`📈 [WALLET] Found ${transactions.length} transactions for ${participantId}`);
       return transactions;

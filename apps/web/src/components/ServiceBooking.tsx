@@ -48,26 +48,40 @@ interface ServiceBookingProps {
 
 const getCategoryIcon = (iconName: string) => {
   const icons = {
-    Heart: <Heart className="h-5 w-5" />,
-    Briefcase: <Briefcase className="h-5 w-5" />,
-    Scale: <Scale className="h-5 w-5" />,
-    FileText: <FileText className="h-5 w-5" />,
-    Users: <Users className="h-5 w-5" />,
-    Utensils: <Utensils className="h-5 w-5" />,
-    Droplets: <Droplets className="h-5 w-5" />,
-    Package: <Package className="h-5 w-5" />
+    Heart: <Heart className="h-6 w-6" />,
+    Briefcase: <Briefcase className="h-6 w-6" />,
+    Scale: <Scale className="h-6 w-6" />,
+    FileText: <FileText className="h-6 w-6" />,
+    Users: <Users className="h-6 w-6" />,
+    Utensils: <Utensils className="h-6 w-6" />,
+    Droplets: <Droplets className="h-6 w-6" />,
+    Package: <Package className="h-6 w-6" />
   };
-  return icons[iconName as keyof typeof icons] || <FileText className="h-5 w-5" />;
+  return icons[iconName as keyof typeof icons] || <FileText className="h-6 w-6" />;
+};
+
+const getCategoryStyle = (color: string) => {
+  const styles = {
+    red: 'border-2 border-red-500 text-red-600 bg-transparent',
+    blue: 'border-2 border-blue-500 text-blue-600 bg-transparent',
+    purple: 'border-2 border-purple-500 text-purple-600 bg-transparent',
+    green: 'border-2 border-green-500 text-green-600 bg-transparent',
+    teal: 'border-2 border-teal-500 text-teal-600 bg-transparent',
+    orange: 'border-2 border-orange-500 text-orange-600 bg-transparent',
+    cyan: 'border-2 border-cyan-500 text-cyan-600 bg-transparent',
+    gray: 'border-2 border-gray-500 text-gray-600 bg-transparent'
+  };
+  return styles[color as keyof typeof styles] || 'border-2 border-gray-500 text-gray-600 bg-transparent';
 };
 
 const getStatusColor = (status: string) => {
   switch (status) {
-    case 'confirmed': return 'text-green-600 bg-green-100';
-    case 'pending': return 'text-yellow-600 bg-yellow-100';
-    case 'completed': return 'text-blue-600 bg-blue-100';
-    case 'cancelled': return 'text-red-600 bg-red-100';
-    case 'no_show': return 'text-gray-600 bg-gray-100';
-    default: return 'text-gray-600 bg-gray-100';
+    case 'confirmed': return 'text-green-600 border border-green-500 bg-transparent';
+    case 'pending': return 'text-yellow-600 border border-yellow-500 bg-transparent';
+    case 'completed': return 'text-blue-600 border border-blue-500 bg-transparent';
+    case 'cancelled': return 'text-red-600 border border-red-500 bg-transparent';
+    case 'no_show': return 'text-gray-600 border border-gray-500 bg-transparent';
+    default: return 'text-gray-600 border border-gray-500 bg-transparent';
   }
 };
 
@@ -612,7 +626,7 @@ export function ServiceBooking({
                   >
                     <CardContent className="pt-6">
                       <div className="flex items-center space-x-3">
-                        <div className={`p-2 rounded-lg bg-${category.color}-100 text-${category.color}-600`}>
+                        <div className={`p-3 rounded-lg ${getCategoryStyle(category.color)}`}>
                           {getCategoryIcon(category.icon)}
                         </div>
                         <div>

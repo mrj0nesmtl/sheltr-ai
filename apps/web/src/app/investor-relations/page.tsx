@@ -34,6 +34,7 @@ import {
   Pause,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
   Zap,
   Award,
   Rocket,
@@ -1767,23 +1768,47 @@ export default function InvestorRelationsPage() {
                 </p>
                 
                 <div className="grid md:grid-cols-2 gap-6 mt-8">
-                  <div className="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg border border-blue-200 dark:border-blue-800">
-                    <h3 className="text-xl font-semibold text-blue-700 dark:text-blue-300 mb-3">
+                  <div 
+                    className="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg border border-blue-200 dark:border-blue-800 cursor-pointer transition-all duration-300 hover:bg-blue-100 dark:hover:bg-blue-900/30 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-lg transform hover:scale-105"
+                    onClick={() => {
+                      document.getElementById('option-a')?.scrollIntoView({ 
+                        behavior: 'smooth',
+                        block: 'start'
+                      });
+                    }}
+                  >
+                    <h3 className="text-xl font-semibold text-blue-700 dark:text-blue-300 mb-3 flex items-center">
                       Option A: ICO Model
+                      <ChevronDown className="ml-2 h-4 w-4" />
                     </h3>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
                       Initial Coin Offering with dual-token architecture featuring pre-launch discounted sale. 
                       This page details the ICO structure, tokenomics, and blockchain-based funding approach.
                     </p>
+                    <p className="text-xs text-blue-600 dark:text-blue-400 mt-2 font-medium">
+                      Click to explore Option A details ↓
+                    </p>
                   </div>
                   
-                  <div className="bg-green-50 dark:bg-green-900/20 p-6 rounded-lg border border-green-200 dark:border-green-800">
-                    <h3 className="text-xl font-semibold text-green-700 dark:text-green-300 mb-3">
+                  <div 
+                    className="bg-green-50 dark:bg-green-900/20 p-6 rounded-lg border border-green-200 dark:border-green-800 cursor-pointer transition-all duration-300 hover:bg-green-100 dark:hover:bg-green-900/30 hover:border-green-300 dark:hover:border-green-700 hover:shadow-lg transform hover:scale-105"
+                    onClick={() => {
+                      document.getElementById('option-b')?.scrollIntoView({ 
+                        behavior: 'smooth',
+                        block: 'start'
+                      });
+                    }}
+                  >
+                    <h3 className="text-xl font-semibold text-green-700 dark:text-green-300 mb-3 flex items-center">
                       Option B: Traditional Funding
+                      <ChevronDown className="ml-2 h-4 w-4" />
                     </h3>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
                       Conventional funding model including equity partnerships, SAFE notes, and strategic investor 
                       relationships. Details available in our traditional strategy documentation.
+                    </p>
+                    <p className="text-xs text-green-600 dark:text-green-400 mt-2 font-medium">
+                      Click to jump to Option B section ↓
                     </p>
                   </div>
                 </div>
@@ -1965,9 +1990,22 @@ export default function InvestorRelationsPage() {
           </section>
         )}
 
-      {/* Investment Overview */}
-      <section className="py-16">
+      {/* Option A - ICO Model */}
+      <section id="option-a" className="py-16">
         <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <Badge variant="outline" className="mb-4 bg-blue-50 text-blue-700 border-blue-200">
+              Option A
+            </Badge>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+              ICO Model: Dual-Token Architecture
+            </h2>
+            <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-8">
+              Initial Coin Offering with pre-launch discounted sale featuring our innovative dual-token ecosystem. 
+              <strong> Please explore all tabs in the toolbar below</strong> to understand the complete ICO structure, 
+              tokenomics, and blockchain-based funding approach.
+            </p>
+          </div>
           <div className="grid md:grid-cols-4 gap-6 mb-12">
             <Card className="text-center">
               <CardContent className="pt-6">
@@ -2951,7 +2989,7 @@ export default function InvestorRelationsPage() {
       <InvestmentDeckSlideshow isOpen={deckOpen} onClose={() => setDeckOpen(false)} />
 
       {/* Option B - Traditional Funding Strategy */}
-      <section className="py-16 bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-900/20 dark:to-indigo-900/20">
+      <section id="option-b" className="py-16 bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-900/20 dark:to-indigo-900/20">
         <div className="container mx-auto px-4 text-center">
           <div className="max-w-4xl mx-auto">
             <div className="mb-8">

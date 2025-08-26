@@ -12,6 +12,7 @@ import { profileService, type UserProfile, type PersonalInfo, type EmergencyCont
 import { getParticipantProfile, type ParticipantProfile } from '@/services/platformMetrics';
 import { doc, updateDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import { generateProfileQRCodeUrl, getParticipantProfileUrl, getSharingUrl } from '@/utils/profileUrls';
 import { 
   User, 
   Camera,
@@ -1030,7 +1031,7 @@ export default function ParticipantProfile() {
                     <div className="mt-2 p-4 border rounded-lg text-center bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700">
                       <div className="w-32 h-32 mx-auto bg-white rounded flex items-center justify-center p-2">
                         <img 
-                          src={`https://api.qrserver.com/v1/create-qr-code/?size=128x128&data=${encodeURIComponent(`https://sheltr-ai.web.app/participant/${getParticipantId()}`)}&format=png`}
+                          src={generateProfileQRCodeUrl(getParticipantId(), 128)}
                           alt="Your QR Code"
                           className="w-full h-full object-cover rounded"
                         />
@@ -1052,7 +1053,7 @@ export default function ParticipantProfile() {
                           link.href = canvas.toDataURL();
                           link.click();
                         };
-                        img.src = `https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=${encodeURIComponent(`https://sheltr-ai.web.app/participant/${profile?.personalInfo.firstName?.toLowerCase() + '-' + profile?.personalInfo.lastName?.toLowerCase() || 'demo'}`)}&format=png`;
+                        img.src = generateProfileQRCodeUrl(getParticipantId(), 256);
                       }}>
                         <Download className="w-4 h-4 mr-2" />
                         Download QR
@@ -1150,9 +1151,7 @@ export default function ParticipantProfile() {
                   <Button
                     variant="outline"
                     onClick={() => {
-                      const participantId = getParticipantId();
-                      const baseUrl = window.location.origin; // This will use localhost:3000 in dev, production URL in prod
-                      const url = `${baseUrl}/participant/${participantId}`;
+                      const url = getParticipantProfileUrl(getParticipantId());
                       window.open(url, '_blank');
                     }}
                   >
@@ -1162,9 +1161,7 @@ export default function ParticipantProfile() {
                   <Button
                     variant="outline"
                     onClick={() => {
-                      const participantId = getParticipantId();
-                      const baseUrl = 'https://sheltr-ai.web.app'; // Use production URL for sharing
-                      const url = `${baseUrl}/participant/${participantId}`;
+                      const url = getSharingUrl(getParticipantId()); // Use production URL for sharing
                       navigator.clipboard.writeText(url);
                       alert('Profile URL copied to clipboard!');
                     }}
@@ -1175,9 +1172,7 @@ export default function ParticipantProfile() {
                   <Button
                     variant="outline"
                     onClick={() => {
-                      const participantId = getParticipantId();
-                      const baseUrl = 'https://sheltr-ai.web.app'; // Use production URL for sharing
-                      const url = `${baseUrl}/participant/${participantId}`;
+                      const url = getSharingUrl(getParticipantId()); // Use production URL for sharing
                       if (navigator.share) {
                         navigator.share({
                           title: `Support ${profile?.personalInfo.firstName} ${profile?.personalInfo.lastName}`,

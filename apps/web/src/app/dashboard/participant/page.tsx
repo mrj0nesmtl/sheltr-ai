@@ -9,6 +9,7 @@ import { getShelterMetrics, ShelterMetrics } from '@/services/platformMetrics';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import Link from 'next/link';
+import { generateProfileQRCodeUrl, getParticipantProfileUrl } from '@/utils/profileUrls';
 import { 
   User, 
   Calendar, 
@@ -436,7 +437,7 @@ export default function ParticipantDashboard() {
           <CardContent className="text-center space-y-4">
             <div className="mx-auto w-32 h-32 bg-white rounded-lg flex items-center justify-center p-1">
               <img 
-                src={`https://api.qrserver.com/v1/create-qr-code/?size=128x128&data=${encodeURIComponent(`https://sheltr-ai.web.app/participant/${getParticipantId()}`)}&format=png`}
+                src={generateProfileQRCodeUrl(getParticipantId(), 128)}
                 alt={`QR Code for ${getUserDisplayName()}`}
                 className="w-full h-full object-cover rounded"
                 onError={(e) => {

@@ -16,7 +16,7 @@ These documents are designed for:
 - Board and advisor discussions
 
 ## Usage
-These documents support the `/executive-access` page and can be uploaded to the super admin knowledge base for AI-powered investor Q&A.
+These documents support the `/traditional-strategy` page and can be uploaded to the super admin knowledge base for AI-powered investor Q&A.
 
 ## Security
 ⚠️ **Confidential Information** - These documents contain proprietary business strategy, financial projections, and partnership terms. Distribution should be limited to authorized personnel and qualified investors only.

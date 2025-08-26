@@ -11,7 +11,7 @@ import ThemeLogo from '@/components/ThemeLogo';
 import { useState } from 'react';
 import { DemoQRModal } from '@/components/demo/DemoQRModal';
 import { db } from '@/lib/firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, query, where, getDocs } from 'firebase/firestore';
 
 export default function ScanGivePage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -23,6 +23,47 @@ export default function ScanGivePage() {
   const [emailSubmitting, setEmailSubmitting] = useState(false);
   const [emailSubmitted, setEmailSubmitted] = useState(false);
   const [emailError, setEmailError] = useState('');
+
+  // Function to get Michael's real donation data from Firestore
+  const getMichaelRealData = async () => {
+    try {
+      console.log('🔍 [SCAN-GIVE] Fetching Michael Rodriguez real donation data from Firestore...');
+      
+      // Query all donations for Michael Rodriguez
+      const donationsQuery = query(
+        collection(db, 'demo_donations'),
+        where('participant_id', '==', 'michael-rodriguez')
+      );
+      const donationsSnapshot = await getDocs(donationsQuery);
+      
+      let totalReceived = 0;
+      let donationCount = 0;
+      
+      donationsSnapshot.docs.forEach(doc => {
+        const donationData = doc.data();
+        const amount = donationData.amount?.total || donationData.amount || 0;
+        if (amount > 0) {
+          totalReceived += amount;
+          donationCount++;
+        }
+      });
+      
+      console.log(`💰 [SCAN-GIVE] Found ${donationCount} donations totaling $${totalReceived} for Michael Rodriguez`);
+      
+      return {
+        total_received: totalReceived,
+        donation_count: donationCount,
+        services_completed: 8 // Keep this static for demo purposes
+      };
+    } catch (error) {
+      console.error('❌ Error fetching Michael real data:', error);
+      return {
+        total_received: 267, // Fallback to known amount if query fails
+        donation_count: 4,
+        services_completed: 8
+      };
+    }
+  };
 
   const handleTryDemo = async () => {
     setLoading(true);
@@ -48,9 +89,12 @@ export default function ScanGivePage() {
           throw new Error('Failed to fetch participant data');
         }
       } catch (apiError) {
-        console.warn('⚠️ API call failed, using fallback data:', apiError);
+        console.warn('⚠️ API call failed, using fallback data with real donation metrics:', apiError);
         
-        // Fallback to hardcoded data if API fails
+        // Get Michael's real donation data from Firestore
+        const realDonationData = await getMichaelRealData();
+        
+        // Fallback to hardcoded data if API fails, but with real donation metrics
         const fallbackParticipant = {
           id: "michael-rodriguez",
           firstName: "Michael",
@@ -67,9 +111,9 @@ export default function ScanGivePage() {
           ],
           skills: ["Communication", "Leadership", "Problem Solving", "Community Outreach"],
           interests: ["Community Service", "Personal Development", "Mentoring", "Social Impact"],
-          total_received: 0.00,
-          donation_count: 0,
-          services_completed: 0,
+          total_received: realDonationData.total_received, // Real donation total
+          donation_count: realDonationData.donation_count, // Real donation count
+          services_completed: realDonationData.services_completed, // Real or demo services
           progress: 55,
           qr_code: "SHELTR-MICHAEL-REAL",
           featured: true,

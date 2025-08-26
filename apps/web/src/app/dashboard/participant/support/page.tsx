@@ -237,7 +237,7 @@ export default function ParticipantSupportPage() {
         </div>
         <Button 
           variant="outline"
-          className="border-red-500 text-red-600 hover:bg-red-50 dark:border-red-400 dark:text-red-400 dark:hover:bg-red-950/30"
+          className="border-red-500 text-red-600 hover:scale-105 hover:border-red-600 hover:shadow-md transition-all duration-200 dark:border-red-400 dark:text-red-400 dark:hover:border-red-300"
         >
           <Phone className="h-4 w-4 mr-2" />
           Emergency: 911
@@ -304,7 +304,7 @@ export default function ParticipantSupportPage() {
                       <Button 
                         variant="outline" 
                         size="sm" 
-                        className="mt-2 border-red-500 text-red-600 hover:bg-red-50 dark:border-red-400 dark:text-red-400 dark:hover:bg-red-950/30"
+                        className="mt-2 border-red-500 text-red-600 hover:scale-105 hover:border-red-600 hover:shadow-md transition-all duration-200 dark:border-red-400 dark:text-red-400 dark:hover:border-red-300"
                       >
                         <Phone className="h-4 w-4 mr-2" />
                         {resource.phone}

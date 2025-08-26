@@ -1719,7 +1719,7 @@ export default function InvestorRelationsPage() {
             <Badge className="mb-4 bg-amber-600 text-black">PRE-SEED FUNDING ROUND</Badge>
             <h1 className="text-5xl font-bold mb-6">
               Invest in the Future of 
-              <span className="bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent"> Humanitarian Technology</span>
+              <span className="bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent"> HMIS Technology</span>
             </h1>
             <p className="text-xl mb-8 text-blue-100">
               Join us in revolutionizing homelessness support through our dual-token architecture: 
@@ -1743,6 +1743,56 @@ export default function InvestorRelationsPage() {
                 <Calendar className="h-5 w-5 mr-2" />
                 Schedule Meeting
               </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Funding Strategy Introduction */}
+      <section className="py-16 bg-white dark:bg-slate-900">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <div className="mb-8">
+              <Badge variant="outline" className="mb-4 bg-blue-50 text-blue-700 border-blue-200">
+                Internal Strategy Review
+              </Badge>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">
+                Two Funding Models Under Consideration
+              </h2>
+              <div className="prose prose-lg max-w-none text-gray-600 dark:text-gray-300">
+                <p className="text-lg leading-relaxed mb-6">
+                  As we approach late-stage development, we have identified two key funding models to reach our 
+                  fundraising objective of <strong>$150,000</strong> to complete development and launch the platform. 
+                  Our team is currently evaluating both approaches to determine the optimal path forward.
+                </p>
+                
+                <div className="grid md:grid-cols-2 gap-6 mt-8">
+                  <div className="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg border border-blue-200 dark:border-blue-800">
+                    <h3 className="text-xl font-semibold text-blue-700 dark:text-blue-300 mb-3">
+                      Option A: ICO Model
+                    </h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      Initial Coin Offering with dual-token architecture featuring pre-launch discounted sale. 
+                      This page details the ICO structure, tokenomics, and blockchain-based funding approach.
+                    </p>
+                  </div>
+                  
+                  <div className="bg-green-50 dark:bg-green-900/20 p-6 rounded-lg border border-green-200 dark:border-green-800">
+                    <h3 className="text-xl font-semibold text-green-700 dark:text-green-300 mb-3">
+                      Option B: Traditional Funding
+                    </h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      Conventional funding model including equity partnerships, SAFE notes, and strategic investor 
+                      relationships. Details available in our traditional strategy documentation.
+                    </p>
+                  </div>
+                </div>
+                
+                <p className="text-base text-gray-500 dark:text-gray-400 mt-6 italic">
+                  This internal review will guide our decision-making process over the next 30 days before 
+                  finalizing our investment offering strategy.
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -2900,21 +2950,21 @@ export default function InvestorRelationsPage() {
       {/* Investment Deck Slideshow */}
       <InvestmentDeckSlideshow isOpen={deckOpen} onClose={() => setDeckOpen(false)} />
 
-      {/* Plan B - Alternative Funding Strategy */}
+      {/* Option B - Traditional Funding Strategy */}
       <section className="py-16 bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-900/20 dark:to-indigo-900/20">
         <div className="container mx-auto px-4 text-center">
           <div className="max-w-4xl mx-auto">
             <div className="mb-8">
               <Badge variant="outline" className="mb-4 bg-blue-50 text-blue-700 border-blue-200">
-                Alternative Investment Strategy
+                Traditional Funding Strategy
               </Badge>
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">
-                Plan B: Traditional Conservative Funding
+                Option B: Traditional Funding Method
               </h2>
               <p className="text-lg text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
-                For investors who prefer traditional equity structures over token-based offerings, 
-                we&apos;ve developed a comprehensive alternative funding strategy that addresses regulatory 
-                concerns while maintaining our growth potential through strategic partnerships.
+                Another model we are considering is a comprehensive traditional funding strategy that 
+                leverages established financial structures and addresses regulatory considerations 
+                while maintaining our growth potential through strategic partnerships.
               </p>
             </div>
 
@@ -2952,7 +3002,7 @@ export default function InvestorRelationsPage() {
 
             <div className="bg-white dark:bg-gray-800 rounded-lg p-8 border-2 border-blue-300 dark:border-blue-700 mb-8">
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-                Why Conservative Investors Choose Plan B
+                Key Benefits of the Traditional Funding Model
               </h3>
               <div className="grid md:grid-cols-2 gap-6 text-left">
                 <div className="space-y-3">
@@ -3004,11 +3054,11 @@ export default function InvestorRelationsPage() {
                 className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 text-lg"
                 onClick={() => {
                   sessionStorage.setItem('investor-relations-access', 'granted');
-                  window.open('/executive-access', '_blank');
+                  window.open('/traditional-strategy', '_blank');
                 }}
               >
                 <FileText className="mr-2 h-5 w-5" />
-                Access Plan B: Traditional Funding Strategy
+                Access Option B: Traditional Funding Strategy
               </Button>
               <p className="text-sm text-gray-500 dark:text-gray-400">
                 Confidential executive summary and partnership framework • Investment-grade documentation

@@ -415,8 +415,8 @@ export default function ParticipantDashboard() {
               </div>
             </div>
 
-            <Link href="/dashboard/participant/wallet">
-              <Button className="w-full" variant="outline">
+            <Link href="/dashboard/participant/wallet" className="block">
+              <Button className="w-full h-10" variant="outline">
                 <Eye className="mr-2 h-4 w-4" />
                 View Transaction History
               </Button>
@@ -451,8 +451,8 @@ export default function ParticipantDashboard() {
             <div className="text-xs text-muted-foreground">
               Last scanned: {participantData?.lastDonation || 'Never'}
             </div>
-            <Link href={`/participant/${getParticipantId()}`} target="_blank">
-              <Button className="w-full" size="sm">
+            <Link href={`/participant/${getParticipantId()}`} target="_blank" className="block">
+              <Button className="w-full h-10" size="sm">
                 <QrCode className="mr-2 h-4 w-4" />
                 View Public Profile
               </Button>
@@ -467,25 +467,27 @@ export default function ParticipantDashboard() {
             <CardDescription>Common participant tasks</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
-            <Link href="/dashboard/participant/services">
-              <Button className="w-full justify-start" variant="outline">
+            <Link href="/dashboard/participant/services" className="block">
+              <Button className="w-full justify-start h-12" variant="outline">
                 <Calendar className="mr-2 h-4 w-4" />
                 Book Services
               </Button>
             </Link>
-            <Link href="/dashboard/participant/support">
-              <Button className="w-full justify-start" variant="outline">
+            <Link href="/dashboard/participant/support" className="block">
+              <Button className="w-full justify-start h-12" variant="outline">
                 <MessageCircle className="mr-2 h-4 w-4" />
                 Message Caseworker
               </Button>
             </Link>
-            <Button className="w-full justify-start" variant="outline" disabled>
-              <Target className="mr-2 h-4 w-4" />
-              Update Goals
-              <Badge variant="secondary" className="ml-auto text-xs">Coming Soon</Badge>
-            </Button>
-            <Link href="/dashboard/participant/profile">
-              <Button className="w-full justify-start" variant="outline">
+            <div className="block">
+              <Button className="w-full justify-start h-12" variant="outline" disabled>
+                <Target className="mr-2 h-4 w-4" />
+                Update Goals
+                <Badge variant="secondary" className="ml-auto text-xs">Coming Soon</Badge>
+              </Button>
+            </div>
+            <Link href="/dashboard/participant/profile" className="block">
+              <Button className="w-full justify-start h-12" variant="outline">
                 <User className="mr-2 h-4 w-4" />
                 Update Profile
               </Button>

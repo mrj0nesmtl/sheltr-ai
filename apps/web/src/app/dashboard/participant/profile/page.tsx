@@ -10,7 +10,7 @@ import { Label } from '@/components/ui/label';
 import { useState, useEffect } from 'react';
 import { profileService, type UserProfile, type PersonalInfo, type EmergencyContact, type Goal } from '@/services/profileService';
 import { getParticipantProfile, type ParticipantProfile } from '@/services/platformMetrics';
-import { doc, updateDoc } from 'firebase/firestore';
+import { doc, updateDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { 
   User, 
@@ -132,14 +132,84 @@ const mockProfile = {
   }
 };
 
+// Interface for participant donation data
+interface ParticipantDonationData {
+  totalReceived: number;
+  donationCount: number;
+  profileViews: number;
+  supporterCount: number;
+  goalProgress: number;
+}
+
 export default function ParticipantProfile() {
   const { user, hasRole } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [profile, setProfile] = useState<ExtendedUserProfile | null>(null);
+  const [donationData, setDonationData] = useState<ParticipantDonationData | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [activeSection, setActiveSection] = useState('personal');
+
+  // Get participant ID for data queries - consistent with dashboard
+  const getParticipantId = () => {
+    // For Michael Rodriguez, use consistent ID across platform
+    if (user?.email === 'participant@example.com' || user?.email === 'michael.rodriguez@example.com') {
+      return 'michael-rodriguez';
+    }
+    // For other participants, derive from email or user ID
+    return user?.uid || 'demo-participant-001';
+  };
+
+  // Function to get participant's real donation data from Firestore
+  const getParticipantDonationData = async (participantId: string): Promise<ParticipantDonationData> => {
+    try {
+      console.log(`🔍 [PROFILE] Fetching real donation data for: ${participantId}`);
+      
+      // Query all donations for this participant
+      const donationsQuery = query(
+        collection(db, 'demo_donations'),
+        where('participant_id', '==', participantId)
+      );
+      const donationsSnapshot = await getDocs(donationsQuery);
+      
+      let totalReceived = 0;
+      let donationCount = 0;
+      
+      donationsSnapshot.docs.forEach(doc => {
+        const donationData = doc.data();
+        const amount = donationData.amount?.total || donationData.amount || 0;
+        if (amount > 0) {
+          totalReceived += amount;
+          donationCount++;
+        }
+      });
+      
+      // Calculate estimated stats (in real app, these would come from analytics)
+      const profileViews = donationCount * 5; // Estimate 5 views per donation
+      const supporterCount = donationCount; // Assume each donation is from unique supporter
+      const goalProgress = Math.min(Math.round((totalReceived / 1000) * 100), 100); // Progress toward $1000 goal
+      
+      console.log(`💰 [PROFILE] Found ${donationCount} donations totaling $${totalReceived} for ${participantId}`);
+      
+      return {
+        totalReceived,
+        donationCount,
+        profileViews,
+        supporterCount,
+        goalProgress
+      };
+    } catch (error) {
+      console.error('❌ Error fetching participant donation data:', error);
+      return {
+        totalReceived: 0,
+        donationCount: 0,
+        profileViews: 0,
+        supporterCount: 0,
+        goalProgress: 0
+      };
+    }
+  };
 
   // Load user profile on component mount
   useEffect(() => {
@@ -150,8 +220,16 @@ export default function ParticipantProfile() {
         setLoading(true);
         setError(null);
         
-        // Load real participant data using the platformMetrics service
-        const participantData = await getParticipantProfile(user.uid);
+        const participantId = getParticipantId();
+        console.log(`🔄 [PROFILE] Loading profile and donation data for: ${participantId}`);
+        
+        // Load both participant profile and donation data
+        const [participantData, realDonationData] = await Promise.all([
+          getParticipantProfile(user.uid),
+          getParticipantDonationData(participantId)
+        ]);
+        
+        setDonationData(realDonationData);
         
         if (participantData) {
           // Convert ParticipantProfile to ExtendedUserProfile format
@@ -296,14 +374,21 @@ export default function ParticipantProfile() {
         email: profile.personalInfo.email,
         phone: profile.personalInfo.phone,
         dateOfBirth: profile.personalInfo.dateOfBirth,
+        pronouns: profile.personalInfo.pronouns,
+        preferredLanguage: profile.personalInfo.preferredLanguage,
         // Add emergency contact if exists
         ...(profile.emergencyContacts && profile.emergencyContacts.length > 0 && {
           emergencyContact: {
             name: profile.emergencyContacts[0].name,
             phone: profile.emergencyContacts[0].phone,
-            relationship: profile.emergencyContacts[0].relationship
+            relationship: profile.emergencyContacts[0].relationship,
+            email: profile.emergencyContacts[0].email
           }
         }),
+        // Save goals array
+        goals: profile.goals || [],
+        // Save preferences
+        preferences: profile.preferences || {},
         updated_at: new Date().toISOString()
       };
       
@@ -311,6 +396,7 @@ export default function ParticipantProfile() {
       
       setIsEditing(false);
       console.log('✅ Profile updated successfully in Firestore');
+      console.log('📊 Saved data:', updateData);
       alert('Profile saved successfully!');
     } catch (err) {
       console.error('Failed to save profile:', err);
@@ -944,7 +1030,7 @@ export default function ParticipantProfile() {
                     <div className="mt-2 p-4 border rounded-lg text-center bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700">
                       <div className="w-32 h-32 mx-auto bg-white rounded flex items-center justify-center p-2">
                         <img 
-                          src={`https://api.qrserver.com/v1/create-qr-code/?size=128x128&data=${encodeURIComponent(`https://sheltr-ai.web.app/participant/${profile?.personalInfo.firstName?.toLowerCase() + '-' + profile?.personalInfo.lastName?.toLowerCase() || 'demo'}`)}&format=png`}
+                          src={`https://api.qrserver.com/v1/create-qr-code/?size=128x128&data=${encodeURIComponent(`https://sheltr-ai.web.app/participant/${getParticipantId()}`)}&format=png`}
                           alt="Your QR Code"
                           className="w-full h-full object-cover rounded"
                         />
@@ -979,19 +1065,19 @@ export default function ParticipantProfile() {
                     <div className="mt-2 space-y-3">
                       <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded">
                         <span className="text-sm text-gray-600 dark:text-gray-400">Total Supporters</span>
-                        <Badge variant="secondary">0</Badge>
+                        <Badge variant="secondary">{donationData?.supporterCount || 0}</Badge>
                       </div>
                       <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded">
                         <span className="text-sm text-gray-600 dark:text-gray-400">Profile Views</span>
-                        <Badge variant="secondary">0</Badge>
+                        <Badge variant="secondary">{donationData?.profileViews || 0}</Badge>
                       </div>
                       <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded">
                         <span className="text-sm text-gray-600 dark:text-gray-400">Total Received</span>
-                        <Badge variant="secondary">$0.00</Badge>
+                        <Badge variant="secondary">${donationData?.totalReceived.toLocaleString() || '0.00'}</Badge>
                       </div>
                       <div className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded">
                         <span className="text-sm text-gray-600 dark:text-gray-400">Goal Progress</span>
-                        <Badge variant="secondary">68%</Badge>
+                        <Badge variant="secondary">{donationData?.goalProgress || 0}%</Badge>
                       </div>
                     </div>
                   </div>
@@ -1064,7 +1150,7 @@ export default function ParticipantProfile() {
                   <Button
                     variant="outline"
                     onClick={() => {
-                      const participantId = profile?.personalInfo.firstName?.toLowerCase() + '-' + profile?.personalInfo.lastName?.toLowerCase() || 'demo';
+                      const participantId = getParticipantId();
                       const baseUrl = window.location.origin; // This will use localhost:3000 in dev, production URL in prod
                       const url = `${baseUrl}/participant/${participantId}`;
                       window.open(url, '_blank');
@@ -1076,7 +1162,7 @@ export default function ParticipantProfile() {
                   <Button
                     variant="outline"
                     onClick={() => {
-                      const participantId = profile?.personalInfo.firstName?.toLowerCase() + '-' + profile?.personalInfo.lastName?.toLowerCase() || 'demo';
+                      const participantId = getParticipantId();
                       const baseUrl = 'https://sheltr-ai.web.app'; // Use production URL for sharing
                       const url = `${baseUrl}/participant/${participantId}`;
                       navigator.clipboard.writeText(url);
@@ -1089,7 +1175,7 @@ export default function ParticipantProfile() {
                   <Button
                     variant="outline"
                     onClick={() => {
-                      const participantId = profile?.personalInfo.firstName?.toLowerCase() + '-' + profile?.personalInfo.lastName?.toLowerCase() || 'demo';
+                      const participantId = getParticipantId();
                       const baseUrl = 'https://sheltr-ai.web.app'; // Use production URL for sharing
                       const url = `${baseUrl}/participant/${participantId}`;
                       if (navigator.share) {

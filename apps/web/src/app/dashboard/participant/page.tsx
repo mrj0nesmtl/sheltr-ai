@@ -683,12 +683,19 @@ export default function ParticipantDashboard() {
             <CardDescription>Important contacts and resources</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+            <div className="p-3 bg-gray-50 dark:bg-gray-900/50 border border-red-300 dark:border-red-700 rounded-lg">
               <div className="flex items-center space-x-2 mb-2">
-                <Phone className="h-4 w-4 text-red-600" />
-                <span className="font-medium text-red-900 dark:text-red-100">24/7 Crisis Hotline</span>
+                <Phone className="h-4 w-4 text-red-600 dark:text-red-400" />
+                <span className="font-medium text-red-700 dark:text-red-300">24/7 Crisis Hotline</span>
               </div>
-              <p className="text-lg font-bold text-red-600">(555) 911-HELP</p>
+              <Button 
+                variant="outline" 
+                size="sm"
+                className="border-red-500 text-red-600 hover:bg-red-50 dark:border-red-400 dark:text-red-400 dark:hover:bg-red-950/30"
+              >
+                <Phone className="h-4 w-4 mr-2" />
+                (555) 911-HELP
+              </Button>
             </div>
 
             <div className="flex items-center justify-between">

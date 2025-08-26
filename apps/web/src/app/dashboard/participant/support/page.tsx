@@ -235,20 +235,23 @@ export default function ParticipantSupportPage() {
             Emergency resources, local services, and your support team
           </p>
         </div>
-        <Button className="bg-red-600 hover:bg-red-700">
+        <Button 
+          variant="outline"
+          className="border-red-500 text-red-600 hover:bg-red-50 dark:border-red-400 dark:text-red-400 dark:hover:bg-red-950/30"
+        >
           <Phone className="h-4 w-4 mr-2" />
           Emergency: 911
         </Button>
       </div>
 
       {/* Emergency Alert */}
-      <Card className="bg-red-50 border-red-200">
-        <CardContent className="p-4">
+      <Card className="bg-gray-50 dark:bg-gray-900/50 border border-red-300 dark:border-red-700">
+        <CardContent className="p-3">
           <div className="flex items-center space-x-3">
-            <AlertTriangle className="h-6 w-6 text-red-600" />
+            <AlertTriangle className="h-5 w-5 text-red-600 dark:text-red-400" />
             <div>
-              <h3 className="font-semibold text-red-900">Emergency Resources</h3>
-              <p className="text-sm text-red-800">
+              <h3 className="font-medium text-red-700 dark:text-red-300 text-sm">Emergency Resources</h3>
+              <p className="text-xs text-red-600 dark:text-red-400">
                 If you're in immediate danger, call 911. For crisis support, text HOME to 741741 or call 988.
               </p>
             </div>
@@ -298,7 +301,11 @@ export default function ParticipantSupportPage() {
                       <Badge variant="secondary" className={getTypeColor(resource.type)}>
                         {resource.type}
                       </Badge>
-                      <Button className="mt-2 bg-red-600 hover:bg-red-700" size="sm">
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="mt-2 border-red-500 text-red-600 hover:bg-red-50 dark:border-red-400 dark:text-red-400 dark:hover:bg-red-950/30"
+                      >
                         <Phone className="h-4 w-4 mr-2" />
                         {resource.phone}
                       </Button>

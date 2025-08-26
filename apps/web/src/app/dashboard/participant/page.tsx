@@ -295,7 +295,7 @@ export default function ParticipantDashboard() {
           
           {/* Shelter Badge - Only show if participant is assigned to a shelter */}
           {shelterInfo && (
-            <Badge variant="secondary" className="bg-blue-100 text-blue-800 px-4 py-2">
+            <Badge variant="outline" className="border-blue-500 text-blue-600 bg-transparent px-4 py-2">
               <Building className="w-4 h-4 mr-2" />
               {shelterInfo.shelterName}
             </Badge>
@@ -508,11 +508,11 @@ export default function ParticipantDashboard() {
             {upcomingServices.map((service) => (
               <div key={service.id} className="flex items-center justify-between p-4 border rounded-lg">
                 <div className="flex items-center space-x-4">
-                  <div className={`h-10 w-10 rounded-full flex items-center justify-center ${
-                    service.type === 'Medical' ? 'bg-red-100 text-red-600' :
-                    service.type === 'Employment' ? 'bg-blue-100 text-blue-600' :
-                    service.type === 'Mental Health' ? 'bg-green-100 text-green-600' :
-                    'bg-gray-100 text-gray-600'
+                  <div className={`h-10 w-10 rounded-lg border-2 flex items-center justify-center bg-transparent ${
+                    service.type === 'Medical' ? 'border-red-500 text-red-600' :
+                    service.type === 'Employment' ? 'border-blue-500 text-blue-600' :
+                    service.type === 'Mental Health' ? 'border-green-500 text-green-600' :
+                    'border-gray-500 text-gray-600'
                   }`}>
                     {service.type === 'Medical' && <Stethoscope className="h-5 w-5" />}
                     {service.type === 'Employment' && <GraduationCap className="h-5 w-5" />}
@@ -640,7 +640,7 @@ export default function ParticipantDashboard() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center space-x-3 p-3 border rounded-lg">
-              <User className="h-8 w-8 p-1.5 bg-blue-100 text-blue-600 rounded-full" />
+              <User className="h-8 w-8 p-1.5 border-2 border-blue-500 text-blue-600 bg-transparent rounded-lg" />
               <div className="flex-1">
                 <p className="font-medium">Sarah Johnson</p>
                 <p className="text-sm text-muted-foreground">Primary Caseworker</p>
@@ -653,7 +653,7 @@ export default function ParticipantDashboard() {
 
             {shelterInfo && (
               <div className="flex items-center space-x-3 p-3 border rounded-lg">
-                <Home className="h-8 w-8 p-1.5 bg-green-100 text-green-600 rounded-full" />
+                <Home className="h-8 w-8 p-1.5 border-2 border-green-500 text-green-600 bg-transparent rounded-lg" />
                 <div className="flex-1">
                   <p className="font-medium">{shelterInfo.shelterName}</p>
                   <p className="text-sm text-muted-foreground">Your Assigned Shelter</p>
@@ -666,8 +666,8 @@ export default function ParticipantDashboard() {
             )}
             
             {!shelterInfo && !loading && (
-              <div className="flex items-center space-x-3 p-3 border rounded-lg bg-yellow-50 border-yellow-200">
-                <AlertCircle className="h-8 w-8 p-1.5 bg-yellow-100 text-yellow-600 rounded-full" />
+              <div className="flex items-center space-x-3 p-3 border-2 border-yellow-500 rounded-lg bg-transparent">
+                <AlertCircle className="h-8 w-8 p-1.5 border-2 border-yellow-500 text-yellow-600 bg-transparent rounded-lg" />
                 <div className="flex-1">
                   <p className="font-medium">No Shelter Assignment</p>
                   <p className="text-sm text-muted-foreground">Contact admin for shelter placement</p>

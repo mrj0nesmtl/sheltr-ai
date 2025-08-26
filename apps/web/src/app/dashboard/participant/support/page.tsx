@@ -198,19 +198,19 @@ export default function ParticipantSupportPage() {
   const getTypeColor = (type: string) => {
     switch (type) {
       case 'emergency':
-        return 'bg-red-100 text-red-800';
+        return 'border border-red-500 text-red-600 bg-transparent';
       case 'crisis':
-        return 'bg-orange-100 text-orange-800';
+        return 'border border-orange-500 text-orange-600 bg-transparent';
       case 'shelter':
-        return 'bg-blue-100 text-blue-800';
+        return 'border border-blue-500 text-blue-600 bg-transparent';
       case 'medical':
-        return 'bg-green-100 text-green-800';
+        return 'border border-green-500 text-green-600 bg-transparent';
       case 'food':
-        return 'bg-purple-100 text-purple-800';
+        return 'border border-purple-500 text-purple-600 bg-transparent';
       case 'employment':
-        return 'bg-indigo-100 text-indigo-800';
+        return 'border border-indigo-500 text-indigo-600 bg-transparent';
       default:
-        return 'bg-gray-100 text-gray-800';
+        return 'border border-gray-500 text-gray-600 bg-transparent';
     }
   };
 
@@ -285,7 +285,7 @@ export default function ParticipantSupportPage() {
                 {emergencyResources.map((resource) => (
                   <div key={resource.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-800/20 dark:hover:bg-gray-700/20">
                     <div className="flex items-center space-x-4">
-                      <div className={`w-12 h-12 rounded-full flex items-center justify-center ${resource.urgent ? 'bg-red-100' : 'bg-orange-100'}`}>
+                      <div className="w-12 h-12 rounded-full flex items-center justify-center bg-transparent">
                         <Phone className={`h-6 w-6 ${resource.urgent ? 'text-red-600' : 'text-orange-600'}`} />
                       </div>
                       <div>
@@ -341,7 +341,7 @@ export default function ParticipantSupportPage() {
                   <div key={resource.id} className="border rounded-lg p-6">
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex items-start space-x-4">
-                        <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                        <div className="w-12 h-12 bg-transparent rounded-full flex items-center justify-center">
                           {getResourceIcon(resource.type)}
                         </div>
                         <div>
@@ -417,7 +417,7 @@ export default function ParticipantSupportPage() {
                 {supportTeam.map((member) => (
                   <div key={member.id} className="border rounded-lg p-6">
                     <div className="text-center mb-4">
-                      <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                      <div className="w-16 h-16 bg-transparent rounded-full flex items-center justify-center mx-auto mb-3">
                         <Users className="h-8 w-8 text-purple-600" />
                       </div>
                       <h3 className="font-semibold">{member.name}</h3>
@@ -483,8 +483,8 @@ export default function ParticipantSupportPage() {
                   Start Live Chat
                 </Button>
                 
-                <div className="mt-8 p-4 bg-blue-50 rounded-lg">
-                  <h4 className="font-medium text-blue-900 mb-2">Quick Links</h4>
+                <div className="mt-8 p-4 bg-transparent border border-blue-300 dark:border-blue-600 rounded-lg">
+                  <h4 className="font-medium text-blue-700 dark:text-blue-400 mb-2">Quick Links</h4>
                   <div className="grid grid-cols-2 gap-3">
                     <Button variant="outline" size="sm">
                       <Heart className="h-4 w-4 mr-2" />

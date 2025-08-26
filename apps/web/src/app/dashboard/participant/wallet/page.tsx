@@ -52,64 +52,64 @@ interface RealTransaction {
   hash: string;
 }
 
-// Mock earning opportunities
-const earningOpportunities = [
-  {
-    id: 1,
-    title: 'Daily Check-in',
-    description: 'Check in at the shelter every day',
-    reward: 5,
-    frequency: 'Daily',
-    icon: CheckCircle,
-    color: 'bg-green-100 text-green-600',
-    available: true,
-    completedToday: true
-  },
-  {
-    id: 2,
-    title: 'Complete Service Appointment',
-    description: 'Attend scheduled counseling or workshop sessions',
-    reward: 25,
-    frequency: 'Per session',
-    icon: Star,
-    color: 'bg-blue-100 text-blue-600',
-    available: true,
-    completedToday: false
-  },
-  {
-    id: 3,
-    title: 'Help Fellow Participant',
-    description: 'Assist other participants with daily tasks',
-    reward: 10,
-    frequency: 'As needed',
-    icon: Gift,
-    color: 'bg-purple-100 text-purple-600',
-    available: true,
-    completedToday: false
-  },
-  {
-    id: 4,
-    title: 'Goal Milestone Achievement',
-    description: 'Reach important personal development goals',
-    reward: 50,
-    frequency: 'Per milestone',
-    icon: Target,
-    color: 'bg-yellow-100 text-yellow-600',
-    available: false,
-    completedToday: false
-  },
-  {
-    id: 5,
-    title: 'Volunteer at Shelter Event',
-    description: 'Help with community events and activities',
-    reward: 20,
-    frequency: 'Per event',
-    icon: Award,
-    color: 'bg-indigo-100 text-indigo-600',
-    available: true,
-    completedToday: false
-  }
-];
+  // Mock earning opportunities
+  const earningOpportunities = [
+    {
+      id: 1,
+      title: 'Daily Check-in',
+      description: 'Check in at the shelter every day',
+      reward: 5,
+      frequency: 'Daily',
+      icon: CheckCircle,
+      color: 'border-2 border-green-500 text-green-600 bg-transparent',
+      available: true,
+      completedToday: true
+    },
+    {
+      id: 2,
+      title: 'Complete Service Appointment',
+      description: 'Attend scheduled counseling or workshop sessions',
+      reward: 25,
+      frequency: 'Per session',
+      icon: Star,
+      color: 'border-2 border-blue-500 text-blue-600 bg-transparent',
+      available: true,
+      completedToday: false
+    },
+    {
+      id: 3,
+      title: 'Help Fellow Participant',
+      description: 'Assist other participants with daily tasks',
+      reward: 10,
+      frequency: 'As needed',
+      icon: Gift,
+      color: 'border-2 border-purple-500 text-purple-600 bg-transparent',
+      available: true,
+      completedToday: false
+    },
+    {
+      id: 4,
+      title: 'Goal Milestone Achievement',
+      description: 'Reach important personal development goals',
+      reward: 50,
+      frequency: 'Per milestone',
+      icon: Target,
+      color: 'border-2 border-yellow-500 text-yellow-600 bg-transparent',
+      available: false,
+      completedToday: false
+    },
+    {
+      id: 5,
+      title: 'Volunteer at Shelter Event',
+      description: 'Help with community events and activities',
+      reward: 20,
+      frequency: 'Per event',
+      icon: Award,
+      color: 'border-2 border-indigo-500 text-indigo-600 bg-transparent',
+      available: true,
+      completedToday: false
+    }
+  ];
 
 // Mock recent transactions for more detailed history
 const recentTransactions = [
@@ -555,7 +555,7 @@ export default function ParticipantWallet() {
             <Card>
               <CardContent className="pt-6">
                 <div className="flex items-center space-x-3">
-                  <div className="p-3 bg-green-100 text-green-600 rounded-lg">
+                  <div className="p-3 border-2 border-green-500 text-green-600 bg-transparent rounded-lg">
                     <ArrowDownLeft className="w-6 h-6" />
                   </div>
                   <div>
@@ -574,7 +574,7 @@ export default function ParticipantWallet() {
             <Card>
               <CardContent className="pt-6">
                 <div className="flex items-center space-x-3">
-                  <div className="p-3 bg-blue-100 text-blue-600 rounded-lg">
+                  <div className="p-3 border-2 border-blue-500 text-blue-600 bg-transparent rounded-lg">
                     <Plus className="w-6 h-6" />
                   </div>
                   <div>
@@ -593,7 +593,7 @@ export default function ParticipantWallet() {
             <Card>
               <CardContent className="pt-6">
                 <div className="flex items-center space-x-3">
-                  <div className="p-3 bg-purple-100 text-purple-600 rounded-lg">
+                  <div className="p-3 border-2 border-purple-500 text-purple-600 bg-transparent rounded-lg">
                     <Eye className="w-6 h-6" />
                   </div>
                   <div>
@@ -765,7 +765,7 @@ export default function ParticipantWallet() {
                   <CardContent className="pt-6">
                     <div className="flex items-start justify-between mb-4">
                       <div className={`p-3 rounded-lg ${opportunity.color}`}>
-                        <Icon className="w-6 h-6" />
+                        <Icon className="w-7 h-7" />
                       </div>
                       <div className="text-right">
                         <p className="text-2xl font-bold text-green-600">

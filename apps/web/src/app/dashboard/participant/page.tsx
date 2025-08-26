@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { getShelterMetrics, ShelterMetrics } from '@/services/platformMetrics';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import Link from 'next/link';
 import { 
   User, 
   Calendar, 
@@ -383,12 +384,22 @@ export default function ParticipantDashboard() {
           <CardContent className="space-y-4">
             <div className="p-3 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium">SHELTR-S</span>
-                <span className="text-lg font-bold text-green-600">-</span>
+                <div>
+                  <span className="text-sm font-medium">SHELTR Stable Coin</span>
+                  <div className="text-xs text-muted-foreground">USDC • 80% of donations</div>
+                </div>
+                <span className="text-lg font-bold text-green-600">
+                  ${participantData ? Math.round(participantData.totalReceived * 0.80).toLocaleString() : 0}
+                </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm font-medium">SHELTR</span>
-                <span className="text-lg font-bold text-blue-600">-</span>
+                <div>
+                  <span className="text-sm font-medium">SHELTR Utility Token</span>
+                  <div className="text-xs text-muted-foreground">Housing Growth Fund • DeFi • 15%</div>
+                </div>
+                <span className="text-lg font-bold text-blue-600">
+                  ${participantData ? Math.round(participantData.totalReceived * 0.15).toLocaleString() : 0}
+                </span>
               </div>
             </div>
             
@@ -404,10 +415,12 @@ export default function ParticipantDashboard() {
               </div>
             </div>
 
-            <Button className="w-full" variant="outline">
-              <Eye className="mr-2 h-4 w-4" />
-              View Transaction History
-            </Button>
+            <Link href="/dashboard/participant/wallet">
+              <Button className="w-full" variant="outline">
+                <Eye className="mr-2 h-4 w-4" />
+                View Transaction History
+              </Button>
+            </Link>
           </CardContent>
         </Card>
 
@@ -438,10 +451,12 @@ export default function ParticipantDashboard() {
             <div className="text-xs text-muted-foreground">
               Last scanned: {participantData?.lastDonation || 'Never'}
             </div>
-            <Button className="w-full" size="sm">
-              <QrCode className="mr-2 h-4 w-4" />
-              View Public Profile
-            </Button>
+            <Link href={`/participant/${getParticipantId()}`} target="_blank">
+              <Button className="w-full" size="sm">
+                <QrCode className="mr-2 h-4 w-4" />
+                View Public Profile
+              </Button>
+            </Link>
           </CardContent>
         </Card>
 
@@ -452,22 +467,29 @@ export default function ParticipantDashboard() {
             <CardDescription>Common participant tasks</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
-            <Button className="w-full justify-start" variant="outline">
-              <Calendar className="mr-2 h-4 w-4" />
-              Book Services
-            </Button>
-            <Button className="w-full justify-start" variant="outline">
-              <MessageCircle className="mr-2 h-4 w-4" />
-              Message Caseworker
-            </Button>
-            <Button className="w-full justify-start" variant="outline">
+            <Link href="/dashboard/participant/services">
+              <Button className="w-full justify-start" variant="outline">
+                <Calendar className="mr-2 h-4 w-4" />
+                Book Services
+              </Button>
+            </Link>
+            <Link href="/dashboard/participant/support">
+              <Button className="w-full justify-start" variant="outline">
+                <MessageCircle className="mr-2 h-4 w-4" />
+                Message Caseworker
+              </Button>
+            </Link>
+            <Button className="w-full justify-start" variant="outline" disabled>
               <Target className="mr-2 h-4 w-4" />
               Update Goals
+              <Badge variant="secondary" className="ml-auto text-xs">Coming Soon</Badge>
             </Button>
-            <Button className="w-full justify-start" variant="outline">
-              <User className="mr-2 h-4 w-4" />
-              Update Profile
-            </Button>
+            <Link href="/dashboard/participant/profile">
+              <Button className="w-full justify-start" variant="outline">
+                <User className="mr-2 h-4 w-4" />
+                Update Profile
+              </Button>
+            </Link>
           </CardContent>
         </Card>
       </div>

@@ -23,7 +23,7 @@ import {
   Home
 } from 'lucide-react';
 
-export default function ExecutiveAccess() {
+export default function TraditionalStrategy() {
   const router = useRouter();
   const [hasAccess, setHasAccess] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -74,7 +74,7 @@ export default function ExecutiveAccess() {
             Investor Relations
           </Link>
           <ChevronRight className="h-4 w-4" />
-          <span className="font-medium text-gray-900 dark:text-gray-100">Executive Access</span>
+                        <span className="font-medium text-gray-900 dark:text-gray-100">Traditional Strategy</span>
         </nav>
         
         {/* Header */}
@@ -83,18 +83,15 @@ export default function ExecutiveAccess() {
             <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center">
               <Building2 className="w-6 h-6 text-white" />
             </div>
-            <h1 className="text-4xl font-bold text-gray-900 dark:text-white">SHELTR-AI</h1>
+            <h1 className="text-4xl font-bold text-gray-900 dark:text-white">SHELTR</h1>
           </div>
           <div className="space-y-2">
             <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200">
-              Alternative Funding Strategy
+              Traditional Funding Strategy
             </h2>
             <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
               Executive Summary & Partnership-Based Investment Framework for Q4 2025
             </p>
-            <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
-              Confidential Executive Access
-            </Badge>
           </div>
         </div>
 
@@ -131,32 +128,32 @@ export default function ExecutiveAccess() {
               </div>
               
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">Why Not ICO?</h3>
+                <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">Traditional Model Benefits</h3>
                 <div className="space-y-3">
                   <div className="flex items-start space-x-2">
-                    <Shield className="w-4 h-4 text-red-500 mt-0.5" />
+                    <Shield className="w-4 h-4 text-green-500 mt-0.5" />
                     <div className="text-sm">
-                      <span className="font-medium">Regulatory Uncertainty:</span>
+                      <span className="font-medium">Regulatory Clarity:</span>
                       <span className="text-gray-600 dark:text-gray-400 ml-1">
-                        Evolving SEC guidelines create compliance risks
+                        Established securities framework with clear compliance paths
                       </span>
                     </div>
                   </div>
                   <div className="flex items-start space-x-2">
-                    <Shield className="w-4 h-4 text-red-500 mt-0.5" />
+                    <Shield className="w-4 h-4 text-green-500 mt-0.5" />
                     <div className="text-sm">
-                      <span className="font-medium">Market Perception:</span>
+                      <span className="font-medium">Institutional Familiarity:</span>
                       <span className="text-gray-600 dark:text-gray-400 ml-1">
-                        ICO association with speculative projects
+                        Traditional equity structures that investors understand
                       </span>
                     </div>
                   </div>
                   <div className="flex items-start space-x-2">
-                    <Shield className="w-4 h-4 text-red-500 mt-0.5" />
+                    <Shield className="w-4 h-4 text-green-500 mt-0.5" />
                     <div className="text-sm">
-                      <span className="font-medium">Institutional Barriers:</span>
+                      <span className="font-medium">Institutional Access:</span>
                       <span className="text-gray-600 dark:text-gray-400 ml-1">
-                        Traditional investors prefer proven structures
+                        Broader investor base comfortable with equity investments
                       </span>
                     </div>
                   </div>

@@ -39,7 +39,20 @@ export const getUserAnalytics = async (forceFresh = false): Promise<UserAnalytic
       allUsers = usersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       console.log(`📊 [${timestamp}] Successfully mapped ${allUsers.length} user documents`);
     } catch (firestoreError) {
-      console.error('❌ FIRESTORE ERROR in getUserAnalytics:', firestoreError);
+      console.error('❌ FIRESTORE ERROR in getUserAnalytics:', {
+        error: firestoreError,
+        message: firestoreError.message,
+        code: firestoreError.code,
+        details: firestoreError.details || 'No additional details'
+      });
+      
+      // Check if it's a permission error
+      if (firestoreError.code === 'permission-denied') {
+        console.error('🚫 PERMISSION DENIED: Platform Admin may not have access to users collection');
+      } else if (firestoreError.code === 'unauthenticated') {
+        console.error('🔐 UNAUTHENTICATED: User may not be properly logged in');
+      }
+      
       throw firestoreError; // Re-throw to trigger fallback
     }
     

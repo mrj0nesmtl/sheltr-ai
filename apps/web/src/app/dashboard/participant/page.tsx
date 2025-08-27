@@ -480,13 +480,12 @@ export default function ParticipantDashboard() {
                 Message Caseworker
               </Button>
             </Link>
-            <div className="block">
-              <Button className="w-full justify-start h-12" variant="outline" disabled>
+            <Link href="/dashboard/participant/goals" className="block">
+              <Button className="w-full justify-start h-12" variant="outline">
                 <Target className="mr-2 h-4 w-4" />
-                Update Goals
-                <Badge variant="secondary" className="ml-auto text-xs">Coming Soon</Badge>
+                Manage Goals
               </Button>
-            </div>
+            </Link>
             <Link href="/dashboard/participant/profile" className="block">
               <Button className="w-full justify-start h-12" variant="outline">
                 <User className="mr-2 h-4 w-4" />

@@ -22,6 +22,10 @@ service cloud.firestore {
       return isAuthenticated() && getUserData().role == 'super_admin';
     }
     
+    function isPlatformAdmin() {
+      return isAuthenticated() && getUserData().role == 'platform_admin';
+    }
+    
     function isAdmin() {
       return isAuthenticated() && getUserData().role == 'admin';
     }
@@ -49,14 +53,16 @@ service cloud.firestore {
     // USERS COLLECTION - Core user profiles
     // =================================================================
     match /users/{userId} {
-      // Read: Users can read their own profile, admins can read users in their shelter, super_admin can read all
+      // Read: Users can read their own profile, platform admins can read all, admins can read users in their shelter, super_admin can read all
       allow read: if isOwner(userId) || 
                      isSuperAdmin() ||
+                     isPlatformAdmin() ||
                      (isAdmin() && resource.data.shelter_id == getUserData().shelter_id);
       
-      // Write: Users can update their own profile, admins can update users in their shelter, super_admin can update all
+      // Write: Users can update their own profile, platform admins can update all, admins can update users in their shelter, super_admin can update all
       allow write: if isOwner(userId) || 
                       isSuperAdmin() ||
+                      isPlatformAdmin() ||
                       (isAdmin() && resource.data.shelter_id == getUserData().shelter_id);
       
       // Create: Anyone authenticated can create their own user profile

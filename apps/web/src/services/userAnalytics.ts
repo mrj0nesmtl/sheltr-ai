@@ -52,7 +52,9 @@ export const getUserAnalytics = async (): Promise<UserAnalyticsData[]> => {
       const admins = Math.round(startAdmins + (currentAdmins - startAdmins) * growthProgress);
       
       // Add small realistic variance (±5%) but keep final day exact
-      const variance = i === 0 ? 1 : (1 + (Math.random() - 0.5) * 0.1);
+      // Use date-based seed for consistent variance per day
+      const dateSeed = new Date(date).getTime() % 1000 / 1000; // 0-1 based on date
+      const variance = i === 0 ? 1 : (1 + (dateSeed - 0.5) * 0.1);
       
       const finalParticipants = i === 0 ? currentParticipants : Math.max(0, Math.round(participants * variance));
       const finalDonors = i === 0 ? currentDonors : Math.max(0, Math.round(donors * variance));

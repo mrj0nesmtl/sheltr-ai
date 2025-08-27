@@ -21,6 +21,7 @@ import {
 import { TrendingUp, TrendingDown, RefreshCw } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { getUserAnalytics, getUserAnalyticsStats, UserAnalyticsData } from "@/services/userAnalytics"
+import { useAuth } from "@/contexts/AuthContext"
 
 const chartConfig = {
   users: {
@@ -41,6 +42,7 @@ const chartConfig = {
 } satisfies ChartConfig
 
 export function VisitorAreaChart() {
+  const { user } = useAuth()
   const [chartData, setChartData] = React.useState<UserAnalyticsData[]>([])
   const [stats, setStats] = React.useState<any>(null)
   const [loading, setLoading] = React.useState(true)
@@ -59,7 +61,13 @@ export function VisitorAreaChart() {
   const loadUserData = async (forceFresh = false) => {
     try {
       const timestamp = new Date().toISOString();
-      console.log(`📊 [${timestamp}] VisitorAreaChart.loadUserData(forceFresh=${forceFresh}) called - Loading user analytics...`)
+      console.log(`📊 [${timestamp}] VisitorAreaChart.loadUserData(forceFresh=${forceFresh}) called`);
+      console.log(`📊 [${timestamp}] Current user context:`, {
+        email: user?.email,
+        role: user?.role,
+        uid: user?.uid,
+        isAuthenticated: !!user
+      });
       
       const [userData, userStats] = await Promise.all([
         getUserAnalytics(forceFresh),

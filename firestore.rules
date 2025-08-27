@@ -46,6 +46,7 @@ service cloud.firestore {
     // Check if admin manages this shelter
     function canManageShelter(shelterId) {
       return isSuperAdmin() || 
+             isPlatformAdmin() ||
              (isAdmin() && getUserData().shelter_id == shelterId);
     }
     
@@ -73,30 +74,35 @@ service cloud.firestore {
     // TENANTS COLLECTION - Multi-tenant platform structure
     // =================================================================
     match /tenants/{tenantId} {
-      // Read: Super admin can read all tenants, admins can read their own tenant
+      // Read: Super admin and platform admin can read all tenants, admins can read their own tenant
       allow read: if isSuperAdmin() || 
+                     isPlatformAdmin() ||
                      (isAdmin() && getUserData().tenant_id == tenantId);
       
-      // Write: Super admin can write all tenants, admins can write their own tenant
+      // Write: Super admin and platform admin can write all tenants, admins can write their own tenant
       allow write: if isSuperAdmin() || 
+                      isPlatformAdmin() ||
                       (isAdmin() && getUserData().tenant_id == tenantId);
       
-      // Create: Super admin can create tenants
-      allow create: if isSuperAdmin();
+      // Create: Super admin and platform admin can create tenants
+      allow create: if isSuperAdmin() || isPlatformAdmin();
     }
     
     // Tenant sub-collections (platform data, shelters, etc.)
     match /tenants/{tenantId}/{document=**} {
-      // Read: Super admin can read all tenant data, admins can read their own tenant data
+      // Read: Super admin and platform admin can read all tenant data, admins can read their own tenant data
       allow read: if isSuperAdmin() || 
+                     isPlatformAdmin() ||
                      (isAdmin() && getUserData().tenant_id == tenantId);
       
-      // Write: Super admin can write all tenant data, admins can write their own tenant data
+      // Write: Super admin and platform admin can write all tenant data, admins can write their own tenant data
       allow write: if isSuperAdmin() || 
+                      isPlatformAdmin() ||
                       (isAdmin() && getUserData().tenant_id == tenantId);
       
-      // Create: Super admin can create tenant data, admins can create data in their own tenant
+      // Create: Super admin and platform admin can create tenant data, admins can create data in their own tenant
       allow create: if isSuperAdmin() || 
+                       isPlatformAdmin() ||
                        (isAdmin() && getUserData().tenant_id == tenantId);
     }
     
@@ -104,11 +110,11 @@ service cloud.firestore {
     // SHELTERS COLLECTION - Shelter information and management
     // =================================================================
     match /shelters/{shelterId} {
-      // Read: Super admin can read all, admins can read their own shelter, participants/donors can read basic info
+      // Read: Super admin and platform admin can read all, admins can read their own shelter, participants/donors can read basic info
       allow read: if isAuthenticated();
       
-      // Write: Super admin can write all, admins can write their own shelter
-      allow write: if canManageShelter(shelterId);
+      // Write: Super admin and platform admin can write all, admins can write their own shelter
+      allow write: if isSuperAdmin() || isPlatformAdmin() || canManageShelter(shelterId);
     }
     
     // =================================================================

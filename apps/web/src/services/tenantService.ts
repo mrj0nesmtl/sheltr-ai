@@ -107,27 +107,23 @@ export class TenantService {
    */
   async getAllShelterTenants(): Promise<ShelterTenant[]> {
     try {
-      console.log('🏠 [SESSION 13] Fetching all shelter tenants with FIXED database structure...');
-      
-      // FIXED: Based on migration docs, shelters are in tenants/Vc48fjy0cajJrstbLQRr/platform/shelters/data/
-      const MIGRATED_TENANT_ID = 'Vc48fjy0cajJrstbLQRr';
-      
-      console.log(`🔍 Looking for migrated shelters in tenant: ${MIGRATED_TENANT_ID}`);
+      console.log('🏠 [SESSION 13] Fetching all shelter tenants from ACTUAL database structure...');
       
       const shelters: ShelterTenant[] = [];
       
+      // METHOD 1: Try the actual shelters collection first
       try {
-        // Check the migrated shelter structure from the migration docs
-        const migratedSheltersRef = collection(db, CONFIG.tenantsCollectionPath, MIGRATED_TENANT_ID, 'platform', 'shelters', 'data');
-        const sheltersSnapshot = await getDocs(migratedSheltersRef);
+        console.log('🔍 Looking for shelters in shelters collection...');
+        const sheltersRef = collection(db, 'shelters');
+        const sheltersSnapshot = await getDocs(sheltersRef);
         
-        console.log(`🔍 Found ${sheltersSnapshot.size} migrated shelter documents`);
+        console.log(`🔍 Found ${sheltersSnapshot.size} shelter documents in shelters collection`);
         
         sheltersSnapshot.forEach((shelterDoc) => {
           const shelterId = shelterDoc.id;
           const shelterData = shelterDoc.data();
           
-          console.log(`🏠 Processing migrated shelter: ${shelterId} - ${shelterData.name}`);
+          console.log(`🏠 Processing shelter: ${shelterId} - ${shelterData.name}`);
           
           const shelter: ShelterTenant = {
             id: shelterId,
@@ -157,10 +153,58 @@ export class TenantService {
         });
         
       } catch (error) {
-        console.error('❌ Error fetching migrated shelters:', error);
+        console.error('❌ Error fetching shelters from shelters collection:', error);
       }
       
-      console.log(`✅ Found ${shelters.length} shelter tenants from migrated structure`);
+      // METHOD 2: If no shelters found, try the legacy tenant structure
+      if (shelters.length === 0) {
+        try {
+          console.log('🔍 No shelters found, trying legacy tenant structure...');
+          const MIGRATED_TENANT_ID = 'Vc48fjy0cajJrstbLQRr';
+          const migratedSheltersRef = collection(db, CONFIG.tenantsCollectionPath, MIGRATED_TENANT_ID, 'platform', 'shelters', 'data');
+          const sheltersSnapshot = await getDocs(migratedSheltersRef);
+          
+          console.log(`🔍 Found ${sheltersSnapshot.size} migrated shelter documents`);
+          
+          sheltersSnapshot.forEach((shelterDoc) => {
+            const shelterId = shelterDoc.id;
+            const shelterData = shelterDoc.data();
+            
+            console.log(`🏠 Processing migrated shelter: ${shelterId} - ${shelterData.name}`);
+            
+            const shelter: ShelterTenant = {
+              id: shelterId,
+              name: shelterData.name || 'Unknown Shelter',
+              address: shelterData.address || shelterData.location || '',
+              type: shelterData.type || 'Emergency Shelter',
+              capacity: shelterData.capacity || 0,
+              currentOccupancy: shelterData.currentOccupancy || 0,
+              status: shelterData.status || 'active',
+              contact: shelterData.contact || { name: '', email: '', phone: '' },
+              coordinates: shelterData.coordinates || { lat: 45.5017, lng: -73.5673 }, // Default Montreal
+              features_enabled: {
+                participant_management: true,
+                donation_processing: true,
+                qr_code_generation: true,
+                analytics_dashboard: true,
+                staff_management: true,
+                resource_tracking: true,
+                smartfund_integration: true
+              },
+              subscription: 'free',
+              createdAt: shelterData.createdAt || Timestamp.now(),
+              updatedAt: Timestamp.now()
+            };
+            
+            shelters.push(shelter);
+          });
+          
+        } catch (error) {
+          console.error('❌ Error fetching migrated shelters:', error);
+        }
+      }
+      
+      console.log(`✅ Found ${shelters.length} shelter tenants total`);
       return shelters.sort((a, b) => a.name.localeCompare(b.name));
       
     } catch (error) {

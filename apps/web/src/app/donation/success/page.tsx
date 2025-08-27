@@ -3,6 +3,7 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { CheckCircle, Heart, Home, Share2, Mail, ArrowRight, Sparkles, User } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -10,6 +11,7 @@ import Link from 'next/link';
 import confetti from 'canvas-confetti';
 
 function SuccessPageContent() {
+  const { user } = useAuth();
   const searchParams = useSearchParams();
   const [showAnimation, setShowAnimation] = useState(false);
   
@@ -311,16 +313,24 @@ function SuccessPageContent() {
                         
                         const donationData = {
                           participant_id: 'michael-rodriguez',
+                          participant_name: 'Michael Rodriguez',
                           shelter_id: 'YDJCJnuLGMC9mWOWDSOa', // Old Brewery Mission tenant ID
+                          shelter_name: 'Old Brewery Mission',
                           recipient_id: 'YDJCJnuLGMC9mWOWDSOa', // Ensure both fields
                           amount: { total: 100, currency: 'USD' },
-                          donor_info: { name: 'Demo User', email: 'demo.user@example.com' },
+                          donor_id: user?.uid || null, // **FIX: Include user ID for tracking**
+                          donor_info: { 
+                            name: user?.displayName || user?.email || 'Demo User', 
+                            email: user?.email || 'demo.user@example.com' 
+                          },
                           status: 'completed',
+                          type: 'one-time',
+                          purpose: 'Test donation from success page',
                           payment_data: { adyen_reference: `TEST-${Date.now()}`, status: 'completed' },
                           created_at: serverTimestamp(),
                           updated_at: serverTimestamp(),
                           demo: true,
-                          source: 'scan-give-success-page'
+                          source: user?.uid ? 'scan-give-success-page-logged-in' : 'scan-give-success-page-anonymous'
                         };
                         
                         console.log('📝 Creating donation with data:', donationData);
@@ -332,7 +342,10 @@ function SuccessPageContent() {
                         await addDoc(collection(db, `tenants/YDJCJnuLGMC9mWOWDSOa/donations`), donationData);
                         console.log('✅ Added to tenant collection!');
                         
-                        alert('✅ Test donation added to Old Brewery Mission! Check shelter metrics.');
+                        const donorMessage = user?.uid ? 
+                          `✅ Test donation added and tracked to ${user.email || 'your account'}! Check your donor dashboard.` :
+                          '✅ Test donation added to Old Brewery Mission! Log in to track your donations.';
+                        alert(donorMessage);
                       } catch (error) {
                         console.error('❌ Error creating test donation:', error);
                         alert(`❌ Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -340,7 +353,7 @@ function SuccessPageContent() {
                     }}
                     className="w-full mt-4 px-4 py-2 border border-green-500 text-green-600 bg-white hover:bg-green-50 rounded-md text-sm font-medium transition-colors"
                   >
-                    🧪 Add Test Donation to Metrics
+                    🧪 {user?.uid ? `Add Tracked Donation (${user.email})` : 'Add Test Donation to Metrics'}
                   </button>
                 </div>
               </CardContent>

@@ -2,8 +2,13 @@ import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
 /**
- * Utility to create test donations for Old Brewery Mission
- * SESSION 13: Testing the scan-give donation connection with user tracking
+ * Utility to create donations for Old Brewery Mission
+ * 
+ * DONATION TRACKING LOGIC:
+ * - If donorId provided: Tracked donation to user account
+ * - If no donorId: Anonymous donation (donor_id: 'anonymous')
+ * 
+ * SESSION 13: Scan-give donation connection with user tracking + anonymous support
  */
 export async function createTestDonationForOBM(
   amount: number = 50, 
@@ -23,10 +28,10 @@ export async function createTestDonationForOBM(
         total: amount,
         currency: 'USD'
       },
-      donor_id: donorId || null, // Track user ID if provided
+      donor_id: donorId || 'anonymous', // Track user ID if provided, otherwise anonymous
       donor_info: {
-        name: donorName,
-        email: donorEmail || `${donorName.toLowerCase().replace(/\s+/g, '.')}@example.com`
+        name: donorId ? donorName : 'Anonymous Donor',
+        email: donorId ? (donorEmail || `${donorName.toLowerCase().replace(/\s+/g, '.')}@example.com`) : 'anonymous@sheltr.ai'
       },
       status: 'completed',
       payment_data: {
@@ -38,7 +43,9 @@ export async function createTestDonationForOBM(
       created_at: serverTimestamp(),
       updated_at: serverTimestamp(),
       demo: true,
-      source: donorId ? 'scan-give-logged-in' : 'scan-give-test'
+      source: donorId ? 'scan-give-logged-in' : 'scan-give-anonymous',
+      anonymous: !donorId, // Mark as anonymous if no donor ID
+      public: true // All scan-give donations are public
     };
     
     const docRef = await addDoc(collection(db, 'demo_donations'), donationData);

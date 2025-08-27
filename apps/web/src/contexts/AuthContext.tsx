@@ -16,7 +16,7 @@ import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { auth, db } from '../lib/firebase';
 
 // Types for our RBAC system
-export type UserRole = 'super_admin' | 'admin' | 'participant' | 'donor';
+export type UserRole = 'super_admin' | 'platform_admin' | 'admin' | 'participant' | 'donor';
 
 export interface CustomClaims {
   role?: UserRole;
@@ -60,6 +60,7 @@ interface AuthContextType {
   hasPermission: (permission: string) => boolean;
   hasAnyRole: (roles: UserRole[]) => boolean;
   isSuperAdmin: () => boolean;
+  isPlatformAdmin: () => boolean;
   isAdmin: () => boolean;
   isParticipant: () => boolean;
   isDonor: () => boolean;
@@ -459,7 +460,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const isSuperAdmin = (): boolean => user?.role === 'super_admin';
-  const isAdmin = (): boolean => user?.role === 'admin' || isSuperAdmin();
+  const isPlatformAdmin = (): boolean => user?.role === 'platform_admin';
+  const isAdmin = (): boolean => user?.role === 'admin' || isPlatformAdmin() || isSuperAdmin();
   const isParticipant = (): boolean => user?.role === 'participant';
   const isDonor = (): boolean => user?.role === 'donor';
 
@@ -515,6 +517,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     hasPermission,
     hasAnyRole,
     isSuperAdmin,
+    isPlatformAdmin,
     isAdmin,
     isParticipant,
     isDonor,

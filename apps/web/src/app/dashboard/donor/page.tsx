@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { getDonorMetrics, DonorMetrics } from '@/services/platformMetrics';
+import { getDonorMetrics, getDonationHistory, DonorMetrics, DonationRecord } from '@/services/platformMetrics';
 import { 
   Heart, 
   DollarSign, 
@@ -28,6 +28,7 @@ import {
 export default function DonorDashboard() {
   const { user, hasRole } = useAuth();
   const [donorMetrics, setDonorMetrics] = useState<DonorMetrics | null>(null);
+  const [recentDonations, setRecentDonations] = useState<DonationRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -42,11 +43,17 @@ export default function DonorDashboard() {
 
       try {
         console.log('💰 Loading donor data for:', user.uid);
-        const metrics = await getDonorMetrics(user.uid);
+        
+        // Load both metrics and donation history
+        const [metrics, donations] = await Promise.all([
+          getDonorMetrics(user.uid),
+          getDonationHistory(user.uid)
+        ]);
         
         if (metrics) {
           setDonorMetrics(metrics);
-          console.log('✅ Donor data loaded:', metrics);
+          setRecentDonations(donations.slice(0, 3)); // Show latest 3 donations
+          console.log('✅ Donor data loaded:', { metrics, donationCount: donations.length });
         } else {
           setError('Failed to load donor data');
         }
@@ -63,16 +70,18 @@ export default function DonorDashboard() {
     }
   }, [user, hasRole]);
 
-  // Mock recent donations data (will be replaced with real data in future)
-  const recentDonations = [
+  // Show fallback message if no donations
+  const displayDonations = recentDonations.length > 0 ? recentDonations : [
     {
-      id: 1,
-      date: "2024-01-10",
+      id: 'placeholder',
+      date: new Date().toISOString().split('T')[0],
       amount: 0,
       shelter: "No donations yet",
-      type: "one-time",
-      status: "pending",
-      impact: "Start your giving journey today"
+      participant: "",
+      type: "one-time" as const,
+      status: "pending" as const,
+      impact: "Start your giving journey today",
+      receipt_available: false
     }
   ];
 
@@ -279,7 +288,7 @@ export default function DonorDashboard() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {recentDonations.map((donation) => (
+              {displayDonations.map((donation) => (
                 <div key={donation.id} className="flex items-center justify-between p-3 border rounded-lg">
                   <div className="flex-1 space-y-1">
                     <div className="flex items-center space-x-2">
@@ -287,9 +296,15 @@ export default function DonorDashboard() {
                       <Badge variant={donation.type === 'recurring' ? 'default' : 'outline'}>
                         {donation.type}
                       </Badge>
+                      {donation.status === 'completed' && (
+                        <Badge variant="default" className="bg-green-100 text-green-800">
+                          ✓ Completed
+                        </Badge>
+                      )}
                     </div>
                     <p className="text-xs text-muted-foreground">
                       {donation.shelter} • {new Date(donation.date).toLocaleDateString()}
+                      {donation.participant && ` • Supporting ${donation.participant}`}
                     </p>
                     <p className="text-xs text-green-600">
                       {donation.impact}

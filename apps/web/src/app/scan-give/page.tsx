@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { Home, QrCode, Heart, Shield, Smartphone, ArrowRight, Check, LogIn, Menu, X, Camera, Share2, BarChart3 } from 'lucide-react';
+import { Home, QrCode, Heart, Shield, Smartphone, ArrowRight, Check, LogIn, Menu, X, Camera, Share2, BarChart3, User } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -14,6 +15,7 @@ import { db } from '@/lib/firebase';
 import { collection, addDoc, serverTimestamp, query, where, getDocs } from 'firebase/firestore';
 
 export default function ScanGivePage() {
+  const { user, hasRole } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showDemoQR, setShowDemoQR] = useState(false);
   const [demoParticipant, setDemoParticipant] = useState<any>(null);
@@ -395,6 +397,137 @@ export default function ScanGivePage() {
           </Card>
         </div>
       </section>
+
+      {/* Donor Login Section */}
+      {!user ? (
+        <section className="py-16 bg-gradient-to-br from-purple-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 border-t">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div className="mb-8">
+              <Badge variant="secondary" className="mb-4 bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20">
+                Connect Your Account
+              </Badge>
+              <h2 className="text-3xl font-bold mb-4">Track Your Impact</h2>
+              <p className="text-xl text-muted-foreground">
+                Log in to connect your donations to your SHELTR account and see your impact metrics in real-time.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6 mb-8">
+              <Card className="text-left">
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <BarChart3 className="h-5 w-5 mr-2 text-purple-600" />
+                    Donation Dashboard
+                  </CardTitle>
+                  <CardDescription>
+                    View all your donations, impact metrics, and tax documents in one place
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-2 text-sm text-muted-foreground">
+                    <li className="flex items-center">
+                      <Check className="h-4 w-4 mr-2 text-green-600" />
+                      Track total donations and impact
+                    </li>
+                    <li className="flex items-center">
+                      <Check className="h-4 w-4 mr-2 text-green-600" />
+                      Download tax receipts
+                    </li>
+                    <li className="flex items-center">
+                      <Check className="h-4 w-4 mr-2 text-green-600" />
+                      See participant progress
+                    </li>
+                  </ul>
+                </CardContent>
+              </Card>
+
+              <Card className="text-left">
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <Heart className="h-5 w-5 mr-2 text-purple-600" />
+                    SHELTR Rewards
+                  </CardTitle>
+                  <CardDescription>
+                    Earn SHELTR tokens and build your blockchain giving portfolio
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-2 text-sm text-muted-foreground">
+                    <li className="flex items-center">
+                      <Check className="h-4 w-4 mr-2 text-green-600" />
+                      Earn 1 token per $10 donated
+                    </li>
+                    <li className="flex items-center">
+                      <Check className="h-4 w-4 mr-2 text-green-600" />
+                      Portfolio tracking
+                    </li>
+                    <li className="flex items-center">
+                      <Check className="h-4 w-4 mr-2 text-green-600" />
+                      Future utility features
+                    </li>
+                  </ul>
+                </CardContent>
+              </Card>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link href="/login">
+                <Button size="lg" className="bg-purple-600 hover:bg-purple-700">
+                  <LogIn className="h-4 w-4 mr-2" />
+                  Sign In to Track Donations
+                </Button>
+              </Link>
+              <Link href="/register">
+                <Button size="lg" variant="outline">
+                  <User className="h-4 w-4 mr-2" />
+                  Create Account
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </section>
+      ) : (
+        <section className="py-16 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-gray-900 dark:to-gray-800 border-t">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div className="mb-8">
+              <Badge variant="secondary" className="mb-4 bg-green-500/10 text-green-600 dark:text-green-400 border-green-500/20">
+                ✓ Account Connected
+              </Badge>
+              <h2 className="text-3xl font-bold mb-4">Welcome back, {user.displayName || user.email}!</h2>
+              <p className="text-xl text-muted-foreground">
+                Your donations will be automatically tracked in your dashboard. Ready to make a difference?
+              </p>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              {hasRole('donor') ? (
+                <Link href="/dashboard/donor">
+                  <Button size="lg" className="bg-green-600 hover:bg-green-700">
+                    <BarChart3 className="h-4 w-4 mr-2" />
+                    View My Dashboard
+                  </Button>
+                </Link>
+              ) : (
+                <Link href="/dashboard">
+                  <Button size="lg" className="bg-green-600 hover:bg-green-700">
+                    <BarChart3 className="h-4 w-4 mr-2" />
+                    View Dashboard
+                  </Button>
+                </Link>
+              )}
+              <Button 
+                size="lg" 
+                variant="outline"
+                onClick={handleTryDemo}
+                disabled={loading}
+              >
+                <QrCode className="h-4 w-4 mr-2" />
+                {loading ? 'Generating...' : 'Try Demo Now'}
+              </Button>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Call to Action - Mobile App Coming Soon */}
       <section className="py-20 bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">

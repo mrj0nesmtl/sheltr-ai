@@ -24,6 +24,7 @@ import {
   Edit,
   Ban,
   Crown,
+  Star,
   Activity,
   MapPin,
   Shield,
@@ -34,6 +35,7 @@ import { useState, useEffect } from 'react';
 import {
   getUserStats,
   getAdminUsers,
+  getPlatformAdmins,
   getParticipantUsers,
   getDonorUsers,
   getOrphanedUsers,
@@ -54,6 +56,7 @@ export default function UserManagement() {
   // Real data state
   const [userStats, setUserStats] = useState<UserStats | null>(null);
   const [adminUsers, setAdminUsers] = useState<AdminUser[]>([]);
+  const [platformAdmins, setPlatformAdmins] = useState<AdminUser[]>([]);
   const [participantUsers, setParticipantUsers] = useState<ParticipantUser[]>([]);
   const [donorUsers, setDonorUsers] = useState<DonorUser[]>([]);
   const [orphanedUsers, setOrphanedUsers] = useState<OrphanedUser[]>([]);
@@ -387,9 +390,10 @@ export default function UserManagement() {
     try {
       console.log('👥 Loading user management data...');
       
-      const [statsData, adminsData, participantsData, donorsData, orphanedData] = await Promise.all([
+      const [statsData, adminsData, platformAdminsData, participantsData, donorsData, orphanedData] = await Promise.all([
         getUserStats(),
         getAdminUsers(),
+        getPlatformAdmins(),
         getParticipantUsers(),
         getDonorUsers(),
         getOrphanedUsers()
@@ -397,6 +401,7 @@ export default function UserManagement() {
 
       setUserStats(statsData);
       setAdminUsers(adminsData);
+      setPlatformAdmins(platformAdminsData);
       setParticipantUsers(participantsData);
       setDonorUsers(donorsData);
       setOrphanedUsers(orphanedData);
@@ -619,10 +624,14 @@ export default function UserManagement() {
       <Tabs defaultValue="super-admins" className="space-y-6">
         {/* Desktop Tabs */}
         <div className="hidden sm:block">
-          <TabsList className="grid w-full grid-cols-6">
+          <TabsList className="grid w-full grid-cols-7">
             <TabsTrigger value="super-admins" className="flex items-center">
               <Crown className="mr-2 h-4 w-4" />
               Super Admins
+            </TabsTrigger>
+            <TabsTrigger value="platform-admins" className="flex items-center">
+              <Star className="mr-2 h-4 w-4" />
+              Platform Admins
             </TabsTrigger>
             <TabsTrigger value="admins" className="flex items-center">
               <UserCog className="mr-2 h-4 w-4" />
@@ -654,13 +663,20 @@ export default function UserManagement() {
 
         {/* Mobile Stacked Tabs */}
         <div className="sm:hidden">
-          <TabsList className="grid grid-cols-6 gap-1 h-14 bg-muted p-1 rounded-md w-full">
+          <TabsList className="grid grid-cols-7 gap-1 h-14 bg-muted p-1 rounded-md w-full">
             <TabsTrigger 
               value="super-admins" 
               className="flex flex-col items-center justify-center h-full px-1 py-1 w-full"
               title="Super Admins"
             >
               <Crown className="h-5 w-5" />
+            </TabsTrigger>
+            <TabsTrigger 
+              value="platform-admins" 
+              className="flex flex-col items-center justify-center h-full px-1 py-1 w-full"
+              title="Platform Admins"
+            >
+              <Star className="h-5 w-5" />
             </TabsTrigger>
             <TabsTrigger 
               value="admins" 
@@ -877,6 +893,69 @@ export default function UserManagement() {
               </div>
             </CardContent>
           </Card>
+        </TabsContent>
+
+        {/* Platform Admins Tab */}
+        <TabsContent value="platform-admins" className="space-y-4">
+          <div className="flex justify-between items-center">
+            <div>
+              <h3 className="text-lg font-medium flex items-center">
+                <Star className="mr-2 h-5 w-5 text-orange-600" />
+                Platform Administrators
+              </h3>
+              <p className="text-sm text-muted-foreground">Founding partners with platform-wide access</p>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-1">
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                <span className="text-sm text-green-600 font-medium">LIVE DATA</span>
+              </div>
+            </div>
+          </div>
+
+          {platformAdmins.length === 0 ? (
+            <Card className="border-2 border-orange-200 dark:border-orange-800">
+              <CardContent className="p-8 text-center">
+                <Star className="mx-auto h-12 w-12 text-orange-400 mb-4" />
+                <h3 className="text-lg font-medium mb-2">No Platform Administrators</h3>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Platform administrators haven't been created yet.
+                </p>
+              </CardContent>
+            </Card>
+          ) : (
+            <Card className="border-2 border-orange-200 dark:border-orange-800">
+              <CardContent className="p-0">
+                <div className="space-y-4 p-4">
+                  {platformAdmins.map((admin) => (
+                    <div key={admin.uid} className="flex items-center justify-between p-4 bg-gradient-to-r from-orange-50 to-yellow-50 dark:from-orange-900/20 dark:to-yellow-900/20 rounded-lg border border-orange-200 dark:border-orange-800">
+                      <div className="flex items-center space-x-4">
+                        <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-full flex items-center justify-center shadow-lg">
+                          <Star className="h-6 w-6 text-white" />
+                        </div>
+                        <div>
+                          <div className="font-bold text-orange-700 dark:text-orange-300">
+                            {admin.firstName} {admin.lastName}
+                          </div>
+                          <div className="text-sm text-orange-600 dark:text-orange-400">
+                            {admin.email}
+                          </div>
+                          <div className="text-xs text-muted-foreground">
+                            Platform Administrator • {admin.adminProfile?.title || 'Founding Partner'}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Badge className="bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-100">
+                          {admin.status || 'Active'}
+                        </Badge>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          )}
         </TabsContent>
 
         {/* Admin Users Tab */}

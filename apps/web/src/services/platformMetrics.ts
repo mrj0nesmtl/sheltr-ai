@@ -72,6 +72,7 @@ export interface PlatformMetrics {
   totalUsers: number;
   activeParticipants: number;
   activeDonors: number;
+  platformAdmins: number;
   totalDonations: number;
   platformUptime: number;
   issuesOpen: number;
@@ -138,6 +139,16 @@ export const getPlatformMetricsFromTenants = async (): Promise<PlatformMetrics> 
     const activeDonors = donorsSnapshot.size;
     console.log(`💝 Found ${activeDonors} active donors`);
     
+    // Get platform administrators count
+    const platformAdminsQuery = query(
+      collection(db, 'users'),
+      where('role', '==', 'platform_admin'),
+      where('status', '!=', 'inactive')
+    );
+    const platformAdminsSnapshot = await getDocs(platformAdminsQuery);
+    const platformAdmins = platformAdminsSnapshot.size;
+    console.log(`⭐ Found ${platformAdmins} platform administrators`);
+    
     // Aggregate donations across all tenants
     let totalDonations = 0;
     
@@ -166,6 +177,7 @@ export const getPlatformMetricsFromTenants = async (): Promise<PlatformMetrics> 
       totalUsers,
       activeParticipants: totalParticipants,
       activeDonors,
+      platformAdmins,
       totalDonations,
       platformUptime: 99.9, // Keep as operational metric
       issuesOpen: 0, // Keep as operational metric
@@ -277,6 +289,16 @@ export const getPlatformMetrics = async (): Promise<PlatformMetrics> => {
     const activeDonors = donorsSnapshot.size;
     console.log(`💝 Found ${activeDonors} active donors`);
     
+    // Get platform administrators count
+    const platformAdminsQuery = query(
+      collection(db, 'users'),
+      where('role', '==', 'platform_admin'),
+      where('status', '!=', 'inactive')
+    );
+    const platformAdminsSnapshot = await getDocs(platformAdminsQuery);
+    const platformAdmins = platformAdminsSnapshot.size;
+    console.log(`⭐ Found ${platformAdmins} platform administrators`);
+    
     // Get real donations total from both demo_donations and new donations collection
     const demoDonationsSnapshot = await getDocs(collection(db, 'demo_donations'));
     const donationsSnapshot = await getDocs(collection(db, 'donations'));
@@ -302,6 +324,7 @@ export const getPlatformMetrics = async (): Promise<PlatformMetrics> => {
       totalUsers,
       activeParticipants,
       activeDonors,
+      platformAdmins,
       totalDonations,
       platformUptime: 99.9, // Keep as operational metric
       issuesOpen: 0, // Keep as operational metric
@@ -1868,6 +1891,57 @@ export const getParticipantUsers = async (): Promise<ParticipantUser[]> => {
     });
   } catch (error) {
     console.error('❌ Error fetching participant users:', error);
+    return [];
+  }
+};
+
+/**
+ * Get platform administrators from users collection
+ */
+export const getPlatformAdmins = async (): Promise<AdminUser[]> => {
+  try {
+    console.log('👑 Fetching platform administrators...');
+    
+    // Query users with platform_admin role
+    const platformAdminsQuery = query(
+      collection(db, 'users'),
+      where('role', '==', 'platform_admin')
+    );
+    
+    const querySnapshot = await getDocs(platformAdminsQuery);
+    const platformAdmins: AdminUser[] = [];
+    
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      const platformAdmin: AdminUser = {
+        uid: doc.id,
+        email: data.email || '',
+        firstName: data.firstName || '',
+        lastName: data.lastName || '',
+        role: data.role || 'platform_admin',
+        status: data.status || 'active',
+        emailVerified: data.emailVerified || false,
+        profileComplete: data.profileComplete || false,
+        shelter_id: data.shelter_id || '',
+        tenant_id: data.tenant_id || 'platform',
+        adminProfile: {
+          title: data.adminProfile?.title || 'Founding Partner',
+          department: data.adminProfile?.department || 'Platform Administration',
+          permissions: data.adminProfile?.permissions || [],
+          accessLevel: data.adminProfile?.accessLevel || 'platform'
+        },
+        created_at: data.createdAt || data.created_at,
+        updated_at: data.updatedAt || data.updated_at
+      };
+      
+      platformAdmins.push(platformAdmin);
+    });
+    
+    console.log(`✅ Found ${platformAdmins.length} platform administrators`);
+    return platformAdmins;
+    
+  } catch (error) {
+    console.error('❌ Error fetching platform administrators:', error);
     return [];
   }
 };

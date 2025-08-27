@@ -166,6 +166,78 @@ const getNavigationItems = (userRole: string) => {
     ];
   }
 
+  // Platform Admin Navigation (same as Super Admin but cannot access System Settings)
+  if (userRole === 'platform_admin') {
+    return [
+      {
+        title: 'Overview',
+        href: '/dashboard',
+        icon: Home,
+        description: 'Platform overview and metrics'
+      },
+      {
+        title: 'Notifications',
+        href: '/dashboard/notifications',
+        icon: Bell,
+        description: 'Manage notifications and alerts'
+      },
+      {
+        title: 'Platform Management',
+        href: '/dashboard/platform',
+        icon: Settings,
+        description: 'System configuration and settings'
+      },
+      {
+        title: 'Shelter Network',
+        href: '/dashboard/shelters',
+        icon: Building2,
+        description: 'Shelter directory and onboarding'
+      },
+      {
+        title: 'User Management',
+        href: '/dashboard/users',
+        icon: Users,
+        description: 'Manage user accounts and roles (except Super Admins)'
+      },
+      {
+        title: 'Knowledge Base',
+        href: '/dashboard/knowledge',
+        icon: Brain,
+        description: 'Manage knowledge documents and embeddings'
+      },
+      {
+        title: 'Chatbot Control',
+        href: '/dashboard/chatbots',
+        icon: MessageSquare,
+        description: 'AI chatbot control panel and conversations'
+      },
+      {
+        title: 'Financial Oversight',
+        href: '/dashboard/financial',
+        icon: DollarSign,
+        description: 'Transaction monitoring and analytics'
+      },
+      {
+        title: 'Analytics',
+        href: '/dashboard/analytics',
+        icon: BarChart3,
+        description: 'Platform-wide analytics and insights'
+      },
+      {
+        title: 'Blog Management',
+        href: '/dashboard/blog',
+        icon: FileText,
+        description: 'Create and manage blog posts'
+      },
+      {
+        title: 'Security & Compliance',
+        href: '/dashboard/security',
+        icon: Shield,
+        description: 'Security monitoring and compliance'
+      }
+    ];
+  }
+
   // Shelter Admin Navigation
   if (userRole === 'admin') {
     return [

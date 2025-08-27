@@ -45,6 +45,7 @@ export function MobileBottomNav({ className = '', sidebarOpen = false }: MobileB
         return [
           '/dashboard/participant',           // My Dashboard
           '/dashboard/participant/profile',   // Profile
+          '/dashboard/participant/goals',     // Goals & Progress
           '/dashboard/participant/services',  // Services
           '/dashboard/participant/wallet',    // Wallet
           '/dashboard/participant/support'    // Support

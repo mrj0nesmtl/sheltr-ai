@@ -28,7 +28,8 @@ import {
   Cog,
   FileText,
   Brain,
-  MessageSquare
+  MessageSquare,
+  Target
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -263,6 +264,12 @@ const getNavigationItems = (userRole: string) => {
         href: '/dashboard/participant/profile',
         icon: User,
         description: 'Manage your profile'
+      },
+      {
+        title: 'Goals & Progress',
+        href: '/dashboard/participant/goals',
+        icon: Target,
+        description: 'Track your goals and milestones'
       },
       {
         title: 'Services',

@@ -505,11 +505,35 @@ export default function ParticipantProfile() {
         </div>
       </div>
 
+      {/* Goals Moved Notice */}
+      <Card className="bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
+        <CardContent className="p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <Target className="w-6 h-6 text-blue-500" />
+              <div>
+                <h3 className="font-semibold text-blue-900 dark:text-blue-100">
+                  Goals & Progress moved to dedicated page
+                </h3>
+                <p className="text-sm text-blue-800 dark:text-blue-200">
+                  Find your goals and track your progress in the new dedicated Goals page with enhanced features.
+                </p>
+              </div>
+            </div>
+            <Link href="/dashboard/participant/goals">
+              <Button className="bg-blue-500 hover:bg-blue-600 text-white">
+                <Target className="w-4 h-4 mr-2" />
+                Go to Goals
+              </Button>
+            </Link>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Navigation Tabs */}
       <div className="flex space-x-1 bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
         {[
           { id: 'personal', label: 'Personal Info', icon: User },
-          { id: 'goals', label: 'Goals & Progress', icon: Target },
           { id: 'emergency', label: 'Emergency Contacts', icon: Phone },
           { id: 'preferences', label: 'Preferences', icon: Settings },
           { id: 'documents', label: 'Documents', icon: FileText },
@@ -694,126 +718,7 @@ export default function ParticipantProfile() {
         </div>
       )}
 
-      {/* Goals & Progress */}
-      {activeSection === 'goals' && (
-        <div className="space-y-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-2xl font-bold">Personal Goals</h2>
-              <p className="text-gray-600 dark:text-gray-400">
-                Track your progress towards independence
-              </p>
-            </div>
-            <Button onClick={addGoal} disabled={!isEditing}>
-              <Plus className="w-4 h-4 mr-2" />
-              Add Goal
-            </Button>
-          </div>
 
-          <div className="grid gap-4">
-            {profile.goals.map((goal) => (
-              <Card key={goal.id}>
-                <CardContent className="pt-6">
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center space-x-2 mb-2">
-                        <Badge variant="secondary">{goal.category}</Badge>
-                        <span className="text-sm text-gray-500">
-                          Target: {new Date(goal.targetDate).toLocaleDateString()}
-                        </span>
-                        {isEditing && (
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => removeGoal(goal.id)}
-                            className="text-red-500 hover:text-red-700"
-                          >
-                            <X className="w-4 h-4" />
-                          </Button>
-                        )}
-                      </div>
-                      {isEditing ? (
-                        <div className="space-y-3 mb-4">
-                          <Input
-                            placeholder="Goal title"
-                            value={goal.title}
-                            onChange={(e) => {
-                              const updatedGoals = profile.goals.map(g => 
-                                g.id === goal.id ? { ...g, title: e.target.value } : g
-                              );
-                              setProfile(prev => prev ? { ...prev, goals: updatedGoals } : null);
-                            }}
-                          />
-                          <Input
-                            placeholder="Goal description"
-                            value={goal.description}
-                            onChange={(e) => {
-                              const updatedGoals = profile.goals.map(g => 
-                                g.id === goal.id ? { ...g, description: e.target.value } : g
-                              );
-                              setProfile(prev => prev ? { ...prev, goals: updatedGoals } : null);
-                            }}
-                          />
-                          <div className="grid grid-cols-2 gap-3">
-                            <select 
-                              value={goal.category}
-                              onChange={(e) => {
-                                const updatedGoals = profile.goals.map(g => 
-                                  g.id === goal.id ? { ...g, category: e.target.value } : g
-                                );
-                                setProfile(prev => prev ? { ...prev, goals: updatedGoals } : null);
-                              }}
-                              className="px-3 py-2 border rounded-md"
-                            >
-                              <option value="Housing">Housing</option>
-                              <option value="Employment">Employment</option>
-                              <option value="Financial">Financial</option>
-                              <option value="Health">Health</option>
-                              <option value="Education">Education</option>
-                              <option value="Personal">Personal</option>
-                            </select>
-                            <Input
-                              type="date"
-                              value={goal.targetDate}
-                              onChange={(e) => {
-                                const updatedGoals = profile.goals.map(g => 
-                                  g.id === goal.id ? { ...g, targetDate: e.target.value } : g
-                                );
-                                setProfile(prev => prev ? { ...prev, goals: updatedGoals } : null);
-                              }}
-                            />
-                          </div>
-                        </div>
-                      ) : (
-                        <>
-                          <h3 className="font-semibold text-lg">{goal.title}</h3>
-                          <p className="text-gray-600 dark:text-gray-400 mb-4">
-                            {goal.description}
-                          </p>
-                        </>
-                      )}
-                      
-                      {/* Progress Bar */}
-                      <div className="space-y-2">
-                        <div className="flex justify-between text-sm">
-                          <span>Progress</span>
-                          <span>{goal.progress}%</span>
-                        </div>
-                        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                          <div
-                            className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                            style={{ width: `${goal.progress}%` }}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      )}
 
       {/* Emergency Contacts */}
       {activeSection === 'emergency' && (

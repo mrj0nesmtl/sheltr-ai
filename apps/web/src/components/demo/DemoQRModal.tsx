@@ -4,8 +4,10 @@ import { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { QrCode, User, MapPin, Target, Camera, ExternalLink, Heart, DollarSign } from 'lucide-react';
+import { QrCode, User, MapPin, Target, Camera, ExternalLink, Heart, DollarSign, LogIn, BarChart3 } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface DemoQRModalProps {
   open: boolean;
@@ -15,6 +17,7 @@ interface DemoQRModalProps {
 }
 
 export function DemoQRModal({ open, onOpenChange, participant, qrCodeUrl }: DemoQRModalProps) {
+  const { user, hasRole } = useAuth();
   const [scanningMode, setScanningMode] = useState(false);
 
   const handleSimulateScan = () => {
@@ -138,6 +141,59 @@ export function DemoQRModal({ open, onOpenChange, participant, qrCodeUrl }: Demo
               </p>
             </div>
           </div>
+
+          {/* Account Connection Section */}
+          {!user ? (
+            <div className="p-4 bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-950/30 dark:to-blue-950/30 rounded-lg border border-purple-200 dark:border-purple-800">
+              <div className="text-center space-y-3">
+                <Badge variant="secondary" className="bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20">
+                  💡 Track Your Impact
+                </Badge>
+                <h4 className="font-semibold text-purple-900 dark:text-purple-100">
+                  Connect Your Account to Track This Donation
+                </h4>
+                <p className="text-sm text-purple-700 dark:text-purple-300">
+                  Sign in to automatically track your donation in your dashboard and see your real-time impact metrics.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-2 justify-center">
+                  <Link href="/login">
+                    <Button size="sm" className="bg-purple-600 hover:bg-purple-700 text-white">
+                      <LogIn className="h-4 w-4 mr-2" />
+                      Sign In to Track
+                    </Button>
+                  </Link>
+                  <Link href="/register">
+                    <Button size="sm" variant="outline" className="border-purple-500 text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-950">
+                      <User className="h-4 w-4 mr-2" />
+                      Create Account
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="p-4 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-950/30 dark:to-emerald-950/30 rounded-lg border border-green-200 dark:border-green-800">
+              <div className="text-center space-y-3">
+                <Badge variant="secondary" className="bg-green-500/10 text-green-600 dark:text-green-400 border-green-500/20">
+                  ✅ Account Connected
+                </Badge>
+                <h4 className="font-semibold text-green-900 dark:text-green-100">
+                  Welcome back, {user.displayName || user.email}!
+                </h4>
+                <p className="text-sm text-green-700 dark:text-green-300">
+                  Your donation will be automatically tracked in your dashboard. Ready to make a difference?
+                </p>
+                {hasRole('donor') && (
+                  <Link href="/dashboard/donor">
+                    <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white">
+                      <BarChart3 className="h-4 w-4 mr-2" />
+                      View My Dashboard
+                    </Button>
+                  </Link>
+                )}
+              </div>
+            </div>
+          )}
 
           {/* Demo Stats */}
           <div className="grid grid-cols-3 gap-4 p-4 bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-950/30 dark:to-blue-950/30 rounded-lg">

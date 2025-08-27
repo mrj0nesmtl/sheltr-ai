@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Donations</title>
+</head>
+<body>
+    <h1>Debug Donations Script</h1>
+    <p>Copy and paste this into your browser console while on the SHELTR website:</p>
+    
+    <textarea style="width: 100%; height: 300px;" readonly>
+// Debug Jane's donations - Run this in browser console
+(async function debugDonations() {
+  try {
+    console.log('🔍 Debugging donations...');
+    
+    // Import Firebase functions
+    const { getFirestore, collection, query, where, getDocs, orderBy } = await import('https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js');
+    const { getAuth } = await import('https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js');
+    
+    // Get Firebase instances (assuming they're available globally)
+    const db = window.firebase?.firestore() || getFirestore();
+    const auth = window.firebase?.auth() || getAuth();
+    const currentUser = auth.currentUser;
+    
+    console.log('Current user:', currentUser?.uid, currentUser?.email);
+    
+    // Simple Firestore query using the global Firebase instance
+    const donationsRef = collection(db, 'demo_donations');
+    const allDonations = await getDocs(donationsRef);
+    
+    console.log('\n📊 ALL RECENT DONATIONS:');
+    let allDonationsList = [];
+    allDonations.forEach(doc => {
+      const data = doc.data();
+      allDonationsList.push({
+        id: doc.id,
+        amount: data.amount?.total || data.amount,
+        donor_name: data.donor_info?.name,
+        donor_id: data.donor_id,
+        created_at: data.created_at?.toDate?.() || 'unknown'
+      });
+    });
+    
+    // Sort by creation time
+    allDonationsList.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    
+    console.table(allDonationsList.slice(0, 10)); // Show last 10 donations
+    
+    // Calculate Michael's total
+    let totalForMichael = 0;
+    let donationCount = 0;
+    
+    allDonationsList.forEach(donation => {
+      totalForMichael += donation.amount || 0;
+      donationCount++;
+    });
+    
+    console.log(`\n💰 MICHAEL TOTAL: $${totalForMichael} from ${donationCount} donations`);
+    
+    // Check if current user has donations
+    if (currentUser?.uid) {
+      const userDonations = allDonationsList.filter(d => d.donor_id === currentUser.uid);
+      console.log(`\n👩 USER'S DONATIONS (${userDonations.length}):`, userDonations);
+    }
+    
+  } catch (error) {
+    console.error('❌ Debug error:', error);
+    console.log('💡 Try running this simpler version:');
+    console.log('window.location.href = "/api/debug-donations"');
+  }
+})();
+    </textarea>
+
+    <h2>Simpler Version - Just check the data:</h2>
+    <textarea style="width: 100%; height: 100px;" readonly>
+// Simple check - paste this in console
+fetch('/api/debug-donations').then(r => r.json()).then(console.log).catch(console.error);
+    </textarea>
+</body>
+</html>

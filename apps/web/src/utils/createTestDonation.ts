@@ -3,40 +3,73 @@ import { db } from '@/lib/firebase';
 
 /**
  * Utility to create test donations for Old Brewery Mission
- * SESSION 13: Testing the scan-give donation connection
+ * SESSION 13: Testing the scan-give donation connection with user tracking
  */
-export async function createTestDonationForOBM(amount: number = 50, donorName: string = 'Test Donor') {
+export async function createTestDonationForOBM(
+  amount: number = 50, 
+  donorName: string = 'Test Donor',
+  donorId?: string,
+  donorEmail?: string
+) {
   try {
-    console.log(`💰 Creating test donation for Old Brewery Mission: $${amount}`);
+    console.log(`💰 Creating test donation for Old Brewery Mission: $${amount} (${donorId ? 'User ID: ' + donorId : 'Anonymous'})`);
     
     const donationData = {
       participant_id: 'michael-rodriguez',
+      participant_name: 'Michael Rodriguez',
       shelter_id: 'YDJCJnuLGMC9mWOWDSOa', // Old Brewery Mission tenant ID
+      shelter_name: 'Old Brewery Mission',
       amount: {
         total: amount,
         currency: 'USD'
       },
+      donor_id: donorId || null, // Track user ID if provided
       donor_info: {
         name: donorName,
-        email: `${donorName.toLowerCase().replace(' ', '.')}@example.com`
+        email: donorEmail || `${donorName.toLowerCase().replace(/\s+/g, '.')}@example.com`
       },
       status: 'completed',
       payment_data: {
         adyen_reference: `TEST-${Date.now()}`,
         status: 'completed'
       },
+      type: 'one-time',
+      purpose: 'General support',
       created_at: serverTimestamp(),
       updated_at: serverTimestamp(),
       demo: true,
-      source: 'scan-give-test'
+      source: donorId ? 'scan-give-logged-in' : 'scan-give-test'
     };
     
     const docRef = await addDoc(collection(db, 'demo_donations'), donationData);
-    console.log(`✅ Test donation created with ID: ${docRef.id}`);
+    console.log(`✅ Test donation created with ID: ${docRef.id}`, donorId ? `for user ${donorId}` : '(anonymous)');
     
     return docRef.id;
   } catch (error) {
     console.error('❌ Error creating test donation:', error);
+    throw error;
+  }
+}
+
+/**
+ * Create a tracked donation for Jane Supporter (logged-in user)
+ */
+export async function createJaneDonation(amount: number = 100) {
+  try {
+    console.log(`👩 Creating tracked donation for Jane Supporter: $${amount}`);
+    
+    // Use Jane's Firebase Auth UID (you'll need to get this from the auth context)
+    // For now, using a placeholder - this should be the actual user.uid from auth
+    const janeUserId = 'jane-supporter-uid'; // This should come from Firebase Auth
+    
+    return await createTestDonationForOBM(
+      amount,
+      'Jane Supporter',
+      janeUserId,
+      'jane.supporter@example.com'
+    );
+  } catch (error) {
+    console.error('❌ Error creating Jane donation:', error);
     throw error;
   }
 }

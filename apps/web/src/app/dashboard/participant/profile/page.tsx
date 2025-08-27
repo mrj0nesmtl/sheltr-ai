@@ -131,7 +131,8 @@ const mockProfile = {
       allowPhotos: false,
       publicProfile: true,
       showRealName: true,
-      showDonationAmounts: false
+      showDonationAmounts: false,
+      shareGoals: true
     }
   }
 };
@@ -1183,6 +1184,36 @@ export default function ParticipantProfile() {
                         }}
                       >
                         {profile?.preferences?.privacy?.showDonationAmounts ? 
+                          <CheckCircle className="w-5 h-5 text-green-500" /> : 
+                          <AlertCircle className="w-5 h-5 text-gray-400" />
+                        }
+                      </Button>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <span className="font-medium">Share Goals & Progress</span>
+                        <p className="text-sm text-gray-600">Show your goals and progress on your public profile</p>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        disabled={!isEditing}
+                        onClick={() => {
+                          if (isEditing && profile) {
+                            setProfile(prev => prev ? {
+                              ...prev,
+                              preferences: {
+                                ...prev.preferences,
+                                privacy: {
+                                  ...prev.preferences.privacy,
+                                  shareGoals: !prev.preferences.privacy?.shareGoals
+                                }
+                              }
+                            } : null);
+                          }
+                        }}
+                      >
+                        {profile?.preferences?.privacy?.shareGoals ? 
                           <CheckCircle className="w-5 h-5 text-green-500" /> : 
                           <AlertCircle className="w-5 h-5 text-gray-400" />
                         }

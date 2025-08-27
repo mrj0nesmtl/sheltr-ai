@@ -341,6 +341,38 @@ service cloud.firestore {
       allow write: if isSuperAdmin();
     }
     
+        // =================================================================
+    // PARTICIPANT PROFILES COLLECTION - Profile data and privacy settings
+    // =================================================================
+    match /participant_profiles/{participantId} {
+      // Read: Profile owner, their shelter admin, super admin
+      allow read: if isAuthenticated() && (
+        participantId == request.auth.uid ||
+        isSuperAdmin() ||
+        isAdmin()
+      );
+
+      // Write: Profile owner, their shelter admin, super admin
+      allow write: if isAuthenticated() && (
+        participantId == request.auth.uid ||
+        isSuperAdmin() ||
+        isAdmin()
+      );
+
+      // Create: Participants can create their own profile, admins can create for their participants
+      allow create: if isAuthenticated() && (
+        participantId == request.auth.uid ||
+        isSuperAdmin() ||
+        isAdmin()
+      );
+
+      // Delete: Profile owner, super admin
+      allow delete: if isAuthenticated() && (
+        participantId == request.auth.uid ||
+        isSuperAdmin()
+      );
+    }
+
     // =================================================================
     // PARTICIPANT GOALS COLLECTION - Goal tracking and management
     // =================================================================
@@ -351,21 +383,21 @@ service cloud.firestore {
         isSuperAdmin() ||
         (isAdmin() && resource.data.assignedCaseWorker == request.auth.uid)
       );
-      
+
       // Write: Goal owner, their shelter admin, super admin
       allow write: if isAuthenticated() && (
         resource.data.participantId == request.auth.uid ||
         isSuperAdmin() ||
         (isAdmin() && resource.data.assignedCaseWorker == request.auth.uid)
       );
-      
+
       // Create: Participants can create their own goals, admins can create for their participants
       allow create: if isAuthenticated() && (
         request.resource.data.participantId == request.auth.uid ||
         isSuperAdmin() ||
         isAdmin()
       );
-      
+
       // Delete: Goal owner, super admin
       allow delete: if isAuthenticated() && (
         resource.data.participantId == request.auth.uid ||

@@ -158,7 +158,7 @@ class RealWalletService {
   }
 
   // Get real transaction history from donations
-  async getRealTransactionHistory(userId: string, limit: number = 50): Promise<RealTransaction[]> {
+  async getRealTransactionHistory(userId: string, limitCount: number = 50): Promise<RealTransaction[]> {
     try {
       const transactions: RealTransaction[] = [];
       
@@ -168,7 +168,7 @@ class RealWalletService {
         where('participant_id', '==', userId),
         where('status', '==', 'completed'),
         orderBy('created_at', 'desc'),
-        limit(limit)
+        limit(limitCount)
       );
       const donationsSnapshot = await getDocs(donationsQuery);
       

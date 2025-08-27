@@ -20,6 +20,7 @@ export function MobileBottomNav({ className = '', sidebarOpen = false }: MobileB
   const getDashboardRoutes = (role: string) => {
     switch (role) {
       case 'super_admin':
+      case 'platform_admin':
         return [
           '/dashboard',                    // Overview
           '/dashboard/notifications',      // Notifications

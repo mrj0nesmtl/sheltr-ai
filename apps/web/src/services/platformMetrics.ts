@@ -76,6 +76,8 @@ export interface PlatformMetrics {
   totalDonations: number;
   platformUptime: number;
   issuesOpen: number;
+  investorAccessAttempts?: number;
+  investorAccessLogins?: number;
   recentActivity: ActivityItem[];
 }
 
@@ -2349,5 +2351,38 @@ export const getAnalyticsData = async (shelterId: string): Promise<AnalyticsData
   } catch (error) {
     console.error('❌ Error fetching analytics data:', error);
     return null;
+  }
+};
+
+/**
+ * Get investor access metrics for platform dashboard
+ */
+export const getInvestorAccessMetrics = async (): Promise<{
+  totalAttempts: number;
+  successfulLogins: number;
+  teamLogins: number;
+  accessCodeLogins: number;
+}> => {
+  try {
+    console.log('📊 Fetching investor access metrics...');
+    
+    // Import here to avoid circular dependency
+    const { getInvestorAccessMetrics } = await import('./investorAccessService');
+    const metrics = await getInvestorAccessMetrics();
+    
+    return {
+      totalAttempts: metrics.totalAttempts,
+      successfulLogins: metrics.successfulLogins,
+      teamLogins: metrics.teamLogins,
+      accessCodeLogins: metrics.accessCodeLogins
+    };
+  } catch (error) {
+    console.error('❌ Error fetching investor access metrics:', error);
+    return {
+      totalAttempts: 0,
+      successfulLogins: 0,
+      teamLogins: 0,
+      accessCodeLogins: 0
+    };
   }
 };

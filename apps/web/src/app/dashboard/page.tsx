@@ -177,9 +177,25 @@ export default function DashboardPage() {
       
       // Fallback to multi-tenant platform metrics (SESSION 13)
       console.log('🏢 [SESSION 13] Using multi-tenant platform metrics...');
-      const metrics = await getPlatformMetricsFromTenants();
-      setPlatformMetrics(metrics);
-      console.log('✅ [SESSION 13] Multi-tenant platform metrics loaded:', metrics);
+      const [metrics, investorMetrics] = await Promise.all([
+        getPlatformMetricsFromTenants(),
+        import('@/services/investorAccessService').then(module => module.getInvestorAccessMetrics()).catch(() => ({
+          totalAttempts: 0,
+          successfulLogins: 0,
+          teamLogins: 0,
+          accessCodeLogins: 0
+        }))
+      ]);
+      
+      // Merge investor access metrics
+      const enhancedMetrics = {
+        ...metrics,
+        investorAccessAttempts: investorMetrics.totalAttempts,
+        investorAccessLogins: investorMetrics.successfulLogins
+      };
+      
+      setPlatformMetrics(enhancedMetrics);
+      console.log('✅ [SESSION 13] Multi-tenant platform metrics loaded with investor access:', enhancedMetrics);
     } catch (error) {
       console.error('❌ Failed to load platform metrics:', error);
       // Set fallback metrics with dashes/zeros
@@ -188,9 +204,12 @@ export default function DashboardPage() {
         totalUsers: 0,
         activeParticipants: 0,
         activeDonors: 0,
+        platformAdmins: 0,
         totalDonations: 0,
         platformUptime: 0,
         issuesOpen: 0,
+        investorAccessAttempts: 0,
+        investorAccessLogins: 0,
         recentActivity: [
           {
             action: 'Data loading error',
@@ -573,6 +592,21 @@ export default function DashboardPage() {
               </CardContent>
             </Card>
           </Link>
+
+          <Link href="/investor-access">
+            <Card className="cursor-pointer hover:shadow-md transition-shadow">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Investor Access</CardTitle>
+                <Shield className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{platformMetrics.investorAccessLogins || '-'}</div>
+                <p className="text-xs text-muted-foreground">
+                  {platformMetrics.investorAccessAttempts || 0} total attempts
+                </p>
+              </CardContent>
+            </Card>
+          </Link>
         </div>
 
         {/* Visitor Analytics Chart */}
@@ -887,6 +921,21 @@ export default function DashboardPage() {
               <CardContent>
                 <div className="text-2xl font-bold">{notificationCounts?.pendingShelterapplications || '-'}</div>
                 <p className="text-xs text-muted-foreground">Shelter admin requests</p>
+              </CardContent>
+            </Card>
+          </Link>
+
+          <Link href="/investor-access">
+            <Card className="cursor-pointer hover:shadow-md transition-shadow">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Investor Access</CardTitle>
+                <Shield className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{platformMetrics.investorAccessLogins || '-'}</div>
+                <p className="text-xs text-muted-foreground">
+                  {platformMetrics.investorAccessAttempts || 0} total attempts
+                </p>
               </CardContent>
             </Card>
           </Link>

@@ -58,16 +58,23 @@ export function VisitorAreaChart() {
 
   const loadUserData = async () => {
     try {
-      console.log('📊 Loading user analytics for area chart...')
+      const timestamp = new Date().toISOString();
+      console.log(`📊 [${timestamp}] VisitorAreaChart.loadUserData() called - Loading user analytics...`)
       
       const [userData, userStats] = await Promise.all([
         getUserAnalytics(),
         getUserAnalyticsStats()
       ])
       
+      console.log(`📊 [${timestamp}] Chart data loaded:`, {
+        dataPoints: userData.length,
+        finalDay: userData[userData.length - 1],
+        stats: userStats
+      });
+      
       setChartData(userData)
       setStats(userStats)
-      console.log('✅ User analytics loaded for chart')
+      console.log(`✅ [${timestamp}] User analytics loaded for chart`)
       
     } catch (error) {
       console.error('❌ Error loading user data for chart:', error)

@@ -259,7 +259,8 @@ export const getPlatformMetrics = async (): Promise<PlatformMetrics> => {
     const sheltersSnapshot = await getDocs(collection(db, 'shelters'));
     const activeShelters = sheltersSnapshot.docs.filter(doc => {
       const data = doc.data();
-      return data.status === 'active' || !data.status; // Include active or undefined status
+      // Include all shelters for now to match production
+      return true;
     });
     const totalOrganizations = activeShelters.length;
     console.log(`🏠 Found ${totalOrganizations} active organizations in database (out of ${sheltersSnapshot.size} total)`);

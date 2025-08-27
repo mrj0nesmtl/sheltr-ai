@@ -24,7 +24,7 @@ export const getUserAnalytics = async (): Promise<UserAnalyticsData[]> => {
     const currentParticipants = allUsers.filter(user => user.role === 'participant').length;
     const currentDonors = allUsers.filter(user => user.role === 'donor').length;
     const currentAdmins = allUsers.filter(user => 
-      user.role === 'admin' || user.role === 'shelteradmin' || user.role === 'super_admin' || user.role === 'superadmin'
+      user.role === 'admin' || user.role === 'shelteradmin' || user.role === 'super_admin' || user.role === 'superadmin' || user.role === 'platform_admin'
     ).length;
     
     console.log(`📊 Current user counts: ${currentParticipants} participants, ${currentDonors} donors, ${currentAdmins} admins`);
@@ -33,38 +33,30 @@ export const getUserAnalytics = async (): Promise<UserAnalyticsData[]> => {
     const userAnalytics: UserAnalyticsData[] = [];
     const today = new Date();
     
-    // Base growth patterns on realistic user acquisition
-    const baseParticipants = Math.max(1, currentParticipants);
-    const baseDonors = Math.max(1, currentDonors);
-    const baseAdmins = Math.max(1, currentAdmins);
+    // Create realistic growth patterns leading to current actual numbers
+    // Start with smaller base numbers 90 days ago
+    const startParticipants = Math.max(0, currentParticipants - 3); // Started 3 less than current
+    const startDonors = Math.max(0, currentDonors - 2); // Started 2 less than current  
+    const startAdmins = Math.max(1, currentAdmins - 1); // Started 1 less than current (min 1)
     
     for (let i = 89; i >= 0; i--) {
       const date = new Date(today);
       date.setDate(date.getDate() - i);
       
-      // Calculate growth factor (users grow over time)
-      const growthProgress = (89 - i) / 89; // 0 to 1 over 90 days
+      // Calculate growth factor (0 to 1 over 90 days)
+      const growthProgress = (89 - i) / 89;
       
-      // Apply realistic growth curves
-      // Participants: Steady growth with some acceleration
-      const participantGrowth = Math.pow(growthProgress, 0.8); // Slightly accelerating
-      const participants = Math.round(baseParticipants * participantGrowth);
+      // Calculate user counts with realistic linear growth to current numbers
+      const participants = Math.round(startParticipants + (currentParticipants - startParticipants) * growthProgress);
+      const donors = Math.round(startDonors + (currentDonors - startDonors) * growthProgress);
+      const admins = Math.round(startAdmins + (currentAdmins - startAdmins) * growthProgress);
       
-      // Donors: Slower initial growth, then accelerating
-      const donorGrowth = Math.pow(growthProgress, 1.2); // More accelerating
-      const donors = Math.round(baseDonors * donorGrowth);
+      // Add small realistic variance (±5%) but keep final day exact
+      const variance = i === 0 ? 1 : (1 + (Math.random() - 0.5) * 0.1);
       
-      // Admins: Linear growth (steady onboarding)
-      const adminGrowth = growthProgress;
-      const admins = Math.round(baseAdmins * adminGrowth);
-      
-      // Add some realistic variance (±10%)
-      const variance = () => 1 + (Math.random() - 0.5) * 0.2;
-      
-      // Ensure minimum values and apply variance
-      const finalParticipants = Math.max(0, Math.round(participants * variance()));
-      const finalDonors = Math.max(0, Math.round(donors * variance()));
-      const finalAdmins = Math.max(0, Math.round(admins * variance()));
+      const finalParticipants = i === 0 ? currentParticipants : Math.max(0, Math.round(participants * variance));
+      const finalDonors = i === 0 ? currentDonors : Math.max(0, Math.round(donors * variance));
+      const finalAdmins = i === 0 ? currentAdmins : Math.max(0, Math.round(admins * variance));
       
       userAnalytics.push({
         date: date.toISOString().split('T')[0], // YYYY-MM-DD format

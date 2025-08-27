@@ -7,6 +7,7 @@ import { useAuth } from '@/contexts/AuthContext';
 // Define role-based dashboard routes
 const ROLE_DASHBOARD_MAP = {
   'super_admin': '/dashboard',
+  'platform_admin': '/dashboard',
   'admin': '/dashboard/shelter-admin', 
   'participant': '/dashboard/participant',
   'donor': '/dashboard/donor'

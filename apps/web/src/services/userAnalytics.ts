@@ -14,11 +14,15 @@ export interface UserAnalyticsData {
  */
 export const getUserAnalytics = async (): Promise<UserAnalyticsData[]> => {
   try {
-    console.log('📊 Generating user analytics from real platform data...');
+    const timestamp = new Date().toISOString();
+    const callStack = new Error().stack?.split('\n').slice(1, 4).join(' | ') || 'unknown';
+    console.log(`📊 [${timestamp}] getUserAnalytics() called from: ${callStack}`);
     
     // Get actual user data to base analytics on
     const usersSnapshot = await getDocs(collection(db, 'users'));
     const allUsers = usersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    
+    console.log(`📊 [${timestamp}] Found ${allUsers.length} total users in database`);
     
     // Count current users by role
     const currentParticipants = allUsers.filter(user => user.role === 'participant').length;
@@ -27,7 +31,10 @@ export const getUserAnalytics = async (): Promise<UserAnalyticsData[]> => {
       user.role === 'admin' || user.role === 'shelteradmin' || user.role === 'super_admin' || user.role === 'superadmin' || user.role === 'platform_admin'
     ).length;
     
-    console.log(`📊 Current user counts: ${currentParticipants} participants, ${currentDonors} donors, ${currentAdmins} admins`);
+    console.log(`📊 [${timestamp}] CURRENT USER COUNTS:`);
+    console.log(`   Participants: ${currentParticipants}`);
+    console.log(`   Donors: ${currentDonors}`);
+    console.log(`   Admins: ${currentAdmins}`);
     
     // Generate 90 days of historical data leading to current state
     const userAnalytics: UserAnalyticsData[] = [];
@@ -68,8 +75,9 @@ export const getUserAnalytics = async (): Promise<UserAnalyticsData[]> => {
       });
     }
     
-    console.log(`✅ Generated ${userAnalytics.length} days of user analytics`);
-    console.log('📊 Sample recent data:', userAnalytics.slice(-7)); // Last 7 days
+    console.log(`✅ [${timestamp}] Generated ${userAnalytics.length} days of user analytics`);
+    console.log(`📊 [${timestamp}] Sample recent data:`, userAnalytics.slice(-7)); // Last 7 days
+    console.log(`📊 [${timestamp}] FINAL DAY DATA:`, userAnalytics[userAnalytics.length - 1]);
     
     return userAnalytics;
     

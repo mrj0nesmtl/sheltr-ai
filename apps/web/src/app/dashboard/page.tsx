@@ -611,7 +611,7 @@ export default function DashboardPage() {
 
         {/* Visitor Analytics Chart */}
         <div className="mb-8">
-          <VisitorAreaChart />
+          <VisitorAreaChart key={`chart-${effectiveRole || user?.role}-${user?.uid}`} />
         </div>
 
         {/* Activity and Notifications Grid */}
@@ -943,7 +943,7 @@ export default function DashboardPage() {
 
         {/* Visitor Analytics Chart */}
         <div className="mb-8">
-          <VisitorAreaChart />
+          <VisitorAreaChart key={`chart-${effectiveRole || user?.role}-${user?.uid}`} />
         </div>
 
         {/* Activity and Notifications Grid */}

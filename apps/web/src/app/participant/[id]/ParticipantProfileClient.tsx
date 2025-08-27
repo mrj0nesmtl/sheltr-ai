@@ -184,14 +184,8 @@ export function ParticipantProfileClient({ participantId }: ParticipantProfileCl
     }
   };
 
-  // Function to refresh participant data
-  const refreshParticipantData = async () => {
-    setLastRefresh(new Date());
-    await loadParticipant();
-  };
-
-  useEffect(() => {
-    const loadParticipant = async () => {
+  // Main function to load participant data
+  const loadParticipant = async () => {
       console.log(`🔄 [DEBUG] Loading participant data for ID: ${participantId}`);
       try {
         const isProduction = process.env.NODE_ENV === 'production';
@@ -397,6 +391,14 @@ export function ParticipantProfileClient({ participantId }: ParticipantProfileCl
       }
     };
 
+  // Function to refresh participant data
+  const refreshParticipantData = async () => {
+    setLastRefresh(new Date());
+    setLoading(true);
+    await loadParticipant();
+  };
+
+  useEffect(() => {
     if (participantId) {
       loadParticipant();
     }

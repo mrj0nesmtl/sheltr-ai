@@ -129,7 +129,9 @@ const mockProfile = {
     privacy: {
       shareProgress: true,
       allowPhotos: false,
-      publicProfile: false
+      publicProfile: true,
+      showRealName: true,
+      showDonationAmounts: false
     }
   }
 };
@@ -438,12 +440,16 @@ export default function ParticipantProfile() {
   const addGoal = () => {
     if (!profile) return;
     
+    // Generate a better default target date (3 months from now)
+    const defaultDate = new Date();
+    defaultDate.setMonth(defaultDate.getMonth() + 3);
+    
     const newGoal = {
-      id: profileService.generateGoalId(),
-      title: '',
-      description: '',
+      id: `goal_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`,
+      title: 'New Goal',
+      description: 'Describe your goal here...',
       category: 'Personal',
-      targetDate: '',
+      targetDate: defaultDate.toISOString().split('T')[0], // YYYY-MM-DD format
       progress: 0,
       status: 'active'
     };
@@ -726,10 +732,66 @@ export default function ParticipantProfile() {
                           </Button>
                         )}
                       </div>
-                      <h3 className="font-semibold text-lg">{goal.title}</h3>
-                      <p className="text-gray-600 dark:text-gray-400 mb-4">
-                        {goal.description}
-                      </p>
+                      {isEditing ? (
+                        <div className="space-y-3 mb-4">
+                          <Input
+                            placeholder="Goal title"
+                            value={goal.title}
+                            onChange={(e) => {
+                              const updatedGoals = profile.goals.map(g => 
+                                g.id === goal.id ? { ...g, title: e.target.value } : g
+                              );
+                              setProfile(prev => prev ? { ...prev, goals: updatedGoals } : null);
+                            }}
+                          />
+                          <Input
+                            placeholder="Goal description"
+                            value={goal.description}
+                            onChange={(e) => {
+                              const updatedGoals = profile.goals.map(g => 
+                                g.id === goal.id ? { ...g, description: e.target.value } : g
+                              );
+                              setProfile(prev => prev ? { ...prev, goals: updatedGoals } : null);
+                            }}
+                          />
+                          <div className="grid grid-cols-2 gap-3">
+                            <select 
+                              value={goal.category}
+                              onChange={(e) => {
+                                const updatedGoals = profile.goals.map(g => 
+                                  g.id === goal.id ? { ...g, category: e.target.value } : g
+                                );
+                                setProfile(prev => prev ? { ...prev, goals: updatedGoals } : null);
+                              }}
+                              className="px-3 py-2 border rounded-md"
+                            >
+                              <option value="Housing">Housing</option>
+                              <option value="Employment">Employment</option>
+                              <option value="Financial">Financial</option>
+                              <option value="Health">Health</option>
+                              <option value="Education">Education</option>
+                              <option value="Personal">Personal</option>
+                            </select>
+                            <Input
+                              type="date"
+                              value={goal.targetDate}
+                              onChange={(e) => {
+                                const updatedGoals = profile.goals.map(g => 
+                                  g.id === goal.id ? { ...g, targetDate: e.target.value } : g
+                                );
+                                setProfile(prev => prev ? { ...prev, goals: updatedGoals } : null);
+                              }}
+                            />
+                          </div>
+                        </div>
+                      ) : (
+                        <>
+                          <h3 className="font-semibold text-lg">{goal.title}</h3>
+                          <p className="text-gray-600 dark:text-gray-400 mb-4">
+                            {goal.description}
+                          </p>
+                        </>
+                      )}
                       
                       {/* Progress Bar */}
                       <div className="space-y-2">
@@ -1140,8 +1202,25 @@ export default function ParticipantProfile() {
                         variant="ghost"
                         size="sm"
                         disabled={!isEditing}
+                        onClick={() => {
+                          if (isEditing && profile) {
+                            setProfile(prev => prev ? {
+                              ...prev,
+                              preferences: {
+                                ...prev.preferences,
+                                privacy: {
+                                  ...prev.preferences.privacy,
+                                  publicProfile: !prev.preferences.privacy?.publicProfile
+                                }
+                              }
+                            } : null);
+                          }
+                        }}
                       >
-                        <CheckCircle className="w-5 h-5 text-green-500" />
+                        {profile?.preferences?.privacy?.publicProfile ? 
+                          <CheckCircle className="w-5 h-5 text-green-500" /> : 
+                          <AlertCircle className="w-5 h-5 text-gray-400" />
+                        }
                       </Button>
                     </div>
                     <div className="flex items-center justify-between">
@@ -1153,8 +1232,25 @@ export default function ParticipantProfile() {
                         variant="ghost"
                         size="sm"
                         disabled={!isEditing}
+                        onClick={() => {
+                          if (isEditing && profile) {
+                            setProfile(prev => prev ? {
+                              ...prev,
+                              preferences: {
+                                ...prev.preferences,
+                                privacy: {
+                                  ...prev.preferences.privacy,
+                                  showRealName: !prev.preferences.privacy?.showRealName
+                                }
+                              }
+                            } : null);
+                          }
+                        }}
                       >
-                        <CheckCircle className="w-5 h-5 text-green-500" />
+                        {profile?.preferences?.privacy?.showRealName ? 
+                          <CheckCircle className="w-5 h-5 text-green-500" /> : 
+                          <AlertCircle className="w-5 h-5 text-gray-400" />
+                        }
                       </Button>
                     </div>
                     <div className="flex items-center justify-between">
@@ -1166,8 +1262,25 @@ export default function ParticipantProfile() {
                         variant="ghost"
                         size="sm"
                         disabled={!isEditing}
+                        onClick={() => {
+                          if (isEditing && profile) {
+                            setProfile(prev => prev ? {
+                              ...prev,
+                              preferences: {
+                                ...prev.preferences,
+                                privacy: {
+                                  ...prev.preferences.privacy,
+                                  showDonationAmounts: !prev.preferences.privacy?.showDonationAmounts
+                                }
+                              }
+                            } : null);
+                          }
+                        }}
                       >
-                        <AlertCircle className="w-5 h-5 text-gray-400" />
+                        {profile?.preferences?.privacy?.showDonationAmounts ? 
+                          <CheckCircle className="w-5 h-5 text-green-500" /> : 
+                          <AlertCircle className="w-5 h-5 text-gray-400" />
+                        }
                       </Button>
                     </div>
                   </div>

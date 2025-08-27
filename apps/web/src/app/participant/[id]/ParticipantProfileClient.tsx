@@ -7,6 +7,7 @@ import { QrCode, Heart, Share2, MapPin, Target, Calendar, User, ExternalLink, Co
 import { getParticipantProfile, type ParticipantProfile } from '@/services/platformMetrics';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import { publicProfileService, type PublicGoalData, type PublicGoalStats } from '@/services/publicProfileService';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -56,6 +57,41 @@ export function ParticipantProfileClient({ participantId }: ParticipantProfileCl
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
+  const [publicGoals, setPublicGoals] = useState<PublicGoalData[]>([]);
+  const [goalStats, setGoalStats] = useState<PublicGoalStats | null>(null);
+  const [goalsVisible, setGoalsVisible] = useState(true);
+
+  // Function to load participant goals and privacy settings
+  const loadParticipantGoals = async (participantId: string) => {
+    try {
+      console.log(`🎯 Loading goals for participant: ${participantId}`);
+      
+      // Get public goals and statistics
+      const goalsData = await publicProfileService.getPublicGoals(participantId);
+      
+      if (goalsData) {
+        console.log(`✅ Loaded ${goalsData.goals.length} public goals`);
+        setPublicGoals(goalsData.goals);
+        setGoalStats(goalsData.stats);
+        setGoalsVisible(true);
+      } else {
+        console.log(`🔒 Goals sharing disabled or no goals found for ${participantId}`);
+        // Use demo goals as fallback
+        const demoData = publicProfileService.getDemoGoals(participantId);
+        setPublicGoals(demoData.goals);
+        setGoalStats(demoData.stats);
+        setGoalsVisible(true); // Show demo goals for now
+      }
+      
+    } catch (error) {
+      console.error('Error loading participant goals:', error);
+      // Fallback to demo goals on error
+      const demoData = publicProfileService.getDemoGoals(participantId);
+      setPublicGoals(demoData.goals);
+      setGoalStats(demoData.stats);
+      setGoalsVisible(true);
+    }
+  };
 
   // Function to fetch real donation data for a participant
   const fetchParticipantDonations = async (participantId: string): Promise<{ total_received: number; donation_count: number }> => {
@@ -261,6 +297,9 @@ export function ParticipantProfileClient({ participantId }: ParticipantProfileCl
           if (realParticipant) {
             setParticipant(realParticipant);
             console.log('✅ Real participant profile loaded:', realParticipant);
+            
+            // Load participant goals
+            await loadParticipantGoals(realParticipant.id);
             return;
           }
         } catch (error) {
@@ -347,6 +386,9 @@ export function ParticipantProfileClient({ participantId }: ParticipantProfileCl
           setParticipant(mockParticipant);
           console.log('✅ [DEBUG] Demo participant loaded in catch block:', mockParticipant);
           console.log(`💰 [DEBUG] Participant total_received: $${mockParticipant.total_received}`);
+          
+          // Load participant goals
+          await loadParticipantGoals(participantId);
         } else {
           setError('Failed to load participant profile');
         }
@@ -557,27 +599,77 @@ export function ParticipantProfileClient({ participantId }: ParticipantProfileCl
                 </CardContent>
               </Card>
 
-              {/* Current Goals */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Target className="h-5 w-5 text-blue-500" />
-                    Current Goals
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {participant.goals.map((goal) => (
-                    <div key={goal.id} className="space-y-2">
-                      <div className="flex justify-between items-center">
-                        <h4 className="font-medium">{goal.title}</h4>
-                        <span className="text-sm text-muted-foreground">{goal.progress}%</span>
+              {/* Goals & Progress */}
+              {goalsVisible && publicGoals.length > 0 && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Target className="h-5 w-5 text-blue-500" />
+                      Goals & Progress
+                    </CardTitle>
+                    <CardDescription>
+                      {participant.firstName}'s journey towards independence and stability
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    
+                    {/* Goal Statistics */}
+                    {goalStats && (
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                        <div className="text-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                          <div className="text-2xl font-bold text-blue-600">{goalStats.totalGoals}</div>
+                          <div className="text-sm text-blue-600">Total Goals</div>
+                        </div>
+                        <div className="text-center p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                          <div className="text-2xl font-bold text-green-600">{goalStats.activeGoals}</div>
+                          <div className="text-sm text-green-600">Active</div>
+                        </div>
+                        <div className="text-center p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+                          <div className="text-2xl font-bold text-purple-600">{goalStats.completedGoals}</div>
+                          <div className="text-sm text-purple-600">Completed</div>
+                        </div>
+                        <div className="text-center p-3 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
+                          <div className="text-2xl font-bold text-orange-600">{goalStats.averageProgress}%</div>
+                          <div className="text-sm text-orange-600">Avg Progress</div>
+                        </div>
                       </div>
-                      <Progress value={goal.progress} className="h-2" />
-                      <p className="text-sm text-muted-foreground">{goal.description}</p>
+                    )}
+
+                    {/* Individual Goals */}
+                    <div className="space-y-4">
+                      {publicGoals.map((goal) => (
+                        <div key={goal.id} className="space-y-3 p-4 border rounded-lg bg-gray-50 dark:bg-gray-800/50">
+                          <div className="flex justify-between items-start">
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 mb-1">
+                                <h4 className="font-semibold">{goal.title}</h4>
+                                <Badge variant="secondary" className="text-xs">
+                                  {goal.category}
+                                </Badge>
+                              </div>
+                              <p className="text-sm text-muted-foreground mb-2">{goal.description}</p>
+                              <div className="text-xs text-muted-foreground">
+                                Target Date: {new Date(goal.targetDate).toLocaleDateString()}
+                              </div>
+                            </div>
+                            <div className="text-right ml-4">
+                              <div className="text-lg font-bold text-blue-600">{goal.progress}%</div>
+                              <div className="text-xs text-muted-foreground">Complete</div>
+                            </div>
+                          </div>
+                          <Progress value={goal.progress} className="h-3" />
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </CardContent>
-              </Card>
+
+                    <div className="text-center pt-4 border-t">
+                      <p className="text-sm text-muted-foreground">
+                        🎯 Your support helps {participant.firstName} achieve these meaningful goals
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
 
               {/* Skills & Interests */}
               <div className="grid md:grid-cols-2 gap-6">

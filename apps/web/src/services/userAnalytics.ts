@@ -8,19 +8,40 @@ export interface UserAnalyticsData {
   admins: number;
 }
 
+// Cache for preventing multiple simultaneous calls
+let analyticsCache: { data: UserAnalyticsData[]; timestamp: number } | null = null;
+const CACHE_DURATION = 5000; // 5 seconds
+
 /**
  * Generate realistic user analytics data based on actual platform usage
  * This creates user growth trends using real user registration patterns
  */
-export const getUserAnalytics = async (): Promise<UserAnalyticsData[]> => {
+export const getUserAnalytics = async (forceFresh = false): Promise<UserAnalyticsData[]> => {
   try {
     const timestamp = new Date().toISOString();
     const callStack = new Error().stack?.split('\n').slice(1, 4).join(' | ') || 'unknown';
-    console.log(`📊 [${timestamp}] getUserAnalytics() called from: ${callStack}`);
+    console.log(`📊 [${timestamp}] getUserAnalytics(forceFresh=${forceFresh}) called from: ${callStack}`);
+    
+    // Check cache first (unless forced fresh)
+    if (!forceFresh && analyticsCache && (Date.now() - analyticsCache.timestamp < CACHE_DURATION)) {
+      console.log(`📊 [${timestamp}] Returning cached data (age: ${Date.now() - analyticsCache.timestamp}ms)`);
+      return analyticsCache.data;
+    }
+    
+    console.log(`📊 [${timestamp}] Generating fresh data from database...`);
     
     // Get actual user data to base analytics on
-    const usersSnapshot = await getDocs(collection(db, 'users'));
-    const allUsers = usersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    let usersSnapshot, allUsers;
+    try {
+      console.log(`📊 [${timestamp}] Fetching users from Firestore...`);
+      usersSnapshot = await getDocs(collection(db, 'users'));
+      console.log(`📊 [${timestamp}] Firestore query successful, processing ${usersSnapshot.docs.length} documents...`);
+      allUsers = usersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      console.log(`📊 [${timestamp}] Successfully mapped ${allUsers.length} user documents`);
+    } catch (firestoreError) {
+      console.error('❌ FIRESTORE ERROR in getUserAnalytics:', firestoreError);
+      throw firestoreError; // Re-throw to trigger fallback
+    }
     
     console.log(`📊 [${timestamp}] Found ${allUsers.length} total users in database`);
     
@@ -79,12 +100,23 @@ export const getUserAnalytics = async (): Promise<UserAnalyticsData[]> => {
     console.log(`📊 [${timestamp}] Sample recent data:`, userAnalytics.slice(-7)); // Last 7 days
     console.log(`📊 [${timestamp}] FINAL DAY DATA:`, userAnalytics[userAnalytics.length - 1]);
     
+    // Update cache
+    analyticsCache = {
+      data: userAnalytics,
+      timestamp: Date.now()
+    };
+    
     return userAnalytics;
     
   } catch (error) {
-    console.error('❌ Error generating user analytics:', error);
+    console.error('❌ CRITICAL ERROR in getUserAnalytics:', error);
+    console.error('❌ Error details:', {
+      name: error.name,
+      message: error.message,
+      stack: error.stack
+    });
     
-    // Return fallback data with realistic patterns
+    // Return fallback data with realistic patterns (BUT LOG THIS CLEARLY)
     const fallbackData: UserAnalyticsData[] = [];
     const today = new Date();
     
@@ -105,6 +137,9 @@ export const getUserAnalytics = async (): Promise<UserAnalyticsData[]> => {
         admins
       });
     }
+    
+    console.warn('🔄 RETURNING FALLBACK DATA - Platform Admin chart will show incorrect numbers!');
+    console.warn('🔄 Fallback final day:', fallbackData[fallbackData.length - 1]);
     
     return fallbackData;
   }

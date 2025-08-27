@@ -53,16 +53,16 @@ export function VisitorAreaChart() {
   // Add refresh functionality
   const refreshData = () => {
     setLoading(true)
-    loadUserData()
+    loadUserData(true) // Force fresh data
   }
 
-  const loadUserData = async () => {
+  const loadUserData = async (forceFresh = false) => {
     try {
       const timestamp = new Date().toISOString();
-      console.log(`📊 [${timestamp}] VisitorAreaChart.loadUserData() called - Loading user analytics...`)
+      console.log(`📊 [${timestamp}] VisitorAreaChart.loadUserData(forceFresh=${forceFresh}) called - Loading user analytics...`)
       
       const [userData, userStats] = await Promise.all([
-        getUserAnalytics(),
+        getUserAnalytics(forceFresh),
         getUserAnalyticsStats()
       ])
       

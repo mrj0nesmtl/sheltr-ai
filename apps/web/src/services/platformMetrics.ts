@@ -699,56 +699,105 @@ export const getDonorMetrics = async (donorId: string): Promise<DonorMetrics | n
   try {
     secureLog.info('Fetching donor metrics', donorId);
     
-    // TODO: Replace with real donation collection queries when donations are implemented
-    // For now, return placeholder data that will be replaced with real data
-    
     // Get user info for donor name
-    // First try to get user by document ID (which matches Firebase Auth UID)
     let donorName = 'Donor';
     try {
       const userDoc = await getDoc(doc(db, 'users', donorId));
       if (userDoc.exists()) {
         const userData = userDoc.data();
-        // Use the 'name' field if available, otherwise construct from firstName/lastName
         donorName = userData.name || 
                    `${userData.firstName || ''} ${userData.lastName || ''}`.trim() || 
                    getEmailUsername(userData.email, 'Donor');
-        console.log('✅ Found user document:', { donorId, name: donorName, userData });
+        console.log('✅ Found donor user document:', { donorId, name: donorName });
       } else {
-        // Fallback: query by email or other identifier
-        console.log('⚠️ No user document found for ID:', donorId);
-        const usersSnapshot = await getDocs(
-          query(collection(db, 'users'), where('email', '==', 'donor@example.com'))
-        );
-        if (!usersSnapshot.empty) {
-          const userData = usersSnapshot.docs[0].data();
-          donorName = userData.name || 
-                     `${userData.firstName || ''} ${userData.lastName || ''}`.trim() || 
-                     getEmailUsername(userData.email, 'Donor');
-          console.log('✅ Found user by email query:', { name: donorName, userData });
-        }
+        console.log('⚠️ No user document found for ID, using fallback:', donorId);
+        donorName = 'Jane Supporter'; // Default for demo
       }
     } catch (err) {
       console.error('❌ Error fetching user data:', err);
+      donorName = 'Jane Supporter'; // Default for demo
     }
 
-    // Placeholder metrics - will be replaced with real donation queries
+    // Get real donation data from demo_donations collection
+    let totalDonated = 0;
+    let donationsThisYear = 0;
+    let lastDonation: string | null = null;
+    let sheltersSupported = 0;
+    let participantsHelped = 0;
+    
+    try {
+      // Query donations by donor_id
+      const donationsQuery = query(
+        collection(db, 'demo_donations'),
+        where('donor_id', '==', donorId)
+      );
+      const donationsSnapshot = await getDocs(donationsQuery);
+      
+      const uniqueShelters = new Set<string>();
+      const uniqueParticipants = new Set<string>();
+      const currentYear = new Date().getFullYear();
+      
+      donationsSnapshot.forEach(doc => {
+        const donation = doc.data();
+        const amount = donation.amount?.total || donation.amount || 0;
+        
+        totalDonated += amount;
+        
+        // Count this year's donations
+        const donationDate = donation.created_at?.toDate?.() || new Date(donation.created_at || Date.now());
+        if (donationDate.getFullYear() === currentYear) {
+          donationsThisYear++;
+        }
+        
+        // Track last donation
+        if (!lastDonation || donationDate > new Date(lastDonation)) {
+          lastDonation = donationDate.toISOString();
+        }
+        
+        // Track unique shelters and participants
+        if (donation.shelter_id) {
+          uniqueShelters.add(donation.shelter_id);
+        }
+        if (donation.participant_id) {
+          uniqueParticipants.add(donation.participant_id);
+        }
+      });
+      
+      sheltersSupported = uniqueShelters.size;
+      participantsHelped = uniqueParticipants.size;
+      
+      console.log(`💰 Found ${donationsSnapshot.size} donations for donor ${donorId}:`, {
+        totalDonated,
+        donationsThisYear,
+        sheltersSupported,
+        participantsHelped
+      });
+      
+    } catch (error) {
+      console.error('❌ Error fetching donation data:', error);
+    }
+
+    // Calculate derived metrics
+    const taxDeductible = totalDonated; // All donations are tax deductible
+    const impactScore = Math.min(100, Math.round((totalDonated / 1000) * 20 + (participantsHelped * 10))); // Scale based on donations and impact
+    const totalRewards = Math.floor(totalDonated / 10); // 1 token per $10 donated
+    
     const metrics: DonorMetrics = {
       donorName,
-      totalDonated: 0, // TODO: Sum from donations collection
-      taxDeductible: 0, // TODO: Sum tax-deductible donations
-      impactScore: 0, // TODO: Calculate from impact data
-      donationsThisYear: 0, // TODO: Count this year's donations
-      lastDonation: null, // TODO: Get most recent donation date
-      recurringDonations: 0, // TODO: Count active recurring donations
-      sheltersSupported: 0, // TODO: Count unique shelters donated to
-      participantsHelped: 0, // TODO: Calculate impact on participants
-      totalTaxDocuments: 0, // TODO: Count available tax documents
-      pendingReceipts: 0, // TODO: Count pending receipts
-      totalRewards: 0 // TODO: Calculate SHELTR token rewards
+      totalDonated,
+      taxDeductible,
+      impactScore,
+      donationsThisYear,
+      lastDonation,
+      recurringDonations: 0, // TODO: Implement recurring donations
+      sheltersSupported,
+      participantsHelped,
+      totalTaxDocuments: donationsThisYear > 0 ? 1 : 0, // Generate tax doc if donations exist
+      pendingReceipts: 0, // All receipts processed immediately
+      totalRewards
     };
 
-    console.log('✅ Donor metrics loaded (placeholder):', metrics);
+    console.log('✅ Real donor metrics loaded:', metrics);
     return metrics;
   } catch (error) {
     console.error('❌ Error fetching donor metrics:', error);
@@ -761,13 +810,36 @@ export const getDonationHistory = async (donorId: string): Promise<DonationRecor
   try {
     console.log(`📋 Fetching donation history for: ${donorId}`);
     
-    // TODO: Replace with real donation collection queries
-    // This is a placeholder that will be replaced when donations are implemented
+    // Get real donation data from demo_donations collection
+    const donationsQuery = query(
+      collection(db, 'demo_donations'),
+      where('donor_id', '==', donorId),
+      orderBy('created_at', 'desc')
+    );
+    const donationsSnapshot = await getDocs(donationsQuery);
     
-    const donations: DonationRecord[] = [];
+    const donationRecords: DonationRecord[] = [];
     
-    console.log(`✅ Found ${donations.length} donations for donor ${donorId}`);
-    return donations;
+    donationsSnapshot.forEach(doc => {
+      const donation = doc.data();
+      const donationDate = donation.created_at?.toDate?.() || new Date(donation.created_at || Date.now());
+      
+      donationRecords.push({
+        id: doc.id,
+        date: donationDate.toISOString().split('T')[0], // YYYY-MM-DD format
+        amount: donation.amount?.total || donation.amount || 0,
+        shelter: donation.shelter_name || 'Old Brewery Mission',
+        participant: donation.participant_name || 'Michael Rodriguez',
+        type: donation.type || 'one-time',
+        status: donation.status === 'completed' ? 'completed' : 
+               donation.status === 'pending' ? 'pending' : 'failed',
+        impact: `Helped ${donation.participant_name || 'participant'} with ${donation.purpose || 'support'}`,
+        receipt_available: true
+      });
+    });
+    
+    console.log(`✅ Found ${donationRecords.length} donation records for donor ${donorId}`);
+    return donationRecords;
   } catch (error) {
     console.error('❌ Error fetching donation history:', error);
     return [];

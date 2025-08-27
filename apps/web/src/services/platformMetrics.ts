@@ -198,6 +198,7 @@ export const getPlatformMetricsFromTenants = async (): Promise<PlatformMetrics> 
       totalUsers: 0,
       activeParticipants: 0,
       activeDonors: 0,
+      platformAdmins: 0,
       totalDonations: 0,
       platformUptime: 0,
       issuesOpen: 0,
@@ -254,16 +255,19 @@ export const getPlatformMetrics = async (): Promise<PlatformMetrics> => {
   try {
     console.log('📊 Fetching real platform metrics from Session 12 collections...');
     
-    // Get all shelters count from the shelters collection (should be 16 total)
-    // User expects to see 10 organizations - let's get all shelters for now
+    // Get active shelters count from the shelters collection
     const sheltersSnapshot = await getDocs(collection(db, 'shelters'));
-    const totalOrganizations = sheltersSnapshot.size;
-    console.log(`🏠 Found ${totalOrganizations} total organizations in database`);
+    const activeShelters = sheltersSnapshot.docs.filter(doc => {
+      const data = doc.data();
+      return data.status === 'active' || !data.status; // Include active or undefined status
+    });
+    const totalOrganizations = activeShelters.length;
+    console.log(`🏠 Found ${totalOrganizations} active organizations in database (out of ${sheltersSnapshot.size} total)`);
     
     // Debug: Log actual shelter data to understand the count
-    sheltersSnapshot.docs.forEach(doc => {
+    activeShelters.forEach(doc => {
       const data = doc.data();
-      console.log(`   Shelter: ${data.name} - Status: ${data.status || 'no status'}`);
+      console.log(`   Active Shelter: ${data.name} - Status: ${data.status || 'active'}`);
     });
     
     // Get all users count
@@ -307,12 +311,30 @@ export const getPlatformMetrics = async (): Promise<PlatformMetrics> => {
     
     const demoTotal = demoDonationsSnapshot.docs.reduce((total, doc) => {
       const donationData = doc.data();
-      return total + (donationData?.amount?.total || 0);
+      // Handle different amount formats
+      let amount = 0;
+      if (donationData?.amount) {
+        if (typeof donationData.amount === 'object') {
+          amount = donationData.amount.total || donationData.amount.amount || 0;
+        } else {
+          amount = donationData.amount || 0;
+        }
+      }
+      return total + amount;
     }, 0);
     
     const realTotal = donationsSnapshot.docs.reduce((total, doc) => {
       const donationData = doc.data();
-      return total + (donationData?.amount || 0);
+      // Handle different amount formats
+      let amount = 0;
+      if (donationData?.amount) {
+        if (typeof donationData.amount === 'object') {
+          amount = donationData.amount.total || donationData.amount.amount || 0;
+        } else {
+          amount = donationData.amount || 0;
+        }
+      }
+      return total + amount;
     }, 0);
     
     const totalDonations = demoTotal + realTotal;
@@ -345,6 +367,7 @@ export const getPlatformMetrics = async (): Promise<PlatformMetrics> => {
       totalUsers: 0,
       activeParticipants: 0,
       activeDonors: 0,
+      platformAdmins: 0,
       totalDonations: 0,
       platformUptime: 0,
       issuesOpen: 0,

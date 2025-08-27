@@ -30,54 +30,104 @@ function SuccessPageContent() {
   };
 
   useEffect(() => {
-    // Trigger celebration animation
-    const timer = setTimeout(() => {
+    // Trigger celebration animation and create donation automatically
+    const timer = setTimeout(async () => {
       setShowAnimation(true);
       
-      // Confetti celebration
-      const count = 200;
-      const defaults = {
-        origin: { y: 0.7 }
-      };
-
-      function fire(particleRatio: number, opts: any) {
-        confetti({
-          ...defaults,
-          ...opts,
-          particleCount: Math.floor(count * particleRatio)
-        });
+      // Create donation automatically for demo donations
+      if (isDemo) {
+        try {
+          console.log('🎯 Automatically creating demo donation...');
+          const { addDoc, collection, serverTimestamp } = await import('firebase/firestore');
+          const { db } = await import('@/lib/firebase');
+          
+          const donationData = {
+            participant_id: 'michael-rodriguez',
+            participant_name: participantName,
+            shelter_id: 'YDJCJnuLGMC9mWOWDSOa', // Old Brewery Mission tenant ID
+            shelter_name: 'Old Brewery Mission',
+            amount: { 
+              total: parseFloat(amount), 
+              currency: 'USD' 
+            },
+            donor_id: user?.uid || 'anonymous', // Track user ID if logged in
+            donor_info: { 
+              name: user?.displayName || user?.email || 'Anonymous Donor', 
+              email: user?.email || 'anonymous@sheltr.ai' 
+            },
+            status: 'completed',
+            type: 'one-time',
+            purpose: 'Demo donation from scan-give',
+            payment_data: { 
+              adyen_reference: reference, 
+              status: 'completed' 
+            },
+            created_at: serverTimestamp(),
+            updated_at: serverTimestamp(),
+            demo: true,
+            source: user?.uid ? 'scan-give-logged-in' : 'scan-give-anonymous',
+            anonymous: !user?.uid,
+            public: true
+          };
+          
+          console.log('📝 Creating automatic demo donation:', donationData);
+          const docRef = await addDoc(collection(db, 'demo_donations'), donationData);
+          console.log('✅ Automatic demo donation created with ID:', docRef.id);
+          
+        } catch (error) {
+          console.error('❌ Error creating automatic demo donation:', error);
+        }
       }
+      
+      // Confetti celebration (with error handling for production)
+      try {
+        const count = 200;
+        const defaults = {
+          origin: { y: 0.7 }
+        };
 
-      fire(0.25, {
-        spread: 26,
-        startVelocity: 55,
-      });
+        function fire(particleRatio: number, opts: any) {
+          confetti({
+            ...defaults,
+            ...opts,
+            particleCount: Math.floor(count * particleRatio)
+          });
+        }
 
-      fire(0.2, {
-        spread: 60,
-      });
+        fire(0.25, {
+          spread: 26,
+          startVelocity: 55,
+        });
 
-      fire(0.35, {
-        spread: 100,
-        decay: 0.91,
-        scalar: 0.8
-      });
+        fire(0.2, {
+          spread: 60,
+        });
 
-      fire(0.1, {
-        spread: 120,
-        startVelocity: 25,
-        decay: 0.92,
-        scalar: 1.2
-      });
+        fire(0.35, {
+          spread: 100,
+          decay: 0.91,
+          scalar: 0.8
+        });
 
-      fire(0.1, {
-        spread: 120,
-        startVelocity: 45,
-      });
+        fire(0.1, {
+          spread: 120,
+          startVelocity: 25,
+          decay: 0.92,
+          scalar: 1.2
+        });
+
+        fire(0.1, {
+          spread: 120,
+          startVelocity: 45,
+        });
+      } catch (confettiError) {
+        console.warn('⚠️ Confetti failed to load:', confettiError);
+        // Fallback: just show the success animation
+      }
     }, 500);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [isDemo, amount, participantName, reference, user]);
 
   const handleShare = async () => {
     const shareData = {

@@ -342,6 +342,38 @@ service cloud.firestore {
     }
     
     // =================================================================
+    // PARTICIPANT GOALS COLLECTION - Goal tracking and management
+    // =================================================================
+    match /participant_goals/{goalId} {
+      // Read: Goal owner, their shelter admin, super admin
+      allow read: if isAuthenticated() && (
+        resource.data.participantId == request.auth.uid ||
+        isSuperAdmin() ||
+        (isAdmin() && resource.data.assignedCaseWorker == request.auth.uid)
+      );
+      
+      // Write: Goal owner, their shelter admin, super admin
+      allow write: if isAuthenticated() && (
+        resource.data.participantId == request.auth.uid ||
+        isSuperAdmin() ||
+        (isAdmin() && resource.data.assignedCaseWorker == request.auth.uid)
+      );
+      
+      // Create: Participants can create their own goals, admins can create for their participants
+      allow create: if isAuthenticated() && (
+        request.resource.data.participantId == request.auth.uid ||
+        isSuperAdmin() ||
+        isAdmin()
+      );
+      
+      // Delete: Goal owner, super admin
+      allow delete: if isAuthenticated() && (
+        resource.data.participantId == request.auth.uid ||
+        isSuperAdmin()
+      );
+    }
+    
+    // =================================================================
     // CHATBOT COLLECTIONS - Chat sessions and messages
     // =================================================================
     

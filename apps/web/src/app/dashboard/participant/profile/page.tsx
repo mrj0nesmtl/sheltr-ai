@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useState, useEffect } from 'react';
 import { profileService, type UserProfile, type PersonalInfo, type EmergencyContact, type Goal } from '@/services/profileService';
+import { goalsService, type Goal as RealGoal } from '@/services/goalsService';
 import { getParticipantProfile, type ParticipantProfile } from '@/services/platformMetrics';
 import { doc, updateDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
@@ -147,6 +148,7 @@ export default function ParticipantProfile() {
   const [isEditing, setIsEditing] = useState(false);
   const [profile, setProfile] = useState<ExtendedUserProfile | null>(null);
   const [donationData, setDonationData] = useState<ParticipantDonationData | null>(null);
+  const [realGoals, setRealGoals] = useState<RealGoal[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -273,11 +275,36 @@ export default function ParticipantProfile() {
               phone: participantData.emergencyContact.phone,
               relationship: participantData.emergencyContact.relationship
             }] : [],
-            goals: []
+            goals: [] // Real goals will be loaded separately
           };
           
           setProfile(profileWithData);
           console.log('✅ Real participant profile loaded:', profileWithData);
+          
+          // Load real goals from Firestore
+          console.log('🎯 Loading real goals for participant:', participantId);
+          try {
+            const goals = await goalsService.getParticipantGoals(participantId);
+            setRealGoals(goals);
+            console.log(`📋 Loaded ${goals.length} real goals`);
+            
+            // Update profile with real goals
+            setProfile(prev => prev ? {
+              ...prev,
+              goals: goals.map(g => ({
+                id: g.id,
+                title: g.title,
+                description: g.description,
+                category: g.category,
+                targetDate: g.targetDate,
+                progress: g.progress,
+                status: g.status
+              }))
+            } : null);
+          } catch (goalsError) {
+            console.error('Failed to load goals, using mock data:', goalsError);
+            setProfile(prev => prev ? { ...prev, goals: mockProfile.goals } : null);
+          }
         } else {
           // Fallback to mock data if no participant found
           throw new Error('Participant not found');

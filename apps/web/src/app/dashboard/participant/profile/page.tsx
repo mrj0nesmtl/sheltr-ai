@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { profileService, type UserProfile, type PersonalInfo, type EmergencyContact, type Goal } from '@/services/profileService';
 import { goalsService, type Goal as RealGoal } from '@/services/goalsService';
 import { getParticipantProfile, type ParticipantProfile } from '@/services/platformMetrics';
@@ -309,8 +310,15 @@ export default function ParticipantProfile() {
             setProfile(prev => prev ? { ...prev, goals: mockProfile.goals } : null);
           }
         } else {
-          // Fallback to mock data if no participant found
-          throw new Error('Participant not found');
+          // Fallback to mock data for demo participants
+          console.log('📝 [PROFILE] No real participant found, using mock profile data');
+          setProfile(mockProfile);
+          setDonationData({
+            totalReceived: realDonationData.totalReceived,
+            supporterCount: realDonationData.supporterCount,
+            profileViews: realDonationData.profileViews,
+            goalProgress: 55
+          });
         }
       } catch (err) {
         console.error('Failed to load profile:', err);

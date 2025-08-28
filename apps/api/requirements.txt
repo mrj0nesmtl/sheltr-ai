@@ -50,7 +50,7 @@ python-dateutil==2.8.2
 
 # Email and Communications
 sendgrid==6.12.4
-twilio==9.7.0
+twilio==9.7.2
 
 # Image and QR Code Processing
 qrcode[pil]==8.2

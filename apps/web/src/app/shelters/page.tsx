@@ -5,25 +5,30 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { MapPin, Users, Heart, ExternalLink, Phone, Mail, Clock, MapIcon, Sparkles } from 'lucide-react';
+import { MapPin, Users, Heart, ExternalLink, Phone, Mail, Clock, MapIcon, Sparkles, Filter, Search, Map } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { tenantService, ShelterTenant } from '@/services/tenantService';
+import { ShelterTenant } from '@/services/tenantService';
 import { shelterService, ShelterPublicConfig } from '@/services/shelterService';
 import PublicNavigation from '@/components/PublicNavigation';
 
 export default function SheltersPage() {
   const [sheltersData, setSheltersData] = useState<Array<{ shelter: ShelterTenant; config: ShelterPublicConfig }>>([]);
+  const [filteredShelters, setFilteredShelters] = useState<Array<{ shelter: ShelterTenant; config: ShelterPublicConfig }>>([]);
   const [loading, setLoading] = useState(true);
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedType, setSelectedType] = useState('');
+  const [showMap, setShowMap] = useState(false);
 
   useEffect(() => {
     const loadShelters = async () => {
       try {
         const publicShelters = await shelterService.getAllPublicShelters();
         setSheltersData(publicShelters);
+        setFilteredShelters(publicShelters);
       } catch (error) {
         console.error('Error loading shelters:', error);
       } finally {
@@ -34,12 +39,28 @@ export default function SheltersPage() {
     loadShelters();
   }, []);
 
-  const getShelterSlug = (name: string) => {
-    return name.toLowerCase()
-      .replace(/[^a-z0-9\s]/g, '')
-      .replace(/\s+/g, '-')
-      .replace(/^-+|-+$/g, '');
-  };
+  // Filter shelters based on search and type
+  useEffect(() => {
+    let filtered = sheltersData;
+
+    if (searchTerm) {
+      filtered = filtered.filter(item => 
+        item.shelter.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.shelter.address?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.config.description?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    if (selectedType) {
+      filtered = filtered.filter(item => 
+        item.shelter.type === selectedType
+      );
+    }
+
+    setFilteredShelters(filtered);
+  }, [sheltersData, searchTerm, selectedType]);
+
+  // Removed unused getShelterSlug function
 
   const getShelterTypeColor = (type: string) => {
     switch (type) {
@@ -80,9 +101,9 @@ export default function SheltersPage() {
       // For now, we'll just simulate a successful submission
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      setSubmitMessage('Thank you! We\'ll be in touch soon.');
+      setSubmitMessage('Thank you! We&apos;ll be in touch soon.');
       setEmail('');
-    } catch (error) {
+    } catch {
       setSubmitMessage('Something went wrong. Please try again.');
     } finally {
       setIsSubmitting(false);
@@ -120,24 +141,35 @@ export default function SheltersPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen relative">
+      {/* Background Image */}
+      <div 
+        className="fixed inset-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: 'url("/backgrounds/solutions-bg.jpg")',
+          opacity: 0.5,
+          zIndex: -2
+        }}
+      />
+      <div className="fixed inset-0 bg-gradient-to-br from-blue-50/80 to-indigo-100/80 z-[-1]" />
+      
       <PublicNavigation />
-      <div className="container mx-auto px-4 py-12">
+      <div className="container mx-auto px-4 py-12 relative z-10">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4 drop-shadow-sm">
             Our Affiliated Shelters
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-700 max-w-3xl mx-auto drop-shadow-sm">
             Discover the network of shelters working together to provide safety, support, and hope 
             to those experiencing homelessness across Montreal.
           </p>
           <div className="mt-6 flex justify-center items-center space-x-6">
-            <div className="flex items-center text-gray-600">
+            <div className="flex items-center text-gray-800 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full border border-white/30">
               <Heart className="h-5 w-5 text-red-500 mr-2" />
               <span className="font-medium">{sheltersData.length} Partner Shelters</span>
             </div>
-            <div className="flex items-center text-gray-600">
+            <div className="flex items-center text-gray-800 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full border border-white/30">
               <Users className="h-5 w-5 text-blue-500 mr-2" />
               <span className="font-medium">
                 {sheltersData.reduce((total, item) => total + item.shelter.capacity, 0)} Total Beds
@@ -146,9 +178,75 @@ export default function SheltersPage() {
           </div>
         </div>
 
+        {/* Filtering Toolbar */}
+        <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg border border-white/50 p-6 mb-8">
+          <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
+            <div className="flex flex-col sm:flex-row gap-4 flex-1">
+              {/* Search */}
+              <div className="relative flex-1 max-w-md">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                <Input
+                  type="text"
+                  placeholder="Search shelters, locations..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10 bg-white/80 border-gray-200"
+                />
+              </div>
+
+              {/* Type Filter */}
+              <div className="relative">
+                <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                <select
+                  value={selectedType}
+                  onChange={(e) => setSelectedType(e.target.value)}
+                  className="pl-10 pr-10 py-2 bg-white/80 border border-gray-200 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none cursor-pointer"
+                >
+                  <option value="">All Types</option>
+                  <option value="Emergency Shelter">Emergency Shelter</option>
+                  <option value="Transitional Housing">Transitional Housing</option>
+                  <option value="Family Shelter">Family Shelter</option>
+                  <option value="Youth Shelter">Youth Shelter</option>
+                  <option value="Women's Shelter">Women&apos;s Shelter</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Map Toggle */}
+            <div className="flex items-center gap-4">
+              <span className="text-sm text-gray-600">
+                Showing {filteredShelters.length} of {sheltersData.length} shelters
+              </span>
+              <Button
+                variant={showMap ? "default" : "outline"}
+                onClick={() => setShowMap(!showMap)}
+                className="flex items-center gap-2"
+              >
+                <Map className="h-4 w-4" />
+                {showMap ? "Hide Map" : "Show Map"}
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        {/* Map View */}
+        {showMap && (
+          <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg border border-white/50 p-6 mb-8">
+            <div className="flex items-center justify-center h-64 bg-gray-100 rounded-lg">
+              <div className="text-center">
+                <MapIcon className="h-12 w-12 text-gray-400 mx-auto mb-2" />
+                <p className="text-gray-600">Interactive map coming soon...</p>
+                <p className="text-sm text-gray-500 mt-1">
+                  Will show all {filteredShelters.length} shelter locations
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Shelters Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {sheltersData.map(({ shelter, config }) => {
+          {filteredShelters.map(({ shelter, config }) => {
             const occupancyPercentage = calculateOccupancyPercentage(
               shelter.currentOccupancy, 
               shelter.capacity
@@ -156,50 +254,67 @@ export default function SheltersPage() {
             const shelterSlug = config.slug;
 
             return (
-              <Card key={shelter.id} className="group hover:shadow-xl transition-all duration-300 overflow-hidden">
-                {/* Shelter Image/Logo */}
-                <div className="relative h-48 bg-gradient-to-br from-blue-500 to-indigo-600">
-                  {config.backgroundImageUrl ? (
-                    <Image
-                      src={config.backgroundImageUrl}
-                      alt={shelter.name}
-                      fill
-                      className="object-cover"
-                    />
-                  ) : null}
-                  <div className="absolute inset-0 bg-black bg-opacity-20"></div>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="text-center text-white">
-                      {config.logoUrl ? (
-                        <div className="w-16 h-16 rounded-full overflow-hidden mx-auto mb-2 bg-white p-2">
-                          <Image
-                            src={config.logoUrl}
-                            alt={`${shelter.name} logo`}
-                            width={48}
-                            height={48}
-                            className="w-full h-full object-contain"
-                          />
-                        </div>
-                      ) : (
-                        <div className="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-2">
-                          <Heart className="h-8 w-8" />
-                        </div>
-                      )}
-                      <h3 className="text-lg font-semibold">{shelter.name}</h3>
+              <Link href={`/${shelterSlug}`} key={shelter.id}>
+                <Card className="group hover:shadow-xl transition-all duration-300 overflow-hidden cursor-pointer bg-white/95 backdrop-blur-sm border border-white/50 hover:bg-white hover:scale-[1.02]">
+                  {/* Shelter Image/Logo */}
+                  <div className="relative h-48 bg-gradient-to-br from-blue-500 via-indigo-600 to-purple-600">
+                    {config.backgroundImageUrl ? (
+                      <Image
+                        src={config.backgroundImageUrl}
+                        alt={shelter.name}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                    ) : null}
+                    <div className="absolute inset-0 bg-black bg-opacity-30"></div>
+                    
+                    {/* Background Pattern */}
+                    <div className="absolute inset-0 opacity-20">
+                      <div className="absolute top-4 left-4 w-8 h-8 bg-white rounded-full"></div>
+                      <div className="absolute top-12 right-8 w-6 h-6 bg-white rounded-full"></div>
+                      <div className="absolute bottom-8 left-8 w-4 h-4 bg-white rounded-full"></div>
+                      <div className="absolute bottom-4 right-4 w-10 h-10 bg-white rounded-full"></div>
+                    </div>
+                    
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="text-center text-white">
+                        {config.logoUrl ? (
+                          <div className="w-20 h-20 rounded-full overflow-hidden mx-auto mb-3 bg-white/90 backdrop-blur-sm p-3 shadow-lg border border-white/30">
+                            <Image
+                              src={config.logoUrl}
+                              alt={`${shelter.name} logo`}
+                              width={56}
+                              height={56}
+                              className="w-full h-full object-contain"
+                            />
+                          </div>
+                        ) : (
+                          <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg border border-white/30">
+                            <Heart className="h-10 w-10" />
+                          </div>
+                        )}
+                        <h3 className="text-xl font-bold drop-shadow-sm">{shelter.name}</h3>
+                      </div>
+                    </div>
+                    
+                    {/* Shelter Type Badge */}
+                    <div className="absolute top-3 left-3">
+                      <Badge className={`${getShelterTypeColor(shelter.type)} backdrop-blur-sm`}>
+                        {shelter.type}
+                      </Badge>
                     </div>
                   </div>
-                </div>
 
-                <CardHeader className="pb-4">
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center justify-between mb-2">
-                        <CardTitle className="text-lg line-clamp-2">{shelter.name}</CardTitle>
-                        <Badge variant="secondary" className="bg-orange-100 text-orange-800 border-orange-200">
-                          <Clock className="h-3 w-3 mr-1" />
-                          Coming Soon
-                        </Badge>
-                      </div>
+                  <CardHeader className="pb-4">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between mb-2">
+                          <CardTitle className="text-lg line-clamp-2">{shelter.name}</CardTitle>
+                          <Badge variant="secondary" className="bg-orange-100 text-orange-800 border-orange-200">
+                            <Clock className="h-3 w-3 mr-1" />
+                            Coming Soon
+                          </Badge>
+                        </div>
                       <CardDescription className="flex items-center mt-1">
                         <MapPin className="h-4 w-4 mr-1" />
                         {shelter.address}
@@ -263,30 +378,17 @@ export default function SheltersPage() {
                     </Badge>
                   </div>
 
-                  {/* Action Buttons */}
-                  <div className="flex space-x-2">
-                    <Button 
-                      asChild 
-                      className="flex-1"
-                      variant="default"
-                    >
-                      <Link href={`/${shelterSlug}`}>
-                        <ExternalLink className="h-4 w-4 mr-2" />
-                        Visit Page
-                      </Link>
-                    </Button>
-                    <Button 
-                      asChild 
-                      variant="outline"
-                      size="sm"
-                    >
-                      <Link href={`/donate?shelter=${shelter.id}`}>
-                        <Heart className="h-4 w-4" />
-                      </Link>
-                    </Button>
+                  {/* Action Indicator */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center text-sm text-muted-foreground">
+                      <ExternalLink className="h-4 w-4 mr-2" />
+                      Click to visit page
+                    </div>
+                    <Heart className="h-4 w-4 text-muted-foreground hover:text-red-500 transition-colors" />
                   </div>
                 </CardContent>
-              </Card>
+                </Card>
+              </Link>
             );
           })}
         </div>
@@ -297,7 +399,7 @@ export default function SheltersPage() {
             <Heart className="h-16 w-16 text-gray-400 mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-gray-600 mb-2">No shelters found</h3>
             <p className="text-gray-500">
-              We're working on adding shelter partners to our network.
+              We&apos;re working on adding shelter partners to our network.
             </p>
           </div>
         )}
@@ -317,7 +419,7 @@ export default function SheltersPage() {
                   Expanding Across Canada
                 </h2>
                 <p className="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
-                  We're actively seeking shelter partners and affiliates across Canada to join our revolutionary platform. 
+                  We&apos;re actively seeking shelter partners and affiliates across Canada to join our revolutionary platform. 
                   Be part of the future of transparent, blockchain-powered homelessness support.
                 </p>
 
@@ -330,7 +432,7 @@ export default function SheltersPage() {
                     </div>
                     <h3 className="text-lg font-semibold text-white mb-2">Coast to Coast</h3>
                     <p className="text-blue-100 text-sm">
-                      From Vancouver to Halifax, we're building a national network
+                      From Vancouver to Halifax, we&apos;re building a national network
                     </p>
                   </div>
                   

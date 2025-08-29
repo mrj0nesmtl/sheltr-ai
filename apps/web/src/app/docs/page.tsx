@@ -31,8 +31,10 @@ import ThemeLogo from '@/components/ThemeLogo';
 import { useState } from 'react';
 import { collection, addDoc, Timestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function DocsPage() {
+  const { user, hasRole } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -228,17 +230,35 @@ export default function DocsPage() {
             <div className="flex items-center space-x-4">
               <ThemeToggle />
               <div className="hidden md:flex items-center space-x-4">
-                <Link href="/login">
-                  <Button variant="ghost" size="sm">
-                    <LogIn className="h-4 w-4 mr-2" />
-                    Sign In
-                  </Button>
-                </Link>
-                <Link href="/register">
-                  <Button size="sm">
-                    Get Started
-                  </Button>
-                </Link>
+                {user ? (
+                  // Logged in user navigation
+                  <>
+                    <span className="text-sm text-muted-foreground">
+                      Welcome, {user.displayName || user.email}
+                    </span>
+                    <Link href={hasRole('donor') ? '/dashboard/donor' : hasRole('super_admin') ? '/dashboard' : hasRole('platform_admin') ? '/dashboard' : hasRole('participant') ? '/dashboard/participant' : '/dashboard'}>
+                      <Button variant="ghost" size="sm">
+                        <ArrowRight className="h-4 w-4 mr-2" />
+                        Dashboard
+                      </Button>
+                    </Link>
+                  </>
+                ) : (
+                  // Non-logged in navigation
+                  <>
+                    <Link href="/login">
+                      <Button variant="ghost" size="sm">
+                        <LogIn className="h-4 w-4 mr-2" />
+                        Sign In
+                      </Button>
+                    </Link>
+                    <Link href="/register">
+                      <Button size="sm">
+                        Get Started
+                      </Button>
+                    </Link>
+                  </>
+                )}
               </div>
               
               {/* Mobile menu button */}
@@ -262,8 +282,23 @@ export default function DocsPage() {
                 <Link href="/impact" className="block px-3 py-2 text-muted-foreground hover:text-primary">Impact</Link>
                 <Link href="/docs" className="block px-3 py-2 text-foreground hover:text-primary">Docs</Link>
                 <div className="border-t pt-3 mt-3">
-                  <Link href="/login" className="block px-3 py-2 text-muted-foreground hover:text-primary">Sign In</Link>
-                  <Link href="/register" className="block px-3 py-2 text-muted-foreground hover:text-primary">Get Started</Link>
+                  {user ? (
+                    // Logged in mobile menu
+                    <>
+                      <div className="text-sm text-muted-foreground px-3 py-2">
+                        Welcome, {user.displayName || user.email}
+                      </div>
+                      <Link href={hasRole('donor') ? '/dashboard/donor' : hasRole('super_admin') ? '/dashboard' : hasRole('platform_admin') ? '/dashboard' : hasRole('participant') ? '/dashboard/participant' : '/dashboard'} className="block px-3 py-2 text-muted-foreground hover:text-primary">
+                        Dashboard
+                      </Link>
+                    </>
+                  ) : (
+                    // Non-logged in mobile menu
+                    <>
+                      <Link href="/login" className="block px-3 py-2 text-muted-foreground hover:text-primary">Sign In</Link>
+                      <Link href="/register" className="block px-3 py-2 text-muted-foreground hover:text-primary">Get Started</Link>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
@@ -322,7 +357,7 @@ export default function DocsPage() {
             {/* Last Updated Badge */}
             <div className="flex justify-center">
               <Badge className="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 text-sm">
-                📅 LAST UPDATED: AUGUST 10, 2025
+                📅 LAST UPDATED: AUGUST 29, 2025
               </Badge>
             </div>
           </div>

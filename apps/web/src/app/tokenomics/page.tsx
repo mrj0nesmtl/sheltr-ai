@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowLeft, Coins, TrendingUp, Shield, Zap, DollarSign, Users, BarChart3, CheckCircle, ExternalLink, Copy, Eye, LogIn, Menu, X, FileText, BookOpen, Rocket, Target, PieChart, ArrowRight } from 'lucide-react';
+import { Coins, TrendingUp, Shield, Zap, DollarSign, Users, BarChart3, CheckCircle, ExternalLink, Eye, LogIn, Menu, X, FileText, BookOpen, Target, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -10,8 +10,10 @@ import { ThemeToggle } from '@/components/theme-toggle';
 import Footer from '@/components/Footer';
 import ThemeLogo from '@/components/ThemeLogo';
 import { useState } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function TokenomicsPage() {
+  const { user, hasRole } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
@@ -31,17 +33,35 @@ export default function TokenomicsPage() {
             <div className="flex items-center space-x-4">
               <ThemeToggle />
               <div className="hidden md:flex items-center space-x-4">
-                <Link href="/login">
-                  <Button variant="ghost" size="sm">
-                    <LogIn className="h-4 w-4 mr-2" />
-                    Sign In
-                  </Button>
-                </Link>
-                <Link href="/register">
-                  <Button>
-                    Get Started
-                  </Button>
-                </Link>
+                {user ? (
+                  // Logged in user navigation
+                  <>
+                    <span className="text-sm text-muted-foreground">
+                      Welcome, {user.displayName || user.email}
+                    </span>
+                    <Link href={hasRole('donor') ? '/dashboard/donor' : hasRole('super_admin') ? '/dashboard' : hasRole('platform_admin') ? '/dashboard' : hasRole('participant') ? '/dashboard/participant' : '/dashboard'}>
+                      <Button variant="ghost" size="sm">
+                        <BarChart3 className="h-4 w-4 mr-2" />
+                        Dashboard
+                      </Button>
+                    </Link>
+                  </>
+                ) : (
+                  // Non-logged in navigation
+                  <>
+                    <Link href="/login">
+                      <Button variant="ghost" size="sm">
+                        <LogIn className="h-4 w-4 mr-2" />
+                        Sign In
+                      </Button>
+                    </Link>
+                    <Link href="/register">
+                      <Button>
+                        Get Started
+                      </Button>
+                    </Link>
+                  </>
+                )}
               </div>
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -64,17 +84,35 @@ export default function TokenomicsPage() {
               <Link href="/tokenomics" className="block text-foreground hover:text-primary transition-colors py-2">Tokenomics</Link>
               <Link href="/impact" className="block text-muted-foreground hover:text-primary transition-colors py-2">Impact</Link>
               <div className="border-t pt-4 space-y-3">
-                <Link href="/login" className="block">
-                  <Button variant="ghost" className="w-full justify-start">
-                    <LogIn className="h-4 w-4 mr-2" />
-                    Sign In
-                  </Button>
-                </Link>
-                <Link href="/register" className="block">
-                  <Button className="w-full">
-                    Get Started
-                  </Button>
-                </Link>
+                {user ? (
+                  // Logged in mobile menu
+                  <>
+                    <div className="text-sm text-muted-foreground px-3 py-2">
+                      Welcome, {user.displayName || user.email}
+                    </div>
+                    <Link href={hasRole('donor') ? '/dashboard/donor' : hasRole('super_admin') ? '/dashboard' : hasRole('platform_admin') ? '/dashboard' : hasRole('participant') ? '/dashboard/participant' : '/dashboard'} className="block">
+                      <Button variant="ghost" className="w-full justify-start">
+                        <BarChart3 className="h-4 w-4 mr-2" />
+                        Dashboard
+                      </Button>
+                    </Link>
+                  </>
+                ) : (
+                  // Non-logged in mobile menu
+                  <>
+                    <Link href="/login" className="block">
+                      <Button variant="ghost" className="w-full justify-start">
+                        <LogIn className="h-4 w-4 mr-2" />
+                        Sign In
+                      </Button>
+                    </Link>
+                    <Link href="/register" className="block">
+                      <Button className="w-full">
+                        Get Started
+                      </Button>
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -102,7 +140,7 @@ export default function TokenomicsPage() {
             SmartFund™ Tokenomics
           </h1>
           <p className="text-xl text-gray-200 mb-8 max-w-3xl mx-auto">
-            Sheltr's pioneering dual-token architecture combines both stability and growth potential for Participants and the Community.
+            Sheltr&apos;s pioneering dual-token architecture combines both stability and growth potential for Participants and the Community.
           </p>
           
           {/* Quick Links to Documentation */}

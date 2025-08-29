@@ -89,14 +89,16 @@ Complete API documentation covering endpoints, database schema, Firebase setup, 
 ### 📁 Directory Contents
 - [**💻 Development Hub**](04-development/README.md) - Development overview and navigation
 - [**🗺️ Development Roadmap**](04-development/dev-roadmap.md) - Complete development strategy
+- [**🚀 Session 14 Kickoff**](04-development/SESSION-14-KICKOFF.md) - Beta launch preparation guide
+- [**🔥 Business Logic Testing**](04-development/BUSINESS-LOGIC-TESTING.md) - Comprehensive testing framework
 - [**🤖 Chatbot Agent Architecture**](04-development/CHATBOT-AGENT-ARCHITECTURE.md) - AI chatbot system design
 - [**📊 Complete Functionality Matrix**](04-development/COMPLETE-FUNCTIONALITY-MATRIX.md) - Feature coverage matrix
-- [**👥 User Journeys**](04-development/USER-JOURNEYS.md) - User experience flows
+- [**📚 Knowledge Base Management**](04-development/KNOWLEDGE-BASE-SYNC-SYSTEM.md) - Document management system
 
 ### 📁 development_archive/
-- Historical development sessions and notes
+- Historical development sessions and notes (Sessions 1-13)
 - Legacy development materials and setup guides
-- Complete session documentation (Sessions 1-12)
+- Complete session documentation archive
 
 ### 🎯 Purpose
 Comprehensive development documentation including roadmaps, architecture, session logs, and development processes.

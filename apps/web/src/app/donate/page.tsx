@@ -9,8 +9,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { isSecureDomain } from '@/lib/urlSecurity';
-import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import { getDonationMetrics } from '@/services/donationMetricsService';
 
 // Demo donation amounts
 const DEMO_AMOUNTS = [25, 50, 100, 200];
@@ -30,45 +30,9 @@ interface Participant {
   services_completed: number;
 }
 
-// Function to get Michael's real donation data from Firestore
+// Use unified donation metrics service for consistency
 const getMichaelRealData = async () => {
-  try {
-    console.log('🔍 [DONATE] Fetching Michael Rodriguez real donation data from Firestore...');
-    
-    // Query all donations for Michael Rodriguez
-    const donationsQuery = query(
-      collection(db, 'demo_donations'),
-      where('participant_id', '==', 'michael-rodriguez')
-    );
-    const donationsSnapshot = await getDocs(donationsQuery);
-    
-    let totalReceived = 0;
-    let donationCount = 0;
-    
-    donationsSnapshot.docs.forEach(doc => {
-      const donationData = doc.data();
-      const amount = donationData.amount?.total || donationData.amount || 0;
-      if (amount > 0) {
-        totalReceived += amount;
-        donationCount++;
-      }
-    });
-    
-    console.log(`💰 [DONATE] Found ${donationCount} donations totaling $${totalReceived} for Michael Rodriguez`);
-    
-    return {
-      total_received: totalReceived,
-      donation_count: donationCount,
-      services_completed: 8 // Keep this static for demo purposes
-    };
-  } catch (error) {
-    console.error('❌ Error fetching Michael real data:', error);
-    return {
-      total_received: 409, // Fallback to known amount if query fails
-      donation_count: 6,
-      services_completed: 8
-    };
-  }
+  return await getDonationMetrics('michael-rodriguez');
 };
 
 function DonatePageContent() {

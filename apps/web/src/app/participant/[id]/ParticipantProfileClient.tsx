@@ -7,6 +7,7 @@ import { QrCode, Heart, Share2, MapPin, Target, Calendar, User, ExternalLink, Co
 import { getParticipantProfile, type ParticipantProfile } from '@/services/platformMetrics';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import { getDonationMetrics } from '@/services/donationMetricsService';
 import { publicProfileService, type PublicGoalData, type PublicGoalStats } from '@/services/publicProfileService';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -93,95 +94,13 @@ export function ParticipantProfileClient({ participantId }: ParticipantProfileCl
     }
   };
 
-  // Function to fetch real donation data for a participant
+  // Use unified donation metrics service for consistency
   const fetchParticipantDonations = async (participantId: string): Promise<{ total_received: number; donation_count: number }> => {
-    try {
-      let total_received = 0;
-      let donation_count = 0;
-      
-      // For michael-rodriguez, also check for donations with that ID and demo-participant-001 for backwards compatibility
-      const participantIds = [participantId];
-      if (participantId === 'michael-rodriguez') {
-        participantIds.push('demo-participant-001', 'michael-rodriguez');
-      } else if (participantId === 'demo-participant-001') {
-        participantIds.push('michael-rodriguez'); // Check both IDs for legacy support
-      }
-      
-      // ALWAYS include michael-rodriguez for our test donations
-      if (!participantIds.includes('michael-rodriguez')) {
-        participantIds.push('michael-rodriguez');
-      }
-      
-      // NEW APPROACH: Query ALL Old Brewery Mission donations, then filter by participant
-      console.log(`🔍 [DEBUG] Querying ALL Old Brewery Mission donations...`);
-      
-      // Query by shelter_id for YDJCJnuLGMC9mWOWDSOa (removed status filter)
-      const obmQuery1 = query(
-        collection(db, 'demo_donations'),
-        where('shelter_id', '==', 'YDJCJnuLGMC9mWOWDSOa')
-      );
-      const obmSnapshot1 = await getDocs(obmQuery1);
-      console.log(`📊 [DEBUG] Found ${obmSnapshot1.size} donations for YDJCJnuLGMC9mWOWDSOa`);
-      
-      // Query by shelter_id for old-brewery-mission (removed status filter)
-      const obmQuery2 = query(
-        collection(db, 'demo_donations'),
-        where('shelter_id', '==', 'old-brewery-mission')
-      );
-      const obmSnapshot2 = await getDocs(obmQuery2);
-      console.log(`📊 [DEBUG] Found ${obmSnapshot2.size} donations for old-brewery-mission`);
-      
-      // Process both result sets
-      [obmSnapshot1, obmSnapshot2].forEach((snapshot, index) => {
-        const shelterIdQueried = index === 0 ? 'YDJCJnuLGMC9mWOWDSOa' : 'old-brewery-mission';
-        console.log(`🔄 [DEBUG] Processing donations from ${shelterIdQueried}...`);
-        
-        snapshot.docs.forEach(doc => {
-          const donationData = doc.data();
-          const donationParticipantId = donationData?.participant_id;
-          
-          // Only count donations for this specific participant
-          const isForThisParticipant = participantIds.includes(donationParticipantId);
-          
-          console.log(`💰 [DEBUG] Processing donation:`, {
-            id: doc.id,
-            participant_id: donationParticipantId,
-            shelter_id: donationData?.shelter_id,
-            isForThisParticipant
-          });
-          
-          if (isForThisParticipant) {
-            const amount = donationData.amount || {};
-            const status = donationData.status || 'unknown';
-            
-            // Handle different amount formats
-            let donationValue = 0;
-            if (typeof amount === 'object') {
-              donationValue = amount.total || amount.amount || 0;
-            } else {
-              donationValue = amount || 0;
-            }
-            
-            console.log(`💵 [DEBUG] Donation value: ${donationValue}, status: ${status} for participant ${donationParticipantId}`);
-            if (donationValue > 0) {
-              total_received += donationValue;
-              donation_count++;
-              console.log(`✅ [DEBUG] Added $${donationValue} (status: ${status}), total now: $${total_received}`);
-            }
-          } else {
-            console.log(`⏭️ [DEBUG] Skipped donation for participant ${donationParticipantId} (not ${participantId})`);
-          }
-        });
-      });
-      
-      console.log(`💰 [DEBUG] Fetched donation data for ${participantId}: $${total_received} from ${donation_count} donations`);
-      console.log(`💰 [DEBUG] Checked participant IDs:`, participantIds);
-      return { total_received, donation_count };
-      
-    } catch (error) {
-      console.error(`❌ Error fetching donation data for ${participantId}:`, error);
-      return { total_received: 0, donation_count: 0 };
-    }
+    const metrics = await getDonationMetrics(participantId);
+    return {
+      total_received: metrics.total_received,
+      donation_count: metrics.donation_count
+    };
   };
 
   // Main function to load participant data

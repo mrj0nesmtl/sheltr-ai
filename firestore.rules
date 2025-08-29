@@ -121,10 +121,8 @@ service cloud.firestore {
     // PARTICIPANTS COLLECTION - Participant profiles and data
     // =================================================================
     match /participants/{participantId} {
-      // Read: Owner, their shelter admin, super admin
-      allow read: if isOwner(participantId) || 
-                     isSuperAdmin() ||
-                     (isAdmin() && resource.data.shelter_id == getUserData().shelter_id);
+      // Read: Public access allowed for participant showcase pages (demo participants)
+      allow read: if true;
       
       // Write: Owner, their shelter admin, super admin
       allow write: if isOwner(participantId) || 
@@ -157,14 +155,14 @@ service cloud.firestore {
     // DEMO_DONATIONS COLLECTION - Demo/test donation records
     // =================================================================
     match /demo_donations/{donationId} {
-      // Read: All authenticated users can read demo donations for testing/analytics
-      allow read: if isAuthenticated();
+      // Read: Public access allowed for participant showcase pages and demo functionality
+      allow read: if true;
       
       // Write: Super admin can modify demo donations
       allow write: if isSuperAdmin();
       
-      // Create: All authenticated users can create demo donations for testing
-      allow create: if isAuthenticated();
+      // Create: Anyone can create demo donations for testing (including anonymous users)
+      allow create: if true;
     }
     
     // =================================================================
@@ -365,12 +363,8 @@ service cloud.firestore {
     // PARTICIPANT PROFILES COLLECTION - Profile data and privacy settings
     // =================================================================
     match /participant_profiles/{participantId} {
-      // Read: Profile owner, their shelter admin, super admin
-      allow read: if isAuthenticated() && (
-        participantId == request.auth.uid ||
-        isSuperAdmin() ||
-        isAdmin()
-      );
+      // Read: Public access allowed for participant showcase pages, profile owner, their shelter admin, super admin
+      allow read: if true;
 
       // Write: Profile owner, their shelter admin, super admin
       allow write: if isAuthenticated() && (

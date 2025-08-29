@@ -110,8 +110,8 @@ service cloud.firestore {
     // SHELTERS COLLECTION - Shelter information and management
     // =================================================================
     match /shelters/{shelterId} {
-      // Read: Super admin and platform admin can read all, admins can read their own shelter, participants/donors can read basic info
-      allow read: if isAuthenticated();
+      // Read: Public access allowed for shelter showcase, authenticated users can read all
+      allow read: if true;
       
       // Write: Super admin and platform admin can write all, admins can write their own shelter
       allow write: if isSuperAdmin() || isPlatformAdmin() || canManageShelter(shelterId);
@@ -300,6 +300,14 @@ service cloud.firestore {
     match /shelters/{shelterId}/analytics/{analyticsId} {
       allow read: if canManageShelter(shelterId);
       allow write: if isSuperAdmin();
+    }
+    
+    // Shelter public configurations (for public pages)
+    match /shelters/{shelterId}/public_config/{configId} {
+      // Read: Public access allowed for public shelter pages
+      allow read: if true;
+      // Write: Only shelter admins and higher can modify
+      allow write: if canManageShelter(shelterId);
     }
     
     // =================================================================

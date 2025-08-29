@@ -2,14 +2,16 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Menu, X, LogIn, ArrowRight, Heart, Wallet, Home, QrCode, Shield, BarChart3, UserPlus, Users, FileText, HelpCircle, Mail, ExternalLink, Building2 } from 'lucide-react';
+import { Menu, X, LogIn, ArrowRight, Heart, Wallet, Home, QrCode, Shield, BarChart3, UserPlus, Users, FileText, Mail, ExternalLink, Building2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/theme-toggle';
 import Footer from '@/components/Footer';
 import ThemeLogo from '@/components/ThemeLogo';
 import { PublicChatbot } from '@/components/PublicChatbot';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function HomePage() {
+  const { user, hasRole } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
@@ -41,16 +43,34 @@ export default function HomePage() {
               </div>
 
               <div className="hidden md:flex items-center space-x-4">
-                <Link href="/login">
-                  <Button variant="ghost" size="sm">
-                    <LogIn className="h-4 w-4 mr-2" />
-                    Sign In
-                  </Button>
-                </Link>
-                <Link href="/register">
-                  <Button size="sm">Get Started</Button>
-                </Link>
                 <ThemeToggle />
+                {user ? (
+                  // Logged in user navigation
+                  <>
+                    <span className="text-sm text-muted-foreground">
+                      Welcome, {user.displayName || user.email}
+                    </span>
+                    <Link href={hasRole('donor') ? '/dashboard/donor' : hasRole('super_admin') ? '/dashboard' : hasRole('platform_admin') ? '/dashboard' : hasRole('participant') ? '/dashboard/participant' : '/dashboard'}>
+                      <Button variant="ghost" size="sm">
+                        <BarChart3 className="h-4 w-4 mr-2" />
+                        Dashboard
+                      </Button>
+                    </Link>
+                  </>
+                ) : (
+                  // Non-logged in navigation
+                  <>
+                    <Link href="/login">
+                      <Button variant="ghost" size="sm">
+                        <LogIn className="h-4 w-4 mr-2" />
+                        Sign In
+                      </Button>
+                    </Link>
+                    <Link href="/register">
+                      <Button size="sm">Get Started</Button>
+                    </Link>
+                  </>
+                )}
               </div>
 
               {/* Mobile menu button */}
@@ -158,18 +178,36 @@ export default function HomePage() {
 
                     {/* Action Buttons */}
                     <div className="border-t pt-4 space-y-3">
-                      <Link href="/login" onClick={() => setIsMenuOpen(false)}>
-                        <Button variant="ghost" size="lg" className="w-full justify-center h-12 text-base">
-                          <LogIn className="h-5 w-5 mr-2" />
-                          Sign In
-                        </Button>
-                      </Link>
-                      <Link href="/register" onClick={() => setIsMenuOpen(false)}>
-                        <Button size="lg" className="w-full h-12 text-base bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
-                          <UserPlus className="h-5 w-5 mr-2" />
-                          Get Started
-                        </Button>
-                      </Link>
+                      {user ? (
+                        // Logged in mobile menu
+                        <>
+                          <div className="text-sm text-muted-foreground px-3 py-2">
+                            Welcome, {user.displayName || user.email}
+                          </div>
+                          <Link href={hasRole('donor') ? '/dashboard/donor' : hasRole('super_admin') ? '/dashboard' : hasRole('platform_admin') ? '/dashboard' : hasRole('participant') ? '/dashboard/participant' : '/dashboard'} onClick={() => setIsMenuOpen(false)}>
+                            <Button variant="ghost" size="lg" className="w-full justify-center h-12 text-base">
+                              <BarChart3 className="h-5 w-5 mr-2" />
+                              Dashboard
+                            </Button>
+                          </Link>
+                        </>
+                      ) : (
+                        // Non-logged in mobile menu
+                        <>
+                          <Link href="/login" onClick={() => setIsMenuOpen(false)}>
+                            <Button variant="ghost" size="lg" className="w-full justify-center h-12 text-base">
+                              <LogIn className="h-5 w-5 mr-2" />
+                              Sign In
+                            </Button>
+                          </Link>
+                          <Link href="/register" onClick={() => setIsMenuOpen(false)}>
+                            <Button size="lg" className="w-full h-12 text-base bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
+                              <UserPlus className="h-5 w-5 mr-2" />
+                              Get Started
+                            </Button>
+                          </Link>
+                        </>
+                      )}
                     </div>
 
                     {/* Footer Info */}

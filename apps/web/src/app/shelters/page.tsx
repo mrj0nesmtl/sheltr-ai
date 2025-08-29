@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { MapPin, Users, Heart, ExternalLink, Phone, Mail, Clock, MapIcon, Sparkles, Filter, Search, Map } from 'lucide-react';
+import { MapPin, Users, Heart, ExternalLink, Phone, Mail, Clock, MapIcon, Filter, Search, Map } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ShelterTenant } from '@/services/tenantService';
@@ -157,7 +157,7 @@ export default function SheltersPage() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-white mb-4 drop-shadow-md">
-            Our Affiliated Shelters
+            SHELTR Affiliated Shelters
           </h1>
           <p className="text-xl text-gray-100 max-w-3xl mx-auto drop-shadow-md">
             Discover the network of shelters working together to provide safety, support, and hope 
@@ -427,8 +427,14 @@ export default function SheltersPage() {
             <div className="px-8 py-12 md:px-12 md:py-16">
               <div className="max-w-4xl mx-auto text-center">
                 <div className="flex justify-center mb-6">
-                  <div className="flex items-center justify-center w-16 h-16 bg-white/10 rounded-full">
-                    <Sparkles className="h-8 w-8 text-white" />
+                  <div className="flex items-center justify-center w-32 h-16 bg-white/10 rounded-lg px-4">
+                    <Image
+                      src="/logo.svg"
+                      alt="SHELTR"
+                      width={120}
+                      height={28}
+                      className="h-7 w-auto"
+                    />
                   </div>
                 </div>
                 

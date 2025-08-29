@@ -4,15 +4,20 @@ import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { MapPin, Users, Heart, ExternalLink, Phone, Mail } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { MapPin, Users, Heart, ExternalLink, Phone, Mail, Clock, MapIcon, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { tenantService, ShelterTenant } from '@/services/tenantService';
 import { shelterService, ShelterPublicConfig } from '@/services/shelterService';
+import PublicNavigation from '@/components/PublicNavigation';
 
 export default function SheltersPage() {
   const [sheltersData, setSheltersData] = useState<Array<{ shelter: ShelterTenant; config: ShelterPublicConfig }>>([]);
   const [loading, setLoading] = useState(true);
+  const [email, setEmail] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState('');
 
   useEffect(() => {
     const loadShelters = async () => {
@@ -65,6 +70,25 @@ export default function SheltersPage() {
     return Math.round((current / capacity) * 100);
   };
 
+  const handleEmailSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+
+    setIsSubmitting(true);
+    try {
+      // Here you would integrate with your email service (e.g., Mailchimp, ConvertKit, etc.)
+      // For now, we'll just simulate a successful submission
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      setSubmitMessage('Thank you! We\'ll be in touch soon.');
+      setEmail('');
+    } catch (error) {
+      setSubmitMessage('Something went wrong. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
@@ -97,6 +121,7 @@ export default function SheltersPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+      <PublicNavigation />
       <div className="container mx-auto px-4 py-12">
         {/* Header */}
         <div className="text-center mb-12">
@@ -167,16 +192,24 @@ export default function SheltersPage() {
 
                 <CardHeader className="pb-4">
                   <div className="flex items-start justify-between">
-                    <div>
-                      <CardTitle className="text-lg line-clamp-2">{shelter.name}</CardTitle>
+                    <div className="flex-1">
+                      <div className="flex items-center justify-between mb-2">
+                        <CardTitle className="text-lg line-clamp-2">{shelter.name}</CardTitle>
+                        <Badge variant="secondary" className="bg-orange-100 text-orange-800 border-orange-200">
+                          <Clock className="h-3 w-3 mr-1" />
+                          Coming Soon
+                        </Badge>
+                      </div>
                       <CardDescription className="flex items-center mt-1">
                         <MapPin className="h-4 w-4 mr-1" />
                         {shelter.address}
                       </CardDescription>
+                      <div className="mt-2">
+                        <Badge className={getShelterTypeColor(shelter.type)}>
+                          {shelter.type}
+                        </Badge>
+                      </div>
                     </div>
-                    <Badge className={getShelterTypeColor(shelter.type)}>
-                      {shelter.type}
-                    </Badge>
                   </div>
                 </CardHeader>
 
@@ -270,20 +303,111 @@ export default function SheltersPage() {
         )}
 
         {/* Call to Action */}
-        <div className="mt-16 text-center">
-          <div className="bg-white rounded-lg shadow-md p-8 max-w-2xl mx-auto">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              Want to Partner With Us?
-            </h2>
-            <p className="text-gray-600 mb-6">
-              Join our network of shelters providing transparent, efficient support to those in need.
-            </p>
-            <Button asChild size="lg">
-              <Link href="/contact">
-                <Heart className="h-5 w-5 mr-2" />
-                Become a Partner
-              </Link>
-            </Button>
+        <div className="mt-16">
+          <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-xl shadow-xl overflow-hidden">
+            <div className="px-8 py-12 md:px-12 md:py-16">
+              <div className="max-w-4xl mx-auto text-center">
+                <div className="flex justify-center mb-6">
+                  <div className="flex items-center justify-center w-16 h-16 bg-white/10 rounded-full">
+                    <Sparkles className="h-8 w-8 text-white" />
+                  </div>
+                </div>
+                
+                <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                  Expanding Across Canada
+                </h2>
+                <p className="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
+                  We're actively seeking shelter partners and affiliates across Canada to join our revolutionary platform. 
+                  Be part of the future of transparent, blockchain-powered homelessness support.
+                </p>
+
+                <div className="grid md:grid-cols-3 gap-6 mb-12">
+                  <div className="text-center">
+                    <div className="flex justify-center mb-3">
+                      <div className="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center">
+                        <MapIcon className="h-6 w-6 text-white" />
+                      </div>
+                    </div>
+                    <h3 className="text-lg font-semibold text-white mb-2">Coast to Coast</h3>
+                    <p className="text-blue-100 text-sm">
+                      From Vancouver to Halifax, we're building a national network
+                    </p>
+                  </div>
+                  
+                  <div className="text-center">
+                    <div className="flex justify-center mb-3">
+                      <div className="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center">
+                        <Heart className="h-6 w-6 text-white" />
+                      </div>
+                    </div>
+                    <h3 className="text-lg font-semibold text-white mb-2">FREE Platform</h3>
+                    <p className="text-blue-100 text-sm">
+                      Our platform is completely free for all shelter partners
+                    </p>
+                  </div>
+                  
+                  <div className="text-center">
+                    <div className="flex justify-center mb-3">
+                      <div className="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center">
+                        <Users className="h-6 w-6 text-white" />
+                      </div>
+                    </div>
+                    <h3 className="text-lg font-semibold text-white mb-2">Expert Support</h3>
+                    <p className="text-blue-100 text-sm">
+                      Full onboarding, training, and ongoing technical support
+                    </p>
+                  </div>
+                </div>
+
+                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 mb-8 max-w-2xl mx-auto">
+                  <h3 className="text-xl font-semibold text-white mb-4">
+                    Interested in Partnering?
+                  </h3>
+                  <p className="text-blue-100 mb-6">
+                    Join our waitlist to be the first to know when we launch in your region.
+                  </p>
+                  
+                  <form onSubmit={handleEmailSubmit} className="flex flex-col sm:flex-row gap-3">
+                    <Input
+                      type="email"
+                      placeholder="Enter your organization's email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="flex-1 bg-white/90 border-white/20 text-gray-900 placeholder-gray-500"
+                      required
+                    />
+                    <Button 
+                      type="submit" 
+                      disabled={isSubmitting}
+                      className="bg-white text-blue-600 hover:bg-blue-50 px-8"
+                    >
+                      {isSubmitting ? 'Submitting...' : 'Join Waitlist'}
+                    </Button>
+                  </form>
+                  
+                  {submitMessage && (
+                    <p className="mt-3 text-center text-white font-medium">
+                      {submitMessage}
+                    </p>
+                  )}
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <Button asChild variant="outline" size="lg" className="bg-white/10 border-white/20 text-white hover:bg-white/20">
+                    <Link href="/solutions">
+                      <ExternalLink className="h-5 w-5 mr-2" />
+                      View Solutions
+                    </Link>
+                  </Button>
+                  <Button asChild variant="outline" size="lg" className="bg-white/10 border-white/20 text-white hover:bg-white/20">
+                    <Link href="/contact">
+                      <Mail className="h-5 w-5 mr-2" />
+                      Contact Us
+                    </Link>
+                  </Button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -2,15 +2,17 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Menu, X, LogIn, Coins, Shield, Zap, QrCode, UserCheck, CreditCard, Database, Smartphone, Building2, Handshake, Globe, ArrowRight, Users, Heart, Target } from 'lucide-react';
+import { Menu, X, LogIn, Coins, Shield, Zap, QrCode, UserCheck, CreditCard, Database, Smartphone, Building2, Handshake, Globe, ArrowRight, Users, Heart, Target, BarChart3 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ThemeToggle } from '@/components/theme-toggle';
 import Footer from '@/components/Footer';
 import ThemeLogo from '@/components/ThemeLogo';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function AboutPage() {
+  const { user, hasRole } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
@@ -44,15 +46,33 @@ export default function AboutPage() {
             <div className="flex items-center space-x-4">
               <ThemeToggle />
               <div className="hidden md:flex items-center space-x-4">
-                <Link href="/login">
-                  <Button variant="ghost" size="sm">
-                    <LogIn className="h-4 w-4 mr-2" />
-                    Sign In
-                  </Button>
-                </Link>
-                <Link href="/register">
-                  <Button size="sm">Get Started</Button>
-                </Link>
+                {user ? (
+                  // Logged in user navigation
+                  <>
+                    <span className="text-sm text-muted-foreground">
+                      Welcome, {user.displayName || user.email}
+                    </span>
+                    <Link href={hasRole('donor') ? '/dashboard/donor' : hasRole('super_admin') ? '/dashboard' : hasRole('platform_admin') ? '/dashboard' : hasRole('participant') ? '/dashboard/participant' : '/dashboard'}>
+                      <Button variant="ghost" size="sm">
+                        <BarChart3 className="h-4 w-4 mr-2" />
+                        Dashboard
+                      </Button>
+                    </Link>
+                  </>
+                ) : (
+                  // Non-logged in navigation
+                  <>
+                    <Link href="/login">
+                      <Button variant="ghost" size="sm">
+                        <LogIn className="h-4 w-4 mr-2" />
+                        Sign In
+                      </Button>
+                    </Link>
+                    <Link href="/register">
+                      <Button size="sm">Get Started</Button>
+                    </Link>
+                  </>
+                )}
               </div>
               {/* Mobile menu button */}
               <button
@@ -97,15 +117,33 @@ export default function AboutPage() {
                   Impact
                 </Link>
                 <div className="border-t pt-2 mt-2">
-                  <Link href="/login" onClick={() => setIsMenuOpen(false)}>
-                    <Button variant="ghost" size="sm" className="w-full justify-start mb-2">
-                      <LogIn className="h-4 w-4 mr-2" />
-                      Sign In
-                    </Button>
-                  </Link>
-                  <Link href="/register" onClick={() => setIsMenuOpen(false)}>
-                    <Button size="sm" className="w-full">Get Started</Button>
-                  </Link>
+                  {user ? (
+                    // Logged in mobile menu
+                    <>
+                      <div className="text-sm text-muted-foreground px-3 py-2">
+                        Welcome, {user.displayName || user.email}
+                      </div>
+                      <Link href={hasRole('donor') ? '/dashboard/donor' : hasRole('super_admin') ? '/dashboard' : hasRole('platform_admin') ? '/dashboard' : hasRole('participant') ? '/dashboard/participant' : '/dashboard'} onClick={() => setIsMenuOpen(false)}>
+                        <Button variant="ghost" size="sm" className="w-full justify-start mb-2">
+                          <BarChart3 className="h-4 w-4 mr-2" />
+                          Dashboard
+                        </Button>
+                      </Link>
+                    </>
+                  ) : (
+                    // Non-logged in mobile menu
+                    <>
+                      <Link href="/login" onClick={() => setIsMenuOpen(false)}>
+                        <Button variant="ghost" size="sm" className="w-full justify-start mb-2">
+                          <LogIn className="h-4 w-4 mr-2" />
+                          Sign In
+                        </Button>
+                      </Link>
+                      <Link href="/register" onClick={() => setIsMenuOpen(false)}>
+                        <Button size="sm" className="w-full">Get Started</Button>
+                      </Link>
+                    </>
+                  )}
                 </div>
               </div>
             </div>

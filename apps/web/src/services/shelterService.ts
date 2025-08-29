@@ -251,7 +251,7 @@ export class ShelterService {
       id: shelter.id,
       name: shelter.name,
       slug: slug,
-      publicUrl: `/shelter-${slug}`,
+      publicUrl: `/${slug}`,
       description: `${shelter.name} is committed to providing safe, supportive emergency shelter and services to individuals and families experiencing homelessness in Montreal.`,
       mission: "To provide immediate shelter, support services, and pathways to permanent housing for our community's most vulnerable members.",
       services: [

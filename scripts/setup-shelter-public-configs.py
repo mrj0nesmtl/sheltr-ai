@@ -55,7 +55,7 @@ def create_default_shelter_config(shelter_id, shelter_data):
         'id': shelter_id,
         'name': name,
         'slug': slug,
-        'publicUrl': f'/shelter-{slug}',
+        'publicUrl': f'/{slug}',
         'description': f"{name} is committed to providing safe, supportive emergency shelter and services to individuals and families experiencing homelessness in Montreal.",
         'mission': "To provide immediate shelter, support services, and pathways to permanent housing for our community's most vulnerable members.",
         'services': [
@@ -164,10 +164,10 @@ def setup_shelter_public_configs():
                 shelter_data = shelter_doc.to_dict()
                 shelter_name = shelter_data.get('name', 'Unknown Shelter')
                 slug = generate_slug(shelter_name)
-                print(f"• {shelter_name}: /shelter-{slug}")
+                print(f"• {shelter_name}: /{slug}")
         
         print(f"\n🚀 You can now visit the shelters showcase page at: /shelters")
-        print(f"🏠 Individual shelter pages are available at: /shelter-[name]")
+        print(f"🏠 Individual shelter pages are available at: /[name]")
         
     except Exception as e:
         print(f"❌ Error setting up shelter configurations: {e}")

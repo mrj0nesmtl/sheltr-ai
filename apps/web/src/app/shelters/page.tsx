@@ -237,7 +237,7 @@ export default function SheltersPage() {
                       className="flex-1"
                       variant="default"
                     >
-                      <Link href={`/shelter-${shelterSlug}`}>
+                      <Link href={`/${shelterSlug}`}>
                         <ExternalLink className="h-4 w-4 mr-2" />
                         Visit Page
                       </Link>

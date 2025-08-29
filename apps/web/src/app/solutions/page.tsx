@@ -9,8 +9,10 @@ import { ThemeToggle } from '@/components/theme-toggle';
 import Footer from '@/components/Footer';
 import ThemeLogo from '@/components/ThemeLogo';
 import { useState } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function SolutionsPage() {
+  const { user, hasRole } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
@@ -30,17 +32,35 @@ export default function SolutionsPage() {
             <div className="flex items-center space-x-4">
               <ThemeToggle />
               <div className="hidden md:flex items-center space-x-4">
-                <Link href="/login">
-                  <Button variant="ghost" size="sm">
-                    <LogIn className="h-4 w-4 mr-2" />
-                    Sign In
-                  </Button>
-                </Link>
-                <Link href="/register">
-                  <Button>
-                    Get Started
-                  </Button>
-                </Link>
+                {user ? (
+                  // Logged in user navigation
+                  <>
+                    <span className="text-sm text-muted-foreground">
+                      Welcome, {user.displayName || user.email}
+                    </span>
+                    <Link href={hasRole('donor') ? '/dashboard/donor' : hasRole('super_admin') ? '/dashboard' : hasRole('platform_admin') ? '/dashboard' : hasRole('participant') ? '/dashboard/participant' : '/dashboard'}>
+                      <Button variant="ghost" size="sm">
+                        <BarChart3 className="h-4 w-4 mr-2" />
+                        Dashboard
+                      </Button>
+                    </Link>
+                  </>
+                ) : (
+                  // Non-logged in navigation
+                  <>
+                    <Link href="/login">
+                      <Button variant="ghost" size="sm">
+                        <LogIn className="h-4 w-4 mr-2" />
+                        Sign In
+                      </Button>
+                    </Link>
+                    <Link href="/register">
+                      <Button>
+                        Get Started
+                      </Button>
+                    </Link>
+                  </>
+                )}
               </div>
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -63,17 +83,35 @@ export default function SolutionsPage() {
               <Link href="/tokenomics" className="block text-muted-foreground hover:text-primary transition-colors py-2">Tokenomics</Link>
               <Link href="/impact" className="block text-muted-foreground hover:text-primary transition-colors py-2">Impact</Link>
               <div className="border-t pt-4 space-y-3">
-                <Link href="/login" className="block">
-                  <Button variant="ghost" className="w-full justify-start">
-                    <LogIn className="h-4 w-4 mr-2" />
-                    Sign In
-                  </Button>
-                </Link>
-                <Link href="/register" className="block">
-                  <Button className="w-full">
-                    Get Started
-                  </Button>
-                </Link>
+                {user ? (
+                  // Logged in mobile menu
+                  <>
+                    <div className="text-sm text-muted-foreground px-3 py-2">
+                      Welcome, {user.displayName || user.email}
+                    </div>
+                    <Link href={hasRole('donor') ? '/dashboard/donor' : hasRole('super_admin') ? '/dashboard' : hasRole('platform_admin') ? '/dashboard' : hasRole('participant') ? '/dashboard/participant' : '/dashboard'} className="block">
+                      <Button variant="ghost" className="w-full justify-start">
+                        <BarChart3 className="h-4 w-4 mr-2" />
+                        Dashboard
+                      </Button>
+                    </Link>
+                  </>
+                ) : (
+                  // Non-logged in mobile menu
+                  <>
+                    <Link href="/login" className="block">
+                      <Button variant="ghost" className="w-full justify-start">
+                        <LogIn className="h-4 w-4 mr-2" />
+                        Sign In
+                      </Button>
+                    </Link>
+                    <Link href="/register" className="block">
+                      <Button className="w-full">
+                        Get Started
+                      </Button>
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           </div>

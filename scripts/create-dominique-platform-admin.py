@@ -34,23 +34,50 @@ def create_platform_admin(email: str, first_name: str, last_name: str):
             print(f'   ✅ Firebase Auth user exists: {existing_user.uid}')
             user_uid = existing_user.uid
             
-            # Generate new password reset link even if user exists
+            # Generate a secure temporary password for existing user
+            import secrets
+            import string
+            
+            alphabet = string.ascii_letters + string.digits + "!@#$%^&*"
+            temp_password = ''.join(secrets.choice(alphabet) for i in range(16))
+            temp_password = f"SHELTR2025!{temp_password[:8]}"
+            
+            # Update existing user with new temporary password
+            auth.update_user(
+                user_uid,
+                password=temp_password,
+                email_verified=True
+            )
+            print(f'   🔐 Updated with new temporary password: {temp_password}')
+            
+            # Generate password reset link as backup
             reset_link = auth.generate_password_reset_link(email)
-            print(f'   📧 NEW Password reset link: {reset_link}')
+            print(f'   📧 Password reset link (backup): {reset_link}')
             
         except auth.UserNotFoundError:
-            # Create Firebase Auth user (they'll need to set password via email)
+            # Generate a secure temporary password
+            import secrets
+            import string
+            
+            # Create a strong temporary password
+            alphabet = string.ascii_letters + string.digits + "!@#$%^&*"
+            temp_password = ''.join(secrets.choice(alphabet) for i in range(16))
+            temp_password = f"SHELTR2025!{temp_password[:8]}"  # Ensure it meets complexity requirements
+            
+            # Create Firebase Auth user with temporary password
             user_record = auth.create_user(
                 email=email,
+                password=temp_password,
                 display_name=f'{first_name} {last_name}',
-                email_verified=False  # They'll verify via email
+                email_verified=True  # Mark as verified since admin created
             )
             print(f'   ✅ Created Firebase Auth user: {user_record.uid}')
+            print(f'   🔐 Temporary Password: {temp_password}')
             user_uid = user_record.uid
             
-            # Send password reset email so they can set their password
+            # Still generate reset link as backup
             reset_link = auth.generate_password_reset_link(email)
-            print(f'   📧 Password reset link: {reset_link}')
+            print(f'   📧 Password reset link (backup): {reset_link}')
         
         # Create Firestore user document
         db = get_firestore()
@@ -133,7 +160,9 @@ def create_platform_admin(email: str, first_name: str, last_name: str):
         auth.set_custom_user_claims(user_uid, custom_claims)
         print(f'   ✅ Set custom claims: {custom_claims}')
         
-        return user_uid, reset_link
+        # Return both password and reset link
+        temp_password_info = temp_password if 'temp_password' in locals() else None
+        return user_uid, reset_link, temp_password_info
         
     except Exception as e:
         print(f'   ❌ Error creating platform admin: {e}')
@@ -154,7 +183,7 @@ def create_dominique_platform_admin():
     }
     
     try:
-        user_uid, reset_link = create_platform_admin(
+        user_uid, reset_link, temp_password = create_platform_admin(
             admin_data['email'],
             admin_data['first_name'], 
             admin_data['last_name']
@@ -166,6 +195,8 @@ def create_dominique_platform_admin():
         print(f'   🆔 UID: {user_uid}')
         print(f'   🏢 Company: Arcana Concept')
         print(f'   ⚡ Role: Blockchain Expert & Platform Administrator')
+        if temp_password:
+            print(f'   🔐 Temporary Password: {temp_password}')
         print(f'   🔗 Reset Link: {reset_link}')
         
         # Verify creation by checking all platform admins
@@ -186,13 +217,21 @@ def create_dominique_platform_admin():
             created = data.get('createdAt', 'Unknown')
             print(f'   👤 {name} ({email}) - {company} - Status: {status} - Created: {created[:10] if created != "Unknown" else "Unknown"}')
         
-        print(f'\n📧 EMAIL INSTRUCTIONS FOR DOMINIQUE:')
-        print(f'   1. Check email: {admin_data["email"]}')
-        print(f'   2. Look for password reset email from Firebase')
-        print(f'   3. Click the link to set your password')
-        print(f'   4. Log in at: https://sheltr-ai.web.app/login')
-        print(f'   5. You should see the Platform Admin dashboard')
-        print(f'   6. Navigate to "My Giving" to see personal donation tracking')
+        print(f'\n📧 LOGIN INSTRUCTIONS FOR DOMINIQUE:')
+        if temp_password:
+            print(f'   1. Go to: https://sheltr-ai.web.app/login')
+            print(f'   2. Email: {admin_data["email"]}')
+            print(f'   3. Temporary Password: {temp_password}')
+            print(f'   4. IMPORTANT: Change password immediately after first login')
+            print(f'   5. You should see the Platform Admin dashboard')
+            print(f'   6. Navigate to "My Giving" to see personal donation tracking')
+        else:
+            print(f'   1. Check email: {admin_data["email"]}')
+            print(f'   2. Look for password reset email from Firebase')
+            print(f'   3. Click the link to set your password')
+            print(f'   4. Log in at: https://sheltr-ai.web.app/login')
+            print(f'   5. You should see the Platform Admin dashboard')
+            print(f'   6. Navigate to "My Giving" to see personal donation tracking')
         
         print(f'\n🧪 TESTING CHECKLIST:')
         print(f'   ✅ Email received and password set')
@@ -217,6 +256,7 @@ def create_dominique_platform_admin():
             'uid': user_uid,
             'name': f"{admin_data['first_name']} {admin_data['last_name']}",
             'email': admin_data['email'],
+            'temp_password': temp_password,
             'reset_link': reset_link,
             'company': 'Arcana Concept',
             'expertise': 'Blockchain & Strategic Development'

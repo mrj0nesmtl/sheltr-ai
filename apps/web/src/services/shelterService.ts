@@ -28,6 +28,25 @@ export interface ShelterPublicConfig {
   description?: string;
   mission?: string;
   services?: string[];
+  qrCode?: {
+    url: string;
+    storagePath: string;
+    donationUrl: string;
+    generatedAt: string;
+    type: string;
+    size?: string;
+    format?: string;
+  };
+  qrCodeClean?: {
+    url: string;
+    storagePath: string;
+    donationUrl: string;
+    generatedAt: string;
+    type: string;
+    size?: string;
+    format?: string;
+    hasText: boolean;
+  };
   operatingHours?: {
     [key: string]: string;
   };

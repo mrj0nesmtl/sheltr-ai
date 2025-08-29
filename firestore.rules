@@ -448,6 +448,13 @@ service cloud.firestore {
       allow write: if isSuperAdmin();
     }
     
+    // Contact inquiries - Anyone can create, Super Admin can read/update
+    match /contact_inquiries/{inquiryId} {
+      allow create: if true; // Anyone can submit contact forms
+      allow read, update: if isSuperAdmin() || isPlatformAdmin();
+      allow delete: if isSuperAdmin();
+    }
+    
     // =================================================================
     // FALLBACK RULE - Deny all other access
     // =================================================================

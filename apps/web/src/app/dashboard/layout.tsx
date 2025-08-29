@@ -29,7 +29,8 @@ import {
   FileText,
   Brain,
   MessageSquare,
-  Target
+  Target,
+  Mail
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -119,6 +120,12 @@ const getNavigationItems = (userRole: string) => {
         href: '/dashboard/users',
         icon: Users,
         description: 'Manage all user accounts and roles'
+      },
+      {
+        title: 'Contact Inquiries',
+        href: '/dashboard/contact-inquiries',
+        icon: Mail,
+        description: 'Manage contact form submissions and inquiries'
       },
       {
         title: 'Knowledge Base',

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Menu, X, LogIn, ArrowRight, Heart, Wallet, Home, QrCode, Shield, BarChart3, UserPlus, Users, FileText, Mail, ExternalLink, Building2 } from 'lucide-react';
+import { Menu, X, LogIn, ArrowRight, Heart, Wallet, Home, QrCode, Shield, BarChart3, UserPlus, Users, FileText, Mail, ExternalLink, Building2, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/theme-toggle';
 import Footer from '@/components/Footer';
@@ -129,6 +129,14 @@ export default function HomePage() {
                         >
                           <BarChart3 className="h-5 w-5 mr-3 text-muted-foreground" />
                           Impact Dashboard
+                        </Link>
+                        <Link 
+                          href="/contact" 
+                          className="flex items-center px-3 py-3 text-base font-medium hover:bg-muted/50 rounded-lg transition-colors"
+                          onClick={() => setIsMenuOpen(false)}
+                        >
+                          <MessageCircle className="h-5 w-5 mr-3 text-muted-foreground" />
+                          Contact Us
                         </Link>
                       </div>
                     </div>

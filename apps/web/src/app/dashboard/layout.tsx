@@ -104,6 +104,12 @@ const getNavigationItems = (userRole: string) => {
         description: 'Manage notifications and alerts'
       },
       {
+        title: 'My Giving',
+        href: '/dashboard/donor',
+        icon: Heart,
+        description: 'View your personal donations and impact'
+      },
+      {
         title: 'Platform Management',
         href: '/dashboard/platform',
         icon: Settings,
@@ -187,6 +193,12 @@ const getNavigationItems = (userRole: string) => {
         href: '/dashboard/notifications',
         icon: Bell,
         description: 'Manage notifications and alerts'
+      },
+      {
+        title: 'My Giving',
+        href: '/dashboard/donor',
+        icon: Heart,
+        description: 'View your personal donations and impact'
       },
       {
         title: 'Platform Management',

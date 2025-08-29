@@ -126,7 +126,7 @@ export default function SheltersPage() {
                     <div className="h-40 bg-gray-300 rounded-t-lg"></div>
                     <div className="p-6">
                       <div className="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
-                      <div className="h-3 bg-gray-300 rounded w-1/2 mb-4"></div>
+                      <div className="h-3 bg-gray-Please organize excuse me re-organize the drop-down300 rounded w-1/2 mb-4"></div>
                       <div className="h-3 bg-gray-300 rounded w-full mb-2"></div>
                       <div className="h-3 bg-gray-300 rounded w-2/3"></div>
                     </div>
@@ -146,31 +146,30 @@ export default function SheltersPage() {
       <div 
         className="fixed inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: 'url("/backgrounds/solutions-bg.jpg")',
-          opacity: 0.5,
+          backgroundImage: 'url("/backgrounds/hero-bg.jpg")',
           zIndex: -2
         }}
       />
-      <div className="fixed inset-0 bg-gradient-to-br from-blue-50/80 to-indigo-100/80 z-[-1]" />
+      <div className="fixed inset-0 bg-gradient-to-br from-gray-900/60 via-blue-900/50 to-indigo-900/60 z-[-1]" />
       
       <PublicNavigation />
       <div className="container mx-auto px-4 py-12 relative z-10">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4 drop-shadow-sm">
+          <h1 className="text-4xl font-bold text-white mb-4 drop-shadow-md">
             Our Affiliated Shelters
           </h1>
-          <p className="text-xl text-gray-700 max-w-3xl mx-auto drop-shadow-sm">
+          <p className="text-xl text-gray-100 max-w-3xl mx-auto drop-shadow-md">
             Discover the network of shelters working together to provide safety, support, and hope 
             to those experiencing homelessness across Montreal.
           </p>
           <div className="mt-6 flex justify-center items-center space-x-6">
-            <div className="flex items-center text-gray-800 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full border border-white/30">
-              <Heart className="h-5 w-5 text-red-500 mr-2" />
+            <div className="flex items-center text-white bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full border border-white/30">
+              <Heart className="h-5 w-5 text-red-400 mr-2" />
               <span className="font-medium">{sheltersData.length} Partner Shelters</span>
             </div>
-            <div className="flex items-center text-gray-800 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full border border-white/30">
-              <Users className="h-5 w-5 text-blue-500 mr-2" />
+            <div className="flex items-center text-white bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full border border-white/30">
+              <Users className="h-5 w-5 text-blue-400 mr-2" />
               <span className="font-medium">
                 {sheltersData.reduce((total, item) => total + item.shelter.capacity, 0)} Total Beds
               </span>
@@ -179,7 +178,7 @@ export default function SheltersPage() {
         </div>
 
         {/* Filtering Toolbar */}
-        <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg border border-white/50 p-6 mb-8">
+        <div className="bg-gray-800/90 backdrop-blur-sm rounded-xl shadow-lg border border-gray-600/50 p-6 mb-8">
           <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
             <div className="flex flex-col sm:flex-row gap-4 flex-1">
               {/* Search */}
@@ -190,7 +189,7 @@ export default function SheltersPage() {
                   placeholder="Search shelters, locations..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 bg-white/80 border-gray-200"
+                  className="pl-10 bg-gray-700/80 border-gray-600 text-gray-100 placeholder-gray-400 focus:border-blue-500"
                 />
               </div>
 
@@ -200,21 +199,21 @@ export default function SheltersPage() {
                 <select
                   value={selectedType}
                   onChange={(e) => setSelectedType(e.target.value)}
-                  className="pl-10 pr-10 py-2 bg-white/80 border border-gray-200 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none cursor-pointer"
+                  className="pl-10 pr-10 py-2 bg-gray-700/80 border border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none cursor-pointer text-gray-100"
                 >
                   <option value="">All Types</option>
                   <option value="Emergency Shelter">Emergency Shelter</option>
+                  <option value="Women's Shelter">Women&apos;s Shelter</option>
                   <option value="Transitional Housing">Transitional Housing</option>
                   <option value="Family Shelter">Family Shelter</option>
                   <option value="Youth Shelter">Youth Shelter</option>
-                  <option value="Women's Shelter">Women&apos;s Shelter</option>
                 </select>
               </div>
             </div>
 
             {/* Map Toggle */}
             <div className="flex items-center gap-4">
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-gray-100">
                 Showing {filteredShelters.length} of {sheltersData.length} shelters
               </span>
               <Button
@@ -231,12 +230,12 @@ export default function SheltersPage() {
 
         {/* Map View */}
         {showMap && (
-          <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg border border-white/50 p-6 mb-8">
-            <div className="flex items-center justify-center h-64 bg-gray-100 rounded-lg">
+          <div className="bg-gray-800/90 backdrop-blur-sm rounded-xl shadow-lg border border-gray-600/50 p-6 mb-8">
+            <div className="flex items-center justify-center h-64 bg-gray-700 rounded-lg">
               <div className="text-center">
                 <MapIcon className="h-12 w-12 text-gray-400 mx-auto mb-2" />
-                <p className="text-gray-600">Interactive map coming soon...</p>
-                <p className="text-sm text-gray-500 mt-1">
+                <p className="text-gray-300">Interactive map coming soon...</p>
+                <p className="text-sm text-gray-400 mt-1">
                   Will show all {filteredShelters.length} shelter locations
                 </p>
               </div>
@@ -255,7 +254,7 @@ export default function SheltersPage() {
 
             return (
               <Link href={`/${shelterSlug}`} key={shelter.id}>
-                <Card className="group hover:shadow-xl transition-all duration-300 overflow-hidden cursor-pointer bg-white/95 backdrop-blur-sm border border-white/50 hover:bg-white hover:scale-[1.02]">
+                <Card className="group hover:shadow-xl transition-all duration-300 overflow-hidden cursor-pointer bg-gray-900/95 backdrop-blur-sm border border-gray-700/50 hover:bg-gray-800 hover:scale-[1.02] dark:bg-gray-900/95 dark:border-gray-700/50 dark:hover:bg-gray-800">
                   {/* Shelter Image/Logo */}
                   <div className="relative h-48 bg-gradient-to-br from-blue-500 via-indigo-600 to-purple-600">
                     {config.backgroundImageUrl ? (
@@ -278,7 +277,27 @@ export default function SheltersPage() {
                     
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="text-center text-white">
-                        {config.logoUrl ? (
+                        {config.qrCodeClean?.url ? (
+                          <div className="w-24 h-24 rounded-lg overflow-hidden mx-auto mb-3 bg-white/95 backdrop-blur-sm p-2 shadow-lg border border-white/30">
+                            <Image
+                              src={config.qrCodeClean.url}
+                              alt={`${shelter.name} QR code`}
+                              width={80}
+                              height={80}
+                              className="w-full h-full object-contain"
+                            />
+                          </div>
+                        ) : config.qrCode?.url ? (
+                          <div className="w-24 h-24 rounded-lg overflow-hidden mx-auto mb-3 bg-white/95 backdrop-blur-sm p-2 shadow-lg border border-white/30">
+                            <Image
+                              src={config.qrCode.url}
+                              alt={`${shelter.name} QR code`}
+                              width={80}
+                              height={80}
+                              className="w-full h-full object-contain"
+                            />
+                          </div>
+                        ) : config.logoUrl ? (
                           <div className="w-20 h-20 rounded-full overflow-hidden mx-auto mb-3 bg-white/90 backdrop-blur-sm p-3 shadow-lg border border-white/30">
                             <Image
                               src={config.logoUrl}
@@ -294,28 +313,26 @@ export default function SheltersPage() {
                           </div>
                         )}
                         <h3 className="text-xl font-bold drop-shadow-sm">{shelter.name}</h3>
+                        {(config.qrCodeClean?.url || config.qrCode?.url) && (
+                          <p className="text-sm text-white/80 mt-1">Scan to donate</p>
+                        )}
                       </div>
                     </div>
                     
-                    {/* Shelter Type Badge */}
-                    <div className="absolute top-3 left-3">
-                      <Badge className={`${getShelterTypeColor(shelter.type)} backdrop-blur-sm`}>
-                        {shelter.type}
-                      </Badge>
-                    </div>
+
                   </div>
 
                   <CardHeader className="pb-4">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center justify-between mb-2">
-                          <CardTitle className="text-lg line-clamp-2">{shelter.name}</CardTitle>
+                          <CardTitle className="text-lg line-clamp-2 text-white">{shelter.name}</CardTitle>
                           <Badge variant="secondary" className="bg-orange-100 text-orange-800 border-orange-200">
                             <Clock className="h-3 w-3 mr-1" />
                             Coming Soon
                           </Badge>
                         </div>
-                      <CardDescription className="flex items-center mt-1">
+                      <CardDescription className="flex items-center mt-1 text-gray-300">
                         <MapPin className="h-4 w-4 mr-1" />
                         {shelter.address}
                       </CardDescription>
@@ -332,12 +349,12 @@ export default function SheltersPage() {
                   {/* Capacity Info */}
                   <div className="mb-4">
                     <div className="flex justify-between items-center mb-2">
-                      <span className="text-sm font-medium text-gray-600">Capacity</span>
+                      <span className="text-sm font-medium text-gray-200">Capacity</span>
                       <span className={`text-sm font-semibold ${getOccupancyColor(occupancyPercentage)}`}>
                         {shelter.currentOccupancy}/{shelter.capacity} ({occupancyPercentage}%)
                       </span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="w-full bg-gray-700 rounded-full h-2">
                       <div
                         className={`h-2 rounded-full transition-all duration-300 ${
                           occupancyPercentage >= 90 ? 'bg-red-500' :
@@ -354,14 +371,14 @@ export default function SheltersPage() {
                   {shelter.contact && (
                     <div className="mb-4 space-y-1">
                       {shelter.contact.phone && (
-                        <div className="flex items-center text-sm text-gray-600">
-                          <Phone className="h-4 w-4 mr-2 text-gray-400" />
+                        <div className="flex items-center text-sm text-gray-400">
+                          <Phone className="h-4 w-4 mr-2 text-gray-500" />
                           {shelter.contact.phone}
                         </div>
                       )}
                       {shelter.contact.email && (
-                        <div className="flex items-center text-sm text-gray-600">
-                          <Mail className="h-4 w-4 mr-2 text-gray-400" />
+                        <div className="flex items-center text-sm text-gray-400">
+                          <Mail className="h-4 w-4 mr-2 text-gray-500" />
                           {shelter.contact.email}
                         </div>
                       )}
@@ -380,11 +397,11 @@ export default function SheltersPage() {
 
                   {/* Action Indicator */}
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center text-sm text-muted-foreground">
+                    <div className="flex items-center text-sm text-gray-400">
                       <ExternalLink className="h-4 w-4 mr-2" />
                       Click to visit page
                     </div>
-                    <Heart className="h-4 w-4 text-muted-foreground hover:text-red-500 transition-colors" />
+                    <Heart className="h-4 w-4 text-gray-500 hover:text-red-500 transition-colors" />
                   </div>
                 </CardContent>
                 </Card>
@@ -406,7 +423,7 @@ export default function SheltersPage() {
 
         {/* Call to Action */}
         <div className="mt-16">
-          <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-xl shadow-xl overflow-hidden">
+          <div className="bg-gradient-to-br from-gray-900 via-blue-900 to-indigo-900 rounded-xl shadow-xl overflow-hidden">
             <div className="px-8 py-12 md:px-12 md:py-16">
               <div className="max-w-4xl mx-auto text-center">
                 <div className="flex justify-center mb-6">

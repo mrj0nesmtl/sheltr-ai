@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+r#!/usr/bin/env python3
 """
 Shelter Logo Upload Script
 Allows direct upload of shelter logos to Firebase Storage and updates Firestore.

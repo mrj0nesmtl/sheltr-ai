@@ -36,6 +36,25 @@ interface ShelterConfig {
   description?: string;
   mission?: string;
   services?: string[];
+  qrCode?: {
+    url: string;
+    storagePath: string;
+    donationUrl: string;
+    generatedAt: string;
+    type: string;
+    size?: string;
+    format?: string;
+  };
+  qrCodeClean?: {
+    url: string;
+    storagePath: string;
+    donationUrl: string;
+    generatedAt: string;
+    type: string;
+    size?: string;
+    format?: string;
+    hasText: boolean;
+  };
   operatingHours?: {
     [key: string]: string;
   };
@@ -152,7 +171,7 @@ export default function ShelterPage() {
   const occupancyStatus = getOccupancyStatus(occupancyPercentage);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-900">
       {/* Hero Section */}
       <div className="relative h-64 md:h-80 bg-gradient-to-br from-blue-600 to-indigo-700 overflow-hidden">
         {shelterConfig.backgroundImageUrl && (
@@ -164,8 +183,8 @@ export default function ShelterPage() {
           />
         )}
         <div className="absolute inset-0 bg-black bg-opacity-40"></div>
-        <div className="relative container mx-auto px-4 h-full flex items-center">
-          <div className="text-white">
+        <div className="relative container mx-auto px-4 h-full flex items-center justify-between">
+          <div className="text-white flex-1">
             <div className="flex items-center mb-4">
               <Button variant="outline" size="sm" asChild className="mr-4 bg-white/10 border-white/20 text-white hover:bg-white/20">
                 <Link href="/shelters">
@@ -186,23 +205,70 @@ export default function ShelterPage() {
               {shelterConfig.description}
             </p>
           </div>
+          
+          {/* QR Code Section */}
+          {(shelterConfig.qrCodeClean?.url || shelterConfig.qrCode?.url) && (
+            <div className="hidden md:flex flex-col items-center bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+              <div className="bg-white rounded-lg p-3 mb-3">
+                <Image
+                  src={shelterConfig.qrCodeClean?.url || shelterConfig.qrCode?.url || ''}
+                  alt={`${shelter.name} donation QR code`}
+                  width={120}
+                  height={120}
+                  className="w-30 h-30"
+                />
+              </div>
+              <div className="text-center">
+                <p className="text-white font-semibold text-sm mb-1">Quick Donate</p>
+                <p className="text-white/80 text-xs">Scan with your phone</p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
+
+      {/* Mobile QR Code Section */}
+      {(shelterConfig.qrCodeClean?.url || shelterConfig.qrCode?.url) && (
+        <div className="md:hidden bg-gray-800 border-b border-gray-700">
+          <div className="container mx-auto px-4 py-6">
+            <div className="flex items-center justify-center space-x-6">
+              <div className="bg-white rounded-lg p-3">
+                <Image
+                  src={shelterConfig.qrCodeClean?.url || shelterConfig.qrCode?.url || ''}
+                  alt={`${shelter.name} donation QR code`}
+                  width={80}
+                  height={80}
+                  className="w-20 h-20"
+                />
+              </div>
+              <div className="text-center">
+                <p className="text-white font-semibold mb-1">Quick Donate</p>
+                <p className="text-gray-400 text-sm">Scan with your phone</p>
+                <Button asChild className="mt-2" size="sm">
+                  <Link href={`/donate?shelter=${shelter.id}`}>
+                    Donate Now
+                  </Link>
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-8">
             {/* Mission */}
-            <Card>
+            <Card className="bg-gray-800 border-gray-700">
               <CardHeader>
-                <CardTitle className="flex items-center">
+                <CardTitle className="flex items-center text-white">
                   <Star className="h-5 w-5 mr-2 text-yellow-500" />
                   Our Mission
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-700 leading-relaxed">
+                <p className="text-gray-300 leading-relaxed">
                   {shelterConfig.mission}
                 </p>
               </CardContent>

@@ -12,7 +12,10 @@ on:
 permissions:
   contents: read
   security-events: write
-  actions: read
+  # Explicitly deny dangerous permissions
+  actions: none
+  id-token: none
+  packages: none
 
 jobs:
   dependency-scan:

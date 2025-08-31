@@ -157,7 +157,7 @@ export default function AngelsPage() {
         <div className="absolute inset-0 bg-black/40" />
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <Badge variant="secondary" className="mb-4 bg-purple-500/10 text-purple-600 border-purple-500/20">Internet Angels</Badge>
+            <Badge variant="secondary" className="mb-4">Internet Angels</Badge>
             <h1 className="text-4xl font-bold mb-6">Angels Amongst Us</h1>
           </div>
         </div>

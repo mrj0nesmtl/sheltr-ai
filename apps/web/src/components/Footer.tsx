@@ -17,10 +17,12 @@ export default function Footer() {
             {/* Mini Spotify Widget - Desktop Only */}
             <div className="hidden lg:block mt-4 p-3 bg-muted/50 rounded-lg border">
               <div className="flex items-center gap-2 mb-2">
-                <div className="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center">
-                  <div className="w-2 h-2 bg-white rounded-full"></div>
-                </div>
-                <span className="text-xs font-medium">Featured Podcast</span>
+                <img 
+                  src="/Spotify_Primary_Logo_RGB_Green.png" 
+                  alt="Spotify" 
+                  className="h-4 w-4"
+                />
+                <span className="text-xs font-medium">Featured on Spotify</span>
               </div>
               <div className="text-xs text-muted-foreground mb-2">
                 Hacking Homelessness • Tomes of Arcana
@@ -31,9 +33,11 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1 text-xs text-primary hover:text-primary/80 transition-colors"
               >
-                <div className="w-3 h-3 bg-green-500 rounded-full flex items-center justify-center">
-                  <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
-                </div>
+                <img 
+                  src="/Spotify_Primary_Logo_RGB_Green.png" 
+                  alt="Spotify" 
+                  className="h-3 w-3"
+                />
                 Listen on Spotify
               </a>
             </div>

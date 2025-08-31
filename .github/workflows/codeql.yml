@@ -14,15 +14,13 @@ jobs:
     runs-on: ${{ (matrix.language == 'swift' && 'macos-latest') || 'ubuntu-latest' }}
     timeout-minutes: ${{ (matrix.language == 'swift' && 120) || 360 }}
     permissions:
-      # required for all workflows
+      # Minimal permissions required for CodeQL analysis
       security-events: write
-      # required to fetch internal or private CodeQL packs
-      packages: read
-      # only required for workflows in private repositories
-      actions: read
       contents: read
-      # explicitly deny write-all to satisfy security scanners
+      # Explicitly deny dangerous permissions
+      actions: none
       id-token: none
+      packages: none
 
     strategy:
       fail-fast: false

@@ -247,7 +247,7 @@ async def health_check():
             content={
                 "success": False,
                 "status": "unhealthy",
-                "error": str(e)
+                "error": "Health check service unavailable"
             }
         )
 

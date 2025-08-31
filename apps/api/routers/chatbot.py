@@ -457,6 +457,6 @@ async def chatbot_health():
         return {
             "success": False,
             "status": "error",
-            "error": str(e),
+            "error": "Chatbot service unavailable",
             "timestamp": datetime.now().isoformat()
         } 

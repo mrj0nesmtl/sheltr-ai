@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# 🍎 MacBook Sync Script for SHELTR-AI
+# 🍎 MacBook Sync Script for SHELTR-AI - Aug 30, 2025
 # Run this script to sync your MacBook with all Mac Mini development
 echo "🍎 Starting MacBook sync for SHELTR-AI..."
 echo "📅 Mac Mini has been primary development environment for months"

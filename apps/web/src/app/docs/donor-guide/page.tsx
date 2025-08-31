@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -18,7 +19,13 @@ import {
   ArrowRight,
   Wallet,
   BarChart3,
-  Home
+  Home,
+  BookOpen,
+  FileText,
+  MessageSquare,
+  Target,
+  DollarSign,
+  Globe
 } from 'lucide-react';
 
 export default function DonorGuidePage() {
@@ -29,7 +36,9 @@ export default function DonorGuidePage() {
       icon: Heart,
       description: 'Account creation, profile setup, and understanding the SmartFund model',
       status: 'Essential',
-      color: 'bg-red-50 text-red-700'
+      color: 'bg-red-50 text-red-700',
+      link: '/user-journeys/donors/',
+      external: false
     },
     {
       id: 'qr-donations',
@@ -37,7 +46,9 @@ export default function DonorGuidePage() {
       icon: QrCode,
       description: 'Instant donations, participant connection, and mobile giving experience',
       status: 'Core Feature',
-      color: 'bg-blue-50 text-blue-700'
+      color: 'bg-blue-50 text-blue-700',
+      link: '/scan-give',
+      external: false
     },
     {
       id: 'impact-tracking',
@@ -45,7 +56,9 @@ export default function DonorGuidePage() {
       icon: TrendingUp,
       description: 'Real-time transparency, outcome measurement, and success stories',
       status: 'Transparency',
-      color: 'bg-green-50 text-green-700'
+      color: 'bg-green-50 text-green-700',
+      link: '/impact',
+      external: false
     },
     {
       id: 'payment-security',
@@ -53,7 +66,9 @@ export default function DonorGuidePage() {
       icon: Shield,
       description: 'Secure payment methods, privacy protection, and financial safety',
       status: 'Security',
-      color: 'bg-purple-50 text-purple-700'
+      color: 'bg-purple-50 text-purple-700',
+      link: 'https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/06-user-guides/donor-guide.md',
+      external: true
     },
     {
       id: 'community-building',
@@ -61,7 +76,9 @@ export default function DonorGuidePage() {
       icon: Users,
       description: 'Participant relationships, corporate giving, and advocacy opportunities',
       status: 'Community',
-      color: 'bg-orange-50 text-orange-700'
+      color: 'bg-orange-50 text-orange-700',
+      link: '/solutions',
+      external: false
     },
     {
       id: 'support-resources',
@@ -69,7 +86,9 @@ export default function DonorGuidePage() {
       icon: HelpCircle,
       description: 'Getting help, best practices, and donor community resources',
       status: 'Support',
-      color: 'bg-gray-50 text-gray-700'
+      color: 'bg-gray-50 text-gray-700',
+      link: 'mailto:joel@arcanaconcept.com',
+      external: true
     }
   ];
 
@@ -78,37 +97,49 @@ export default function DonorGuidePage() {
       title: 'QR Code Donations',
       description: 'Instant giving through smartphone camera scanning',
       icon: QrCode,
-      status: 'Instant'
+      status: 'Instant',
+      link: '/scan-give',
+      external: false
     },
     {
       title: 'SmartFund Distribution',
       description: '85% direct, 10% housing fund, 5% shelter operations',
       icon: Wallet,
-      status: 'Transparent'
+      status: 'Transparent',
+      link: '/tokenomics',
+      external: false
     },
     {
       title: 'Blockchain Tracking',
       description: 'Every donation tracked with complete transparency',
       icon: BarChart3,
-      status: 'Verified'
+      status: 'Verified',
+      link: 'https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/tokenomics/blockchain.md',
+      external: true
     },
     {
       title: 'Housing Impact',
       description: '10% of every donation builds long-term housing solutions',
       icon: Home,
-      status: 'Long-term'
+      status: 'Long-term',
+      link: '/impact',
+      external: false
     },
     {
       title: 'Real-Time Impact',
       description: 'See immediate results and participant progress',
       icon: TrendingUp,
-      status: 'Live'
+      status: 'Live',
+      link: '/impact',
+      external: false
     },
     {
       title: 'Secure Payments',
       description: 'Bank-level security with multiple payment options',
       icon: Shield,
-      status: 'Protected'
+      status: 'Protected',
+      link: 'https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/technical/security.md',
+      external: true
     }
   ];
 
@@ -116,28 +147,32 @@ export default function DonorGuidePage() {
 
   const quickActions = [
     {
-      title: 'Preview Donor Wallet',
-      description: 'See what your donor experience will look like in action',
-      icon: Wallet,
-      action: '/demo/donor-wallet'
+      title: 'View User Journey',
+      description: 'Complete donor user journey and workflow guide',
+      icon: BookOpen,
+      action: '/user-journeys/donors/',
+      external: false
     },
     {
       title: 'Start Giving Today',
       description: 'Create your account and make your first donation',
       icon: Heart,
-      action: '/register?role=donor'
+      action: '/register?role=donor',
+      external: false
     },
     {
-      title: 'Download PDF Guide',
-      description: 'Complete 28-page donor guide for comprehensive reference',
-      icon: Download,
-      action: '/docs/donor-guide.pdf'
+      title: 'Access Documentation',
+      description: 'Comprehensive technical documentation and guides',
+      icon: FileText,
+      action: '/docs',
+      external: false
     },
     {
-      title: 'Join Donor Community',
-      description: 'Connect with other donors and share experiences',
-      icon: Users,
-      action: '/community/donors'
+      title: 'Contact Support',
+      description: 'Get help with donations and platform questions',
+      icon: MessageSquare,
+      action: 'mailto:joel@arcanaconcept.com',
+      external: true
     }
   ];
 
@@ -180,10 +215,12 @@ export default function DonorGuidePage() {
               <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
                 Version 1.4.0 • Revolutionary Giving Platform
               </p>
-              <Button className="bg-red-600 hover:bg-red-700">
-                <Heart className="h-4 w-4 mr-2" />
-                Start Giving Today
-              </Button>
+              <Link href="/user-journeys/donors/">
+                <Button className="bg-red-600 hover:bg-red-700">
+                  <BookOpen className="h-4 w-4 mr-2" />
+                  View User Journey
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
@@ -234,21 +271,50 @@ export default function DonorGuidePage() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {givingFeatures.map((feature, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow">
-                <CardHeader className="pb-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                      <feature.icon className="h-5 w-5 text-blue-600" />
-                      <CardTitle className="text-base">{feature.title}</CardTitle>
-                    </div>
-                    <Badge variant="secondary" className="bg-green-100 text-green-800 text-xs">
-                      {feature.status}
-                    </Badge>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription>{feature.description}</CardDescription>
-                </CardContent>
+              <Card key={index} className="hover:shadow-lg transition-shadow cursor-pointer group">
+                {feature.external ? (
+                  <a href={feature.link} target="_blank" rel="noopener noreferrer">
+                    <CardHeader className="pb-3">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-2">
+                          <feature.icon className="h-5 w-5 text-blue-600" />
+                          <CardTitle className="text-base group-hover:text-red-600 transition-colors">{feature.title}</CardTitle>
+                        </div>
+                        <Badge variant="secondary" className="bg-green-100 text-green-800 text-xs">
+                          {feature.status}
+                        </Badge>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <CardDescription>{feature.description}</CardDescription>
+                      <div className="flex items-center mt-2 text-red-600">
+                        <span className="text-xs">View Documentation</span>
+                        <ExternalLink className="h-3 w-3 ml-1" />
+                      </div>
+                    </CardContent>
+                  </a>
+                ) : (
+                  <Link href={feature.link}>
+                    <CardHeader className="pb-3">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-2">
+                          <feature.icon className="h-5 w-5 text-blue-600" />
+                          <CardTitle className="text-base group-hover:text-red-600 transition-colors">{feature.title}</CardTitle>
+                        </div>
+                        <Badge variant="secondary" className="bg-green-100 text-green-800 text-xs">
+                          {feature.status}
+                        </Badge>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <CardDescription>{feature.description}</CardDescription>
+                      <div className="flex items-center mt-2 text-red-600">
+                        <span className="text-xs">Learn More</span>
+                        <ArrowRight className="h-3 w-3 ml-1" />
+                      </div>
+                    </CardContent>
+                  </Link>
+                )}
               </Card>
             ))}
           </div>
@@ -260,50 +326,65 @@ export default function DonorGuidePage() {
             Give at a Distance, Stay Connected
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Card className="hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Users className="h-5 w-5 text-blue-600" />
-                  Participant Check-ins
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                  Stay connected with participants you&apos;ve supported. Receive progress updates, milestones, and success stories directly from those you&apos;ve helped.
-                </p>
-                <Badge className="bg-green-100 text-green-800">Real-time Updates</Badge>
-              </CardContent>
-            </Card>
+            <Link href="/impact">
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer group">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 group-hover:text-red-600 transition-colors">
+                    <Users className="h-5 w-5 text-blue-600" />
+                    Participant Check-ins
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                    Stay connected with participants you&apos;ve supported. Receive progress updates, milestones, and success stories directly from those you&apos;ve helped.
+                  </p>
+                  <div className="flex items-center justify-between">
+                    <Badge className="bg-green-100 text-green-800">Real-time Updates</Badge>
+                    <ArrowRight className="h-4 w-4 text-red-600" />
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
             
-            <Card className="hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Clock className="h-5 w-5 text-purple-600" />
-                  Recurring Donations
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                  Set up automatic recurring donations to provide consistent support. Choose weekly, monthly, or custom schedules that work for your budget.
-                </p>
-                <Badge className="bg-purple-100 text-purple-800">Automated Support</Badge>
-              </CardContent>
-            </Card>
+            <Link href="/tokenomics">
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer group">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 group-hover:text-red-600 transition-colors">
+                    <Clock className="h-5 w-5 text-purple-600" />
+                    Recurring Donations
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                    Set up automatic recurring donations to provide consistent support. Choose weekly, monthly, or custom schedules that work for your budget.
+                  </p>
+                  <div className="flex items-center justify-between">
+                    <Badge className="bg-purple-100 text-purple-800">Automated Support</Badge>
+                    <ArrowRight className="h-4 w-4 text-red-600" />
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
             
-            <Card className="hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Shield className="h-5 w-5 text-orange-600" />
-                  Remote Support
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                  Support participants from anywhere in the world. Technology bridges distance, allowing meaningful connections across cities, states, or countries.
-                </p>
-                <Badge className="bg-orange-100 text-orange-800">Global Impact</Badge>
-              </CardContent>
-            </Card>
+            <Link href="/solutions">
+              <Card className="hover:shadow-lg transition-shadow cursor-pointer group">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 group-hover:text-red-600 transition-colors">
+                    <Globe className="h-5 w-5 text-orange-600" />
+                    Remote Support
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                    Support participants from anywhere in the world. Technology bridges distance, allowing meaningful connections across cities, states, or countries.
+                  </p>
+                  <div className="flex items-center justify-between">
+                    <Badge className="bg-orange-100 text-orange-800">Global Impact</Badge>
+                    <ArrowRight className="h-4 w-4 text-red-600" />
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
           </div>
           
           <div className="mt-8 p-6 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg border">
@@ -422,29 +503,67 @@ export default function DonorGuidePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {sections.map((section, index) => (
               <Card key={index} className="hover:shadow-lg transition-shadow cursor-pointer group">
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <div className={`p-2 rounded-lg ${section.color}`}>
-                        <section.icon className="h-5 w-5" />
+                {section.external ? (
+                  <a href={section.link} target="_blank" rel="noopener noreferrer">
+                    <CardHeader>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-3">
+                          <div className={`p-2 rounded-lg ${section.color}`}>
+                            <section.icon className="h-5 w-5" />
+                          </div>
+                          <div>
+                            <CardTitle className="text-lg group-hover:text-red-600 transition-colors">
+                              {section.title}
+                            </CardTitle>
+                            <Badge variant="outline" className="mt-1 text-xs">
+                              {section.status}
+                            </Badge>
+                          </div>
+                        </div>
+                        <ExternalLink className="h-5 w-5 text-gray-400 group-hover:text-red-600 transition-colors" />
                       </div>
-                      <div>
-                        <CardTitle className="text-lg group-hover:text-red-600 transition-colors">
-                          {section.title}
-                        </CardTitle>
-                        <Badge variant="outline" className="mt-1 text-xs">
-                          {section.status}
-                        </Badge>
+                    </CardHeader>
+                    <CardContent>
+                      <CardDescription className="text-sm">
+                        {section.description}
+                      </CardDescription>
+                      <div className="flex items-center mt-2 text-red-600">
+                        <span className="text-xs">View Documentation</span>
+                        <ExternalLink className="h-3 w-3 ml-1" />
                       </div>
-                    </div>
-                    <ArrowRight className="h-5 w-5 text-gray-400 group-hover:text-red-600 transition-colors" />
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="text-sm">
-                    {section.description}
-                  </CardDescription>
-                </CardContent>
+                    </CardContent>
+                  </a>
+                ) : (
+                  <Link href={section.link}>
+                    <CardHeader>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-3">
+                          <div className={`p-2 rounded-lg ${section.color}`}>
+                            <section.icon className="h-5 w-5" />
+                          </div>
+                          <div>
+                            <CardTitle className="text-lg group-hover:text-red-600 transition-colors">
+                              {section.title}
+                            </CardTitle>
+                            <Badge variant="outline" className="mt-1 text-xs">
+                              {section.status}
+                            </Badge>
+                          </div>
+                        </div>
+                        <ArrowRight className="h-5 w-5 text-gray-400 group-hover:text-red-600 transition-colors" />
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <CardDescription className="text-sm">
+                        {section.description}
+                      </CardDescription>
+                      <div className="flex items-center mt-2 text-red-600">
+                        <span className="text-xs">Learn More</span>
+                        <ArrowRight className="h-3 w-3 ml-1" />
+                      </div>
+                    </CardContent>
+                  </Link>
+                )}
               </Card>
             ))}
           </div>
@@ -457,26 +576,47 @@ export default function DonorGuidePage() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {quickActions.map((action, index) => (
-              <a key={index} href={action.action} target={action.action.startsWith('http') ? '_blank' : '_self'} rel={action.action.startsWith('http') ? 'noopener noreferrer' : undefined}>
-                <Card className="hover:shadow-lg transition-shadow cursor-pointer group h-full">
-                  <CardContent className="p-6 text-center">
-                    <div className="flex justify-center mb-4">
-                      <div className="p-3 bg-red-100 dark:bg-red-900 rounded-full group-hover:bg-red-200 dark:group-hover:bg-red-800 transition-colors">
-                        <action.icon className="h-6 w-6 text-red-600 dark:text-red-400" />
+              <Card key={index} className="hover:shadow-lg transition-shadow cursor-pointer group h-full">
+                {action.external ? (
+                  <a href={action.action} target="_blank" rel="noopener noreferrer">
+                    <CardContent className="p-6 text-center">
+                      <div className="flex justify-center mb-4">
+                        <div className="p-3 bg-red-100 dark:bg-red-900 rounded-full group-hover:bg-red-200 dark:group-hover:bg-red-800 transition-colors">
+                          <action.icon className="h-6 w-6 text-red-600 dark:text-red-400" />
+                        </div>
                       </div>
-                    </div>
-                    <h3 className="font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-red-600 transition-colors">
-                      {action.title}
-                    </h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                      {action.description}
-                    </p>
-                    <Button variant="outline" size="sm" className="w-full">
-                      <ArrowRight className="h-4 w-4 ml-2" />
-                    </Button>
-                  </CardContent>
-                </Card>
-              </a>
+                      <h3 className="font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-red-600 transition-colors">
+                        {action.title}
+                      </h3>
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                        {action.description}
+                      </p>
+                      <Button variant="outline" size="sm" className="w-full">
+                        <ExternalLink className="h-4 w-4 ml-2" />
+                      </Button>
+                    </CardContent>
+                  </a>
+                ) : (
+                  <Link href={action.action}>
+                    <CardContent className="p-6 text-center">
+                      <div className="flex justify-center mb-4">
+                        <div className="p-3 bg-red-100 dark:bg-red-900 rounded-full group-hover:bg-red-200 dark:group-hover:bg-red-800 transition-colors">
+                          <action.icon className="h-6 w-6 text-red-600 dark:text-red-400" />
+                        </div>
+                      </div>
+                      <h3 className="font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-red-600 transition-colors">
+                        {action.title}
+                      </h3>
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                        {action.description}
+                      </p>
+                      <Button variant="outline" size="sm" className="w-full">
+                        <ArrowRight className="h-4 w-4 ml-2" />
+                      </Button>
+                    </CardContent>
+                  </Link>
+                )}
+              </Card>
             ))}
           </div>
         </div>
@@ -517,14 +657,18 @@ export default function DonorGuidePage() {
             Every donation creates immediate impact while building long-term solutions for homelessness.
           </p>
           <div className="flex justify-center space-x-4">
-            <Button className="bg-red-600 hover:bg-red-700" size="lg">
-              <Heart className="h-4 w-4 mr-2" />
-              Start Giving Today
-            </Button>
-            <Button variant="outline" size="lg">
-              <Download className="h-4 w-4 mr-2" />
-              Download Guide
-            </Button>
+            <Link href="/user-journeys/donors/">
+              <Button className="bg-red-600 hover:bg-red-700" size="lg">
+                <BookOpen className="h-4 w-4 mr-2" />
+                View User Journey
+              </Button>
+            </Link>
+            <Link href="/docs">
+              <Button variant="outline" size="lg">
+                <FileText className="h-4 w-4 mr-2" />
+                Access Documentation
+              </Button>
+            </Link>
           </div>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-4">
             No fees for donors • Bank-level security • Instant impact

@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -15,7 +16,13 @@ import {
   CheckCircle,
   Clock,
   Star,
-  ArrowRight
+  ArrowRight,
+  BookOpen,
+  FileText,
+  MessageSquare,
+  BarChart,
+  Shield as ShieldIcon,
+  LifeBuoy
 } from 'lucide-react';
 
 export default function ShelterAdminGuidePage() {
@@ -26,7 +33,9 @@ export default function ShelterAdminGuidePage() {
       icon: Building2,
       description: 'Account setup, dashboard overview, and initial configuration',
       status: 'Essential',
-      color: 'bg-blue-50 text-blue-700'
+      color: 'bg-blue-50 text-blue-700',
+      link: '/user-journeys/shelters/',
+      external: false
     },
     {
       id: 'participant-management',
@@ -34,7 +43,9 @@ export default function ShelterAdminGuidePage() {
       icon: Users,
       description: 'Registration, status tracking, and comprehensive participant care',
       status: 'Core Feature',
-      color: 'bg-green-50 text-green-700'
+      color: 'bg-green-50 text-green-700',
+      link: '/solutions',
+      external: false
     },
     {
       id: 'service-management',
@@ -42,7 +53,9 @@ export default function ShelterAdminGuidePage() {
       icon: Settings,
       description: 'Service administration, scheduling, and provider coordination',
       status: 'Operational',
-      color: 'bg-purple-50 text-purple-700'
+      color: 'bg-purple-50 text-purple-700',
+      link: 'https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/06-user-guides/shelter-admin-guide.md',
+      external: true
     },
     {
       id: 'analytics-reporting',
@@ -50,7 +63,9 @@ export default function ShelterAdminGuidePage() {
       icon: BarChart3,
       description: 'Real-time metrics, impact measurement, and stakeholder reporting',
       status: 'Data-Driven',
-      color: 'bg-orange-50 text-orange-700'
+      color: 'bg-orange-50 text-orange-700',
+      link: '/impact',
+      external: false
     },
     {
       id: 'security-compliance',
@@ -58,7 +73,9 @@ export default function ShelterAdminGuidePage() {
       icon: Shield,
       description: 'Data protection, regulatory compliance, and emergency procedures',
       status: 'Critical',
-      color: 'bg-red-50 text-red-700'
+      color: 'bg-red-50 text-red-700',
+      link: 'https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/technical/security.md',
+      external: true
     },
     {
       id: 'support-resources',
@@ -66,67 +83,85 @@ export default function ShelterAdminGuidePage() {
       icon: HelpCircle,
       description: 'Troubleshooting, best practices, and community support',
       status: 'Support',
-      color: 'bg-gray-50 text-gray-700'
+      color: 'bg-gray-50 text-gray-700',
+      link: 'mailto:joel@arcanaconcept.com',
+      external: true
     }
   ];
 
   const keyFeatures = [
     {
       title: 'Real-Time Dashboard',
-      description: 'Live participant tracking with Session 9 implementation',
-      status: 'operational'
+      description: 'Live participant tracking with Session 14 implementation',
+      status: 'operational',
+      link: '/dashboard',
+      external: false
     },
     {
       title: 'Bed Management System',
       description: 'Dynamic occupancy tracking for Old Brewery Mission and other shelters',
-      status: 'operational'
+      status: 'operational',
+      link: '/solutions',
+      external: false
     },
     {
       title: 'SmartFund Distribution',
       description: 'Transparent 80-15-5 donation allocation system',
-      status: 'operational'
+      status: 'operational',
+      link: '/tokenomics',
+      external: false
     },
     {
       title: 'Service Coordination',
       description: 'Comprehensive service management and provider integration',
-      status: 'operational'
+      status: 'operational',
+      link: 'https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/06-user-guides/shelter-admin-guide.md',
+      external: true
     },
     {
       title: 'Impact Analytics',
       description: 'Data-driven insights for shelter optimization',
-      status: 'operational'
+      status: 'operational',
+      link: '/impact',
+      external: false
     },
     {
       title: 'Community Integration',
       description: 'Donor engagement and community building tools',
-      status: 'operational'
+      status: 'operational',
+      link: '/scan-give',
+      external: false
     }
   ];
 
   const quickActions = [
     {
-      title: 'Download PDF Guide',
-      description: 'Complete 400+ page admin guide for offline reference',
-      icon: Download,
-      action: '/docs/shelter-admin-guide.pdf'
+      title: 'View User Journey',
+      description: 'Complete shelter administrator user journey and workflow',
+      icon: BookOpen,
+      action: '/user-journeys/shelters/',
+      external: false
     },
     {
-      title: 'Access Training Videos',
-      description: 'Video tutorials for platform mastery',
-      icon: ExternalLink,
-      action: '/training/admin-videos'
+      title: 'Access Documentation',
+      description: 'Comprehensive technical documentation and guides',
+      icon: FileText,
+      action: '/docs',
+      external: false
     },
     {
-      title: 'Join Admin Forum',
-      description: 'Connect with other shelter administrators',
-      icon: Users,
-      action: '/community/admin-forum'
+      title: 'Chatbot Support',
+      description: 'AI-powered assistance for platform questions',
+      icon: MessageSquare,
+      action: '/dashboard/chatbots',
+      external: false
     },
     {
       title: 'Contact Support',
       description: '24/7 technical and operational support',
-      icon: HelpCircle,
-      action: 'mailto:admin-support@sheltr.ai'
+      icon: LifeBuoy,
+      action: 'mailto:joel@arcanaconcept.com',
+      external: true
     }
   ];
 
@@ -153,7 +188,7 @@ export default function ShelterAdminGuidePage() {
               <div className="flex items-center space-x-4">
                 <Badge variant="secondary" className="bg-green-100 text-green-800">
                   <CheckCircle className="h-3 w-3 mr-1" />
-                  Session 9 Updated
+                  Session 14 Updated
                 </Badge>
                 <Badge variant="secondary" className="bg-blue-100 text-blue-800">
                   <Clock className="h-3 w-3 mr-1" />
@@ -161,18 +196,20 @@ export default function ShelterAdminGuidePage() {
                 </Badge>
                 <Badge variant="secondary" className="bg-purple-100 text-purple-800">
                   <Star className="h-3 w-3 mr-1" />
-                  400+ Pages
+                  Professional Documentation
                 </Badge>
               </div>
             </div>
             <div className="text-right">
               <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                Version 2.0 • Investment-Grade Documentation
+                Version 2.0 • Professional Documentation
               </p>
-              <Button className="bg-blue-600 hover:bg-blue-700">
-                <Download className="h-4 w-4 mr-2" />
-                Download Complete Guide
-              </Button>
+              <Link href="/user-journeys/shelters/">
+                <Button className="bg-blue-600 hover:bg-blue-700">
+                  <BookOpen className="h-4 w-4 mr-2" />
+                  View User Journey
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
@@ -186,19 +223,46 @@ export default function ShelterAdminGuidePage() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {keyFeatures.map((feature, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow">
-                <CardHeader className="pb-3">
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="text-base">{feature.title}</CardTitle>
-                    <Badge variant="secondary" className="bg-green-100 text-green-800 text-xs">
-                      <CheckCircle className="h-3 w-3 mr-1" />
-                      {feature.status}
-                    </Badge>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription>{feature.description}</CardDescription>
-                </CardContent>
+              <Card key={index} className="hover:shadow-lg transition-shadow cursor-pointer group">
+                {feature.external ? (
+                  <a href={feature.link} target="_blank" rel="noopener noreferrer">
+                    <CardHeader className="pb-3">
+                      <div className="flex items-center justify-between">
+                        <CardTitle className="text-base group-hover:text-blue-600 transition-colors">{feature.title}</CardTitle>
+                        <Badge variant="secondary" className="bg-green-100 text-green-800 text-xs">
+                          <CheckCircle className="h-3 w-3 mr-1" />
+                          {feature.status}
+                        </Badge>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <CardDescription>{feature.description}</CardDescription>
+                      <div className="flex items-center mt-2 text-blue-600">
+                        <span className="text-xs">View Documentation</span>
+                        <ExternalLink className="h-3 w-3 ml-1" />
+                      </div>
+                    </CardContent>
+                  </a>
+                ) : (
+                  <Link href={feature.link}>
+                    <CardHeader className="pb-3">
+                      <div className="flex items-center justify-between">
+                        <CardTitle className="text-base group-hover:text-blue-600 transition-colors">{feature.title}</CardTitle>
+                        <Badge variant="secondary" className="bg-green-100 text-green-800 text-xs">
+                          <CheckCircle className="h-3 w-3 mr-1" />
+                          {feature.status}
+                        </Badge>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <CardDescription>{feature.description}</CardDescription>
+                      <div className="flex items-center mt-2 text-blue-600">
+                        <span className="text-xs">Learn More</span>
+                        <ArrowRight className="h-3 w-3 ml-1" />
+                      </div>
+                    </CardContent>
+                  </Link>
+                )}
               </Card>
             ))}
           </div>
@@ -212,29 +276,67 @@ export default function ShelterAdminGuidePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {sections.map((section, index) => (
               <Card key={index} className="hover:shadow-lg transition-shadow cursor-pointer group">
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <div className={`p-2 rounded-lg ${section.color}`}>
-                        <section.icon className="h-5 w-5" />
+                {section.external ? (
+                  <a href={section.link} target="_blank" rel="noopener noreferrer">
+                    <CardHeader>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-3">
+                          <div className={`p-2 rounded-lg ${section.color}`}>
+                            <section.icon className="h-5 w-5" />
+                          </div>
+                          <div>
+                            <CardTitle className="text-lg group-hover:text-blue-600 transition-colors">
+                              {section.title}
+                            </CardTitle>
+                            <Badge variant="outline" className="mt-1 text-xs">
+                              {section.status}
+                            </Badge>
+                          </div>
+                        </div>
+                        <ExternalLink className="h-5 w-5 text-gray-400 group-hover:text-blue-600 transition-colors" />
                       </div>
-                      <div>
-                        <CardTitle className="text-lg group-hover:text-blue-600 transition-colors">
-                          {section.title}
-                        </CardTitle>
-                        <Badge variant="outline" className="mt-1 text-xs">
-                          {section.status}
-                        </Badge>
+                    </CardHeader>
+                    <CardContent>
+                      <CardDescription className="text-sm">
+                        {section.description}
+                      </CardDescription>
+                      <div className="flex items-center mt-2 text-blue-600">
+                        <span className="text-xs">View Documentation</span>
+                        <ExternalLink className="h-3 w-3 ml-1" />
                       </div>
-                    </div>
-                    <ArrowRight className="h-5 w-5 text-gray-400 group-hover:text-blue-600 transition-colors" />
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="text-sm">
-                    {section.description}
-                  </CardDescription>
-                </CardContent>
+                    </CardContent>
+                  </a>
+                ) : (
+                  <Link href={section.link}>
+                    <CardHeader>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-3">
+                          <div className={`p-2 rounded-lg ${section.color}`}>
+                            <section.icon className="h-5 w-5" />
+                          </div>
+                          <div>
+                            <CardTitle className="text-lg group-hover:text-blue-600 transition-colors">
+                              {section.title}
+                            </CardTitle>
+                            <Badge variant="outline" className="mt-1 text-xs">
+                              {section.status}
+                            </Badge>
+                          </div>
+                        </div>
+                        <ArrowRight className="h-5 w-5 text-gray-400 group-hover:text-blue-600 transition-colors" />
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <CardDescription className="text-sm">
+                        {section.description}
+                      </CardDescription>
+                      <div className="flex items-center mt-2 text-blue-600">
+                        <span className="text-xs">Learn More</span>
+                        <ArrowRight className="h-3 w-3 ml-1" />
+                      </div>
+                    </CardContent>
+                  </Link>
+                )}
               </Card>
             ))}
           </div>
@@ -248,22 +350,45 @@ export default function ShelterAdminGuidePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {quickActions.map((action, index) => (
               <Card key={index} className="hover:shadow-lg transition-shadow cursor-pointer group">
-                <CardContent className="p-6 text-center">
-                  <div className="flex justify-center mb-4">
-                    <div className="p-3 bg-blue-100 dark:bg-blue-900 rounded-full group-hover:bg-blue-200 dark:group-hover:bg-blue-800 transition-colors">
-                      <action.icon className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-                    </div>
-                  </div>
-                  <h3 className="font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-blue-600 transition-colors">
-                    {action.title}
-                  </h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                    {action.description}
-                  </p>
-                  <Button variant="outline" size="sm" className="w-full">
-                    <ArrowRight className="h-4 w-4 ml-2" />
-                  </Button>
-                </CardContent>
+                {action.external ? (
+                  <a href={action.action} target="_blank" rel="noopener noreferrer">
+                    <CardContent className="p-6 text-center">
+                      <div className="flex justify-center mb-4">
+                        <div className="p-3 bg-blue-100 dark:bg-blue-900 rounded-full group-hover:bg-blue-200 dark:group-hover:bg-blue-800 transition-colors">
+                          <action.icon className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                        </div>
+                      </div>
+                      <h3 className="font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-blue-600 transition-colors">
+                        {action.title}
+                      </h3>
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                        {action.description}
+                      </p>
+                      <Button variant="outline" size="sm" className="w-full">
+                        <ExternalLink className="h-4 w-4 ml-2" />
+                      </Button>
+                    </CardContent>
+                  </a>
+                ) : (
+                  <Link href={action.action}>
+                    <CardContent className="p-6 text-center">
+                      <div className="flex justify-center mb-4">
+                        <div className="p-3 bg-blue-100 dark:bg-blue-900 rounded-full group-hover:bg-blue-200 dark:group-hover:bg-blue-800 transition-colors">
+                          <action.icon className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                        </div>
+                      </div>
+                      <h3 className="font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-blue-600 transition-colors">
+                        {action.title}
+                      </h3>
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                        {action.description}
+                      </p>
+                      <Button variant="outline" size="sm" className="w-full">
+                        <ArrowRight className="h-4 w-4 ml-2" />
+                      </Button>
+                    </CardContent>
+                  </Link>
+                )}
               </Card>
             ))}
           </div>
@@ -274,14 +399,14 @@ export default function ShelterAdminGuidePage() {
           <CardHeader>
             <CardTitle className="flex items-center space-x-2 text-green-800 dark:text-green-400">
               <CheckCircle className="h-5 w-5" />
-              <span>Session 9 Implementation Status</span>
+              <span>Session 14 Implementation Status</span>
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="text-center">
                 <div className="text-3xl font-bold text-green-600 dark:text-green-400 mb-2">
-                  90%
+                  95%
                 </div>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
                   Platform Completion

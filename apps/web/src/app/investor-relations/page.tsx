@@ -2223,6 +2223,57 @@ export default function InvestorRelationsPage() {
 
               <Card>
                 <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <ArrowRight className="h-5 w-5" />
+                    A Path Forward
+                  </CardTitle>
+                  <CardDescription>
+                    Our roadmap to transforming charitable giving across North America
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid md:grid-cols-3 gap-6">
+                    <div className="text-center border-2 border-green-200 dark:border-green-800 rounded-lg p-6 hover:border-green-300 dark:hover:border-green-700 hover:shadow-lg transition-all">
+                      <Badge className="mx-auto mb-4 bg-green-500/10 text-green-600 border-green-500/20">Phase 1</Badge>
+                      <h4 className="text-lg font-semibold mb-2">Foundation & Pilot</h4>
+                      <p className="text-sm text-muted-foreground mb-4">Local Market Entry</p>
+                      <ul className="text-sm text-muted-foreground space-y-2 text-left">
+                        <li>• Platform development & testing</li>
+                        <li>• Local shelter partnerships</li>
+                        <li>• Community pilot programs</li>
+                        <li>• User feedback integration</li>
+                      </ul>
+                    </div>
+
+                    <div className="text-center border-2 border-blue-200 dark:border-blue-800 rounded-lg p-6 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-lg transition-all">
+                      <Badge className="mx-auto mb-4 bg-blue-500/10 text-blue-600 border-blue-500/20">Phase 2</Badge>
+                      <h4 className="text-lg font-semibold mb-2">Regional Expansion</h4>
+                      <p className="text-sm text-muted-foreground mb-4">Network Scaling</p>
+                      <ul className="text-sm text-muted-foreground space-y-2 text-left">
+                        <li>• National expansion</li>
+                        <li>• Provincial government partnerships</li>
+                        <li>• Mobile app launch</li>
+                        <li>• Corporate sponsorship program</li>
+                      </ul>
+                    </div>
+
+                    <div className="text-center border-2 border-purple-200 dark:border-purple-800 rounded-lg p-6 hover:border-purple-300 dark:hover:border-purple-700 hover:shadow-lg transition-all">
+                      <Badge className="mx-auto mb-4 bg-purple-500/10 text-purple-600 border-purple-500/20">Phase 3</Badge>
+                      <h4 className="text-lg font-semibold mb-2">Continental Impact</h4>
+                      <p className="text-sm text-muted-foreground mb-4">North American Network</p>
+                      <ul className="text-sm text-muted-foreground space-y-2 text-left">
+                        <li>• US market entry</li>
+                        <li>• International partnerships</li>
+                        <li>• AI-driven impact optimization</li>
+                        <li>• Global replication framework</li>
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
                   <CardTitle>Development Roadmap & Milestones</CardTitle>
                 </CardHeader>
                 <CardContent>

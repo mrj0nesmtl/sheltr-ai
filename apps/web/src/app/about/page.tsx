@@ -164,16 +164,23 @@ export default function AboutPage() {
         <div className="absolute inset-0 bg-black/50"></div>
         <div className="relative z-10 container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-block bg-white text-black px-4 py-2 rounded-full text-sm font-semibold mb-6">
+            <Badge variant="secondary" className="mb-6 bg-white/20 text-white border-white/30 backdrop-blur-sm">
               POWERED BY AI & BLOCKCHAIN
-            </div>
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
+            </Badge>
+            <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
               Transforming Donations into <span className="text-blue-400">Impact</span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-4xl mx-auto">
-              Turn meaningful actions into direct support with transparency and accountability.
+              SHELTR serves everyone in the ecosystem through a unified platform that ensures 
+              transparency, dignity, and maximum impact for every participant.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link href="/solutions">
+                <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white">
+                  <ArrowRight className="h-5 w-5 mr-2" />
+                  Explore Solutions
+                </Button>
+              </Link>
               <Link href="/docs">
                 <Button variant="outline" size="lg" className="border-2 border-white text-white bg-white/10 hover:bg-white hover:text-black backdrop-blur-sm">
                   <Shield className="h-5 w-5 mr-2" />

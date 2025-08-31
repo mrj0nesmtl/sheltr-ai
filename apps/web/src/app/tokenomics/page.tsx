@@ -129,18 +129,18 @@ export default function TokenomicsPage() {
       </div>
 
       {/* Hero Section */}
-      <section className="relative py-16 bg-cover bg-center bg-no-repeat" style={{backgroundImage: 'url(/backgrounds/hero-bg.jpg)'}}>
-        <div className="absolute inset-0 bg-black/40" />
+      <section className="relative py-24 bg-cover bg-center bg-no-repeat" style={{backgroundImage: 'url(/backgrounds/hero-bg.jpg)'}}>
+        <div className="absolute inset-0 bg-black/50" />
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-6">
-            <Coins className="h-10 w-10 text-white" />
-          </div>
-          <Badge variant="secondary" className="mb-4 bg-gradient-to-r from-blue-500/10 to-purple-500/10 border-blue-500/20">$SHLTR Tokenomics</Badge>
-          <h1 className="text-4xl font-bold mb-6 text-white">
-            SmartFund™ Tokenomics
+          <Badge variant="secondary" className="mb-6 bg-white/20 text-white border-white/30 backdrop-blur-sm">
+            SMARTFUND™ TOKENOMICS
+          </Badge>
+          <h1 className="text-5xl md:text-6xl font-bold mb-6 text-white">
+            Dual-Token <span className="text-blue-400">Architecture</span>
           </h1>
-          <p className="text-xl text-gray-200 mb-8 max-w-3xl mx-auto">
-            Sheltr&apos;s pioneering dual-token architecture combines both stability and growth potential for Participants and the Community.
+          <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto">
+            SHELTR's pioneering dual-token system combines stability and growth potential, 
+            ensuring every participant benefits from transparent, scalable impact.
           </p>
           
           {/* Quick Links to Documentation */}

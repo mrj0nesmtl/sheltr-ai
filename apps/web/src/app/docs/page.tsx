@@ -144,7 +144,7 @@ export default function DocsPage() {
       audience: "Shelter Administrators • Operations Managers • Staff",
       topics: ["Dashboard Management", "Participant Registration", "Service Coordination", "Resource Management", "Analytics & Reporting"],
       link: "/docs/shelter-admin-guide",
-      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/06-user-guides/shelter-admin-guide.md",
+      downloadLink: "/user-journeys/shelters/",
       lastUpdated: "August 2025"
     },
     {
@@ -157,7 +157,7 @@ export default function DocsPage() {
       audience: "Donors • Community Supporters • Corporate Partners",
       topics: ["QR Code Giving", "SmartFund Model", "Impact Tracking", "Payment Security", "Community Building"],
       link: "/docs/donor-guide",
-      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/06-user-guides/donor-guide.md",
+      downloadLink: "/user-journeys/donors/",
       lastUpdated: "August 2025"
     },
     {
@@ -170,7 +170,7 @@ export default function DocsPage() {
       audience: "Participants • Support Staff • Shelter Administrators",
       topics: ["Platform Onboarding", "QR Code Usage", "Wallet Management", "Service Access", "Support Resources"],
       link: "/docs/participant-guide",
-      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/06-user-guides/participant-guide.md",
+      downloadLink: "/user-journeys/participants/",
       lastUpdated: "July 2025"
     }
   ];
@@ -484,13 +484,23 @@ export default function DocsPage() {
                           <span className="sm:hidden">View</span>
                         </Button>
                       </Link>
-                      <a href={doc.downloadLink} target="_blank" rel="noopener noreferrer" className="flex-1">
-                        <Button variant="outline" className="w-full h-10 sm:h-12 text-sm sm:text-base border-2 border-black text-black hover:bg-black hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black">
-                          <Download className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
-                          <span className="hidden sm:inline">View on GitHub</span>
-                          <span className="sm:hidden">GitHub</span>
-                        </Button>
-                      </a>
+                      {doc.downloadLink.startsWith('/') ? (
+                        <Link href={doc.downloadLink} className="flex-1">
+                          <Button variant="outline" className="w-full h-10 sm:h-12 text-sm sm:text-base border-2 border-black text-black hover:bg-black hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black">
+                            <Download className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
+                            <span className="hidden sm:inline">View User Journey</span>
+                            <span className="sm:hidden">Journey</span>
+                          </Button>
+                        </Link>
+                      ) : (
+                        <a href={doc.downloadLink} target="_blank" rel="noopener noreferrer" className="flex-1">
+                          <Button variant="outline" className="w-full h-10 sm:h-12 text-sm sm:text-base border-2 border-black text-black hover:bg-black hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black">
+                            <Download className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
+                            <span className="hidden sm:inline">View on GitHub</span>
+                            <span className="sm:hidden">GitHub</span>
+                          </Button>
+                        </a>
+                      )}
                     </div>
                   </div>
                 </CardContent>

@@ -285,18 +285,22 @@ export default function ShelterUserJourney() {
                 {phases.map((phase) => (
                   <div key={phase.id}>
                     <Button
-                      variant={activePhase === phase.id ? "default" : "ghost"}
-                      className="w-full justify-start h-auto p-3"
+                      variant={activePhase === phase.id ? "outline" : "ghost"}
+                      className={`w-full justify-start h-auto p-3 text-left ${
+                        activePhase === phase.id 
+                          ? "border-blue-600 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20" 
+                          : "hover:border-blue-600 hover:text-blue-600"
+                      }`}
                       onClick={() => {
                         setActivePhase(phase.id);
                         setActiveStep(1);
                       }}
                     >
-                      <div className="flex items-start gap-3 text-left">
+                      <div className="flex items-start gap-3 w-full">
                         <phase.icon className="h-5 w-5 mt-0.5 flex-shrink-0" />
-                        <div>
-                          <div className="font-medium">{phase.title}</div>
-                          <div className="text-xs text-muted-foreground mt-1">
+                        <div className="min-w-0 flex-1">
+                          <div className="font-medium break-words">{phase.title}</div>
+                          <div className="text-xs text-muted-foreground mt-1 break-words leading-relaxed">
                             {phase.description}
                           </div>
                         </div>
@@ -307,12 +311,16 @@ export default function ShelterUserJourney() {
                         {phase.steps.map((step) => (
                           <Button
                             key={step.id}
-                            variant={activeStep === step.id ? "secondary" : "ghost"}
+                            variant={activeStep === step.id ? "outline" : "ghost"}
                             size="sm"
-                            className="w-full justify-start text-xs"
+                            className={`w-full justify-start text-xs ${
+                              activeStep === step.id 
+                                ? "border-blue-600 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20" 
+                                : "hover:border-blue-600 hover:text-blue-600"
+                            }`}
                             onClick={() => setActiveStep(step.id)}
                           >
-                            {step.title}
+                            <span className="break-words text-left">{step.title}</span>
                           </Button>
                         ))}
                       </div>

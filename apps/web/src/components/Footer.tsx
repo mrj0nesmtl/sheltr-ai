@@ -130,7 +130,7 @@ export default function Footer() {
         
         {/* Copyright */}
         <div className="border-t pt-6 mt-6 text-center text-xs text-muted-foreground">
-          <p>&copy; Established 2025</p>
+          <p>&copy; Arcana Labs 2025</p>
         </div>
       </div>
     </footer>

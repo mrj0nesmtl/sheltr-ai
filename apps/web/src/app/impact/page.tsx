@@ -137,8 +137,8 @@ export default function ImpactPage() {
               Transforming Lives Through Technology
             </h1>
             <p className="text-xl text-gray-200 mb-12 max-w-4xl mx-auto">
-              Our mission is to create systematic, scalable solutions that amplify the incredible work 
-              of Internet Angels and ensure every act of kindness creates lasting, measurable impact.
+              Our ethos: Tech for Good.
+              Our mission: Create scalable solutions that amplify every act of kindness to create lasting, measurable impact.
             </p>
           </div>
 

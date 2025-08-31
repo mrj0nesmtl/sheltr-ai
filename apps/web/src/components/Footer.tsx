@@ -67,7 +67,7 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Spotify Widget - Right Side */}
+          {/* Spotify Widget - Right Side Desktop */}
           <div className="hidden lg:block lg:w-64 lg:flex-shrink-0">
             <div className="p-4 bg-muted/50 rounded-lg border">
               <div className="flex items-center gap-2 mb-3">
@@ -95,6 +95,36 @@ export default function Footer() {
                 Listen on Spotify
               </a>
             </div>
+          </div>
+        </div>
+
+        {/* Mobile Spotify Widget */}
+        <div className="lg:hidden mt-6 pt-6 border-t">
+          <div className="max-w-sm mx-auto p-4 bg-muted/50 rounded-lg border">
+            <div className="flex items-center gap-2 mb-3">
+              <img 
+                src="/Spotify_Primary_Logo_RGB_Green.png" 
+                alt="Spotify" 
+                className="h-5 w-5"
+              />
+              <span className="text-sm font-medium">Featured on Spotify</span>
+            </div>
+            <div className="text-xs text-muted-foreground mb-3 text-center">
+              Hacking Homelessness • Tomes of Arcana
+            </div>
+            <a 
+              href="https://open.spotify.com/episode/2TZquGVy7vT6yZMgDraMYe?si=rTIdTJ8MSW687rKZBbFJ6Q" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 text-sm text-primary hover:text-primary/80 transition-colors bg-primary/10 hover:bg-primary/20 px-4 py-3 rounded-md w-full"
+            >
+              <img 
+                src="/Spotify_Primary_Logo_RGB_Green.png" 
+                alt="Spotify" 
+                className="h-4 w-4"
+              />
+              Listen on Spotify
+            </a>
           </div>
         </div>
         

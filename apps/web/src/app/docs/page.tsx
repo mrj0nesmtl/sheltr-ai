@@ -19,7 +19,10 @@ import {
   Heart,
   Building2,
   Mail,
-  Send
+  Send,
+  MessageSquare,
+  CheckSquare,
+  BookOpen
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -133,6 +136,45 @@ export default function DocsPage() {
       link: "/docs/api",
       downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/03-api/README.md",
       lastUpdated: "August 9, 2025"
+    },
+    {
+      title: "Chatbot Agent Architecture",
+      description: "Comprehensive guide to SHELTR-AI's multi-agent chatbot system with public orchestrator and admin control panel",
+      icon: MessageSquare,
+      badge: "AI System",
+      badgeColor: "bg-purple-600",
+      pages: "266 pages",
+      audience: "AI Engineers • Developers • System Architects • Technical Teams",
+      topics: ["Multi-Agent System", "RAG Integration", "Role-Based Routing", "OpenAI Integration", "Knowledge Base"],
+      link: "/docs/chatbot-architecture",
+      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/04-development/CHATBOT-AGENT-ARCHITECTURE.md",
+      lastUpdated: "August 22, 2025"
+    },
+    {
+      title: "Complete Functionality Matrix",
+      description: "Comprehensive testing matrix for all features, data storage/retrieval, business logic, and user workflows",
+      icon: CheckSquare,
+      badge: "Testing",
+      badgeColor: "bg-green-600",
+      pages: "352 pages",
+      audience: "QA Engineers • Developers • Project Managers • Technical Teams",
+      topics: ["Testing Matrix", "Business Logic", "User Workflows", "Data Validation", "Platform Status"],
+      link: "/docs/functionality-matrix",
+      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/04-development/COMPLETE-FUNCTIONALITY-MATRIX-UPDATED.md",
+      lastUpdated: "August 28, 2025"
+    },
+    {
+      title: "Knowledge Base Update Guide",
+      description: "Complete guide for updating SHELTR-AI Knowledge Base documents with embedding regeneration",
+      icon: BookOpen,
+      badge: "Maintenance",
+      badgeColor: "bg-blue-600",
+      pages: "250 pages",
+      audience: "Developers • System Administrators • Content Managers • Technical Teams",
+      topics: ["Document Updates", "Embedding Regeneration", "RAG System", "Firebase Storage", "Chatbot Integration"],
+      link: "/docs/knowledge-base-guide",
+      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/04-development/KNOWLEDGE-BASE-UPDATE-GUIDE.md",
+      lastUpdated: "August 22, 2025"
     },
     {
       title: "Shelter Administrator Guide",

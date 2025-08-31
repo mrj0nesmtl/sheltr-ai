@@ -41,9 +41,9 @@ The next generation platform for transparent charitable giving and homelessness 
 - [Implementation Roadmap](docs/01-overview/SHELTR-AI-IMPLEMENTATION-PLAN.md)
 
 ### 🏗️ [02. Architecture](docs/02-architecture/)
-- [System Design](docs/02-architecture/system-design.md)
-- [Official Whitepaper](docs/02-architecture/whitepaper_final.md)
-- [Blockchain Integration](docs/02-architecture/technical/blockchain.md)
+- [System Design](docs/02-architecture/technical/system-design.md)
+- [Official Whitepaper](docs/02-architecture/tokenomics/whitepaper_final.md)
+- [Blockchain Integration](docs/02-architecture/tokenomics/blockchain.md)
 - [SHELTR Tokenomics](docs/02-architecture/tokenomics/sheltr-tokenomics.md)
 
 ### 🔌 [03. API Documentation](docs/03-api/)

@@ -18,7 +18,8 @@ import {
   Star,
   ChevronLeft,
   ExternalLink,
-  Share2
+  Share2,
+  CheckCircle
 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -128,7 +129,7 @@ export default function ShelterPageClient({ slug }: ShelterPageClientProps) {
         if (matchingShelter) {
           // Get additional shelter configuration if available
           try {
-            const publicConfig = await shelterService.getPublicConfig(matchingShelter.id);
+            const publicConfig = await shelterService.getShelterPublicConfig(matchingShelter.id);
             
             const shelterConfig: ShelterConfig = {
               id: matchingShelter.id,
@@ -136,37 +137,41 @@ export default function ShelterPageClient({ slug }: ShelterPageClientProps) {
               slug,
               publicUrl: publicConfig?.publicUrl || `/${slug}`,
               logoUrl: publicConfig?.logoUrl || '/icon.svg',
-              description: publicConfig?.description || matchingShelter.description,
+              description: publicConfig?.description || 'Supporting individuals experiencing homelessness in Montreal.',
               mission: publicConfig?.mission,
               services: publicConfig?.services || [],
               address: {
-                street: matchingShelter.address?.street || '',
-                city: matchingShelter.address?.city || 'Montreal',
-                province: matchingShelter.address?.province || 'QC',
-                postalCode: matchingShelter.address?.postalCode || '',
-                coordinates: matchingShelter.address?.coordinates
+                street: matchingShelter.address || '',
+                city: 'Montreal',
+                province: 'QC',
+                postalCode: '',
+                coordinates: matchingShelter.coordinates
               },
               contact: {
                 phone: matchingShelter.contact?.phone,
                 email: matchingShelter.contact?.email,
-                website: matchingShelter.contact?.website
+                website: undefined
               },
               capacity: {
-                total: matchingShelter.capacity?.total || 0,
-                available: matchingShelter.capacity?.available || 0
+                total: matchingShelter.capacity || 0,
+                available: (matchingShelter.capacity || 0) - (matchingShelter.currentOccupancy || 0)
               },
-              operatingHours: publicConfig?.operatingHours,
-              eligibility: publicConfig?.eligibility || [],
-              amenities: publicConfig?.amenities || [],
-              languages: publicConfig?.languages || ['English', 'French'],
-              accessibility: publicConfig?.accessibility || [],
-              programs: publicConfig?.programs || [],
+              operatingHours: publicConfig?.operatingHours ? 
+                Object.entries(publicConfig.operatingHours).reduce((acc, [key, value]) => {
+                  acc[key] = { open: value, close: value, is24Hours: false, isClosed: false };
+                  return acc;
+                }, {} as { [key: string]: { open: string; close: string; is24Hours?: boolean; isClosed?: boolean } }) : undefined,
+              eligibility: [],
+              amenities: [],
+              languages: ['English', 'French'],
+              accessibility: [],
+              programs: [],
               socialMedia: publicConfig?.socialMedia,
               qrCode: publicConfig?.qrCode,
               qrCodeClean: publicConfig?.qrCodeClean,
-              lastUpdated: publicConfig?.lastUpdated || new Date().toISOString(),
-              verified: publicConfig?.verified || false,
-              publiclyVisible: publicConfig?.publiclyVisible !== false
+              lastUpdated: new Date().toISOString(),
+              verified: false,
+              publiclyVisible: true
             };
 
             setShelter(shelterConfig);
@@ -178,16 +183,16 @@ export default function ShelterPageClient({ slug }: ShelterPageClientProps) {
               id: matchingShelter.id,
               name: matchingShelter.name,
               slug,
-              description: matchingShelter.description || 'Supporting individuals experiencing homelessness in Montreal.',
+              description: 'Supporting individuals experiencing homelessness in Montreal.',
               address: {
-                street: matchingShelter.address?.street || '',
-                city: matchingShelter.address?.city || 'Montreal',
-                province: matchingShelter.address?.province || 'QC',
-                postalCode: matchingShelter.address?.postalCode || ''
+                street: matchingShelter.address || '',
+                city: 'Montreal',
+                province: 'QC',
+                postalCode: ''
               },
               capacity: {
-                total: matchingShelter.capacity?.total || 0,
-                available: matchingShelter.capacity?.available || 0
+                total: matchingShelter.capacity || 0,
+                available: (matchingShelter.capacity || 0) - (matchingShelter.currentOccupancy || 0)
               },
               languages: ['English', 'French'],
               publiclyVisible: true
@@ -267,7 +272,7 @@ export default function ShelterPageClient({ slug }: ShelterPageClientProps) {
           <div className="text-6xl mb-4">🔒</div>
           <h1 className="text-2xl font-bold mb-2">Private Shelter</h1>
           <p className="text-muted-foreground mb-6">
-            This shelter's information is not publicly available.
+            This shelter&apos;s information is not publicly available.
           </p>
           <Link href="/shelters">
             <Button>

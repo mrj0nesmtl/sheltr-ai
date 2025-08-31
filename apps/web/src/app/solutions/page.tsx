@@ -122,7 +122,7 @@ export default function SolutionsPage() {
       <section className="relative py-24 bg-cover bg-center bg-no-repeat" style={{backgroundImage: 'url(/backgrounds/solutions-bg.jpg)'}}>
         <div className="absolute inset-0 bg-black/60" />
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <Badge variant="secondary" className="mb-4">Platform Solutions</Badge>
+          <Badge variant="secondary" className="mb-4">Better to Solve</Badge>
           <h1 className="text-5xl font-bold mb-6 text-white">
             One Platform, Every Stakeholder
           </h1>

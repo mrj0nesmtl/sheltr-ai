@@ -8,7 +8,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-6">
           {/* Main Footer Content - Centered Columns */}
-          <div className="grid md:grid-cols-4 gap-3 lg:gap-4 flex-1 lg:max-w-3xl lg:mx-auto">
+          <div className="grid md:grid-cols-5 gap-3 lg:gap-4 flex-1 lg:max-w-4xl lg:mx-auto">
             {/* Brand Section */}
             <div>
               <ThemeLogo className="h-5 w-auto mb-3" />
@@ -42,7 +42,7 @@ export default function Footer() {
               </ul>
             </div>
             
-            {/* Community & Support Combined */}
+            {/* Community Section */}
             <div>
               <h3 className="text-sm font-semibold mb-3">Community</h3>
               <ul className="space-y-1 text-xs text-muted-foreground">
@@ -54,7 +54,11 @@ export default function Footer() {
                   </a>
                 </li>
               </ul>
-              <h3 className="text-sm font-semibold mb-3 mt-4">Support</h3>
+            </div>
+            
+            {/* Support Section */}
+            <div>
+              <h3 className="text-sm font-semibold mb-3">Support</h3>
               <ul className="space-y-1 text-xs text-muted-foreground">
                 <li><Link href="/terms" className="hover:text-foreground">Terms of Service</Link></li>
                 <li><Link href="/privacy" className="hover:text-foreground">Privacy Policy</Link></li>

@@ -47,23 +47,17 @@ export default function APIDocumentationPage() {
                   Comprehensive API reference for developers, integration guides, and technical specifications
                 </p>
                 <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground mb-4">
-                  <span>Version 1.0.0</span>
+                  <span>Version 2.16.0</span>
                   <span>•</span>
-                  <span>August 9, 2025</span>
+                  <span>August 29, 2025</span>
                   <span>•</span>
-                  <span>32 pages</span>
+                  <span>Production Ready</span>
                 </div>
                 
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                  <Link href="/docs">
-                    <Button className="bg-orange-600 hover:bg-orange-700">
-                      <Code className="h-4 w-4 mr-2" />
-                      View Online
-                    </Button>
-                  </Link>
                   <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/03-api/README.md" target="_blank" rel="noopener noreferrer">
                     <Button variant="outline">
-                      <Download className="h-4 w-4 mr-2" />
+                      <Download className="h-4 h-4 mr-2" />
                       View on GitHub
                     </Button>
                   </a>
@@ -85,6 +79,14 @@ export default function APIDocumentationPage() {
                 enabling seamless integration with shelter management systems, donor platforms, and 
                 participant services. Built on modern REST principles with blockchain integration.
               </p>
+              <div className="bg-green-50 dark:bg-green-900/20 border-l-4 border-green-500 p-4 my-6">
+                <h3 className="text-green-800 dark:text-green-200 font-semibold mb-2">✅ Current Status: Production-Ready Multi-Tenant Platform</h3>
+                <p className="text-green-700 dark:text-green-300 text-sm">
+                  <strong>Base URL</strong>: <code>https://sheltr-api-714964620823.us-central1.run.app</code> (Production)<br/>
+                  <strong>Authentication</strong>: Firebase ID tokens ✅ <strong>OPERATIONAL</strong><br/>
+                  <strong>Multi-Tenant</strong>: 10 shelter tenants with real data connectivity ✅ <strong>LIVE</strong>
+                </p>
+              </div>
             </div>
 
             <div className="grid md:grid-cols-2 gap-8 mb-12">
@@ -97,11 +99,12 @@ export default function APIDocumentationPage() {
                 </CardHeader>
                 <CardContent>
                   <ul className="space-y-2 text-sm">
-                    <li>• Participant management</li>
-                    <li>• Donation processing</li>
-                    <li>• QR code generation</li>
-                    <li>• Blockchain transactions</li>
-                    <li>• Analytics and reporting</li>
+                    <li>• Multi-tenant user management</li>
+                    <li>• Real donation processing (Adyen)</li>
+                    <li>• QR code generation & tracking</li>
+                    <li>• Analytics & financial reporting</li>
+                    <li>• AI chatbot integration</li>
+                    <li>• Knowledge base management</li>
                   </ul>
                 </CardContent>
               </Card>
@@ -115,11 +118,11 @@ export default function APIDocumentationPage() {
                 </CardHeader>
                 <CardContent>
                   <ul className="space-y-2 text-sm">
-                    <li>• JWT token authentication</li>
-                    <li>• Role-based access control</li>
-                    <li>• Rate limiting protection</li>
-                    <li>• API key management</li>
-                    <li>• Webhook security</li>
+                    <li>• Firebase ID token authentication</li>
+                    <li>• 4-role access control system</li>
+                    <li>• Multi-tenant data isolation</li>
+                    <li>• CORS protection</li>
+                    <li>• Real-time security monitoring</li>
                   </ul>
                 </CardContent>
               </Card>
@@ -129,14 +132,14 @@ export default function APIDocumentationPage() {
               <h3 className="text-2xl font-bold mb-4">Quick Start</h3>
               <div className="bg-black rounded-lg p-4 mb-4">
                 <code className="text-green-400 text-sm">
-                  {`curl -X GET "https://api.sheltr.ai/v1/participants" \\
-  -H "Authorization: Bearer YOUR_API_KEY" \\
+                  {`curl -X GET "https://sheltr-api-714964620823.us-central1.run.app/auth/profile" \\
+  -H "Authorization: Bearer <firebase-id-token>" \\
   -H "Content-Type: application/json"`}
                 </code>
               </div>
               <p className="text-sm text-muted-foreground">
-                Get started with the SHELTR API using your authenticated API key. 
-                Full documentation and examples available in our GitHub repository.
+                Get started with the SHELTR API using Firebase ID token authentication. 
+                Interactive documentation available at <code className="text-blue-400">/docs</code> endpoint.
               </p>
             </div>
 

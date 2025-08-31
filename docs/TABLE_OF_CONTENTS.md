@@ -42,17 +42,16 @@ Complete platform introduction covering mission, vision, documentation strategy,
 
 ### 📁 Directory Contents
 - [**🏗️ Architecture Hub**](02-architecture/README.md) - Architecture overview and navigation
-- [**🏗️ System Design**](02-architecture/system-design.md) - Core architecture overview
-- [**📄 Official Whitepaper**](02-architecture/whitepaper_final.md) - Complete platform whitepaper
-- [**🌐 Website Architecture**](02-architecture/website-architecture.md) - Frontend architecture and user flows
+- [**🏗️ System Design**](02-architecture/technical/system-design.md) - Core architecture overview
+- [**🌐 Website Architecture**](02-architecture/technical/website-architecture.md) - Frontend architecture and user flows
+- [**📄 Project Tree**](02-architecture/PROJECT-TREE.md) - Complete project structure
 
 ### 📁 technical/
-- [**🔗 Blockchain Integration**](02-architecture/technical/blockchain.md) - Blockchain technical details
+- [**🔗 Blockchain Integration**](02-architecture/tokenomics/blockchain.md) - Blockchain technical details
 
 ### 📁 tokenomics/
 - [**🪙 SHELTR Tokenomics**](02-architecture/tokenomics/sheltr-tokenomics.md) - Token economics and SmartFund™
-- [**📊 Tokenomics Strategy**](02-architecture/tokenomics/SHELTR-TOKENOMICS-STRATEGY.md) - Strategic token implementation
-- [**🔧 Technical Implementation**](02-architecture/tokenomics/TECHNICAL-IMPLEMENTATION-GUIDE.md) - Token technical guide
+- [**📄 Official Whitepaper**](02-architecture/tokenomics/whitepaper_final.md) - Complete platform whitepaper
 
 ### 📁 payment-rails/
 - [**💳 Adyen Integration**](02-architecture/payment-rails/adyen-integration.md) - Payment processing setup

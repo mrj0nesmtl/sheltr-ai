@@ -13,7 +13,7 @@ export default function Footer() {
             <div>
               <ThemeLogo className="h-5 w-auto mb-3" />
               <p className="text-xs text-muted-foreground">
-                Hacking homelessness through technology.
+                Tech for Good.
               </p>
             </div>
           
@@ -130,7 +130,7 @@ export default function Footer() {
         
         {/* Copyright */}
         <div className="border-t pt-6 mt-6 text-center text-xs text-muted-foreground">
-          <p>&copy; 2025 SHELTR. Built with ❤️ for a better world.</p>
+          <p>&copy; Established 2025</p>
         </div>
       </div>
     </footer>

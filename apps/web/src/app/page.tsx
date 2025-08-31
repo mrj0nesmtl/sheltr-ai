@@ -257,7 +257,7 @@ export default function HomePage() {
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/scan-give">
                   <Button size="lg" className="w-full sm:w-auto text-lg px-8 py-4 bg-green-600 hover:bg-green-700">
-                    Scan & Donate
+                    Scan & Give
                   </Button>
                 </Link>
                 <Link href="/about">

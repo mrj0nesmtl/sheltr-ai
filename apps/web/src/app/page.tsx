@@ -400,23 +400,42 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* CTA Section - Fixed Learn More button text */}
-        <section className="py-20 bg-primary text-primary-foreground">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        {/* CTA Section - With Background Image and Overlay */}
+        <section className="relative py-20 overflow-hidden">
+          {/* Background Image */}
+          <div 
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+            style={{ backgroundImage: 'url(/backgrounds/impact-bg.jpg)' }}
+          />
+          
+          {/* Dark Overlay for Better Text Readability */}
+          <div className="absolute inset-0 bg-black/60 dark:bg-black/70" />
+          
+          {/* Content */}
+          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <div className="max-w-3xl mx-auto">
-              <h2 className="text-4xl font-bold mb-6">Ready to Transform How You Address the Unhoused?</h2>
-              <p className="text-xl mb-8 opacity-90">
+              <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white drop-shadow-lg">
+                Ready to Transform How You Address the Unhoused?
+              </h2>
+              <p className="text-xl mb-8 text-white/95 drop-shadow-md">
                 Join the SHELTR movement - Every scan creates transparency, 
                 every donation builds housing, every participant finds dignity.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/register">
-                  <Button size="lg" variant="secondary" className="text-lg px-8 py-4">
+                  <Button 
+                    size="lg" 
+                    className="text-lg px-8 py-4 bg-white text-black hover:bg-gray-100 dark:bg-white dark:text-black dark:hover:bg-gray-100 font-semibold shadow-lg"
+                  >
                     Get Started Today
                   </Button>
                 </Link>
                 <Link href="/solutions">
-                  <Button size="lg" variant="outline" className="text-lg px-8 py-4 border-white text-primary-foreground bg-white/10 hover:bg-white hover:text-black">
+                  <Button 
+                    size="lg" 
+                    variant="outline" 
+                    className="text-lg px-8 py-4 border-2 border-white text-white bg-transparent hover:bg-white hover:text-black font-semibold shadow-lg transition-all duration-200"
+                  >
                     Learn More
                   </Button>
                 </Link>

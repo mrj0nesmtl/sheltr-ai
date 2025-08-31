@@ -477,14 +477,16 @@ export default function AboutPage() {
           <div className="max-w-4xl mx-auto">
             <Card className="border-2 hover:border-primary/30 transition-all duration-300 hover:shadow-lg">
               <CardHeader className="text-center">
-                <CardTitle className="flex items-center justify-center gap-2">
-                  <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-                    <div className="w-3 h-3 bg-white rounded-full"></div>
-                  </div>
-                  Featured on Tomes of Arcana
+                <CardTitle className="flex items-center justify-center gap-3">
+                  <img 
+                    src="/Spotify_Primary_Logo_RGB_Green.png" 
+                    alt="Spotify" 
+                    className="h-8 w-8"
+                  />
+                  Featured on Spotify
                 </CardTitle>
                 <CardDescription>
-                  December 31, 2024 • 11 minutes • Hacking Homelessness through Technology
+                  Tomes of Arcana • December 31, 2024 • 11 minutes • Hacking Homelessness through Technology
                 </CardDescription>
               </CardHeader>
               <CardContent>

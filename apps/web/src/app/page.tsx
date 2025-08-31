@@ -411,7 +411,7 @@ export default function HomePage() {
                     Get Started Today
                   </Button>
                 </Link>
-                <Link href="/scan-give">
+                <Link href="/solutions">
                   <Button size="lg" variant="outline" className="text-lg px-8 py-4 border-white text-primary-foreground bg-white/10 hover:bg-white hover:text-black">
                     Learn More
                   </Button>

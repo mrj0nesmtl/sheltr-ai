@@ -57,7 +57,8 @@ function DonatePageContent() {
         const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
         
         // Use real participant data for demo - Michael Rodriguez for authentic experience
-        if ((isProduction && isSecureDomain(apiBaseUrl, 'api.sheltr-ai.com')) || participantId === 'demo-participant-001' || participantId === 'michael-rodriguez') {
+        const isSecureApiUrl = isProduction && apiBaseUrl && isSecureDomain(apiBaseUrl, 'api.sheltr-ai.com');
+        if (isSecureApiUrl || participantId === 'demo-participant-001' || participantId === 'michael-rodriguez') {
           // Get Michael's real donation data from Firestore
           const realDonationData = await getMichaelRealData();
           

@@ -2216,12 +2216,15 @@ export const getOrphanedUsers = async (): Promise<OrphanedUser[]> => {
                      `${user.firstName || ''} ${user.lastName || ''}`.trim() || 
                      getEmailUsername(user.email, 'Unknown User');
         
-        // Determine registration method
+        // Determine registration method - secure domain validation
         let registrationMethod = 'Unknown';
-        if (user.email?.includes('gmail.com') || user.email?.includes('icloud.com')) {
-          registrationMethod = 'OAuth (Google/Apple)';
-        } else if (user.email && !user.role) {
-          registrationMethod = 'Direct Registration';
+        if (user.email) {
+          const emailDomain = user.email.split('@')[1]?.toLowerCase();
+          if (emailDomain === 'gmail.com' || emailDomain === 'icloud.com') {
+            registrationMethod = 'OAuth (Google/Apple)';
+          } else if (!user.role) {
+            registrationMethod = 'Direct Registration';
+          }
         }
         
         orphanedUsers.push({

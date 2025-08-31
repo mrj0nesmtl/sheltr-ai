@@ -247,12 +247,15 @@ export default function HomePage() {
           <div className="absolute inset-0 bg-black/40"></div>
           <div className="relative z-10 container mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center">
+              <Badge variant="secondary" className="mb-6 bg-white/20 text-white border-white/30 backdrop-blur-sm">
+                POWERED BY AI & BLOCKCHAIN
+              </Badge>
               <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
                 Better to <span className="text-blue-400">Solve</span> than Manage
               </h1>
               <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto">
-                An ecosystem where every donation creates immediate, transparent impact 
-                through direct participant empowerment.
+                SHELTR creates systematic, scalable solutions that amplify every act of kindness 
+                and ensure lasting, measurable impact for everyone in the ecosystem.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/scan-give">

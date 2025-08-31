@@ -166,12 +166,12 @@ export default function WebsiteArchitecturePage() {
               <Building className="w-8 h-8 text-white" />
             </div>
             <div>
-              <Badge className="bg-indigo-500 hover:bg-indigo-600 mb-2">QA Framework</Badge>
+              <Badge className="bg-indigo-500 hover:bg-indigo-600 mb-2">Platform Framework</Badge>
               <h1 className="text-4xl font-bold text-foreground mb-2">
-                Website Architecture & QA Guide
+                Website Architecture & Platform Guide
               </h1>
               <p className="text-xl text-muted-foreground">
-                Complete site structure, role-based features, and comprehensive quality assurance testing framework
+                Complete site structure, role-based features, and comprehensive platform framework
               </p>
             </div>
           </div>
@@ -198,12 +198,6 @@ export default function WebsiteArchitecturePage() {
                 View on GitHub
               </Link>
             </Button>
-            <Button variant="outline" asChild>
-              <Link href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/website-architecture.md">
-                <Download className="w-4 h-4 mr-2" />
-                Download PDF
-              </Link>
-            </Button>
           </div>
         </div>
       </div>
@@ -211,19 +205,6 @@ export default function WebsiteArchitecturePage() {
       {/* Document Overview */}
       <div className="py-16">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Key Features */}
-          <div className="mb-16">
-            <h2 className="text-3xl font-bold text-center mb-8">Comprehensive QA Framework</h2>
-            <div className="grid md:grid-cols-2 gap-6">
-              {keyFeatures.map((feature, index) => (
-                <div key={index} className="flex items-start space-x-3 p-4 rounded-lg border bg-card">
-                  <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
-                  <span className="text-sm">{feature}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
           {/* Document Sections */}
           <div className="mb-16">
             <h2 className="text-3xl font-bold text-center mb-12">Documentation Sections</h2>
@@ -242,15 +223,34 @@ export default function WebsiteArchitecturePage() {
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <div className="flex flex-wrap gap-2">
-                      {section.topics.map((topic, topicIndex) => (
-                        <Badge key={topicIndex} variant="secondary" className="text-xs">
-                          {topic}
-                        </Badge>
-                      ))}
+                    <div className="space-y-4">
+                      <div className="flex flex-wrap gap-2">
+                        {section.topics.map((topic, topicIndex) => (
+                          <Badge key={topicIndex} variant="secondary" className="text-xs">
+                            {topic}
+                          </Badge>
+                        ))}
+                      </div>
+                      <Button variant="outline" size="sm" className="w-full">
+                        <ExternalLink className="w-4 h-4 mr-2" />
+                        View Documentation
+                      </Button>
                     </div>
                   </CardContent>
                 </Card>
+              ))}
+            </div>
+          </div>
+
+          {/* Key Features */}
+          <div className="mb-16">
+            <h2 className="text-3xl font-bold text-center mb-8">Comprehensive Platform Framework</h2>
+            <div className="grid md:grid-cols-2 gap-6">
+              {keyFeatures.map((feature, index) => (
+                <div key={index} className="flex items-start space-x-3 p-4 rounded-lg border bg-card">
+                  <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
+                  <span className="text-sm">{feature}</span>
+                </div>
               ))}
             </div>
           </div>
@@ -328,9 +328,9 @@ export default function WebsiteArchitecturePage() {
           <div className="text-center">
             <Card className="max-w-2xl mx-auto">
               <CardHeader>
-                <CardTitle className="text-2xl">Ready to Ensure Quality?</CardTitle>
+                <CardTitle className="text-2xl">Quality Documentation Standards</CardTitle>
                 <CardDescription className="text-lg">
-                  Download the complete Website Architecture & QA Testing Guide and implement enterprise-grade quality assurance for SHELTR-AI.
+                  We follow enterprise-grade documentation standards with comprehensive coverage, clear structure, and continuous updates. Our platform framework ensures maintainable, scalable, and well-documented codebases.
                 </CardDescription>
               </CardHeader>
               <CardContent>

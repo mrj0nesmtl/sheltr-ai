@@ -216,7 +216,7 @@ export default function DonorGuidePage() {
                 Version 1.4.0 • Revolutionary Giving Platform
               </p>
               <Link href="/user-journeys/donors/">
-                <Button className="bg-red-600 hover:bg-red-700">
+                <Button variant="outline" className="border-red-600 text-red-600 hover:bg-red-600 hover:text-white">
                   <BookOpen className="h-4 w-4 mr-2" />
                   View User Journey
                 </Button>
@@ -482,7 +482,7 @@ export default function DonorGuidePage() {
               </div>
               <div className="mt-6 flex flex-col sm:flex-row gap-3">
                 <a href="/demo/donor-wallet" target="_blank" rel="noopener noreferrer">
-                  <Button className="bg-red-600 hover:bg-red-700 w-full sm:w-auto">
+                  <Button variant="outline" className="border-red-600 text-red-600 hover:bg-red-600 hover:text-white w-full sm:w-auto">
                     <Wallet className="h-4 w-4 mr-2" />
                     Preview Donor Wallet
                   </Button>
@@ -658,7 +658,7 @@ export default function DonorGuidePage() {
           </p>
           <div className="flex justify-center space-x-4">
             <Link href="/user-journeys/donors/">
-              <Button className="bg-red-600 hover:bg-red-700" size="lg">
+              <Button variant="outline" className="border-red-600 text-red-600 hover:bg-red-600 hover:text-white" size="lg">
                 <BookOpen className="h-4 w-4 mr-2" />
                 View User Journey
               </Button>

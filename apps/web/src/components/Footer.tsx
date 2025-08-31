@@ -6,9 +6,9 @@ export default function Footer() {
   return (
     <footer className="bg-background border-t py-8 mt-0">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-8">
+        <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-6">
           {/* Main Footer Content - Centered Columns */}
-          <div className="grid md:grid-cols-4 gap-4 lg:gap-6 flex-1 lg:max-w-4xl lg:mx-auto">
+          <div className="grid md:grid-cols-4 gap-3 lg:gap-4 flex-1 lg:max-w-3xl lg:mx-auto">
             {/* Brand Section */}
             <div>
               <ThemeLogo className="h-5 w-auto mb-3" />

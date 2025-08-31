@@ -150,3 +150,6 @@ apps/api/.venv/
 
 # Documentation files with credentials
 QUICK-MACBOOK-SYNC.md
+
+# Local scripts directory (contains sensitive operations)
+scripts/

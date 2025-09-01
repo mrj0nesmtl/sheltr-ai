@@ -157,10 +157,10 @@ export default function DocsPage() {
       lastUpdated: "August 28, 2025"
     },
     {
-      title: "Knowledge Base Update Guide",
+      title: "Knowledge Base Guide",
       description: "Complete guide for updating SHELTR-AI Knowledge Base documents with embedding regeneration",
       icon: BookOpen,
-      badge: "Maintenance",
+      badge: "AI System",
       badgeColor: "bg-blue-600",
       audience: "Developers • System Administrators • Content Managers • Technical Teams",
       topics: ["Document Updates", "Embedding Regeneration", "RAG System", "Firebase Storage", "Chatbot Integration"],

@@ -41,7 +41,7 @@ export default function KnowledgeBaseGuidePage() {
               <div className="flex-1">
                 <div className="mb-3">
                   <h1 className="text-3xl sm:text-4xl font-bold mb-2 leading-tight">Knowledge Base Update Guide</h1>
-                  <Badge className="bg-blue-600 text-white text-sm">Maintenance</Badge>
+                  <Badge className="bg-blue-600 text-white text-sm">AI Knowledge</Badge>
                 </div>
                 <p className="text-lg text-muted-foreground mb-3">
                   Complete guide for updating SHELTR-AI Knowledge Base documents with embedding regeneration

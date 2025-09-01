@@ -156,3 +156,6 @@ scripts/
 
 # Backup directories
 backups/
+
+# Sync scripts (contain sensitive environment information)
+sync-mac*.sh

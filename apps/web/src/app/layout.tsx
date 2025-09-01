@@ -20,12 +20,12 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'SHELTR-AI',
+  title: 'SHELTR',
   description: 'Blockchain-powered platform for direct participant empowerment',
   keywords: ['homelessness', 'blockchain', 'AI', 'technology', 'social impact', 'donations', 'shelter management'],
   authors: [{ name: 'SHELTR Team' }],
-  creator: 'SHELTR-AI',
-  publisher: 'SHELTR-AI',
+  creator: 'SHELTR',
+  publisher: 'SHELTR',
   robots: 'index, follow',
   icons: {
     icon: '/favicon.ico',
@@ -33,16 +33,16 @@ export const metadata: Metadata = {
     apple: '/apple-touch-icon.png',
   },
   openGraph: {
-    title: 'SHELTR-AI',
+    title: 'SHELTR',
     description: 'Blockchain-powered platform for direct participant empowerment',
     url: 'https://sheltr-ai.web.app',
-    siteName: 'SHELTR-AI',
+    siteName: 'SHELTR',
     images: [
       {
         url: '/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'SHELTR-AI Logo',
+        alt: 'SHELTR Logo',
       },
     ],
     locale: 'en_US',
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'SHELTR-AI',
+    title: 'SHELTR',
     description: 'Blockchain-powered platform for direct participant empowerment',
     images: ['/og-image.jpg'],
   },

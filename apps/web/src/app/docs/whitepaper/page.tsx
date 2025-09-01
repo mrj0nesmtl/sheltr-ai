@@ -54,12 +54,6 @@ export default function WhitepaperPage() {
                 </div>
                 
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                  <Link href="/docs">
-                    <Button className="bg-blue-600 hover:bg-blue-700">
-                      <FileText className="h-4 w-4 mr-2" />
-                      View Online
-                    </Button>
-                  </Link>
                   <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/whitepaper_final.md" target="_blank" rel="noopener noreferrer">
                     <Button variant="outline">
                       <Download className="h-4 w-4 mr-2" />

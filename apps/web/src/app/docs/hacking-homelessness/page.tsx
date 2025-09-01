@@ -56,12 +56,6 @@ export default function HackingHomelessnessPage() {
                 </div>
                 
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                  <Link href="/docs">
-                    <Button className="bg-purple-600 hover:bg-purple-700">
-                      <Users className="h-4 w-4 mr-2" />
-                      View Online
-                    </Button>
-                  </Link>
                   <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/01-overview/hacking_homelessness.md">
                     <Button variant="outline">
                       <Download className="h-4 w-4 mr-2" />

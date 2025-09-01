@@ -111,7 +111,7 @@ export default function TraditionalStrategy() {
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">The Opportunity</h3>
                 <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
-                  SHELTR-AI represents a paradigm shift in addressing homelessness through technology. 
+                  SHELTR represents a paradigm shift in addressing homelessness through technology. 
                   Our platform combines AI-driven resource allocation, blockchain transparency, and 
                   real-time impact tracking to create the first comprehensive homelessness solution ecosystem.
                 </p>
@@ -505,7 +505,7 @@ export default function TraditionalStrategy() {
 
         {/* Footer */}
         <div className="text-center text-sm text-gray-500 border-t pt-6">
-          <p>© 2025 SHELTR-AI. Confidential and Proprietary.</p>
+          <p>© 2025 SHELTR. Confidential and Proprietary.</p>
           <p>This document contains confidential business information. Distribution limited to authorized personnel only.</p>
         </div>
       </div>

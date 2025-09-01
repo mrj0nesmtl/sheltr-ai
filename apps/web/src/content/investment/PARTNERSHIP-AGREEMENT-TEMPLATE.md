@@ -12,8 +12,8 @@
 **Address:** [To be determined]  
 **Represented by:** Joel Jones, Chief Executive Officer  
 
-**Partner:** Doug [Last Name]  
-**Title:** Chief Financial Officer & Payment Systems Partner  
+**Partner:** DK [Last Name]  
+**Title:** Financial Officer & Payment Systems Partner  
 **Address:** [To be provided]  
 
 ---
@@ -21,20 +21,20 @@
 ## 1. PARTNERSHIP OVERVIEW
 
 ### 1.1 Purpose
-This Agreement establishes Doug as Chief Financial Officer and Payment Systems Partner of SHELTR-AI Corporation ("Company"), bringing his 20+ years of payment sector expertise to revolutionize homelessness solutions through technology.
+This Agreement establishes DK as Financial Officer and Payment Systems Partner of SHELTR Corporation ("Company"), bringing his 20+ years of payment sector expertise to revolutionize homelessness solutions through technology.
 
 ### 1.2 Effective Date
 This Agreement becomes effective on [DATE] and continues until terminated according to the terms herein.
 
 ### 1.3 Partnership Philosophy
-The parties recognize that Doug's involvement represents a strategic pivot from token-based fundraising to traditional partnership-driven investment, leveraging established industry relationships and institutional credibility.
+The parties recognize that DK's involvement represents a strategic pivot from token-based fundraising to traditional partnership-driven investment, leveraging established industry relationships and institutional credibility.
 
 ---
 
-## 2. DOUG'S ROLE & RESPONSIBILITIES
+## 2. DK'S ROLE & RESPONSIBILITIES
 
 ### 2.1 Title and Authority
-Doug shall serve as **Chief Financial Officer** with the following authority:
+DK shall serve as **Financial Officer** with the following authority:
 - Financial planning and budget oversight
 - Investor relations and fundraising leadership
 - Payment systems strategy and implementation
@@ -71,7 +71,7 @@ Doug shall serve as **Chief Financial Officer** with the following authority:
 - [ ] Manage investor updates and quarterly reporting
 
 ### 2.3 Time Commitment
-Doug commits to dedicating **minimum 20 hours per week** to Company activities during the pre-seed phase, scaling to **full-time engagement** upon Series A funding completion.
+DK commits to dedicating **minimum 20 hours per week** to Company activities during the pre-seed phase, scaling to **full-time engagement** upon Series A funding completion.
 
 ### 2.4 Performance Metrics & Milestones
 
@@ -113,13 +113,13 @@ Doug commits to dedicating **minimum 20 hours per week** to Company activities d
 ### 3.2 Revenue Sharing Arrangements
 
 #### Payment Processing Revenue Share
-- **Percentage:** 3% of net processing fees from partnerships Doug facilitates
+- **Percentage:** 3% of net processing fees from partnerships DK facilitates
 - **Calculation:** Based on monthly net revenue after processor costs
 - **Payment Schedule:** Quarterly payments within 30 days of quarter end
 - **Minimum Threshold:** $1,000 quarterly minimum for payment processing
 
 #### Strategic Partnership Commissions
-- **New Partnership Revenue:** 5% commission on first-year revenue from partnerships Doug facilitates
+- **New Partnership Revenue:** 5% commission on first-year revenue from partnerships DK facilitates
 - **Ongoing Relationships:** 2% commission on years 2-5 of partnership revenue
 - **Corporate Contracts:** 3% commission on municipal and enterprise contracts
 
@@ -140,7 +140,7 @@ Doug commits to dedicating **minimum 20 hours per week** to Company activities d
 
 #### Fundraising Success Fees
 - **Pre-Seed Completion:** $5,000 bonus upon $150K raise completion
-- **Series A Lead:** 1% additional equity if Doug sources lead Series A investor
+- **Series A Lead:** 1% additional equity if DK sources lead Series A investor
 - **Valuation Milestones:** Equity bonuses for achieving valuation targets
 
 #### Revenue Milestones
@@ -181,21 +181,21 @@ Doug commits to dedicating **minimum 20 hours per week** to Company activities d
 ## 5. INTELLECTUAL PROPERTY & CONFIDENTIALITY
 
 ### 5.1 IP Assignment
-All intellectual property developed by Doug in connection with Company activities shall be assigned to the Company, including:
+All intellectual property developed by DK in connection with Company activities shall be assigned to the Company, including:
 - Payment processing methodologies and systems
 - Financial models and analytical frameworks
 - Partnership strategies and relationship management systems
 - Fundraising materials and investor presentation content
 
 ### 5.2 Confidentiality Obligations
-Doug agrees to maintain strict confidentiality regarding:
+DK agrees to maintain strict confidentiality regarding:
 - Company financial information and business plans
 - Investor relationships and fundraising activities
 - Technical specifications and platform architecture
 - Strategic partnerships and competitive information
 
 ### 5.3 Non-Compete Provisions
-During the term of this Agreement and for 12 months thereafter, Doug shall not:
+During the term of this Agreement and for 12 months thereafter, DK shall not:
 - Engage in competing homeless services technology businesses
 - Solicit Company employees, investors, or strategic partners
 - Use Company confidential information for personal benefit
@@ -229,7 +229,7 @@ During the term of this Agreement and for 12 months thereafter, Doug shall not:
 
 #### Partnership Metrics
 - Number of strategic partnerships secured
-- Revenue generated through Doug's partnerships
+- Revenue generated through DK's partnerships
 - Payment processing volume and growth rate
 - Partnership pipeline quality and conversion rates
 
@@ -251,10 +251,10 @@ During the term of this Agreement and for 12 months thereafter, Doug shall not:
 
 ### 7.1 Termination Triggers
 
-#### Voluntary Termination by Doug
+#### Voluntary Termination by DK
 - 30 days written notice required
 - All vested equity retained with standard exercise periods
-- Revenue sharing continues for partnerships Doug facilitated
+- Revenue sharing continues for partnerships DK facilitated
 
 #### Termination by Company
 
@@ -328,7 +328,7 @@ This Agreement may only be amended through written consent of both parties with 
 If any provision is deemed unenforceable, the remainder of the Agreement remains in full force and effect.
 
 ### 9.3 Assignment Rights
-This Agreement is personal to Doug and may not be assigned without Company consent. Company may assign with Doug's consent.
+This Agreement is personal to DK and may not be assigned without Company consent. Company may assign with DK's consent.
 
 ### 9.4 Integration Clause
 This Agreement constitutes the entire agreement between the parties and supersedes all prior negotiations and understandings.
@@ -342,14 +342,14 @@ By signing below, both parties acknowledge they have read, understood, and agree
 **SHELTR-AI CORPORATION**
 
 Signature: _________________________ Date: _____________  
-Print Name: Joel Jones  
+Print Name: JY  
 Title: Chief Executive Officer  
 
 **PARTNER**
 
 Signature: _________________________ Date: _____________  
-Print Name: Doug [Last Name]  
-Title: Chief Financial Officer & Payment Systems Partner  
+Print Name: DK [Last Name]  
+Title: Financial Officer & Payment Systems Partner  
 
 ---
 

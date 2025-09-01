@@ -14,25 +14,24 @@ export default function TeamPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const teamMembers = [
-    { name: 'Joel Y.', role: 'Founder & CEO', email: 'joel@example.com', linkedin: '#', website: '#' },
-    { name: 'Doug K.', role: 'Chief Financial Officer', email: 'doug@example.com', linkedin: '#', website: '#' },
-    { name: 'Sasko D.', role: 'Chief Technology Officer', email: 'sasko@example.com', linkedin: '#', website: '#' },
-    { name: 'Alex K.', role: 'Chief Operating Officer', email: 'alex@example.com', linkedin: '#', website: '#' },
-    { name: 'Terry M.', role: 'Head of Partnerships', email: 'terry@example.com', linkedin: '#', website: '#' },
-    { name: 'Courtnal', role: 'Head of Marketing', email: 'courtnal@example.com', linkedin: '#', website: '#' },
-    { name: 'Zaffia L.', role: 'Head of Product', email: 'zaffia@example.com', linkedin: '#', website: '#' },
-    { name: 'Ami R.', role: 'Lead Developer', email: 'ami@example.com', linkedin: '#', website: '#' },
-    { name: 'Marc R.', role: 'Senior Developer', email: 'marc@example.com', linkedin: '#', website: '#' },
-    { name: 'Morgan H.', role: 'UX/UI Designer', email: 'morgan@example.com', linkedin: '#', website: '#' },
-    { name: 'Dominique L.', role: 'Community Manager', email: 'dominique@example.com', linkedin: '#', website: '#' },
-    { name: 'Sara S.', role: 'Content Strategist', email: 'sara@example.com', linkedin: '#', website: '#' },
-    { name: 'Sen W.', role: 'Data Analyst', email: 'sen@example.com', linkedin: '#', website: '#' },
+    { name: 'Joel Y.', email: 'joel@example.com', linkedin: '#', website: '#' },
+    { name: 'Doug K.', email: 'doug@example.com', linkedin: '#', website: '#' },
+    { name: 'Alex K.', email: 'alex@example.com', linkedin: '#', website: '#' },
+    { name: 'Terry M.', email: 'terry@example.com', linkedin: '#', website: '#' },
+    { name: 'Zaffia L.', email: 'zaffia@example.com', linkedin: '#', website: '#' },
+    { name: 'Ami R.', email: 'ami@example.com', linkedin: '#', website: '#' },
+    { name: 'Marc R.', email: 'marc@example.com', linkedin: '#', website: '#' },
+    { name: 'Morgan H.', email: 'morgan@example.com', linkedin: '#', website: '#' },
+    { name: 'Dominique L.', email: 'dominique@example.com', linkedin: '#', website: '#' },
+    { name: 'Sara S.', email: 'sara@example.com', linkedin: '#', website: '#' },
+    { name: 'Sen W.', email: 'sen@example.com', linkedin: '#', website: '#' },
+    { name: 'Zell A.', email: 'zell@example.com', linkedin: '#', website: '#' },
   ];
 
   const inMemoryMembers = [
-    { name: 'Mihai Frimu', role: 'Technical Advisor', email: 'mihai@example.com', linkedin: '#', website: '#' },
-    { name: 'Toni Lane Casserly', role: 'Blockchain Pioneer', email: 'toni@example.com', linkedin: '#', website: '#' },
-    { name: 'Jim Anastassiou', role: 'Strategic Advisor', email: 'jim@example.com', linkedin: '#', website: '#' },
+    { name: 'Mihai Frimu', email: 'mihai@example.com', linkedin: '#', website: '#' },
+    { name: 'Toni Lane Casserly', email: 'toni@example.com', linkedin: '#', website: '#' },
+    { name: 'Jim Anastassiou', email: 'jim@example.com', linkedin: '#', website: '#' },
   ];
 
   return (
@@ -152,7 +151,7 @@ export default function TeamPage() {
               MEET THE TEAM
             </div>
             <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-              The <span className="text-blue-400">Visionaries</span> Behind SHELTR
+              Who's <span className="text-blue-400">Behind</span> SHELTR?
             </h1>
             <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-4xl mx-auto">
               A diverse team of innovators, technologists, and humanitarian leaders committed to transforming charitable giving.

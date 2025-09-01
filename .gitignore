@@ -153,3 +153,6 @@ QUICK-MACBOOK-SYNC.md
 
 # Local scripts directory (contains sensitive operations)
 scripts/
+
+# Backup directories
+backups/

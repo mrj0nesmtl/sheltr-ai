@@ -21,10 +21,7 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  // Clean up build output
-  generateBuildId: async () => {
-    return 'build-' + Date.now();
-  },
+
 };
 
 export default nextConfig;

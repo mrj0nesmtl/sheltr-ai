@@ -22,6 +22,38 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: 'SHELTR-AI',
   description: 'Blockchain-powered platform for direct participant empowerment',
+  keywords: ['homelessness', 'blockchain', 'AI', 'technology', 'social impact', 'donations', 'shelter management'],
+  authors: [{ name: 'SHELTR Team' }],
+  creator: 'SHELTR-AI',
+  publisher: 'SHELTR-AI',
+  robots: 'index, follow',
+  icons: {
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: '/apple-touch-icon.png',
+  },
+  openGraph: {
+    title: 'SHELTR-AI',
+    description: 'Blockchain-powered platform for direct participant empowerment',
+    url: 'https://sheltr-ai.web.app',
+    siteName: 'SHELTR-AI',
+    images: [
+      {
+        url: '/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'SHELTR-AI Logo',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'SHELTR-AI',
+    description: 'Blockchain-powered platform for direct participant empowerment',
+    images: ['/og-image.jpg'],
+  },
 }
 
 export default function RootLayout({

@@ -225,7 +225,7 @@ export default function HomePage() {
                         Transforming charitable giving through blockchain
                       </p>
                       <p className="text-xs text-muted-foreground mt-1">
-                        © 2025 SHELTR-AI
+                        © 2025 SHELTR
                       </p>
                     </div>
                   </div>

@@ -50,7 +50,7 @@
 | Feature | Test Case | Expected Result | Data Source | Status |
 |---------|-----------|----------------|-------------|---------|
 | **Login System** | All 4 test accounts can login | Redirected to role-appropriate dashboard | Firebase Auth | ✅ |
-| **Role Verification** | joel.yaffe@gmail.com login | Super Admin Dashboard access | Custom Claims | ✅ |
+| **Role Verification** | xxx.xxxx@gmail.com login | Super Admin Dashboard access | Custom Claims | ✅ |
 | **Role Verification** | shelteradmin@example.com login | Shelter Admin Dashboard access | Custom Claims | ✅ |
 | **Role Verification** | participant@example.com login | Participant Dashboard access | Custom Claims | ✅ |
 | **Role Verification** | donor@example.com login | Donor Dashboard access | Custom Claims | ✅ |

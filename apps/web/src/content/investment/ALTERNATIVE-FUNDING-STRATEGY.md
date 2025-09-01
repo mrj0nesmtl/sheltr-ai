@@ -4,14 +4,14 @@
 **Document Type:** Strategic Investment Plan  
 **Date:** December 2024  
 **Classification:** Confidential - Executive Access Only  
-**Prepared For:** Doug (Payment Systems Partner) & Strategic Stakeholders  
+**Prepared For:** Strategic Stakeholders  
 
 ---
 
 ## 🎯 Executive Summary
 
 ### The Strategic Pivot
-Following extensive stakeholder discussions, SHELTR-AI is transitioning from a token-based fundraising model (ICO/Pre-ICO) to a traditional partnership-driven investment approach. This pivot addresses regulatory concerns, market perception issues, and institutional investor preferences while maintaining our core mission of revolutionizing homelessness solutions through technology.
+Following extensive stakeholder discussions, SHELTR may transition from a token-based fundraising model (ICO/Pre-ICO) to a traditional partnership-driven investment approach. This potential pivot addresses regulatory concerns, market perception issues, and institutional investor preferences while maintaining our core mission of revolutionizing homelessness solutions through technology.
 
 ### Key Benefits of Alternative Approach
 - **Regulatory Compliance:** Eliminates SEC uncertainty and token classification risks
@@ -58,7 +58,7 @@ Following extensive stakeholder discussions, SHELTR-AI is transitioning from a t
 
 **Investor Profile:**
 - Angel investors with social impact focus
-- Payment industry executives (Doug's network)
+- Payment industry executives (DK network)
 - Municipal technology VCs
 - Impact investment funds
 
@@ -75,10 +75,10 @@ Following extensive stakeholder discussions, SHELTR-AI is transitioning from a t
 
 ---
 
-## 🤝 Doug's Strategic Partnership Agreement
+## 🤝 DK Strategic Partnership Agreement
 
 ### Partnership Structure
-Doug joins SHELTR-AI as **Chief Financial Officer and Payment Systems Partner**, bringing 20+ years of high-level payments sector experience and established industry relationships.
+DK will joins SHELTR as **Financial and Payment Systems Partner**, bringing 20+ years of high-level payments sector experience and established industry relationships.
 
 ### Equity & Compensation Package
 
@@ -89,14 +89,14 @@ Doug joins SHELTR-AI as **Chief Financial Officer and Payment Systems Partner**,
 - **Board Rights:** Board observer rights, escalating to board seat at Series A
 
 #### Revenue Sharing
-- **Payment Processing Revenue:** 2-3% of all processing fees generated through Doug's partnerships
-- **Partnership Commissions:** 5% of revenue from payment sector partnerships facilitated by Doug
+- **Payment Processing Revenue:** 2-3% of all processing fees generated through new partnerships
+- **Partnership Commissions:** 5% of revenue from payment sector partnerships facilitated by DK
 - **Performance Bonuses:** Milestone-based bonuses tied to fundraising and revenue targets
 
 #### Advisory Compensation
 - **Monthly Retainer:** $5,000/month until Series A completion
 - **Equity Acceleration:** 25% vest acceleration upon successful Series A
-- **Success Fee:** 1% equity bonus if Doug facilitates lead Series A investor
+- **Success Fee:** 1% equity bonus if D facilitates lead Series A investor
 
 ### Responsibilities & Deliverables
 
@@ -235,7 +235,7 @@ Doug joins SHELTR-AI as **Chief Financial Officer and Payment Systems Partner**,
 - [ ] Initial investor prospectus preparation
 
 ### Q1 2025
-- [ ] Doug partnership agreement finalization
+- [ ] Partnership agreement
 - [ ] Pre-seed investor outreach launch
 - [ ] Product development acceleration
 - [ ] Pilot program partner identification
@@ -264,7 +264,7 @@ Doug joins SHELTR-AI as **Chief Financial Officer and Payment Systems Partner**,
 
 ### Available Documentation
 1. **Financial Model Spreadsheet** - Detailed 5-year projections with sensitivity analysis
-2. **Partnership Agreement Template** - Legal framework for Doug's involvement
+2. **Partnership Agreement Template** - Legal framework for DK involvement
 3. **Investor Pitch Deck** - Professional presentation for potential investors
 4. **Market Analysis Report** - Comprehensive competitive landscape analysis
 5. **Technology Architecture** - Technical specifications and security framework
@@ -285,7 +285,7 @@ Doug joins SHELTR-AI as **Chief Financial Officer and Payment Systems Partner**,
 1. **Legal Structure**
    - [ ] Incorporate Delaware C-Corp
    - [ ] Setup cap table management
-   - [ ] Draft partnership agreement with Doug
+   - [ ] Draft partnership agreement with DK
 
 2. **Financial Planning**
    - [ ] Complete detailed financial model
@@ -293,7 +293,7 @@ Doug joins SHELTR-AI as **Chief Financial Officer and Payment Systems Partner**,
    - [ ] Develop budget and use of funds
 
 3. **Partnership Development**
-   - [ ] Finalize Doug's role and compensation
+   - [ ] Finalize DK role and compensation
    - [ ] Identify initial payment processor targets
    - [ ] Begin pilot program partner outreach
 

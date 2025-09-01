@@ -177,10 +177,7 @@ export default function WebsiteArchitecturePage() {
           </div>
 
           <div className="flex flex-wrap gap-4 mb-8">
-            <div className="flex items-center text-sm text-muted-foreground">
-              <Building className="w-4 h-4 mr-2" />
-              45 pages
-            </div>
+
             <div className="flex items-center text-sm text-muted-foreground">
               <Users className="w-4 h-4 mr-2" />
               QA Engineers • Developers • Project Managers

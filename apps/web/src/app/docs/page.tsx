@@ -78,7 +78,6 @@ export default function DocsPage() {
       icon: Users,
       badge: "Thesis",
       badgeColor: "bg-purple-500",
-      pages: "25 pages",
       audience: "Executives • Impact Investors • Media • Partners",
       topics: ["Theory of Change", "Market Analysis", "Social Impact", "Investment Thesis", "Implementation Roadmap"],
       link: "/docs/hacking-homelessness",
@@ -91,7 +90,6 @@ export default function DocsPage() {
       icon: Building,
       badge: "QA Framework",
       badgeColor: "bg-indigo-500",
-      pages: "45 pages",
       audience: "QA Engineers • Developers • Project Managers • Technical Teams",
       topics: ["Site Architecture", "Role-Based Access", "Mobile Testing", "Authentication Flow", "Business Logic QA"],
       link: "/docs/website-architecture",
@@ -104,7 +102,6 @@ export default function DocsPage() {
       icon: FileText,
       badge: "Published",
       badgeColor: "bg-blue-500",
-      pages: "67 pages",
       audience: "Technical Teams • Partners",
       topics: ["Dual-Token Economics", "Smart Contract Architecture", "Base Network Integration", "Security Framework", "Financial Projections"],
       link: "/docs/whitepaper",
@@ -117,7 +114,6 @@ export default function DocsPage() {
       icon: Shield,
       badge: "Peer Review",
       badgeColor: "bg-green-500",
-      pages: "45 pages",
       audience: "Developers • Blockchain Engineers • Security Auditors",
       topics: ["Smart Contract Code", "Base Network Integration", "Security Protocols", "Oracle Systems", "Token Utilities"],
       link: "/docs/blockchain",
@@ -130,7 +126,6 @@ export default function DocsPage() {
       icon: Code,
       badge: "Technical",
       badgeColor: "bg-orange-500",
-      pages: "32 pages",
       audience: "Developers • System Integrators • Technical Partners",
       topics: ["REST API Endpoints", "Authentication", "Rate Limiting", "Error Handling", "SDK Integration"],
       link: "/docs/api",
@@ -143,7 +138,6 @@ export default function DocsPage() {
       icon: MessageSquare,
       badge: "AI System",
       badgeColor: "bg-purple-600",
-      pages: "266 pages",
       audience: "AI Engineers • Developers • System Architects • Technical Teams",
       topics: ["Multi-Agent System", "RAG Integration", "Role-Based Routing", "OpenAI Integration", "Knowledge Base"],
       link: "/docs/chatbot-architecture",
@@ -156,7 +150,6 @@ export default function DocsPage() {
       icon: CheckSquare,
       badge: "Testing",
       badgeColor: "bg-green-600",
-      pages: "352 pages",
       audience: "QA Engineers • Developers • Project Managers • Technical Teams",
       topics: ["Testing Matrix", "Business Logic", "User Workflows", "Data Validation", "Platform Status"],
       link: "/docs/functionality-matrix",
@@ -169,7 +162,6 @@ export default function DocsPage() {
       icon: BookOpen,
       badge: "Maintenance",
       badgeColor: "bg-blue-600",
-      pages: "250 pages",
       audience: "Developers • System Administrators • Content Managers • Technical Teams",
       topics: ["Document Updates", "Embedding Regeneration", "RAG System", "Firebase Storage", "Chatbot Integration"],
       link: "/docs/knowledge-base-guide",
@@ -182,7 +174,6 @@ export default function DocsPage() {
       icon: Building2,
       badge: "Admin Guide",
       badgeColor: "bg-blue-600",
-      pages: "25 pages",
       audience: "Shelter Administrators • Operations Managers • Staff",
       topics: ["Dashboard Management", "Participant Registration", "Service Coordination", "Resource Management", "Analytics & Reporting"],
       link: "/docs/shelter-admin-guide",
@@ -195,7 +186,6 @@ export default function DocsPage() {
       icon: Heart,
       badge: "Donor Guide",
       badgeColor: "bg-red-600",
-      pages: "28 pages",
       audience: "Donors • Community Supporters • Corporate Partners",
       topics: ["QR Code Giving", "SmartFund Model", "Impact Tracking", "Payment Security", "Community Building"],
       link: "/docs/donor-guide",
@@ -208,7 +198,6 @@ export default function DocsPage() {
       icon: Users,
       badge: "User Guide",
       badgeColor: "bg-teal-500",
-      pages: "28 pages",
       audience: "Participants • Support Staff • Shelter Administrators",
       topics: ["Platform Onboarding", "QR Code Usage", "Wallet Management", "Service Access", "Support Resources"],
       link: "/docs/participant-guide",
@@ -365,7 +354,7 @@ export default function DocsPage() {
               <Book className="h-16 w-16 text-white/90" />
             </div>
             <h1 className="text-5xl font-bold mb-6 text-white">
-              I am Documentation!
+              I am Documentation.
             </h1>
             <p className="text-xl mb-8 text-white/90">
               Built on modern cloud infrastructure.
@@ -399,7 +388,7 @@ export default function DocsPage() {
             {/* Last Updated Badge */}
             <div className="flex justify-center">
               <Badge className="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 text-sm">
-                📅 LAST UPDATED: AUGUST 29, 2025
+                📅 LAST UPDATED: September 1, 2025
               </Badge>
             </div>
           </div>
@@ -441,9 +430,8 @@ export default function DocsPage() {
                       </CardDescription>
                     </div>
                     
-                    {/* Page Count and Update Date */}
-                    <div className="flex items-center justify-between text-xs bg-muted/50 rounded-lg px-3 py-2">
-                      <span className="font-semibold text-foreground">{doc.pages}</span>
+                    {/* Update Date */}
+                    <div className="flex items-center justify-end text-xs bg-muted/50 rounded-lg px-3 py-2">
                       <span className="text-muted-foreground">Updated {doc.lastUpdated}</span>
                     </div>
                   </div>
@@ -467,7 +455,6 @@ export default function DocsPage() {
                       </div>
                     </div>
                     <div className="text-right text-sm text-muted-foreground bg-muted/50 rounded-lg p-3">
-                      <div className="font-semibold">{doc.pages}</div>
                       <div className="text-xs">Updated {doc.lastUpdated}</div>
                     </div>
                   </div>

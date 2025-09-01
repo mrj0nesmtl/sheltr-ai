@@ -51,7 +51,7 @@ export default function BlockchainPage() {
                   <span>•</span>
                   <span>August 2025</span>
                   <span>•</span>
-                  <span>45 pages</span>
+
                 </div>
                 
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">

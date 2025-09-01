@@ -50,8 +50,6 @@ export default function KnowledgeBaseGuidePage() {
                   <span>Version 1.0.0</span>
                   <span>•</span>
                   <span>August 22, 2025</span>
-                  <span>•</span>
-                  <span>250 pages</span>
                 </div>
                 
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">

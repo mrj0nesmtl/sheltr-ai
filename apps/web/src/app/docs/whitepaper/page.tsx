@@ -50,7 +50,7 @@ export default function WhitepaperPage() {
                   <span>•</span>
                   <span>January 25, 2025</span>
                   <span>•</span>
-                  <span>67 pages</span>
+
                 </div>
                 
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">

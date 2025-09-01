@@ -52,7 +52,7 @@ export default function HackingHomelessnessPage() {
                   <span>•</span>
                   <span>July 20, 2025</span>
                   <span>•</span>
-                  <span>25 pages</span>
+
                 </div>
                 
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">

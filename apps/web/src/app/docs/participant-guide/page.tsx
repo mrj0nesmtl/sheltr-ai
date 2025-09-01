@@ -51,7 +51,7 @@ export default function ParticipantGuidePage() {
                   <span>•</span>
                   <span>July 2025</span>
                   <span>•</span>
-                  <span>28 pages</span>
+
                 </div>
                 
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">

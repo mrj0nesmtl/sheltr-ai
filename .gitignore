@@ -159,3 +159,7 @@ backups/
 
 # Sync scripts (contain sensitive environment information)
 sync-mac*.sh
+
+# Next.js App Router generated .txt files (prevent 404 errors)
+*.txt
+**/*.txt

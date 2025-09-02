@@ -91,8 +91,8 @@ Create `contracts.json` after deployment:
 treasury.authorizeManager(managerAddress);
 
 // Set up governance founders
-governance.updateFounder(joelAddress);
-governance.updateFoundingMember(dougAddress);
+governance.updateFounder(jyAddress);
+governance.updateFoundingMember(dkAddress);
 
 // Update treasury wallet addresses
 treasury.updateReserveFundWallet(reserveWallet);
@@ -293,8 +293,8 @@ uint256 remaining = tokenSale.getRemainingInvestmentCapacity(investor);
 5. **Execute**: After veto window expires
 
 ### **Veto Power**
-- **Joel (Founder)** can veto any passed proposal
-- **Doug (CFO)** can veto any passed proposal
+- **JY (Founder)** can veto any passed proposal
+- **DK (CFO)** can veto any passed proposal
 - **3-day window** after proposal passes
 - **Community governance** with founder protection
 
@@ -314,7 +314,7 @@ sheltrToken.isTeamMemberExiled(member);
 
 ### **Exile Process**
 1. **Initiation**: Any team member can create exile vote
-2. **Voting**: Joel (founder) + 2 other team members required
+2. **Voting**: JY (founder) + 2 other team members required
 3. **Execution**: Automatic when conditions met
 4. **Token Transfer**: Remaining tokens → Shelter Operations
 5. **Status Update**: Member marked as exiled
@@ -422,6 +422,6 @@ treasury.updateReserveFundWallet(newWallet);
 
 ---
 
-**Version**: 1.0  
-**Last Updated**: December 2024  
-**Maintainer**: SHELTR Development Team
+**Version**: 1.3 
+**Last Updated**: September 2, 2024  
+**Maintainer**: SHELTR/ARCANA Development Team

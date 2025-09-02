@@ -105,7 +105,7 @@ export default function ShelterAdminGuidePage() {
       external: false
     },
     {
-      title: 'SmartFund Distribution',
+      title: 'SmartFund™ Distribution',
       description: 'Transparent 80-15-5 donation allocation system',
       status: 'operational',
       link: '/tokenomics',

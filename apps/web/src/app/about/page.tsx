@@ -283,7 +283,7 @@ export default function AboutPage() {
                 How We Create Change
               </h2>
               <p className="text-xl text-gray-200">
-                Our transparent SmartFund donation distribution model ensures maximum impact
+                Our transparent SmartFund™ donation distribution model ensures maximum impact
               </p>
             </div>
 
@@ -306,7 +306,7 @@ export default function AboutPage() {
                 </div>
                 <h3 className="text-xl font-semibold mb-3 text-white">Housing Allocation</h3>
                 <p className="text-gray-200">
-                  SmartFund contracts automatically direct 15% towards participants&apos; emergency housing goals like tiny homes. 
+                  SmartFund™ contracts automatically direct 15% towards participants&apos; emergency housing goals like tiny homes. 
                   AI-optimized token staking compounds these funds over time. 
                   Each participant builds their housing fund through every donation received.
                 </p>

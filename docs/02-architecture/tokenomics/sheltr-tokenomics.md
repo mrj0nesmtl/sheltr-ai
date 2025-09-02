@@ -1,6 +1,6 @@
-# 🪙 SHELTR Tokenomics: Dual-Token Architecture
-*Version: 1.3.0 - August 2025*
-*Status: Pre-ICO Launch* 🚀
+# 🪙 SHELTR Tokenomics: Proposed Dual-Token Architecture
+*Version: 1.3.0 - September 2025*
+*Status: Beta Platform / Pre Token Launch* 🚀
 
 ## 🎯 **Q4 2025 TOKEN LAUNCH TIMELINE**
 
@@ -520,10 +520,9 @@ Our commitment to transparency, security, and community governance ensures that 
 
 ---
 
-*Built with ❤️ in memory of Gunnar Blaze*
-*"Loyalty, Protection, and Unconditional Care" - The SHELTR Values*
+*Built with ❤️ in memory of Gunnar, Jim, Mihai, and Tony Lane*
 
 ---
-*Last Updated: January 22, 2025*
-*Version: 1.0.0*
-*Status: IMPLEMENTED* ✅ 
+*Last Updated: September 2, 2025*
+*Version: 1.3.7*
+*Status: Under Review*

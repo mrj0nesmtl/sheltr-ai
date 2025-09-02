@@ -137,22 +137,22 @@ contract SHELTRS {
 #### **Vesting Allocations (3-Year Schedule)**
 | **Team Member** | **Allocation** | **Tokens** | **Role** | **Vesting** |
 |-----------------|----------------|------------|----------|-------------|
-| **SD** | 1% | 1,000,000 | CTO | 3-year vesting |
-| **JC** | 1% | 1,000,000 | Leadership | 3-year vesting |
 | **ZL** | 1% | 1,000,000 | Leadership | 3-year vesting |
-| **AR** | 1% | 1,000,000 | Leadership | 3-year vesting |
+| **SD** | 1% | 1,000,000 | Leadership | 3-year vesting |
 | **MR** | 1% | 1,000,000 | Leadership | 3-year vesting |
 | **MH** | 1% | 1,000,000 | Leadership | 3-year vesting |
 | **DL** | 1% | 1,000,000 | Leadership | 3-year vesting |
-| **SS** | 1% | 1,000,000 | Leadership | 3-year vesting |
 | **SW** | 1% | 1,000,000 | Leadership | 3-year vesting |
+| **ZA** | 1% | 1,000,000 | Leadership | 3-year vesting |
+| **SS** | 1% | 1,000,000 | Leadership | 3-year vesting |
+| **AR** | 1% | 1,000,000 | Leadership | 3-year vesting |
 
 ### **Vesting Schedule**
 - **Start Date**: January 1, 2026
 - **Duration**: 3 years (36 months)
 - **Cliff**: 30 days
 - **Release**: Linear monthly distribution
-- **Applicable To**: 9 team members (excluding Joel, Doug, Alex)
+- **Applicable To**: 9 team members (excluding JY, DK, AK)
 
 ### **Immediate Allocations**
 - **JY (Founder)**: 1M SHELTR - Immediate transfer
@@ -162,10 +162,10 @@ contract SHELTRS {
 
 ### **Team Accountability Mechanism**
 - **Exile Voting**: Any team member can initiate exile vote
-- **Vote Requirements**: Joel (founder) + 2 other team members
+- **Vote Requirements**: JY (founder) + 2 other team members
 - **Automatic Transfer**: Exiled member's remaining tokens → Shelter Operations
 - **Protection**: Prevents non-performing team members from retaining tokens
-- **Note**: Joel, Doug, and Alex are not subject to exile voting (immediate allocations)
+- **Note**: JY, DK, and AK are not subject to exile voting (immediate allocations)
 
 ## 🏦 Treasury Management System
 
@@ -230,7 +230,7 @@ contract SHELTRS {
 ## 🔐 Governance & Security
 
 ### **Founder Veto Power**
-- **Joel (Founder) + Doug (CFO)** = Veto authority
+- **JY (Founder) + DK (CFO)** = Veto authority
 - **3-day veto window** after proposal passes
 - **Community governance** with founder protection
 - **Proposal threshold**: 100,000 SHELTR
@@ -246,7 +246,7 @@ contract SHELTRS {
 
 ### **Token Sale Structure**
 
-#### **Pre-Seed Sale (Whitelist Only)**
+#### **Proposed Pre-Seed Sale (Whitelist Only)**
 - **Allocation**: 3M tokens (3% of total supply)
 - **Price**: $0.05 per token (50% discount)
 - **Vesting**: 12-month vesting with 30-day cliff
@@ -317,7 +317,7 @@ contract SHELTRS {
 - **Supply**: 100M tokens
 - **Use Cases**: Voting, staking, platform access
 
-### **SHELTR-S Token (Stablecoin)**
+### **Proposed SHELTR-S Token (Stablecoin)**
 - **Purpose**: Participant stablecoin
 - **Backing**: 1:1 USDC reserves
 - **Features**: Zero volatility, welcome bonus, gasless transactions
@@ -375,7 +375,7 @@ This strategy positions SHELTR for success in the competitive blockchain philant
 
 ---
 
-**Document Version**: 1.0  
-**Last Updated**: December 2024  
+**Document Version**: 1.3
+**Last Updated**: September 2, 2025  
 **Author**: SHELTR Development Team  
-**Status**: Ready for Implementation
+**Status**: Ready for Review

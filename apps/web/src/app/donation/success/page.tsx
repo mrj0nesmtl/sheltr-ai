@@ -20,7 +20,7 @@ function SuccessPageContent() {
   const participantName = searchParams.get('participant') || 'Michael';
   const reference = searchParams.get('ref') || 'DEMO-' + Date.now();
 
-  // Calculate SmartFund breakdown
+  // Calculate SmartFund™ breakdown
   const donationAmount = parseFloat(amount);
   const breakdown = {
     total: donationAmount,

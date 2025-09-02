@@ -368,7 +368,7 @@ function DonatePageContent() {
                 </CardContent>
               </Card>
 
-              {/* SmartFund Breakdown */}
+              {/* SmartFund™ Breakdown */}
               <Card>
                 <CardHeader>
                   <CardTitle className="text-lg flex items-center gap-2">

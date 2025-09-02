@@ -1,8 +1,8 @@
-# SHELTR-AI Chatbot Agent Architecture Documentation
+# SHELTR Chatbot Agent Architecture Documentation
 
 ## 🎯 **Overview**
 
-SHELTR-AI has a sophisticated multi-agent chatbot system with two main components:
+SHELTR has a sophisticated multi-agent chatbot system with two main components:
 
 1. **Public Landing Page Chatbot** - Orchestrator-based system for public users
 2. **Super Admin Chatbot Control Panel** - Configurable agent system for internal use

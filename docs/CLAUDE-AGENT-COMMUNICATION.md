@@ -1,7 +1,7 @@
 # 🤖↔️🤖 Claude Agent Communication Protocol
 ## Coordination Between Development Environments
 
-> **Purpose**: Inter-agent communication system for Claude instances working on SHELTR-AI across laptop and Mac mini environments.
+> **Purpose**: Inter-agent communication system for Claude instances working on SHELTR across laptop and Mac mini environments.
 
 ---
 
@@ -158,7 +158,7 @@ MacBook Pro environment now FULLY SYNCHRONIZED (August 8, 2025)
 - **docs/04-development/SESSION-14-KICKOFF.md** - Next session planning
 - **CHANGELOG.md** - Updated through v2.16.0 (Session 13.2)
 - **docs/TABLE_OF_CONTENTS.md** - Reorganized documentation structure
-- **SHELTR-AI-DEVELOPMENT-ROADMAP.md** - Updated timeline through Q4 2025
+- **SHELTR-DEVELOPMENT-ROADMAP.md** - Updated timeline through Q4 2025
 
 ---
 

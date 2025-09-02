@@ -2,8 +2,8 @@
 *Hacking Homelessness - Direct-Impact Technology*
 Joel Yaffe, Montreal, Canada
 Version 1.3.0
-August 9, 2025
-Status: LIVE DOCUMENT ✅
+September 2, 2025
+Status: PEER REVIEWED - LIVE DOCUMENT ✅
 
 ## Abstract
 
@@ -824,16 +824,16 @@ We are not just building a platform—we are creating a movement that proves tec
 *"Technology's true measure is not in its sophistication, but in its service to humanity."*
 
 **Contact Information**:
-- **Partnership Opportunities**: partnerships@sheltr-ai.com
-- **Technical Questions**: development@sheltr-ai.com
-- **Platform Integration**: integration@sheltr-ai.com
-- **General Information**: hello@sheltr-ai.com
+- **Partnership Opportunities**: joel@arcanaconcept.com
+- **Technical Questions**: joel@arcanaconcept.com
+- **Platform Integration**: joel@arcanaconcept.com
+- **General Information**: joel@arcanaconcept.com
 
 **Important Legal Disclaimers**:
 *This whitepaper contains forward-looking statements based on current expectations and assumptions. Actual results may differ materially. Platform participation and token usage carry inherent risks in emerging technology implementations. Please consult with qualified technical and legal advisors before platform integration. This document is for informational purposes and does not constitute financial advice.*
 
 ---
 *Document Version: 1.4.0*  
-*Last Updated: January 25, 2025*  
-*Status: PRODUCTION READY* ✅  
-*Classification: Investment Grade Documentation*
+*Last Updated: September 25, 2025*  
+*Status: PEER REVIEW READY* ✅  
+*Classification: Professional Grade Documentation*

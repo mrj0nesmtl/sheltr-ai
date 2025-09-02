@@ -14,7 +14,7 @@ export default function DonorsPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link href="/" className="flex items-center">
-              <img src="/logo.svg" alt="SHELTR-AI" className="h-6 w-auto hover:opacity-80 transition-opacity" />
+              <img src="/logo.svg" alt="SHELTR" className="h-6 w-auto hover:opacity-80 transition-opacity" />
             </Link>
             <div className="hidden md:flex space-x-8">
               <Link href="/" className="text-muted-foreground hover:text-primary transition-colors">Home</Link>

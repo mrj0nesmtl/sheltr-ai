@@ -45,7 +45,7 @@ Welcome to the comprehensive documentation for the SHELTR token ecosystem. This 
 - **Smart Fund Distribution**: 80/15/5 donation split
 
 ### **Governance Features**
-- **Founder Veto Power**: Joel + Doug with 3-day window
+- **Founder Veto Power**: JY + DK with 3-day window
 - **Community Governance**: Token-weighted voting
 - **Emergency Controls**: Pause and emergency withdrawal
 - **Transparent Operations**: All transactions logged
@@ -71,7 +71,7 @@ Welcome to the comprehensive documentation for the SHELTR token ecosystem. This 
 ### **Financial Targets (3YR)**
 - **Capital Raise**: $5-10M+ from public sale
 - **Treasury Efficiency**: 5M tokens allocated optimally
-- **Team Retention**: 13M tokens vested successfully
+- **Team Retention**: 12M tokens vested successfully
 - **Partnership Growth**: 30M tokens for strategic expansion
 
 ### **Operational Goals 12 Mo.**
@@ -98,7 +98,7 @@ Welcome to the comprehensive documentation for the SHELTR token ecosystem. This 
 
 ### **Documentation Updates**
 - **Version**: 1.0
-- **Last Updated**: August 21, 2025
+- **Last Updated**: September 2, 2025
 - **Maintainer**: SHELTR Development Team Joel Yaffe - joel@arcanaconcept.com
 
 ### **Contact Information**
@@ -111,3 +111,8 @@ Welcome to the comprehensive documentation for the SHELTR token ecosystem. This 
 **Welcome to the future of blockchain philanthropy! 🚀**
 
 *SHELTR is building a sustainable, transparent, and impactful platform for social change through innovative blockchain technology.*
+
+**Document Version**: 1.3
+**Last Updated**: September 2, 2025  
+**Author**: SHELTR Development Team  
+**Status**: Ready for Review

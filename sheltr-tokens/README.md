@@ -2,12 +2,17 @@
 
 **SHELTR is a revolutionary dual-token ecosystem for blockchain philanthropy, built on Base network with comprehensive smart contracts for transparent donation distribution and community governance.**
 
+**Document Version**: 1.3
+**Last Updated**: September 2, 2025  
+**Author**: SHELTR Development Team  
+**Status**: Ready for Review
+
 ## 🚀 Project Overview
 
 SHELTR implements a sophisticated tokenomics system with:
 - **100M SHELTR tokens** total supply
 - **80/15/5 SmartFund distribution** (participant/shelter/operations)
-- **Dual-token architecture** (SHELTR governance + SHELTR-S stablecoin)
+- **Dual-token architecture** (SHELTR governance + SHELTR-S stablecoin (PROPOSED))
 - **3-year staggered capital generation** ($4.85M USD total)
 - **Team accountability** with exile voting mechanism
 - **Multi-currency support** (CAD, USD, EUR, USDC)
@@ -137,4 +142,8 @@ This project is part of the Arcana ecosystem for blockchain philanthropy.
 
 *Built with ❤️ for social impact and community empowerment*
 
-**Last Updated**: August 21, 2025
+
+**Document Version**: 1.3
+**Last Updated**: September 2, 2025  
+**Author**: SHELTR Development Team  
+**Status**: Ready for Review

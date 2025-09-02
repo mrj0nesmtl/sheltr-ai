@@ -105,8 +105,8 @@ contract DeploySHELTR is Script {
         console.log("Deploying SHELTR Governance...");
         SHELTRGovernance governance = new SHELTRGovernance(
             address(sheltrToken),  // SHELTR token
-            deployer,              // Founder (Joel) - temporary
-            deployer               // Founding Member (Doug) - temporary
+            deployer,              // Founder (JY) - temporary
+            deployer               // Founding Member (DK) - temporary
         );
         console.log("SHELTR Governance deployed at:", address(governance));
         
@@ -136,9 +136,9 @@ contract DeploySHELTR is Script {
         // Add some initial team members (example)
         console.log("Setting up initial team members...");
         
-        // Example: Add Joel Y. as team member with vesting
+        // Example: Add JY as team member with vesting
         // sheltrToken.addTeamMember(
-        //     0x1234567890123456789012345678901234567890, // Joel's address
+        //     0x1234567890123456789012345678901234567890, // JYs address
         //     10_000_000 * 10**18, // 10 million tokens
         //     block.timestamp + 30 days, // Start in 30 days
         //     365 days // Vest over 1 year

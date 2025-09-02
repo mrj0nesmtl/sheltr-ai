@@ -41,10 +41,10 @@ export default function FunctionalityMatrixPage() {
               <div className="flex-1">
                 <div className="mb-3">
                   <h1 className="text-3xl sm:text-4xl font-bold mb-2 leading-tight">Complete Functionality Matrix</h1>
-                  <Badge className="bg-green-600 text-white text-sm">Testing</Badge>
+                  <Badge className="bg-green-600 text-white text-sm">Beta Testing</Badge>
                 </div>
                 <p className="text-lg text-muted-foreground mb-3">
-                  Comprehensive testing matrix for all features, data storage/retrieval, business logic, and user workflows
+                  Comprehensive matrix for all features, data storage/retrieval, business logic, and user workflows
                 </p>
                 <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground mb-4">
                   <span>Version 1.0.0</span>
@@ -74,7 +74,7 @@ export default function FunctionalityMatrixPage() {
               <h2>Platform Overview & Current Status</h2>
               <p>
                 This comprehensive testing matrix covers all features, data storage/retrieval, business logic, and user workflows 
-                for the SHELTR-AI platform. Updated for Session 13 with multi-tenant platform and platform administrator role.
+                for the SHELTR platform. Updated for Session 13 with multi-tenant platform and platform administrator role.
               </p>
             </div>
 

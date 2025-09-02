@@ -27,8 +27,7 @@
     "ignore": [
       "firebase.json",
       "**/.*",
-      "**/node_modules/**",
-      "**/*.txt"
+      "**/node_modules/**"
     ],
     "headers": [
       {

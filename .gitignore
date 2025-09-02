@@ -163,3 +163,5 @@ sync-mac*.sh
 # Next.js App Router generated .txt files (prevent 404 errors)
 *.txt
 **/*.txt
+# Exception: Allow requirements.txt files (needed for Docker builds)
+!**/requirements.txt

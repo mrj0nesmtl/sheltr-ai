@@ -44,7 +44,7 @@ export default function ChatbotArchitecturePage() {
                   <Badge className="bg-purple-600 text-white text-sm">AI System</Badge>
                 </div>
                 <p className="text-lg text-muted-foreground mb-3">
-                  Comprehensive guide to SHELTR-AI's multi-agent chatbot system with public orchestrator and admin control panel
+                  Comprehensive guide to SHELTR's multi-agent chatbot system with public orchestrator and admin control panel
                 </p>
                 <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground mb-4">
                   <span>Version 1.0.0</span>
@@ -96,8 +96,8 @@ export default function ChatbotArchitecturePage() {
                       <ul className="space-y-2 text-sm">
                         <li>• <strong>Emergency</strong> - Crisis response and safety resources</li>
                         <li>• <strong>Participant Support</strong> - Service booking and resource navigation</li>
-                        <li>• <strong>Donor Relations</strong> - SmartFund explanation and impact tracking</li>
-                        <li>• <strong>Public Information</strong> - Platform education and SmartFund model</li>
+                        <li>• <strong>Donor Relations</strong> - SmartFund™ explanation and impact tracking</li>
+                        <li>• <strong>Public Information</strong> - Platform education and SmartFund™ model</li>
                         <li>• <strong>Public Support</strong> - Getting started and donation guidance</li>
                         <li>• <strong>Shelter Operations</strong> - Participant management and reporting</li>
                         <li>• <strong>Technical Support</strong> - Platform issues and account problems</li>
@@ -164,17 +164,17 @@ export default function ChatbotArchitecturePage() {
                 <div>
                   <h4 className="font-semibold mb-3">Current Status</h4>
                   <ul className="space-y-2 text-sm">
-                    <li>• <strong>Public Chatbot:</strong> ✅ All 7 agents operational</li>
-                    <li>• <strong>Super Admin Control Panel:</strong> ✅ All 5 configurable agents functional</li>
-                    <li>• <strong>Model Integration:</strong> ✅ OpenAI GPT-4o and GPT-4o Mini working</li>
-                    <li>• <strong>Session Management:</strong> ✅ Chat sessions persisting correctly</li>
+                    <li>• <strong>Public Chatbot:</strong> 🟡 All 7 agents in development</li>
+                    <li>• <strong>Super Admin Control Panel:</strong> 🟡 All 5 configurable agents in development</li>
+                    <li>• <strong>Model Integration:</strong> 🟡 OpenAI GPT-4o and GPT-4o Mini in development</li>
+                    <li>• <strong>Session Management:</strong> 🟡 Chat sessions persisting correctly</li>
                   </ul>
                 </div>
               </div>
             </div>
 
             <div className="bg-green-50 dark:bg-green-900/20 border-l-4 border-green-500 p-4 mb-12">
-              <h3 className="text-green-800 dark:text-green-200 font-semibold mb-2">✅ Current Status: Both Systems Operational</h3>
+              <h3 className="text-green-800 dark:text-green-200 font-semibold mb-2">🟡 Current Status: All Systems in Development</h3>
               <p className="text-green-700 dark:text-green-300 text-sm">
                 <strong>Public Orchestrator System</strong>: 7 specialized agents for public users with RAG enhancement<br/>
                 <strong>Admin Control Panel System</strong>: 5 configurable agents for Super Admin with model selection<br/>

@@ -251,7 +251,7 @@ export default function TokenomicsPage() {
             </CardHeader>
             <CardContent>
               <div className="grid lg:grid-cols-3 gap-8">
-                {/* SmartFund Distribution */}
+                {/* SmartFund™ Distribution */}
                 <div className="text-center">
                   <h3 className="font-semibold mb-4">SmartFund™ Distribution</h3>
                   <div className="space-y-3">
@@ -645,7 +645,7 @@ export default function TokenomicsPage() {
         </div>
       </section>
 
-      {/* SmartFund Distribution */}
+      {/* SmartFund™ Distribution */}
       <section className="py-20 bg-gradient-to-r from-blue-500/5 to-purple-500/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">

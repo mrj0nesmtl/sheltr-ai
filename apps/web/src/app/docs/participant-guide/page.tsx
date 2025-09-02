@@ -87,7 +87,7 @@ export default function ParticipantGuidePage() {
               </p>
             </div>
 
-            {/* SmartFund Flow Chart */}
+            {/* SmartFund™ Flow Chart */}
             <div className="mb-12">
               <h2 className="text-3xl font-bold mb-6 text-center">How SHELTR SmartFund™ Works for You</h2>
               <div className="bg-gradient-to-br from-teal-50 to-cyan-50 dark:from-teal-900/20 dark:to-cyan-900/20 rounded-lg p-8">

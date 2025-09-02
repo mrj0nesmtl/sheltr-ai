@@ -153,7 +153,7 @@ export default function RoadmapPage() {
                       <ul className="space-y-1 text-sm text-muted-foreground">
                         <li>✅ Adyen payment integration operational</li>
                         <li>✅ QR code donation system with confetti animation</li>
-                        <li>✅ SmartFund 80-15-5 distribution demo</li>
+                        <li>✅ SmartFund™ 80-15-5 distribution demo</li>
                         <li>✅ Investor access portal with dual authentication</li>
                         <li>✅ Production deployment to Cloud Run</li>
                       </ul>

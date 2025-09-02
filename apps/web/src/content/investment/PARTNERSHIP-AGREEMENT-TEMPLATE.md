@@ -1,4 +1,4 @@
-# SHELTR-AI STRATEGIC PARTNERSHIP AGREEMENT
+# SHELTR STRATEGIC PARTNERSHIP AGREEMENT
 ## Chief Financial Officer & Payment Systems Partner
 
 **CONFIDENTIAL PARTNERSHIP AGREEMENT**
@@ -7,12 +7,12 @@
 
 ## PARTIES
 
-**Company:** SHELTR-AI Corporation  
+**Company:** SHELTR Corporation  
 *A Delaware Corporation*  
 **Address:** [To be determined]  
-**Represented by:** Joel Jones, Chief Executive Officer  
+**Represented by:** JY, Chief Executive Officer  
 
-**Partner:** DK [Last Name]  
+**Partner:** DK [Initials]  
 **Title:** Financial Officer & Payment Systems Partner  
 **Address:** [To be provided]  
 

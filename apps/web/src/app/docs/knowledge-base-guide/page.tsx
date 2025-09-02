@@ -105,7 +105,7 @@ export default function KnowledgeBaseGuidePage() {
                     <li>• <strong>hacking_homelessness.md</strong> → Hacking Homelessness Strategy</li>
                     <li>• <strong>participant-guide.md</strong> → Participant User Guide</li>
                     <li>• <strong>shelter-admin-guide.md</strong> → Shelter Admin Guide</li>
-                    <li>• <strong>sheltr-tokenomics.md</strong> → SHELTR Tokenomics and SmartFund Model</li>
+                    <li>• <strong>sheltr-tokenomics.md</strong> → SHELTR Tokenomics and SmartFund™ Model</li>
                     <li>• <strong>system-design.md</strong> → SHELTR System Design and Architecture</li>
                     <li>• <strong>whitepaper_final.md</strong> → SHELTR White Paper</li>
                   </ul>

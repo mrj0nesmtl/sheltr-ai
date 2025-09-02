@@ -1,6 +1,6 @@
 # 🏗️ Technical Architecture
 
-This section contains detailed technical architecture documentation for the SHELTR-AI platform.
+This section contains detailed technical architecture documentation for the SHELTR platform.
 
 ## 📋 Contents
 

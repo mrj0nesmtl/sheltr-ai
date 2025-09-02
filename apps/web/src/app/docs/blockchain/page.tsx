@@ -183,7 +183,7 @@ export default function BlockchainPage() {
 
             {/* Smart Contract Example */}
             <div className="mb-8">
-              <h2 className="text-3xl font-bold mb-6">Smart Contract Architecture</h2>
+              <h2 className="text-3xl font-bold mb-6">SmartFund™ Contract Architecture</h2>
               <div className="bg-slate-900 text-white rounded-lg p-6 overflow-x-auto">
                 <h3 className="text-lg font-semibold mb-4 text-green-400">Core Distribution Contract</h3>
                 <pre className="text-sm">

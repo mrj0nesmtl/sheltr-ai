@@ -612,4 +612,4 @@ ADYEN_MERCHANT_ACCOUNT=your_merchant_account
 
 ---
 
-**This FastAPI backend powers the SHELTR-AI multi-tenant platform and is ready for beta launch with comprehensive real data connectivity and professional user experience.** 🚀✨ 
+**This FastAPI backend powers the SHELTR multi-tenant platform and is ready for beta launch with comprehensive real data connectivity and professional user experience.** 🚀✨ 

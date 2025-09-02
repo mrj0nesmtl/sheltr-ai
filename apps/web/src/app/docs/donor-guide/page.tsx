@@ -34,7 +34,7 @@ export default function DonorGuidePage() {
       id: 'getting-started',
       title: 'Getting Started',
       icon: Heart,
-      description: 'Account creation, profile setup, and understanding the SmartFund model',
+      description: 'Account creation, profile setup, and understanding the SmartFund™ model',
       status: 'Essential',
       color: 'bg-red-50 text-red-700',
       link: '/user-journeys/donors/',
@@ -102,7 +102,7 @@ export default function DonorGuidePage() {
       external: false
     },
     {
-      title: 'SmartFund Distribution',
+      title: 'SmartFund™ Distribution',
       description: '85% direct, 10% housing fund, 5% shelter operations',
       icon: Wallet,
       status: 'Transparent',
@@ -224,13 +224,13 @@ export default function DonorGuidePage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* SmartFund Model */}
+        {/* SmartFund™ Model */}
         <div className="mb-8">
           <Card className="bg-gradient-to-r from-blue-50 to-green-50 dark:from-blue-900/20 dark:to-green-900/20 border-blue-200 dark:border-blue-800">
             <CardHeader>
               <CardTitle className="flex items-center space-x-2 text-blue-800 dark:text-blue-400">
                 <Wallet className="h-5 w-5" />
-                <span>The SmartFund Model (85-10-5)</span>
+                <span>The SmartFund™ Model (85-10-5)</span>
               </CardTitle>
             </CardHeader>
             <CardContent>

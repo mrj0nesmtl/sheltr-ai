@@ -908,7 +908,7 @@ function InvestmentDeckSlideshow({ isOpen, onClose }: { isOpen: boolean; onClose
                     </div>
                   </div>
                   
-                  {/* SmartFund Distribution */}
+                  {/* SmartFund™ Distribution */}
                   <div>
                     <h3 className="text-2xl font-semibold mb-4 text-white drop-shadow-md">SmartFund™ Distribution</h3>
                     <div className="grid md:grid-cols-3 gap-4">

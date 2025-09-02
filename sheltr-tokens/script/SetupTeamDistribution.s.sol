@@ -10,8 +10,6 @@ contract SetupTeamDistribution is Script {
     address constant DOUG_K = 0x2345678901234567890123456789012345678901; // Doug K.
     address constant SASKO_D = 0x3456789012345678901234567890123456789012; // Sasko D.
     address constant ALEX_K = 0x4567890123456789012345678901234567890123; // Alex K.
-    address constant TERRY_M = 0x5678901234567890123456789012345678901234; // Terry M.
-    address constant COURTNAL = 0x6789012345678901234567890123456789012345; // Courtnal
     address constant ZAFFIA_L = 0x7890123456789012345678901234567890123456; // Zaffia L.
     address constant AMI_R = 0x8901234567890123456789012345678901234567; // Ami R.
     address constant MARC_R = 0x9012345678901234567890123456789012345678; // Marc R.
@@ -19,7 +17,8 @@ contract SetupTeamDistribution is Script {
     address constant DOMINIQUE_L = 0xB012345678901234567890123456789012345678; // Dominique L.
     address constant SARA_S = 0xC012345678901234567890123456789012345678; // Sara S.
     address constant SEN_W = 0xD012345678901234567890123456789012345678; // Sen W.
-    
+    address constant ZEL_A = 0xD012345678901234567890123456789012345678; // Zel A.
+
     // Partner addresses
     address constant PARTNER_1 = 0xE012345678901234567890123456789012345678; // Strategic Partner 1
     address constant PARTNER_2 = 0xF012345678901234567890123456789012345678; // Strategic Partner 2
@@ -34,8 +33,7 @@ contract SetupTeamDistribution is Script {
     
     // Vesting allocations (3-year schedule) - Exact breakdown
     uint256 public constant SASKO_ALLOCATION = 1_000_000 * 10**18; // 1M (1% of total supply)
-    uint256 public constant TERRY_ALLOCATION = 1_000_000 * 10**18; // 1M (1% of total supply)
-    uint256 public constant COURTNAL_ALLOCATION = 1_000_000 * 10**18; // 1M (1% of total supply)
+    uint256 public constant ZEL_ALLOCATION = 1_000_000 * 10**18; // 1M (1% of total supply)
     uint256 public constant ZAFFIA_ALLOCATION = 1_000_000 * 10**18; // 1M (1% of total supply)
     uint256 public constant AMI_ALLOCATION = 1_000_000 * 10**18; // 1M (1% of total supply)
     uint256 public constant MARC_ALLOCATION = 1_000_000 * 10**18; // 1M (1% of total supply)
@@ -89,16 +87,15 @@ contract SetupTeamDistribution is Script {
         // Vesting allocations (3-year schedule)
         console.log("=== VESTING ALLOCATIONS ===");
         
-        addTeamMember(sheltrToken, SASKO_D, SASKO_ALLOCATION, "Sasko D. (CTO)");
-        addTeamMember(sheltrToken, TERRY_M, TERRY_ALLOCATION, "Terry M. (Partnerships)");
-        addTeamMember(sheltrToken, COURTNAL, COURTNAL_ALLOCATION, "Courtnal (Marketing)");
-        addTeamMember(sheltrToken, ZAFFIA_L, ZAFFIA_ALLOCATION, "Zaffia L. (Product)");
-        addTeamMember(sheltrToken, AMI_R, AMI_ALLOCATION, "Ami R. (Lead Developer)");
-        addTeamMember(sheltrToken, MARC_R, MARC_ALLOCATION, "Marc R. (Senior Developer)");
-        addTeamMember(sheltrToken, MORGAN_H, MORGAN_ALLOCATION, "Morgan H. (UX/UI Designer)");
-        addTeamMember(sheltrToken, DOMINIQUE_L, DOMINIQUE_ALLOCATION, "Dominique L. (Community)");
-        addTeamMember(sheltrToken, SARA_S, SARA_ALLOCATION, "Sara S. (Content)");
-        addTeamMember(sheltrToken, SEN_W, SEN_ALLOCATION, "Sen W. (Data Analyst)");
+        addTeamMember(sheltrToken, SASKO_D, SASKO_ALLOCATION, "Sasko D. (Leadership)");
+        addTeamMember(sheltrToken, ZELL_A, ZELL_ALLOCATION, "Zell A. (Leadership)");
+        addTeamMember(sheltrToken, ZAFFIA_L, ZAFFIA_ALLOCATION, "Zaffia L. (Leadership)");
+        addTeamMember(sheltrToken, AMI_R, AMI_ALLOCATION, "Ami R. (Leadership)");
+        addTeamMember(sheltrToken, MARC_R, MARC_ALLOCATION, "Marc R. (Leadership)");
+        addTeamMember(sheltrToken, MORGAN_H, MORGAN_ALLOCATION, "Morgan H. (Leadership)");
+        addTeamMember(sheltrToken, DOMINIQUE_L, DOMINIQUE_ALLOCATION, "Dominique L. (Leadership)");
+        addTeamMember(sheltrToken, SARA_S, SARA_ALLOCATION, "Sara S. (Leadership)");
+        addTeamMember(sheltrToken, SEN_W, SEN_ALLOCATION, "Sen W. (Leadership)");
         
         console.log("");
         console.log("=== STRATEGIC PARTNERS ===");

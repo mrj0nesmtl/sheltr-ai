@@ -1,6 +1,6 @@
-# 📚 SHELTR-AI Documentation
+# 📚 SHELTR Documentation
 
-Welcome to the SHELTR-AI platform documentation. This comprehensive guide covers all aspects of the platform from architecture to user guides.
+Welcome to the SHELTR platform documentation. This comprehensive guide covers all aspects of the platform from architecture to user guides.
 
 ## 🗂️ Documentation Structure
 
@@ -36,7 +36,7 @@ Additional resources, templates, and guidelines.
 
 ## 🚀 Quick Start
 
-1. **New to SHELTR-AI?** Start with [Project Overview](01-overview/README.md)
+1. **New to SHELTR?** Start with [Project Overview](01-overview/README.md)
 2. **Developer?** Check out [Development Guide](04-development/README.md)
 3. **User?** See [User Guides](06-user-guides/README.md)
 4. **Deploying?** Review [Deployment Guide](05-deployment/README.md)

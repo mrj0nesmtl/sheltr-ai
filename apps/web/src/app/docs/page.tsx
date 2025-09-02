@@ -182,12 +182,12 @@ export default function DocsPage() {
     },
     {
       title: "Donor Guide",
-      description: "Complete guide for donors making transparent, impactful donations through QR codes and the SmartFund model",
+      description: "Complete guide for donors making transparent, impactful donations through QR codes and the SmartFund™ model",
       icon: Heart,
       badge: "Donor Guide",
       badgeColor: "bg-red-600",
       audience: "Donors • Community Supporters • Corporate Partners",
-      topics: ["QR Code Giving", "SmartFund Model", "Impact Tracking", "Payment Security", "Community Building"],
+      topics: ["QR Code Giving", "SmartFund™ Model", "Impact Tracking", "Payment Security", "Community Building"],
       link: "/docs/donor-guide",
       downloadLink: "/user-journeys/donors/",
       lastUpdated: "August 2025"

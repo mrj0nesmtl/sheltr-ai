@@ -296,7 +296,7 @@ export default function HomePage() {
                 <div className="flex items-center justify-center mx-auto mb-4">
                   <Wallet className="w-8 h-8 text-purple-400" />
                 </div>
-                <h3 className="text-xl font-bold mb-3">Smart Allocation</h3>
+                <h3 className="text-xl font-bold mb-3">SmartFund™ Allocation</h3>
                 <p className="text-muted-foreground">
                   Funds are automatically distributed: 80% for immediate needs, 15% for housing, and 5% for operations.
                 </p>

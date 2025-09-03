@@ -11,6 +11,7 @@ import Footer from '@/components/Footer';
 import ThemeLogo from '@/components/ThemeLogo';
 import { useState } from 'react';
 import { DemoQRModal } from '@/components/demo/DemoQRModal';
+import { PublicChatbot } from '@/components/PublicChatbot';
 import { db } from '@/lib/firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { getDonationMetrics } from '@/services/donationMetricsService';
@@ -652,6 +653,7 @@ export default function ScanGivePage() {
         participant={demoParticipant}
         qrCodeUrl={qrCodeUrl}
       />
+      <PublicChatbot />
     </div>
   );
 } 

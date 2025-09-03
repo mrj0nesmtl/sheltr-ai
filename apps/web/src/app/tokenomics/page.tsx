@@ -11,6 +11,7 @@ import Footer from '@/components/Footer';
 import ThemeLogo from '@/components/ThemeLogo';
 import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { PublicChatbot } from '@/components/PublicChatbot';
 
 export default function TokenomicsPage() {
   const { user, hasRole } = useAuth();
@@ -1070,6 +1071,7 @@ export default function TokenomicsPage() {
       </section>
 
       <Footer />
+      <PublicChatbot />
     </div>
   );
 } 

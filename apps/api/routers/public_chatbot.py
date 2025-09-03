@@ -115,24 +115,25 @@ async def public_chat(message_data: PublicChatMessage, request: Request):
         # Add public-specific actions
         public_actions = []
         if response.actions:
+            # If we have specific actions from FAQ/agent, use those primarily
             public_actions.extend(response.actions)
-        
-        # Add helpful public actions based on message content
-        message_lower = message_data.message.lower()
-        if any(word in message_lower for word in ["donate", "donation", "give", "help", "support"]):
-            public_actions.extend([
-                {"type": "link", "text": "Learn About Donations", "url": "/scan-give"},
-                {"type": "link", "text": "View Impact", "url": "/impact"}
-            ])
-        elif any(word in message_lower for word in ["about", "what", "platform", "sheltr"]):
-            public_actions.extend([
-                {"type": "link", "text": "About SHELTR", "url": "/about"},
-                {"type": "link", "text": "Our Team", "url": "/team"}
-            ])
-        elif any(word in message_lower for word in ["token", "blockchain", "crypto"]):
-            public_actions.append(
-                {"type": "link", "text": "SHELTR Tokenomics", "url": "/tokenomics"}
-            )
+        else:
+            # Only add generic keyword-based actions if no specific actions exist
+            message_lower = message_data.message.lower()
+            if any(word in message_lower for word in ["donate", "donation", "give", "help", "support"]):
+                public_actions.extend([
+                    {"type": "link", "text": "Learn About Donations", "url": "/scan-give"},
+                    {"type": "link", "text": "View Impact", "url": "/impact"}
+                ])
+            elif any(word in message_lower for word in ["about", "what", "platform", "sheltr"]):
+                public_actions.extend([
+                    {"type": "link", "text": "About SHELTR", "url": "/about"},
+                    {"type": "link", "text": "Our Team", "url": "/team"}
+                ])
+            elif any(word in message_lower for word in ["token", "blockchain", "crypto"]):
+                public_actions.append(
+                    {"type": "link", "text": "SHELTR Tokenomics", "url": "/tokenomics"}
+                )
         
         # Track analytics (anonymized)
         try:

@@ -16,6 +16,7 @@ import Image from 'next/image';
 import Footer from '@/components/Footer';
 import ThemeLogo from '@/components/ThemeLogo';
 import Head from 'next/head';
+import { PublicChatbot } from '@/components/PublicChatbot';
 
 export default function ContactPage() {
   const { user, hasRole } = useAuth();
@@ -484,6 +485,7 @@ export default function ContactPage() {
         </section>
 
         <Footer />
+        <PublicChatbot />
       </div>
     </>
   );

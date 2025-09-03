@@ -1,7 +1,7 @@
 """
 SHELTR-AI Chatbot Orchestrator
 Master agent that routes user inquiries to specialized AI agents
-Enhanced with OpenAI intelligence for contextual responses
+Enhanced with OpenAI intelligence, FAQ matching, and user role detection
 """
 
 from typing import Dict, Any, List, Optional
@@ -14,6 +14,8 @@ from enum import Enum
 # Import OpenAI service and prompts
 from services.openai_service import openai_service
 from services.chatbot.prompts import get_enhanced_prompt, SYSTEM_PROMPTS
+from services.faq_service import faq_service
+from services.chatbot.user_classifier import user_classifier
 
 logger = logging.getLogger(__name__)
 
@@ -291,7 +293,7 @@ class ChatbotOrchestrator:
         user_role: str,
         conversation_context: Optional[Dict] = None
     ) -> ChatResponse:
-        """Process a user message and generate appropriate response"""
+        """Process a user message with FAQ checking, role detection, and agent routing"""
         try:
             # Get or create conversation context
             context = await self._get_conversation_context(user_id, user_role)
@@ -299,6 +301,58 @@ class ChatbotOrchestrator:
             # Store current message in context for handlers to use
             context.current_message = message
             
+            # 1. First, check for FAQ matches (quick responses)
+            faq_match = await faq_service.find_faq_match(message, user_role)
+            
+            # 2. Classify user role (detect if they're participant, donor, admin, etc.)
+            detected_role, role_confidence, role_metadata = await user_classifier.classify_user_role(
+                message=message,
+                conversation_history=context.get_recent_context(),
+                current_role=user_role
+            )
+            
+            # 3. Update user role if we detected a different one with high confidence
+            if detected_role != user_role and role_confidence > 80:
+                logger.info(f"🔄 User role updated: {user_role} → {detected_role} (confidence: {role_confidence}%)")
+                context.user_role = detected_role
+                user_role = detected_role  # Update for this session
+            
+            # 4. Check if we should suggest agent handoff
+            should_handoff, suggested_agent = user_classifier.should_suggest_agent_handoff(
+                detected_role, context.active_agent or "public_information", role_confidence
+            )
+            
+            # 5. If we have a high-confidence FAQ match, use it
+            if faq_match and faq_match["confidence"] > 70:
+                logger.info(f"📋 Using FAQ response: {faq_match['id']}")
+                
+                response = ChatResponse(
+                    message=faq_match["answer"],
+                    actions=faq_match["actions"],
+                    agent_used=f"faq_{faq_match['category']}",
+                    metadata={
+                        "faq_id": faq_match["id"],
+                        "faq_confidence": faq_match["confidence"],
+                        "role_detected": detected_role,
+                        "role_confidence": role_confidence
+                    }
+                )
+                
+                # Add handoff suggestion if appropriate
+                if should_handoff:
+                    handoff_message = user_classifier.generate_handoff_message(
+                        detected_role, suggested_agent, role_confidence
+                    )
+                    response.message += f"\n\n{handoff_message}"
+                    response.metadata["handoff_suggested"] = suggested_agent
+                
+                # Update conversation history
+                intent = await self.intent_classifier.classify(message, user_role)
+                context.add_message(message, response, intent)
+                
+                return response
+            
+            # 6. If no FAQ match, proceed with normal agent routing
             # Classify the intent
             intent = await self.intent_classifier.classify(message, user_role)
             context.current_intent = intent
@@ -306,12 +360,32 @@ class ChatbotOrchestrator:
             # Debug logging to track message flow
             logger.info(f"🔍 DEBUG: Processing message='{message}' from {user_role} user {user_id}: {intent.category.value}")
             
-            # Route to appropriate agent
-            selected_agent = self.agent_router.select_agent(intent, user_role)
+            # Route to appropriate agent (use suggested agent if handoff recommended)
+            if should_handoff and suggested_agent:
+                selected_agent = suggested_agent
+                logger.info(f"🤝 Agent handoff: {context.active_agent} → {selected_agent}")
+            else:
+                selected_agent = self.agent_router.select_agent(intent, user_role)
+            
             context.active_agent = selected_agent
             
             # Generate response based on agent and intent
             response = await self._generate_response(intent, context, selected_agent)
+            
+            # Add role detection metadata
+            response.metadata = response.metadata or {}
+            response.metadata.update({
+                "role_detected": detected_role,
+                "role_confidence": role_confidence,
+                "role_evidence": role_metadata.get("evidence", [])
+            })
+            
+            # Add handoff message if we switched agents
+            if should_handoff and suggested_agent:
+                handoff_message = user_classifier.generate_handoff_message(
+                    detected_role, suggested_agent, role_confidence
+                )
+                response.message = f"{handoff_message}\n\n{response.message}"
             
             # Update conversation history
             context.add_message(message, response, intent)

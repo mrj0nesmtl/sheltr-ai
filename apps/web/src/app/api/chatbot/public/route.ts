@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
     // Call backend API
     const backendUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
     
-    const response = await fetch(`${backendUrl}/chatbot/public`, {
+    const response = await fetch(`${backendUrl}/api/v1/chatbot/public`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

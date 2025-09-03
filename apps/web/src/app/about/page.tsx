@@ -10,6 +10,7 @@ import { ThemeToggle } from '@/components/theme-toggle';
 import Footer from '@/components/Footer';
 import ThemeLogo from '@/components/ThemeLogo';
 import { useAuth } from '@/contexts/AuthContext';
+import { PublicChatbot } from '@/components/PublicChatbot';
 
 export default function AboutPage() {
   const { user, hasRole } = useAuth();
@@ -529,6 +530,7 @@ export default function AboutPage() {
       </section>
 
       <Footer />
+      <PublicChatbot />
     </div>
   );
 }

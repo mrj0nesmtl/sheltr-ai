@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { MessageCircle, X, Send, Minimize2, Maximize2 } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -11,6 +11,11 @@ interface Message {
   text: string;
   isUser: boolean;
   timestamp: Date;
+  actions?: Array<{
+    type: string;
+    text: string;
+    url: string;
+  }>;
 }
 
 interface PublicChatbotProps {
@@ -20,10 +25,12 @@ interface PublicChatbotProps {
 export const PublicChatbot: React.FC<PublicChatbotProps> = ({ className = '' }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
   
   // Smart positioning detection
   const { user } = useAuth();
@@ -74,6 +81,15 @@ export const PublicChatbot: React.FC<PublicChatbotProps> = ({ className = '' }) 
     }
   }, [messages]);
 
+  // Auto-scroll to bottom when messages change
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, isLoading]);
+
   const sendMessage = async () => {
     if (!inputValue.trim() || isLoading) return;
 
@@ -108,11 +124,13 @@ export const PublicChatbot: React.FC<PublicChatbotProps> = ({ className = '' }) 
 
       if (response.ok) {
         const data = await response.json();
+        
         const botMessage: Message = {
           id: (Date.now() + 1).toString(),
           text: data.response || "I'm here to help! Could you please rephrase your question?",
           isUser: false,
-          timestamp: new Date()
+          timestamp: new Date(),
+          actions: data.actions || []
         };
         setMessages(prev => [...prev, botMessage]);
       } else {
@@ -207,7 +225,13 @@ export const PublicChatbot: React.FC<PublicChatbotProps> = ({ className = '' }) 
 
   return (
     <div 
-      className={`fixed ${isMobile ? 'inset-x-4' : 'bottom-6 right-6 w-96'} bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl z-50 flex flex-col ${className}`}
+      className={`fixed ${
+        isMobile 
+          ? 'inset-x-4' 
+          : isExpanded 
+            ? 'inset-0 m-auto w-[600px] h-[700px]' 
+            : 'bottom-6 right-6 w-96'
+      } bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl z-50 flex flex-col ${className}`}
       style={mobileStyles}
     >
       {/* Header */}
@@ -222,6 +246,23 @@ export const PublicChatbot: React.FC<PublicChatbotProps> = ({ className = '' }) 
           </div>
         </div>
         <div className="flex items-center space-x-1">
+          {!isMobile && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="text-white hover:bg-white/20 h-8 w-8 p-0"
+              title={isExpanded ? "Minimize to corner" : "Expand to center"}
+            >
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                {isExpanded ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 9l6-6m0 0l-6 6m6-6v6m0-6H9" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                )}
+              </svg>
+            </Button>
+          )}
           <Button
             variant="ghost"
             size="sm"
@@ -244,7 +285,7 @@ export const PublicChatbot: React.FC<PublicChatbotProps> = ({ className = '' }) 
       {!isMinimized && (
         <>
           {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 max-h-96">
+          <div className={`flex-1 overflow-y-auto p-4 space-y-4 ${isExpanded ? 'max-h-[550px]' : 'max-h-96'}`}>
             {messages.map((message) => (
               <div
                 key={message.id}
@@ -257,7 +298,29 @@ export const PublicChatbot: React.FC<PublicChatbotProps> = ({ className = '' }) 
                       : 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100'
                   }`}
                 >
-                  {message.text}
+                  <div className="mb-2">{message.text}</div>
+                  {message.actions && message.actions.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mt-3">
+                      {message.actions.map((action, index) => {
+                        // Safety check for action properties
+                        const url = action.url || '#';
+                        const text = action.text || 'Link';
+                        const isExternal = url.startsWith('http');
+                        
+                        return (
+                          <a
+                            key={index}
+                            href={url}
+                            target={isExternal ? '_blank' : '_self'}
+                            rel={isExternal ? 'noopener noreferrer' : undefined}
+                            className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-blue-600 bg-blue-50 border border-blue-200 rounded-md hover:bg-blue-100 dark:text-blue-400 dark:bg-blue-900/20 dark:border-blue-800 dark:hover:bg-blue-900/30 transition-colors"
+                          >
+                            {text}
+                          </a>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
@@ -272,6 +335,7 @@ export const PublicChatbot: React.FC<PublicChatbotProps> = ({ className = '' }) 
                 </div>
               </div>
             )}
+            <div ref={messagesEndRef} />
           </div>
 
           {/* Input */}

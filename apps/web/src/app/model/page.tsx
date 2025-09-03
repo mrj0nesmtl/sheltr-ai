@@ -10,6 +10,7 @@ import { ThemeToggle } from '@/components/theme-toggle';
 import Footer from '@/components/Footer';
 import ThemeLogo from '@/components/ThemeLogo';
 import { useState } from 'react';
+import { PublicChatbot } from '@/components/PublicChatbot';
 
 export default function RevenueModelPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -775,6 +776,7 @@ export default function RevenueModelPage() {
       </section>
 
       <Footer />
+      <PublicChatbot />
     </div>
   );
 }

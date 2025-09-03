@@ -7,6 +7,88 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.17.0] - 2025-09-02 (Session 14: AI Chatbot Revolution + FAQ Enhancement + Site-Wide Integration)
+
+### 🎯 Session 14 Major Achievements (INTELLIGENT CHATBOT SYSTEM TRANSFORMATION)
+- **🤖 ENHANCED FAQ SYSTEM WITH DEFI & BLOCKCHAIN**: Complete FAQ database with DeFi strategy, pool donations, and blockchain verification
+- **🎯 ROLE-SPECIFIC FAQ COLLECTIONS**: Specialized FAQ responses for donor, participant, and shelter admin agents
+- **🌐 SITE-WIDE CHATBOT DEPLOYMENT**: PublicChatbot widget integrated across all 7 major public pages
+- **⚡ INTELLIGENT AGENT ORCHESTRATION**: Smart FAQ matching, user role detection, and agent handoff system
+- **🔗 ACTION-ORIENTED RESPONSES**: Every FAQ includes contextual action buttons with specific URLs
+- **📱 ENHANCED UI/UX**: Auto-scroll, expand functionality, and mobile-optimized chat experience
+
+#### 🤖 Revolutionary FAQ System Enhancement
+- **DeFi Strategy FAQ**: Comprehensive explanation of 60% conservative, 30% growth, 10% innovation allocation for housing fund
+- **Pool Donations FAQ**: Details SmartFund collective impact (40% emergency housing, 35% transitional, 20% permanent, 5% support)
+- **Blockchain Verification FAQ**: Explains Base network smart contracts creating immutable transparency
+- **Dual Token System FAQ**: Clarifies SHELTR-S (stable) vs SHELTR (governance) token architecture
+- **Roadmap & Global Launch FAQ**: Addresses expansion plans and launch timeline questions
+
+#### 🎯 Role-Specific Chatbot Intelligence
+- **Donor Relations Agent**: Enhanced with DeFi strategy details, impact tracking, donation processes with contextual links
+- **Participant Support Agent**: Service access, QR code help, getting started guidance with shelter finder links
+- **Shelter Operations Agent**: Platform management, reporting, training resources with admin dashboard links
+- **Smart FAQ Routing**: Role-specific FAQ collections checked first before falling back to general responses
+- **Contextual Action Buttons**: Every agent response includes relevant next-step links and resources
+
+#### 🌐 Site-Wide Chatbot Integration
+- **7 Public Pages Enhanced**: `/about`, `/solutions`, `/scan-give`, `/impact`, `/tokenomics`, `/contact`, `/model`
+- **Consistent Chat Experience**: Same intelligent chatbot functionality across all pages
+- **Context-Aware Responses**: Chatbot understands which page user is on for better assistance
+- **Persistent Chat History**: Conversations maintained across page navigation using localStorage
+- **Mobile-Optimized**: Responsive design with touch-friendly interface on all devices
+
+#### ⚡ Advanced Agent Orchestration System
+- **FAQ Priority System**: FAQ matches checked first (70% confidence threshold) before RAG responses
+- **User Role Detection**: Automatic classification of users as donors, participants, or shelter admins
+- **Agent Handoff Logic**: Smart transitions between public agent and specialized role-based agents
+- **Confidence-Based Routing**: High-confidence FAQ matches bypass complex RAG processing for faster responses
+- **Enhanced Prompts**: All agents now include explicit instructions for providing helpful links and structured responses
+
+#### 🔗 Action-Oriented Response Architecture
+- **Contextual Action Buttons**: Every FAQ response includes 2-3 relevant action buttons with specific URLs
+- **Role-Specific Links**: Donors get `/scan-give`, `/impact`; Participants get `/shelters`, `/register`; Admins get `/dashboard`
+- **Next-Step Guidance**: Responses focus on immediate actionable steps rather than just information
+- **Link Integration**: Frontend properly renders action buttons with proper styling and navigation
+- **Mobile-Friendly Actions**: Touch-optimized button design for mobile users
+
+#### 📱 Enhanced Chatbot UI/UX Features
+- **Auto-Scroll Functionality**: Automatic scrolling to latest messages for better conversation flow
+- **Expand to Center**: Desktop users can expand chat window to center of screen for focused interaction
+- **Mobile Responsiveness**: Optimized chat interface for mobile devices with proper touch targets
+- **Loading States**: Professional loading indicators during message processing
+- **Error Handling**: Graceful fallbacks when API calls fail with user-friendly messages
+
+#### 🔧 Technical Excellence & Architecture
+- **FAQ Service Enhancement**: Role-specific FAQ collections with fuzzy matching using Python's difflib
+- **Orchestrator Intelligence**: Enhanced message processing with FAQ priority, role detection, and agent routing
+- **Frontend Integration**: Complete action button rendering with safety checks and proper error handling
+- **Backend Stability**: Fixed indentation errors and ensured reliable API startup
+- **Performance Optimization**: Efficient FAQ matching and reduced response times through smart routing
+
+### 🚀 Platform Intelligence Metrics
+- **FAQ Database**: 15+ comprehensive FAQ entries covering all major platform concepts
+- **Role-Specific Collections**: 3 specialized FAQ sets for donor, participant, and shelter admin workflows
+- **Site Coverage**: 7 major public pages now feature intelligent chatbot assistance
+- **Response Quality**: Concise, actionable responses with contextual links replacing verbose RAG outputs
+- **User Experience**: Auto-scroll, expand functionality, and mobile optimization across all chat interactions
+
+### 🎯 Production-Ready AI Assistant
+- **Intelligent Routing**: Smart FAQ matching with role-based fallbacks for comprehensive user support
+- **Action-Oriented Design**: Every response includes next steps and relevant links for user engagement
+- **Cross-Page Consistency**: Unified chatbot experience across entire public platform
+- **Mobile Excellence**: Touch-friendly interface optimized for mobile-first user interactions
+- **Technical Reliability**: Robust error handling and graceful fallbacks throughout chat system
+
+### 🌟 Foundation for Advanced AI Features
+- **User Classification**: Automatic role detection enabling personalized experiences
+- **Agent Handoff System**: Framework for transitioning between specialized AI agents
+- **Knowledge Base Integration**: FAQ system ready for expansion with additional content areas
+- **Conversation Context**: Persistent chat history and context-aware responses
+- **Scalable Architecture**: Modular design ready for additional AI agents and specialized workflows
+
+---
+
 ## [2.15.0] - 2025-08-26 (Session 13.1: Multi-Tenant Super Admin Dashboard Integration + Real Data Connectivity Revolution)
 
 ### 🎯 Session 13.1 Major Achievements (MULTI-TENANT PLATFORM TRANSFORMATION)

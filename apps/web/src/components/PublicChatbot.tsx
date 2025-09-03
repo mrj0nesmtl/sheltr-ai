@@ -105,19 +105,25 @@ export const PublicChatbot: React.FC<PublicChatbotProps> = ({ className = '' }) 
     setIsLoading(true);
 
     try {
-      // Call the public chatbot endpoint (to be implemented)
-      const response = await fetch('/api/chatbot/public', {
+      // Determine the API endpoint based on environment
+      const apiUrl = process.env.NODE_ENV === 'production' 
+        ? 'https://sheltr-api-714964620823.us-central1.run.app/api/v1/chatbot/public'
+        : '/api/chatbot/public';
+      
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           message: userMessage.text,
-          sessionId: getSessionId(),
-          context: {
+          user_id: getSessionId(),
+          user_role: 'public',
+          conversation_context: {
             page: window.location.pathname,
-            userAgent: navigator.userAgent,
-            timestamp: new Date().toISOString()
+            user_agent: navigator.userAgent,
+            session_type: 'public',
+            anonymous: true
           }
         }),
       });

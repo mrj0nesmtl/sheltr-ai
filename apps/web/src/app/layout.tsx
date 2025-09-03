@@ -4,6 +4,7 @@ import './globals.css'
 import { ThemeProvider } from '@/components/theme-provider'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { MockWalletProvider } from '@/components/blockchain/MockWalletProvider'
+import ConsoleFilter from '@/components/ConsoleFilter'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -72,6 +73,7 @@ export default function RootLayout({
         >
           <AuthProvider>
             <MockWalletProvider>
+              <ConsoleFilter />
               {children}
             </MockWalletProvider>
           </AuthProvider>

@@ -83,7 +83,7 @@ click==8.1.7
 fastapi-cors==0.0.6
 
 # Background Tasks
-celery==5.3.4
+celery==5.5.3
 redis==5.0.1
 
 # Rate Limiting

@@ -21,6 +21,13 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  
+  // Reduce console noise for production demos
+  onDemandEntries: {
+    // Reduce RSC payload generation
+    maxInactiveAge: 25 * 1000,
+    pagesBufferLength: 2,
+  },
 
 };
 

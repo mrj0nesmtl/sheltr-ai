@@ -22,6 +22,25 @@ This section contains detailed technical architecture documentation for the SHEL
 - **[Production Deployment](./payment-rails/production-deployment.md)**: Payment system deployment guide
 - **[SHELTR Demo Implementation](./payment-rails/sheltr-demo-implementation.md)**: Demo payment system setup
 
+## 📁 Directory Structure
+
+```
+docs/02-architecture/
+├── README.md                           # This file - Architecture overview
+├── PROJECT-TREE.md                     # Complete project structure
+├── technical/                          # Core technical documentation
+│   ├── system-design.md               # System architecture & design patterns
+│   └── website-architecture.md        # Frontend/backend architecture
+├── tokenomics/                         # Blockchain & token documentation
+│   ├── blockchain.md                  # Smart contract architecture
+│   ├── sheltr-tokenomics.md          # Token economics & distribution
+│   └── whitepaper_final.md           # Complete technical whitepaper
+└── payment-rails/                      # Payment system documentation
+    ├── adyen-integration.md           # Adyen payment processing
+    ├── production-deployment.md       # Payment system deployment
+    └── sheltr-demo-implementation.md  # Demo payment implementation
+```
+
 ## 🔗 Related Documentation
 
 - [API Documentation](../03-api/README.md)

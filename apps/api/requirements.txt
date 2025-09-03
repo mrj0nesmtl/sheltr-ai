@@ -91,4 +91,4 @@ slowapi==0.1.9
 
 # Documentation
 mkdocs==1.5.3
-mkdocs-material==9.4.8 
+mkdocs-material==9.6.18 

@@ -459,9 +459,9 @@ interface BlogPost {
 - **Demo Participant**: Michael Rodriguez with $267 real donations
 
 ### **AI System Metrics** (New in Session 14)
-- **Knowledge Base**: 250+ documents with 15,000+ vector embeddings
-- **Chat Sessions**: 2,500+ AI chatbot interactions
-- **Response Accuracy**: 95%+ satisfaction rate across all agents
+- **Knowledge Base**: Documents with + vector embeddings
+- **Chat Sessions**: AI chatbot interactions
+- **Response Accuracy**: satisfaction rate across all agents to be implemented
 - **Average Response Time**: 1.2 seconds for knowledge retrieval
 - **Token Usage**: 2.5M+ OpenAI tokens processed
 - **Active Agents**: 5 specialized chatbot agents (emergency, support, donor, general, super_admin)

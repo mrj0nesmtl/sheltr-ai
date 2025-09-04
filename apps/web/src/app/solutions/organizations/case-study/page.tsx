@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowLeft, Building2, Users, Clock, TrendingUp, CheckCircle, BarChart3, FileText, Download, Shield, DollarSign, Calendar, Target, Coins, Zap, Heart, Gamepad2, Smartphone, QrCode, Globe } from 'lucide-react';
+import { ArrowLeft, Building2, Users, Clock, TrendingUp, CheckCircle, BarChart3, FileText, Download, Shield, DollarSign, Calendar, Target, Coins, Zap, Heart, Gamepad2, Smartphone, QrCode, Globe, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -34,40 +34,125 @@ export default function OrganizationsCaseStudyPage() {
       </nav>
 
       {/* Document Header */}
-      <section className="py-12 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20">
-        <div className="container mx-auto px-4">
+      <section className="relative py-12 overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0">
+          <img 
+            src="/backgrounds/solutions-bg.jpg" 
+            alt="Background" 
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-black/60 dark:bg-black/70" />
+        </div>
+        <div className="relative container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="flex items-center gap-4 mb-6">
-              <Building2 className="h-12 w-12 text-blue-600" />
+              <Building2 className="h-12 w-12 text-white" />
               <div>
                 <div className="flex items-center gap-2 mb-2">
-                  <h1 className="text-4xl font-bold">SHELTR for Shelters -  Case Study</h1>
-                  <Badge className="bg-blue-500 text-white">Organizations</Badge>
+                  <h1 className="text-4xl font-bold text-white">SHELTR for Shelters -  Case Study</h1>
+                  <Badge className="bg-white text-black">Organizations</Badge>
                 </div>
-                <p className="text-lg text-muted-foreground">
+                <p className="text-lg text-gray-200">
                   Transforming Shelter Operations Through Technology
                 </p>
-                <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
+                <div className="flex items-center gap-4 mt-2 text-sm text-gray-300">
                   <span>Case Study</span>
                   <span>•</span>
                   <span>June 2025</span>
                   <span>•</span>
                   <span>15 min read</span>
                   <span>•</span>
-                  <Badge variant="outline" className="text-green-600 border-green-600">Implementation Studied</Badge>
+                  <Badge variant="outline" className="text-green-300 border-green-300">Implementation Studied</Badge>
                 </div>
               </div>
             </div>
             
-            <div className="flex gap-4">
-              <Button className="bg-blue-600 hover:bg-blue-700">
-                <Download className="h-4 w-4 mr-2" />
-                Download PDF
-              </Button>
-              <Button variant="outline">
-                <Calendar className="h-4 w-4 mr-2" />
-                Schedule Demo
-              </Button>
+            <div className="text-center">
+              <p className="text-gray-300 mb-4">
+                This case study demonstrates the transformative potential of SHELTR's platform for shelter operations.
+              </p>
+              <p className="text-sm text-gray-400">
+                For detailed documentation and implementation guides, visit our{' '}
+                <a 
+                  href="https://github.com/mrjones/sheltr-ai" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-blue-300 hover:text-blue-200 underline"
+                >
+                  GitHub repository
+                </a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Opening Statement */}
+      <section className="py-16 bg-gradient-to-r from-gray-50 to-blue-50 dark:from-gray-900/50 dark:to-blue-900/20">
+        <div className="container mx-auto px-4">
+          <div className="max-w-5xl mx-auto text-center">
+            <div className="mb-8">
+              <Badge className="bg-green-100 text-green-800 border-green-200 mb-4">
+                <Heart className="h-4 w-4 mr-2" />
+                Our Mission
+              </Badge>
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
+                Elevating Lives Through Technology & Community Support
+              </h2>
+            </div>
+            
+            <div className="prose prose-lg max-w-none dark:prose-invert">
+              <p className="text-xl text-muted-foreground leading-relaxed mb-8">
+                SHELTR transforms the traditional approach to homelessness by leveraging cutting-edge technology 
+                to create direct pathways from the streets to stable housing. Our platform connects participants 
+                with immediate housing solutions—from tiny homes to apartments—while building sustainable financial 
+                foundations through community-powered crowdfunding.
+              </p>
+              
+              <div className="grid md:grid-cols-3 gap-8 mt-12">
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Home className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+                  </div>
+                  <h3 className="text-lg font-semibold mb-2">Immediate Housing</h3>
+                  <p className="text-muted-foreground">
+                    Connect participants with tiny homes, transitional apartments, and permanent housing solutions 
+                    through our verified network of providers.
+                  </p>
+                </div>
+                
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <DollarSign className="h-8 w-8 text-green-600 dark:text-green-400" />
+                  </div>
+                  <h3 className="text-lg font-semibold mb-2">Financial Elevation</h3>
+                  <p className="text-muted-foreground">
+                    Build sustainable income through skill development, job placement, and direct community 
+                    support via blockchain-verified micro-donations.
+                  </p>
+                </div>
+                
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Users className="h-8 w-8 text-purple-600 dark:text-purple-400" />
+                  </div>
+                  <h3 className="text-lg font-semibold mb-2">Community Crowdfunding</h3>
+                  <p className="text-muted-foreground">
+                    Harness the power of technology to mobilize community support, creating transparent 
+                    funding streams that directly impact participant outcomes.
+                  </p>
+                </div>
+              </div>
+              
+              <div className="mt-12 bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg">
+                <blockquote className="text-lg italic text-foreground border-l-4 border-blue-500 pl-6">
+                  "Technology isn't just changing how we manage homelessness—it's revolutionizing how we 
+                  <strong>solve</strong> it. By connecting participants directly with housing opportunities 
+                  and community funding, we're creating pathways to independence that were never possible before."
+                </blockquote>
+                <cite className="block text-right text-muted-foreground mt-4">— SHELTR Platform Vision</cite>
+              </div>
             </div>
           </div>
         </div>
@@ -78,10 +163,10 @@ export default function OrganizationsCaseStudyPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="prose prose-lg max-w-none dark:prose-invert mb-12">
-              <h2 className="text-center">Executive Summary: The Operational Revolution</h2>
+              <h2 className="text-center">Summary: The Operational Implementation</h2>
               <p className="text-center text-xl">
-                SHELTR transforms shelter operations through cutting-edge technology, streamlining participant management 
-                while creating unprecedented transparency and engagement opportunities. Our blockchain-powered platform 
+                Transform shelter operations through cutting-edge technology, streamlining participant management 
+                while creating unprecedented transparency and fundraising engagement opportunities. A blockchain-powered platform 
                 modernizes every aspect of shelter administration, from intake to housing placement, while building 
                 sustainable support networks for long-term participant success.
               </p>
@@ -102,10 +187,10 @@ export default function OrganizationsCaseStudyPage() {
                 <CardHeader className="text-center pb-2">
                   <Clock className="h-12 w-12 text-blue-600 mx-auto mb-2" />
                   <CardTitle className="text-blue-600 text-2xl">75%</CardTitle>
-                  <CardDescription className="font-medium">Time Savings</CardDescription>
+                  <CardDescription className="font-medium">Potential Time Savings</CardDescription>
                 </CardHeader>
                 <CardContent className="text-center">
-                  <p className="text-sm text-muted-foreground">Reduction in administrative tasks</p>
+                  <p className="text-sm text-muted-foreground">Potential Reduction in administrative tasks</p>
                 </CardContent>
               </Card>
 
@@ -151,7 +236,7 @@ export default function OrganizationsCaseStudyPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4">Case Study: Metro Hope Shelter Implementation</h2>
+              <h2 className="text-3xl font-bold mb-4">Case Study: Shelter Implementation</h2>
               <p className="text-xl text-muted-foreground">
                 A 120-bed shelter transforms operations in 3 weeks with SHELTR's comprehensive platform
               </p>

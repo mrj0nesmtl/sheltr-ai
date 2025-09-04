@@ -166,7 +166,7 @@ export default function AboutPage() {
         <div className="relative z-10 container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <Badge variant="secondary" className="mb-6 bg-white/20 text-white border-white/30 backdrop-blur-sm">
-              POWERED BY AI & BLOCKCHAIN
+              BLOCKCHAIN POWERED
             </Badge>
             <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
               Transforming Donations into <span className="text-blue-400">Impact</span>
@@ -175,20 +175,6 @@ export default function AboutPage() {
               SHELTR serves everyone in the ecosystem through a unified platform that ensures 
               transparency, dignity, and maximum impact for every participant.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/solutions">
-                <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white">
-                  <ArrowRight className="h-5 w-5 mr-2" />
-                  Explore Solutions
-                </Button>
-              </Link>
-              <Link href="/docs">
-                <Button variant="outline" size="lg" className="border-2 border-white text-white bg-white/10 hover:bg-white hover:text-black backdrop-blur-sm">
-                  <Shield className="h-5 w-5 mr-2" />
-                  Technical Docs
-                </Button>
-              </Link>
-            </div>
           </div>
         </div>
       </section>
@@ -202,7 +188,7 @@ export default function AboutPage() {
                 What is SHELTR?
               </h2>
               <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                We&apos;re a blockchain-powered platform that enables <strong>direct participant empowerment </strong> 
+                We&apos;re a blockchain-powered QR code platform that enables <strong>direct participant empowerment </strong> 
                 through transparent donations and smart contracts.
               </p>
             </div>
@@ -248,7 +234,7 @@ export default function AboutPage() {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Users className="h-6 w-6 text-purple-600" />
-                    Community Angels
+                    Community Angels + Disruptors
                   </CardTitle>
                   <CardDescription>
                     Partnering with social impact creators

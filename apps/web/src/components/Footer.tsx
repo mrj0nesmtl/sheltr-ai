@@ -33,6 +33,7 @@ export default function Footer() {
               <h3 className="text-sm font-semibold mb-3">Technology</h3>
               <ul className="space-y-1 text-xs text-muted-foreground">
                 <li><Link href="/tokenomics" className="hover:text-foreground">Tokenomics</Link></li>
+                <li><Link href="/docs" className="hover:text-foreground">Documentation</Link></li>
                 <li><Link href="/docs/whitepaper" className="hover:text-foreground">White Paper</Link></li>
                 <li>
                   <a href="https://github.com/mrj0nesmtl/sheltr-ai" target="_blank" className="hover:text-foreground flex items-center">

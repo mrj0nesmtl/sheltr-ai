@@ -137,7 +137,7 @@ export default function SolutionsPage() {
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4">How SHELTR Works for Everyone</h2>
+            <h2 className="text-3xl font-bold mb-4">How SHELTR Will Works for Everyone</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               Our platform creates value for every participant in the homelessness ecosystem, 
               from frontline organizations to individual donors.
@@ -151,7 +151,7 @@ export default function SolutionsPage() {
                 <div className="w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Building2 className="h-8 w-8 text-blue-600 dark:text-blue-400" />
                 </div>
-                <CardTitle className="text-2xl">Shelters & NGOs</CardTitle>
+                <CardTitle className="text-2xl">Shelters</CardTitle>
                 <CardDescription className="text-lg">
                   Streamlined operations and enhanced participant support
                 </CardDescription>
@@ -184,13 +184,13 @@ export default function SolutionsPage() {
                   <Link href="/solutions/organizations">
                     <Button className="w-full border-2 border-black text-black hover:bg-black hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black" variant="outline" size="sm">
                       <Building2 className="h-4 w-4 mr-2" />
-                      Learn More for Organizations
+                      Learn More
                     </Button>
                   </Link>
                   <Link href="/user-journeys/shelters">
                     <Button className="w-full" variant="secondary" size="sm">
                       <ArrowRight className="h-4 w-4 mr-2" />
-                      View User Journey
+                      User Journey
                     </Button>
                   </Link>
                 </div>
@@ -203,7 +203,7 @@ export default function SolutionsPage() {
                 <div className="w-16 h-16 bg-purple-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
                   <MapPin className="h-8 w-8 text-purple-600 dark:text-purple-400" />
                 </div>
-                <CardTitle className="text-2xl">Government Agencies</CardTitle>
+                <CardTitle className="text-2xl">Government</CardTitle>
                 <CardDescription className="text-lg">
                   Data-driven policy making and budget transparency
                 </CardDescription>
@@ -236,13 +236,13 @@ export default function SolutionsPage() {
                   <Link href="/solutions/government">
                     <Button className="w-full border-2 border-black text-black hover:bg-black hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black" variant="outline" size="sm">
                       <MapPin className="h-4 w-4 mr-2" />
-                      Government Solutions
+                      Learn More
                     </Button>
                   </Link>
                   <Link href="/user-journeys/government">
                     <Button className="w-full" variant="secondary" size="sm">
                       <ArrowRight className="h-4 w-4 mr-2" />
-                      View User Journey
+                      User Journey
                     </Button>
                   </Link>
                 </div>
@@ -288,13 +288,13 @@ export default function SolutionsPage() {
                   <Link href="/solutions/participants">
                     <Button className="w-full border-2 border-black text-black hover:bg-black hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black" variant="outline" size="sm">
                       <Users className="h-4 w-4 mr-2" />
-                      Participant Support
+                      Learn More
                     </Button>
                   </Link>
                   <Link href="/user-journeys/participants">
                     <Button className="w-full" variant="secondary" size="sm">
                       <ArrowRight className="h-4 w-4 mr-2" />
-                      View User Journey
+                      User Journey
                     </Button>
                   </Link>
                 </div>

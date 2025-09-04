@@ -62,7 +62,7 @@ requests-oauthlib==2.0.0
 
 # Monitoring and Logging
 structlog==25.4.0
-sentry-sdk[fastapi]==2.35.0
+sentry-sdk[fastapi]==2.36.0
 
 # Testing
 pytest==7.4.3

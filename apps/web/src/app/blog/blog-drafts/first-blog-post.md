@@ -1,15 +1,15 @@
 ---
-title: "SHELTR-AI: Transforming Homeless Services Through Technology"
-excerpt: "Discover how blockchain technology and AI are revolutionizing how we address homelessness, creating transparent and efficient systems for shelters, participants, and donors."
+title: "SHELTR: Hacking Homelessness with Tech for Good."
+excerpt: "Discover how blockchain technology and AI are disrupting how we address homelessness, creating transparent and efficient systems for shelters, participants, and donors."
 category: "Technology"
-tags: "blockchain, AI, homelessness, social impact, technology"
+tags: "blockchain, AI, unhoused, social impact, technology"
 status: "draft"
-seo_title: "SHELTR-AI Blockchain Platform - Revolutionizing Homeless Services"
-seo_description: "Learn how SHELTR-AI uses blockchain and AI to create transparent, efficient systems for homeless services and donor management."
+seo_title: "SHELTR's Blockchain Platform is Hacking Homelessness"
+seo_description: "Learn how SHELTR uses QR codes, blockchain and AI to create transparent, efficient systems for homeless services and donor management."
 seo_keywords: "blockchain, AI, homeless services, social impact, technology, donations, transparency"
 ---
 
-# SHELTR-AI: Transforming Homeless Services Through Technology
+# SHELTR: Transforming Homeless Services Through Technology
 
 ## Introduction
 
@@ -24,7 +24,7 @@ Homelessness remains one of the most complex social issues facing our communitie
 - **Limited data insights** for evidence-based decision making
 - **Fragmented service delivery** systems
 
-## The SHELTR-AI Solution
+## The SHELTR Solution
 
 Our platform leverages cutting-edge technology to create a comprehensive ecosystem that benefits all stakeholders:
 
@@ -80,14 +80,6 @@ Our artificial intelligence systems provide:
 - **Automated Support**: 24/7 participant assistance through intelligent chatbots
 - **Personalized Recommendations**: Tailored service suggestions
 
-## Real-World Impact
-
-Since our launch, SHELTR-AI has demonstrated measurable impact:
-
-- **Increased Donor Confidence**: 85% improvement in donation transparency satisfaction
-- **Enhanced Service Delivery**: 40% reduction in administrative overhead
-- **Better Outcomes**: 60% improvement in participant goal achievement
-- **Community Engagement**: 200% increase in volunteer participation
 
 ## Media Showcase
 

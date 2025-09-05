@@ -122,7 +122,7 @@ class BlogService {
       if (category) params.append('category', category);
       if (tag) params.append('tag', tag);
 
-      const response = await fetch(`${this.baseUrl}/blog/posts?${params}`, {
+      const response = await fetch(`${this.baseUrl}/api/v1/blog/posts?${params}`, {
         headers: await this.getAuthHeaders(),
       });
 
@@ -142,7 +142,7 @@ class BlogService {
    */
   async getBlogPost(slug: string): Promise<BlogPostResponse> {
     try {
-      const response = await fetch(`${this.baseUrl}/blog/posts/${slug}`, {
+      const response = await fetch(`${this.baseUrl}/api/v1/blog/posts/${slug}`, {
         headers: await this.getAuthHeaders(),
       });
 
@@ -162,6 +162,7 @@ class BlogService {
    */
   async createBlogPost(postData: {
     title: string;
+    slug?: string;
     content: string;
     excerpt: string;
     category: string;
@@ -170,11 +171,15 @@ class BlogService {
     seo_title?: string;
     seo_description?: string;
     seo_keywords?: string[];
-    featured_image?: File;
+    featured_image?: string;
+    ingest_to_knowledge_base?: boolean;
   }): Promise<{ success: boolean; data: { post_id: string; message: string } }> {
     try {
       const formData = new FormData();
       formData.append('title', postData.title);
+      if (postData.slug) {
+        formData.append('slug', postData.slug);
+      }
       formData.append('content', postData.content);
       formData.append('excerpt', postData.excerpt);
       formData.append('category', postData.category);
@@ -193,11 +198,14 @@ class BlogService {
         formData.append('seo_keywords', postData.seo_keywords.join(','));
       }
       if (postData.featured_image) {
-        formData.append('featured_image', postData.featured_image);
+        formData.append('featured_image_url', postData.featured_image);
+      }
+      if (postData.ingest_to_knowledge_base !== undefined) {
+        formData.append('ingest_to_knowledge_base', postData.ingest_to_knowledge_base.toString());
       }
 
       const token = await this.getAuthToken();
-      const response = await fetch(`${this.baseUrl}/blog/posts`, {
+      const response = await fetch(`${this.baseUrl}/api/v1/blog/posts`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -247,7 +255,7 @@ class BlogService {
       });
 
       const token = await this.getAuthToken();
-      const response = await fetch(`${this.baseUrl}/blog/posts/${postId}`, {
+      const response = await fetch(`${this.baseUrl}/api/v1/blog/posts/${postId}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -272,7 +280,7 @@ class BlogService {
   async deleteBlogPost(postId: string): Promise<{ success: boolean; data: { message: string } }> {
     try {
       const token = await this.getAuthToken();
-      const response = await fetch(`${this.baseUrl}/blog/posts/${postId}`, {
+      const response = await fetch(`${this.baseUrl}/api/v1/blog/posts/${postId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -295,7 +303,7 @@ class BlogService {
    */
   async getCategories(): Promise<CategoriesResponse> {
     try {
-      const response = await fetch(`${this.baseUrl}/blog/categories`, {
+      const response = await fetch(`${this.baseUrl}/api/v1/blog/categories`, {
         headers: await this.getAuthHeaders(),
       });
 
@@ -325,7 +333,7 @@ class BlogService {
       formData.append('color', categoryData.color || '#3B82F6');
 
       const token = await this.getAuthToken();
-      const response = await fetch(`${this.baseUrl}/blog/categories`, {
+      const response = await fetch(`${this.baseUrl}/api/v1/blog/categories`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -349,7 +357,7 @@ class BlogService {
    */
   async getTags(): Promise<TagsResponse> {
     try {
-      const response = await fetch(`${this.baseUrl}/blog/tags`, {
+      const response = await fetch(`${this.baseUrl}/api/v1/blog/tags`, {
         headers: await this.getAuthHeaders(),
       });
 
@@ -373,7 +381,7 @@ class BlogService {
       formData.append('file_content', fileContent);
 
       const token = await this.getAuthToken();
-      const response = await fetch(`${this.baseUrl}/blog/import-markdown`, {
+      const response = await fetch(`${this.baseUrl}/api/v1/blog/import-markdown`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -397,7 +405,7 @@ class BlogService {
    */
   async getMediaEmbeds(postId: string): Promise<{ success: boolean; data: { embeds: any[] } }> {
     try {
-      const response = await fetch(`${this.baseUrl}/blog/posts/${postId}/media-embeds`, {
+      const response = await fetch(`${this.baseUrl}/api/v1/blog/posts/${postId}/media-embeds`, {
         headers: await this.getAuthHeaders(),
       });
 

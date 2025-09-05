@@ -84,7 +84,7 @@ const ComparisonRow = ({
   traditional: string;
   sheltr: string;
 }) => (
-  <tr className="border-b">
+  <tr className="border-b border-border">
     <td className="py-3 px-4 font-medium text-foreground">{feature}</td>
     <td className="py-3 px-4 text-muted-foreground">{traditional}</td>
     <td className="py-3 px-4 text-foreground font-medium">{sheltr}</td>
@@ -137,7 +137,7 @@ export default function HMISGuidePage() {
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white py-20 dark:from-gray-800 dark:via-gray-900 dark:to-black">
         <div className="container mx-auto px-4 max-w-4xl text-center">
-          <Badge className="bg-white text-black mb-4 border border-white">
+          <Badge className="bg-gray-800 text-white mb-4 border border-gray-600">
             HMIS Education
           </Badge>
           <h1 className="text-4xl md:text-5xl font-bold mb-6">
@@ -147,10 +147,10 @@ export default function HMISGuidePage() {
             A comprehensive guide to Homeless Management Information Systems and how SHELTR revolutionizes the approach
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-white text-black hover:bg-gray-200">
+            <Button size="lg" className="bg-gray-800 text-white hover:bg-gray-700 border border-gray-600">
               Get Started Today
             </Button>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-black">
+            <Button size="lg" variant="outline" className="border-gray-600 text-white hover:bg-gray-800 hover:text-white">
               Schedule a Demo
             </Button>
           </div>
@@ -206,26 +206,26 @@ export default function HMISGuidePage() {
       <section className="py-16">
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl font-bold text-foreground mb-4">
               What is HMIS? (And Why It's Not Enough Anymore)
             </h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
               Traditional HMIS was built for compliance, not innovation. SHELTR transforms essential compliance functions 
               into tools that empower both providers and participants.
             </p>
           </div>
 
-          <div className="bg-white rounded-lg shadow-lg overflow-hidden mb-12">
-            <div className="bg-gray-50 px-6 py-4 border-b">
-              <h3 className="text-xl font-semibold text-gray-900">Traditional HMIS vs. SHELTR-AI Platform</h3>
+          <div className="bg-background border border-border rounded-lg shadow-lg overflow-hidden mb-12">
+            <div className="bg-muted px-6 py-4 border-b border-border">
+              <h3 className="text-xl font-semibold text-foreground">Traditional HMIS vs. SHELTR-AI Platform</h3>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-gray-50">
+                <thead className="bg-muted">
                   <tr>
-                    <th className="py-3 px-4 text-left font-semibold text-gray-900">Feature</th>
-                    <th className="py-3 px-4 text-left font-semibold text-gray-600">Traditional HMIS</th>
-                    <th className="py-3 px-4 text-left font-semibold text-blue-600">SHELTR-AI Platform</th>
+                    <th className="py-3 px-4 text-left font-semibold text-foreground">Feature</th>
+                    <th className="py-3 px-4 text-left font-semibold text-muted-foreground">Traditional HMIS</th>
+                    <th className="py-3 px-4 text-left font-semibold text-primary">SHELTR-AI Platform</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -267,85 +267,85 @@ export default function HMISGuidePage() {
       </section>
 
       {/* Technology Revolution */}
-      <section className="py-16 bg-blue-50">
+      <section className="py-16 bg-muted/30">
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl font-bold text-foreground mb-4">
               The Technology Revolution in Homeless Services
             </h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
               SHELTR doesn't just track homelessness—we help prevent it through predictive intelligence, 
               blockchain transparency, and participant empowerment.
             </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            <Card>
+            <Card className="border-2">
               <CardHeader>
-                <Brain className="h-12 w-12 text-blue-600 mb-4" />
+                <Brain className="h-12 w-12 text-primary mb-4" />
                 <CardTitle>Predictive Intelligence</CardTitle>
                 <CardDescription>Beyond Data Collection</CardDescription>
               </CardHeader>
               <CardContent>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="h-4 w-4 text-green-400 mt-0.5 flex-shrink-0" />
                     <span>Risk Assessment: ML identifies high-risk individuals</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="h-4 w-4 text-green-400 mt-0.5 flex-shrink-0" />
                     <span>Resource Optimization: Predictive analytics guide allocation</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="h-4 w-4 text-green-400 mt-0.5 flex-shrink-0" />
                     <span>Outcome Tracking: Real-time stability measurement</span>
                   </li>
                 </ul>
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="border-2">
               <CardHeader>
-                <Shield className="h-12 w-12 text-blue-600 mb-4" />
+                <Shield className="h-12 w-12 text-primary mb-4" />
                 <CardTitle>Blockchain Transparency</CardTitle>
                 <CardDescription>Trust Through Technology</CardDescription>
               </CardHeader>
               <CardContent>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="h-4 w-4 text-green-400 mt-0.5 flex-shrink-0" />
                     <span><strong>80% Direct Impact:</strong> Automated smart contracts</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="h-4 w-4 text-green-400 mt-0.5 flex-shrink-0" />
                     <span><strong>15% Housing Fund:</strong> Sustainable investments tracked</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="h-4 w-4 text-green-400 mt-0.5 flex-shrink-0" />
                     <span><strong>5% Operations:</strong> Minimal overhead with full accountability</span>
                   </li>
                 </ul>
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="border-2">
               <CardHeader>
-                <Smartphone className="h-12 w-12 text-blue-600 mb-4" />
+                <Smartphone className="h-12 w-12 text-primary mb-4" />
                 <CardTitle>Participant Empowerment</CardTitle>
                 <CardDescription>Technology with Dignity</CardDescription>
               </CardHeader>
               <CardContent>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="h-4 w-4 text-green-400 mt-0.5 flex-shrink-0" />
                     <span>Personal QR Codes: Direct donation capability</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="h-4 w-4 text-green-400 mt-0.5 flex-shrink-0" />
                     <span>Digital Wallets: Participants control resources</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="h-4 w-4 text-green-400 mt-0.5 flex-shrink-0" />
                     <span>Progress Tracking: Real-time journey visibility</span>
                   </li>
                 </ul>
@@ -359,48 +359,48 @@ export default function HMISGuidePage() {
       <section className="py-16">
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl font-bold text-foreground mb-4">
               The HUD Partnership: Compliance Made Simple
             </h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
               We maintain full compliance with HUD mandates while adding transformative capabilities that go far beyond basic requirements.
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8">
-            <Card>
+            <Card className="border-2">
               <CardHeader>
-                <Building2 className="h-12 w-12 text-blue-600 mb-4" />
+                <Building2 className="h-12 w-12 text-primary mb-4" />
                 <CardTitle>Understanding HUD's Mission</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">
+                <p className="text-muted-foreground mb-4">
                   The Department of Housing and Urban Development, established in 1965 as part of President Johnson's "Great Society," works to:
                 </p>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="h-4 w-4 text-green-400 mt-0.5 flex-shrink-0" />
                     <span>Address America's housing needs</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="h-4 w-4 text-green-400 mt-0.5 flex-shrink-0" />
                     <span>Develop and improve communities</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="h-4 w-4 text-green-400 mt-0.5 flex-shrink-0" />
                     <span>Enforce fair housing laws</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="h-4 w-4 text-green-400 mt-0.5 flex-shrink-0" />
                     <span>Support homeownership for lower/moderate-income families</span>
                   </li>
                 </ul>
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="border-2">
               <CardHeader>
-                <Rocket className="h-12 w-12 text-blue-600 mb-4" />
+                <Rocket className="h-12 w-12 text-primary mb-4" />
                 <CardTitle>SHELTR Meets HUD Requirements (And Exceeds Them)</CardTitle>
               </CardHeader>
               <CardContent>
@@ -430,64 +430,64 @@ export default function HMISGuidePage() {
       </section>
 
       {/* CoC Section */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-muted/30">
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl font-bold text-foreground mb-4">
               The Role of Continuums of Care (CoCs)
             </h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
               SHELTR supercharges CoC effectiveness by transforming manual processes into automated intelligence.
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8 mb-12">
-            <Card className="border-red-200 bg-red-50">
+            <Card className="border-2 border-red-500/30 bg-red-500/5">
               <CardHeader>
-                <CardTitle className="text-red-800">Traditional CoC Challenges</CardTitle>
+                <CardTitle className="text-red-400">Traditional CoC Challenges</CardTitle>
               </CardHeader>
               <CardContent>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2">
-                    <span className="text-red-600">•</span>
+                    <span className="text-red-400">•</span>
                     <span>Manual data collection and reporting</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-red-600">•</span>
+                    <span className="text-red-400">•</span>
                     <span>Siloed information systems</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-red-600">•</span>
+                    <span className="text-red-400">•</span>
                     <span>Limited real-time visibility</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-red-600">•</span>
+                    <span className="text-red-400">•</span>
                     <span>Resource allocation guesswork</span>
                   </li>
                 </ul>
               </CardContent>
             </Card>
 
-            <Card className="border-green-200 bg-green-50">
+            <Card className="border-2 border-green-500/30 bg-green-500/5">
               <CardHeader>
-                <CardTitle className="text-green-800">SHELTR Solutions</CardTitle>
+                <CardTitle className="text-green-400">SHELTR Solutions</CardTitle>
               </CardHeader>
               <CardContent>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="h-4 w-4 text-green-400 mt-0.5 flex-shrink-0" />
                     <span><strong>Automated Reporting:</strong> Real-time dashboards eliminate manual reports</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="h-4 w-4 text-green-400 mt-0.5 flex-shrink-0" />
                     <span><strong>Integrated Systems:</strong> Single platform connects all providers</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="h-4 w-4 text-green-400 mt-0.5 flex-shrink-0" />
                     <span><strong>Live Analytics:</strong> Instant visibility into trends and gaps</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="h-4 w-4 text-green-400 mt-0.5 flex-shrink-0" />
                     <span><strong>Smart Allocation:</strong> AI-driven resource optimization</span>
                   </li>
                 </ul>
@@ -501,90 +501,90 @@ export default function HMISGuidePage() {
       <section className="py-16">
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl font-bold text-foreground mb-4">
               Why Organizations Choose SHELTR
             </h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
               Beyond traditional case management software—SHELTR reimagines what's possible for every stakeholder.
             </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            <Card>
+            <Card className="border-2">
               <CardHeader>
-                <Users className="h-12 w-12 text-blue-600 mb-4" />
+                <Users className="h-12 w-12 text-primary mb-4" />
                 <CardTitle>For Staff: Tools That Actually Help</CardTitle>
               </CardHeader>
               <CardContent>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="h-4 w-4 text-green-400 mt-0.5 flex-shrink-0" />
                     <span>Mobile-first design for field work</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="h-4 w-4 text-green-400 mt-0.5 flex-shrink-0" />
                     <span>Offline capability for remote areas</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="h-4 w-4 text-green-400 mt-0.5 flex-shrink-0" />
                     <span>AI-assisted case planning</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="h-4 w-4 text-green-400 mt-0.5 flex-shrink-0" />
                     <span>Automated documentation</span>
                   </li>
                 </ul>
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="border-2">
               <CardHeader>
-                <User className="h-12 w-12 text-blue-600 mb-4" />
+                <User className="h-12 w-12 text-primary mb-4" />
                 <CardTitle>For Participants: Technology with Dignity</CardTitle>
               </CardHeader>
               <CardContent>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="h-4 w-4 text-green-400 mt-0.5 flex-shrink-0" />
                     <span>Personal donation codes</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="h-4 w-4 text-green-400 mt-0.5 flex-shrink-0" />
                     <span>Direct access to their own data</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="h-4 w-4 text-green-400 mt-0.5 flex-shrink-0" />
                     <span>Progress tracking and goal setting</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="h-4 w-4 text-green-400 mt-0.5 flex-shrink-0" />
                     <span>Community connection tools</span>
                   </li>
                 </ul>
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="border-2">
               <CardHeader>
-                <BarChart3 className="h-12 w-12 text-blue-600 mb-4" />
+                <BarChart3 className="h-12 w-12 text-primary mb-4" />
                 <CardTitle>For Organizations: Results That Matter</CardTitle>
               </CardHeader>
               <CardContent>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="h-4 w-4 text-green-400 mt-0.5 flex-shrink-0" />
                     <span>1-2 week implementation (vs. 2-6 months)</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="h-4 w-4 text-green-400 mt-0.5 flex-shrink-0" />
                     <span>Automated compliance reporting</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="h-4 w-4 text-green-400 mt-0.5 flex-shrink-0" />
                     <span>Real-time impact measurement</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                    <CheckCircle className="h-4 w-4 text-green-400 mt-0.5 flex-shrink-0" />
                     <span>Community-supported pricing model</span>
                   </li>
                 </ul>
@@ -595,7 +595,7 @@ export default function HMISGuidePage() {
       </section>
 
       {/* Future Vision */}
-      <section className="py-16 bg-blue-900 text-white">
+      <section className="py-16 bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white">
         <div className="container mx-auto px-4 max-w-4xl text-center">
           <h2 className="text-3xl font-bold mb-6">
             The Future of Homeless Services is Here
@@ -603,57 +603,57 @@ export default function HMISGuidePage() {
           <div className="grid md:grid-cols-2 gap-8 mb-12">
             <div>
               <h3 className="text-xl font-semibold mb-4">From Managing Homelessness to Solving It</h3>
-              <p className="text-blue-100">
+              <p className="text-gray-300">
                 Traditional HMIS systems help you manage the problem. SHELTR helps you solve it.
               </p>
             </div>
             <div>
               <h3 className="text-xl font-semibold mb-4">Our Vision</h3>
-              <p className="text-blue-100">
+              <p className="text-gray-300">
                 A world where homelessness is rare, brief, and non-recurring—powered by technology that treats every person with dignity.
               </p>
             </div>
           </div>
           
-          <div className="bg-blue-800 rounded-lg p-8 mb-8">
+          <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-8 mb-8">
             <h3 className="text-2xl font-bold mb-4">Ready to Join the Revolution?</h3>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
               <div className="text-center">
                 <p className="font-semibold mb-2">For Shelter Directors</p>
-                <p className="text-blue-200">Transform operations in weeks, not months</p>
+                <p className="text-gray-300">Transform operations in weeks, not months</p>
               </div>
               <div className="text-center">
                 <p className="font-semibold mb-2">For CoC Coordinators</p>
-                <p className="text-blue-200">Unified data and AI insights</p>
+                <p className="text-gray-300">Unified data and AI insights</p>
               </div>
               <div className="text-center">
                 <p className="font-semibold mb-2">For Case Managers</p>
-                <p className="text-blue-200">Tools designed by frontline workers</p>
+                <p className="text-gray-300">Tools designed by frontline workers</p>
               </div>
               <div className="text-center">
                 <p className="font-semibold mb-2">For Participants</p>
-                <p className="text-blue-200">Technology that maintains dignity</p>
+                <p className="text-gray-300">Technology that maintains dignity</p>
               </div>
             </div>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-green-600 hover:bg-green-700 text-white">
+            <Button size="lg" className="bg-gray-800 hover:bg-gray-700 text-white border border-gray-600">
               Get Started Today
             </Button>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-900">
+            <Button size="lg" variant="outline" className="border-gray-600 text-white hover:bg-gray-800 hover:text-white">
               Schedule a Demo
             </Button>
             <Link href="/contact">
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-900">
+              <Button size="lg" variant="outline" className="border-gray-600 text-white hover:bg-gray-800 hover:text-white">
                 Contact Our Team
               </Button>
             </Link>
           </div>
 
-          <div className="mt-12 pt-8 border-t border-blue-800">
-            <p className="text-lg italic text-blue-100">
-              "Better to Solve than Manage" isn't just our tagline—it's our commitment to revolutionizing 
+          <div className="mt-12 pt-8 border-t border-gray-700">
+            <p className="text-lg italic text-gray-300">
+              "Better to Solve than Manage" isn't just our ethos's our commitment to revolutionizing 
               how we approach homelessness through human-centered technology.
             </p>
           </div>

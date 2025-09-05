@@ -128,7 +128,7 @@ export default function SolutionsPage() {
             One Platform, Every Stakeholder
           </h1>
           <p className="text-xl text-gray-200 mb-8 max-w-3xl mx-auto">
-            SHELTR serves everyone in the ecosystem through a unified open-source platform that ensures transparency, dignity, and maximum impact.
+            A unified open-source platform that ensures transparency, dignity, and maximum impact.
           </p>
         </div>
       </section>
@@ -137,15 +137,15 @@ export default function SolutionsPage() {
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4">How SHELTR Will Works for Everyone</h2>
+            <h2 className="text-3xl font-bold mb-4">How SHELTR Works</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Our platform creates value for every participant in the homelessness ecosystem, 
+              The platform creates value for every Participant in the ecosystem, including stakeholders  
               from frontline organizations to individual donors.
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8">
-            {/* Shelters & NGOs */}
+            {/* Shelters */}
             <Card className="border-2 border-gray-200 dark:border-gray-800 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-xl transition-all duration-300">
               <CardHeader className="text-center pb-4">
                 <div className="w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto mb-4">

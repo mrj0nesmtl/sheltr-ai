@@ -10,26 +10,28 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
-import { Plus, Edit, Trash2, Eye, Calendar, User, Tag, Search, Filter, Upload, FileText } from 'lucide-react';
+import { Plus, Edit, Trash2, Eye, Calendar, User, Search, Upload, FileText } from 'lucide-react';
 import { blogService, BlogPost, BlogCategory, BlogTag } from '@/services/blogService';
 import { useAuth } from '@/contexts/AuthContext';
+import BlogImageUpload from '@/components/BlogImageUpload';
 
 export default function BlogManagementPage() {
-  const { user } = useAuth();
+  const { } = useAuth();
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [categories, setCategories] = useState<BlogCategory[]>([]);
-  const [tags, setTags] = useState<BlogTag[]>([]);
+  const [, setTags] = useState<BlogTag[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [showCreateDialog, setShowCreateDialog] = useState(false);
-  const [showImportDialog, setShowImportDialog] = useState(false);
   const [editingPost, setEditingPost] = useState<BlogPost | null>(null);
+  const [importMode, setImportMode] = useState(false);
   const [markdownContent, setMarkdownContent] = useState('');
 
   // Form state
   const [formData, setFormData] = useState({
     title: '',
+    slug: '',
     content: '',
     excerpt: '',
     category: '',
@@ -38,26 +40,114 @@ export default function BlogManagementPage() {
     seo_title: '',
     seo_description: '',
     seo_keywords: [] as string[],
+    featured_image: '',
   });
+  const [showPreview, setShowPreview] = useState(false);
 
   useEffect(() => {
     loadBlogData();
   }, []);
+
+  // Generate URL-friendly slug from title
+  const generateSlug = (title: string): string => {
+    return title
+      .toLowerCase()
+      .replace(/[^\w\s-]/g, '')
+      .replace(/[-\s]+/g, '-')
+      .trim();
+  };
+
+  // Auto-generate slug when title changes
+  const handleTitleChange = (title: string) => {
+    setFormData(prev => ({
+      ...prev,
+      title,
+      slug: editingPost ? prev.slug : generateSlug(title)
+    }));
+  };
+
+  // Parse markdown frontmatter and content
+  const parseMarkdown = (markdown: string) => {
+    const frontmatterRegex = /^---\s*\n([\s\S]*?)\n---\s*\n([\s\S]*)/;
+    const match = markdown.match(frontmatterRegex);
+    
+    if (!match) {
+      return {
+        frontmatter: {},
+        content: markdown
+      };
+    }
+
+    const frontmatterText = match[1];
+    const content = match[2];
+    const frontmatter: Record<string, any> = {};
+
+    // Parse YAML-like frontmatter
+    frontmatterText.split('\n').forEach(line => {
+      const colonIndex = line.indexOf(':');
+      if (colonIndex > 0) {
+        const key = line.substring(0, colonIndex).trim();
+        const value = line.substring(colonIndex + 1).trim().replace(/^["']|["']$/g, '');
+        
+        if (key === 'tags' || key === 'seo_keywords') {
+          frontmatter[key] = value.split(',').map((tag: string) => tag.trim());
+        } else {
+          frontmatter[key] = value;
+        }
+      }
+    });
+
+    return { frontmatter, content };
+  };
+
+  // Handle markdown import and populate form
+  const handleMarkdownImport = (markdownText: string) => {
+    const { frontmatter, content } = parseMarkdown(markdownText);
+    
+    setFormData({
+      title: frontmatter.title || '',
+      slug: frontmatter.slug || generateSlug(frontmatter.title || ''),
+      content: content.trim(),
+      excerpt: frontmatter.excerpt || '',
+      category: frontmatter.category || '',
+      tags: frontmatter.tags || [],
+      status: frontmatter.status || 'draft',
+      seo_title: frontmatter.seo_title || '',
+      seo_description: frontmatter.seo_description || '',
+      seo_keywords: frontmatter.seo_keywords || [],
+      featured_image: '',
+    });
+    
+    setImportMode(false);
+    setMarkdownContent('');
+  };
 
   const loadBlogData = async () => {
     try {
       setLoading(true);
       
       // Load all posts (including drafts)
-      const postsResponse = await blogService.getBlogPosts('all', undefined, undefined, 100, 0);
-      setPosts(postsResponse.data.posts);
+      try {
+        const postsResponse = await blogService.getBlogPosts('all', undefined, undefined, 100, 0);
+        setPosts(postsResponse.data.posts);
+      } catch (error) {
+        console.error('Error loading posts:', error);
+      }
 
       // Load categories and tags
-      const categoriesResponse = await blogService.getCategories();
-      setCategories(categoriesResponse.data.categories);
+      try {
+        const categoriesResponse = await blogService.getCategories();
+        setCategories(categoriesResponse.data.categories);
+      } catch (error) {
+        console.error('Error loading categories:', error);
+      }
 
-      const tagsResponse = await blogService.getTags();
-      setTags(tagsResponse.data.tags);
+      try {
+        const tagsResponse = await blogService.getTags();
+        setTags(tagsResponse.data.tags);
+      } catch (error) {
+        console.error('Error loading tags:', error);
+      }
     } catch (error) {
       console.error('Error loading blog data:', error);
     } finally {
@@ -68,6 +158,7 @@ export default function BlogManagementPage() {
   const resetForm = () => {
     setFormData({
       title: '',
+      slug: '',
       content: '',
       excerpt: '',
       category: '',
@@ -76,18 +167,30 @@ export default function BlogManagementPage() {
       seo_title: '',
       seo_description: '',
       seo_keywords: [],
+      featured_image: '',
     });
     setEditingPost(null);
+    setShowPreview(false);
   };
 
   const handleCreatePost = async () => {
     try {
-      await blogService.createBlogPost(formData);
+      const result = await blogService.createBlogPost({
+        ...formData,
+        // Add knowledge base integration flag
+        ingest_to_knowledge_base: true
+      });
+      
       setShowCreateDialog(false);
       resetForm();
+      setImportMode(false);
+      setMarkdownContent('');
       loadBlogData(); // Refresh the list
+      
+      alert(`Blog post created successfully! ${result.data.message}`);
     } catch (error) {
       console.error('Error creating blog post:', error);
+      alert('Failed to create blog post. Please try again.');
     }
   };
 
@@ -115,28 +218,12 @@ export default function BlogManagementPage() {
     }
   };
 
-  const handleImportMarkdown = async () => {
-    if (!markdownContent.trim()) {
-      alert('Please enter markdown content');
-      return;
-    }
-    
-    try {
-      await blogService.importMarkdownFile(markdownContent);
-      setShowImportDialog(false);
-      setMarkdownContent('');
-      loadBlogData(); // Refresh the list
-      alert('Markdown file imported successfully!');
-    } catch (error) {
-      console.error('Error importing markdown file:', error);
-      alert('Failed to import markdown file');
-    }
-  };
 
   const openEditDialog = (post: BlogPost) => {
     setEditingPost(post);
     setFormData({
       title: post.title,
+      slug: post.slug,
       content: post.content,
       excerpt: post.excerpt,
       category: post.category,
@@ -144,14 +231,15 @@ export default function BlogManagementPage() {
       status: post.status,
       seo_title: post.seo_title || '',
       seo_description: post.seo_description || '',
-      seo_keywords: post.seo_keywords || [],
+      seo_keywords: post.seo_keywords || '',
+      featured_image: post.featured_image || '',
     });
     setShowCreateDialog(true);
   };
 
   const filteredPosts = posts.filter(post => {
-    const matchesSearch = post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         post.excerpt.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch = (post.title?.toLowerCase() || '').includes(searchQuery.toLowerCase()) ||
+                         (post.excerpt?.toLowerCase() || '').includes(searchQuery.toLowerCase());
     const matchesStatus = statusFilter === 'all' || post.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
@@ -188,28 +276,78 @@ export default function BlogManagementPage() {
         </div>
         
         <div className="flex gap-2">
-          <Dialog open={showImportDialog} onOpenChange={setShowImportDialog}>
-            <DialogTrigger asChild>
-              <Button variant="outline">
-                <Upload className="h-4 w-4 mr-2" />
-                Import Markdown
-              </Button>
-            </DialogTrigger>
-          </Dialog>
-          
-          <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
+          <Dialog open={showCreateDialog} onOpenChange={(open) => {
+            setShowCreateDialog(open);
+            if (!open) {
+              setImportMode(false);
+              setMarkdownContent('');
+              resetForm();
+            }
+          }}>
             <DialogTrigger asChild>
               <Button onClick={() => resetForm()}>
                 <Plus className="h-4 w-4 mr-2" />
                 Create Post
               </Button>
             </DialogTrigger>
+          
+          <Button 
+            variant="outline" 
+            onClick={() => {
+              setImportMode(true);
+              setShowCreateDialog(true);
+            }}
+          >
+            <Upload className="h-4 w-4 mr-2" />
+            Import Markdown
+          </Button>
           <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>
-                {editingPost ? 'Edit Blog Post' : 'Create New Blog Post'}
+                {editingPost ? 'Edit Blog Post' : importMode ? 'Import Markdown & Configure Post' : 'Create New Blog Post'}
               </DialogTitle>
             </DialogHeader>
+            
+            {/* Markdown Import Section */}
+            {importMode && !editingPost && (
+              <div className="space-y-4 mb-6 p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg border-2 border-blue-200 dark:border-blue-800">
+                <div className="flex items-center gap-2">
+                  <FileText className="h-5 w-5 text-blue-600" />
+                  <h3 className="text-lg font-semibold text-blue-800 dark:text-blue-200">Import Markdown Content</h3>
+                </div>
+                <Textarea
+                  value={markdownContent}
+                  onChange={(e) => setMarkdownContent(e.target.value)}
+                  placeholder="Paste your markdown content with frontmatter here...&#10;&#10;Example:&#10;---&#10;title: Your Post Title&#10;excerpt: Brief description&#10;category: Technology&#10;tags: tag1, tag2&#10;status: draft&#10;---&#10;&#10;# Your Content Here"
+                  rows={8}
+                  className="font-mono text-sm"
+                />
+                <div className="flex gap-2">
+                  <Button 
+                    onClick={() => handleMarkdownImport(markdownContent)}
+                    disabled={!markdownContent.trim()}
+                    className="bg-blue-600 hover:bg-blue-700"
+                  >
+                    <Upload className="h-4 w-4 mr-2" />
+                    Parse & Import
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    onClick={() => {
+                      setImportMode(false);
+                      setMarkdownContent('');
+                    }}
+                  >
+                    Skip Import
+                  </Button>
+                </div>
+                {markdownContent && (
+                  <p className="text-sm text-blue-600 dark:text-blue-400">
+                    Click &quot;Parse &amp; Import&quot; to automatically populate the form fields from your markdown frontmatter.
+                  </p>
+                )}
+              </div>
+            )}
             
             <div className="space-y-6">
               {/* Basic Information */}
@@ -218,9 +356,23 @@ export default function BlogManagementPage() {
                   <label className="text-sm font-medium">Title *</label>
                   <Input
                     value={formData.title}
-                    onChange={(e) => setFormData({...formData, title: e.target.value})}
+                    onChange={(e) => handleTitleChange(e.target.value)}
                     placeholder="Enter post title"
+                    required
                   />
+                </div>
+                
+                <div>
+                  <label className="text-sm font-medium">URL Slug *</label>
+                  <Input
+                    value={formData.slug}
+                    onChange={(e) => setFormData({...formData, slug: e.target.value})}
+                    placeholder="url-friendly-slug"
+                    required
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Will be used in the URL: /blog/{formData.slug || 'your-slug'}
+                  </p>
                 </div>
                 
                 <div>
@@ -230,11 +382,15 @@ export default function BlogManagementPage() {
                       <SelectValue placeholder="Select category" />
                     </SelectTrigger>
                     <SelectContent>
-                      {categories.map((category) => (
-                        <SelectItem key={category.id} value={category.name}>
-                          {category.name}
-                        </SelectItem>
-                      ))}
+                      {categories.length === 0 ? (
+                        <SelectItem value="" disabled>Loading categories...</SelectItem>
+                      ) : (
+                        categories.map((category) => (
+                          <SelectItem key={category.id} value={category.name}>
+                            {category.name}
+                          </SelectItem>
+                        ))
+                      )}
                     </SelectContent>
                   </Select>
                 </div>
@@ -249,6 +405,13 @@ export default function BlogManagementPage() {
                   rows={3}
                 />
               </div>
+
+              {/* Featured Image Upload */}
+              <BlogImageUpload
+                currentImageUrl={formData.featured_image}
+                onImageUploaded={(url) => setFormData({...formData, featured_image: url})}
+                onImageRemoved={() => setFormData({...formData, featured_image: ''})}
+              />
 
               <div>
                 <label className="text-sm font-medium">Content *</label>
@@ -321,14 +484,63 @@ export default function BlogManagementPage() {
                 </div>
               </div>
 
-              <div className="flex justify-end gap-2">
-                <Button variant="outline" onClick={() => setShowCreateDialog(false)}>
-                  Cancel
+              <div className="flex justify-between">
+                <Button 
+                  variant="outline" 
+                  onClick={() => setShowPreview(!showPreview)}
+                  className="flex items-center gap-2"
+                >
+                  <Eye className="h-4 w-4" />
+                  {showPreview ? 'Hide Preview' : 'Preview Post'}
                 </Button>
-                <Button onClick={editingPost ? handleUpdatePost : handleCreatePost}>
-                  {editingPost ? 'Update Post' : 'Create Post'}
-                </Button>
+                
+                <div className="flex gap-2">
+                  <Button variant="outline" onClick={() => setShowCreateDialog(false)}>
+                    Cancel
+                  </Button>
+                  <Button onClick={editingPost ? handleUpdatePost : handleCreatePost}>
+                    {editingPost ? 'Update Post' : 'Create Post'}
+                  </Button>
+                </div>
               </div>
+              
+              {/* Preview Section */}
+              {showPreview && (
+                <div className="mt-6 p-6 border rounded-lg bg-muted/20">
+                  <div className="flex items-center gap-2 mb-4">
+                    <Eye className="h-5 w-5 text-blue-600" />
+                    <h3 className="text-lg font-semibold">Preview</h3>
+                  </div>
+                  
+                  <div className="prose dark:prose-invert max-w-none">
+                    <h1>{formData.title || 'Untitled Post'}</h1>
+                    {formData.excerpt && (
+                      <p className="text-lg text-muted-foreground italic">{formData.excerpt}</p>
+                    )}
+                    <div className="flex gap-2 mb-4">
+                      {formData.category && (
+                        <Badge variant="secondary">{formData.category}</Badge>
+                      )}
+                      {formData.tags.map(tag => (
+                        <Badge key={tag} variant="outline">{tag}</Badge>
+                      ))}
+                    </div>
+                    {formData.featured_image && (
+                      <img 
+                        src={formData.featured_image} 
+                        alt="Featured image" 
+                        className="w-full h-64 object-cover rounded-lg mb-4"
+                      />
+                    )}
+                    <div 
+                      className="whitespace-pre-wrap"
+                      dangerouslySetInnerHTML={{
+                        __html: formData.content.replace(/\n/g, '<br/>')
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
             </div>
           </DialogContent>
         </Dialog>
@@ -405,14 +617,14 @@ export default function BlogManagementPage() {
               </p>
               
               <div className="flex flex-wrap gap-1 mb-4">
-                {post.tags.slice(0, 3).map((tag) => (
+                {(post.tags || []).slice(0, 3).map((tag) => (
                   <Badge key={tag} variant="outline" className="text-xs">
                     {tag}
                   </Badge>
                 ))}
-                {post.tags.length > 3 && (
+                {(post.tags || []).length > 3 && (
                   <Badge variant="outline" className="text-xs">
-                    +{post.tags.length - 3} more
+                    +{(post.tags || []).length - 3} more
                   </Badge>
                 )}
               </div>
@@ -461,36 +673,6 @@ export default function BlogManagementPage() {
         </div>
       )}
 
-      {/* Import Markdown Dialog */}
-      <Dialog open={showImportDialog} onOpenChange={setShowImportDialog}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
-            <DialogTitle>Import Markdown File</DialogTitle>
-          </DialogHeader>
-          
-          <div className="space-y-4">
-            <div>
-              <label className="text-sm font-medium">Markdown Content</label>
-              <Textarea
-                value={markdownContent}
-                onChange={(e) => setMarkdownContent(e.target.value)}
-                placeholder="Paste your markdown content here...&#10;&#10;You can include frontmatter:&#10;---&#10;title: Your Post Title&#10;excerpt: Brief description&#10;category: Technology&#10;tags: tag1, tag2&#10;status: draft&#10;---&#10;&#10;# Your Content Here&#10;&#10;Supports media embeds:&#10;- YouTube: https://youtube.com/watch?v=VIDEO_ID&#10;- Vimeo: https://vimeo.com/VIDEO_ID&#10;- Audio: https://example.com/audio.mp3&#10;- Social: https://twitter.com/user/status/123"
-                rows={15}
-              />
-            </div>
-            
-            <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={() => setShowImportDialog(false)}>
-                Cancel
-              </Button>
-              <Button onClick={handleImportMarkdown}>
-                <FileText className="h-4 w-4 mr-2" />
-                Import Post
-              </Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }

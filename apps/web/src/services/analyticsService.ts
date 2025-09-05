@@ -210,7 +210,7 @@ class AnalyticsService {
     try {
       const token = await this.getAuthToken();
       
-      const response = await fetch(`${this.baseUrl}/analytics/track`, {
+      const response = await fetch(`${this.baseUrl}/api/v1/analytics/track`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

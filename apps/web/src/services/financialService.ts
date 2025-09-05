@@ -72,7 +72,10 @@ export const getFinancialMetrics = async (): Promise<FinancialMetrics> => {
       const amount = donationData.amount?.total || donationData.amount || 0;
       const status = donationData.status || 'completed';
       
+      console.log(`💰 Processing donation: amount=${amount}, status=${status}`);
+      
       if (amount > 0) {
+        // Count all donations regardless of status for total amount
         totalDonations += amount;
         transactionCount++;
         

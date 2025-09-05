@@ -85,12 +85,15 @@ async def create_blog_post(
     content: str = Form(...),
     excerpt: str = Form(...),
     category: str = Form(...),
+    slug: Optional[str] = Form(None),
     tags: Optional[str] = Form(None),  # Comma-separated tags
     status: str = Form("draft"),
     seo_title: Optional[str] = Form(None),
     seo_description: Optional[str] = Form(None),
     seo_keywords: Optional[str] = Form(None),  # Comma-separated keywords
     featured_image: Optional[UploadFile] = File(None),
+    featured_image_url: Optional[str] = Form(None),
+    ingest_to_knowledge_base: Optional[str] = Form(None),
     current_user: Dict[str, Any] = Depends(require_super_admin)
 ):
     """Create a new blog post (Super Admin only)"""
@@ -103,8 +106,10 @@ async def create_blog_post(
         keyword_list = [kw.strip() for kw in seo_keywords.split(',')] if seo_keywords else []
         
         # Handle featured image upload
-        featured_image_url = None
-        if featured_image:
+        final_featured_image_url = None
+        if featured_image_url:
+            final_featured_image_url = featured_image_url
+        elif featured_image:
             # TODO: Implement image upload to Firebase Storage
             # For now, we'll skip image upload
             logger.warning("Featured image upload not yet implemented")
@@ -118,8 +123,9 @@ async def create_blog_post(
             author_name=current_user.get('display_name') or current_user.get('email'),
             category=category,
             tags=tag_list,
-            featured_image=featured_image_url,
+            featured_image=final_featured_image_url,
             status=status,
+            slug=slug,
             seo_title=seo_title,
             seo_description=seo_description,
             seo_keywords=keyword_list
@@ -227,10 +233,8 @@ async def delete_blog_post(
         raise HTTPException(status_code=500, detail="Failed to delete blog post")
 
 @router.get("/categories")
-async def get_categories(
-    current_user: Dict[str, Any] = Depends(get_current_user)
-):
-    """Get all blog categories"""
+async def get_categories():
+    """Get all blog categories (public endpoint)"""
     
     try:
         blog_service = BlogService()
@@ -277,10 +281,8 @@ async def create_category(
         raise HTTPException(status_code=500, detail="Failed to create blog category")
 
 @router.get("/tags")
-async def get_tags(
-    current_user: Dict[str, Any] = Depends(get_current_user)
-):
-    """Get all blog tags with usage counts"""
+async def get_tags():
+    """Get all blog tags with usage counts (public endpoint)"""
     
     try:
         blog_service = BlogService()

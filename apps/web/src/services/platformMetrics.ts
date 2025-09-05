@@ -177,7 +177,7 @@ export const getPlatformMetricsFromTenants = async (): Promise<PlatformMetrics> 
     const metrics: PlatformMetrics = {
       totalOrganizations,
       totalUsers,
-      activeParticipants: totalParticipants,
+      activeParticipants,
       activeDonors,
       platformAdmins,
       totalDonations,
@@ -276,15 +276,32 @@ export const getPlatformMetrics = async (): Promise<PlatformMetrics> => {
     const totalUsers = usersSnapshot.size;
     console.log(`👥 Found ${totalUsers} total users in database`);
     
-    // Get active participants count from the new participants collection + users with participant role
+    // Debug: Log user roles
+    const userRoles: Record<string, number> = {};
+    usersSnapshot.docs.forEach(doc => {
+      const data = doc.data();
+      const role = data.role || 'no_role';
+      userRoles[role] = (userRoles[role] || 0) + 1;
+    });
+    console.log('👥 User roles breakdown:', userRoles);
+    
+    // Get active participants count from demo_participants collection (where actual data is stored)
+    const demoParticipantsSnapshot = await getDocs(collection(db, 'demo_participants'));
     const participantsCollectionSnapshot = await getDocs(collection(db, 'participants'));
     const userParticipantsQuery = query(
       collection(db, 'users'),
       where('role', '==', 'participant')
     );
     const userParticipantsSnapshot = await getDocs(userParticipantsQuery);
-    const activeParticipants = participantsCollectionSnapshot.size + userParticipantsSnapshot.size;
-    console.log(`🧑‍🤝‍🧑 Found ${activeParticipants} total participants (${participantsCollectionSnapshot.size} in participants collection + ${userParticipantsSnapshot.size} user participants)`);
+    const activeParticipants = demoParticipantsSnapshot.size + participantsCollectionSnapshot.size + userParticipantsSnapshot.size;
+    console.log(`🧑‍🤝‍🧑 Found ${activeParticipants} total participants (${demoParticipantsSnapshot.size} in demo_participants + ${participantsCollectionSnapshot.size} in participants collection + ${userParticipantsSnapshot.size} user participants)`);
+    
+    console.log('🔍 [DEBUG] Individual counts:', {
+      demoParticipants: demoParticipantsSnapshot.size,
+      participantsCollection: participantsCollectionSnapshot.size,
+      userParticipants: userParticipantsSnapshot.size,
+      totalCalculated: activeParticipants
+    });
     
     // Get active donors count from users with donor role
     const donorsQuery = query(
@@ -356,7 +373,14 @@ export const getPlatformMetrics = async (): Promise<PlatformMetrics> => {
       recentActivity
     };
     
-    console.log('✅ Platform metrics loaded from Session 12 collections:', metrics);
+    console.log('✅ Platform metrics loaded from Session 12 collections:', {
+      totalOrganizations,
+      totalUsers,
+      activeParticipants,
+      activeDonors,
+      totalDonations
+    });
+    console.log('🔍 [FINAL DEBUG] Complete metrics object:', metrics);
     return metrics;
     
   } catch (err) {
@@ -2205,11 +2229,11 @@ export const getOrphanedUsers = async (): Promise<OrphanedUser[]> => {
     }
     
     // Filter for users without proper roles
-    const validRoles = ['superadmin', 'super_admin', 'admin', 'shelteradmin', 'participant', 'donor'];
+    const validRoles = ['superadmin', 'super_admin', 'platform_admin', 'admin', 'shelteradmin', 'participant', 'donor'];
     const orphanedUsers: OrphanedUser[] = [];
     
     allUsers.forEach(user => {
-      const hasValidRole = user.role && validRoles.includes(user.role);
+      const hasValidRole = user.role && validRoles.includes(user.role.toLowerCase());
       
       if (!hasValidRole) {
         const name = user.name || 

@@ -7,6 +7,72 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.18.0] - 2025-09-05 (Session 14.1: Registration Beta Controls + Analytics Dashboard Enhancements + UI/UX Polish)
+
+### 🎯 Session 14.1 Major Achievements (BETA TESTING PREPARATION + DASHBOARD OPTIMIZATION)
+- **🔐 BETA REGISTRATION CONTROLS**: Restricted account types to Participants and Donors only for beta testing
+- **📊 ANALYTICS DASHBOARD ENHANCEMENTS**: Complete data connectivity with real geographic distribution and user metrics
+- **🎨 UI/UX POLISH**: HMIS Guide page dark mode optimization and case study page layout fixes
+- **🧹 API CLEANUP**: Organized backend scripts and removed obsolete files for cleaner architecture
+- **📈 REAL DATA INTEGRATION**: Connected all analytics components to live platform data with proper empty state handling
+
+#### 🔐 Beta Testing Registration Controls
+- **Account Type Restrictions**: Temporarily disabled "Shelter Admin" and "Platform Administrator" options in registration dropdown
+- **Beta-Appropriate Access**: Only Participants and Donors can register during beta testing phase
+- **Shelter Creation Strategy**: Shelters will be created directly through Super Admin backend interface
+- **Clear Documentation**: Added comments explaining temporary restrictions for easy re-enablement later
+- **User Experience**: Simplified registration flow focusing on core beta user types
+
+#### 📊 Analytics Dashboard Real Data Revolution
+- **Geographic Distribution Intelligence**: Connected to real shelter and transaction data with North America focus
+- **Users Panel Grid Layout**: Transformed from vertical list to responsive 2x2 grid for better visual organization
+- **Real Business Logic**: Geographic cards show actual Montreal/Canada data while properly blanking other regions
+- **Empty State Handling**: Professional "Platform not yet available in this region" messaging for non-active areas
+- **Data Consistency**: All metrics connected to live Firestore collections with proper aggregation logic
+
+#### 🎨 Professional UI/UX Enhancements
+- **HMIS Guide Dark Mode Fix**: Complete removal of white and blue backgrounds, implemented consistent black theme
+- **Card Border Enhancement**: Added beautiful borders around all cards and components for improved visual hierarchy
+- **Case Study Layout Fix**: Resolved overlapping title issue by adjusting margins for proper text spacing
+- **Theme-Aware Styling**: Enhanced dark mode compatibility with proper color schemes and contrast ratios
+- **Visual Polish**: Improved card styling with proper backgrounds, borders, and text colors for dark mode
+
+#### 🧹 Backend Architecture Cleanup
+- **API Root Organization**: Moved 8 script files from `apps/api/` root to proper `scripts/` directory
+- **Obsolete File Removal**: Deleted backup files, audit reports, and temporary database files
+- **Clean Structure**: Maintained essential files (main.py, requirements.txt, service keys) while organizing development scripts
+- **Professional Architecture**: Enhanced backend organization for better maintainability and clarity
+
+#### 📈 Advanced Analytics Implementation
+- **Geographic Data Processing**: Implemented `getGeographicData` function processing shelters, participants, and donations by region
+- **North America Focus**: Intelligent region detection based on coordinates and address data (Montreal/Canada)
+- **Conditional Rendering**: Dynamic display showing metrics for active regions and empty states for inactive regions
+- **Performance Optimization**: Efficient data aggregation and processing with proper error handling
+- **Visual Indicators**: Color-coded backgrounds and icons based on data availability status
+
+### 🚀 Technical Excellence & Architecture
+- **Component Reusability**: Enhanced analytics dashboard with modular, reusable data processing functions
+- **Type Safety**: Proper TypeScript interfaces and error handling throughout analytics system
+- **Performance**: Optimized geographic data processing with efficient Firestore queries
+- **Error Handling**: Comprehensive error handling and fallback mechanisms for data processing
+- **Build Quality**: All linting errors resolved with clean, production-ready code
+
+### 📊 Platform Beta Readiness
+- **Registration Flow**: Streamlined beta testing registration limited to essential user types
+- **Analytics Intelligence**: Complete real-data connectivity showing authentic platform metrics
+- **Geographic Intelligence**: Smart regional data display with proper empty state handling
+- **UI Polish**: Professional dark mode implementation across all components
+- **Backend Organization**: Clean, maintainable code structure ready for continued development
+
+### 🎯 Session 13/14 Testing Foundation
+- **Data Connectivity**: All analytics components now connected to real platform data
+- **User Management**: Proper user role handling and registration flow controls
+- **Geographic Distribution**: Intelligent regional data processing ready for expansion
+- **UI Consistency**: Professional design language maintained across all components
+- **Architecture Quality**: Clean, organized codebase ready for comprehensive business logic testing
+
+---
+
 ## [2.17.0] - 2025-09-02 (Session 14: AI Chatbot Revolution + FAQ Enhancement + Site-Wide Integration)
 
 ### 🎯 Session 14 Major Achievements (INTELLIGENT CHATBOT SYSTEM TRANSFORMATION)

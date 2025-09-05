@@ -21,8 +21,7 @@ class BlogService:
     
     def __init__(self):
         self.db = firestore.client()
-        self.storage_client = storage.client()
-        self.bucket = self.storage_client.bucket('sheltr-ai.firebasestorage.app')
+        self.bucket = storage.bucket('sheltr-ai.firebasestorage.app')
     
     def _generate_slug(self, title: str) -> str:
         """Generate URL-friendly slug from title"""
@@ -49,6 +48,7 @@ class BlogService:
         tags: List[str] = None,
         featured_image: Optional[str] = None,
         status: str = 'draft',
+        slug: Optional[str] = None,
         seo_title: Optional[str] = None,
         seo_description: Optional[str] = None,
         seo_keywords: Optional[List[str]] = None
@@ -56,8 +56,9 @@ class BlogService:
         """Create a new blog post"""
         
         try:
-            # Generate slug
-            slug = self._generate_slug(title)
+            # Use provided slug or generate from title
+            if not slug:
+                slug = self._generate_slug(title)
             
             # Check if slug already exists
             existing_posts = self.db.collection('blog_posts').where('slug', '==', slug).limit(1).stream()
@@ -215,7 +216,7 @@ class BlogService:
             query = self.db.collection('blog_posts')
             
             # Apply filters
-            if status:
+            if status and status != 'all':
                 query = query.where('status', '==', status)
             if category:
                 query = query.where('category', '==', category)

@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { Metadata } from 'next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -119,11 +120,20 @@ export default function PodsPage() {
             Secure, Mobile, Functional.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-white text-black hover:bg-gray-200">
+            <Button 
+              size="lg" 
+              className="bg-white text-black hover:bg-gray-200"
+              onClick={() => document.getElementById('pod-models')?.scrollIntoView({ behavior: 'smooth' })}
+            >
               Explore Models
             </Button>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-black">
-              Technical Specs
+            <Button 
+              size="lg" 
+              variant="outline" 
+              className="border-white text-white hover:bg-white hover:text-black"
+              asChild
+            >
+              <Link href="/pods/buildout">Technical Specs</Link>
             </Button>
           </div>
         </div>
@@ -167,7 +177,7 @@ export default function PodsPage() {
       </section>
 
       {/* Pod Models Section */}
-      <section className="py-20 bg-muted/30">
+      <section id="pod-models" className="py-20 bg-muted/30">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-6">Pod Models</h2>

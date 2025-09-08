@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowLeft, Users, QrCode, DollarSign, Home, Heart, Shield, Smartphone, CheckCircle, CreditCard, MapPin, Clock } from 'lucide-react';
+import { ArrowLeft, Users, QrCode, DollarSign, Home, Heart, Shield, Smartphone, CheckCircle, CreditCard, Bike, Building2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -113,8 +113,152 @@ export default function ParticipantsPage() {
         </div>
       </section>
 
-      {/* How It Works */}
+      {/* SHELTR Integrated Supply Chain */}
       <section className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold mb-4">SHELTR Integrated Supply Chain</h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              Your donations directly fund emergency housing solutions through our PODS and MOBI ecosystem - 
+              creating immediate shelter and mobility options connected to your account.
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-12 mb-12">
+            {/* PODS Integration */}
+            <Card className="border-2 border-blue-500/20 bg-blue-500/5">
+              <CardHeader>
+                <Building2 className="h-12 w-12 text-blue-600 dark:text-blue-400 mx-auto mb-4" />
+                <CardTitle className="text-center text-2xl text-blue-600 dark:text-blue-400">Emergency PODS</CardTitle>
+                <CardDescription className="text-center">
+                  Secure, mobile micro-housing units funded by your donations
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-3">
+                  <div className="flex items-start space-x-3">
+                    <CheckCircle className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5" />
+                    <div>
+                      <strong>Winter-Rated Shelter:</strong> Secure housing rated for -25°C with full amenities
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <CheckCircle className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5" />
+                    <div>
+                      <strong>Solar Powered:</strong> Off-grid capability with battery backup systems
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <CheckCircle className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5" />
+                    <div>
+                      <strong>Smart Security:</strong> Biometric locks and QR code integration for safety
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <CheckCircle className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5" />
+                    <div>
+                      <strong>Donation Funded:</strong> Your housing fund directly supports POD deployment
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-6">
+                  <Link href="/pods">
+                    <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                      <Building2 className="h-4 w-4 mr-2" />
+                      Explore PODS
+                    </Button>
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* MOBI Integration */}
+            <Card className="border-2 border-orange-500/20 bg-orange-500/5">
+              <CardHeader>
+                <Bike className="h-12 w-12 text-orange-600 dark:text-orange-400 mx-auto mb-4" />
+                <CardTitle className="text-center text-2xl text-orange-600 dark:text-orange-400">MOBI Mobility</CardTitle>
+                <CardDescription className="text-center">
+                  Electric transportation and POD delivery system
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-3">
+                  <div className="flex items-start space-x-3">
+                    <CheckCircle className="h-5 w-5 text-orange-600 dark:text-orange-400 mt-0.5" />
+                    <div>
+                      <strong>POD Transport:</strong> Specialized bikes for moving and positioning PODS
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <CheckCircle className="h-5 w-5 text-orange-600 dark:text-orange-400 mt-0.5" />
+                    <div>
+                      <strong>Personal Mobility:</strong> Transportation access for work and services
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <CheckCircle className="h-5 w-5 text-orange-600 dark:text-orange-400 mt-0.5" />
+                    <div>
+                      <strong>All-Terrain:</strong> Urban and rural capability for any environment
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <CheckCircle className="h-5 w-5 text-orange-600 dark:text-orange-400 mt-0.5" />
+                    <div>
+                      <strong>Account Connected:</strong> Access through your participant account
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-6">
+                  <Link href="/pods/mobi">
+                    <Button className="w-full bg-orange-600 hover:bg-orange-700">
+                      <Bike className="h-4 w-4 mr-2" />
+                      Explore MOBI
+                    </Button>
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Supply Chain Flow */}
+          <div className="bg-gradient-to-r from-green-500/10 via-blue-500/10 to-orange-500/10 rounded-xl p-8 border border-green-500/20">
+            <h3 className="text-2xl font-bold text-center mb-6">How Your Donations Create Housing Solutions</h3>
+            <div className="grid md:grid-cols-4 gap-6">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-green-600 text-white rounded-full flex items-center justify-center mx-auto mb-4">
+                  <DollarSign className="h-8 w-8" />
+                </div>
+                <h4 className="font-semibold mb-2">Donations Received</h4>
+                <p className="text-sm text-muted-foreground">80% direct support, 15% housing fund</p>
+              </div>
+              <div className="text-center">
+                <div className="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Building2 className="h-8 w-8" />
+                </div>
+                <h4 className="font-semibold mb-2">POD Deployment</h4>
+                <p className="text-sm text-muted-foreground">Housing funds trigger emergency shelter</p>
+              </div>
+              <div className="text-center">
+                <div className="w-16 h-16 bg-orange-600 text-white rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Bike className="h-8 w-8" />
+                </div>
+                <h4 className="font-semibold mb-2">MOBI Transport</h4>
+                <p className="text-sm text-muted-foreground">Delivery and positioning of your POD</p>
+              </div>
+              <div className="text-center">
+                <div className="w-16 h-16 bg-purple-600 text-white rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Home className="h-8 w-8" />
+                </div>
+                <h4 className="font-semibold mb-2">Stable Housing</h4>
+                <p className="text-sm text-muted-foreground">Pathway to permanent accommodation</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* How It Works */}
+      <section className="py-20 bg-muted/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold mb-4">Simple Steps to Get Support</h2>
@@ -247,7 +391,7 @@ export default function ParticipantsPage() {
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold mb-6">Your Path to Housing Success</h2>
             <p className="text-xl text-muted-foreground">
-              How SHELTR-S tokens help you save money and achieve stable housing through our systematic approach.
+              How SHELTR tokens, PODS, and MOBI work together to provide immediate relief and long-term housing stability.
             </p>
           </div>
           
@@ -262,8 +406,8 @@ export default function ParticipantsPage() {
               </CardHeader>
               <CardContent className="text-center">
                 <p className="text-sm text-muted-foreground mb-4">
-                  Receive SHELTR-S stable tokens directly to your digital wallet for immediate needs like food, 
-                  transportation, and emergency shelter.
+                  Receive SHELTR tokens directly for immediate needs like food, transportation, 
+                  and emergency shelter while PODS are being deployed.
                 </p>
                 <div className="bg-green-600/10 rounded-lg p-3">
                   <div className="text-lg font-semibold text-green-600">$40 direct support</div>
@@ -278,15 +422,15 @@ export default function ParticipantsPage() {
                 <div className="w-12 h-12 bg-green-600 text-white rounded-full flex items-center justify-center mx-auto mb-4">
                   <span className="text-xl font-bold">2</span>
                 </div>
-                <CardTitle className="text-center">Housing Fund Building</CardTitle>
+                <CardTitle className="text-center">Emergency PODS Deployment</CardTitle>
               </CardHeader>
               <CardContent className="text-center">
                 <p className="text-sm text-muted-foreground mb-4">
-                  15% of every donation automatically builds a dedicated housing fund that provides security deposits, 
-                  first month&apos;s rent, and move-in assistance.
+                  15% of donations fund emergency PODS deployment through MOBI transport - 
+                  providing immediate secure shelter while building toward permanent housing.
                 </p>
                 <div className="bg-blue-600/10 rounded-lg p-3">
-                  <div className="text-lg font-semibold text-blue-600">$7.50 housing fund</div>
+                  <div className="text-lg font-semibold text-blue-600">$7.50 PODS fund</div>
                   <div className="text-xs text-muted-foreground">per $50 donation received</div>
                 </div>
               </CardContent>
@@ -302,8 +446,8 @@ export default function ParticipantsPage() {
               </CardHeader>
               <CardContent className="text-center">
                 <p className="text-sm text-muted-foreground mb-4">
-                  Once housed, continue receiving support for job training, healthcare access, and financial literacy 
-                  to maintain long-term stability.
+                  From PODS to permanent housing with continued MOBI access for transportation, 
+                  job training, healthcare access, and financial literacy support.
                 </p>
                 <div className="bg-purple-600/10 rounded-lg p-3">
                   <div className="text-lg font-semibold text-purple-600">Ongoing support</div>
@@ -321,7 +465,7 @@ export default function ParticipantsPage() {
                 Every person deserves dignity, respect, and the opportunity for a stable life. 
                 SHELTR provides the tools and support to make it happen.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
                 <Link href="/register">
                   <Button size="lg" className="bg-green-600 hover:bg-green-700">
                     <Users className="h-4 w-4 mr-2" />
@@ -332,6 +476,21 @@ export default function ParticipantsPage() {
                   <Button variant="outline" size="lg" className="border-green-500/20 text-green-600 dark:text-green-400">
                     <Heart className="h-4 w-4 mr-2" />
                     Get Support Guide
+                  </Button>
+                </Link>
+              </div>
+              
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link href="/pods">
+                  <Button variant="outline" size="lg" className="border-blue-500/20 text-blue-600 dark:text-blue-400">
+                    <Building2 className="h-4 w-4 mr-2" />
+                    Explore PODS
+                  </Button>
+                </Link>
+                <Link href="/pods/mobi">
+                  <Button variant="outline" size="lg" className="border-orange-500/20 text-orange-600 dark:text-orange-400">
+                    <Bike className="h-4 w-4 mr-2" />
+                    Explore MOBI
                   </Button>
                 </Link>
               </div>

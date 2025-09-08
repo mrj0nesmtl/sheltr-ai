@@ -642,6 +642,16 @@ export default function PodsBuildoutPage() {
               </Card>
             </div>
           </div>
+          
+          {/* Security Deep Dive Button */}
+          <div className="text-center mt-12">
+            <Link href="/security">
+              <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white">
+                <Shield className="h-4 w-4 mr-2" />
+                Explore Advanced Security
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -754,6 +764,16 @@ export default function PodsBuildoutPage() {
                 />
               </div>
             </div>
+          </div>
+          
+          {/* MOBI Deep Dive Button */}
+          <div className="text-center mt-12">
+            <Link href="/pods/mobi">
+              <Button size="lg" className="bg-green-600 hover:bg-green-700 text-white">
+                <Bike className="h-4 w-4 mr-2" />
+                Explore MOBI Details
+              </Button>
+            </Link>
           </div>
         </div>
       </section>

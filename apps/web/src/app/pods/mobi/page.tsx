@@ -1,14 +1,13 @@
+'use client';
+
 import Image from 'next/image';
-import { Metadata } from 'next';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Footer from '@/components/Footer';
 import { 
   ArrowLeft,
-  Bike,
   Battery,
   Zap,
   Mountain,
@@ -16,7 +15,6 @@ import {
   Shield,
   Wrench,
   CheckCircle,
-  Info,
   AlertTriangle,
   Gauge,
   Timer,
@@ -25,46 +23,7 @@ import {
   Truck
 } from 'lucide-react';
 
-export const metadata: Metadata = {
-  title: 'SHELTR Mountain Bike - Ultimate Mobility & Pod Transport',
-  description: 'The SHELTR Mountain Bike provides ultimate mobility and pod transport capability. Electric-powered, all-terrain design built for urban and rural environments with integrated cargo and towing systems.',
-  keywords: [
-    'SHELTR mountain bike',
-    'electric bike',
-    'pod transport',
-    'mobility solution',
-    'cargo bike',
-    'bike hitch',
-    'all-terrain bike',
-    'urban mobility',
-    'sustainable transport'
-  ],
-  openGraph: {
-    title: 'SHELTR Mountain Bike - Ultimate Mobility Solution',
-    description: 'Electric mountain bike designed for pod transport and ultimate mobility. All-terrain capability with integrated cargo systems.',
-    url: 'https://sheltr-ai.web.app/pods/mobility',
-    siteName: 'SHELTR',
-    images: [
-      {
-        url: '/images/sheltr_units/sheltr-mobility.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'SHELTR Mountain Bike - Ultimate mobility and transport solution',
-        type: 'image/jpeg',
-      }
-    ],
-    locale: 'en_US',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'SHELTR Mountain Bike - Ultimate Mobility',
-    description: 'Electric mountain bike designed for pod transport and all-terrain mobility.',
-    images: ['/images/sheltr_units/sheltr-mobility.jpg'],
-  },
-};
-
-export default function MobilityPage() {
+export default function MobiPage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
@@ -97,29 +56,30 @@ export default function MobilityPage() {
             Ultimate mobility and pod transport solution for any terrain
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-white text-black hover:bg-gray-200">
+          <div className="flex justify-center">
+            <Button 
+              size="lg" 
+              className="bg-white text-black hover:bg-gray-200"
+              onClick={() => document.getElementById('specifications')?.scrollIntoView({ behavior: 'smooth' })}
+            >
               View Specifications
-            </Button>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-black">
-              Request Demo
             </Button>
           </div>
         </div>
       </section>
 
       {/* Overview Section */}
-      <section className="py-20 px-4 max-w-7xl mx-auto">
+      <section id="specifications" className="py-20 px-4 max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold mb-6">Built for Every Journey</h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            The SHELTR Mountain Bike combines electric power, all-terrain capability, and integrated 
+            MOBI combines electric power, all-terrain capability, and integrated 
             transport systems to provide the ultimate mobility solution for urban and rural environments.
           </p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8 mb-16">
-          <Card className="border-2">
+          <Card className="border-2 transition-all duration-300 hover:border-green-500 hover:shadow-lg hover:shadow-green-500/20">
             <CardContent className="p-6 text-center">
               <Mountain className="h-12 w-12 mx-auto mb-4 text-green-500" />
               <h3 className="text-xl font-semibold mb-2">All-Terrain</h3>
@@ -127,7 +87,7 @@ export default function MobilityPage() {
             </CardContent>
           </Card>
           
-          <Card className="border-2">
+          <Card className="border-2 transition-all duration-300 hover:border-blue-500 hover:shadow-lg hover:shadow-blue-500/20">
             <CardContent className="p-6 text-center">
               <Zap className="h-12 w-12 mx-auto mb-4 text-blue-500" />
               <h3 className="text-xl font-semibold mb-2">Electric Power</h3>
@@ -135,11 +95,11 @@ export default function MobilityPage() {
             </CardContent>
           </Card>
           
-          <Card className="border-2">
+          <Card className="border-2 transition-all duration-300 hover:border-orange-500 hover:shadow-lg hover:shadow-orange-500/20">
             <CardContent className="p-6 text-center">
               <Truck className="h-12 w-12 mx-auto mb-4 text-orange-500" />
-              <h3 className="text-xl font-semibold mb-2">Pod Transport</h3>
-              <p className="text-muted-foreground">Integrated hitch system for towing Model A pods</p>
+              <h3 className="text-xl font-semibold mb-2">POD Transport</h3>
+              <p className="text-muted-foreground">Integrated hitch system for towing Model A PODS</p>
             </CardContent>
           </Card>
         </div>
@@ -148,10 +108,10 @@ export default function MobilityPage() {
       {/* Technical Specifications */}
       <section className="py-20 bg-muted/30">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-6">Technical Specifications</h2>
-            <p className="text-xl text-muted-foreground">Professional-grade components for reliability and performance</p>
-          </div>
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold mb-6">Technical Specifications</h2>
+          <p className="text-xl text-muted-foreground">Professional-grade components for MOBI reliability and performance</p>
+        </div>
 
           <div className="grid lg:grid-cols-2 gap-12 items-center mb-12">
             <div className="grid grid-cols-2 gap-4">
@@ -396,8 +356,8 @@ export default function MobilityPage() {
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-6">Pod Transport System</h2>
-            <p className="text-xl text-muted-foreground">Engineered specifically for SHELTR Model A pod towing</p>
+            <h2 className="text-4xl font-bold mb-6">POD Transport System</h2>
+            <p className="text-xl text-muted-foreground">Engineered specifically for SHELTR Model A POD towing</p>
           </div>
 
           <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -412,7 +372,7 @@ export default function MobilityPage() {
                 <CardContent className="space-y-4">
                   <div className="space-y-3">
                     <div>
-                      <strong>Maximum Towing Weight:</strong> 800 lbs (Model A pod: ~600 lbs)
+                      <strong>Maximum Towing Weight:</strong> 800 lbs (Model A POD: ~600 lbs)
                     </div>
                     <div>
                       <strong>Hitch Type:</strong> Universal ball hitch with quick-release mechanism
@@ -421,7 +381,7 @@ export default function MobilityPage() {
                       <strong>Safety Features:</strong> Safety chain, breakaway cable, reflective tape
                     </div>
                     <div>
-                      <strong>Electrical:</strong> 7-pin connector for pod brake lights and turn signals
+                      <strong>Electrical:</strong> 7-pin connector for POD brake lights and turn signals
                     </div>
                     <div>
                       <strong>Installation:</strong> Bolt-on attachment to reinforced rear frame points
@@ -440,13 +400,13 @@ export default function MobilityPage() {
                 <CardContent className="space-y-4">
                   <div className="space-y-3">
                     <div>
-                      <strong>Towing Range:</strong> 40-50 miles per charge (with Model A pod)
+                      <strong>Towing Range:</strong> 40-50 miles per charge (with Model A POD)
                     </div>
                     <div>
                       <strong>Towing Speed:</strong> Up to 20 mph (recommended maximum)
                     </div>
                     <div>
-                      <strong>Hill Climbing:</strong> 15% grade with full pod load
+                      <strong>Hill Climbing:</strong> 15% grade with full POD load
                     </div>
                     <div>
                       <strong>Terrain:</strong> Paved roads, bike paths, packed dirt trails
@@ -560,7 +520,7 @@ export default function MobilityPage() {
         <div className="max-w-4xl mx-auto text-center px-4">
           <h2 className="text-4xl font-bold mb-6">Ready for Ultimate Mobility?</h2>
           <p className="text-xl text-muted-foreground mb-8">
-            Experience the freedom of the SHELTR Mountain Bike. Contact us for test rides, 
+            Experience the freedom of MOBI. Contact us for test rides, 
             pricing information, and delivery options.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

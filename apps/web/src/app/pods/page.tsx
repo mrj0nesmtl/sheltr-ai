@@ -252,11 +252,11 @@ export default function PodsPage() {
         </div>
       </section>
 
-      {/* SHELTR Mountain Bike Section */}
+      {/* SHELTR MOBI Section */}
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-6">SHELTR Mountain Bike</h2>
+            <h2 className="text-4xl font-bold mb-6">SHELTR MOBI</h2>
             <p className="text-xl text-muted-foreground">Ultimate mobility and transportation solution</p>
           </div>
 
@@ -316,7 +316,7 @@ export default function PodsPage() {
               </div>
 
               <Button className="w-full sm:w-auto" asChild>
-                <Link href="/pods/mobility">Learn More About Mobility</Link>
+                <Link href="/pods/mobi">Learn More About MOBI</Link>
               </Button>
             </div>
           </div>

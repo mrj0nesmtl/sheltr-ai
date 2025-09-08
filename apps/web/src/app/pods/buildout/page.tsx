@@ -572,7 +572,7 @@ export default function PodsBuildoutPage() {
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Security & Technology Systems</h2>
+            <h2 className="text-3xl font-bold mb-4">Security & Technology</h2>
             <p className="text-lg text-muted-foreground">Advanced security, QR codes, and smart features</p>
           </div>
 
@@ -673,7 +673,7 @@ export default function PodsBuildoutPage() {
       <section className="py-16 bg-muted/30">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Mobility & Transport Systems</h2>
+            <h2 className="text-3xl font-bold mb-4">MOBI Transport Systems</h2>
             <p className="text-lg text-muted-foreground">Bike hitch, wheels, and transportation features</p>
           </div>
 
@@ -848,16 +848,13 @@ export default function PodsBuildoutPage() {
       {/* Call to Action */}
       <section className="py-20">
         <div className="max-w-4xl mx-auto text-center px-4">
-          <h2 className="text-4xl font-bold mb-6">Ready to Build Your SHELTR Pod?</h2>
+          <h2 className="text-4xl font-bold mb-6">Need a POD?</h2>
           <p className="text-xl text-muted-foreground mb-8">
-            Contact our technical team for detailed specifications, customization options, and deployment planning.
+            Contact our team for detailed specifications, customization options, and deployment planning.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90">
               Request Technical Specs
-            </Button>
-            <Button size="lg" variant="outline">
-              Schedule Consultation
             </Button>
           </div>
         </div>

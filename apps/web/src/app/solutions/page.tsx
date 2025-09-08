@@ -145,111 +145,7 @@ export default function SolutionsPage() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-8">
-            {/* Shelters */}
-            <Card className="border-2 border-gray-200 dark:border-gray-800 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-xl transition-all duration-300">
-              <CardHeader className="text-center pb-4">
-                <div className="w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Building2 className="h-8 w-8 text-blue-600 dark:text-blue-400" />
-                </div>
-                <CardTitle className="text-2xl">Shelters</CardTitle>
-                <CardDescription className="text-lg">
-                  Streamlined operations and enhanced participant support
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-3">
-                  <div className="flex items-start space-x-3">
-                    <UserCheck className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
-                    <div>
-                      <h4 className="font-medium">Participant Management</h4>
-                      <p className="text-sm text-muted-foreground">Digital profiles, QR code generation, and progress tracking</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start space-x-3">
-                    <BarChart3 className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
-                    <div>
-                      <h4 className="font-medium">Real-Time Analytics</h4>
-                      <p className="text-sm text-muted-foreground">Track donations, impact metrics, and resource allocation</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start space-x-3">
-                    <Shield className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
-                    <div>
-                      <h4 className="font-medium">Compliance & Reporting</h4>
-                      <p className="text-sm text-muted-foreground">Automated reports for funders and regulatory requirements</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="space-y-4">
-                  <Link href="/solutions/organizations">
-                    <Button className="w-full border-2 border-black text-black hover:bg-black hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black" variant="outline" size="sm">
-                      <Building2 className="h-4 w-4 mr-2" />
-                      Learn More
-                    </Button>
-                  </Link>
-                  <Link href="/user-journeys/shelters">
-                    <Button className="w-full" variant="secondary" size="sm">
-                      <ArrowRight className="h-4 w-4 mr-2" />
-                      User Journey
-                    </Button>
-                  </Link>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Government */}
-            <Card className="border-2 border-gray-200 dark:border-gray-800 hover:border-purple-300 dark:hover:border-purple-700 hover:shadow-xl transition-all duration-300">
-              <CardHeader className="text-center pb-4">
-                <div className="w-16 h-16 bg-purple-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <MapPin className="h-8 w-8 text-purple-600 dark:text-purple-400" />
-                </div>
-                <CardTitle className="text-2xl">Government</CardTitle>
-                <CardDescription className="text-lg">
-                  Data-driven policy making and budget transparency
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-3">
-                  <div className="flex items-start space-x-3">
-                    <BarChart3 className="h-5 w-5 text-purple-600 dark:text-purple-400 mt-0.5 flex-shrink-0" />
-                    <div>
-                      <h4 className="font-medium">Policy Insights</h4>
-                      <p className="text-sm text-muted-foreground">Regional homelessness data and trend analysis</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start space-x-3">
-                    <DollarSign className="h-5 w-5 text-purple-600 dark:text-purple-400 mt-0.5 flex-shrink-0" />
-                    <div>
-                      <h4 className="font-medium">Budget Transparency</h4>
-                      <p className="text-sm text-muted-foreground">Track public fund allocation and impact measurement</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start space-x-3">
-                    <Handshake className="h-5 w-5 text-purple-600 dark:text-purple-400 mt-0.5 flex-shrink-0" />
-                    <div>
-                      <h4 className="font-medium">Multi-Agency Coordination</h4>
-                      <p className="text-sm text-muted-foreground">Unified platform for cross-department collaboration</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="space-y-4">
-                  <Link href="/solutions/government">
-                    <Button className="w-full border-2 border-black text-black hover:bg-black hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black" variant="outline" size="sm">
-                      <MapPin className="h-4 w-4 mr-2" />
-                      Learn More
-                    </Button>
-                  </Link>
-                  <Link href="/user-journeys/government">
-                    <Button className="w-full" variant="secondary" size="sm">
-                      <ArrowRight className="h-4 w-4 mr-2" />
-                      User Journey
-                    </Button>
-                  </Link>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Participants (Homeless) */}
+            {/* Participants (First) */}
             <Card className="border-2 border-gray-200 dark:border-gray-800 hover:border-green-300 dark:hover:border-green-700 hover:shadow-xl transition-all duration-300">
               <CardHeader className="text-center pb-4">
                 <div className="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -284,24 +180,18 @@ export default function SolutionsPage() {
                     </div>
                   </div>
                 </div>
-                <div className="space-y-4">
+                <div>
                   <Link href="/solutions/participants">
                     <Button className="w-full border-2 border-black text-black hover:bg-black hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black" variant="outline" size="sm">
                       <Users className="h-4 w-4 mr-2" />
                       Learn More
                     </Button>
                   </Link>
-                  <Link href="/user-journeys/participants">
-                    <Button className="w-full" variant="secondary" size="sm">
-                      <ArrowRight className="h-4 w-4 mr-2" />
-                      User Journey
-                    </Button>
-                  </Link>
                 </div>
               </CardContent>
             </Card>
 
-            {/* Donors */}
+            {/* Donors (Second) */}
             <Card className="border-2 border-gray-200 dark:border-gray-800 hover:border-orange-300 dark:hover:border-orange-700 hover:shadow-xl transition-all duration-300">
               <CardHeader className="text-center pb-4">
                 <div className="w-16 h-16 bg-orange-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -336,17 +226,103 @@ export default function SolutionsPage() {
                     </div>
                   </div>
                 </div>
-                <div className="space-y-4">
+                <div>
                   <Link href="/solutions/donors">
                     <Button className="w-full border-2 border-black text-black hover:bg-black hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black" variant="outline" size="sm">
                       <Heart className="h-4 w-4 mr-2" />
                       Start Giving Today
                     </Button>
                   </Link>
-                  <Link href="/user-journeys/donors">
-                    <Button className="w-full" variant="secondary" size="sm">
-                      <ArrowRight className="h-4 w-4 mr-2" />
-                      View User Journey
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Shelters (Third) */}
+            <Card className="border-2 border-gray-200 dark:border-gray-800 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-xl transition-all duration-300">
+              <CardHeader className="text-center pb-4">
+                <div className="w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Building2 className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+                </div>
+                <CardTitle className="text-2xl">Shelters</CardTitle>
+                <CardDescription className="text-lg">
+                  Streamlined operations and enhanced participant support
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-3">
+                  <div className="flex items-start space-x-3">
+                    <UserCheck className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <h4 className="font-medium">Participant Management</h4>
+                      <p className="text-sm text-muted-foreground">Digital profiles, QR code generation, and progress tracking</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <BarChart3 className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <h4 className="font-medium">Real-Time Analytics</h4>
+                      <p className="text-sm text-muted-foreground">Track donations, impact metrics, and resource allocation</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <Shield className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <h4 className="font-medium">Compliance & Reporting</h4>
+                      <p className="text-sm text-muted-foreground">Automated reports for funders and regulatory requirements</p>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <Link href="/solutions/organizations">
+                    <Button className="w-full border-2 border-black text-black hover:bg-black hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black" variant="outline" size="sm">
+                      <Building2 className="h-4 w-4 mr-2" />
+                      Learn More
+                    </Button>
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Government (Fourth) */}
+            <Card className="border-2 border-gray-200 dark:border-gray-800 hover:border-purple-300 dark:hover:border-purple-700 hover:shadow-xl transition-all duration-300">
+              <CardHeader className="text-center pb-4">
+                <div className="w-16 h-16 bg-purple-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <MapPin className="h-8 w-8 text-purple-600 dark:text-purple-400" />
+                </div>
+                <CardTitle className="text-2xl">Government</CardTitle>
+                <CardDescription className="text-lg">
+                  Data-driven policy making and budget transparency
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-3">
+                  <div className="flex items-start space-x-3">
+                    <BarChart3 className="h-5 w-5 text-purple-600 dark:text-purple-400 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <h4 className="font-medium">Policy Insights</h4>
+                      <p className="text-sm text-muted-foreground">Regional homelessness data and trend analysis</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <DollarSign className="h-5 w-5 text-purple-600 dark:text-purple-400 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <h4 className="font-medium">Budget Transparency</h4>
+                      <p className="text-sm text-muted-foreground">Track public fund allocation and impact measurement</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <Handshake className="h-5 w-5 text-purple-600 dark:text-purple-400 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <h4 className="font-medium">Multi-Agency Coordination</h4>
+                      <p className="text-sm text-muted-foreground">Unified platform for cross-department collaboration</p>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <Link href="/solutions/government">
+                    <Button className="w-full border-2 border-black text-black hover:bg-black hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black" variant="outline" size="sm">
+                      <MapPin className="h-4 w-4 mr-2" />
+                      Learn More
                     </Button>
                   </Link>
                 </div>

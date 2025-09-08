@@ -465,7 +465,7 @@ export default function ParticipantsPage() {
                 Every person deserves dignity, respect, and the opportunity for a stable life. 
                 SHELTR provides the tools and support to make it happen.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">Although these pages look awesome
                 <Link href="/register">
                   <Button size="lg" className="bg-green-600 hover:bg-green-700">
                     <Users className="h-4 w-4 mr-2" />

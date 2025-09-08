@@ -558,6 +558,16 @@ export default function PodsPage() {
               </div>
             </CardContent>
           </Card>
+          
+          {/* Security Deep Dive Button */}
+          <div className="text-center mt-12">
+            <Link href="/security">
+              <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white">
+                <Shield className="h-4 w-4 mr-2" />
+                Learn About Security
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
 

@@ -11,7 +11,9 @@ export default function Footer() {
           <div className="grid md:grid-cols-5 gap-3 lg:gap-4 flex-1 lg:max-w-4xl lg:mx-auto">
             {/* Brand Section */}
             <div>
-              <ThemeLogo className="h-5 w-auto mb-3" />
+              <Link href="/" className="inline-block hover:opacity-80 transition-opacity">
+                <ThemeLogo className="h-5 w-auto mb-3" />
+              </Link>
               <p className="text-xs text-muted-foreground">
                 Tech for Good.
               </p>
@@ -23,7 +25,6 @@ export default function Footer() {
               <ul className="space-y-1 text-xs text-muted-foreground">
                 <li><Link href="/about" className="hover:text-foreground">About</Link></li>
                 <li><Link href="/solutions" className="hover:text-foreground">Solutions</Link></li>
-                <li><Link href="/scan-give" className="hover:text-foreground">Scan & Give</Link></li>
                 <li><Link href="/impact" className="hover:text-foreground">Impact</Link></li>
               </ul>
             </div>
@@ -33,6 +34,16 @@ export default function Footer() {
               <h3 className="text-sm font-semibold mb-3">Technology</h3>
               <ul className="space-y-1 text-xs text-muted-foreground">
                 <li><Link href="/tokenomics" className="hover:text-foreground">Tokenomics</Link></li>
+                <li><Link href="/scan-give" className="hover:text-foreground">Scan & Give</Link></li>
+                <li><Link href="/pods" className="hover:text-foreground">PODS</Link></li>
+                <li><Link href="/pods/mobi" className="hover:text-foreground">MOBI</Link></li>
+              </ul>
+            </div>
+            
+            {/* Project Hub Section */}
+            <div>
+              <h3 className="text-sm font-semibold mb-3">Project Hub</h3>
+              <ul className="space-y-1 text-xs text-muted-foreground">
                 <li><Link href="/docs" className="hover:text-foreground">Documentation</Link></li>
                 <li><Link href="/docs/whitepaper" className="hover:text-foreground">White Paper</Link></li>
                 <li>

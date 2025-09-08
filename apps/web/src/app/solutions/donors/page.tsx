@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { ArrowLeft, Heart, Shield, BarChart3, QrCode, Eye, Zap, TrendingUp, CheckCircle, Smartphone, Globe, Users } from 'lucide-react';
+import Image from 'next/image';
+import { ArrowLeft, Heart, Shield, BarChart3, QrCode, Eye, Zap, TrendingUp, CheckCircle, Smartphone, Globe, Users, Target, Gift, Repeat, Bike, Building2, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -46,20 +47,43 @@ export default function DonorsPage() {
       </div>
 
       {/* Hero Section */}
-      <section className="py-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="w-20 h-20 bg-orange-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
-            <Heart className="h-10 w-10 text-orange-600 dark:text-orange-400" />
-          </div>
-          <Badge variant="secondary" className="mb-4 bg-orange-500/10 text-orange-600 dark:text-orange-400 border-orange-500/20">For Donors</Badge>
-          <h1 className="text-4xl font-bold mb-6">
-            See Every Dollar Make a Real Difference
+      <section className="relative h-screen flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/images/sheltr_units/closeup-wheels.jpeg"
+            alt="SHELTR MOBI wheels - mobility and freedom in motion"
+            fill
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-black/70" />
+        </div>
+        
+        <div className="relative z-10 text-center text-white px-4 max-w-5xl mx-auto">
+          <Badge variant="secondary" className="mb-6 bg-orange-500/20 text-orange-300 border-orange-500/30">
+            For Donors
+          </Badge>
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight">
+            Every Dollar Turns the Wheel
           </h1>
-          <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
+          <p className="text-xl md:text-2xl font-light mb-8 max-w-4xl mx-auto">
             Experience the most transparent charitable giving platform ever created. Watch your donations 
-            flow directly to those in need through blockchain technology, with real-time impact tracking 
-            and verified outcomes you can trust.
+            flow directly to those in need, fund MOBI bikes and PODS, sponsor participant journeys, 
+            and track real-time impact through blockchain technology.
           </p>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/scan-give">
+              <Button size="lg" className="bg-orange-600 hover:bg-orange-700 text-white">
+                <QrCode className="h-4 w-4 mr-2" />
+                Start Giving Today
+              </Button>
+            </Link>
+            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-black">
+              <Eye className="h-4 w-4 mr-2" />
+              Track Your Impact
+            </Button>
+          </div>
         </div>
       </section>
 
@@ -114,6 +138,131 @@ export default function DonorsPage() {
         </div>
       </section>
 
+      {/* Advanced Donor Features */}
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold mb-4">Next-Generation Giving Experience</h2>
+            <p className="text-xl text-muted-foreground">Revolutionary features that transform how you support participants</p>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-12 mb-16">
+            {/* Distance Scanning & Recurring Sponsorships */}
+            <Card className="border-2 border-blue-500/20 bg-blue-500/5">
+              <CardHeader>
+                <Target className="h-12 w-12 text-blue-600 dark:text-blue-400 mx-auto mb-4" />
+                <CardTitle className="text-center text-2xl text-blue-600 dark:text-blue-400">Distance Scanning & Sponsorships</CardTitle>
+                <CardDescription className="text-center">
+                  Support participants from anywhere with recurring sponsorships
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-3">
+                  <div className="flex items-start space-x-3">
+                    <CheckCircle className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5" />
+                    <div>
+                      <strong>Distance QR Scanning:</strong> Donate to participants from photos, social media, or remote locations
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <Repeat className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5" />
+                    <div>
+                      <strong>Recurring Sponsorships:</strong> Set up weekly, monthly, or custom recurring donations
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <Eye className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5" />
+                    <div>
+                      <strong>Goal Tracking:</strong> Watch your sponsored participants achieve housing milestones
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <Calendar className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5" />
+                    <div>
+                      <strong>Progress Updates:</strong> Receive personalized updates on participant journeys
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* MOBI & PODS Gifting */}
+            <Card className="border-2 border-green-500/20 bg-green-500/5">
+              <CardHeader>
+                <Gift className="h-12 w-12 text-green-600 dark:text-green-400 mx-auto mb-4" />
+                <CardTitle className="text-center text-2xl text-green-600 dark:text-green-400">MOBI & PODS Gifting</CardTitle>
+                <CardDescription className="text-center">
+                  Directly fund mobility and housing solutions
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-3">
+                  <div className="flex items-start space-x-3">
+                    <Bike className="h-5 w-5 text-green-600 dark:text-green-400 mt-0.5" />
+                    <div>
+                      <strong>Gift MOBI Access:</strong> Fund electric bike access for transportation and work opportunities
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <Building2 className="h-5 w-5 text-green-600 dark:text-green-400 mt-0.5" />
+                    <div>
+                      <strong>Sponsor PODS:</strong> Directly fund emergency micro-housing deployment
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <Target className="h-5 w-5 text-green-600 dark:text-green-400 mt-0.5" />
+                    <div>
+                      <strong>Targeted Impact:</strong> Choose specific participants to receive MOBI or PODS
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <Shield className="h-5 w-5 text-green-600 dark:text-green-400 mt-0.5" />
+                    <div>
+                      <strong>Verified Delivery:</strong> Blockchain-verified deployment and participant access
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Integration Flow */}
+          <div className="bg-gradient-to-r from-orange-500/10 via-blue-500/10 to-green-500/10 rounded-xl p-8 border border-orange-500/20">
+            <h3 className="text-2xl font-bold text-center mb-6">Complete Ecosystem Integration</h3>
+            <div className="grid md:grid-cols-4 gap-6">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-orange-600 text-white rounded-full flex items-center justify-center mx-auto mb-4">
+                  <QrCode className="h-8 w-8" />
+                </div>
+                <h4 className="font-semibold mb-2">Scan & Sponsor</h4>
+                <p className="text-sm text-muted-foreground">Distance scanning with recurring sponsorships</p>
+              </div>
+              <div className="text-center">
+                <div className="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Eye className="h-8 w-8" />
+                </div>
+                <h4 className="font-semibold mb-2">Track Goals</h4>
+                <p className="text-sm text-muted-foreground">Watch participants achieve housing milestones</p>
+              </div>
+              <div className="text-center">
+                <div className="w-16 h-16 bg-green-600 text-white rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Gift className="h-8 w-8" />
+                </div>
+                <h4 className="font-semibold mb-2">Gift Solutions</h4>
+                <p className="text-sm text-muted-foreground">Fund MOBI bikes and PODS directly</p>
+              </div>
+              <div className="text-center">
+                <div className="w-16 h-16 bg-purple-600 text-white rounded-full flex items-center justify-center mx-auto mb-4">
+                  <TrendingUp className="h-8 w-8" />
+                </div>
+                <h4 className="font-semibold mb-2">Measure Impact</h4>
+                <p className="text-sm text-muted-foreground">Real-time blockchain verification of outcomes</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Giving Methods */}
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -134,7 +283,7 @@ export default function DonorsPage() {
                 <div className="space-y-3">
                   <div className="flex items-center space-x-3">
                     <CheckCircle className="h-5 w-5 text-orange-600 dark:text-orange-400" />
-                    <span>Scan QR codes from participants you meet</span>
+                    <span>Scan QR codes in-person or from distance (photos/social media)</span>
                   </div>
                   <div className="flex items-center space-x-3">
                     <CheckCircle className="h-5 w-5 text-orange-600 dark:text-orange-400" />
@@ -320,7 +469,7 @@ export default function DonorsPage() {
             Start your giving journey in just minutes and see immediate impact.
           </p>
           
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-8 mb-12">
             <div className="text-center">
               <div className="w-12 h-12 bg-orange-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-orange-600 dark:text-orange-400 font-bold">1</span>
@@ -342,6 +491,27 @@ export default function DonorsPage() {
               <h3 className="font-semibold mb-2">Track Your Impact</h3>
               <p className="text-sm text-muted-foreground">Receive updates and see how your generosity helps</p>
             </div>
+          </div>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/scan-give">
+              <Button size="lg" className="bg-orange-600 hover:bg-orange-700">
+                <Heart className="h-4 w-4 mr-2" />
+                Start Giving Today
+              </Button>
+            </Link>
+            <Link href="/pods">
+              <Button variant="outline" size="lg" className="border-blue-500/20 text-blue-600 dark:text-blue-400">
+                <Building2 className="h-4 w-4 mr-2" />
+                Explore PODS
+              </Button>
+            </Link>
+            <Link href="/pods/mobi">
+              <Button variant="outline" size="lg" className="border-green-500/20 text-green-600 dark:text-green-400">
+                <Bike className="h-4 w-4 mr-2" />
+                Explore MOBI
+              </Button>
+            </Link>
           </div>
         </div>
       </section>

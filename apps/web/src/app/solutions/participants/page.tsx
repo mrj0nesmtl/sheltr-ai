@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowLeft, Users, QrCode, DollarSign, Home, Heart, Shield, Smartphone, CheckCircle, CreditCard, Bike, Building2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -46,19 +47,42 @@ export default function ParticipantsPage() {
       </div>
 
       {/* Hero Section */}
-      <section className="py-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="w-20 h-20 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
-            <Users className="h-10 w-10 text-green-600 dark:text-green-400" />
-          </div>
-          <Badge variant="secondary" className="mb-4 bg-green-500/10 text-green-600 dark:text-green-400 border-green-500/20">For Participants</Badge>
-          <h1 className="text-4xl font-bold mb-6">
-            Your Path to Stability Starts Here
+      <section className="relative h-screen flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/images/sheltr_units/security.jpeg"
+            alt="SHELTR Security - Digital door lock with biometric access"
+            fill
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-black/60" />
+        </div>
+        
+        <div className="relative z-10 text-center text-white px-4 max-w-4xl mx-auto">
+          <Badge variant="secondary" className="mb-6 bg-green-500/20 text-green-300 border-green-500/30">
+            For Participants
+          </Badge>
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight">
+            The Key to Stability is Here
           </h1>
-          <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
-            SHELTR provides you with direct access to resources, financial support, and a pathway to permanent housing. 
-            Your journey matters, your dignity is respected, and your privacy is protected every step of the way.
+          <p className="text-xl md:text-2xl font-light mb-8 max-w-3xl mx-auto">
+            Direct access to resources, financial support, and a pathway to emergency housing. 
+            Your journey and dignity respected, and your privacy protected.
           </p>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/register">
+              <Button size="lg" className="bg-green-600 hover:bg-green-700 text-white">
+                <Users className="h-4 w-4 mr-2" />
+                Get Started Today
+              </Button>
+            </Link>
+            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-black">
+              <Shield className="h-4 w-4 mr-2" />
+              Learn About Security
+            </Button>
+          </div>
         </div>
       </section>
 

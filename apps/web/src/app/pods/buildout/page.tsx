@@ -730,35 +730,19 @@ export default function PodsBuildoutPage() {
               </Card>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="relative h-48 rounded-lg overflow-hidden">
-                <Image
-                  src="/images/sheltr_units/bike-1.jpeg"
-                  alt="SHELTR Mountain Bike"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-              <div className="relative h-48 rounded-lg overflow-hidden">
+            <div className="space-y-6">
+              <div className="relative h-64 rounded-lg overflow-hidden">
                 <Image
                   src="/images/sheltr_units/closeup-wheels.jpeg"
-                  alt="Mobility System"
+                  alt="SHELTR Heavy-Duty Wheels and Mobility System"
                   fill
                   className="object-cover"
                 />
               </div>
-              <div className="relative h-48 rounded-lg overflow-hidden">
+              <div className="relative h-64 rounded-lg overflow-hidden">
                 <Image
                   src="/images/sheltr_units/bike-2.jpeg"
-                  alt="Bike Hitch Detail"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-              <div className="relative h-48 rounded-lg overflow-hidden">
-                <Image
-                  src="/images/sheltr_units/cube-and-storage.jpeg"
-                  alt="Storage and Transport"
+                  alt="MOBI Bike with POD Transport System"
                   fill
                   className="object-cover"
                 />

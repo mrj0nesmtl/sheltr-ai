@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import Footer from '@/components/Footer';
 import { 
   Shield, 
   Battery, 
@@ -116,12 +117,12 @@ export default function PodsPage() {
           <div className="grid lg:grid-cols-2 gap-12">
             {/* Model A - One Person */}
             <Card className="border-2 overflow-hidden">
-              <div className="relative h-64">
+              <div className="relative h-64 bg-muted/20">
                 <Image
                   src="/images/sheltr_units/sleeper-1.jpeg"
                   alt="SHELTR One-Person Unit"
                   fill
-                  className="object-cover"
+                  className="object-contain"
                 />
                 <div className="absolute top-4 left-4">
                   <Badge className="bg-blue-600 text-white">Model A</Badge>
@@ -183,12 +184,12 @@ export default function PodsPage() {
 
             {/* Model B - Two Person */}
             <Card className="border-2 overflow-hidden">
-              <div className="relative h-64">
+              <div className="relative h-64 bg-muted/20">
                 <Image
                   src="/images/sheltr_units/sleeper-2.jpeg"
                   alt="SHELTR Two-Person Unit"
                   fill
-                  className="object-cover"
+                  className="object-contain"
                 />
                 <div className="absolute top-4 left-4">
                   <Badge className="bg-purple-600 text-white">Model B</Badge>
@@ -314,8 +315,8 @@ export default function PodsPage() {
                 </div>
               </div>
 
-              <Button className="w-full sm:w-auto">
-                Learn More About Mobility
+              <Button className="w-full sm:w-auto" asChild>
+                <Link href="/pods/mobility">Learn More About Mobility</Link>
               </Button>
             </div>
           </div>
@@ -682,7 +683,7 @@ export default function PodsPage() {
       {/* Call to Action */}
       <section className="py-20">
         <div className="max-w-4xl mx-auto text-center px-4">
-          <h2 className="text-4xl font-bold mb-6">Ready to Deploy SHELTR Pods?</h2>
+          <h2 className="text-4xl font-bold mb-6">Ready to Deploy?</h2>
           <p className="text-xl text-muted-foreground mb-8">
             Contact us to learn more about pod deployment, customization options, and partnership opportunities.
           </p>
@@ -696,6 +697,9 @@ export default function PodsPage() {
           </div>
         </div>
       </section>
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 }

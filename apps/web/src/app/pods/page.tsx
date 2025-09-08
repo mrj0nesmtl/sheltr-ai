@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ImageViewer } from '@/components/ui/image-viewer';
 import { ThemeToggle } from '@/components/theme-toggle';
 import Footer from '@/components/Footer';
 import ThemeLogo from '@/components/ThemeLogo';
@@ -34,6 +35,35 @@ import {
 
 export default function PodsPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [imageViewerOpen, setImageViewerOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  // Pod Model Images Data
+  const podImages = [
+    {
+      src: '/images/sheltr_units/sleeper-1.jpeg',
+      alt: 'SHELTR Model A - One-Person Unit',
+      title: 'Model A - One-Person Unit'
+    },
+    {
+      src: '/images/sheltr_units/sleeper-2.jpeg',
+      alt: 'SHELTR Model B - Two-Person Unit', 
+      title: 'Model B - Two-Person Unit'
+    }
+  ];
+
+  const openImageViewer = (index: number) => {
+    setCurrentImageIndex(index);
+    setImageViewerOpen(true);
+  };
+
+  const nextImage = () => {
+    setCurrentImageIndex((prev) => (prev + 1) % podImages.length);
+  };
+
+  const previousImage = () => {
+    setCurrentImageIndex((prev) => (prev - 1 + podImages.length) % podImages.length);
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -221,15 +251,23 @@ export default function PodsPage() {
           <div className="grid lg:grid-cols-2 gap-12">
             {/* Model A - One Person */}
             <Card className="border-2 overflow-hidden">
-              <div className="relative h-64 bg-muted/20">
+              <div 
+                className="relative h-64 bg-muted/20 cursor-pointer group"
+                onClick={() => openImageViewer(0)}
+              >
                 <Image
                   src="/images/sheltr_units/sleeper-1.jpeg"
                   alt="SHELTR One-Person Unit"
                   fill
-                  className="object-contain"
+                  className="object-contain transition-transform group-hover:scale-105"
                 />
                 <div className="absolute top-4 left-4">
                   <Badge className="bg-blue-600 text-white">Model A</Badge>
+                </div>
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+                  <div className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 rounded-full p-2">
+                    <Eye className="h-6 w-6 text-gray-800" />
+                  </div>
                 </div>
               </div>
               <CardHeader>
@@ -288,15 +326,23 @@ export default function PodsPage() {
 
             {/* Model B - Two Person */}
             <Card className="border-2 overflow-hidden">
-              <div className="relative h-64 bg-muted/20">
+              <div 
+                className="relative h-64 bg-muted/20 cursor-pointer group"
+                onClick={() => openImageViewer(1)}
+              >
                 <Image
                   src="/images/sheltr_units/sleeper-2.jpeg"
                   alt="SHELTR Two-Person Unit"
                   fill
-                  className="object-contain"
+                  className="object-contain transition-transform group-hover:scale-105"
                 />
                 <div className="absolute top-4 left-4">
                   <Badge className="bg-purple-600 text-white">Model B</Badge>
+                </div>
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+                  <div className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 rounded-full p-2">
+                    <Eye className="h-6 w-6 text-gray-800" />
+                  </div>
                 </div>
               </div>
               <CardHeader>
@@ -814,6 +860,16 @@ export default function PodsPage() {
 
       {/* Footer */}
       <Footer />
+
+      {/* Image Viewer */}
+      <ImageViewer
+        images={podImages}
+        currentIndex={currentImageIndex}
+        isOpen={imageViewerOpen}
+        onClose={() => setImageViewerOpen(false)}
+        onNext={nextImage}
+        onPrevious={previousImage}
+      />
     </div>
   );
 }

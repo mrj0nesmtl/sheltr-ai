@@ -78,10 +78,6 @@ export default function ParticipantsPage() {
                 Get Started Today
               </Button>
             </Link>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-black">
-              <Shield className="h-4 w-4 mr-2" />
-              Learn About Security
-            </Button>
           </div>
         </div>
       </section>

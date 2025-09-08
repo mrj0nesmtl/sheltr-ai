@@ -52,10 +52,10 @@ export const metadata: Metadata = {
     siteName: 'SHELTR',
     images: [
       {
-        url: '/images/sheltr_units/interior-1.jpeg',
+        url: '/images/sheltr_units/sleeper-2.jpeg',
         width: 1200,
         height: 630,
-        alt: 'SHELTR Pod Interior Technical Buildout',
+          alt: 'SHELTR POD Technical Buildout',
         type: 'image/jpeg',
       }
     ],
@@ -66,30 +66,43 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'SHELTR Pods Buildout - Technical Specifications',
     description: 'Complete technical buildout guide for SHELTR mobile micro-housing units.',
-    images: ['/images/sheltr_units/interior-1.jpeg'],
+    images: ['/images/sheltr_units/sleeper-2.jpeg'],
   },
 };
 
 export default function PodsBuildoutPage() {
   return (
     <div className="min-h-screen bg-background">
-      {/* Header with Back Navigation */}
-      <section className="py-8 border-b">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center gap-4 mb-6">
-            <Link href="/pods">
-              <Button variant="ghost" size="sm">
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to Pods
-              </Button>
-            </Link>
-          </div>
-          <div className="text-center">
-            <h1 className="text-4xl md:text-6xl font-bold mb-4">Pod Buildout</h1>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Complete technical specifications and buildout guide for SHELTR mobile micro-housing units
-            </p>
-          </div>
+      {/* Hero Section */}
+      <section className="relative h-screen flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/images/sheltr_units/sleeper-2.jpeg"
+            alt="SHELTR POD Technical Buildout"
+            fill
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-black/60" />
+        </div>
+        
+        {/* Back Navigation - positioned absolutely */}
+        <div className="absolute top-8 left-8 z-10">
+          <Link href="/pods">
+            <Button variant="ghost" size="sm" className="text-white border-white hover:bg-white hover:text-black">
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back to PODS
+            </Button>
+          </Link>
+        </div>
+        
+        <div className="relative z-10 text-center text-white px-4">
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight">
+            POD Buildout
+          </h1>
+          <p className="text-2xl md:text-3xl font-light mb-8 max-w-3xl mx-auto">
+            Complete technical specifications and buildout guide for SHELTR mobile micro-housing units
+          </p>
         </div>
       </section>
 

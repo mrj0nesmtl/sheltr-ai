@@ -1,119 +1,100 @@
 import Link from 'next/link';
-import { Github, Users } from 'lucide-react';
+import { Github, MessageCircle } from 'lucide-react';
 import ThemeLogo from './ThemeLogo';
 
 export default function Footer() {
   return (
     <footer className="bg-background border-t py-8 mt-0">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-6">
-          {/* Main Footer Content - Centered Columns */}
-          <div className="grid md:grid-cols-5 gap-3 lg:gap-4 flex-1 lg:max-w-4xl lg:mx-auto">
-            {/* Brand Section */}
-            <div>
-              <Link href="/" className="inline-block hover:opacity-80 transition-opacity">
-                <ThemeLogo className="h-5 w-auto mb-3" />
-              </Link>
-              <p className="text-xs text-muted-foreground">
-                Tech for Good.
-              </p>
-            </div>
-          
-            {/* Platform Section */}
-            <div>
-              <h3 className="text-sm font-semibold mb-3">Platform</h3>
-              <ul className="space-y-1 text-xs text-muted-foreground">
-                <li><Link href="/about" className="hover:text-foreground">About</Link></li>
-                <li><Link href="/solutions" className="hover:text-foreground">Solutions</Link></li>
-                <li><Link href="/impact" className="hover:text-foreground">Impact</Link></li>
-              </ul>
-            </div>
+        <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-8">
+          {/* Left Side - Brand */}
+          <div className="lg:w-1/3">
+            <Link href="/" className="inline-block hover:opacity-80 transition-opacity">
+              <ThemeLogo className="h-6 w-auto mb-4" />
+            </Link>
+            <p className="text-sm text-muted-foreground mb-4">
+              Tech for Good.
+            </p>
             
-            {/* Technology Section */}
-            <div>
-              <h3 className="text-sm font-semibold mb-3">Technology</h3>
-              <ul className="space-y-1 text-xs text-muted-foreground">
-                <li><Link href="/tokenomics" className="hover:text-foreground">Tokenomics</Link></li>
-                <li><Link href="/scan-give" className="hover:text-foreground">Scan & Give</Link></li>
-                <li><Link href="/pods" className="hover:text-foreground">PODS</Link></li>
-                <li><Link href="/pods/mobi" className="hover:text-foreground">MOBI</Link></li>
-              </ul>
-            </div>
-            
-            {/* Project Hub Section */}
-            <div>
-              <h3 className="text-sm font-semibold mb-3">Project Hub</h3>
-              <ul className="space-y-1 text-xs text-muted-foreground">
-                <li><Link href="/docs" className="hover:text-foreground">Documentation</Link></li>
-                <li><Link href="/docs/whitepaper" className="hover:text-foreground">White Paper</Link></li>
-                <li>
-                  <a href="https://github.com/mrj0nesmtl/sheltr-ai" target="_blank" className="hover:text-foreground flex items-center">
-                    <Github className="h-3 w-3 mr-1" /> GitHub
-                  </a>
-                </li>
-              </ul>
-            </div>
-            
-            {/* Community Section */}
-            <div>
-              <h3 className="text-sm font-semibold mb-3">Community</h3>
-              <ul className="space-y-1 text-xs text-muted-foreground">
-                <li><Link href="/angels" className="hover:text-foreground">Angels</Link></li>
-                <li><Link href="/blog" className="hover:text-foreground">Blog</Link></li>
-                <li>
-                  <a href="https://bsky.app/profile/sheltrops.bsky.social" target="_blank" className="hover:text-foreground">
-                    BlueSky
-                  </a>
-                </li>
-              </ul>
-            </div>
-            
-            {/* Support Section */}
-            <div>
-              <h3 className="text-sm font-semibold mb-3">Support</h3>
-              <ul className="space-y-1 text-xs text-muted-foreground">
-                <li><Link href="/terms" className="hover:text-foreground">Terms of Service</Link></li>
-                <li><Link href="/privacy" className="hover:text-foreground">Privacy Policy</Link></li>
-                <li><Link href="/contact" className="hover:text-foreground">Contact</Link></li>
-              </ul>
+            {/* Social Icons */}
+            <div className="flex items-center gap-3">
+              <a 
+                href="https://github.com/mrj0nesmtl/sheltr-ai" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="p-2 rounded-md bg-muted/50 hover:bg-muted transition-colors"
+                aria-label="GitHub"
+              >
+                <Github className="h-4 w-4" />
+              </a>
+              <a 
+                href="https://bsky.app/profile/sheltrops.bsky.social" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="p-2 rounded-md bg-muted/50 hover:bg-muted transition-colors"
+                aria-label="BlueSky"
+              >
+                <MessageCircle className="h-4 w-4" />
+              </a>
+              <a 
+                href="https://x.com/sheltrops" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="p-2 rounded-md bg-muted/50 hover:bg-muted transition-colors"
+                aria-label="X (Twitter)"
+              >
+                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                </svg>
+              </a>
             </div>
           </div>
 
-          {/* Spotify Widget - Right Side Desktop */}
-          <div className="hidden lg:block lg:w-64 lg:flex-shrink-0">
-            <div className="p-4 bg-muted/50 rounded-lg border">
-              <div className="flex items-center gap-2 mb-3">
-                <img 
-                  src="/Spotify_Primary_Logo_RGB_Green.png" 
-                  alt="Spotify" 
-                  className="h-5 w-5"
-                />
-                <span className="text-sm font-medium">Featured on Spotify</span>
+          {/* Center - Main Navigation */}
+          <div className="lg:w-2/3">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
+              {/* Platform & Technology Combined */}
+              <div>
+                <h3 className="text-sm font-semibold mb-3">Platform</h3>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li><Link href="/about" className="hover:text-foreground transition-colors">About</Link></li>
+                  <li><Link href="/solutions" className="hover:text-foreground transition-colors">Solutions</Link></li>
+                  <li><Link href="/impact" className="hover:text-foreground transition-colors">Impact</Link></li>
+                  <li><Link href="/tokenomics" className="hover:text-foreground transition-colors">Token</Link></li>
+                  <li><Link href="/scan-give" className="hover:text-foreground transition-colors">Scan</Link></li>
+                  <li><Link href="/pods" className="hover:text-foreground transition-colors">Pods</Link></li>
+                  <li><Link href="/pods/mobi" className="hover:text-foreground transition-colors">Mobi</Link></li>
+                </ul>
               </div>
-              <div className="text-xs text-muted-foreground mb-3">
-                Hacking Homelessness • Tomes of Arcana
+              
+              {/* Resources */}
+              <div>
+                <h3 className="text-sm font-semibold mb-3">Resources</h3>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li><Link href="/docs" className="hover:text-foreground transition-colors">Documentation</Link></li>
+                  <li><Link href="/docs/whitepaper" className="hover:text-foreground transition-colors">White Paper</Link></li>
+                  <li><Link href="/angels" className="hover:text-foreground transition-colors">Angels</Link></li>
+                  <li><Link href="/blog" className="hover:text-foreground transition-colors">Blog</Link></li>
+                </ul>
               </div>
-              <a 
-                href="https://open.spotify.com/episode/2TZquGVy7vT6yZMgDraMYe?si=rTIdTJ8MSW687rKZBbFJ6Q" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-xs text-primary hover:text-primary/80 transition-colors bg-primary/10 hover:bg-primary/20 px-3 py-2 rounded-md"
-              >
-                <img 
-                  src="/Spotify_Primary_Logo_RGB_Green.png" 
-                  alt="Spotify" 
-                  className="h-3 w-3"
-                />
-                Listen on Spotify
-              </a>
+              
+              {/* Support */}
+              <div>
+                <h3 className="text-sm font-semibold mb-3">Support</h3>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li><Link href="/contact" className="hover:text-foreground transition-colors">Contact</Link></li>
+                  <li><Link href="/terms" className="hover:text-foreground transition-colors">Terms</Link></li>
+                  <li><Link href="/privacy" className="hover:text-foreground transition-colors">Privacy</Link></li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Mobile Spotify Widget */}
-        <div className="lg:hidden mt-6 pt-6 border-t">
+        {/* Spotify Widget - Full Width */}
+        <div className="mt-8 pt-6 border-t">
           <div className="max-w-sm mx-auto p-4 bg-muted/50 rounded-lg border">
-            <div className="flex items-center gap-2 mb-3">
+            <div className="flex items-center gap-2 mb-3 justify-center">
               <img 
                 src="/Spotify_Primary_Logo_RGB_Green.png" 
                 alt="Spotify" 

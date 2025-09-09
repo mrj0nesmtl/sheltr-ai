@@ -58,28 +58,12 @@ export default function OrganizationsPage() {
           <div className="absolute inset-0 bg-black/50 dark:bg-black/70" />
         </div>
         
-        {/* Background Pattern Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 to-purple-900/20" />
-        <div className="absolute inset-0">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-blue-400/10 rounded-full blur-3xl" />
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-400/10 rounded-full blur-3xl" />
-        </div>
         
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <div className="flex justify-center mb-6">
-              <div className="relative">
-                <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto shadow-lg">
-                  <Building2 className="h-12 w-12 text-white" />
-                </div>
-                <div className="absolute -top-2 -right-2 w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-                  <Zap className="h-4 w-4 text-white" />
-                </div>
-              </div>
-            </div>
             
             <div className="flex justify-center mb-6">
-              <Badge className="bg-gradient-to-r from-blue-600 to-purple-600 text-white border-0 px-4 py-2">
+              <Badge variant="outline" className="border-2 border-white text-white px-4 py-2">
                 <Star className="h-4 w-4 mr-2" />
                 Launching Soon
               </Badge>
@@ -100,22 +84,6 @@ export default function OrganizationsPage() {
             </p>
             
             </div>
-          
-          {/* CTA Buttons */}
-          <div className="flex flex-col lg:flex-row gap-4 justify-center items-center">
-            <Link href="/solutions/organizations/hmis-guide">
-              <Button variant="outline" size="lg" className="border-2 border-purple-200 hover:border-purple-300 text-purple-700 hover:text-purple-800 hover:bg-purple-50 px-8">
-                <Brain className="h-5 w-5 mr-2" />
-                HMIS & SHELTR
-              </Button>
-            </Link>
-            <Link href="/solutions/organizations/case-study">
-              <Button variant="outline" size="lg" className="border-2 border-gray-200 hover:border-gray-300 px-8">
-                <FileText className="h-5 w-5 mr-2" />
-                View Case Study
-              </Button>
-            </Link>
-          </div>
         </div>
       </section>
 
@@ -265,6 +233,22 @@ export default function OrganizationsPage() {
                 </div>
               </CardContent>
             </Card>
+          </div>
+          
+          {/* CTA Buttons */}
+          <div className="flex flex-col lg:flex-row gap-4 justify-center items-center mt-12">
+            <Link href="/solutions/organizations/hmis-guide">
+              <Button variant="outline" size="lg" className="bg-transparent border-2 border-purple-400 text-purple-400 hover:bg-purple-400 hover:text-white transition-all duration-300 px-8">
+                <Brain className="h-5 w-5 mr-2" />
+                HMIS & SHELTR
+              </Button>
+            </Link>
+            <Link href="/solutions/organizations/case-study">
+              <Button variant="outline" size="lg" className="bg-transparent border-2 border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white transition-all duration-300 px-8">
+                <FileText className="h-5 w-5 mr-2" />
+                View Case Study
+              </Button>
+            </Link>
           </div>
           
         </div>

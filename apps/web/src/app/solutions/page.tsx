@@ -141,12 +141,11 @@ export default function SolutionsPage() {
               <p className="text-xl text-muted-foreground max-w-4xl mx-auto mb-6">
                 SHELTR operates as a unified ecosystem where every stakeholder contributes to and benefits from a revolutionary approach to addressing homelessness. Our platform transforms traditional charity into strategic investment through the SmartFund™ allocation system.
               </p>
-              <div className="bg-muted/30 rounded-lg p-6 max-w-4xl mx-auto">
-                <h3 className="text-lg font-semibold mb-4 text-primary">SmartFund™ Investment Philosophy</h3>
-                <p className="text-base text-muted-foreground">
-                  Every donation is strategically distributed: <strong>80% directly empowers participants</strong> for immediate needs, <strong>15% funds housing solutions</strong> through the <Link href="/pods" className="text-blue-600 hover:text-blue-800 font-semibold underline">PODS</Link> deployment, and <strong>5% sustains platform operations</strong>. This creates a self-reinforcing cycle where immediate relief generates lasting systemic change, transforming charity into measurable investment with compound returns for the entire community.
-                </p>
-              </div>
+               <div className="bg-muted/30 rounded-lg p-6 max-w-4xl mx-auto">
+                 <p className="text-base text-muted-foreground">
+                   Every donation is strategically distributed: <strong>80% directly empowers participants</strong> for immediate needs, <strong>15% funds housing solutions</strong> through the <Link href="/pods" className="text-blue-600 hover:text-blue-800 font-semibold underline">PODS</Link> deployment, and <strong>5% sustains platform operations</strong>. This creates a self-reinforcing cycle where immediate relief generates lasting systemic change, transforming charity into measurable investment with compound returns for the entire community.
+                 </p>
+               </div>
             </div>
 
           <div className="grid md:grid-cols-2 gap-8">
@@ -158,7 +157,7 @@ export default function SolutionsPage() {
                 </div>
                 <CardTitle className="text-2xl">Participants</CardTitle>
                 <CardDescription className="text-lg">
-                  Empowered through direct financial support, PODS access, and pathway to permanent housing
+                  Empowered through direct financial support, PODS and MOBI access, and pathway to temporary, mobile housing
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">

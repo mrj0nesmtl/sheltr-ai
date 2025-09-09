@@ -365,9 +365,15 @@ export default function ScanGivePage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">SmartFund™ Distribution</h2>
-            <p className="text-xl text-muted-foreground">
+            <p className="text-xl text-muted-foreground mb-6">
               Every donation is automatically split to maximize impact
             </p>
+            <div className="bg-muted/30 rounded-lg p-6 max-w-4xl mx-auto">
+              <h3 className="text-lg font-semibold mb-4 text-primary">SmartFund™ Investment Philosophy</h3>
+              <p className="text-base text-muted-foreground">
+                Every donation is strategically distributed: <strong>80% directly empowers participants</strong> for immediate needs, <strong>15% funds housing solutions</strong> through the <Link href="/pods" className="text-blue-600 hover:text-blue-800 font-semibold underline">PODS</Link> deployment, and <strong>5% sustains platform operations</strong>. This creates a self-reinforcing cycle where immediate relief generates lasting systemic change, transforming charity into measurable investment with compound returns for the entire community.
+              </p>
+            </div>
           </div>
 
           <Card className="max-w-2xl mx-auto">

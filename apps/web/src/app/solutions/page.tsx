@@ -136,13 +136,18 @@ export default function SolutionsPage() {
       {/* Solutions Grid */}
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4">How SHELTR Works</h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              The platform creates value for every Participant in the ecosystem, including stakeholders  
-              from frontline organizations to individual donors.
-            </p>
-          </div>
+            <div className="text-center mb-16">
+              <h2 className="text-3xl font-bold mb-4">How SHELTR Works</h2>
+              <p className="text-xl text-muted-foreground max-w-4xl mx-auto mb-6">
+                SHELTR operates as a unified ecosystem where every stakeholder contributes to and benefits from a revolutionary approach to addressing homelessness. Our platform transforms traditional charity into strategic investment through the SmartFund™ allocation system.
+              </p>
+              <div className="bg-muted/30 rounded-lg p-6 max-w-4xl mx-auto">
+                <h3 className="text-lg font-semibold mb-4 text-primary">SmartFund™ Investment Philosophy</h3>
+                <p className="text-base text-muted-foreground">
+                  Every donation is strategically distributed: <strong>80% directly empowers participants</strong> for immediate needs, <strong>15% builds long-term housing solutions</strong> through our emergency PODS and permanent housing fund, and <strong>5% sustains platform operations</strong>. This creates a self-reinforcing cycle where immediate relief generates lasting systemic change, transforming charity into measurable investment with compound returns for the entire community.
+                </p>
+              </div>
+            </div>
 
           <div className="grid md:grid-cols-2 gap-8">
             {/* Participants (First) */}
@@ -153,7 +158,7 @@ export default function SolutionsPage() {
                 </div>
                 <CardTitle className="text-2xl">Participants</CardTitle>
                 <CardDescription className="text-lg">
-                  Dignified support with direct access to resources
+                  Empowered through direct financial support, PODS access, and pathway to permanent housing
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -199,7 +204,7 @@ export default function SolutionsPage() {
                 </div>
                 <CardTitle className="text-2xl">Donors</CardTitle>
                 <CardDescription className="text-lg">
-                  Transparent giving with measurable impact
+                  Strategic investment through SmartFund™ with transparent, measurable community returns
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -245,7 +250,7 @@ export default function SolutionsPage() {
                 </div>
                 <CardTitle className="text-2xl">Shelters</CardTitle>
                 <CardDescription className="text-lg">
-                  Streamlined operations and enhanced participant support
+                  Operational efficiency with integrated PODS deployment and SmartFund™ resource optimization
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -291,7 +296,7 @@ export default function SolutionsPage() {
                 </div>
                 <CardTitle className="text-2xl">Government</CardTitle>
                 <CardDescription className="text-lg">
-                  Data-driven policy making and budget transparency
+                  Evidence-based policy development with measurable ROI through SmartFund™ impact metrics
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -374,7 +379,7 @@ export default function SolutionsPage() {
       {/* Call to Action */}
       <section className="py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-6">Ready to Transform How We Address the Unhoused?</h2>
+          <h2 className="text-3xl font-bold mb-6">Ready to look at how we address the unhoused?</h2>
           <p className="text-xl text-muted-foreground mb-8">
             Create lasting change.
           </p>

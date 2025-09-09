@@ -64,11 +64,10 @@ export default function ParticipantsPage() {
             For Participants
           </Badge>
           <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight">
-            The Key to Stability is Here
+            The Key to Stability
           </h1>
           <p className="text-xl md:text-2xl font-light mb-8 max-w-3xl mx-auto">
-            Direct access to resources, financial support, and a pathway to emergency housing. 
-            Your journey and dignity respected, and your privacy protected.
+          Your journey and dignity respected, and your privacy protected.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -183,7 +182,7 @@ export default function ParticipantsPage() {
                 </div>
                 <div className="mt-6">
                   <Link href="/pods">
-                    <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                    <Button variant="outline" className="w-full bg-transparent border-2 border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white transition-all duration-300">
                       <Building2 className="h-4 w-4 mr-2" />
                       Explore PODS
                     </Button>
@@ -230,7 +229,7 @@ export default function ParticipantsPage() {
                 </div>
                 <div className="mt-6">
                   <Link href="/pods/mobi">
-                    <Button className="w-full bg-orange-600 hover:bg-orange-700">
+                    <Button variant="outline" className="w-full bg-transparent border-2 border-orange-400 text-orange-400 hover:bg-orange-400 hover:text-white transition-all duration-300">
                       <Bike className="h-4 w-4 mr-2" />
                       Explore MOBI
                     </Button>
@@ -245,29 +244,29 @@ export default function ParticipantsPage() {
             <h3 className="text-2xl font-bold text-center mb-6">How Your Donations Create Housing Solutions</h3>
             <div className="grid md:grid-cols-4 gap-6">
               <div className="text-center">
-                <div className="w-16 h-16 bg-green-600 text-white rounded-full flex items-center justify-center mx-auto mb-4">
-                  <DollarSign className="h-8 w-8" />
+                <div className="w-16 h-16 border-2 border-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <DollarSign className="h-8 w-8 text-green-500" />
                 </div>
                 <h4 className="font-semibold mb-2">Donations Received</h4>
                 <p className="text-sm text-muted-foreground">80% direct support, 15% housing fund</p>
               </div>
               <div className="text-center">
-                <div className="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Building2 className="h-8 w-8" />
+                <div className="w-16 h-16 border-2 border-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Building2 className="h-8 w-8 text-blue-500" />
                 </div>
                 <h4 className="font-semibold mb-2">POD Deployment</h4>
                 <p className="text-sm text-muted-foreground">Housing funds trigger emergency shelter</p>
               </div>
               <div className="text-center">
-                <div className="w-16 h-16 bg-orange-600 text-white rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Bike className="h-8 w-8" />
+                <div className="w-16 h-16 border-2 border-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Bike className="h-8 w-8 text-orange-500" />
                 </div>
                 <h4 className="font-semibold mb-2">MOBI Transport</h4>
                 <p className="text-sm text-muted-foreground">Delivery and positioning of your POD</p>
               </div>
               <div className="text-center">
-                <div className="w-16 h-16 bg-purple-600 text-white rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Home className="h-8 w-8" />
+                <div className="w-16 h-16 border-2 border-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Home className="h-8 w-8 text-purple-500" />
                 </div>
                 <h4 className="font-semibold mb-2">Stable Housing</h4>
                 <p className="text-sm text-muted-foreground">Pathway to permanent accommodation</p>

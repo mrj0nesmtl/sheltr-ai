@@ -258,7 +258,7 @@ export default function ScanGivePage() {
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <Badge variant="secondary" className="mb-4 bg-white/20 text-white border-white/30 backdrop-blur-sm">Instant Impact</Badge>
           <h1 className="text-4xl font-bold mb-6 text-white">
-            Scan & Give in Seconds
+            Scan & Give in <span className="text-blue-400">Seconds</span>
           </h1>
           <p className="text-xl text-gray-200 mb-8 max-w-3xl mx-auto">
             Put money directly into the hands of those who need it most.
@@ -267,6 +267,8 @@ export default function ScanGivePage() {
             size="lg" 
             onClick={handleTryDemo}
             disabled={loading}
+            variant="outline"
+            className="bg-transparent border-2 border-blue-400 text-white hover:bg-blue-400 hover:text-black transition-all duration-300"
           >
             <QrCode className="h-4 w-4 mr-2" />
             {loading ? 'Generating...' : 'Try Demo QR Code'}
@@ -390,7 +392,7 @@ export default function ScanGivePage() {
                 <div className="flex items-center justify-between p-4 bg-gray-500/10 rounded-lg border border-gray-500/20">
                   <div>
                     <div className="font-semibold text-gray-700 dark:text-gray-400">Shelter Operations</div>
-                    <div className="text-sm text-muted-foreground">In-house Platform maintenance & security</div>
+                    <div className="text-sm text-muted-foreground">Affiliate Platform Dividend</div>
                   </div>
                   <div className="text-2xl font-bold text-gray-700 dark:text-gray-400">5%</div>
                 </div>
@@ -410,7 +412,7 @@ export default function ScanGivePage() {
               </Badge>
               <h2 className="text-3xl font-bold mb-4">Track Your Impact</h2>
               <p className="text-xl text-muted-foreground">
-                Log in to connect your donations to your SHELTR account and see your impact metrics in real-time.
+                Log in to connect your donations to your SHELTR account.
               </p>
             </div>
 
@@ -447,10 +449,10 @@ export default function ScanGivePage() {
                 <CardHeader>
                   <CardTitle className="flex items-center">
                     <Heart className="h-5 w-5 mr-2 text-purple-600" />
-                    SHELTR Rewards
+                    SHELTR Tokens
                   </CardTitle>
                   <CardDescription>
-                    Earn SHELTR tokens and build your blockchain giving portfolio
+                    Build your blockchain giving portfolio
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -474,9 +476,9 @@ export default function ScanGivePage() {
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/login">
-                <Button size="lg" className="bg-purple-600 hover:bg-purple-700">
+                <Button size="lg" variant="outline" className="bg-transparent border-2 border-purple-400 text-purple-400 hover:bg-purple-400 hover:text-white transition-all duration-300">
                   <LogIn className="h-4 w-4 mr-2" />
-                  Sign In to Track Donations
+                  Sign In
                 </Button>
               </Link>
               <Link href="/register">
@@ -537,7 +539,7 @@ export default function ScanGivePage() {
           <Badge variant="secondary" className="mb-4 bg-orange-500/10 text-orange-600 dark:text-orange-400 border-orange-500/20">
             Coming Soon
           </Badge>
-          <h2 className="text-3xl font-bold mb-6">SHELTR Mobile App</h2>
+          <h2 className="text-3xl font-bold mb-6">Mobile Platfom</h2>
           <p className="text-xl text-muted-foreground mb-8">
             Scan QR codes, make instant donations, and track your impact - all from your mobile device.
           </p>
@@ -549,7 +551,7 @@ export default function ScanGivePage() {
                 size="lg" 
                 variant="outline" 
                 disabled
-                className="cursor-not-allowed opacity-60 bg-black text-white hover:bg-black border-black dark:bg-white dark:text-black dark:hover:bg-white dark:border-white"
+                className="cursor-not-allowed opacity-60"
               >
                 <svg className="h-6 w-6 mr-3" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>

@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Home, Building2, Users, Heart, DollarSign, BarChart3, Shield, QrCode, Handshake, MapPin, UserCheck, LogIn, Menu, X, ArrowRight } from 'lucide-react';
+import { Home, Building2, Users, Heart, DollarSign, BarChart3, Shield, QrCode, Handshake, MapPin, UserCheck, LogIn, Menu, X, BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -144,7 +144,7 @@ export default function SolutionsPage() {
               <div className="bg-muted/30 rounded-lg p-6 max-w-4xl mx-auto">
                 <h3 className="text-lg font-semibold mb-4 text-primary">SmartFund™ Investment Philosophy</h3>
                 <p className="text-base text-muted-foreground">
-                  Every donation is strategically distributed: <strong>80% directly empowers participants</strong> for immediate needs, <strong>15% builds long-term housing solutions</strong> through our emergency PODS and permanent housing fund, and <strong>5% sustains platform operations</strong>. This creates a self-reinforcing cycle where immediate relief generates lasting systemic change, transforming charity into measurable investment with compound returns for the entire community.
+                  Every donation is strategically distributed: <strong>80% directly empowers participants</strong> for immediate needs, <strong>15% funds housing solutions</strong> through the <Link href="/pods" className="text-blue-600 hover:text-blue-800 font-semibold underline">PODS</Link> deployment, and <strong>5% sustains platform operations</strong>. This creates a self-reinforcing cycle where immediate relief generates lasting systemic change, transforming charity into measurable investment with compound returns for the entire community.
                 </p>
               </div>
             </div>
@@ -338,39 +338,47 @@ export default function SolutionsPage() {
       </section>
 
       {/* Platform Benefits */}
-      <section className="py-20 bg-primary/5">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-6">Why Trust SHELTR?</h2>
+      <section className="relative py-20 overflow-hidden">
+        {/* Background Image with Blur */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat blur-sm scale-110" 
+          style={{backgroundImage: 'url(/images/sheltr_units/pods-1.jpeg)'}}
+        />
+        {/* Dark Overlay */}
+        <div className="absolute inset-0 bg-black/70" />
+        
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl font-bold mb-12 text-white">Why Trust SHELTR?</h2>
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="space-y-4">
+            <div className="bg-black/40 backdrop-blur-sm border border-white/20 rounded-xl p-6 space-y-4 hover:bg-black/50 transition-all duration-300">
               <div className="relative w-20 h-20 mx-auto">
                 <div className="w-full h-full bg-gradient-to-br from-red-500 to-pink-600 rounded-full flex items-center justify-center shadow-lg ring-4 ring-red-500/20">
                   <Heart className="h-10 w-10 text-white" />
                 </div>
                 <div className="absolute -inset-1 bg-gradient-to-br from-red-500 to-pink-600 rounded-full opacity-20 blur-sm"></div>
               </div>
-              <h3 className="text-xl font-semibold">Human-Centered</h3>
-              <p className="text-muted-foreground">Built with dignity and respect for all participants in the system</p>
+              <h3 className="text-xl font-semibold text-white">Human-Centered</h3>
+              <p className="text-gray-200">Built with dignity and respect for all participants in the system</p>
             </div>
-            <div className="space-y-4">
+            <div className="bg-black/40 backdrop-blur-sm border border-white/20 rounded-xl p-6 space-y-4 hover:bg-black/50 transition-all duration-300">
               <div className="relative w-20 h-20 mx-auto">
                 <div className="w-full h-full bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg ring-4 ring-blue-500/20">
                   <Shield className="h-10 w-10 text-white" />
                 </div>
                 <div className="absolute -inset-1 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full opacity-20 blur-sm"></div>
               </div>
-              <h3 className="text-xl font-semibold">100% Transparent</h3>
-              <p className="text-muted-foreground">Blockchain tech ensures every transaction is visible and verified</p>
+              <h3 className="text-xl font-semibold text-white">100% Transparent</h3>
+              <p className="text-gray-200">Blockchain tech ensures every transaction is visible and verified</p>
             </div>
-            <div className="space-y-4">
+            <div className="bg-black/40 backdrop-blur-sm border border-white/20 rounded-xl p-6 space-y-4 hover:bg-black/50 transition-all duration-300">
               <div className="relative w-20 h-20 mx-auto">
                 <div className="w-full h-full bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center shadow-lg ring-4 ring-green-500/20">
                   <BarChart3 className="h-10 w-10 text-white" />
                 </div>
                 <div className="absolute -inset-1 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full opacity-20 blur-sm"></div>
               </div>
-              <h3 className="text-xl font-semibold">Data-Driven</h3>
-              <p className="text-muted-foreground">Real-time analytics help optimize resource allocation and impact</p>
+              <h3 className="text-xl font-semibold text-white">Data-Driven</h3>
+              <p className="text-gray-200">Real-time analytics help optimize resource allocation and impact</p>
             </div>
           </div>
         </div>
@@ -384,23 +392,11 @@ export default function SolutionsPage() {
             Create lasting change.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/solutions/organizations">
-              <Button size="lg">
-                <Building2 className="h-4 w-4 mr-2" />
-                Organization Sign Up
-              </Button>
-            </Link>
-            <Link href="/solutions/donors">
-              <Button variant="outline" size="lg">
-                <Heart className="h-4 w-4 mr-2" />
-                Individual Donor
-              </Button>
-            </Link>
-            <Link href="/solutions/government">
-              <Button variant="outline" size="lg">
-                <MapPin className="h-4 w-4 mr-2" />
-                Government Partnership
+          <div className="flex justify-center">
+            <Link href="/docs">
+              <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white">
+                <BookOpen className="h-4 w-4 mr-2" />
+                Learn More
               </Button>
             </Link>
           </div>

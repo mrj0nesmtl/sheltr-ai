@@ -98,16 +98,12 @@ export default function RevenueModelPage() {
       <section className="relative py-16 bg-cover bg-center bg-no-repeat" style={{backgroundImage: 'url(/backgrounds/hero-bg.jpg)'}}>
         <div className="absolute inset-0 bg-black/40" />
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="w-20 h-20 bg-gradient-to-r from-green-500 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-6">
-            <DollarSign className="h-10 w-10 text-white" />
-          </div>
-          <Badge variant="secondary" className="mb-4 bg-gradient-to-r from-green-500/10 to-blue-500/10 border-green-500/20">Sustainable Economics</Badge>
+          <Badge variant="secondary" className="mb-4 bg-gradient-to-r from-green-500/10 to-blue-500/10 border-green-500/20">Economics</Badge>
           <h1 className="text-4xl font-bold mb-6 text-white">
-            Sustainable Revenue Model
+            The Sustainable  Model
           </h1>
           <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
-            Multiple revenue streams ensure platform growth while protecting participants. 
-            Discover how SHELTR's innovative economics create lasting impact through DeFi yields, 
+            Innovative economics can create lasting impact through DeFi yields, 
             marketplace fees, and strategic partnerships.
           </p>
         </div>
@@ -117,8 +113,8 @@ export default function RevenueModelPage() {
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4">Revenue Streams Breakdown</h2>
-            <p className="text-xl text-muted-foreground">Diversified income sources that fuel platform growth and participant protection</p>
+            <h2 className="text-3xl font-bold mb-4">Revenue Breakdown</h2>
+            <p className="text-xl text-muted-foreground">Diversified income sources fuel platform growth and participant protection</p>
           </div>
 
           <div className="grid lg:grid-cols-2 gap-8 mb-12">
@@ -139,7 +135,7 @@ export default function RevenueModelPage() {
                 <div className="space-y-3">
                   <div className="flex items-center space-x-3">
                     <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-400" />
-                    <span>No fees on SHELTR-S transactions</span>
+                    <span>No fees on transactions</span>
                   </div>
                   <div className="flex items-center space-x-3">
                     <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-400" />

@@ -125,7 +125,7 @@ export default function SolutionsPage() {
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <Badge variant="secondary" className="mb-4">Better to Solve</Badge>
           <h1 className="text-5xl font-bold mb-6 text-white">
-            One Platform, Every Stakeholder
+            One Platform, <span className="text-blue-400">Every</span> Stakeholder
           </h1>
           <p className="text-xl text-gray-200 mb-8 max-w-3xl mx-auto">
             A unified open-source platform that ensures transparency, dignity, and maximum impact.

@@ -254,10 +254,6 @@ export default function HomePage() {
               <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
                 Better to <span className="text-blue-400">Solve</span> than Manage
               </h1>
-              <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto">
-                SHELTR creates a scalable system that amplifies every act of kindness 
-                and ensure lasting, measurable impact for everyone in the ecosystem.
-              </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/scan-give">
                   <Button size="lg" className="w-full sm:w-auto text-lg px-8 py-4 bg-green-600 hover:bg-green-700">
@@ -278,6 +274,12 @@ export default function HomePage() {
         {/* Feature Cards Section - 6 Cards in 2x3 Grid */}
         <section className="py-20 bg-background">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <p className="text-xl md:text-2xl text-muted-foreground max-w-4xl mx-auto">
+                SHELTR creates a scalable system that amplifies every act of kindness 
+                and ensure lasting, measurable impact for everyone in the ecosystem.
+              </p>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               
               {/* Direct Impact */}

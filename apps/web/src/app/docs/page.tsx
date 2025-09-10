@@ -354,7 +354,7 @@ export default function DocsPage() {
               <Book className="h-16 w-16 text-white/90" />
             </div>
             <h1 className="text-5xl font-bold mb-6 text-white">
-              I am Documentation.
+              Documentation.
             </h1>
             <p className="text-xl mb-8 text-white/90">
               Built on modern cloud infrastructure.

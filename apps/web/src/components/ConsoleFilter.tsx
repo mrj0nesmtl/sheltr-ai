@@ -14,6 +14,22 @@ export default function ConsoleFilter() {
       const originalError = console.error;
       const originalWarn = console.warn;
       
+      // Handle uncaught promise rejections
+      const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
+        const error = event.reason;
+        const message = error?.message || error?.toString() || 'Unknown error';
+        
+        // Suppress Firebase connection errors and auth errors during development
+        if (message.includes('Could not establish connection') ||
+            message.includes('auth/network-request-failed') ||
+            message.includes('FirebaseError')) {
+          event.preventDefault();
+          return;
+        }
+      };
+      
+      window.addEventListener('unhandledrejection', handleUnhandledRejection);
+      
       // Override console.error to filter .txt 404s
       console.error = (...args: any[]) => {
         const message = args.join(' ');
@@ -26,7 +42,9 @@ export default function ConsoleFilter() {
         // Suppress other noisy Next.js hydration warnings
         if (message.includes('Warning: Extra attributes from the server') ||
             message.includes('Warning: Prop `') ||
-            message.includes('hydration')) {
+            message.includes('hydration') ||
+            message.includes('Could not establish connection') ||
+            message.includes('Uncaught (in promise)')) {
           return;
         }
         
@@ -52,6 +70,7 @@ export default function ConsoleFilter() {
       return () => {
         console.error = originalError;
         console.warn = originalWarn;
+        window.removeEventListener('unhandledrejection', handleUnhandledRejection);
       };
     }
   }, []);

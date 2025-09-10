@@ -104,6 +104,19 @@ service firebase.storage {
                             request.time < resource.timeCreated + duration.value(1, 'h');
     }
 
+    // =================================================================
+    // GALLERY IMAGES - Public gallery images
+    // Publicly readable, admin-writable
+    // =================================================================
+    match /gallery/{document=**} {
+      // Read access: Anyone (public gallery images)
+      allow read: if true;
+      
+      // Write access: Super Admin and Platform Admin only
+      allow write: if isSuperAdmin() || 
+                      (request.auth != null && getUserData().role == 'platform_admin');
+    }
+
     // Default deny all other paths
     match /{allPaths=**} {
       allow read, write: if false;

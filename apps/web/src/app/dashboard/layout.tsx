@@ -30,7 +30,8 @@ import {
   Brain,
   MessageSquare,
   Target,
-  Mail
+  Mail,
+  Camera
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -134,6 +135,12 @@ const getNavigationItems = (userRole: string) => {
         description: 'Manage contact form submissions and inquiries'
       },
       {
+        title: 'Gallery Management',
+        href: '/dashboard/gallery',
+        icon: Camera,
+        description: 'Manage public gallery images and content'
+      },
+      {
         title: 'Knowledge Base',
         href: '/dashboard/knowledge',
         icon: Brain,
@@ -217,6 +224,12 @@ const getNavigationItems = (userRole: string) => {
         href: '/dashboard/users',
         icon: Users,
         description: 'Manage user accounts and roles (except Super Admins)'
+      },
+      {
+        title: 'Gallery Management',
+        href: '/dashboard/gallery',
+        icon: Camera,
+        description: 'Manage public gallery images and content'
       },
       {
         title: 'Knowledge Base',

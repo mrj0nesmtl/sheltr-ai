@@ -49,6 +49,11 @@ Complete platform introduction covering mission, vision, documentation strategy,
 ### 📁 technical/
 - [**🔗 Blockchain Integration**](02-architecture/tokenomics/blockchain.md) - Blockchain technical details
 
+### 📁 ecosystem/
+- [**🏠 PODS System**](02-architecture/ecosystem/pods-system.md) - Portable emergency housing units with full technical specifications
+- [**🚴 MOBI System**](02-architecture/ecosystem/mobi-system.md) - Electric mountain bike logistics and transportation platform
+- [**🚁 Drone System**](02-architecture/ecosystem/drone-system.md) - Emergency supply delivery and aerial logistics platform
+
 ### 📁 tokenomics/
 - [**🪙 SHELTR Tokenomics**](02-architecture/tokenomics/sheltr-tokenomics.md) - Token economics and SmartFund™
 - [**📄 Official Whitepaper**](02-architecture/tokenomics/whitepaper_final.md) - Complete platform whitepaper
@@ -234,9 +239,9 @@ Supplementary resources, templates, and guidelines for consistent development an
 | Category | Count | Status | Cloud Sync |
 |----------|--------|--------|------------|
 | **📁 Main Directories** | 10 | ✅ Complete | ✅ Synced |
-| **📄 Documentation Files** | 26+ | ✅ Active | ✅ Synced |
+| **📄 Documentation Files** | 29+ | ✅ Active | ✅ Synced |
 | **📋 README Files** | 10 | ✅ Complete | ✅ Synced |
-| **🗂️ Subdirectories** | 5 | ✅ Organized | ✅ Synced |
+| **🗂️ Subdirectories** | 6 | ✅ Organized | ✅ Synced |
 | **📚 Legacy Archive** | 1 | 📦 Archived | ✅ Consolidated |
 
 ---

@@ -182,6 +182,26 @@ Every donation to you also contributes to long-term solutions:
 - **Used for permanent housing solutions** in your area
 - **You may be eligible** for housing assistance
 
+### SHELTR Ecosystem Components
+
+#### 🏠 PODS (Portable Emergency Housing)
+- **Emergency shelter units** that can be deployed rapidly
+- **Fully equipped** with power, water, and climate control
+- **Secure and dignified** temporary housing solution
+- **Available for** emergency situations and transitional periods
+
+#### 🚴 MOBI (Electric Transportation)
+- **Electric mountain bikes** for transportation needs
+- **Job interview transportation** and essential services access
+- **Mobile service delivery** to your location
+- **Emergency communication** and support services
+
+#### 🚁 Drone Delivery System
+- **Emergency supply delivery** within 15-30 minutes
+- **Medical supplies, food, and essentials** delivered directly
+- **GPS-precise delivery** to your location
+- **Available 24/7** for emergency situations
+
 ### Eligibility for Housing Support
 - **Active participant** for 6+ months
 - **Demonstrated progress** toward stability
@@ -189,6 +209,7 @@ Every donation to you also contributes to long-term solutions:
 - **Available housing units** in your area
 
 ### Housing Support Types
+- **Emergency PODS deployment** for immediate shelter
 - **First month's rent** and deposit assistance
 - **Temporary housing** placement
 - **Shared housing** arrangements

@@ -37,34 +37,32 @@ export default function PodsBuildoutPage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="/images/sheltr_units/sleeper-2.jpeg"
-            alt="SHELTR POD Technical Buildout"
-            fill
-            className="object-cover"
-            priority
-          />
-          <div className="absolute inset-0 bg-black/60" />
-        </div>
+      <section className="relative py-24 overflow-hidden">
+        {/* Background Image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat blur-[2px] scale-105" 
+          style={{backgroundImage: 'url(/images/sheltr_units/sleeper-2.jpeg)'}}
+        />
+        {/* Dark Overlay */}
+        <div className="absolute inset-0 bg-black/60" />
         
-        {/* Back Navigation - positioned absolutely */}
-        <div className="absolute top-8 left-8 z-10">
-          <Link href="/pods">
-            <Button variant="ghost" size="sm" className="text-white border-white hover:bg-white hover:text-black">
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to PODS
-            </Button>
-          </Link>
-        </div>
-        
-        <div className="relative z-10 text-center text-white px-4">
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight">
-            POD Buildout
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="mb-8">
+            <Link href="/pods">
+              <Button variant="ghost" size="sm" className="text-white hover:bg-white/20 mb-4">
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Back to PODS
+              </Button>
+            </Link>
+          </div>
+          
+          <h1 className="text-5xl md:text-6xl font-bold mb-6 text-white">
+            Buildout
           </h1>
-          <p className="text-2xl md:text-3xl font-light mb-8 max-w-3xl mx-auto">
-            Complete technical specifications and buildout guide for SHELTR mobile micro-housing units
+          
+          <p className="text-xl text-gray-200 mb-8 max-w-3xl mx-auto">
+            Complete technical specifications and buildout guide for SHELTR mobile micro-housing units. 
+            Professional fabrication documentation for manufacturers and partners.
           </p>
         </div>
       </section>

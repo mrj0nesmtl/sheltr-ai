@@ -1,4 +1,4 @@
-# 🏗️ Technical Architecture
+# 👨🏻‍🔧 Technical Architecture
 
 This section contains detailed technical architecture documentation for the SHELTR platform.
 
@@ -8,6 +8,11 @@ This section contains detailed technical architecture documentation for the SHEL
 - **[System Design](./technical/system-design.md)**: Overall system architecture, design patterns, and component relationships
 - **[Website Architecture](./technical/website-architecture.md)**: Frontend and backend architecture with Next.js and FastAPI
 - **[Project Tree](./PROJECT-TREE.md)**: Complete project structure and file organization
+
+### 🏠 SHELTR Ecosystem
+- **[PODS System](./ecosystem/pods-system.md)**: Portable emergency housing units with full technical specifications
+- **[MOBI System](./ecosystem/mobi-system.md)**: Electric mountain bike logistics and transportation platform
+- **[Drone System](./ecosystem/drone-system.md)**: Emergency supply delivery and aerial logistics platform
 
 ### ⛓️ Blockchain & Technical
 - **[Blockchain Architecture](./tokenomics/blockchain.md)**: Smart contract architecture and Web3 integration
@@ -31,6 +36,10 @@ docs/02-architecture/
 ├── technical/                          # Core technical documentation
 │   ├── system-design.md               # System architecture & design patterns
 │   └── website-architecture.md        # Frontend/backend architecture
+├── ecosystem/                          # SHELTR Ecosystem Components
+│   ├── pods-system.md                 # Portable emergency housing units
+│   ├── mobi-system.md                 # Electric bike logistics platform
+│   └── drone-system.md                # Emergency supply delivery drones
 ├── tokenomics/                         # Blockchain & token documentation
 │   ├── blockchain.md                  # Smart contract architecture
 │   ├── sheltr-tokenomics.md          # Token economics & distribution

@@ -276,8 +276,8 @@ export default function HomePage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <p className="text-xl md:text-2xl text-muted-foreground max-w-4xl mx-auto">
-                SHELTR creates a scalable system that amplifies every act of kindness 
-                and ensure lasting, measurable impact for everyone in the ecosystem.
+                Let's create a world where every act of kindness is amplified 
+                and ensures lasting, measurable impact for everyone in the ecosystem. 
               </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -416,9 +416,9 @@ export default function HomePage() {
           {/* Content */}
           <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <div className="max-w-3xl mx-auto">
-              <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white drop-shadow-lg">
+              <h3 className="text-4xl md:text-5xl font-bold mb-6 text-white drop-shadow-lg">
                How You Address the Unhoused, Needs to Change.
-              </h2>
+              </h3>
               <p className="text-xl mb-8 text-white/95 drop-shadow-md">
                 Every scan creates transparency, 
                 every donation builds housing, every participant finds dignity.

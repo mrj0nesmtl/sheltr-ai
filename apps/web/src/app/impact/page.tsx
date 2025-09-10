@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { TrendingUp, Users, Home, DollarSign, Globe, Shield, Heart, MapPin, Clock, CheckCircle, BarChart3, PieChart, Building2, Coins, LogIn, Menu, X, ArrowRight } from 'lucide-react';
+import { Users, DollarSign, Globe, Shield, Heart, BarChart3, PieChart, LogIn, Menu, X, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -235,7 +235,7 @@ export default function ImpactPage() {
                       <span className="text-sm text-purple-600 dark:text-purple-400 font-semibold">5% - Shelter support</span>
                     </div>
                     <Progress value={5} className="h-3" />
-                    <p className="text-xs text-muted-foreground mt-1">Participant's registered shelter operations</p>
+                    <p className="text-xs text-muted-foreground mt-1">Participant&apos;s registered shelter operations</p>
                   </div>
                 </div>
               </CardContent>

@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Home, QrCode, Heart, Shield, Smartphone, ArrowRight, Check, LogIn, Menu, X, Camera, Share2, BarChart3, User } from 'lucide-react';
+import { QrCode, Heart, Shield, Check, LogIn, Menu, X, BarChart3, User } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -20,7 +20,7 @@ export default function ScanGivePage() {
   const { user, hasRole } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showDemoQR, setShowDemoQR] = useState(false);
-  const [demoParticipant, setDemoParticipant] = useState<any>(null);
+  const [demoParticipant, setDemoParticipant] = useState<object | null>(null);
   const [qrCodeUrl, setQrCodeUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
@@ -619,7 +619,7 @@ export default function ScanGivePage() {
                   Thanks for signing up!
                 </h3>
                 <p className="text-sm text-muted-foreground">
-                  We'll notify you as soon as the SHELTR mobile app is available.
+                  We&apos;ll notify you as soon as the SHELTR mobile app is available.
                 </p>
               </div>
             ) : (

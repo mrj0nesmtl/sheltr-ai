@@ -1,11 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowLeft, Coins, TrendingUp, Shield, Zap, DollarSign, Users, BarChart3, CheckCircle, ExternalLink, Copy, Eye, LogIn, Menu, X, FileText, BookOpen, Rocket, Target, PieChart, ArrowRight, Building2, Home, Timer, Percent, Wallet, PiggyBank, ChartLine, Globe, Handshake, Lock, RefreshCw, Calendar, Award } from 'lucide-react';
+import { ArrowLeft, Coins, TrendingUp, Shield, DollarSign, Users, BarChart3, CheckCircle, Eye, LogIn, Menu, X, Home, Timer, PiggyBank, ChartLine, RefreshCw, Award, Target } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
 import { ThemeToggle } from '@/components/theme-toggle';
 import Footer from '@/components/Footer';
 import ThemeLogo from '@/components/ThemeLogo';

@@ -52,39 +52,38 @@ export default function Footer() {
 
           {/* Center - Main Navigation */}
           <div className="lg:w-2/3">
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
               {/* Platform & Technology Combined */}
               <div>
-                <h3 className="text-sm font-semibold mb-3">Platform</h3>
-                <ul className="space-y-2 text-sm text-muted-foreground">
-                  <li><Link href="/about" className="hover:text-foreground transition-colors">About</Link></li>
-                  <li><Link href="/solutions" className="hover:text-foreground transition-colors">Solutions</Link></li>
-                  <li><Link href="/impact" className="hover:text-foreground transition-colors">Impact</Link></li>
-                  <li><Link href="/tokenomics" className="hover:text-foreground transition-colors">Token</Link></li>
-                  <li><Link href="/scan-give" className="hover:text-foreground transition-colors">Scan</Link></li>
-                  <li><Link href="/pods" className="hover:text-foreground transition-colors">Pods</Link></li>
-                  <li><Link href="/pods/mobi" className="hover:text-foreground transition-colors">Mobi</Link></li>
+                <h3 className="text-sm font-semibold mb-2">Platform</h3>
+                <ul className="space-y-1 text-xs text-muted-foreground">
+                  <li><Link href="/solutions" className="hover:text-blue-400 transition-all duration-300 hover:translate-x-1">Solutions</Link></li>
+                  <li><Link href="/tokenomics" className="hover:text-blue-400 transition-all duration-300 hover:translate-x-1">Token</Link></li>
+                  <li><Link href="/scan-give" className="hover:text-blue-400 transition-all duration-300 hover:translate-x-1">Scan</Link></li>
+                  <li><Link href="/pods" className="hover:text-blue-400 transition-all duration-300 hover:translate-x-1">Pods</Link></li>
+                  <li><Link href="/pods/mobi" className="hover:text-blue-400 transition-all duration-300 hover:translate-x-1">Mobi</Link></li>
+                  <li><Link href="/drones" className="hover:text-blue-400 transition-all duration-300 hover:translate-x-1">Drones</Link></li>
                 </ul>
               </div>
               
               {/* Resources */}
               <div>
-                <h3 className="text-sm font-semibold mb-3">Resources</h3>
-                <ul className="space-y-2 text-sm text-muted-foreground">
-                  <li><Link href="/docs" className="hover:text-foreground transition-colors">Documentation</Link></li>
-                  <li><Link href="/docs/whitepaper" className="hover:text-foreground transition-colors">White Paper</Link></li>
-                  <li><Link href="/angels" className="hover:text-foreground transition-colors">Angels</Link></li>
-                  <li><Link href="/blog" className="hover:text-foreground transition-colors">Blog</Link></li>
+                <h3 className="text-sm font-semibold mb-2">Resources</h3>
+                <ul className="space-y-1 text-xs text-muted-foreground">
+                  <li><Link href="/docs" className="hover:text-green-400 transition-all duration-300 hover:translate-x-1">Documentation</Link></li>
+                  <li><Link href="/docs/whitepaper" className="hover:text-green-400 transition-all duration-300 hover:translate-x-1">White Paper</Link></li>
+                  <li><Link href="/angels" className="hover:text-green-400 transition-all duration-300 hover:translate-x-1">Angels</Link></li>
+                  <li><Link href="/blog" className="hover:text-green-400 transition-all duration-300 hover:translate-x-1">Blog</Link></li>
                 </ul>
               </div>
               
               {/* Support */}
               <div>
-                <h3 className="text-sm font-semibold mb-3">Support</h3>
-                <ul className="space-y-2 text-sm text-muted-foreground">
-                  <li><Link href="/contact" className="hover:text-foreground transition-colors">Contact</Link></li>
-                  <li><Link href="/terms" className="hover:text-foreground transition-colors">Terms</Link></li>
-                  <li><Link href="/privacy" className="hover:text-foreground transition-colors">Privacy</Link></li>
+                <h3 className="text-sm font-semibold mb-2">Support</h3>
+                <ul className="space-y-1 text-xs text-muted-foreground">
+                  <li><Link href="/contact" className="hover:text-purple-400 transition-all duration-300 hover:translate-x-1">Contact</Link></li>
+                  <li><Link href="/terms" className="hover:text-purple-400 transition-all duration-300 hover:translate-x-1">Terms</Link></li>
+                  <li><Link href="/privacy" className="hover:text-purple-400 transition-all duration-300 hover:translate-x-1">Privacy</Link></li>
                 </ul>
               </div>
             </div>

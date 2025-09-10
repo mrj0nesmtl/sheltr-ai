@@ -137,33 +137,32 @@ export default function MobiPage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="/images/sheltr_units/sheltr-mobility.jpg"
-            alt="SHELTR Mountain Bike"
-            fill
-            className="object-cover"
-            priority
-          />
-          <div className="absolute inset-0 bg-black/50" />
-        </div>
+      <section className="relative py-24 overflow-hidden">
+        {/* Background Image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat blur-[2px] scale-105" 
+          style={{backgroundImage: 'url(/images/sheltr_units/sheltr-mobility.jpg)'}}
+        />
+        {/* Dark Overlay */}
+        <div className="absolute inset-0 bg-black/50" />
         
-        <div className="relative z-10 text-center text-white px-4">
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="mb-8">
             <Link href="/pods">
               <Button variant="ghost" size="sm" className="text-white hover:bg-white/20 mb-4">
                 <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to Pods
+                Back to PODS
               </Button>
             </Link>
           </div>
           
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight">
-            MOBI
+          <h1 className="text-5xl md:text-6xl font-bold mb-6 text-white">
+            MOBI Cycle
           </h1>
-          <p className="text-2xl md:text-3xl font-light mb-8 max-w-3xl mx-auto">
-            Ultimate mobility and pod transport solution for any terrain
+          
+          <p className="text-xl text-gray-200 mb-8 max-w-3xl mx-auto">
+            Ultimate mobility and pod transport solution for any terrain. Electric mountain bike designed 
+            for urban logistics and scenarios.
           </p>
           
           <div className="flex justify-center">
@@ -184,7 +183,7 @@ export default function MobiPage() {
           <h2 className="text-4xl font-bold mb-6">Built for Every Journey</h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
             MOBI combines electric power, all-terrain capability, and integrated 
-            transport systems to provide the ultimate mobility solution for urban and rural environments.
+            transport systems to provide the ultimate POD mobility solution for urban and rural environments.
           </p>
         </div>
 

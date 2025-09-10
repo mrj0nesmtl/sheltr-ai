@@ -102,10 +102,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         const userDocSnap = await getDoc(userDocRef);
         if (userDocSnap.exists()) {
           firestoreData = userDocSnap.data();
-          console.log('📄 Loaded user data from Firestore:', firestoreData);
         }
       } catch (firestoreError) {
-        console.warn('⚠️ Could not fetch user data from Firestore:', firestoreError);
+        console.warn('Could not fetch user data from Firestore:', firestoreError);
       }
       
       // Merge Firebase custom claims with Firestore data (Firestore takes priority for newer users)
@@ -114,16 +113,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const permissions = firestoreData?.permissions || customClaims.permissions || [];
       const shelterId = firestoreData?.shelter_id || customClaims.shelter_id;
       
-      console.log('🔐 User role detected:', role);
-      console.log('🔍 Full user data debug:', {
-        email: firebaseUser.email,
-        displayName: firebaseUser.displayName,
-        firestoreRole: firestoreData?.role,
-        customClaimsRole: customClaims.role,
-        finalRole: role,
-        tenantId,
-        shelterId
-      });
+      // Only log in development
+      if (process.env.NODE_ENV === 'development') {
+        console.log('User role detected:', role);
+      }
       
       return {
         ...firebaseUser,

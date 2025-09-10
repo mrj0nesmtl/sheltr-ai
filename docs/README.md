@@ -8,7 +8,7 @@ Welcome to the SHELTR platform documentation. This comprehensive guide covers al
 Project introduction, mission, and getting started guides.
 
 ### 🏗️ [02-architecture/](02-architecture/) 
-Technical architecture, system design, and blockchain documentation.
+Technical architecture, system design, blockchain documentation, and SHELTR ecosystem components (PODS, MOBI, Drones).
 
 ### 🔌 [03-api/](03-api/)
 API documentation, schemas, and integration guides.

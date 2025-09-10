@@ -164,29 +164,29 @@ export default function PodsPage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="/images/sheltr_units/hero-pods.png"
-            alt="SHELTR Pods"
-            fill
-            className="object-cover"
-            priority
-          />
-          <div className="absolute inset-0 bg-black/60" />
-        </div>
+      <section className="relative py-24 overflow-hidden">
+        {/* Background Image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat blur-[1px] scale-105" 
+          style={{backgroundImage: 'url(/images/sheltr_units/hero-pods.png)'}}
+        />
+        {/* Dark Overlay */}
+        <div className="absolute inset-0 bg-black/60" />
         
-        <div className="relative z-10 text-center text-white px-4">
-          <h1 className="text-6xl md:text-8xl font-bold mb-6 tracking-tight">
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-5xl md:text-6xl font-bold mb-6 text-white">
             PODS
           </h1>
-          <p className="text-2xl md:text-3xl font-light mb-8 max-w-2xl mx-auto">
+          
+          <p className="text-xl text-gray-200 mb-8 max-w-3xl mx-auto">
             Secure, Mobile, Functional.
           </p>
+          
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
               size="lg" 
-              className="bg-white text-black hover:bg-gray-200"
+              variant="outline"
+              className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-black transition-all duration-300"
               onClick={() => document.getElementById('pod-models')?.scrollIntoView({ behavior: 'smooth' })}
             >
               Explore Models
@@ -194,7 +194,7 @@ export default function PodsPage() {
             <Button 
               size="lg" 
               variant="outline" 
-              className="border-white text-white hover:bg-white hover:text-black"
+              className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-black transition-all duration-300"
               asChild
             >
               <Link href="/pods/buildout">Technical Specs</Link>
@@ -206,10 +206,10 @@ export default function PodsPage() {
       {/* Overview Section */}
       <section className="py-20 px-4 max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold mb-6">Revolutionary Micro-Housing</h2>
+          <h2 className="text-4xl font-bold mb-6">Urban Micro-Housing</h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            SHELTR mobile micro-housing units provide safe, insulated, and weather-resistant accommodations 
-            designed for dignity, mobility, and sustainability. Engineered for Canadian winters and rated for -25°C.
+          PODS (Personal Optimized Dwelling System) represents a real-world approach to emergency housing, combining security, mobility, and functionality in a compact, deployable unit. Each POD is designed to provide dignified temporary housing while participants work toward permanent solutions. SHELTR PODS provide safe, insulated, and weather-resistant accommodations 
+            designed for dignity, mobility, and sustainability.
           </p>
         </div>
 
@@ -465,7 +465,7 @@ export default function PodsPage() {
                 </div>
               </div>
 
-              <Button className="w-full sm:w-auto" asChild>
+              <Button variant="outline" className="w-full sm:w-auto" asChild>
                 <Link href="/pods/mobi">Learn More About MOBI</Link>
               </Button>
             </div>
@@ -608,7 +608,7 @@ export default function PodsPage() {
           {/* Security Deep Dive Button */}
           <div className="text-center mt-12">
             <Link href="/security">
-              <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white">
+              <Button size="lg" variant="outline">
                 <Shield className="h-4 w-4 mr-2" />
                 Learn About Security
               </Button>

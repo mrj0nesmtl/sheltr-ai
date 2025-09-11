@@ -155,7 +155,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
                   <div className="mt-3">
                     <Link 
                       href="/register" 
-                      className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+                      className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200 transition-colors"
                     >
                       Create SHELTR Account
                     </Link>
@@ -170,7 +170,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
         <button
           onClick={handleGoogleLogin}
           disabled={isLoading}
-          className="w-full flex justify-center items-center px-4 py-3 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="w-full flex justify-center items-center px-4 py-3 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
         >
           <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -206,7 +206,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-gray-500 focus:border-gray-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
               placeholder="your.email@example.com"
             />
           </div>
@@ -225,7 +225,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-gray-500 focus:border-gray-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                 placeholder="Enter your password"
               />
               <button
@@ -254,7 +254,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
                 id="remember-me"
                 name="remember-me"
                 type="checkbox"
-                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                className="h-4 w-4 text-gray-600 focus:ring-gray-500 border-gray-300 rounded dark:text-gray-300"
               />
               <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900 dark:text-gray-300">
                 Remember me
@@ -266,7 +266,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
                 type="button"
                 onClick={handleForgotPassword}
                 disabled={isResetLoading || !email}
-                className="font-medium text-blue-600 hover:text-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="font-medium text-gray-900 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed dark:text-gray-100 dark:hover:text-gray-300"
               >
                 {isResetLoading ? 'Sending...' : 'Forgot password?'}
               </button>
@@ -277,7 +277,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
           <button
             type="submit"
             disabled={isLoading || !email || !password}
-            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200"
           >
             {isLoading ? (
               <div className="flex items-center">
@@ -301,14 +301,14 @@ export const LoginForm: React.FC<LoginFormProps> = ({
               {onToggleMode ? (
                 <button
                   onClick={onToggleMode}
-                  className="font-medium text-blue-600 hover:text-blue-500"
+                  className="font-medium text-gray-900 hover:text-gray-700 dark:text-gray-100 dark:hover:text-gray-300"
                 >
                   Sign up here
                 </button>
               ) : (
                 <a
                   href="/register"
-                  className="font-medium text-blue-600 hover:text-blue-500"
+                  className="font-medium text-gray-900 hover:text-gray-700 dark:text-gray-100 dark:hover:text-gray-300"
                 >
                   Sign up here
                 </a>

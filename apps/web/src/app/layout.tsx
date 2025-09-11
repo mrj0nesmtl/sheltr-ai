@@ -21,6 +21,7 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://sheltr-ai.web.app'),
   title: 'SHELTR',
   description: 'Blockchain-powered platform for direct participant empowerment',
   keywords: ['homelessness', 'blockchain', 'AI', 'technology', 'social impact', 'donations', 'shelter management'],

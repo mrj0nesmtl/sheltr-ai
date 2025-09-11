@@ -14,18 +14,17 @@ export default function TeamPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const teamMembers = [
-    { name: 'Joel Y.', email: 'joel@example.com', linkedin: '#', website: '#' },
-    { name: 'Doug K.', email: 'doug@example.com', linkedin: '#', website: '#' },
-    { name: 'Alex K.', email: 'alex@example.com', linkedin: '#', website: '#' },
-    { name: 'Terry M.', email: 'terry@example.com', linkedin: '#', website: '#' },
-    { name: 'Zaffia L.', email: 'zaffia@example.com', linkedin: '#', website: '#' },
-    { name: 'Ami R.', email: 'ami@example.com', linkedin: '#', website: '#' },
-    { name: 'Marc R.', email: 'marc@example.com', linkedin: '#', website: '#' },
-    { name: 'Morgan H.', email: 'morgan@example.com', linkedin: '#', website: '#' },
-    { name: 'Dominique L.', email: 'dominique@example.com', linkedin: '#', website: '#' },
-    { name: 'Sara S.', email: 'sara@example.com', linkedin: '#', website: '#' },
-    { name: 'Sen W.', email: 'sen@example.com', linkedin: '#', website: '#' },
-    { name: 'Zell A.', email: 'zell@example.com', linkedin: '#', website: '#' },
+    { name: 'Joel', email: 'joel@example.com', linkedin: '#', website: '#' },
+    { name: 'Doug', email: 'doug@example.com', linkedin: '#', website: '#' },
+    { name: 'Alex', email: 'alex@example.com', linkedin: '#', website: '#' },
+    { name: 'Zaffia', email: 'zaffia@example.com', linkedin: '#', website: '#' },
+    { name: 'Ami', email: 'ami@example.com', linkedin: '#', website: '#' },
+    { name: 'Marc', email: 'marc@example.com', linkedin: '#', website: '#' },
+    { name: 'Morgan', email: 'morgan@example.com', linkedin: '#', website: '#' },
+    { name: 'Dominique', email: 'dominique@example.com', linkedin: '#', website: '#' },
+    { name: 'Sara', email: 'sara@example.com', linkedin: '#', website: '#' },
+    { name: 'Sen', email: 'sen@example.com', linkedin: '#', website: '#' },
+    { name: 'Zell', email: 'zell@example.com', linkedin: '#', website: '#' },
   ];
 
   const inMemoryMembers = [
@@ -147,11 +146,11 @@ export default function TeamPage() {
         <div className="absolute inset-0 bg-black/50"></div>
         <div className="relative z-10 container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-block bg-white text-black px-4 py-2 rounded-full text-sm font-semibold mb-6">
-              MEET THE TEAM
+            <div className="inline-block border-2 border-white text-white px-4 py-2 rounded-full text-sm font-semibold mb-6">
+              TEAM SHELTR
             </div>
             <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-              Who's <span className="text-blue-400">Behind</span> SHELTR?
+              WHOIS <span className="text-blue-400">SHELTR</span>?
             </h1>
             <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-4xl mx-auto">
               A diverse team of innovators, technologists, and humanitarian leaders committed to transforming charitable giving.

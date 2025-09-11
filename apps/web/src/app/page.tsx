@@ -249,15 +249,11 @@ export default function HomePage() {
           <div className="relative z-10 container mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center">
               <Badge variant="secondary" className="mb-6 bg-white/20 text-white border-white/30 backdrop-blur-sm">
-                POWERED BY AI & BLOCKCHAIN
+                TECH-4-GOOD
               </Badge>
               <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
                 Better to <span className="text-blue-400">Solve</span> than Manage
               </h1>
-              <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto">
-                SHELTR creates systematic, scalable solutions that amplify every act of kindness 
-                and ensure lasting, measurable impact for everyone in the ecosystem.
-              </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/scan-give">
                   <Button size="lg" className="w-full sm:w-auto text-lg px-8 py-4 bg-green-600 hover:bg-green-700">
@@ -278,6 +274,12 @@ export default function HomePage() {
         {/* Feature Cards Section - 6 Cards in 2x3 Grid */}
         <section className="py-20 bg-background">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <p className="text-xl md:text-2xl text-muted-foreground max-w-4xl mx-auto">
+                Let's create a world where every act of kindness is amplified 
+                and ensures lasting, measurable impact for everyone in the ecosystem. 
+              </p>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               
               {/* Direct Impact */}
@@ -287,7 +289,7 @@ export default function HomePage() {
                 </div>
                 <h3 className="text-xl font-bold mb-3">Direct Impact</h3>
                 <p className="text-muted-foreground">
-                  Your donations directly support individuals in need through secure, transparent blockchain transactions.
+                  Your donations directly support individuals in need through secure, transparent transactions.
                 </p>
               </div>
 
@@ -298,7 +300,7 @@ export default function HomePage() {
                 </div>
                 <h3 className="text-xl font-bold mb-3">SmartFund™ Allocation</h3>
                 <p className="text-muted-foreground">
-                  Funds are automatically distributed: 80% for immediate needs, 15% for housing, and 5% for operations.
+                  Donated funds are automatically distributed: 80% for immediate needs, 15% for housing, and 5% for shelter operations.
                 </p>
               </div>
 
@@ -309,7 +311,7 @@ export default function HomePage() {
                 </div>
                 <h3 className="text-xl font-bold mb-3">Housing Focus</h3>
                 <p className="text-muted-foreground">
-                  Every donation contributes to a dedicated housing fund, helping create lasting change.
+                  Every donation contributes to a dedicated POD housing fund, helping to facilitate real world change.
                 </p>
               </div>
 
@@ -320,7 +322,7 @@ export default function HomePage() {
                 </div>
                 <h3 className="text-xl font-bold mb-3">QR Technology</h3>
                 <p className="text-muted-foreground">
-                  Scan unique QR codes to make instant, secure donations to specific individuals in need.
+                  Scan QR codes to make instant, secure donations to specific individuals in need.
                 </p>
               </div>
 
@@ -342,7 +344,7 @@ export default function HomePage() {
                 </div>
                 <h3 className="text-xl font-bold mb-3">Impact Tracking</h3>
                 <p className="text-muted-foreground">
-                  Monitor your contributions and see the real impact of your donations in real-time.
+                  See the real impact of your donations in real-time.
                 </p>
               </div>
             </div>
@@ -414,11 +416,11 @@ export default function HomePage() {
           {/* Content */}
           <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <div className="max-w-3xl mx-auto">
-              <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white drop-shadow-lg">
-                Ready to Transform How You Address the Unhoused?
-              </h2>
+              <h3 className="text-4xl md:text-5xl font-bold mb-6 text-white drop-shadow-lg">
+               How We Address the Unhoused Needs to Change
+              </h3>
               <p className="text-xl mb-8 text-white/95 drop-shadow-md">
-                Join the SHELTR movement - Every scan creates transparency, 
+                Every scan creates transparency, 
                 every donation builds housing, every participant finds dignity.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">

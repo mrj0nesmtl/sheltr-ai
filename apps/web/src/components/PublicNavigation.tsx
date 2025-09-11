@@ -64,6 +64,9 @@ export default function PublicNavigation() {
               <Link href="/solutions" className="hover:text-primary px-3 py-2 text-sm font-medium transition-colors">
                 Solutions
               </Link>
+              <Link href="/pods" className="hover:text-primary px-3 py-2 text-sm font-medium transition-colors">
+                Pods
+              </Link>
               <Link href="/scan-give" className="hover:text-primary px-3 py-2 text-sm font-medium transition-colors">
                 Scan & Give
               </Link>
@@ -200,6 +203,15 @@ export default function PublicNavigation() {
                       onClick={() => setIsMenuOpen(false)}
                     >
                       Solutions
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/pods"
+                      className="text-sm text-muted-foreground hover:text-primary transition-colors block py-1"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      Pods
                     </Link>
                   </li>
                   <li>

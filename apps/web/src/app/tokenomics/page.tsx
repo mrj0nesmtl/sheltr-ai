@@ -134,31 +134,15 @@ export default function TokenomicsPage() {
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <Badge variant="secondary" className="mb-6 bg-white/20 text-white border-white/30 backdrop-blur-sm">
-            SMARTFUND™ TOKENOMICS
+            TOKENOMICS
           </Badge>
           <h1 className="text-5xl md:text-6xl font-bold mb-6 text-white">
-            Dual-Token <span className="text-blue-400">Architecture</span>
+            Token <span className="text-blue-400">Architecture</span>
           </h1>
           <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto">
-            SHELTR's pioneering dual-token system combines stability and growth potential, 
-            ensuring every participant benefits from transparent, scalable impact.
+            Pioneering a dual-token system that combines stability and growth so every participant benefits.
           </p>
           
-          {/* Quick Links to Documentation */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
-            <Link href="/docs/whitepaper">
-              <Button variant="outline" size="lg">
-                <FileText className="h-4 w-4 mr-2" />
-                Whitepaper
-              </Button>
-            </Link>
-            <Link href="/docs" target="_blank" rel="noopener noreferrer">
-              <Button variant="outline" size="lg">
-                <BookOpen className="h-4 w-4 mr-2" />
-                Thesis
-              </Button>
-            </Link>
-          </div>
         </div>
       </section>
 
@@ -457,15 +441,15 @@ export default function TokenomicsPage() {
       <section className="py-20 bg-gradient-to-r from-orange-500/5 to-red-500/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4">SHELTR Blockchain Launch Information</h2>
-            <p className="text-xl text-muted-foreground">Invest in revolutionary social impact technology</p>
+            <h2 className="text-3xl font-bold mb-4">SHELTR Token Information</h2>
+            <p className="text-xl text-muted-foreground">Real World Utility.</p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8 mb-12">
             <Card className="border-2 border-orange-500/20 bg-orange-500/5">
               <CardHeader>
-                <CardTitle className="text-xl text-orange-600 dark:text-orange-400">🚀 Pre-Seed (Current)</CardTitle>
-                <CardDescription>Supports Platform Completion & Launch</CardDescription>
+                <CardTitle className="text-xl text-orange-600 dark:text-orange-400">🚀 Testnet Development (Current)</CardTitle>
+                <CardDescription>Supports Platform Completion & ICO</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">

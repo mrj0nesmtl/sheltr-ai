@@ -47,7 +47,7 @@ export default function DonorsPage() {
       </div>
 
       {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden">
+      <section className="relative py-24 flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <Image
             src="/images/sheltr_units/closeup-wheels.jpeg"

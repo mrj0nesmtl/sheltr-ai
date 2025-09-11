@@ -47,7 +47,7 @@ export default function ParticipantsPage() {
       </div>
 
       {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden">
+      <section className="relative py-24 flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <Image
             src="/images/sheltr_units/security.jpeg"
@@ -64,10 +64,10 @@ export default function ParticipantsPage() {
             For Participants
           </Badge>
           <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight">
-            The Key to Stability
+            Make a Move
           </h1>
           <p className="text-xl md:text-2xl font-light mb-8 max-w-3xl mx-auto">
-          Your journey and dignity respected, and your privacy protected.
+          Your journey respected, your privacy protected.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -85,7 +85,7 @@ export default function ParticipantsPage() {
       <section className="py-16 bg-green-500/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Direct Support When You Need It</h2>
+            <h2 className="text-3xl font-bold mb-4">Direct Support as You Need It</h2>
             <p className="text-xl text-muted-foreground">Simple, respectful access to resources and opportunities</p>
           </div>
 
@@ -110,7 +110,7 @@ export default function ParticipantsPage() {
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground text-center">
-                  15% of donations automatically go toward long-term housing solutions, 
+                  15% of donations automatically go towards housing solutions, 
                   building a foundation for your permanent stability.
                 </p>
               </CardContent>
@@ -136,7 +136,7 @@ export default function ParticipantsPage() {
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4">SHELTR Integrated Supply Chain</h2>
+            <h2 className="text-3xl font-bold mb-4">Integrated Supply Chain</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               Your donations directly fund emergency housing solutions through our PODS and MOBI ecosystem - 
               creating immediate shelter and mobility options connected to your account.
@@ -195,7 +195,7 @@ export default function ParticipantsPage() {
             <Card className="border-2 border-orange-500/20 bg-orange-500/5">
               <CardHeader>
                 <Bike className="h-12 w-12 text-orange-600 dark:text-orange-400 mx-auto mb-4" />
-                <CardTitle className="text-center text-2xl text-orange-600 dark:text-orange-400">MOBI Mobility</CardTitle>
+                <CardTitle className="text-center text-2xl text-orange-600 dark:text-orange-400">MOBI Cycle</CardTitle>
                 <CardDescription className="text-center">
                   Electric transportation and POD delivery system
                 </CardDescription>

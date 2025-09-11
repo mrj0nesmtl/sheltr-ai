@@ -417,7 +417,7 @@ export default function HomePage() {
           <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <div className="max-w-3xl mx-auto">
               <h3 className="text-4xl md:text-5xl font-bold mb-6 text-white drop-shadow-lg">
-               How You Address the Unhoused, Needs to Change.
+               How We Address the Unhoused Needs to Change
               </h3>
               <p className="text-xl mb-8 text-white/95 drop-shadow-md">
                 Every scan creates transparency, 

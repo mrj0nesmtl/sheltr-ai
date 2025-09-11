@@ -532,12 +532,14 @@ export default function BlogManagementPage() {
                         className="w-full h-64 object-cover rounded-lg mb-4"
                       />
                     )}
-                    <div 
-                      className="whitespace-pre-wrap"
-                      dangerouslySetInnerHTML={{
-                        __html: formData.content.replace(/\n/g, '<br/>')
-                      }}
-                    />
+                    <div className="whitespace-pre-wrap">
+                      {formData.content.split('\n').map((line, index) => (
+                        <span key={index}>
+                          {line}
+                          {index < formData.content.split('\n').length - 1 && <br />}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 </div>
               )}

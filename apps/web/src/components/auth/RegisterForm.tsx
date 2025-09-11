@@ -205,7 +205,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
                 required
                 value={formData.firstName}
                 onChange={(e) => handleInputChange('firstName', e.target.value)}
-                className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white ${
+                className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-gray-500 focus:border-gray-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white ${
                   validationErrors.firstName ? 'border-red-300' : 'border-gray-300'
                 }`}
                 placeholder="John"
@@ -226,7 +226,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
                 required
                 value={formData.lastName}
                 onChange={(e) => handleInputChange('lastName', e.target.value)}
-                className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white ${
+                className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-gray-500 focus:border-gray-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white ${
                   validationErrors.lastName ? 'border-red-300' : 'border-gray-300'
                 }`}
                 placeholder="Doe"
@@ -250,7 +250,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
               required
               value={formData.email}
               onChange={(e) => handleInputChange('email', e.target.value)}
-              className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white ${
+              className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-gray-500 focus:border-gray-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white ${
                 validationErrors.email ? 'border-red-300' : 'border-gray-300'
               }`}
               placeholder="john.doe@example.com"
@@ -271,7 +271,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
               type="tel"
               value={formData.phone || ''}
               onChange={(e) => handleInputChange('phone', e.target.value)}
-              className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white ${
+              className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-gray-500 focus:border-gray-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white ${
                 validationErrors.phone ? 'border-red-300' : 'border-gray-300'
               }`}
               placeholder="+1 (555) 123-4567"
@@ -291,7 +291,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
               name="role"
               value={formData.role}
               onChange={(e) => handleInputChange('role', e.target.value as UserRole)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-gray-500 focus:border-gray-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
             >
               {roleOptions.map((option) => (
                 <option key={option.value} value={option.value}>
@@ -319,7 +319,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
                   required
                   value={formData.password}
                   onChange={(e) => handleInputChange('password', e.target.value)}
-                  className={`block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white ${
+                  className={`block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-gray-500 focus:border-gray-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white ${
                     validationErrors.password ? 'border-red-300' : 'border-gray-300'
                   }`}
                   placeholder="Min. 8 characters"
@@ -359,7 +359,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
                   required
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className={`block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white ${
+                  className={`block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-gray-500 focus:border-gray-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white ${
                     validationErrors.confirmPassword ? 'border-red-300' : 'border-gray-300'
                   }`}
                   placeholder="Re-enter password"
@@ -394,15 +394,15 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
               name="terms"
               type="checkbox"
               required
-              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+              className="h-4 w-4 text-gray-600 focus:ring-gray-500 border-gray-300 rounded dark:text-gray-300"
             />
             <label htmlFor="terms" className="ml-2 block text-sm text-gray-900 dark:text-gray-300">
               I agree to the{' '}
-              <a href="#" className="text-blue-600 hover:text-blue-500">
+              <a href="#" className="text-gray-900 hover:text-gray-700 dark:text-gray-100 dark:hover:text-gray-300">
                 Terms of Service
               </a>{' '}
               and{' '}
-              <a href="#" className="text-blue-600 hover:text-blue-500">
+              <a href="#" className="text-gray-900 hover:text-gray-700 dark:text-gray-100 dark:hover:text-gray-300">
                 Privacy Policy
               </a>
             </label>
@@ -412,7 +412,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-900 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200"
           >
             {isLoading ? (
               <div className="flex items-center">
@@ -436,14 +436,14 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
               {onToggleMode ? (
                 <button
                   onClick={onToggleMode}
-                  className="font-medium text-blue-600 hover:text-blue-500"
+                  className="font-medium text-gray-900 hover:text-gray-700 dark:text-gray-100 dark:hover:text-gray-300"
                 >
                   Sign in here
                 </button>
               ) : (
                 <a
                   href="/login"
-                  className="font-medium text-blue-600 hover:text-blue-500"
+                  className="font-medium text-gray-900 hover:text-gray-700 dark:text-gray-100 dark:hover:text-gray-300"
                 >
                   Sign in here
                 </a>

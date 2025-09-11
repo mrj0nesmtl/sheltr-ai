@@ -456,6 +456,23 @@ service cloud.firestore {
     }
     
     // =================================================================
+    // GALLERY IMAGES COLLECTION - Public gallery management
+    // =================================================================
+    match /gallery_images/{imageId} {
+      // Read: Anyone can read public images, admins can read all
+      allow read: if resource.data.isPublic == true || isSuperAdmin() || isPlatformAdmin();
+      
+      // Write: Super Admin and Platform Admin can manage gallery
+      allow write: if isSuperAdmin() || isPlatformAdmin();
+      
+      // Create: Super Admin and Platform Admin can upload images
+      allow create: if isSuperAdmin() || isPlatformAdmin();
+      
+      // Delete: Super Admin and Platform Admin can delete images
+      allow delete: if isSuperAdmin() || isPlatformAdmin();
+    }
+    
+    // =================================================================
     // FALLBACK RULE - Deny all other access
     // =================================================================
     match /{document=**} {

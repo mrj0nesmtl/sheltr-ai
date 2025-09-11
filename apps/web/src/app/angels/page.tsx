@@ -731,43 +731,42 @@ export default function AngelsPage() {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-6">The SHELTR Connection</h2>
             <p className="text-xl text-muted-foreground max-w-4xl mx-auto mb-8">
-              These Angels inspire our mission to create systematic, scalable solutions that amplify the incredible work 
-              of digital humanitarians. SHELTR&apos;s blockchain technology and AI-driven insights ensure every act of kindness 
-              creates lasting, measurable impact.
+              These Angels inspire our mission to create real-world, scalable solutions that amplify the incredible work 
+              of digital humanitarians.
             </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            <Card className="text-center border-2 hover:shadow-lg transition-shadow">
+            <Card className="text-center border-2 hover:border-purple-400 hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer group">
               <CardContent className="p-6">
-                <div className="w-12 h-12 bg-purple-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <TrendingUp className="h-6 w-6 text-purple-600" />
+                <div className="w-12 h-12 bg-purple-500/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-purple-500/20 group-hover:scale-110 transition-all duration-300">
+                  <TrendingUp className="h-6 w-6 text-purple-600 group-hover:scale-110 transition-transform duration-300" />
                 </div>
-                <h3 className="font-bold mb-2">Amplify Impact</h3>
+                <h3 className="font-bold mb-2 group-hover:text-purple-600 transition-colors duration-300">Amplify Impact</h3>
                 <p className="text-sm text-muted-foreground">
                   Technology that scales the compassionate work these creators already do
                 </p>
               </CardContent>
             </Card>
 
-            <Card className="text-center border-2 hover:shadow-lg transition-shadow">
+            <Card className="text-center border-2 hover:border-blue-400 hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer group">
               <CardContent className="p-6">
-                <div className="w-12 h-12 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Users className="h-6 w-6 text-blue-600" />
+                <div className="w-12 h-12 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-500/20 group-hover:scale-110 transition-all duration-300">
+                  <Users className="h-6 w-6 text-blue-600 group-hover:scale-110 transition-transform duration-300" />
                 </div>
-                <h3 className="font-bold mb-2">Build Networks</h3>
+                <h3 className="font-bold mb-2 group-hover:text-blue-600 transition-colors duration-300">Build Networks</h3>
                 <p className="text-sm text-muted-foreground">
                   Connect Angels with sustainable support systems and resources
                 </p>
               </CardContent>
             </Card>
 
-            <Card className="text-center border-2 hover:shadow-lg transition-shadow">
+            <Card className="text-center border-2 hover:border-cyan-400 hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer group">
               <CardContent className="p-6">
-                <div className="w-12 h-12 bg-cyan-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Heart className="h-6 w-6 text-cyan-600" />
+                <div className="w-12 h-12 bg-cyan-500/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-cyan-500/20 group-hover:scale-110 transition-all duration-300">
+                  <Heart className="h-6 w-6 text-cyan-600 group-hover:scale-110 transition-transform duration-300" />
                 </div>
-                <h3 className="font-bold mb-2">Ensure Legacy</h3>
+                <h3 className="font-bold mb-2 group-hover:text-cyan-600 transition-colors duration-300">Ensure Legacy</h3>
                 <p className="text-sm text-muted-foreground">
                   Blockchain transparency guarantees their impact continues and grows
                 </p>
@@ -777,7 +776,7 @@ export default function AngelsPage() {
 
           <div className="text-center mt-12">
             <Link href="/impact">
-              <Button size="lg" className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700">
+              <Button size="lg" variant="outline" className="bg-transparent border-2 border-purple-400 text-purple-400 hover:bg-purple-400 hover:text-white transition-all duration-300">
                 <Heart className="h-4 w-4 mr-2" />
                 Join the Movement
               </Button>

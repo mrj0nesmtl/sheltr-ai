@@ -38,8 +38,9 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
   const roleOptions = [
     { value: 'participant', label: 'Participant', description: 'Individual seeking SHELTR services' },
     { value: 'donor', label: 'Donor', description: 'Support SHELTR mission through donations' },
-    { value: 'admin', label: 'Shelter Admin', description: 'Manage shelter operations (requires approval)' },
-    { value: 'platform_admin', label: 'Platform Administrator', description: 'Founding partner with platform access (restricted)' },
+    // Temporarily disabled for beta - shelters will be created via super admin
+    // { value: 'admin', label: 'Shelter Admin', description: 'Manage shelter operations (requires approval)' },
+    // { value: 'platform_admin', label: 'Platform Administrator', description: 'Founding partner with platform access (restricted)' },
   ];
 
   const validateForm = (): boolean => {

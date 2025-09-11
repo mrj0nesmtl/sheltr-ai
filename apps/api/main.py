@@ -32,6 +32,9 @@ from routers.blog import router as blog_router
 from routers.knowledge_dashboard import router as knowledge_dashboard_router
 from routers.chatbot_dashboard import router as chatbot_dashboard_router
 
+# Import Firebase service for initialization
+from services.firebase_service import FirebaseService
+
 # Set up logging
 logging.basicConfig(
     level=logging.INFO,
@@ -44,6 +47,14 @@ async def lifespan(app: FastAPI):
     """Application lifespan manager"""
     # Startup
     logger.info("🚀 SHELTR-AI API starting up...")
+    
+    # Initialize Firebase
+    try:
+        firebase_service = FirebaseService()
+        logger.info("🔥 Firebase initialized successfully")
+    except Exception as e:
+        logger.error(f"🚨 Firebase initialization failed: {e}")
+        
     logger.info("🔐 Authentication system initialized")
     logger.info("🏢 Multi-tenant architecture ready")
     yield

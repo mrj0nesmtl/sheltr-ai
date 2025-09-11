@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowLeft, Building2, Users, Clock, TrendingUp, CheckCircle, BarChart3, FileText, Download, Shield, DollarSign, Calendar, Target, Coins, Zap, Heart, Gamepad2, Smartphone, QrCode, Globe } from 'lucide-react';
+import { ArrowLeft, Building2, Users, Clock, TrendingUp, CheckCircle, BarChart3, FileText, Download, Shield, DollarSign, Calendar, Target, Coins, Zap, Heart, Gamepad2, Smartphone, QrCode, Globe, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -34,40 +34,125 @@ export default function OrganizationsCaseStudyPage() {
       </nav>
 
       {/* Document Header */}
-      <section className="py-12 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20">
-        <div className="container mx-auto px-4">
+      <section className="relative py-12 overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0">
+          <img 
+            src="/backgrounds/solutions-bg.jpg" 
+            alt="Background" 
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-black/60 dark:bg-black/70" />
+        </div>
+        <div className="relative container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="flex items-center gap-4 mb-6">
-              <Building2 className="h-12 w-12 text-blue-600" />
+              <Building2 className="h-12 w-12 text-white" />
               <div>
                 <div className="flex items-center gap-2 mb-2">
-                  <h1 className="text-4xl font-bold">SHELTR for Shelters -  Case Study</h1>
-                  <Badge className="bg-blue-500 text-white">Organizations</Badge>
+                  <h1 className="text-4xl font-bold text-white">SHELTR for Shelters</h1>
+                  <Badge className="bg-white text-black">Case Study</Badge>
                 </div>
-                <p className="text-lg text-muted-foreground">
-                  Transforming Shelter Operations Through Technology
+                <p className="text-lg text-gray-200">
+                  Rethinking Fundraising for the Unhoused
                 </p>
-                <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
-                  <span>Case Study</span>
+                <div className="flex items-center gap-4 mt-2 text-sm text-gray-300">
+                  <span>TECH4GOOD</span>
                   <span>•</span>
                   <span>June 2025</span>
                   <span>•</span>
                   <span>15 min read</span>
                   <span>•</span>
-                  <Badge variant="outline" className="text-green-600 border-green-600">Implementation Studied</Badge>
+                  <Badge variant="outline" className="text-green-300 border-green-300">Implementation Studied</Badge>
                 </div>
               </div>
             </div>
             
-            <div className="flex gap-4">
-              <Button className="bg-blue-600 hover:bg-blue-700">
-                <Download className="h-4 w-4 mr-2" />
-                Download PDF
-              </Button>
-              <Button variant="outline">
-                <Calendar className="h-4 w-4 mr-2" />
-                Schedule Demo
-              </Button>
+            <div className="text-center">
+              <p className="text-gray-300 mb-4">
+                This case study demonstrates the transformative potential of the SHELTR HMIS platform.
+              </p>
+              <p className="text-sm text-gray-400">
+                For detailed documentation and implementation guides, visit our{' '}
+                <a 
+                  href="https://github.com/mrjones/sheltr-ai" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-blue-300 hover:text-blue-200 underline"
+                >
+                  GitHub Repo
+                </a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Opening Statement */}
+      <section className="py-16 bg-gradient-to-r from-gray-50 to-blue-50 dark:from-gray-900/50 dark:to-blue-900/20">
+        <div className="container mx-auto px-4">
+          <div className="max-w-5xl mx-auto text-center">
+            <div className="mb-8">
+              <Badge className="bg-green-100 text-green-800 border-green-200 mb-4">
+                <Heart className="h-4 w-4 mr-2" />
+                Our Mission
+              </Badge>
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
+                Elevating Lives Through Tech & Community Support
+              </h2>
+            </div>
+            
+            <div className="prose prose-lg max-w-none dark:prose-invert">
+              <p className="text-xl text-muted-foreground leading-relaxed mb-8">
+                SHELTR disrupts the traditional approach to homelessness by leveraging technology 
+                to create direct pathways from the streets to stable housing. Our platform connects participants 
+                with immediate housing solutions, such as tiny homes and transitional apartments, while hardcoding sustainable financial 
+                foundations through blockchain-powered DeFi strategies and community-powered donations.
+              </p>
+              
+              <div className="grid md:grid-cols-3 gap-8 mt-12">
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Home className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+                  </div>
+                  <h3 className="text-lg font-semibold mb-2">Immediate Housing</h3>
+                  <p className="text-muted-foreground">
+                    Connect participants with tiny homes, transitional apartments, and permanent housing solutions 
+                    through our verified network of providers.
+                  </p>
+                </div>
+                
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <DollarSign className="h-8 w-8 text-green-600 dark:text-green-400" />
+                  </div>
+                  <h3 className="text-lg font-semibold mb-2">Financial Elevation</h3>
+                  <p className="text-muted-foreground">
+                    Build sustainable income through skill development, job placement, and direct community 
+                    investment via blockchain-verified micro-donations.
+                  </p>
+                </div>
+                
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Users className="h-8 w-8 text-purple-600 dark:text-purple-400" />
+                  </div>
+                  <h3 className="text-lg font-semibold mb-2">Community Crowdfunding</h3>
+                  <p className="text-muted-foreground">
+                    Harness the power of technology to mobilize community support, creating transparent 
+                    funding streams that directly impact participant outcomes.
+                  </p>
+                </div>
+              </div>
+              
+              <div className="mt-12 bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg">
+                <blockquote className="text-lg italic text-foreground border-l-4 border-blue-500 pl-6">
+                  "Technology is changing how we manage the unhoused. It's revolutionizing how we 
+                  <strong>solve</strong> it. By connecting participants directly with housing opportunities 
+                  and community funding, we're creating pathways to independence that were never possible before."
+                </blockquote>
+                <cite className="block text-right text-muted-foreground mt-4">— SHELTR Platform Vision</cite>
+              </div>
             </div>
           </div>
         </div>
@@ -78,10 +163,10 @@ export default function OrganizationsCaseStudyPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="prose prose-lg max-w-none dark:prose-invert mb-12">
-              <h2 className="text-center">Executive Summary: The Operational Revolution</h2>
+              <h2 className="text-center">Summary: The Operational Implementation</h2>
               <p className="text-center text-xl">
-                SHELTR transforms shelter operations through cutting-edge technology, streamlining participant management 
-                while creating unprecedented transparency and engagement opportunities. Our blockchain-powered platform 
+                Transform shelter operations through cutting-edge technology, streamlining participant management 
+                while creating unprecedented transparency and fundraising engagement opportunities. A blockchain-powered platform 
                 modernizes every aspect of shelter administration, from intake to housing placement, while building 
                 sustainable support networks for long-term participant success.
               </p>
@@ -102,10 +187,10 @@ export default function OrganizationsCaseStudyPage() {
                 <CardHeader className="text-center pb-2">
                   <Clock className="h-12 w-12 text-blue-600 mx-auto mb-2" />
                   <CardTitle className="text-blue-600 text-2xl">75%</CardTitle>
-                  <CardDescription className="font-medium">Time Savings</CardDescription>
+                  <CardDescription className="font-medium">Potential Time Savings</CardDescription>
                 </CardHeader>
                 <CardContent className="text-center">
-                  <p className="text-sm text-muted-foreground">Reduction in administrative tasks</p>
+                  <p className="text-sm text-muted-foreground">Potential Reduction in administrative tasks</p>
                 </CardContent>
               </Card>
 
@@ -151,7 +236,7 @@ export default function OrganizationsCaseStudyPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4">Case Study: Metro Hope Shelter Implementation</h2>
+              <h2 className="text-3xl font-bold mb-4">Case Study: Shelter Implementation</h2>
               <p className="text-xl text-muted-foreground">
                 A 120-bed shelter transforms operations in 3 weeks with SHELTR's comprehensive platform
               </p>
@@ -480,9 +565,9 @@ export default function OrganizationsCaseStudyPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold mb-4">Financial Scenario: 100 Participants</h2>
+              <h2 className="text-4xl font-bold mb-4">Scenario: 100 Participants</h2>
               <p className="text-xl text-muted-foreground max-w-4xl mx-auto">
-                Conservative projections show how SHELTR transforms your shelter's financial sustainability 
+                Conservative projections show how SHELTR technology can create financial sustainability 
                 through participant-driven revenue generation and donor engagement automation.
               </p>
             </div>
@@ -513,7 +598,7 @@ export default function OrganizationsCaseStudyPage() {
                         <span className="font-medium">$5,000</span>
                       </div>
                       <div className="flex justify-between items-center bg-green-50 dark:bg-green-900/20 p-3 rounded-lg">
-                        <span className="font-semibold text-green-700 dark:text-green-400">🏆 YOUR SHELTER REVENUE (5%)</span>
+                        <span className="font-semibold text-green-700 dark:text-green-400">SHELTER DISTRIBUTION (5%)</span>
                         <span className="text-xl font-bold text-green-600">$2,500</span>
                       </div>
                     </div>
@@ -550,56 +635,6 @@ export default function OrganizationsCaseStudyPage() {
               </Card>
             </div>
 
-            {/* Fundraising Performance Metrics */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg">
-              <h3 className="text-2xl font-bold text-center mb-8">Participant Fundraising Performance Distribution</h3>
-              <div className="grid md:grid-cols-4 gap-6">
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-red-500 mb-2">20</div>
-                  <div className="text-sm font-medium mb-2">Top Performers</div>
-                  <div className="text-xs text-muted-foreground mb-3">$1,000+ monthly</div>
-                  <div className="bg-red-500/10 p-3 rounded-lg">
-                    <div className="font-bold text-red-600">$1,000 × 20 = $20,000</div>
-                    <div className="text-xs">Shelter Revenue: $1,000</div>
-                  </div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-orange-500 mb-2">30</div>
-                  <div className="text-sm font-medium mb-2">Strong Performers</div>
-                  <div className="text-xs text-muted-foreground mb-3">$500-$999 monthly</div>
-                  <div className="bg-orange-500/10 p-3 rounded-lg">
-                    <div className="font-bold text-orange-600">$750 × 30 = $22,500</div>
-                    <div className="text-xs">Shelter Revenue: $1,125</div>
-                  </div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-blue-500 mb-2">30</div>
-                  <div className="text-sm font-medium mb-2">Average Performers</div>
-                  <div className="text-xs text-muted-foreground mb-3">$200-$499 monthly</div>
-                  <div className="bg-blue-500/10 p-3 rounded-lg">
-                    <div className="font-bold text-blue-600">$350 × 30 = $10,500</div>
-                    <div className="text-xs">Shelter Revenue: $525</div>
-                  </div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-gray-500 mb-2">20</div>
-                  <div className="text-sm font-medium mb-2">New/Developing</div>
-                  <div className="text-xs text-muted-foreground mb-3">$50-$199 monthly</div>
-                  <div className="bg-gray-500/10 p-3 rounded-lg">
-                    <div className="font-bold text-gray-600">$125 × 20 = $2,500</div>
-                    <div className="text-xs">Shelter Revenue: $125</div>
-                  </div>
-                </div>
-              </div>
-              <div className="mt-8 text-center">
-                <div className="text-4xl font-bold text-green-600 mb-2">$55,500</div>
-                <div className="text-lg text-muted-foreground mb-2">Total Monthly Platform Volume</div>
-                <div className="text-2xl font-bold text-purple-600">$2,775 Monthly Shelter Revenue</div>
-                <p className="text-sm text-muted-foreground mt-2">
-                  Actual performance often exceeds conservative projections due to gamification effects
-                </p>
-              </div>
-            </div>
           </div>
         </div>
       </section>
@@ -609,7 +644,7 @@ export default function OrganizationsCaseStudyPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4">The Donor Engagement Revolution</h2>
+              <h2 className="text-3xl font-bold mb-4">Donor Engagement Disruption</h2>
               <p className="text-xl text-muted-foreground">
                 SHELTR's invisible gamification mechanics transform casual donors into committed long-term supporters
               </p>
@@ -719,7 +754,7 @@ export default function OrganizationsCaseStudyPage() {
 
             {/* Donor Journey Visualization */}
             <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-xl p-8">
-              <h3 className="text-2xl font-bold text-center mb-8">Typical Donor Journey & Revenue Acceleration</h3>
+              <h3 className="text-2xl font-bold text-center mb-8">Typical Donor Journey</h3>
               <div className="grid md:grid-cols-4 gap-6">
                 <div className="text-center">
                   <div className="w-16 h-16 bg-blue-500 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">1</div>
@@ -959,7 +994,7 @@ export default function OrganizationsCaseStudyPage() {
                   <span className="text-xs font-bold">$3,500+</span>
                 </div>
               </div>
-              <div className="text-center mt-6">
+              <div className="text-center mt-12">
                 <p className="text-lg font-semibold text-green-600">
                   Conservative projection: 200% month-over-month growth in first quarter
                 </p>

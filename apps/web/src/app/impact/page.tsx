@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { TrendingUp, Users, Home, DollarSign, Globe, Shield, Heart, MapPin, Clock, CheckCircle, BarChart3, PieChart, Building2, Coins, LogIn, Menu, X, ArrowRight } from 'lucide-react';
+import { Users, DollarSign, Globe, Shield, Heart, BarChart3, PieChart, LogIn, Menu, X, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -135,11 +135,10 @@ export default function ImpactPage() {
           <div className="text-center mb-16">
             <Badge variant="secondary" className="mb-4 bg-white/20 text-white border-white/30 backdrop-blur-sm">Impact Vision</Badge>
             <h1 className="text-4xl font-bold mb-6 text-white">
-              Transforming Lives Through Technology
+              Upgrading Lives Through Technology
             </h1>
             <p className="text-xl text-gray-200 mb-12 max-w-4xl mx-auto">
-              Our ethos: Tech for Good.
-              Our mission: Create scalable solutions that amplify every act of kindness to create lasting, measurable impact.
+              Tech for Good - Create solutions that amplify every act of kindness to create measurable impact.
             </p>
           </div>
 
@@ -236,7 +235,7 @@ export default function ImpactPage() {
                       <span className="text-sm text-purple-600 dark:text-purple-400 font-semibold">5% - Shelter support</span>
                     </div>
                     <Progress value={5} className="h-3" />
-                    <p className="text-xs text-muted-foreground mt-1">Participant's registered shelter operations</p>
+                    <p className="text-xs text-muted-foreground mt-1">Participant&apos;s registered shelter operations</p>
                   </div>
                 </div>
               </CardContent>
@@ -371,9 +370,9 @@ export default function ImpactPage() {
             {/* View All Angels Button */}
             <div className="text-center mt-8">
               <Link href="/angels">
-                <Button size="lg" className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700">
+                <Button size="lg" variant="outline" className="bg-transparent border-2 border-purple-400 text-purple-400 hover:bg-purple-400 hover:text-white transition-all duration-300">
                   <Heart className="h-4 w-4 mr-2" />
-                  See All Angels in Action
+                  Angels in Action
                   <ArrowRight className="h-4 w-4 ml-2" />
                 </Button>
               </Link>
@@ -431,31 +430,39 @@ export default function ImpactPage() {
 
 
       {/* Call to Action */}
-      <section className="py-24 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-orange-500/10">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-6">Join the Movement</h2>
-          <p className="text-xl text-muted-foreground mb-8">
-            Help us amplify the incredible work of Internet Angels and create systematic solutions 
+      <section className="relative py-24 overflow-hidden">
+        {/* Background Image with Blur */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat blur-[2px] scale-105" 
+          style={{backgroundImage: 'url(/images/sheltr_units/closeup-wheels.jpeg)'}}
+        />
+        {/* Dark Overlay */}
+        <div className="absolute inset-0 bg-black/70" />
+        
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl font-bold mb-6 text-white">Join the Movement</h2>
+          <p className="text-xl text-gray-200 mb-8">
+            Help us amplify the incredible work of these Angels and create systematic solutions 
             that ensure every act of kindness creates lasting impact.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/scan-give">
-              <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
+              <Button size="lg" variant="outline" className="bg-transparent border-2 border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white transition-all duration-300">
                 <Heart className="h-4 w-4 mr-2" />
-                Start Giving
+                Start
               </Button>
             </Link>
             <Link href="/solutions">
               <Button size="lg" variant="outline">
                 <Users className="h-4 w-4 mr-2" />
-                Explore Solutions
+                Explore
               </Button>
             </Link>
             <Link href="/docs">
               <Button size="lg" variant="outline">
                 <BarChart3 className="h-4 w-4 mr-2" />
-                Technical Docs
+                Documentation
               </Button>
             </Link>
           </div>

@@ -16,7 +16,7 @@ alembic==1.13.1
 asyncpg==0.30.0
 
 # Authentication and Security
-python-jose[cryptography]==3.4.0
+python-jose[cryptography]==3.5.0
 passlib[bcrypt]==1.7.4
 python-multipart==0.0.20
 
@@ -41,10 +41,10 @@ cryptography==44.0.1
 # HTTP Client and Async
 httpx==0.28.1
 aiohttp==3.12.15
-requests==2.32.4
+requests==2.32.5
 
 # Data Processing
-pandas==2.1.4
+pandas==2.3.2
 numpy==1.25.2
 python-dateutil==2.9.0.post0
 
@@ -62,7 +62,7 @@ requests-oauthlib==2.0.0
 
 # Monitoring and Logging
 structlog==25.4.0
-sentry-sdk[fastapi]==2.35.0
+sentry-sdk[fastapi]==2.37.1
 
 # Testing
 pytest==7.4.3
@@ -77,13 +77,13 @@ mypy==1.17.1
 
 # Environment and Configuration
 python-dotenv==1.0.0
-click==8.1.7
+click==8.1.8
 
 # CORS and Middleware
 fastapi-cors==0.0.6
 
 # Background Tasks
-celery==5.3.4
+celery==5.5.3
 redis==5.0.1
 
 # Rate Limiting
@@ -91,4 +91,4 @@ slowapi==0.1.9
 
 # Documentation
 mkdocs==1.6.1
-mkdocs-material==9.4.8 
+mkdocs-material==9.6.19 

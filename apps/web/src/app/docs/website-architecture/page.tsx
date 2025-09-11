@@ -33,43 +33,50 @@ export default function WebsiteArchitecturePage() {
       title: "Complete Site Tree",
       description: "Visual mapping of all 50+ pages including public and authenticated routes",
       icon: Globe,
-      topics: ["Public Pages", "Dashboard System", "Authentication Routes", "Role-Based Navigation"]
+      topics: ["Public Pages", "Dashboard System", "Authentication Routes", "Role-Based Navigation"],
+      url: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/website-architecture.md#-complete-site-tree"
     },
     {
       title: "Role-Based Access Matrix",
       description: "Comprehensive permissions table for Super Admin, Shelter Admin, Participant, and Donor roles",
       icon: Shield,
-      topics: ["Access Control", "Permission Levels", "Security Boundaries", "Role Inheritance"]
+      topics: ["Access Control", "Permission Levels", "Security Boundaries", "Role Inheritance"],
+      url: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/website-architecture.md#-role-based-access-matrix"
     },
     {
       title: "Mobile Responsiveness Guide",
       description: "Apple Liquid Glass design standards and mobile optimization framework",
       icon: Smartphone,
-      topics: ["Breakpoints", "Touch Targets", "Typography Scale", "Navigation Patterns"]
+      topics: ["Breakpoints", "Touch Targets", "Typography Scale", "Navigation Patterns"],
+      url: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/website-architecture.md#-mobile-responsiveness-guide"
     },
     {
       title: "Feature Testing Checklist",
       description: "100+ test cases covering authentication, navigation, business logic, and mobile features",
       icon: CheckCircle,
-      topics: ["Critical Tests", "High Priority", "Medium Priority", "Low Priority"]
+      topics: ["Critical Tests", "High Priority", "Medium Priority", "Low Priority"],
+      url: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/website-architecture.md#-feature-testing-checklist"
     },
     {
       title: "Authentication Flow Testing",
       description: "Complete testing scenarios for login, registration, and role-based routing",
       icon: Users,
-      topics: ["Test User Accounts", "Role Validation", "Session Management", "Access Control"]
+      topics: ["Test User Accounts", "Role Validation", "Session Management", "Access Control"],
+      url: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/website-architecture.md#-authentication-flow-testing"
     },
     {
       title: "Business Logic Testing",
       description: "Service booking system, form persistence, and core functionality validation",
       icon: Settings,
-      topics: ["API Endpoints", "Data Models", "Error Handling", "Real-time Updates"]
+      topics: ["API Endpoints", "Data Models", "Error Handling", "Real-time Updates"],
+      url: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/website-architecture.md#-business-logic-testing"
     },
     {
       title: "Performance & Deployment",
       description: "KPIs, metrics, and production readiness checklist",
       icon: BarChart3,
-      topics: ["Performance Targets", "User Experience Metrics", "Security Testing", "Deployment Checklist"]
+      topics: ["Performance Targets", "User Experience Metrics", "Security Testing", "Deployment Checklist"],
+      url: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/website-architecture.md#-current-implementation-status"
     }
   ];
 
@@ -228,9 +235,11 @@ export default function WebsiteArchitecturePage() {
                           </Badge>
                         ))}
                       </div>
-                      <Button variant="outline" size="sm" className="w-full">
-                        <ExternalLink className="w-4 h-4 mr-2" />
-                        View Documentation
+                      <Button variant="outline" size="sm" className="w-full" asChild>
+                        <Link href={section.url} target="_blank" rel="noopener noreferrer">
+                          <ExternalLink className="w-4 h-4 mr-2" />
+                          View Documentation
+                        </Link>
                       </Button>
                     </div>
                   </CardContent>

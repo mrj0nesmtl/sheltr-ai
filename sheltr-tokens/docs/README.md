@@ -10,7 +10,7 @@ Welcome to the comprehensive documentation for the SHELTR token ecosystem. This 
 
 ## 🚀 Quick Navigation
 
-### **For Investors & Stakeholders**
+### **For Stakeholders**
 - [Tokenomics Overview](./SHELTR-TOKENOMICS-STRATEGY.md#tokenomics-overview)
 - [Business Strategy](./SHELTR-TOKENOMICS-STRATEGY.md#business-strategy)
 - [Team Distribution](./SHELTR-TOKENOMICS-STRATEGY.md#team-distribution-12m-sheltr)
@@ -21,6 +21,13 @@ Welcome to the comprehensive documentation for the SHELTR token ecosystem. This 
 - [Contract Architecture](./SHELTR-TOKENOMICS-STRATEGY.md#smart-contract-architecture)
 - [Security Configuration](./TECHNICAL-IMPLEMENTATION-GUIDE.md#security-configuration)
 - [Testing Strategy](./TECHNICAL-IMPLEMENTATION-GUIDE.md#testing-strategy)
+
+#### **🔗 Quick Contract Access**
+- **Token Contracts**: [SHELTR.sol](../src/SHELTR.sol) | [SHELTRS.sol](../src/SHELTRS.sol)
+- **Financial**: [Treasury](../src/SHELTRTreasury.sol) | [Token Sale](../src/SHELTRTokenSale.sol)
+- **Donations**: [SmartFund](../src/SmartFundDistributor.sol) | [Multi-Currency](../src/MultiCurrencyDonation.sol)
+- **Operations**: [Housing Fund](../src/HousingFund.sol) | [Shelter Ops](../src/ShelterOperations.sol)
+- **Governance**: [Governance](../src/SHELTRGovernance.sol) | [Counter](../src/Counter.sol)
 
 ### **For Operations & Management**
 - [Treasury Management](./SHELTR-TOKENOMICS-STRATEGY.md#treasury-management-system)
@@ -58,13 +65,63 @@ Welcome to the comprehensive documentation for the SHELTR token ecosystem. This 
 - **Framework**: Foundry
 - **Security**: OpenZeppelin contracts
 
-### **Core Contracts**
-1. **SHELTR.sol** - Main governance token
-2. **SHELTRTreasury.sol** - Treasury management
-3. **SmartFundDistributor.sol** - Donation distribution
-4. **SHELTRGovernance.sol** - Governance system
-5. **SHELTRS.sol** - Stablecoin
-6. **MultiCurrencyDonation.sol** - Multi-currency support
+### **Smart Contract Architecture**
+
+#### **🏛️ Core Token Contracts**
+1. **[SHELTR.sol](../src/SHELTR.sol)** - Main governance token (ERC-20)
+   - Governance token with voting capabilities
+   - Total supply: 100,000,000 SHELTR
+   - Vesting and distribution logic
+
+2. **[SHELTRS.sol](../src/SHELTRS.sol)** - SHELTR Stablecoin (ERC-20)
+   - USD-pegged stablecoin for donations
+   - Stability mechanisms and collateralization
+   - Integration with donation system
+
+#### **💰 Financial Management**
+3. **[SHELTRTreasury.sol](../src/SHELTRTreasury.sol)** - Treasury Management
+   - Multi-signature treasury operations
+   - Fund allocation and investment strategies
+   - Emergency controls and governance integration
+
+4. **[SHELTRTokenSale.sol](../src/SHELTRTokenSale.sol)** - Public Token Sale
+   - ICO implementation with phased release
+   - December 2025 launch preparation
+   - Investor vesting and distribution
+
+#### **🎯 Donation & Distribution**
+5. **[SmartFundDistributor.sol](../src/SmartFundDistributor.sol)** - SmartFund™ Logic
+   - Automated 80/15/5 distribution model
+   - 80% immediate participant needs
+   - 15% housing fund allocation
+   - 5% platform operations
+
+6. **[MultiCurrencyDonation.sol](../src/MultiCurrencyDonation.sol)** - Multi-Currency Support
+   - Accept donations in multiple cryptocurrencies
+   - Automatic conversion and routing
+   - Real-time exchange rate integration
+
+#### **🏠 Housing & Operations**
+7. **[HousingFund.sol](../src/HousingFund.sol)** - Housing Fund Management
+   - 15% donation allocation management
+   - POD housing program funding
+   - Transparent fund tracking and allocation
+
+8. **[ShelterOperations.sol](../src/ShelterOperations.sol)** - Shelter Operations
+   - 5% operational fund management
+   - Platform maintenance and development
+   - Operational transparency and reporting
+
+#### **🗳️ Governance & Utilities**
+9. **[SHELTRGovernance.sol](../src/SHELTRGovernance.sol)** - Governance System
+   - Token-weighted voting mechanisms
+   - Proposal creation and execution
+   - Founder veto power (JY + DK, 3-day window)
+
+10. **[Counter.sol](../src/Counter.sol)** - Testing & Development
+    - Utility contract for testing
+    - Development demonstrations
+    - Contract interaction examples
 
 ## 📈 Success Metrics
 
@@ -97,9 +154,10 @@ Welcome to the comprehensive documentation for the SHELTR token ecosystem. This 
 ## 📞 Support & Resources
 
 ### **Documentation Updates**
-- **Version**: 1.0
-- **Last Updated**: September 2, 2025
+- **Version**: 1.4
+- **Last Updated**: September 12, 2025
 - **Maintainer**: SHELTR Development Team Joel Yaffe - joel@arcanaconcept.com
+- **Enhanced**: Complete contract architecture with direct links to source code
 
 ### **Contact Information**
 - **Technical Support**: GitHub Issues - joel@arcanaconcept.com
@@ -112,7 +170,7 @@ Welcome to the comprehensive documentation for the SHELTR token ecosystem. This 
 
 *SHELTR is building a sustainable, transparent, and impactful platform for social change through innovative blockchain technology.*
 
-**Document Version**: 1.3
-**Last Updated**: September 2, 2025  
+**Document Version**: 1.4
+**Last Updated**: September 12, 2025  
 **Author**: SHELTR Development Team  
-**Status**: Ready for Review
+**Status**: Enhanced with Contract Links - Ready for Review

@@ -5,7 +5,7 @@ pydantic[email]>=2.7.0,<3.0.0
 pydantic-settings==2.10.1
 
 # Firebase and Google Cloud
-firebase-admin==6.4.0
+firebase-admin==7.1.0
 google-cloud-firestore==2.21.0
 google-cloud-storage==3.3.0
 google-auth==2.40.3

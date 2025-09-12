@@ -67,9 +67,9 @@ export const PublicChatbot: React.FC<PublicChatbotProps> = ({ className = '' }) 
     if (savedMessages) {
       try {
         const parsed = JSON.parse(savedMessages);
-        setMessages(parsed.map((msg: any) => ({
+        setMessages(parsed.map((msg: Record<string, unknown>) => ({
           ...msg,
-          timestamp: new Date(msg.timestamp)
+          timestamp: new Date(msg.timestamp as string)
         })));
       } catch (error) {
         console.warn('Failed to load chat history:', error);
@@ -107,36 +107,56 @@ export const PublicChatbot: React.FC<PublicChatbotProps> = ({ className = '' }) 
     setIsLoading(true);
 
     try {
-      // Determine the API endpoint based on environment
-      const apiUrl = process.env.NODE_ENV === 'production' 
-        ? 'https://sheltr-api-714964620823.us-central1.run.app/api/v1/chatbot/public'
-        : '/api/chatbot/public';
+      // In development, use Next.js API route for better error handling
+      // In production (static export), call backend directly
+      const isDevelopment = process.env.NODE_ENV === 'development';
+      const apiUrl = isDevelopment 
+        ? '/api/chatbot/public'
+        : 'https://sheltr-api-714964620823.us-central1.run.app/api/v1/chatbot/public';
+      
+      // Prepare the request body based on the endpoint
+      const requestBody = isDevelopment ? {
+        message: userMessage.text,
+        sessionId: getSessionId(),
+        context: {
+          page: window.location.pathname,
+          userAgent: navigator.userAgent,
+          timestamp: new Date().toISOString()
+        }
+      } : {
+        message: userMessage.text,
+        user_id: getSessionId(),
+        user_role: 'public',
+        conversation_context: {
+          page: window.location.pathname,
+          user_agent: navigator.userAgent,
+          session_type: 'public',
+          anonymous: true,
+          timestamp: new Date().toISOString()
+        }
+      };
       
       const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          message: userMessage.text,
-          sessionId: getSessionId(),
-          context: {
-            page: window.location.pathname,
-            userAgent: navigator.userAgent,
-            timestamp: new Date().toISOString()
-          }
-        }),
+        body: JSON.stringify(requestBody),
       });
 
       if (response.ok) {
         const data = await response.json();
         
+        // Handle different response formats from Next.js API route vs backend API
+        const responseText = data.response || data.message || "I'm here to help! Could you please rephrase your question?";
+        const actions = data.actions || [];
+        
         const botMessage: Message = {
           id: (Date.now() + 1).toString(),
-          text: data.response || "I'm here to help! Could you please rephrase your question?",
+          text: responseText,
           isUser: false,
           timestamp: new Date(),
-          actions: data.actions || []
+          actions: actions
         };
         setMessages(prev => [...prev, botMessage]);
       } else {
@@ -309,9 +329,9 @@ export const PublicChatbot: React.FC<PublicChatbotProps> = ({ className = '' }) 
                     <div className="flex flex-wrap gap-2 mt-3">
                       {message.actions.map((action, index) => {
                         // Safety check for action properties - API returns 'label' not 'text'
-                        const url = action.url || action.data?.url || '#';
-                        const text = action.label || action.text || 'Link';
-                        const isExternal = url.startsWith('http');
+                        const url = (action.url || action.data?.url || '#') as string;
+                        const text = (action.label || action.text || 'Link') as string;
+                        const isExternal = typeof url === 'string' && url.startsWith('http');
                         
                         return (
                           <a
@@ -367,7 +387,7 @@ export const PublicChatbot: React.FC<PublicChatbotProps> = ({ className = '' }) 
             </div>
             <div className="flex justify-between items-center mt-2">
               <p className="text-xs text-gray-500">
-                ⚡ For emergencies, type "emergency" or call 911
+                ⚡ For emergencies, type &quot;emergency&quot; or call 911
               </p>
               <button
                 onClick={clearChat}

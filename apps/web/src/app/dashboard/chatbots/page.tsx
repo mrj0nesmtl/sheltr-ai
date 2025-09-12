@@ -270,33 +270,20 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
         setSelectedAgent(hardcodedAgents[0].id);
       }
 
-      // Load mock sessions for demonstration
-      const mockSessions: ChatSession[] = [
-        {
-          id: 'session-1',
-          title: 'New Chat 1',
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-          agent_type: 'general',
-          message_count: 0,
-          last_message: 'No messages yet',
-          model: 'gpt-4o-mini',
-          status: 'active'
-        },
-        {
-          id: 'session-2',
-          title: 'New Chat 2',
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-          agent_type: 'general',
-          message_count: 0,
-          last_message: 'No messages yet',
-          model: 'gpt-4o-mini',
-          status: 'active'
+      // Load chat sessions from backend
+      try {
+        const response = await chatbotDashboardService.getChatSessions();
+        if (response.success && response.data.sessions) {
+          setSessions(response.data.sessions);
+        } else {
+          console.warn('No chat sessions found, starting with empty list');
+          setSessions([]);
         }
-      ];
-      
-      setSessions(mockSessions);
+      } catch (error) {
+        console.error('Error loading chat sessions from backend:', error);
+        // Fall back to empty sessions list if backend is unavailable
+        setSessions([]);
+      }
       
     } catch (error) {
       console.error('Error loading chatbot data:', error);
@@ -307,23 +294,37 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
 
   const createNewSession = async () => {
     try {
-      const newSession: ChatSession = {
-        id: `session-${Date.now()}`,
-        title: `New Chat ${sessions.length + 1}`,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-        agent_type: selectedAgent || 'general',
-        message_count: 0,
-        last_message: 'No messages yet',
-        model: selectedModel,
-        status: 'active'
-      };
-      
-      setSessions(prev => [newSession, ...prev]);
-      setCurrentSession(newSession);
-      setMessages([]);
+      // Create session on backend first
+      const response = await chatbotDashboardService.createChatSession(
+        `New Chat ${sessions.length + 1}`,
+        selectedAgent || 'general',
+        selectedModel
+      );
+
+      if (response.success && response.data.session_id) {
+        // Create local session object with backend ID
+        const newSession: ChatSession = {
+          id: response.data.session_id,
+          title: `New Chat ${sessions.length + 1}`,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          agent_type: selectedAgent || 'general',
+          message_count: 0,
+          last_message: 'No messages yet',
+          model: selectedModel,
+          status: 'active'
+        };
+        
+        setSessions(prev => [newSession, ...prev]);
+        setCurrentSession(newSession);
+        setMessages([]);
+      } else {
+        throw new Error('Failed to create session on backend');
+      }
     } catch (error) {
       console.error('Error creating new session:', error);
+      // Show user-friendly error message
+      alert('Failed to create new chat session. Please try again.');
     }
   };
 
@@ -331,9 +332,19 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
     try {
       setCurrentSession(session);
       
-      // Load mock messages for demonstration
-      const mockMessages: ChatMessage[] = [];
-      setMessages(mockMessages);
+      // Load actual messages from backend
+      try {
+        const response = await chatbotDashboardService.getChatMessages(session.id);
+        if (response.success && response.data.messages) {
+          setMessages(response.data.messages);
+        } else {
+          setMessages([]);
+        }
+      } catch (error) {
+        console.error('Error loading messages from backend:', error);
+        // Fall back to empty messages if backend is unavailable
+        setMessages([]);
+      }
     } catch (error) {
       console.error('Error loading session messages:', error);
     }
@@ -481,8 +492,8 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
         setCurrentSession({ ...currentSession, title: newSessionTitle.trim() });
       }
 
-      // TODO: In a real implementation, you would call the backend API here
-      // await chatbotDashboardService.updateSessionTitle(sessionToRename.id, newSessionTitle.trim());
+      // Call the backend API to persist the title change
+      await chatbotDashboardService.updateSessionTitle(sessionToRename.id, newSessionTitle.trim());
 
       // Close the dialog
       setRenameDialogOpen(false);
@@ -506,8 +517,8 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
         setMessages([]);
       }
 
-      // TODO: In a real implementation, you would call the backend API here
-      // await chatbotDashboardService.deleteSession(session.id);
+      // Call the backend API to delete the session
+      await chatbotDashboardService.deleteChatSession(session.id);
     } catch (error) {
       console.error('Error deleting session:', error);
     }

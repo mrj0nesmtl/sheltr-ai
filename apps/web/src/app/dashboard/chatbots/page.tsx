@@ -377,8 +377,8 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
         const startTime = Date.now();
         
         // Find the selected agent configuration
-        const selectedAgent = agents.find(agent => agent.name === selectedModel) || {
-          id: 'general-assistant',
+        const selectedAgentConfig = agents.find(agent => agent.id === selectedAgent) || {
+          id: 'general',
           name: 'General Assistant',
           description: 'A helpful general purpose assistant',
           instructions: 'You are a helpful AI assistant for SHELTR platform users.',
@@ -389,44 +389,46 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
           status: 'active' as const
         };
         
-        // Use the simpler authenticated chatbot endpoint instead of complex session management
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000'}/api/v1/chatbot/message`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${await (await import('firebase/auth')).getAuth().currentUser?.getIdToken()}`,
-          },
-          body: JSON.stringify({
-            message: newMessage.trim(),
-            context: {
-              agent_type: selectedModel,
-              dashboard_context: true,
-              session_id: currentSession.id
+        // Use the chatbot dashboard service to send message and save to session
+        const response = await chatbotDashboardService.sendMessage(
+          currentSession.id,
+          userMessage.content,
+          selectedAgentConfig
+        );
+        
+        if (response.success) {
+          const responseTime = (Date.now() - startTime) / 1000;
+          
+          const aiMessage: ChatMessage = {
+            id: `msg-${Date.now() + 1}`,
+            content: response.data.message || "I received your message successfully!",
+            role: 'assistant',
+            timestamp: new Date().toISOString(),
+            metadata: {
+              model: selectedModel,
+              tokens_used: response.data.metadata?.tokens_used || 150,
+              response_time: response.data.metadata?.response_time || responseTime
             }
-          }),
-        });
-
-        if (!response.ok) {
-          throw new Error(`API responded with ${response.status}: ${response.statusText}`);
+          };
+          
+          setMessages(prev => [...prev, aiMessage]);
+          
+          // Update the current session with new message count and last message
+          const updatedSession = {
+            ...currentSession,
+            message_count: currentSession.message_count + 2, // user + assistant message
+            last_message: aiMessage.content.slice(0, 50) + (aiMessage.content.length > 50 ? '...' : ''),
+            updated_at: new Date().toISOString()
+          };
+          setCurrentSession(updatedSession);
+          
+          // Update the session in the sessions list
+          setSessions(prev => prev.map(session => 
+            session.id === currentSession.id ? updatedSession : session
+          ));
+        } else {
+          throw new Error('Failed to get response from chatbot service');
         }
-
-        const data = await response.json();
-        
-        const responseTime = (Date.now() - startTime) / 1000;
-        
-        const aiMessage: ChatMessage = {
-          id: `msg-${Date.now() + 1}`,
-          content: data.response || "I received your message successfully!",
-          role: 'assistant',
-          timestamp: new Date().toISOString(),
-          metadata: {
-            model: selectedModel,
-            tokens_used: 150,
-            response_time: responseTime
-          }
-        };
-        
-        setMessages(prev => [...prev, aiMessage]);
         
       } catch (apiError) {
         console.error('API Error:', apiError);
@@ -480,20 +482,20 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
     if (!sessionToRename || !newSessionTitle.trim()) return;
 
     try {
-      // Update the session title in the local state
+      // Call the backend API to persist the title change first
+      await chatbotDashboardService.updateSessionTitle(sessionToRename.id, newSessionTitle.trim());
+
+      // Update the session title in the local state only after backend success
       setSessions(prev => prev.map(session => 
         session.id === sessionToRename.id 
-          ? { ...session, title: newSessionTitle.trim() }
+          ? { ...session, title: newSessionTitle.trim(), updated_at: new Date().toISOString() }
           : session
       ));
 
       // Update current session if it's the one being renamed
       if (currentSession?.id === sessionToRename.id) {
-        setCurrentSession({ ...currentSession, title: newSessionTitle.trim() });
+        setCurrentSession({ ...currentSession, title: newSessionTitle.trim(), updated_at: new Date().toISOString() });
       }
-
-      // Call the backend API to persist the title change
-      await chatbotDashboardService.updateSessionTitle(sessionToRename.id, newSessionTitle.trim());
 
       // Close the dialog
       setRenameDialogOpen(false);
@@ -501,6 +503,7 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
       setNewSessionTitle('');
     } catch (error) {
       console.error('Error renaming session:', error);
+      alert('Failed to rename chat session. Please try again.');
     }
   };
 
@@ -508,7 +511,10 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
     if (!confirm(`Are you sure you want to delete "${session.title}"?`)) return;
 
     try {
-      // Remove from local state
+      // Call the backend API to delete the session first
+      await chatbotDashboardService.deleteChatSession(session.id);
+
+      // Remove from local state only after backend success
       setSessions(prev => prev.filter(s => s.id !== session.id));
 
       // If it's the current session, clear it
@@ -516,11 +522,9 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
         setCurrentSession(null);
         setMessages([]);
       }
-
-      // Call the backend API to delete the session
-      await chatbotDashboardService.deleteChatSession(session.id);
     } catch (error) {
       console.error('Error deleting session:', error);
+      alert('Failed to delete chat session. Please try again.');
     }
   };
 

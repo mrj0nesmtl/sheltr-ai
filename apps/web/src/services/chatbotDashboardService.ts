@@ -199,7 +199,7 @@ class ChatbotDashboardService {
       formData.append('agent_config', JSON.stringify(agentConfig));
 
       const token = await this.getAuthToken();
-      const response = await fetch(`${this.baseUrl}/api/v1/api/v1/chatbot-dashboard/sessions/${sessionId}/send`, {
+      const response = await fetch(`${this.baseUrl}/api/v1/chatbot-dashboard/sessions/${sessionId}/send`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

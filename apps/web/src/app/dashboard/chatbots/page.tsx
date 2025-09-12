@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
@@ -86,6 +87,9 @@ export default function ChatbotDashboard() {
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [sessionFilter, setSessionFilter] = useState<string>('all');
+  const [renameDialogOpen, setRenameDialogOpen] = useState(false);
+  const [sessionToRename, setSessionToRename] = useState<ChatSession | null>(null);
+  const [newSessionTitle, setNewSessionTitle] = useState('');
 
   // Toolbar state
   const [showToolbar, setShowToolbar] = useState(true);
@@ -357,23 +361,82 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
       setMessages(prev => [...prev, userMessage]);
       setNewMessage('');
       
-      // Simulate AI response
-      setTimeout(() => {
+      // Send message to backend
+      try {
+        const startTime = Date.now();
+        
+        // Find the selected agent configuration
+        const selectedAgent = agents.find(agent => agent.name === selectedModel) || {
+          id: 'general-assistant',
+          name: 'General Assistant',
+          description: 'A helpful general purpose assistant',
+          instructions: 'You are a helpful AI assistant for SHELTR platform users.',
+          model: selectedModel,
+          knowledge_bases: [],
+          temperature: 0.7,
+          max_tokens: 1000,
+          status: 'active' as const
+        };
+        
+        // Use the simpler authenticated chatbot endpoint instead of complex session management
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000'}/api/v1/chatbot/message`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${await (await import('firebase/auth')).getAuth().currentUser?.getIdToken()}`,
+          },
+          body: JSON.stringify({
+            message: newMessage.trim(),
+            context: {
+              agent_type: selectedModel,
+              dashboard_context: true,
+              session_id: currentSession.id
+            }
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`API responded with ${response.status}: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        
+        const responseTime = (Date.now() - startTime) / 1000;
+        
         const aiMessage: ChatMessage = {
           id: `msg-${Date.now() + 1}`,
-          content: "I'm a mock response for demonstration. Backend integration is pending.",
+          content: data.response || "I received your message successfully!",
           role: 'assistant',
           timestamp: new Date().toISOString(),
           metadata: {
             model: selectedModel,
             tokens_used: 150,
-            response_time: 1.2
+            response_time: responseTime
           }
         };
         
         setMessages(prev => [...prev, aiMessage]);
-        setIsTyping(false);
-      }, 1000);
+        
+      } catch (apiError) {
+        console.error('API Error:', apiError);
+        
+        // Fallback response if backend fails
+        const aiMessage: ChatMessage = {
+          id: `msg-${Date.now() + 1}`,
+          content: "I'm experiencing technical difficulties connecting to the AI backend. The message was received but I cannot provide an intelligent response right now. Please try again or contact support.",
+          role: 'assistant',
+          timestamp: new Date().toISOString(),
+          metadata: {
+            model: selectedModel,
+            tokens_used: 0,
+            response_time: 1.0
+          }
+        };
+        
+        setMessages(prev => [...prev, aiMessage]);
+      }
+      
+      setIsTyping(false);
       
     } catch (error) {
       console.error('Error sending message:', error);
@@ -393,6 +456,61 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
       hour: '2-digit', 
       minute: '2-digit' 
     });
+  };
+
+  // Rename session functions
+  const handleRenameSession = (session: ChatSession) => {
+    setSessionToRename(session);
+    setNewSessionTitle(session.title);
+    setRenameDialogOpen(true);
+  };
+
+  const handleSaveRename = async () => {
+    if (!sessionToRename || !newSessionTitle.trim()) return;
+
+    try {
+      // Update the session title in the local state
+      setSessions(prev => prev.map(session => 
+        session.id === sessionToRename.id 
+          ? { ...session, title: newSessionTitle.trim() }
+          : session
+      ));
+
+      // Update current session if it's the one being renamed
+      if (currentSession?.id === sessionToRename.id) {
+        setCurrentSession({ ...currentSession, title: newSessionTitle.trim() });
+      }
+
+      // TODO: In a real implementation, you would call the backend API here
+      // await chatbotDashboardService.updateSessionTitle(sessionToRename.id, newSessionTitle.trim());
+
+      // Close the dialog
+      setRenameDialogOpen(false);
+      setSessionToRename(null);
+      setNewSessionTitle('');
+    } catch (error) {
+      console.error('Error renaming session:', error);
+    }
+  };
+
+  const handleDeleteSession = async (session: ChatSession) => {
+    if (!confirm(`Are you sure you want to delete "${session.title}"?`)) return;
+
+    try {
+      // Remove from local state
+      setSessions(prev => prev.filter(s => s.id !== session.id));
+
+      // If it's the current session, clear it
+      if (currentSession?.id === session.id) {
+        setCurrentSession(null);
+        setMessages([]);
+      }
+
+      // TODO: In a real implementation, you would call the backend API here
+      // await chatbotDashboardService.deleteSession(session.id);
+    } catch (error) {
+      console.error('Error deleting session:', error);
+    }
   };
 
   // Filter sessions based on search and filter
@@ -597,17 +715,39 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
                         </div>
                         
                         <div className="flex items-center gap-1">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="h-6 w-6 p-0"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              // TODO: Show session options
-                            }}
-                          >
-                            <MoreHorizontal className="h-3 w-3" />
-                          </Button>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-6 w-6 p-0"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <MoreHorizontal className="h-3 w-3" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className="w-40">
+                              <DropdownMenuItem
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleRenameSession(session);
+                                }}
+                              >
+                                <Edit className="h-4 w-4 mr-2" />
+                                Rename
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleDeleteSession(session);
+                                }}
+                                className="text-destructive"
+                              >
+                                <Trash2 className="h-4 w-4 mr-2" />
+                                Delete
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
                         </div>
                       </div>
                     </CardContent>
@@ -926,6 +1066,48 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
               </Card>
             </TabsContent>
           </Tabs>
+        </DialogContent>
+      </Dialog>
+
+      {/* Rename Session Dialog */}
+      <Dialog open={renameDialogOpen} onOpenChange={setRenameDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Rename Chat Session</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <label className="text-sm font-medium mb-2 block">Session Name</label>
+              <Input
+                value={newSessionTitle}
+                onChange={(e) => setNewSessionTitle(e.target.value)}
+                placeholder="Enter new session name..."
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    handleSaveRename();
+                  }
+                }}
+              />
+            </div>
+            <div className="flex justify-end gap-2">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setRenameDialogOpen(false);
+                  setSessionToRename(null);
+                  setNewSessionTitle('');
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleSaveRename}
+                disabled={!newSessionTitle.trim()}
+              >
+                Save
+              </Button>
+            </div>
+          </div>
         </DialogContent>
       </Dialog>
     </div>

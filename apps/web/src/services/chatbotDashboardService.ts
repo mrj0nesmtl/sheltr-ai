@@ -124,7 +124,7 @@ class ChatbotDashboardService {
    */
   async getChatSessions(): Promise<ChatSessionsResponse> {
     try {
-      const response = await fetch(`${this.baseUrl}/chatbot-dashboard/sessions`, {
+      const response = await fetch(`${this.baseUrl}/api/v1/chatbot-dashboard/sessions`, {
         headers: await this.getAuthHeaders(),
       });
 
@@ -150,7 +150,7 @@ class ChatbotDashboardService {
       formData.append('model', model);
 
       const token = await this.getAuthToken();
-      const response = await fetch(`${this.baseUrl}/chatbot-dashboard/sessions`, {
+      const response = await fetch(`${this.baseUrl}/api/v1/chatbot-dashboard/sessions`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -174,7 +174,7 @@ class ChatbotDashboardService {
    */
   async getChatMessages(sessionId: string): Promise<ChatMessagesResponse> {
     try {
-      const response = await fetch(`${this.baseUrl}/chatbot-dashboard/sessions/${sessionId}/messages`, {
+      const response = await fetch(`${this.baseUrl}/api/v1/api/v1/chatbot-dashboard/sessions/${sessionId}/messages`, {
         headers: await this.getAuthHeaders(),
       });
 
@@ -199,7 +199,7 @@ class ChatbotDashboardService {
       formData.append('agent_config', JSON.stringify(agentConfig));
 
       const token = await this.getAuthToken();
-      const response = await fetch(`${this.baseUrl}/chatbot-dashboard/sessions/${sessionId}/send`, {
+      const response = await fetch(`${this.baseUrl}/api/v1/api/v1/chatbot-dashboard/sessions/${sessionId}/send`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -223,7 +223,7 @@ class ChatbotDashboardService {
    */
   async getAgentConfigurations(): Promise<AgentConfigurationsResponse> {
     try {
-      const response = await fetch(`${this.baseUrl}/chatbot-dashboard/agents`, {
+      const response = await fetch(`${this.baseUrl}/api/v1/chatbot-dashboard/agents`, {
         headers: await this.getAuthHeaders(),
       });
 
@@ -247,7 +247,7 @@ class ChatbotDashboardService {
       formData.append('agent_data', JSON.stringify(agentData));
 
       const token = await this.getAuthToken();
-      const response = await fetch(`${this.baseUrl}/chatbot-dashboard/agents`, {
+      const response = await fetch(`${this.baseUrl}/api/v1/chatbot-dashboard/agents`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -271,7 +271,7 @@ class ChatbotDashboardService {
    */
   async deleteChatSession(sessionId: string): Promise<{ success: boolean; data: { message: string } }> {
     try {
-      const response = await fetch(`${this.baseUrl}/chatbot-dashboard/sessions/${sessionId}`, {
+      const response = await fetch(`${this.baseUrl}/api/v1/chatbot-dashboard/sessions/${sessionId}`, {
         method: 'DELETE',
         headers: await this.getAuthHeaders(),
       });
@@ -296,7 +296,7 @@ class ChatbotDashboardService {
       formData.append('title', title);
 
       const token = await this.getAuthToken();
-      const response = await fetch(`${this.baseUrl}/chatbot-dashboard/sessions/${sessionId}/title`, {
+      const response = await fetch(`${this.baseUrl}/api/v1/chatbot-dashboard/sessions/${sessionId}/title`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -320,7 +320,7 @@ class ChatbotDashboardService {
    */
   async getChatAnalytics(): Promise<ChatAnalyticsResponse> {
     try {
-      const response = await fetch(`${this.baseUrl}/chatbot-dashboard/analytics`, {
+      const response = await fetch(`${this.baseUrl}/api/v1/chatbot-dashboard/analytics`, {
         headers: await this.getAuthHeaders(),
       });
 

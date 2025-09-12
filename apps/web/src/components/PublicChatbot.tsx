@@ -13,8 +13,10 @@ interface Message {
   timestamp: Date;
   actions?: Array<{
     type: string;
-    text: string;
-    url: string;
+    label?: string;
+    text?: string;
+    url?: string;
+    data?: Record<string, unknown>;
   }>;
 }
 
@@ -117,13 +119,11 @@ export const PublicChatbot: React.FC<PublicChatbotProps> = ({ className = '' }) 
         },
         body: JSON.stringify({
           message: userMessage.text,
-          user_id: getSessionId(),
-          user_role: 'public',
-          conversation_context: {
+          sessionId: getSessionId(),
+          context: {
             page: window.location.pathname,
-            user_agent: navigator.userAgent,
-            session_type: 'public',
-            anonymous: true
+            userAgent: navigator.userAgent,
+            timestamp: new Date().toISOString()
           }
         }),
       });
@@ -308,9 +308,9 @@ export const PublicChatbot: React.FC<PublicChatbotProps> = ({ className = '' }) 
                   {message.actions && message.actions.length > 0 && (
                     <div className="flex flex-wrap gap-2 mt-3">
                       {message.actions.map((action, index) => {
-                        // Safety check for action properties
-                        const url = action.url || '#';
-                        const text = action.text || 'Link';
+                        // Safety check for action properties - API returns 'label' not 'text'
+                        const url = action.url || action.data?.url || '#';
+                        const text = action.label || action.text || 'Link';
                         const isExternal = url.startsWith('http');
                         
                         return (

@@ -144,7 +144,7 @@ export default function DronesPage() {
       <section className="relative py-24 overflow-hidden">
         {/* Background Image */}
         <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat blur-[2px] scale-105" 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-105" 
           style={{backgroundImage: 'url(/images/sheltr_units/drone-delivery.jpeg)'}}
         />
         {/* Dark Overlay */}
@@ -502,7 +502,7 @@ export default function DronesPage() {
       <section className="relative py-24 overflow-hidden">
         {/* Background Image */}
         <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat blur-[2px] scale-105" 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-105" 
           style={{backgroundImage: 'url(/images/sheltr_units/qr-applications.jpeg)'}}
         />
         {/* Dark Overlay */}

@@ -50,8 +50,8 @@ export default function ParticipantsPage() {
       <section className="relative py-24 flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <Image
-            src="/images/sheltr_units/security.jpeg"
-            alt="SHELTR Security - Digital door lock with biometric access"
+            src="/images/sheltr_units/pods-2.jpeg"
+            alt="SHELTR PODS - Mobile emergency housing units in urban setting"
             fill
             className="object-cover"
             priority

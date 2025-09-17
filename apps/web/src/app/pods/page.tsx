@@ -167,7 +167,7 @@ export default function PodsPage() {
       <section className="relative py-24 overflow-hidden">
         {/* Background Image */}
         <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat blur-[1px] scale-105" 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-105" 
           style={{backgroundImage: 'url(/images/sheltr_units/hero-pods.png)'}}
         />
         {/* Dark Overlay */}

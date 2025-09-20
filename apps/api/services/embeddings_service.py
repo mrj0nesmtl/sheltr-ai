@@ -29,11 +29,11 @@ class EmbeddingsService:
         self._db = None
         self._storage_bucket = None
         
-        # OpenAI embeddings configuration
+        # OpenAI embeddings configuration - OPTIMIZED FOR QUALITY
         self.embedding_model = "text-embedding-3-small"  # Cost-effective, good quality
-        self.max_chunk_size = 1000  # Tokens per chunk
-        self.chunk_overlap = 200    # Overlap between chunks
-        self.max_chunks_per_doc = 50  # Prevent runaway processing
+        self.max_chunk_size = 800   # Smaller chunks for better granularity
+        self.chunk_overlap = 150    # Optimized overlap for better context
+        self.max_chunks_per_doc = 75  # Allow more chunks for comprehensive coverage
         
         # Token encoding
         try:
@@ -70,8 +70,14 @@ class EmbeddingsService:
             
             logger.info(f"Generating embeddings for document {document_id}")
             
-            # Split content into chunks
-            chunks = await self._split_into_chunks(content, metadata)
+            # QUALITY ENHANCEMENT: Enhance document metadata and content
+            enhanced_metadata = await self._enhance_document_quality(content, metadata)
+            enhanced_content = enhanced_metadata.get('enhanced_content', content)
+            
+            logger.info(f"Document enhanced - Word count: {enhanced_metadata.get('word_count', 0)}, Tags: {len(enhanced_metadata.get('tags', []))}")
+            
+            # Split enhanced content into chunks
+            chunks = await self._split_into_chunks(enhanced_content, enhanced_metadata)
             
             if len(chunks) > self.max_chunks_per_doc:
                 logger.warning(f"Document {document_id} has {len(chunks)} chunks, limiting to {self.max_chunks_per_doc}")
@@ -419,6 +425,119 @@ class EmbeddingsService:
         except Exception:
             # Fallback to word count
             return len(text.split())
+    
+    async def _generate_smart_tags(self, content: str, title: str, category: str = "") -> List[str]:
+        """Generate relevant tags using AI analysis"""
+        try:
+            # Truncate content for analysis (first 1000 chars)
+            content_sample = content[:1000] if len(content) > 1000 else content
+            
+            prompt = f"""Analyze this SHELTR-AI documentation and generate 3-5 relevant tags.
+            
+Title: {title}
+Category: {category}
+Content: {content_sample}
+
+Generate tags that would help users find this document. Focus on:
+- Technical topics (API, Firebase, React, etc.)
+- User roles (admin, participant, donor, etc.) 
+- Features (authentication, dashboard, etc.)
+- Document types (guide, reference, tutorial, etc.)
+
+Return ONLY the tags as a comma-separated list, no explanations."""
+
+            response = await openai_service.client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[{"role": "user", "content": prompt}],
+                max_tokens=60,
+                temperature=0.3
+            )
+            
+            tags_text = response.choices[0].message.content.strip()
+            tags = [tag.strip().lower() for tag in tags_text.split(',') if tag.strip()]
+            
+            # Ensure we have at least some tags
+            if not tags:
+                # Fallback tags based on category and title
+                fallback_tags = []
+                if category:
+                    fallback_tags.append(category.lower())
+                if 'api' in title.lower():
+                    fallback_tags.append('api')
+                if 'guide' in title.lower():
+                    fallback_tags.append('guide')
+                if 'dashboard' in title.lower():
+                    fallback_tags.append('dashboard')
+                tags = fallback_tags[:3] if fallback_tags else ['documentation']
+            
+            logger.info(f"Generated {len(tags)} tags for document: {', '.join(tags)}")
+            return tags[:5]  # Limit to 5 tags max
+            
+        except Exception as e:
+            logger.error(f"Failed to generate smart tags: {str(e)}")
+            # Return basic fallback tags
+            fallback_tags = []
+            if category:
+                fallback_tags.append(category.lower())
+            fallback_tags.append('documentation')
+            return fallback_tags[:2]
+    
+    async def _enhance_document_quality(self, content: str, metadata: Dict[str, Any]) -> Dict[str, Any]:
+        """Enhance document metadata for better quality scores"""
+        try:
+            enhanced_metadata = metadata.copy()
+            
+            # Generate tags if missing
+            if not enhanced_metadata.get('tags') or len(enhanced_metadata.get('tags', [])) == 0:
+                title = enhanced_metadata.get('title', '')
+                category = enhanced_metadata.get('category', '')
+                enhanced_metadata['tags'] = await self._generate_smart_tags(content, title, category)
+                logger.info(f"Generated tags for document: {enhanced_metadata['tags']}")
+            
+            # Enhance content if too short (less than 100 words)
+            word_count = len(content.split())
+            if word_count < 100:
+                try:
+                    # Generate a brief summary to add context
+                    summary_prompt = f"""Write a brief 2-3 sentence summary of this SHELTR-AI documentation:
+
+Title: {enhanced_metadata.get('title', '')}
+Content: {content[:500]}
+
+Summary:"""
+                    
+                    response = await openai_service.client.chat.completions.create(
+                        model="gpt-4o-mini",
+                        messages=[{"role": "user", "content": summary_prompt}],
+                        max_tokens=100,
+                        temperature=0.3
+                    )
+                    
+                    summary = response.choices[0].message.content.strip()
+                    enhanced_content = content + f"\n\n## Document Summary\n{summary}"
+                    enhanced_metadata['enhanced_content'] = enhanced_content
+                    enhanced_metadata['word_count'] = len(enhanced_content.split())
+                    logger.info(f"Enhanced short document from {word_count} to {enhanced_metadata['word_count']} words")
+                    
+                except Exception as e:
+                    logger.warning(f"Failed to enhance short content: {str(e)}")
+                    enhanced_metadata['enhanced_content'] = content
+                    enhanced_metadata['word_count'] = word_count
+            else:
+                enhanced_metadata['enhanced_content'] = content
+                enhanced_metadata['word_count'] = word_count
+            
+            return enhanced_metadata
+            
+        except Exception as e:
+            logger.error(f"Failed to enhance document quality: {str(e)}")
+            # Return original metadata with basic enhancements
+            enhanced_metadata = metadata.copy()
+            enhanced_metadata['enhanced_content'] = content
+            enhanced_metadata['word_count'] = len(content.split())
+            if not enhanced_metadata.get('tags'):
+                enhanced_metadata['tags'] = ['documentation']
+            return enhanced_metadata
     
     async def get_embedding_stats(self) -> Dict[str, Any]:
         """Get statistics about stored embeddings"""

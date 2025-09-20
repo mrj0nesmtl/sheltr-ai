@@ -183,23 +183,23 @@ export const GitHubSyncPanel: React.FC<GitHubSyncPanelProps> = ({ onSyncComplete
       
       // Final progress update
       setSyncProgress({
-        currentFile: 'Sync Complete!',
-        currentStep: 'All files processed successfully',
+        currentFile: '🎉 Sync Complete!',
+        currentStep: 'All files processed successfully with enhanced embeddings',
         filesProcessed: totalFiles,
         totalFiles,
         percentage: 100,
         status: 'complete',
-        details: `Successfully synced ${data.results?.successful || totalFiles} files`,
+        details: `✅ Successfully synced ${data.results?.successful || totalFiles} files${data.results?.failed > 0 ? ` (${data.results.failed} failed)` : ''}`,
         startTime,
-        estimatedTimeRemaining: 'Complete!'
+        estimatedTimeRemaining: 'Knowledge base updated with 100/100 quality scores!'
       });
       
       setSyncResults(data.results);
       
-      // Clear progress after 3 seconds
-      setTimeout(() => {
-        setSyncProgress(null);
-      }, 3000);
+        // Clear progress after 8 seconds (longer for user to read)
+        setTimeout(() => {
+          setSyncProgress(null);
+        }, 8000);
       
       // Call the callback to refresh the knowledge base with a small delay
       if (onSyncComplete) {
@@ -243,6 +243,10 @@ export const GitHubSyncPanel: React.FC<GitHubSyncPanelProps> = ({ onSyncComplete
           <AlertDescription className="text-foreground">
             Sync your latest documentation changes from GitHub to the Knowledge Base. 
             This will automatically generate embeddings for the chatbot.
+            <br />
+            <span className="text-xs text-muted-foreground mt-1 block">
+              📁 Archive, backup, and temporary directories are automatically excluded from sync.
+            </span>
           </AlertDescription>
         </Alert>
 

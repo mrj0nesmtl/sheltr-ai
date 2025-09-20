@@ -162,6 +162,12 @@ class GitHubService:
                                 'download_url': item['download_url']
                             })
                         elif item['type'] == 'dir':
+                            # Skip archive and backup directories
+                            dir_name = item['name'].lower()
+                            if self._should_skip_directory(dir_name, item['path']):
+                                logger.info(f"Skipping directory: {item['path']}")
+                                continue
+                            
                             # Recursively get files from subdirectory
                             await self._get_files_recursive(session, item['url'], files)
                 elif response.status == 404:
@@ -174,6 +180,38 @@ class GitHubService:
         except Exception as e:
             logger.error(f"Error in recursive file fetch: {str(e)}")
             # Don't re-raise, just log the error
+    
+    def _should_skip_directory(self, dir_name: str, full_path: str) -> bool:
+        """Check if a directory should be skipped during sync"""
+        # List of directory patterns to skip
+        skip_patterns = [
+            'archive',
+            'backup',
+            'development_archive',
+            'legacy-migration-archived',
+            'migration',
+            'archived',
+            'old',
+            'deprecated',
+            'temp',
+            'temporary',
+            '.git',
+            'node_modules',
+            '__pycache__'
+        ]
+        
+        # Check if directory name matches any skip pattern
+        for pattern in skip_patterns:
+            if pattern in dir_name:
+                return True
+        
+        # Check if full path contains archive patterns
+        full_path_lower = full_path.lower()
+        for pattern in skip_patterns:
+            if pattern in full_path_lower:
+                return True
+        
+        return False
     
     async def get_file_content(self, file_path: str) -> Optional[str]:
         """Get the content of a specific file from GitHub"""
@@ -268,12 +306,13 @@ class GitHubService:
                         }
                         document_id = await kb_service.create_knowledge_document(document_data)
                     
-                    # Generate embeddings
+                    # Generate embeddings with enhanced metadata
                     metadata = {
                         'document_id': document_id,
                         'title': title,
                         'category': category,
-                        'access_level': 'public'
+                        'access_level': 'public',
+                        'tags': self._extract_tags_from_path(file_path)  # Initial tags from path
                     }
                     
                     chunk_ids = await embeddings_service.process_document_embeddings(
@@ -282,14 +321,22 @@ class GitHubService:
                         metadata=metadata
                     )
                     
-                    # Update document with embedding info
+                    # Update document with embedding info and enhanced metadata
+                    # Get enhanced metadata from embeddings service (if available)
+                    enhanced_updates = {
+                        'embedding_count': len(chunk_ids),
+                        'processed': True,
+                        'embedding_status': 'completed',
+                        'word_count': len(content.split())
+                    }
+                    
+                    # Add enhanced tags if they were generated during embedding
+                    if 'tags' in metadata and metadata['tags']:
+                        enhanced_updates['tags'] = metadata['tags']
+                    
                     await kb_service.update_knowledge_document(
                         document_id=document_id,
-                        updates={
-                            'embedding_count': len(chunk_ids),
-                            'processed': True,
-                            'embedding_status': 'completed'
-                        }
+                        updates=enhanced_updates
                     )
                     
                     details.append({

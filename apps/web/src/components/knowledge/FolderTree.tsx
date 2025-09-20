@@ -39,7 +39,7 @@ export function FolderTree({
   className 
 }: FolderTreeProps) {
   const [expandedFolders, setExpandedFolders] = useState<Set<string>>(
-    new Set(['01-overview', '02-architecture', '03-api', '04-development', '05-deployment', '06-user-guides', '07-reference', '08-integrations', '09-migration', '10-resources'])
+    new Set(['01-overview', '02-architecture', '03-api', '04-development', '05-deployment', '06-user-guides', '07-reference', '08-integrations', '10-resources'])
   );
 
   const toggleFolder = (path: string) => {
@@ -158,7 +158,6 @@ export function buildFolderTree(documents: any[]): FolderNode[] {
     { path: '06-user-guides', name: '👥 User Guides', description: 'User documentation' },
     { path: '07-reference', name: '📚 Reference', description: 'Technical reference' },
     { path: '08-integrations', name: '🔗 Integrations', description: 'Third-party integrations' },
-    { path: '09-migration', name: '📦 Migration', description: 'Migration documentation' },
     { path: '10-resources', name: '🎯 Resources', description: 'Templates and resources' }
   ];
 

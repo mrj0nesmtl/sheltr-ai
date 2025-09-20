@@ -13,6 +13,114 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/blog", tags=["blog"])
 
+# Public endpoints (no authentication required)
+
+@router.get("/public/posts")
+async def get_public_blog_posts(
+    status: str = "published",
+    category: Optional[str] = None,
+    tag: Optional[str] = None,
+    limit: int = 10,
+    offset: int = 0
+):
+    """Get published blog posts for public viewing (no authentication required)"""
+    
+    try:
+        blog_service = BlogService()
+        # Only allow published posts for public access
+        posts = await blog_service.get_blog_posts(
+            status='published',
+            category=category,
+            tag=tag,
+            limit=limit,
+            offset=offset
+        )
+        
+        return {
+            "success": True,
+            "data": {
+                "posts": posts,
+                "total": len(posts),
+                "limit": limit,
+                "offset": offset
+            }
+        }
+        
+    except Exception as e:
+        logger.error(f"Failed to get public blog posts: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to retrieve blog posts")
+
+@router.get("/public/posts/{slug}")
+async def get_public_blog_post(slug: str):
+    """Get a single published blog post by slug for public viewing (no authentication required)"""
+    
+    try:
+        blog_service = BlogService()
+        post = await blog_service.get_blog_post_by_slug(slug)
+        
+        if not post:
+            raise HTTPException(status_code=404, detail="Blog post not found")
+        
+        # Only allow published posts for public access
+        if post.get('status') != 'published':
+            raise HTTPException(status_code=404, detail="Blog post not found")
+        
+        # Increment view count for published posts
+        await blog_service.increment_view_count(post['id'])
+        
+        return {
+            "success": True,
+            "data": {
+                "post": post
+            }
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to get public blog post {slug}: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to retrieve blog post")
+
+@router.get("/public/categories")
+async def get_public_blog_categories():
+    """Get blog categories for public viewing (no authentication required)"""
+    
+    try:
+        blog_service = BlogService()
+        categories = await blog_service.get_categories()
+        
+        return {
+            "success": True,
+            "data": {
+                "categories": categories
+            }
+        }
+        
+    except Exception as e:
+        logger.error(f"Failed to get public blog categories: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to retrieve categories")
+
+@router.get("/public/tags")
+async def get_public_blog_tags():
+    """Get blog tags for public viewing (no authentication required)"""
+    
+    try:
+        blog_service = BlogService()
+        tags = await blog_service.get_tags()
+        
+        return {
+            "success": True,
+            "data": {
+                "tags": tags
+            }
+        }
+        
+    except Exception as e:
+        logger.error(f"Failed to get public blog tags: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to retrieve tags")
+
+# Admin endpoints (authentication required)
+
 @router.get("/posts")
 async def get_blog_posts(
     status: str = "published",

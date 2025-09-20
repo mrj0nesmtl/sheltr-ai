@@ -53,6 +53,32 @@
         {"fieldPath": "categories", "arrayConfig": "CONTAINS"},
         {"fieldPath": "uploaded_at", "order": "DESCENDING"}
       ]
+    },
+    {
+      "collectionGroup": "blog_posts",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {"fieldPath": "status", "order": "ASCENDING"},
+        {"fieldPath": "published_at", "order": "DESCENDING"}
+      ]
+    },
+    {
+      "collectionGroup": "blog_posts",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {"fieldPath": "status", "order": "ASCENDING"},
+        {"fieldPath": "category", "order": "ASCENDING"},
+        {"fieldPath": "published_at", "order": "DESCENDING"}
+      ]
+    },
+    {
+      "collectionGroup": "blog_posts",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {"fieldPath": "status", "order": "ASCENDING"},
+        {"fieldPath": "tags", "arrayConfig": "CONTAINS"},
+        {"fieldPath": "published_at", "order": "DESCENDING"}
+      ]
     }
   ],
   "fieldOverrides": []

@@ -277,13 +277,13 @@ export default function KnowledgeDashboard() {
   };
 
   const openEditPage = (document: KnowledgeDocument) => {
-    // Navigate to dedicated edit page
-    window.location.href = `/dashboard/knowledge/edit/${document.id}`;
+Both view and editor working locally perfectly!!!    // Navigate to dedicated edit page with search params
+    window.location.href = `/dashboard/knowledge/edit?id=${document.id}`;
   };
 
   const openViewPage = (document: KnowledgeDocument) => {
-    // Navigate to dedicated view page
-    window.location.href = `/dashboard/knowledge/view/${document.id}`;
+    // Navigate to dedicated view page with search params
+    window.location.href = `/dashboard/knowledge/view?id=${document.id}`;
   };
 
   const formatFileSize = (bytes: number) => {

@@ -834,6 +834,13 @@ export default function KnowledgeDashboard() {
                             {getEmbeddingStatusIcon(doc.embedding_status)}
                             <span className="ml-1 truncate">{doc.embedding_status}</span>
                           </Badge>
+                          <Badge 
+                            variant={doc.is_live ? 'default' : 'secondary'} 
+                            className={`text-xs px-2 py-0.5 ${doc.is_live ? 'bg-green-500 hover:bg-green-600' : 'bg-gray-500'}`}
+                          >
+                            <Brain className="h-3 w-3 mr-1 flex-shrink-0" />
+                            <span className="truncate">{doc.is_live ? 'Published' : 'Draft'}</span>
+                          </Badge>
                           <Badge className={`${confidentialityBadge.color} text-xs px-2 py-0.5`}>
                             <ConfidentialityIcon className="h-3 w-3 mr-1 flex-shrink-0" />
                             <span className="truncate">{confidentialityBadge.text}</span>

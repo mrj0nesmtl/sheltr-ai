@@ -273,6 +273,45 @@ class KnowledgeDashboardService {
   }
 
   /**
+   * Update a knowledge document
+   */
+  async updateKnowledgeDocument(documentId: string, documentData: {
+    title: string;
+    content: string;
+    category: string;
+    tags: string[];
+    status: string;
+    sharing_level?: string;
+    shared_with?: string[];
+    access_roles?: string[];
+    is_live?: boolean;
+    confidentiality_level?: string;
+  }): Promise<{ success: boolean; data: { message: string } }> {
+    try {
+      const apiUrl = `${this.baseUrl}/api/v1/knowledge-dashboard/documents/${documentId}`;
+      console.log('📝 Updating knowledge document at:', apiUrl);
+      
+      const response = await fetch(apiUrl, {
+        method: 'PUT',
+        headers: {
+          ...await this.getAuthHeaders(),
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(documentData),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to update knowledge document: ${response.statusText}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error updating knowledge document:', error);
+      throw error;
+    }
+  }
+
+  /**
    * Delete a knowledge document
    */
   async deleteKnowledgeDocument(documentId: string): Promise<{ success: boolean; data: { message: string } }> {

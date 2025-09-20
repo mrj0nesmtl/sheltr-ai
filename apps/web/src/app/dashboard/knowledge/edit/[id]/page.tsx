@@ -47,7 +47,7 @@ export default function EditKnowledgeDocument() {
     content: '',
     category: '',
     tags: [] as string[],
-    status: 'active' as 'active' | 'archived' | 'processing',
+    status: 'active' as 'active' | 'draft' | 'archived' | 'processing',
     sharing_level: 'public' as 'public' | 'shelter_specific' | 'super_admin_only' | 'role_based',
     shared_with: [] as string[],
     access_roles: [] as string[],
@@ -370,16 +370,23 @@ export default function EditKnowledgeDocument() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="text-sm font-medium">Status</label>
-                  <Select value={formData.status} onValueChange={(value: 'active' | 'archived' | 'processing') => setFormData({...formData, status: value})}>
+                  <Select value={formData.status} onValueChange={(value: 'active' | 'draft' | 'archived' | 'processing') => setFormData({...formData, status: value})}>
                     <SelectTrigger className="mt-1">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="active">✅ Active</SelectItem>
+                      <SelectItem value="draft">📝 Draft</SelectItem>
                       <SelectItem value="archived">📦 Archived</SelectItem>
                       <SelectItem value="processing">⏳ Processing</SelectItem>
                     </SelectContent>
                   </Select>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {formData.status === 'active' && "✅ Document is ready for publication"}
+                    {formData.status === 'draft' && "📝 Document is in draft mode - not published to AI chatbot"}
+                    {formData.status === 'archived' && "📦 Document is archived and not available"}
+                    {formData.status === 'processing' && "⏳ Document is being processed"}
+                  </p>
                 </div>
                 
                 <div>
@@ -395,7 +402,7 @@ export default function EditKnowledgeDocument() {
             </CardContent>
           </Card>
 
-          {/* Sharing & Publishing Controls */}
+It would be awesome. If in the side column, we could have a little box that would track changes to the file in the UI and that could send a notification to the admit.          {/* Sharing & Publishing Controls */}
           <Card>
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2">
@@ -423,7 +430,15 @@ export default function EditKnowledgeDocument() {
                     type="checkbox"
                     id="is_live"
                     checked={formData.is_live}
-                    onChange={(e) => setFormData({...formData, is_live: e.target.checked})}
+                    onChange={(e) => {
+                      const isLive = e.target.checked;
+                      setFormData({
+                        ...formData, 
+                        is_live: isLive,
+                        // Auto-sync status: if publishing, set to active; if unpublishing and currently active, set to draft
+                        status: isLive ? 'active' : (formData.status === 'active' ? 'draft' : formData.status)
+                      });
+                    }}
                     className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                   />
                   <label htmlFor="is_live" className="text-sm">

@@ -213,7 +213,7 @@ class BlogService:
         """Get blog posts with filtering and pagination"""
         
         try:
-            # For now, get all posts and filter/sort in Python until indexes are built
+3            # For now, get all posts and filter/sort in Python until indexes are built
             query = self.db.collection('blog_posts')
             
             # Execute query

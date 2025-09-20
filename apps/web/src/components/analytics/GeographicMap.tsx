@@ -1,8 +1,13 @@
 "use client";
 
+import React, { useEffect, useState } from 'react';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import { DivIcon, LatLngBounds } from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { MapPin, TrendingUp, TrendingDown, Building2, Users, DollarSign } from 'lucide-react';
+import { MapPin, TrendingUp, TrendingDown, Building2, Users, DollarSign, Heart } from 'lucide-react';
+import ReactDOMServer from 'react-dom/server';
 
 interface GeographicRegion {
   region: string;
@@ -17,21 +22,133 @@ interface GeographicMapProps {
   geographicData: GeographicRegion[];
 }
 
-export function GeographicMap({ geographicData }: GeographicMapProps) {
-  const getRegionColor = (region: GeographicRegion) => {
-    if (!region.hasData) return 'fill-gray-300 dark:fill-gray-600';
-    if (region.donations > 5000) return 'fill-emerald-500 dark:fill-emerald-400';
-    if (region.donations > 1000) return 'fill-blue-500 dark:fill-blue-400';
-    return 'fill-orange-500 dark:fill-orange-400';
+// Geographic location data for regions
+interface RegionLocation {
+  region: string;
+  coordinates: { lat: number; lng: number };
+  shelters: number;
+  participants: number;
+  donations: number;
+  growth: number;
+  hasData: boolean;
+}
+
+// Create region activity icons
+const createRegionIcon = (region: GeographicRegion) => {
+  const getColor = () => {
+    if (!region.hasData) return '#6b7280'; // Gray
+    if (region.donations > 5000) return '#16a34a'; // Green
+    if (region.donations > 1000) return '#3b82f6'; // Blue  
+    return '#f97316'; // Orange
   };
 
-  const getRegionInfo = (regionName: string) => {
-    return geographicData.find(r => r.region === regionName);
+  const getSize = () => {
+    if (region.donations > 5000) return 40;
+    if (region.donations > 1000) return 32;
+    if (region.donations > 100) return 24;
+    return 20;
   };
+
+  const color = getColor();
+  const size = getSize();
+  
+  const iconHtml = ReactDOMServer.renderToString(
+    React.createElement(region.hasData ? Heart : MapPin, {
+      size: size * 0.6,
+      fill: color,
+      stroke: 'white',
+      strokeWidth: 2,
+      className: 'drop-shadow-lg'
+    })
+  );
+  
+  return new DivIcon({
+    html: `<div style="background: white; border-radius: 50%; padding: ${size * 0.15}px; box-shadow: 0 2px 8px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; border: 2px solid ${color};">${iconHtml}</div>`,
+    iconSize: [size, size],
+    iconAnchor: [size / 2, size],
+    popupAnchor: [0, -size],
+    className: `custom-region-marker region-${region.hasData ? 'active' : 'inactive'}`
+  });
+};
+
+// Component to fit map bounds to all regions
+function FitBounds({ regions }: { regions: RegionLocation[] }) {
+  const map = useMap();
+
+  useEffect(() => {
+    if (regions.length > 0) {
+      const bounds = new LatLngBounds(
+        regions.map(region => [region.coordinates.lat, region.coordinates.lng])
+      );
+      map.fitBounds(bounds, { padding: [50, 50] });
+    }
+  }, [regions, map]);
+
+  return null;
+}
+
+export function GeographicMap({ geographicData }: GeographicMapProps) {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  // Convert data to region locations with coordinates
+  const regionLocations: RegionLocation[] = geographicData.map(item => {
+    // Define approximate center coordinates for each region
+    const getRegionCoordinates = (region: string) => {
+      switch (region.toLowerCase()) {
+        case 'north america':
+          return { lat: 45.5017, lng: -73.5673 }; // Montreal (primary market)
+        case 'europe':
+          return { lat: 48.8566, lng: 2.3522 }; // Paris
+        case 'asia pacific':
+          return { lat: 35.6762, lng: 139.6503 }; // Tokyo
+        case 'other':
+        case 'other regions':
+          return { lat: -33.8688, lng: 151.2093 }; // Sydney
+        default:
+          return { lat: 45.5017, lng: -73.5673 }; // Default to Montreal
+      }
+    };
+
+    return {
+      ...item,
+      coordinates: getRegionCoordinates(item.region)
+    };
+  });
+
+  const getStatusColor = (region: GeographicRegion) => {
+    if (!region.hasData) return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100';
+    if (region.donations > 5000) return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100';
+    if (region.donations > 1000) return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100';
+    return 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-100';
+  };
+
+  const getActivityLabel = (region: GeographicRegion) => {
+    if (!region.hasData) return 'No Data';
+    if (region.donations > 5000) return 'High Activity';
+    if (region.donations > 1000) return 'Medium Activity';
+    return 'Low Activity';
+  };
+
+  if (!isClient) {
+    return (
+      <div className="space-y-6">
+        <div className="w-full bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center h-96">
+          <div className="flex items-center space-x-2 text-gray-500">
+            <MapPin className="h-5 w-5 animate-pulse" />
+            <span>Loading geographic map...</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
-      {/* World Map Visualization */}
+      {/* Interactive Leaflet Map */}
       <Card className="overflow-hidden">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -39,116 +156,121 @@ export function GeographicMap({ geographicData }: GeographicMapProps) {
             Global Platform Reach
           </CardTitle>
           <p className="text-sm text-muted-foreground">
-            Interactive view of SHELTR platform presence worldwide
+            Interactive map showing SHELTR platform activity worldwide
           </p>
         </CardHeader>
-        <CardContent>
-          <div className="relative bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-800 dark:to-gray-900 rounded-lg p-6 overflow-hidden">
-            {/* Simplified World Map SVG */}
-            <div className="flex items-center justify-center min-h-[300px]">
-              <svg 
-                viewBox="0 0 1000 500" 
-                className="w-full h-full max-w-4xl"
-                style={{ filter: 'drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1))' }}
-              >
-                {/* Background */}
-                <rect width="1000" height="500" fill="rgba(59, 130, 246, 0.1)" rx="8" />
-                
-                {/* North America */}
-                <g>
-                  <path
-                    d="M 100 100 L 350 100 L 380 150 L 350 200 L 300 250 L 200 280 L 150 250 L 100 200 Z"
-                    className={getRegionColor(getRegionInfo('North America') || { region: 'North America', shelters: 0, participants: 0, donations: 0, growth: 0, hasData: false })}
-                    stroke="rgba(255, 255, 255, 0.8)"
-                    strokeWidth="2"
-                  />
-                  <text x="225" y="190" textAnchor="middle" className="fill-white font-semibold text-sm">
-                    North America
-                  </text>
-                  {getRegionInfo('North America')?.hasData && (
-                    <circle cx="225" cy="210" r="8" className="fill-white animate-pulse" />
-                  )}
-                </g>
+        <CardContent className="p-0">
+          <div className="w-full rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">
+            <MapContainer
+              center={[20, 0]} // Global view center
+              zoom={2}
+              style={{ height: '500px', width: '100%' }}
+              className="z-0"
+            >
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              
+              <FitBounds regions={regionLocations} />
+              
+              {regionLocations.map((region) => (
+                <Marker
+                  key={region.region}
+                  position={[region.coordinates.lat, region.coordinates.lng]}
+                  icon={createRegionIcon(region)}
+                >
+                  <Popup className="region-popup" maxWidth={300}>
+                    <div className="p-3 space-y-3">
+                      {/* Header */}
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-2">
+                          <MapPin className="h-5 w-5 text-blue-600" />
+                          <div>
+                            <h3 className="font-semibold text-gray-900 dark:text-gray-100">{region.region}</h3>
+                            <p className="text-sm text-gray-600 dark:text-gray-400">Platform Region</p>
+                          </div>
+                        </div>
+                        <Badge className={getStatusColor(region)} variant="secondary">
+                          {getActivityLabel(region)}
+                        </Badge>
+                      </div>
 
-                {/* Europe */}
-                <g>
-                  <path
-                    d="M 450 120 L 600 120 L 620 180 L 580 220 L 500 240 L 450 200 Z"
-                    className={getRegionColor(getRegionInfo('Europe') || { region: 'Europe', shelters: 0, participants: 0, donations: 0, growth: 0, hasData: false })}
-                    stroke="rgba(255, 255, 255, 0.8)"
-                    strokeWidth="2"
-                  />
-                  <text x="535" y="180" textAnchor="middle" className="fill-white font-semibold text-sm">
-                    Europe
-                  </text>
-                  {getRegionInfo('Europe')?.hasData && (
-                    <circle cx="535" cy="200" r="8" className="fill-white animate-pulse" />
-                  )}
-                </g>
+                      {/* Metrics */}
+                      <div className="space-y-2 text-sm">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-2">
+                            <Building2 className="h-4 w-4 text-blue-500" />
+                            <span className="text-gray-700 dark:text-gray-300">Shelters</span>
+                          </div>
+                          <span className="font-medium">{region.shelters}</span>
+                        </div>
+                        
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-2">
+                            <Users className="h-4 w-4 text-purple-500" />
+                            <span className="text-gray-700 dark:text-gray-300">Participants</span>
+                          </div>
+                          <span className="font-medium">{region.participants.toLocaleString()}</span>
+                        </div>
+                        
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-2">
+                            <DollarSign className="h-4 w-4 text-green-500" />
+                            <span className="text-gray-700 dark:text-gray-300">Total Donations</span>
+                          </div>
+                          <span className="font-medium">${region.donations.toLocaleString()}</span>
+                        </div>
+                        
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-2">
+                            {region.growth > 0 ? (
+                              <TrendingUp className="h-4 w-4 text-green-500" />
+                            ) : (
+                              <TrendingDown className="h-4 w-4 text-red-500" />
+                            )}
+                            <span className="text-gray-700 dark:text-gray-300">Growth Rate</span>
+                          </div>
+                          <span className={`font-medium ${region.growth > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                            {region.growth > 0 ? '+' : ''}{region.growth}%
+                          </span>
+                        </div>
+                      </div>
 
-                {/* Asia Pacific */}
-                <g>
-                  <path
-                    d="M 650 100 L 900 100 L 920 180 L 880 250 L 800 280 L 700 260 L 650 200 Z"
-                    className={getRegionColor(getRegionInfo('Asia Pacific') || { region: 'Asia Pacific', shelters: 0, participants: 0, donations: 0, growth: 0, hasData: false })}
-                    stroke="rgba(255, 255, 255, 0.8)"
-                    strokeWidth="2"
-                  />
-                  <text x="775" y="190" textAnchor="middle" className="fill-white font-semibold text-sm">
-                    Asia Pacific
-                  </text>
-                  {getRegionInfo('Asia Pacific')?.hasData && (
-                    <circle cx="775" cy="210" r="8" className="fill-white animate-pulse" />
-                  )}
-                </g>
-
-                {/* Other Regions (Africa, South America, etc.) */}
-                <g>
-                  <path
-                    d="M 200 320 L 400 320 L 420 380 L 380 420 L 300 440 L 220 420 L 200 380 Z"
-                    className={getRegionColor(getRegionInfo('Other') || { region: 'Other', shelters: 0, participants: 0, donations: 0, growth: 0, hasData: false })}
-                    stroke="rgba(255, 255, 255, 0.8)"
-                    strokeWidth="2"
-                  />
-                  <text x="310" y="380" textAnchor="middle" className="fill-white font-semibold text-sm">
-                    Other Regions
-                  </text>
-                  {getRegionInfo('Other')?.hasData && (
-                    <circle cx="310" cy="400" r="8" className="fill-white animate-pulse" />
-                  )}
-                </g>
-
-                {/* Grid lines for visual appeal */}
-                <defs>
-                  <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
-                    <path d="M 50 0 L 0 0 0 50" fill="none" stroke="rgba(255, 255, 255, 0.1)" strokeWidth="1"/>
-                  </pattern>
-                </defs>
-                <rect width="1000" height="500" fill="url(#grid)" />
-              </svg>
-            </div>
-
-            {/* Legend */}
-            <div className="mt-4 flex flex-wrap items-center justify-center gap-4 text-sm">
-              <div className="flex items-center gap-2">
-                <div className="w-4 h-4 bg-emerald-500 rounded"></div>
-                <span className="text-gray-700 dark:text-gray-300">High Activity ($5K+)</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-4 h-4 bg-blue-500 rounded"></div>
-                <span className="text-gray-700 dark:text-gray-300">Medium Activity ($1K+)</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-4 h-4 bg-orange-500 rounded"></div>
-                <span className="text-gray-700 dark:text-gray-300">Low Activity</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-4 h-4 bg-gray-400 rounded"></div>
-                <span className="text-gray-700 dark:text-gray-300">No Data</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 bg-white rounded-full animate-pulse"></div>
-                <span className="text-gray-700 dark:text-gray-300">Active Regions</span>
+                      {/* Status */}
+                      <div className="pt-2 border-t border-gray-200 dark:border-gray-600">
+                        <div className="text-sm text-gray-600 dark:text-gray-400">
+                          Status: <span className="font-medium">{region.hasData ? 'Active' : 'Planning Phase'}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </Popup>
+                </Marker>
+              ))}
+            </MapContainer>
+            
+            {/* Map Legend */}
+            <div className="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-3">
+              <div className="flex flex-wrap items-center justify-center gap-4 text-sm">
+                <div className="flex items-center space-x-2">
+                  <div className="w-4 h-4 rounded-full bg-green-500 border-2 border-white shadow-sm"></div>
+                  <span className="text-gray-700 dark:text-gray-300">High Activity ($5K+)</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-4 h-4 rounded-full bg-blue-500 border-2 border-white shadow-sm"></div>
+                  <span className="text-gray-700 dark:text-gray-300">Medium Activity ($1K+)</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-4 h-4 rounded-full bg-orange-500 border-2 border-white shadow-sm"></div>
+                  <span className="text-gray-700 dark:text-gray-300">Low Activity</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-4 h-4 rounded-full bg-gray-400 border-2 border-white shadow-sm"></div>
+                  <span className="text-gray-700 dark:text-gray-300">No Data</span>
+                </div>
+                <div className="text-gray-500 dark:text-gray-400">
+                  {geographicData.filter(region => region.hasData).length} active regions
+                </div>
               </div>
             </div>
           </div>

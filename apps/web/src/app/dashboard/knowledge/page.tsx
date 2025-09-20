@@ -229,7 +229,7 @@ export default function KnowledgeDashboard() {
   const handleDocumentSelect = (documentId: string) => {
     const doc = documents.find(d => d.id === documentId);
     if (doc) {
-      openViewDialog(doc);
+      openEditPage(doc);
     }
   };
 
@@ -322,7 +322,7 @@ export default function KnowledgeDashboard() {
     <div className="flex h-screen bg-background">
       {/* Folder Sidebar */}
       {showFolderSidebar && (
-        <div className="w-80 border-r bg-card flex flex-col">
+        <div className="w-96 border-r bg-card flex flex-col">
           {/* Sidebar Header */}
           <div className="p-4 border-b">
             <div className="flex items-center justify-between">

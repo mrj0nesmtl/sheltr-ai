@@ -12,6 +12,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
+import { KnowledgeDocument } from '@/services/knowledgeDashboardService';
 
 export interface FolderNode {
   id: string;
@@ -144,7 +145,7 @@ export function FolderTree({
 }
 
 // Helper function to build folder tree from documents
-export function buildFolderTree(documents: any[]): FolderNode[] {
+export function buildFolderTree(documents: KnowledgeDocument[]): FolderNode[] {
   const folderMap = new Map<string, FolderNode>();
   const rootFolders: FolderNode[] = [];
 
@@ -198,9 +199,9 @@ export function buildFolderTree(documents: any[]): FolderNode[] {
         
         // Map emoji/keyword patterns to folders
         const fileToFolderMap: { [key: string]: string } = {
-          '🔌': '07-reference', // API reference
+          '🔌': '03-api', // API reference and documentation
           '📚': '07-reference', // Technical reference  
-          '🗄️': '07-reference', // Database schema
+          '🗄️': '03-api', // Database schema (API related)
           '🔥': '08-integrations', // Firebase integration
           '🔗': '08-integrations', // Third-party integrations
           '🚀': '05-deployment', // Deployment guides
@@ -217,8 +218,8 @@ export function buildFolderTree(documents: any[]): FolderNode[] {
           '✨': '10-resources', // Feature request
           '🐛': '10-resources', // Bug report
           '🌟': '01-overview', // Overview
-          '📚': '01-overview', // Documentation plan
-          '🚀': '01-overview', // Implementation plan
+          '📋': '01-overview', // Documentation plan
+          '🎯': '01-overview', // Implementation plan
           '🏗️': '02-architecture', // Architecture
           '🌐': '02-architecture', // Platform architecture
           '⛓️': '02-architecture', // Blockchain
@@ -235,7 +236,9 @@ export function buildFolderTree(documents: any[]): FolderNode[] {
         
         // Fallback: try to match keywords in filename
         if (!folderPath || !folderMap.get(folderPath)) {
-          if (fileName.includes('api') || fileName.includes('database') || fileName.includes('reference')) {
+          if (fileName.includes('api') || fileName.includes('database')) {
+            folderPath = '03-api';
+          } else if (fileName.includes('reference')) {
             folderPath = '07-reference';
           } else if (fileName.includes('firebase') || fileName.includes('integration')) {
             folderPath = '08-integrations';

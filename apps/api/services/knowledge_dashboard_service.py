@@ -31,24 +31,32 @@ class KnowledgeDashboardService:
                 doc_data = doc.to_dict()
                 doc_data['id'] = doc.id
                 
+                # Get actual content for proper calculations
+                content = doc_data.get('content', doc_data.get('description', ''))
+                
+                # Calculate chunk count from knowledge_chunks collection
+                chunks_query = self.db.collection('knowledge_chunks').where('document_id', '==', doc.id)
+                chunks = list(chunks_query.stream())
+                chunk_count = len(chunks)
+                
                 # Transform Firestore data to match frontend expectations
                 transformed_doc = {
                     'id': doc_data.get('id', doc.id),
                     'title': doc_data.get('title', 'Untitled'),
-                    'content': doc_data.get('description', ''),  # Use description as content
+                    'content': content,
                     'file_path': doc_data.get('file_path', ''),
                     'file_type': doc_data.get('file_type', 'markdown'),
-                    'file_size': doc_data.get('metadata', {}).get('size', 0) if doc_data.get('metadata') else 0,
+                    'file_size': doc_data.get('file_size', len(content.encode('utf-8')) if content else 0),
                     'category': doc_data.get('category', 'Platform').title(),
                     'tags': doc_data.get('tags', []),
-                    'status': 'active' if doc_data.get('processed', False) else 'processing',
-                    'embedding_status': 'completed' if doc_data.get('embedding_count', 0) > 0 else 'pending',
-                    'created_at': doc_data.get('uploaded_at', datetime.now().isoformat()),
+                    'status': doc_data.get('status', 'active' if doc_data.get('processed', False) else 'processing'),
+                    'embedding_status': 'completed' if chunk_count > 0 else doc_data.get('embedding_status', 'pending'),
+                    'created_at': doc_data.get('created_at', doc_data.get('uploaded_at', datetime.now().isoformat())),
                     'updated_at': doc_data.get('updated_at', datetime.now().isoformat()),
-                    'created_by': doc_data.get('uploaded_by', 'System'),
-                    'view_count': 0,  # Not tracked in current system
-                    'chunk_count': doc_data.get('embedding_count', 0),
-                    'word_count': doc_data.get('word_count', 0)
+                    'created_by': doc_data.get('created_by', doc_data.get('uploaded_by', 'System')),
+                    'view_count': doc_data.get('view_count', 0),
+                    'chunk_count': chunk_count,
+                    'word_count': doc_data.get('word_count', len(content.split()) if content else 0)
                 }
                 
                 documents.append(transformed_doc)
@@ -211,7 +219,7 @@ class KnowledgeDashboardService:
             }
     
     async def get_knowledge_document(self, document_id: str) -> Optional[Dict[str, Any]]:
-        """Get a single knowledge document by ID"""
+        """Get a single knowledge document by ID with enhanced stats"""
         try:
             doc_ref = self.db.collection('knowledge_documents').document(document_id)
             doc_data = doc_ref.get()
@@ -219,6 +227,39 @@ class KnowledgeDashboardService:
             if doc_data.exists:
                 document = doc_data.to_dict()
                 document['id'] = document_id
+                
+                # Ensure all required stats are present with proper calculations
+                content = document.get('content', '')
+                
+                # Calculate missing stats if not present
+                if not document.get('word_count'):
+                    document['word_count'] = len(content.split()) if content else 0
+                
+                if not document.get('file_size'):
+                    document['file_size'] = len(content.encode('utf-8')) if content else 0
+                
+                # Get chunk count from knowledge_chunks collection
+                chunks_query = self.db.collection('knowledge_chunks').where('document_id', '==', document_id)
+                chunks = list(chunks_query.stream())
+                document['chunk_count'] = len(chunks)
+                
+                # Update embedding status based on chunks
+                if chunks and not document.get('embedding_status'):
+                    document['embedding_status'] = 'completed'
+                elif not chunks and not document.get('embedding_status'):
+                    document['embedding_status'] = 'pending'
+                
+                # Ensure view_count exists
+                if not document.get('view_count'):
+                    document['view_count'] = 0
+                
+                # Increment view count (since this is a view)
+                document['view_count'] = document.get('view_count', 0) + 1
+                
+                # Update the document with the new view count
+                doc_ref.update({'view_count': document['view_count']})
+                
+                logger.info(f"Retrieved document {document_id} with stats: words={document.get('word_count')}, size={document.get('file_size')}, chunks={document.get('chunk_count')}, views={document.get('view_count')}")
                 return document
             else:
                 logger.warning(f"Document {document_id} not found")

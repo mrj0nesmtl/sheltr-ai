@@ -651,7 +651,7 @@ export default function KnowledgeDashboard() {
 
                  {/* Documents Display - Enhanced Desktop Layout */}
                  {viewMode === 'cards' ? (
-                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-6 sm:gap-8">
+                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {filteredDocuments.map((doc) => {
             const qualityScore = getQualityScore(doc);
             const qualityBadge = getQualityBadge(qualityScore);
@@ -760,7 +760,7 @@ export default function KnowledgeDashboard() {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => openViewDialog(doc)}
+                      onClick={() => openEditPage(doc)}
                       className="flex-1 text-xs px-2 py-1 h-8"
                     >
                       <Eye className="h-3 w-3 mr-1 flex-shrink-0" />
@@ -911,7 +911,7 @@ export default function KnowledgeDashboard() {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => openViewDialog(doc)}
+                        onClick={() => openEditPage(doc)}
                         className="w-full sm:w-auto lg:w-full text-xs px-2 py-1 h-8"
                       >
                         <Eye className="h-3 w-3 mr-1 flex-shrink-0" />

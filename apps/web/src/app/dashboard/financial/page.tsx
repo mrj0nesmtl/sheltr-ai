@@ -35,6 +35,7 @@ import {
 import { FinancialChart } from '@/components/charts/FinancialChart';
 import { TransactionChart } from '@/components/charts/TransactionChart';
 import { RevenueExplanationTooltip } from '@/components/financial/RevenueExplanationTooltip';
+import { createTestFraudAlert } from '@/services/fraudDetectionService';
 
 export default function FinancialOversight() {
   // Real data state
@@ -71,6 +72,21 @@ export default function FinancialOversight() {
   useEffect(() => {
     loadFinancialData();
   }, []);
+
+  // Test fraud alert function
+  const handleTestFraudAlert = async () => {
+    try {
+      console.log('🧪 [TEST] Creating test fraud alert...');
+      const alertId = await createTestFraudAlert();
+      console.log(`✅ [TEST] Test fraud alert created with ID: ${alertId}`);
+      
+      // Show success message (you could add a toast notification here)
+      alert('Test fraud alert created! Check the notifications dashboard to see the admin notification.');
+    } catch (error) {
+      console.error('❌ [TEST] Error creating test fraud alert:', error);
+      alert('Error creating test fraud alert. Check console for details.');
+    }
+  };
 
 const fraudAlerts = [
   {
@@ -506,6 +522,14 @@ const fraudAlerts = [
               <Button variant="outline" size="sm">
                 View All Alerts
               </Button>
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={handleTestFraudAlert}
+                className="bg-red-50 hover:bg-red-100 text-red-700 border-red-200"
+              >
+                🧪 Test Alert
+              </Button>
             </div>
           </div>
 
@@ -592,8 +616,13 @@ const fraudAlerts = [
                     SHELTR is currently in beta testing with controlled transactions. The fraud detection system is active and monitoring, 
                     but no actual fraud attempts have been detected. The examples above demonstrate how alerts would appear in a production environment.
                   </p>
-                  <div className="mt-2 text-xs text-blue-600 dark:text-blue-300">
-                    <strong>Current Status:</strong> Zero fraud incidents • All transactions verified • SmartFund distribution working correctly
+                  <div className="mt-3 p-3 bg-blue-100 dark:bg-blue-900/50 rounded border">
+                    <div className="text-xs text-blue-600 dark:text-blue-300 mb-2">
+                      <strong>🔔 Notification System:</strong> When fraud alerts are detected, automatic notifications are sent to all administrators (Super Admin & Platform Admin).
+                    </div>
+                    <div className="text-xs text-blue-600 dark:text-blue-300">
+                      <strong>Current Status:</strong> Zero fraud incidents • All transactions verified • SmartFund distribution working correctly • Admin notifications ready
+                    </div>
                   </div>
                 </div>
               </div>

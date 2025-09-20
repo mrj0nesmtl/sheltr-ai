@@ -211,7 +211,7 @@ service cloud.firestore {
     }
     
     // =================================================================
-    // KNOWLEDGE_BASE COLLECTION - AI chatbot knowledge base
+    // KNOWLEDGE_BASE COLLECTION - AI chatbot knowledge base (legacy)
     // =================================================================
     match /knowledge_base/{docId} {
       // Read: All authenticated users can read public knowledge
@@ -219,6 +219,40 @@ service cloud.firestore {
       
       // Write: Super admin only
       allow write: if isSuperAdmin();
+    }
+    
+    // =================================================================
+    // KNOWLEDGE DOCUMENTS COLLECTION - New knowledge base documents
+    // =================================================================
+    match /knowledge_documents/{docId} {
+      // Read: All authenticated users can read published documents
+      allow read: if isAuthenticated();
+      
+      // Write: Super Admin only
+      allow write: if isSuperAdmin();
+      
+      // Create: Super Admin only
+      allow create: if isSuperAdmin();
+      
+      // Delete: Super Admin only
+      allow delete: if isSuperAdmin();
+    }
+    
+    // =================================================================
+    // KNOWLEDGE CHUNKS COLLECTION - Document chunks for embeddings
+    // =================================================================
+    match /knowledge_chunks/{chunkId} {
+      // Read: System access only (for AI processing)
+      allow read: if isSuperAdmin();
+      
+      // Write: Super Admin only (system processing)
+      allow write: if isSuperAdmin();
+      
+      // Create: Super Admin only (system processing)
+      allow create: if isSuperAdmin();
+      
+      // Delete: Super Admin only
+      allow delete: if isSuperAdmin();
     }
     
     // =================================================================
@@ -452,6 +486,40 @@ service cloud.firestore {
     match /contact_inquiries/{inquiryId} {
       allow create: if true; // Anyone can submit contact forms
       allow read, update: if isSuperAdmin() || isPlatformAdmin();
+      allow delete: if isSuperAdmin();
+    }
+    
+    // =================================================================
+    // FRAUD ALERTS COLLECTION - Fraud detection and security alerts
+    // =================================================================
+    match /fraud_alerts/{alertId} {
+      // Read: Super Admin and Platform Admin can read all fraud alerts
+      allow read: if isSuperAdmin() || isPlatformAdmin();
+      
+      // Write: Super Admin and Platform Admin can update fraud alerts
+      allow write: if isSuperAdmin() || isPlatformAdmin();
+      
+      // Create: System can create fraud alerts (authenticated users for testing)
+      allow create: if isAuthenticated();
+      
+      // Delete: Super Admin only
+      allow delete: if isSuperAdmin();
+    }
+    
+    // =================================================================
+    // ADMIN NOTIFICATIONS COLLECTION - Administrative notifications
+    // =================================================================
+    match /admin_notifications/{notificationId} {
+      // Read: Super Admin and Platform Admin can read notifications
+      allow read: if isSuperAdmin() || isPlatformAdmin();
+      
+      // Write: Super Admin and Platform Admin can update notifications (mark as read)
+      allow write: if isSuperAdmin() || isPlatformAdmin();
+      
+      // Create: System can create notifications (authenticated users for testing)
+      allow create: if isAuthenticated();
+      
+      // Delete: Super Admin only
       allow delete: if isSuperAdmin();
     }
     

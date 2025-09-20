@@ -34,7 +34,10 @@ export default function EditKnowledgeDocumentClient() {
   const params = useParams();
   const router = useRouter();
   const { user } = useAuth();
-  const documentId = params.id as string;
+  
+  // Handle client-side routing for production static export
+  const [actualDocumentId, setActualDocumentId] = useState<string | null>(null);
+  const documentId = actualDocumentId || (params.id as string);
 
   const [document, setDocument] = useState<KnowledgeDocument | null>(null);
   const [loading, setLoading] = useState(true);
@@ -63,8 +66,31 @@ export default function EditKnowledgeDocumentClient() {
     confidentiality_level: 'public' as 'public' | 'internal' | 'confidential' | 'restricted'
   });
 
+  // Handle client-side routing for production static export
   useEffect(() => {
-    loadDocument();
+    const urlParams = params.id as string;
+    
+    // In production with static export, extract the real document ID from the URL
+    if (typeof window !== 'undefined') {
+      const currentPath = window.location.pathname;
+      const pathParts = currentPath.split('/');
+      const lastPart = pathParts[pathParts.length - 1];
+      
+      // If the URL contains the actual document ID, use it
+      if (lastPart && lastPart !== 'placeholder' && urlParams !== lastPart) {
+        setActualDocumentId(lastPart);
+      } else if (urlParams !== 'placeholder') {
+        setActualDocumentId(urlParams);
+      } else {
+        setError('Document ID not found. Please navigate from the knowledge base dashboard.');
+      }
+    }
+  }, [params.id]);
+
+  useEffect(() => {
+    if (documentId && documentId !== 'placeholder') {
+      loadDocument();
+    }
   }, [documentId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const loadDocument = async () => {

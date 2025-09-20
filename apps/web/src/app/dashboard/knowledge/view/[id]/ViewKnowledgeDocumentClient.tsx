@@ -15,7 +15,6 @@ import {
   Clock,
   Target,
   AlertTriangle,
-  BookOpen,
   Globe,
   Lock,
   Users,
@@ -29,7 +28,7 @@ import { ChangeTracker } from '@/components/knowledge/ChangeTracker';
 export default function ViewKnowledgeDocumentClient() {
   const params = useParams();
   const router = useRouter();
-  const { user } = useAuth();
+  const { } = useAuth();
   const documentId = params.id as string;
 
   const [document, setDocument] = useState<KnowledgeDocument | null>(null);
@@ -55,13 +54,14 @@ export default function ViewKnowledgeDocumentClient() {
       const doc = response.data;
       
       setDocument(doc);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error loading document:', error);
       
       // Handle different types of errors
-      if (error?.message?.includes('404') || error?.message?.includes('not found')) {
+      const errorMessage = (error as Error)?.message || '';
+      if (errorMessage.includes('404') || errorMessage.includes('not found')) {
         setError(`Document with ID "${documentId}" was not found. It may have been deleted or you may not have permission to access it.`);
-      } else if (error?.message?.includes('403') || error?.message?.includes('unauthorized')) {
+      } else if (errorMessage.includes('403') || errorMessage.includes('unauthorized')) {
         setError('You do not have permission to view this document.');
       } else {
         setError('Failed to load document. Please check your connection and try again.');
@@ -90,7 +90,7 @@ export default function ViewKnowledgeDocumentClient() {
   };
 
   const getSharingBadge = (doc: KnowledgeDocument) => {
-    const sharingLevel = doc.sharing_level || doc.access_level || 'public';
+    const sharingLevel = doc.sharing_level || 'public';
     switch (sharingLevel) {
       case 'super_admin_only':
         return { color: 'bg-red-500', text: 'Super Admin Only', icon: Lock };
@@ -397,10 +397,9 @@ export default function ViewKnowledgeDocumentClient() {
                     <div className="mt-1">
                       <Badge variant={document.status === 'active' ? 'default' : 'secondary'}>
                         {document.status === 'active' && '✅ Active'}
-                        {document.status === 'draft' && '📝 Draft'}
                         {document.status === 'archived' && '📦 Archived'}
                         {document.status === 'processing' && '⏳ Processing'}
-                        {!['active', 'draft', 'archived', 'processing'].includes(document.status) && document.status}
+                        {!['active', 'archived', 'processing'].includes(document.status) && `📝 ${document.status}`}
                       </Badge>
                     </div>
                   </div>

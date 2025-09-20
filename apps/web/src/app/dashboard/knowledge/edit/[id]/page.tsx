@@ -1,16 +1,10 @@
 import EditKnowledgeDocumentClient from './EditKnowledgeDocumentClient';
 
-// Generate static params for static export
-export async function generateStaticParams() {
-  // Return some demo document IDs for static generation
-  // In a real scenario, you'd fetch these from your API
+// Minimal generateStaticParams for build compatibility
+export async function generateStaticParams(): Promise<{ id: string }[]> {
+  // Return at least one param for static export compatibility
   return [
-    {
-      id: 'demo-doc-001',
-    },
-    {
-      id: 'demo-doc-002',
-    },
+    { id: 'placeholder' }
   ];
 }
 

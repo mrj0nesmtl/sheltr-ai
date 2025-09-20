@@ -1,6 +1,6 @@
 # Business Logic Testing - Multi-Tenant Platform
 
-**Document Version**: 5.0  
+I think we can also exclude anything to do with migration. It is currently showing in the UI.**Document Version**: 5.0  
 **Last Updated**: September 20, 2025  
 **Testing Scope**: Dashboard data connectivity resolution and knowledge base management  
 **Priority**: ✅ **RESOLVED** - Session 15+ dashboard connectivity crisis successfully resolved

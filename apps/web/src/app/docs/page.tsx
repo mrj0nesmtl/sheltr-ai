@@ -32,9 +32,8 @@ import { ThemeToggle } from '@/components/theme-toggle';
 import Footer from '@/components/Footer';
 import ThemeLogo from '@/components/ThemeLogo';
 import { useState } from 'react';
-import { collection, addDoc, Timestamp } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
 import { useAuth } from '@/contexts/AuthContext';
+import { UnifiedInquiryService } from '@/services/unifiedInquiryService';
 
 export default function DocsPage() {
   const { user, hasRole } = useAuth();
@@ -51,13 +50,11 @@ export default function DocsPage() {
     setSubmitMessage('');
 
     try {
-      await addDoc(collection(db, 'newsletter_signups'), {
+      await UnifiedInquiryService.createNewsletterSignup({
         email: email.trim(),
         source: 'docs_page_cta',
         page: 'documentation_hub',
-        signup_date: Timestamp.now(),
-        user_agent: navigator.userAgent,
-        status: 'active'
+        user_id: user?.uid
       });
 
       setSubmitMessage('✅ Thank you! We\'ll be in touch soon.');

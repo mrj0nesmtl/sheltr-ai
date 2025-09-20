@@ -149,23 +149,42 @@ export default function DashboardPage() {
       try {
         const apiMetrics = await analyticsService.getPlatformAnalytics();
         console.log('📊 API metrics received:', apiMetrics);
+        console.log('🔍 Mapping API data to dashboard metrics...');
+        
+        // Try to get real activity data from Firebase, but fallback to static if it fails
+        let recentActivity = [
+          {
+            action: 'Platform metrics loaded',
+            details: `Connected to ${apiMetrics.shelters?.total_shelters || 0} shelters with ${apiMetrics.users?.total || 0} users`,
+            time: 'Just now'
+          }
+        ];
+        
+        try {
+          console.log('🔄 Attempting to get simple activity data from Firebase...');
+          const { generateSimpleActivity } = await import('@/utils/generateSimpleActivity');
+          const simpleActivity = await generateSimpleActivity();
+          if (simpleActivity && simpleActivity.length > 0) {
+            recentActivity = simpleActivity;
+            console.log('✅ Using simple activity data from Firebase');
+          } else {
+            console.log('⚠️ No activity data generated, using fallback');
+          }
+        } catch (activityError) {
+          console.warn('⚠️ Failed to get activity data, using fallback:', activityError);
+        }
         
         // Transform API data to match PlatformMetrics interface
         const transformedMetrics: PlatformMetrics = {
           totalOrganizations: apiMetrics.shelters?.total_shelters || 0,
           totalUsers: apiMetrics.users?.total || 0,
           activeParticipants: apiMetrics.shelters?.participants_served || 0,
-          activeDonors: apiMetrics.users?.donors || 0,
+          activeDonors: apiMetrics.users?.by_role?.donor || 0,
+          platformAdmins: apiMetrics.users?.by_role?.admin || 0,
           totalDonations: apiMetrics.donations?.total_amount || 0,
           platformUptime: 99.9, // Keep as operational metric
           issuesOpen: 0, // Keep as operational metric
-          recentActivity: [
-            {
-              action: 'Platform metrics loaded',
-              details: `Connected to ${apiMetrics.shelters?.total_shelters || 0} shelters with ${apiMetrics.users?.total || 0} users`,
-              time: 'Just now'
-            }
-          ]
+          recentActivity: recentActivity
         };
         
         setPlatformMetrics(transformedMetrics);

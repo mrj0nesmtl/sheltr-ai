@@ -12,9 +12,29 @@ import {
   Plus,
   Save,
   ExternalLink,
-  ChevronUp,
-  ChevronDown
+  GripVertical,
+  RotateCcw
 } from 'lucide-react';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+  rectSortingStrategy,
+} from '@dnd-kit/sortable';
+import {
+  useSortable,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -36,6 +56,7 @@ interface GalleryImage {
   tags: string[];
   date: string;
   isPublic: boolean;
+  isHero: boolean;
   order: number;
   uploadedBy: string;
   createdAt: Date;
@@ -43,6 +64,123 @@ interface GalleryImage {
 }
 
 const categories = ['pods', 'mobi', 'drones', 'technology', 'fabrication', 'concepts'];
+
+// Sortable Image Card Component
+interface SortableImageCardProps {
+  image: GalleryImage;
+  index: number;
+  onEdit: (image: GalleryImage) => void;
+  onDelete: (image: GalleryImage) => void;
+  onToggleHero: (image: GalleryImage) => void;
+}
+
+function SortableImageCard({ image, index, onEdit, onDelete, onToggleHero }: SortableImageCardProps) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: image.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  return (
+    <Card 
+      ref={setNodeRef} 
+      style={style} 
+      className={`overflow-hidden ${isDragging ? 'shadow-2xl z-50' : ''}`}
+    >
+      <div className="relative aspect-square">
+        <Image
+          src={image.src}
+          alt={image.title}
+          fill
+          className="object-cover"
+          sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+        />
+        <div className="absolute top-2 right-2 flex gap-1">
+          <Badge variant={image.isPublic ? "default" : "secondary"} className="text-xs">
+            {image.isPublic ? "Public" : "Private"}
+          </Badge>
+          <Badge variant="outline" className="text-xs">
+            {image.category}
+          </Badge>
+          {image.isHero && (
+            <Badge variant="default" className="text-xs bg-yellow-500 hover:bg-yellow-600">
+              HERO
+            </Badge>
+          )}
+        </div>
+        {/* Drag Handle */}
+        <div 
+          {...attributes}
+          {...listeners}
+          className="absolute top-2 left-2 bg-black/50 hover:bg-black/70 rounded p-1 cursor-grab active:cursor-grabbing transition-colors"
+        >
+          <GripVertical className="h-4 w-4 text-white" />
+        </div>
+      </div>
+      <CardContent className="p-4">
+        <h3 className="font-semibold truncate mb-1">{image.title}</h3>
+        <p className="text-sm text-muted-foreground mb-2 line-clamp-2">
+          {image.description}
+        </p>
+        <div className="flex flex-wrap gap-1 mb-3">
+          {image.tags.slice(0, 3).map((tag, tagIndex) => (
+            <Badge key={tagIndex} variant="outline" className="text-xs">
+              {tag}
+            </Badge>
+          ))}
+          {image.tags.length > 3 && (
+            <Badge variant="outline" className="text-xs">
+              +{image.tags.length - 3}
+            </Badge>
+          )}
+        </div>
+        <div className="flex items-center gap-2 mb-2">
+          <input
+            type="checkbox"
+            id={`hero-${image.id}`}
+            checked={image.isHero || false}
+            onChange={() => onToggleHero(image)}
+            className="w-4 h-4 text-yellow-600 bg-gray-100 border-gray-300 rounded focus:ring-yellow-500 dark:focus:ring-yellow-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+          />
+          <label htmlFor={`hero-${image.id}`} className="text-sm font-medium text-gray-900 dark:text-gray-300">
+            Hero Image
+          </label>
+        </div>
+        <div className="flex justify-between items-center">
+          <div className="text-xs text-muted-foreground">
+            Order: {index + 1}
+          </div>
+          <div className="flex gap-1">
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => onEdit(image)}
+            >
+              <Edit className="h-4 w-4" />
+            </Button>
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => onDelete(image)}
+              className="text-destructive hover:text-destructive"
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
 
 export default function GalleryManagementPage() {
   const { user, hasRole } = useAuth();
@@ -55,6 +193,15 @@ export default function GalleryManagementPage() {
   const [editingImage, setEditingImage] = useState<GalleryImage | null>(null);
   const [uploading, setUploading] = useState(false);
   const [alert, setAlert] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [isReordering, setIsReordering] = useState(false);
+
+  // Drag & Drop sensors
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
 
   // Form state for new/editing images
   const [formData, setFormData] = useState({
@@ -62,7 +209,8 @@ export default function GalleryManagementPage() {
     category: '',
     description: '',
     tags: '',
-    isPublic: true
+    isPublic: true,
+    isHero: false
   });
 
   // Helper function to show alerts
@@ -148,6 +296,7 @@ export default function GalleryManagementPage() {
         tags: formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag),
         date: new Date().getFullYear().toString(),
         isPublic: formData.isPublic,
+        isHero: formData.isHero,
         order: images.length,
         uploadedBy: user.uid,
         createdAt: new Date(),
@@ -158,7 +307,7 @@ export default function GalleryManagementPage() {
       
       showAlert('success', 'Image uploaded successfully!');
       setUploadDialogOpen(false);
-      setFormData({ title: '', category: '', description: '', tags: '', isPublic: true });
+      setFormData({ title: '', category: '', description: '', tags: '', isPublic: true, isHero: false });
       loadImages();
     } catch (error) {
       console.error('Error uploading image:', error);
@@ -186,6 +335,39 @@ export default function GalleryManagementPage() {
     }
   };
 
+  // Handle hero image toggle
+  const handleToggleHero = async (image: GalleryImage) => {
+    try {
+      setIsReordering(true);
+      
+      // If setting this image as hero, first unset any existing hero images
+      if (!image.isHero) {
+        const currentHeroImages = images.filter(img => img.isHero);
+        const unsetPromises = currentHeroImages.map(heroImage => 
+          updateDoc(doc(db, 'gallery_images', heroImage.id), { 
+            isHero: false,
+            updatedAt: new Date()
+          })
+        );
+        await Promise.all(unsetPromises);
+      }
+      
+      // Toggle the hero status of the current image
+      await updateDoc(doc(db, 'gallery_images', image.id), {
+        isHero: !image.isHero,
+        updatedAt: new Date()
+      });
+      
+      showAlert('success', image.isHero ? 'Hero image removed!' : 'Hero image set successfully!');
+      loadImages();
+    } catch (error) {
+      console.error('Error toggling hero image:', error);
+      showAlert('error', 'Failed to update hero image');
+    } finally {
+      setIsReordering(false);
+    }
+  };
+
   // Handle image deletion
   const handleDeleteImage = async (image: GalleryImage) => {
     if (!confirm('Are you sure you want to delete this image? This action cannot be undone.')) {
@@ -208,27 +390,81 @@ export default function GalleryManagementPage() {
     }
   };
 
-  // Handle reordering
-  const handleReorder = async (imageId: string, direction: 'up' | 'down') => {
-    const currentIndex = images.findIndex(img => img.id === imageId);
-    if (currentIndex === -1) return;
+  // Handle drag end for reordering
+  const handleDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event;
 
-    const newIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
-    if (newIndex < 0 || newIndex >= images.length) return;
+    if (!over || active.id === over.id) {
+      return;
+    }
 
+    const oldIndex = images.findIndex((item) => item.id === active.id);
+    const newIndex = images.findIndex((item) => item.id === over.id);
+
+    if (oldIndex === -1 || newIndex === -1) return;
+
+    setIsReordering(true);
+    
     try {
-      const currentImage = images[currentIndex];
-      const swapImage = images[newIndex];
+      // Optimistically update the UI
+      const newImages = arrayMove(images, oldIndex, newIndex);
+      setImages(newImages);
+      setFilteredImages(newImages.filter(image => {
+        const matchesSearch = image.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                             image.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                             image.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
+        const matchesCategory = selectedCategory === 'all' || image.category === selectedCategory;
+        return matchesSearch && matchesCategory;
+      }));
 
-      // Update order values
-      await updateDoc(doc(db, 'gallery_images', currentImage.id), { order: swapImage.order });
-      await updateDoc(doc(db, 'gallery_images', swapImage.id), { order: currentImage.order });
+      // Update all affected images' order values in Firebase
+      const updatePromises = newImages.map((image, index) => 
+        updateDoc(doc(db, 'gallery_images', image.id), { 
+          order: index,
+          updatedAt: new Date()
+        })
+      );
 
-      showAlert('success', 'Image order updated!');
-      loadImages();
+      await Promise.all(updatePromises);
+      
+      showAlert('success', 'Images reordered successfully!');
     } catch (error) {
       console.error('Error reordering images:', error);
       showAlert('error', 'Failed to reorder images');
+      // Reload images to revert optimistic update
+      loadImages();
+    } finally {
+      setIsReordering(false);
+    }
+  };
+
+  // Reset order to original (by creation date)
+  const resetOrder = async () => {
+    if (!confirm('Reset all images to their original order? This cannot be undone.')) {
+      return;
+    }
+
+    setIsReordering(true);
+    try {
+      // Sort by creation date and update order
+      const sortedImages = [...images].sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+      
+      const updatePromises = sortedImages.map((image, index) => 
+        updateDoc(doc(db, 'gallery_images', image.id), { 
+          order: index,
+          updatedAt: new Date()
+        })
+      );
+
+      await Promise.all(updatePromises);
+      
+      showAlert('success', 'Image order reset to original!');
+      loadImages();
+    } catch (error) {
+      console.error('Error resetting order:', error);
+      showAlert('error', 'Failed to reset image order');
+    } finally {
+      setIsReordering(false);
     }
   };
 
@@ -284,6 +520,14 @@ export default function GalleryManagementPage() {
               View Public Gallery
             </a>
           </Button>
+          <Button 
+            variant="outline" 
+            onClick={resetOrder}
+            disabled={isReordering}
+          >
+            <RotateCcw className="h-4 w-4 mr-2" />
+            Reset Order
+          </Button>
           <Dialog open={uploadDialogOpen} onOpenChange={setUploadDialogOpen}>
             <DialogTrigger asChild>
               <Button>
@@ -336,14 +580,25 @@ export default function GalleryManagementPage() {
                     placeholder="tag1, tag2, tag3"
                   />
                 </div>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    id="isPublic"
-                    checked={formData.isPublic}
-                    onChange={(e) => setFormData(prev => ({ ...prev, isPublic: e.target.checked }))}
-                  />
-                  <label htmlFor="isPublic" className="text-sm">Make public</label>
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      id="isPublic"
+                      checked={formData.isPublic}
+                      onChange={(e) => setFormData(prev => ({ ...prev, isPublic: e.target.checked }))}
+                    />
+                    <label htmlFor="isPublic" className="text-sm">Make public</label>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      id="isHero"
+                      checked={formData.isHero}
+                      onChange={(e) => setFormData(prev => ({ ...prev, isHero: e.target.checked }))}
+                    />
+                    <label htmlFor="isHero" className="text-sm">Set as hero image</label>
+                  </div>
                 </div>
                 <div>
                   <label className="text-sm font-medium">Select Image File</label>
@@ -399,85 +654,41 @@ export default function GalleryManagementPage() {
         </div>
       </div>
 
-      {/* Images Grid */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {filteredImages.map((image) => (
-          <Card key={image.id} className="overflow-hidden">
-            <div className="relative aspect-square">
-              <Image
-                src={image.src}
-                alt={image.title}
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+      {/* Drag & Drop Instructions */}
+      {filteredImages.length > 0 && (
+        <div className="mb-4 p-3 bg-muted/50 rounded-lg">
+          <p className="text-sm text-muted-foreground">
+            <GripVertical className="inline h-4 w-4 mr-1" />
+            Drag images by the grip handle to reorder them. Changes will be reflected on the public gallery page.
+            {isReordering && <span className="ml-2 text-primary">Updating order...</span>}
+          </p>
+        </div>
+      )}
+
+      {/* Drag & Drop Images Grid */}
+      <DndContext 
+        sensors={sensors} 
+        collisionDetection={closestCenter} 
+        onDragEnd={handleDragEnd}
+      >
+        <SortableContext 
+          items={filteredImages.map(img => img.id)} 
+          strategy={rectSortingStrategy}
+        >
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {filteredImages.map((image, index) => (
+              <SortableImageCard
+                key={image.id}
+                image={image}
+                index={index}
+                onEdit={setEditingImage}
+                onDelete={handleDeleteImage}
+                onToggleHero={handleToggleHero}
               />
-              <div className="absolute top-2 right-2 flex gap-1">
-                <Badge variant={image.isPublic ? "default" : "secondary"} className="text-xs">
-                  {image.isPublic ? "Public" : "Private"}
-                </Badge>
-                <Badge variant="outline" className="text-xs">
-                  {image.category}
-                </Badge>
-              </div>
-            </div>
-            <CardContent className="p-4">
-              <h3 className="font-semibold truncate mb-1">{image.title}</h3>
-              <p className="text-sm text-muted-foreground mb-2 line-clamp-2">
-                {image.description}
-              </p>
-              <div className="flex flex-wrap gap-1 mb-3">
-                {image.tags.slice(0, 3).map((tag, index) => (
-                  <Badge key={index} variant="outline" className="text-xs">
-                    {tag}
-                  </Badge>
-                ))}
-                {image.tags.length > 3 && (
-                  <Badge variant="outline" className="text-xs">
-                    +{image.tags.length - 3}
-                  </Badge>
-                )}
-              </div>
-              <div className="flex justify-between items-center">
-                <div className="flex gap-1">
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    onClick={() => handleReorder(image.id, 'up')}
-                    disabled={images.findIndex(img => img.id === image.id) === 0}
-                  >
-                    <ChevronUp className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    onClick={() => handleReorder(image.id, 'down')}
-                    disabled={images.findIndex(img => img.id === image.id) === images.length - 1}
-                  >
-                    <ChevronDown className="h-4 w-4" />
-                  </Button>
-                </div>
-                <div className="flex gap-1">
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    onClick={() => setEditingImage(image)}
-                  >
-                    <Edit className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    onClick={() => handleDeleteImage(image)}
-                    className="text-destructive hover:text-destructive"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+            ))}
+          </div>
+        </SortableContext>
+      </DndContext>
 
       {filteredImages.length === 0 && (
         <div className="text-center py-12">
@@ -538,14 +749,25 @@ export default function GalleryManagementPage() {
                   } : null)}
                 />
               </div>
-              <div className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  id="editIsPublic"
-                  checked={editingImage.isPublic}
-                  onChange={(e) => setEditingImage(prev => prev ? { ...prev, isPublic: e.target.checked } : null)}
-                />
-                <label htmlFor="editIsPublic" className="text-sm">Make public</label>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="editIsPublic"
+                    checked={editingImage.isPublic}
+                    onChange={(e) => setEditingImage(prev => prev ? { ...prev, isPublic: e.target.checked } : null)}
+                  />
+                  <label htmlFor="editIsPublic" className="text-sm">Make public</label>
+                </div>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="editIsHero"
+                    checked={editingImage.isHero || false}
+                    onChange={(e) => setEditingImage(prev => prev ? { ...prev, isHero: e.target.checked } : null)}
+                  />
+                  <label htmlFor="editIsHero" className="text-sm">Set as hero image</label>
+                </div>
               </div>
               <div className="flex gap-2 pt-4">
                 <Button onClick={() => setEditingImage(null)} variant="outline" className="flex-1">

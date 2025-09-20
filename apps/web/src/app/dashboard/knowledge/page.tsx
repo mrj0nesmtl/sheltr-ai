@@ -37,7 +37,8 @@ import {
   Users,
   Lock,
   AlertTriangle,
-  Folder
+  Folder,
+  Sparkles
 } from 'lucide-react';
 import { knowledgeDashboardService, KnowledgeDocument, KnowledgeStats } from '@/services/knowledgeDashboardService';
 
@@ -63,9 +64,7 @@ export default function KnowledgeDashboard() {
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [viewMode, setViewMode] = useState<'list' | 'cards'>('cards');
   const [showCreateDialog, setShowCreateDialog] = useState(false);
-  const [showEditDialog, setShowEditDialog] = useState(false);
   const [showViewDialog, setShowViewDialog] = useState(false);
-  const [editingDocument, setEditingDocument] = useState<KnowledgeDocument | null>(null);
   const [viewingDocument, setViewingDocument] = useState<KnowledgeDocument | null>(null);
   const [showWebScrapingDialog, setShowWebScrapingDialog] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -212,7 +211,6 @@ export default function KnowledgeDashboard() {
       is_live: false,
       confidentiality_level: 'public'
     });
-    setEditingDocument(null);
   };
 
   // Folder navigation handlers
@@ -246,18 +244,6 @@ export default function KnowledgeDashboard() {
     }
   };
 
-  const handleUpdateDocument = async () => {
-    if (!editingDocument) return;
-    
-    try {
-      await knowledgeDashboardService.updateKnowledgeDocument(editingDocument.id, formData);
-      setShowEditDialog(false);
-      resetForm();
-      loadKnowledgeData(); // Refresh the list
-    } catch (error) {
-      console.error('Error updating document:', error);
-    }
-  };
 
   const handleDeleteDocument = async (documentId: string) => {
     if (!confirm('Are you sure you want to delete this knowledge document?')) return;
@@ -282,21 +268,9 @@ export default function KnowledgeDashboard() {
     }
   };
 
-  const openEditDialog = (document: KnowledgeDocument) => {
-    setEditingDocument(document);
-    setFormData({
-      title: document.title,
-      content: document.content,
-      category: document.category,
-      tags: document.tags,
-      status: document.status,
-      sharing_level: document.sharing_level || 'public',
-      shared_with: document.shared_with || [],
-      access_roles: document.access_roles || [],
-      is_live: document.is_live || false,
-      confidentiality_level: document.confidentiality_level || 'public'
-    });
-    setShowEditDialog(true);
+  const openEditPage = (document: KnowledgeDocument) => {
+    // Navigate to dedicated edit page
+    window.location.href = `/dashboard/knowledge/edit/${document.id}`;
   };
 
   const formatFileSize = (bytes: number) => {
@@ -380,15 +354,30 @@ export default function KnowledgeDashboard() {
         <div className="flex-1 overflow-auto">
           <div className="p-6 max-w-7xl mx-auto w-full">
           {/* Header */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-4">
             <div>
               <h1 className="text-2xl sm:text-3xl font-bold flex items-center">
                 <Brain className="h-8 w-8 mr-3" />
                 Knowledge Base
               </h1>
-              <p className="text-gray-600 text-sm sm:text-base">
-                Manage and organize your knowledge documents
-              </p>
+              <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mt-2">
+                <p className="text-gray-600 text-sm sm:text-base">
+                  Manage and organize your knowledge documents
+                </p>
+                {/* Folder Toggle - Under Subtitle */}
+                <Button
+                  variant={showFolderSidebar ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setShowFolderSidebar(!showFolderSidebar)}
+                  className={`flex-shrink-0 w-fit ${showFolderSidebar ? 'bg-blue-600 text-white hover:bg-blue-700' : 'border-blue-300 text-blue-600 hover:bg-blue-50'}`}
+                  title={showFolderSidebar ? "Hide Folders" : "Show Folders"}
+                >
+                  <Folder className="h-4 w-4 mr-1" />
+                  <span className="text-xs">
+                    {showFolderSidebar ? "Hide Folders" : "Show Folders"}
+                  </span>
+                </Button>
+              </div>
             </div>
         
         <div className="flex flex-col sm:flex-row gap-2">
@@ -413,162 +402,256 @@ export default function KnowledgeDashboard() {
         </div>
       </div>
 
-      {/* GitHub Sync Panel */}
-      <GitHubSyncPanel onSyncComplete={loadKnowledgeData} />
+      {/* GitHub Sync Panel - Full Width at Top */}
+      <div className="mb-6">
+        <GitHubSyncPanel onSyncComplete={loadKnowledgeData} />
+      </div>
 
-      {/* Stats Row */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
-        <Card>
-          <CardContent className="p-3 sm:p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs sm:text-sm font-medium text-muted-foreground">Total Documents</p>
-                <p className="text-xl sm:text-2xl font-bold">{stats.total_documents}</p>
+      {/* AI Knowledge Helper Component */}
+      <Card className="mb-6 bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 border-purple-200 dark:border-purple-800">
+        <CardContent className="p-4">
+          <div className="flex items-start gap-4">
+            <div className="flex-shrink-0">
+              <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
+                <Brain className="h-6 w-6 text-white" />
               </div>
-              <Database className="h-6 w-6 sm:h-8 sm:w-8 text-blue-500" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <h3 className="text-lg font-semibold text-purple-900 dark:text-purple-100 mb-2">
+                🤖 How SHELTR&apos;s AI Knowledge System Works
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <FileText className="h-4 w-4 text-purple-600" />
+                    <span className="font-medium">1. Document Processing</span>
+                  </div>
+                  <p className="text-muted-foreground text-xs leading-relaxed">
+                    Your documents are broken into smart &quot;chunks&quot; - small, meaningful pieces that our AI can understand and search through quickly.
+                  </p>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="h-4 w-4 text-blue-600" />
+                    <span className="font-medium">2. AI Embeddings</span>
+                  </div>
+                  <p className="text-muted-foreground text-xs leading-relaxed">
+                    Each chunk gets converted into &quot;embeddings&quot; - mathematical representations that capture the meaning, allowing instant semantic search.
+                  </p>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <Brain className="h-4 w-4 text-green-600" />
+                    <span className="font-medium">3. Smart Chatbot</span>
+                  </div>
+                  <p className="text-muted-foreground text-xs leading-relaxed">
+                    When users ask questions, our chatbot finds the most relevant chunks and provides accurate, contextual answers from your knowledge base.
+                  </p>
+                </div>
+              </div>
+              <div className="mt-3 flex items-center gap-4 text-xs text-muted-foreground">
+                <div className="flex items-center gap-1">
+                  <Hash className="h-3 w-3" />
+                  <span>{stats.total_chunks} chunks processed</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <CheckCircle className="h-3 w-3 text-green-500" />
+                  <span>{stats.active_documents} documents live</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <BookOpen className="h-3 w-3" />
+                  <span>{stats.total_words?.toLocaleString() || 0} words indexed</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Enhanced Stats Row - Better Desktop Layout */}
+      <div className="grid grid-cols-2 lg:grid-cols-6 gap-3 sm:gap-4 mb-6 sm:mb-8">
+        <Card className="lg:col-span-1">
+          <CardContent className="p-3 sm:p-4">
+            <div className="flex flex-col items-center text-center">
+              <Database className="h-8 w-8 text-blue-500 mb-2" />
+              <p className="text-xs font-medium text-muted-foreground mb-1">Total Documents</p>
+              <p className="text-2xl font-bold text-blue-600">{stats.total_documents}</p>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="lg:col-span-1">
           <CardContent className="p-3 sm:p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs sm:text-sm font-medium text-muted-foreground">Active Documents</p>
-                <p className="text-xl sm:text-2xl font-bold">{stats.active_documents}</p>
-              </div>
-              <FileText className="h-6 w-6 sm:h-8 sm:w-8 text-green-500" />
+            <div className="flex flex-col items-center text-center">
+              <CheckCircle className="h-8 w-8 text-green-500 mb-2" />
+              <p className="text-xs font-medium text-muted-foreground mb-1">Active Documents</p>
+              <p className="text-2xl font-bold text-green-600">{stats.active_documents}</p>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="lg:col-span-1">
           <CardContent className="p-3 sm:p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs sm:text-sm font-medium text-muted-foreground">Total Chunks</p>
-                <p className="text-xl sm:text-2xl font-bold">{stats.total_chunks}</p>
-              </div>
-              <Hash className="h-6 w-6 sm:h-8 sm:w-8 text-purple-500" />
+            <div className="flex flex-col items-center text-center">
+              <Hash className="h-8 w-8 text-purple-500 mb-2" />
+              <p className="text-xs font-medium text-muted-foreground mb-1">Total Chunks</p>
+              <p className="text-2xl font-bold text-purple-600">{stats.total_chunks}</p>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="lg:col-span-1">
           <CardContent className="p-3 sm:p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs sm:text-sm font-medium text-muted-foreground">Pending Embeddings</p>
-                <p className="text-xl sm:text-2xl font-bold">{stats.pending_embeddings}</p>
-              </div>
-              <Brain className="h-6 w-6 sm:h-8 sm:w-8 text-orange-500" />
+            <div className="flex flex-col items-center text-center">
+              <Brain className="h-8 w-8 text-orange-500 mb-2" />
+              <p className="text-xs font-medium text-muted-foreground mb-1">Pending Embeddings</p>
+              <p className="text-2xl font-bold text-orange-600">{stats.pending_embeddings}</p>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="lg:col-span-1">
+          <CardContent className="p-3 sm:p-4">
+            <div className="flex flex-col items-center text-center">
+              <BookOpen className="h-8 w-8 text-indigo-500 mb-2" />
+              <p className="text-xs font-medium text-muted-foreground mb-1">Total Words</p>
+              <p className="text-2xl font-bold text-indigo-600">{stats.total_words?.toLocaleString() || 0}</p>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="lg:col-span-1">
+          <CardContent className="p-3 sm:p-4">
+            <div className="flex flex-col items-center text-center">
+              <Folder className="h-8 w-8 text-teal-500 mb-2" />
+              <p className="text-xs font-medium text-muted-foreground mb-1">Categories</p>
+              <p className="text-2xl font-bold text-teal-600">{stats.categories_count || 0}</p>
             </div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Filters */}
+      {/* Enhanced Filters - Desktop Optimized */}
       <Card className="mb-6">
-        <CardContent className="p-3 sm:p-4">
-          <div className="flex flex-col gap-3 sm:gap-4">
-            {/* Search bar */}
+        <CardContent className="p-4">
+          <div className="flex flex-col xl:flex-row gap-4">
+            {/* Search bar - takes more space on desktop */}
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search documents..."
+                placeholder="Search documents by title, content, or tags..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-10"
               />
             </div>
             
-            {/* Filters row */}
-            <div className="flex flex-col sm:flex-row gap-3">
+            {/* Filters - horizontal on desktop */}
+            <div className="flex flex-col sm:flex-row xl:flex-row gap-3 xl:gap-2">
               {/* Navigation Controls */}
               <div className="flex items-center gap-2">
-                {/* Folder Toggle Button */}
                 {!showFolderSidebar && (
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => setShowFolderSidebar(true)}
-                    className="flex-shrink-0"
+                    className="flex-shrink-0 bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200"
                   >
                     <Folder className="h-4 w-4 mr-2" />
-                    Show Folders
+                    <span className="hidden sm:inline">Show Folders</span>
+                    <span className="sm:hidden">Folders</span>
                   </Button>
                 )}
                 
-                {/* Breadcrumb Navigation */}
                 <Breadcrumb
                   items={buildBreadcrumb(selectedFolder)}
                   onNavigate={handleBreadcrumbNavigate}
                   className="flex-shrink-0"
                 />
-                
-                {/* Manual Refresh Button */}
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={loadKnowledgeData}
-                  disabled={loading}
-                  className="flex-shrink-0"
-                >
-                  <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
-                  Refresh
-                </Button>
               </div>
+              
               <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-                <SelectTrigger className="w-full sm:w-48">
+                <SelectTrigger className="w-full sm:w-40 xl:w-48">
                   <SelectValue placeholder="All Categories" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Categories</SelectItem>
-                  <SelectItem value="Platform">Platform</SelectItem>
-                  <SelectItem value="Technology">Technology</SelectItem>
-                  <SelectItem value="AI">AI</SelectItem>
+                  <SelectItem value="Platform">📋 Platform</SelectItem>
+                  <SelectItem value="Architecture">🏗️ Architecture</SelectItem>
+                  <SelectItem value="API">🔌 API</SelectItem>
+                  <SelectItem value="Development">💻 Development</SelectItem>
+                  <SelectItem value="Deployment">🚀 Deployment</SelectItem>
+                  <SelectItem value="User Guides">👥 User Guides</SelectItem>
+                  <SelectItem value="Reference">📚 Reference</SelectItem>
                 </SelectContent>
               </Select>
 
               <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger className="w-full sm:w-48">
+                <SelectTrigger className="w-full sm:w-40 xl:w-48">
                   <SelectValue placeholder="All Status" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Status</SelectItem>
-                  <SelectItem value="active">Active</SelectItem>
-                  <SelectItem value="archived">Archived</SelectItem>
-                  <SelectItem value="processing">Processing</SelectItem>
+                  <SelectItem value="active">✅ Active</SelectItem>
+                  <SelectItem value="archived">📦 Archived</SelectItem>
+                  <SelectItem value="processing">⏳ Processing</SelectItem>
                 </SelectContent>
               </Select>
+              
+              {/* View toggle - compact on desktop */}
+              <div className="flex gap-1 border rounded-md p-1">
+                <Button
+                  variant={viewMode === 'cards' ? 'default' : 'ghost'}
+                  size="sm"
+                  onClick={() => setViewMode('cards')}
+                  className="px-3 py-1 h-8"
+                >
+                  <div className="grid grid-cols-2 gap-0.5 h-3 w-3 mr-2">
+                    <div className="bg-current rounded-sm"></div>
+                    <div className="bg-current rounded-sm"></div>
+                    <div className="bg-current rounded-sm"></div>
+                    <div className="bg-current rounded-sm"></div>
+                  </div>
+                  Cards
+                </Button>
+                <Button
+                  variant={viewMode === 'list' ? 'default' : 'ghost'}
+                  size="sm"
+                  onClick={() => setViewMode('list')}
+                  className="px-3 py-1 h-8"
+                >
+                  <div className="flex flex-col gap-0.5 h-3 w-3 mr-2">
+                    <div className="bg-current h-0.5 rounded-sm"></div>
+                    <div className="bg-current h-0.5 rounded-sm"></div>
+                    <div className="bg-current h-0.5 rounded-sm"></div>
+                  </div>
+                  List
+                </Button>
+              </div>
             </div>
-            
-            {/* View toggle */}
-            <div className="flex gap-2">
-              <Button
-                variant={viewMode === 'cards' ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setViewMode('cards')}
-                className="flex-1 sm:flex-none"
-              >
-                Cards
-              </Button>
-              <Button
-                variant={viewMode === 'list' ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setViewMode('list')}
-                className="flex-1 sm:flex-none"
-              >
-                List
-              </Button>
+          </div>
+          
+          {/* Results Summary */}
+          <div className="flex items-center justify-between mt-4 pt-3 border-t">
+            <div className="text-sm text-muted-foreground">
+              Showing {filteredDocuments.length} of {documents.length} documents
+              {selectedFolder && (
+                <span className="ml-2 px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs">
+                  📁 {selectedFolder}
+                </span>
+              )}
+            </div>
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Clock className="h-4 w-4" />
+              Last updated: {stats.last_updated ? formatDate(stats.last_updated) : 'Never'}
             </div>
           </div>
         </CardContent>
       </Card>
 
-      {/* Documents Display */}
-      {viewMode === 'cards' ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                 {/* Documents Display - Enhanced Desktop Layout */}
+                 {viewMode === 'cards' ? (
+                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-6 sm:gap-8">
           {filteredDocuments.map((doc) => {
             const qualityScore = getQualityScore(doc);
             const qualityBadge = getQualityBadge(qualityScore);
@@ -686,7 +769,7 @@ export default function KnowledgeDashboard() {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => openEditDialog(doc)}
+                      onClick={() => openEditPage(doc)}
                       className="flex-1 text-xs px-2 py-1 h-8"
                     >
                       <Edit className="h-3 w-3 mr-1 flex-shrink-0" />
@@ -837,7 +920,7 @@ export default function KnowledgeDashboard() {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => openEditDialog(doc)}
+                        onClick={() => openEditPage(doc)}
                         className="w-full sm:w-auto lg:w-full text-xs px-2 py-1 h-8"
                       >
                         <Edit className="h-3 w-3 mr-1 flex-shrink-0" />
@@ -1035,220 +1118,6 @@ export default function KnowledgeDashboard() {
         </DialogContent>
       </Dialog>
 
-      {/* Enhanced Edit Document Dialog */}
-      <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
-        <DialogContent className="max-w-6xl max-h-[95vh] overflow-y-auto">
-          <DialogHeader>
-            <div className="flex items-center justify-between">
-              <DialogTitle className="flex items-center gap-2">
-                <Edit className="h-5 w-5" />
-                Edit Knowledge Document
-              </DialogTitle>
-              <div className="flex items-center gap-2">
-                <Badge variant={editingDocument?.embedding_status === 'completed' ? 'default' : 'secondary'}>
-                  {editingDocument?.embedding_status === 'completed' ? 'Embedded' : 'Pending'}
-                </Badge>
-                <Badge variant="outline">
-                  {editingDocument?.chunk_count || 0} chunks
-                </Badge>
-              </div>
-            </div>
-          </DialogHeader>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Left Column - Document Info */}
-            <div className="lg:col-span-1 space-y-4">
-              <div className="bg-muted/50 p-4 rounded-lg space-y-3">
-                <h3 className="font-semibold flex items-center gap-2">
-                  <FileText className="h-4 w-4" />
-                  Document Info
-                </h3>
-                <div className="space-y-2 text-sm">
-                  <div>
-                    <span className="font-medium">File Path:</span>
-                    <p className="text-muted-foreground font-mono text-xs break-all">
-                      {editingDocument?.file_path || 'N/A'}
-                    </p>
-                  </div>
-                  <div>
-                    <span className="font-medium">Size:</span>
-                    <span className="text-muted-foreground ml-2">
-                      {editingDocument?.file_size ? `${(editingDocument.file_size / 1024).toFixed(1)} KB` : 'N/A'}
-                    </span>
-                  </div>
-                  <div>
-                    <span className="font-medium">Words:</span>
-                    <span className="text-muted-foreground ml-2">
-                      {editingDocument?.word_count || 0}
-                    </span>
-                  </div>
-                  <div>
-                    <span className="font-medium">Created:</span>
-                    <p className="text-muted-foreground text-xs">
-                      {editingDocument?.created_at ? new Date(editingDocument.created_at).toLocaleDateString() : 'N/A'}
-                    </p>
-                  </div>
-                  <div>
-                    <span className="font-medium">Updated:</span>
-                    <p className="text-muted-foreground text-xs">
-                      {editingDocument?.updated_at ? new Date(editingDocument.updated_at).toLocaleDateString() : 'N/A'}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Privacy & Access Controls */}
-              <div className="bg-muted/50 p-4 rounded-lg space-y-3">
-                <h3 className="font-semibold flex items-center gap-2">
-                  <Shield className="h-4 w-4" />
-                  Privacy & Access
-                </h3>
-                
-                <div>
-                  <label className="text-sm font-medium">Access Level</label>
-                  <Select 
-                    value={formData.sharing_level} 
-                    onValueChange={(value: 'public' | 'super_admin_only' | 'shelter_specific' | 'role_based') => setFormData({...formData, sharing_level: value})}
-                  >
-                    <SelectTrigger className="mt-1">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="public">🌐 Public (Chatbot)</SelectItem>
-                      <SelectItem value="super_admin_only">🔒 Super Admin Only</SelectItem>
-                      <SelectItem value="shelter_specific">🏠 Shelter Specific</SelectItem>
-                      <SelectItem value="role_based">👥 Role Based</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div>
-                  <label className="text-sm font-medium">Confidentiality</label>
-                  <Select 
-                    value={formData.confidentiality_level} 
-                    onValueChange={(value: 'public' | 'internal' | 'confidential' | 'restricted') => setFormData({...formData, confidentiality_level: value})}
-                  >
-                    <SelectTrigger className="mt-1">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="public">📖 Public</SelectItem>
-                      <SelectItem value="internal">🏢 Internal</SelectItem>
-                      <SelectItem value="confidential">🔐 Confidential</SelectItem>
-                      <SelectItem value="restricted">⛔ Restricted</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    id="is_live"
-                    checked={formData.is_live}
-                    onChange={(e) => setFormData({...formData, is_live: e.target.checked})}
-                    className="rounded"
-                  />
-                  <label htmlFor="is_live" className="text-sm font-medium">
-                    Live in Chatbot
-                  </label>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Column - Content */}
-            <div className="lg:col-span-2 space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="text-sm font-medium">Title *</label>
-                  <Input
-                    value={formData.title}
-                    onChange={(e) => setFormData({...formData, title: e.target.value})}
-                    placeholder="Enter document title"
-                    className="mt-1"
-                  />
-                </div>
-                
-                <div>
-                  <label className="text-sm font-medium">Category *</label>
-                  <Select value={formData.category} onValueChange={(value) => setFormData({...formData, category: value})}>
-                    <SelectTrigger className="mt-1">
-                      <SelectValue placeholder="Select category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Platform">📋 Platform</SelectItem>
-                      <SelectItem value="Architecture">🏗️ Architecture</SelectItem>
-                      <SelectItem value="API">🔌 API</SelectItem>
-                      <SelectItem value="Development">💻 Development</SelectItem>
-                      <SelectItem value="Deployment">🚀 Deployment</SelectItem>
-                      <SelectItem value="User Guides">👥 User Guides</SelectItem>
-                      <SelectItem value="Reference">📚 Reference</SelectItem>
-                      <SelectItem value="Integrations">🔗 Integrations</SelectItem>
-                      <SelectItem value="Migration">📦 Migration</SelectItem>
-                      <SelectItem value="Resources">🎯 Resources</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              <div>
-                <label className="text-sm font-medium">Content *</label>
-                <Textarea
-                  value={formData.content}
-                  onChange={(e) => setFormData({...formData, content: e.target.value})}
-                  placeholder="Enter document content (Markdown supported)"
-                  rows={15}
-                  className="mt-1 font-mono text-sm"
-                />
-                <p className="text-xs text-muted-foreground mt-1">
-                  Supports Markdown formatting. Changes will regenerate embeddings.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="text-sm font-medium">Status</label>
-                  <Select value={formData.status} onValueChange={(value: 'active' | 'archived' | 'processing') => setFormData({...formData, status: value})}>
-                    <SelectTrigger className="mt-1">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="active">✅ Active</SelectItem>
-                      <SelectItem value="archived">📦 Archived</SelectItem>
-                      <SelectItem value="processing">⏳ Processing</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                
-                <div>
-                  <label className="text-sm font-medium">Tags</label>
-                  <Input
-                    value={formData.tags.join(', ')}
-                    onChange={(e) => setFormData({...formData, tags: e.target.value.split(',').map(t => t.trim()).filter(Boolean)})}
-                    placeholder="Enter tags separated by commas"
-                    className="mt-1"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex justify-between items-center pt-4 border-t">
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <AlertTriangle className="h-4 w-4" />
-              Changes will regenerate embeddings and update the chatbot knowledge
-            </div>
-            <div className="flex gap-3">
-              <Button variant="outline" onClick={() => setShowEditDialog(false)}>
-                Cancel
-              </Button>
-              <Button onClick={handleUpdateDocument} className="bg-blue-600 hover:bg-blue-700">
-                <RefreshCw className="h-4 w-4 mr-2" />
-                Update & Regenerate
-              </Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
 
       {/* Enhanced View Document Dialog */}
       <Dialog open={showViewDialog} onOpenChange={setShowViewDialog}>
@@ -1287,8 +1156,7 @@ export default function KnowledgeDashboard() {
                   size="sm"
                   onClick={() => {
                     if (viewingDocument) {
-                      openEditDialog(viewingDocument);
-                      setShowViewDialog(false);
+                      openEditPage(viewingDocument);
                     }
                   }}
                   className="px-3 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200"
@@ -1516,8 +1384,7 @@ export default function KnowledgeDashboard() {
                             <Button 
                               onClick={() => {
                                 if (viewingDocument) {
-                                  openEditDialog(viewingDocument);
-                                  setShowViewDialog(false);
+                                  openEditPage(viewingDocument);
                                 }
                               }}
                               className="bg-blue-600 hover:bg-blue-700"

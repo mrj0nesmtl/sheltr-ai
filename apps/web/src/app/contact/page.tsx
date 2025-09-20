@@ -2,8 +2,7 @@
 
 import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { db } from '@/lib/firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { UnifiedInquiryService } from '@/services/unifiedInquiryService';
 import { Mail, Phone, MapPin, MessageCircle, Send, ExternalLink, Github, FileText, Sparkles, Users, Heart, BarChart3, LogIn } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -36,34 +35,19 @@ export default function ContactPage() {
     setIsSubmitting(true);
     
     try {
-      // Save contact inquiry to Firestore
-      const contactData = {
+      console.log('💬 [CONTACT] Submitting contact inquiry via unified service');
+      
+      const inquiryId = await UnifiedInquiryService.createContactInquiry({
         name: formData.name,
         email: formData.email,
-        organization: formData.organization || null,
+        organization: formData.organization || undefined,
         inquiry_type: formData.type,
         subject: formData.subject,
         message: formData.message,
-        status: 'new',
-        priority: formData.type === 'partnership' ? 'high' : formData.type === 'investor' ? 'high' : 'normal',
-        user_id: user?.uid || null,
-        created_at: serverTimestamp(),
-        updated_at: serverTimestamp(),
-        responded: false,
-        assigned_to: null,
-        response_notes: null,
-        metadata: {
-          user_agent: typeof navigator !== 'undefined' ? navigator.userAgent : null,
-          referrer: typeof document !== 'undefined' ? document.referrer : null,
-          page_url: typeof window !== 'undefined' ? window.location.href : null
-        }
-      };
-
-      console.log('💬 [CONTACT] Submitting contact inquiry:', contactData);
+        user_id: user?.uid || undefined
+      });
       
-      const docRef = await addDoc(collection(db, 'contact_inquiries'), contactData);
-      
-      console.log('✅ [CONTACT] Contact inquiry saved with ID:', docRef.id);
+      console.log('✅ [CONTACT] Contact inquiry saved with ID:', inquiryId);
       
       setSubmitted(true);
       

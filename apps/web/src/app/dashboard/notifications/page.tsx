@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
-tusimport { getNotificationCounts, getRecentEmailSignups, getRecentContactInquiries, getAdminNotifications, markNotificationAsRead, NotificationCounts, EmailSignup, ContactInquiryNotification, AdminNotification, formatRelativeTime } from '@/services/notificationService';
+import { getNotificationCounts, getRecentEmailSignups, getRecentContactInquiries, getAdminNotifications, markNotificationAsRead, NotificationCounts, EmailSignup, ContactInquiryNotification, AdminNotification, formatRelativeTime } from '@/services/notificationService';
 import { 
   Mail, 
   Bell, 

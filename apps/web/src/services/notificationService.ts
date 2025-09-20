@@ -1,4 +1,4 @@
-import { collection, getDocs, query, orderBy, limit, where, Timestamp, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, getDocs, query, orderBy, limit, where, Timestamp, addDoc, serverTimestamp, FieldValue } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
 // API base URL for notifications
@@ -25,7 +25,7 @@ export interface ContactInquiryNotification {
   priority: 'low' | 'normal' | 'high';
   source: string;
   status: 'new' | 'read' | 'responded';
-  created_at: any;
+  created_at: Timestamp;
   read_by?: string[];
 }
 
@@ -167,7 +167,7 @@ export const getNotificationCounts = async (): Promise<NotificationCounts> => {
       const pendingSnapshot = await getDocs(pendingQuery);
       pendingShelterapplications += pendingSnapshot.size;
       
-    } catch (error) {
+    } catch {
       console.log('ℹ️ No applications collections found yet');
     }
     
@@ -198,7 +198,7 @@ export const getNotificationCounts = async (): Promise<NotificationCounts> => {
       const repliedInquiriesSnapshot = await getDocs(repliedInquiriesQuery);
       repliedContactInquiries = repliedInquiriesSnapshot.size;
       
-    } catch (error) {
+    } catch {
       console.log('ℹ️ No contact_inquiries collection found yet');
     }
     
@@ -350,13 +350,13 @@ export const formatRelativeTime = (date: Date): string => {
 
 export interface AdminNotification {
   id?: string;
-  type: 'user_signup' | 'donation' | 'contact_inquiry' | 'system_alert' | 'github_sync_required';
+  type: 'user_signup' | 'donation' | 'contact_inquiry' | 'system_alert' | 'github_sync_required' | 'fraud_alert';
   title: string;
   message: string;
-  data?: any;
+  data?: Record<string, unknown>;
   priority: 'low' | 'medium' | 'high';
   read: boolean;
-  created_at: any;
+  created_at: Timestamp | FieldValue;
   target_roles?: string[];
 }
 
@@ -383,10 +383,59 @@ const createAdminNotification = async (notification: Omit<AdminNotification, 'id
   }
 };
 
+/**
+ * Create a fraud alert notification for all administrators
+ */
+export const createFraudAlertNotification = async (fraudAlert: {
+  id: string;
+  level: 'low' | 'medium' | 'high';
+  description: string;
+  details: string;
+  timestamp: string;
+  status: string;
+}): Promise<string> => {
+  try {
+    console.log('🚨 [FRAUD ALERT] Creating fraud alert notification for all administrators...', fraudAlert);
+
+    const priorityMap = {
+      'low': 'medium' as const,
+      'medium': 'high' as const, 
+      'high': 'high' as const
+    };
+
+    const notification: Omit<AdminNotification, 'id' | 'read' | 'created_at'> = {
+      type: 'fraud_alert',
+      title: `🚨 Fraud Alert: ${fraudAlert.description}`,
+      message: `${fraudAlert.details} - Alert Level: ${fraudAlert.level.toUpperCase()}`,
+      data: {
+        fraud_alert_id: fraudAlert.id,
+        level: fraudAlert.level,
+        description: fraudAlert.description,
+        details: fraudAlert.details,
+        timestamp: fraudAlert.timestamp,
+        status: fraudAlert.status
+      },
+      priority: priorityMap[fraudAlert.level],
+      target_roles: ['super_admin', 'platform_admin'] // Notify all administrators
+    };
+
+    const notificationId = await createAdminNotification(notification);
+    
+    console.log(`✅ [FRAUD ALERT] Fraud alert notification created with ID: ${notificationId}`);
+    console.log(`🔔 [FRAUD ALERT] Notification sent to: super_admin, platform_admin`);
+    
+    return notificationId;
+  } catch (error) {
+    console.error('❌ [FRAUD ALERT] Error creating fraud alert notification:', error);
+    throw error;
+  }
+};
+
 // Export the service with the new function
 export const notificationService = {
   getNotificationCounts,
   getRecentContactInquiries,
   createContactInquiryNotification,
-  createAdminNotification
+  createAdminNotification,
+  createFraudAlertNotification
 };

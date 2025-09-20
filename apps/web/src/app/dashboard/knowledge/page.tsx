@@ -835,8 +835,17 @@ export default function KnowledgeDashboard() {
                         
                         {/* Status badges - improved mobile stacking */}
                         <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-                          <Badge variant={doc.status === 'active' ? 'default' : 'secondary'} className="text-xs px-2 py-0.5">
-                            <span className="truncate">{doc.status}</span>
+                          <Badge 
+                            variant={doc.status === 'active' ? 'default' : doc.status === 'draft' ? 'outline' : 'secondary'} 
+                            className={`text-xs px-2 py-0.5 ${doc.status === 'draft' ? 'border-yellow-400 text-yellow-600' : ''}`}
+                          >
+                            <span className="truncate">
+                              {doc.status === 'active' && '✅ Active'}
+                              {doc.status === 'draft' && '📝 Draft'}
+                              {doc.status === 'archived' && '📦 Archived'}
+                              {doc.status === 'processing' && '⏳ Processing'}
+                              {!['active', 'draft', 'archived', 'processing'].includes(doc.status) && doc.status}
+                            </span>
                           </Badge>
                           <Badge variant={doc.embedding_status === 'completed' ? 'default' : 'outline'} className="text-xs px-2 py-0.5">
                             {getEmbeddingStatusIcon(doc.embedding_status)}

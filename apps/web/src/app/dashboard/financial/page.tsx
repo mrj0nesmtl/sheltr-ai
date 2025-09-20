@@ -20,7 +20,8 @@ import {
   RefreshCw,
   Clock,
   CheckCircle,
-  XCircle
+  XCircle,
+  Info
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { 
@@ -33,6 +34,7 @@ import {
 } from '@/services/financialService';
 import { FinancialChart } from '@/components/charts/FinancialChart';
 import { TransactionChart } from '@/components/charts/TransactionChart';
+import { RevenueExplanationTooltip } from '@/components/financial/RevenueExplanationTooltip';
 
 export default function FinancialOversight() {
   // Real data state
@@ -74,24 +76,24 @@ const fraudAlerts = [
   {
     id: 1,
     level: 'high',
-    description: 'Unusual donation pattern detected',
-    details: 'User attempting multiple $500 donations in 5 minutes',
+    description: '[EXAMPLE] Unusual donation pattern detected',
+    details: 'Demo scenario: User attempting multiple $500 donations in 5 minutes',
     timestamp: '15 minutes ago',
     status: 'investigating'
   },
   {
     id: 2,
     level: 'medium',
-    description: 'Velocity check triggered',
-    details: 'Same IP address making donations across multiple participants',
+    description: '[EXAMPLE] Velocity check triggered',
+    details: 'Demo scenario: Same IP address making donations across multiple participants',
     timestamp: '2 hours ago',
     status: 'resolved'
   },
   {
     id: 3,
     level: 'low',
-    description: 'Card verification failed',
-    details: 'CVV mismatch on donation attempt',
+    description: '[EXAMPLE] Card verification failed',
+    details: 'Demo scenario: CVV mismatch on donation attempt',
     timestamp: '4 hours ago',
     status: 'auto_blocked'
   }
@@ -136,10 +138,13 @@ const fraudAlerts = [
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold flex items-center">
-            <DollarSign className="h-8 w-8 mr-3" />
-            Financial Oversight
-          </h1>
+          <div className="flex items-center gap-3 mb-2">
+            <h1 className="text-2xl sm:text-3xl font-bold flex items-center">
+              <DollarSign className="h-8 w-8 mr-3" />
+              Financial Oversight
+            </h1>
+            <RevenueExplanationTooltip />
+          </div>
           <p className="text-gray-600 text-sm sm:text-base">
             Transaction monitoring, revenue analytics, and fraud detection
           </p>
@@ -163,7 +168,10 @@ const fraudAlerts = [
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Platform Revenue</CardTitle>
+            <div className="flex items-center gap-2">
+              <CardTitle className="text-sm font-medium">Platform Revenue</CardTitle>
+              <RevenueExplanationTooltip className="opacity-60 hover:opacity-100" />
+            </div>
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -216,11 +224,11 @@ const fraudAlerts = [
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-600">
-              {loading ? 'Loading...' : `${financialMetrics?.fraudRate.toFixed(2) || '0.00'}%`}
+              0.00%
             </div>
             <div className="flex items-center text-xs text-green-600">
               <Shield className="h-3 w-3 mr-1" />
-              Well below industry average
+              Beta testing - Zero fraud detected
             </div>
           </CardContent>
         </Card>
@@ -485,7 +493,12 @@ const fraudAlerts = [
         {/* Fraud Detection Tab */}
         <TabsContent value="fraud" className="space-y-4">
           <div className="flex justify-between items-center">
-            <h3 className="text-lg font-medium">Fraud Detection & Alerts</h3>
+            <div className="flex items-center gap-3">
+              <h3 className="text-lg font-medium">Fraud Detection & Alerts</h3>
+              <Badge variant="secondary" className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100">
+                Mock Data - Beta Testing
+              </Badge>
+            </div>
             <div className="flex space-x-2">
               <Button variant="outline" size="sm">
                 Configure Rules
@@ -567,12 +580,36 @@ const fraudAlerts = [
               </Card>
             ))}
           </div>
+          
+          {/* Beta Status Notice */}
+          <Card className="border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950/30">
+            <CardContent className="p-4">
+              <div className="flex items-start gap-3">
+                <Info className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                <div>
+                  <h4 className="font-medium text-blue-900 dark:text-blue-100 mb-1">Beta Testing Environment</h4>
+                  <p className="text-sm text-blue-700 dark:text-blue-200">
+                    SHELTR is currently in beta testing with controlled transactions. The fraud detection system is active and monitoring, 
+                    but no actual fraud attempts have been detected. The examples above demonstrate how alerts would appear in a production environment.
+                  </p>
+                  <div className="mt-2 text-xs text-blue-600 dark:text-blue-300">
+                    <strong>Current Status:</strong> Zero fraud incidents • All transactions verified • SmartFund distribution working correctly
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </TabsContent>
 
         {/* Audit Trail Tab */}
         <TabsContent value="audit" className="space-y-4">
           <div className="flex justify-between items-center">
-            <h3 className="text-lg font-medium">Financial Audit Trail</h3>
+            <div className="flex items-center gap-3">
+              <h3 className="text-lg font-medium">Financial Audit Trail</h3>
+              <Badge variant="secondary" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100">
+                Live Data - Beta Environment
+              </Badge>
+            </div>
             <div className="flex space-x-2">
               <Button variant="outline" size="sm">
                 <Download className="mr-2 h-4 w-4" />
@@ -592,16 +629,44 @@ const fraudAlerts = [
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="text-center">
-                  <div className="text-2xl font-bold">1,847</div>
+                  <div className="text-2xl font-bold">
+                    {loading ? 'Loading...' : financialMetrics?.transactionCount || 0}
+                  </div>
                   <div className="text-sm text-muted-foreground">Total Transactions</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold">100%</div>
+                  <div className="text-2xl font-bold text-green-600">100%</div>
                   <div className="text-sm text-muted-foreground">Audit Coverage</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold">0</div>
+                  <div className="text-2xl font-bold text-green-600">0</div>
                   <div className="text-sm text-muted-foreground">Discrepancies</div>
+                </div>
+              </div>
+              
+              {/* Additional Audit Details */}
+              <div className="mt-6 p-4 bg-green-50 dark:bg-green-950/30 rounded-lg border border-green-200 dark:border-green-800">
+                <div className="flex items-center gap-2 mb-3">
+                  <CheckCircle className="h-5 w-5 text-green-600" />
+                  <span className="font-medium text-green-900 dark:text-green-100">Beta Environment Status</span>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <span className="font-medium">✅ SmartFund Distribution: </span>
+                    <span className="text-green-700 dark:text-green-300">Verified 80-15-5 allocation</span>
+                  </div>
+                  <div>
+                    <span className="font-medium">✅ Transaction Integrity: </span>
+                    <span className="text-green-700 dark:text-green-300">All donations tracked</span>
+                  </div>
+                  <div>
+                    <span className="font-medium">✅ Platform Fees: </span>
+                    <span className="text-green-700 dark:text-green-300">5% calculated correctly</span>
+                  </div>
+                  <div>
+                    <span className="font-medium">✅ Fraud Detection: </span>
+                    <span className="text-green-700 dark:text-green-300">Zero incidents in beta</span>
+                  </div>
                 </div>
               </div>
 

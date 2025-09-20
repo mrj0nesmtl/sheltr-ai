@@ -10,8 +10,8 @@ export async function generateStaticParams(): Promise<{ id: string }[]> {
   ];
 }
 
-// Disable dynamic params for static export
-export const dynamicParams = false;
+// Enable dynamic params for development
+export const dynamicParams = true;
 
 interface PageProps {
   params: {

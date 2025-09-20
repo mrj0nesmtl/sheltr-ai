@@ -12,8 +12,7 @@ import ThemeLogo from '@/components/ThemeLogo';
 import { useState } from 'react';
 import { DemoQRModal } from '@/components/demo/DemoQRModal';
 import { PublicChatbot } from '@/components/PublicChatbot';
-import { db } from '@/lib/firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { UnifiedInquiryService } from '@/services/unifiedInquiryService';
 import { getDonationMetrics } from '@/services/donationMetricsService';
 
 export default function ScanGivePage() {
@@ -114,15 +113,10 @@ export default function ScanGivePage() {
     setEmailError('');
 
     try {
-      // Add email to Firestore
-      await addDoc(collection(db, 'newsletter_signups'), {
+      await UnifiedInquiryService.createAppNotificationSignup({
         email: email.toLowerCase().trim(),
         source: 'mobile_app_teaser',
-        page: 'scan-give',
-        signup_date: serverTimestamp(),
-        ip_address: null, // Could be added if needed
-        user_agent: navigator.userAgent,
-        status: 'active'
+        user_id: user?.uid
       });
 
       setEmailSubmitted(true);

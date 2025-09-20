@@ -1,4 +1,4 @@
-import { collection, getDocs, query, orderBy, limit, where, Timestamp } from 'firebase/firestore';
+import { collection, getDocs, query, orderBy, limit, where, Timestamp, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
 // API base URL for notifications
@@ -15,10 +15,27 @@ export interface EmailSignup {
   created_at?: string;
 }
 
+export interface ContactInquiryNotification {
+  id: string;
+  inquiry_id: string;
+  inquiry_type: string;
+  sender_email: string;
+  sender_name?: string;
+  subject: string;
+  priority: 'low' | 'normal' | 'high';
+  source: string;
+  status: 'new' | 'read' | 'responded';
+  created_at: any;
+  read_by?: string[];
+}
+
 export interface NotificationCounts {
   totalEmailSignups: number;
   recentEmailSignups: number;
   pendingShelterapplications: number;
+  contactInquiries: number;
+  recentContactInquiries: number;
+  repliedContactInquiries: number;
   totalNotifications: number;
 }
 
@@ -154,21 +171,56 @@ export const getNotificationCounts = async (): Promise<NotificationCounts> => {
       console.log('ℹ️ No applications collections found yet');
     }
     
-    const totalNotifications = recentEmailSignups + pendingShelterapplications;
+    // Get contact inquiry metrics from actual contact_inquiries collection
+    let contactInquiries = 0;
+    let recentContactInquiries = 0;
+    let repliedContactInquiries = 0;
+    try {
+      const contactInquiriesRef = collection(db, 'contact_inquiries');
+      
+      // Get total contact inquiries
+      const totalInquiriesSnapshot = await getDocs(contactInquiriesRef);
+      contactInquiries = totalInquiriesSnapshot.size;
+      
+      // Get recent contact inquiries (last 7 days)
+      const recentInquiriesQuery = query(
+        contactInquiriesRef,
+        where('created_at', '>=', Timestamp.fromDate(sevenDaysAgo))
+      );
+      const recentInquiriesSnapshot = await getDocs(recentInquiriesQuery);
+      recentContactInquiries = recentInquiriesSnapshot.size;
+      
+      // Get replied contact inquiries
+      const repliedInquiriesQuery = query(
+        contactInquiriesRef,
+        where('responded', '==', true)
+      );
+      const repliedInquiriesSnapshot = await getDocs(repliedInquiriesQuery);
+      repliedContactInquiries = repliedInquiriesSnapshot.size;
+      
+    } catch (error) {
+      console.log('ℹ️ No contact_inquiries collection found yet');
+    }
+    
+    const totalNotifications = recentEmailSignups + pendingShelterapplications + recentContactInquiries;
     
     const counts: NotificationCounts = {
       totalEmailSignups,
       recentEmailSignups,
       pendingShelterapplications,
+      contactInquiries,
+      recentContactInquiries,
+      repliedContactInquiries,
       totalNotifications
     };
     
     console.log('✅ [SESSION 13] Real notification counts from database:', counts);
     console.log(`📧 Real signups: ${totalEmailSignups} total, ${recentEmailSignups} recent`);
     console.log(`📋 Pending applications: ${pendingShelterapplications}`);
+    console.log(`💬 Contact inquiries: ${contactInquiries} total, ${recentContactInquiries} recent, ${repliedContactInquiries} replied`);
     
     // If we have some real data, return it
-    if (totalEmailSignups > 0 || pendingShelterapplications > 0) {
+    if (totalEmailSignups > 0 || pendingShelterapplications > 0 || contactInquiries > 0) {
       return counts;
     }
     
@@ -179,6 +231,9 @@ export const getNotificationCounts = async (): Promise<NotificationCounts> => {
       totalEmailSignups: 0,
       recentEmailSignups: 0,
       pendingShelterapplications: 0,
+      contactInquiries: 0,
+      recentContactInquiries: 0,
+      repliedContactInquiries: 0,
       totalNotifications: 0
     };
     
@@ -188,8 +243,90 @@ export const getNotificationCounts = async (): Promise<NotificationCounts> => {
       totalEmailSignups: 0,
       recentEmailSignups: 0,
       pendingShelterapplications: 0,
+      contactInquiries: 0,
+      recentContactInquiries: 0,
+      repliedContactInquiries: 0,
       totalNotifications: 0
     };
+  }
+};
+
+/**
+ * Create a notification for contact inquiry
+ */
+export const createContactInquiryNotification = async (inquiryData: {
+  inquiry_id: string;
+  inquiry_type: string;
+  sender_email: string;
+  sender_name?: string;
+  subject: string;
+  priority: 'low' | 'normal' | 'high';
+  source: string;
+}): Promise<string> => {
+  try {
+    console.log('🔔 Creating contact inquiry notification:', inquiryData);
+    
+    const notification: Omit<ContactInquiryNotification, 'id'> = {
+      inquiry_id: inquiryData.inquiry_id,
+      inquiry_type: inquiryData.inquiry_type,
+      sender_email: inquiryData.sender_email,
+      sender_name: inquiryData.sender_name,
+      subject: inquiryData.subject,
+      priority: inquiryData.priority,
+      source: inquiryData.source,
+      status: 'new',
+      created_at: serverTimestamp(),
+      read_by: []
+    };
+
+    const docRef = await addDoc(collection(db, 'admin_notifications'), notification);
+    console.log('✅ Contact inquiry notification created:', docRef.id);
+    return docRef.id;
+  } catch (error) {
+    console.error('❌ Error creating contact inquiry notification:', error);
+    throw error;
+  }
+};
+
+/**
+ * Get recent contact inquiry notifications from actual contact_inquiries collection
+ */
+export const getRecentContactInquiries = async (limitCount: number = 10): Promise<ContactInquiryNotification[]> => {
+  try {
+    console.log('🔔 Fetching recent contact inquiries from contact_inquiries collection...');
+    
+    const contactInquiriesRef = collection(db, 'contact_inquiries');
+    const q = query(
+      contactInquiriesRef,
+      orderBy('created_at', 'desc'),
+      limit(limitCount)
+    );
+    
+    const querySnapshot = await getDocs(q);
+    const notifications: ContactInquiryNotification[] = [];
+    
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      notifications.push({
+        id: doc.id,
+        inquiry_id: doc.id, // Use the document ID as inquiry_id
+        inquiry_type: data.inquiry_type || 'contact_form',
+        sender_email: data.email,
+        sender_name: data.name,
+        subject: data.subject || `${data.inquiry_type || 'Contact'} inquiry`,
+        priority: data.priority || 'normal',
+        source: data.source || 'contact_form',
+        status: data.responded ? 'responded' : 'new',
+        created_at: data.created_at,
+        read_by: []
+      });
+    });
+    
+    console.log(`✅ Found ${notifications.length} contact inquiries from contact_inquiries collection`);
+    return notifications;
+  } catch (error) {
+    console.error('❌ Error fetching contact inquiries:', error);
+    return [];
   }
 };
 

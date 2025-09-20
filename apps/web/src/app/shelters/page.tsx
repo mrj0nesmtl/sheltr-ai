@@ -10,6 +10,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ShelterTenant } from '@/services/tenantService';
 import { shelterService, ShelterPublicConfig } from '@/services/shelterService';
+import { UnifiedInquiryService } from '@/services/unifiedInquiryService';
 import PublicNavigation from '@/components/PublicNavigation';
 
 export default function SheltersPage() {
@@ -97,13 +98,16 @@ export default function SheltersPage() {
 
     setIsSubmitting(true);
     try {
-      // Here you would integrate with your email service (e.g., Mailchimp, ConvertKit, etc.)
-      // For now, we'll just simulate a successful submission
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await UnifiedInquiryService.createPartnershipWaitlist({
+        email: email.trim(),
+        source: 'shelters_page_waitlist',
+        organization: 'Organization from shelters page'
+      });
       
-      setSubmitMessage('Thank you! We&apos;ll be in touch soon.');
+      setSubmitMessage('Thank you! We\'ll be in touch soon.');
       setEmail('');
-    } catch {
+    } catch (error) {
+      console.error('Error submitting waitlist signup:', error);
       setSubmitMessage('Something went wrong. Please try again.');
     } finally {
       setIsSubmitting(false);

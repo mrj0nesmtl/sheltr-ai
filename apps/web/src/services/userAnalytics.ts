@@ -58,9 +58,31 @@ export const getUserAnalytics = async (forceFresh = false): Promise<UserAnalytic
     
     console.log(`📊 [${timestamp}] Found ${allUsers.length} total users in database`);
     
-    // Count current users by role
+    // Count current users by role with dual-role logic for donors
     const currentParticipants = allUsers.filter(user => user.role === 'participant').length;
-    const currentDonors = allUsers.filter(user => user.role === 'donor').length;
+    
+    // DUAL-ROLE LOGIC: Count donors by primary role + donation activity
+    const primaryDonors = allUsers.filter(user => user.role === 'donor').length;
+    
+    // Get users with donation activity
+    const donationsSnapshot = await getDocs(collection(db, 'demo_donations'));
+    const usersWithDonations = new Set<string>();
+    
+    donationsSnapshot.forEach(doc => {
+      const donationData = doc.data();
+      const donorId = donationData.donor_id;
+      if (donorId) {
+        usersWithDonations.add(donorId);
+      }
+    });
+    
+    // Count total unique donors (avoiding double counting)
+    const allDonorIds = new Set([
+      ...allUsers.filter(u => u.role === 'donor').map(u => u.id),
+      ...Array.from(usersWithDonations)
+    ]);
+    const currentDonors = allDonorIds.size;
+    
     const currentAdmins = allUsers.filter(user => 
       user.role === 'admin' || user.role === 'shelteradmin' || user.role === 'super_admin' || user.role === 'superadmin' || user.role === 'platform_admin'
     ).length;

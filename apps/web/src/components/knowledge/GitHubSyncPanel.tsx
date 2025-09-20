@@ -14,7 +14,11 @@ import {
   Download,
   Zap,
   Github,
-  XCircle
+  XCircle,
+  Database,
+  Brain,
+  ArrowDown,
+  Cog
 } from 'lucide-react';
 
 interface SyncChanges {
@@ -22,6 +26,18 @@ interface SyncChanges {
   modified: string[];
   deleted: string[];
   unchanged: string[];
+}
+
+interface SyncProgress {
+  currentFile: string;
+  currentStep: string;
+  filesProcessed: number;
+  totalFiles: number;
+  percentage: number;
+  status: 'downloading' | 'processing' | 'embedding' | 'complete' | 'error';
+  details: string;
+  startTime?: Date;
+  estimatedTimeRemaining?: string;
 }
 
 interface GitHubSyncPanelProps {
@@ -32,8 +48,9 @@ export const GitHubSyncPanel: React.FC<GitHubSyncPanelProps> = ({ onSyncComplete
   const [isScanning, setIsScanning] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
   const [changes, setChanges] = useState<SyncChanges | null>(null);
-  const [syncResults, setSyncResults] = useState<any>(null);
+  const [syncResults, setSyncResults] = useState<{ successful: number; failed: number; details: { file: string; status: string; error?: string }[] } | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [syncProgress, setSyncProgress] = useState<SyncProgress | null>(null);
 
   const getAuthToken = async () => {
     // Get Firebase auth token
@@ -77,15 +94,76 @@ export const GitHubSyncPanel: React.FC<GitHubSyncPanelProps> = ({ onSyncComplete
 
   const syncAllFiles = async () => {
     if (!changes) return;
-    
+
     setIsSyncing(true);
     setError(null);
-    
+    setSyncResults(null);
+
+    const filesToSync = [...changes.new, ...changes.modified];
+    const totalFiles = filesToSync.length;
+    const startTime = new Date();
+
+    // Initialize progress
+    setSyncProgress({
+      currentFile: '',
+      currentStep: 'Initializing sync...',
+      filesProcessed: 0,
+      totalFiles,
+      percentage: 0,
+      status: 'downloading',
+      details: `Preparing to sync ${totalFiles} files`,
+      startTime
+    });
+
     try {
-      const filesToSync = [...changes.new, ...changes.modified];
       const token = await getAuthToken();
       const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
       
+      // Simulate progress updates during sync
+      const progressInterval = setInterval(() => {
+        setSyncProgress(prev => {
+          if (!prev || prev.status === 'complete') return prev;
+          
+          // Simulate realistic progress
+          const elapsed = Date.now() - startTime.getTime();
+          const estimatedTotal = totalFiles * 2000; // ~2 seconds per file
+          const progressPercentage = Math.min(95, (elapsed / estimatedTotal) * 100);
+          
+          const currentFileIndex = Math.floor(progressPercentage / 100 * totalFiles);
+          const currentFile = filesToSync[currentFileIndex] || filesToSync[filesToSync.length - 1];
+          
+          let currentStep = 'Processing...';
+          let status: SyncProgress['status'] = 'processing';
+          
+          if (progressPercentage < 30) {
+            currentStep = 'Downloading from GitHub...';
+            status = 'downloading';
+          } else if (progressPercentage < 70) {
+            currentStep = 'Processing content...';
+            status = 'processing';
+          } else {
+            currentStep = 'Generating embeddings...';
+            status = 'embedding';
+          }
+
+          const remainingTime = Math.max(0, estimatedTotal - elapsed);
+          const estimatedTimeRemaining = remainingTime > 0 
+            ? `${Math.ceil(remainingTime / 1000)}s remaining`
+            : 'Almost done...';
+
+          return {
+            ...prev,
+            currentFile: currentFile.split('/').pop() || currentFile,
+            currentStep,
+            filesProcessed: currentFileIndex,
+            percentage: Math.round(progressPercentage),
+            status,
+            details: `Processing ${currentFile.split('/').pop() || currentFile}`,
+            estimatedTimeRemaining
+          };
+        });
+      }, 500);
+
       const response = await fetch(`${baseUrl}/api/v1/knowledge-dashboard/sync-github-files`, {
         method: 'POST',
         headers: {
@@ -95,24 +173,50 @@ export const GitHubSyncPanel: React.FC<GitHubSyncPanelProps> = ({ onSyncComplete
         body: JSON.stringify({ files: filesToSync })
       });
       
+      clearInterval(progressInterval);
+      
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
       
       const data = await response.json();
+      
+      // Final progress update
+      setSyncProgress({
+        currentFile: 'Sync Complete!',
+        currentStep: 'All files processed successfully',
+        filesProcessed: totalFiles,
+        totalFiles,
+        percentage: 100,
+        status: 'complete',
+        details: `Successfully synced ${data.results?.successful || totalFiles} files`,
+        startTime,
+        estimatedTimeRemaining: 'Complete!'
+      });
+      
       setSyncResults(data.results);
       
+      // Clear progress after 3 seconds
+      setTimeout(() => {
+        setSyncProgress(null);
+      }, 3000);
+      
       // Call the callback to refresh the knowledge base with a small delay
-      // to ensure the backend has finished processing
       if (onSyncComplete) {
         setTimeout(() => {
           onSyncComplete();
-        }, 1000); // 1 second delay to ensure backend processing is complete
+        }, 1000);
       }
       
     } catch (error) {
       console.error('Error syncing files:', error);
       setError('Failed to sync files. Please try again.');
+      setSyncProgress(prev => prev ? {
+        ...prev,
+        status: 'error',
+        currentStep: 'Sync failed',
+        details: 'An error occurred during sync'
+      } : null);
     } finally {
       setIsSyncing(false);
     }
@@ -172,6 +276,58 @@ export const GitHubSyncPanel: React.FC<GitHubSyncPanelProps> = ({ onSyncComplete
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>{error}</AlertDescription>
           </Alert>
+        )}
+
+        {/* Progress Bar */}
+        {syncProgress && (
+          <div className="space-y-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                {syncProgress.status === 'downloading' && <ArrowDown className="h-4 w-4 text-blue-500 animate-bounce" />}
+                {syncProgress.status === 'processing' && <Cog className="h-4 w-4 text-orange-500 animate-spin" />}
+                {syncProgress.status === 'embedding' && <Brain className="h-4 w-4 text-purple-500 animate-pulse" />}
+                {syncProgress.status === 'complete' && <CheckCircle className="h-4 w-4 text-green-500" />}
+                {syncProgress.status === 'error' && <XCircle className="h-4 w-4 text-red-500" />}
+                <span className="font-medium text-sm">{syncProgress.currentStep}</span>
+              </div>
+              <div className="text-right">
+                <div className="text-sm font-mono">{syncProgress.percentage}%</div>
+                {syncProgress.estimatedTimeRemaining && (
+                  <div className="text-xs text-muted-foreground">{syncProgress.estimatedTimeRemaining}</div>
+                )}
+              </div>
+            </div>
+
+            {/* Progress Bar */}
+            <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+              <div 
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  syncProgress.status === 'complete' ? 'bg-green-500' :
+                  syncProgress.status === 'error' ? 'bg-red-500' :
+                  syncProgress.status === 'embedding' ? 'bg-purple-500' :
+                  syncProgress.status === 'processing' ? 'bg-orange-500' :
+                  'bg-blue-500'
+                }`}
+                style={{ width: `${syncProgress.percentage}%` }}
+              />
+            </div>
+
+            {/* File Progress */}
+            <div className="flex items-center justify-between text-sm">
+              <div className="flex items-center gap-2">
+                <Database className="h-4 w-4 text-gray-500" />
+                <span className="font-mono text-xs">{syncProgress.currentFile}</span>
+              </div>
+              <div className="text-muted-foreground">
+                {syncProgress.filesProcessed} / {syncProgress.totalFiles} files
+              </div>
+            </div>
+
+            {/* Details */}
+            <div className="text-xs text-muted-foreground bg-white dark:bg-gray-900 p-2 rounded border">
+              {syncProgress.details}
+            </div>
+          </div>
         )}
 
         {/* Changes Summary */}

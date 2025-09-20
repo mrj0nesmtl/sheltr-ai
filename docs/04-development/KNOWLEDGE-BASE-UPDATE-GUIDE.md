@@ -12,15 +12,28 @@ The Knowledge Base is critical for chatbot instruction. When you update document
 - **Embeddings**: `knowledge_chunks` (62+ embedding chunks for chatbot RAG)
 
 ### **Available Documents:**
-1. `README.md` → SHELTR Platform Overview
-2. `blockchain.md` → SHELTR Blockchain Technical Documentation  
-3. `donor-guide.md` → Donor User Guide
-4. `hacking_homelessness.md` → Hacking Homelessness Strategy
-5. `participant-guide.md` → Participant User Guide
-6. `shelter-admin-guide.md` → Shelter Admin Guide
-7. `sheltr-tokenomics.md` → SHELTR Tokenomics and SmartFund Model
-8. `system-design.md` → SHELTR System Design and Architecture
-9. `whitepaper_final.md` → SHELTR White Paper
+**Current Status**: 62+ documents synced from GitHub repository with comprehensive folder organization
+
+**Major Categories:**
+1. **Overview** (11 documents) - Platform overviews, documentation plans, implementation guides
+2. **Architecture** (16 documents) - System design, blockchain architecture, technical specifications
+3. **API** (4 documents) - Database schema, API reference, Firestore setup
+4. **Development** (50+ documents) - Development guides, session documentation, business logic testing
+5. **Deployment** (5 documents) - Firebase hosting, Google Cloud Run, monitoring, security
+6. **User Guides** (4 documents) - Donor, participant, shelter admin guides, outreach templates
+7. **Reference** (4 documents) - API reference, database schema, user journeys
+8. **Integrations** (2 documents) - Firebase integration documentation
+9. **Migration** (21 archived documents) - Legacy migration documentation
+10. **Resources** (3 documents) - Design system, templates, additional resources
+
+**Key Documents Include:**
+- `SHELTR Overview` → Platform overview and mission
+- `SHELTR Documentation Plan` → Complete documentation strategy
+- `SHELTR Implementation Plan` → Technical implementation roadmap
+- `System Design and Architecture` → Comprehensive technical architecture
+- `Blockchain Technical Documentation` → Smart contract and tokenomics
+- `User Guides` → Role-specific platform usage guides
+- `Session Documentation` → Complete development history and testing guides
 
 ---
 
@@ -68,23 +81,31 @@ python3 scripts/update_knowledge_document.py --directory /path/to/docs/folder/
 
 ---
 
-### **Method 2: UI-Based Update**
+### **Method 2: UI-Based Update (Enhanced)**
 
-**Use this for individual document updates through the dashboard.**
+**Use this for individual document updates through the enhanced dashboard interface.**
 
-#### **Steps:**
+#### **Enhanced Dashboard Features (Session 15+):**
 1. **Login** as Super Admin to `localhost:3000/dashboard/knowledge`
-2. **Find** the document you want to update
-3. **Click** the "Edit" button on the document card
-4. **Update** the content in the text editor
-5. **Save** - embeddings will be regenerated automatically
+2. **Enhanced Layout**: GitHub sync panel at top, educational component, optimized desktop layout
+3. **Folder Navigation**: Always-visible folder toggle button with visual state indicators
+4. **Document Management**: Find documents using improved search and folder organization
 
-#### **File Upload Update (New Feature):**
-1. **Go to** Knowledge Base dashboard
-2. **Click** "Update from File" button (if available)
-3. **Select** your updated markdown file
-4. **Choose** the document to replace
-5. **Upload** - embeddings regenerated automatically
+#### **Dedicated Edit Page (NEW):**
+1. **Click** the "Edit" button on any document card
+2. **Full-Screen Editor**: Navigate to `/dashboard/knowledge/edit/[id]` for comprehensive editing
+3. **Enhanced Interface**: 
+   - Document details sidebar with metadata
+   - Privacy & access controls
+   - AI & quality metrics
+   - Professional content editor with Markdown support
+4. **Save & Regenerate**: Automatic embedding regeneration with progress tracking
+
+#### **GitHub Sync Integration (NEW):**
+1. **Scan for Changes**: Click "Scan for Changes" to detect GitHub repository updates
+2. **Progress Tracking**: Real-time progress bar with file tracking and time estimates
+3. **Selective Sync**: Choose which files to sync from detected changes
+4. **Automatic Processing**: Embeddings regenerated automatically for synced files
 
 ---
 

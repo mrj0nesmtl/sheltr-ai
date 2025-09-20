@@ -37,6 +37,7 @@ interface GalleryImage {
   tags: string[];
   date: string;
   isPublic: boolean;
+  isHero: boolean;
   order: number;
 }
 
@@ -50,6 +51,7 @@ const gridSizes = [
 export default function GalleryPage() {
   const [images, setImages] = useState<GalleryImage[]>([]);
   const [filteredImages, setFilteredImages] = useState<GalleryImage[]>([]);
+  const [heroImage, setHeroImage] = useState<GalleryImage | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [gridSize, setGridSize] = useState(0);
@@ -66,10 +68,11 @@ export default function GalleryPage() {
       );
       const snapshot = await getDocs(imagesQuery);
       const loadedImages: GalleryImage[] = [];
+      let foundHeroImage: GalleryImage | null = null;
       
       snapshot.forEach((doc) => {
         const data = doc.data();
-        loadedImages.push({
+        const image: GalleryImage = {
           id: doc.id,
           src: data.src,
           title: data.title,
@@ -78,8 +81,16 @@ export default function GalleryPage() {
           tags: data.tags || [],
           date: data.date,
           isPublic: data.isPublic,
+          isHero: data.isHero || false,
           order: data.order
-        });
+        };
+        
+        loadedImages.push(image);
+        
+        // Track the hero image
+        if (image.isHero) {
+          foundHeroImage = image;
+        }
       });
       
       // Sort images by order manually since we can't use orderBy in the query yet
@@ -87,10 +98,12 @@ export default function GalleryPage() {
       
       setImages(loadedImages);
       setFilteredImages(loadedImages);
+      setHeroImage(foundHeroImage);
     } catch (error) {
       console.error('Error loading images:', error);
       setImages([]);
       setFilteredImages([]);
+      setHeroImage(null);
     } finally {
       setIsLoading(false);
     }
@@ -189,6 +202,46 @@ export default function GalleryPage() {
           </div>
         </div>
       </header>
+
+      {/* Hero Banner */}
+      <div className="relative overflow-hidden bg-gradient-to-br from-primary/10 via-background to-muted/20">
+        {/* Hero Background Image */}
+        {heroImage && (
+          <div className="absolute inset-0">
+            <Image
+              src={heroImage.src}
+              alt={heroImage.title}
+              fill
+              className="object-cover opacity-60"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-br from-background/70 via-background/40 to-background/70"></div>
+          </div>
+        )}
+        <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
+          <div className="max-w-4xl mx-auto">
+            <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent mb-6">
+              Ecosystem Visuals
+            </h1>
+            <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+              Explore our innovative solutions for urban mobility, emergency response, and sustainable living. 
+              From SHELTR PODS to drone delivery systems, discover the technology shaping tomorrow's cities.
+            </p>
+            <div className="flex items-center justify-center gap-4 text-sm text-muted-foreground">
+              <div className="flex items-center gap-2">
+                <Camera className="h-4 w-4" />
+                <span>{filteredImages.length} Images</span>
+              </div>
+              <div className="w-1 h-1 bg-muted-foreground rounded-full"></div>
+              <div className="flex items-center gap-2">
+                <Tag className="h-4 w-4" />
+                <span>{categories.length - 1} Categories</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* Controls */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">

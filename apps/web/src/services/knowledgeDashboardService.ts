@@ -131,6 +131,29 @@ class KnowledgeDashboardService {
   }
 
   /**
+   * Get single knowledge document by ID
+   */
+  async getKnowledgeDocument(documentId: string): Promise<{ success: boolean; data: KnowledgeDocument }> {
+    try {
+      const apiUrl = `${this.baseUrl}/api/v1/knowledge-dashboard/documents/${documentId}`;
+      console.log('🔍 Fetching knowledge document from:', apiUrl);
+      
+      const response = await fetch(apiUrl, {
+        headers: await this.getAuthHeaders(),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch knowledge document: ${response.statusText}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching knowledge document:', error);
+      throw error;
+    }
+  }
+
+  /**
    * Create a new knowledge document
    */
   async createKnowledgeDocument(documentData: {

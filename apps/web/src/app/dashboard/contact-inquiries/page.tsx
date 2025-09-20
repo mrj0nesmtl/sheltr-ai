@@ -3,14 +3,22 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { db } from '@/lib/firebase';
-import { collection, query, orderBy, onSnapshot, doc, updateDoc, where } from 'firebase/firestore';
-import { Mail, Clock, AlertCircle, CheckCircle, User, Building, MessageSquare, Eye, ArrowRight } from 'lucide-react';
+import { collection, query, orderBy, onSnapshot, doc, updateDoc, where, arrayUnion, serverTimestamp } from 'firebase/firestore';
+import { Mail, Clock, AlertCircle, CheckCircle, User, Building, MessageSquare, Eye, ArrowRight, Download, FileText, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import Link from 'next/link';
+
+interface ContactNote {
+  id: string;
+  content: string;
+  author: string;
+  author_name: string;
+  created_at: any;
+}
 
 interface ContactInquiry {
   id: string;
@@ -27,6 +35,8 @@ interface ContactInquiry {
   responded: boolean;
   assigned_to?: string;
   response_notes?: string;
+  notes?: ContactNote[];
+  source?: string; // Track where the inquiry came from
 }
 
 export default function ContactInquiries() {
@@ -82,18 +92,77 @@ export default function ContactInquiries() {
   };
 
   const addResponseNotes = async (inquiryId: string, notes: string) => {
+    if (!notes.trim() || !user) return;
+    
     try {
+      const newNote: ContactNote = {
+        id: Date.now().toString(),
+        content: notes.trim(),
+        author: user.uid,
+        author_name: user.displayName || user.email || 'Unknown User',
+        created_at: serverTimestamp()
+      };
+
       await updateDoc(doc(db, 'contact_inquiries', inquiryId), {
-        response_notes: notes,
+        notes: arrayUnion(newNote),
         status: 'responded',
-        updated_at: new Date(),
+        updated_at: serverTimestamp(),
         responded: true
       });
+      
       setResponseNotes('');
       setSelectedInquiry(null);
     } catch (error) {
       console.error('Error adding response notes:', error);
     }
+  };
+
+  // CSV Export function
+  const exportToCSV = () => {
+    const headers = [
+      'Date',
+      'Name',
+      'Email',
+      'Organization',
+      'Type',
+      'Subject',
+      'Message',
+      'Status',
+      'Priority',
+      'Source',
+      'Notes Count',
+      'Latest Note'
+    ];
+
+    const csvData = inquiries.map(inquiry => [
+      inquiry.created_at?.toDate?.()?.toLocaleDateString() || 'N/A',
+      inquiry.name || '',
+      inquiry.email || '',
+      inquiry.organization || '',
+      inquiry.inquiry_type || '',
+      inquiry.subject || '',
+      `"${inquiry.message?.replace(/"/g, '""') || ''}"`, // Escape quotes
+      inquiry.status || '',
+      inquiry.priority || '',
+      inquiry.source || 'contact_form',
+      inquiry.notes?.length || 0,
+      inquiry.notes?.length ? `"${inquiry.notes[inquiry.notes.length - 1].content.replace(/"/g, '""')}"` : ''
+    ]);
+
+    const csvContent = [
+      headers.join(','),
+      ...csvData.map(row => row.join(','))
+    ].join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `contact_inquiries_${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const getPriorityColor = (priority: string) => {
@@ -126,12 +195,18 @@ export default function ContactInquiries() {
           <h1 className="text-3xl font-bold">Contact Inquiries</h1>
           <p className="text-muted-foreground">Manage contact form submissions and inquiries</p>
         </div>
-        <Link href="/dashboard">
-          <Button variant="outline">
-            <ArrowRight className="h-4 w-4 mr-2" />
-            Back to Dashboard
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={exportToCSV} disabled={inquiries.length === 0}>
+            <Download className="h-4 w-4 mr-2" />
+            Export CSV
           </Button>
-        </Link>
+          <Link href="/dashboard">
+            <Button variant="outline">
+              <ArrowRight className="h-4 w-4 mr-2" />
+              Back to Dashboard
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {/* Stats Cards */}
@@ -301,21 +376,51 @@ export default function ContactInquiries() {
       {/* Response Notes Modal */}
       {selectedInquiry && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <Card className="w-full max-w-md mx-4">
+          <Card className="w-full max-w-2xl mx-4 max-h-[80vh] overflow-hidden">
             <CardHeader>
-              <CardTitle>Add Response Notes</CardTitle>
+              <CardTitle>Manage Response Notes</CardTitle>
               <p className="text-sm text-muted-foreground">
                 For: {selectedInquiry.subject}
               </p>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <Textarea
-                value={responseNotes}
-                onChange={(e) => setResponseNotes(e.target.value)}
-                placeholder="Add your response notes here..."
-                rows={4}
-              />
-              <div className="flex space-x-2">
+            <CardContent className="space-y-4 overflow-y-auto">
+              
+              {/* Existing Notes */}
+              {selectedInquiry.notes && selectedInquiry.notes.length > 0 && (
+                <div className="space-y-3">
+                  <h4 className="font-medium flex items-center gap-2">
+                    <FileText className="h-4 w-4" />
+                    Previous Notes ({selectedInquiry.notes.length})
+                  </h4>
+                  <div className="space-y-2 max-h-48 overflow-y-auto">
+                    {selectedInquiry.notes.map((note) => (
+                      <div key={note.id} className="bg-muted/50 p-3 rounded-lg">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm font-medium">{note.author_name}</span>
+                          <span className="text-xs text-muted-foreground flex items-center gap-1">
+                            <Calendar className="h-3 w-3" />
+                            {note.created_at?.toDate?.()?.toLocaleString() || 'Just now'}
+                          </span>
+                        </div>
+                        <p className="text-sm">{note.content}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Add New Note */}
+              <div className="space-y-2">
+                <h4 className="font-medium">Add New Note</h4>
+                <Textarea
+                  value={responseNotes}
+                  onChange={(e) => setResponseNotes(e.target.value)}
+                  placeholder="Add your response notes here..."
+                  rows={4}
+                />
+              </div>
+
+              <div className="flex space-x-2 pt-4 border-t">
                 <Button
                   onClick={() => addResponseNotes(selectedInquiry.id, responseNotes)}
                   disabled={!responseNotes.trim()}

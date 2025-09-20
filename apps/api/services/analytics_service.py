@@ -82,14 +82,33 @@ class AnalyticsService:
             week_ago = now - timedelta(days=7)
             today_start = now.replace(hour=0, minute=0, second=0, microsecond=0)
             
+            # Get all users who have made donations to count as donors
+            donors_query = self.db.collection('demo_donations')
+            donation_docs = donors_query.stream()
+            users_with_donations = set()
+            
+            for donation in donation_docs:
+                donation_data = donation.to_dict()
+                donor_id = donation_data.get('donor_id')
+                if donor_id:
+                    users_with_donations.add(donor_id)
+            
+            logger.info(f"Found {len(users_with_donations)} users with donation activity")
+            
             for user in users:
                 user_data = user.to_dict()
                 total_users += 1
+                user_id = user.id
                 
-                # Count by role
+                # Count by primary role
                 role = user_data.get('role', 'participant')
                 if role in roles_count:
                     roles_count[role] += 1
+                
+                # DUAL-ROLE LOGIC: Also count as donor if they have donation activity
+                if user_id in users_with_donations and role != 'donor':
+                    roles_count['donor'] += 1
+                    logger.info(f"User {user_data.get('email', user_id)} counted as both {role} and donor")
                 
                 # Check if active today (has lastLogin today)
                 last_login = user_data.get('lastLogin')

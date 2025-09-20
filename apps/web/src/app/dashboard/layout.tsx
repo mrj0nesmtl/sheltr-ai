@@ -226,6 +226,12 @@ const getNavigationItems = (userRole: string) => {
         description: 'Manage user accounts and roles (except Super Admins)'
       },
       {
+        title: 'Contact Inquiries',
+        href: '/dashboard/contact-inquiries',
+        icon: Mail,
+        description: 'Manage contact form submissions and inquiries'
+      },
+      {
         title: 'Gallery Management',
         href: '/dashboard/gallery',
         icon: Camera,

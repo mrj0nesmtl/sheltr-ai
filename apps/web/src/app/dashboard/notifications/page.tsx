@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
-import { getNotificationCounts, getRecentEmailSignups, NotificationCounts, EmailSignup, formatRelativeTime } from '@/services/notificationService';
+import { getNotificationCounts, getRecentEmailSignups, getRecentContactInquiries, NotificationCounts, EmailSignup, ContactInquiryNotification, formatRelativeTime } from '@/services/notificationService';
 import { 
   Mail, 
   Bell, 
@@ -20,7 +20,8 @@ import {
   Calendar,
   ExternalLink,
   AlertCircle,
-  CheckCircle
+  CheckCircle,
+  MessageSquare
 } from 'lucide-react';
 
 export default function NotificationsPage() {
@@ -28,6 +29,8 @@ export default function NotificationsPage() {
   const [notificationCounts, setNotificationCounts] = useState<NotificationCounts | null>(null);
   const [allEmailSignups, setAllEmailSignups] = useState<EmailSignup[]>([]);
   const [filteredSignups, setFilteredSignups] = useState<EmailSignup[]>([]);
+  const [allContactInquiries, setAllContactInquiries] = useState<ContactInquiryNotification[]>([]);
+  const [filteredInquiries, setFilteredInquiries] = useState<ContactInquiryNotification[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState('all');
@@ -39,20 +42,30 @@ export default function NotificationsPage() {
     }
   }, [user?.role]);
 
-  // Filter signups based on search term
+  // Filter signups and inquiries based on search term
   useEffect(() => {
-    let filtered = allEmailSignups;
+    let filteredSignupsResult = allEmailSignups;
+    let filteredInquiriesResult = allContactInquiries;
     
     if (searchTerm) {
-      filtered = filtered.filter(signup => 
+      filteredSignupsResult = filteredSignupsResult.filter(signup => 
         signup.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
         signup.source.toLowerCase().includes(searchTerm.toLowerCase()) ||
         signup.page.toLowerCase().includes(searchTerm.toLowerCase())
       );
+      
+      filteredInquiriesResult = filteredInquiriesResult.filter(inquiry => 
+        inquiry.sender_email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        inquiry.sender_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        inquiry.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        inquiry.source.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        inquiry.inquiry_type.toLowerCase().includes(searchTerm.toLowerCase())
+      );
     }
 
-    setFilteredSignups(filtered);
-  }, [allEmailSignups, searchTerm]);
+    setFilteredSignups(filteredSignupsResult);
+    setFilteredInquiries(filteredInquiriesResult);
+  }, [allEmailSignups, allContactInquiries, searchTerm]);
 
   const loadNotifications = async () => {
     setLoading(true);
@@ -72,16 +85,19 @@ export default function NotificationsPage() {
         console.warn('⚠️ Could not fetch active users from API:', apiError);
       }
       
-      const [counts, emailSignups] = await Promise.all([
+      const [counts, emailSignups, contactInquiries] = await Promise.all([
         getNotificationCounts(),
-        getRecentEmailSignups(50) // Get more for the dedicated page
+        getRecentEmailSignups(50), // Get more for the dedicated page
+        getRecentContactInquiries(50) // Get recent contact inquiries
       ]);
       
       setNotificationCounts(counts);
       setAllEmailSignups(emailSignups);
       setFilteredSignups(emailSignups);
+      setAllContactInquiries(contactInquiries);
+      setFilteredInquiries(contactInquiries);
       setActiveUsers(activeUsersCount);
-      console.log('✅ All notifications loaded:', { counts, emailSignups, activeUsers: activeUsersCount });
+      console.log('✅ All notifications loaded:', { counts, emailSignups, contactInquiries, activeUsers: activeUsersCount });
       
     } catch (error) {
       console.error('❌ Failed to load notifications:', error);
@@ -143,59 +159,130 @@ export default function NotificationsPage() {
         </div>
       </div>
 
-      {/* Notification Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Notifications</CardTitle>
-            <Bell className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{notificationCounts?.totalNotifications || 0}</div>
-            <p className="text-xs text-muted-foreground">Active items</p>
+      {/* Notification Summary Cards - Redesigned for Perfect Responsiveness */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 sm:gap-6 mb-8">
+        
+        {/* Total Notifications Card */}
+        <Card className="overflow-hidden">
+          <CardContent className="p-4 sm:p-6">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center space-x-2">
+                <div className="p-2 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
+                  <Bell className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-sm font-medium text-muted-foreground truncate">Total</p>
+                  <p className="text-xs text-muted-foreground">Notifications</p>
+                </div>
+              </div>
+            </div>
+            <div className="space-y-1">
+              <div className="text-2xl sm:text-3xl font-bold">{notificationCounts?.totalNotifications || 0}</div>
+              <p className="text-xs text-muted-foreground">Active items</p>
+            </div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Email Signups</CardTitle>
-            <Mail className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{notificationCounts?.totalEmailSignups || 0}</div>
-            <p className="text-xs text-muted-foreground">
-              {notificationCounts?.recentEmailSignups || 0} new this week
-            </p>
+        {/* Email Signups Card */}
+        <Card className="overflow-hidden">
+          <CardContent className="p-4 sm:p-6">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center space-x-2">
+                <div className="p-2 bg-green-100 dark:bg-green-900/20 rounded-lg">
+                  <Mail className="h-4 w-4 text-green-600 dark:text-green-400" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-sm font-medium text-muted-foreground truncate">Email</p>
+                  <p className="text-xs text-muted-foreground">Signups</p>
+                </div>
+              </div>
+            </div>
+            <div className="space-y-1">
+              <div className="text-2xl sm:text-3xl font-bold">{notificationCounts?.totalEmailSignups || 0}</div>
+              <p className="text-xs text-muted-foreground">
+                {notificationCounts?.recentEmailSignups || 0} new this week
+              </p>
+            </div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pending Applications</CardTitle>
-            <Building className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{notificationCounts?.pendingShelterapplications || 0}</div>
-            <p className="text-xs text-muted-foreground">Shelter admin requests</p>
+        {/* Pending Applications Card */}
+        <Card className="overflow-hidden">
+          <CardContent className="p-4 sm:p-6">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center space-x-2">
+                <div className="p-2 bg-orange-100 dark:bg-orange-900/20 rounded-lg">
+                  <Building className="h-4 w-4 text-orange-600 dark:text-orange-400" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-sm font-medium text-muted-foreground truncate">Pending</p>
+                  <p className="text-xs text-muted-foreground">Applications</p>
+                </div>
+              </div>
+            </div>
+            <div className="space-y-1">
+              <div className="text-2xl sm:text-3xl font-bold">{notificationCounts?.pendingShelterapplications || 0}</div>
+              <p className="text-xs text-muted-foreground">Shelter admin requests</p>
+            </div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Users</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{activeUsers}</div>
-            <p className="text-xs text-muted-foreground">Last 24 hours</p>
+        {/* Contact Inquiries Card */}
+        <Card className="overflow-hidden">
+          <CardContent className="p-4 sm:p-6">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center space-x-2">
+                <div className="p-2 bg-purple-100 dark:bg-purple-900/20 rounded-lg">
+                  <MessageSquare className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-sm font-medium text-muted-foreground truncate">Contact</p>
+                  <p className="text-xs text-muted-foreground">Inquiries</p>
+                </div>
+              </div>
+            </div>
+            <div className="space-y-1">
+              <div className="text-2xl sm:text-3xl font-bold">{notificationCounts?.contactInquiries || 0}</div>
+              <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+                <span>{notificationCounts?.recentContactInquiries || 0} new this week</span>
+                {(notificationCounts?.repliedContactInquiries || 0) > 0 && (
+                  <Badge variant="secondary" className="text-xs px-2 py-0.5">
+                    {notificationCounts?.repliedContactInquiries} replied
+                  </Badge>
+                )}
+              </div>
+            </div>
           </CardContent>
         </Card>
+
+        {/* Active Users Card */}
+        <Card className="overflow-hidden">
+          <CardContent className="p-4 sm:p-6">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center space-x-2">
+                <div className="p-2 bg-indigo-100 dark:bg-indigo-900/20 rounded-lg">
+                  <Users className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-sm font-medium text-muted-foreground truncate">Active</p>
+                  <p className="text-xs text-muted-foreground">Users</p>
+                </div>
+              </div>
+            </div>
+            <div className="space-y-1">
+              <div className="text-2xl sm:text-3xl font-bold">{activeUsers}</div>
+              <p className="text-xs text-muted-foreground">Last 24 hours</p>
+            </div>
+          </CardContent>
+        </Card>
+
       </div>
 
       {/* Notifications Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="all">All Notifications</TabsTrigger>
+          <TabsTrigger value="contact-inquiries">Contact Inquiries</TabsTrigger>
           <TabsTrigger value="email-signups">Email Signups</TabsTrigger>
           <TabsTrigger value="applications">Applications</TabsTrigger>
         </TabsList>
@@ -220,6 +307,52 @@ export default function NotificationsPage() {
         {/* All Notifications Tab */}
         <TabsContent value="all" className="space-y-6">
           <div className="grid gap-6">
+            {/* Contact Inquiries Preview */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <MessageSquare className="w-5 h-5 mr-2" />
+                  Recent Contact Inquiries
+                  <Badge className="ml-2 bg-blue-500 text-white">
+                    {notificationCounts?.recentContactInquiries || 0} new
+                  </Badge>
+                </CardTitle>
+                <CardDescription>Latest contact form submissions and inquiries</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  {allContactInquiries.slice(0, 3).map((inquiry) => (
+                    <div key={inquiry.id} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                      <div className="flex items-center space-x-3">
+                        <div className={`w-2 h-2 rounded-full ${
+                          inquiry.priority === 'high' ? 'bg-red-500' : 
+                          inquiry.priority === 'normal' ? 'bg-blue-500' : 'bg-green-500'
+                        }`}></div>
+                        <div>
+                          <p className="font-medium text-sm">{inquiry.sender_name || inquiry.sender_email}</p>
+                          <p className="text-xs text-gray-500 truncate max-w-48">
+                            {inquiry.subject}
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            {inquiry.created_at?.toDate ? formatRelativeTime(inquiry.created_at.toDate()) : 'Recently'}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex gap-2">
+                        <Badge variant="outline" className="text-xs">{inquiry.inquiry_type}</Badge>
+                        <Badge variant={inquiry.priority === 'high' ? 'destructive' : 'outline'} className="text-xs">
+                          {inquiry.priority}
+                        </Badge>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <Button variant="outline" className="w-full mt-4" onClick={() => setActiveTab('contact-inquiries')}>
+                  View All Contact Inquiries
+                </Button>
+              </CardContent>
+            </Card>
+
             {/* Email Signups Preview */}
             <Card>
               <CardHeader>
@@ -284,6 +417,73 @@ export default function NotificationsPage() {
               </CardContent>
             </Card>
           </div>
+        </TabsContent>
+
+        {/* Contact Inquiries Tab */}
+        <TabsContent value="contact-inquiries" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>All Contact Inquiries ({filteredInquiries.length})</CardTitle>
+              <CardDescription>Complete list of contact form submissions and inquiries</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {loading ? (
+                <div className="flex items-center justify-center py-8">
+                  <Loader2 className="h-6 w-6 animate-spin mr-2" />
+                  <span>Loading contact inquiries...</span>
+                </div>
+              ) : filteredInquiries.length > 0 ? (
+                <div className="space-y-3">
+                  {filteredInquiries.map((inquiry) => (
+                    <div key={inquiry.id} className="flex items-start justify-between p-4 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                      <div className="flex items-start space-x-3">
+                        <div className={`w-2 h-2 rounded-full mt-2 ${
+                          inquiry.priority === 'high' ? 'bg-red-500' : 
+                          inquiry.priority === 'normal' ? 'bg-blue-500' : 'bg-green-500'
+                        }`}></div>
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-2 mb-1">
+                            <p className="font-medium">{inquiry.sender_name || inquiry.sender_email}</p>
+                            <Badge variant={inquiry.status === 'new' ? 'default' : 'outline'} className="text-xs">
+                              {inquiry.status}
+                            </Badge>
+                          </div>
+                          <p className="text-sm text-gray-900 dark:text-gray-100 mb-2">{inquiry.subject}</p>
+                          <div className="flex flex-wrap gap-2 mb-2">
+                            <Badge variant="outline" className="text-xs">
+                              {inquiry.inquiry_type.replace('_', ' ')}
+                            </Badge>
+                            <Badge variant="outline" className="text-xs">
+                              {inquiry.source}
+                            </Badge>
+                            <Badge variant={inquiry.priority === 'high' ? 'destructive' : inquiry.priority === 'normal' ? 'default' : 'secondary'} className="text-xs">
+                              {inquiry.priority} priority
+                            </Badge>
+                          </div>
+                          <p className="text-xs text-gray-500">
+                            Received {inquiry.created_at?.toDate ? formatRelativeTime(inquiry.created_at.toDate()) : 'recently'}
+                          </p>
+                        </div>
+                      </div>
+                      <Button variant="ghost" size="sm" asChild>
+                        <a href={`/dashboard/contact-inquiries`} target="_blank" rel="noopener noreferrer">
+                          <ExternalLink className="w-4 h-4" />
+                        </a>
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <MessageSquare className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-medium mb-2">No contact inquiries found</h3>
+                  <p className="text-gray-500">
+                    {searchTerm ? 'Try adjusting your search terms' : 'Contact inquiries will appear here as users submit forms'}
+                  </p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </TabsContent>
 
         {/* Email Signups Tab */}

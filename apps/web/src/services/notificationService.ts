@@ -1,4 +1,4 @@
-import { collection, getDocs, query, orderBy, limit, where, Timestamp, addDoc, serverTimestamp, FieldValue } from 'firebase/firestore';
+import { collection, getDocs, query, orderBy, limit, where, Timestamp, addDoc, serverTimestamp, FieldValue, doc, updateDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
 // API base URL for notifications
@@ -384,6 +384,69 @@ const createAdminNotification = async (notification: Omit<AdminNotification, 'id
 };
 
 /**
+ * Get recent admin notifications
+ */
+export const getAdminNotifications = async (limitCount: number = 20): Promise<AdminNotification[]> => {
+  try {
+    console.log('🔔 [ADMIN NOTIFICATIONS] Fetching admin notifications...');
+    
+    const notificationsRef = collection(db, 'admin_notifications');
+    const q = query(
+      notificationsRef,
+      orderBy('created_at', 'desc'),
+      limit(limitCount)
+    );
+    
+    const querySnapshot = await getDocs(q);
+    const notifications: AdminNotification[] = [];
+    
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      notifications.push({
+        id: doc.id,
+        type: data.type,
+        title: data.title,
+        message: data.message,
+        data: data.data || {},
+        priority: data.priority,
+        read: data.read || false,
+        created_at: data.created_at,
+        target_roles: data.target_roles || []
+      });
+    });
+    
+    console.log(`✅ [ADMIN NOTIFICATIONS] Found ${notifications.length} admin notifications`);
+    return notifications;
+    
+  } catch (error) {
+    console.error('❌ [ADMIN NOTIFICATIONS] Error fetching admin notifications:', error);
+    return [];
+  }
+};
+
+/**
+ * Mark an admin notification as read
+ */
+export const markNotificationAsRead = async (notificationId: string): Promise<boolean> => {
+  try {
+    console.log(`🔔 [ADMIN NOTIFICATIONS] Marking notification ${notificationId} as read...`);
+    
+    const notificationRef = doc(db, 'admin_notifications', notificationId);
+    await updateDoc(notificationRef, {
+      read: true,
+      read_at: serverTimestamp()
+    });
+    
+    console.log(`✅ [ADMIN NOTIFICATIONS] Notification ${notificationId} marked as read`);
+    return true;
+    
+  } catch (error) {
+    console.error(`❌ [ADMIN NOTIFICATIONS] Error marking notification ${notificationId} as read:`, error);
+    return false;
+  }
+};
+
+/**
  * Create a fraud alert notification for all administrators
  */
 export const createFraudAlertNotification = async (fraudAlert: {
@@ -431,11 +494,13 @@ export const createFraudAlertNotification = async (fraudAlert: {
   }
 };
 
-// Export the service with the new function
+// Export the service with the new functions
 export const notificationService = {
   getNotificationCounts,
   getRecentContactInquiries,
   createContactInquiryNotification,
   createAdminNotification,
-  createFraudAlertNotification
+  createFraudAlertNotification,
+  getAdminNotifications,
+  markNotificationAsRead
 };

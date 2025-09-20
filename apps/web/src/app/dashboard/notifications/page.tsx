@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
-import { getNotificationCounts, getRecentEmailSignups, getRecentContactInquiries, NotificationCounts, EmailSignup, ContactInquiryNotification, formatRelativeTime } from '@/services/notificationService';
+tusimport { getNotificationCounts, getRecentEmailSignups, getRecentContactInquiries, getAdminNotifications, markNotificationAsRead, NotificationCounts, EmailSignup, ContactInquiryNotification, AdminNotification, formatRelativeTime } from '@/services/notificationService';
 import { 
   Mail, 
   Bell, 
@@ -21,7 +21,9 @@ import {
   ExternalLink,
   AlertCircle,
   CheckCircle,
-  MessageSquare
+  MessageSquare,
+  Shield,
+  ShieldAlert
 } from 'lucide-react';
 
 export default function NotificationsPage() {
@@ -31,6 +33,8 @@ export default function NotificationsPage() {
   const [filteredSignups, setFilteredSignups] = useState<EmailSignup[]>([]);
   const [allContactInquiries, setAllContactInquiries] = useState<ContactInquiryNotification[]>([]);
   const [filteredInquiries, setFilteredInquiries] = useState<ContactInquiryNotification[]>([]);
+  const [allAdminNotifications, setAllAdminNotifications] = useState<AdminNotification[]>([]);
+  const [filteredAdminNotifications, setFilteredAdminNotifications] = useState<AdminNotification[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState('all');
@@ -42,10 +46,11 @@ export default function NotificationsPage() {
     }
   }, [user?.role]);
 
-  // Filter signups and inquiries based on search term
+  // Filter signups, inquiries, and admin notifications based on search term
   useEffect(() => {
     let filteredSignupsResult = allEmailSignups;
     let filteredInquiriesResult = allContactInquiries;
+    let filteredAdminNotificationsResult = allAdminNotifications;
     
     if (searchTerm) {
       filteredSignupsResult = filteredSignupsResult.filter(signup => 
@@ -61,11 +66,18 @@ export default function NotificationsPage() {
         inquiry.source.toLowerCase().includes(searchTerm.toLowerCase()) ||
         inquiry.inquiry_type.toLowerCase().includes(searchTerm.toLowerCase())
       );
+      
+      filteredAdminNotificationsResult = filteredAdminNotificationsResult.filter(notification => 
+        notification.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        notification.message.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        notification.type.toLowerCase().includes(searchTerm.toLowerCase())
+      );
     }
 
     setFilteredSignups(filteredSignupsResult);
     setFilteredInquiries(filteredInquiriesResult);
-  }, [allEmailSignups, allContactInquiries, searchTerm]);
+    setFilteredAdminNotifications(filteredAdminNotificationsResult);
+  }, [allEmailSignups, allContactInquiries, allAdminNotifications, searchTerm]);
 
   const loadNotifications = async () => {
     setLoading(true);
@@ -85,10 +97,11 @@ export default function NotificationsPage() {
         console.warn('⚠️ Could not fetch active users from API:', apiError);
       }
       
-      const [counts, emailSignups, contactInquiries] = await Promise.all([
+      const [counts, emailSignups, contactInquiries, adminNotifications] = await Promise.all([
         getNotificationCounts(),
         getRecentEmailSignups(50), // Get more for the dedicated page
-        getRecentContactInquiries(50) // Get recent contact inquiries
+        getRecentContactInquiries(50), // Get recent contact inquiries
+        getAdminNotifications(50) // Get recent admin notifications
       ]);
       
       setNotificationCounts(counts);
@@ -96,8 +109,10 @@ export default function NotificationsPage() {
       setFilteredSignups(emailSignups);
       setAllContactInquiries(contactInquiries);
       setFilteredInquiries(contactInquiries);
+      setAllAdminNotifications(adminNotifications);
+      setFilteredAdminNotifications(adminNotifications);
       setActiveUsers(activeUsersCount);
-      console.log('✅ All notifications loaded:', { counts, emailSignups, contactInquiries, activeUsers: activeUsersCount });
+      console.log('✅ All notifications loaded:', { counts, emailSignups, contactInquiries, adminNotifications, activeUsers: activeUsersCount });
       
     } catch (error) {
       console.error('❌ Failed to load notifications:', error);
@@ -159,8 +174,8 @@ export default function NotificationsPage() {
         </div>
       </div>
 
-      {/* Notification Summary Cards - Redesigned for Perfect Responsiveness */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 sm:gap-6 mb-8">
+      {/* Notification Summary Cards - Redesigned for Perfect Responsiveness (3x2 Grid) */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8">
         
         {/* Total Notifications Card */}
         <Card className="overflow-hidden">
@@ -255,6 +270,65 @@ export default function NotificationsPage() {
           </CardContent>
         </Card>
 
+        {/* Security Notifications Card */}
+        <Card className="overflow-hidden">
+          <CardContent className="p-4 sm:p-6">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center space-x-2">
+                <div className="p-2 bg-red-100 dark:bg-red-900/20 rounded-lg">
+                  <Shield className="h-4 w-4 text-red-600 dark:text-red-400" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-sm font-medium text-muted-foreground truncate">Security</p>
+                  <p className="text-xs text-muted-foreground">Notifications</p>
+                </div>
+              </div>
+            </div>
+            <div className="space-y-1">
+              <div className="text-2xl sm:text-3xl font-bold">
+                {filteredAdminNotifications.filter(n => n.type === 'fraud_alert' || n.type === 'system_alert').length}
+              </div>
+              <div className="flex items-center gap-2">
+                <p className="text-xs text-muted-foreground">
+                  {filteredAdminNotifications.filter(n => (n.type === 'fraud_alert' || n.type === 'system_alert') && !n.read).length > 0 && (
+                    <span className="inline-flex items-center gap-1">
+                      <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                      {filteredAdminNotifications.filter(n => (n.type === 'fraud_alert' || n.type === 'system_alert') && !n.read).length} unread
+                    </span>
+                  )}
+                  {filteredAdminNotifications.filter(n => (n.type === 'fraud_alert' || n.type === 'system_alert') && !n.read).length === 0 && "All secure"}
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+      </div>
+
+      {/* Second Row of Metric Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8">
+        
+        {/* Pending Applications Card */}
+        <Card className="overflow-hidden">
+          <CardContent className="p-4 sm:p-6">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center space-x-2">
+                <div className="p-2 bg-orange-100 dark:bg-orange-900/20 rounded-lg">
+                  <Building className="h-4 w-4 text-orange-600 dark:text-orange-400" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-sm font-medium text-muted-foreground truncate">Pending</p>
+                  <p className="text-xs text-muted-foreground">Applications</p>
+                </div>
+              </div>
+            </div>
+            <div className="space-y-1">
+              <div className="text-2xl sm:text-3xl font-bold">{notificationCounts?.pendingShelterapplications || 0}</div>
+              <p className="text-xs text-muted-foreground">Shelter admin requests</p>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Active Users Card */}
         <Card className="overflow-hidden">
           <CardContent className="p-4 sm:p-6">
@@ -276,15 +350,41 @@ export default function NotificationsPage() {
           </CardContent>
         </Card>
 
+        {/* System Health Card */}
+        <Card className="overflow-hidden">
+          <CardContent className="p-4 sm:p-6">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center space-x-2">
+                <div className="p-2 bg-green-100 dark:bg-green-900/20 rounded-lg">
+                  <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-sm font-medium text-muted-foreground truncate">System</p>
+                  <p className="text-xs text-muted-foreground">Health</p>
+                </div>
+              </div>
+            </div>
+            <div className="space-y-1">
+              <div className="text-2xl sm:text-3xl font-bold">100%</div>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <p className="text-xs text-muted-foreground">All systems operational</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
       </div>
 
       {/* Notifications Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-6">
           <TabsTrigger value="all">All Notifications</TabsTrigger>
-          <TabsTrigger value="contact-inquiries">Contact Inquiries</TabsTrigger>
-          <TabsTrigger value="email-signups">Email Signups</TabsTrigger>
-          <TabsTrigger value="applications">Applications</TabsTrigger>
+          <TabsTrigger value="security">Security</TabsTrigger>
+          <TabsTrigger value="admin-notifications">Admin</TabsTrigger>
+          <TabsTrigger value="contact-inquiries">Contact</TabsTrigger>
+          <TabsTrigger value="email-signups">Email</TabsTrigger>
+          <TabsTrigger value="applications">Apps</TabsTrigger>
         </TabsList>
 
         {/* Search and Filter Bar */}
@@ -307,6 +407,121 @@ export default function NotificationsPage() {
         {/* All Notifications Tab */}
         <TabsContent value="all" className="space-y-6">
           <div className="grid gap-6">
+            {/* Security Notifications Preview */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <ShieldAlert className="w-5 h-5 mr-2 text-red-600" />
+                  Security Notifications
+                  {filteredAdminNotifications.filter(n => (n.type === 'fraud_alert' || n.type === 'system_alert') && !n.read).length > 0 && (
+                    <Badge variant="destructive" className="ml-2 animate-pulse">
+                      {filteredAdminNotifications.filter(n => (n.type === 'fraud_alert' || n.type === 'system_alert') && !n.read).length} urgent
+                    </Badge>
+                  )}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {filteredAdminNotifications.filter(n => n.type === 'fraud_alert' || n.type === 'system_alert').length === 0 ? (
+                  <div className="flex items-center gap-2 text-green-600">
+                    <Shield className="h-4 w-4" />
+                    <p className="text-sm font-medium">All systems secure - No security alerts</p>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    {filteredAdminNotifications.filter(n => n.type === 'fraud_alert' || n.type === 'system_alert').slice(0, 3).map((notification) => (
+                      <div key={notification.id} className={`p-3 rounded border-l-4 ${
+                        notification.type === 'fraud_alert' 
+                          ? 'border-l-red-500 bg-red-50 dark:bg-red-900/10' 
+                          : 'border-l-orange-500 bg-orange-50 dark:bg-orange-900/10'
+                      } ${!notification.read ? 'ring-2 ring-blue-200 dark:ring-blue-800' : ''}`}>
+                        <div className="flex items-center gap-2 mb-1">
+                          {notification.type === 'fraud_alert' && <AlertCircle className="h-3 w-3 text-red-500" />}
+                          {notification.type === 'system_alert' && <ShieldAlert className="h-3 w-3 text-orange-500" />}
+                          <span className="font-medium text-xs">{notification.title}</span>
+                          <Badge variant={notification.priority === 'high' ? 'destructive' : 'secondary'} className="text-xs">
+                            {notification.priority}
+                          </Badge>
+                          {!notification.read && <Badge variant="default" className="bg-blue-500 text-xs animate-pulse">URGENT</Badge>}
+                        </div>
+                        <p className="text-xs text-gray-700 dark:text-gray-300">{notification.message}</p>
+                        <p className="text-xs text-gray-400 mt-1">
+                          {notification.created_at && formatRelativeTime(
+                            notification.created_at instanceof Date 
+                              ? notification.created_at 
+                              : notification.created_at.toDate?.() || new Date()
+                          )}
+                        </p>
+                      </div>
+                    ))}
+                    {filteredAdminNotifications.filter(n => n.type === 'fraud_alert' || n.type === 'system_alert').length > 3 && (
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        onClick={() => setActiveTab('security')}
+                        className="w-full mt-2 border-red-200 text-red-700 hover:bg-red-50"
+                      >
+                        View All Security Alerts ({filteredAdminNotifications.filter(n => n.type === 'fraud_alert' || n.type === 'system_alert').length})
+                      </Button>
+                    )}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Admin Notifications Preview */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Bell className="w-5 h-5 mr-2" />
+                  Recent Admin Notifications
+                  {filteredAdminNotifications.filter(n => !n.read).length > 0 && (
+                    <Badge variant="destructive" className="ml-2">
+                      {filteredAdminNotifications.filter(n => !n.read).length} unread
+                    </Badge>
+                  )}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {filteredAdminNotifications.length === 0 ? (
+                  <p className="text-gray-500 text-sm">No admin notifications</p>
+                ) : (
+                  <div className="space-y-2">
+                    {filteredAdminNotifications.slice(0, 3).map((notification) => (
+                      <div key={notification.id} className={`p-3 rounded border ${!notification.read ? 'bg-blue-50 border-blue-200' : 'bg-gray-50'}`}>
+                        <div className="flex items-center gap-2 mb-1">
+                          {notification.type === 'fraud_alert' && <AlertCircle className="h-3 w-3 text-red-500" />}
+                          {notification.type === 'system_alert' && <Bell className="h-3 w-3 text-yellow-500" />}
+                          <span className="font-medium text-xs">{notification.title}</span>
+                          <Badge variant={notification.priority === 'high' ? 'destructive' : 'secondary'} className="text-xs">
+                            {notification.priority}
+                          </Badge>
+                          {!notification.read && <Badge variant="default" className="bg-blue-500 text-xs">New</Badge>}
+                        </div>
+                        <p className="text-xs text-gray-600">{notification.message}</p>
+                        <p className="text-xs text-gray-400 mt-1">
+                          {notification.created_at && formatRelativeTime(
+                            notification.created_at instanceof Date 
+                              ? notification.created_at 
+                              : notification.created_at.toDate?.() || new Date()
+                          )}
+                        </p>
+                      </div>
+                    ))}
+                    {filteredAdminNotifications.length > 3 && (
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        onClick={() => setActiveTab('admin-notifications')}
+                        className="w-full mt-2"
+                      >
+                        View All Admin Notifications ({filteredAdminNotifications.length})
+                      </Button>
+                    )}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
             {/* Contact Inquiries Preview */}
             <Card>
               <CardHeader>
@@ -417,6 +632,284 @@ export default function NotificationsPage() {
               </CardContent>
             </Card>
           </div>
+        </TabsContent>
+
+        {/* Security Notifications Tab */}
+        <TabsContent value="security" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <ShieldAlert className="h-5 w-5 text-red-600" />
+                Security Notifications ({filteredAdminNotifications.filter(n => n.type === 'fraud_alert' || n.type === 'system_alert').length})
+                {filteredAdminNotifications.filter(n => (n.type === 'fraud_alert' || n.type === 'system_alert') && !n.read).length > 0 && (
+                  <Badge variant="destructive" className="ml-2">
+                    {filteredAdminNotifications.filter(n => (n.type === 'fraud_alert' || n.type === 'system_alert') && !n.read).length} unread
+                  </Badge>
+                )}
+              </CardTitle>
+              <CardDescription>Fraud alerts, security warnings, and system security notifications</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {loading ? (
+                <div className="flex items-center justify-center py-8">
+                  <Loader2 className="h-6 w-6 animate-spin mr-2" />
+                  <span>Loading security notifications...</span>
+                </div>
+              ) : filteredAdminNotifications.filter(n => n.type === 'fraud_alert' || n.type === 'system_alert').length === 0 ? (
+                <div className="text-center py-8">
+                  <Shield className="h-12 w-12 text-green-400 mx-auto mb-4" />
+                  <p className="text-green-600 font-medium mb-2">All Secure</p>
+                  <p className="text-gray-500">No security alerts or warnings detected</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {filteredAdminNotifications.filter(n => n.type === 'fraud_alert' || n.type === 'system_alert').map((notification) => (
+                    <Card key={notification.id} className={`transition-colors border-l-4 ${
+                      notification.type === 'fraud_alert' 
+                        ? 'border-l-red-500 bg-red-50 dark:bg-red-900/10' 
+                        : 'border-l-orange-500 bg-orange-50 dark:bg-orange-900/10'
+                    } ${!notification.read ? 'ring-2 ring-blue-200 dark:ring-blue-800' : ''}`}>
+                      <CardContent className="p-4">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-2">
+                              {notification.type === 'fraud_alert' && <AlertCircle className="h-4 w-4 text-red-500" />}
+                              {notification.type === 'system_alert' && <ShieldAlert className="h-4 w-4 text-orange-500" />}
+                              
+                              <span className="font-medium text-sm">{notification.title}</span>
+                              
+                              <Badge variant={
+                                notification.priority === 'high' ? 'destructive' : 
+                                notification.priority === 'medium' ? 'default' : 
+                                'secondary'
+                              } className="text-xs">
+                                {notification.priority}
+                              </Badge>
+                              
+                              {!notification.read && (
+                                <Badge variant="default" className="bg-blue-500 text-xs">
+                                  New
+                                </Badge>
+                              )}
+                            </div>
+                            
+                            <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                              {notification.message}
+                            </p>
+                            
+                            {notification.data && Object.keys(notification.data).length > 0 && (
+                              <div className="text-xs text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-800 p-3 rounded border mb-3">
+                                <strong className="text-gray-900 dark:text-gray-100">Security Details:</strong>
+                                {notification.type === 'fraud_alert' && notification.data?.fraud_alert_id && (
+                                  <div className="mt-1">🚨 Alert ID: {String(notification.data.fraud_alert_id)}</div>
+                                )}
+                                {notification.data?.level && (
+                                  <div className="mt-1">⚡ Threat Level: {String(notification.data.level).toUpperCase()}</div>
+                                )}
+                                {notification.data?.timestamp && (
+                                  <div className="mt-1">🕒 Detection Time: {String(notification.data.timestamp)}</div>
+                                )}
+                                {notification.data?.details && (
+                                  <div className="mt-1">📋 Details: {String(notification.data.details)}</div>
+                                )}
+                              </div>
+                            )}
+                            
+                            <div className="flex items-center justify-between">
+                              <div className="text-xs text-gray-500">
+                                {notification.created_at && formatRelativeTime(
+                                  notification.created_at instanceof Date 
+                                    ? notification.created_at 
+                                    : notification.created_at.toDate?.() || new Date()
+                                )}
+                                {notification.target_roles && (
+                                  <span className="ml-2">• Target: {notification.target_roles.join(', ')}</span>
+                                )}
+                              </div>
+                              
+                              <div className="flex items-center gap-2">
+                                {!notification.read && (
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={async () => {
+                                      if (notification.id) {
+                                        const success = await markNotificationAsRead(notification.id);
+                                        if (success) {
+                                          loadNotifications();
+                                        }
+                                      }
+                                    }}
+                                    className="text-xs px-2 py-1"
+                                  >
+                                    Mark as Read
+                                  </Button>
+                                )}
+                                
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => setActiveTab('admin-notifications')}
+                                  className="text-xs px-2 py-1"
+                                >
+                                  View in Admin
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
+              
+              {/* Security Status Summary */}
+              <div className="mt-6 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                <h4 className="font-medium text-sm mb-2 flex items-center gap-2">
+                  <Shield className="h-4 w-4" />
+                  Security Status Summary
+                </h4>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                  <div className="flex items-center gap-2">
+                    <div className={`w-2 h-2 rounded-full ${
+                      filteredAdminNotifications.filter(n => n.type === 'fraud_alert' && n.priority === 'high').length > 0 
+                        ? 'bg-red-500 animate-pulse' 
+                        : 'bg-green-500'
+                    }`}></div>
+                    <span>Fraud Alerts: {filteredAdminNotifications.filter(n => n.type === 'fraud_alert').length}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className={`w-2 h-2 rounded-full ${
+                      filteredAdminNotifications.filter(n => n.type === 'system_alert' && n.priority === 'high').length > 0 
+                        ? 'bg-orange-500 animate-pulse' 
+                        : 'bg-green-500'
+                    }`}></div>
+                    <span>System Alerts: {filteredAdminNotifications.filter(n => n.type === 'system_alert').length}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className={`w-2 h-2 rounded-full ${
+                      filteredAdminNotifications.filter(n => (n.type === 'fraud_alert' || n.type === 'system_alert') && !n.read).length > 0 
+                        ? 'bg-blue-500 animate-pulse' 
+                        : 'bg-green-500'
+                    }`}></div>
+                    <span>Unread: {filteredAdminNotifications.filter(n => (n.type === 'fraud_alert' || n.type === 'system_alert') && !n.read).length}</span>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Admin Notifications Tab */}
+        <TabsContent value="admin-notifications" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Admin Notifications ({filteredAdminNotifications.length})</CardTitle>
+              <CardDescription>System notifications, fraud alerts, and administrative messages</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {loading ? (
+                <div className="flex items-center justify-center py-8">
+                  <Loader2 className="h-6 w-6 animate-spin mr-2" />
+                  <span>Loading admin notifications...</span>
+                </div>
+              ) : filteredAdminNotifications.length === 0 ? (
+                <div className="text-center py-8">
+                  <Bell className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <p className="text-gray-500">No admin notifications found</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {filteredAdminNotifications.map((notification) => (
+                    <Card key={notification.id} className={`transition-colors ${notification.read ? 'bg-gray-50 dark:bg-gray-900' : 'bg-blue-50 dark:bg-blue-900/20 border-blue-200'}`}>
+                      <CardContent className="p-4">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-2">
+                              {notification.type === 'fraud_alert' && <AlertCircle className="h-4 w-4 text-red-500" />}
+                              {notification.type === 'system_alert' && <Bell className="h-4 w-4 text-yellow-500" />}
+                              {notification.type === 'contact_inquiry' && <MessageSquare className="h-4 w-4 text-blue-500" />}
+                              {notification.type === 'user_signup' && <Users className="h-4 w-4 text-green-500" />}
+                              {notification.type === 'donation' && <CheckCircle className="h-4 w-4 text-green-500" />}
+                              {notification.type === 'github_sync_required' && <ExternalLink className="h-4 w-4 text-purple-500" />}
+                              
+                              <span className="font-medium text-sm">{notification.title}</span>
+                              
+                              <Badge variant={
+                                notification.priority === 'high' ? 'destructive' : 
+                                notification.priority === 'medium' ? 'default' : 
+                                'secondary'
+                              } className="text-xs">
+                                {notification.priority}
+                              </Badge>
+                              
+                              {!notification.read && (
+                                <Badge variant="default" className="bg-blue-500 text-xs">
+                                  New
+                                </Badge>
+                              )}
+                            </div>
+                            
+                            <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
+                              {notification.message}
+                            </p>
+                            
+                            {notification.data && Object.keys(notification.data).length > 0 && (
+                              <div className="text-xs text-gray-500 bg-gray-100 dark:bg-gray-800 p-2 rounded mt-2">
+                                <strong>Details:</strong>
+                                {notification.type === 'fraud_alert' && notification.data?.fraud_alert_id && (
+                                  <div>Alert ID: {String(notification.data.fraud_alert_id)}</div>
+                                )}
+                                {notification.data?.level && (
+                                  <div>Level: {String(notification.data.level)}</div>
+                                )}
+                                {notification.data?.timestamp && (
+                                  <div>Timestamp: {String(notification.data.timestamp)}</div>
+                                )}
+                              </div>
+                            )}
+                            
+                            <div className="flex items-center justify-between mt-3">
+                              <div className="text-xs text-gray-500">
+                                {notification.created_at && formatRelativeTime(
+                                  notification.created_at instanceof Date 
+                                    ? notification.created_at 
+                                    : notification.created_at.toDate?.() || new Date()
+                                )}
+                                {notification.target_roles && (
+                                  <span className="ml-2">• Target: {notification.target_roles.join(', ')}</span>
+                                )}
+                              </div>
+                              
+                              {!notification.read && (
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={async () => {
+                                    if (notification.id) {
+                                      const success = await markNotificationAsRead(notification.id);
+                                      if (success) {
+                                        // Refresh notifications
+                                        loadNotifications();
+                                      }
+                                    }
+                                  }}
+                                  className="text-xs px-2 py-1"
+                                >
+                                  Mark as Read
+                                </Button>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </TabsContent>
 
         {/* Contact Inquiries Tab */}

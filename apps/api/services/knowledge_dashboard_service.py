@@ -210,6 +210,65 @@ class KnowledgeDashboardService:
                 'last_updated': datetime.now().isoformat()
             }
     
+    async def get_knowledge_document(self, document_id: str) -> Optional[Dict[str, Any]]:
+        """Get a single knowledge document by ID"""
+        try:
+            doc_ref = self.db.collection('knowledge_documents').document(document_id)
+            doc_data = doc_ref.get()
+            
+            if doc_data.exists:
+                document = doc_data.to_dict()
+                document['id'] = document_id
+                return document
+            else:
+                logger.warning(f"Document {document_id} not found")
+                return None
+                
+        except Exception as e:
+            logger.error(f"Failed to get knowledge document {document_id}: {str(e)}")
+            return None
+    
+    async def update_knowledge_document(self, document_id: str, updates: Dict[str, Any]) -> bool:
+        """Update an existing knowledge document"""
+        try:
+            doc_ref = self.db.collection('knowledge_documents').document(document_id)
+            
+            # Check if document exists
+            if not doc_ref.get().exists:
+                logger.warning(f"Document {document_id} not found for update")
+                return False
+            
+            # Add updated timestamp
+            updates['updated_at'] = datetime.now()
+            
+            # Update the document
+            doc_ref.update(updates)
+            logger.info(f"Successfully updated knowledge document {document_id}")
+            return True
+            
+        except Exception as e:
+            logger.error(f"Failed to update knowledge document {document_id}: {str(e)}")
+            return False
+    
+    async def delete_knowledge_document(self, document_id: str) -> bool:
+        """Delete a knowledge document"""
+        try:
+            doc_ref = self.db.collection('knowledge_documents').document(document_id)
+            
+            # Check if document exists
+            if not doc_ref.get().exists:
+                logger.warning(f"Document {document_id} not found for deletion")
+                return False
+            
+            # Delete the document
+            doc_ref.delete()
+            logger.info(f"Successfully deleted knowledge document {document_id}")
+            return True
+            
+        except Exception as e:
+            logger.error(f"Failed to delete knowledge document {document_id}: {str(e)}")
+            return False
+    
     async def create_knowledge_document(self, document_data: Dict[str, Any]) -> str:
         """Create a new knowledge document"""
         try:

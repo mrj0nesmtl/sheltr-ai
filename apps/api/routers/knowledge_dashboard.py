@@ -4,7 +4,8 @@ Handles knowledge document management and dashboard data
 """
 
 from fastapi import APIRouter, Depends, HTTPException, Form, UploadFile, File
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
+from pydantic import BaseModel
 from services.knowledge_dashboard_service import KnowledgeDashboardService
 from middleware.auth_middleware import get_current_user, require_super_admin
 from firebase_admin import firestore
@@ -14,6 +15,18 @@ import logging
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/knowledge-dashboard", tags=["knowledge-dashboard"])
+
+class UpdateDocumentRequest(BaseModel):
+    title: str
+    content: str
+    category: str
+    tags: List[str] = []
+    status: str = "active"
+    sharing_level: Optional[str] = "public"
+    shared_with: Optional[List[str]] = []
+    access_roles: Optional[List[str]] = []
+    is_live: Optional[bool] = False
+    confidentiality_level: Optional[str] = "public"
 
 @router.get("/documents")
 async def get_knowledge_documents(
@@ -36,7 +49,30 @@ async def get_knowledge_documents(
         logger.error(f"Failed to get knowledge documents: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to retrieve knowledge documents")
 
-
+@router.get("/documents/{document_id}")
+async def get_knowledge_document(
+    document_id: str,
+    current_user: Dict[str, Any] = Depends(get_current_user)
+):
+    """Get a single knowledge document by ID"""
+    
+    try:
+        knowledge_service = KnowledgeDashboardService()
+        document = await knowledge_service.get_knowledge_document(document_id)
+        
+        if not document:
+            raise HTTPException(status_code=404, detail="Document not found")
+        
+        return {
+            "success": True,
+            "data": document
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to get knowledge document {document_id}: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to retrieve knowledge document")
 
 @router.get("/stats")
 async def get_knowledge_stats(
@@ -100,11 +136,7 @@ async def create_knowledge_document(
 @router.put("/documents/{document_id}")
 async def update_knowledge_document(
     document_id: str,
-    title: str = Form(...),
-    content: str = Form(...),
-    category: str = Form(...),
-    tags: str = Form(""),
-    status: str = Form("active"),
+    request: UpdateDocumentRequest,
     current_user: Dict[str, Any] = Depends(require_super_admin)
 ):
     """Update an existing knowledge document (Super Admin only)"""
@@ -112,15 +144,17 @@ async def update_knowledge_document(
     try:
         knowledge_service = KnowledgeDashboardService()
         
-        # Parse tags
-        tag_list = [tag.strip() for tag in tags.split(',') if tag.strip()] if tags else []
-        
         updates = {
-            'title': title,
-            'content': content,
-            'category': category,
-            'tags': tag_list,
-            'status': status
+            'title': request.title,
+            'content': request.content,
+            'category': request.category,
+            'tags': request.tags,
+            'status': request.status,
+            'sharing_level': request.sharing_level,
+            'shared_with': request.shared_with,
+            'access_roles': request.access_roles,
+            'is_live': request.is_live,
+            'confidentiality_level': request.confidentiality_level
         }
         
         success = await knowledge_service.update_knowledge_document(document_id, updates)

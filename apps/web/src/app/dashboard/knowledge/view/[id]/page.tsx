@@ -1,4 +1,4 @@
-import EditKnowledgeDocumentClient from './EditKnowledgeDocumentClient';
+import ViewKnowledgeDocumentClient from './ViewKnowledgeDocumentClient';
 
 // Generate static params for build compatibility
 export async function generateStaticParams(): Promise<{ id: string }[]> {
@@ -19,6 +19,6 @@ interface PageProps {
   };
 }
 
-export default function EditKnowledgeDocument({ params }: PageProps) {
-  return <EditKnowledgeDocumentClient />;
+export default function ViewKnowledgeDocument({ params }: PageProps) {
+  return <ViewKnowledgeDocumentClient />;
 }

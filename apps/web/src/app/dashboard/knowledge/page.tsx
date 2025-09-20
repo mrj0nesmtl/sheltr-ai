@@ -237,7 +237,7 @@ export default function KnowledgeDashboard() {
   const handleDocumentSelect = (documentId: string) => {
     const doc = documents.find(d => d.id === documentId);
     if (doc) {
-      openEditPage(doc);
+      openViewPage(doc);
     }
   };
 
@@ -279,6 +279,11 @@ export default function KnowledgeDashboard() {
   const openEditPage = (document: KnowledgeDocument) => {
     // Navigate to dedicated edit page
     window.location.href = `/dashboard/knowledge/edit/${document.id}`;
+  };
+
+  const openViewPage = (document: KnowledgeDocument) => {
+    // Navigate to dedicated view page
+    window.location.href = `/dashboard/knowledge/view/${document.id}`;
   };
 
   const formatFileSize = (bytes: number) => {
@@ -768,7 +773,7 @@ export default function KnowledgeDashboard() {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => openEditPage(doc)}
+                      onClick={() => openViewPage(doc)}
                       className="flex-1 text-xs px-2 py-1 h-8"
                     >
                       <Eye className="h-3 w-3 mr-1 flex-shrink-0" />
@@ -935,7 +940,7 @@ export default function KnowledgeDashboard() {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => openEditPage(doc)}
+                        onClick={() => openViewPage(doc)}
                         className="w-full sm:w-auto lg:w-full text-xs px-2 py-1 h-8"
                       >
                         <Eye className="h-3 w-3 mr-1 flex-shrink-0" />

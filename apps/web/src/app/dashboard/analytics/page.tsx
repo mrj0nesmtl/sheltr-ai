@@ -311,24 +311,13 @@ export default function Analytics() {
       // Process participants - use platform data
       geographicStats['North America'].participants = platformData.activeParticipants || 0;
 
-      // Process donations from transactions
-      if (transactions && transactions.length > 0) {
-        console.log(`💰 Processing ${transactions.length} transactions for geographic distribution`);
-        
-        transactions.forEach(tx => {
-          const amount = tx.amount || 0;
-          const shelter = tx.shelter || '';
-          
-          // All our current donations are Montreal-based (North America)
-          let region = 'North America';
-          if (shelter.toLowerCase().includes('montreal') || shelter.toLowerCase().includes('old brewery')) {
-            region = 'North America';
-          }
-          
-          geographicStats[region].donations += amount;
-          geographicStats[region].donationCount++;
-        });
-      }
+      // Use the same total donations from financialMetrics to ensure consistency
+      // All our current donations are Montreal-based (North America)
+      const totalDonationsFromFinancialMetrics = platformData.totalDonations || 0;
+      geographicStats['North America'].donations = totalDonationsFromFinancialMetrics;
+      geographicStats['North America'].donationCount = transactions?.length || 0;
+      
+      console.log(`💰 Using consistent total donations: $${totalDonationsFromFinancialMetrics} for geographic distribution`);
 
       // Convert to expected format with hasData flag
       const result = [
@@ -404,7 +393,7 @@ export default function Analytics() {
             activeParticipants: apiMetrics.shelters?.participants_served || 0,
             totalOrganizations: apiMetrics.shelters?.total_shelters || 0,
             activeDonors: apiMetrics.users?.by_role?.donor || 0,
-            totalDonations: apiMetrics.donations?.total_amount || 0
+            totalDonations: financialMetrics.totalDonations // Always use financial metrics for consistency
           };
         } catch (apiError) {
           console.warn('⚠️ [ANALYTICS] API call failed, using financial metrics only:', apiError);

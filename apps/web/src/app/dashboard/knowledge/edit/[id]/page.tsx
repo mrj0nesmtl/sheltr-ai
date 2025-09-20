@@ -417,18 +417,56 @@ export default function EditKnowledgeDocument() {
             </CardContent>
           </Card>
 
-          {/* Privacy & Access Controls */}
+          {/* Sharing & Publishing Controls */}
           <Card>
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2">
-                <Shield className="h-5 w-5 text-red-600" />
-                Privacy & Access Controls
+                <Shield className="h-5 w-5 text-blue-600" />
+                Sharing & Publishing Controls
               </CardTitle>
+              <p className="text-sm text-muted-foreground mt-1">
+                Control who can access this document and whether it&apos;s available to AI chatbots
+              </p>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-6">
+              {/* Publishing Status */}
+              <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <Brain className="h-5 w-5 text-blue-600" />
+                    <span className="font-medium text-blue-900 dark:text-blue-100">AI Chatbot Access</span>
+                  </div>
+                  <Badge variant={formData.is_live ? "default" : "secondary"} className={formData.is_live ? "bg-green-500" : ""}>
+                    {formData.is_live ? "🟢 Published" : "🔴 Draft"}
+                  </Badge>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <input
+                    type="checkbox"
+                    id="is_live"
+                    checked={formData.is_live}
+                    onChange={(e) => setFormData({...formData, is_live: e.target.checked})}
+                    className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <label htmlFor="is_live" className="text-sm">
+                    <span className="font-medium">Publish to AI Chatbot</span>
+                    <p className="text-xs text-muted-foreground">
+                      {formData.is_live 
+                        ? "✅ This document is available to AI chatbots and can be referenced in responses"
+                        : "❌ This document is in draft mode and not available to AI chatbots"
+                      }
+                    </p>
+                  </label>
+                </div>
+              </div>
+
+              {/* Access Level Controls */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="text-sm font-medium">Access Level</label>
+                  <label className="text-sm font-medium flex items-center gap-2">
+                    <Users className="h-4 w-4" />
+                    Access Level
+                  </label>
                   <Select 
                     value={formData.sharing_level} 
                     onValueChange={(value: 'public' | 'super_admin_only' | 'shelter_specific' | 'role_based') => setFormData({...formData, sharing_level: value})}
@@ -437,16 +475,45 @@ export default function EditKnowledgeDocument() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="public">🌐 Public (Chatbot Available)</SelectItem>
-                      <SelectItem value="super_admin_only">🔒 Super Admin Only</SelectItem>
-                      <SelectItem value="shelter_specific">🏠 Shelter Specific</SelectItem>
-                      <SelectItem value="role_based">👥 Role Based</SelectItem>
+                      <SelectItem value="public">
+                        <div className="flex items-center gap-2">
+                          <Globe className="h-4 w-4 text-green-500" />
+                          <span>Public - All Users</span>
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="super_admin_only">
+                        <div className="flex items-center gap-2">
+                          <Lock className="h-4 w-4 text-red-500" />
+                          <span>Super Admin Only</span>
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="shelter_specific">
+                        <div className="flex items-center gap-2">
+                          <Target className="h-4 w-4 text-blue-500" />
+                          <span>Shelter Specific</span>
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="role_based">
+                        <div className="flex items-center gap-2">
+                          <Users className="h-4 w-4 text-purple-500" />
+                          <span>Role Based Access</span>
+                        </div>
+                      </SelectItem>
                     </SelectContent>
                   </Select>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {formData.sharing_level === 'public' && "Available to all platform users"}
+                    {formData.sharing_level === 'super_admin_only' && "Only Super Admins can access"}
+                    {formData.sharing_level === 'shelter_specific' && "Only specified shelters can access"}
+                    {formData.sharing_level === 'role_based' && "Access based on user roles"}
+                  </p>
                 </div>
 
                 <div>
-                  <label className="text-sm font-medium">Confidentiality Level</label>
+                  <label className="text-sm font-medium flex items-center gap-2">
+                    <Shield className="h-4 w-4" />
+                    Confidentiality Level
+                  </label>
                   <Select 
                     value={formData.confidentiality_level} 
                     onValueChange={(value: 'public' | 'internal' | 'confidential' | 'restricted') => setFormData({...formData, confidentiality_level: value})}
@@ -455,26 +522,39 @@ export default function EditKnowledgeDocument() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="public">📖 Public</SelectItem>
-                      <SelectItem value="internal">🏢 Internal</SelectItem>
-                      <SelectItem value="confidential">🔐 Confidential</SelectItem>
-                      <SelectItem value="restricted">⛔ Restricted</SelectItem>
+                      <SelectItem value="public">
+                        <div className="flex items-center gap-2">
+                          <BookOpen className="h-4 w-4 text-green-500" />
+                          <span>Public Information</span>
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="internal">
+                        <div className="flex items-center gap-2">
+                          <Users className="h-4 w-4 text-blue-500" />
+                          <span>Internal Use Only</span>
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="confidential">
+                        <div className="flex items-center gap-2">
+                          <Lock className="h-4 w-4 text-orange-500" />
+                          <span>Confidential</span>
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="restricted">
+                        <div className="flex items-center gap-2">
+                          <AlertTriangle className="h-4 w-4 text-red-500" />
+                          <span>Restricted Access</span>
+                        </div>
+                      </SelectItem>
                     </SelectContent>
                   </Select>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {formData.confidentiality_level === 'public' && "No confidentiality restrictions"}
+                    {formData.confidentiality_level === 'internal' && "Internal platform information"}
+                    {formData.confidentiality_level === 'confidential' && "Sensitive information - limited access"}
+                    {formData.confidentiality_level === 'restricted' && "Highly restricted - minimal access"}
+                  </p>
                 </div>
-              </div>
-
-              <div className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  id="is_live"
-                  checked={formData.is_live}
-                  onChange={(e) => setFormData({...formData, is_live: e.target.checked})}
-                  className="rounded"
-                />
-                <label htmlFor="is_live" className="text-sm font-medium">
-                  Make available to AI Chatbot (Live)
-                </label>
               </div>
 
               {formData.sharing_level === 'shelter_specific' && (

@@ -350,7 +350,7 @@ class EmbeddingsService:
         user_role: str, 
         shelter_id: Optional[str]
     ) -> bool:
-        """Check if user has access to document"""
+        """Check if user has access to document and if it's available to chatbot"""
         try:
             # Get document metadata
             doc_ref = self.db.collection('knowledge_documents').document(document_id)
@@ -360,16 +360,36 @@ class EmbeddingsService:
                 return False
             
             doc_dict = doc_data.to_dict()
-            access_level = doc_dict.get('access_level', 'public')
             
-            # Access control logic
-            if access_level == 'public':
+            # First check if document is published/live for chatbot access
+            is_live = doc_dict.get('is_live', True)  # Default to True for backward compatibility
+            if not is_live:
+                logger.debug(f"Document {document_id} is in draft mode - not available to chatbot")
+                return False
+            
+            # Then check access level permissions
+            access_level = doc_dict.get('access_level', doc_dict.get('sharing_level', 'public'))
+            confidentiality = doc_dict.get('confidentiality_level', 'public')
+            
+            # Enhanced access control logic
+            if access_level == 'public' and confidentiality in ['public', 'internal']:
                 return True
-            elif access_level == 'internal':
-                return user_role in ['admin', 'super_admin']
-            elif access_level == 'shelter-specific':
-                return (user_role in ['admin', 'super_admin'] and 
+            elif access_level == 'super_admin_only':
+                return user_role == 'super_admin'
+            elif access_level == 'shelter_specific':
+                return (user_role in ['shelter_admin', 'super_admin'] and 
                         shelter_id == doc_dict.get('shelter_id'))
+            elif access_level == 'role_based':
+                access_roles = doc_dict.get('access_roles', [])
+                return user_role in access_roles or user_role == 'super_admin'
+            elif access_level == 'internal':  # Legacy support
+                return user_role in ['shelter_admin', 'platform_admin', 'super_admin']
+            
+            # Confidentiality level restrictions
+            if confidentiality == 'confidential':
+                return user_role in ['platform_admin', 'super_admin']
+            elif confidentiality == 'restricted':
+                return user_role == 'super_admin'
             
             return False
             

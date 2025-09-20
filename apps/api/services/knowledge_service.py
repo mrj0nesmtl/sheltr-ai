@@ -394,12 +394,9 @@ class KnowledgeService:
             query = self.db.collection('knowledge_documents')
             
             # Apply access level filter based on user role
-            if user_role == 'participant' or user_role == 'donor':
-                query = query.where('access_level', '==', 'public')
-            elif user_role == 'admin':
-                # Admin can see public and internal, plus their shelter-specific
-                # Note: Firestore doesn't support complex OR queries, so we'll filter in memory
-                pass
+            # Note: We'll do most filtering in memory due to Firestore query limitations
+            # Only filter for published documents at the query level
+            query = query.where('is_live', '==', True)  # Only published documents for chatbot access
             
             # Apply category filter
             if category:
@@ -413,7 +410,7 @@ class KnowledgeService:
                 doc_data = doc.to_dict()
                 
                 # Additional access control filtering
-                if await self._check_document_access(doc_data, user_role, shelter_id):
+                if self._check_document_access(doc_data, user_role, shelter_id):
                     documents.append({
                         'id': doc.id,
                         **doc_data
@@ -425,6 +422,44 @@ class KnowledgeService:
             logger.error(f"Failed to list documents: {str(e)}")
             return []
     
+    def _check_document_access(self, doc_data: Dict[str, Any], user_role: str, shelter_id: Optional[str]) -> bool:
+        """Check if user has access to document based on sharing and confidentiality settings"""
+        try:
+            # Check if document is published/live
+            is_live = doc_data.get('is_live', True)  # Default to True for backward compatibility
+            if not is_live:
+                return False
+            
+            # Get access control settings
+            access_level = doc_data.get('access_level', doc_data.get('sharing_level', 'public'))
+            confidentiality = doc_data.get('confidentiality_level', 'public')
+            
+            # Enhanced access control logic
+            if access_level == 'public' and confidentiality in ['public', 'internal']:
+                return True
+            elif access_level == 'super_admin_only':
+                return user_role == 'super_admin'
+            elif access_level == 'shelter_specific':
+                return (user_role in ['shelter_admin', 'super_admin'] and 
+                        shelter_id == doc_data.get('shelter_id'))
+            elif access_level == 'role_based':
+                access_roles = doc_data.get('access_roles', [])
+                return user_role in access_roles or user_role == 'super_admin'
+            elif access_level == 'internal':  # Legacy support
+                return user_role in ['shelter_admin', 'platform_admin', 'super_admin']
+            
+            # Confidentiality level restrictions
+            if confidentiality == 'confidential':
+                return user_role in ['platform_admin', 'super_admin']
+            elif confidentiality == 'restricted':
+                return user_role == 'super_admin'
+            
+            return False
+            
+        except Exception as e:
+            logger.error(f"Document access check failed: {str(e)}")
+            return False
+
     async def delete_document(self, document_id: str) -> bool:
         """Delete document and all associated chunks"""
         try:

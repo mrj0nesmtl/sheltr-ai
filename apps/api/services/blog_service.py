@@ -213,39 +213,42 @@ class BlogService:
         """Get blog posts with filtering and pagination"""
         
         try:
+            # For now, get all posts and filter/sort in Python until indexes are built
             query = self.db.collection('blog_posts')
-            
-            # Apply filters
-            if status and status != 'all':
-                query = query.where('status', '==', status)
-            if category:
-                query = query.where('category', '==', category)
-            
-            # Order by published_at (descending) or created_at
-            if status == 'published':
-                query = query.order_by('published_at', direction=firestore.Query.DESCENDING)
-            else:
-                query = query.order_by('created_at', direction=firestore.Query.DESCENDING)
-            
-            # Apply pagination
-            query = query.limit(limit).offset(offset)
             
             # Execute query
             posts = query.stream()
             
-            # Convert to list of dictionaries
+            # Convert to list of dictionaries and apply filters
             posts_list = []
             for post in posts:
                 post_data = post.to_dict()
                 post_data['id'] = post.id
                 
-                # Filter by tag if specified
+                # Apply status filter
+                if status and status != 'all' and post_data.get('status') != status:
+                    continue
+                    
+                # Apply category filter
+                if category and post_data.get('category') != category:
+                    continue
+                
+                # Apply tag filter
                 if tag and tag not in post_data.get('tags', []):
                     continue
                 
                 posts_list.append(post_data)
             
-            return posts_list
+            # Sort by published_at (descending) or created_at
+            if status == 'published':
+                posts_list.sort(key=lambda x: x.get('published_at') or x.get('created_at'), reverse=True)
+            else:
+                posts_list.sort(key=lambda x: x.get('created_at'), reverse=True)
+            
+            # Apply pagination
+            start_index = offset
+            end_index = offset + limit
+            return posts_list[start_index:end_index]
             
         except Exception as e:
             logger.error(f"Failed to get blog posts: {str(e)}")

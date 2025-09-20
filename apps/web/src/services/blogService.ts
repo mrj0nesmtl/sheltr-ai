@@ -103,7 +103,7 @@ class BlogService {
   }
 
   /**
-   * Get blog posts with filtering and pagination
+   * Get blog posts with filtering and pagination (public access)
    */
   async getBlogPosts(
     status: string = 'published',
@@ -122,8 +122,10 @@ class BlogService {
       if (category) params.append('category', category);
       if (tag) params.append('tag', tag);
 
-      const response = await fetch(`${this.baseUrl}/api/v1/blog/posts?${params}`, {
-        headers: await this.getAuthHeaders(),
+      const response = await fetch(`${this.baseUrl}/api/v1/blog/public/posts?${params}`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
 
       if (!response.ok) {
@@ -138,12 +140,14 @@ class BlogService {
   }
 
   /**
-   * Get a single blog post by slug
+   * Get a single blog post by slug (public access)
    */
   async getBlogPost(slug: string): Promise<BlogPostResponse> {
     try {
-      const response = await fetch(`${this.baseUrl}/api/v1/blog/posts/${slug}`, {
-        headers: await this.getAuthHeaders(),
+      const response = await fetch(`${this.baseUrl}/api/v1/blog/public/posts/${slug}`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
 
       if (!response.ok) {
@@ -299,12 +303,14 @@ class BlogService {
   }
 
   /**
-   * Get all blog categories
+   * Get all blog categories (public access)
    */
   async getCategories(): Promise<CategoriesResponse> {
     try {
-      const response = await fetch(`${this.baseUrl}/api/v1/blog/categories`, {
-        headers: await this.getAuthHeaders(),
+      const response = await fetch(`${this.baseUrl}/api/v1/blog/public/categories`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
 
       if (!response.ok) {
@@ -353,12 +359,14 @@ class BlogService {
   }
 
   /**
-   * Get all blog tags
+   * Get all blog tags (public access)
    */
   async getTags(): Promise<TagsResponse> {
     try {
-      const response = await fetch(`${this.baseUrl}/api/v1/blog/tags`, {
-        headers: await this.getAuthHeaders(),
+      const response = await fetch(`${this.baseUrl}/api/v1/blog/public/tags`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
 
       if (!response.ok) {

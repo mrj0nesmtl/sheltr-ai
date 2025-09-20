@@ -29,6 +29,7 @@ import { db } from '@/lib/firebase';
 import { analyticsService } from '@/services/analyticsService';
 import { getFinancialMetrics, getRecentTransactions } from '@/services/financialService';
 import { VisitorAreaChart } from '@/components/charts/VisitorAreaChart';
+import { GeographicMap } from '@/components/analytics/GeographicMap';
 
 // Real-time analytics data structure
 interface AnalyticsMetrics {
@@ -56,32 +57,123 @@ const defaultGeographicData = [
 
 
 
-const insights = [
-  {
-    title: 'Peak Donation Hours',
-    description: 'Donations are 40% higher between 2-4 PM on weekdays',
-    impact: 'High',
-    recommendation: 'Schedule social media campaigns during peak hours'
-  },
-  {
-    title: 'Geographic Expansion',
-    description: 'Asia Pacific region shows 34.5% growth - highest globally',
-    impact: 'Medium',
-    recommendation: 'Consider targeted marketing in APAC region'
-  },
-  {
-    title: 'User Retention',
-    description: 'Donor retention rate improved to 87.7% this quarter',
-    impact: 'High',
-    recommendation: 'Continue current engagement strategies'
-  },
-  {
-    title: 'Average Donation Trending Up',
-    description: 'Average donation amount increased 8.2% month-over-month',
-    impact: 'Medium',
-    recommendation: 'Analyze what\'s driving larger donations'
+// Dynamic insights based on real platform data
+const generateInsights = (analyticsMetrics: AnalyticsMetrics, geographicData: any[], monthlyData: any[]) => {
+  const insights = [];
+
+  // Donation growth insight
+  if (analyticsMetrics.donationGrowth > 10) {
+    insights.push({
+      title: 'Strong Donation Growth',
+      description: `Donations increased by ${analyticsMetrics.donationGrowth.toFixed(1)}% - excellent momentum!`,
+      impact: 'High',
+      recommendation: 'Capitalize on this growth with targeted outreach campaigns'
+    });
+  } else if (analyticsMetrics.donationGrowth > 0) {
+    insights.push({
+      title: 'Steady Donation Growth',
+      description: `Donations show positive growth of ${analyticsMetrics.donationGrowth.toFixed(1)}%`,
+      impact: 'Medium',
+      recommendation: 'Implement strategies to accelerate growth momentum'
+    });
+  } else {
+    insights.push({
+      title: 'Donation Growth Opportunity',
+      description: 'Donations need attention - growth is currently flat or declining',
+      impact: 'High',
+      recommendation: 'Review donor engagement strategies and launch retention campaigns'
+    });
   }
-];
+
+  // Average donation insight
+  if (analyticsMetrics.avgDonationAmount > 100) {
+    insights.push({
+      title: 'High-Value Donors',
+      description: `Average donation of $${analyticsMetrics.avgDonationAmount.toFixed(2)} indicates engaged donor base`,
+      impact: 'High',
+      recommendation: 'Focus on donor stewardship and major gift cultivation'
+    });
+  } else {
+    insights.push({
+      title: 'Donation Amount Optimization',
+      description: `Average donation of $${analyticsMetrics.avgDonationAmount.toFixed(2)} has room for growth`,
+      impact: 'Medium',
+      recommendation: 'Test suggested donation amounts and impact storytelling'
+    });
+  }
+
+  // User growth insight
+  if (analyticsMetrics.userGrowth > 15) {
+    insights.push({
+      title: 'Rapid User Acquisition',
+      description: `User base growing at ${analyticsMetrics.userGrowth.toFixed(1)}% - platform gaining traction`,
+      impact: 'High',
+      recommendation: 'Ensure onboarding experience scales with growth'
+    });
+  } else if (analyticsMetrics.userGrowth > 5) {
+    insights.push({
+      title: 'Healthy User Growth',
+      description: `Steady user growth of ${analyticsMetrics.userGrowth.toFixed(1)}% indicates platform appeal`,
+      impact: 'Medium',
+      recommendation: 'Implement referral programs to accelerate acquisition'
+    });
+  }
+
+  // Geographic insight
+  const activeRegions = geographicData.filter(region => region.hasData);
+  if (activeRegions.length === 1) {
+    insights.push({
+      title: 'Geographic Expansion Opportunity',
+      description: `Platform currently active in ${activeRegions[0].region} - significant expansion potential`,
+      impact: 'High',
+      recommendation: 'Develop market entry strategy for additional regions'
+    });
+  } else if (activeRegions.length > 1) {
+    const topRegion = activeRegions.sort((a, b) => b.donations - a.donations)[0];
+    insights.push({
+      title: 'Regional Performance Leader',
+      description: `${topRegion.region} leads with $${topRegion.donations.toLocaleString()} in donations`,
+      impact: 'Medium',
+      recommendation: 'Replicate successful strategies from top-performing regions'
+    });
+  }
+
+  // Platform revenue insight
+  if (analyticsMetrics.platformRevenue > 200) {
+    insights.push({
+      title: 'Strong Platform Revenue',
+      description: `Platform generating $${analyticsMetrics.platformRevenue.toLocaleString()} through SmartFund fees`,
+      impact: 'High',
+      recommendation: 'Reinvest revenue in platform development and marketing'
+    });
+  }
+
+  // Conversion rate insight
+  if (analyticsMetrics.conversionRate > 10) {
+    insights.push({
+      title: 'Excellent Conversion Rate',
+      description: `${analyticsMetrics.conversionRate.toFixed(1)}% conversion rate shows strong user engagement`,
+      impact: 'High',
+      recommendation: 'Document and replicate high-converting user journeys'
+    });
+  } else if (analyticsMetrics.conversionRate > 5) {
+    insights.push({
+      title: 'Good Conversion Performance',
+      description: `${analyticsMetrics.conversionRate.toFixed(1)}% conversion rate is solid but has optimization potential`,
+      impact: 'Medium',
+      recommendation: 'A/B test donation flow improvements and calls-to-action'
+    });
+  } else {
+    insights.push({
+      title: 'Conversion Rate Optimization Needed',
+      description: `${analyticsMetrics.conversionRate.toFixed(1)}% conversion rate indicates user experience issues`,
+      impact: 'High',
+      recommendation: 'Conduct user research and optimize donation funnel immediately'
+    });
+  }
+
+  return insights.slice(0, 4); // Return top 4 insights
+};
 
 // Helper function to process real transactions into monthly breakdown
 const processTransactionsIntoMonths = (transactions: any[]) => {
@@ -1197,118 +1289,7 @@ export default function Analytics() {
 
         {/* Geographic Tab */}
         <TabsContent value="geographic" className="space-y-6">
-          {/* Geographic Distribution - Mobile Redesigned */}
-          <div className="space-y-3">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Geographic Distribution</h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">Platform reach and performance by region</p>
-            
-                {geographicData.map((region) => (
-              <Card key={region.region} className="overflow-hidden">
-                <CardContent className="p-0 sm:p-6">
-                  {/* Mobile Layout */}
-                  <div className="block sm:hidden">
-                    {/* Header Section */}
-                    <div className={`p-4 ${region.hasData 
-                      ? 'bg-gradient-to-r from-emerald-50 via-white to-emerald-50 dark:from-emerald-950/30 dark:via-slate-900 dark:to-emerald-950/30' 
-                      : 'bg-gradient-to-r from-gray-50 via-white to-gray-50 dark:from-gray-950/30 dark:via-slate-900 dark:to-gray-950/30'
-                    }`}>
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="flex items-center space-x-3">
-                          <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg ${region.hasData 
-                            ? 'bg-gradient-to-br from-emerald-500 to-green-600' 
-                            : 'bg-gradient-to-br from-gray-400 to-gray-500'
-                          }`}>
-                            <Globe className="h-7 w-7 text-white" />
-                          </div>
-                          <div>
-                            <h3 className="font-bold text-lg text-gray-900 dark:text-white">
-                              {region.region}
-                            </h3>
-                            <div className="text-sm text-gray-600 dark:text-gray-400">
-                              {region.hasData 
-                                ? `${region.shelters} shelters • ${region.participants} participants`
-                                : 'No data available'
-                              }
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      {/* Metrics Grid */}
-                      {region.hasData ? (
-                        <div className="grid grid-cols-2 gap-4">
-                          <div>
-                            <div className="text-sm font-medium text-gray-900 dark:text-white">Donations</div>
-                            <div className="text-xl font-bold text-emerald-600 dark:text-emerald-400">
-                              ${region.donations.toLocaleString()}
-                            </div>
-                          </div>
-                          <div>
-                            <div className="text-sm font-medium text-gray-900 dark:text-white">Growth</div>
-                            <div className={`flex items-center text-xl font-bold ${getGrowthColor(region.growth)}`}>
-                              {getGrowthIcon(region.growth)}
-                              <span className="ml-1">{region.growth}%</span>
-                            </div>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="text-center py-4">
-                          <div className="text-sm text-gray-500 dark:text-gray-400">
-                            Platform not yet available in this region
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Desktop Layout */}
-                  <div className="hidden sm:block">
-                    <div className="flex items-center justify-between p-6">
-                      <div className="flex items-center space-x-4">
-                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center shadow-sm ${region.hasData 
-                          ? 'bg-gradient-to-br from-emerald-500 to-green-600' 
-                          : 'bg-gradient-to-br from-gray-400 to-gray-500'
-                        }`}>
-                          <Globe className="h-6 w-6 text-white" />
-                        </div>
-                        <div>
-                          <div className="font-bold text-lg">{region.region}</div>
-                          <div className="text-sm text-gray-600 dark:text-gray-400">
-                            {region.hasData 
-                              ? `${region.shelters} shelters • ${region.participants} participants`
-                              : 'No data available'
-                            }
-                          </div>
-                        </div>
-                      </div>
-                    
-                      {region.hasData ? (
-                        <div className="flex items-center space-x-6">
-                          <div className="text-center">
-                            <div className="text-lg font-bold text-emerald-600 dark:text-emerald-400">${region.donations.toLocaleString()}</div>
-                            <div className="text-xs text-gray-500 dark:text-gray-400">Donations</div>
-                          </div>
-                          <div className={`text-center ${getGrowthColor(region.growth)}`}>
-                            <div className="flex items-center text-lg font-bold">
-                              {getGrowthIcon(region.growth)}
-                              <span className="ml-1">{region.growth}%</span>
-                            </div>
-                            <div className="text-xs text-gray-500 dark:text-gray-400">Growth</div>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="text-center">
-                          <div className="text-sm text-gray-500 dark:text-gray-400">
-                            Platform not yet available in this region
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-                ))}
-              </div>
+          <GeographicMap geographicData={geographicData} />
         </TabsContent>
 
         {/* Insights Tab */}
@@ -1318,7 +1299,7 @@ export default function Analytics() {
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">AI-Powered Insights</h3>
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">Data-driven recommendations for platform optimization</p>
             
-            {insights.map((insight, index) => {
+            {generateInsights(analyticsMetrics, geographicData, monthlyData).map((insight, index) => {
               const getInsightIcon = () => {
                 switch (insight.impact) {
                   case 'High': return <Zap className="h-6 w-6 text-white" />;

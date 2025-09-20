@@ -134,7 +134,10 @@ export default function KnowledgeDashboard() {
       return { color: 'bg-green-500', text: 'LIVE', icon: Zap };
     }
     
-    switch (doc.sharing_level) {
+    // Use sharing_level or fall back to access_level, default to 'public'
+    const sharingLevel = doc.sharing_level || doc.access_level || 'public';
+    
+    switch (sharingLevel) {
       case 'public':
         return { color: 'bg-blue-500', text: 'Public', icon: Globe };
       case 'shelter_specific':
@@ -143,13 +146,18 @@ export default function KnowledgeDashboard() {
         return { color: 'bg-red-500', text: 'Internal', icon: Shield };
       case 'role_based':
         return { color: 'bg-orange-500', text: 'Role-Based', icon: Users };
+      case 'internal': // Legacy support
+        return { color: 'bg-red-500', text: 'Internal', icon: Shield };
       default:
-        return { color: 'bg-gray-500', text: 'Unknown', icon: FileText };
+        return { color: 'bg-blue-500', text: 'Public', icon: Globe }; // Default to Public instead of Unknown
     }
   };
 
   const getConfidentialityBadge = (level: string) => {
-    switch (level) {
+    // Default to 'public' if level is undefined, null, or empty
+    const confidentialityLevel = level || 'public';
+    
+    switch (confidentialityLevel) {
       case 'public':
         return { color: 'bg-green-100 text-green-800', text: 'Public', icon: Globe };
       case 'internal':
@@ -159,7 +167,7 @@ export default function KnowledgeDashboard() {
       case 'restricted':
         return { color: 'bg-red-100 text-red-800', text: 'Restricted', icon: AlertTriangle };
       default:
-        return { color: 'bg-gray-100 text-gray-800', text: 'Unknown', icon: FileText };
+        return { color: 'bg-green-100 text-green-800', text: 'Public', icon: Globe }; // Default to Public instead of Unknown
     }
   };
 

@@ -70,6 +70,14 @@ export default function EditKnowledgeDocumentClient() {
   const loadDocument = async () => {
     try {
       setLoading(true);
+      setError(null);
+      
+      // Handle placeholder route from static generation
+      if (documentId === 'placeholder') {
+        setError('Please select a document from the Knowledge Base to edit.');
+        return;
+      }
+      
       const response = await knowledgeDashboardService.getKnowledgeDocument(documentId);
       const doc = response.data;
       
@@ -88,9 +96,17 @@ export default function EditKnowledgeDocumentClient() {
       };
       setFormData(initialFormData);
       setOriginalFormData(initialFormData);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error loading document:', error);
-      setError('Failed to load document');
+      
+      // Handle different types of errors
+      if (error?.message?.includes('404') || error?.message?.includes('not found')) {
+        setError(`Document with ID "${documentId}" was not found. It may have been deleted or you may not have permission to access it.`);
+      } else if (error?.message?.includes('403') || error?.message?.includes('unauthorized')) {
+        setError('You do not have permission to edit this document.');
+      } else {
+        setError('Failed to load document. Please check your connection and try again.');
+      }
     } finally {
       setLoading(false);
     }

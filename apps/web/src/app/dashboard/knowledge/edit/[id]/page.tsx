@@ -395,28 +395,6 @@ export default function EditKnowledgeDocument() {
             </CardContent>
           </Card>
 
-          {/* Content */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Document Content</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div>
-                <label className="text-sm font-medium">Content *</label>
-                <Textarea
-                  value={formData.content}
-                  onChange={(e) => setFormData({...formData, content: e.target.value})}
-                  placeholder="Enter document content (Markdown supported)"
-                  rows={20}
-                  className="mt-1 font-mono text-sm"
-                />
-                <p className="text-xs text-muted-foreground mt-2">
-                  Supports Markdown formatting. Changes will regenerate embeddings for the AI chatbot.
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-
           {/* Sharing & Publishing Controls */}
           <Card>
             <CardHeader>
@@ -580,6 +558,41 @@ export default function EditKnowledgeDocument() {
                   />
                 </div>
               )}
+
+              {/* Important Notice */}
+              <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
+                <div className="flex items-start gap-3">
+                  <AlertTriangle className="h-5 w-5 text-yellow-600 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <h4 className="font-medium text-yellow-900 dark:text-yellow-100">Important Notice</h4>
+                    <p className="text-sm text-yellow-700 dark:text-yellow-200 mt-1">
+                      Saving changes will regenerate embeddings and update the AI chatbot&apos;s knowledge base. This process may take a few minutes to complete.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Content */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Document Content</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div>
+                <label className="text-sm font-medium">Content *</label>
+                <Textarea
+                  value={formData.content}
+                  onChange={(e) => setFormData({...formData, content: e.target.value})}
+                  placeholder="Enter document content (Markdown supported)"
+                  rows={20}
+                  className="mt-1 font-mono text-sm"
+                />
+                <p className="text-xs text-muted-foreground mt-2">
+                  Supports Markdown formatting. Changes will regenerate embeddings for the AI chatbot.
+                </p>
+              </div>
             </CardContent>
           </Card>
 

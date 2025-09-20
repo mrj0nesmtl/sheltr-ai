@@ -347,3 +347,46 @@ export const formatRelativeTime = (date: Date): string => {
   
   return date.toLocaleDateString();
 };
+
+export interface AdminNotification {
+  id?: string;
+  type: 'user_signup' | 'donation' | 'contact_inquiry' | 'system_alert' | 'github_sync_required';
+  title: string;
+  message: string;
+  data?: any;
+  priority: 'low' | 'medium' | 'high';
+  read: boolean;
+  created_at: any;
+  target_roles?: string[];
+}
+
+/**
+ * Create a general admin notification
+ */
+const createAdminNotification = async (notification: Omit<AdminNotification, 'id' | 'read' | 'created_at'>): Promise<string> => {
+  try {
+    console.log('📢 Creating admin notification:', notification);
+
+    const notificationData = {
+      ...notification,
+      read: false,
+      created_at: serverTimestamp()
+    };
+
+    const docRef = await addDoc(collection(db, 'admin_notifications'), notificationData);
+    console.log('✅ Admin notification created with ID:', docRef.id);
+
+    return docRef.id;
+  } catch (error) {
+    console.error('❌ Error creating admin notification:', error);
+    throw error;
+  }
+};
+
+// Export the service with the new function
+export const notificationService = {
+  getNotificationCounts,
+  getRecentContactInquiries,
+  createContactInquiryNotification,
+  createAdminNotification
+};

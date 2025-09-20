@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Separator } from '@/components/ui/separator';
 import { 
   ArrowLeft,
   Save,
@@ -19,9 +18,7 @@ import {
   CheckCircle,
   XCircle,
   Clock,
-  Hash,
   BookOpen,
-  Eye,
   Globe,
   Lock,
   Users,
@@ -30,16 +27,27 @@ import {
   Sparkles
 } from 'lucide-react';
 import { knowledgeDashboardService, KnowledgeDocument } from '@/services/knowledgeDashboardService';
+import { useAuth } from '@/contexts/AuthContext';
+import { ChangeTracker, useChangeTracker } from '@/components/knowledge/ChangeTracker';
 
 export default function EditKnowledgeDocument() {
   const params = useParams();
   const router = useRouter();
+  const { user } = useAuth();
   const documentId = params.id as string;
 
   const [document, setDocument] = useState<KnowledgeDocument | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [originalFormData, setOriginalFormData] = useState<typeof formData | null>(null);
+
+  // Change tracking
+  const { trackChange } = useChangeTracker(
+    documentId,
+    document?.title || 'Unknown Document',
+    document?.file_path
+  );
 
   // Form state
   const [formData, setFormData] = useState({
@@ -57,7 +65,7 @@ export default function EditKnowledgeDocument() {
 
   useEffect(() => {
     loadDocument();
-  }, [documentId]);
+  }, [documentId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const loadDocument = async () => {
     try {
@@ -66,7 +74,7 @@ export default function EditKnowledgeDocument() {
       const doc = response.data;
       
       setDocument(doc);
-      setFormData({
+      const initialFormData = {
         title: doc.title,
         content: doc.content,
         category: doc.category,
@@ -77,7 +85,9 @@ export default function EditKnowledgeDocument() {
         access_roles: doc.access_roles || [],
         is_live: doc.is_live || false,
         confidentiality_level: doc.confidentiality_level || 'public'
-      });
+      };
+      setFormData(initialFormData);
+      setOriginalFormData(initialFormData);
     } catch (error) {
       console.error('Error loading document:', error);
       setError('Failed to load document');
@@ -90,8 +100,51 @@ export default function EditKnowledgeDocument() {
     try {
       setSaving(true);
       setError(null);
+
+      // Track changes before saving
+      if (originalFormData && user) {
+        const changes: { field: string; old_value: unknown; new_value: unknown }[] = [];
+        
+        // Compare form data with original
+        (Object.keys(formData) as Array<keyof typeof formData>).forEach(key => {
+          const oldValue = originalFormData[key];
+          const newValue = formData[key];
+          
+          // Handle array comparison
+          if (Array.isArray(oldValue) && Array.isArray(newValue)) {
+            if (JSON.stringify(oldValue) !== JSON.stringify(newValue)) {
+              changes.push({ field: String(key), old_value: oldValue, new_value: newValue });
+            }
+          } else if (oldValue !== newValue) {
+            changes.push({ field: String(key), old_value: oldValue, new_value: newValue });
+          }
+        });
+
+        // Track changes if any exist
+        if (changes.length > 0) {
+          // Determine change type
+          const contentFields = ['title', 'content', 'category'];
+          const publishingFields = ['is_live', 'status'];
+          const sharingFields = ['sharing_level', 'shared_with', 'access_roles', 'confidentiality_level'];
+          
+          let changeType: 'content' | 'metadata' | 'publishing' | 'sharing' = 'metadata';
+          
+          if (changes.some(c => contentFields.includes(c.field))) {
+            changeType = 'content';
+          } else if (changes.some(c => publishingFields.includes(c.field))) {
+            changeType = 'publishing';
+          } else if (changes.some(c => sharingFields.includes(c.field))) {
+            changeType = 'sharing';
+          }
+
+          await trackChange(changeType, changes);
+        }
+      }
       
       await knowledgeDashboardService.updateKnowledgeDocument(documentId, formData);
+      
+      // Update original form data to new values
+      setOriginalFormData({ ...formData });
       
       // Show success and redirect back
       router.push('/dashboard/knowledge');
@@ -324,6 +377,13 @@ export default function EditKnowledgeDocument() {
               </div>
             </CardContent>
           </Card>
+
+          {/* Change Tracking */}
+          <ChangeTracker
+            documentId={documentId}
+            documentTitle={document?.title || 'Unknown Document'}
+            documentPath={document?.file_path}
+          />
         </div>
 
         {/* Main Content Area */}
@@ -402,7 +462,6 @@ export default function EditKnowledgeDocument() {
             </CardContent>
           </Card>
 
-It would be awesome. If in the side column, we could have a little box that would track changes to the file in the UI and that could send a notification to the admit.          {/* Sharing & Publishing Controls */}
           <Card>
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2">
@@ -617,7 +676,7 @@ It would be awesome. If in the side column, we could have a little box that woul
             <div className="text-sm">
               <p className="font-medium text-yellow-800">Important Notice</p>
               <p className="text-yellow-700">
-                Saving changes will regenerate embeddings and update the AI chatbot's knowledge base. 
+                Saving changes will regenerate embeddings and update the AI chatbot&apos;s knowledge base. 
                 This process may take a few minutes to complete.
               </p>
             </div>

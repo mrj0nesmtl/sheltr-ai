@@ -25,7 +25,8 @@ import {
   MessageSquare,
   Target,
   DollarSign,
-  Globe
+  Globe,
+  ArrowLeft
 } from 'lucide-react';
 
 export default function DonorGuidePage() {
@@ -103,7 +104,7 @@ export default function DonorGuidePage() {
     },
     {
       title: 'SmartFund™ Distribution',
-      description: '85% direct, 10% housing fund, 5% shelter operations',
+      description: '80% direct, 15% housing fund, 5% platform operations',
       icon: Wallet,
       status: 'Transparent',
       link: '/tokenomics',
@@ -119,7 +120,7 @@ export default function DonorGuidePage() {
     },
     {
       title: 'Housing Impact',
-      description: '10% of every donation builds long-term housing solutions',
+      description: '15% of every donation builds long-term housing solutions',
       icon: Home,
       status: 'Long-term',
       link: '/impact',
@@ -181,6 +182,13 @@ export default function DonorGuidePage() {
       {/* Header */}
       <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <Link 
+            href="/docs" 
+            className="inline-flex items-center text-sm text-muted-foreground hover:text-primary mb-6 transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back to Documentation
+          </Link>
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center space-x-3 mb-4">
@@ -203,14 +211,18 @@ export default function DonorGuidePage() {
                 </Badge>
                 <Badge variant="secondary" className="bg-blue-100 text-blue-800">
                   <Clock className="h-3 w-3 mr-1" />
-                  August 2025
+                  September 2025
+                </Badge>
+                <Badge variant="secondary" className="bg-purple-100 text-purple-800">
+                  <Star className="h-3 w-3 mr-1" />
+                  LIVE PLATFORM
                 </Badge>
 
               </div>
             </div>
             <div className="text-right">
               <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                Version 1.4.0 • Revolutionary Giving Platform
+                Version 2.0 • Updated September 21, 2025
               </p>
               <Link href="/user-journeys/donors/">
                 <Button variant="outline" className="border-red-600 text-red-600 hover:bg-red-600 hover:text-white">
@@ -230,20 +242,20 @@ export default function DonorGuidePage() {
             <CardHeader>
               <CardTitle className="flex items-center space-x-2 text-blue-800 dark:text-blue-400">
                 <Wallet className="h-5 w-5" />
-                <span>The SmartFund™ Model (85-10-5)</span>
+                <span>The SmartFund™ Model (80-15-5)</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="text-center p-4 bg-white dark:bg-gray-800 rounded-lg border">
-                  <div className="text-4xl font-bold text-green-600 dark:text-green-400 mb-2">85%</div>
+                  <div className="text-4xl font-bold text-green-600 dark:text-green-400 mb-2">80%</div>
                   <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Direct Impact</h4>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
                     Goes directly to the participant you&apos;re supporting
                   </p>
                 </div>
                 <div className="text-center p-4 bg-white dark:bg-gray-800 rounded-lg border">
-                  <div className="text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2">10%</div>
+                  <div className="text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2">15%</div>
                   <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Housing Fund</h4>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
                     Builds long-term housing solutions for the community
@@ -251,14 +263,117 @@ export default function DonorGuidePage() {
                 </div>
                 <div className="text-center p-4 bg-white dark:bg-gray-800 rounded-lg border">
                   <div className="text-4xl font-bold text-purple-600 dark:text-purple-400 mb-2">5%</div>
-                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Shelter Support</h4>
+                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Platform Support</h4>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Supports the participant&apos;s registered shelter operations
+                    Supports platform operations and technology maintenance
                   </p>
                 </div>
               </div>
             </CardContent>
           </Card>
+        </div>
+
+        {/* Payment Methods & Security */}
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+            💰 Payment Methods & Security
+          </h2>
+          <div className="grid md:grid-cols-2 gap-8 mb-8">
+            <Card className="hover:shadow-lg transition-shadow duration-300">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Shield className="w-5 h-5 text-green-600" />
+                  Secure Payment Options
+                </CardTitle>
+                <CardDescription>
+                  Multiple secure payment methods with bank-level encryption
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                    <DollarSign className="w-5 h-5 text-blue-600" />
+                    <div>
+                      <div className="font-medium">Credit & Debit Cards</div>
+                      <div className="text-sm text-muted-foreground">Visa, Mastercard, American Express</div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                    <Wallet className="w-5 h-5 text-purple-600" />
+                    <div>
+                      <div className="font-medium">Digital Wallets</div>
+                      <div className="text-sm text-muted-foreground">Apple Pay, Google Pay, PayPal</div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                    <BarChart3 className="w-5 h-5 text-orange-600" />
+                    <div>
+                      <div className="font-medium">Bank Transfers</div>
+                      <div className="text-sm text-muted-foreground">ACH transfers for larger donations</div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                    <Globe className="w-5 h-5 text-green-600" />
+                    <div>
+                      <div className="font-medium">Cryptocurrency</div>
+                      <div className="text-sm text-muted-foreground">Bitcoin, Ethereum & major cryptos</div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="hover:shadow-lg transition-shadow duration-300">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Shield className="w-5 h-5 text-red-600" />
+                  Financial Security
+                </CardTitle>
+                <CardDescription>
+                  Your security is our paramount concern
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div className="flex items-start gap-2">
+                    <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <div className="font-medium">Bank-level encryption</div>
+                      <div className="text-sm text-muted-foreground">All transactions protected</div>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <div className="font-medium">PCI DSS compliance</div>
+                      <div className="text-sm text-muted-foreground">Payment processing standards</div>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <div className="font-medium">Secure tokenization</div>
+                      <div className="text-sm text-muted-foreground">We never store card numbers</div>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <div className="font-medium">Real-time fraud monitoring</div>
+                      <div className="text-sm text-muted-foreground">Alerts and protection</div>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <div className="font-medium">GDPR compliance</div>
+                      <div className="text-sm text-muted-foreground">Privacy law compliance</div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
 
         {/* Giving Features */}
@@ -618,28 +733,176 @@ export default function DonorGuidePage() {
           </div>
         </div>
 
+        {/* Safety & Best Practices */}
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+            ⚠️ Safety & Best Practices
+          </h2>
+          <div className="grid md:grid-cols-2 gap-8 mb-8">
+            <Card className="hover:shadow-lg transition-shadow duration-300 border-red-200 dark:border-red-800">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Shield className="w-5 h-5 text-red-600" />
+                  Safe Giving Guidelines
+                </CardTitle>
+                <CardDescription>
+                  Essential safety practices for all donor interactions
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div className="flex items-start gap-2">
+                    <CheckCircle className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <div className="font-medium">Use the QR code system</div>
+                      <div className="text-sm text-muted-foreground">Avoid cash transactions</div>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <CheckCircle className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <div className="font-medium">Meet in public areas</div>
+                      <div className="text-sm text-muted-foreground">Well-lit, safe locations only</div>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <CheckCircle className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <div className="font-medium">Don't share personal information</div>
+                      <div className="text-sm text-muted-foreground">Keep contact details private</div>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <CheckCircle className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <div className="font-medium">Report concerning behavior</div>
+                      <div className="text-sm text-muted-foreground">Use the app reporting system</div>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <CheckCircle className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <div className="font-medium">Trust your instincts</div>
+                      <div className="text-sm text-muted-foreground">Your safety comes first</div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="hover:shadow-lg transition-shadow duration-300 border-blue-200 dark:border-blue-800">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Target className="w-5 h-5 text-blue-600" />
+                  Responsible Giving
+                </CardTitle>
+                <CardDescription>
+                  Building sustainable giving habits
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div className="flex items-start gap-2">
+                    <CheckCircle className="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <div className="font-medium">Establish a monthly budget</div>
+                      <div className="text-sm text-muted-foreground">Set sustainable giving limits</div>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <CheckCircle className="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <div className="font-medium">Balance immediate & long-term</div>
+                      <div className="text-sm text-muted-foreground">Plan your giving strategy</div>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <CheckCircle className="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <div className="font-medium">It's okay to say no</div>
+                      <div className="text-sm text-muted-foreground">Don't give beyond your means</div>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <CheckCircle className="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <div className="font-medium">Regular small donations</div>
+                      <div className="text-sm text-muted-foreground">Often more impactful than large one-time gifts</div>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <CheckCircle className="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <div className="font-medium">Combine with advocacy</div>
+                      <div className="text-sm text-muted-foreground">Support policy changes too</div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="bg-amber-50 dark:bg-amber-900/20 rounded-lg p-6 border border-amber-200 dark:border-amber-800">
+            <h4 className="font-semibold text-amber-800 dark:text-amber-200 mb-4 flex items-center gap-2">
+              <HelpCircle className="w-5 h-5" />
+              Scam Prevention & Financial Protection
+            </h4>
+            <div className="grid md:grid-cols-2 gap-6 text-sm">
+              <div>
+                <h5 className="font-medium text-amber-800 dark:text-amber-200 mb-2">Financial Protection</h5>
+                <ul className="space-y-1 text-amber-700 dark:text-amber-300">
+                  <li>• Never give bank account information</li>
+                  <li>• Use secure payment methods through platform</li>
+                  <li>• Monitor donations and account activity</li>
+                  <li>• Report suspicious activity immediately</li>
+                </ul>
+              </div>
+              <div>
+                <h5 className="font-medium text-amber-800 dark:text-amber-200 mb-2">Scam Prevention</h5>
+                <ul className="space-y-1 text-amber-700 dark:text-amber-300">
+                  <li>• Verify QR codes lead to official SHELTR platform</li>
+                  <li>• Be cautious of requests outside the platform</li>
+                  <li>• Don't download apps from unofficial sources</li>
+                  <li>• Report fake QR codes or fraudulent requests</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Success Story */}
         <Card className="bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 border-green-200 dark:border-green-800 mb-8">
           <CardHeader>
             <CardTitle className="flex items-center space-x-2 text-green-800 dark:text-green-400">
               <Star className="h-5 w-5" />
-              <span>Donor Success Story</span>
+              <span>Donor Success Stories</span>
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <blockquote className="text-lg italic text-gray-700 dark:text-gray-300 mb-4">
-              &ldquo;I started with $10 donations and watched Sarah go from sleeping in her car to getting her own apartment. 
-              Seeing that transformation made me realize how powerful direct giving can be. The transparency of knowing 
-              exactly where my money goes and seeing real results has completely changed how I think about charity.&rdquo;
-            </blockquote>
-            <div className="flex items-center justify-between">
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                — Anonymous Donor, Seattle
-              </p>
-              <Button variant="outline" size="sm">
-                <ExternalLink className="h-4 w-4 mr-2" />
-                Read More Stories
-              </Button>
+            <div className="space-y-6">
+              <blockquote className="text-lg italic text-gray-700 dark:text-gray-300 mb-4">
+                &ldquo;I started with $10 donations and watched Sarah go from sleeping in her car to getting her own apartment. 
+                Seeing that transformation made me realize how powerful direct giving can be. The transparency of knowing 
+                exactly where my money goes and seeing real results has completely changed how I think about charity.&rdquo;
+              </blockquote>
+              <div className="flex items-center justify-between mb-4">
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  — Anonymous Donor, Seattle
+                </p>
+              </div>
+              
+              <blockquote className="text-lg italic text-gray-700 dark:text-gray-300 mb-4">
+                &ldquo;Our company started a monthly giving campaign through SHELTR. In one year, we helped 25 people find housing and our employees feel more connected to our community impact.&rdquo;
+              </blockquote>
+              <div className="flex items-center justify-between">
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  — Maria Rodriguez, Corporate Social Responsibility Manager
+                </p>
+                <Button variant="outline" size="sm">
+                  <ExternalLink className="h-4 w-4 mr-2" />
+                  Read More Stories
+                </Button>
+              </div>
             </div>
           </CardContent>
         </Card>

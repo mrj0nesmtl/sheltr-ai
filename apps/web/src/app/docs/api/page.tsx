@@ -49,15 +49,15 @@ export default function APIDocumentationPage() {
                 <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground mb-4">
                   <span>Version 2.16.0</span>
                   <span>•</span>
-                  <span>August 29, 2025</span>
+                  <span>Updated September 21, 2025</span>
                   <span>•</span>
-                  <span>Production Ready</span>
+                  <Badge className="bg-green-500 hover:bg-green-600 text-white text-xs">PRODUCTION READY</Badge>
                 </div>
                 
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                   <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/03-api/README.md" target="_blank" rel="noopener noreferrer">
                     <Button variant="outline">
-                      <Download className="h-4 h-4 mr-2" />
+                      <Download className="h-4 w-4 mr-2" />
                       View on GitHub
                     </Button>
                   </a>
@@ -119,7 +119,7 @@ export default function APIDocumentationPage() {
                 <CardContent>
                   <ul className="space-y-2 text-sm">
                     <li>• Firebase ID token authentication</li>
-                    <li>• 4-role access control system</li>
+                    <li>• 5-role access control system</li>
                     <li>• Multi-tenant data isolation</li>
                     <li>• CORS protection</li>
                     <li>• Real-time security monitoring</li>
@@ -128,19 +128,180 @@ export default function APIDocumentationPage() {
               </Card>
             </div>
 
+            {/* 5-Role System */}
+            <div className="mb-12">
+              <h2 className="text-3xl font-bold mb-8 text-center">🎯 5-Role Access Control System</h2>
+              <div className="grid md:grid-cols-5 gap-4 mb-8">
+                <Card className="text-center">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-lg">Super Admin</CardTitle>
+                    <CardDescription className="text-xs">Platform-wide access</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <Badge className="bg-red-500 text-white text-xs">Full Access</Badge>
+                    <p className="text-xs text-muted-foreground mt-2">All endpoints & operations</p>
+                  </CardContent>
+                </Card>
+                <Card className="text-center">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-lg">Platform Admin</CardTitle>
+                    <CardDescription className="text-xs">Cross-tenant management</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <Badge className="bg-purple-500 text-white text-xs">Admin Level</Badge>
+                    <p className="text-xs text-muted-foreground mt-2">Multi-tenant operations</p>
+                  </CardContent>
+                </Card>
+                <Card className="text-center">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-lg">Shelter Admin</CardTitle>
+                    <CardDescription className="text-xs">Shelter-specific data</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <Badge className="bg-blue-500 text-white text-xs">Tenant Access</Badge>
+                    <p className="text-xs text-muted-foreground mt-2">Shelter management</p>
+                  </CardContent>
+                </Card>
+                <Card className="text-center">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-lg">Participant</CardTitle>
+                    <CardDescription className="text-xs">Personal profile</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <Badge className="bg-green-500 text-white text-xs">User Access</Badge>
+                    <p className="text-xs text-muted-foreground mt-2">Own data & services</p>
+                  </CardContent>
+                </Card>
+                <Card className="text-center">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-lg">Donor</CardTitle>
+                    <CardDescription className="text-xs">Donation tracking</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <Badge className="bg-orange-500 text-white text-xs">Donor Access</Badge>
+                    <p className="text-xs text-muted-foreground mt-2">Impact & donations</p>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+
+            {/* API Endpoints */}
+            <div className="mb-12">
+              <h2 className="text-3xl font-bold mb-8 text-center">📚 API Endpoints</h2>
+              <div className="grid md:grid-cols-2 gap-8">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Code className="w-5 h-5 text-blue-600" />
+                      Authentication (/auth)
+                    </CardTitle>
+                    <CardDescription>User registration, login, and role management</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="space-y-2 text-sm">
+                      <li><code className="text-green-600">POST</code> /auth/register - Register new user</li>
+                      <li><code className="text-blue-600">GET</code> /auth/profile - Get user profile</li>
+                      <li><code className="text-orange-600">PUT</code> /auth/profile - Update profile</li>
+                      <li><code className="text-blue-600">GET</code> /auth/users - List users (admin)</li>
+                      <li><code className="text-orange-600">PUT</code> /auth/role/{user_id} - Update role</li>
+                    </ul>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Code className="w-5 h-5 text-green-600" />
+                      Analytics (/analytics)
+                    </CardTitle>
+                    <CardDescription>Platform and shelter analytics</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="space-y-2 text-sm">
+                      <li><code className="text-blue-600">GET</code> /analytics/platform - Platform metrics</li>
+                      <li><code className="text-blue-600">GET</code> /analytics/shelter/{id} - Shelter analytics</li>
+                      <li><code className="text-blue-600">GET</code> /analytics/user/{id} - User analytics</li>
+                      <li><code className="text-green-600">POST</code> /analytics/report - Custom reports</li>
+                    </ul>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Code className="w-5 h-5 text-purple-600" />
+                      Services (/services)
+                    </CardTitle>
+                    <CardDescription>Shelter service management</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="space-y-2 text-sm">
+                      <li><code className="text-blue-600">GET</code> /services/ - List services</li>
+                      <li><code className="text-green-600">POST</code> /services/ - Create service</li>
+                      <li><code className="text-orange-600">PUT</code> /services/{id} - Update service</li>
+                      <li><code className="text-red-600">DELETE</code> /services/{id} - Delete service</li>
+                    </ul>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Code className="w-5 h-5 text-orange-600" />
+                      Donations (/donations)
+                    </CardTitle>
+                    <CardDescription>Donation processing and tracking</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="space-y-2 text-sm">
+                      <li><code className="text-green-600">POST</code> /donations/create - Process donation</li>
+                      <li><code className="text-blue-600">GET</code> /donations/{id} - Get donation</li>
+                      <li><code className="text-blue-600">GET</code> /donations/participant/{id} - Participant donations</li>
+                      <li><code className="text-blue-600">GET</code> /donations/donor/{id} - Donor history</li>
+                    </ul>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+
             <div className="bg-muted/30 rounded-lg p-8 mb-12">
               <h3 className="text-2xl font-bold mb-4">Quick Start</h3>
-              <div className="bg-black rounded-lg p-4 mb-4">
+              <div className="bg-black rounded-lg p-4 mb-6">
                 <code className="text-green-400 text-sm">
-                  {`curl -X GET "https://sheltr-api-714964620823.us-central1.run.app/auth/profile" \\
+                  {`# Get user profile
+curl -X GET "https://sheltr-api-714964620823.us-central1.run.app/auth/profile" \\
   -H "Authorization: Bearer <firebase-id-token>" \\
-  -H "Content-Type: application/json"`}
+  -H "Content-Type: application/json"
+
+# Standard API Response
+{
+  "success": true,
+  "data": { /* Response data */ },
+  "message": "Operation completed successfully",
+  "timestamp": 1691827200.0
+}`}
                 </code>
               </div>
-              <p className="text-sm text-muted-foreground">
-                Get started with the SHELTR API using Firebase ID token authentication. 
-                Interactive documentation available at <code className="text-blue-400">/docs</code> endpoint.
-              </p>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <h4 className="font-semibold mb-2">Production Environment</h4>
+                  <p className="text-sm text-muted-foreground mb-2">
+                    <strong>Base URL:</strong> <code className="text-blue-600">https://sheltr-api-714964620823.us-central1.run.app</code>
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    <strong>Authentication:</strong> Firebase ID tokens required for all endpoints
+                  </p>
+                </div>
+                <div>
+                  <h4 className="font-semibold mb-2">Development Environment</h4>
+                  <p className="text-sm text-muted-foreground mb-2">
+                    <strong>Base URL:</strong> <code className="text-blue-600">http://localhost:8000</code>
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    Interactive documentation available at <code className="text-blue-600">/docs</code> endpoint
+                  </p>
+                </div>
+              </div>
             </div>
 
             <div className="text-center">

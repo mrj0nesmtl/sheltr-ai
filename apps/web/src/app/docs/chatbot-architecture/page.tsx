@@ -49,7 +49,9 @@ export default function ChatbotArchitecturePage() {
                 <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground mb-4">
                   <span>Version 1.0.0</span>
                   <span>•</span>
-                  <span>August 22, 2025</span>
+                  <span>Updated September 21, 2025</span>
+                  <span>•</span>
+                  <Badge className="bg-green-500 hover:bg-green-600 text-white text-xs">ACTIVE DEVELOPMENT</Badge>
                 </div>
                 
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
@@ -149,37 +151,234 @@ export default function ChatbotArchitecturePage() {
               </Card>
             </div>
 
+            {/* Agent Responsibilities Matrix */}
+            <div className="mb-12">
+              <h2 className="text-3xl font-bold mb-8 text-center">🎯 Agent Responsibilities Matrix</h2>
+              
+              {/* Public-Facing Agents */}
+              <div className="mb-8">
+                <h3 className="text-2xl font-bold mb-6">Public-Facing Agents (Orchestrator)</h3>
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse border border-gray-300 dark:border-gray-700">
+                    <thead>
+                      <tr className="bg-gray-50 dark:bg-gray-800">
+                        <th className="border border-gray-300 dark:border-gray-700 px-4 py-2 text-left">Agent</th>
+                        <th className="border border-gray-300 dark:border-gray-700 px-4 py-2 text-left">Primary Users</th>
+                        <th className="border border-gray-300 dark:border-gray-700 px-4 py-2 text-left">Key Functions</th>
+                        <th className="border border-gray-300 dark:border-gray-700 px-4 py-2 text-left">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2 font-medium">emergency</td>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">Crisis situations</td>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">Crisis intervention, safety resources</td>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">
+                          <Badge className="bg-green-500 text-white text-xs">✅ Active</Badge>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2 font-medium">participant_support</td>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">Homeless individuals</td>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">Service booking, resource navigation</td>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">
+                          <Badge className="bg-green-500 text-white text-xs">✅ Active</Badge>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2 font-medium">donor_relations</td>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">Donors</td>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">SmartFund™ explanation, impact tracking</td>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">
+                          <Badge className="bg-green-500 text-white text-xs">✅ Active</Badge>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2 font-medium">public_information</td>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">General public</td>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">Platform education, SmartFund™ model</td>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">
+                          <Badge className="bg-green-500 text-white text-xs">✅ Active</Badge>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2 font-medium">public_support</td>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">New users</td>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">Getting started, donation guidance</td>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">
+                          <Badge className="bg-green-500 text-white text-xs">✅ Active</Badge>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2 font-medium">shelter_operations</td>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">Shelter admins</td>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">Participant management, reporting</td>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">
+                          <Badge className="bg-green-500 text-white text-xs">✅ Active</Badge>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2 font-medium">technical_support</td>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">All users</td>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">Platform issues, account problems</td>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">
+                          <Badge className="bg-green-500 text-white text-xs">✅ Active</Badge>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Admin-Facing Agents */}
+              <div className="mb-8">
+                <h3 className="text-2xl font-bold mb-6">Admin-Facing Agents (Control Panel)</h3>
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse border border-gray-300 dark:border-gray-700">
+                    <thead>
+                      <tr className="bg-gray-50 dark:bg-gray-800">
+                        <th className="border border-gray-300 dark:border-gray-700 px-4 py-2 text-left">Agent</th>
+                        <th className="border border-gray-300 dark:border-gray-700 px-4 py-2 text-left">Primary Use</th>
+                        <th className="border border-gray-300 dark:border-gray-700 px-4 py-2 text-left">Key Functions</th>
+                        <th className="border border-gray-300 dark:border-gray-700 px-4 py-2 text-left">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2 font-medium">general</td>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">General assistance</td>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">Various tasks, Q&A</td>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">
+                          <Badge className="bg-green-500 text-white text-xs">✅ Active</Badge>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2 font-medium">sheltr_support</td>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">Platform support</td>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">SHELTR-specific help</td>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">
+                          <Badge className="bg-green-500 text-white text-xs">✅ Active</Badge>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2 font-medium">technical_expert</td>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">Development support</td>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">Technical guidance, architecture</td>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">
+                          <Badge className="bg-green-500 text-white text-xs">✅ Active</Badge>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2 font-medium">business_analyst</td>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">Strategy support</td>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">Business insights, analytics</td>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">
+                          <Badge className="bg-green-500 text-white text-xs">✅ Active</Badge>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2 font-medium">creative_writer</td>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">Content creation</td>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">Writing assistance, marketing</td>
+                        <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">
+                          <Badge className="bg-green-500 text-white text-xs">✅ Active</Badge>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            {/* System Comparison */}
+            <div className="mb-12">
+              <h2 className="text-3xl font-bold mb-8 text-center">🔄 System Architecture Comparison</h2>
+              <div className="overflow-x-auto">
+                <table className="w-full border-collapse border border-gray-300 dark:border-gray-700">
+                  <thead>
+                    <tr className="bg-gray-50 dark:bg-gray-800">
+                      <th className="border border-gray-300 dark:border-gray-700 px-4 py-2 text-left">Aspect</th>
+                      <th className="border border-gray-300 dark:border-gray-700 px-4 py-2 text-left">Orchestrator Agents</th>
+                      <th className="border border-gray-300 dark:border-gray-700 px-4 py-2 text-left">Control Panel Agents</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className="border border-gray-300 dark:border-gray-700 px-4 py-2 font-medium">Configuration</td>
+                      <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">Hardcoded in prompts.py</td>
+                      <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">Configurable via UI</td>
+                    </tr>
+                    <tr>
+                      <td className="border border-gray-300 dark:border-gray-700 px-4 py-2 font-medium">Purpose</td>
+                      <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">Public user support</td>
+                      <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">Super Admin tooling</td>
+                    </tr>
+                    <tr>
+                      <td className="border border-gray-300 dark:border-gray-700 px-4 py-2 font-medium">Persistence</td>
+                      <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">Session-based</td>
+                      <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">Full conversation history</td>
+                    </tr>
+                    <tr>
+                      <td className="border border-gray-300 dark:border-gray-700 px-4 py-2 font-medium">Model Selection</td>
+                      <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">Fixed per agent</td>
+                      <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">User-selectable</td>
+                    </tr>
+                    <tr>
+                      <td className="border border-gray-300 dark:border-gray-700 px-4 py-2 font-medium">Knowledge Base</td>
+                      <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">RAG-enhanced</td>
+                      <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">Configurable per agent</td>
+                    </tr>
+                    <tr>
+                      <td className="border border-gray-300 dark:border-gray-700 px-4 py-2 font-medium">Access</td>
+                      <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">Public users</td>
+                      <td className="border border-gray-300 dark:border-gray-700 px-4 py-2">Super Admin only</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
             <div className="bg-muted/30 rounded-lg p-8 mb-12">
               <h3 className="text-2xl font-bold mb-4">System Integration</h3>
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <h4 className="font-semibold mb-3">Firebase Storage Status</h4>
                   <ul className="space-y-2 text-sm">
-                    <li>• <strong>Knowledge Base:</strong> ✅ 10 documents loaded</li>
+                    <li>• <strong>Knowledge Base:</strong> ✅ 10+ documents loaded</li>
                     <li>• <strong>Storage Bucket:</strong> gs://sheltr-ai.firebasestorage.app</li>
                     <li>• <strong>Collections:</strong> knowledge_documents, knowledge_chunks</li>
-                    <li>• <strong>Embeddings:</strong> 62+ embedding chunks for chatbot RAG</li>
+                    <li>• <strong>Embeddings:</strong> 100+ embedding chunks for RAG</li>
                   </ul>
                 </div>
                 <div>
-                  <h4 className="font-semibold mb-3">Current Status</h4>
+                  <h4 className="font-semibold mb-3">Technical Implementation</h4>
                   <ul className="space-y-2 text-sm">
-                    <li>• <strong>Public Chatbot:</strong> 🟡 All 7 agents in development</li>
-                    <li>• <strong>Super Admin Control Panel:</strong> 🟡 All 5 configurable agents in development</li>
-                    <li>• <strong>Model Integration:</strong> 🟡 OpenAI GPT-4o and GPT-4o Mini in development</li>
-                    <li>• <strong>Session Management:</strong> 🟡 Chat sessions persisting correctly</li>
+                    <li>• <strong>Orchestrator:</strong> apps/api/services/chatbot/orchestrator.py</li>
+                    <li>• <strong>Control Panel:</strong> apps/web/src/app/dashboard/chatbots/page.tsx</li>
+                    <li>• <strong>Models:</strong> GPT-4o, GPT-4o Mini, Claude (configurable)</li>
+                    <li>• <strong>RAG System:</strong> Real-time knowledge enhancement</li>
                   </ul>
                 </div>
               </div>
             </div>
 
-            <div className="bg-green-50 dark:bg-green-900/20 border-l-4 border-green-500 p-4 mb-12">
-              <h3 className="text-green-800 dark:text-green-200 font-semibold mb-2">🟡 Current Status: All Systems in Development</h3>
-              <p className="text-green-700 dark:text-green-300 text-sm">
-                <strong>Public Orchestrator System</strong>: 7 specialized agents for public users with RAG enhancement<br/>
-                <strong>Admin Control Panel System</strong>: 5 configurable agents for Super Admin with model selection<br/>
-                <strong>Knowledge Base Integration</strong>: Both systems share the same Firebase Storage knowledge base
+            <div className="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 p-4 mb-12">
+              <h3 className="text-blue-800 dark:text-blue-200 font-semibold mb-2">🚀 Current Status: Multi-Agent System Active</h3>
+              <p className="text-blue-700 dark:text-blue-300 text-sm mb-4">
+                <strong>Public Orchestrator System</strong>: ✅ 7 specialized agents operational with intent classification and role-based routing<br/>
+                <strong>Admin Control Panel System</strong>: ✅ 5 configurable agents with real-time model switching (GPT-4o, GPT-4o Mini, Claude)<br/>
+                <strong>Knowledge Base Integration</strong>: ✅ RAG enhancement with 100+ document chunks for contextual responses<br/>
+                <strong>Session Management</strong>: ✅ Persistent conversations with full history tracking for admin agents
               </p>
+              <div className="bg-amber-50 dark:bg-amber-900/20 rounded p-3 border border-amber-200 dark:border-amber-800">
+                <h4 className="text-amber-800 dark:text-amber-200 font-medium mb-2">🔧 Technical Architecture</h4>
+                <div className="text-amber-700 dark:text-amber-300 text-xs space-y-1">
+                  <div><strong>Orchestrator Location:</strong> <code>apps/api/services/chatbot/orchestrator.py</code></div>
+                  <div><strong>Control Panel Location:</strong> <code>apps/web/src/app/dashboard/chatbots/page.tsx</code></div>
+                  <div><strong>Knowledge Enhancement:</strong> Firebase Firestore with vector embeddings</div>
+                  <div><strong>Model Support:</strong> OpenAI GPT-4o/Mini, Anthropic Claude (configurable)</div>
+                </div>
+              </div>
             </div>
 
             <div className="text-center">

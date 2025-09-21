@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import { 
   ArrowLeft, 
-  Download, 
   ExternalLink, 
   Building, 
   Users, 
@@ -37,8 +36,8 @@ export default function WebsiteArchitecturePage() {
       url: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/website-architecture.md#-complete-site-tree"
     },
     {
-      title: "Role-Based Access Matrix",
-      description: "Comprehensive permissions table for Super Admin, Shelter Admin, Participant, and Donor roles",
+      title: "5-Role Access Matrix",
+      description: "Comprehensive permissions table for Super Admin, Platform Admin, Shelter Admin, Participant, and Donor roles",
       icon: Shield,
       topics: ["Access Control", "Permission Levels", "Security Boundaries", "Role Inheritance"],
       url: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/website-architecture.md#-role-based-access-matrix"
@@ -82,11 +81,12 @@ export default function WebsiteArchitecturePage() {
 
   const keyFeatures = [
     "📱 Mobile-first design standards with Apple Liquid Glass aesthetics",
-    "🔐 Complete 4-role authentication system testing framework",
-    "🌳 Visual site tree mapping all public and authenticated pages", 
+    "🔐 Complete 5-role authentication system testing framework",
+    "🌳 Visual site tree mapping 50+ public and authenticated pages", 
     "✅ 100+ comprehensive test cases prioritized by criticality",
-    "🎯 Role-based feature matrix ensuring proper access control",
+    "🎯 Role-based access matrix ensuring proper security boundaries",
     "⚙️ Business logic testing for service booking and form persistence",
+    "🏠 Complete ecosystem testing (Gallery, Blog, Knowledge Base, Financial)",
     "📊 Performance KPIs and deployment readiness metrics",
     "🚀 Production-ready QA framework for enterprise deployment"
   ];
@@ -175,10 +175,10 @@ export default function WebsiteArchitecturePage() {
             <div>
               <Badge className="bg-indigo-500 hover:bg-indigo-600 mb-2">Platform Framework</Badge>
               <h1 className="text-4xl font-bold text-foreground mb-2">
-                Website Architecture & Platform Guide
+                Platform Architecture & QA Framework
               </h1>
               <p className="text-xl text-muted-foreground">
-                Complete site structure, role-based features, and comprehensive platform framework
+                Complete site structure, 5-role access matrix, and enterprise-grade quality assurance testing framework
               </p>
             </div>
           </div>
@@ -191,7 +191,7 @@ export default function WebsiteArchitecturePage() {
             </div>
             <div className="flex items-center text-sm text-muted-foreground">
               <CheckCircle className="w-4 h-4 mr-2" />
-              Updated August 4, 2025
+              Updated September 21, 2025
             </div>
           </div>
 
@@ -286,9 +286,9 @@ export default function WebsiteArchitecturePage() {
               <Card className="text-center">
                 <CardHeader>
                   <Shield className="w-12 h-12 mx-auto mb-4 text-purple-600" />
-                  <CardTitle>4-Role System</CardTitle>
+                  <CardTitle>5-Role RBAC System</CardTitle>
                   <CardDescription>
-                    Complete access control matrix for all stakeholder types
+                    Complete access control matrix including Platform Administrator role
                   </CardDescription>
                 </CardHeader>
               </Card>

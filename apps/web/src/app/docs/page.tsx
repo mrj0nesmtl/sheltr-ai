@@ -22,7 +22,9 @@ import {
   Send,
   MessageSquare,
   CheckSquare,
-  BookOpen
+  BookOpen,
+  Eye,
+  Github
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -79,10 +81,10 @@ export default function DocsPage() {
       topics: ["Theory of Change", "Market Analysis", "Social Impact", "Investment Thesis", "Implementation Roadmap"],
       link: "/docs/hacking-homelessness",
       downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/01-overview/hacking_homelessness.md",
-      lastUpdated: "July 20, 2025"
+      lastUpdated: "September 21, 2025"
     },
     {
-      title: "SHELTR Platform Architecture",
+      title: "Platform Architecture",
       description: "Complete site structure, role-based features, and comprehensive quality assurance testing framework",
       icon: Building,
       badge: "QA Framework",
@@ -103,7 +105,7 @@ export default function DocsPage() {
       topics: ["Dual-Token Economics", "Smart Contract Architecture", "Base Network Integration", "Security Framework", "Financial Projections"],
       link: "/docs/whitepaper",
       downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/whitepaper_final.md",
-      lastUpdated: "January 25, 2025"
+      lastUpdated: "September 25, 2025"
     },
     {
       title: "Blockchain Architecture",
@@ -405,7 +407,7 @@ export default function DocsPage() {
 
           <div className="grid lg:grid-cols-1 gap-6 max-w-5xl mx-auto">
             {coreDocuments.map((doc, index) => (
-              <Card key={index} className="border-2 border-gray-200 dark:border-gray-800 hover:border-primary/50 dark:hover:border-primary/70 hover:shadow-xl transition-all duration-300 bg-gradient-to-r from-slate-50 to-gray-50 dark:from-slate-900 dark:to-gray-900">
+              <Card key={index} className="border-2 border-gray-400 dark:border-gray-600 hover:border-primary/80 dark:hover:border-primary/90 hover:shadow-2xl transition-all duration-300 bg-gradient-to-r from-slate-50 to-gray-50 dark:from-slate-900 dark:to-gray-900 shadow-md">
                 <CardHeader className="pb-4">
                   {/* Mobile Layout */}
                   <div className="block sm:hidden space-y-4">
@@ -505,7 +507,7 @@ export default function DocsPage() {
                     <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4 border-t">
                       <Link href={doc.link} className="flex-1">
                         <Button className="w-full h-10 sm:h-12 text-sm sm:text-base bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200">
-                          <FileText className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
+                          <Eye className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
                           <span className="hidden sm:inline">View Online</span>
                           <span className="sm:hidden">View</span>
                         </Button>
@@ -521,7 +523,7 @@ export default function DocsPage() {
                       ) : (
                         <a href={doc.downloadLink} target="_blank" rel="noopener noreferrer" className="flex-1">
                           <Button variant="outline" className="w-full h-10 sm:h-12 text-sm sm:text-base border-2 border-black text-black hover:bg-black hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black">
-                            <Download className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
+                            <Github className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
                             <span className="hidden sm:inline">View on GitHub</span>
                             <span className="sm:hidden">GitHub</span>
                           </Button>
@@ -548,7 +550,7 @@ export default function DocsPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {additionalResources.map((resource, index) => (
-              <Card key={index} className="border-2 border-gray-200 dark:border-gray-800 hover:border-primary/50 dark:hover:border-primary/70 hover:shadow-lg transition-all duration-300 bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-gray-800">
+              <Card key={index} className="border-2 border-gray-400 dark:border-gray-600 hover:border-primary/80 dark:hover:border-primary/90 hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-gray-800 shadow-md">
                 <CardHeader className="pb-3">
                   <div className="flex items-center justify-between mb-3">
                     <div className="w-10 h-10 bg-gradient-to-br from-primary/20 to-primary/10 rounded-lg flex items-center justify-center">

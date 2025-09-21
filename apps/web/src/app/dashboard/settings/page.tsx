@@ -3,6 +3,7 @@
 import { useAuth } from '@/contexts/AuthContext';
 import { useEffect, useState } from 'react';
 import { SystemSettingsService } from '@/services/systemSettingsService';
+import { SystemHealthService, SystemHealthMetrics } from '@/services/systemHealthService';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -16,29 +17,24 @@ import {
   Database, 
   Shield, 
   Mail, 
-  Bell,
   Users,
-  Building,
   Globe,
-  Lock,
   Key,
-  Server,
   AlertCircle,
   CheckCircle,
   Save,
   RefreshCw,
-  Monitor,
-  Smartphone,
   Code,
-  FileText,
   Zap,
   Activity,
   User,
   Camera,
-  Phone,
   Calendar,
   MapPin,
-  Briefcase
+  Bot,
+  Brain,
+  Wifi,
+  HardDrive
 } from 'lucide-react';
 
 export default function SystemSettingsPage() {
@@ -47,6 +43,8 @@ export default function SystemSettingsPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
+  const [systemHealth, setSystemHealth] = useState<SystemHealthMetrics | null>(null);
+  const [healthLoading, setHealthLoading] = useState(true);
 
   // Mock settings state - would be replaced with real API calls
   const [generalSettings, setGeneralSettings] = useState({
@@ -112,6 +110,21 @@ export default function SystemSettingsPage() {
 
   const [avatarUploadOpen, setAvatarUploadOpen] = useState(false);
 
+  // Function to load system health metrics
+  const loadSystemHealth = async () => {
+    try {
+      setHealthLoading(true);
+      console.log('🏥 Loading system health metrics...');
+      const health = await SystemHealthService.getSystemHealth();
+      setSystemHealth(health);
+      console.log('✅ System health loaded:', health);
+    } catch (error) {
+      console.error('❌ Error loading system health:', error);
+    } finally {
+      setHealthLoading(false);
+    }
+  };
+
   // Load settings on component mount
   useEffect(() => {
     const loadSettings = async () => {
@@ -143,6 +156,7 @@ export default function SystemSettingsPage() {
     };
     
     loadSettings();
+    loadSystemHealth();
   }, [user?.uid]);
 
   const handleSaveSettings = async (settingsType: string) => {
@@ -266,6 +280,20 @@ export default function SystemSettingsPage() {
           </p>
         </div>
         <div className="flex items-center space-x-3">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => loadSystemHealth()}
+            disabled={healthLoading}
+            className="flex items-center space-x-2"
+          >
+            {healthLoading ? (
+              <RefreshCw className="w-4 h-4 animate-spin" />
+            ) : (
+              <RefreshCw className="w-4 h-4" />
+            )}
+            <span>Refresh Status</span>
+          </Button>
           {saveStatus === 'saved' && (
             <Badge className="bg-green-500 text-white">
               <CheckCircle className="w-3 h-3 mr-1" />
@@ -281,61 +309,193 @@ export default function SystemSettingsPage() {
         </div>
       </div>
 
-      {/* System Status Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Platform Status</CardTitle>
-            <Activity className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center space-x-2">
-              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-              <span className="text-sm font-medium">Operational</span>
-            </div>
-            <p className="text-xs text-muted-foreground mt-1">99.9% uptime</p>
-          </CardContent>
-        </Card>
+      {/* System Health Status Cards */}
+      {healthLoading ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
+          {[...Array(8)].map((_, i) => (
+            <Card key={i} className="animate-pulse">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <div className="h-4 bg-gray-200 rounded w-20"></div>
+                <div className="h-4 w-4 bg-gray-200 rounded"></div>
+              </CardHeader>
+              <CardContent>
+                <div className="h-4 bg-gray-200 rounded w-16 mb-1"></div>
+                <div className="h-3 bg-gray-200 rounded w-24"></div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
+          {/* Platform Status */}
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Platform Status</CardTitle>
+              <Activity className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center space-x-2">
+                <div className={`w-2 h-2 rounded-full ${
+                  systemHealth?.platform.status === 'operational' ? 'bg-green-500' :
+                  systemHealth?.platform.status === 'degraded' ? 'bg-yellow-500' : 'bg-red-500'
+                }`}></div>
+                <span className="text-sm font-medium capitalize">
+                  {systemHealth?.platform.status || 'Operational'}
+                </span>
+              </div>
+              <p className="text-xs text-muted-foreground mt-1">
+                {systemHealth?.platform.uptime || '99.9%'} uptime
+              </p>
+            </CardContent>
+          </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Database</CardTitle>
-            <Database className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center space-x-2">
-              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-              <span className="text-sm font-medium">Connected</span>
-            </div>
-            <p className="text-xs text-muted-foreground mt-1">Firestore active</p>
-          </CardContent>
-        </Card>
+          {/* Database Status */}
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Database</CardTitle>
+              <HardDrive className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center space-x-2">
+                <div className={`w-2 h-2 rounded-full ${
+                  systemHealth?.database.status === 'connected' ? 'bg-green-500' :
+                  systemHealth?.database.status === 'degraded' ? 'bg-yellow-500' : 'bg-red-500'
+                }`}></div>
+                <span className="text-sm font-medium capitalize">
+                  {systemHealth?.database.status || 'Connected'}
+                </span>
+              </div>
+              <p className="text-xs text-muted-foreground mt-1">
+                {systemHealth?.database.totalDocuments || 0} documents
+              </p>
+            </CardContent>
+          </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Security</CardTitle>
-            <Shield className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center space-x-2">
-              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-              <span className="text-sm font-medium">Protected</span>
-            </div>
-            <p className="text-xs text-muted-foreground mt-1">SSL enabled</p>
-          </CardContent>
-        </Card>
+          {/* AI Chatbot Status */}
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">AI Chatbot</CardTitle>
+              <Bot className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center space-x-2">
+                <div className={`w-2 h-2 rounded-full ${
+                  systemHealth?.aiChatbot.status === 'active' ? 'bg-green-500' :
+                  systemHealth?.aiChatbot.status === 'starting' ? 'bg-yellow-500' : 'bg-red-500'
+                }`}></div>
+                <span className="text-sm font-medium capitalize">
+                  {systemHealth?.aiChatbot.status || 'Starting'}
+                </span>
+              </div>
+              <p className="text-xs text-muted-foreground mt-1">
+                {systemHealth?.aiChatbot.activeConnections || 0} active connections
+              </p>
+            </CardContent>
+          </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Version</CardTitle>
-            <Code className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-sm font-medium">v{generalSettings.platformVersion}</div>
-            <p className="text-xs text-muted-foreground mt-1">Latest stable</p>
-          </CardContent>
-        </Card>
-      </div>
+          {/* Knowledge Base Status */}
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Knowledge Base</CardTitle>
+              <Brain className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center space-x-2">
+                <div className={`w-2 h-2 rounded-full ${
+                  systemHealth?.knowledgeBase.status === 'ready' ? 'bg-green-500' :
+                  systemHealth?.knowledgeBase.status === 'syncing' ? 'bg-yellow-500' : 'bg-red-500'
+                }`}></div>
+                <span className="text-sm font-medium capitalize">
+                  {systemHealth?.knowledgeBase.status || 'Ready'}
+                </span>
+              </div>
+              <p className="text-xs text-muted-foreground mt-1">
+                {systemHealth?.knowledgeBase.totalDocuments || 0} documents
+              </p>
+            </CardContent>
+          </Card>
+
+          {/* API Performance */}
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">API Performance</CardTitle>
+              <Zap className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center space-x-2">
+                <div className={`w-2 h-2 rounded-full ${
+                  systemHealth?.api.status === 'operational' ? 'bg-green-500' :
+                  systemHealth?.api.status === 'slow' ? 'bg-yellow-500' : 'bg-red-500'
+                }`}></div>
+                <span className="text-sm font-medium">
+                  {systemHealth?.api.responseTime || 0}ms
+                </span>
+              </div>
+              <p className="text-xs text-muted-foreground mt-1">
+                {systemHealth?.api.uptime || 99.9}% uptime
+              </p>
+            </CardContent>
+          </Card>
+
+          {/* Security Status */}
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Security</CardTitle>
+              <Shield className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center space-x-2">
+                <div className={`w-2 h-2 rounded-full ${
+                  systemHealth?.security.status === 'protected' ? 'bg-green-500' :
+                  systemHealth?.security.status === 'warning' ? 'bg-yellow-500' : 'bg-red-500'
+                }`}></div>
+                <span className="text-sm font-medium capitalize">
+                  {systemHealth?.security.status || 'Protected'}
+                </span>
+              </div>
+              <p className="text-xs text-muted-foreground mt-1">
+                {systemHealth?.security.encryptionLevel || 'AES-256'}
+              </p>
+            </CardContent>
+          </Card>
+
+          {/* Integrations Status */}
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Integrations</CardTitle>
+              <Wifi className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center space-x-2">
+                <div className={`w-2 h-2 rounded-full ${
+                  (systemHealth?.integrations.firebase && systemHealth?.integrations.openai) ? 'bg-green-500' :
+                  (systemHealth?.integrations.firebase || systemHealth?.integrations.openai) ? 'bg-yellow-500' : 'bg-red-500'
+                }`}></div>
+                <span className="text-sm font-medium">
+                  {Object.values(systemHealth?.integrations || {}).filter(Boolean).length} / {Object.keys(systemHealth?.integrations || {}).length} Active
+                </span>
+              </div>
+              <p className="text-xs text-muted-foreground mt-1">
+                Firebase, OpenAI, Email
+              </p>
+            </CardContent>
+          </Card>
+
+          {/* Platform Version */}
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Version</CardTitle>
+              <Code className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-sm font-medium">
+                v{systemHealth?.platform.version || generalSettings.platformVersion}
+              </div>
+              <p className="text-xs text-muted-foreground mt-1">Latest stable</p>
+            </CardContent>
+          </Card>
+        </div>
+      )}
 
       {/* Settings Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
@@ -1005,7 +1165,6 @@ export default function SystemSettingsPage() {
                 </div>
                 <FileUpload
                   uploadType="profile"
-                  maxFiles={1}
                   maxSize={5 * 1024 * 1024} // 5MB
                   onUploadComplete={(files) => {
                     console.log('Avatar uploaded:', files);

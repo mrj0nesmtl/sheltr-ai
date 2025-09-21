@@ -1,6 +1,6 @@
 # 📚 SHELTR Documentation
 
-Welcome to the SHELTR platform documentation. This comprehensive guide covers all aspects of the platform from architecture to user guides.
+Welcome to the SHELTR platform documentation. This comprehensive guide covers all aspects of the platform from architecture to user guides, including our new blog system and AI-powered knowledge base.
 
 ## 🗂️ Documentation Structure
 
@@ -11,7 +11,7 @@ Project introduction, mission, and getting started guides.
 Technical architecture, system design, blockchain documentation, and SHELTR ecosystem components (PODS, MOBI, Drones).
 
 ### 🔌 [03-api/](03-api/)
-API documentation, schemas, and integration guides.
+API documentation, schemas, blog system API, knowledge base endpoints, and integration guides.
 
 ### 💻 [04-development/](04-development/)
 Development guides, standards, and processes.
@@ -44,9 +44,11 @@ Additional resources, templates, and guidelines.
 ## 🔗 External Links
 
 - [Live Platform](https://sheltr-ai.web.app)
+- [Production Blog](https://sheltr-ai.web.app/blog/)
 - [GitHub Repository](https://github.com/mrj0nesmtl/sheltr-ai)
 - [API Documentation](https://sheltr-ai.web.app/docs/api)
+- [Knowledge Base Dashboard](https://sheltr-ai.web.app/dashboard/knowledge)
 
 ---
 
-*Documentation last updated: {datetime.now().strftime('%Y-%m-%d')}*
+*Documentation last updated: September 21, 2025 - Blog System Implementation Complete*

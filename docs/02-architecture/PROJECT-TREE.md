@@ -1,7 +1,7 @@
 # 🌳 SHELTR Project Tree Reference
 
-*Generated on: Thu Sep 11 22:47:19 EDT 2025*
-*Last Updated: 2025-09-11*
+*Generated on: Sun Sep 21 10:58:31 EDT 2025*
+*Last Updated: 2025-09-20*
 
 ## 📋 Quick Navigation
 
@@ -9,6 +9,7 @@
 - [🧠 Knowledge Base System](#-knowledge-base-system)
 - [💬 Chat & AI System](#-chat--ai-system)
 - [🔔 Notifications System](#-notifications-system)
+- [📝 Blog Management System](#-blog-management-system)
 - [👥 User Management](#-user-management)
 - [🏠 Shelter Management](#-shelter-management)
 - [💰 Financial & Payments](#-financial--payments)
@@ -166,7 +167,77 @@ apps/web/src/lib/
 ```
 Firestore: /notifications/        # User Notifications
 Firestore: /notification_settings/ # User Preferences
+Firestore: /blog_posts/           # Blog Post Content & Metadata
+Firestore: /blog_categories/      # Blog Categories
+Firestore: /blog_tags/            # Blog Tags
 ```
+
+---
+
+## 📝 Blog Management System
+
+### Public Blog Pages
+```
+apps/web/src/app/blog/
+├── page.tsx                      # Blog List Page (Public)
+├── [slug]/
+│   ├── page.tsx                  # Server Component Wrapper
+│   └── BlogPostClient.tsx        # Client Component for Post Display
+└── loading.tsx                   # Loading State Component
+```
+
+### Admin Blog Management
+```
+apps/web/src/app/dashboard/blog/
+├── page.tsx                      # Blog Management Dashboard
+└── components/
+    ├── BlogEditor.tsx            # Rich Text Editor for Posts
+    ├── BlogPostTable.tsx         # Admin Post Listing
+    ├── CategoryManager.tsx       # Category Management
+    └── TagManager.tsx            # Tag Management
+```
+
+### Blog Services
+```
+apps/web/src/services/
+├── blogService.ts                # Blog CRUD Operations
+└── blogValidation.ts             # Form Validation
+
+apps/web/src/lib/
+├── blogTypes.ts                  # TypeScript Interfaces
+└── blogUtils.ts                  # Utility Functions
+```
+
+### Backend API
+```
+apps/api/routers/
+├── blog.py                       # Blog API Endpoints
+└── blog_service.py               # Blog Business Logic
+
+apps/api/scripts/
+├── create_test_blog_post.py      # Test Data Creation
+└── create_test_blog_tags.py      # Tag Setup Scripts
+```
+
+### Database Collections
+```
+Firestore: /blog_posts/           # Blog Post Content & Metadata
+Firestore: /blog_categories/      # Blog Categories
+Firestore: /blog_tags/            # Blog Tags
+```
+
+### Features Implemented
+- ✅ **Public Blog** - Live at https://sheltr-ai.web.app/blog/
+- ✅ **Individual Post Pages** - SEO-optimized with social sharing
+- ✅ **Admin Management** - Create, edit, delete posts (Super Admin + Platform Admin)
+- ✅ **Markdown Support** - Full ReactMarkdown rendering with custom styling
+- ✅ **SEO Excellence** - Meta tags, Open Graph, Twitter Cards, structured data
+- ✅ **Social Sharing** - Native Web Share API with clipboard fallback
+- ✅ **Category & Tag System** - Organized content structure
+- ✅ **Static Export Compatibility** - Server/client component architecture
+- ✅ **Public API Endpoints** - Unauthenticated endpoints for public access
+- ✅ **Knowledge Base Integration** - Optional ingestion for AI chatbot
+- ✅ **Responsive Design** - Mobile-optimized layouts
 
 ---
 
@@ -489,6 +560,12 @@ sheltr-ai.code-workspace          # VS Code Workspace
 **Need to work on Notifications?** → Look at:
 - `apps/web/src/components/NotificationCenter.tsx`
 - `apps/web/src/services/notificationService.ts`
+
+**Need to work on Blog System?** → Look at:
+- `apps/web/src/app/blog/` (Public blog pages)
+- `apps/web/src/app/dashboard/blog/` (Admin management)
+- `apps/web/src/services/blogService.ts`
+- `apps/api/routers/blog.py` (Backend API)
 
 **Need to work on User Management?** → Look at:
 - `apps/web/src/app/dashboard/users/`

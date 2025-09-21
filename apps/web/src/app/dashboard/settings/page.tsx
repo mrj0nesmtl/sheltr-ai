@@ -2,6 +2,7 @@
 
 import { useAuth } from '@/contexts/AuthContext';
 import { useEffect, useState } from 'react';
+import { SystemSettingsService } from '@/services/systemSettingsService';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -44,6 +45,7 @@ export default function SystemSettingsPage() {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState('general');
   const [isLoading, setIsLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
 
   // Mock settings state - would be replaced with real API calls
@@ -110,16 +112,107 @@ export default function SystemSettingsPage() {
 
   const [avatarUploadOpen, setAvatarUploadOpen] = useState(false);
 
+  // Load settings on component mount
+  useEffect(() => {
+    const loadSettings = async () => {
+      if (!user?.uid) return;
+      
+      try {
+        setInitialLoading(true);
+        
+        // Load system settings
+        const systemSettings = await SystemSettingsService.getSystemSettings();
+        if (systemSettings) {
+          setGeneralSettings(systemSettings.general);
+          setSecuritySettings(systemSettings.security);
+          setNotificationSettings(systemSettings.notifications);
+          setIntegrationSettings(systemSettings.integrations);
+        }
+        
+        // Load super admin profile
+        const profile = await SystemSettingsService.getSuperAdminProfile(user.uid);
+        if (profile) {
+          setSuperAdminProfile(profile);
+        }
+        
+      } catch (error) {
+        console.error('❌ Error loading settings:', error);
+      } finally {
+        setInitialLoading(false);
+      }
+    };
+    
+    loadSettings();
+  }, [user?.uid]);
+
   const handleSaveSettings = async (settingsType: string) => {
+    if (!user?.uid) return;
+    
     setSaveStatus('saving');
     setIsLoading(true);
     
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      let success = false;
       
-      console.log(`💾 Saving ${settingsType} settings...`);
-      setSaveStatus('saved');
+      switch (settingsType) {
+        case 'general':
+          success = await SystemSettingsService.saveSystemSettings(
+            { general: generalSettings }, 
+            user.uid, 
+            'general'
+          );
+          break;
+          
+        case 'security':
+          success = await SystemSettingsService.saveSystemSettings(
+            { security: securitySettings }, 
+            user.uid, 
+            'security'
+          );
+          break;
+          
+        case 'notifications':
+          success = await SystemSettingsService.saveSystemSettings(
+            { notifications: notificationSettings }, 
+            user.uid, 
+            'notifications'
+          );
+          break;
+          
+        case 'integrations':
+          success = await SystemSettingsService.saveSystemSettings(
+            { integrations: integrationSettings }, 
+            user.uid, 
+            'integrations'
+          );
+          break;
+          
+        case 'profile':
+        case 'admin-security':
+          success = await SystemSettingsService.saveSuperAdminProfile(
+            user.uid, 
+            superAdminProfile
+          );
+          break;
+          
+        default:
+          console.warn(`Unknown settings type: ${settingsType}`);
+          success = false;
+      }
+      
+      if (success) {
+        setSaveStatus('saved');
+        
+        // Create audit log
+        await SystemSettingsService.createAuditLog(
+          user.uid,
+          `Updated ${settingsType} settings`,
+          settingsType,
+          { timestamp: new Date() }
+        );
+      } else {
+        setSaveStatus('error');
+      }
       
       // Reset status after 3 seconds
       setTimeout(() => setSaveStatus('idle'), 3000);
@@ -140,6 +233,21 @@ export default function SystemSettingsPage() {
         <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
         <h1 className="text-2xl font-bold mb-2">Access Denied</h1>
         <p className="text-gray-600">Only Super Admins can access system settings.</p>
+      </div>
+    );
+  }
+
+  // Show loading state while loading initial settings
+  if (initialLoading) {
+    return (
+      <div className="p-6 max-w-7xl mx-auto">
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="text-center">
+            <RefreshCw className="h-8 w-8 animate-spin mx-auto mb-4 text-blue-600" />
+            <h2 className="text-lg font-semibold mb-2">Loading System Settings</h2>
+            <p className="text-gray-600">Please wait while we load your configuration...</p>
+          </div>
+        </div>
       </div>
     );
   }

@@ -36,6 +36,13 @@ export default function ParticipantGuidePage() {
       <section className="py-12 bg-gradient-to-r from-teal-50 to-cyan-50 dark:from-teal-900/20 dark:to-cyan-900/20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
+            <Link 
+              href="/docs" 
+              className="inline-flex items-center text-sm text-muted-foreground hover:text-primary mb-6 transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Documentation
+            </Link>
             <div className="flex items-start gap-4 mb-6">
               <Users className="h-12 w-12 text-teal-600 mt-1" />
               <div className="flex-1">

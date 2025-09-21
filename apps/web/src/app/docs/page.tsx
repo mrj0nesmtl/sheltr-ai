@@ -93,7 +93,7 @@ export default function DocsPage() {
       topics: ["Site Architecture", "Role-Based Access", "Mobile Testing", "Authentication Flow", "Business Logic QA"],
       link: "/docs/website-architecture",
       downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/website-architecture.md",
-      lastUpdated: "August 4, 2025"
+      lastUpdated: "September 21, 2025"
     },
     {
       title: "Technical White Paper",
@@ -117,7 +117,7 @@ export default function DocsPage() {
       topics: ["Smart Contract Code", "Base Network Integration", "Security Protocols", "Oracle Systems", "Token Utilities"],
       link: "/docs/blockchain",
       downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/technical/blockchain.md",
-      lastUpdated: "August 2025"
+      lastUpdated: "September 21, 2025"
     },
     {
       title: "API Documentation",
@@ -129,7 +129,7 @@ export default function DocsPage() {
       topics: ["REST API Endpoints", "Authentication", "Rate Limiting", "Error Handling", "SDK Integration"],
       link: "/docs/api",
       downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/03-api/README.md",
-      lastUpdated: "August 9, 2025"
+      lastUpdated: "September 21, 2025"
     },
     {
       title: "Chatbot Agent Architecture",
@@ -141,7 +141,7 @@ export default function DocsPage() {
       topics: ["Multi-Agent System", "RAG Integration", "Role-Based Routing", "OpenAI Integration", "Knowledge Base"],
       link: "/docs/chatbot-architecture",
       downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/04-development/CHATBOT-AGENT-ARCHITECTURE.md",
-      lastUpdated: "August 22, 2025"
+      lastUpdated: "September 21, 2025"
     },
     {
       title: "Complete Functionality Matrix",
@@ -153,7 +153,7 @@ export default function DocsPage() {
       topics: ["Testing Matrix", "Business Logic", "User Workflows", "Data Validation", "Platform Status"],
       link: "/docs/functionality-matrix",
       downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/04-development/COMPLETE-FUNCTIONALITY-MATRIX-UPDATED.md",
-      lastUpdated: "August 28, 2025"
+      lastUpdated: "September 21, 2025"
     },
     {
       title: "Knowledge Base Guide",
@@ -165,7 +165,7 @@ export default function DocsPage() {
       topics: ["Document Updates", "Embedding Regeneration", "RAG System", "Firebase Storage", "Chatbot Integration"],
       link: "/docs/knowledge-base-guide",
       downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/04-development/KNOWLEDGE-BASE-UPDATE-GUIDE.md",
-      lastUpdated: "August 22, 2025"
+      lastUpdated: "September 21, 2025"
     },
     {
       title: "Shelter Administrator Guide",
@@ -177,7 +177,7 @@ export default function DocsPage() {
       topics: ["Dashboard Management", "Participant Registration", "Service Coordination", "Resource Management", "Analytics & Reporting"],
       link: "/docs/shelter-admin-guide",
       downloadLink: "/user-journeys/shelters/",
-      lastUpdated: "August 2025"
+      lastUpdated: "September 21, 2025"
     },
     {
       title: "Donor Guide",
@@ -189,7 +189,7 @@ export default function DocsPage() {
       topics: ["QR Code Giving", "SmartFund™ Model", "Impact Tracking", "Payment Security", "Community Building"],
       link: "/docs/donor-guide",
       downloadLink: "/user-journeys/donors/",
-      lastUpdated: "August 2025"
+      lastUpdated: "September 21, 2025"
     },
     {
       title: "Participant User Guide",
@@ -201,7 +201,7 @@ export default function DocsPage() {
       topics: ["Platform Onboarding", "QR Code Usage", "Wallet Management", "Service Access", "Support Resources"],
       link: "/docs/participant-guide",
       downloadLink: "/user-journeys/participants/",
-      lastUpdated: "July 2025"
+      lastUpdated: "September 21, 2025"
     }
   ];
 

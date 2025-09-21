@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowLeft, Download, Share, Code, Shield, Coins } from 'lucide-react';
+import { ArrowLeft, Download, Code, Shield, Coins } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -47,11 +47,11 @@ export default function BlockchainPage() {
                   Deep technical dive into our Base network implementation, smart contracts, and verification systems
                 </p>
                 <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground mb-4">
-                  <span>Version 1.4.0</span>
+                  <span>Version 1.3.0</span>
                   <span>•</span>
-                  <span>August 2025</span>
+                  <span>Updated September 21, 2025</span>
                   <span>•</span>
-
+                  <Badge className="bg-blue-500 hover:bg-blue-600 text-white text-xs">IN PEER REVIEW</Badge>
                 </div>
                 
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
@@ -91,9 +91,9 @@ export default function BlockchainPage() {
                 <p>
                   SHELTR implements the world&rsquo;s first <strong>dual-token charitable ecosystem</strong> on Base network, 
                   combining participant protection through SHELTR-S (stable token) with community governance 
-                  via SHELTR (growth token). Our revolutionary architecture ensures 85% of donations reach 
-                  participants as stable value, 10% funds housing solutions, and 5% supports the participant&apos;s 
-                  registered shelter operations through smart contract-governed fund allocation.
+                  via SHELTR (growth token). Our revolutionary architecture ensures 80% of donations reach 
+                  participants as stable value, 15% funds housing solutions, and 5% supports platform operations 
+                  through smart contract-governed fund allocation.
                 </p>
                 <div className="mt-6">
                   <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/technical/blockchain.md" target="_blank" rel="noopener noreferrer">
@@ -191,10 +191,10 @@ export default function BlockchainPage() {
 pragma solidity ^0.8.19;
 
 contract SHELTRCore is AccessControl, ReentrancyGuard, Pausable {
-    // Distribution constants (immutable for security)
-    uint256 public constant DIRECT_SUPPORT = 85;
-    uint256 public constant HOUSING_FUND = 10;
-    uint256 public constant SHELTER_OPERATIONS = 5;
+                    // Distribution constants (immutable for security)
+    uint256 public constant DIRECT_SUPPORT = 80;
+    uint256 public constant HOUSING_FUND = 15;
+    uint256 public constant PLATFORM_OPERATIONS = 5;
     
     // Participant-shelter mapping for 5% allocation
     mapping(address => address) public participantShelter;
@@ -207,17 +207,13 @@ contract SHELTRCore is AccessControl, ReentrancyGuard, Pausable {
     ) external onlyRole(DISTRIBUTOR_ROLE) nonReentrant whenNotPaused {
         uint256 directSupport = (amount * DIRECT_SUPPORT) / 100;
         uint256 housingContribution = (amount * HOUSING_FUND) / 100;
-        uint256 shelterOperations = (amount * SHELTER_OPERATIONS) / 100;
+        uint256 platformOperations = (amount * PLATFORM_OPERATIONS) / 100;
         
         // Mint SHELTR-S tokens for participant (1:1 with USDC)
         ISheltrStable(address(sheltrStable)).mint(participant, directSupport);
         
-        // Handle 5% allocation: shelter ops or additional housing fund
-        if (participantShelter[participant] != address(0)) {
-            IERC20(usdc).transfer(participantShelter[participant], shelterOperations);
-        } else {
-            housingContribution += shelterOperations; // Add to housing fund
-        }
+        // Handle 5% allocation: platform operations
+        IERC20(usdc).transfer(platformAddress, platformOperations);
         
         emit DonationProcessed(donor, participant, amount, directSupport, housingContribution);
     }
@@ -244,14 +240,14 @@ contract SHELTRCore is AccessControl, ReentrancyGuard, Pausable {
                     
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border text-center">
-                        <div className="font-bold text-green-600 text-xl">85%</div>
+                        <div className="font-bold text-green-600 text-xl">80%</div>
                         <div className="text-sm font-medium">Direct Support</div>
                         <div className="text-xs text-muted-foreground mt-1">SHELTR-S → Participant Wallet</div>
                         <div className="text-xs text-muted-foreground">Immediate access, 0% volatility</div>
                       </div>
                       
                       <div className="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg border text-center">
-                        <div className="font-bold text-purple-600 text-xl">10%</div>
+                        <div className="font-bold text-purple-600 text-xl">15%</div>
                         <div className="text-sm font-medium">Housing Fund</div>
                         <div className="text-xs text-muted-foreground mt-1">USDC → DeFi Yield Strategy</div>
                         <div className="text-xs text-muted-foreground">Compound interest for housing</div>
@@ -259,9 +255,9 @@ contract SHELTRCore is AccessControl, ReentrancyGuard, Pausable {
                       
                       <div className="p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg border text-center">
                         <div className="font-bold text-orange-600 text-xl">5%</div>
-                        <div className="text-sm font-medium">Shelter Operations</div>
-                        <div className="text-xs text-muted-foreground mt-1">USDC → Registered Shelter</div>
-                        <div className="text-xs text-muted-foreground">*Or Housing Fund if independent</div>
+                        <div className="text-sm font-medium">Platform Operations</div>
+                        <div className="text-xs text-muted-foreground mt-1">USDC → Platform Treasury</div>
+                        <div className="text-xs text-muted-foreground">Technology & operations</div>
                       </div>
                     </div>
                     
@@ -275,12 +271,12 @@ contract SHELTRCore is AccessControl, ReentrancyGuard, Pausable {
                     </div>
                   </div>
                   
-                  <div className="mt-6 p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
-                    <h4 className="font-semibold text-amber-800 dark:text-amber-200 mb-2">Special Rule Implementation</h4>
-                    <p className="text-sm text-amber-700 dark:text-amber-300">
-                      If participant is not registered through a shelter, the 5% shelter allocation 
-                      is automatically redirected to their individual housing fund account, ensuring 
-                      100% efficiency regardless of onboarding path.
+                  <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                    <h4 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">SmartFund™ Distribution Model</h4>
+                    <p className="text-sm text-blue-700 dark:text-blue-300">
+                      The 80-15-5 distribution ensures maximum efficiency: 80% direct participant support, 
+                      15% housing fund for long-term solutions, and 5% platform operations for technology 
+                      maintenance and development. All allocations are automated via smart contracts.
                     </p>
                   </div>
                 </div>

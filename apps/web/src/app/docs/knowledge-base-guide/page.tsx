@@ -36,6 +36,15 @@ export default function KnowledgeBaseGuidePage() {
       <section className="py-12 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
+            {/* Breadcrumb */}
+            <Link
+              href="/docs"
+              className="inline-flex items-center text-sm text-muted-foreground hover:text-primary mb-6 transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Documentation
+            </Link>
+            
             <div className="flex items-start gap-4 mb-6">
               <BookOpen className="h-12 w-12 text-blue-600 mt-1" />
               <div className="flex-1">
@@ -47,9 +56,11 @@ export default function KnowledgeBaseGuidePage() {
                   Complete guide for updating SHELTR-AI Knowledge Base documents with embedding regeneration
                 </p>
                 <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground mb-4">
-                  <span>Version 1.0.0</span>
+                  <span>Version 2.0.0</span>
                   <span>•</span>
-                  <span>August 22, 2025</span>
+                  <span>Updated September 21, 2025</span>
+                  <span>•</span>
+                  <Badge className="bg-green-500 hover:bg-green-600 text-white text-xs">LIVE SYSTEM</Badge>
                 </div>
                 
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
@@ -79,71 +90,108 @@ export default function KnowledgeBaseGuidePage() {
               </p>
             </div>
 
-            <div className="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 p-4 mb-12">
-              <h3 className="text-blue-800 dark:text-blue-200 font-semibold mb-2">📊 Current Knowledge Base Status</h3>
-              <p className="text-blue-700 dark:text-blue-300 text-sm">
-                <strong>Storage Structure</strong>: Firebase Storage knowledge-base/public/ (9 markdown files)<br/>
-                <strong>Firestore Collection</strong>: knowledge_documents (9 document records)<br/>
-                <strong>Embeddings</strong>: knowledge_chunks (62+ embedding chunks for chatbot RAG)<br/>
-                <strong>Status</strong>: ✅ All documents loaded and operational
+            <div className="bg-green-50 dark:bg-green-900/20 border-l-4 border-green-500 p-4 mb-12">
+              <h3 className="text-green-800 dark:text-green-200 font-semibold mb-2">🚀 Current Knowledge Base Status - Session 15+ Revolution</h3>
+              <p className="text-green-700 dark:text-green-300 text-sm">
+                <strong>Live Documents</strong>: 61 active documents synced from GitHub repository<br/>
+                <strong>Folder Structure</strong>: 10 major categories with organized folder tree navigation<br/>
+                <strong>GitHub Integration</strong>: Real-time sync with progress tracking and change detection<br/>
+                <strong>Enhanced UI</strong>: Desktop-optimized layout, dedicated edit pages, educational components<br/>
+                <strong>Embeddings</strong>: 100+ high-quality embedding chunks for advanced RAG system<br/>
+                <strong>Status</strong>: ✅ Production-ready multi-agent chatbot system operational
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-8 mb-12">
+            <div className="grid lg:grid-cols-3 gap-8 mb-12">
               <Card>
                 <CardHeader>
-                  <CardTitle>Available Documents (9 Total)</CardTitle>
+                  <CardTitle>Document Categories (61 Total)</CardTitle>
                   <CardDescription>
-                    Current knowledge base documents
+                    Complete GitHub repository documentation organized by category
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <ul className="space-y-2 text-sm">
-                    <li>• <strong>README.md</strong> → SHELTR Platform Overview</li>
-                    <li>• <strong>blockchain.md</strong> → SHELTR Blockchain Technical Documentation</li>
-                    <li>• <strong>donor-guide.md</strong> → Donor User Guide</li>
-                    <li>• <strong>hacking_homelessness.md</strong> → Hacking Homelessness Strategy</li>
-                    <li>• <strong>participant-guide.md</strong> → Participant User Guide</li>
-                    <li>• <strong>shelter-admin-guide.md</strong> → Shelter Admin Guide</li>
-                    <li>• <strong>sheltr-tokenomics.md</strong> → SHELTR Tokenomics and SmartFund™ Model</li>
-                    <li>• <strong>system-design.md</strong> → SHELTR System Design and Architecture</li>
-                    <li>• <strong>whitepaper_final.md</strong> → SHELTR White Paper</li>
+                    <li>• <strong>Overview</strong> (11 docs) → Platform overviews, plans</li>
+                    <li>• <strong>Architecture</strong> (16 docs) → System design, blockchain</li>
+                    <li>• <strong>API</strong> (4 docs) → Database schema, reference</li>
+                    <li>• <strong>Development</strong> (15+ docs) → Guides, session docs</li>
+                    <li>• <strong>Deployment</strong> (5 docs) → Firebase, Cloud Run</li>
+                    <li>• <strong>User Guides</strong> (4 docs) → Role-specific guides</li>
+                    <li>• <strong>Reference</strong> (4 docs) → API, database schema</li>
+                    <li>• <strong>Integrations</strong> (2 docs) → Firebase integration</li>
                   </ul>
                 </CardContent>
               </Card>
 
               <Card>
                 <CardHeader>
-                  <CardTitle>Update Methods</CardTitle>
+                  <CardTitle>Enhanced Update Methods</CardTitle>
                   <CardDescription>
-                    Three different approaches for updating documents
+                    Multiple approaches with Session 15+ improvements
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
                     <div>
-                      <h4 className="font-semibold mb-2">Method 1: Script-Based Update (Recommended)</h4>
-                      <p className="text-sm text-muted-foreground mb-2">Use for bulk updates or when you have local markdown files</p>
+                      <h4 className="font-semibold mb-2">🔄 GitHub Sync (NEW)</h4>
+                      <p className="text-sm text-muted-foreground mb-2">Real-time sync with progress tracking</p>
                       <ul className="space-y-1 text-xs">
-                        <li>• List available documents</li>
-                        <li>• Update single document</li>
-                        <li>• Update specific document by ID</li>
-                        <li>• Update all documents from directory</li>
+                        <li>• Scan for repository changes</li>
+                        <li>• Progress bar with file tracking</li>
+                        <li>• Selective sync with change detection</li>
+                        <li>• Automatic embedding regeneration</li>
                       </ul>
                     </div>
                     <div>
-                      <h4 className="font-semibold mb-2">Method 2: UI-Based Update</h4>
-                      <p className="text-sm text-muted-foreground mb-2">Use for individual document updates through the dashboard</p>
+                      <h4 className="font-semibold mb-2">🖥️ Enhanced Dashboard UI</h4>
+                      <p className="text-sm text-muted-foreground mb-2">Desktop-optimized with dedicated edit pages</p>
                       <ul className="space-y-1 text-xs">
-                        <li>• Login as Super Admin</li>
-                        <li>• Find document to update</li>
-                        <li>• Edit content in text editor</li>
-                        <li>• Save with automatic embedding regeneration</li>
+                        <li>• Full-screen editing experience</li>
+                        <li>• Folder tree navigation</li>
+                        <li>• Educational AI system components</li>
+                        <li>• Privacy & access controls</li>
                       </ul>
                     </div>
                     <div>
-                      <h4 className="font-semibold mb-2">Method 3: Direct File Replacement</h4>
-                      <p className="text-sm text-muted-foreground mb-2">Advanced users only - requires manual embedding regeneration</p>
+                      <h4 className="font-semibold mb-2">⚡ Script-Based Updates</h4>
+                      <p className="text-sm text-muted-foreground mb-2">Bulk operations with enhanced quality scoring</p>
+                      <ul className="space-y-1 text-xs">
+                        <li>• 100/100 quality optimization</li>
+                        <li>• Duplicate detection & cleanup</li>
+                        <li>• Enhanced metadata processing</li>
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>AI System Integration</CardTitle>
+                  <CardDescription>
+                    Advanced embedding system for multi-agent chatbots
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div>
+                      <h4 className="font-semibold mb-2">🧠 Embedding Technology</h4>
+                      <ul className="space-y-1 text-xs">
+                        <li>• <strong>Model</strong>: text-embedding-3-small (OpenAI)</li>
+                        <li>• <strong>Strategy</strong>: Overlapping chunks for context</li>
+                        <li>• <strong>Quality</strong>: 100/100 score optimization</li>
+                        <li>• <strong>Tags</strong>: AI-generated relevant keywords</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold mb-2">🤖 Multi-Agent Support</h4>
+                      <ul className="space-y-1 text-xs">
+                        <li>• Public landing page chatbot</li>
+                        <li>• Super Admin control panel agent</li>
+                        <li>• RAG-powered semantic search</li>
+                        <li>• Real-time knowledge updates</li>
+                      </ul>
                     </div>
                   </div>
                 </CardContent>
@@ -151,48 +199,129 @@ export default function KnowledgeBaseGuidePage() {
             </div>
 
             <div className="bg-muted/30 rounded-lg p-8 mb-12">
-              <h3 className="text-2xl font-bold mb-4">Embedding Regeneration Process</h3>
-              <div className="grid md:grid-cols-2 gap-6">
+              <h3 className="text-2xl font-bold mb-4">Advanced Embedding & Quality System</h3>
+              <div className="grid md:grid-cols-3 gap-6">
                 <div>
-                  <h4 className="font-semibold mb-3">Why Embeddings Matter</h4>
+                  <h4 className="font-semibold mb-3">🎯 Quality Scoring (100/100)</h4>
                   <ul className="space-y-2 text-sm">
-                    <li>• Chatbots use embeddings for <strong>semantic search</strong></li>
-                    <li>• Enables <strong>RAG (Retrieval-Augmented Generation)</strong></li>
-                    <li>• When document content changes, old embeddings become <strong>outdated</strong></li>
-                    <li>• <strong>New embeddings</strong> ensure chatbots have access to latest information</li>
+                    <li>• <strong>Chunk Count</strong>: Optimal document segmentation</li>
+                    <li>• <strong>Word Count</strong>: Comprehensive content analysis</li>
+                    <li>• <strong>Embedding Status</strong>: Completion verification</li>
+                    <li>• <strong>AI Tags</strong>: GPT-4o-mini generated keywords</li>
+                    <li>• <strong>Content Enhancement</strong>: Auto-summary for short docs</li>
                   </ul>
                 </div>
                 <div>
-                  <h4 className="font-semibold mb-3">Automatic vs Manual Regeneration</h4>
+                  <h4 className="font-semibold mb-3">🔄 Automatic Processing</h4>
                   <div className="space-y-3">
                     <div>
-                      <h5 className="font-medium text-green-600 mb-1">✅ Automatic Regeneration</h5>
+                      <h5 className="font-medium text-green-600 mb-1">✅ Auto-Regeneration Triggers</h5>
                       <ul className="space-y-1 text-xs">
-                        <li>• Using the update script</li>
-                        <li>• Using UI update with file upload</li>
-                        <li>• Using the new API endpoint</li>
+                        <li>• GitHub sync operations</li>
+                        <li>• Dashboard UI updates</li>
+                        <li>• API endpoint calls</li>
+                        <li>• Script-based bulk updates</li>
                       </ul>
                     </div>
                     <div>
-                      <h5 className="font-medium text-red-600 mb-1">❌ Manual Regeneration Needed</h5>
+                      <h5 className="font-medium text-blue-600 mb-1">🚀 Enhanced Features</h5>
                       <ul className="space-y-1 text-xs">
-                        <li>• Directly editing files in Firebase Storage</li>
-                        <li>• Manually updating Firestore documents</li>
-                        <li>• Importing documents via other methods</li>
+                        <li>• Duplicate detection & cleanup</li>
+                        <li>• Progress tracking with visual feedback</li>
+                        <li>• Quality optimization algorithms</li>
                       </ul>
                     </div>
                   </div>
                 </div>
+                <div>
+                  <h4 className="font-semibold mb-3">🤖 Multi-Agent RAG</h4>
+                  <ul className="space-y-2 text-sm">
+                    <li>• <strong>Semantic Search</strong>: Vector similarity matching</li>
+                    <li>• <strong>Context Retrieval</strong>: Relevant document chunks</li>
+                    <li>• <strong>Real-time Updates</strong>: Immediate knowledge refresh</li>
+                    <li>• <strong>Agent Orchestration</strong>: Public + Admin chatbots</li>
+                    <li>• <strong>Session Persistence</strong>: Conversation memory</li>
+                  </ul>
+                </div>
               </div>
             </div>
 
-            <div className="bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-500 p-4 mb-12">
-              <h3 className="text-yellow-800 dark:text-yellow-200 font-semibold mb-2">🔧 Recommended Workflow</h3>
-              <p className="text-yellow-700 dark:text-yellow-300 text-sm">
-                <strong>For Regular Updates</strong>: Edit markdown files locally → Run update script → Verify in dashboard → Test chatbot responses<br/>
-                <strong>For Single Document Updates</strong>: Edit specific file → Update using script → Check dashboard for updated chunk count<br/>
-                <strong>Always verify</strong> that embeddings were regenerated and chatbot responses reflect new information
-              </p>
+            <div className="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 p-6 mb-12">
+              <h3 className="text-blue-800 dark:text-blue-200 font-semibold mb-4">🛠️ Comprehensive Workflow Guide</h3>
+              <div className="grid md:grid-cols-2 gap-8">
+                <div>
+                  <h4 className="font-semibold mb-3">📋 For Regular GitHub Sync Updates</h4>
+                  <ol className="space-y-2 text-sm list-decimal list-inside">
+                    <li>Navigate to <code className="bg-blue-100 dark:bg-blue-800 px-1 rounded">localhost:3000/dashboard/knowledge</code></li>
+                    <li>Click <strong>&ldquo;Scan for Changes&rdquo;</strong> in GitHub Sync panel</li>
+                    <li>Review detected changes (new, modified, deleted files)</li>
+                    <li>Click <strong>&ldquo;Sync Files&rdquo;</strong> with progress tracking</li>
+                    <li>Verify embedding regeneration and quality scores</li>
+                    <li>Test chatbot responses with updated knowledge</li>
+                  </ol>
+                </div>
+                <div>
+                  <h4 className="font-semibold mb-3">✏️ For Individual Document Editing</h4>
+                  <ol className="space-y-2 text-sm list-decimal list-inside">
+                    <li>Find document in folder tree or search</li>
+                    <li>Click <strong>&ldquo;Edit&rdquo;</strong> to open dedicated edit page</li>
+                    <li>Use full-screen Markdown editor with metadata</li>
+                    <li>Configure privacy, access controls, and sharing</li>
+                    <li>Save with automatic embedding regeneration</li>
+                    <li>Monitor quality score improvements</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-500 p-6 mb-12">
+              <h3 className="text-yellow-800 dark:text-yellow-200 font-semibold mb-4">🚨 Advanced Troubleshooting & Best Practices</h3>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <h4 className="font-semibold mb-3 text-yellow-800 dark:text-yellow-200">Common Issues & Solutions</h4>
+                  <ul className="space-y-2 text-sm text-yellow-700 dark:text-yellow-300">
+                    <li>• <strong>Quality Score &lt; 100</strong>: Check word count, add tags, enhance content</li>
+                    <li>• <strong>Embedding Generation Failed</strong>: Verify OpenAI API key, check content validity</li>
+                    <li>• <strong>GitHub Sync Errors</strong>: Ensure GitHub token configured, check repository access</li>
+                    <li>• <strong>Chatbot Not Updated</strong>: Wait 1-2 minutes for propagation, restart if needed</li>
+                    <li>• <strong>Duplicate Documents</strong>: Use cleanup scripts, keep highest quality version</li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-semibold mb-3 text-yellow-800 dark:text-yellow-200">Production Best Practices</h4>
+                  <ul className="space-y-2 text-sm text-yellow-700 dark:text-yellow-300">
+                    <li>• <strong>Always use GitHub sync</strong> for reliable, tracked updates</li>
+                    <li>• <strong>Monitor quality scores</strong> and optimize for 100/100 rating</li>
+                    <li>• <strong>Test chatbot responses</strong> after major knowledge updates</li>
+                    <li>• <strong>Use dedicated edit pages</strong> for comprehensive document management</li>
+                    <li>• <strong>Leverage AI tags</strong> for improved semantic search performance</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-purple-50 dark:bg-purple-900/20 border-l-4 border-purple-500 p-6 mb-12">
+              <h3 className="text-purple-800 dark:text-purple-200 font-semibold mb-4">🔮 Future Enhancements & Roadmap</h3>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <h4 className="font-semibold mb-3 text-purple-800 dark:text-purple-200">Planned Features</h4>
+                  <ul className="space-y-2 text-sm text-purple-700 dark:text-purple-300">
+                    <li>• <strong>OpenAI MCP Integration</strong>: Enhanced embedding control and manipulation</li>
+                    <li>• <strong>Automated Sync Scheduling</strong>: Webhook-based or scheduled sync options</li>
+                    <li>• <strong>Advanced Analytics</strong>: Document usage tracking and optimization insights</li>
+                    <li>• <strong>Version Control</strong>: Document history and rollback capabilities</li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-semibold mb-3 text-purple-800 dark:text-purple-200">Integration Opportunities</h4>
+                  <ul className="space-y-2 text-sm text-purple-700 dark:text-purple-300">
+                    <li>• <strong>Real-time Collaboration</strong>: Multi-user editing with conflict resolution</li>
+                    <li>• <strong>AI-Powered Suggestions</strong>: Content improvement recommendations</li>
+                    <li>• <strong>Cross-Platform Sync</strong>: Integration with other documentation systems</li>
+                    <li>• <strong>Performance Optimization</strong>: Faster embedding generation and search</li>
+                  </ul>
+                </div>
+              </div>
             </div>
 
             <div className="text-center">

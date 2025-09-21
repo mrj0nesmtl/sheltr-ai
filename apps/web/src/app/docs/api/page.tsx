@@ -203,7 +203,7 @@ export default function APIDocumentationPage() {
                       <li><code className="text-blue-600">GET</code> /auth/profile - Get user profile</li>
                       <li><code className="text-orange-600">PUT</code> /auth/profile - Update profile</li>
                       <li><code className="text-blue-600">GET</code> /auth/users - List users (admin)</li>
-                      <li><code className="text-orange-600">PUT</code> /auth/role/{user_id} - Update role</li>
+                      <li><code className="text-orange-600">PUT</code> /auth/role/&#123;user_id&#125; - Update role</li>
                     </ul>
                   </CardContent>
                 </Card>
@@ -219,8 +219,8 @@ export default function APIDocumentationPage() {
                   <CardContent>
                     <ul className="space-y-2 text-sm">
                       <li><code className="text-blue-600">GET</code> /analytics/platform - Platform metrics</li>
-                      <li><code className="text-blue-600">GET</code> /analytics/shelter/{id} - Shelter analytics</li>
-                      <li><code className="text-blue-600">GET</code> /analytics/user/{id} - User analytics</li>
+                      <li><code className="text-blue-600">GET</code> /analytics/shelter/&#123;id&#125; - Shelter analytics</li>
+                      <li><code className="text-blue-600">GET</code> /analytics/user/&#123;id&#125; - User analytics</li>
                       <li><code className="text-green-600">POST</code> /analytics/report - Custom reports</li>
                     </ul>
                   </CardContent>
@@ -238,8 +238,8 @@ export default function APIDocumentationPage() {
                     <ul className="space-y-2 text-sm">
                       <li><code className="text-blue-600">GET</code> /services/ - List services</li>
                       <li><code className="text-green-600">POST</code> /services/ - Create service</li>
-                      <li><code className="text-orange-600">PUT</code> /services/{id} - Update service</li>
-                      <li><code className="text-red-600">DELETE</code> /services/{id} - Delete service</li>
+                      <li><code className="text-orange-600">PUT</code> /services/&#123;id&#125; - Update service</li>
+                      <li><code className="text-red-600">DELETE</code> /services/&#123;id&#125; - Delete service</li>
                     </ul>
                   </CardContent>
                 </Card>
@@ -255,9 +255,9 @@ export default function APIDocumentationPage() {
                   <CardContent>
                     <ul className="space-y-2 text-sm">
                       <li><code className="text-green-600">POST</code> /donations/create - Process donation</li>
-                      <li><code className="text-blue-600">GET</code> /donations/{id} - Get donation</li>
-                      <li><code className="text-blue-600">GET</code> /donations/participant/{id} - Participant donations</li>
-                      <li><code className="text-blue-600">GET</code> /donations/donor/{id} - Donor history</li>
+                      <li><code className="text-blue-600">GET</code> /donations/&#123;id&#125; - Get donation</li>
+                      <li><code className="text-blue-600">GET</code> /donations/participant/&#123;id&#125; - Participant donations</li>
+                      <li><code className="text-blue-600">GET</code> /donations/donor/&#123;id&#125; - Donor history</li>
                     </ul>
                   </CardContent>
                 </Card>

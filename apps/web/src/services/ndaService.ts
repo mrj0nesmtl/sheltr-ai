@@ -29,6 +29,23 @@ export class NDAService {
   private static readonly DOCUMENT_VERSION = '1.0.0';
 
   /**
+   * Test Firebase connection
+   */
+  static async testFirebaseConnection(): Promise<boolean> {
+    try {
+      console.log('🔍 [NDA] Testing Firebase connection...');
+      
+      // Try to read from a collection (this doesn't require write permissions)
+      const testDoc = await getDoc(doc(db, 'test', 'connection'));
+      console.log('✅ [NDA] Firebase connection test successful');
+      return true;
+    } catch (error) {
+      console.error('❌ [NDA] Firebase connection test failed:', error);
+      return false;
+    }
+  }
+
+  /**
    * Check if a user has signed the NDA
    */
   static async hasUserSignedNDA(userId: string): Promise<boolean> {
@@ -46,6 +63,10 @@ export class NDAService {
    */
   static async signNDA(signature: NDASignature): Promise<boolean> {
     try {
+      console.log('🔍 [NDA] Starting signature process for:', signature.userEmail);
+      console.log('🔍 [NDA] User ID:', signature.userId);
+      console.log('🔍 [NDA] Collection:', this.COLLECTION_NAME);
+
       const ndaRecord: Omit<NDARecord, 'id'> = {
         ...signature,
         signedAt: new Date(),
@@ -57,20 +78,31 @@ export class NDAService {
         }
       };
 
+      console.log('🔍 [NDA] Prepared record:', ndaRecord);
+
       // Save NDA signature with userId as document ID
+      console.log('🔍 [NDA] Saving to Firestore...');
       await setDoc(doc(db, this.COLLECTION_NAME, signature.userId), {
         ...ndaRecord,
         signedAt: serverTimestamp(),
         'auditTrail.createdAt': serverTimestamp()
       });
 
+      console.log('✅ [NDA] Document saved successfully');
+
       // Send notification to Super Admin
+      console.log('🔍 [NDA] Sending notification to Super Admin...');
       await this.notifySuperAdmin(signature);
 
       console.log(`✅ NDA signed successfully for user: ${signature.userEmail}`);
       return true;
     } catch (error) {
       console.error('❌ Error saving NDA signature:', error);
+      console.error('❌ Error details:', {
+        name: error instanceof Error ? error.name : 'Unknown',
+        message: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined
+      });
       return false;
     }
   }

@@ -36,6 +36,15 @@ export function NDAModal({ onAccept, onCancel }: NDAModalProps) {
 
     setIsLoading(true);
     try {
+      console.log('🔍 [NDA Modal] Starting signature process...');
+      
+      // Test Firebase connection first
+      const connectionTest = await NDAService.testFirebaseConnection();
+      if (!connectionTest) {
+        alert('Unable to connect to the database. Please check your internet connection and try again.');
+        return;
+      }
+
       const success = await NDAService.signNDA({
         userId: user.uid,
         userEmail: user.email || '',
@@ -46,13 +55,14 @@ export function NDAModal({ onAccept, onCancel }: NDAModalProps) {
       });
 
       if (success) {
+        console.log('✅ [NDA Modal] Signature successful, proceeding to dashboard...');
         onAccept();
       } else {
-        alert('Failed to save NDA signature. Please try again.');
+        alert('Failed to save NDA signature. Please check the browser console for details and try again.');
       }
     } catch (error) {
-      console.error('Error signing NDA:', error);
-      alert('An error occurred while saving your signature. Please try again.');
+      console.error('❌ [NDA Modal] Error signing NDA:', error);
+      alert(`An error occurred while saving your signature: ${error instanceof Error ? error.message : 'Unknown error'}. Please try again.`);
     } finally {
       setIsLoading(false);
     }

@@ -4,6 +4,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useEffect, useState } from 'react';
 import { SystemSettingsService } from '@/services/systemSettingsService';
 import { SystemHealthService, SystemHealthMetrics } from '@/services/systemHealthService';
+import { NDAPreview } from '@/components/admin/NDAPreview';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -34,7 +35,8 @@ import {
   Bot,
   Brain,
   Wifi,
-  HardDrive
+  HardDrive,
+  Eye
 } from 'lucide-react';
 
 export default function SystemSettingsPage() {
@@ -45,6 +47,7 @@ export default function SystemSettingsPage() {
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
   const [systemHealth, setSystemHealth] = useState<SystemHealthMetrics | null>(null);
   const [healthLoading, setHealthLoading] = useState(true);
+  const [showNDAPreview, setShowNDAPreview] = useState(false);
 
   // Mock settings state - would be replaced with real API calls
   const [generalSettings, setGeneralSettings] = useState({
@@ -280,6 +283,17 @@ export default function SystemSettingsPage() {
           </p>
         </div>
         <div className="flex items-center space-x-3">
+          {user?.role === 'super_admin' && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowNDAPreview(true)}
+              className="flex items-center space-x-2"
+            >
+              <Eye className="w-4 h-4" />
+              <span>Preview NDA</span>
+            </Button>
+          )}
           <Button
             variant="outline"
             size="sm"
@@ -1199,6 +1213,11 @@ export default function SystemSettingsPage() {
           )}
         </TabsContent>
       </Tabs>
+
+      {/* NDA Preview Modal for Super Admins */}
+      {showNDAPreview && (
+        <NDAPreview onClose={() => setShowNDAPreview(false)} />
+      )}
     </div>
   );
 }

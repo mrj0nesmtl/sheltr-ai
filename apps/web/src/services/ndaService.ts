@@ -169,9 +169,62 @@ export class NDAService {
       });
 
       await Promise.all(notifications);
-      console.log(`📧 Notifications sent to ${superAdminsSnapshot.size} Super Admin(s)`);
+      console.log(`📧 NDA signature notifications sent to ${superAdminsSnapshot.size} Super Admin(s)`);
     } catch (error) {
       console.error('❌ Error sending Super Admin notifications:', error);
+    }
+  }
+
+  /**
+   * Send notification to Super Admin about Platform Administrator login
+   */
+  static async notifyPlatformAdminLogin(loginData: {
+    userId: string;
+    userEmail: string;
+    userName: string;
+    loginTime: Date;
+    ipAddress: string;
+    userAgent: string;
+  }): Promise<void> {
+    try {
+      // Get all super admin users
+      const superAdminsQuery = query(
+        collection(db, 'users'),
+        where('role', '==', 'super_admin')
+      );
+      
+      const superAdminsSnapshot = await getDocs(superAdminsQuery);
+      
+      // Create notifications for each super admin
+      const notifications = superAdminsSnapshot.docs.map(async (superAdminDoc) => {
+        const notification = {
+          type: 'platform_admin_login',
+          title: 'Platform Administrator Login',
+          message: `Platform Administrator ${loginData.userName} (${loginData.userEmail}) has logged into the system.`,
+          data: {
+            userId: loginData.userId,
+            userEmail: loginData.userEmail,
+            userName: loginData.userName,
+            loginTime: loginData.loginTime,
+            ipAddress: loginData.ipAddress,
+            userAgent: loginData.userAgent
+          },
+          recipient_id: superAdminDoc.id,
+          recipient_role: 'super_admin',
+          is_read: false,
+          priority: 'low',
+          category: 'security',
+          created_at: serverTimestamp(),
+          expires_at: null
+        };
+
+        return addDoc(collection(db, this.NOTIFICATION_COLLECTION), notification);
+      });
+
+      await Promise.all(notifications);
+      console.log(`📧 Platform Admin login notifications sent to ${superAdminsSnapshot.size} Super Admin(s)`);
+    } catch (error) {
+      console.error('❌ Error sending Platform Admin login notifications:', error);
     }
   }
 

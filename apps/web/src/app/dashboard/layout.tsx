@@ -439,9 +439,9 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
   const navigationItems = getNavigationItems(user?.role || '');
 
-  // Check NDA status for Platform Administrators
+  // Check NDA status for Platform Administrators and send login notifications
   useEffect(() => {
-    const checkNDAStatus = async () => {
+    const checkNDAStatusAndNotifyLogin = async () => {
       if (!user || user.role !== 'platform_admin') {
         setNdaCheckComplete(true);
         return;
@@ -449,6 +449,17 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
       try {
         console.log('🔍 Checking NDA status for Platform Admin:', user.email);
+        
+        // Send login notification to Super Admin
+        await NDAService.notifyPlatformAdminLogin({
+          userId: user.uid,
+          userEmail: user.email || '',
+          userName: user.displayName || user.email?.split('@')[0] || 'Platform Administrator',
+          loginTime: new Date(),
+          ipAddress: await getClientIP(),
+          userAgent: navigator.userAgent
+        });
+        
         const hasSigned = await NDAService.hasUserSignedNDA(user.uid);
         
         if (!hasSigned) {
@@ -465,8 +476,19 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       }
     };
 
+    // Get client IP address (simplified for demo)
+    const getClientIP = async (): Promise<string> => {
+      try {
+        const response = await fetch('https://api.ipify.org?format=json');
+        const data = await response.json();
+        return data.ip || 'Unknown';
+      } catch {
+        return 'Unknown';
+      }
+    };
+
     if (user) {
-      checkNDAStatus();
+      checkNDAStatusAndNotifyLogin();
     }
   }, [user]);
 

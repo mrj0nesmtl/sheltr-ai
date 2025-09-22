@@ -27,6 +27,61 @@ class RAGOrchestrator:
         self.similarity_threshold = 0.3  # Lower threshold for better recall
         self.max_knowledge_tokens = 1500
     
+    async def enhance_search_query(self, query: str, agent_type: str = "general", intent=None) -> str:
+        """Public method to enhance search queries - used by dashboard service"""
+        # Create a minimal intent if none provided
+        if intent is None:
+            from services.chatbot.orchestrator import Intent, IntentCategory, UrgencyLevel
+            intent = Intent(
+                category=IntentCategory.INFORMATION,
+                subcategory="general",
+                confidence=0.5,
+                urgency=UrgencyLevel.LOW,
+                entities={},
+                requires_escalation=False
+            )
+        
+        return await self._enhance_search_query(query, agent_type, intent)
+    
+    async def search_knowledge_base(self, query: str, user_role: str = "general") -> str:
+        """Public method to search knowledge base - used by dashboard service"""
+        try:
+            # Create a minimal intent for the search
+            from services.chatbot.orchestrator import Intent, IntentCategory, UrgencyLevel
+            intent = Intent(
+                category=IntentCategory.INFORMATION,
+                subcategory="general",
+                confidence=0.5,
+                urgency=UrgencyLevel.LOW,
+                entities={},
+                requires_escalation=False
+            )
+            
+            # Search for relevant knowledge
+            knowledge_results = await self._search_relevant_knowledge(
+                query=query,
+                user_role=user_role,
+                agent_type="general",
+                intent=intent
+            )
+            
+            # Format results for simple string return
+            results = knowledge_results.get('results', [])
+            if not results:
+                return "No relevant information found in the knowledge base."
+            
+            # Return formatted content from top results
+            content_parts = []
+            for result in results[:2]:  # Top 2 results
+                if result.get('similarity', 0) >= self.similarity_threshold:
+                    content_parts.append(result.get('content', '')[:300])
+            
+            return " ".join(content_parts) if content_parts else "No high-confidence matches found."
+            
+        except Exception as e:
+            logger.error(f"Knowledge base search failed: {str(e)}")
+            return "Unable to search knowledge base at this time."
+
     async def generate_knowledge_enhanced_response(
         self,
         user_message: str,

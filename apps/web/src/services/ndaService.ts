@@ -28,22 +28,6 @@ export class NDAService {
   private static readonly NOTIFICATION_COLLECTION = 'admin_notifications';
   private static readonly DOCUMENT_VERSION = '1.0.0';
 
-  /**
-   * Test Firebase connection
-   */
-  static async testFirebaseConnection(): Promise<boolean> {
-    try {
-      console.log('🔍 [NDA] Testing Firebase connection...');
-      
-      // Try to read from a collection (this doesn't require write permissions)
-      const testDoc = await getDoc(doc(db, 'test', 'connection'));
-      console.log('✅ [NDA] Firebase connection test successful');
-      return true;
-    } catch (error) {
-      console.error('❌ [NDA] Firebase connection test failed:', error);
-      return false;
-    }
-  }
 
   /**
    * Check if a user has signed the NDA

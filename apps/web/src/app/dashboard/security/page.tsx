@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -20,114 +21,79 @@ import {
   Search,
   Filter,
   RefreshCw,
-  Settings,
-  Database,
-  Key
 } from 'lucide-react';
-
-// Mock data for security oversight
-const securityMetrics = {
-  threatLevel: 'Low',
-  blockedAttempts: 47,
-  activeIncidents: 2,
-  complianceScore: 98.5,
-  lastSecurityAudit: '2024-07-20',
-  vulnerabilities: 1,
-  systemUptime: 99.98,
-  encryptionStatus: 'Active'
-};
-
-const recentAccessLogs = [
-  {
-    id: 1,
-    user: 'joel@sheltr.ai',
-    role: 'Super Admin',
-    action: 'Dashboard Access',
-    ipAddress: '192.168.1.100',
-    location: 'Vancouver, BC',
-    timestamp: '2024-07-24 14:25:00',
-    status: 'success',
-    device: 'Chrome/Mac'
-  },
-  {
-    id: 2,
-    user: 'sarah@downtownhope.org',
-    role: 'Admin',
-    action: 'User Management',
-    ipAddress: '10.0.0.45',
-    location: 'Seattle, WA',
-    timestamp: '2024-07-24 14:15:30',
-    status: 'success',
-    device: 'Safari/iOS'
-  },
-  {
-    id: 3,
-    user: 'unknown@suspicious.com',
-    role: 'Attempted Access',
-    action: 'Login Attempt',
-    ipAddress: '185.220.101.32',
-    location: 'Unknown/VPN',
-    timestamp: '2024-07-24 13:45:22',
-    status: 'blocked',
-    device: 'Bot/Automated'
-  },
-  {
-    id: 4,
-    user: 'mchen@riverside.org',
-    role: 'Admin',
-    action: 'Data Export',
-    ipAddress: '192.168.1.205',
-    location: 'Portland, OR',
-    timestamp: '2024-07-24 13:30:10',
-    status: 'success',
-    device: 'Firefox/Windows'
-  }
-];
-
-const securityIncidents = [
-  {
-    id: 1,
-    title: 'Suspicious Login Pattern',
-    severity: 'medium',
-    description: 'Multiple failed login attempts from same IP range',
-    status: 'investigating',
-    assignee: 'Security Team',
-    created: '2024-07-24 12:30:00',
-    updated: '2024-07-24 13:15:00'
-  },
-  {
-    id: 2,
-    title: 'Data Access Anomaly',
-    severity: 'low',
-    description: 'User accessed unusual amount of participant data',
-    status: 'resolved',
-    assignee: 'Compliance Team',
-    created: '2024-07-23 16:45:00',
-    updated: '2024-07-24 09:30:00'
-  }
-];
+import { SecurityService, SecurityMetrics, AccessLog, SecurityIncident, SecurityVulnerability } from '@/services/securityService';
 
 const complianceChecks = [
-  { id: 1, requirement: 'Data Encryption at Rest', status: 'compliant', lastCheck: '2024-07-24', score: 100 },
-  { id: 2, requirement: 'Access Control Policies', status: 'compliant', lastCheck: '2024-07-24', score: 98 },
-  { id: 3, requirement: 'Audit Trail Retention', status: 'compliant', lastCheck: '2024-07-23', score: 100 },
-  { id: 4, requirement: 'Data Privacy Controls', status: 'warning', lastCheck: '2024-07-22', score: 95 },
-  { id: 5, requirement: 'Incident Response Plan', status: 'compliant', lastCheck: '2024-07-20', score: 97 }
-];
-
-const systemVulnerabilities = [
-  {
-    id: 1,
-    title: 'Outdated SSL Certificate',
-    severity: 'low',
-    description: 'SSL certificate expires in 30 days',
-    impact: 'Low security risk if not renewed',
-    remediation: 'Schedule certificate renewal',
-    timeline: '30 days'
-  }
+  { id: 1, requirement: 'Data Encryption at Rest', status: 'compliant', lastCheck: '2024-09-21', score: 100 },
+  { id: 2, requirement: 'Access Control Policies', status: 'compliant', lastCheck: '2024-09-21', score: 98 },
+  { id: 3, requirement: 'Audit Trail Retention', status: 'compliant', lastCheck: '2024-09-20', score: 100 },
+  { id: 4, requirement: 'Data Privacy Controls', status: 'warning', lastCheck: '2024-09-19', score: 95 },
+  { id: 5, requirement: 'Incident Response Plan', status: 'compliant', lastCheck: '2024-09-18', score: 97 },
+  { id: 6, requirement: 'NDA Compliance', status: 'compliant', lastCheck: '2024-09-21', score: 100 }
 ];
 
 export default function SecurityCompliance() {
+  const [loading, setLoading] = useState(true);
+  const [securityMetrics, setSecurityMetrics] = useState<SecurityMetrics | null>(null);
+  const [accessLogs, setAccessLogs] = useState<AccessLog[]>([]);
+  const [securityIncidents, setSecurityIncidents] = useState<SecurityIncident[]>([]);
+  const [vulnerabilities, setVulnerabilities] = useState<SecurityVulnerability[]>([]);
+  
+  // Load security data on component mount
+  useEffect(() => {
+    const loadSecurityData = async () => {
+      try {
+        setLoading(true);
+        console.log('🔒 Loading security dashboard data...');
+        
+        const [metrics, logs, incidents, vulns] = await Promise.all([
+          SecurityService.getSecurityMetrics(),
+          SecurityService.getAccessLogs(15),
+          SecurityService.getSecurityIncidents(10),
+          SecurityService.getSecurityVulnerabilities()
+        ]);
+        
+        setSecurityMetrics(metrics);
+        setAccessLogs(logs);
+        setSecurityIncidents(incidents);
+        setVulnerabilities(vulns);
+        
+        console.log('✅ Security dashboard data loaded');
+      } catch (error) {
+        console.error('❌ Error loading security data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    loadSecurityData();
+  }, []);
+
+  const refreshData = async () => {
+    await loadSecurityData();
+  };
+
+  const loadSecurityData = async () => {
+    try {
+      setLoading(true);
+      const [metrics, logs, incidents, vulns] = await Promise.all([
+        SecurityService.getSecurityMetrics(),
+        SecurityService.getAccessLogs(15),
+        SecurityService.getSecurityIncidents(10),
+        SecurityService.getSecurityVulnerabilities()
+      ]);
+      
+      setSecurityMetrics(metrics);
+      setAccessLogs(logs);
+      setSecurityIncidents(incidents);
+      setVulnerabilities(vulns);
+    } catch (error) {
+      console.error('❌ Error refreshing security data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'success':
@@ -197,8 +163,14 @@ export default function SecurityCompliance() {
             <span className="hidden sm:inline">Security Report</span>
             <span className="sm:hidden">Report</span>
           </Button>
-          <Button variant="outline" size="sm" className="flex-1 sm:flex-none">
-            <RefreshCw className="mr-1 sm:mr-2 h-4 w-4" />
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="flex-1 sm:flex-none"
+            onClick={refreshData}
+            disabled={loading}
+          >
+            <RefreshCw className={`mr-1 sm:mr-2 h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
             <span className="hidden sm:inline">Refresh Status</span>
             <span className="sm:hidden">Refresh</span>
           </Button>
@@ -213,7 +185,7 @@ export default function SecurityCompliance() {
             <Shield className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">{securityMetrics.threatLevel}</div>
+            <div className="text-2xl font-bold text-green-600">{securityMetrics?.threatLevel || 'Low'}</div>
             <div className="flex items-center text-xs text-green-600">
               <CheckCircle className="h-3 w-3 mr-1" />
               All systems secure
@@ -227,7 +199,7 @@ export default function SecurityCompliance() {
             <Lock className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{securityMetrics.blockedAttempts}</div>
+            <div className="text-2xl font-bold">{securityMetrics?.blockedAttempts || 0}</div>
             <div className="flex items-center text-xs text-muted-foreground">
               <Activity className="h-3 w-3 mr-1" />
               Last 24 hours
@@ -241,7 +213,7 @@ export default function SecurityCompliance() {
             <FileText className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">{securityMetrics.complianceScore}%</div>
+            <div className="text-2xl font-bold text-green-600">{securityMetrics?.complianceScore || 95}%</div>
             <div className="flex items-center text-xs text-green-600">
               <CheckCircle className="h-3 w-3 mr-1" />
               Excellent compliance
@@ -255,7 +227,7 @@ export default function SecurityCompliance() {
             <AlertTriangle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-yellow-600">{securityMetrics.activeIncidents}</div>
+            <div className="text-2xl font-bold text-yellow-600">{securityMetrics?.activeIncidents || 0}</div>
             <div className="flex items-center text-xs text-yellow-600">
               <Clock className="h-3 w-3 mr-1" />
               Under investigation
@@ -338,110 +310,64 @@ export default function SecurityCompliance() {
             </div>
           </div>
 
-          <div className="space-y-3">
-            {recentAccessLogs.map((log) => (
+          <div className="space-y-1">
+            {accessLogs.map((log) => (
               <Card key={log.id} className="overflow-hidden">
-                <CardContent className="p-0 sm:p-6">
-                  {/* Mobile Layout - Completely Redesigned */}
-                  <div className="block sm:hidden">
-                    {/* Header Section */}
-                    <div className="p-4 bg-gradient-to-r from-blue-50 via-white to-blue-50 dark:from-blue-950/30 dark:via-slate-900 dark:to-blue-950/30">
-                      <div className="flex items-start justify-between mb-3">
-                        <div className="flex items-center space-x-3 flex-1 min-w-0">
-                          <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
-                            <User className="h-7 w-7 text-white" />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <h3 className="font-bold text-lg leading-tight text-gray-900 dark:text-white truncate">
-                              {log.user}
-                            </h3>
-                            <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                              {log.action}
-                            </div>
-                            <div className="text-sm text-gray-500 dark:text-gray-500 mt-0.5">
-                              {log.role}
-                            </div>
-                          </div>
-                        </div>
-                        <Badge className={`${getStatusColor(log.status)} shrink-0 ml-2`} variant="secondary">
-                          {log.status}
-                        </Badge>
+                <CardContent className="p-3 sm:p-4">
+                  {/* Compact Layout for All Screen Sizes */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3 flex-1 min-w-0">
+                      <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center shadow-sm">
+                        <User className="h-4 w-4 text-white" />
                       </div>
-                    </div>
-
-                    {/* Location & Device Section */}
-                    <div className="px-4 py-3 bg-gray-50 dark:bg-slate-800/50 border-y border-gray-200 dark:border-gray-700">
-                      <div className="space-y-2">
-                        <div className="flex items-center text-sm text-gray-700 dark:text-gray-300">
-                          <MapPin className="h-4 w-4 mr-2 shrink-0 text-blue-500" />
-                          <span className="font-medium">{log.location}</span>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center space-x-2">
+                          <div className="font-semibold text-sm truncate">{log.email}</div>
+                          <Badge 
+                            variant="secondary" 
+                            className="text-xs px-2 py-0 bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300"
+                          >
+                            {log.role}
+                          </Badge>
                         </div>
-                        <div className="flex items-center text-sm text-gray-700 dark:text-gray-300">
-                          <Globe className="h-4 w-4 mr-2 shrink-0 text-green-500" />
-                          <span className="font-medium">{log.device}</span>
+                        <div className="flex items-center space-x-4 text-xs text-gray-500 dark:text-gray-400 mt-1">
+                          <span className="flex items-center">
+                            <Activity className="h-3 w-3 mr-1" />
+                            {log.action}
+                          </span>
+                          <span className="flex items-center">
+                            <MapPin className="h-3 w-3 mr-1" />
+                            {log.location}
+                          </span>
+                          <span className="hidden sm:flex items-center">
+                            <Globe className="h-3 w-3 mr-1" />
+                            {log.deviceInfo}
+                          </span>
                         </div>
                       </div>
                     </div>
                     
-                    {/* IP & Timestamp Section */}
-                    <div className="p-4">
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <div className="text-sm font-medium text-gray-900 dark:text-white">IP Address</div>
-                          <div className="text-sm text-gray-600 dark:text-gray-400 font-mono">
-                            {log.ipAddress}
-                          </div>
+                    <div className="flex items-center space-x-3 shrink-0">
+                      <div className="text-right hidden sm:block">
+                        <div className="text-xs font-mono text-gray-600 dark:text-gray-400">{log.ipAddress}</div>
+                        <div className="text-xs text-gray-500 dark:text-gray-500">
+                          {log.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </div>
-                        <div>
-                          <div className="text-sm font-medium text-gray-900 dark:text-white">Time</div>
-                          <div className="text-sm text-gray-600 dark:text-gray-400">
-                            {log.timestamp.split(' ')[1]}
-                          </div>
-                          <div className="text-xs text-gray-500 dark:text-gray-500">
-                            {log.timestamp.split(' ')[0]}
-                          </div>
-                        </div>
+                      </div>
+                      <div className="flex items-center space-x-1">
+                        {getStatusIcon(log.status)}
+                        <Badge className={`${getStatusColor(log.status)} text-xs px-2 py-0`}>
+                          {log.status}
+                        </Badge>
                       </div>
                     </div>
                   </div>
 
-                  {/* Desktop Layout */}
-                  <div className="hidden sm:block">
-                    <div className="flex items-center justify-between p-6 border-b last:border-b-0">
-                      <div className="flex items-center space-x-4 flex-1">
-                        <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-sm">
-                          <User className="h-6 w-6 text-white" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="font-bold text-lg truncate">{log.user}</div>
-                          <div className="text-sm text-gray-600 dark:text-gray-400">{log.action}</div>
-                          <div className="text-xs text-gray-500 dark:text-gray-500 flex items-center mt-1">
-                            <MapPin className="h-3 w-3 mr-1" />
-                            <span className="truncate">{log.location} • {log.device}</span>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-center space-x-6">
-                        <div className="text-center">
-                          <div className="text-sm font-medium">{log.role}</div>
-                          <div className="text-xs text-gray-500 dark:text-gray-400">Role</div>
-                        </div>
-                        <div className="text-center">
-                          <div className="text-sm font-medium font-mono">{log.ipAddress}</div>
-                          <div className="text-xs text-gray-500 dark:text-gray-400">IP Address</div>
-                        </div>
-                        <div className="text-center">
-                          <div className="text-sm font-medium">{log.timestamp.split(' ')[1]}</div>
-                          <div className="text-xs text-gray-500 dark:text-gray-400">{log.timestamp.split(' ')[0]}</div>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          {getStatusIcon(log.status)}
-                          <Badge className={getStatusColor(log.status)}>
-                            {log.status}
-                          </Badge>
-                        </div>
-                      </div>
+                  {/* Mobile-only additional info */}
+                  <div className="sm:hidden mt-2 pt-2 border-t border-gray-100 dark:border-gray-800">
+                    <div className="flex justify-between text-xs text-gray-500">
+                      <span className="font-mono">{log.ipAddress}</span>
+                      <span>{log.timestamp.toLocaleString()}</span>
                     </div>
                   </div>
                 </CardContent>
@@ -511,13 +437,13 @@ export default function SecurityCompliance() {
                         <div className="grid grid-cols-2 gap-4 text-sm">
                           <div>
                             <div className="font-medium text-gray-900 dark:text-white">Created</div>
-                            <div className="text-gray-600 dark:text-gray-400">{incident.created.split(' ')[0]}</div>
-                            <div className="text-xs text-gray-500 dark:text-gray-500">{incident.created.split(' ')[1]}</div>
+                            <div className="text-gray-600 dark:text-gray-400">{incident.createdAt.toLocaleDateString()}</div>
+                            <div className="text-xs text-gray-500 dark:text-gray-500">{incident.createdAt.toLocaleTimeString()}</div>
                           </div>
                           <div>
                             <div className="font-medium text-gray-900 dark:text-white">Updated</div>
-                            <div className="text-gray-600 dark:text-gray-400">{incident.updated.split(' ')[0]}</div>
-                            <div className="text-xs text-gray-500 dark:text-gray-500">{incident.updated.split(' ')[1]}</div>
+                            <div className="text-gray-600 dark:text-gray-400">{incident.updatedAt.toLocaleDateString()}</div>
+                            <div className="text-xs text-gray-500 dark:text-gray-500">{incident.updatedAt.toLocaleTimeString()}</div>
                           </div>
                         </div>
                         <Button variant="outline" size="sm" className="w-full bg-white dark:bg-slate-800 mt-3">
@@ -546,7 +472,7 @@ export default function SecurityCompliance() {
                         </div>
                         <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">{incident.description}</div>
                         <div className="text-xs text-gray-500 dark:text-gray-500">
-                          Assigned to: {incident.assignee} • Created: {incident.created} • Updated: {incident.updated}
+                          Assigned to: {incident.assignee} • Created: {incident.createdAt.toLocaleDateString()} • Updated: {incident.updatedAt.toLocaleDateString()}
                         </div>
                       </div>
                       <Button variant="outline" size="sm">
@@ -613,7 +539,7 @@ export default function SecurityCompliance() {
               <CardContent>
                 <div className="space-y-6">
                   <div className="text-center">
-                    <div className="text-4xl font-bold text-green-600">{securityMetrics.complianceScore}%</div>
+                    <div className="text-4xl font-bold text-green-600">{securityMetrics?.complianceScore || 95}%</div>
                     <div className="text-sm text-muted-foreground">Overall Compliance Score</div>
                   </div>
                   
@@ -658,9 +584,9 @@ export default function SecurityCompliance() {
               <CardDescription className="text-sm">Current system vulnerabilities and recommended actions</CardDescription>
             </CardHeader>
             <CardContent className="pt-3">
-              {systemVulnerabilities.length > 0 ? (
+              {vulnerabilities.length > 0 ? (
                 <div className="space-y-3">
-                  {systemVulnerabilities.map((vuln) => (
+                  {vulnerabilities.map((vuln) => (
                     <Card key={vuln.id} className="overflow-hidden">
                       <CardContent className="p-0 sm:p-6">
                         {/* Mobile Layout - Completely Redesigned */}

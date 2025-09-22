@@ -14,6 +14,7 @@ import {
 } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { auth, db } from '../lib/firebase';
+import { SecurityService } from '../services/securityService';
 
 // Types for our RBAC system
 export type UserRole = 'super_admin' | 'platform_admin' | 'admin' | 'participant' | 'donor';
@@ -345,15 +346,90 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
+  // Helper function to get user's location and device info
+  const getAccessInfo = async () => {
+    let ipAddress = 'Unknown';
+    let location = 'Unknown';
+    
+    try {
+      // Get IP address
+      const ipResponse = await fetch('https://api.ipify.org?format=json');
+      const ipData = await ipResponse.json();
+      ipAddress = ipData.ip;
+      
+      // Get location info (optional, may fail due to CORS)
+      try {
+        const locationResponse = await fetch(`https://ipapi.co/${ipAddress}/json/`);
+        const locationData = await locationResponse.json();
+        location = `${locationData.city || 'Unknown'}, ${locationData.region || 'Unknown'}`;
+      } catch {
+        location = 'Unknown Location';
+      }
+    } catch {
+      ipAddress = '0.0.0.0';
+      location = 'Unknown Location';
+    }
+    
+    // Get device info
+    const userAgent = navigator.userAgent;
+    let deviceInfo = 'Unknown Device';
+    
+    if (userAgent.includes('Chrome')) {
+      deviceInfo = userAgent.includes('Mac') ? 'Chrome/Mac' : 
+                   userAgent.includes('Windows') ? 'Chrome/Windows' : 
+                   userAgent.includes('iPhone') ? 'Chrome/iOS' : 'Chrome/Other';
+    } else if (userAgent.includes('Safari') && !userAgent.includes('Chrome')) {
+      deviceInfo = userAgent.includes('Mac') ? 'Safari/Mac' : 
+                   userAgent.includes('iPhone') ? 'Safari/iOS' : 'Safari/Other';
+    } else if (userAgent.includes('Firefox')) {
+      deviceInfo = userAgent.includes('Mac') ? 'Firefox/Mac' : 
+                   userAgent.includes('Windows') ? 'Firefox/Windows' : 'Firefox/Other';
+    } else if (userAgent.includes('Edge')) {
+      deviceInfo = 'Edge/Windows';
+    }
+    
+    return { ipAddress, location, userAgent, deviceInfo };
+  };
+
   // Login with email and password
   const login = async (email: string, password: string): Promise<void> => {
+    const accessInfo = await getAccessInfo();
+    
     try {
       setLoading(true);
       setError(null);
-      await signInWithEmailAndPassword(auth, email, password);
+      const result = await signInWithEmailAndPassword(auth, email, password);
+      
+      // Log successful access
+      await SecurityService.logAccess({
+        userId: result.user.uid,
+        email: result.user.email || email,
+        role: 'Unknown', // Will be updated when user data loads
+        action: 'Email Login',
+        ipAddress: accessInfo.ipAddress,
+        userAgent: accessInfo.userAgent,
+        location: accessInfo.location,
+        status: 'success',
+        deviceInfo: accessInfo.deviceInfo
+      });
+      
     } catch (error: any) {
       console.error('Login error:', error);
       setError(error.message || 'Login failed');
+      
+      // Log failed access attempt
+      await SecurityService.logAccess({
+        userId: 'failed-login',
+        email: email,
+        role: 'Failed Login',
+        action: 'Email Login Attempt',
+        ipAddress: accessInfo.ipAddress,
+        userAgent: accessInfo.userAgent,
+        location: accessInfo.location,
+        status: 'failed',
+        deviceInfo: accessInfo.deviceInfo
+      });
+      
       throw error;
     } finally {
       setLoading(false);
@@ -362,6 +438,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   // Login with Google
   const loginWithGoogle = async (): Promise<void> => {
+    const accessInfo = await getAccessInfo();
+    
     try {
       setLoading(true);
       setError(null);
@@ -414,8 +492,35 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       
       console.log('✅ Google login successful for existing SHELTR user');
       
+      // Log successful Google login
+      await SecurityService.logAccess({
+        userId: user.uid,
+        email: user.email || 'unknown@google.com',
+        role: 'Unknown', // Will be updated when user data loads
+        action: 'Google OAuth Login',
+        ipAddress: accessInfo.ipAddress,
+        userAgent: accessInfo.userAgent,
+        location: accessInfo.location,
+        status: 'success',
+        deviceInfo: accessInfo.deviceInfo
+      });
+      
     } catch (error: any) {
       console.error('Google login error:', error);
+      
+      // Log failed Google login attempt
+      await SecurityService.logAccess({
+        userId: 'failed-google-login',
+        email: 'unknown@google.com',
+        role: 'Failed Google Login',
+        action: 'Google OAuth Login Attempt',
+        ipAddress: accessInfo.ipAddress,
+        userAgent: accessInfo.userAgent,
+        location: accessInfo.location,
+        status: 'failed',
+        deviceInfo: accessInfo.deviceInfo
+      });
+      
       if (error.message === 'User must register first') {
         // Keep the specific error message for unregistered users
         setError('Account not found. Please register for a SHELTR account first before signing in with Google.');

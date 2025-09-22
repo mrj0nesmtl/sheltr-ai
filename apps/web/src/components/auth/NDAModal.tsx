@@ -36,7 +36,7 @@ export function NDAModal({ onAccept, onCancel }: NDAModalProps) {
 
     setIsLoading(true);
     try {
-      console.log('🔍 [NDA Modal] Starting signature process...');
+        console.log('🔍 [NDA Modal] Starting signature process...');
       
       // Test Firebase connection first
       const connectionTest = await NDAService.testFirebaseConnection();

@@ -156,6 +156,18 @@ export default function DocsPage() {
       lastUpdated: "September 22, 2025"
     },
     {
+      title: "OpenAI MCP Demo",
+      description: "Interactive demonstration of SHELTR-AI's enhanced chatbot powered by OpenAI Agents SDK and specialized MCP agents",
+      icon: MessageSquare,
+      badge: "Live Demo",
+      badgeColor: "bg-gradient-to-r from-yellow-500 to-orange-600",
+      audience: "All Users • Administrators • Developers • Stakeholders",
+      topics: ["OpenAI Agents SDK", "Specialized AI Agents", "Role-Based Access", "Real-Time Chat", "MCP Integration"],
+      link: "/docs/mcp-demo",
+      downloadLink: "https://openai.github.io/openai-agents-js/guides/mcp/",
+      lastUpdated: "September 22, 2025"
+    },
+    {
       title: "Complete Functionality Matrix",
       description: "Comprehensive testing matrix for all features, data storage/retrieval, business logic, and user workflows",
       icon: CheckSquare,

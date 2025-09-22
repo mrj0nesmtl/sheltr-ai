@@ -36,14 +36,13 @@ export function NDAModal({ onAccept, onCancel }: NDAModalProps) {
 
     setIsLoading(true);
     try {
-        console.log('🔍 [NDA Modal] Starting signature process...');
-      
-      // Test Firebase connection first
-      const connectionTest = await NDAService.testFirebaseConnection();
-      if (!connectionTest) {
-        alert('Unable to connect to the database. Please check your internet connection and try again.');
-        return;
-      }
+      console.log('🔍 [NDA Modal] Starting signature process...');
+      console.log('🔍 [NDA Modal] User details:', {
+        uid: user.uid,
+        email: user.email,
+        role: (user as any)?.role,
+        displayName: user.displayName
+      });
 
       const success = await NDAService.signNDA({
         userId: user.uid,

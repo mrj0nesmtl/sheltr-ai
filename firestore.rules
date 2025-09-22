@@ -603,6 +603,23 @@ service cloud.firestore {
     }
     
     // =================================================================
+    // NDA AGREEMENTS COLLECTION - Digital signature agreements for Platform Administrators
+    // =================================================================
+    match /nda_agreements/{userId} {
+      // Read: Super Admin can read all NDAs, Platform Admins can read their own
+      allow read: if isSuperAdmin() || (isPlatformAdmin() && userId == request.auth.uid);
+      
+      // Write: Platform Admins can sign their own NDA, Super Admin can manage all
+      allow write: if isSuperAdmin() || (isPlatformAdmin() && userId == request.auth.uid);
+      
+      // Create: Platform Admins can create their own NDA signature
+      allow create: if isPlatformAdmin() && userId == request.auth.uid;
+      
+      // Delete: Super Admin only
+      allow delete: if isSuperAdmin();
+    }
+    
+    // =================================================================
     // FALLBACK RULE - Deny all other access
     // =================================================================
     match /{document=**} {

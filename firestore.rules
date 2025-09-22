@@ -300,22 +300,6 @@ service cloud.firestore {
       allow delete: if isSuperAdmin();
     }
 
-    // =================================================================
-    // NDA AGREEMENTS - Platform Administrator NDAs
-    // =================================================================
-    match /nda_agreements/{userId} {
-      // Read: Super Admin can read all, Platform Admin can read their own
-      allow read: if isSuperAdmin() || (isPlatformAdmin() && request.auth.uid == userId);
-      
-      // Write: Platform Admin can create/update their own NDA
-      allow write: if isPlatformAdmin() && request.auth.uid == userId;
-      
-      // Create: Platform Admin can create their own NDA
-      allow create: if isPlatformAdmin() && request.auth.uid == userId;
-      
-      // Delete: Super Admin only (for compliance reasons)
-      allow delete: if isSuperAdmin();
-    }
     
     // =================================================================
     // CHAT_SESSIONS COLLECTION - Chatbot conversation history

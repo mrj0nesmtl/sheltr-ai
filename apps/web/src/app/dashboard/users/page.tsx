@@ -651,24 +651,49 @@ export default function UserManagement() {
       </div>
 
       {/* User Statistics Overview - Real Data */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className="border-2 border-purple-200 dark:border-purple-800 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20">
+      <div className={`grid grid-cols-1 md:grid-cols-2 gap-6 ${user?.email === 'joel@sheltr.ai' ? 'lg:grid-cols-5' : 'lg:grid-cols-4'}`}>
+        {/* Super Admin Card - Only visible to Super Admins */}
+        {user?.email === 'joel@sheltr.ai' && (
+          <Card className="border-2 border-purple-200 dark:border-purple-800 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Super Admins</CardTitle>
+              <Crown className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-purple-700 dark:text-purple-300">
+                {loading ? '--' : userStats?.superAdmins.total || 0}
+              </div>
+              <div className="flex items-center space-x-4 text-xs text-purple-600 dark:text-purple-400 mt-2">
+                <span className="flex items-center">
+                  <Activity className="h-3 w-3 text-green-500 mr-1" />
+                  {loading ? '--' : userStats?.superAdmins.active || 0} Online
+                </span>
+                <span className="flex items-center">
+                  <Shield className="h-3 w-3 text-purple-500 mr-1" />
+                  Platform Control
+                </span>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        <Card className="border-2 border-blue-200 dark:border-blue-800 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Super Admins</CardTitle>
-            <Crown className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+            <CardTitle className="text-sm font-medium">Platform Admins</CardTitle>
+            <Star className="h-4 w-4 text-blue-600 dark:text-blue-400" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-purple-700 dark:text-purple-300">
-              {loading ? '--' : userStats?.superAdmins.total || 0}
+            <div className="text-2xl font-bold text-blue-700 dark:text-blue-300">
+              {loading ? '--' : userStats?.platformAdmins.total || 0}
             </div>
-            <div className="flex items-center space-x-4 text-xs text-purple-600 dark:text-purple-400 mt-2">
+            <div className="flex items-center space-x-4 text-xs text-blue-600 dark:text-blue-400 mt-2">
               <span className="flex items-center">
-                <Activity className="h-3 w-3 text-green-500 mr-1" />
-                {loading ? '--' : userStats?.superAdmins.active || 0} Online
+                <CheckCircle className="h-3 w-3 text-green-500 mr-1" />
+                {loading ? '--' : userStats?.platformAdmins.active || 0} Active
               </span>
               <span className="flex items-center">
-                <Shield className="h-3 w-3 text-purple-500 mr-1" />
-                Platform Control
+                <Clock className="h-3 w-3 text-yellow-500 mr-1" />
+                {loading ? '--' : userStats?.platformAdmins.pending || 0} Pending
               </span>
             </div>
           </CardContent>
@@ -676,21 +701,21 @@ export default function UserManagement() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Admin Users</CardTitle>
+            <CardTitle className="text-sm font-medium">Shelter Admins</CardTitle>
             <UserCog className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {loading ? '--' : userStats?.admins.total || 0}
+              {loading ? '--' : userStats?.shelterAdmins.total || 0}
             </div>
             <div className="flex items-center space-x-4 text-xs text-muted-foreground mt-2">
               <span className="flex items-center">
                 <CheckCircle className="h-3 w-3 text-green-500 mr-1" />
-                {loading ? '--' : userStats?.admins.active || 0} Active
+                {loading ? '--' : userStats?.shelterAdmins.active || 0} Active
               </span>
               <span className="flex items-center">
                 <Clock className="h-3 w-3 text-yellow-500 mr-1" />
-                {loading ? '--' : userStats?.admins.pending || 0} Pending
+                {loading ? '--' : userStats?.shelterAdmins.pending || 0} Pending
               </span>
             </div>
           </CardContent>

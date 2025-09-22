@@ -1047,18 +1047,58 @@ export default function GalleryManagementPage() {
           {/* Image Info */}
           <div className="absolute bottom-4 left-4 right-4 bg-black/70 rounded-lg p-4 text-white">
             <div className="flex items-center justify-between">
-              <div>
+              <div className="flex-1">
                 <h3 className="font-semibold text-lg">{filteredImages[currentImageIndex]?.title}</h3>
-                <p className="text-sm text-gray-300">{filteredImages[currentImageIndex]?.description}</p>
-              </div>
-              <div className="text-right text-sm text-gray-300">
-                <div>{currentImageIndex + 1} of {filteredImages.length}</div>
-                {filteredImages[currentImageIndex]?.width && filteredImages[currentImageIndex]?.height && (
+                <p className="text-sm text-gray-300 mb-2">{filteredImages[currentImageIndex]?.description}</p>
+                
+                {/* Enhanced Metadata Section */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs text-gray-400">
                   <div>
-                    {filteredImages[currentImageIndex].width} × {filteredImages[currentImageIndex].height}
-                    ({filteredImages[currentImageIndex].aspectRatio})
+                    <span className="text-gray-500">Category:</span>
+                    <div className="text-white">{filteredImages[currentImageIndex]?.category || 'N/A'}</div>
+                  </div>
+                  {filteredImages[currentImageIndex]?.width && filteredImages[currentImageIndex]?.height && (
+                    <div>
+                      <span className="text-gray-500">Dimensions:</span>
+                      <div className="text-white">{filteredImages[currentImageIndex].width} × {filteredImages[currentImageIndex].height}</div>
+                    </div>
+                  )}
+                  {filteredImages[currentImageIndex]?.aspectRatio && (
+                    <div>
+                      <span className="text-gray-500">Aspect Ratio:</span>
+                      <div className="text-white">{filteredImages[currentImageIndex].aspectRatio}</div>
+                    </div>
+                  )}
+                  {filteredImages[currentImageIndex]?.fileSize && (
+                    <div>
+                      <span className="text-gray-500">File Size:</span>
+                      <div className="text-white">{(filteredImages[currentImageIndex].fileSize! / 1024 / 1024).toFixed(2)} MB</div>
+                    </div>
+                  )}
+                </div>
+                
+                {/* Tags */}
+                {filteredImages[currentImageIndex]?.tags && filteredImages[currentImageIndex].tags.length > 0 && (
+                  <div className="mt-2">
+                    <span className="text-gray-500 text-xs">Tags:</span>
+                    <div className="flex flex-wrap gap-1 mt-1">
+                      {filteredImages[currentImageIndex].tags.map((tag, idx) => (
+                        <span key={idx} className="bg-white/20 px-2 py-1 rounded text-xs">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 )}
+              </div>
+              
+              <div className="text-right text-sm text-gray-300 ml-4">
+                <div className="text-lg font-semibold">{currentImageIndex + 1} of {filteredImages.length}</div>
+                <div className="text-xs mt-1">
+                  {filteredImages[currentImageIndex]?.isHero && <span className="bg-yellow-500/20 text-yellow-300 px-2 py-1 rounded mr-1">Gallery Hero</span>}
+                  {filteredImages[currentImageIndex]?.isLandingHero && <span className="bg-orange-500/20 text-orange-300 px-2 py-1 rounded mr-1">Landing Hero</span>}
+                  {filteredImages[currentImageIndex]?.isPrivate && <span className="bg-red-500/20 text-red-300 px-2 py-1 rounded">Hidden</span>}
+                </div>
               </div>
             </div>
           </div>

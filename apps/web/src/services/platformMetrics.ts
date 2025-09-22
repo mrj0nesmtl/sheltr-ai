@@ -1721,7 +1721,8 @@ export const getRealTimePlatformMetrics = async (): Promise<RealTimePlatformMetr
 // User management interfaces
 export interface UserStats {
   superAdmins: { total: number; active: number; pending: number };
-  admins: { total: number; active: number; pending: number };
+  platformAdmins: { total: number; active: number; pending: number };
+  shelterAdmins: { total: number; active: number; pending: number };
   participants: { total: number; verified: number; pending: number };
   donors: { total: number; active: number; verified: number };
 }
@@ -1788,9 +1789,10 @@ export const getUserStats = async (): Promise<UserStats> => {
     console.log(`🔍 DEBUG: Found ${users.length} total users in database`);
     console.log('🔍 DEBUG: User roles breakdown:', users.map(u => ({ email: u.email, role: u.role })));
     
-    // Count by role
+    // Count by role - separate platform and shelter admins
     const superAdmins = users.filter(user => user.role === 'superadmin' || user.role === 'super_admin');
-    const admins = users.filter(user => user.role === 'admin' || user.role === 'shelteradmin');
+    const platformAdmins = users.filter(user => user.role === 'platform_admin');
+    const shelterAdmins = users.filter(user => user.role === 'admin' || user.role === 'shelteradmin');
     const participants = users.filter(user => user.role === 'participant');
     
     // DUAL-ROLE LOGIC: Count donors by primary role + donation activity
@@ -1841,10 +1843,15 @@ export const getUserStats = async (): Promise<UserStats> => {
         active: superAdmins.filter(u => u.status !== 'inactive').length,
         pending: superAdmins.filter(u => u.status === 'pending').length
       },
-      admins: {
-        total: admins.length,
-        active: admins.filter(u => u.status !== 'inactive').length,
-        pending: admins.filter(u => u.status === 'pending').length
+      platformAdmins: {
+        total: platformAdmins.length,
+        active: platformAdmins.filter(u => u.status !== 'inactive').length,
+        pending: platformAdmins.filter(u => u.status === 'pending').length
+      },
+      shelterAdmins: {
+        total: shelterAdmins.length,
+        active: shelterAdmins.filter(u => u.status !== 'inactive').length,
+        pending: shelterAdmins.filter(u => u.status === 'pending').length
       },
       participants: {
         total: participants.length,
@@ -1866,7 +1873,8 @@ export const getUserStats = async (): Promise<UserStats> => {
     // Return safe fallback
     return {
       superAdmins: { total: 0, active: 0, pending: 0 },
-      admins: { total: 0, active: 0, pending: 0 },
+      platformAdmins: { total: 0, active: 0, pending: 0 },
+      shelterAdmins: { total: 0, active: 0, pending: 0 },
       participants: { total: 0, verified: 0, pending: 0 },
       donors: { total: 0, active: 0, verified: 0 }
     };

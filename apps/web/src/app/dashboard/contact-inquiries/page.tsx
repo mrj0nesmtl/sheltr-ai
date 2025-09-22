@@ -60,18 +60,22 @@ export default function ContactInquiries() {
     if (!hasRole('super_admin') && !hasRole('platform_admin')) return;
 
     const inquiriesRef = collection(db, 'contact_inquiries');
-    let q = query(inquiriesRef, orderBy('created_at', 'desc'));
     
-    if (filter !== 'all') {
-      q = query(inquiriesRef, where('status', '==', filter), orderBy('created_at', 'desc'));
-    }
+    // Always get all inquiries and filter client-side to avoid Firestore index issues
+    const q = query(inquiriesRef, orderBy('created_at', 'desc'));
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      const inquiriesData = snapshot.docs.map(doc => ({
+      let inquiriesData = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
       })) as ContactInquiry[];
       
+      // Apply client-side filtering
+      if (filter !== 'all') {
+        inquiriesData = inquiriesData.filter(inquiry => inquiry.status === filter);
+      }
+      
+      console.log(`📧 Loaded ${inquiriesData.length} contact inquiries (filter: ${filter})`);
       setInquiries(inquiriesData);
       setLoading(false);
     });

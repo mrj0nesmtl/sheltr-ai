@@ -144,7 +144,8 @@ class OpenAIService:
                 max_tokens=self.max_tokens,
                 temperature=self.temperature,
                 presence_penalty=0.1,  # Encourage varied responses
-                frequency_penalty=0.1   # Reduce repetition
+                frequency_penalty=0.1,  # Reduce repetition
+                stop=None  # Let it complete naturally instead of hard cutoffs
             )
             
             response_time = time.time() - start_time

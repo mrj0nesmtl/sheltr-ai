@@ -142,31 +142,32 @@ class ChatbotDashboardService:
             relevant_context = await self.rag_orchestrator.search_knowledge_base(enhanced_query)
             
             # Prepare system message with context
-            system_message = f"{instructions}\n\nRelevant context: {relevant_context[:1000] if relevant_context else 'No specific context available.'}"
+            system_message = f"""{instructions}
+
+Relevant context: {relevant_context[:1000] if relevant_context else 'No specific context available.'}
+
+IMPORTANT: Always provide complete, well-structured responses. Finish your thoughts completely rather than cutting off mid-sentence. Aim for comprehensive yet concise answers that fully address the user's question."""
             
             # Generate AI response
             response = await self.openai_service.generate_response(
-                messages=conversation_history,
-                system_message=system_message,
-                model=agent_config.get('model', 'gpt-4o-mini'),
-                temperature=agent_config.get('temperature', 0.7),
-                max_tokens=agent_config.get('max_tokens', 1000)
+                message=user_message,
+                context={'conversation_history': conversation_history},
+                system_prompt=system_message
             )
             
             # Add assistant message to database
             metadata = {
-                'model': agent_config.get('model'),
-                'tokens_used': response.get('usage', {}).get('total_tokens', 0),
-                'response_time': response.get('response_time', 0),
+                'model': agent_config.get('model', 'gpt-4o-mini'),
+                'tokens_used': 0,  # OpenAI service returns string, not usage dict
                 'context_used': bool(relevant_context)
             }
             
-            await self.add_chat_message(session_id, 'assistant', response['content'], metadata)
+            await self.add_chat_message(session_id, 'assistant', response, metadata)
             
             return {
                 'success': True,
                 'data': {
-                    'message': response['content'],
+                    'message': response,
                     'metadata': metadata
                 }
             }

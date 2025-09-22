@@ -10,12 +10,18 @@ export interface GalleryImage {
   tags: string[];
   date: string;
   isPublic: boolean;
+  isPrivate: boolean; // Hide from public gallery (internal use only)
   isHero: boolean; // Hero image for gallery page
   isLandingHero: boolean; // Hero image for landing page
   order: number;
   uploadedBy: string;
   createdAt: Date;
   updatedAt: Date;
+  // Image metadata
+  width?: number;
+  height?: number;
+  aspectRatio?: string;
+  fileSize?: number;
 }
 
 export class GalleryService {
@@ -102,12 +108,15 @@ export class GalleryService {
       
       querySnapshot.forEach((doc) => {
         const data = doc.data();
-        images.push({
-          id: doc.id,
-          ...data,
-          createdAt: data.createdAt?.toDate() || new Date(),
-          updatedAt: data.updatedAt?.toDate() || new Date()
-        } as GalleryImage);
+        // Only include images that are not marked as private
+        if (!data.isPrivate) {
+          images.push({
+            id: doc.id,
+            ...data,
+            createdAt: data.createdAt?.toDate() || new Date(),
+            updatedAt: data.updatedAt?.toDate() || new Date()
+          } as GalleryImage);
+        }
       });
       
       // Sort by order field

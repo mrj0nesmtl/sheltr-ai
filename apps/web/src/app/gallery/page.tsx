@@ -19,8 +19,7 @@ import {
   Calendar,
   Tag
 } from 'lucide-react';
-import { collection, getDocs, query, where, orderBy } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { GalleryService } from '@/services/galleryService';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -37,8 +36,11 @@ interface GalleryImage {
   tags: string[];
   date: string;
   isPublic: boolean;
-  isHero: boolean;
+  isHero: boolean; // Hero image for gallery page
+  isLandingHero: boolean; // Hero image for landing page
   order: number;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const categories = ['all', 'pods', 'mobi', 'drones', 'technology', 'fabrication', 'concepts'];
@@ -59,42 +61,14 @@ export default function GalleryPage() {
   const [showImageInfo, setShowImageInfo] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Load images from Firebase
+  // Load images from Firebase using GalleryService
   const loadImages = async () => {
     try {
-      const imagesQuery = query(
-        collection(db, 'gallery_images'),
-        where('isPublic', '==', true)
-      );
-      const snapshot = await getDocs(imagesQuery);
-      const loadedImages: GalleryImage[] = [];
-      let foundHeroImage: GalleryImage | null = null;
+      // Load all public gallery images
+      const loadedImages = await GalleryService.getPublicGalleryImages();
       
-      snapshot.forEach((doc) => {
-        const data = doc.data();
-        const image: GalleryImage = {
-          id: doc.id,
-          src: data.src,
-          title: data.title,
-          category: data.category,
-          description: data.description,
-          tags: data.tags || [],
-          date: data.date,
-          isPublic: data.isPublic,
-          isHero: data.isHero || false,
-          order: data.order
-        };
-        
-        loadedImages.push(image);
-        
-        // Track the hero image
-        if (image.isHero) {
-          foundHeroImage = image;
-        }
-      });
-      
-      // Sort images by order manually since we can't use orderBy in the query yet
-      loadedImages.sort((a, b) => (a.order || 0) - (b.order || 0));
+      // Get the gallery hero image
+      const foundHeroImage = await GalleryService.getGalleryHeroImage();
       
       setImages(loadedImages);
       setFilteredImages(loadedImages);
@@ -226,7 +200,7 @@ export default function GalleryPage() {
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
               Explore our innovative solutions for urban mobility, emergency response, and sustainable living. 
-              From SHELTR PODS to drone delivery systems, discover the technology shaping tomorrow's cities.
+              From SHELTR PODS to drone delivery systems, discover the technology shaping tomorrow&apos;s cities.
             </p>
             <div className="flex items-center justify-center gap-4 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">

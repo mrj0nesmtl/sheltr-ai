@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Menu, X, LogIn, ArrowRight, Heart, Wallet, Home, QrCode, Shield, BarChart3, UserPlus, Users, FileText, Mail, ExternalLink, Building2, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -10,10 +10,26 @@ import Footer from '@/components/Footer';
 import ThemeLogo from '@/components/ThemeLogo';
 import { PublicChatbot } from '@/components/PublicChatbot';
 import { useAuth } from '@/contexts/AuthContext';
+import { GalleryService, GalleryImage } from '@/services/galleryService';
 
 export default function HomePage() {
   const { user, hasRole } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [landingHeroImage, setLandingHeroImage] = useState<GalleryImage | null>(null);
+
+  // Load landing hero image
+  useEffect(() => {
+    const loadLandingHero = async () => {
+      try {
+        const heroImage = await GalleryService.getLandingHeroImage();
+        setLandingHeroImage(heroImage);
+      } catch (error) {
+        console.error('Error loading landing hero image:', error);
+      }
+    };
+    
+    loadLandingHero();
+  }, []);
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -239,7 +255,9 @@ export default function HomePage() {
         <section 
           className="relative py-24 min-h-[80vh] flex items-center bg-gradient-to-r from-slate-900 to-slate-800"
           style={{
-            backgroundImage: "url('/backgrounds/hero-bg.jpg')",
+            backgroundImage: landingHeroImage 
+              ? `url('${landingHeroImage.src}')` 
+              : "url('/backgrounds/hero-bg.jpg')",
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat'

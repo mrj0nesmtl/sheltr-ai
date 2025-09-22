@@ -13,7 +13,11 @@ import {
   Save,
   ExternalLink,
   GripVertical,
-  RotateCcw
+  RotateCcw,
+  Eye,
+  ChevronLeft,
+  ChevronRight,
+  X
 } from 'lucide-react';
 import {
   DndContext,
@@ -55,15 +59,49 @@ interface GalleryImage {
   tags: string[];
   date: string;
   isPublic: boolean;
+  isPrivate: boolean; // Hide from public gallery (internal use only)
   isHero: boolean; // Hero image for gallery page
   isLandingHero: boolean; // Hero image for landing page
   order: number;
   uploadedBy: string;
   createdAt: Date;
   updatedAt: Date;
+  // Image metadata
+  width?: number;
+  height?: number;
+  aspectRatio?: string;
+  fileSize?: number;
 }
 
 const categories = ['pods', 'mobi', 'drones', 'technology', 'fabrication', 'concepts'];
+
+// Helper function to extract image metadata
+const extractImageMetadata = (file: File): Promise<{ width: number; height: number; aspectRatio: string }> => {
+  return new Promise((resolve) => {
+    const img = document.createElement('img');
+    img.onload = () => {
+      const width = img.naturalWidth;
+      const height = img.naturalHeight;
+      const ratio = width / height;
+      
+      // Calculate common aspect ratios
+      let aspectRatio = `${width}:${height}`;
+      
+      // Check for common ratios
+      if (Math.abs(ratio - 16/9) < 0.01) aspectRatio = '16:9';
+      else if (Math.abs(ratio - 4/3) < 0.01) aspectRatio = '4:3';
+      else if (Math.abs(ratio - 3/2) < 0.01) aspectRatio = '3:2';
+      else if (Math.abs(ratio - 1) < 0.01) aspectRatio = '1:1';
+      else if (Math.abs(ratio - 9/16) < 0.01) aspectRatio = '9:16';
+      else if (Math.abs(ratio - 21/9) < 0.01) aspectRatio = '21:9';
+      else aspectRatio = `${Math.round(ratio * 100) / 100}:1`;
+      
+      resolve({ width, height, aspectRatio });
+    };
+    img.onerror = () => resolve({ width: 0, height: 0, aspectRatio: 'Unknown' });
+    img.src = URL.createObjectURL(file);
+  });
+};
 
 // Sortable Image Card Component
 interface SortableImageCardProps {
@@ -73,9 +111,11 @@ interface SortableImageCardProps {
   onDelete: (image: GalleryImage) => void;
   onToggleHero: (image: GalleryImage) => void;
   onToggleLandingHero: (image: GalleryImage) => void;
+  onTogglePrivacy: (image: GalleryImage) => void;
+  onViewImage: (index: number) => void;
 }
 
-function SortableImageCard({ image, index, onEdit, onDelete, onToggleHero, onToggleLandingHero }: SortableImageCardProps) {
+function SortableImageCard({ image, index, onEdit, onDelete, onToggleHero, onToggleLandingHero, onTogglePrivacy, onViewImage }: SortableImageCardProps) {
   const {
     attributes,
     listeners,
@@ -97,18 +137,29 @@ function SortableImageCard({ image, index, onEdit, onDelete, onToggleHero, onTog
       style={style} 
       className={`overflow-hidden ${isDragging ? 'shadow-2xl z-50' : ''}`}
     >
-      <div className="relative aspect-square">
+      <div className="relative aspect-square cursor-pointer" onClick={() => onViewImage(index)}>
         <Image
           src={image.src}
           alt={image.title}
           fill
-          className="object-cover"
+          className="object-cover hover:scale-105 transition-transform duration-200"
           sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
         />
-        <div className="absolute top-2 right-2 flex gap-1">
+        {/* View overlay on hover */}
+        <div className="absolute inset-0 bg-black/0 hover:bg-black/20 transition-colors duration-200 flex items-center justify-center">
+          <div className="opacity-0 hover:opacity-100 transition-opacity duration-200">
+            <Eye className="h-8 w-8 text-white drop-shadow-lg" />
+          </div>
+        </div>
+        <div className="absolute top-2 right-2 flex gap-1 flex-wrap">
           <Badge variant={image.isPublic ? "default" : "secondary"} className="text-xs">
             {image.isPublic ? "Public" : "Private"}
           </Badge>
+          {image.isPrivate && (
+            <Badge variant="destructive" className="text-xs bg-red-500 hover:bg-red-600">
+              HIDDEN
+            </Badge>
+          )}
           <Badge variant="outline" className="text-xs">
             {image.category}
           </Badge>
@@ -174,7 +225,33 @@ function SortableImageCard({ image, index, onEdit, onDelete, onToggleHero, onTog
               Hero Image Landing Page
             </label>
           </div>
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              id={`private-${image.id}`}
+              checked={image.isPrivate || false}
+              onChange={() => onTogglePrivacy(image)}
+              className="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 rounded focus:ring-red-500 dark:focus:ring-red-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+            />
+            <label htmlFor={`private-${image.id}`} className="text-sm font-medium text-gray-900 dark:text-gray-300">
+              Hide from Public Gallery
+            </label>
+          </div>
         </div>
+        {/* Image Metadata */}
+        {(image.width && image.height) && (
+          <div className="text-xs text-muted-foreground mb-2 p-2 bg-muted/50 rounded">
+            <div className="flex justify-between items-center">
+              <span>Dimensions: {image.width} × {image.height}</span>
+              <span>Ratio: {image.aspectRatio || 'Unknown'}</span>
+            </div>
+            {image.fileSize && (
+              <div className="mt-1">
+                Size: {(image.fileSize / 1024 / 1024).toFixed(2)} MB
+              </div>
+            )}
+          </div>
+        )}
         <div className="flex justify-between items-center">
           <div className="text-xs text-muted-foreground">
             Order: {index + 1}
@@ -214,6 +291,8 @@ export default function GalleryManagementPage() {
   const [uploading, setUploading] = useState(false);
   const [alert, setAlert] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const [isReordering, setIsReordering] = useState(false);
+  const [viewerOpen, setViewerOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   // Drag & Drop sensors
   const sensors = useSensors(
@@ -230,6 +309,7 @@ export default function GalleryManagementPage() {
     description: '',
     tags: '',
     isPublic: true,
+    isPrivate: false,
     isHero: false,
     isLandingHero: false
   });
@@ -308,6 +388,9 @@ export default function GalleryManagementPage() {
       const snapshot = await uploadBytes(storageRef, file);
       const downloadURL = await getDownloadURL(snapshot.ref);
 
+      // Extract image metadata
+      const imageMetadata = await extractImageMetadata(file);
+
       // Save to Firestore
       const imageData = {
         src: downloadURL,
@@ -317,19 +400,25 @@ export default function GalleryManagementPage() {
         tags: formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag),
         date: new Date().getFullYear().toString(),
         isPublic: formData.isPublic,
+        isPrivate: formData.isPrivate,
         isHero: formData.isHero,
         isLandingHero: formData.isLandingHero,
         order: images.length,
         uploadedBy: user.uid,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
+        // Image metadata
+        width: imageMetadata.width,
+        height: imageMetadata.height,
+        aspectRatio: imageMetadata.aspectRatio,
+        fileSize: file.size
       };
 
       await addDoc(collection(db, 'gallery_images'), imageData);
       
       showAlert('success', 'Image uploaded successfully!');
       setUploadDialogOpen(false);
-      setFormData({ title: '', category: '', description: '', tags: '', isPublic: true, isHero: false, isLandingHero: false });
+      setFormData({ title: '', category: '', description: '', tags: '', isPublic: true, isPrivate: false, isHero: false, isLandingHero: false });
       loadImages();
     } catch (error) {
       console.error('Error uploading image:', error);
@@ -422,6 +511,67 @@ export default function GalleryManagementPage() {
       setIsReordering(false);
     }
   };
+
+  // Handle privacy toggle (hide from public gallery)
+  const handleTogglePrivacy = async (image: GalleryImage) => {
+    try {
+      setIsReordering(true);
+      
+      // Toggle the privacy status of the current image
+      await updateDoc(doc(db, 'gallery_images', image.id), {
+        isPrivate: !image.isPrivate,
+        updatedAt: new Date()
+      });
+      
+      showAlert('success', image.isPrivate ? 'Image made visible in public gallery!' : 'Image hidden from public gallery!');
+      loadImages();
+    } catch (error) {
+      console.error('Error toggling privacy:', error);
+      showAlert('error', 'Failed to update privacy setting');
+    } finally {
+      setIsReordering(false);
+    }
+  };
+
+  // Handle image viewer
+  const handleViewImage = (index: number) => {
+    setCurrentImageIndex(index);
+    setViewerOpen(true);
+  };
+
+  const handleNextImage = useCallback(() => {
+    setCurrentImageIndex((prev) => (prev + 1) % filteredImages.length);
+  }, [filteredImages.length]);
+
+  const handlePrevImage = useCallback(() => {
+    setCurrentImageIndex((prev) => (prev - 1 + filteredImages.length) % filteredImages.length);
+  }, [filteredImages.length]);
+
+  const handleCloseViewer = () => {
+    setViewerOpen(false);
+  };
+
+  // Keyboard navigation for viewer
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (viewerOpen) {
+        switch (event.key) {
+          case 'Escape':
+            handleCloseViewer();
+            break;
+          case 'ArrowLeft':
+            handlePrevImage();
+            break;
+          case 'ArrowRight':
+            handleNextImage();
+            break;
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [viewerOpen, handleNextImage, handlePrevImage]);
 
   // Handle image deletion
   const handleDeleteImage = async (image: GalleryImage) => {
@@ -749,6 +899,8 @@ export default function GalleryManagementPage() {
                 onDelete={handleDeleteImage}
                 onToggleHero={handleToggleHero}
                 onToggleLandingHero={handleToggleLandingHero}
+                onTogglePrivacy={handleTogglePrivacy}
+                onViewImage={handleViewImage}
               />
             ))}
           </div>
@@ -849,6 +1001,74 @@ export default function GalleryManagementPage() {
             </div>
           </DialogContent>
         </Dialog>
+      )}
+
+      {/* Image Viewer Modal */}
+      {viewerOpen && filteredImages.length > 0 && (
+        <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center">
+          {/* Close Button */}
+          <button
+            onClick={handleCloseViewer}
+            className="absolute top-4 right-4 z-60 p-2 rounded-full bg-black/50 hover:bg-black/70 text-white transition-colors"
+          >
+            <X className="h-6 w-6" />
+          </button>
+
+          {/* Navigation Buttons */}
+          {filteredImages.length > 1 && (
+            <>
+              <button
+                onClick={handlePrevImage}
+                className="absolute left-4 top-1/2 -translate-y-1/2 z-60 p-2 rounded-full bg-black/50 hover:bg-black/70 text-white transition-colors"
+              >
+                <ChevronLeft className="h-8 w-8" />
+              </button>
+              <button
+                onClick={handleNextImage}
+                className="absolute right-4 top-1/2 -translate-y-1/2 z-60 p-2 rounded-full bg-black/50 hover:bg-black/70 text-white transition-colors"
+              >
+                <ChevronRight className="h-8 w-8" />
+              </button>
+            </>
+          )}
+
+          {/* Image */}
+          <div className="relative max-w-[90vw] max-h-[90vh] flex items-center justify-center">
+            <Image
+              src={filteredImages[currentImageIndex]?.src || ''}
+              alt={filteredImages[currentImageIndex]?.title || ''}
+              width={1200}
+              height={800}
+              className="max-w-full max-h-full object-contain"
+              priority
+            />
+          </div>
+
+          {/* Image Info */}
+          <div className="absolute bottom-4 left-4 right-4 bg-black/70 rounded-lg p-4 text-white">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="font-semibold text-lg">{filteredImages[currentImageIndex]?.title}</h3>
+                <p className="text-sm text-gray-300">{filteredImages[currentImageIndex]?.description}</p>
+              </div>
+              <div className="text-right text-sm text-gray-300">
+                <div>{currentImageIndex + 1} of {filteredImages.length}</div>
+                {filteredImages[currentImageIndex]?.width && filteredImages[currentImageIndex]?.height && (
+                  <div>
+                    {filteredImages[currentImageIndex].width} × {filteredImages[currentImageIndex].height}
+                    ({filteredImages[currentImageIndex].aspectRatio})
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Keyboard Hints */}
+          <div className="absolute top-4 left-4 bg-black/50 rounded-lg p-2 text-white text-xs">
+            <div>← → Navigate</div>
+            <div>ESC Close</div>
+          </div>
+        </div>
       )}
     </div>
   );

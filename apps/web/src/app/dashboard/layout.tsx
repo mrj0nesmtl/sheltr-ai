@@ -34,10 +34,11 @@ import {
   Camera
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { MobileBottomNav } from '@/components/MobileBottomNav';
 import { ProfileAvatar } from '@/components/ProfileAvatar';
+import { NDAModal } from '@/components/auth/NDAModal';
+import { NDAService } from '@/services/ndaService';
 import { useState, useEffect } from 'react';
 
 // Helper function to get user display name using real-time Firestore data
@@ -423,6 +424,8 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [showNDAModal, setShowNDAModal] = useState(false);
+  const [ndaCheckComplete, setNdaCheckComplete] = useState(false);
 
   // Debug user information (development only)
   if (process.env.NODE_ENV === 'development') {
@@ -435,6 +438,37 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   }
 
   const navigationItems = getNavigationItems(user?.role || '');
+
+  // Check NDA status for Platform Administrators
+  useEffect(() => {
+    const checkNDAStatus = async () => {
+      if (!user || user.role !== 'platform_admin') {
+        setNdaCheckComplete(true);
+        return;
+      }
+
+      try {
+        console.log('🔍 Checking NDA status for Platform Admin:', user.email);
+        const hasSigned = await NDAService.hasUserSignedNDA(user.uid);
+        
+        if (!hasSigned) {
+          console.log('📋 NDA required - showing modal');
+          setShowNDAModal(true);
+        } else {
+          console.log('✅ NDA already signed');
+        }
+        
+        setNdaCheckComplete(true);
+      } catch (error) {
+        console.error('❌ Error checking NDA status:', error);
+        setNdaCheckComplete(true);
+      }
+    };
+
+    if (user) {
+      checkNDAStatus();
+    }
+  }, [user]);
 
   // Handle responsive behavior
   useEffect(() => {
@@ -465,6 +499,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     if (isMobile) {
       setSidebarOpen(false);
     }
+  };
+
+  const handleNDAAccept = () => {
+    setShowNDAModal(false);
+    console.log('✅ NDA accepted - allowing dashboard access');
   };
 
   const toggleSidebar = () => {
@@ -738,10 +777,15 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             </main>
           </div>
 
-          {/* Mobile Bottom Navigation - Fixed positioning outside main content */}
+          {/* Mobile Bottom Navigation - Fixed positioning outside main content */}                                                             
           <MobileBottomNav sidebarOpen={sidebarOpen} />
+
+          {/* NDA Modal for Platform Administrators */}
+          {showNDAModal && ndaCheckComplete && (
+            <NDAModal onAccept={handleNDAAccept} />
+          )}
         </div>
       </DashboardRouter>
     </ProtectedRoute>
   );
-} 
+}

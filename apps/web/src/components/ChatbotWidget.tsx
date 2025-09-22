@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from 'react';
-import { MessageCircle, X, Send, Bot, User, Zap, ExternalLink, Maximize2, Minimize2 } from 'lucide-react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { MessageCircle, X, Send, Bot, User, Zap, ExternalLink, Maximize2, Minimize2, Shield, Crown } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { chatbotService } from '@/services/chatbotService';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 
 interface ChatMessage {
@@ -12,6 +13,8 @@ interface ChatMessage {
   text: string;
   sender: 'user' | 'bot';
   timestamp: Date;
+  mcpToolUsed?: string;
+  roleRestricted?: boolean;
   actions?: Array<{
     type: string;
     label: string;
@@ -31,7 +34,66 @@ export const ChatbotWidget: React.FC = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const popoutWindowRef = useRef<Window | null>(null);
   
-  const { user } = useAuth();
+  const { user, hasRole } = useAuth();
+
+  // Determine user role and permissions
+  const getUserRole = () => {
+    if (!user) return 'public';
+    if (hasRole('super_admin')) return 'super_admin';
+    if (hasRole('platform_admin')) return 'platform_admin';
+    if (hasRole('admin')) return 'admin';
+    if (hasRole('participant')) return 'participant';
+    if (hasRole('donor')) return 'donor';
+    return 'authenticated';
+  };
+
+  const userRole = getUserRole();
+  const isAuthenticated = !!user;
+
+  // Get user's first name for personalization
+  const getUserFirstName = () => {
+    if (!user) return null;
+    if (user.displayName) {
+      return user.displayName.split(' ')[0];
+    }
+    if (user.email) {
+      // Extract name from email (e.g., doug.smith@example.com -> Doug)
+      const emailName = user.email.split('@')[0];
+      const name = emailName.replace(/[._-]/g, ' ').split(' ')[0];
+      return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+    }
+    return null;
+  };
+
+  const firstName = getUserFirstName();
+
+  // Get role icon
+  const getRoleIcon = () => {
+    const icons = {
+      super_admin: <Crown className="h-5 w-5 text-yellow-500" />,
+      platform_admin: <Shield className="h-5 w-5 text-purple-500" />,
+      admin: <Shield className="h-5 w-5 text-blue-500" />,
+      participant: <User className="h-5 w-5 text-green-500" />,
+      donor: <User className="h-5 w-5 text-orange-500" />,
+      authenticated: <User className="h-5 w-5 text-gray-500" />,
+      public: <Bot className="h-5 w-5 text-gray-400" />
+    };
+    return icons[userRole as keyof typeof icons] || icons.public;
+  };
+
+  // Get role badge
+  const getRoleBadge = () => {
+    const badges = {
+      super_admin: <Badge className="bg-yellow-500 text-white text-xs">Super Admin</Badge>,
+      platform_admin: <Badge className="bg-purple-500 text-white text-xs">Platform Admin</Badge>,
+      admin: <Badge className="bg-blue-500 text-white text-xs">Shelter Admin</Badge>,
+      participant: <Badge className="bg-green-500 text-white text-xs">Participant</Badge>,
+      donor: <Badge className="bg-orange-500 text-white text-xs">Donor</Badge>,
+      authenticated: <Badge className="bg-gray-500 text-white text-xs">User</Badge>,
+      public: <Badge className="bg-gray-400 text-white text-xs">Public</Badge>
+    };
+    return badges[userRole as keyof typeof badges] || badges.public;
+  };
 
   // Scroll to bottom when new messages arrive
   const scrollToBottom = () => {
@@ -61,10 +123,26 @@ export const ChatbotWidget: React.FC = () => {
     scrollToBottom();
   }, [messages]);
 
+  // Get personalized welcome message
+  const getWelcomeMessage = useCallback(() => {
+    const greeting = firstName ? `👋 Hello ${firstName}!` : "👋 Hello!";
+    
+    const roleMessages = {
+      super_admin: `${greeting} Great to see you! I have full access to all MCP tools including analytics, system management, shelter operations, and emergency protocols. Try asking me about platform status, donation analytics, or shelter capacity!`,
+      platform_admin: `${greeting} Nice to see you! I can help with analytics, user management, shelter operations, and knowledge base queries. Ask me about platform metrics, user reports, or shelter management.`,
+      admin: `${greeting} Welcome back! I can assist with participant management, capacity updates, and shelter-specific operations. Try asking about your shelter's status or participant reports.`,
+      participant: `${greeting} I'm here to help! I can assist you with services, update your status, generate QR codes, and access support resources. How can I help you today?`,
+      donor: `${greeting} Welcome back! I can show you donation impact, generate receipts, and provide transparency reports. Ask me about your donation history or impact metrics!`,
+      authenticated: `${greeting} You're signed in, so I have access to additional features. I can help with platform information and basic account queries.`
+    };
+
+    return roleMessages[userRole as keyof typeof roleMessages] || roleMessages.authenticated;
+  }, [firstName, userRole]);
+
   // Initialize conversation when widget opens
   useEffect(() => {
     if (isOpen && messages.length === 0 && user) {
-      const welcomeMessage = chatbotService.getConversationStarter(user.role || 'participant');
+      const welcomeMessage = getWelcomeMessage();
       const quickActions = chatbotService.getQuickActions(user.role || 'participant');
       
       setMessages([{
@@ -79,7 +157,7 @@ export const ChatbotWidget: React.FC = () => {
         }))
       }]);
     }
-  }, [isOpen, user]);
+  }, [isOpen, user, getWelcomeMessage]);
 
   const sendMessage = async (messageText: string) => {
     if (!messageText.trim() || !user) return;
@@ -96,25 +174,51 @@ export const ChatbotWidget: React.FC = () => {
     setIsTyping(true);
 
     try {
-      const response = await chatbotService.sendMessage({
+      // Use authenticated chatbot endpoint for dashboard users
+      const apiUrl = '/api/chatbot/authenticated';
+      
+      const requestBody = {
         message: messageText.trim(),
-        conversation_id: conversationId || undefined,
+        sessionId: user.uid || `dashboard_${Date.now()}`,
+        userRole: userRole,
         context: {
-          user_role: user.role,
-          timestamp: new Date().toISOString()
+          page: '/dashboard',
+          userAgent: navigator.userAgent,
+          timestamp: new Date().toISOString(),
+          authenticated: true,
+          userId: user.uid,
+          email: user.email,
+          firstName: firstName,
+          conversationId: conversationId
         }
+      };
+      
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody),
       });
 
-      if (!conversationId) {
-        setConversationId(response.conversation_id);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (!conversationId && data.conversation_id) {
+        setConversationId(data.conversation_id);
       }
 
       const botMessage: ChatMessage = {
         id: (Date.now() + 1).toString(),
-        text: response.response,
+        text: data.response || data.message || "I'm here to help! Could you please rephrase your question?",
         sender: 'bot',
         timestamp: new Date(),
-        actions: response.actions
+        actions: data.actions || [],
+        mcpToolUsed: data.mcp_tool_used,
+        roleRestricted: data.role_restricted || false
       };
 
       setMessages(prev => [...prev, botMessage]);
@@ -367,15 +471,13 @@ export const ChatbotWidget: React.FC = () => {
           {/* Header */}
           <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 bg-blue-600 text-white rounded-t-lg">
             <div className="flex items-center space-x-2">
-              <Bot className="h-5 w-5" />
+              {getRoleIcon()}
               <div>
                 <h3 className="font-semibold">SHELTR AI Assistant</h3>
-                <p className="text-xs opacity-90">
-                  {user.role === 'super_admin' ? 'Platform Support' :
-                   user.role === 'admin' ? 'Shelter Operations' :
-                   user.role === 'donor' ? 'Donor Relations' :
-                   'Participant Support'}
-                </p>
+                <div className="flex items-center space-x-2">
+                  {getRoleBadge()}
+                  <Badge className="bg-green-500 text-white text-xs">MCP</Badge>
+                </div>
               </div>
             </div>
             <div className="flex items-center space-x-2">
@@ -423,6 +525,20 @@ export const ChatbotWidget: React.FC = () => {
                     )}
                     <div className="flex-1">
                       <p className="text-sm leading-relaxed">{message.text}</p>
+                      {message.mcpToolUsed && (
+                        <div className="mt-2">
+                          <Badge className="bg-green-500 text-white text-xs">
+                            MCP: {message.mcpToolUsed}
+                          </Badge>
+                        </div>
+                      )}
+                      {message.roleRestricted && (
+                        <div className="mt-2">
+                          <Badge className="bg-red-500 text-white text-xs">
+                            🔒 Access restricted
+                          </Badge>
+                        </div>
+                      )}
                       {message.actions && message.actions.length > 0 && (
                         <div className="mt-3 space-y-2">
                           {message.actions.map((action, index) => (
@@ -471,7 +587,9 @@ export const ChatbotWidget: React.FC = () => {
                 type="text"
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
-                placeholder="Type your message..."
+                placeholder={userRole === 'super_admin' || userRole === 'platform_admin' 
+                  ? "Try: 'Show me platform analytics'" 
+                  : "Type your message..."}
                 className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-colors"
                 disabled={isTyping}
               />

@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from 'react';
-import { MessageCircle, X, Send, Minimize2, Maximize2 } from 'lucide-react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { MessageCircle, X, Send, Minimize2, Maximize2, User, Shield, Crown } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/contexts/AuthContext';
 
 interface Message {
@@ -11,6 +12,8 @@ interface Message {
   text: string;
   isUser: boolean;
   timestamp: Date;
+  mcpToolUsed?: string;
+  roleRestricted?: boolean;
   actions?: Array<{
     type: string;
     label?: string;
@@ -34,9 +37,68 @@ export const PublicChatbot: React.FC<PublicChatbotProps> = ({ className = '' }) 
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
-  // Smart positioning detection
-  const { user } = useAuth();
+  // Smart positioning detection and role awareness
+  const { user, hasRole } = useAuth();
   const pathname = usePathname();
+
+  // Determine user role and permissions
+  const getUserRole = () => {
+    if (!user) return 'public';
+    if (hasRole('super_admin')) return 'super_admin';
+    if (hasRole('platform_admin')) return 'platform_admin';
+    if (hasRole('admin')) return 'admin';
+    if (hasRole('participant')) return 'participant';
+    if (hasRole('donor')) return 'donor';
+    return 'authenticated';
+  };
+
+  const userRole = getUserRole();
+  const isAuthenticated = !!user;
+
+  // Get user's first name for personalization
+  const getUserFirstName = () => {
+    if (!user) return null;
+    if (user.displayName) {
+      return user.displayName.split(' ')[0];
+    }
+    if (user.email) {
+      // Extract name from email (e.g., doug.smith@example.com -> Doug)
+      const emailName = user.email.split('@')[0];
+      const name = emailName.replace(/[._-]/g, ' ').split(' ')[0];
+      return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+    }
+    return null;
+  };
+
+  const firstName = getUserFirstName();
+
+  // Get role icon
+  const getRoleIcon = () => {
+    const icons = {
+      super_admin: <Crown className="h-4 w-4 text-yellow-500" />,
+      platform_admin: <Shield className="h-4 w-4 text-purple-500" />,
+      admin: <Shield className="h-4 w-4 text-blue-500" />,
+      participant: <User className="h-4 w-4 text-green-500" />,
+      donor: <User className="h-4 w-4 text-orange-500" />,
+      authenticated: <User className="h-4 w-4 text-gray-500" />,
+      public: <MessageCircle className="h-4 w-4 text-gray-400" />
+    };
+    return icons[userRole as keyof typeof icons] || icons.public;
+  };
+
+  // Get role badge
+  const getRoleBadge = () => {
+    const badges = {
+      super_admin: <Badge className="bg-yellow-500 text-white text-xs">Super Admin</Badge>,
+      platform_admin: <Badge className="bg-purple-500 text-white text-xs">Platform Admin</Badge>,
+      admin: <Badge className="bg-blue-500 text-white text-xs">Shelter Admin</Badge>,
+      participant: <Badge className="bg-green-500 text-white text-xs">Participant</Badge>,
+      donor: <Badge className="bg-orange-500 text-white text-xs">Donor</Badge>,
+      authenticated: <Badge className="bg-gray-500 text-white text-xs">User</Badge>,
+      public: <Badge className="bg-gray-400 text-white text-xs">Public</Badge>
+    };
+    return badges[userRole as keyof typeof badges] || badges.public;
+  };
 
   // Check for mobile viewport
   useEffect(() => {
@@ -49,17 +111,37 @@ export const PublicChatbot: React.FC<PublicChatbotProps> = ({ className = '' }) 
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Initialize with welcome message
+  // Get personalized welcome message
+  const getWelcomeMessage = useCallback(() => {
+    if (!isAuthenticated) {
+      return "👋 Hello! I'm the SHELTR AI Assistant. I can help you learn about our platform, find resources, or answer questions about blockchain-powered charitable giving. For advanced features like analytics and system management, please sign in. How can I help you today?";
+    }
+
+    const greeting = firstName ? `👋 Hello ${firstName}!` : "👋 Hello!";
+    
+    const roleMessages = {
+      super_admin: `${greeting} Great to see you! I have full access to all MCP tools including analytics, system management, shelter operations, and emergency protocols. Try asking me about platform status, donation analytics, or shelter capacity!`,
+      platform_admin: `${greeting} Nice to see you! I can help with analytics, user management, shelter operations, and knowledge base queries. Ask me about platform metrics, user reports, or shelter management.`,
+      admin: `${greeting} Welcome back! I can assist with participant management, capacity updates, and shelter-specific operations. Try asking about your shelter's status or participant reports.`,
+      participant: `${greeting} I'm here to help! I can assist you with services, update your status, generate QR codes, and access support resources. How can I help you today?`,
+      donor: `${greeting} Welcome back! I can show you donation impact, generate receipts, and provide transparency reports. Ask me about your donation history or impact metrics!`,
+      authenticated: `${greeting} You're signed in, so I have access to additional features. I can help with platform information and basic account queries.`
+    };
+
+    return roleMessages[userRole as keyof typeof roleMessages] || roleMessages.authenticated;
+  }, [isAuthenticated, firstName, userRole]);
+
+  // Initialize with personalized welcome message
   useEffect(() => {
     if (messages.length === 0) {
       setMessages([{
         id: 'welcome',
-        text: "👋 Hello! I'm the SHELTR AI Assistant. I can help you learn about our platform, find resources, or answer questions about blockchain-powered charitable giving. How can I help you today?",
+        text: getWelcomeMessage(),
         isUser: false,
         timestamp: new Date()
       }]);
     }
-  }, [messages.length]);
+  }, [getWelcomeMessage, messages.length]);
 
   // Persist chat state across pages
   useEffect(() => {
@@ -107,32 +189,41 @@ export const PublicChatbot: React.FC<PublicChatbotProps> = ({ className = '' }) 
     setIsLoading(true);
 
     try {
-      // In development, use Next.js API route for better error handling
-      // In production (static export), call backend directly
+      // Use different endpoints based on authentication
       const isDevelopment = process.env.NODE_ENV === 'development';
       const apiUrl = isDevelopment 
-        ? '/api/chatbot/public'
-        : 'https://sheltr-api-714964620823.us-central1.run.app/api/v1/chatbot/public';
+        ? (isAuthenticated ? '/api/chatbot/authenticated' : '/api/chatbot/public')
+        : (isAuthenticated 
+            ? 'https://sheltr-api-714964620823.us-central1.run.app/api/v1/chatbot/authenticated'
+            : 'https://sheltr-api-714964620823.us-central1.run.app/api/v1/chatbot/public');
       
-      // Prepare the request body based on the endpoint
+      // Prepare the request body based on authentication and endpoint
       const requestBody = isDevelopment ? {
         message: userMessage.text,
         sessionId: getSessionId(),
+        userRole: userRole,
         context: {
           page: window.location.pathname,
           userAgent: navigator.userAgent,
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
+          authenticated: isAuthenticated,
+          userId: user?.uid,
+          email: user?.email,
+          firstName: firstName
         }
       } : {
         message: userMessage.text,
         user_id: getSessionId(),
-        user_role: 'public',
+        user_role: userRole,
         conversation_context: {
           page: window.location.pathname,
           user_agent: navigator.userAgent,
-          session_type: 'public',
-          anonymous: true,
-          timestamp: new Date().toISOString()
+          session_type: isAuthenticated ? 'authenticated' : 'public',
+          anonymous: !isAuthenticated,
+          timestamp: new Date().toISOString(),
+          user_id: user?.uid,
+          email: user?.email,
+          first_name: firstName
         }
       };
       
@@ -156,7 +247,9 @@ export const PublicChatbot: React.FC<PublicChatbotProps> = ({ className = '' }) 
           text: responseText,
           isUser: false,
           timestamp: new Date(),
-          actions: actions
+          actions: actions,
+          mcpToolUsed: data.mcp_tool_used,
+          roleRestricted: data.role_restricted || false
         };
         setMessages(prev => [...prev, botMessage]);
       } else {
@@ -200,7 +293,6 @@ export const PublicChatbot: React.FC<PublicChatbotProps> = ({ className = '' }) 
   };
 
   // Smart positioning: detect if mobile nav is present
-  const isAuthenticated = !!user;
   const isDashboard = pathname.startsWith('/dashboard');
   const hasMobileNav = isAuthenticated && isDashboard;
   
@@ -264,11 +356,16 @@ export const PublicChatbot: React.FC<PublicChatbotProps> = ({ className = '' }) 
       <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 bg-blue-600 text-white rounded-t-lg">
         <div className="flex items-center space-x-2">
           <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-            🤖
+            {getRoleIcon()}
           </div>
           <div>
             <h3 className="font-semibold text-sm">SHELTR AI Assistant</h3>
-            <p className="text-xs opacity-90">Public Support</p>
+            <div className="flex items-center space-x-2">
+              {getRoleBadge()}
+              {isAuthenticated && (
+                <Badge className="bg-green-500 text-white text-xs">MCP</Badge>
+              )}
+            </div>
           </div>
         </div>
         <div className="flex items-center space-x-1">
@@ -325,6 +422,20 @@ export const PublicChatbot: React.FC<PublicChatbotProps> = ({ className = '' }) 
                   }`}
                 >
                   <div className="mb-2">{message.text}</div>
+                  {message.mcpToolUsed && (
+                    <div className="mt-2">
+                      <Badge className="bg-green-500 text-white text-xs">
+                        MCP: {message.mcpToolUsed}
+                      </Badge>
+                    </div>
+                  )}
+                  {message.roleRestricted && (
+                    <div className="mt-2">
+                      <Badge className="bg-red-500 text-white text-xs">
+                        🔒 Sign in required
+                      </Badge>
+                    </div>
+                  )}
                   {message.actions && message.actions.length > 0 && (
                     <div className="flex flex-wrap gap-2 mt-3">
                       {message.actions.map((action, index) => {
@@ -372,7 +483,11 @@ export const PublicChatbot: React.FC<PublicChatbotProps> = ({ className = '' }) 
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
-                placeholder="Ask about SHELTR, donations, or getting help..."
+                placeholder={isAuthenticated 
+                  ? (userRole === 'super_admin' || userRole === 'platform_admin' 
+                      ? "Try: 'Show me platform analytics'" 
+                      : "Ask me anything about SHELTR...")
+                  : "Ask about SHELTR, donations, or getting help..."}
                 className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white"
                 disabled={isLoading}
               />

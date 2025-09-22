@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowLeft, Download, MessageSquare, ExternalLink, Book } from 'lucide-react';
+import { ArrowLeft, Download, MessageSquare, ExternalLink, Book, Rocket } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -43,16 +43,18 @@ export default function ChatbotArchitecturePage() {
                   <h1 className="text-3xl sm:text-4xl font-bold mb-2 leading-tight">Chatbot Agent Architecture</h1>
                   <Badge className="bg-purple-600 text-white text-sm">AI System</Badge>
                 </div>
-                <p className="text-lg text-muted-foreground mb-3">
-                  Comprehensive guide to SHELTR's multi-agent chatbot system with public orchestrator and admin control panel
-                </p>
-                <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground mb-4">
-                  <span>Version 1.0.0</span>
-                  <span>•</span>
-                  <span>Updated September 21, 2025</span>
-                  <span>•</span>
-                  <Badge className="bg-green-500 hover:bg-green-600 text-white text-xs">ACTIVE DEVELOPMENT</Badge>
-                </div>
+              <p className="text-lg text-muted-foreground mb-3">
+                Comprehensive guide to SHELTR's multi-agent chatbot system with MCP-powered workflow automation, public orchestrator, and admin control panel
+              </p>
+              <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground mb-4">
+                <span>Version 2.0.0</span>
+                <span>•</span>
+                <span>Updated September 22, 2025</span>
+                <span>•</span>
+                <Badge className="bg-green-500 hover:bg-green-600 text-white text-xs">MCP ENHANCED</Badge>
+                <span>•</span>
+                <Badge className="bg-purple-500 hover:bg-purple-600 text-white text-xs">WORKFLOW AUTOMATION</Badge>
+              </div>
                 
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                   <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/04-development/CHATBOT-AGENT-ARCHITECTURE.md" target="_blank" rel="noopener noreferrer">
@@ -61,6 +63,12 @@ export default function ChatbotArchitecturePage() {
                       View on GitHub
                     </Button>
                   </a>
+                  <Link href="/docs/chatbot-user-guide">
+                    <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white">
+                      <Rocket className="h-4 w-4 mr-2" />
+                      Revolutionary User Guide
+                    </Button>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -73,14 +81,37 @@ export default function ChatbotArchitecturePage() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="prose prose-lg max-w-none dark:prose-invert mb-12">
-              <h2>System Overview</h2>
-              <p>
-                SHELTR-AI has a sophisticated multi-agent chatbot system with two main components:
+              <h2 className="text-2xl font-bold mb-4">System Overview</h2>
+              <p className="mb-4">
+                SHELTR-AI features a next-generation AI system with three integrated components powered by Model Context Protocol (MCP):
               </p>
-              <ul>
-                <li><strong>Public Landing Page Chatbot</strong> - Orchestrator-based system for public users</li>
-                <li><strong>Super Admin Chatbot Control Panel</strong> - Configurable agent system for internal use</li>
+              <ul className="list-disc list-inside space-y-2 mb-6">
+                <li><strong>Public Landing Page Chatbot</strong> - Orchestrator-based system with MCP workflow automation</li>
+                <li><strong>Super Admin Chatbot Control Panel</strong> - Configurable agents with MCP tool integration</li>
+                <li><strong>MCP Workflow Engine</strong> - 10 specialized tools + 2 automated multi-step workflows</li>
               </ul>
+              
+              <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 p-6 rounded-lg mt-6 border border-blue-200 dark:border-blue-800">
+                <h3 className="text-xl font-bold mb-3 text-blue-800 dark:text-blue-200">🚀 MCP Integration Highlights</h3>
+                <div className="grid md:grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <h4 className="font-semibold mb-2 text-blue-700 dark:text-blue-300">Intelligent Actions</h4>
+                    <ul className="space-y-1 text-blue-600 dark:text-blue-400">
+                      <li>• Real-world action execution (donations, status updates)</li>
+                      <li>• Automated workflows (shelter onboarding, emergency response)</li>
+                      <li>• Smart data queries with natural language</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold mb-2 text-purple-700 dark:text-purple-300">Technical Features</h4>
+                    <ul className="space-y-1 text-purple-600 dark:text-purple-400">
+                      <li>• 10 specialized MCP tools for platform operations</li>
+                      <li>• Role-based access control for secure tool usage</li>
+                      <li>• Multi-step workflow automation with dependencies</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div className="grid md:grid-cols-2 gap-8 mb-12">
@@ -88,30 +119,30 @@ export default function ChatbotArchitecturePage() {
                 <CardHeader>
                   <CardTitle>Public Landing Page Chatbot</CardTitle>
                   <CardDescription>
-                    Orchestrator-based system for public users
+                    MCP-powered orchestrator system for public users
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
                     <div>
-                      <h4 className="font-semibold mb-2">Agent Types (7 Specialized Agents)</h4>
+                      <h4 className="font-semibold mb-2">Agent Types (7 MCP-Enhanced Agents)</h4>
                       <ul className="space-y-2 text-sm">
-                        <li>• <strong>Emergency</strong> - Crisis response and safety resources</li>
-                        <li>• <strong>Participant Support</strong> - Service booking and resource navigation</li>
-                        <li>• <strong>Donor Relations</strong> - SmartFund™ explanation and impact tracking</li>
-                        <li>• <strong>Public Information</strong> - Platform education and SmartFund™ model</li>
-                        <li>• <strong>Public Support</strong> - Getting started and donation guidance</li>
-                        <li>• <strong>Shelter Operations</strong> - Participant management and reporting</li>
-                        <li>• <strong>Technical Support</strong> - Platform issues and account problems</li>
+                        <li>• <strong>Emergency</strong> - Crisis response with automated escalation workflow</li>
+                        <li>• <strong>Participant Support</strong> - Real status updates, QR code generation</li>
+                        <li>• <strong>Donor Relations</strong> - Live donation processing, receipt generation</li>
+                        <li>• <strong>Public Information</strong> - Enhanced knowledge search and platform queries</li>
+                        <li>• <strong>Public Support</strong> - Intelligent onboarding and guidance</li>
+                        <li>• <strong>Shelter Operations</strong> - Real-time capacity updates, reporting</li>
+                        <li>• <strong>Technical Support</strong> - System queries and account management</li>
                       </ul>
                     </div>
                     <div>
-                      <h4 className="font-semibold mb-2">How It Works</h4>
+                      <h4 className="font-semibold mb-2">MCP-Enhanced Workflow</h4>
                       <ul className="space-y-1 text-sm">
-                        <li>• Intent Classification - Analyzes user message for intent</li>
-                        <li>• Role-Based Routing - Routes to appropriate agent</li>
-                        <li>• RAG Enhancement - Uses knowledge base for enhanced responses</li>
-                        <li>• Response Generation - Generates contextual responses</li>
+                        <li>• Intent Classification + MCP Tool Detection</li>
+                        <li>• Role-Based Routing + Permission Validation</li>
+                        <li>• RAG Enhancement + Real-Time Data Access</li>
+                        <li>• Response Generation + Action Execution</li>
                       </ul>
                     </div>
                   </div>
@@ -122,33 +153,126 @@ export default function ChatbotArchitecturePage() {
                 <CardHeader>
                   <CardTitle>Super Admin Control Panel</CardTitle>
                   <CardDescription>
-                    Configurable agent system for internal use
+                    MCP-integrated configurable agent system for internal use
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
                     <div>
-                      <h4 className="font-semibold mb-2">Agent Types (5 Configurable Agents)</h4>
+                      <h4 className="font-semibold mb-2">Agent Types (5 MCP-Integrated Agents)</h4>
                       <ul className="space-y-2 text-sm">
-                        <li>• <strong>General Assistant</strong> - Various tasks and Q&A</li>
-                        <li>• <strong>SHELTR Support</strong> - Platform-specific help</li>
-                        <li>• <strong>Technical Expert</strong> - Technical guidance and architecture</li>
-                        <li>• <strong>Business Analyst</strong> - Business insights and analytics</li>
-                        <li>• <strong>Creative Writer</strong> - Writing assistance and marketing</li>
+                        <li>• <strong>General Assistant</strong> - All MCP tools based on user role</li>
+                        <li>• <strong>SHELTR Support</strong> - Platform tools, shelter onboarding workflows</li>
+                        <li>• <strong>Technical Expert</strong> - System queries, performance analysis</li>
+                        <li>• <strong>Business Analyst</strong> - Analytics tools, revenue reporting</li>
+                        <li>• <strong>Creative Writer</strong> - Knowledge search for content research</li>
                       </ul>
                     </div>
                     <div>
-                      <h4 className="font-semibold mb-2">Features</h4>
+                      <h4 className="font-semibold mb-2">MCP-Enhanced Features</h4>
                       <ul className="space-y-1 text-sm">
-                        <li>• Session Management - Persistent chat sessions</li>
-                        <li>• Agent Selection - Choose from configurable agents</li>
-                        <li>• Model Selection - Switch between AI models</li>
-                        <li>• Real-time Configuration - Edit agent instructions</li>
+                        <li>• Session Management + Workflow Execution History</li>
+                        <li>• Agent Selection + Tool Access Based on Role</li>
+                        <li>• Model Selection + MCP Tool Integration</li>
+                        <li>• Real-time Configuration + Action Monitoring</li>
                       </ul>
                     </div>
                   </div>
                 </CardContent>
               </Card>
+            </div>
+
+            {/* MCP Tools & Workflows */}
+            <div className="mb-12">
+              <h2 className="text-3xl font-bold mb-8 text-center">🛠️ MCP Tools & Workflows</h2>
+              
+              <div className="grid md:grid-cols-2 gap-8 mb-8">
+                <Card className="border-2 border-blue-200 dark:border-blue-800">
+                  <CardHeader>
+                    <CardTitle className="flex items-center">
+                      <span className="text-blue-600 mr-2">🔧</span>
+                      MCP Tools (10 Available)
+                    </CardTitle>
+                    <CardDescription>Specialized tools for platform operations</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3 text-sm">
+                      <div>
+                        <h4 className="font-semibold text-green-600 mb-1">Shelter Management</h4>
+                        <p>create_shelter, update_shelter_capacity</p>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-purple-600 mb-1">Donation Processing</h4>
+                        <p>process_donation, generate_donation_receipt</p>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-orange-600 mb-1">Participant Support</h4>
+                        <p>update_participant_status, generate_participant_qr</p>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-red-600 mb-1">Emergency Response</h4>
+                        <p>emergency_escalation</p>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-indigo-600 mb-1">Analytics & Knowledge</h4>
+                        <p>generate_impact_report, query_platform_data, search_knowledge_base</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="border-2 border-purple-200 dark:border-purple-800">
+                  <CardHeader>
+                    <CardTitle className="flex items-center">
+                      <span className="text-purple-600 mr-2">🔄</span>
+                      MCP Workflows (2 Active)
+                    </CardTitle>
+                    <CardDescription>Multi-step automated processes</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4 text-sm">
+                      <div className="bg-green-50 dark:bg-green-900/20 p-3 rounded">
+                        <h4 className="font-semibold text-green-700 dark:text-green-300 mb-2">Shelter Onboarding</h4>
+                        <ul className="space-y-1 text-green-600 dark:text-green-400">
+                          <li>1. Create shelter profile</li>
+                          <li>2. Send welcome email</li>
+                          <li>3. Schedule training</li>
+                        </ul>
+                      </div>
+                      <div className="bg-red-50 dark:bg-red-900/20 p-3 rounded">
+                        <h4 className="font-semibold text-red-700 dark:text-red-300 mb-2">Emergency Response</h4>
+                        <ul className="space-y-1 text-red-600 dark:text-red-400">
+                          <li>1. Escalate emergency</li>
+                          <li>2. Notify authorities (if critical)</li>
+                          <li>3. Create incident report</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              <div className="bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 p-6 rounded-lg border border-green-200 dark:border-green-800">
+                <h3 className="text-xl font-bold mb-3 text-green-800 dark:text-green-200">🎯 User Experience Enhancement</h3>
+                <div className="grid md:grid-cols-2 gap-6 text-sm">
+                  <div>
+                    <h4 className="font-semibold mb-2 text-green-700 dark:text-green-300">Before MCP</h4>
+                    <div className="bg-white dark:bg-gray-800 p-3 rounded border">
+                      <p className="text-gray-600 dark:text-gray-400 mb-2"><strong>User:</strong> "I need help with housing"</p>
+                      <p className="text-gray-600 dark:text-gray-400"><strong>Bot:</strong> "Here are some resources about housing assistance..."</p>
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold mb-2 text-blue-700 dark:text-blue-300">After MCP</h4>
+                    <div className="bg-white dark:bg-gray-800 p-3 rounded border">
+                      <p className="text-gray-600 dark:text-gray-400 mb-2"><strong>User:</strong> "I need help with housing"</p>
+                      <p className="text-blue-600 dark:text-blue-400"><strong>Bot:</strong> "Let me check your status and available options..."</p>
+                      <p className="text-green-600 dark:text-green-400 text-xs mt-1">[Executes: update_participant_status, search_knowledge_base]</p>
+                      <p className="text-gray-600 dark:text-gray-400 mt-2"><strong>Bot:</strong> "Found 3 shelters with availability. Generated your QR code. Here are your next steps..."</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
 
             {/* Agent Responsibilities Matrix */}
@@ -362,21 +486,42 @@ export default function ChatbotArchitecturePage() {
               </div>
             </div>
 
-            <div className="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 p-4 mb-12">
-              <h3 className="text-blue-800 dark:text-blue-200 font-semibold mb-2">🚀 Current Status: Multi-Agent System Active</h3>
-              <p className="text-blue-700 dark:text-blue-300 text-sm mb-4">
-                <strong>Public Orchestrator System</strong>: ✅ 7 specialized agents operational with intent classification and role-based routing<br/>
-                <strong>Admin Control Panel System</strong>: ✅ 5 configurable agents with real-time model switching (GPT-4o, GPT-4o Mini, Claude)<br/>
-                <strong>Knowledge Base Integration</strong>: ✅ RAG enhancement with 100+ document chunks for contextual responses<br/>
-                <strong>Session Management</strong>: ✅ Persistent conversations with full history tracking for admin agents
-              </p>
-              <div className="bg-amber-50 dark:bg-amber-900/20 rounded p-3 border border-amber-200 dark:border-amber-800">
-                <h4 className="text-amber-800 dark:text-amber-200 font-medium mb-2">🔧 Technical Architecture</h4>
-                <div className="text-amber-700 dark:text-amber-300 text-xs space-y-1">
-                  <div><strong>Orchestrator Location:</strong> <code>apps/api/services/chatbot/orchestrator.py</code></div>
-                  <div><strong>Control Panel Location:</strong> <code>apps/web/src/app/dashboard/chatbots/page.tsx</code></div>
-                  <div><strong>Knowledge Enhancement:</strong> Firebase Firestore with vector embeddings</div>
-                  <div><strong>Model Support:</strong> OpenAI GPT-4o/Mini, Anthropic Claude (configurable)</div>
+            <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 border-l-4 border-blue-500 p-6 mb-12">
+              <h3 className="text-blue-800 dark:text-blue-200 font-semibold mb-3 text-xl">🚀 Current Status: MCP-Enhanced Multi-Agent System</h3>
+              <div className="grid md:grid-cols-2 gap-6 text-sm mb-4">
+                <div>
+                  <h4 className="font-semibold text-blue-700 dark:text-blue-300 mb-2">✅ Operational Systems</h4>
+                  <ul className="space-y-1 text-blue-600 dark:text-blue-400">
+                    <li><strong>Public Orchestrator</strong>: 7 MCP-enhanced agents with workflow automation</li>
+                    <li><strong>Admin Control Panel</strong>: 5 agents with MCP tool integration</li>
+                    <li><strong>MCP Backend</strong>: 10 specialized tools + 2 automated workflows</li>
+                    <li><strong>Knowledge Base</strong>: 57+ documents with semantic search</li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-purple-700 dark:text-purple-300 mb-2">🔄 In Progress</h4>
+                  <ul className="space-y-1 text-purple-600 dark:text-purple-400">
+                    <li><strong>Frontend MCP Client</strong>: React integration for tool execution</li>
+                    <li><strong>Tool Implementations</strong>: Converting stubs to full functionality</li>
+                    <li><strong>Workflow UI</strong>: Visual workflow execution monitoring</li>
+                    <li><strong>Testing & Validation</strong>: End-to-end workflow testing</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div className="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-lg p-4 border border-amber-200 dark:border-amber-800">
+                <h4 className="text-amber-800 dark:text-amber-200 font-medium mb-3">🔧 Technical Architecture</h4>
+                <div className="grid md:grid-cols-2 gap-4 text-xs">
+                  <div className="text-amber-700 dark:text-amber-300 space-y-1">
+                    <div><strong>Orchestrator:</strong> <code>apps/api/services/chatbot/orchestrator.py</code></div>
+                    <div><strong>Control Panel:</strong> <code>apps/web/src/app/dashboard/chatbots/page.tsx</code></div>
+                    <div><strong>MCP Service:</strong> <code>apps/api/services/mcp_service.py</code></div>
+                  </div>
+                  <div className="text-amber-700 dark:text-amber-300 space-y-1">
+                    <div><strong>MCP Router:</strong> <code>apps/api/routers/mcp.py</code></div>
+                    <div><strong>Knowledge Base:</strong> Firebase Firestore with vector embeddings</div>
+                    <div><strong>Models:</strong> OpenAI GPT-4o/Mini, Anthropic Claude</div>
+                  </div>
                 </div>
               </div>
             </div>

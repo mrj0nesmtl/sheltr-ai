@@ -314,11 +314,42 @@ SHELTR now features a comprehensive **MCP (Model Context Protocol)** integration
 
 ---
 
+## 🌐 **Complete Chatbot Deployment Map**
+
+### **🤖 Where SHELTR AI Chatbots Are Available:**
+
+#### **Public Pages (PublicChatbot - MCP-Enhanced):**
+- ✅ **Homepage** (`/`) - Role-aware with MCP tools for authenticated users
+- ✅ **About** (`/about`) - Platform information and getting started guidance
+- ✅ **Solutions Hub** (`/solutions`) - Stakeholder-specific assistance
+- ✅ **Organizations** (`/solutions/organizations`) - Business implementation support
+- ✅ **HMIS Guide** (`/solutions/organizations/hmis-guide`) - Technical documentation help
+- ✅ **Impact** (`/impact`) - Impact metrics and Internet Angels information
+- ✅ **Tokenomics** (`/tokenomics`) - SmartFund and blockchain explanations
+- ✅ **Model** (`/model`) - Revenue model and DeFi strategy details
+- ✅ **Scan & Give** (`/scan-give`) - QR donation process support
+- ✅ **Contact** (`/contact`) - Support and inquiry assistance
+- ✅ **Drones** (`/drones`) - Product showcase and technical specifications
+
+#### **Documentation Pages (RoleAwareChatbot):**
+- ✅ **Chatbot User Guide** (`/docs/chatbot-user-guide`) - Live embedded chatbot with role switching demo
+
+#### **Dashboard Pages (ChatbotWidget - Full MCP Access):**
+- ✅ **Main Dashboard** (`/dashboard`) - MCP-powered assistant for all authenticated roles
+- ✅ **All Sub-Dashboards** - Consistent AI assistance throughout admin interface
+
+### **🎯 Role-Specific AI Recognition:**
+
+#### **Authenticated Users Get Personalized Experience:**
+- **Super Admin (Joel)**: "👋 Hello Joel! I have full access to all MCP tools..."
+- **Platform Admin (Gunnar)**: "👋 Hello Gunnar! I can help with shelter management and analytics..."
+- **Public Users**: "Hello! I can help you learn about SHELTR and guide you through donations..."
+
 ## 🚀 **Revolutionary Potential: Voice-First Administration**
 
 ### **🎯 What You Can Do RIGHT NOW (with our MCP backend):**
 
-#### **Via Chatbot Dashboard:**
+#### **Via Any Chatbot (Dashboard or Public Pages when authenticated):**
 - **"Show me this week's donation analytics"** → `generate_impact_report` tool executes
 - **"How many participants need housing assistance?"** → `query_platform_data` tool runs  
 - **"What's the capacity at Old Brewery Mission?"** → `update_shelter_capacity` tool checks

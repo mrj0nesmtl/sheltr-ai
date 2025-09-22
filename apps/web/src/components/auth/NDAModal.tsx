@@ -13,16 +13,19 @@ import {
   MapPin, 
   User, 
   CheckCircle,
-  AlertTriangle
+  AlertTriangle,
+  ArrowLeft,
+  Home
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { NDAService } from '@/services/ndaService';
 
 interface NDAModalProps {
   onAccept: () => void;
+  onCancel?: () => void;
 }
 
-export function NDAModal({ onAccept }: NDAModalProps) {
+export function NDAModal({ onAccept, onCancel }: NDAModalProps) {
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [signature, setSignature] = useState('');
@@ -72,9 +75,40 @@ export function NDAModal({ onAccept }: NDAModalProps) {
     day: 'numeric'
   });
 
+  const handleCancel = () => {
+    if (onCancel) {
+      onCancel();
+    } else {
+      // Default behavior - sign out user if no cancel handler provided
+      window.location.href = '/';
+    }
+  };
+
   return (
     <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
       <Card className="w-full max-w-4xl max-h-[95vh] bg-white dark:bg-gray-900">
+        {/* Breadcrumb Navigation */}
+        <div className="p-4 border-b bg-gray-50 dark:bg-gray-800">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
+              <Home className="h-4 w-4" />
+              <span>/</span>
+              <span>Dashboard</span>
+              <span>/</span>
+              <span className="font-medium text-blue-600">Required NDA Agreement</span>
+            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleCancel}
+              className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            >
+              <ArrowLeft className="h-4 w-4 mr-1" />
+              Return to Home
+            </Button>
+          </div>
+        </div>
+
         <CardHeader className="text-center border-b">
           <div className="flex items-center justify-center mb-4">
             <Shield className="h-8 w-8 text-blue-600 mr-3" />

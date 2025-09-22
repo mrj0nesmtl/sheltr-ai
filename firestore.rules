@@ -276,11 +276,11 @@ service cloud.firestore {
     // ADMIN PROFILES - Super admin profile information
     // =================================================================
     match /admin_profiles/{userId} {
-      // Read/Write: Super Admin can access their own profile
-      allow read, write: if isSuperAdmin() && request.auth.uid == userId;
+      // Read/Write: Super Admin and Platform Admin can access their own profile
+      allow read, write: if (isSuperAdmin() || isPlatformAdmin()) && request.auth.uid == userId;
       
-      // Create: Super Admin can create their own profile
-      allow create: if isSuperAdmin() && request.auth.uid == userId;
+      // Create: Super Admin and Platform Admin can create their own profile
+      allow create: if (isSuperAdmin() || isPlatformAdmin()) && request.auth.uid == userId;
     }
     
     // =================================================================

@@ -268,6 +268,13 @@ const getNavigationItems = (userRole: string) => {
         description: 'Create and manage blog posts'
       },
       {
+        title: 'System Settings',
+        href: '/dashboard/settings',
+        icon: Cog,
+        description: 'Platform settings and system configuration',
+        separator: true
+      },
+      {
         title: 'Security & Compliance',
         href: '/dashboard/security',
         icon: Shield,

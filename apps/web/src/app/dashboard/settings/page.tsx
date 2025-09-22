@@ -240,13 +240,13 @@ export default function SystemSettingsPage() {
     }
   };
 
-  // Redirect if not super admin
-  if (user?.role !== 'super_admin') {
+  // Redirect if not super admin or platform admin
+  if (user?.role !== 'super_admin' && user?.role !== 'platform_admin') {
     return (
       <div className="p-6 text-center">
         <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
         <h1 className="text-2xl font-bold mb-2">Access Denied</h1>
-        <p className="text-gray-600">Only Super Admins can access system settings.</p>
+        <p className="text-gray-600">Only Super Admins and Platform Administrators can access system settings.</p>
       </div>
     );
   }

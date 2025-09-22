@@ -142,12 +142,15 @@ export class SystemHealthService {
       await getDocs(query(collection(db, 'users'), where('role', '!=', 'test')));
       const connectionTime = performance.now() - startTime;
       
-      // Get collection and document counts across all major collections
+      // Get collection and document counts across ALL platform collections
       const collections = [
-        'users', 'shelters', 'participants', 'donations', 'notifications',
-        'contact_inquiries', 'gallery_images', 'blog_posts', 'knowledge_documents',
-        'knowledge_chunks', 'admin_notifications', 'fraud_alerts', 'platform_config',
-        'admin_profiles', 'audit_logs'
+        'admin_notifications', 'agent_configurations', 'analytics_events', 'appointments',
+        'blog_categories', 'blog_posts', 'blog_tags', 'chat_sessions', 'contact_inquiries',
+        'demo_analytics', 'demo_donations', 'demo_participants', 'donations', 'feature_flags',
+        'fraud_alerts', 'gallery_images', 'global', 'knowledge_chunks', 'knowledge_documents',
+        'newsletter_signups', 'participants', 'platform_administrators', 'platform_metrics',
+        'services', 'shelter_services', 'shelters', 'system_alerts', 'system_health',
+        'tenants', 'transactions', 'translations', 'user_profiles', 'user_stats', 'users'
       ];
       let totalDocuments = 0;
       let activeCollections = 0;

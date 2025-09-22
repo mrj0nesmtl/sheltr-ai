@@ -1,5 +1,6 @@
 "use client";
 
+import Image from 'next/image';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -141,7 +142,8 @@ export default function UserManagement() {
           break;
         default:
           // Export all users combined with enhanced data and dual-role logic
-          const allUsersMap = new Map<string, any>();
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const allUsersMap = new Map() as Map<string, any>;
           
           // Add admin users
           adminUsers.forEach(u => {
@@ -174,9 +176,9 @@ export default function UserManagement() {
               email: u.email,
               shelter: u.shelter,
               shelter_id: u.shelter_id || '',
-              role: u.role,
+              role: 'participant',
               status: u.status,
-              lastLogin: u.lastLogin || 'Never',
+              lastLogin: 'Never', // ParticipantUser doesn't have lastLogin
               participants: 0,
               joinDate: u.joinDate,
               created_at: u.created_at || u.joinDate,
@@ -202,11 +204,11 @@ export default function UserManagement() {
                 firstName: u.firstName || u.name?.split(' ')[0] || '',
                 lastName: u.lastName || u.name?.split(' ').slice(1).join(' ') || '',
                 email: u.email,
-                shelter: u.shelter || 'N/A',
-                shelter_id: u.shelter_id || '',
-                role: u.role,
+                shelter: 'N/A', // DonorUser doesn't have shelter
+                shelter_id: '', // DonorUser doesn't have shelter_id
+                role: 'donor',
                 status: u.status,
-                lastLogin: u.lastLogin || 'Never',
+                lastLogin: 'Never', // DonorUser doesn't have lastLogin
                 participants: 0,
                 joinDate: u.joinDate,
                 created_at: u.created_at || u.joinDate,
@@ -231,7 +233,7 @@ export default function UserManagement() {
               shelter_id: '',
               role: u.role,
               status: u.status,
-              lastLogin: u.lastLogin || 'Never',
+              lastLogin: 'Never', // OrphanedUser doesn't have lastLogin
               participants: 0,
               joinDate: u.joinDate,
               created_at: u.created_at || u.joinDate,
@@ -768,9 +770,10 @@ export default function UserManagement() {
 
       {/* User Management Tabs - Updated with Super Admins */}
       <Tabs defaultValue="super-admins" className="space-y-6">
-        {/* Desktop Tabs */}
+        {/* Desktop Tabs with responsive breakpoints */}
         <div className="hidden sm:block">
-          <TabsList className="grid w-full grid-cols-7">
+          {/* Full text version for large screens */}
+          <TabsList className="hidden xl:grid w-full grid-cols-7">
             <TabsTrigger value="super-admins" className="flex items-center">
               <Crown className="mr-2 h-4 w-4" />
               Super Admins
@@ -781,7 +784,7 @@ export default function UserManagement() {
             </TabsTrigger>
             <TabsTrigger value="admins" className="flex items-center">
               <UserCog className="mr-2 h-4 w-4" />
-              Admin Users
+              Shelter Admins
             </TabsTrigger>
             <TabsTrigger value="participants" className="flex items-center">
               <UserCheck className="mr-2 h-4 w-4" />
@@ -803,6 +806,73 @@ export default function UserManagement() {
             <TabsTrigger value="map" className="flex items-center">
               <Map className="mr-2 h-4 w-4" />
               User Map
+            </TabsTrigger>
+          </TabsList>
+          
+          {/* Shortened text version for medium screens */}
+          <TabsList className="hidden lg:grid xl:hidden w-full grid-cols-7">
+            <TabsTrigger value="super-admins" className="flex items-center text-xs">
+              <Crown className="mr-1 h-3 w-3" />
+              Super
+            </TabsTrigger>
+            <TabsTrigger value="platform-admins" className="flex items-center text-xs">
+              <Star className="mr-1 h-3 w-3" />
+              Platform
+            </TabsTrigger>
+            <TabsTrigger value="admins" className="flex items-center text-xs">
+              <UserCog className="mr-1 h-3 w-3" />
+              Shelter
+            </TabsTrigger>
+            <TabsTrigger value="participants" className="flex items-center text-xs">
+              <UserCheck className="mr-1 h-3 w-3" />
+              Participants
+            </TabsTrigger>
+            <TabsTrigger value="donors" className="flex items-center text-xs">
+              <Heart className="mr-1 h-3 w-3" />
+              Donors
+            </TabsTrigger>
+            <TabsTrigger value="orphaned" className="flex items-center text-xs">
+              <AlertCircle className="mr-1 h-3 w-3" />
+              Orphaned
+              {orphanedUsers.length > 0 && (
+                <Badge variant="destructive" className="ml-1 text-xs px-1">
+                  {orphanedUsers.length}
+                </Badge>
+              )}
+            </TabsTrigger>
+            <TabsTrigger value="map" className="flex items-center text-xs">
+              <Map className="mr-1 h-3 w-3" />
+              Map
+            </TabsTrigger>
+          </TabsList>
+          
+          {/* Icons-only version for smaller desktop screens */}
+          <TabsList className="grid lg:hidden w-full grid-cols-7">
+            <TabsTrigger value="super-admins" className="flex items-center justify-center p-2" title="Super Admins">
+              <Crown className="h-4 w-4" />
+            </TabsTrigger>
+            <TabsTrigger value="platform-admins" className="flex items-center justify-center p-2" title="Platform Admins">
+              <Star className="h-4 w-4" />
+            </TabsTrigger>
+            <TabsTrigger value="admins" className="flex items-center justify-center p-2" title="Shelter Admins">
+              <UserCog className="h-4 w-4" />
+            </TabsTrigger>
+            <TabsTrigger value="participants" className="flex items-center justify-center p-2" title="Participants">
+              <UserCheck className="h-4 w-4" />
+            </TabsTrigger>
+            <TabsTrigger value="donors" className="flex items-center justify-center p-2" title="Donors">
+              <Heart className="h-4 w-4" />
+            </TabsTrigger>
+            <TabsTrigger value="orphaned" className="flex items-center justify-center p-2 relative" title="Orphaned Users">
+              <AlertCircle className="h-4 w-4" />
+              {orphanedUsers.length > 0 && (
+                <Badge variant="destructive" className="absolute -top-1 -right-1 text-xs px-1 min-w-[16px] h-4 flex items-center justify-center">
+                  {orphanedUsers.length}
+                </Badge>
+              )}
+            </TabsTrigger>
+            <TabsTrigger value="map" className="flex items-center justify-center p-2" title="User Map">
+              <Map className="h-4 w-4" />
             </TabsTrigger>
           </TabsList>
         </div>
@@ -827,7 +897,7 @@ export default function UserManagement() {
             <TabsTrigger 
               value="admins" 
               className="flex flex-col items-center justify-center h-full px-1 py-1 w-full"
-              title="Admin Users"
+              title="Shelter Admins"
             >
               <UserCog className="h-5 w-5" />
             </TabsTrigger>
@@ -1065,7 +1135,7 @@ export default function UserManagement() {
                 <Star className="mx-auto h-12 w-12 text-orange-400 mb-4" />
                 <h3 className="text-lg font-medium mb-2">No Platform Administrators</h3>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Platform administrators haven't been created yet.
+                  Platform administrators haven&apos;t been created yet.
                 </p>
               </CardContent>
             </Card>
@@ -1074,7 +1144,7 @@ export default function UserManagement() {
               <CardContent className="p-0">
                 <div className="space-y-4 p-4">
                   {platformAdmins.map((admin) => (
-                    <div key={admin.uid} className="flex items-center justify-between p-4 bg-gradient-to-r from-orange-50 to-yellow-50 dark:from-orange-900/20 dark:to-yellow-900/20 rounded-lg border border-orange-200 dark:border-orange-800">
+                    <div key={admin.id} className="flex items-center justify-between p-4 bg-gradient-to-r from-orange-50 to-yellow-50 dark:from-orange-900/20 dark:to-yellow-900/20 rounded-lg border border-orange-200 dark:border-orange-800">
                       <div className="flex items-center space-x-4">
                         <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-full flex items-center justify-center shadow-lg">
                           <Star className="h-6 w-6 text-white" />
@@ -1087,7 +1157,7 @@ export default function UserManagement() {
                             {admin.email}
                           </div>
                           <div className="text-xs text-muted-foreground">
-                            Platform Administrator • {admin.adminProfile?.title || 'Founding Partner'}
+                            Platform Administrator • Founding Partner
                           </div>
                         </div>
                       </div>
@@ -1676,7 +1746,7 @@ export default function UserManagement() {
                       {orphanedUsers.length} Users Need Role Assignment
                     </CardTitle>
                     <CardDescription>
-                      These users registered but don't have proper roles assigned. They may have registered via OAuth or direct signup without completing role selection.
+                      These users registered but don&apos;t have proper roles assigned. They may have registered via OAuth or direct signup without completing role selection.
                     </CardDescription>
                   </div>
                   <Badge variant="destructive">
@@ -1741,7 +1811,7 @@ export default function UserManagement() {
                             <Button
                               variant="outline"
                               size="sm"
-                              onClick={() => viewUser(user as any, 'orphaned')}
+                              onClick={() => viewUser(user as unknown as AdminUser & ParticipantUser & DonorUser, 'orphaned')}
                             >
                               <Eye className="mr-2 h-4 w-4" />
                               Inspect
@@ -1749,7 +1819,7 @@ export default function UserManagement() {
                             <Button
                               variant="default"
                               size="sm"
-                              onClick={() => editUser(user as any, 'orphaned')}
+                              onClick={() => editUser(user as unknown as AdminUser & ParticipantUser & DonorUser, 'orphaned')}
                             >
                               <Edit className="mr-2 h-4 w-4" />
                               Assign Role
@@ -1768,8 +1838,8 @@ export default function UserManagement() {
                       <div>
                         <h4 className="font-semibold text-yellow-800">Action Required</h4>
                         <p className="text-sm text-yellow-700 mt-1">
-                          These users won't appear in role-specific views and can't access dashboard features until roles are assigned.
-                          This is likely why <code className="bg-yellow-200 px-1 rounded">brokers.licence.4d@icloud.com</code> wasn't visible in your user management interface.
+                          These users won&apos;t appear in role-specific views and can&apos;t access dashboard features until roles are assigned.
+                          This is likely why <code className="bg-yellow-200 px-1 rounded">brokers.licence.4d@icloud.com</code> wasn&apos;t visible in your user management interface.
                         </p>
                       </div>
                     </div>
@@ -1985,9 +2055,11 @@ export default function UserManagement() {
               
               {/* QR Code Display */}
               <div className="bg-white p-4 rounded-lg mx-auto w-fit mb-4">
-                <img 
+                <Image 
                   src={showQRModal.qrCodeUrl}
                   alt={`QR Code for ${showQRModal.participant.name}`}
+                  width={192}
+                  height={192}
                   className="w-48 h-48 object-cover rounded"
                   onError={(e) => {
                     console.log('🚫 QR Code image failed to load');

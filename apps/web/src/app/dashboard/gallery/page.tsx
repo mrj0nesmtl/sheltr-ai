@@ -28,7 +28,6 @@ import {
   arrayMove,
   SortableContext,
   sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
   rectSortingStrategy,
 } from '@dnd-kit/sortable';
 import {
@@ -56,7 +55,8 @@ interface GalleryImage {
   tags: string[];
   date: string;
   isPublic: boolean;
-  isHero: boolean;
+  isHero: boolean; // Hero image for gallery page
+  isLandingHero: boolean; // Hero image for landing page
   order: number;
   uploadedBy: string;
   createdAt: Date;
@@ -72,9 +72,10 @@ interface SortableImageCardProps {
   onEdit: (image: GalleryImage) => void;
   onDelete: (image: GalleryImage) => void;
   onToggleHero: (image: GalleryImage) => void;
+  onToggleLandingHero: (image: GalleryImage) => void;
 }
 
-function SortableImageCard({ image, index, onEdit, onDelete, onToggleHero }: SortableImageCardProps) {
+function SortableImageCard({ image, index, onEdit, onDelete, onToggleHero, onToggleLandingHero }: SortableImageCardProps) {
   const {
     attributes,
     listeners,
@@ -113,7 +114,12 @@ function SortableImageCard({ image, index, onEdit, onDelete, onToggleHero }: Sor
           </Badge>
           {image.isHero && (
             <Badge variant="default" className="text-xs bg-yellow-500 hover:bg-yellow-600">
-              HERO
+              GALLERY HERO
+            </Badge>
+          )}
+          {image.isLandingHero && (
+            <Badge variant="default" className="text-xs bg-orange-500 hover:bg-orange-600">
+              LANDING HERO
             </Badge>
           )}
         </div>
@@ -143,17 +149,31 @@ function SortableImageCard({ image, index, onEdit, onDelete, onToggleHero }: Sor
             </Badge>
           )}
         </div>
-        <div className="flex items-center gap-2 mb-2">
-          <input
-            type="checkbox"
-            id={`hero-${image.id}`}
-            checked={image.isHero || false}
-            onChange={() => onToggleHero(image)}
-            className="w-4 h-4 text-yellow-600 bg-gray-100 border-gray-300 rounded focus:ring-yellow-500 dark:focus:ring-yellow-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-          />
-          <label htmlFor={`hero-${image.id}`} className="text-sm font-medium text-gray-900 dark:text-gray-300">
-            Hero Image
-          </label>
+        <div className="space-y-2 mb-2">
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              id={`hero-gallery-${image.id}`}
+              checked={image.isHero || false}
+              onChange={() => onToggleHero(image)}
+              className="w-4 h-4 text-yellow-600 bg-gray-100 border-gray-300 rounded focus:ring-yellow-500 dark:focus:ring-yellow-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+            />
+            <label htmlFor={`hero-gallery-${image.id}`} className="text-sm font-medium text-gray-900 dark:text-gray-300">
+              Hero Image Gallery
+            </label>
+          </div>
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              id={`hero-landing-${image.id}`}
+              checked={image.isLandingHero || false}
+              onChange={() => onToggleLandingHero(image)}
+              className="w-4 h-4 text-orange-600 bg-gray-100 border-gray-300 rounded focus:ring-orange-500 dark:focus:ring-orange-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+            />
+            <label htmlFor={`hero-landing-${image.id}`} className="text-sm font-medium text-gray-900 dark:text-gray-300">
+              Hero Image Landing Page
+            </label>
+          </div>
         </div>
         <div className="flex justify-between items-center">
           <div className="text-xs text-muted-foreground">
@@ -210,7 +230,8 @@ export default function GalleryManagementPage() {
     description: '',
     tags: '',
     isPublic: true,
-    isHero: false
+    isHero: false,
+    isLandingHero: false
   });
 
   // Helper function to show alerts
@@ -297,6 +318,7 @@ export default function GalleryManagementPage() {
         date: new Date().getFullYear().toString(),
         isPublic: formData.isPublic,
         isHero: formData.isHero,
+        isLandingHero: formData.isLandingHero,
         order: images.length,
         uploadedBy: user.uid,
         createdAt: new Date(),
@@ -307,7 +329,7 @@ export default function GalleryManagementPage() {
       
       showAlert('success', 'Image uploaded successfully!');
       setUploadDialogOpen(false);
-      setFormData({ title: '', category: '', description: '', tags: '', isPublic: true, isHero: false });
+      setFormData({ title: '', category: '', description: '', tags: '', isPublic: true, isHero: false, isLandingHero: false });
       loadImages();
     } catch (error) {
       console.error('Error uploading image:', error);
@@ -363,6 +385,39 @@ export default function GalleryManagementPage() {
     } catch (error) {
       console.error('Error toggling hero image:', error);
       showAlert('error', 'Failed to update hero image');
+    } finally {
+      setIsReordering(false);
+    }
+  };
+
+  // Handle landing page hero image toggle
+  const handleToggleLandingHero = async (image: GalleryImage) => {
+    try {
+      setIsReordering(true);
+      
+      // If setting this image as landing hero, first unset any existing landing hero images
+      if (!image.isLandingHero) {
+        const currentLandingHeroImages = images.filter(img => img.isLandingHero);
+        const unsetPromises = currentLandingHeroImages.map(heroImage => 
+          updateDoc(doc(db, 'gallery_images', heroImage.id), { 
+            isLandingHero: false,
+            updatedAt: new Date()
+          })
+        );
+        await Promise.all(unsetPromises);
+      }
+      
+      // Toggle the landing hero status of the current image
+      await updateDoc(doc(db, 'gallery_images', image.id), {
+        isLandingHero: !image.isLandingHero,
+        updatedAt: new Date()
+      });
+      
+      showAlert('success', image.isLandingHero ? 'Landing page hero image removed!' : 'Landing page hero image set successfully!');
+      loadImages();
+    } catch (error) {
+      console.error('Error toggling landing hero image:', error);
+      showAlert('error', 'Failed to update landing page hero image');
     } finally {
       setIsReordering(false);
     }
@@ -597,7 +652,16 @@ export default function GalleryManagementPage() {
                       checked={formData.isHero}
                       onChange={(e) => setFormData(prev => ({ ...prev, isHero: e.target.checked }))}
                     />
-                    <label htmlFor="isHero" className="text-sm">Set as hero image</label>
+                    <label htmlFor="isHero" className="text-sm">Set as hero image gallery</label>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      id="isLandingHero"
+                      checked={formData.isLandingHero}
+                      onChange={(e) => setFormData(prev => ({ ...prev, isLandingHero: e.target.checked }))}
+                    />
+                    <label htmlFor="isLandingHero" className="text-sm">Set as hero image landing page</label>
                   </div>
                 </div>
                 <div>
@@ -684,6 +748,7 @@ export default function GalleryManagementPage() {
                 onEdit={setEditingImage}
                 onDelete={handleDeleteImage}
                 onToggleHero={handleToggleHero}
+                onToggleLandingHero={handleToggleLandingHero}
               />
             ))}
           </div>

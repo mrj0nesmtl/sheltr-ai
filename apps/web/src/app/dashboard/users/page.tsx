@@ -48,6 +48,7 @@ import {
 } from '@/services/platformMetrics';
 import { doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import { UserExportService } from '@/services/userExportService';
 
 export default function UserManagement() {
   const { user } = useAuth();
@@ -139,17 +140,137 @@ export default function UserManagement() {
           filename = 'orphaned-users.csv';
           break;
         default:
-          // Export all users combined
-          exportData = [
-            ...adminUsers.map(u => ({ ...u, UserType: 'Admin' })),
-            ...participantUsers.map(u => ({ ...u, UserType: 'Participant' })),
-            ...donorUsers.map(u => ({ ...u, UserType: 'Donor' })),
-            ...orphanedUsers.map(u => ({ ...u, UserType: 'Orphaned', needsAttention: u.needsAttention ? 'YES' : 'NO' }))
-          ];
-          filename = 'all-users.csv';
+          // Export all users combined with enhanced data and dual-role logic
+          const allUsersMap = new Map<string, any>();
+          
+          // Add admin users
+          adminUsers.forEach(u => {
+            allUsersMap.set(u.id, {
+              id: u.id,
+              name: u.name,
+              firstName: u.firstName || u.name?.split(' ')[0] || '',
+              lastName: u.lastName || u.name?.split(' ').slice(1).join(' ') || '',
+              email: u.email,
+              shelter: u.shelter,
+              shelter_id: u.shelter_id || '',
+              role: u.role,
+              status: u.status,
+              lastLogin: u.lastLogin || 'Never',
+              participants: u.participants || 0,
+              joinDate: u.joinDate,
+              created_at: u.created_at || u.joinDate,
+              updated_at: u.updated_at || '',
+              UserType: 'Admin'
+            });
+          });
+          
+          // Add participant users
+          participantUsers.forEach(u => {
+            allUsersMap.set(u.id, {
+              id: u.id,
+              name: u.name,
+              firstName: u.firstName || u.name?.split(' ')[0] || '',
+              lastName: u.lastName || u.name?.split(' ').slice(1).join(' ') || '',
+              email: u.email,
+              shelter: u.shelter,
+              shelter_id: u.shelter_id || '',
+              role: u.role,
+              status: u.status,
+              lastLogin: u.lastLogin || 'Never',
+              participants: 0,
+              joinDate: u.joinDate,
+              created_at: u.created_at || u.joinDate,
+              updated_at: u.updated_at || '',
+              UserType: 'Participant'
+            });
+          });
+          
+          // Add donor users with dual-role logic
+          donorUsers.forEach(u => {
+            const existingUser = allUsersMap.get(u.id);
+            if (existingUser) {
+              // User already exists (dual-role) - update UserType to show both roles
+              existingUser.UserType = `${existingUser.UserType}, Donor`;
+              existingUser.totalDonated = u.totalDonated || 0;
+              existingUser.donationCount = u.donationCount || 0;
+              existingUser.lastDonation = u.lastDonation || 'Never';
+            } else {
+              // Primary donor only
+              allUsersMap.set(u.id, {
+                id: u.id,
+                name: u.name,
+                firstName: u.firstName || u.name?.split(' ')[0] || '',
+                lastName: u.lastName || u.name?.split(' ').slice(1).join(' ') || '',
+                email: u.email,
+                shelter: u.shelter || 'N/A',
+                shelter_id: u.shelter_id || '',
+                role: u.role,
+                status: u.status,
+                lastLogin: u.lastLogin || 'Never',
+                participants: 0,
+                joinDate: u.joinDate,
+                created_at: u.created_at || u.joinDate,
+                updated_at: u.updated_at || '',
+                totalDonated: u.totalDonated || 0,
+                donationCount: u.donationCount || 0,
+                lastDonation: u.lastDonation || 'Never',
+                UserType: 'Donor'
+              });
+            }
+          });
+          
+          // Add orphaned users
+          orphanedUsers.forEach(u => {
+            allUsersMap.set(u.id, {
+              id: u.id,
+              name: u.name,
+              firstName: u.firstName || u.name?.split(' ')[0] || '',
+              lastName: u.lastName || u.name?.split(' ').slice(1).join(' ') || '',
+              email: u.email,
+              shelter: 'No Shelter Assigned',
+              shelter_id: '',
+              role: u.role,
+              status: u.status,
+              lastLogin: u.lastLogin || 'Never',
+              participants: 0,
+              joinDate: u.joinDate,
+              created_at: u.created_at || u.joinDate,
+              updated_at: u.updated_at || '',
+              needsAttention: u.needsAttention ? 'YES' : 'NO',
+              UserType: 'Orphaned'
+            });
+          });
+          
+          // Use enhanced export service for comprehensive data
+          try {
+            console.log('📊 Using enhanced export service...');
+            const enhancedData = await UserExportService.getEnhancedUserData(
+              adminUsers, 
+              participantUsers, 
+              donorUsers, 
+              orphanedUsers
+            );
+            
+            const csvContent = UserExportService.convertToCSV(enhancedData);
+            
+            // Download the enhanced CSV
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'all-users-enhanced.csv';
+            link.click();
+            
+            console.log('✅ Enhanced CSV export completed');
+            return;
+          } catch (error) {
+            console.error('❌ Enhanced export failed, falling back to basic export:', error);
+            // Fallback to basic export
+            exportData = Array.from(allUsersMap.values());
+            filename = 'all-users-basic.csv';
+          }
       }
       
-      // Convert to CSV
+      // Convert to CSV (fallback method)
       if (exportData.length === 0) {
         alert('No data to export');
         return;

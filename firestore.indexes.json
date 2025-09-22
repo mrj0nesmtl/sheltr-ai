@@ -79,6 +79,14 @@
         {"fieldPath": "tags", "arrayConfig": "CONTAINS"},
         {"fieldPath": "published_at", "order": "DESCENDING"}
       ]
+    },
+    {
+      "collectionGroup": "access_logs",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {"fieldPath": "email", "order": "ASCENDING"},
+        {"fieldPath": "timestamp", "order": "DESCENDING"}
+      ]
     }
   ],
   "fieldOverrides": []

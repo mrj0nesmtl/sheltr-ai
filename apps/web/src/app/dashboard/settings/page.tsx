@@ -366,7 +366,7 @@ export default function SystemSettingsPage() {
                 </span>
               </div>
               <p className="text-xs text-muted-foreground mt-1">
-                {systemHealth?.database.totalDocuments || 0} documents
+                {systemHealth?.database.totalCollections || 0} collections
               </p>
             </CardContent>
           </Card>
@@ -444,14 +444,29 @@ export default function SystemSettingsPage() {
               <Shield className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="flex items-center space-x-2">
-                <div className={`w-2 h-2 rounded-full ${
-                  systemHealth?.security.status === 'protected' ? 'bg-green-500' :
-                  systemHealth?.security.status === 'warning' ? 'bg-yellow-500' : 'bg-red-500'
-                }`}></div>
-                <span className="text-sm font-medium capitalize">
-                  {systemHealth?.security.status || 'Protected'}
-                </span>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <div className={`w-2 h-2 rounded-full ${
+                    systemHealth?.security.status === 'protected' ? 'bg-green-500' :
+                    systemHealth?.security.status === 'warning' ? 'bg-yellow-500' : 'bg-red-500'
+                  }`}></div>
+                  <span className="text-sm font-medium capitalize">
+                    {systemHealth?.security.status || 'Protected'}
+                  </span>
+                </div>
+                {systemHealth?.security.status === 'warning' && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="h-6 px-2 text-xs"
+                    onClick={() => {
+                      // Navigate to Security & Compliance dashboard
+                      window.location.href = '/dashboard/security';
+                    }}
+                  >
+                    View
+                  </Button>
+                )}
               </div>
               <p className="text-xs text-muted-foreground mt-1">
                 {systemHealth?.security.encryptionLevel || 'AES-256'}
@@ -491,7 +506,12 @@ export default function SystemSettingsPage() {
               <div className="text-sm font-medium">
                 v{systemHealth?.platform.version || generalSettings.platformVersion}
               </div>
-              <p className="text-xs text-muted-foreground mt-1">Latest stable</p>
+              <p className="text-xs text-muted-foreground mt-1">
+                {systemHealth?.platform.lastDeployment 
+                  ? `Deployed ${systemHealth.platform.lastDeployment.toLocaleDateString()}`
+                  : 'Latest stable'
+                }
+              </p>
             </CardContent>
           </Card>
         </div>

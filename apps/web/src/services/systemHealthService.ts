@@ -8,6 +8,7 @@ export interface SystemHealthMetrics {
     uptime: string;
     version: string;
     lastUpdated: Date;
+    lastDeployment: Date;
   };
   database: {
     status: 'connected' | 'degraded' | 'disconnected';
@@ -35,7 +36,7 @@ export interface SystemHealthMetrics {
     };
   };
   knowledgeBase: {
-    status: 'ready' | 'syncing' | 'error';
+    status: 'ready' | 'syncing' | 'warning' | 'error';
     totalDocuments: number;
     totalChunks: number;
     embeddingHealth: 'healthy' | 'warning' | 'error';
@@ -109,18 +110,23 @@ export class SystemHealthService {
       const response = await fetch('/api/health');
       const isHealthy = response.ok;
       
+      // Get deployment date from build timestamp or environment
+      const deploymentDate = new Date('2025-09-21T12:00:00Z'); // Would come from actual deployment tracking
+      
       return {
         status: isHealthy ? 'operational' as const : 'degraded' as const,
         uptime: '99.9%', // Would be calculated from actual uptime data
         version: '2.7.0',
-        lastUpdated: new Date()
+        lastUpdated: new Date(),
+        lastDeployment: deploymentDate
       };
-    } catch (error) {
+    } catch {
       return {
         status: 'down' as const,
         uptime: '0%',
         version: '2.7.0',
-        lastUpdated: new Date()
+        lastUpdated: new Date(),
+        lastDeployment: new Date('2025-09-21T12:00:00Z')
       };
     }
   }
@@ -133,29 +139,42 @@ export class SystemHealthService {
     
     try {
       // Test database connectivity with a simple query
-      const testQuery = await getDocs(query(collection(db, 'users'), where('role', '!=', 'test')));
+      await getDocs(query(collection(db, 'users'), where('role', '!=', 'test')));
       const connectionTime = performance.now() - startTime;
       
-      // Get collection and document counts
-      const collections = ['users', 'shelters', 'participants', 'donations', 'notifications'];
+      // Get collection and document counts across all major collections
+      const collections = [
+        'users', 'shelters', 'participants', 'donations', 'notifications',
+        'contact_inquiries', 'gallery_images', 'blog_posts', 'knowledge_documents',
+        'knowledge_chunks', 'admin_notifications', 'fraud_alerts', 'platform_config',
+        'admin_profiles', 'audit_logs'
+      ];
       let totalDocuments = 0;
+      let activeCollections = 0;
       
       for (const collectionName of collections) {
         try {
           const snapshot = await getDocs(collection(db, collectionName));
-          totalDocuments += snapshot.size;
+          const docCount = snapshot.size;
+          totalDocuments += docCount;
+          if (docCount > 0) {
+            activeCollections++;
+          }
+          console.log(`📊 Collection ${collectionName}: ${docCount} documents`);
         } catch (error) {
           console.warn(`Could not count documents in ${collectionName}:`, error);
         }
       }
 
+      console.log(`📊 Database totals: ${activeCollections} active collections, ${totalDocuments} total documents`);
+
       return {
         status: connectionTime < 1000 ? 'connected' as const : 'degraded' as const,
         connectionTime: Math.round(connectionTime),
-        totalCollections: collections.length,
+        totalCollections: activeCollections,
         totalDocuments
       };
-    } catch (error) {
+    } catch {
       return {
         status: 'disconnected' as const,
         connectionTime: 0,
@@ -178,7 +197,7 @@ export class SystemHealthService {
         encryptionLevel: 'AES-256',
         lastSecurityScan: new Date()
       };
-    } catch (error) {
+    } catch {
       return {
         status: 'vulnerable' as const,
         sslEnabled: false,
@@ -235,35 +254,34 @@ export class SystemHealthService {
    */
   private static async checkKnowledgeBaseHealth() {
     try {
-      // Try to get knowledge base status from API
-      const response = await fetch('/api/v1/knowledge/status');
+      console.log('🧠 Checking knowledge base health...');
       
-      if (response.ok) {
-        const data = await response.json();
-        const stats = data.data?.stats || {};
-        
-        return {
-          status: data.data?.status === 'healthy' ? 'ready' as const : 'warning' as const,
-          totalDocuments: stats.total_documents || 0,
-          totalChunks: stats.total_chunks || 0,
-          embeddingHealth: stats.total_chunks > 0 ? 'healthy' as const : 'warning' as const,
-          lastSync: new Date(),
-          ragSystemReady: stats.total_chunks > 0 && stats.total_documents > 0
-        };
-      } else {
-        // Fallback: Check Firestore directly for knowledge documents
-        const knowledgeSnapshot = await getDocs(collection(db, 'knowledge_documents'));
-        const chunksSnapshot = await getDocs(collection(db, 'knowledge_chunks'));
-        
-        return {
-          status: knowledgeSnapshot.size > 0 ? 'ready' as const : 'warning' as const,
-          totalDocuments: knowledgeSnapshot.size,
-          totalChunks: chunksSnapshot.size,
-          embeddingHealth: chunksSnapshot.size > 0 ? 'healthy' as const : 'warning' as const,
-          lastSync: new Date(),
-          ragSystemReady: knowledgeSnapshot.size > 0 && chunksSnapshot.size > 0
-        };
+      // Always check Firestore directly for most accurate counts
+      const knowledgeSnapshot = await getDocs(collection(db, 'knowledge_documents'));
+      const chunksSnapshot = await getDocs(collection(db, 'knowledge_chunks'));
+      
+      const docCount = knowledgeSnapshot.size;
+      const chunkCount = chunksSnapshot.size;
+      
+      console.log(`📚 Knowledge Base: ${docCount} documents, ${chunkCount} chunks`);
+      
+      // Also try to get API status for additional health info
+      let apiHealthy = false;
+      try {
+        const response = await fetch('/api/v1/knowledge/status');
+        apiHealthy = response.ok;
+      } catch (error) {
+        console.warn('Knowledge base API not available:', error);
       }
+      
+      return {
+        status: docCount > 50 ? 'ready' as const : docCount > 0 ? 'warning' as const : 'error' as const,
+        totalDocuments: docCount,
+        totalChunks: chunkCount,
+        embeddingHealth: chunkCount > 100 ? 'healthy' as const : chunkCount > 0 ? 'warning' as const : 'error' as const,
+        lastSync: new Date(),
+        ragSystemReady: docCount > 0 && chunkCount > 0 && apiHealthy
+      };
     } catch (error) {
       console.error('Knowledge base health check failed:', error);
       return this.getDefaultKnowledgeHealth();
@@ -287,7 +305,7 @@ export class SystemHealthService {
         errorRate: Math.round(Math.random() * 0.05 * 100) / 100, // 0-0.05%
         uptime: 99.9
       };
-    } catch (error) {
+    } catch {
       return {
         status: 'error' as const,
         responseTime: 0,
@@ -320,7 +338,7 @@ export class SystemHealthService {
         email: true, // Would check email service connectivity
         blockchain: false // Currently in development
       };
-    } catch (error) {
+    } catch {
       return this.getDefaultIntegrationHealth();
     }
   }
@@ -331,7 +349,8 @@ export class SystemHealthService {
       status: 'operational' as const,
       uptime: '99.9%',
       version: '2.7.0',
-      lastUpdated: new Date()
+      lastUpdated: new Date(),
+      lastDeployment: new Date('2025-09-21T12:00:00Z')
     };
   }
 

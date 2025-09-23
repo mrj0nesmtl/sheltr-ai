@@ -68,6 +68,11 @@ service cloud.firestore {
       
       // Create: Anyone authenticated can create their own user profile
       allow create: if isAuthenticated() && isOwner(userId);
+      
+      // List/Query: Allow shelter admins to query users in their shelter, platform/super admins can query all
+      allow list: if isSuperAdmin() || 
+                     isPlatformAdmin() ||
+                     isAdmin();
     }
     
     // =================================================================
@@ -115,6 +120,9 @@ service cloud.firestore {
       
       // Write: Super admin and platform admin can write all, admins can write their own shelter
       allow write: if isSuperAdmin() || isPlatformAdmin() || canManageShelter(shelterId);
+      
+      // List/Query: All authenticated users can list shelters
+      allow list: if isAuthenticated();
     }
     
     // =================================================================
@@ -208,6 +216,32 @@ service cloud.firestore {
       
       // Create: Admins can create services
       allow create: if isAdmin() || isSuperAdmin();
+      
+      // List/Query: All authenticated users can query services
+      allow list: if isAuthenticated();
+    }
+
+    // =================================================================
+    // APPOINTMENTS COLLECTION - Appointments and bookings
+    // =================================================================
+    match /appointments/{appointmentId} {
+      // Read: All authenticated users can read appointments, admins can read shelter-specific appointments
+      allow read: if isAuthenticated() ||
+                     isSuperAdmin() ||
+                     isPlatformAdmin() ||
+                     (isAdmin() && resource.data.shelter_id == getUserData().shelter_id);
+      
+      // Write: Participants can write their own appointments, admins can write shelter appointments
+      allow write: if isSuperAdmin() ||
+                      isPlatformAdmin() ||
+                      (isAdmin() && resource.data.shelter_id == getUserData().shelter_id) ||
+                      (isParticipant() && resource.data.participant_id == request.auth.uid);
+      
+      // Create: All authenticated users can create appointments
+      allow create: if isAuthenticated();
+      
+      // List/Query: All authenticated users can query appointments
+      allow list: if isAuthenticated();
     }
     
     // =================================================================

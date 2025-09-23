@@ -14,7 +14,7 @@ from collections import defaultdict
 
 from services.chatbot.orchestrator import chatbot_orchestrator, ChatResponse
 from services.analytics_service import analytics_service
-from services.mcp_service import mcp_service, MCPToolRequest
+from services.mcp_service import mcp_service, MCPToolRequest, MCPToolType
 
 logger = logging.getLogger(__name__)
 
@@ -101,73 +101,71 @@ def detect_mcp_intent(message: str, user_role: str) -> Optional[str]:
     return None
 
 async def try_mcp_execution_for_authenticated_user(message: str, user_role: str, user_id: str) -> Optional[Dict[str, Any]]:
-    """Attempt to execute MCP tool if appropriate for authenticated users"""
+    """Execute real MCP tools for authenticated users"""
     try:
         mcp_tool = detect_mcp_intent(message, user_role)
         if not mcp_tool:
             return None
         
-        logger.info(f"🔧 MCP tool detected: {mcp_tool} for user role: {user_role}")
+        logger.info(f"🔧 [REAL MCP] Executing tool: {mcp_tool} for user role: {user_role}")
         
-        # For now, provide simulated MCP responses since auth middleware blocks direct access
-        if mcp_tool == 'generate_impact_report':
-            return {
-                'tool_used': mcp_tool,
-                'result': 'Weekly impact report generated successfully! Platform metrics: 14 users, 5 platform admins, 10 total organizations, $8,213 total donations this quarter.',
-                'data': {
-                    'users': 14,
-                    'admins': 5,
-                    'organizations': 10,
-                    'donations': 8213,
-                    'period': 'weekly'
-                }
-            }
-        elif mcp_tool == 'query_platform_data':
-            return {
-                'tool_used': mcp_tool,
-                'result': 'Platform data query completed! Current system status: All services operational, 99.9% uptime, 12 active email signups this week.',
-                'data': {
-                    'status': 'operational',
-                    'uptime': '99.9%',
-                    'signups': 12
-                }
-            }
-        elif mcp_tool == 'search_knowledge_base':
-            return {
-                'tool_used': mcp_tool,
-                'result': 'Knowledge base search completed! Found relevant documentation about platform analytics and user management.',
-                'data': {
-                    'results': [
-                        {'title': 'Platform Analytics Guide', 'score': 0.95},
-                        {'title': 'User Management Documentation', 'score': 0.87}
-                    ]
-                }
-            }
-        
-        # Try actual MCP service execution (will likely fail due to auth)
+        # Execute REAL MCP tools using our custom SHELTR MCP service
         try:
             mcp_request = MCPToolRequest(
                 tool_name=mcp_tool,
+                tool_type=get_tool_type_for_tool(mcp_tool),
                 parameters=extract_parameters_from_message_for_public(message, mcp_tool),
-                user_id=user_id
+                user_id=user_id,
+                context={'user_role': user_role, 'message': message}
             )
             
+            logger.info(f"🔧 [REAL MCP] Sending request to MCP service: {mcp_request.tool_name}")
             mcp_response = await mcp_service.execute_tool(mcp_request)
             
             if mcp_response.success:
+                logger.info(f"✅ [REAL MCP] Tool executed successfully: {mcp_tool}")
                 return {
                     'tool_used': mcp_tool,
                     'result': mcp_response.message,
-                    'data': mcp_response.data
+                    'data': mcp_response.data or {}
                 }
-        except Exception as auth_error:
-            logger.info(f"MCP service auth failed (expected): {auth_error}, using simulated response")
-            
-        return None
+            else:
+                logger.warning(f"⚠️ [REAL MCP] Tool execution failed: {mcp_response.message}")
+                # Fallback to helpful message
+                return {
+                    'tool_used': mcp_tool,
+                    'result': f"I tried to execute the {mcp_tool} tool, but encountered an issue: {mcp_response.message}. Please try rephrasing your request or contact support.",
+                    'data': {'error': mcp_response.message}
+                }
+                
+        except Exception as mcp_error:
+            logger.error(f"❌ [REAL MCP] MCP service error: {mcp_error}")
+            # Provide helpful fallback instead of simulated data
+            return {
+                'tool_used': mcp_tool,
+                'result': f"I'm having trouble accessing the {mcp_tool} functionality right now. As a {user_role}, you normally have access to real-time data through this tool. Please try again in a moment!",
+                'data': {'error': str(mcp_error), 'fallback': True}
+            }
             
     except Exception as e:
-        logger.error(f"MCP execution error: {e}")
+        logger.error(f"❌ [REAL MCP] Execution error: {e}")
         return None
+
+def get_tool_type_for_tool(tool_name: str) -> MCPToolType:
+    """Map tool names to their types for MCP service"""
+    tool_type_map = {
+        'generate_impact_report': MCPToolType.REPORTING_ANALYTICS,
+        'query_platform_data': MCPToolType.REPORTING_ANALYTICS, 
+        'search_knowledge_base': MCPToolType.KNOWLEDGE_QUERY,
+        'create_shelter': MCPToolType.SHELTER_MANAGEMENT,
+        'update_shelter_capacity': MCPToolType.SHELTER_MANAGEMENT,
+        'process_donation': MCPToolType.DONATION_PROCESSING,
+        'generate_donation_receipt': MCPToolType.DONATION_PROCESSING,
+        'update_participant_status': MCPToolType.PARTICIPANT_SUPPORT,
+        'generate_participant_qr': MCPToolType.PARTICIPANT_SUPPORT,
+        'emergency_escalation': MCPToolType.EMERGENCY_RESPONSE
+    }
+    return tool_type_map.get(tool_name, MCPToolType.KNOWLEDGE_QUERY)
 
 def extract_parameters_from_message_for_public(message: str, tool_name: str) -> Dict[str, Any]:
     """Extract parameters from user message for MCP tools"""

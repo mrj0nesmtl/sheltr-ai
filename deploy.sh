@@ -55,7 +55,7 @@ deploy_frontend() {
     
     # Install dependencies with security audit
     echo -e "${YELLOW}📦 Installing frontend dependencies with security check...${NC}"
-    npm ci > ../../logs/deploy-frontend-install.log 2>&1
+    npm ci --legacy-peer-deps > ../../logs/deploy-frontend-install.log 2>&1
     check_status "Frontend dependency installation"
     
     # Run security audit (non-blocking)

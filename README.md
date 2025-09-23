@@ -1,34 +1,115 @@
-# 🏠 SHELTR
+# 🏠 SHELTR-AI
 **Better to Solve than Manage.** 
 
-The next generation platform for transparent charitable giving and homelessness support built on modern cloud infrastructure and blockchain technology.
+The next generation platform for transparent charitable giving and homelessness support built on modern cloud infrastructure, AI agents, and blockchain technology.
 
 [![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com)
 [![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org)
-[![Expo](https://img.shields.io/badge/Expo-000020?style=for-the-badge&logo=expo&logoColor=white)](https://expo.dev)
+[![OpenAI](https://img.shields.io/badge/OpenAI-412991?style=for-the-badge&logo=openai&logoColor=white)](https://openai.com)
 [![Solidity](https://img.shields.io/badge/Solidity-363636?style=for-the-badge&logo=solidity&logoColor=white)](https://soliditylang.org)
-[![Foundry](https://img.shields.io/badge/Foundry-FF6B35?style=for-the-badge&logo=foundry&logoColor=white)](https://getfoundry.sh)
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://typescriptlang.org)
 [![GitHub Stars](https://img.shields.io/github/stars/mrj0nesmtl/sheltr-ai?style=for-the-badge)](https://github.com/mrj0nesmtl/sheltr-ai)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg?style=for-the-badge)](https://www.python.org/downloads/)
-[![Last Updated](https://img.shields.io/badge/Last%20Updated-September%202%2C%202025-brightgreen?style=for-the-badge)](https://github.com/mrj0nesmtl/sheltr-ai)
+[![Last Updated](https://img.shields.io/badge/Last%20Updated-September%2023%2C%202025-brightgreen?style=for-the-badge)](https://github.com/mrj0nesmtl/sheltr-ai)
+
+---
+
+## 🚀 **MAJOR BREAKTHROUGH: PRODUCTION-READY PLATFORM**
+
+**SHELTR has achieved full production readiness with advanced AI agents, comprehensive security, and complete multi-tenant architecture.** We've built a revolutionary platform that combines transparent charitable giving with cutting-edge AI technology and blockchain verification.
+
+### 🎯 **Live Platform Status**
+- **🌐 Production Website**: [sheltr-ai.web.app](https://sheltr-ai.web.app) - **FULLY OPERATIONAL**
+- **🤖 AI Chatbot System**: **LIVE** with role-aware MCP integration
+- **📊 Multi-Tenant Dashboards**: **5-ROLE RBAC** system operational
+- **🔐 Enterprise Security**: **ALL VULNERABILITIES RESOLVED** (GitHub CodeQL)
+- **💰 Donation Architecture**: **PRODUCTION-READY** with proper tenant structure
+- **📚 Knowledge Base**: **57+ DOCUMENTS** with AI embeddings
+- **📝 Blog System**: **LIVE** with SEO optimization and markdown import
 
 ---
 
 ## 🎯 Mission
 
-**Sheltr is Hacking homelessness.** SHELTR empowers direct, transparent charitable giving through QR-code enabled donations, blockchain verification, and AI-driven insights. Every donation follows our SmartFund™ distribution: **80% direct to participants, 15% to sustainable housing fund, 5% to shelter operations**.
+**SHELTR is revolutionizing homelessness solutions.** We empower direct, transparent charitable giving through QR-code enabled donations, blockchain verification, and AI-driven insights. Every donation follows our SmartFund™ distribution: **80% direct to participants, 15% to sustainable housing fund, 5% to platform operations**.
 
 ## 🚀 Quick Start
 
-- **New to SHELTR?** → Start with [Overview & Vision](docs/01-overview/README.md)
-- **Want to develop?** → Check [Development Roadmap](docs/04-development/dev-roadmap.md)
-- **Need API docs?** → Visit [API Documentation](docs/03-api/README.md)
-- **User guidance?** → See [Complete User Guides](docs/06-user-guides/) (Participant, Admin, Donor)
-- **🆕 Blog System?** → Explore [Live Blog](https://sheltr-ai.web.app/blog/) | [Blog Management](docs/03-api/blog-schema.md)
-- **🆕 Knowledge Base?** → Check [Chatbot Agent Architecture](docs/04-development/CHATBOT-AGENT-ARCHITECTURE.md)
-- **🆕 Blockchain/Tokens?** → Explore [SHELTR Token Ecosystem](sheltr-tokens/docs/README.md)
+- **🆕 Experience the Platform** → Visit [Live SHELTR-AI](https://sheltr-ai.web.app)
+- **🤖 Try Our AI Chatbot** → [Intelligent Assistant](https://sheltr-ai.web.app/docs/chatbot-user-guide) with MCP integration
+- **📊 View Live Dashboards** → [Multi-Role System](https://sheltr-ai.web.app/dashboard) (5-role RBAC)
+- **💝 Make a Demo Donation** → [Scan & Give](https://sheltr-ai.web.app/scan-give) with real-time tracking
+- **📚 Explore Documentation** → [Complete Docs Hub](https://sheltr-ai.web.app/docs) (11+ guides)
+- **📝 Read Our Blog** → [SHELTR Blog](https://sheltr-ai.web.app/blog) with technical insights
+- **🏢 For Developers** → [Development Guide](docs/04-development/dev-roadmap.md)
+
+---
+
+## 🌟 **Revolutionary Features - SEPTEMBER 2025**
+
+### 🤖 **Advanced AI Agent System**
+- **✅ Role-Aware Chatbots** - Dynamic behavior based on user authentication
+- **✅ Model Context Protocol (MCP)** - 36 specialized tools for real-world actions  
+- **✅ Multi-Agent Architecture** - Analytics, Knowledge, Research, Support agents
+- **✅ OpenAI Integration** - GPT-4 with streaming responses and function calling
+- **✅ Secure Session Management** - Cryptographically secure random IDs
+
+### 🏢 **Enterprise Multi-Tenant Platform**
+- **✅ 5-Role RBAC System** - Super Admin, Platform Admin, Shelter Admin, Participant, Donor
+- **✅ Real-Time Dashboards** - Live data across all user roles with Firebase sync
+- **✅ Dual-Role Logic** - Users can hold multiple roles (e.g., Admin + Donor)
+- **✅ Tenant Architecture** - Scalable multi-shelter management
+- **✅ Access Control** - Granular permissions with Firestore security rules
+
+### 🔐 **Enterprise-Grade Security**
+- **✅ Zero Security Vulnerabilities** - All GitHub CodeQL warnings resolved
+- **✅ Content Sanitization** - XSS protection with comprehensive input validation
+- **✅ Secure Random Generation** - Cryptographic session IDs and tokens
+- **✅ NDA Digital Signatures** - Platform Administrator onboarding with legal compliance
+- **✅ Audit Trails** - Complete access logging and security monitoring
+
+### 📊 **Production Data Architecture**
+- **✅ Donation Architecture Cleanup** - Migrated to proper tenant structure
+- **✅ Real-Time Analytics** - Live metrics across all dashboards
+- **✅ Data Consistency** - Single source of truth for all financial data
+- **✅ Firebase Integration** - Optimized queries and real-time listeners
+- **✅ Migration Tools** - Safe data migration with verification
+
+### 📚 **Knowledge Base & Content Management**
+- **✅ AI-Powered Knowledge Base** - 57+ documents with vector embeddings
+- **✅ GitHub Sync** - Automated documentation updates with quality scoring
+- **✅ Semantic Search** - Intelligent document retrieval for chatbot
+- **✅ Professional Blog System** - Live blog with SEO optimization
+- **✅ Content Sanitization** - Secure content handling and display
+
+### 🎨 **User Experience Excellence**
+- **✅ Gallery Management** - Drag-and-drop image ordering with hero selection
+- **✅ Mobile Responsive** - Perfect experience across all devices
+- **✅ Theme System** - Dark/light mode with persistent preferences
+- **✅ Navigation Enhancement** - Role-aware menus and breadcrumbs
+- **✅ Contact Management** - Real-time inquiry handling with CSV export
+
+---
+
+## 🏢 **Five-Role System Architecture**
+
+SHELTR-AI operates on a comprehensive **5-role user system** designed for maximum flexibility and security:
+
+| Role | Description | Access Level | Key Features |
+|------|-------------|--------------|------------|
+| **👑 Super Admin** | SHELTR Founders & Platform Operators | Global system control | Advanced analytics, blockchain oversight, knowledge base management, chatbot control |
+| **👨‍💼 Platform Admin** | Senior Platform Managers | Cross-shelter oversight | User management, financial oversight, security monitoring, **NDA requirement** |
+| **🏠 Shelter Admin** | Shelter Operators & Staff | Individual shelter management | Participant management, resource allocation, reporting |
+| **👤 Participant** | Donation Recipients | Personal QR & donation tracking | Independent registration, QR code generation, impact viewing |
+| **💝 Donor** | People Making Donations | Donation & impact tracking | Real-time impact tracking, donation history, portfolio management |
+
+### **🆕 Dual-Role Logic**
+Users can hold multiple roles simultaneously:
+- **Super Admin + Donor** - Platform oversight with personal giving
+- **Platform Admin + Donor** - Management role with donation activity
+- **Shelter Admin + Donor** - Shelter management with personal contributions
 
 ---
 
@@ -94,22 +175,41 @@ The next generation platform for transparent charitable giving and homelessness 
 
 ---
 
-## 🎯 Four-Role System
+## 🔧 **Technology Stack - 2025 Edition**
 
-SHELTR-AI operates on a comprehensive four-role user system designed for maximum flexibility and security:
+### **Frontend & AI**
+- **Web**: Next.js 15 + React 18 + TypeScript 5.0+
+- **UI**: Tailwind CSS + Shadcn/UI + Radix UI
+- **AI**: OpenAI GPT-4 + Model Context Protocol (MCP)
+- **Agents**: Multi-agent architecture with specialized tools
+- **Real-time**: Firebase SDK v9+ with optimized listeners
 
-| Role | Description | Access Level | Tenant Location | **🆕 New Features** |
-|------|-------------|--------------|-----------------|-------------------|
-| **👑 SuperAdmin** | SHELTR Founders & Platform Operators | Global system control | `tenants/platform/` | Advanced analytics, blockchain oversight, **🆕 Blog Management**, **🆕 Knowledge Base Dashboard**, **🆕 Chatbot Control Panel** |
-| **👨‍💼 Admin** | Shelter Operators & Staff | Shelter management | `tenants/shelter-{id}/` | Multi-shelter dashboards, participant management |
-| **👤 Participant** | Donation Recipients (Homeless Individuals) | Personal QR & donations | `tenants/shelter-{id}/participants/` or `tenants/participant-network/` | **🆕 Independent registration, QR code generation** |
-| **💝 Donor** | People Making Donations | Donation & impact tracking | `tenants/donor-network/` | Real-time impact tracking, donation history |
+### **Backend & Database**  
+- **API**: FastAPI + Python 3.11 + Async/Await
+- **Database**: Firebase Firestore (multi-tenant architecture)
+- **Auth**: Firebase Authentication + custom claims + 5-role RBAC
+- **Storage**: Firebase Storage + Google Cloud Storage
+- **Security**: Enterprise-grade with zero vulnerabilities
 
-### **🆕 Participant Independence**
-Participants can now register **independently** of shelters, creating a more inclusive network:
-- **Direct Registration**: QR code generation without shelter affiliation
-- **Cross-Shelter Mobility**: Maintain identity across multiple locations
-- **Personal Agency**: Own their donation profile and impact story
+### **AI & Knowledge Management**
+- **Embeddings**: OpenAI text-embedding-3-small
+- **Vector Search**: Semantic document retrieval
+- **MCP Tools**: 36 specialized functions for real-world actions
+- **Knowledge Base**: GitHub-synced documentation with quality scoring
+- **Content**: Professional blog system with markdown import
+
+### **Security & Compliance**
+- **Sanitization**: Comprehensive XSS protection
+- **Random Generation**: Cryptographically secure IDs
+- **Access Control**: Firestore security rules with granular permissions
+- **Audit Trails**: Complete logging and monitoring
+- **Legal Compliance**: Digital NDA system for administrators
+
+### **DevOps & Monitoring**
+- **Hosting**: Firebase Hosting + Google Cloud Run
+- **Deployment**: GitHub Actions + automated testing
+- **Monitoring**: Real-time dashboards + security scanning
+- **Quality**: ESLint + Prettier + comprehensive testing
 
 ---
 

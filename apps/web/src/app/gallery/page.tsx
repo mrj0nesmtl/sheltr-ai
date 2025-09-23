@@ -25,6 +25,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { ThemeToggle } from '@/components/theme-toggle';
+import { sanitizeForAttribute, sanitizeForDisplay, sanitizeTags, sanitizeUrl, sanitizeCategory, sanitizeDate } from '@/utils/sanitize';
 
 // Gallery image interface
 interface GalleryImage {
@@ -183,8 +184,8 @@ export default function GalleryPage() {
         {heroImage && (
           <div className="absolute inset-0">
             <Image
-              src={heroImage.src}
-              alt={heroImage.title}
+              src={sanitizeUrl(heroImage.src) || '/images/fallback.jpg'}
+              alt={sanitizeForAttribute(heroImage.title)}
               fill
               className="object-cover opacity-60"
               priority
@@ -279,8 +280,8 @@ export default function GalleryPage() {
               <CardContent className="p-0 relative">
                 <div className="relative aspect-square">
                   <Image
-                    src={image.src}
-                    alt={image.title}
+                    src={sanitizeUrl(image.src) || '/images/fallback.jpg'}
+                    alt={sanitizeForAttribute(image.title)}
                     fill
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
                     sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
@@ -364,8 +365,8 @@ export default function GalleryPage() {
             {/* Main Image */}
             <div className="relative max-w-5xl max-h-[80vh] w-full h-full">
               <Image
-                src={filteredImages[selectedImage].src}
-                alt={filteredImages[selectedImage].title}
+                src={sanitizeUrl(filteredImages[selectedImage].src) || '/images/fallback.jpg'}
+                alt={sanitizeForAttribute(filteredImages[selectedImage].title)}
                 fill
                 className="object-contain"
                 sizes="100vw"
@@ -377,24 +378,24 @@ export default function GalleryPage() {
             {showImageInfo && (
               <div className="absolute bottom-4 left-4 right-4 bg-black/80 backdrop-blur-sm rounded-lg p-6 text-white">
                 <div className="max-w-2xl">
-                  <h2 className="text-2xl font-bold mb-2">{filteredImages[selectedImage].title}</h2>
-                  <p className="text-gray-300 mb-4">{filteredImages[selectedImage].description}</p>
+                  <h2 className="text-2xl font-bold mb-2">{sanitizeForDisplay(filteredImages[selectedImage].title)}</h2>
+                  <p className="text-gray-300 mb-4">{sanitizeForDisplay(filteredImages[selectedImage].description)}</p>
                   
                   <div className="flex items-center gap-4 text-sm text-gray-400 mb-4">
                     <div className="flex items-center gap-1">
                       <Tag className="h-4 w-4" />
-                      <span className="capitalize">{filteredImages[selectedImage].category}</span>
+                      <span className="capitalize">{sanitizeCategory(filteredImages[selectedImage].category)}</span>
                     </div>
                     <div className="flex items-center gap-1">
                       <Calendar className="h-4 w-4" />
-                      <span>{filteredImages[selectedImage].date}</span>
+                      <span>{sanitizeDate(filteredImages[selectedImage].date)}</span>
                     </div>
                   </div>
 
                   <div className="flex flex-wrap gap-2">
-                    {filteredImages[selectedImage].tags.map((tag, tagIndex) => (
+                    {sanitizeTags(filteredImages[selectedImage].tags).map((tag, tagIndex) => (
                       <Badge key={tagIndex} variant="secondary" className="text-xs">
-                        {tag}
+                        {sanitizeForDisplay(tag)}
                       </Badge>
                     ))}
                   </div>

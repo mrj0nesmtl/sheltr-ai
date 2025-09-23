@@ -212,18 +212,18 @@ export default function PlatformGuide() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
             {sections.map((section, index) => (
               <Button
                 key={index}
                 variant="outline"
-                className="h-auto p-4 flex flex-col items-center space-y-2 hover:bg-gray-50 dark:hover:bg-gray-800"
+                className="h-auto p-3 flex flex-col items-center justify-center space-y-2 hover:bg-gray-50 dark:hover:bg-gray-800 min-h-[80px] w-full"
                 onClick={() => document.getElementById(section.title.toLowerCase().replace(/\s+/g, '-'))?.scrollIntoView({ behavior: 'smooth' })}
               >
-                <div className={`p-2 rounded-lg ${section.color} text-white`}>
-                  <section.icon className="h-5 w-5" />
+                <div className={`p-2 rounded-lg ${section.color} text-white flex-shrink-0`}>
+                  <section.icon className="h-4 w-4" />
                 </div>
-                <span className="text-xs font-medium text-center">{section.title}</span>
+                <span className="text-xs font-medium text-center leading-tight break-words">{section.title}</span>
               </Button>
             ))}
           </div>

@@ -270,17 +270,17 @@ const getNavigationItems = (userRole: string) => {
         description: 'Create and manage blog posts'
       },
       {
-        title: 'Platform Administration Guide',
-        href: '/dashboard/platform-guide',
-        icon: BookOpen,
-        description: 'Comprehensive guide for Platform Administrators'
-      },
-      {
         title: 'System Settings',
         href: '/dashboard/settings',
         icon: Cog,
         description: 'Platform settings and system configuration',
         separator: true
+      },
+      {
+        title: 'Platform Administration Guide',
+        href: '/dashboard/platform-guide',
+        icon: BookOpen,
+        description: 'Comprehensive guide for Platform Administrators'
       },
       {
         title: 'Security & Compliance',

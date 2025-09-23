@@ -99,7 +99,7 @@ export default function SettingsPage() {
   // Load real shelter data
   useEffect(() => {
     const loadShelterData = async () => {
-      const shelterId = user?.customClaims?.shelter_id || user?.shelterId;
+      const shelterId = user?.customClaims?.shelter_id || user?.shelterId || (user as any)?.shelter_id;
       
       if (!shelterId) {
         setError('No shelter assigned to this admin');

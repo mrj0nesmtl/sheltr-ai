@@ -42,7 +42,7 @@ export default function ReportsPage() {
   // Load real analytics data based on user's shelter_id
   useEffect(() => {
     const loadAnalyticsData = async () => {
-      const shelterId = user?.customClaims?.shelter_id || user?.shelterId;
+      const shelterId = user?.customClaims?.shelter_id || user?.shelterId || (user as any)?.shelter_id;
       
       if (!shelterId) {
         setError('No shelter assigned to this admin');

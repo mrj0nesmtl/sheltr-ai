@@ -30,11 +30,12 @@ export default function ShelterAdminDashboard() {
   // Load real shelter data based on user's shelter_id
   useEffect(() => {
     const loadShelterData = async () => {
-      const shelterId = user?.customClaims?.shelter_id || user?.shelterId;
+      const shelterId = user?.customClaims?.shelter_id || user?.shelterId || (user as any)?.shelter_id;
       console.log('🔍 Debug - User shelter data:', {
         userEmail: user?.email,
         shelter_id: user?.customClaims?.shelter_id,
         shelterId: user?.shelterId,
+        user_shelter_id: (user as any)?.shelter_id,
         customClaims: user?.customClaims
       });
       

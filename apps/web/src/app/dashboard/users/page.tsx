@@ -50,6 +50,7 @@ import {
 import { doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { UserExportService } from '@/services/userExportService';
+import { UserStatusIndicator } from '@/components/UserStatusIndicator';
 
 export default function UserManagement() {
   const { user } = useAuth();
@@ -1146,8 +1147,13 @@ export default function UserManagement() {
                   {platformAdmins.map((admin) => (
                     <div key={admin.id} className="flex items-center justify-between p-4 bg-gradient-to-r from-orange-50 to-yellow-50 dark:from-orange-900/20 dark:to-yellow-900/20 rounded-lg border border-orange-200 dark:border-orange-800">
                       <div className="flex items-center space-x-4">
-                        <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-full flex items-center justify-center shadow-lg">
-                          <Star className="h-6 w-6 text-white" />
+                        <div className="relative">
+                          <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-full flex items-center justify-center shadow-lg">
+                            <Star className="h-6 w-6 text-white" />
+                          </div>
+                          <div className="absolute -bottom-0.5 -right-0.5">
+                            <UserStatusIndicator userId={admin.id} size="md" />
+                          </div>
                         </div>
                         <div>
                           <div className="font-bold text-orange-700 dark:text-orange-300">
@@ -1213,8 +1219,13 @@ export default function UserManagement() {
                       {/* Top Row: Icon, Name, Status */}
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-3 flex-1 min-w-0">
-                          <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
-                            <UserCog className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                          <div className="relative">
+                            <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
+                              <UserCog className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                            </div>
+                            <div className="absolute -bottom-0.5 -right-0.5">
+                              <UserStatusIndicator userId={admin.id} size="sm" />
+                            </div>
                           </div>
                           <div className="flex-1 min-w-0">
                             <div className="font-medium truncate">{admin.name}</div>
@@ -1279,8 +1290,13 @@ export default function UserManagement() {
                     {/* Desktop Layout */}
                     <div className="hidden sm:flex items-center justify-between">
                       <div className="flex items-center space-x-4">
-                        <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
-                          <UserCog className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                        <div className="relative">
+                          <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
+                            <UserCog className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                          </div>
+                          <div className="absolute -bottom-0.5 -right-0.5">
+                            <UserStatusIndicator userId={admin.id} size="sm" />
+                          </div>
                         </div>
                         <div>
                           <div className="font-medium">{admin.name}</div>
@@ -1393,8 +1409,13 @@ export default function UserManagement() {
                       {/* Top Row: Icon, Name, Status */}
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-3 flex-1 min-w-0">
-                          <div className="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
-                            <UserCheck className="h-5 w-5 text-green-600 dark:text-green-400" />
+                          <div className="relative">
+                            <div className="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
+                              <UserCheck className="h-5 w-5 text-green-600 dark:text-green-400" />
+                            </div>
+                            <div className="absolute -bottom-0.5 -right-0.5">
+                              <UserStatusIndicator userId={participant.id} size="sm" />
+                            </div>
                           </div>
                           <div className="flex-1 min-w-0">
                             <div className="font-medium truncate">{participant.name}</div>
@@ -1455,8 +1476,13 @@ export default function UserManagement() {
                     {/* Desktop Layout */}
                     <div className="hidden sm:flex items-center justify-between">
                       <div className="flex items-center space-x-4">
-                        <div className="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
-                          <UserCheck className="h-5 w-5 text-green-600 dark:text-green-400" />
+                        <div className="relative">
+                          <div className="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
+                            <UserCheck className="h-5 w-5 text-green-600 dark:text-green-400" />
+                          </div>
+                          <div className="absolute -bottom-0.5 -right-0.5">
+                            <UserStatusIndicator userId={participant.id} size="sm" />
+                          </div>
                         </div>
                         <div>
                           <div className="font-medium">{participant.name}</div>
@@ -1581,8 +1607,13 @@ export default function UserManagement() {
                       {/* Top Row: Icon, Name, Status */}
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-3 flex-1 min-w-0">
-                          <div className="w-10 h-10 bg-red-100 dark:bg-red-900 rounded-full flex items-center justify-center">
-                            <Heart className="h-5 w-5 text-red-600 dark:text-red-400" />
+                          <div className="relative">
+                            <div className="w-10 h-10 bg-red-100 dark:bg-red-900 rounded-full flex items-center justify-center">
+                              <Heart className="h-5 w-5 text-red-600 dark:text-red-400" />
+                            </div>
+                            <div className="absolute -bottom-0.5 -right-0.5">
+                              <UserStatusIndicator userId={donor.id} size="sm" />
+                            </div>
                           </div>
                           <div className="flex-1 min-w-0">
                             <div className="font-medium truncate">{donor.name}</div>
@@ -1630,8 +1661,13 @@ export default function UserManagement() {
                     {/* Desktop Layout */}
                     <div className="hidden sm:flex items-center justify-between">
                       <div className="flex items-center space-x-4">
-                        <div className="w-10 h-10 bg-red-100 dark:bg-red-900 rounded-full flex items-center justify-center">
-                          <Heart className="h-5 w-5 text-red-600 dark:text-red-400" />
+                        <div className="relative">
+                          <div className="w-10 h-10 bg-red-100 dark:bg-red-900 rounded-full flex items-center justify-center">
+                            <Heart className="h-5 w-5 text-red-600 dark:text-red-400" />
+                          </div>
+                          <div className="absolute -bottom-0.5 -right-0.5">
+                            <UserStatusIndicator userId={donor.id} size="sm" />
+                          </div>
                         </div>
                         <div>
                           <div className="font-medium">{donor.name}</div>
@@ -1758,28 +1794,38 @@ export default function UserManagement() {
                 <div className="space-y-4">
                   {orphanedUsers.map((user) => (
                     <div key={user.id} className="flex items-center justify-between border rounded-lg p-4 bg-red-50 border-red-200">
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-2">
-                          <h4 className="font-semibold">{user.name}</h4>
-                          <Badge variant="outline" className="bg-red-100 text-red-800 border-red-300">
-                            {user.role || 'NO ROLE'}
-                          </Badge>
-                          {user.status === 'firebase_auth_only' && (
-                            <Badge variant="destructive" className="text-xs">
-                              FIREBASE AUTH ONLY
-                            </Badge>
-                          )}
+                      <div className="flex items-start space-x-3">
+                        <div className="relative">
+                          <div className="w-8 h-8 bg-red-200 rounded-full flex items-center justify-center">
+                            <AlertCircle className="h-4 w-4 text-red-600" />
+                          </div>
+                          <div className="absolute -bottom-0.5 -right-0.5">
+                            <UserStatusIndicator userId={user.id} size="sm" />
+                          </div>
                         </div>
-                        <div className="text-sm text-gray-600 space-y-1">
-                          <div><strong>Email:</strong> {user.email}</div>
-                          <div><strong>Registration:</strong> {user.registrationMethod}</div>
-                          <div><strong>Join Date:</strong> {user.joinDate}</div>
-                          <div><strong>Status:</strong> {user.status}</div>
-                          {user.status === 'firebase_auth_only' && (
-                            <div className="text-red-600 font-medium">
-                              ⚠️ This user exists in Firebase Auth but has no Firestore profile
-                            </div>
-                          )}
+                        <div className="space-y-1">
+                          <div className="flex items-center gap-2">
+                            <h4 className="font-semibold">{user.name}</h4>
+                            <Badge variant="outline" className="bg-red-100 text-red-800 border-red-300">
+                              {user.role || 'NO ROLE'}
+                            </Badge>
+                            {user.status === 'firebase_auth_only' && (
+                              <Badge variant="destructive" className="text-xs">
+                                FIREBASE AUTH ONLY
+                              </Badge>
+                            )}
+                          </div>
+                          <div className="text-sm text-gray-600 space-y-1">
+                            <div><strong>Email:</strong> {user.email}</div>
+                            <div><strong>Registration:</strong> {user.registrationMethod}</div>
+                            <div><strong>Join Date:</strong> {user.joinDate}</div>
+                            <div><strong>Status:</strong> {user.status}</div>
+                            {user.status === 'firebase_auth_only' && (
+                              <div className="text-red-600 font-medium">
+                                ⚠️ This user exists in Firebase Auth but has no Firestore profile
+                              </div>
+                            )}
+                          </div>
                         </div>
                       </div>
                       <div className="flex gap-2">

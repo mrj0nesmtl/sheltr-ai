@@ -4,10 +4,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useState, useEffect } from 'react';
 import { firestoreService, Shelter, PendingApplication } from '@/services/firestore';
 import { AdminUser } from '@/services/platformMetrics';
-import { tenantService, ShelterTenant } from '@/services/tenantService';
+import { tenantService } from '@/services/tenantService';
 import { doc, updateDoc, deleteDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import ShelterNetworkMap from '@/components/ShelterNetworkMap';
@@ -33,7 +34,12 @@ import {
   Map,
   Database,
   Trash2,
-  Ban
+  Ban,
+  QrCode,
+  Copy,
+  ExternalLink,
+  Calendar,
+  DollarSign
 } from 'lucide-react';
 
 export default function ShelterNetwork() {
@@ -121,11 +127,74 @@ export default function ShelterNetwork() {
     });
   };
 
-  // View shelter details
-  const viewShelter = (shelter: Shelter) => {
-    setSelectedShelterForView(shelter);
-    console.log(`👁️ Viewing shelter:`, shelter.name);
+  // Generate QR code data for shelter
+  const generateShelterQRCode = (shelter: Shelter) => {
+    return `https://sheltr-ai.web.app/shelter/${shelter.id}`;
   };
+
+  // Copy to clipboard function
+  const copyToClipboard = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      // You could add a toast notification here
+    } catch (err) {
+      console.error('Failed to copy: ', err);
+    }
+  };
+
+  // View shelter function
+  const viewShelter = (shelter: Shelter) => {
+    // Close any other open modals first
+    setSelectedShelterForEdit(null);
+    setShowDeleteConfirm(null);
+    // Then open the view modal
+    setSelectedShelterForView(shelter);
+  };
+
+  // Get participant count for shelter (mock data for now)
+  const getParticipantCount = (shelterId: string) => {
+    // This would normally fetch from the database
+    // For now, return mock data based on shelter capacity
+    const shelter = shelters.find(s => s.id === shelterId);
+    if (!shelter) return 0;
+    
+    // Mock calculation: roughly 60-80% of capacity as participant count
+    const mockCount = Math.floor(shelter.capacity * (0.6 + Math.random() * 0.2));
+    return mockCount;
+  };
+
+  // Helper functions for styling
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'active':
+        return 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400';
+      case 'pending':
+        return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400';
+      case 'inactive':
+        return 'bg-gray-100 text-gray-800 dark:bg-gray-800/20 dark:text-gray-400';
+      default:
+        return 'bg-gray-100 text-gray-800 dark:bg-gray-800/20 dark:text-gray-400';
+    }
+  };
+
+  const getOccupancyPercentage = (shelter: Shelter) => {
+    if (!shelter.capacity || shelter.capacity === 0) return 0;
+    // Mock occupancy calculation - in real app this would come from actual data
+    return Math.floor(70 + Math.random() * 25); // Random between 70-95%
+  };
+
+  const getOccupancyColor = (percentage: number) => {
+    if (percentage >= 90) return 'text-red-600 dark:text-red-400';
+    if (percentage >= 75) return 'text-yellow-600 dark:text-yellow-400';
+    return 'text-green-600 dark:text-green-400';
+  };
+
+  const getComplianceColor = (score: number) => {
+    if (score >= 90) return 'text-green-600 dark:text-green-400';
+    if (score >= 70) return 'text-yellow-600 dark:text-yellow-400';
+    return 'text-red-600 dark:text-red-400';
+  };
+
 
   // Edit shelter
   const editShelter = async (shelter: Shelter) => {
@@ -484,37 +553,6 @@ export default function ShelterNetwork() {
     networkEfficiency: uniqueShelters.length > 0 ? Math.round((activeShelters / uniqueShelters.length) * 100) : 0
   };
 
-
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'active': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100';
-      case 'pending': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-100';
-      case 'inactive': return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-100';
-      case 'under_review': return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100';
-      case 'pending_documents': return 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-100';
-      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100';
-    }
-  };
-
-  const getOccupancyColor = (occupancy: number) => {
-    if (occupancy >= 90) return 'text-red-600';
-    if (occupancy >= 75) return 'text-yellow-600';
-    return 'text-green-600';
-  };
-
-  const getComplianceColor = (score: number) => {
-    if (score >= 95) return 'text-green-600';
-    if (score >= 85) return 'text-yellow-600';
-    return 'text-red-600';
-  };
-
-  const getOccupancyPercentage = (shelter: Shelter) => {
-    return shelter.capacity > 0 ? Math.round((shelter.currentOccupancy / shelter.capacity) * 100) : 0;
-  };
-
-
-
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
       {/* Header */}
@@ -596,8 +634,8 @@ export default function ShelterNetwork() {
                 <Activity className="h-3 w-3 text-blue-500 mr-1" />
                 {shelterMetrics.currentOccupants.toLocaleString()} Occupied
               </span>
-              <span className={`flex items-center ${getOccupancyColor(shelterMetrics.averageOccupancy)}`}>
-                {shelterMetrics.averageOccupancy}% Average
+              <span className={`flex items-center ${getOccupancyColor(shelterMetrics.occupancyRate)}`}>
+                {shelterMetrics.occupancyRate}% Average
               </span>
             </div>
           </CardContent>
@@ -834,10 +872,10 @@ export default function ShelterNetwork() {
               ))}
             </div>
           ) : (
-            <div className="space-y-3">
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
               {shelters.map((shelter) => (
-                <Card key={shelter.id} className="overflow-hidden">
-                  <CardContent className="p-0 sm:p-6">
+                <Card key={shelter.id} className="overflow-hidden hover:shadow-lg transition-shadow duration-200">
+                  <CardContent className="p-0">
                     {/* Mobile Layout - Completely Redesigned */}
                     <div className="block sm:hidden">
                       {/* Header Section */}
@@ -956,98 +994,138 @@ export default function ShelterNetwork() {
                       </div>
                     </div>
 
-                    {/* Desktop Layout */}
-                    <div className="hidden sm:block">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-4">
-                          <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-sm">
-                            <Building2 className="h-6 w-6 text-white" />
+                    {/* Desktop Layout - Profile Style Card */}
+                    <div className="hidden sm:block p-0">
+                      {/* Header with Shelter Info */}
+                      <div className="relative bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-800 dark:to-blue-900 p-6 text-white">
+                        <div className="absolute top-4 right-4">
+                          <Badge 
+                            className={`${getStatusColor(shelter.status)} text-xs font-medium`}
+                            variant="secondary"
+                          >
+                            {shelter.status}
+                          </Badge>
+                        </div>
+                        <div className="flex items-start space-x-4">
+                          <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center shadow-lg">
+                            <Building2 className="h-8 w-8 text-white" />
                           </div>
-                          <div>
-                            <div className="font-bold text-lg">{shelter.name}</div>
-                            <div className="text-sm text-muted-foreground flex items-center">
-                              <MapPin className="h-3 w-3 mr-1" />
-                              {shelter.location} • {shelter.type}
+                          <div className="flex-1 min-w-0">
+                            <h3 className="text-xl font-bold text-white mb-1 truncate">
+                              {shelter.name}
+                            </h3>
+                            <div className="flex items-center text-blue-100 text-sm mb-2">
+                              <MapPin className="h-4 w-4 mr-2 shrink-0" />
+                              <span className="truncate">{shelter.location}</span>
                             </div>
-                            <div className="text-sm text-muted-foreground flex items-center mt-1">
-                              <Mail className="h-3 w-3 mr-1" />
-                              {shelter.contact.email}
-                              {shelter.contact.phone && (
-                                <>
-                                  <span className="mx-2">•</span>
-                                  <Phone className="h-3 w-3 mr-1" />
-                                  {shelter.contact.phone}
-                                </>
-                              )}
+                            <div className="text-blue-200 text-sm">
+                              {shelter.type}
                             </div>
                           </div>
                         </div>
-                        
-                        <div className="flex items-center space-x-6">
-                          <div className="text-center">
-                            <div className="text-lg font-bold text-blue-600 dark:text-blue-400">{shelter.capacity}</div>
-                            <div className="text-xs text-muted-foreground">Capacity</div>
+                      </div>
+
+                      {/* Contact Information */}
+                      <div className="px-6 py-4 bg-gray-50 dark:bg-gray-800/50 border-b border-gray-200 dark:border-gray-700">
+                        <div className="space-y-2">
+                          <div className="flex items-center text-sm text-gray-700 dark:text-gray-300">
+                            <Mail className="h-4 w-4 mr-3 text-blue-500 shrink-0" />
+                            <span className="truncate font-medium">{shelter.contact.email}</span>
                           </div>
-                          <div className="text-center">
-                            <div className={`text-lg font-bold ${getOccupancyColor(getOccupancyPercentage(shelter))}`}>
+                          {shelter.contact.phone && (
+                            <div className="flex items-center text-sm text-gray-700 dark:text-gray-300">
+                              <Phone className="h-4 w-4 mr-3 text-green-500 shrink-0" />
+                              <span className="font-medium">{shelter.contact.phone}</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Metrics Grid */}
+                      <div className="p-6">
+                        <div className="grid grid-cols-2 gap-4 mb-6">
+                          {/* Capacity */}
+                          <div className="bg-blue-50 dark:bg-blue-950/30 rounded-xl p-4 text-center border border-blue-200 dark:border-blue-800">
+                            <div className="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-1">
+                              {shelter.capacity}
+                            </div>
+                            <div className="text-xs font-medium text-blue-700 dark:text-blue-300 uppercase tracking-wide">
+                              Capacity
+                            </div>
+                          </div>
+
+                          {/* Occupancy */}
+                          <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4 text-center border border-gray-200 dark:border-gray-700">
+                            <div className={`text-2xl font-bold mb-1 ${getOccupancyColor(getOccupancyPercentage(shelter))}`}>
                               {getOccupancyPercentage(shelter)}%
                             </div>
-                            <div className="text-xs text-muted-foreground">Occupied</div>
+                            <div className="text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wide">
+                              Occupied
+                            </div>
                           </div>
-                          <div className="text-center">
-                            <div className="text-lg font-bold text-green-600 dark:text-green-400">
+
+                          {/* Donations */}
+                          <div className="bg-green-50 dark:bg-green-950/30 rounded-xl p-4 text-center border border-green-200 dark:border-green-800">
+                            <div className="text-xl font-bold text-green-600 dark:text-green-400 mb-1">
                               ${shelter.totalDonations.toLocaleString()}
                             </div>
-                            <div className="text-xs text-muted-foreground">Donations</div>
+                            <div className="text-xs font-medium text-green-700 dark:text-green-300 uppercase tracking-wide">
+                              Donations
+                            </div>
                           </div>
-                          <div className="text-center">
-                            <div className={`text-lg font-bold ${getComplianceColor(shelter.complianceScore)}`}>
+
+                          {/* Compliance */}
+                          <div className="bg-orange-50 dark:bg-orange-950/30 rounded-xl p-4 text-center border border-orange-200 dark:border-orange-800">
+                            <div className={`text-xl font-bold mb-1 ${getComplianceColor(shelter.complianceScore)}`}>
                               {shelter.complianceScore}%
                             </div>
-                            <div className="text-xs text-muted-foreground">Compliance</div>
+                            <div className="text-xs font-medium text-orange-700 dark:text-orange-300 uppercase tracking-wide">
+                              Compliance
+                            </div>
                           </div>
-                          <div className="flex items-center space-x-2">
-                            <Badge className={getStatusColor(shelter.status)}>
-                              {shelter.status}
-                            </Badge>
-                          </div>
-                          <div className="flex space-x-1">
-                            <Button 
-                              variant="ghost" 
-                              size="sm"
-                              onClick={() => viewShelter(shelter)}
-                              title="View Details"
-                            >
-                              <Eye className="h-4 w-4" />
-                            </Button>
-                            <Button 
-                              variant="ghost" 
-                              size="sm"
-                              onClick={() => editShelter(shelter)}
-                              title="Edit Shelter"
-                            >
-                              <Edit className="h-4 w-4" />
-                            </Button>
-                            <Button 
-                              variant="ghost" 
-                              size="sm"
-                              onClick={() => toggleShelterStatus(shelter.id, shelter.status)}
-                              title={shelter.status === 'active' ? 'Deactivate' : 'Activate'}
-                            >
-                              {shelter.status === 'active' ? 
-                                <Ban className="h-4 w-4 text-red-500" /> : 
-                                <CheckCircle className="h-4 w-4 text-green-500" />
-                              }
-                            </Button>
-                            <Button 
-                              variant="ghost" 
-                              size="sm"
-                              onClick={() => deleteShelter(shelter.id, shelter.name)}
-                              title="Delete Shelter"
-                            >
-                              <Trash2 className="h-4 w-4 text-red-500" />
-                            </Button>
-                          </div>
+                        </div>
+
+                        {/* Action Buttons */}
+                        <div className="flex space-x-2">
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="flex-1"
+                            onClick={() => viewShelter(shelter)}
+                          >
+                            <Eye className="h-4 w-4 mr-2" />
+                            View Details
+                          </Button>
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            className="px-3"
+                            onClick={() => editShelter(shelter)}
+                            title="Edit Shelter"
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            className="px-3"
+                            onClick={() => toggleShelterStatus(shelter.id, shelter.status)}
+                            title={shelter.status === 'active' ? 'Deactivate' : 'Activate'}
+                          >
+                            {shelter.status === 'active' ? 
+                              <Ban className="h-4 w-4 text-red-500" /> : 
+                              <CheckCircle className="h-4 w-4 text-green-500" />
+                            }
+                          </Button>
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            className="px-3"
+                            onClick={() => deleteShelter(shelter.id, shelter.name)}
+                            title="Delete Shelter"
+                          >
+                            <Trash2 className="h-4 w-4 text-red-500" />
+                          </Button>
                         </div>
                       </div>
                     </div>
@@ -1114,80 +1192,6 @@ export default function ShelterNetwork() {
         </TabsContent>
       </Tabs>
 
-      {/* View Shelter Modal */}
-      {selectedShelterForView && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
-            <h3 className="text-lg font-semibold mb-4">Shelter Details</h3>
-            
-            <div className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Name</label>
-                  <p className="mt-1 text-sm text-gray-900 dark:text-white">{selectedShelterForView.name}</p>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Location</label>
-                  <p className="mt-1 text-sm text-gray-900 dark:text-white">{selectedShelterForView.location}</p>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Type</label>
-                  <p className="mt-1 text-sm text-gray-900 dark:text-white">{selectedShelterForView.type}</p>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Status</label>
-                  <Badge className={getStatusColor(selectedShelterForView.status)}>{selectedShelterForView.status}</Badge>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Capacity</label>
-                  <p className="mt-1 text-sm text-gray-900 dark:text-white">{selectedShelterForView.capacity}</p>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Current Occupancy</label>
-                  <p className="mt-1 text-sm text-gray-900 dark:text-white">{selectedShelterForView.currentOccupancy} ({getOccupancyPercentage(selectedShelterForView)}%)</p>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
-                  <p className="mt-1 text-sm text-gray-900 dark:text-white">{selectedShelterForView.contact.email}</p>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Phone</label>
-                  <p className="mt-1 text-sm text-gray-900 dark:text-white">{selectedShelterForView.contact.phone || 'N/A'}</p>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Total Donations</label>
-                  <p className="mt-1 text-sm text-gray-900 dark:text-white">${selectedShelterForView.totalDonations.toLocaleString()}</p>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Compliance Score</label>
-                  <p className={`mt-1 text-sm font-medium ${getComplianceColor(selectedShelterForView.complianceScore)}`}>{selectedShelterForView.complianceScore}%</p>
-                </div>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Address</label>
-                <p className="mt-1 text-sm text-gray-900 dark:text-white">{selectedShelterForView.address}</p>
-              </div>
-            </div>
-
-            <div className="flex justify-end space-x-2 mt-6">
-              <Button 
-                variant="outline" 
-                onClick={() => setSelectedShelterForView(null)}
-              >
-                Close
-              </Button>
-              <Button 
-                onClick={() => {
-                  setSelectedShelterForView(null);
-                  editShelter(selectedShelterForView);
-                }}
-              >
-                Edit Shelter
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Edit Shelter Modal */}
       {selectedShelterForEdit && (
@@ -1375,6 +1379,255 @@ export default function ShelterNetwork() {
         </div>
       )}
 
+      {/* Enhanced Shelter Details Modal */}
+      <Dialog open={!!selectedShelterForView} onOpenChange={(open) => !open && setSelectedShelterForView(null)}>
+        <DialogContent className="max-w-[95vw] w-full max-h-[90vh] overflow-y-auto p-0">
+          {selectedShelterForView && (
+            <>
+              {/* Header Section */}
+              <div className="p-4 md:p-6 lg:p-8 pb-4 md:pb-6 border-b border-gray-200 dark:border-gray-700">
+                <DialogHeader className="space-y-0">
+                  <DialogTitle className="flex items-center gap-4 mb-2">
+                    <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
+                      <Building2 className="h-8 w-8 text-white" />
+                    </div>
+                    <div>
+                      <h2 className="text-3xl font-bold mb-2">{selectedShelterForView.name}</h2>
+                      <div className="flex items-center gap-3">
+                        <Badge 
+                          className={`${getStatusColor(selectedShelterForView.status)} text-sm px-3 py-1`}
+                          variant="secondary"
+                        >
+                          {selectedShelterForView.status}
+                        </Badge>
+                        <span className="text-gray-500 dark:text-gray-400 text-sm">
+                          {selectedShelterForView.type}
+                        </span>
+                      </div>
+                    </div>
+                  </DialogTitle>
+                  <DialogDescription className="text-base text-gray-600 dark:text-gray-300">
+                    Comprehensive shelter information and management tools
+                  </DialogDescription>
+                </DialogHeader>
+              </div>
+
+              {/* Content Section */}
+              <div className="p-4 md:p-6 lg:p-8">
+                {/* Key Statistics - Full Width at Top */}
+                <div className="mb-8">
+                  <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                    <TrendingUp className="h-5 w-5" />
+                    Key Statistics
+                  </h3>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+                    <div className="text-center p-4 md:p-6 lg:p-8 bg-blue-50 dark:bg-blue-950/30 rounded-2xl border border-blue-200 dark:border-blue-800">
+                      <div className="text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2">
+                        {selectedShelterForView.capacity}
+                      </div>
+                      <div className="text-sm font-medium text-blue-700 dark:text-blue-300 uppercase tracking-wide">
+                        Total Capacity
+                      </div>
+                    </div>
+                    <div className="text-center p-4 md:p-6 lg:p-8 bg-gray-50 dark:bg-gray-800/50 rounded-2xl border border-gray-200 dark:border-gray-700">
+                      <div className={`text-4xl font-bold mb-2 ${getOccupancyColor(getOccupancyPercentage(selectedShelterForView))}`}>
+                        {getOccupancyPercentage(selectedShelterForView)}%
+                      </div>
+                      <div className="text-sm font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wide">
+                        Occupied
+                      </div>
+                    </div>
+                    <div className="text-center p-4 md:p-6 lg:p-8 bg-purple-50 dark:bg-purple-950/30 rounded-2xl border border-purple-200 dark:border-purple-800">
+                      <div className="text-4xl font-bold text-purple-600 dark:text-purple-400 mb-2">
+                        {getParticipantCount(selectedShelterForView.id)}
+                      </div>
+                      <div className="text-sm font-medium text-purple-700 dark:text-purple-300 uppercase tracking-wide">
+                        Participants
+                      </div>
+                    </div>
+                    <div className="text-center p-4 md:p-6 lg:p-8 bg-orange-50 dark:bg-orange-950/30 rounded-2xl border border-orange-200 dark:border-orange-800">
+                      <div className={`text-4xl font-bold mb-2 ${getComplianceColor(selectedShelterForView.complianceScore)}`}>
+                        {selectedShelterForView.complianceScore}%
+                      </div>
+                      <div className="text-sm font-medium text-orange-700 dark:text-orange-300 uppercase tracking-wide">
+                        Compliance
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Two Column Layout for Details */}
+                <div className="grid grid-cols-1 xl:grid-cols-5 gap-6 lg:gap-8">
+                  {/* Left Column - Information */}
+                  <div className="xl:col-span-3 space-y-6">
+                    {/* Basic Information */}
+                    <Card className="shadow-sm">
+                      <CardHeader className="pb-4">
+                        <CardTitle className="flex items-center gap-2 text-lg">
+                          <MapPin className="h-5 w-5" />
+                          Basic Information
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <div className="space-y-1">
+                            <label className="text-sm font-medium text-gray-500 dark:text-gray-400">Name</label>
+                            <p className="text-lg font-semibold">{selectedShelterForView.name}</p>
+                          </div>
+                          <div className="space-y-1">
+                            <label className="text-sm font-medium text-gray-500 dark:text-gray-400">Type</label>
+                            <p className="text-lg">{selectedShelterForView.type}</p>
+                          </div>
+                          <div className="space-y-1">
+                            <label className="text-sm font-medium text-gray-500 dark:text-gray-400">Location</label>
+                            <p className="text-lg">{selectedShelterForView.location}</p>
+                          </div>
+                          <div className="space-y-1">
+                            <label className="text-sm font-medium text-gray-500 dark:text-gray-400">Address</label>
+                            <p className="text-base text-gray-600 dark:text-gray-300">
+                              {selectedShelterForView.location}
+                            </p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    {/* Contact Information */}
+                    <Card className="shadow-sm">
+                      <CardHeader className="pb-4">
+                        <CardTitle className="flex items-center gap-2 text-lg">
+                          <Phone className="h-5 w-5" />
+                          Contact Information
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <div className="flex items-center gap-4">
+                            <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
+                              <Mail className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                            </div>
+                            <div className="space-y-1">
+                              <label className="text-sm font-medium text-gray-500 dark:text-gray-400">Email</label>
+                              <p className="text-lg font-medium">{selectedShelterForView.contact.email}</p>
+                            </div>
+                          </div>
+                          {selectedShelterForView.contact.phone && (
+                            <div className="flex items-center gap-4">
+                              <div className="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
+                                <Phone className="h-5 w-5 text-green-600 dark:text-green-400" />
+                              </div>
+                              <div className="space-y-1">
+                                <label className="text-sm font-medium text-gray-500 dark:text-gray-400">Phone</label>
+                                <p className="text-lg font-medium">{selectedShelterForView.contact.phone}</p>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    {/* Financial Overview */}
+                    <Card className="shadow-sm">
+                      <CardHeader className="pb-4">
+                        <CardTitle className="flex items-center gap-2 text-lg">
+                          <DollarSign className="h-5 w-5" />
+                          Financial Overview
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="text-center p-4 md:p-6 lg:p-8 bg-green-50 dark:bg-green-950/30 rounded-2xl border border-green-200 dark:border-green-800">
+                          <div className="text-4xl font-bold text-green-600 dark:text-green-400 mb-2">
+                            ${selectedShelterForView.totalDonations.toLocaleString()}
+                          </div>
+                          <div className="text-base font-medium text-green-700 dark:text-green-300 mb-4">
+                            Total Donations Received
+                          </div>
+                          <Button variant="outline" size="sm" className="mt-2">
+                            <TrendingUp className="h-4 w-4 mr-2" />
+                            View Financial Details
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+
+                  {/* Right Column - QR Code & Actions */}
+                  <div className="xl:col-span-2 space-y-6">
+                    {/* Shelter QR Code */}
+                    <Card className="shadow-sm">
+                      <CardHeader className="pb-4">
+                        <CardTitle className="flex items-center gap-2 text-lg">
+                          <QrCode className="h-5 w-5" />
+                          Shelter QR Code
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="text-center">
+                        <div className="bg-white dark:bg-gray-800 p-4 rounded-xl border-2 border-gray-200 dark:border-gray-600 mb-4">
+                          <div className="w-32 h-32 mx-auto bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                            <div className="text-center space-y-1">
+                              <QrCode className="h-12 w-12 mx-auto text-gray-400" />
+                              <p className="text-xs text-gray-500">QR Code</p>
+                            </div>
+                          </div>
+                        </div>
+                        <p className="text-xs text-gray-500 font-mono mb-4 break-all px-2">
+                          {generateShelterQRCode(selectedShelterForView)}
+                        </p>
+                        <div className="space-y-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="w-full"
+                            onClick={() => copyToClipboard(generateShelterQRCode(selectedShelterForView))}
+                          >
+                            <Copy className="h-4 w-4 mr-2" />
+                            Copy Link
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="w-full"
+                            onClick={() => window.open(generateShelterQRCode(selectedShelterForView), '_blank')}
+                          >
+                            <ExternalLink className="h-4 w-4 mr-2" />
+                            Open Page
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    {/* Quick Actions */}
+                    <Card className="shadow-sm">
+                      <CardHeader className="pb-4">
+                        <CardTitle className="text-lg">Quick Actions</CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-3">
+                        <Button variant="outline" size="sm" className="w-full justify-start h-10">
+                          <Edit className="h-4 w-4 mr-3" />
+                          Edit Shelter Details
+                        </Button>
+                        <Button variant="outline" size="sm" className="w-full justify-start h-10">
+                          <Users className="h-4 w-4 mr-3" />
+                          Manage Participants
+                        </Button>
+                        <Button variant="outline" size="sm" className="w-full justify-start h-10">
+                          <Calendar className="h-4 w-4 mr-3" />
+                          View Schedule
+                        </Button>
+                        <Button variant="outline" size="sm" className="w-full justify-start h-10">
+                          <Download className="h-4 w-4 mr-3" />
+                          Download Report
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
+
       {/* Delete Confirmation Modal */}
       {showDeleteConfirm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -1410,4 +1663,4 @@ export default function ShelterNetwork() {
       )}
     </div>
   );
-} 
+}

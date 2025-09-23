@@ -100,7 +100,7 @@ export async function createDemoDonationData() {
         demo_date: new Date(Date.now() - (Math.random() * 30 * 24 * 60 * 60 * 1000))
       };
       
-      const docRef = await addDoc(collection(db, 'demo_donations'), donationData);
+      const docRef = await addDoc(collection(db, 'tenants/YDJCJnuLGMC9mWOWDSOa/donations'), donationData);
       donationIds.push(docRef.id);
       
       console.log(`✅ Created donation ${i + 1}: $${donationData.amount} from ${donationData.donor_name}`);

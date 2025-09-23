@@ -867,9 +867,9 @@ export const getDonorMetrics = async (donorId: string): Promise<DonorMetrics | n
     let participantsHelped = 0;
     
     try {
-      // Query donations by donor_id
+      // Query donations by donor_id from tenant collection
       const donationsQuery = query(
-        collection(db, 'demo_donations'),
+        collection(db, 'tenants/YDJCJnuLGMC9mWOWDSOa/donations'),
         where('donor_id', '==', donorId)
       );
       const donationsSnapshot = await getDocs(donationsQuery);
@@ -951,9 +951,9 @@ export const getDonationHistory = async (donorId: string): Promise<DonationRecor
   try {
     console.log(`📋 Fetching donation history for: ${donorId}`);
     
-    // Get real donation data from demo_donations collection
+    // Get real donation data from tenant collection
     const donationsQuery = query(
-      collection(db, 'demo_donations'),
+      collection(db, 'tenants/YDJCJnuLGMC9mWOWDSOa/donations'),
       where('donor_id', '==', donorId),
       orderBy('created_at', 'desc')
     );

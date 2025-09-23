@@ -4,11 +4,13 @@ import React, { useState, useEffect } from 'react';
 import { getDownloadURL, ref, getMetadata } from 'firebase/storage';
 import { storage } from '@/lib/firebase';
 import { UserCog } from 'lucide-react';
+import { useOtherUserStatus, statusColors } from '@/services/userStatusService';
 
 interface ProfileAvatarProps {
   userId: string;
   size?: 'small' | 'medium' | 'large';
   className?: string;
+  showStatus?: boolean;
 }
 
 // Enhanced cache to avoid repeated lookups and failed checks
@@ -29,19 +31,31 @@ export const markUserAsNoAvatar = (userId: string) => {
   });
 };
 
-export function ProfileAvatar({ userId, size = 'medium', className = '' }: ProfileAvatarProps) {
+export function ProfileAvatar({ userId, size = 'medium', className = '', showStatus = false }: ProfileAvatarProps) {
   const [profilePicUrl, setProfilePicUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  
+  // Get user status if showStatus is enabled
+  const { status } = useOtherUserStatus(showStatus ? userId : '');
 
   // Size configurations
   const sizeConfig = {
-    small: { container: 'h-8 w-8', icon: 'h-4 w-4' },
-    medium: { container: 'h-10 w-10', icon: 'h-5 w-5' },
-    large: { container: 'h-16 w-16', icon: 'h-8 w-8' }
+    small: { container: 'h-8 w-8', icon: 'h-4 w-4', status: 'h-2.5 w-2.5' },
+    medium: { container: 'h-10 w-10', icon: 'h-5 w-5', status: 'h-3 w-3' },
+    large: { container: 'h-16 w-16', icon: 'h-8 w-8', status: 'h-4 w-4' }
   };
 
-  const { container, icon } = sizeConfig[size];
+  const { container, icon, status: statusSize } = sizeConfig[size];
+
+  // Status indicator component
+  const StatusIndicator = () => {
+    if (!showStatus) return null;
+    
+    return (
+      <div className={`absolute -bottom-0.5 -right-0.5 ${statusSize} rounded-full border-2 border-white dark:border-gray-800 ${statusColors[status]}`} />
+    );
+  };
 
   useEffect(() => {
     const fetchProfilePicture = async () => {
@@ -125,10 +139,13 @@ export function ProfileAvatar({ userId, size = 'medium', className = '' }: Profi
   // Show loading state
   if (loading) {
     return (
-      <div 
-        className={`${container} rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center shadow-lg animate-pulse ${className}`}
-      >
-        <UserCog className={`${icon} text-white`} />
+      <div className={`relative ${className}`}>
+        <div 
+          className={`${container} rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center shadow-lg animate-pulse`}
+        >
+          <UserCog className={`${icon} text-white`} />
+        </div>
+        <StatusIndicator />
       </div>
     );
   }
@@ -136,33 +153,39 @@ export function ProfileAvatar({ userId, size = 'medium', className = '' }: Profi
   // Show profile picture if available
   if (profilePicUrl && !error) {
     return (
-      <div className={`${container} rounded-full overflow-hidden shadow-lg ${className}`}>
-        <img
-          src={profilePicUrl}
-          alt="Profile"
-          className="w-full h-full object-cover"
-          onError={() => {
-            // Silently handle image load failures
-            setError(true);
-            setProfilePicUrl(null);
-            // Update cache to mark as failed
-            profilePicCache.set(userId, {
-              url: null,
-              timestamp: Date.now(),
-              checked: true
-            });
-          }}
-        />
+      <div className={`relative ${className}`}>
+        <div className={`${container} rounded-full overflow-hidden shadow-lg`}>
+          <img
+            src={profilePicUrl}
+            alt="Profile"
+            className="w-full h-full object-cover"
+            onError={() => {
+              // Silently handle image load failures
+              setError(true);
+              setProfilePicUrl(null);
+              // Update cache to mark as failed
+              profilePicCache.set(userId, {
+                url: null,
+                timestamp: Date.now(),
+                checked: true
+              });
+            }}
+          />
+        </div>
+        <StatusIndicator />
       </div>
     );
   }
 
   // Fallback to default gradient avatar
   return (
-    <div 
-      className={`${container} rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center shadow-lg ${className}`}
-    >
-      <UserCog className={`${icon} text-white`} />
+    <div className={`relative ${className}`}>
+      <div 
+        className={`${container} rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center shadow-lg`}
+      >
+        <UserCog className={`${icon} text-white`} />
+      </div>
+      <StatusIndicator />
     </div>
   );
 }

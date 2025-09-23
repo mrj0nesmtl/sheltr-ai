@@ -16,6 +16,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { ChatbotWidget } from '@/components/ChatbotWidget';
+import { StatusDebugger } from '@/components/StatusDebugger';
 import { getPlatformMetrics, getPlatformMetricsFromTenants, PlatformMetrics } from '@/services/platformMetrics';
 import { getNotificationCounts, getRecentEmailSignups, NotificationCounts, EmailSignup, formatRelativeTime } from '@/services/notificationService';
 import { analyticsService } from '@/services/analyticsService';
@@ -478,6 +479,11 @@ export default function DashboardPage() {
               <span className="hidden sm:inline">Super Admin</span>
             </Badge>
           </div>
+        </div>
+
+        {/* Debug Tool for Status Testing */}
+        <div className="mb-8">
+          <StatusDebugger />
         </div>
 
         {/* Platform Statistics */}

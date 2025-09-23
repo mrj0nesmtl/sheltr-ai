@@ -638,6 +638,23 @@ service cloud.firestore {
     }
     
     // =================================================================
+    // USER_STATUS COLLECTION - Real-time user online/offline status
+    // =================================================================
+    match /user_status/{userId} {
+      // Read: Users can read their own status, all authenticated users can read others' status
+      allow read: if isAuthenticated();
+      
+      // Write: Users can only update their own status
+      allow write: if isAuthenticated() && isOwner(userId);
+      
+      // Create: Users can create their own status document
+      allow create: if isAuthenticated() && isOwner(userId);
+      
+      // Delete: Users can delete their own status, Super Admin can delete any
+      allow delete: if isAuthenticated() && (isOwner(userId) || isSuperAdmin());
+    }
+    
+    // =================================================================
     // FALLBACK RULE - Deny all other access
     // =================================================================
     match /{document=**} {

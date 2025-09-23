@@ -24,6 +24,10 @@ import {
   Loader2,
   AlertCircle
 } from 'lucide-react';
+import { MakeNewDonationModal } from '@/components/donor/MakeNewDonationModal';
+import { RecurringGiftModal } from '@/components/donor/RecurringGiftModal';
+import { TaxDocumentsModal } from '@/components/donor/TaxDocumentsModal';
+import { FindNewSheltersModal } from '@/components/donor/FindNewSheltersModal';
 
 export default function DonorDashboard() {
   const { user, hasRole } = useAuth();
@@ -31,6 +35,12 @@ export default function DonorDashboard() {
   const [recentDonations, setRecentDonations] = useState<DonationRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  
+  // Modal states
+  const [showDonationModal, setShowDonationModal] = useState(false);
+  const [showRecurringModal, setShowRecurringModal] = useState(false);
+  const [showTaxModal, setShowTaxModal] = useState(false);
+  const [showSheltersModal, setShowSheltersModal] = useState(false);
 
   // Load real donor data based on user's ID
   useEffect(() => {
@@ -57,22 +67,18 @@ export default function DonorDashboard() {
         } else {
           // For users with no donation history, create empty metrics instead of error
           const emptyMetrics: DonorMetrics = {
-            totalDonated: 0,
-            donationCount: 0,
-            averageDonation: 0,
-            participantsHelped: 0,
-            shelterId: null,
-            lastDonationDate: null,
-            currentStreak: 0,
-            longestStreak: 0,
-            impactScore: 0,
-            monthlyGoal: 0,
-            monthlyProgress: 0,
-            totalImpactPoints: 0,
-            badgesEarned: [],
-            favoriteCategories: [],
             donorName: user.displayName || user.email || 'Platform Administrator',
-            lastDonation: null
+            totalDonated: 0,
+            taxDeductible: 0,
+            impactScore: 0,
+            donationsThisYear: 0,
+            lastDonation: null,
+            recurringDonations: 0,
+            sheltersSupported: 0,
+            participantsHelped: 0,
+            totalTaxDocuments: 0,
+            pendingReceipts: 0,
+            totalRewards: 0
           };
           setDonorMetrics(emptyMetrics);
           console.log('📊 No donation history found - showing empty state for user:', user.uid);
@@ -91,19 +97,8 @@ export default function DonorDashboard() {
   }, [user, hasRole]);
 
   // Show fallback message if no donations
-  const displayDonations = recentDonations.length > 0 ? recentDonations : [
-    {
-      id: 'placeholder',
-      date: new Date().toISOString().split('T')[0],
-      amount: 0,
-      shelter: "No donations yet",
-      participant: "",
-      type: "one-time" as const,
-      status: "pending" as const,
-      impact: "Start your giving journey today",
-      receipt_available: false
-    }
-  ];
+  // Show actual donations or empty state message
+  const displayDonations = recentDonations;
 
   // Dynamic impact metrics based on real data
   const getImpactMetrics = () => {
@@ -218,7 +213,7 @@ export default function DonorDashboard() {
         </h1>
         <p className="text-gray-600 dark:text-gray-400 mt-2">
           Your Giving Dashboard • Real Data Connected • Status: ✅ Ready for donations
-          {donorMetrics.donationCount > 0 && donorMetrics.lastDonation 
+          {donorMetrics.donationsThisYear > 0 && donorMetrics.lastDonation 
             ? ` • Last donation: ${new Date(donorMetrics.lastDonation).toLocaleDateString()}`
             : ' • Start your giving journey today!'
           }
@@ -302,19 +297,34 @@ export default function DonorDashboard() {
             <CardDescription>Manage your giving and impact</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
-            <Button className="w-full justify-start">
+            <Button 
+              className="w-full justify-start"
+              onClick={() => setShowDonationModal(true)}
+            >
               <Heart className="mr-2 h-4 w-4" />
               Make New Donation
             </Button>
-            <Button className="w-full justify-start" variant="outline">
+            <Button 
+              className="w-full justify-start" 
+              variant="outline"
+              onClick={() => setShowRecurringModal(true)}
+            >
               <PiggyBank className="mr-2 h-4 w-4" />
               Setup Recurring Gift
             </Button>
-            <Button className="w-full justify-start" variant="outline">
+            <Button 
+              className="w-full justify-start" 
+              variant="outline"
+              onClick={() => setShowTaxModal(true)}
+            >
               <Receipt className="mr-2 h-4 w-4" />
               Download Tax Docs
             </Button>
-            <Button className="w-full justify-start" variant="outline">
+            <Button 
+              className="w-full justify-start" 
+              variant="outline"
+              onClick={() => setShowSheltersModal(true)}
+            >
               <MapPin className="mr-2 h-4 w-4" />
               Find New Shelters
             </Button>
@@ -329,37 +339,52 @@ export default function DonorDashboard() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {displayDonations.map((donation) => (
-                <div key={donation.id} className="flex items-center justify-between p-3 border rounded-lg">
-                  <div className="flex-1 space-y-1">
-                    <div className="flex items-center space-x-2">
-                      <p className="text-sm font-medium">${donation.amount.toFixed(2)}</p>
-                      <Badge variant={donation.type === 'recurring' ? 'default' : 'outline'}>
-                        {donation.type}
-                      </Badge>
-                      {donation.status === 'completed' && (
-                        <Badge variant="default" className="bg-green-100 text-green-800">
-                          ✓ Completed
+              {displayDonations.length > 0 ? (
+                displayDonations.map((donation) => (
+                  <div key={donation.id} className="flex items-center justify-between p-3 border rounded-lg">
+                    <div className="flex-1 space-y-1">
+                      <div className="flex items-center space-x-2">
+                        <p className="text-sm font-medium">${donation.amount.toFixed(2)}</p>
+                        <Badge variant={donation.type === 'recurring' ? 'default' : 'outline'}>
+                          {donation.type}
                         </Badge>
-                      )}
+                        {donation.status === 'completed' && (
+                          <Badge variant="default" className="bg-green-100 text-green-800">
+                            ✓ Completed
+                          </Badge>
+                        )}
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        {donation.shelter} • {new Date(donation.date).toLocaleDateString()}
+                      </p>
+                      <p className="text-xs text-green-600">
+                        {donation.impact}
+                      </p>
                     </div>
-                    <p className="text-xs text-muted-foreground">
-                      {donation.shelter} • {new Date(donation.date).toLocaleDateString()}
-                      {donation.participant && ` • Supporting ${donation.participant}`}
-                    </p>
-                    <p className="text-xs text-green-600">
-                      {donation.impact}
-                    </p>
+                    <ChevronRight className="h-4 w-4 text-muted-foreground" />
                   </div>
-                  <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                ))
+              ) : (
+                <div className="text-center py-8">
+                  <Heart className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+                  <h3 className="text-lg font-medium mb-2">Recent donations will appear here</h3>
+                  <p className="text-gray-600 dark:text-gray-300 mb-4">
+                    Your donation history and impact will be displayed in this section
+                  </p>
+                  <Button onClick={() => setShowDonationModal(true)}>
+                    <Heart className="mr-2 h-4 w-4" />
+                    Make Your First Donation
+                  </Button>
                 </div>
-              ))}
+              )}
             </div>
-            <div className="mt-4">
-              <Button variant="outline" className="w-full">
-                View All Donations
-              </Button>
-            </div>
+            {displayDonations.length > 0 && (
+              <div className="mt-4">
+                <Button variant="outline" className="w-full">
+                  View All Donations
+                </Button>
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>
@@ -544,6 +569,24 @@ export default function DonorDashboard() {
           </CardContent>
         </Card>
       )}
+
+      {/* Modal Components */}
+      <MakeNewDonationModal 
+        isOpen={showDonationModal} 
+        onClose={() => setShowDonationModal(false)} 
+      />
+      <RecurringGiftModal 
+        isOpen={showRecurringModal} 
+        onClose={() => setShowRecurringModal(false)} 
+      />
+      <TaxDocumentsModal 
+        isOpen={showTaxModal} 
+        onClose={() => setShowTaxModal(false)} 
+      />
+      <FindNewSheltersModal 
+        isOpen={showSheltersModal} 
+        onClose={() => setShowSheltersModal(false)} 
+      />
     </div>
   );
 } 

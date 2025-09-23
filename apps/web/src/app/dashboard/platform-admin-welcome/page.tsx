@@ -66,19 +66,19 @@ If you have any questions or encounter issues, please don't hesitate to reach ou
   const renderMarkdown = (content: string) => {
     // Simple markdown rendering for basic formatting
     return content
-      .replace(/^# (.*$)/gim, '<h1 class="text-3xl font-bold mb-6 text-white">$1</h1>')
-      .replace(/^## (.*$)/gim, '<h2 class="text-2xl font-semibold mb-4 mt-8 text-gray-100">$1</h2>')
-      .replace(/^### (.*$)/gim, '<h3 class="text-xl font-semibold mb-3 mt-6 text-gray-200">$1</h3>')
-      .replace(/\*\*(.*?)\*\*/gim, '<strong class="font-semibold text-white">$1</strong>')
-      .replace(/\*(.*?)\*/gim, '<em class="italic text-gray-200">$1</em>')
+      .replace(/^# (.*$)/gim, '<h1 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white">$1</h1>')
+      .replace(/^## (.*$)/gim, '<h2 class="text-2xl font-semibold mb-4 mt-8 text-gray-800 dark:text-gray-100">$1</h2>')
+      .replace(/^### (.*$)/gim, '<h3 class="text-xl font-semibold mb-3 mt-6 text-gray-700 dark:text-gray-200">$1</h3>')
+      .replace(/\*\*(.*?)\*\*/gim, '<strong class="font-semibold text-gray-900 dark:text-white">$1</strong>')
+      .replace(/\*(.*?)\*/gim, '<em class="italic text-gray-600 dark:text-gray-200">$1</em>')
       .replace(/`(.*?)`/gim, '<code class="bg-gray-700 text-gray-100 px-2 py-1 rounded text-sm font-mono">$1</code>')
       // Handle markdown links first
       .replace(/\[([^\]]+)\]\(([^)]+)\)/gim, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300 underline">$1</a>')
       // Handle standalone URLs (https://...)
       .replace(/(^|[^"])(https?:\/\/[^\s<>"{}|\\^`[\]]+)/gim, '$1<a href="$2" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300 underline break-all">$2</a>')
-      .replace(/^- (.*$)/gim, '<li class="ml-4 mb-2 text-gray-200">• $1</li>')
-      .replace(/^\d+\. (.*$)/gim, '<li class="ml-4 mb-2 list-decimal text-gray-200">$1</li>')
-      .replace(/\n\n/gim, '</p><p class="mb-4 text-gray-200">')
+      .replace(/^- (.*$)/gim, '<li class="ml-4 mb-2 text-gray-600 dark:text-gray-200">• $1</li>')
+      .replace(/^\d+\. (.*$)/gim, '<li class="ml-4 mb-2 list-decimal text-gray-600 dark:text-gray-200">$1</li>')
+      .replace(/\n\n/gim, '</p><p class="mb-4 text-gray-600 dark:text-gray-200">')
       .replace(/\n/gim, '<br />');
   };
 
@@ -134,7 +134,7 @@ If you have any questions or encounter issues, please don't hesitate to reach ou
             <div 
               className="space-y-4 text-gray-200 leading-relaxed"
               dangerouslySetInnerHTML={{ 
-                __html: renderMarkdown(welcomeContent).replace(/<p class="mb-4">/g, '<p class="mb-4 text-gray-200">').replace(/<\/p>$/, '</p>')
+                __html: renderMarkdown(welcomeContent).replace(/<p class="mb-4">/g, '<p class="mb-4 text-gray-600 dark:text-gray-200">').replace(/<\/p>$/, '</p>')
               }} 
             />
           </div>

@@ -39,8 +39,10 @@ import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { MobileBottomNav } from '@/components/MobileBottomNav';
 import { ProfileAvatar } from '@/components/ProfileAvatar';
+import { UserStatusSelector } from '@/components/UserStatusSelector';
 import { NDAModal } from '@/components/auth/NDAModal';
 import { NDAService } from '@/services/ndaService';
+import { getNotificationCounts, NotificationCounts } from '@/services/notificationService';
 import { useState, useEffect } from 'react';
 
 // Helper function to get user display name using real-time Firestore data
@@ -83,7 +85,7 @@ const getUserDisplayName = (user: { role?: string; email?: string | null; displa
 };
 
 // Define navigation based on user role
-const getNavigationItems = (userRole: string) => {
+const getNavigationItems = (userRole: string, notificationCount?: number) => {
   const baseItems: Array<{
     title: string;
     href: string;
@@ -92,6 +94,7 @@ const getNavigationItems = (userRole: string) => {
     separator?: boolean;
     badge?: string;
     badgeColor?: string;
+    notificationCount?: number;
   }> = [];
 
   // Super Admin Navigation
@@ -107,7 +110,8 @@ const getNavigationItems = (userRole: string) => {
         title: 'Notifications',
         href: '/dashboard/notifications',
         icon: Bell,
-        description: 'Manage notifications and alerts'
+        description: 'Manage notifications and alerts',
+        notificationCount
       },
       {
         title: 'My Giving',
@@ -221,7 +225,8 @@ const getNavigationItems = (userRole: string) => {
         title: 'Notifications',
         href: '/dashboard/notifications',
         icon: Bell,
-        description: 'Manage notifications and alerts'
+        description: 'Manage notifications and alerts',
+        notificationCount
       },
       {
         title: 'My Giving',
@@ -453,6 +458,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const [isMobile, setIsMobile] = useState(false);
   const [showNDAModal, setShowNDAModal] = useState(false);
   const [ndaCheckComplete, setNdaCheckComplete] = useState(false);
+  const [notificationCounts, setNotificationCounts] = useState<NotificationCounts | null>(null);
 
   // Debug user information (development only)
   if (process.env.NODE_ENV === 'development') {
@@ -464,7 +470,29 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     });
   }
 
-  const navigationItems = getNavigationItems(user?.role || '');
+  const navigationItems = getNavigationItems(user?.role || '', notificationCounts?.totalNotifications);
+
+  // Fetch notification counts
+  useEffect(() => {
+    const fetchNotificationCounts = async () => {
+      if (!user || !['super_admin', 'platform_admin'].includes(user.role || '')) {
+        return;
+      }
+
+      try {
+        const counts = await getNotificationCounts();
+        setNotificationCounts(counts);
+      } catch (error) {
+        console.error('Error fetching notification counts:', error);
+      }
+    };
+
+    fetchNotificationCounts();
+    
+    // Refresh notification counts every 30 seconds
+    const interval = setInterval(fetchNotificationCounts, 30000);
+    return () => clearInterval(interval);
+  }, [user]);
 
   // Check NDA status for Platform Administrators and send login notifications
   useEffect(() => {
@@ -667,15 +695,17 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                     <ProfileAvatar 
                       userId={user?.uid || ''} 
                       size="medium"
+                      showStatus={true}
                     />
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
                         {getUserDisplayName(user)}
                       </p>
-                      <div className="flex items-center space-x-2">
+                      <div className="flex items-center justify-between">
                         <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gradient-to-r ${getRoleColor(user?.role || '')}`}>
                           {getRoleLabel(user?.role || '')}
                         </span>
+                        <UserStatusSelector userId={user?.uid || ''} />
                       </div>
                     </div>
                   </div>
@@ -688,6 +718,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                   <ProfileAvatar 
                     userId={user?.uid || ''} 
                     size="small"
+                    showStatus={true}
                   />
                 </div>
               )}
@@ -720,16 +751,30 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                           `}
                           title={sidebarCollapsed ? item.title : undefined}
                         >
-                          <Icon className={`flex-shrink-0 h-5 w-5 transition-transform duration-200 ${isActive ? 'scale-110' : 'group-hover:scale-110'} ${sidebarCollapsed ? '' : 'mr-3'}`} />
+                          <div className="relative">
+                            <Icon className={`flex-shrink-0 h-5 w-5 transition-transform duration-200 ${isActive ? 'scale-110' : 'group-hover:scale-110'} ${sidebarCollapsed ? '' : 'mr-3'}`} />
+                            {sidebarCollapsed && item.notificationCount && item.notificationCount > 0 && (
+                              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold px-1 py-0.5 rounded-full min-w-[1rem] h-4 flex items-center justify-center text-[10px]">
+                                {item.notificationCount > 9 ? '9+' : item.notificationCount}
+                              </span>
+                            )}
+                          </div>
                         {!sidebarCollapsed && (
                           <div className="flex-1 transition-opacity duration-300">
                             <div className="flex items-center justify-between">
                               <div className="text-sm font-medium">{item.title}</div>
-                              {item.badge && (
-                                <span className={`ml-2 px-2 py-1 text-xs font-medium rounded-full ${item.badgeColor || 'bg-blue-100 text-blue-800'}`}>
-                                  {item.badge}
-                                </span>
-                              )}
+                              <div className="flex items-center space-x-2">
+                                {item.notificationCount && item.notificationCount > 0 && (
+                                  <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full min-w-[1.25rem] h-5 flex items-center justify-center">
+                                    {item.notificationCount > 99 ? '99+' : item.notificationCount}
+                                  </span>
+                                )}
+                                {item.badge && (
+                                  <span className={`px-2 py-1 text-xs font-medium rounded-full ${item.badgeColor || 'bg-blue-100 text-blue-800'}`}>
+                                    {item.badge}
+                                  </span>
+                                )}
+                              </div>
                             </div>
                             <div className={`text-xs mt-0.5 transition-colors duration-200 ${
                               isActive 

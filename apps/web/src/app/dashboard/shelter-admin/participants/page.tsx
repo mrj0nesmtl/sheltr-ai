@@ -36,6 +36,7 @@ import {
   X
 } from 'lucide-react';
 import { getShelterParticipants, getShelterMetrics, ShelterParticipant, ShelterMetrics } from '@/services/platformMetrics';
+import { UserStatusIndicator } from '@/components/UserStatusIndicator';
 
 // Mock data removed - now using real Firebase data
 
@@ -483,10 +484,15 @@ export default function ParticipantsPage() {
                       <div className="flex justify-between items-start">
                         <div className="flex-1">
                           <div className="flex items-center space-x-3">
-                            <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
-                              <span className="text-blue-600 dark:text-blue-300 font-semibold">
-                                {participant.name.split(' ').map(n => n[0]).join('')}
-                              </span>
+                            <div className="relative">
+                              <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
+                                <span className="text-blue-600 dark:text-blue-300 font-semibold">
+                                  {participant.name.split(' ').map(n => n[0]).join('')}
+                                </span>
+                              </div>
+                              <div className="absolute -bottom-0.5 -right-0.5">
+                                <UserStatusIndicator userId={participant.id} size="sm" />
+                              </div>
                             </div>
                             <div>
                               <h3 className="font-semibold">{participant.name}</h3>
@@ -549,10 +555,15 @@ export default function ParticipantsPage() {
                       <div className="flex justify-between items-start">
                         <div className="flex-1">
                           <div className="flex items-center space-x-3">
-                            <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
-                              <span className="text-blue-600 dark:text-blue-300 font-semibold">
-                                {participant.name.split(' ').map(n => n[0]).join('')}
-                              </span>
+                            <div className="relative">
+                              <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
+                                <span className="text-blue-600 dark:text-blue-300 font-semibold">
+                                  {participant.name.split(' ').map(n => n[0]).join('')}
+                                </span>
+                              </div>
+                              <div className="absolute -bottom-0.5 -right-0.5">
+                                <UserStatusIndicator userId={participant.id} size="sm" />
+                              </div>
                             </div>
                             <div>
                               <h3 className="font-semibold">{participant.name}</h3>
@@ -615,10 +626,15 @@ export default function ParticipantsPage() {
                       <div className="flex justify-between items-start">
                         <div className="flex-1">
                           <div className="flex items-center space-x-3">
-                            <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
-                              <span className="text-blue-600 dark:text-blue-300 font-semibold">
-                                {participant.name.split(' ').map(n => n[0]).join('')}
-                              </span>
+                            <div className="relative">
+                              <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
+                                <span className="text-blue-600 dark:text-blue-300 font-semibold">
+                                  {participant.name.split(' ').map(n => n[0]).join('')}
+                                </span>
+                              </div>
+                              <div className="absolute -bottom-0.5 -right-0.5">
+                                <UserStatusIndicator userId={participant.id} size="sm" />
+                              </div>
                             </div>
                             <div>
                               <h3 className="font-semibold">{participant.name}</h3>
@@ -681,10 +697,15 @@ export default function ParticipantsPage() {
                       <div className="flex justify-between items-start">
                         <div className="flex-1">
                           <div className="flex items-center space-x-3">
-                            <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
-                              <span className="text-blue-600 dark:text-blue-300 font-semibold">
-                                {participant.name.split(' ').map(n => n[0]).join('')}
-                              </span>
+                            <div className="relative">
+                              <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
+                                <span className="text-blue-600 dark:text-blue-300 font-semibold">
+                                  {participant.name.split(' ').map(n => n[0]).join('')}
+                                </span>
+                              </div>
+                              <div className="absolute -bottom-0.5 -right-0.5">
+                                <UserStatusIndicator userId={participant.id} size="sm" />
+                              </div>
                             </div>
                             <div>
                               <h3 className="font-semibold">{participant.name}</h3>

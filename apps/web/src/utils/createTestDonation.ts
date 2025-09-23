@@ -48,7 +48,7 @@ export async function createTestDonationForOBM(
       public: true // All scan-give donations are public
     };
     
-    const docRef = await addDoc(collection(db, 'demo_donations'), donationData);
+    const docRef = await addDoc(collection(db, 'tenants/YDJCJnuLGMC9mWOWDSOa/donations'), donationData);
     console.log(`✅ Test donation created with ID: ${docRef.id}`, donorId ? `for user ${donorId}` : '(anonymous)');
     
     return docRef.id;

@@ -34,18 +34,14 @@ async function addTestDonationToOBM() {
       source: 'console-test-utility'
     };
     
-    console.log('📝 Creating donation in demo_donations collection...');
-    const docRef1 = await addDoc(collection(db, 'demo_donations'), donationData);
-    console.log('✅ Demo donation created with ID:', docRef1.id);
-    
     console.log('📝 Creating donation in tenant collection...');
-    const docRef2 = await addDoc(collection(db, 'tenants/YDJCJnuLGMC9mWOWDSOa/donations'), donationData);
-    console.log('✅ Tenant donation created with ID:', docRef2.id);
+    const docRef = await addDoc(collection(db, 'tenants/YDJCJnuLGMC9mWOWDSOa/donations'), donationData);
+    console.log('✅ Tenant donation created with ID:', docRef.id);
     
-    console.log('🎉 SUCCESS! Test donations created in both collections!');
+    console.log('🎉 SUCCESS! Test donation created in proper tenant structure!');
     console.log('🔄 Now refresh your dashboard pages to see the $100 donation appear!');
     
-    return { demoId: docRef1.id, tenantId: docRef2.id };
+    return { tenantId: docRef.id };
     
   } catch (error) {
     console.error('❌ Error creating test donations:', error);

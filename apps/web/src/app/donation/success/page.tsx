@@ -71,7 +71,7 @@ function SuccessPageContent() {
           };
           
           console.log('📝 Creating automatic demo donation:', donationData);
-          const docRef = await addDoc(collection(db, 'demo_donations'), donationData);
+          const docRef = await addDoc(collection(db, 'tenants/YDJCJnuLGMC9mWOWDSOa/donations'), donationData);
           console.log('✅ Automatic demo donation created with ID:', docRef.id);
           
         } catch (error) {
@@ -384,13 +384,8 @@ function SuccessPageContent() {
                         };
                         
                         console.log('📝 Creating donation with data:', donationData);
-                        const docRef = await addDoc(collection(db, 'demo_donations'), donationData);
+                        const docRef = await addDoc(collection(db, 'tenants/YDJCJnuLGMC9mWOWDSOa/donations'), donationData);
                         console.log('✅ Donation created with ID:', docRef.id);
-                        
-                        // Also add to tenant-specific collection
-                        console.log('📝 Adding to tenant collection...');
-                        await addDoc(collection(db, `tenants/YDJCJnuLGMC9mWOWDSOa/donations`), donationData);
-                        console.log('✅ Added to tenant collection!');
                         
                         const donorMessage = user?.uid ? 
                           `✅ Test donation added and tracked to ${user.email || 'your account'}! Check your donor dashboard.` :

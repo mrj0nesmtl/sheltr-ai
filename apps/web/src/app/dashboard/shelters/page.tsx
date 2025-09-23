@@ -344,56 +344,29 @@ export default function ShelterNetwork() {
       // Load real donation data
       const donationsByShelter: Record<string, number> = {};
       
-      // Method 1: Check demo_donations for scan-give data
-      try {
-        const demoDonationsSnapshot = await getDocs(collection(db, 'demo_donations'));
-        console.log(`💰 Found ${demoDonationsSnapshot.size} demo donation records`);
-        
-        demoDonationsSnapshot.docs.forEach(doc => {
-          const donationData = doc.data();
-          const amount = donationData?.amount?.total || donationData?.amount || 0;
-          const shelterId = donationData?.shelter_id || donationData?.recipient_id;
-          
-          console.log(`🔍 [DEBUG] Processing donation:`, {
-            id: doc.id,
-            participant_id: donationData?.participant_id,
-            shelter_id: donationData?.shelter_id,
-            amount: amount,
-            rawData: donationData
-          });
-          
-          if (amount > 0 && shelterId) {
-            // Consolidate Old Brewery Mission donations under the correct tenant ID
-            let normalizedShelterId = shelterId;
-            if (shelterId === 'old-brewery-mission') {
-              normalizedShelterId = 'YDJCJnuLGMC9mWOWDSOa';
-              console.log(`🔄 [CONSOLIDATE] Redirecting old-brewery-mission → YDJCJnuLGMC9mWOWDSOa`);
-            }
-            
-            donationsByShelter[normalizedShelterId] = (donationsByShelter[normalizedShelterId] || 0) + amount;
-            console.log(`💰 Added $${amount} for shelter ${normalizedShelterId}, total: $${donationsByShelter[normalizedShelterId]}`);
-          }
-        });
-      } catch (error) {
-        console.warn('⚠️ Could not fetch demo donations:', error);
-      }
-      
-      // Method 2: Check individual tenant donations
+      // Get donations from tenant collections
       for (const tenant of shelterTenants) {
         try {
           const tenantDonationsSnapshot = await getDocs(collection(db, `tenants/${tenant.id}/donations`));
-          if (tenantDonationsSnapshot.size > 0) {
-            console.log(`💰 Found ${tenantDonationsSnapshot.size} donations for ${tenant.name}`);
+          console.log(`💰 Found ${tenantDonationsSnapshot.size} donations for tenant ${tenant.name}`);
+          
+          tenantDonationsSnapshot.docs.forEach(doc => {
+            const donationData = doc.data();
+            const amount = donationData?.amount?.total || donationData?.amount || 0;
             
-            tenantDonationsSnapshot.docs.forEach(doc => {
-              const donationData = doc.data();
-              const amount = donationData?.amount || 0;
-              
-              if (amount > 0) {
-                donationsByShelter[tenant.id] = (donationsByShelter[tenant.id] || 0) + amount;
-              }
+            console.log(`🔍 [DEBUG] Processing donation:`, {
+              id: doc.id,
+              participant_id: donationData?.participant_id,
+              shelter_id: donationData?.shelter_id,
+              amount: amount,
+              tenant_id: tenant.id
             });
-          }
+            
+            if (amount > 0) {
+              donationsByShelter[tenant.id] = (donationsByShelter[tenant.id] || 0) + amount;
+              console.log(`💰 Added $${amount} for tenant ${tenant.id}, total: $${donationsByShelter[tenant.id]}`);
+            }
+          });
         } catch (error) {
           console.warn(`⚠️ Could not fetch donations for tenant ${tenant.id}:`, error);
         }

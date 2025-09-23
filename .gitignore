@@ -151,6 +151,10 @@ apps/api/.venv/
 # Documentation files with credentials
 QUICK-MACBOOK-SYNC.md
 
+# Platform administrator communication letters (for email distribution)
+docs/platform-admin-welcome-letter.md
+docs/platform-admin/welcome-letter.md
+
 # Local scripts directory (contains sensitive operations)
 scripts/
 

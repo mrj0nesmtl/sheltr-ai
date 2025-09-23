@@ -32,7 +32,8 @@ import {
   MessageSquare,
   Target,
   Mail,
-  Camera
+  Camera,
+  Sparkles
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/theme-toggle';
@@ -89,6 +90,8 @@ const getNavigationItems = (userRole: string) => {
     icon: LucideIcon;
     description: string;
     separator?: boolean;
+    badge?: string;
+    badgeColor?: string;
   }> = [];
 
   // Super Admin Navigation
@@ -192,10 +195,27 @@ const getNavigationItems = (userRole: string) => {
   if (userRole === 'platform_admin') {
     return [
       {
+        title: 'Welcome Letter',
+        href: '/dashboard/platform-admin-welcome',
+        icon: Sparkles,
+        description: 'Your welcome guide to SHELTR-AI',
+        badge: 'Start',
+        badgeColor: 'bg-white text-red-600 border border-red-300'
+      },
+      {
+        title: 'Platform Guide',
+        href: '/dashboard/platform-guide',
+        icon: BookOpen,
+        description: 'Complete administrator documentation',
+        badge: 'Start',
+        badgeColor: 'bg-white text-red-600 border border-red-300'
+      },
+      {
         title: 'Overview',
         href: '/dashboard',
         icon: Home,
-        description: 'Platform overview and metrics'
+        description: 'Platform overview and metrics',
+        separator: true
       },
       {
         title: 'Notifications',
@@ -703,7 +723,14 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                           <Icon className={`flex-shrink-0 h-5 w-5 transition-transform duration-200 ${isActive ? 'scale-110' : 'group-hover:scale-110'} ${sidebarCollapsed ? '' : 'mr-3'}`} />
                         {!sidebarCollapsed && (
                           <div className="flex-1 transition-opacity duration-300">
-                            <div className="text-sm font-medium">{item.title}</div>
+                            <div className="flex items-center justify-between">
+                              <div className="text-sm font-medium">{item.title}</div>
+                              {item.badge && (
+                                <span className={`ml-2 px-2 py-1 text-xs font-medium rounded-full ${item.badgeColor || 'bg-blue-100 text-blue-800'}`}>
+                                  {item.badge}
+                                </span>
+                              )}
+                            </div>
                             <div className={`text-xs mt-0.5 transition-colors duration-200 ${
                               isActive 
                                 ? 'text-blue-100' 

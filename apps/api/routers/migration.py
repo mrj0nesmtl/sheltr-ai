@@ -213,3 +213,93 @@ async def verify_migration_endpoint():
         return verification
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Verification failed: {str(e)}")
+
+@router.get("/analyze-shelters")
+async def analyze_shelter_structure():
+    """
+    Analyze current shelter and user structure for debugging
+    """
+    try:
+        print("🔍 Analyzing shelter and user structure...")
+        
+        # Get all shelters
+        shelters_ref = db.collection('shelters')
+        shelter_docs = list(shelters_ref.stream())
+        
+        shelters_data = []
+        for doc in shelter_docs:
+            data = doc.to_dict()
+            shelters_data.append({
+                "id": doc.id,
+                "name": data.get('name', 'Unknown'),
+                "status": data.get('status', 'unknown'),
+                "capacity": data.get('capacity', 0)
+            })
+        
+        # Get all users and their shelter assignments
+        users_ref = db.collection('users')
+        user_docs = list(users_ref.stream())
+        
+        shelter_admins = []
+        for doc in user_docs:
+            data = doc.to_dict()
+            if data.get('role') == 'admin':  # shelter admin role
+                shelter_admins.append({
+                    "email": data.get('email', 'unknown'),
+                    "shelter_id": data.get('shelter_id'),
+                    "customClaims_shelter_id": data.get('customClaims', {}).get('shelter_id') if data.get('customClaims') else None
+                })
+        
+        return {
+            "shelters": shelters_data,
+            "shelter_admins": shelter_admins,
+            "total_shelters": len(shelter_docs),
+            "total_shelter_admins": len(shelter_admins)
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Shelter analysis failed: {str(e)}")
+
+@router.post("/assign-shelter-admin")
+async def assign_shelter_admin(email: str, shelter_id: str):
+    """
+    Assign a shelter admin to a specific shelter
+    """
+    try:
+        print(f"🔧 Assigning {email} to shelter {shelter_id}...")
+        
+        # Find the user
+        users_ref = db.collection('users')
+        query = users_ref.where('email', '==', email)
+        user_docs = list(query.stream())
+        
+        if not user_docs:
+            raise HTTPException(status_code=404, detail=f"User {email} not found")
+        
+        user_doc = user_docs[0]
+        
+        # Verify the shelter exists
+        shelter_ref = db.collection('shelters').document(shelter_id)
+        shelter_doc = shelter_ref.get()
+        
+        if not shelter_doc.exists:
+            raise HTTPException(status_code=404, detail=f"Shelter {shelter_id} not found")
+        
+        # Update the user's shelter_id
+        user_doc.reference.update({
+            'shelter_id': shelter_id,
+            'updated_at': datetime.utcnow()
+        })
+        
+        shelter_data = shelter_doc.to_dict()
+        
+        return {
+            "success": True,
+            "message": f"Successfully assigned {email} to {shelter_data.get('name', shelter_id)}",
+            "user_email": email,
+            "shelter_id": shelter_id,
+            "shelter_name": shelter_data.get('name', shelter_id)
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Assignment failed: {str(e)}")

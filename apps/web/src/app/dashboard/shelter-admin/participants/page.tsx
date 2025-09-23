@@ -68,7 +68,7 @@ export default function ParticipantsPage() {
   // Load participants data
   useEffect(() => {
     const loadData = async () => {
-      const shelterId = user?.customClaims?.shelter_id;
+      const shelterId = user?.customClaims?.shelter_id || user?.shelterId || (user as any)?.shelter_id;
       
       if (!shelterId) {
         setError('No shelter assigned to this admin');

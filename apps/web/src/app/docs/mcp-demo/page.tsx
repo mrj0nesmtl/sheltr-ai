@@ -1,6 +1,8 @@
 import { Metadata } from 'next';
+import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { 
   Bot, 
   Zap, 
@@ -13,9 +15,13 @@ import {
   Users,
   Heart,
   CheckCircle,
-  ArrowRight
+  ArrowRight,
+  ArrowLeft
 } from 'lucide-react';
 import { EnhancedMCPChatbot } from '@/components/EnhancedMCPChatbot';
+import { ThemeToggle } from '@/components/theme-toggle';
+import Footer from '@/components/Footer';
+import ThemeLogo from '@/components/ThemeLogo';
 
 export const metadata: Metadata = {
   title: 'OpenAI MCP Integration Demo | SHELTR-AI Documentation',
@@ -25,36 +31,61 @@ export const metadata: Metadata = {
 
 export default function MCPDemoPage() {
   return (
-    <div className="container mx-auto px-4 py-8">
-      {/* Header */}
-      <div className="text-center mb-8">
-        <div className="flex items-center justify-center mb-4">
-          <Bot className="h-8 w-8 text-blue-600 mr-3" />
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            OpenAI MCP Integration Demo
-          </h1>
-          <Zap className="h-8 w-8 text-yellow-500 ml-3" />
+    <div className="min-h-screen bg-background">
+      {/* Navigation */}
+      <nav className="bg-background/95 backdrop-blur-sm sticky top-0 z-50 border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <Link href="/" className="flex items-center">
+              <ThemeLogo />
+            </Link>
+            <div className="flex items-center space-x-4">
+              <Link href="/docs">
+                <Button variant="ghost" size="sm">
+                  <ArrowLeft className="h-4 w-4 mr-2" />
+                  Back to Docs
+                </Button>
+              </Link>
+              <ThemeToggle />
+            </div>
+          </div>
         </div>
-        <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-          Experience SHELTR-AI's revolutionary chatbot powered by OpenAI's Model Context Protocol (MCP) 
-          and Agents SDK. Our AI assistant now has specialized agents for different tasks and enhanced 
-          capabilities beyond traditional chatbots.
-        </p>
-        <div className="flex items-center justify-center space-x-2 mt-4">
-          <Badge variant="outline" className="bg-green-50 text-green-700">
-            <CheckCircle className="h-3 w-3 mr-1" />
-            Production Ready
-          </Badge>
-          <Badge variant="outline" className="bg-blue-50 text-blue-700">
-            <Zap className="h-3 w-3 mr-1" />
-            MCP Enhanced
-          </Badge>
-          <Badge variant="outline" className="bg-purple-50 text-purple-700">
-            <Brain className="h-3 w-3 mr-1" />
-            AI Agents
-          </Badge>
+      </nav>
+
+      {/* Document Header */}
+      <section className="py-12 bg-gradient-to-r from-blue-50 via-purple-50 to-indigo-50 dark:from-blue-900/20 dark:via-purple-900/20 dark:to-indigo-900/20">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <div className="flex items-start gap-4 mb-6">
+              <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-3 rounded-lg">
+                <Bot className="h-8 w-8 text-white" />
+              </div>
+              <div className="flex-1">
+                <div className="mb-3">
+                  <h1 className="text-3xl sm:text-4xl font-bold mb-2 leading-tight">OpenAI MCP Integration Demo <Zap className="inline h-8 w-8 text-yellow-500 ml-2" /></h1>
+                  <div className="flex flex-wrap gap-2 mb-3">
+                    <Badge className="bg-green-600 text-white text-sm">Production Ready</Badge>
+                    <Badge className="bg-blue-600 text-white text-sm">MCP Enhanced</Badge>
+                    <Badge className="bg-purple-600 text-white text-sm">AI Agents</Badge>
+                  </div>
+                </div>
+                <p className="text-lg text-muted-foreground mb-3">
+                  Experience SHELTR-AI's revolutionary chatbot powered by OpenAI's Model Context Protocol (MCP) and Agents SDK. Our AI assistant now has specialized agents for different tasks and enhanced capabilities beyond traditional chatbots.
+                </p>
+                <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground mb-4">
+                  <span>Version 1.0.0</span>
+                  <span>•</span>
+                  <span>Updated September 22, 2025</span>
+                  <span>•</span>
+                  <Badge className="bg-green-500 hover:bg-green-600 text-white text-xs">DEMO ACTIVE</Badge>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      </section>
+
+      <div className="container mx-auto px-4 py-8">
 
       {/* MCP Architecture Overview */}
       <div className="grid md:grid-cols-2 gap-8 mb-12">
@@ -360,24 +391,28 @@ export default function MCPDemoPage() {
       {/* Navigation */}
       <div className="flex justify-between items-center mt-12 pt-8 border-t">
         <div>
-          <a 
+          <Link 
             href="/docs/chatbot-architecture" 
             className="flex items-center text-blue-600 hover:text-blue-800 transition-colors"
           >
             <ArrowRight className="h-4 w-4 mr-2 rotate-180" />
             Chatbot Architecture
-          </a>
+          </Link>
         </div>
         <div>
-          <a 
-            href="/docs/mcp-integrations" 
+          <Link 
+            href="/docs/mcp-integration" 
             className="flex items-center text-blue-600 hover:text-blue-800 transition-colors"
           >
             MCP Integration Guide
             <ArrowRight className="h-4 w-4 ml-2" />
-          </a>
+          </Link>
         </div>
       </div>
+    </div>
+
+    {/* Footer */}
+    <Footer />
     </div>
   );
 }

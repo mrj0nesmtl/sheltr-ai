@@ -55,6 +55,11 @@ export const DashboardRouter: React.FC<DashboardRouterProps> = ({ children }) =>
     const currentDashboardRole = getCurrentDashboardRole(pathname);
     
     if (currentDashboardRole && currentDashboardRole !== userRole && userRole !== 'super_admin') {
+      // Special case: Platform Admins can access donor dashboard (My Giving)
+      if (userRole === 'platform_admin' && currentDashboardRole === 'donor') {
+        return; // Allow access
+      }
+      
       // Super admins can access any dashboard, others are restricted to their own
       console.warn(`User with role ${userRole} attempted to access ${currentDashboardRole} dashboard`);
       if (targetDashboard) {

@@ -29,6 +29,15 @@ export const DashboardRouter: React.FC<DashboardRouterProps> = ({ children }) =>
     // Only handle dashboard routes
     if (!pathname.startsWith('/dashboard')) return;
 
+    // Debug logging for Platform Admin navigation
+    if (user.role === 'platform_admin' && process.env.NODE_ENV === 'development') {
+      console.log('🔍 DashboardRouter Debug:', {
+        userRole: user.role,
+        pathname,
+        targetDashboard: ROLE_DASHBOARD_MAP[user.role]
+      });
+    }
+
     // Get the appropriate dashboard for the user's role
     const userRole = user.role;
     const targetDashboard = userRole ? ROLE_DASHBOARD_MAP[userRole] : null;
@@ -57,11 +66,12 @@ export const DashboardRouter: React.FC<DashboardRouterProps> = ({ children }) =>
     if (currentDashboardRole && currentDashboardRole !== userRole && userRole !== 'super_admin') {
       // Special case: Platform Admins can access donor dashboard (My Giving)
       if (userRole === 'platform_admin' && currentDashboardRole === 'donor') {
+        console.log('✅ DashboardRouter: Allowing Platform Admin access to donor dashboard');
         return; // Allow access
       }
       
       // Super admins can access any dashboard, others are restricted to their own
-      console.warn(`User with role ${userRole} attempted to access ${currentDashboardRole} dashboard`);
+      console.warn(`❌ DashboardRouter: User with role ${userRole} attempted to access ${currentDashboardRole} dashboard - redirecting to ${targetDashboard}`);
       if (targetDashboard) {
         router.replace(targetDashboard);
       }

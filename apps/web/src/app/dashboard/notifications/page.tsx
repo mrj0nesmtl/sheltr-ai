@@ -487,7 +487,7 @@ export default function NotificationsPage() {
                 ) : (
                   <div className="space-y-2">
                     {filteredAdminNotifications.slice(0, 3).map((notification) => (
-                      <div key={notification.id} className={`p-3 rounded border ${!notification.read ? 'bg-blue-50 border-blue-200' : 'bg-gray-50'}`}>
+                      <div key={notification.id} className={`p-3 rounded border ${!notification.read ? 'bg-blue-900/20 border-blue-600/50 dark:bg-blue-900/20 dark:border-blue-600/50' : 'bg-gray-800/50 border-gray-700/50 dark:bg-gray-800/50 dark:border-gray-700/50'}`}>
                         <div className="flex items-center gap-2 mb-1">
                           {notification.type === 'fraud_alert' && <AlertCircle className="h-3 w-3 text-red-500" />}
                           {notification.type === 'system_alert' && <Bell className="h-3 w-3 text-yellow-500" />}
@@ -537,7 +537,7 @@ export default function NotificationsPage() {
               <CardContent>
                 <div className="space-y-3">
                   {allContactInquiries.slice(0, 3).map((inquiry) => (
-                    <div key={inquiry.id} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                    <div key={inquiry.id} className="flex items-center justify-between p-3 bg-gray-800/50 border border-gray-700/50 rounded-lg">
                       <div className="flex items-center space-x-3">
                         <div className={`w-2 h-2 rounded-full ${
                           inquiry.priority === 'high' ? 'bg-red-500' : 
@@ -583,7 +583,7 @@ export default function NotificationsPage() {
               <CardContent>
                 <div className="space-y-3">
                   {allEmailSignups.slice(0, 3).map((signup) => (
-                    <div key={signup.id} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                    <div key={signup.id} className="flex items-center justify-between p-3 bg-gray-800/50 border border-gray-700/50 rounded-lg">
                       <div className="flex items-center space-x-3">
                         <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                         <div>
@@ -698,7 +698,7 @@ export default function NotificationsPage() {
                             </p>
                             
                             {notification.data && Object.keys(notification.data).length > 0 && (
-                              <div className="text-xs text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-800 p-3 rounded border mb-3">
+                              <div className="text-xs text-gray-300 bg-gray-800/50 border border-gray-700/50 p-3 rounded mb-3">
                                 <strong className="text-gray-900 dark:text-gray-100">Security Details:</strong>
                                 {notification.type === 'fraud_alert' && notification.data?.fraud_alert_id && (
                                   <div className="mt-1">🚨 Alert ID: {String(notification.data.fraud_alert_id)}</div>
@@ -765,7 +765,7 @@ export default function NotificationsPage() {
               )}
               
               {/* Security Status Summary */}
-              <div className="mt-6 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+              <div className="mt-6 p-4 bg-gray-800/50 border border-gray-700/50 rounded-lg">
                 <h4 className="font-medium text-sm mb-2 flex items-center gap-2">
                   <Shield className="h-4 w-4" />
                   Security Status Summary
@@ -822,7 +822,7 @@ export default function NotificationsPage() {
               ) : (
                 <div className="space-y-3">
                   {filteredAdminNotifications.map((notification) => (
-                    <Card key={notification.id} className={`transition-colors ${notification.read ? 'bg-gray-50 dark:bg-gray-900' : 'bg-blue-50 dark:bg-blue-900/20 border-blue-200'}`}>
+                    <Card key={notification.id} className={`transition-colors ${notification.read ? 'bg-gray-800/30 border-gray-700/50' : 'bg-blue-900/20 border-blue-600/50'}`}>
                       <CardContent className="p-4">
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
@@ -856,7 +856,7 @@ export default function NotificationsPage() {
                             </p>
                             
                             {notification.data && Object.keys(notification.data).length > 0 && (
-                              <div className="text-xs text-gray-500 bg-gray-100 dark:bg-gray-800 p-2 rounded mt-2">
+                              <div className="text-xs text-gray-400 bg-gray-800/50 border border-gray-700/50 p-2 rounded mt-2">
                                 <strong>Details:</strong>
                                 {notification.type === 'fraud_alert' && notification.data?.fraud_alert_id && (
                                   <div>Alert ID: {String(notification.data.fraud_alert_id)}</div>
@@ -928,7 +928,7 @@ export default function NotificationsPage() {
               ) : filteredInquiries.length > 0 ? (
                 <div className="space-y-3">
                   {filteredInquiries.map((inquiry) => (
-                    <div key={inquiry.id} className="flex items-start justify-between p-4 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                    <div key={inquiry.id} className="flex items-start justify-between p-4 border border-gray-700/50 bg-gray-800/30 rounded-lg hover:bg-gray-700/50 transition-colors">
                       <div className="flex items-start space-x-3">
                         <div className={`w-2 h-2 rounded-full mt-2 ${
                           inquiry.priority === 'high' ? 'bg-red-500' : 
@@ -995,7 +995,7 @@ export default function NotificationsPage() {
               ) : filteredSignups.length > 0 ? (
                 <div className="space-y-3">
                   {filteredSignups.map((signup) => (
-                    <div key={signup.id} className="flex items-start justify-between p-4 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                    <div key={signup.id} className="flex items-start justify-between p-4 border border-gray-700/50 bg-gray-800/30 rounded-lg hover:bg-gray-700/50 transition-colors">
                       <div className="flex items-start space-x-3">
                         <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
                         <div className="min-w-0 flex-1">

@@ -183,9 +183,9 @@ export const getPlatformMetricsFromTenants = async (): Promise<PlatformMetrics> 
       return total + (donationData?.amount || 0);
     }, 0);
     
-    // Check demo donations collection
-    const demoDonationsSnapshot = await getDocs(collection(db, 'demo_donations'));
-    const demoTotal = demoDonationsSnapshot.docs.reduce((total, doc) => {
+    // Check tenant donations collection for Old Brewery Mission
+    const tenantDonationsSnapshot = await getDocs(collection(db, 'tenants/YDJCJnuLGMC9mWOWDSOa/donations'));
+    const demoTotal = tenantDonationsSnapshot.docs.reduce((total, doc) => {
       const donationData = doc.data();
       return total + (donationData?.amount?.total || 0);
     }, 0);
@@ -345,11 +345,11 @@ export const getPlatformMetrics = async (): Promise<PlatformMetrics> => {
     const platformAdmins = platformAdminsSnapshot.size;
     console.log(`⭐ Found ${platformAdmins} platform administrators`);
     
-    // Get real donations total from both demo_donations and new donations collection
-    const demoDonationsSnapshot = await getDocs(collection(db, 'demo_donations'));
+    // Get real donations total from tenant collection and new donations collection
+    const tenantDonationsSnapshot = await getDocs(collection(db, 'tenants/YDJCJnuLGMC9mWOWDSOa/donations'));
     const donationsSnapshot = await getDocs(collection(db, 'donations'));
     
-    const demoTotal = demoDonationsSnapshot.docs.reduce((total, doc) => {
+    const demoTotal = tenantDonationsSnapshot.docs.reduce((total, doc) => {
       const donationData = doc.data();
       // Handle different amount formats
       let amount = 0;
@@ -501,9 +501,9 @@ async function generateRecentActivity(shelterDocs: QueryDocumentSnapshot<Documen
   const activity: ActivityItem[] = [];
   
   try {
-    // Get recent donations for activity
+    // Get recent donations for activity from tenant collection
     const recentDonationsQuery = query(
-      collection(db, 'demo_donations'),
+      collection(db, 'tenants/YDJCJnuLGMC9mWOWDSOa/donations'),
       orderBy('created_at', 'desc'),
       limit(3)
     );
@@ -859,7 +859,7 @@ export const getDonorMetrics = async (donorId: string): Promise<DonorMetrics | n
       donorName = 'Jane Supporter'; // Default for demo
     }
 
-    // Get real donation data from demo_donations collection
+    // Get real donation data from tenant collection (already updated above)
     let totalDonated = 0;
     let donationsThisYear = 0;
     let lastDonation: string | null = null;
@@ -1273,15 +1273,14 @@ export const updateShelterDonationTotal = async (
 
 /**
  * Get real donation data for Old Brewery Mission (for demo purposes)
- * This connects to the demo_donations collection to show real totals
+ * This connects to the tenant donations collection to show real totals
  */
 export const getOldBreweryMissionDonations = async (): Promise<number> => {
   try {
-    // Get all donations for Michael Rodriguez (Old Brewery Mission participant)
+    // Get all donations for Old Brewery Mission from tenant collection
     const donationsSnapshot = await getDocs(
       query(
-        collection(db, 'demo_donations'),
-        where('shelter_id', '==', 'old-brewery-mission'),
+        collection(db, 'tenants/YDJCJnuLGMC9mWOWDSOa/donations'),
         where('status', '==', 'completed')
       )
     );
@@ -1444,12 +1443,12 @@ export const getPlatformTenants = async (): Promise<PlatformTenant[]> => {
     const sheltersSnapshot = await getDocs(sheltersRef);
     const tenants: PlatformTenant[] = [];
     
-    // Get all demo donations once to aggregate by shelter
-    const demoDonationsSnapshot = await getDocs(collection(db, 'demo_donations'));
+    // Get all tenant donations once to aggregate by shelter
+    const tenantDonationsSnapshot = await getDocs(collection(db, 'tenants/YDJCJnuLGMC9mWOWDSOa/donations'));
     const donationsByShelter: Record<string, number> = {};
     
     // Aggregate donations by shelter_id
-    demoDonationsSnapshot.docs.forEach(doc => {
+    tenantDonationsSnapshot.docs.forEach(doc => {
       const donationData = doc.data();
       const shelterId = donationData?.shelter_id;
       const amount = donationData?.amount?.total || 0;
@@ -1538,12 +1537,12 @@ export const getShelterManagementMetrics = async (): Promise<ShelterManagementMe
     let totalDonations = 0;
     const donationsByShelter: Record<string, number> = {};
     
-    // Method 1: Check demo_donations collection for shelter-specific data
+    // Method 1: Check tenant donations collection for shelter-specific data
     try {
-      const demoDonationsSnapshot = await getDocs(collection(db, 'demo_donations'));
-      console.log(`💰 Found ${demoDonationsSnapshot.size} demo donation records`);
+      const tenantDonationsSnapshot = await getDocs(collection(db, 'tenants/YDJCJnuLGMC9mWOWDSOa/donations'));
+      console.log(`💰 Found ${tenantDonationsSnapshot.size} tenant donation records`);
       
-      demoDonationsSnapshot.docs.forEach(doc => {
+      tenantDonationsSnapshot.docs.forEach(doc => {
         const donationData = doc.data();
         const amount = donationData?.amount?.total || donationData?.amount || 0;
         const shelterId = donationData?.shelter_id || donationData?.recipient_id;
@@ -1557,7 +1556,7 @@ export const getShelterManagementMetrics = async (): Promise<ShelterManagementMe
         }
       });
     } catch (error) {
-      console.warn('⚠️ Could not fetch demo_donations:', error);
+      console.warn('⚠️ Could not fetch tenant donations:', error);
     }
     
     // Method 2: Check global donations collection

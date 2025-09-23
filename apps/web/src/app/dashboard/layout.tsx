@@ -18,6 +18,7 @@ import {
   X,
   LogOut,
   UserCog,
+  BookOpen,
   ChevronLeft,
   ChevronRight,
   Heart,
@@ -267,6 +268,12 @@ const getNavigationItems = (userRole: string) => {
         href: '/dashboard/blog',
         icon: FileText,
         description: 'Create and manage blog posts'
+      },
+      {
+        title: 'Platform Administration Guide',
+        href: '/dashboard/platform-guide',
+        icon: BookOpen,
+        description: 'Comprehensive guide for Platform Administrators'
       },
       {
         title: 'System Settings',

@@ -54,6 +54,26 @@ import { UserStatusIndicator } from '@/components/UserStatusIndicator';
 
 export default function UserManagement() {
   const { user } = useAuth();
+
+  // Platform Administrator role descriptions
+  const getPlatformAdminRole = (email: string): string => {
+    const roleMap: { [key: string]: string } = {
+      'senw@royaltri.com': 'Platform Administrator • Brand, Marketing, Publicity',
+      'alaghetts@gmail.com': 'Platform Administrator • Product Design & Engineering',
+      'zaffialaplante@gmail.com': 'Platform Administrator • Public Relations, Onboarding, Partnerships',
+      'alexanderkline13@gmail.com': 'Platform Administrator • Operations, Partnerships',
+      'deefactorial@gmail.com': 'Platform Administrator • Blockchain Engineer, AI Team',
+      'doug.kukura@gmail.com': 'Platform Administrator • DeFi, Payments, Partnerships',
+      'gunnar.blaze@gmail.com': 'Platform Administrator • Co-Founder',
+      'f.tjeff79@gmail.com': 'Platform Administrator • Blockchain Advisor, Networking',
+      'christinesavardmedia@gmail.com': 'Platform Administrator • Marketing, Outreach, Onboarding',
+      'morganhirtle@gmail.com': 'Platform Administrator • Participant Support Services, EcoSystem',
+      'srivastavaaryan005@gmail.com': 'Platform Administrator • Data Analyst',
+      'admin@royaltri.com': 'Platform Administrator • Brand, Marketing, Publicity'
+    };
+    
+    return roleMap[email] || 'Platform Administrator';
+  };
   const [currentTime, setCurrentTime] = useState(new Date());
   
   // Real data state
@@ -1120,7 +1140,7 @@ export default function UserManagement() {
                 <Star className="mr-2 h-5 w-5 text-orange-600" />
                 Platform Administrators
               </h3>
-              <p className="text-sm text-muted-foreground">Founding partners with platform-wide access</p>
+              <p className="text-sm text-muted-foreground">Team members with platform-wide administrative access</p>
             </div>
             <div className="flex items-center space-x-2">
               <div className="flex items-center space-x-1">
@@ -1163,7 +1183,7 @@ export default function UserManagement() {
                             {admin.email}
                           </div>
                           <div className="text-xs text-muted-foreground">
-                            Platform Administrator • Founding Partner
+                            {getPlatformAdminRole(admin.email)}
                           </div>
                         </div>
                       </div>

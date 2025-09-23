@@ -232,7 +232,10 @@ export class SecurityService {
           location: 'Vancouver, BC • Chrome/Mac',
           timestamp: Timestamp.now(),
           status: 'success',
-          sessionId: 'sess_' + Math.random().toString(36).substr(2, 9),
+          sessionId: (() => {
+            const { generateSecureSessionId } = require('@/utils/secureRandom');
+            return generateSecureSessionId();
+          })(),
           deviceInfo: 'Chrome/Mac'
         },
         {
@@ -245,7 +248,10 @@ export class SecurityService {
           location: 'Seattle, WA • Safari/iOS',
           timestamp: Timestamp.fromDate(new Date(Date.now() - 10 * 60 * 1000)), // 10 minutes ago
           status: 'success',
-          sessionId: 'sess_' + Math.random().toString(36).substr(2, 9),
+          sessionId: (() => {
+            const { generateSecureSessionId } = require('@/utils/secureRandom');
+            return generateSecureSessionId();
+          })(),
           deviceInfo: 'Safari/iOS'
         },
         {
@@ -271,7 +277,10 @@ export class SecurityService {
           location: 'Portland, OR • Firefox/Windows',
           timestamp: Timestamp.fromDate(new Date(Date.now() - 40 * 60 * 1000)), // 40 minutes ago
           status: 'success',
-          sessionId: 'sess_' + Math.random().toString(36).substr(2, 9),
+          sessionId: (() => {
+            const { generateSecureSessionId } = require('@/utils/secureRandom');
+            return generateSecureSessionId();
+          })(),
           deviceInfo: 'Firefox/Windows'
         }
       ];

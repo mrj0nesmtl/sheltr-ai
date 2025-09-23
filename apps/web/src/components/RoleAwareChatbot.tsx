@@ -120,7 +120,9 @@ export const RoleAwareChatbot: React.FC<RoleAwareChatbotProps> = ({
     if (user?.uid) return user.uid;
     let sessionId = localStorage.getItem('sheltr-session-id');
     if (!sessionId) {
-      sessionId = `public_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      // Use secure random ID generation instead of Math.random()
+      const { generateSecurePublicSessionId } = require('@/utils/secureRandom');
+      sessionId = generateSecurePublicSessionId();
       localStorage.setItem('sheltr-session-id', sessionId);
     }
     return sessionId;

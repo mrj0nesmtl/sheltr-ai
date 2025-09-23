@@ -184,11 +184,11 @@ export default function DonorSheltrPortfolioPage() {
     }
   };
 
-  // Only show for donor role
-  if (user?.role !== 'donor' && user?.role !== 'super_admin') {
+  // Only show for donor, platform admin, or super admin role
+  if (user?.role !== 'donor' && user?.role !== 'platform_admin' && user?.role !== 'super_admin') {
     return (
       <div className="flex items-center justify-center h-64">
-        <p className="text-gray-500">Access denied. Donor role required.</p>
+        <p className="text-gray-500">Access denied. Donor access required.</p>
       </div>
     );
   }

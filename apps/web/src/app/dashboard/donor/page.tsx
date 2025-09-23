@@ -55,7 +55,27 @@ export default function DonorDashboard() {
           setRecentDonations(donations.slice(0, 3)); // Show latest 3 donations
           console.log('✅ Donor data loaded:', { metrics, donationCount: donations.length });
         } else {
-          setError('Failed to load donor data');
+          // For users with no donation history, create empty metrics instead of error
+          const emptyMetrics: DonorMetrics = {
+            totalDonated: 0,
+            donationCount: 0,
+            averageDonation: 0,
+            participantsHelped: 0,
+            shelterId: null,
+            lastDonationDate: null,
+            currentStreak: 0,
+            longestStreak: 0,
+            impactScore: 0,
+            monthlyGoal: 0,
+            monthlyProgress: 0,
+            totalImpactPoints: 0,
+            badgesEarned: [],
+            favoriteCategories: [],
+            donorName: user.displayName || user.email || 'Platform Administrator',
+            lastDonation: null
+          };
+          setDonorMetrics(emptyMetrics);
+          console.log('📊 No donation history found - showing empty state for user:', user.uid);
         }
       } catch (error) {
         console.error('❌ Failed to load donor data:', error);
@@ -65,7 +85,7 @@ export default function DonorDashboard() {
       }
     };
 
-    if (user && hasRole('donor')) {
+    if (user && (hasRole('donor') || hasRole('platform_admin') || hasRole('super_admin'))) {
       loadDonorData();
     }
   }, [user, hasRole]);
@@ -117,8 +137,9 @@ export default function DonorDashboard() {
     ];
   };
 
-  // Check if user has donor or super admin access
-  if (!hasRole('donor') && !hasRole('super_admin')) {
+  // Check if user has donor, platform admin, or super admin access
+  // Platform Admins can access their giving dashboard regardless of donation status
+  if (!hasRole('donor') && !hasRole('platform_admin') && !hasRole('super_admin')) {
     return (
       <div className="text-center py-12">
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
@@ -137,7 +158,7 @@ export default function DonorDashboard() {
       <div className="space-y-6">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-            Loading Donor Dashboard...
+            Loading My Giving Dashboard...
           </h1>
         </div>
         <div className="flex items-center justify-center py-8">
@@ -148,22 +169,39 @@ export default function DonorDashboard() {
     );
   }
 
-  // Error state
-  if (error || !donorMetrics) {
+  // Error state (only show if there's a real error, not just missing data)
+  if (error) {
     return (
       <div className="space-y-6">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-            Donor Dashboard Error
+            My Giving Dashboard
           </h1>
         </div>
         <div className="text-center py-8">
           <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-          <h2 className="text-xl font-bold mb-2">Unable to Load Donor Data</h2>
+          <h2 className="text-xl font-bold mb-2">Unable to Load Giving Data</h2>
           <p className="text-gray-600 mb-4">{error}</p>
           <Button onClick={() => window.location.reload()}>
             Retry Loading
           </Button>
+        </div>
+      </div>
+    );
+  }
+
+  // If we don't have metrics at this point, something went wrong
+  if (!donorMetrics) {
+    return (
+      <div className="space-y-6">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            My Giving Dashboard
+          </h1>
+        </div>
+        <div className="text-center py-8">
+          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4" />
+          <p className="text-gray-600">Setting up your giving dashboard...</p>
         </div>
       </div>
     );
@@ -180,7 +218,10 @@ export default function DonorDashboard() {
         </h1>
         <p className="text-gray-600 dark:text-gray-400 mt-2">
           Your Giving Dashboard • Real Data Connected • Status: ✅ Ready for donations
-          {donorMetrics.lastDonation && ` • Last donation: ${new Date(donorMetrics.lastDonation).toLocaleDateString()}`}
+          {donorMetrics.donationCount > 0 && donorMetrics.lastDonation 
+            ? ` • Last donation: ${new Date(donorMetrics.lastDonation).toLocaleDateString()}`
+            : ' • Start your giving journey today!'
+          }
         </p>
       </div>
 

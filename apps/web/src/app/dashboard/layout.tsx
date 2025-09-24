@@ -180,6 +180,12 @@ const getNavigationItems = (userRole: string, notificationCount?: number) => {
         description: 'Create and manage blog posts'
       },
       {
+        title: 'My Profile',
+        href: '/dashboard/super-admin/profile',
+        icon: User,
+        description: 'Manage your super admin profile and preferences'
+      },
+      {
         title: 'System Settings',
         href: '/dashboard/settings',
         icon: Cog,
@@ -213,6 +219,12 @@ const getNavigationItems = (userRole: string, notificationCount?: number) => {
         description: 'Complete administrator documentation',
         badge: 'Start',
         badgeColor: 'bg-white text-red-600 border border-red-300'
+      },
+      {
+        title: 'My Profile',
+        href: '/dashboard/platform-admin/profile',
+        icon: User,
+        description: 'Manage your professional profile and settings'
       },
       {
         title: 'Overview',
@@ -303,7 +315,7 @@ const getNavigationItems = (userRole: string, notificationCount?: number) => {
       },
       {
         title: 'Platform Administration Guide',
-        href: '/dashboard/platform-guide',
+        href: '/dashboard/admin-guide',
         icon: BookOpen,
         description: 'Comprehensive guide for Platform Administrators'
       },

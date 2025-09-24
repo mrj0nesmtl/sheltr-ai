@@ -4,7 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { getDownloadURL, ref, getMetadata } from 'firebase/storage';
 import { storage } from '@/lib/firebase';
 import { UserCog } from 'lucide-react';
-import { useOtherUserStatus, statusColors } from '@/services/userStatusService';
+import { useOtherUserStatus, useUserStatus, statusColors } from '@/services/userStatusService';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface ProfileAvatarProps {
   userId: string;
@@ -36,8 +37,17 @@ export function ProfileAvatar({ userId, size = 'medium', className = '', showSta
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   
-  // Get user status if showStatus is enabled
-  const { status } = useOtherUserStatus(showStatus ? userId : '');
+  const { user } = useAuth();
+  
+  // Determine if this is the current user's avatar
+  const isCurrentUser = showStatus && userId && user?.uid === userId;
+  
+  // Get user status if showStatus is enabled - use appropriate hook
+  const currentUserStatus = useUserStatus(isCurrentUser ? userId : '');
+  const otherUserStatus = useOtherUserStatus(!isCurrentUser && showStatus ? userId : '');
+  
+  // Use the appropriate status based on whether this is the current user
+  const status = isCurrentUser ? currentUserStatus.status : otherUserStatus.status;
 
   // Size configurations
   const sizeConfig = {

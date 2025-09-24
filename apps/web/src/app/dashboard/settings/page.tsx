@@ -40,7 +40,7 @@ import {
 } from 'lucide-react';
 
 export default function SystemSettingsPage() {
-  const { user } = useAuth();
+  const { user, isSuperAdmin, isPlatformAdmin } = useAuth();
   const [activeTab, setActiveTab] = useState('general');
   const [isLoading, setIsLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
@@ -94,21 +94,24 @@ export default function SystemSettingsPage() {
     performanceMonitoring: true
   });
 
-  const [superAdminProfile, setSuperAdminProfile] = useState({
-    firstName: user?.displayName?.split(' ')[0] || 'Joel',
-    lastName: user?.displayName?.split(' ')[1] || 'Yaffe',
-    email: user?.email || 'joel.yaffe@gmail.com',
-    phone: '+1 (555) 123-4567',
-    jobTitle: 'Chief Executive Officer & Founder',
+  const [userProfile, setUserProfile] = useState({
+    firstName: user?.displayName?.split(' ')[0] || '',
+    lastName: user?.displayName?.split(' ')[1] || '',
+    email: user?.email || '',
+    phone: '',
+    position: '', // Changed from jobTitle to position - read-only for platform admins
     company: 'SHELTR-AI Technologies Inc.',
-    location: 'Montreal, QC, Canada',
-    bio: 'Passionate about leveraging technology to solve homelessness and create sustainable social impact.',
+    location: '',
+    bio: '',
     timezone: 'America/Montreal',
     language: 'English',
     twoFactorEnabled: false,
     emailNotifications: true,
     smsNotifications: false,
-    loginAlerts: true
+    loginAlerts: true,
+    linkedIn: '',
+    twitter: '',
+    website: ''
   });
 
   const [avatarUploadOpen, setAvatarUploadOpen] = useState(false);
@@ -145,10 +148,48 @@ export default function SystemSettingsPage() {
           setIntegrationSettings(systemSettings.integrations);
         }
         
-        // Load super admin profile
-        const profile = await SystemSettingsService.getSuperAdminProfile(user.uid);
-        if (profile) {
-          setSuperAdminProfile(profile);
+        // Load user profile based on role
+        if (isSuperAdmin()) {
+          const profile = await SystemSettingsService.getSuperAdminProfile(user.uid);
+          if (profile) {
+            setUserProfile(prev => ({
+              ...prev,
+              firstName: profile.firstName,
+              lastName: profile.lastName,
+              email: profile.email,
+              phone: profile.phone,
+              position: profile.jobTitle, // Super admin can edit position
+              company: profile.company,
+              location: profile.location,
+              bio: profile.bio,
+              timezone: profile.timezone,
+              language: profile.language,
+              twoFactorEnabled: profile.twoFactorEnabled,
+              emailNotifications: profile.emailNotifications,
+              smsNotifications: profile.smsNotifications,
+              loginAlerts: profile.loginAlerts
+            }));
+          }
+        } else if (isPlatformAdmin()) {
+          // Load platform admin profile using our enhanced service
+          const { PlatformAdminProfileService } = await import('@/services/platformAdminProfileService');
+          const profile = await PlatformAdminProfileService.getPlatformAdminProfile(user.uid);
+          if (profile) {
+            setUserProfile(prev => ({
+              ...prev,
+              firstName: profile.firstName,
+              lastName: profile.lastName,
+              email: profile.email,
+              phone: profile.phone || '',
+              position: profile.specialization, // Read-only from database
+              company: 'SHELTR-AI Technologies Inc.',
+              location: profile.department,
+              bio: profile.bio || '',
+              linkedIn: profile.linkedIn || '',
+              twitter: profile.twitter || '',
+              website: profile.website || ''
+            }));
+          }
         }
         
       } catch (error) {
@@ -160,7 +201,7 @@ export default function SystemSettingsPage() {
     
     loadSettings();
     loadSystemHealth();
-  }, [user?.uid]);
+  }, [user?.uid, isSuperAdmin, isPlatformAdmin]);
 
   const handleSaveSettings = async (settingsType: string) => {
     if (!user?.uid) return;
@@ -206,10 +247,27 @@ export default function SystemSettingsPage() {
           
         case 'profile':
         case 'admin-security':
-          success = await SystemSettingsService.saveSuperAdminProfile(
-            user.uid, 
-            superAdminProfile
-          );
+          if (isSuperAdmin()) {
+            success = await SystemSettingsService.saveSuperAdminProfile(
+              user.uid, 
+              userProfile
+            );
+          } else if (isPlatformAdmin()) {
+            const { PlatformAdminProfileService } = await import('@/services/platformAdminProfileService');
+            success = await PlatformAdminProfileService.updatePlatformAdminProfile(
+              user.uid,
+              {
+                firstName: userProfile.firstName,
+                lastName: userProfile.lastName,
+                bio: userProfile.bio,
+                phone: userProfile.phone,
+                linkedIn: userProfile.linkedIn,
+                twitter: userProfile.twitter,
+                website: userProfile.website
+                // Note: position (specialization) is read-only for platform admins
+              }
+            );
+          }
           break;
           
         default:
@@ -533,12 +591,13 @@ export default function SystemSettingsPage() {
 
       {/* Settings Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-5">
+        <TabsList className={`grid w-full ${isSuperAdmin() ? 'grid-cols-5' : 'grid-cols-4'}`}>
           <TabsTrigger value="general">General</TabsTrigger>
           <TabsTrigger value="security">Security</TabsTrigger>
           <TabsTrigger value="notifications">Notifications</TabsTrigger>
           <TabsTrigger value="integrations">Integrations</TabsTrigger>
-          <TabsTrigger value="admin">Super Admin</TabsTrigger>
+          {isSuperAdmin() && <TabsTrigger value="admin">Super Admin</TabsTrigger>}
+          {isPlatformAdmin() && <TabsTrigger value="profile">My Profile</TabsTrigger>}
         </TabsList>
 
         {/* General Settings */}
@@ -953,16 +1012,16 @@ export default function SystemSettingsPage() {
                   <Label htmlFor="firstName">First Name</Label>
                   <Input
                     id="firstName"
-                    value={superAdminProfile.firstName}
-                    onChange={(e) => setSuperAdminProfile({...superAdminProfile, firstName: e.target.value})}
+                    value={userProfile.firstName}
+                    onChange={(e) => setUserProfile({...userProfile, firstName: e.target.value})}
                   />
                 </div>
                 <div>
                   <Label htmlFor="lastName">Last Name</Label>
                   <Input
                     id="lastName"
-                    value={superAdminProfile.lastName}
-                    onChange={(e) => setSuperAdminProfile({...superAdminProfile, lastName: e.target.value})}
+                    value={userProfile.lastName}
+                    onChange={(e) => setUserProfile({...userProfile, lastName: e.target.value})}
                   />
                 </div>
                 <div>
@@ -970,48 +1029,48 @@ export default function SystemSettingsPage() {
                   <Input
                     id="email"
                     type="email"
-                    value={superAdminProfile.email}
-                    onChange={(e) => setSuperAdminProfile({...superAdminProfile, email: e.target.value})}
+                    value={userProfile.email}
+                    onChange={(e) => setUserProfile({...userProfile, email: e.target.value})}
                   />
                 </div>
                 <div>
                   <Label htmlFor="phone">Phone Number</Label>
                   <Input
                     id="phone"
-                    value={superAdminProfile.phone}
-                    onChange={(e) => setSuperAdminProfile({...superAdminProfile, phone: e.target.value})}
+                    value={userProfile.phone}
+                    onChange={(e) => setUserProfile({...userProfile, phone: e.target.value})}
                   />
                 </div>
                 <div>
-                  <Label htmlFor="jobTitle">Job Title</Label>
+                  <Label htmlFor="position">Position</Label>
                   <Input
-                    id="jobTitle"
-                    value={superAdminProfile.jobTitle}
-                    onChange={(e) => setSuperAdminProfile({...superAdminProfile, jobTitle: e.target.value})}
+                    id="position"
+                    value={userProfile.position}
+                    onChange={(e) => setUserProfile({...userProfile, position: e.target.value})}
                   />
                 </div>
                 <div>
                   <Label htmlFor="company">Company</Label>
                   <Input
                     id="company"
-                    value={superAdminProfile.company}
-                    onChange={(e) => setSuperAdminProfile({...superAdminProfile, company: e.target.value})}
+                    value={userProfile.company}
+                    onChange={(e) => setUserProfile({...userProfile, company: e.target.value})}
                   />
                 </div>
                 <div>
                   <Label htmlFor="location">Location</Label>
                   <Input
                     id="location"
-                    value={superAdminProfile.location}
-                    onChange={(e) => setSuperAdminProfile({...superAdminProfile, location: e.target.value})}
+                    value={userProfile.location}
+                    onChange={(e) => setUserProfile({...userProfile, location: e.target.value})}
                   />
                 </div>
                 <div>
                   <Label htmlFor="timezone">Timezone</Label>
                   <Input
                     id="timezone"
-                    value={superAdminProfile.timezone}
-                    onChange={(e) => setSuperAdminProfile({...superAdminProfile, timezone: e.target.value})}
+                    value={userProfile.timezone}
+                    onChange={(e) => setUserProfile({...userProfile, timezone: e.target.value})}
                   />
                 </div>
               </div>
@@ -1022,8 +1081,8 @@ export default function SystemSettingsPage() {
                 <textarea
                   id="bio"
                   className="w-full min-h-[100px] p-3 border border-gray-300 rounded-md resize-none"
-                  value={superAdminProfile.bio}
-                  onChange={(e) => setSuperAdminProfile({...superAdminProfile, bio: e.target.value})}
+                  value={userProfile.bio}
+                  onChange={(e) => setUserProfile({...userProfile, bio: e.target.value})}
                   placeholder="Write a brief bio about yourself..."
                 />
               </div>
@@ -1056,8 +1115,8 @@ export default function SystemSettingsPage() {
                     <input
                       type="checkbox"
                       id="twoFactor"
-                      checked={superAdminProfile.twoFactorEnabled}
-                      onChange={(e) => setSuperAdminProfile({...superAdminProfile, twoFactorEnabled: e.target.checked})}
+                      checked={userProfile.twoFactorEnabled}
+                      onChange={(e) => setUserProfile({...userProfile, twoFactorEnabled: e.target.checked})}
                       className="rounded"
                     />
                     <Label htmlFor="twoFactor">Enabled</Label>
@@ -1073,8 +1132,8 @@ export default function SystemSettingsPage() {
                     <input
                       type="checkbox"
                       id="loginAlerts"
-                      checked={superAdminProfile.loginAlerts}
-                      onChange={(e) => setSuperAdminProfile({...superAdminProfile, loginAlerts: e.target.checked})}
+                      checked={userProfile.loginAlerts}
+                      onChange={(e) => setUserProfile({...userProfile, loginAlerts: e.target.checked})}
                       className="rounded"
                     />
                     <Label htmlFor="loginAlerts">Enabled</Label>
@@ -1088,8 +1147,8 @@ export default function SystemSettingsPage() {
                   <input
                     type="checkbox"
                     id="adminEmailNotifications"
-                    checked={superAdminProfile.emailNotifications}
-                    onChange={(e) => setSuperAdminProfile({...superAdminProfile, emailNotifications: e.target.checked})}
+                    checked={userProfile.emailNotifications}
+                    onChange={(e) => setUserProfile({...userProfile, emailNotifications: e.target.checked})}
                     className="rounded"
                   />
                   <Label htmlFor="adminEmailNotifications">Email Notifications</Label>
@@ -1098,8 +1157,8 @@ export default function SystemSettingsPage() {
                   <input
                     type="checkbox"
                     id="adminSmsNotifications"
-                    checked={superAdminProfile.smsNotifications}
-                    onChange={(e) => setSuperAdminProfile({...superAdminProfile, smsNotifications: e.target.checked})}
+                    checked={userProfile.smsNotifications}
+                    onChange={(e) => setUserProfile({...userProfile, smsNotifications: e.target.checked})}
                     className="rounded"
                   />
                   <Label htmlFor="adminSmsNotifications">SMS Notifications</Label>
@@ -1211,6 +1270,219 @@ export default function SystemSettingsPage() {
               </div>
             </div>
           )}
+        </TabsContent>
+
+        {/* Platform Admin Profile Tab */}
+        <TabsContent value="profile" className="space-y-6">
+          {/* Profile Information */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <User className="h-5 w-5 mr-2" />
+                Profile Information
+              </CardTitle>
+              <CardDescription>Manage your platform administrator profile and contact information</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {/* Avatar Section */}
+              <div className="flex items-center space-x-6">
+                <div className="relative">
+                  <ProfileAvatar userId={user?.uid || ''} size="large" showStatus={true} />
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="absolute -bottom-1 -right-1 h-8 w-8 rounded-full p-0"
+                    onClick={() => setAvatarUploadOpen(true)}
+                  >
+                    <Camera className="h-4 w-4" />
+                  </Button>
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-lg">Profile Picture</h3>
+                  <p className="text-sm text-gray-600 mb-2">
+                    Upload a professional headshot for your profile
+                  </p>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => setAvatarUploadOpen(true)}
+                  >
+                    <Camera className="h-4 w-4 mr-2" />
+                    Change Avatar
+                  </Button>
+                </div>
+              </div>
+
+              {/* Basic Information */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="firstName">First Name</Label>
+                  <Input
+                    id="firstName"
+                    value={userProfile.firstName}
+                    onChange={(e) => setUserProfile({...userProfile, firstName: e.target.value})}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="lastName">Last Name</Label>
+                  <Input
+                    id="lastName"
+                    value={userProfile.lastName}
+                    onChange={(e) => setUserProfile({...userProfile, lastName: e.target.value})}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="email">Email Address</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={userProfile.email}
+                    disabled
+                    className="bg-gray-100 dark:bg-gray-800"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">Email cannot be changed</p>
+                </div>
+                <div>
+                  <Label htmlFor="phone">Phone Number</Label>
+                  <Input
+                    id="phone"
+                    value={userProfile.phone}
+                    onChange={(e) => setUserProfile({...userProfile, phone: e.target.value})}
+                    placeholder="(555) 123-4567"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="position" className="flex items-center">
+                    Position
+                    <Badge variant="outline" className="ml-2 text-xs">Read-only</Badge>
+                  </Label>
+                  <Input
+                    id="position"
+                    value={userProfile.position}
+                    disabled
+                    className="bg-gray-100 dark:bg-gray-800"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">Position is managed by system administrators</p>
+                </div>
+                <div>
+                  <Label htmlFor="company">Company</Label>
+                  <Input
+                    id="company"
+                    value={userProfile.company}
+                    disabled
+                    className="bg-gray-100 dark:bg-gray-800"
+                  />
+                </div>
+              </div>
+
+              {/* Professional Links */}
+              <div className="space-y-4">
+                <h4 className="font-medium">Professional Links</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="linkedIn">LinkedIn Profile</Label>
+                    <Input
+                      id="linkedIn"
+                      value={userProfile.linkedIn}
+                      onChange={(e) => setUserProfile({...userProfile, linkedIn: e.target.value})}
+                      placeholder="https://linkedin.com/in/username"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="twitter">Twitter Profile</Label>
+                    <Input
+                      id="twitter"
+                      value={userProfile.twitter}
+                      onChange={(e) => setUserProfile({...userProfile, twitter: e.target.value})}
+                      placeholder="https://twitter.com/username"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="website">Personal Website</Label>
+                    <Input
+                      id="website"
+                      value={userProfile.website}
+                      onChange={(e) => setUserProfile({...userProfile, website: e.target.value})}
+                      placeholder="https://yourwebsite.com"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Bio */}
+              <div>
+                <Label htmlFor="bio">Professional Bio</Label>
+                <textarea
+                  id="bio"
+                  value={userProfile.bio}
+                  onChange={(e) => setUserProfile({...userProfile, bio: e.target.value})}
+                  className="w-full p-2 border rounded-md bg-background"
+                  rows={3}
+                  placeholder="Brief description of your role and expertise..."
+                />
+              </div>
+
+              <Button 
+                onClick={() => handleSaveSettings('profile')} 
+                disabled={isLoading}
+                className="w-full"
+              >
+                {isLoading ? <RefreshCw className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
+                Save Profile Changes
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Role Information - Read Only */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <Shield className="h-5 w-5 mr-2" />
+                Role & Permissions
+              </CardTitle>
+              <CardDescription>Your platform access and responsibilities</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <h4 className="font-medium mb-2">Current Role</h4>
+                  <div className="flex items-center space-x-2">
+                    <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                      Platform Administrator
+                    </Badge>
+                  </div>
+                  <p className="text-sm text-gray-600 mt-2">{userProfile.position}</p>
+                </div>
+                <div>
+                  <h4 className="font-medium mb-2">Department</h4>
+                  <p className="text-sm text-gray-600">{userProfile.location}</p>
+                </div>
+              </div>
+
+              <div className="border-t pt-4 mt-4">
+                <h4 className="font-medium mb-3">Access Permissions</h4>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                  {[
+                    'Platform Overview',
+                    'User Management',
+                    'Shelter Management',
+                    'Financial Oversight',
+                    'Analytics Access',
+                    'Notification Management',
+                    'Platform Settings',
+                    'Security Monitoring',
+                    'Knowledge Base Access',
+                    'Contact Inquiries'
+                  ].map((permission) => (
+                    <div key={permission} className="flex items-center space-x-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      <span className="text-sm">{permission}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
 

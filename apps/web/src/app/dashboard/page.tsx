@@ -46,13 +46,15 @@ import {
   QrCode,
   Wallet,
   Award,
-  FileText
+  FileText,
+  RefreshCw
 } from 'lucide-react';
 
 export default function DashboardPage() {
   const { user } = useAuth();
   const [platformMetrics, setPlatformMetrics] = useState<PlatformMetrics | null>(null);
   const [metricsLoading, setMetricsLoading] = useState(false);
+  const [refreshingActivity, setRefreshingActivity] = useState(false);
   const [notificationCounts, setNotificationCounts] = useState<NotificationCounts | null>(null);
   const [recentEmailSignups, setRecentEmailSignups] = useState<EmailSignup[]>([]);
   const [notificationsLoading, setNotificationsLoading] = useState(false);
@@ -270,6 +272,32 @@ export default function DashboardPage() {
       setRecentEmailSignups([]);
     } finally {
       setNotificationsLoading(false);
+    }
+  };
+
+  const refreshActivity = async () => {
+    setRefreshingActivity(true);
+    try {
+      console.log('🔄 Refreshing platform activity...');
+      
+      // Get fresh activity data
+      const { generateSimpleActivity } = await import('@/utils/generateSimpleActivity');
+      const freshActivity = await generateSimpleActivity();
+      
+      if (freshActivity && freshActivity.length > 0) {
+        // Update only the recent activity part of platform metrics
+        setPlatformMetrics(prev => prev ? {
+          ...prev,
+          recentActivity: freshActivity
+        } : null);
+        console.log('✅ Platform activity refreshed');
+      } else {
+        console.log('⚠️ No fresh activity data available');
+      }
+    } catch (error) {
+      console.error('❌ Failed to refresh activity:', error);
+    } finally {
+      setRefreshingActivity(false);
     }
   };
 
@@ -644,8 +672,22 @@ export default function DashboardPage() {
           {/* Recent Activity */}
           <Card>
             <CardHeader>
-              <CardTitle>Recent Platform Activity</CardTitle>
-              <CardDescription>Latest system events and updates</CardDescription>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle>Recent Platform Activity</CardTitle>
+                  <CardDescription>Latest system events and updates</CardDescription>
+                </div>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={refreshActivity}
+                  disabled={refreshingActivity}
+                  className="flex items-center space-x-2"
+                >
+                  <RefreshCw className={`h-4 w-4 ${refreshingActivity ? 'animate-spin' : ''}`} />
+                  <span>{refreshingActivity ? 'Refreshing...' : 'Refresh'}</span>
+                </Button>
+              </div>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
@@ -963,8 +1005,22 @@ export default function DashboardPage() {
           {/* Recent Activity */}
           <Card>
             <CardHeader>
-              <CardTitle>Recent Platform Activity</CardTitle>
-              <CardDescription>Latest system events and updates</CardDescription>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle>Recent Platform Activity</CardTitle>
+                  <CardDescription>Latest system events and updates</CardDescription>
+                </div>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={refreshActivity}
+                  disabled={refreshingActivity}
+                  className="flex items-center space-x-2"
+                >
+                  <RefreshCw className={`h-4 w-4 ${refreshingActivity ? 'animate-spin' : ''}`} />
+                  <span>{refreshingActivity ? 'Refreshing...' : 'Refresh'}</span>
+                </Button>
+              </div>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">

@@ -217,19 +217,25 @@ export default function DashboardPage() {
           accessCodeLogins: 0
         })),
         // CONSISTENCY FIX: Use same function as User Management dashboard
-        import('@/services/platformMetrics').then(module => module.getPlatformAdmins()).catch(() => [])
+        import('@/services/platformMetrics').then(module => module.getPlatformAdmins()).catch((error) => {
+          console.error('❌ Failed to load getPlatformAdmins:', error);
+          return [];
+        })
       ]);
       
       // Merge investor access metrics and fix platform admin count
+      const correctPlatformAdminCount = Math.max(realPlatformAdmins.length, metrics.platformAdmins || 0);
       const enhancedMetrics = {
         ...metrics,
         investorAccessAttempts: investorMetrics.totalAttempts,
         investorAccessLogins: investorMetrics.successfulLogins,
         // CONSISTENCY FIX: Use real platform admin count from User Management function
-        platformAdmins: realPlatformAdmins.length
+        platformAdmins: correctPlatformAdminCount
       };
       
-      console.log(`🔧 [CONSISTENCY FIX] Platform admin count corrected: ${metrics.platformAdmins} → ${realPlatformAdmins.length}`);
+      console.log(`🔧 [CONSISTENCY FIX] Platform admin count corrected: ${metrics.platformAdmins} → ${correctPlatformAdminCount} (from ${realPlatformAdmins.length} real admins)`);
+      console.log(`🔍 [DEBUG] Real platform admins found:`, realPlatformAdmins.map(admin => `${admin.firstName} ${admin.lastName} (${admin.email})`));
+      console.log(`🔍 [DEBUG] Enhanced metrics platformAdmins:`, enhancedMetrics.platformAdmins);
       
       setPlatformMetrics(enhancedMetrics);
       console.log('✅ [SESSION 13] Multi-tenant platform metrics loaded with investor access:', enhancedMetrics);

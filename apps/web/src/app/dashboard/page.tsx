@@ -208,22 +208,28 @@ export default function DashboardPage() {
       
       // PRODUCTION FIX: Always use multi-tenant platform metrics for consistency
       console.log('🏢 [PRODUCTION FIX] Using multi-tenant platform metrics for data consistency...');
-      const [metrics, investorMetrics] = await Promise.all([
+      const [metrics, investorMetrics, realPlatformAdmins] = await Promise.all([
         getPlatformMetricsFromTenants(),
         import('@/services/investorAccessService').then(module => module.getInvestorAccessMetrics()).catch(() => ({
           totalAttempts: 0,
           successfulLogins: 0,
           teamLogins: 0,
           accessCodeLogins: 0
-        }))
+        })),
+        // CONSISTENCY FIX: Use same function as User Management dashboard
+        import('@/services/platformMetrics').then(module => module.getPlatformAdmins()).catch(() => [])
       ]);
       
-      // Merge investor access metrics
+      // Merge investor access metrics and fix platform admin count
       const enhancedMetrics = {
         ...metrics,
         investorAccessAttempts: investorMetrics.totalAttempts,
-        investorAccessLogins: investorMetrics.successfulLogins
+        investorAccessLogins: investorMetrics.successfulLogins,
+        // CONSISTENCY FIX: Use real platform admin count from User Management function
+        platformAdmins: realPlatformAdmins.length
       };
+      
+      console.log(`🔧 [CONSISTENCY FIX] Platform admin count corrected: ${metrics.platformAdmins} → ${realPlatformAdmins.length}`);
       
       setPlatformMetrics(enhancedMetrics);
       console.log('✅ [SESSION 13] Multi-tenant platform metrics loaded with investor access:', enhancedMetrics);

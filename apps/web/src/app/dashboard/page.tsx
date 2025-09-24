@@ -162,7 +162,8 @@ export default function DashboardPage() {
         const apiUserCount = apiMetrics.users?.total || 0;
         
         // If API returns suspiciously low numbers that don't match production, skip it
-        const isLikelyMockData = (apiShelterCount <= 5 && apiUserCount <= 8);
+        const apiPlatformAdminCount = apiMetrics.users?.by_role?.platform_admin || 0;
+        const isLikelyMockData = (apiShelterCount <= 5 && apiUserCount <= 8) || (apiPlatformAdminCount === 0);
         
         if (!isLikelyMockData) {
           console.log('✅ API data looks valid, using it');
@@ -203,7 +204,7 @@ export default function DashboardPage() {
           console.log('✅ Platform metrics loaded from API:', transformedMetrics);
           return;
         } else {
-          console.warn('⚠️ API data appears to be mock data (shelters:', apiShelterCount, 'users:', apiUserCount, ') - falling back to tenant service');
+          console.warn('⚠️ API data appears to be incomplete (shelters:', apiShelterCount, 'users:', apiUserCount, 'platform_admins:', apiPlatformAdminCount, ') - falling back to tenant service');
         }
       } catch (apiError) {
         console.warn('⚠️ API call failed, falling back to direct Firestore calls:', apiError);

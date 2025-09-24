@@ -237,8 +237,15 @@ export default function DashboardPage() {
       console.log(`🔍 [DEBUG] Real platform admins found:`, realPlatformAdmins.map(admin => `${admin.firstName} ${admin.lastName} (${admin.email})`));
       console.log(`🔍 [DEBUG] Enhanced metrics platformAdmins:`, enhancedMetrics.platformAdmins);
       
-      setPlatformMetrics(enhancedMetrics);
-      console.log('✅ [SESSION 13] Multi-tenant platform metrics loaded with investor access:', enhancedMetrics);
+      // Force state update with explicit platformAdmins override
+      const finalMetrics = {
+        ...enhancedMetrics,
+        platformAdmins: realPlatformAdmins.length // Force use real count
+      };
+      
+      console.log(`🚨 [FINAL DEBUG] Setting state with platformAdmins: ${finalMetrics.platformAdmins}`);
+      setPlatformMetrics(finalMetrics);
+      console.log('✅ [SESSION 13] Multi-tenant platform metrics loaded with investor access:', finalMetrics);
     } catch (error) {
       console.error('❌ Failed to load platform metrics:', error);
       // Set fallback metrics with dashes/zeros
@@ -594,7 +601,15 @@ export default function DashboardPage() {
                 <Star className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{platformMetrics.platformAdmins || '-'}</div>
+                <div className="text-2xl font-bold">
+                  {platformMetrics.platformAdmins || '-'}
+                  {/* DEBUG: Show what state actually contains */}
+                  {process.env.NODE_ENV === 'development' && (
+                    <span className="text-xs text-red-500 block">
+                      DEBUG: {JSON.stringify({ platformAdmins: platformMetrics.platformAdmins, total: Object.keys(platformMetrics).length })}
+                    </span>
+                  )}
+                </div>
                 <p className="text-xs text-muted-foreground">Founding partners</p>
               </CardContent>
             </Card>

@@ -148,57 +148,11 @@ export default function DashboardPage() {
     try {
       console.log('📊 Loading real platform metrics from API...');
       
-      // Try API first, fallback to direct Firestore calls
-      try {
-        const apiMetrics = await analyticsService.getPlatformAnalytics();
-        console.log('📊 API metrics received:', apiMetrics);
-        console.log('🔍 Mapping API data to dashboard metrics...');
-        
-        // Try to get real activity data from Firebase, but fallback to static if it fails
-        let recentActivity = [
-          {
-            action: 'Platform metrics loaded',
-            details: `Connected to ${apiMetrics.shelters?.total_shelters || 0} shelters with ${apiMetrics.users?.total || 0} users`,
-            time: 'Just now'
-          }
-        ];
-        
-        try {
-          console.log('🔄 Attempting to get simple activity data from Firebase...');
-          const { generateSimpleActivity } = await import('@/utils/generateSimpleActivity');
-          const simpleActivity = await generateSimpleActivity();
-          if (simpleActivity && simpleActivity.length > 0) {
-            recentActivity = simpleActivity;
-            console.log('✅ Using simple activity data from Firebase');
-          } else {
-            console.log('⚠️ No activity data generated, using fallback');
-          }
-        } catch (activityError) {
-          console.warn('⚠️ Failed to get activity data, using fallback:', activityError);
-        }
-        
-        // Transform API data to match PlatformMetrics interface
-        const transformedMetrics: PlatformMetrics = {
-          totalOrganizations: apiMetrics.shelters?.total_shelters || 0,
-          totalUsers: apiMetrics.users?.total || 0,
-          activeParticipants: apiMetrics.shelters?.participants_served || 0,
-          activeDonors: apiMetrics.users?.by_role?.donor || 0,
-          platformAdmins: apiMetrics.users?.by_role?.admin || 0,
-          totalDonations: apiMetrics.donations?.total_amount || 0,
-          platformUptime: 99.9, // Keep as operational metric
-          issuesOpen: 0, // Keep as operational metric
-          recentActivity: recentActivity
-        };
-        
-        setPlatformMetrics(transformedMetrics);
-        console.log('✅ Platform metrics loaded from API:', transformedMetrics);
-        return;
-      } catch (apiError) {
-        console.warn('⚠️ API call failed, falling back to direct Firestore calls:', apiError);
-      }
+      // PRODUCTION FIX: Skip API and use direct tenant service for data consistency
+      console.log('🔧 [PRODUCTION FIX] API returns mock data in production. Using direct tenant service like Shelter Network dashboard...');
       
-      // Fallback to multi-tenant platform metrics (SESSION 13)
-      console.log('🏢 [SESSION 13] Using multi-tenant platform metrics...');
+      // PRODUCTION FIX: Always use multi-tenant platform metrics for consistency
+      console.log('🏢 [PRODUCTION FIX] Using multi-tenant platform metrics for data consistency...');
       const [metrics, investorMetrics] = await Promise.all([
         getPlatformMetricsFromTenants(),
         import('@/services/investorAccessService').then(module => module.getInvestorAccessMetrics()).catch(() => ({

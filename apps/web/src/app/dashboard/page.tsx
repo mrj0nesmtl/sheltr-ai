@@ -148,8 +148,63 @@ export default function DashboardPage() {
     try {
       console.log('📊 Loading real platform metrics from API...');
       
-      // PRODUCTION FIX: Skip API and use direct tenant service for data consistency
-      console.log('🔧 [PRODUCTION FIX] API returns mock data in production. Using direct tenant service like Shelter Network dashboard...');
+      // Try API first, but validate the data quality
+      try {
+        console.log('📊 Trying API first for platform metrics...');
+        const apiMetrics = await analyticsService.getPlatformAnalytics();
+        console.log('📊 API metrics received:', apiMetrics);
+        
+        // PRODUCTION FIX: Check if API data looks like mock data (inconsistent with Shelter Network)
+        const apiShelterCount = apiMetrics.shelters?.total_shelters || 0;
+        const apiUserCount = apiMetrics.users?.total || 0;
+        
+        // If API returns suspiciously low numbers that don't match production, skip it
+        const isLikelyMockData = (apiShelterCount <= 5 && apiUserCount <= 8);
+        
+        if (!isLikelyMockData) {
+          console.log('✅ API data looks valid, using it');
+          
+          // Try to get real activity data from Firebase
+          let recentActivity = [
+            {
+              action: 'Platform metrics loaded',
+              details: `Connected to ${apiShelterCount} shelters with ${apiUserCount} users`,
+              time: 'Just now'
+            }
+          ];
+          
+          try {
+            const { generateSimpleActivity } = await import('@/utils/generateSimpleActivity');
+            const simpleActivity = await generateSimpleActivity();
+            if (simpleActivity && simpleActivity.length > 0) {
+              recentActivity = simpleActivity;
+            }
+          } catch (activityError) {
+            console.warn('⚠️ Failed to get activity data, using fallback:', activityError);
+          }
+          
+          // Transform API data to match PlatformMetrics interface
+          const transformedMetrics: PlatformMetrics = {
+            totalOrganizations: apiShelterCount,
+            totalUsers: apiUserCount,
+            activeParticipants: apiMetrics.shelters?.participants_served || 0,
+            activeDonors: apiMetrics.users?.by_role?.donor || 0,
+            platformAdmins: apiMetrics.users?.by_role?.admin || 0,
+            totalDonations: apiMetrics.donations?.total_amount || 0,
+            platformUptime: 99.9,
+            issuesOpen: 0,
+            recentActivity: recentActivity
+          };
+          
+          setPlatformMetrics(transformedMetrics);
+          console.log('✅ Platform metrics loaded from API:', transformedMetrics);
+          return;
+        } else {
+          console.warn('⚠️ API data appears to be mock data (shelters:', apiShelterCount, 'users:', apiUserCount, ') - falling back to tenant service');
+        }
+      } catch (apiError) {
+        console.warn('⚠️ API call failed, falling back to direct Firestore calls:', apiError);
+      }
       
       // PRODUCTION FIX: Always use multi-tenant platform metrics for consistency
       console.log('🏢 [PRODUCTION FIX] Using multi-tenant platform metrics for data consistency...');

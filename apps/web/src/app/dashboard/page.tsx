@@ -209,7 +209,10 @@ export default function DashboardPage() {
       // PRODUCTION FIX: Always use multi-tenant platform metrics for consistency
       console.log('🏢 [PRODUCTION FIX] Using multi-tenant platform metrics for data consistency...');
       const [metrics, investorMetrics, realPlatformAdmins] = await Promise.all([
-        getPlatformMetricsFromTenants(),
+        getPlatformMetricsFromTenants().then(result => {
+          console.log('🔍 [DEEP DEBUG] getPlatformMetricsFromTenants returned platformAdmins:', result.platformAdmins);
+          return result;
+        }),
         import('@/services/investorAccessService').then(module => module.getInvestorAccessMetrics()).catch(() => ({
           totalAttempts: 0,
           successfulLogins: 0,
@@ -217,7 +220,15 @@ export default function DashboardPage() {
           accessCodeLogins: 0
         })),
         // CONSISTENCY FIX: Use same function as User Management dashboard
-        import('@/services/platformMetrics').then(module => module.getPlatformAdmins()).catch((error) => {
+        import('@/services/platformMetrics').then(async (module) => {
+          console.log('🔍 [DEEP DEBUG] Calling getPlatformAdmins function...');
+          const result = await module.getPlatformAdmins();
+          console.log('🔍 [DEEP DEBUG] getPlatformAdmins returned:', result.length, 'admins');
+          result.forEach((admin, index) => {
+            console.log(`🔍 [DEEP DEBUG] Admin ${index + 1}: ${admin.firstName} ${admin.lastName} (${admin.email}) - Status: ${admin.status}`);
+          });
+          return result;
+        }).catch((error) => {
           console.error('❌ Failed to load getPlatformAdmins:', error);
           return [];
         })
@@ -237,11 +248,13 @@ export default function DashboardPage() {
       console.log(`🔍 [DEBUG] Real platform admins found:`, realPlatformAdmins.map(admin => `${admin.firstName} ${admin.lastName} (${admin.email})`));
       console.log(`🔍 [DEBUG] Enhanced metrics platformAdmins:`, enhancedMetrics.platformAdmins);
       
-      // Force state update with explicit platformAdmins override
+      // TEMPORARY HARDCODE TEST: Force correct count to test if it's a data or state issue
       const finalMetrics = {
         ...enhancedMetrics,
-        platformAdmins: realPlatformAdmins.length // Force use real count
+        platformAdmins: 12 // HARDCODED: Test if state updates work
       };
+      
+      console.log('🚨 [HARDCODE TEST] Forcing platformAdmins to 12 to test state update');
       
       console.log(`🚨 [FINAL DEBUG] Setting state with platformAdmins: ${finalMetrics.platformAdmins}`);
       setPlatformMetrics(finalMetrics);

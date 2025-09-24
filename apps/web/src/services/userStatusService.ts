@@ -17,7 +17,7 @@
 
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { doc, updateDoc, setDoc, onSnapshot, serverTimestamp, Timestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
@@ -52,6 +52,19 @@ export const useUserStatus = (userId: string) => {
   const [status, setStatus] = useState<UserStatus>('offline');
   const [isLoading, setIsLoading] = useState(true);
   const [manualStatus, setManualStatus] = useState<UserStatus | null>(null);
+  
+  // Use refs to access current values in event handlers
+  const statusRef = useRef<UserStatus>('offline');
+  const manualStatusRef = useRef<UserStatus | null>(null);
+  
+  // Update refs when state changes
+  useEffect(() => {
+    statusRef.current = status;
+  }, [status]);
+  
+  useEffect(() => {
+    manualStatusRef.current = manualStatus;
+  }, [manualStatus]);
 
   // Update user status in Firestore
   const updateStatus = useCallback(async (newStatus: UserStatus) => {
@@ -86,7 +99,7 @@ export const useUserStatus = (userId: string) => {
 
   // Manual status update (from user interaction)
   const updateManualStatus = useCallback(async (newStatus: UserStatus) => {
-    console.log(`Manual status change to: ${newStatus}`);
+    console.log(`🎯 Manual status change to: ${newStatus}`);
     setManualStatus(newStatus);
     await updateStatus(newStatus);
   }, [updateStatus]);
@@ -101,6 +114,9 @@ export const useUserStatus = (userId: string) => {
 
     console.log(`Initializing user status for user: ${userId}`);
     
+    // Flag to track if this is the initial load
+    let isInitialLoad = true;
+    
     // Set up real-time listener for status changes FIRST
     const unsubscribe = onSnapshot(
       doc(db, 'user_status', userId),
@@ -109,12 +125,31 @@ export const useUserStatus = (userId: string) => {
         
         if (docSnapshot.exists()) {
           const data = docSnapshot.data() as UserStatusData;
-          setStatus(data.status || 'offline');
-          console.log(`Status loaded from Firestore: ${data.status}`);
+          
+          if (isInitialLoad) {
+            // On initial load (login/refresh), always set to online unless user was manually set to busy/invisible
+            const previousStatus = data.status || 'offline';
+            if (previousStatus === 'busy' || previousStatus === 'invisible') {
+              // Preserve manual status settings
+              setStatus(previousStatus);
+              setManualStatus(previousStatus);
+              console.log(`🔄 Preserving manual status: ${previousStatus}`);
+            } else {
+              // Set to online for offline/online users
+              console.log(`🟢 Setting to online on login/refresh (was: ${previousStatus})`);
+              updateStatus('online');
+            }
+            isInitialLoad = false;
+          } else {
+            // Not initial load - just update the status normally
+            setStatus(data.status || 'offline');
+            console.log(`📡 Status updated from Firestore: ${data.status}`);
+          }
         } else {
           // Document doesn't exist, create it with online status
-          console.log(`No status document found for user ${userId}, creating one...`);
+          console.log(`📝 No status document found for user ${userId}, creating with online status...`);
           updateStatus('online');
+          isInitialLoad = false;
         }
         setIsLoading(false);
       },
@@ -124,22 +159,29 @@ export const useUserStatus = (userId: string) => {
       }
     );
 
-    // Initial status set to online (but listener will override if document exists)
-    updateStatus('online');
-
     // Handle page visibility changes
     const handleVisibilityChange = () => {
+      const currentStatus = statusRef.current;
+      const currentManualStatus = manualStatusRef.current;
+      
+      console.log(`📱 Visibility change - hidden: ${document.hidden}, manualStatus: ${currentManualStatus}, currentStatus: ${currentStatus}`);
+      
       if (document.hidden) {
-        // Only auto-set to offline if user hasn't manually set a status
-        if (!manualStatus || manualStatus === 'online') {
+        // Only auto-set to offline if user hasn't manually set busy or invisible
+        if (!currentManualStatus || (currentManualStatus !== 'busy' && currentManualStatus !== 'invisible')) {
+          console.log('🌙 Setting to offline due to page hidden');
           updateStatus('offline');
+        } else {
+          console.log('🔒 Keeping manual status despite page hidden:', currentManualStatus);
         }
       } else {
-        // Only auto-set to online if user hasn't manually set a status or was offline
-        if (!manualStatus || manualStatus === 'offline') {
+        // Only auto-set to online if user was offline (not if they were busy/invisible)
+        if (currentStatus === 'offline' && (!currentManualStatus || currentManualStatus === 'offline')) {
+          console.log('🌅 Setting to online due to page visible');
           updateStatus('online');
+        } else {
+          console.log('✋ Not changing status on page visible - current:', currentStatus, 'manual:', currentManualStatus);
         }
-        // If user has manually set busy/invisible, keep that status
       }
     };
 
@@ -151,11 +193,17 @@ export const useUserStatus = (userId: string) => {
 
     // Activity tracking
     const handleActivity = () => {
+      const currentStatus = statusRef.current;
       // Only update activity timestamp, don't change status
-      if (status !== 'offline') {
+      if (currentStatus !== 'offline') {
         updateDoc(doc(db, 'user_status', userId), {
           lastActivity: serverTimestamp()
-        }).catch(console.error);
+        }).catch((error) => {
+          // Silently handle permission errors to avoid console spam
+          if (!error.message?.includes('Missing or insufficient permissions')) {
+            console.error('Activity update error:', error);
+          }
+        });
       }
     };
 
@@ -179,7 +227,7 @@ export const useUserStatus = (userId: string) => {
       setManualStatus(null);
       updateStatus('offline');
     };
-  }, [userId, status, manualStatus, updateStatus]);
+  }, [userId, updateStatus]);
 
   return {
     status,

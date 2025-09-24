@@ -19,7 +19,7 @@ import {
   Search,
   Filter,
   Download,
-  Map,
+  Map as MapIcon,
   MoreHorizontal,
   Eye,
   Edit,
@@ -30,7 +30,8 @@ import {
   MapPin,
   Shield,
   Trash2,
-  QrCode
+  QrCode,
+  Globe
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import {
@@ -51,6 +52,56 @@ import { doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { UserExportService } from '@/services/userExportService';
 import { UserStatusIndicator } from '@/components/UserStatusIndicator';
+import { useOtherUserStatus, statusColors, statusLabels } from '@/services/userStatusService';
+import { UserProfileModal, type UserProfileData } from '@/components/UserProfileModal';
+import { tenantService, type ShelterTenant } from '@/services/tenantService';
+import { shelterService, type ShelterPublicConfig } from '@/services/shelterService';
+
+// Dynamic status badge component for super admins
+function SuperAdminStatusBadge({ userId }: { userId: string }) {
+  const { status } = useOtherUserStatus(userId);
+  
+  const getStatusBadgeClasses = (userStatus: string) => {
+    switch (userStatus) {
+      case 'online':
+        return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100';
+      case 'busy':
+        return 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-100';
+      case 'invisible':
+        return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100';
+      case 'offline':
+      default:
+        return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100';
+    }
+  };
+
+  return (
+    <Badge className={`${getStatusBadgeClasses(status)} shrink-0`}>
+      {statusLabels[status]}
+    </Badge>
+  );
+}
+
+// Dynamic status icon component for super admins
+function SuperAdminStatusIcon({ userId }: { userId: string }) {
+  const { status } = useOtherUserStatus(userId);
+  
+  const getStatusIcon = (userStatus: string) => {
+    switch (userStatus) {
+      case 'online':
+        return <CheckCircle className="h-4 w-4 text-green-500" />;
+      case 'busy':
+        return <AlertCircle className="h-4 w-4 text-orange-500" />;
+      case 'invisible':
+        return <Clock className="h-4 w-4 text-gray-500" />;
+      case 'offline':
+      default:
+        return <AlertCircle className="h-4 w-4 text-gray-500" />;
+    }
+  };
+
+  return getStatusIcon(status);
+}
 
 export default function UserManagement() {
   const { user } = useAuth();
@@ -85,6 +136,14 @@ export default function UserManagement() {
   const [orphanedUsers, setOrphanedUsers] = useState<OrphanedUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddUserModal, setShowAddUserModal] = useState(false);
+  
+  // Profile modal state
+  const [profileModalOpen, setProfileModalOpen] = useState(false);
+  const [selectedUserProfile, setSelectedUserProfile] = useState<UserProfileData | null>(null);
+  const [selectedUserType, setSelectedUserType] = useState<'super_admin' | 'platform_admin' | 'shelter_admin' | 'participant' | 'donor'>('platform_admin');
+  
+  // Shelter data for admin cards
+  const [shelterData, setShelterData] = useState(() => new Map<string, { shelter: ShelterTenant; config: ShelterPublicConfig | null }>());
   const [selectedUserForView, setSelectedUserForView] = useState<(AdminUser | ParticipantUser | DonorUser) & { userType: string } | null>(null);
   const [selectedUserForEdit, setSelectedUserForEdit] = useState<(AdminUser | ParticipantUser | DonorUser) & { userType: string } | null>(null);
   const [editFormData, setEditFormData] = useState<{ firstName: string; lastName: string; email: string; }>({ firstName: '', lastName: '', email: '' });
@@ -163,8 +222,8 @@ export default function UserManagement() {
           break;
         default:
           // Export all users combined with enhanced data and dual-role logic
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const allUsersMap = new Map() as Map<string, any>;
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-call
+          const allUsersMap = new (Map as any)();
           
           // Add admin users
           adminUsers.forEach(u => {
@@ -540,7 +599,8 @@ export default function UserManagement() {
         getPlatformAdmins(),
         getParticipantUsers(),
         getDonorUsers(),
-        getOrphanedUsers()
+        getOrphanedUsers(),
+        fetchSuperAdmins() // Add super admin fetching
       ]);
 
       setUserStats(statsData);
@@ -550,11 +610,45 @@ export default function UserManagement() {
       setDonorUsers(donorsData);
       setOrphanedUsers(orphanedData);
       
+      // Load shelter data for admin users
+      await loadShelterData(adminsData);
+      
       console.log('✅ User management data loaded successfully');
     } catch (error) {
       console.error('❌ Error loading user data:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadShelterData = async (adminUsers: AdminUser[]) => {
+    try {
+      console.log('🏠 Loading shelter data for admin users...');
+      
+      const shelterMap = new (globalThis.Map)();
+      const shelterIds = new Set(adminUsers.map(admin => admin.shelter_id).filter(Boolean));
+      
+      // Get all shelters
+      const allShelters = await tenantService.getAllShelterTenants();
+      
+      for (const shelterId of shelterIds) {
+        const shelter = allShelters.find(s => s.id === shelterId);
+        if (shelter) {
+          try {
+            const config = await shelterService.getShelterPublicConfig(shelterId);
+            shelterMap.set(shelterId, { shelter, config });
+            console.log(`✅ Loaded data for shelter: ${shelter.name}`);
+          } catch (error) {
+            console.warn(`⚠️ Failed to load config for shelter ${shelterId}:`, error);
+            shelterMap.set(shelterId, { shelter, config: null });
+          }
+        }
+      }
+      
+      setShelterData(shelterMap);
+      console.log(`✅ Loaded shelter data for ${shelterMap.size} shelters`);
+    } catch (error) {
+      console.error('❌ Failed to load shelter data:', error);
     }
   };
 
@@ -590,22 +684,176 @@ export default function UserManagement() {
     }
   };
 
-  // Create live Super Admin data from current user
-  const liveUserSession = user ? {
-    id: user.uid,
-    name: user.displayName || 'Joel Yaffe',
-    email: user.email,
-    role: 'Platform Owner',
-    status: 'active',
-    lastLogin: 'Active now',
-    sessionStart: new Date().toLocaleTimeString(),
-    location: 'Vancouver, BC',
-    device: 'Chrome/Mac',
-    tenantId: user.tenantId || 'platform',
-    emailVerified: user.emailVerified,
-    customClaims: user.role,
-    joinDate: '2024-01-01' // Platform founding date
-  } : null;
+  // Profile viewing functions
+  const handleViewProfile = (userData: any, userType: 'super_admin' | 'platform_admin' | 'shelter_admin' | 'participant' | 'donor') => {
+    const profileData: UserProfileData = {
+      id: userData.id || userData.uid,
+      name: userData.name,
+      firstName: userData.firstName || '',
+      lastName: userData.lastName || '',
+      email: userData.email || '',
+      phone: userData.phone || '',
+      role: userData.role || userType,
+      status: userData.status || 'active',
+      joinDate: userData.joinDate || userData.created_at?.toDate?.()?.toLocaleDateString() || 'Unknown',
+      lastLogin: userData.lastLogin || 'Recent',
+      shelter: userData.shelter || '',
+      shelter_id: userData.shelter_id || '',
+      company: userData.company || '',
+      location: userData.location || '',
+      bio: userData.bio || '',
+      specialization: userData.specialization || '',
+      department: userData.department || '',
+      totalDonated: userData.totalDonated || 0,
+      donationCount: userData.donationCount || 0,
+      participants: userData.participants || 0,
+      totalReceived: userData.totalReceived || 0,
+      qrScans: userData.qrScans || 0,
+      profileComplete: userData.profileComplete || false,
+      emailVerified: userData.emailVerified || false,
+      created_at: userData.created_at,
+      updated_at: userData.updated_at
+    };
+    
+    setSelectedUserProfile(profileData);
+    setSelectedUserType(userType);
+    setProfileModalOpen(true);
+  };
+
+  const closeProfileModal = () => {
+    setProfileModalOpen(false);
+    setSelectedUserProfile(null);
+  };
+
+  const canEditUser = (userType: 'super_admin' | 'platform_admin' | 'shelter_admin' | 'participant' | 'donor', targetUserId?: string) => {
+    // Super admins can edit anyone
+    if (user?.role === 'super_admin') return true;
+    
+    // Platform admins can only edit their own profile or non-admin users
+    if (user?.role === 'platform_admin') {
+      if (userType === 'super_admin') return false; // Cannot edit super admins
+      if (userType === 'platform_admin') {
+        // Can only edit their own platform admin profile
+        return targetUserId === user?.uid;
+      }
+      // Can edit shelter admins, participants, and donors
+      return userType === 'shelter_admin' || userType === 'participant' || userType === 'donor';
+    }
+    
+    return false;
+  };
+
+  // Helper functions for shelter information
+  const generateShelterSlug = (name: string): string => {
+    return name
+      .toLowerCase()
+      .replace(/\s+/g, '-')
+      .replace(/[^\w-]/g, '')
+      .replace(/--+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  };
+
+  const getShelterPublicUrl = (shelterId: string): string | null => {
+    const shelterInfo = shelterData.get(shelterId);
+    if (!shelterInfo) return null;
+    
+    const slug = generateShelterSlug(shelterInfo.shelter.name);
+    return `${window.location.origin}/${slug}`;
+  };
+
+  const handleViewShelterQR = (shelterId: string) => {
+    const shelterInfo = shelterData.get(shelterId);
+    if (!shelterInfo?.config?.qrCode?.url) {
+      alert('QR code not available for this shelter');
+      return;
+    }
+    
+    // Open QR code in new window
+    window.open(shelterInfo.config.qrCode.url, '_blank');
+  };
+
+  const handleCopyShelterUrl = async (shelterId: string) => {
+    const url = getShelterPublicUrl(shelterId);
+    if (!url) {
+      alert('Public URL not available for this shelter');
+      return;
+    }
+    
+    try {
+      await navigator.clipboard.writeText(url);
+      alert(`Shelter URL copied to clipboard: ${url}`);
+    } catch (error) {
+      console.error('Failed to copy URL:', error);
+      alert('Failed to copy URL to clipboard');
+    }
+  };
+
+  // State for super admin data
+  const [superAdmins, setSuperAdmins] = useState<(AdminUser & { 
+    tenantId?: string; 
+    sessionStart?: string; 
+    location?: string; 
+    device?: string; 
+  })[]>([]);
+  
+  // Fetch super administrators from database
+  const fetchSuperAdmins = async () => {
+    try {
+      const { getDocs, query, collection, where } = await import('firebase/firestore');
+      const { db } = await import('@/lib/firebase');
+      
+      const superAdminsQuery = query(
+        collection(db, 'users'),
+        where('role', '==', 'super_admin')
+      );
+      
+      const querySnapshot = await getDocs(superAdminsQuery);
+      const superAdminsList: (AdminUser & { 
+        tenantId?: string; 
+        sessionStart?: string; 
+        location?: string; 
+        device?: string; 
+      })[] = [];
+      
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        const superAdmin: AdminUser & { 
+          tenantId?: string; 
+          sessionStart?: string; 
+          location?: string; 
+          device?: string; 
+        } = {
+          id: doc.id,
+          name: `${data.firstName || ''} ${data.lastName || ''}`.trim() || data.displayName || 'Super Admin',
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email || '',
+          shelter: 'Platform Headquarters',
+          shelter_id: 'platform',
+          role: 'Super Admin',
+          status: data.status || 'active',
+          lastLogin: user?.uid === doc.id ? 'Active now' : 'Recent',
+          participants: 0,
+          joinDate: data.created_at ? new Date(data.created_at.seconds * 1000).toLocaleDateString() : '2024-01-01',
+          created_at: data.created_at,
+          updated_at: data.updated_at,
+          // Additional properties for display
+          tenantId: 'platform',
+          sessionStart: user?.uid === doc.id ? new Date().toLocaleTimeString() : 'Not active',
+          location: 'Vancouver, BC',
+          device: 'Chrome/Mac'
+        };
+        
+        superAdminsList.push(superAdmin);
+      });
+      
+      setSuperAdmins(superAdminsList);
+      console.log(`✅ Found ${superAdminsList.length} super administrators`);
+    } catch (error) {
+      console.error('❌ Error fetching super administrators:', error);
+      setSuperAdmins([]);
+    }
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -676,7 +924,7 @@ export default function UserManagement() {
       {/* User Statistics Overview - Real Data */}
       <div className={`grid grid-cols-1 md:grid-cols-2 gap-6 ${user?.email === 'joel@sheltr.ai' ? 'lg:grid-cols-5' : 'lg:grid-cols-4'}`}>
         {/* Super Admin Card - Only visible to Super Admins */}
-        {user?.email === 'joel@sheltr.ai' && (
+        {(user?.role === 'super_admin' || user?.email === 'joel.yaffe@gmail.com') && (
           <Card className="border-2 border-purple-200 dark:border-purple-800 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Super Admins</CardTitle>
@@ -825,7 +1073,7 @@ export default function UserManagement() {
               )}
             </TabsTrigger>
             <TabsTrigger value="map" className="flex items-center">
-              <Map className="mr-2 h-4 w-4" />
+              <MapIcon className="mr-2 h-4 w-4" />
               User Map
             </TabsTrigger>
           </TabsList>
@@ -862,7 +1110,7 @@ export default function UserManagement() {
               )}
             </TabsTrigger>
             <TabsTrigger value="map" className="flex items-center text-xs">
-              <Map className="mr-1 h-3 w-3" />
+              <MapIcon className="mr-1 h-3 w-3" />
               Map
             </TabsTrigger>
           </TabsList>
@@ -893,7 +1141,7 @@ export default function UserManagement() {
               )}
             </TabsTrigger>
             <TabsTrigger value="map" className="flex items-center justify-center p-2" title="User Map">
-              <Map className="h-4 w-4" />
+              <MapIcon className="h-4 w-4" />
             </TabsTrigger>
           </TabsList>
         </div>
@@ -953,7 +1201,7 @@ export default function UserManagement() {
               className="flex flex-col items-center justify-center h-full px-1 py-1 w-full"
               title="User Map"
             >
-              <Map className="h-5 w-5" />
+              <MapIcon className="h-5 w-5" />
             </TabsTrigger>
           </TabsList>
         </div>
@@ -978,8 +1226,9 @@ export default function UserManagement() {
 
           <Card className="border-2 border-purple-200 dark:border-purple-800">
             <CardContent className="p-0">
-              {liveUserSession && (
-                <div className="p-4 sm:p-6 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20">
+              {superAdmins.length > 0 ? (
+                superAdmins.map((admin) => (
+                <div key={admin.id} className="p-4 sm:p-6 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20">
                   {/* Mobile Layout */}
                   <div className="block sm:hidden space-y-4">
                     {/* Top Row: Icon, Name, Status */}
@@ -989,26 +1238,24 @@ export default function UserManagement() {
                           <Crown className="h-6 w-6 text-white" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <div className="font-bold text-base text-purple-700 dark:text-purple-300 truncate">{liveUserSession.name}</div>
-                          <div className="text-sm text-purple-600 dark:text-purple-400 truncate">{liveUserSession.email}</div>
+                          <div className="font-bold text-base text-purple-700 dark:text-purple-300 truncate">{admin.name}</div>
+                          <div className="text-sm text-purple-600 dark:text-purple-400 truncate">{admin.email}</div>
                         </div>
                       </div>
-                      <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100 shrink-0">
-                        Online
-                      </Badge>
+                      <SuperAdminStatusBadge userId={admin.id} />
                     </div>
                     
                     {/* Role and Tenant */}
                     <div className="text-sm text-muted-foreground flex items-center">
                       <Building2 className="h-3 w-3 mr-1" />
-                      {liveUserSession.role} • Tenant: {liveUserSession.tenantId}
+                      {admin.role} • Tenant: {admin.tenantId}
                     </div>
                     
                     {/* Session Info */}
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div>
                         <div className="font-medium text-purple-700 dark:text-purple-300">Session Started</div>
-                        <div className="text-xs text-muted-foreground">{liveUserSession.sessionStart}</div>
+                        <div className="text-xs text-muted-foreground">{admin.sessionStart}</div>
                       </div>
                       <div>
                         <div className="font-medium text-green-600 flex items-center">
@@ -1024,17 +1271,25 @@ export default function UserManagement() {
                       <div className="text-sm">
                         <div className="font-medium flex items-center">
                           <MapPin className="h-3 w-3 mr-1" />
-                          {liveUserSession.location}
+                          {admin.location}
                         </div>
-                        <div className="text-xs text-muted-foreground">{liveUserSession.device}</div>
+                        <div className="text-xs text-muted-foreground">{admin.device}</div>
                       </div>
                       <div className="flex space-x-1">
-                        <Button variant="ghost" size="sm">
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          title="View Profile"
+                          onClick={() => handleViewProfile(admin, 'super_admin')}
+                        >
                           <Eye className="h-4 w-4" />
                         </Button>
-                        <Button variant="ghost" size="sm">
-                          <Edit className="h-4 w-4" />
-                        </Button>
+                        {/* Only super admins can edit super admin profiles */}
+                        {user?.role === 'super_admin' && (
+                          <Button variant="ghost" size="sm" title="Edit Profile">
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -1046,11 +1301,11 @@ export default function UserManagement() {
                         <Crown className="h-6 w-6 text-white" />
                       </div>
                       <div>
-                        <div className="font-bold text-lg text-purple-700 dark:text-purple-300">{liveUserSession.name}</div>
-                        <div className="text-sm text-purple-600 dark:text-purple-400">{liveUserSession.email}</div>
+                        <div className="font-bold text-lg text-purple-700 dark:text-purple-300">{admin.name}</div>
+                        <div className="text-sm text-purple-600 dark:text-purple-400">{admin.email}</div>
                         <div className="text-sm text-muted-foreground flex items-center mt-1">
                           <Building2 className="h-3 w-3 mr-1" />
-                          {liveUserSession.role} • Tenant: {liveUserSession.tenantId}
+                          {admin.role} • Tenant: {admin.tenantId}
                         </div>
                       </div>
                     </div>
@@ -1058,7 +1313,7 @@ export default function UserManagement() {
                     <div className="flex items-center space-x-6">
                       <div className="text-center">
                         <div className="text-sm font-medium">Session Started</div>
-                        <div className="text-xs text-muted-foreground">{liveUserSession.sessionStart}</div>
+                        <div className="text-xs text-muted-foreground">{admin.sessionStart}</div>
                       </div>
                       <div className="text-center">
                         <div className="text-sm font-medium flex items-center">
@@ -1070,26 +1325,41 @@ export default function UserManagement() {
                       <div className="text-center">
                         <div className="text-sm font-medium flex items-center">
                           <MapPin className="h-3 w-3 mr-1" />
-                          {liveUserSession.location}
+                          {admin.location}
                         </div>
-                        <div className="text-xs text-muted-foreground">{liveUserSession.device}</div>
+                        <div className="text-xs text-muted-foreground">{admin.device}</div>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <CheckCircle className="h-4 w-4 text-green-500" />
-                        <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100">
-                          Online
-                        </Badge>
+                        <SuperAdminStatusIcon userId={admin.id} />
+                        <SuperAdminStatusBadge userId={admin.id} />
                       </div>
                       <div className="flex space-x-1">
-                        <Button variant="ghost" size="sm">
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          title="View Profile"
+                          onClick={() => handleViewProfile(admin, 'super_admin')}
+                        >
                           <Eye className="h-4 w-4" />
                         </Button>
-                        <Button variant="ghost" size="sm">
-                          <Edit className="h-4 w-4" />
-                        </Button>
+                        {/* Only super admins can edit super admin profiles */}
+                        {user?.role === 'super_admin' && (
+                          <Button variant="ghost" size="sm" title="Edit Profile">
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                        )}
                       </div>
                     </div>
                   </div>
+                </div>
+                ))
+              ) : (
+                <div className="p-6 text-center">
+                  <Crown className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+                  <h3 className="text-lg font-medium mb-2">No Super Administrators Found</h3>
+                  <p className="text-gray-600 dark:text-gray-300">
+                    No super administrators are currently configured in the system.
+                  </p>
                 </div>
               )}
             </CardContent>
@@ -1191,6 +1461,21 @@ export default function UserManagement() {
                         <Badge className="bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-100">
                           {admin.status || 'Active'}
                         </Badge>
+                        <div className="flex space-x-1">
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            title="View Profile"
+                            onClick={() => handleViewProfile(admin, 'platform_admin')}
+                          >
+                            <Eye className="h-4 w-4" />
+                          </Button>
+                          {canEditUser('platform_admin', admin.id) && (
+                            <Button variant="ghost" size="sm" title="Edit Profile">
+                              <Edit className="h-4 w-4" />
+                            </Button>
+                          )}
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -1258,9 +1543,26 @@ export default function UserManagement() {
                       </div>
                       
                       {/* Shelter and Role */}
-                      <div className="text-sm text-muted-foreground flex items-center">
-                        <Building2 className="h-3 w-3 mr-1" />
-                        {admin.shelter} • {admin.role}
+                      <div className="space-y-1">
+                        <div className="text-sm text-muted-foreground flex items-center">
+                          <Building2 className="h-3 w-3 mr-1" />
+                          {admin.shelter} • {admin.role}
+                        </div>
+                        {admin.shelter_id && shelterData.get(admin.shelter_id) && (
+                          <div className="text-xs text-blue-600 dark:text-blue-400 flex items-center">
+                            <Globe className="h-3 w-3 mr-1" />
+                            <button 
+                              onClick={() => {
+                                const url = getShelterPublicUrl(admin.shelter_id);
+                                if (url) window.open(url, '_blank');
+                              }}
+                              className="hover:underline truncate max-w-[200px]"
+                              title="Open public shelter page"
+                            >
+                              {getShelterPublicUrl(admin.shelter_id)?.replace(window.location.origin + '/', '') || 'Public Page'}
+                            </button>
+                          </div>
+                        )}
                       </div>
                       
                       {/* Metrics and Actions */}
@@ -1279,19 +1581,43 @@ export default function UserManagement() {
                           <Button 
                             variant="ghost" 
                             size="sm"
-                            onClick={() => viewUser(admin, 'admin')}
-                            title="View Details"
+                            onClick={() => handleViewProfile(admin, 'shelter_admin')}
+                            title="View Profile"
                           >
                             <Eye className="h-4 w-4" />
                           </Button>
-                          <Button 
-                            variant="ghost" 
-                            size="sm"
-                            onClick={() => editUser(admin, 'admin')}
-                            title="Edit User"
-                          >
-                            <Edit className="h-4 w-4" />
-                          </Button>
+                          {canEditUser('shelter_admin', admin.id) && (
+                            <Button 
+                              variant="ghost" 
+                              size="sm"
+                              onClick={() => editUser(admin, 'admin')}
+                              title="Edit User"
+                            >
+                              <Edit className="h-4 w-4" />
+                            </Button>
+                          )}
+                          {admin.shelter_id && shelterData.get(admin.shelter_id) && (
+                            <>
+                              <Button 
+                                variant="ghost" 
+                                size="sm"
+                                onClick={() => handleViewShelterQR(admin.shelter_id)}
+                                title="View Shelter QR Code"
+                                className="text-orange-600 hover:text-orange-700"
+                              >
+                                <QrCode className="h-4 w-4" />
+                              </Button>
+                              <Button 
+                                variant="ghost" 
+                                size="sm"
+                                onClick={() => handleCopyShelterUrl(admin.shelter_id)}
+                                title="Copy Shelter Public URL"
+                                className="text-blue-600 hover:text-blue-700"
+                              >
+                                <Globe className="h-4 w-4" />
+                              </Button>
+                            </>
+                          )}
                           <Button 
                             variant="ghost" 
                             size="sm"
@@ -1325,6 +1651,21 @@ export default function UserManagement() {
                             <Building2 className="h-3 w-3 mr-1" />
                             {admin.shelter} • {admin.role}
                           </div>
+                          {admin.shelter_id && shelterData.get(admin.shelter_id) && (
+                            <div className="text-xs text-blue-600 dark:text-blue-400 flex items-center mt-1">
+                              <Globe className="h-3 w-3 mr-1" />
+                              <button 
+                                onClick={() => {
+                                  const url = getShelterPublicUrl(admin.shelter_id);
+                                  if (url) window.open(url, '_blank');
+                                }}
+                                className="hover:underline truncate max-w-[250px]"
+                                title="Open public shelter page"
+                              >
+                                {getShelterPublicUrl(admin.shelter_id)?.replace(window.location.origin + '/', '') || 'Public Page'}
+                              </button>
+                            </div>
+                          )}
                         </div>
                       </div>
                       
@@ -1347,19 +1688,43 @@ export default function UserManagement() {
                           <Button 
                             variant="ghost" 
                             size="sm"
-                            onClick={() => viewUser(admin, 'admin')}
-                            title="View Details"
+                            onClick={() => handleViewProfile(admin, 'shelter_admin')}
+                            title="View Profile"
                           >
                             <Eye className="h-4 w-4" />
                           </Button>
-                          <Button 
-                            variant="ghost" 
-                            size="sm"
-                            onClick={() => editUser(admin, 'admin')}
-                            title="Edit User"
-                          >
-                            <Edit className="h-4 w-4" />
-                          </Button>
+                          {canEditUser('shelter_admin', admin.id) && (
+                            <Button 
+                              variant="ghost" 
+                              size="sm"
+                              onClick={() => editUser(admin, 'admin')}
+                              title="Edit User"
+                            >
+                              <Edit className="h-4 w-4" />
+                            </Button>
+                          )}
+                          {admin.shelter_id && shelterData.get(admin.shelter_id) && (
+                            <>
+                              <Button 
+                                variant="ghost" 
+                                size="sm"
+                                onClick={() => handleViewShelterQR(admin.shelter_id)}
+                                title="View Shelter QR Code"
+                                className="text-orange-600 hover:text-orange-700"
+                              >
+                                <QrCode className="h-4 w-4" />
+                              </Button>
+                              <Button 
+                                variant="ghost" 
+                                size="sm"
+                                onClick={() => handleCopyShelterUrl(admin.shelter_id)}
+                                title="Copy Shelter Public URL"
+                                className="text-blue-600 hover:text-blue-700"
+                              >
+                                <Globe className="h-4 w-4" />
+                              </Button>
+                            </>
+                          )}
                           <Button 
                             variant="ghost" 
                             size="sm"
@@ -1921,7 +2286,7 @@ export default function UserManagement() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center">
-                <Map className="mr-2 h-5 w-5" />
+                <MapIcon className="mr-2 h-5 w-5" />
                 User Location Map
               </CardTitle>
               <CardDescription>
@@ -2168,6 +2533,19 @@ export default function UserManagement() {
           </div>
         </div>
       )}
+
+      {/* User Profile Modal */}
+      <UserProfileModal
+        isOpen={profileModalOpen}
+        onClose={closeProfileModal}
+        userData={selectedUserProfile}
+        userType={selectedUserType}
+        canEdit={canEditUser(selectedUserType, selectedUserProfile?.id)}
+        onEdit={() => {
+          // TODO: Implement edit functionality
+          console.log('Edit user:', selectedUserProfile);
+        }}
+      />
     </div>
   );
 } 

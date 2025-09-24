@@ -1735,7 +1735,7 @@ export interface AdminUser {
   shelter: string;
   shelter_id: string;
   role: string;
-  status: 'active' | 'pending' | 'inactive';
+  status: 'active' | 'pending' | 'inactive' | 'pending_nda';
   lastLogin: string;
   participants: number;
   joinDate: string;
@@ -2047,7 +2047,7 @@ export const getParticipantUsers = async (): Promise<ParticipantUser[]> => {
 };
 
 /**
- * Get platform administrators from users collection
+ * Get platform administrators from users collection with proper NDA status checking
  */
 export const getPlatformAdmins = async (): Promise<AdminUser[]> => {
   try {
@@ -2060,27 +2060,58 @@ export const getPlatformAdmins = async (): Promise<AdminUser[]> => {
     );
     
     const querySnapshot = await getDocs(platformAdminsQuery);
+    console.log(`🔍 Platform admin query returned ${querySnapshot.size} documents`);
+    
+    // Get all NDA signatures to check who has signed
+    const signedUserIds = new Set<string>();
+    
+    try {
+      const ndaQuery = query(collection(db, 'nda_agreements'));
+      const ndaSnapshot = await getDocs(ndaQuery);
+      
+      ndaSnapshot.forEach((doc) => {
+        const ndaData = doc.data();
+        if (ndaData.userId) {
+          signedUserIds.add(ndaData.userId);
+        }
+      });
+      
+      console.log(`📋 Found ${signedUserIds.size} NDA signatures`);
+    } catch (ndaError) {
+      console.warn('⚠️ Could not fetch NDA signatures, defaulting all to pending_nda:', ndaError);
+      // Continue with empty set - all users will show as pending_nda
+    }
+    
     const platformAdmins: AdminUser[] = [];
     
     querySnapshot.forEach((doc) => {
       const data = doc.data();
+      const userId = doc.id;
+      
+      console.log(`📝 Processing admin: ${data.firstName} ${data.lastName} (${data.email})`);
+      console.log(`   User ID: ${userId}`);
+      console.log(`   Signed User IDs Set:`, Array.from(signedUserIds));
+      
+      // Determine correct status based on NDA signature
+      const hasSignedNDA = signedUserIds.has(userId);
+      const correctStatus = hasSignedNDA ? 'active' : 'pending_nda';
+      
+      console.log(`   NDA Check: userId=${userId}, hasSignedNDA=${hasSignedNDA}`);
+      console.log(`   Final Status: ${correctStatus}`);
+      
       const platformAdmin: AdminUser = {
-        uid: doc.id,
-        email: data.email || '',
+        id: userId, // Fix: Use id to match AdminUser interface
+        name: `${data.firstName || ''} ${data.lastName || ''}`.trim() || data.displayName || 'Platform Admin',
         firstName: data.firstName || '',
         lastName: data.lastName || '',
+        email: data.email || '',
+        shelter: 'Platform Headquarters',
+        shelter_id: data.shelter_id || 'platform',
         role: data.role || 'platform_admin',
-        status: data.status || 'active',
-        emailVerified: data.emailVerified || false,
-        profileComplete: data.profileComplete || false,
-        shelter_id: data.shelter_id || '',
-        tenant_id: data.tenant_id || 'platform',
-        adminProfile: {
-          title: data.adminProfile?.title || 'Founding Partner',
-          department: data.adminProfile?.department || 'Platform Administration',
-          permissions: data.adminProfile?.permissions || [],
-          accessLevel: data.adminProfile?.accessLevel || 'platform'
-        },
+        status: correctStatus, // Use NDA-based status
+        lastLogin: 'Recent',
+        participants: 0, // Platform admins don't manage participants directly
+        joinDate: data.created_at ? new Date(data.created_at.seconds * 1000).toLocaleDateString() : 'Unknown',
         created_at: data.createdAt || data.created_at,
         updated_at: data.updatedAt || data.updated_at
       };
@@ -2089,6 +2120,8 @@ export const getPlatformAdmins = async (): Promise<AdminUser[]> => {
     });
     
     console.log(`✅ Found ${platformAdmins.length} platform administrators`);
+    console.log(`📋 NDA Status: ${signedUserIds.size} signed, ${platformAdmins.length - signedUserIds.size} pending`);
+    
     return platformAdmins;
     
   } catch (error) {

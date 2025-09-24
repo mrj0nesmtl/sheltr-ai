@@ -153,6 +153,9 @@ export default function DashboardPage() {
         console.log('📊 Trying API first for platform metrics...');
         const apiMetrics = await analyticsService.getPlatformAnalytics();
         console.log('📊 API metrics received:', apiMetrics);
+        console.log('🔍 [API DEBUG] API users by role:', apiMetrics.users?.by_role);
+        console.log('🔍 [API DEBUG] API admin count:', apiMetrics.users?.by_role?.admin);
+        console.log('🔍 [API DEBUG] API platform_admin count:', apiMetrics.users?.by_role?.platform_admin);
         
         // PRODUCTION FIX: Check if API data looks like mock data (inconsistent with Shelter Network)
         const apiShelterCount = apiMetrics.shelters?.total_shelters || 0;
@@ -189,7 +192,7 @@ export default function DashboardPage() {
             totalUsers: apiUserCount,
             activeParticipants: apiMetrics.shelters?.participants_served || 0,
             activeDonors: apiMetrics.users?.by_role?.donor || 0,
-            platformAdmins: apiMetrics.users?.by_role?.admin || 0,
+            platformAdmins: apiMetrics.users?.by_role?.platform_admin || 0,
             totalDonations: apiMetrics.donations?.total_amount || 0,
             platformUptime: 99.9,
             issuesOpen: 0,
@@ -248,13 +251,11 @@ export default function DashboardPage() {
       console.log(`🔍 [DEBUG] Real platform admins found:`, realPlatformAdmins.map(admin => `${admin.firstName} ${admin.lastName} (${admin.email})`));
       console.log(`🔍 [DEBUG] Enhanced metrics platformAdmins:`, enhancedMetrics.platformAdmins);
       
-      // TEMPORARY HARDCODE TEST: Force correct count to test if it's a data or state issue
+      // Use the corrected platform admin count from User Management function
       const finalMetrics = {
         ...enhancedMetrics,
-        platformAdmins: 12 // HARDCODED: Test if state updates work
+        platformAdmins: realPlatformAdmins.length // Use real count from getPlatformAdmins()
       };
-      
-      console.log('🚨 [HARDCODE TEST] Forcing platformAdmins to 12 to test state update');
       
       console.log(`🚨 [FINAL DEBUG] Setting state with platformAdmins: ${finalMetrics.platformAdmins}`);
       setPlatformMetrics(finalMetrics);

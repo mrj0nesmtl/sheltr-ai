@@ -616,16 +616,8 @@ export default function DashboardPage() {
                 <Star className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">
-                  {platformMetrics.platformAdmins || '-'}
-                  {/* DEBUG: Show what state actually contains */}
-                  {process.env.NODE_ENV === 'development' && (
-                    <span className="text-xs text-red-500 block">
-                      DEBUG: {JSON.stringify({ platformAdmins: platformMetrics.platformAdmins, total: Object.keys(platformMetrics).length })}
-                    </span>
-                  )}
-                </div>
-                <p className="text-xs text-muted-foreground">Founding partners</p>
+                <div className="text-2xl font-bold">{platformMetrics.platformAdmins || '-'}</div>
+                <p className="text-xs text-muted-foreground">SHELTR Admins</p>
               </CardContent>
             </Card>
           </Link>

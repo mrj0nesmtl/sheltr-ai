@@ -65,6 +65,7 @@ export interface PlatformAdminProfile {
   profileComplete: boolean;
   lastUpdated: string;
   profilePicture?: string;
+  displayOrder?: number;
 }
 
 // Update request interface
@@ -114,6 +115,12 @@ export interface PlatformAdminProfileUpdate {
   profileVisibility?: 'public' | 'team' | 'private';
   showContactInfo?: boolean;
   showExperience?: boolean;
+  
+  // Profile Picture
+  profilePicture?: string;
+  
+  // Display Order (for Super Admin drag-drop reordering)
+  displayOrder?: number;
 }
 
 export class PlatformAdminProfileService {
@@ -141,10 +148,10 @@ export class PlatformAdminProfileService {
         email: userData.email || '',
         displayName: userData.displayName || `${userData.firstName} ${userData.lastName}`,
         
-        // Professional Information
-        department: adminProfile.department || '',
-        specialization: adminProfile.specialization || '',
-        jobTitle: adminProfile.jobTitle || '',
+        // Professional Information (Auto-fill from existing role mapping if empty)
+        department: adminProfile.department || this.extractDepartmentFromRole(userData.email || ''),
+        specialization: adminProfile.specialization || this.extractSpecializationFromRole(userData.email || ''),
+        jobTitle: adminProfile.jobTitle || this.getPlatformAdminRoleDescription(userData.email || ''),
         bio: adminProfile.bio || '',
         expertise: adminProfile.expertise || [],
         
@@ -170,12 +177,12 @@ export class PlatformAdminProfileService {
           email: userData.privacy?.notificationPreferences?.email ?? true,
           push: userData.privacy?.notificationPreferences?.push ?? true,
           sms: userData.privacy?.notificationPreferences?.sms ?? false,
-          weeklyReports: adminProfile.weeklyReports ?? true,
-          systemAlerts: adminProfile.systemAlerts ?? true,
+          weeklyReports: Boolean(adminProfile.weeklyReports ?? true),
+          systemAlerts: Boolean(adminProfile.systemAlerts ?? true),
         },
         
-        // Privacy Settings
-        profileVisibility: userData.privacy?.profileVisibility || 'team',
+        // Privacy Settings (Default to public for QA stage)
+        profileVisibility: userData.privacy?.profileVisibility || 'public',
         showContactInfo: adminProfile.showContactInfo ?? true,
         showExperience: adminProfile.showExperience ?? true,
         
@@ -183,6 +190,7 @@ export class PlatformAdminProfileService {
         profileComplete: userData.profileComplete || false,
         lastUpdated: userData.updated_at || userData.created_at || '',
         profilePicture: userData.profilePicture || '',
+        displayOrder: adminProfile.displayOrder ?? 999, // Default high number for new admins
       };
       
     } catch (error) {
@@ -262,11 +270,19 @@ export class PlatformAdminProfileService {
       if (updates.showExperience !== undefined) {
         adminProfileUpdates.showExperience = updates.showExperience;
       }
+      if (updates.displayOrder !== undefined) {
+        adminProfileUpdates.displayOrder = updates.displayOrder;
+      }
       
       // Apply admin profile updates
       Object.keys(adminProfileUpdates).forEach(key => {
         updateData[`adminProfile.${key}`] = adminProfileUpdates[key];
       });
+      
+      // Profile picture update (stored at root level)
+      if (updates.profilePicture !== undefined) {
+        updateData.profilePicture = updates.profilePicture;
+      }
       
       // Privacy settings updates
       if (updates.profileVisibility !== undefined) {
@@ -318,25 +334,68 @@ export class PlatformAdminProfileService {
       'email',
       'department',
       'specialization',
+      'jobTitle',
+      'bio'
     ];
     
     // Check if all required fields are present and not empty
-    return requiredFields.every(field => {
+    const fieldsComplete = requiredFields.every(field => {
       const value = mergedProfile[field as keyof PlatformAdminProfile];
       return value && value.toString().trim().length > 0;
     });
+    
+    // CRITICAL: Profile picture is required for completion
+    const hasProfilePicture = Boolean(mergedProfile.profilePicture && mergedProfile.profilePicture.trim().length > 0);
+    
+    // Must have at least one expertise area
+    const hasExpertise = Boolean(mergedProfile.expertise && mergedProfile.expertise.length > 0);
+    
+    return Boolean(fieldsComplete && hasProfilePicture && hasExpertise);
   }
   
   /**
    * Get all platform administrators with their profiles
+   * Filters by profileVisibility for public team page display
    */
-  static async getAllPlatformAdminProfiles(): Promise<PlatformAdminProfile[]> {
+  static async getAllPlatformAdminProfiles(publicOnly = false): Promise<PlatformAdminProfile[]> {
     try {
-      // This would typically use a query, but for now we'll need to implement
-      // based on the existing user management logic
-      console.log('Getting all platform admin profiles...');
-      // Implementation would go here
-      return [];
+      console.log('Getting all platform admin profiles...', { publicOnly });
+      
+      const { collection, getDocs, query, where } = await import('firebase/firestore');
+      const { db } = await import('@/lib/firebase');
+      
+      // Query all users with platform_admin role
+      const usersQuery = query(
+        collection(db, 'users'),
+        where('role', '==', 'platform_admin')
+      );
+      
+      const querySnapshot = await getDocs(usersQuery);
+      const profiles: PlatformAdminProfile[] = [];
+      
+      for (const doc of querySnapshot.docs) {
+        const userId = doc.id;
+        const profile = await this.getPlatformAdminProfile(userId);
+        
+        if (profile) {
+          // If publicOnly is true, only include profiles with 'public' visibility
+          if (publicOnly && profile.profileVisibility !== 'public') {
+            continue;
+          }
+          
+          profiles.push(profile);
+        }
+      }
+      
+      // Sort by join date (newest first)
+      profiles.sort((a, b) => {
+        const dateA = new Date(a.joinDate).getTime();
+        const dateB = new Date(b.joinDate).getTime();
+        return dateB - dateA;
+      });
+      
+      console.log(`Found ${profiles.length} platform admin profiles`, { publicOnly });
+      return profiles;
       
     } catch (error) {
       console.error('Error fetching all platform admin profiles:', error);
@@ -364,5 +423,45 @@ export class PlatformAdminProfileService {
     };
     
     return roleMap[email] || 'Platform Administrator';
+  }
+
+  /**
+   * Extract department from role description
+   */
+  private static extractDepartmentFromRole(email: string): string {
+    const roleDescription = this.getPlatformAdminRoleDescription(email);
+    const specialization = roleDescription.split('•')[1]?.trim();
+    
+    if (!specialization) return 'Leadership';
+    
+    // Map specializations to departments
+    if (specialization.includes('Marketing') || specialization.includes('Brand') || specialization.includes('Publicity')) {
+      return 'Marketing';
+    }
+    if (specialization.includes('Engineering') || specialization.includes('Product Design') || specialization.includes('Blockchain')) {
+      return 'Engineering';
+    }
+    if (specialization.includes('Operations') || specialization.includes('Partnerships')) {
+      return 'Operations';
+    }
+    if (specialization.includes('Co-Founder') || specialization.includes('Advisor')) {
+      return 'Leadership';
+    }
+    if (specialization.includes('Data Analyst')) {
+      return 'Analytics';
+    }
+    if (specialization.includes('Support Services') || specialization.includes('EcoSystem')) {
+      return 'Support';
+    }
+    
+    return 'General';
+  }
+
+  /**
+   * Extract specialization from role description
+   */
+  private static extractSpecializationFromRole(email: string): string {
+    const roleDescription = this.getPlatformAdminRoleDescription(email);
+    return roleDescription.split('•')[1]?.trim() || '';
   }
 }

@@ -142,8 +142,9 @@ export default function DashboardPage() {
         throw new Error('No Firebase user found');
       }
       
-      // Call the backend API to fix all platform admin claims
-      const response = await fetch('/api/auth/fix-platform-admin-claims', {
+      // Call the backend Python API directly to fix all platform admin claims
+      const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+      const response = await fetch(`${backendUrl}/auth/fix-platform-admin-claims`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

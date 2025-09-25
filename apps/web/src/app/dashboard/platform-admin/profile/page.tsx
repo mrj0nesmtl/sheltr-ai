@@ -18,6 +18,7 @@ import {
   type PlatformAdminProfile, 
   type PlatformAdminProfileUpdate 
 } from '@/services/platformAdminProfileService';
+import { uploadProfilePicture } from '@/services/fileStorageService';
 import {
   User, 
   Briefcase,
@@ -42,7 +43,8 @@ import {
   Eye,
   EyeOff,
   Camera,
-  Upload
+  Upload,
+  Loader2
 } from 'lucide-react';
 
 export default function PlatformAdminProfilePage() {
@@ -52,6 +54,7 @@ export default function PlatformAdminProfilePage() {
   const [saving, setSaving] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [activeTab, setActiveTab] = useState('profile');
+  const [uploadingPicture, setUploadingPicture] = useState(false);
   
   // Form data state
   const [formData, setFormData] = useState<PlatformAdminProfileUpdate>({});
@@ -188,6 +191,40 @@ export default function PlatformAdminProfilePage() {
     }
   };
   
+  // Handle profile picture upload
+  const handleProfilePictureUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file || !user?.uid) return;
+
+    try {
+      setUploadingPicture(true);
+      console.log('🔄 Uploading profile picture...');
+
+      // Upload the image
+      const profilePictureUrl = await uploadProfilePicture(file, user.uid);
+      
+      if (profilePictureUrl) {
+        // Update the profile with the new picture URL
+        const success = await PlatformAdminProfileService.updatePlatformAdminProfile(user.uid, {
+          profilePicture: profilePictureUrl
+        });
+        
+        if (success) {
+          // Reload profile to get updated data
+          const updatedProfile = await PlatformAdminProfileService.getPlatformAdminProfile(user.uid);
+          if (updatedProfile) {
+            setProfile(updatedProfile);
+          }
+          console.log('✅ Profile picture updated successfully');
+        }
+      }
+    } catch (error) {
+      console.error('❌ Error uploading profile picture:', error);
+    } finally {
+      setUploadingPicture(false);
+    }
+  };
+
   // Cancel editing
   const handleCancel = () => {
     if (profile) {
@@ -344,9 +381,30 @@ export default function PlatformAdminProfilePage() {
                   </Button>
                 </div>
                 <div className="space-y-2">
-                  <Button variant="outline" className="w-full">
-                    <Upload className="h-4 w-4 mr-2" />
-                    Upload Photo
+                  <input
+                    type="file"
+                    id="profilePictureUpload"
+                    accept="image/*"
+                    onChange={handleProfilePictureUpload}
+                    className="hidden"
+                  />
+                  <Button 
+                    variant="outline" 
+                    className="w-full" 
+                    onClick={() => document.getElementById('profilePictureUpload')?.click()}
+                    disabled={uploadingPicture}
+                  >
+                    {uploadingPicture ? (
+                      <>
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        Uploading...
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="h-4 w-4 mr-2" />
+                        Upload Photo
+                      </>
+                    )}
                   </Button>
                   <p className="text-xs text-gray-500">
                     JPG, PNG or GIF (max. 2MB)

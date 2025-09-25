@@ -643,4 +643,82 @@ async def verify_token(current_user: dict = Depends(get_current_user)):
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Token verification failed: {str(e)}"
+        )
+
+@router.post(
+    "/fix-platform-admin-claims",
+    response_model=StandardResponse,
+    summary="Fix Platform Admin Custom Claims",
+    description="Set proper Firebase custom claims for Platform Admin users (Super Admin only)"
+)
+async def fix_platform_admin_claims(current_user: dict = Depends(require_super_admin())):
+    """
+    Fix Firebase custom claims for Platform Admin users to resolve dashboard permissions.
+    This endpoint ensures all platform_admin users have the correct custom claims set.
+    """
+    try:
+        logger.info("🔧 Starting Platform Admin custom claims fix...")
+        
+        # Get all users with role 'platform_admin' from Firestore
+        users_ref = firebase_service.db.collection('users')
+        platform_admin_query = users_ref.where('role', '==', 'platform_admin')
+        platform_admin_docs = platform_admin_query.get()
+        
+        fixed_users = []
+        errors = []
+        
+        for doc in platform_admin_docs:
+            try:
+                user_data = doc.to_dict()
+                user_id = doc.id
+                email = user_data.get('email', 'unknown')
+                
+                logger.info(f"🔧 Processing Platform Admin: {email} ({user_id})")
+                
+                # Define standard Platform Admin custom claims
+                custom_claims = {
+                    "role": "platform_admin",
+                    "tenant_id": "platform", 
+                    "permissions": [
+                        "platform:read",
+                        "users:manage",
+                        "shelters:manage", 
+                        "donations:view",
+                        "analytics:view",
+                        "participants:manage"
+                    ],
+                    "shelter_id": None
+                }
+                
+                # Set the claims using Firebase Admin SDK
+                firebase_service.auth.set_custom_user_claims(user_id, custom_claims)
+                logger.info(f"✅ Custom claims set for Platform Admin: {email}")
+                
+                fixed_users.append({
+                    "email": email,
+                    "uid": user_id,
+                    "claims_set": True
+                })
+                
+            except Exception as user_error:
+                error_msg = f"Failed to set claims for {email}: {str(user_error)}"
+                logger.error(f"❌ {error_msg}")
+                errors.append(error_msg)
+        
+        return StandardResponse(
+            success=True,
+            message=f"Platform Admin custom claims fix completed. Fixed {len(fixed_users)} users.",
+            data={
+                "fixed_users": fixed_users,
+                "errors": errors,
+                "total_fixed": len(fixed_users),
+                "total_errors": len(errors)
+            }
+        )
+        
+    except Exception as e:
+        logger.error(f"❌ Platform Admin claims fix failed: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to fix Platform Admin claims: {str(e)}"
         ) 

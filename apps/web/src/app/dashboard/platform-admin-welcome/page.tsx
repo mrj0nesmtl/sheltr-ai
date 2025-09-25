@@ -99,8 +99,8 @@ If you have any questions or encounter issues, please don't hesitate to reach ou
         <div className="flex items-center gap-3 mb-4">
           <Sparkles className="h-8 w-8 text-yellow-500" />
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Platform Administrator Welcome</h1>
-            <p className="text-gray-600 mt-1">Your guide to getting started with SHELTR-AI</p>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Platform Administrator Welcome</h1>
+            <p className="text-gray-600 dark:text-gray-300 mt-1">Your guide to getting started with SHELTR-AI</p>
           </div>
           <Badge variant="outline" className="ml-auto bg-white text-red-600 border-red-300">
             Start

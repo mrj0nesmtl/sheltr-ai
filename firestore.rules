@@ -12,30 +12,40 @@ service cloud.firestore {
       return request.auth != null;
     }
     
-    // Get user data from the users collection
+    // Get user data from the users collection (fallback for legacy users)
     function getUserData() {
       return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
     }
     
-    // Check user roles
+    // Get user role from custom claims (preferred) or Firestore (fallback)
+    function getUserRole() {
+      return request.auth.token.role != null ? request.auth.token.role : getUserData().role;
+    }
+    
+    // Get user shelter_id from custom claims (preferred) or Firestore (fallback)
+    function getUserShelterId() {
+      return request.auth.token.shelter_id != null ? request.auth.token.shelter_id : getUserData().shelter_id;
+    }
+    
+    // Check user roles using custom claims first
     function isSuperAdmin() {
-      return isAuthenticated() && getUserData().role == 'super_admin';
+      return isAuthenticated() && getUserRole() == 'super_admin';
     }
     
     function isPlatformAdmin() {
-      return isAuthenticated() && getUserData().role == 'platform_admin';
+      return isAuthenticated() && getUserRole() == 'platform_admin';
     }
     
     function isAdmin() {
-      return isAuthenticated() && getUserData().role == 'admin';
+      return isAuthenticated() && getUserRole() == 'admin';
     }
     
     function isParticipant() {
-      return isAuthenticated() && getUserData().role == 'participant';
+      return isAuthenticated() && getUserRole() == 'participant';
     }
     
     function isDonor() {
-      return isAuthenticated() && getUserData().role == 'donor';
+      return isAuthenticated() && getUserRole() == 'donor';
     }
     
     // Check if user owns the resource
@@ -47,7 +57,7 @@ service cloud.firestore {
     function canManageShelter(shelterId) {
       return isSuperAdmin() || 
              isPlatformAdmin() ||
-             (isAdmin() && getUserData().shelter_id == shelterId);
+             (isAdmin() && getUserShelterId() == shelterId);
     }
     
     // =================================================================
@@ -58,13 +68,13 @@ service cloud.firestore {
       allow read: if isOwner(userId) || 
                      isSuperAdmin() ||
                      isPlatformAdmin() ||
-                     (isAdmin() && resource.data.shelter_id == getUserData().shelter_id);
+                     (isAdmin() && resource.data.shelter_id == getUserShelterId());
       
       // Write: Users can update their own profile, platform admins can update all, admins can update users in their shelter, super_admin can update all
       allow write: if isOwner(userId) || 
                       isSuperAdmin() ||
                       isPlatformAdmin() ||
-                      (isAdmin() && resource.data.shelter_id == getUserData().shelter_id);
+                      (isAdmin() && resource.data.shelter_id == getUserShelterId());
       
       // Create: Anyone authenticated can create their own user profile
       allow create: if isAuthenticated() && isOwner(userId);
@@ -82,12 +92,12 @@ service cloud.firestore {
       // Read: Super admin and platform admin can read all tenants, admins can read their own tenant
       allow read: if isSuperAdmin() || 
                      isPlatformAdmin() ||
-                     (isAdmin() && getUserData().tenant_id == tenantId);
+                     (isAdmin() && (request.auth.token.tenant_id == tenantId || getUserData().tenant_id == tenantId));
       
       // Write: Super admin and platform admin can write all tenants, admins can write their own tenant
       allow write: if isSuperAdmin() || 
                       isPlatformAdmin() ||
-                      (isAdmin() && getUserData().tenant_id == tenantId);
+                      (isAdmin() && (request.auth.token.tenant_id == tenantId || getUserData().tenant_id == tenantId));
       
       // Create: Super admin and platform admin can create tenants
       allow create: if isSuperAdmin() || isPlatformAdmin();
@@ -98,17 +108,17 @@ service cloud.firestore {
       // Read: Super admin and platform admin can read all tenant data, admins can read their own tenant data
       allow read: if isSuperAdmin() || 
                      isPlatformAdmin() ||
-                     (isAdmin() && getUserData().tenant_id == tenantId);
+                     (isAdmin() && (request.auth.token.tenant_id == tenantId || getUserData().tenant_id == tenantId));
       
       // Write: Super admin and platform admin can write all tenant data, admins can write their own tenant data
       allow write: if isSuperAdmin() || 
                       isPlatformAdmin() ||
-                      (isAdmin() && getUserData().tenant_id == tenantId);
+                      (isAdmin() && (request.auth.token.tenant_id == tenantId || getUserData().tenant_id == tenantId));
       
       // Create: Super admin and platform admin can create tenant data, admins can create data in their own tenant
       allow create: if isSuperAdmin() || 
                        isPlatformAdmin() ||
-                       (isAdmin() && getUserData().tenant_id == tenantId);
+                       (isAdmin() && (request.auth.token.tenant_id == tenantId || getUserData().tenant_id == tenantId));
     }
     
     // =================================================================

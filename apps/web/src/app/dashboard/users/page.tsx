@@ -31,7 +31,9 @@ import {
   Shield,
   Trash2,
   QrCode,
-  Globe
+  Globe,
+  GripVertical,
+  Move
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import {
@@ -56,6 +58,7 @@ import { useOtherUserStatus, statusColors, statusLabels } from '@/services/userS
 import { UserProfileModal, type UserProfileData } from '@/components/UserProfileModal';
 import { tenantService, type ShelterTenant } from '@/services/tenantService';
 import { shelterService, type ShelterPublicConfig } from '@/services/shelterService';
+import { PlatformAdminProfileService } from '@/services/platformAdminProfileService';
 
 // Dynamic status badge component for super admins
 function SuperAdminStatusBadge({ userId }: { userId: string }) {
@@ -144,6 +147,11 @@ export default function UserManagement() {
   
   // Shelter data for admin cards
   const [shelterData, setShelterData] = useState(() => new Map<string, { shelter: ShelterTenant; config: ShelterPublicConfig | null }>());
+  
+  // Drag and drop state for Platform Admins (Super Admin only)
+  const [isDragging, setIsDragging] = useState(false);
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+  const [reorderablePlatformAdmins, setReorderablePlatformAdmins] = useState<AdminUser[]>([]);
   const [selectedUserForView, setSelectedUserForView] = useState<(AdminUser | ParticipantUser | DonorUser) & { userType: string } | null>(null);
   const [selectedUserForEdit, setSelectedUserForEdit] = useState<(AdminUser | ParticipantUser | DonorUser) & { userType: string } | null>(null);
   const [editFormData, setEditFormData] = useState<{ firstName: string; lastName: string; email: string; }>({ firstName: '', lastName: '', email: '' });
@@ -610,6 +618,11 @@ export default function UserManagement() {
       setDonorUsers(donorsData);
       setOrphanedUsers(orphanedData);
       
+      // Initialize reorderable platform admins for drag-drop (Super Admin only)
+      if (user?.role === 'super_admin') {
+        setReorderablePlatformAdmins([...platformAdminsData]);
+      }
+      
       // Load shelter data for admin users
       await loadShelterData(adminsData);
       
@@ -649,6 +662,73 @@ export default function UserManagement() {
       console.log(`✅ Loaded shelter data for ${shelterMap.size} shelters`);
     } catch (error) {
       console.error('❌ Failed to load shelter data:', error);
+    }
+  };
+
+  // Drag and Drop handlers for Platform Admins (Super Admin only)
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>, index: number) => {
+    if (user?.role !== 'super_admin') return;
+    
+    setIsDragging(true);
+    setDraggedIndex(index);
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/html', e.currentTarget.outerHTML);
+    e.currentTarget.style.opacity = '0.5';
+  };
+
+  const handleDragEnd = (e: React.DragEvent<HTMLDivElement>) => {
+    setIsDragging(false);
+    setDraggedIndex(null);
+    e.currentTarget.style.opacity = '1';
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  };
+
+  const handleDrop = async (e: React.DragEvent<HTMLDivElement>, dropIndex: number) => {
+    e.preventDefault();
+    
+    if (user?.role !== 'super_admin' || draggedIndex === null || draggedIndex === dropIndex) {
+      return;
+    }
+
+    console.log(`🔄 Reordering Platform Admins: moving ${draggedIndex} to ${dropIndex}`);
+
+    // Create new array with reordered items
+    const newOrder = [...reorderablePlatformAdmins];
+    const draggedItem = newOrder[draggedIndex];
+    
+    // Remove dragged item
+    newOrder.splice(draggedIndex, 1);
+    
+    // Insert at new position
+    newOrder.splice(dropIndex, 0, draggedItem);
+    
+    // Update state
+    setReorderablePlatformAdmins(newOrder);
+    
+    // Save new order to database
+    await savePlatformAdminOrder(newOrder);
+  };
+
+  const savePlatformAdminOrder = async (orderedAdmins: AdminUser[]) => {
+    try {
+      console.log('💾 Saving Platform Admin display order...');
+      
+      // Update each admin's displayOrder in the database
+      const updatePromises = orderedAdmins.map((admin, index) => 
+        PlatformAdminProfileService.updatePlatformAdminProfile(admin.id, {
+          displayOrder: index
+        })
+      );
+      
+      await Promise.all(updatePromises);
+      
+      console.log('✅ Platform Admin display order saved successfully');
+    } catch (error) {
+      console.error('❌ Error saving Platform Admin display order:', error);
     }
   };
 
@@ -1409,8 +1489,21 @@ export default function UserManagement() {
               <h3 className="text-lg font-medium flex items-center">
                 <Star className="mr-2 h-5 w-5 text-orange-600" />
                 Platform Administrators
+                {user?.role === 'super_admin' && (
+                  <Badge variant="outline" className="ml-2 text-xs bg-blue-50 text-blue-700 border-blue-300">
+                    <Move className="h-3 w-3 mr-1" />
+                    Drag to Reorder
+                  </Badge>
+                )}
               </h3>
-              <p className="text-sm text-muted-foreground">Team members with platform-wide administrative access</p>
+              <p className="text-sm text-muted-foreground">
+                Team members with platform-wide administrative access
+                {user?.role === 'super_admin' && (
+                  <span className="block mt-1 text-blue-600">
+                    💡 Drag and drop to customize the order on the public team page
+                  </span>
+                )}
+              </p>
             </div>
             <div className="flex items-center space-x-2">
               <div className="flex items-center space-x-1">
@@ -1434,9 +1527,25 @@ export default function UserManagement() {
             <Card className="border-2 border-orange-200 dark:border-orange-800">
               <CardContent className="p-0">
                 <div className="space-y-4 p-4">
-                  {platformAdmins.map((admin) => (
-                    <div key={admin.id} className="flex items-center justify-between p-4 bg-gradient-to-r from-orange-50 to-yellow-50 dark:from-orange-900/20 dark:to-yellow-900/20 rounded-lg border border-orange-200 dark:border-orange-800">
+                  {(user?.role === 'super_admin' ? reorderablePlatformAdmins : platformAdmins).map((admin, index) => (
+                    <div 
+                      key={admin.id} 
+                      className={`flex items-center justify-between p-4 bg-gradient-to-r from-orange-50 to-yellow-50 dark:from-orange-900/20 dark:to-yellow-900/20 rounded-lg border border-orange-200 dark:border-orange-800 ${
+                        user?.role === 'super_admin' ? 'cursor-move transition-all duration-200 hover:shadow-md' : ''
+                      } ${isDragging && draggedIndex === index ? 'opacity-50 scale-95' : ''}`}
+                      draggable={user?.role === 'super_admin'}
+                      onDragStart={(e) => handleDragStart(e, index)}
+                      onDragEnd={handleDragEnd}
+                      onDragOver={handleDragOver}
+                      onDrop={(e) => handleDrop(e, index)}
+                    >
                       <div className="flex items-center space-x-4">
+                        {/* Drag Handle (Super Admin only) */}
+                        {user?.role === 'super_admin' && (
+                          <div className="flex-shrink-0 text-orange-400 hover:text-orange-600 transition-colors">
+                            <GripVertical className="h-5 w-5" />
+                          </div>
+                        )}
                         <div className="relative">
                           <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-full flex items-center justify-center shadow-lg">
                             <Star className="h-6 w-6 text-white" />

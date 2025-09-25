@@ -133,6 +133,23 @@ export class ProfileSyncService {
       await updateDoc(doc(db, 'users', userId), userUpdateData);
       
       console.log('✅ Successfully synced Super Admin profile to Platform Admin structure');
+      console.log('🔍 Sync details:', {
+        userId,
+        superAdminData: {
+          firstName: superAdminProfile?.firstName,
+          lastName: superAdminProfile?.lastName,
+          jobTitle: superAdminProfile?.jobTitle,
+          bio: superAdminProfile?.bio,
+          location: superAdminProfile?.location
+        },
+        syncedPlatformData: {
+          firstName: platformAdminData.firstName,
+          lastName: platformAdminData.lastName,
+          jobTitle: platformAdminData.jobTitle,
+          bio: platformAdminData.bio,
+          location: platformAdminData.location
+        }
+      });
       console.log('📸 Profile picture preserved:', userData.profilePicture || 'None');
       
       return true;

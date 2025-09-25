@@ -65,6 +65,14 @@ export class TeamSyncService {
       const joelEmail = 'joel.yaffe@gmail.com';
       let hasJoel = teamMembers.some(member => member.email.toLowerCase() === joelEmail.toLowerCase());
       
+      console.log('🔍 Joel lookup results:', {
+        joelEmail,
+        totalTeamMembers: teamMembers.length,
+        hasJoel,
+        teamMemberEmails: teamMembers.map(m => m.email),
+        publicProfileEmails: publicProfiles.map(p => p.email)
+      });
+      
       // If Joel exists in the list but we need to update his info, remove him first
       if (hasJoel) {
         const joelIndex = teamMembers.findIndex(member => member.email.toLowerCase() === joelEmail.toLowerCase());
@@ -95,7 +103,7 @@ export class TeamSyncService {
           displayName: joelProfile?.displayName || 'Joel Yaffe',
           email: joelEmail,
           jobTitle: joelProfile?.jobTitle || 'Chief Executive Officer & Founder',
-          department: joelProfile?.department || 'Leadership',
+          department: joelProfile?.department || 'Leadership', 
           specialization: joelProfile?.specialization || 'Visionary Leadership & Strategic Direction',
           bio: joelProfile?.bio || 'Founder and CEO of SHELTR-AI, pioneering innovative solutions to revolutionize homelessness services through cutting-edge technology and compassionate action.',
           profilePicture: joelProfile?.profilePicture || '', // Use actual profile picture if available
@@ -114,6 +122,16 @@ export class TeamSyncService {
         };
         
         console.log('🖼️ Joel\'s profile picture:', joelProfile?.profilePicture ? 'Found' : 'Using initials fallback');
+        console.log('📊 Joel\'s profile data:', {
+          hasProfile: !!joelProfile,
+          profileEmail: joelProfile?.email,
+          jobTitle: joelProfile?.jobTitle || 'Using fallback',
+          department: joelProfile?.department || 'Using fallback',
+          specialization: joelProfile?.specialization || 'Using fallback', 
+          bio: joelProfile?.bio ? `Custom: ${joelProfile.bio.substring(0, 50)}...` : 'Using fallback',
+          location: joelProfile?.location || 'Using fallback',
+          fullProfile: joelProfile
+        });
         
         // Add Joel at the beginning
         teamMembers.unshift(joelMember);

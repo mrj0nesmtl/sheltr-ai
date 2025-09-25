@@ -17,6 +17,7 @@ import {
   SystemSettingsService, 
   type SuperAdminProfile
 } from '@/services/systemSettingsService';
+import { ProfileSyncService } from '@/services/profileSyncService';
 import {
   User, 
   Briefcase,
@@ -63,6 +64,11 @@ export default function SuperAdminProfilePage() {
         if (profileData) {
           setProfile(profileData);
           setFormData(profileData);
+          
+          // Sync to Platform Admin profile for Team page (run in background)
+          ProfileSyncService.syncSuperAdminToPlatformAdmin(user.uid).catch(error => 
+            console.error('Background sync failed:', error)
+          );
         } else {
           // Initialize with default values if no profile exists
           const defaultProfile = {
@@ -122,12 +128,17 @@ export default function SuperAdminProfilePage() {
         updatedBy: user.uid
       };
 
+      // Save to Super Admin profile collection
       const success = await SystemSettingsService.saveSuperAdminProfile(user.uid, updateData);
       
       if (success) {
+        // Sync to Platform Admin profile for Team page
+        console.log('🔄 Syncing Super Admin profile to Team page...');
+        await ProfileSyncService.syncSuperAdminToPlatformAdmin(user.uid);
+        
         setProfile({ ...profile, ...updateData } as SuperAdminProfile);
         setIsEditing(false);
-        alert('Profile updated successfully!');
+        alert('Profile updated successfully and synced to Team page!');
       } else {
         alert('Failed to update profile. Please try again.');
       }

@@ -18,6 +18,7 @@ import {
   type PlatformAdminProfile, 
   type PlatformAdminProfileUpdate 
 } from '@/services/platformAdminProfileService';
+import { ProfileSyncService } from '@/services/profileSyncService';
 import { uploadProfilePicture } from '@/services/fileStorageService';
 import {
   User, 
@@ -177,6 +178,12 @@ export default function PlatformAdminProfilePage() {
       const success = await PlatformAdminProfileService.updatePlatformAdminProfile(user.uid, formData);
       
       if (success) {
+        // Sync to Super Admin profile if this user is a Super Admin
+        if (user.role === 'super_admin') {
+          console.log('🔄 Syncing Platform Admin profile to Super Admin profile...');
+          await ProfileSyncService.syncPlatformAdminToSuperAdmin(user.uid);
+        }
+        
         // Reload profile data
         const updatedProfile = await PlatformAdminProfileService.getPlatformAdminProfile(user.uid);
         if (updatedProfile) {
@@ -210,12 +217,18 @@ export default function PlatformAdminProfilePage() {
         });
         
         if (success) {
+          // Sync to Super Admin profile if this user is a Super Admin
+          if (user.role === 'super_admin') {
+            console.log('🔄 Syncing profile picture to Super Admin profile...');
+            await ProfileSyncService.syncPlatformAdminToSuperAdmin(user.uid);
+          }
+          
           // Reload profile to get updated data
           const updatedProfile = await PlatformAdminProfileService.getPlatformAdminProfile(user.uid);
           if (updatedProfile) {
             setProfile(updatedProfile);
           }
-          console.log('✅ Profile picture updated successfully');
+          console.log('✅ Profile picture updated successfully and synced!');
         }
       }
     } catch (error) {

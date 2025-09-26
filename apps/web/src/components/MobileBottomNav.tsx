@@ -3,7 +3,6 @@
 import { ArrowLeft, ArrowRight, MessageCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { ThemeToggle } from '@/components/theme-toggle';
-import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 import { useState, useEffect } from 'react';
 
@@ -24,6 +23,8 @@ export function MobileBottomNav({ className = '', sidebarOpen = false }: MobileB
         return [
           '/dashboard',                    // Overview
           '/dashboard/notifications',      // Notifications
+          '/dashboard/messages',           // Messages
+          '/dashboard/automation',         // Automation
           '/dashboard/platform',           // Platform Management  
           '/dashboard/users',              // User Management
           '/dashboard/shelters',           // Shelter Network
@@ -36,6 +37,7 @@ export function MobileBottomNav({ className = '', sidebarOpen = false }: MobileB
       case 'shelter_admin':
         return [
           '/dashboard/shelter-admin',                    // Shelter Overview
+          '/dashboard/messages',                         // Messages
           '/dashboard/shelter-admin/participants',       // Participants
           '/dashboard/shelter-admin/services',           // Services
           '/dashboard/shelter-admin/resources',          // Resources
@@ -102,8 +104,6 @@ export function MobileBottomNav({ className = '', sidebarOpen = false }: MobileB
     }
   };
 
-  if (!user) return null; // Only show for authenticated users
-
   // Only show on mobile screens
   const [isMobile, setIsMobile] = useState(false);
 
@@ -116,6 +116,8 @@ export function MobileBottomNav({ className = '', sidebarOpen = false }: MobileB
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  if (!user) return null; // Only show for authenticated users
 
 
 

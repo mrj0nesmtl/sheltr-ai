@@ -90,11 +90,32 @@ export class TeamSyncService {
         // Try to get Joel's actual profile data first
         let joelProfile = null;
         try {
-          // Check if Joel has a profile in the system
-          const allProfiles = await PlatformAdminProfileService.getAllPlatformAdminProfiles(false);
-          joelProfile = allProfiles.find(p => p.email.toLowerCase() === joelEmail.toLowerCase());
-        } catch {
-          console.log('Could not load Joel\'s profile, using defaults');
+          // First check if Joel is in the publicProfiles we already loaded
+          joelProfile = publicProfiles.find(p => p.email.toLowerCase() === joelEmail.toLowerCase());
+          
+          if (!joelProfile) {
+            console.log('🔍 Joel not found in publicProfiles, trying direct lookup...');
+            // Try to get Joel's profile directly by email
+            joelProfile = await PlatformAdminProfileService.getPlatformAdminProfile(joelEmail);
+          }
+          
+          if (!joelProfile) {
+            console.log('🔍 Direct lookup failed, trying getAllPlatformAdminProfiles...');
+            // Last resort: get all profiles and search
+            const allProfiles = await PlatformAdminProfileService.getAllPlatformAdminProfiles(false);
+            joelProfile = allProfiles.find(p => p.email.toLowerCase() === joelEmail.toLowerCase());
+          }
+          
+          console.log('🔍 Joel profile search result:', {
+            found: !!joelProfile,
+            email: joelProfile?.email,
+            jobTitle: joelProfile?.jobTitle,
+            department: joelProfile?.department,
+            bio: joelProfile?.bio ? `${joelProfile.bio.substring(0, 50)}...` : 'No bio'
+          });
+        } catch (error) {
+          console.error('❌ Error loading Joel\'s profile:', error);
+          console.log('Using fallback defaults for Joel');
         }
         
         const joelMember: PublicTeamMember = {

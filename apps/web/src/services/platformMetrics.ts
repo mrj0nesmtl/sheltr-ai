@@ -1741,6 +1741,7 @@ export interface AdminUser {
   joinDate: string;
   created_at?: FirestoreTimestamp | Timestamp;
   updated_at?: FirestoreTimestamp | Timestamp;
+  displayOrder?: number; // For Super Admin drag-and-drop ordering
 }
 
 export interface ParticipantUser {
@@ -2113,7 +2114,8 @@ export const getPlatformAdmins = async (): Promise<AdminUser[]> => {
         participants: 0, // Platform admins don't manage participants directly
         joinDate: data.created_at ? new Date(data.created_at.seconds * 1000).toLocaleDateString() : 'Unknown',
         created_at: data.createdAt || data.created_at,
-        updated_at: data.updatedAt || data.updated_at
+        updated_at: data.updatedAt || data.updated_at,
+        displayOrder: data.adminProfile?.displayOrder // Add displayOrder from adminProfile
       };
       
       platformAdmins.push(platformAdmin);

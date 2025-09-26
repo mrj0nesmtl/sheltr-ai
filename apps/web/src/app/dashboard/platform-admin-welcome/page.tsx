@@ -36,9 +36,9 @@ export default function PlatformAdminWelcomePage() {
   const getFallbackContent = () => `
 # Welcome to SHELTR-AI Platform Administration Team!
 
-Hey there, amazing humans! 👋
+Hey there, amazing humans!
 
-Welcome to the SHELTR-AI platform administrator dashboard. We're excited to have you as part of our internal team!
+Welcome to the SHELTR platform and your administrator dashboard. We're excited to have you as part of the team!
 
 ## Getting Started
 
@@ -60,7 +60,7 @@ If you have any questions or encounter issues, please don't hesitate to reach ou
 
 ---
 
-*This is your starting point for exploring SHELTR-AI's platform administration features.*
+*This is your starting point for exploring SHELTR's platform administration features.*
 `;
 
   const renderMarkdown = (content: string) => {
@@ -100,7 +100,7 @@ If you have any questions or encounter issues, please don't hesitate to reach ou
           <Sparkles className="h-8 w-8 text-yellow-500" />
           <div>
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Platform Administrator Welcome</h1>
-            <p className="text-gray-600 dark:text-gray-300 mt-1">Your guide to getting started with SHELTR-AI</p>
+            <p className="text-gray-600 dark:text-gray-300 mt-1">Your guide to getting started with SHELTR</p>
           </div>
           <Badge variant="outline" className="ml-auto bg-white text-red-600 border-red-300">
             Start

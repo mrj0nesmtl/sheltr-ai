@@ -665,6 +665,169 @@ service cloud.firestore {
     }
     
     // =================================================================
+    // INTERNAL MESSAGING SYSTEM COLLECTIONS
+    // =================================================================
+    
+    // User shortcodes - Admin users can manage shortcodes for messaging
+    match /user_shortcodes/{shortcodeId} {
+      // Read: All admin users can read shortcodes for messaging
+      allow read: if isAuthenticated() && (isSuperAdmin() || isPlatformAdmin() || isAdmin());
+      
+      // Write: Admin users can update their own shortcode, Super Admin can update all
+      allow write: if isAuthenticated() && (
+        isSuperAdmin() || 
+        (resource.data.userId == request.auth.uid && (isPlatformAdmin() || isAdmin()))
+      );
+      
+      // Create: Admin users can create shortcodes
+      allow create: if isAuthenticated() && (isSuperAdmin() || isPlatformAdmin() || isAdmin());
+      
+      // Delete: Super Admin only
+      allow delete: if isSuperAdmin();
+    }
+    
+    // Internal messages - Admin-to-admin messaging
+    match /internal_messages/{messageId} {
+      // Read: Message participants and Super Admin can read messages
+      allow read: if isAuthenticated() && (
+        isSuperAdmin() ||
+        resource.data.fromUserId == request.auth.uid ||
+        resource.data.toUserId == request.auth.uid
+      );
+      
+      // Write: Message participants can update (mark as read), Super Admin can manage all
+      allow write: if isAuthenticated() && (
+        isSuperAdmin() ||
+        resource.data.fromUserId == request.auth.uid ||
+        resource.data.toUserId == request.auth.uid
+      );
+      
+      // Create: Admin users can create messages
+      allow create: if isAuthenticated() && (
+        isSuperAdmin() || isPlatformAdmin() || isAdmin()
+      ) && request.resource.data.fromUserId == request.auth.uid;
+      
+      // Delete: Super Admin only (soft delete via isDeleted field)
+      allow delete: if isSuperAdmin();
+    }
+    
+    // Message conversations - Conversation management
+    match /message_conversations/{conversationId} {
+      // Read: Conversation participants and Super Admin can read
+      allow read: if isAuthenticated() && (
+        isSuperAdmin() ||
+        request.auth.uid in resource.data.participantIds
+      );
+      
+      // Write: Conversation participants can update, Super Admin can manage all
+      allow write: if isAuthenticated() && (
+        isSuperAdmin() ||
+        request.auth.uid in resource.data.participantIds
+      );
+      
+      // Create: Admin users can create conversations
+      allow create: if isAuthenticated() && (
+        isSuperAdmin() || isPlatformAdmin() || isAdmin()
+      ) && request.auth.uid in request.resource.data.participantIds;
+      
+      // Delete: Super Admin only
+      allow delete: if isSuperAdmin();
+    }
+    
+    // Automation workflows - MCP and email automation
+    match /automation_workflows/{workflowId} {
+      // Read: Super Admin and Platform Admin can read automation workflows
+      allow read: if isSuperAdmin() || isPlatformAdmin();
+      
+      // Write: Super Admin and Platform Admin can manage workflows
+      allow write: if isSuperAdmin() || isPlatformAdmin();
+      
+      // Create: Super Admin and Platform Admin can create workflows
+      allow create: if isSuperAdmin() || isPlatformAdmin();
+      
+      // Delete: Super Admin only
+      allow delete: if isSuperAdmin();
+    }
+    
+    // Email templates - Template management for automation
+    match /email_templates/{templateId} {
+      // Read: Super Admin and Platform Admin can read templates
+      allow read: if isSuperAdmin() || isPlatformAdmin();
+      
+      // Write: Super Admin and Platform Admin can manage templates
+      allow write: if isSuperAdmin() || isPlatformAdmin();
+      
+      // Create: Super Admin and Platform Admin can create templates
+      allow create: if isSuperAdmin() || isPlatformAdmin();
+      
+      // Delete: Super Admin only
+      allow delete: if isSuperAdmin();
+    }
+    
+    // MCP activity log - Chatbot integration activity tracking
+    match /mcp_activity_log/{activityId} {
+      // Read: Super Admin and Platform Admin can read MCP logs
+      allow read: if isSuperAdmin() || isPlatformAdmin();
+      
+      // Write: System can log MCP activity (authenticated users for integration)
+      allow write: if isAuthenticated() && (isSuperAdmin() || isPlatformAdmin() || isAdmin());
+      
+      // Create: System can create MCP activity logs
+      allow create: if isAuthenticated() && (isSuperAdmin() || isPlatformAdmin() || isAdmin());
+      
+      // Delete: Super Admin only
+      allow delete: if isSuperAdmin();
+    }
+    
+    // Inquiry tracking - Contact form and inquiry management
+    match /inquiry_tracking/{inquiryId} {
+      // Read: Super Admin and Platform Admin can read inquiries
+      allow read: if isSuperAdmin() || isPlatformAdmin();
+      
+      // Write: Super Admin and Platform Admin can manage inquiries
+      allow write: if isSuperAdmin() || isPlatformAdmin();
+      
+      // Create: System can create inquiry tracking (anyone can submit contact forms)
+      allow create: if true;
+      
+      // Delete: Super Admin only
+      allow delete: if isSuperAdmin();
+    }
+    
+    // Message notifications - User notification system
+    match /message_notifications/{notificationId} {
+      // Read: Users can read their own notifications, Super Admin can read all
+      // Allow queries even when no documents exist
+      allow read: if isAuthenticated() && 
+        (resource == null || resource.data.userId == request.auth.uid || isSuperAdmin());
+      
+      // Write: Users can update their own notifications (mark as read)
+      allow write: if isAuthenticated() && 
+        (resource == null || resource.data.userId == request.auth.uid);
+      
+      // Create: System can create notifications for admin users
+      allow create: if isAuthenticated() && (isSuperAdmin() || isPlatformAdmin() || isAdmin());
+      
+      // Delete: Super Admin only
+      allow delete: if isSuperAdmin();
+    }
+    
+    // Contact inquiries - Contact form submissions
+    match /contact_inquiries/{inquiryId} {
+      // Read: Super Admin and Platform Admin can read contact inquiries
+      allow read: if isAuthenticated() && (isSuperAdmin() || isPlatformAdmin());
+      
+      // Write: Super Admin and Platform Admin can update inquiries (mark as read)
+      allow write: if isAuthenticated() && (isSuperAdmin() || isPlatformAdmin());
+      
+      // Create: Anyone can create contact inquiries (public contact forms)
+      allow create: if true;
+      
+      // Delete: Super Admin only
+      allow delete: if isSuperAdmin();
+    }
+    
+    // =================================================================
     // FALLBACK RULE - Deny all other access
     // =================================================================
     match /{document=**} {

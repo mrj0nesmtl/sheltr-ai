@@ -459,7 +459,7 @@ export default function AboutPage() {
               <CardHeader>
                 <div className="mx-auto mb-4 flex items-center justify-center h-16">
                   <img 
-                    src="/Base_lockup_2color.svg" 
+                    src="/Base_basemark_all_blue.svg" 
                     alt="Base" 
                     className="h-12 w-auto max-w-full"
                   />

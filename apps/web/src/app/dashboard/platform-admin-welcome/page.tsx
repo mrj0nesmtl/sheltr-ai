@@ -4,34 +4,46 @@ import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ExternalLink, Mail, Sparkles } from 'lucide-react';
+import { ExternalLink, Mail, Sparkles, User } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import { PersonalizedWelcomeService, type PersonalizedWelcomeData } from '@/services/personalizedWelcomeService';
+import Link from 'next/link';
 
 export default function PlatformAdminWelcomePage() {
-  const [welcomeContent, setWelcomeContent] = useState<string>('');
+  const { user } = useAuth();
+  const [welcomeData, setWelcomeData] = useState<PersonalizedWelcomeData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Load the markdown content
+    // Load personalized welcome content
     const loadWelcomeContent = async () => {
       try {
-        const response = await fetch('/docs/platform-admin/welcome-letter.md');
-        if (response.ok) {
-          const content = await response.text();
-          setWelcomeContent(content);
+        if (user?.email) {
+          console.log('🎯 Loading personalized welcome for:', user.email);
+          const personalizedData = await PersonalizedWelcomeService.getPersonalizedWelcome(user.email);
+          setWelcomeData(personalizedData);
         } else {
-          // Fallback content if file is not accessible
-          setWelcomeContent(getFallbackContent());
+          // Load default if no user email
+          const defaultData = await PersonalizedWelcomeService.getPersonalizedWelcome('default@sheltr.ai');
+          setWelcomeData(defaultData);
         }
       } catch (error) {
         console.error('Error loading welcome content:', error);
-        setWelcomeContent(getFallbackContent());
+        // Emergency fallback
+        setWelcomeData({
+          exists: false,
+          content: getFallbackContent(),
+          userEmail: user?.email || 'unknown',
+          fallbackUsed: true,
+          error: 'Failed to load welcome content'
+        });
       } finally {
         setIsLoading(false);
       }
     };
 
     loadWelcomeContent();
-  }, []);
+  }, [user?.email]);
 
   const getFallbackContent = () => `
 # Welcome to SHELTR-AI Platform Administration Team!
@@ -100,24 +112,40 @@ If you have any questions or encounter issues, please don't hesitate to reach ou
           <Sparkles className="h-8 w-8 text-yellow-500" />
           <div>
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Platform Administrator Welcome</h1>
-            <p className="text-gray-600 dark:text-gray-300 mt-1">Your guide to getting started with SHELTR</p>
+            <p className="text-gray-600 dark:text-gray-300 mt-1">
+              {welcomeData?.exists ? 'Your personalized guide to getting started with SHELTR' : 'Your guide to getting started with SHELTR'}
+            </p>
           </div>
-          <Badge variant="outline" className="ml-auto bg-white text-red-600 border-red-300">
-            Start
-          </Badge>
+          <div className="ml-auto flex items-center gap-2">
+            {welcomeData?.exists && (
+              <Badge variant="outline" className="bg-green-50 text-green-600 border-green-300">
+                <User className="h-3 w-3 mr-1" />
+                Personalized
+              </Badge>
+            )}
+            <Badge variant="outline" className="bg-white text-red-600 border-red-300">
+              Start
+            </Badge>
+          </div>
         </div>
         
         <div className="flex gap-3">
           <Button variant="outline" size="sm" className="flex items-center gap-2">
             <Mail className="h-4 w-4" />
-            Email Version Available
+            {welcomeData?.exists ? 'Personalized Welcome' : 'Email Version Available'}
           </Button>
           <Button variant="outline" size="sm" asChild>
-            <a href="/dashboard/platform-guide" className="flex items-center gap-2">
+            <Link href="/dashboard/platform-guide" className="flex items-center gap-2">
               <ExternalLink className="h-4 w-4" />
               Platform Guide
-            </a>
+            </Link>
           </Button>
+          {welcomeData?.fallbackUsed && (
+            <Button variant="outline" size="sm" className="flex items-center gap-2 text-amber-600 border-amber-300">
+              <Sparkles className="h-4 w-4" />
+              Using Default
+            </Button>
+          )}
         </div>
       </div>
 
@@ -134,10 +162,17 @@ If you have any questions or encounter issues, please don't hesitate to reach ou
             <div 
               className="space-y-4 text-gray-200 leading-relaxed"
               dangerouslySetInnerHTML={{ 
-                __html: renderMarkdown(welcomeContent).replace(/<p class="mb-4">/g, '<p class="mb-4 text-gray-600 dark:text-gray-200">').replace(/<\/p>$/, '</p>')
+                __html: renderMarkdown(welcomeData?.content || '').replace(/<p class="mb-4">/g, '<p class="mb-4 text-gray-600 dark:text-gray-200">').replace(/<\/p>$/, '</p>')
               }} 
             />
           </div>
+          {welcomeData?.error && (
+            <div className="mt-4 p-3 bg-amber-50 border border-amber-200 rounded-md">
+              <p className="text-sm text-amber-800">
+                <strong>Note:</strong> {welcomeData.error}
+              </p>
+            </div>
+          )}
         </CardContent>
       </Card>
 

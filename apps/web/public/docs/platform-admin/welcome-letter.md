@@ -1,6 +1,6 @@
-# Welcome to SHELTR-AI Platform Administration Team!
+# Welcome to SHELTR's Platform Administration Team!
 
-Hey there, amazing humans! 👋
+Hey there Friend. If you found yourself on this page, you are 
 
 I hope this message finds you well and as excited as I am about what we're building together. I can barely contain my enthusiasm as I write this – we've just reached an incredible milestone with SHELTR-AI, and you're about to be part of something truly revolutionary.
 

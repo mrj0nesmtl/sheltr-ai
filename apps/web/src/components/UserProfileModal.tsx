@@ -158,10 +158,20 @@ export function UserProfileModal({
               <span>User Profile</span>
             </DialogTitle>
             <div className="flex items-center space-x-2">
-              {canEdit && onEdit && (
-                <Button variant="outline" size="sm" onClick={onEdit}>
+              {canEdit && (
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => {
+                    // Redirect to appropriate profile dashboard
+                    const profileUrl = userType === 'super_admin' 
+                      ? '/dashboard/super-admin/profile'
+                      : '/dashboard/platform-admin/profile';
+                    window.location.href = profileUrl;
+                  }}
+                >
                   <Edit className="h-4 w-4 mr-2" />
-                  Edit
+                  Edit Profile
                 </Button>
               )}
               <Button variant="ghost" size="sm" onClick={onClose}>

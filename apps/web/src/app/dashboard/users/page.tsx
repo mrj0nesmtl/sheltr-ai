@@ -765,6 +765,17 @@ export default function UserManagement() {
   };
 
   // Profile viewing functions
+  const handleEditProfile = (userData: any, userType: 'super_admin' | 'platform_admin' | 'shelter_admin' | 'participant' | 'donor') => {
+    // Redirect to appropriate profile dashboard instead of inline editing
+    const profileUrl = userType === 'super_admin' 
+      ? '/dashboard/super-admin/profile'
+      : userType === 'platform_admin'
+      ? '/dashboard/platform-admin/profile'
+      : '/dashboard/settings'; // fallback for other user types
+    
+    window.location.href = profileUrl;
+  };
+
   const handleViewProfile = (userData: any, userType: 'super_admin' | 'platform_admin' | 'shelter_admin' | 'participant' | 'donor') => {
     const profileData: UserProfileData = {
       id: userData.id || userData.uid,
@@ -1366,7 +1377,12 @@ export default function UserManagement() {
                         </Button>
                         {/* Only super admins can edit super admin profiles */}
                         {user?.role === 'super_admin' && (
-                          <Button variant="ghost" size="sm" title="Edit Profile">
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            title="Edit Profile"
+                            onClick={() => handleEditProfile(admin, 'super_admin')}
+                          >
                             <Edit className="h-4 w-4" />
                           </Button>
                         )}
@@ -1424,7 +1440,12 @@ export default function UserManagement() {
                         </Button>
                         {/* Only super admins can edit super admin profiles */}
                         {user?.role === 'super_admin' && (
-                          <Button variant="ghost" size="sm" title="Edit Profile">
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            title="Edit Profile"
+                            onClick={() => handleEditProfile(admin, 'super_admin')}
+                          >
                             <Edit className="h-4 w-4" />
                           </Button>
                         )}
@@ -1580,7 +1601,12 @@ export default function UserManagement() {
                             <Eye className="h-4 w-4" />
                           </Button>
                           {canEditUser('platform_admin', admin.id) && (
-                            <Button variant="ghost" size="sm" title="Edit Profile">
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              title="Edit Profile"
+                              onClick={() => handleEditProfile(admin, 'platform_admin')}
+                            >
                               <Edit className="h-4 w-4" />
                             </Button>
                           )}
@@ -1699,8 +1725,8 @@ export default function UserManagement() {
                             <Button 
                               variant="ghost" 
                               size="sm"
-                              onClick={() => editUser(admin, 'admin')}
-                              title="Edit User"
+                              onClick={() => handleEditProfile(admin, 'shelter_admin')}
+                              title="Edit Profile"
                             >
                               <Edit className="h-4 w-4" />
                             </Button>
@@ -1806,8 +1832,8 @@ export default function UserManagement() {
                             <Button 
                               variant="ghost" 
                               size="sm"
-                              onClick={() => editUser(admin, 'admin')}
-                              title="Edit User"
+                              onClick={() => handleEditProfile(admin, 'shelter_admin')}
+                              title="Edit Profile"
                             >
                               <Edit className="h-4 w-4" />
                             </Button>

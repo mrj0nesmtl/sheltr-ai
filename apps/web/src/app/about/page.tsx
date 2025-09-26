@@ -400,7 +400,7 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 lg:grid-cols-5 gap-6">
             <Card className="text-center border-2 hover:border-blue-300 dark:hover:border-blue-700 transition-all duration-300 hover:shadow-lg">
               <CardHeader>
                 <div className="mx-auto mb-4 flex items-center justify-center h-16">
@@ -451,6 +451,42 @@ export default function AboutPage() {
               <CardContent>
                 <p className="text-sm text-muted-foreground">
                   Advanced AI assistance for intelligent platform interactions and support
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="text-center border-2 hover:border-blue-300 dark:hover:border-blue-700 transition-all duration-300 hover:shadow-lg">
+              <CardHeader>
+                <div className="mx-auto mb-4 flex items-center justify-center h-16">
+                  <img 
+                    src="/Base_lockup_2color.svg" 
+                    alt="Base" 
+                    className="h-12 w-auto max-w-full"
+                  />
+                </div>
+                <CardTitle className="text-lg">Base</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  The #1 Ethereum Layer 2, incubated by Coinbase. Sub-cent global payments and built-in distribution.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="text-center border-2 hover:border-green-300 dark:hover:border-green-700 transition-all duration-300 hover:shadow-lg">
+              <CardHeader>
+                <div className="mx-auto mb-4 flex items-center justify-center h-16">
+                  <img 
+                    src="/Adyen_Corporate_Logo.svg" 
+                    alt="Adyen" 
+                    className="h-12 w-auto max-w-full"
+                  />
+                </div>
+                <CardTitle className="text-lg">Adyen</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  Global payment platform engineered for ambition with end-to-end payment capabilities
                 </p>
               </CardContent>
             </Card>

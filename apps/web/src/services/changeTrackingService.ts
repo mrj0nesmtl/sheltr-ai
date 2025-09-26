@@ -5,7 +5,7 @@
 
 import { db } from '@/lib/firebase';
 import { collection, addDoc, query, where, orderBy, limit, getDocs, serverTimestamp } from 'firebase/firestore';
-import { notificationService } from './notificationService';
+import { NotificationService } from './notificationService';
 
 export interface DocumentChange {
   id?: string;
@@ -94,7 +94,7 @@ class ChangeTrackingService {
         target_roles: ['super_admin', 'platform_admin']
       };
 
-      await notificationService.createAdminNotification(notificationData);
+      await NotificationService.createAdminNotification(notificationData);
       console.log('✅ GitHub sync notification sent to admins');
     } catch (error) {
       console.error('❌ Error sending GitHub sync notification:', error);

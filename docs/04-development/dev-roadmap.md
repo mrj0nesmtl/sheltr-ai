@@ -1,9 +1,10 @@
-# 🗺️ SHELTR Development Roadmap
-## Complete Rebuild Strategy: Legacy to Enterprise Platform
+# 🗺️ SHELTR Development Roadmap v2.0
+## Enterprise-Grade Platform Strategy: Traditional Funding to Production Scale
 
-> **Vision**: Transform SHELTR from a prototype to an enterprise-grade SaaS platform  
-> **Timeline**: 14 weeks to production launch  
-> **Architecture**: Firebase + FastAPI + Next.js 15 + Expo
+> **Vision**: Transform SHELTR into an enterprise-grade SaaS platform with guaranteed stability  
+> **Timeline**: 12 months to full production scale  
+> **Architecture**: Firebase + Adyen + Coinbase + Next.js 15 + Enterprise Partnerships
+> **Strategic Lead**: Doug Kukura, CFO & Payments Expert [[memory:5408380]]
 
 ---
 
@@ -12,18 +13,14 @@
 ### **Current Development Status: Q3 2025**
 **SHELTR MVP Status**: ✅ **Advanced Production Platform** - Session 17 completed with real-time user status system, enhanced shelter management, and Firebase infrastructure fixes
 
-### **Updated Phase Timeline**
+### **Updated Phase Timeline v2.0**
 | Phase | Timeline | Focus | Status |
 |-------|----------|-------|--------|
 | **Foundation & MVP** | Q1-Q2 2025 | Repository, Website, Core Features | ✅ **COMPLETE** |
 | **Multi-Tenant Platform** | Q3 2025 | Platform Admin Role, Real Donation Flow, Testing | ✅ **COMPLETE** |
-| **Session 13 Achievement** | August 2025 | Database consistency, platform admin, scan-give | ✅ **COMPLETE** |
-| **Session 15+ Achievement** | September 2025 | Dashboard connectivity, knowledge base revolution, complete documentation audit | ✅ **COMPLETE** |
-| **Session 17 Achievement** | September 23, 2025 | Real-time user status system, enhanced shelter management, Firebase fixes | ✅ **COMPLETE** |
-| **Pre-Sale & Funding** | September 2025 | CFO-Led Seed Round | 🎯 **PLANNED** |
-| **Public Beta Launch** | December 2025 | Public Release, Community Growth | 🚀 **TARGET** |
-| **Token ICO (Public)** | December 2025 | SHELTR Token Public Launch | 💎 **MILESTONE** |
-| **Scaling & Expansion** | Q1 2026+ | Multi-city, Enterprise Features | 🔵 **FUTURE** |
+| **Enterprise Architecture** | Q4 2025 | Single-token model, Adyen integration, traditional funding | 🎯 **IN PROGRESS** |
+| **Production Deployment** | Q1 2026 | Adyen live, Coinbase staking, enterprise partnerships | 🚀 **PLANNED** |
+| **Scale & Expansion** | Q2-Q4 2026 | Multi-city deployment, government contracts | 🔵 **FUTURE** |
 
 ### **Success Metrics by Phase**
 ```mermaid
@@ -212,29 +209,31 @@ gantt
 
 ---
 
-## 🚀 **Q4 2025: PUBLIC BETA & TOKEN LAUNCH ROADMAP**
+## 🚀 **Q1-Q4 2026: PRODUCTION SCALE & EXPANSION ROADMAP**
 
-### **September 2025: Pre-Sale & Seed Funding** 🎯 **CRITICAL MILESTONE**
-- **Platform Stability Achievement**: All user roles functional with real data
-- **CFO-Led Seed Round**: Strategic partnership drives institutional investment
-- **Adyen Partnership Formalization**: Payment rail integration for scale
-- **Private Beta Expansion**: Invite-only user growth to 1,000+ participants
-- **Security Audit**: Third-party smart contract and platform security review
-- **Regulatory Compliance**: Legal framework for token launch preparation
+### **Q1 2026: Production Deployment** 🚀 **CRITICAL MILESTONE**
+- **Adyen Production Integration**: Live virtual card issuance and management
+- **Coinbase Institutional Staking**: Active USDT staking with guaranteed returns
+- **Smart Contract Deployment**: SHELTR stablecoin on Base network (tracking only)
+- **Enterprise Security Audit**: Third-party security review of all systems
+- **Regulatory Compliance**: Complete legal framework for production operations
+- **Traditional Seed Funding**: $500K-$1M equity/debt round led by Doug's network
 
-### **October-November 2025: Public Beta Launch** 🚀 **TARGET**
-- **Public Platform Release**: Open registration for all user types
-- **Montreal Pilot Launch**: First city deployment with partner shelters
-- **Mobile App Beta**: iOS/Android applications in App Store beta
-- **Community Growth**: User acquisition campaigns, social media presence
-- **Partnership Onboarding**: Shelter and service provider integrations
+### **Q2 2026: Scale Operations** 🎯 **GROWTH PHASE**
+- **Multi-Shelter Deployment**: 25+ shelter partnerships across North America
+- **Government Partnerships**: Municipal homelessness program contracts
+- **Corporate CSR Integration**: Enterprise social responsibility partnerships
+- **Mobile App Launch**: iOS/Android applications with full payment integration
+- **Advanced Analytics**: AI-powered outcome prediction and optimization
+- **International Expansion**: Regulatory framework for Canada/UK deployment
 
-### **December 2025: SHELTR Token ICO** 💎 **MAJOR MILESTONE**
-- **Public Token Launch**: SHELTR utility token available for purchase
-- **Smart Contract Mainnet**: Production blockchain deployment on Base
-- **DAO Governance Launch**: Community voting on platform decisions
-- **Exchange Listings**: Major DEX/CEX partnerships for liquidity
-- **Marketing Campaign**: Global launch with impact stories and metrics
+### **Q3-Q4 2026: Market Leadership** 💎 **MAJOR MILESTONE**
+- **100+ Shelter Network**: Comprehensive North American shelter coverage
+- **Government Contracts**: Federal and state program integration
+- **Enterprise White-Label**: Solutions for large organizations and municipalities
+- **Advanced AI Integration**: Predictive analytics for housing outcomes
+- **Global Expansion**: International deployment with local compliance
+- **IPO Preparation**: Institutional investment and public offering readiness
 
 ### **Q4 2025 Success Metrics**
 | Metric | Target | Current Status |

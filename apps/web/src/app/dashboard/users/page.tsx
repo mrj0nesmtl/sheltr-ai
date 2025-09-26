@@ -618,10 +618,29 @@ export default function UserManagement() {
       setDonorUsers(donorsData);
       setOrphanedUsers(orphanedData);
       
-      // Initialize reorderable platform admins for drag-drop (Super Admin only)
-      if (user?.role === 'super_admin') {
-        setReorderablePlatformAdmins([...platformAdminsData]);
-      }
+      // Initialize reorderable platform admins with proper ordering
+      // Sort by displayOrder (from Super Admin drag-drop) with fallback to alphabetical
+      const sortedPlatformAdmins = [...platformAdminsData].sort((a, b) => {
+        // Use displayOrder if both have it
+        if (a.displayOrder !== undefined && b.displayOrder !== undefined) {
+          return a.displayOrder - b.displayOrder;
+        }
+        // If only one has displayOrder, prioritize it
+        if (a.displayOrder !== undefined) return -1;
+        if (b.displayOrder !== undefined) return 1;
+        // Fallback to alphabetical by name
+        return (a.firstName || '').localeCompare(b.firstName || '');
+      });
+      
+      // Set ordered list for both Super Admin and Platform Admin
+      setReorderablePlatformAdmins(sortedPlatformAdmins);
+      
+      console.log('📋 Platform Admins ordered by displayOrder:', 
+        sortedPlatformAdmins.map(admin => ({ 
+          name: `${admin.firstName} ${admin.lastName}`, 
+          displayOrder: admin.displayOrder 
+        }))
+      );
       
       // Load shelter data for admin users
       await loadShelterData(adminsData);
@@ -1548,7 +1567,7 @@ export default function UserManagement() {
             <Card className="border-2 border-orange-200 dark:border-orange-800">
               <CardContent className="p-0">
                 <div className="space-y-4 p-4">
-                  {(user?.role === 'super_admin' ? reorderablePlatformAdmins : platformAdmins).map((admin, index) => (
+                  {reorderablePlatformAdmins.map((admin, index) => (
                     <div 
                       key={admin.id} 
                       className={`flex items-center justify-between p-4 bg-gradient-to-r from-orange-50 to-yellow-50 dark:from-orange-900/20 dark:to-yellow-900/20 rounded-lg border border-orange-200 dark:border-orange-800 ${

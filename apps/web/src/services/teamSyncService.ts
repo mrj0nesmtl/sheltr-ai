@@ -5,6 +5,8 @@
  */
 
 import { PlatformAdminProfileService, type PlatformAdminProfile } from './platformAdminProfileService';
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 
 export interface PublicTeamMember {
   id: string;
@@ -95,8 +97,18 @@ export class TeamSyncService {
           
           if (!joelProfile) {
             console.log('🔍 Joel not found in publicProfiles, trying direct lookup...');
-            // Try to get Joel's profile directly by email
-            joelProfile = await PlatformAdminProfileService.getPlatformAdminProfile(joelEmail);
+            // Try to find Joel's user ID by email first, then get profile
+            const usersRef = collection(db, 'users');
+            const q = query(usersRef, where('email', '==', joelEmail));
+            const querySnapshot = await getDocs(q);
+            
+            if (!querySnapshot.empty) {
+              const joelUserId = querySnapshot.docs[0].id;
+              console.log(`🔍 Found Joel's user ID: ${joelUserId}`);
+              joelProfile = await PlatformAdminProfileService.getPlatformAdminProfile(joelUserId);
+            } else {
+              console.log('🔍 Joel not found by email in users collection');
+            }
           }
           
           if (!joelProfile) {

@@ -53,6 +53,17 @@ Here's your treasure map to the SHELTR-AI ecosystem, with special focus on DeFi 
 - **🔌 Payment API Documentation**: https://sheltr-api-714964620823.us-central1.run.app/docs
 - **🔒 Financial Security**: https://sheltr-ai.web.app/security
 - **🏗️ Payment Architecture**: https://sheltr-ai.web.app/docs/website-architecture
+- **🏗️ System Design**: https://sheltr-ai.web.app/docs/system-design
+- **📋 Development Roadmap**: https://sheltr-ai.web.app/docs/dev-roadmap
+
+### **Payment Rails & Integration Documentation**
+- **💳 Adyen Integration**: https://sheltr-ai.web.app/docs/payment-rails/adyen-integration
+- **🚀 Production Deployment**: https://sheltr-ai.web.app/docs/payment-rails/production-deployment  
+- **🎯 SHELTR Demo Implementation**: https://sheltr-ai.web.app/docs/payment-rails/sheltr-demo-implementation
+
+### **Blockchain & Smart Contracts**
+- **⛓️ Blockchain Architecture**: https://sheltr-ai.web.app/docs/technical/blockchain
+- **📄 SHELTR Whitepaper**: https://sheltr-ai.web.app/docs/whitepaper-final
 
 ## What Makes This Special for DeFi? 🌟
 

@@ -361,13 +361,16 @@ export class PlatformAdminProfileService {
     try {
       console.log('Getting all platform admin profiles...', { publicOnly });
       
-      const { collection, getDocs, query, where } = await import('firebase/firestore');
+      const { collection, getDocs, query, where, or } = await import('firebase/firestore');
       const { db } = await import('@/lib/firebase');
       
-      // Query all users with platform_admin role
+      // Query all users with platform_admin OR super_admin role (for team page)
       const usersQuery = query(
         collection(db, 'users'),
-        where('role', '==', 'platform_admin')
+        or(
+          where('role', '==', 'platform_admin'),
+          where('role', '==', 'super_admin')
+        )
       );
       
       const querySnapshot = await getDocs(usersQuery);

@@ -469,3 +469,38 @@ export function formatRelativeTime(timestamp: Timestamp | Date): string {
     return 'Unknown';
   }
 }
+
+/**
+ * Creates a fraud alert notification for administrators
+ */
+export async function createFraudAlertNotification(alertData: {
+  level: 'low' | 'medium' | 'high';
+  description: string;
+  details: string;
+  userId?: string;
+}): Promise<void> {
+  try {
+    const notificationData: AdminNotification = {
+      id: '',
+      type: 'fraud_alert',
+      title: `Fraud Alert: ${alertData.level.toUpperCase()}`,
+      message: alertData.description,
+      details: alertData.details,
+      isRead: false,
+      createdAt: new Date(),
+      priority: alertData.level === 'high' ? 'high' : alertData.level === 'medium' ? 'medium' : 'low',
+      target_roles: ['super_admin', 'platform_admin']
+    };
+
+    // Create notification document
+    await addDoc(collection(db, 'admin_notifications'), {
+      ...notificationData,
+      createdAt: serverTimestamp()
+    });
+
+    console.log('✅ Fraud alert notification created:', alertData.level);
+  } catch (error) {
+    console.error('❌ Error creating fraud alert notification:', error);
+    throw error;
+  }
+}

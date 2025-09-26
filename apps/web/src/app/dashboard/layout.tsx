@@ -33,7 +33,9 @@ import {
   Target,
   Mail,
   Camera,
-  Sparkles
+  Sparkles,
+  MessageCircle,
+  Zap
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/theme-toggle';
@@ -85,7 +87,7 @@ const getUserDisplayName = (user: { role?: string; email?: string | null; displa
 };
 
 // Define navigation based on user role
-const getNavigationItems = (userRole: string, notificationCount?: number) => {
+const getNavigationItems = (userRole: string, messageCount?: number, notificationCount?: number) => {
   const baseItems: Array<{
     title: string;
     href: string;
@@ -112,6 +114,13 @@ const getNavigationItems = (userRole: string, notificationCount?: number) => {
         icon: Bell,
         description: 'Manage notifications and alerts',
         notificationCount
+      },
+      {
+        title: 'Messages',
+        href: '/dashboard/messages',
+        icon: MessageCircle,
+        description: 'Internal admin messaging and communication',
+        notificationCount: messageCount
       },
       {
         title: 'My Giving',
@@ -160,6 +169,14 @@ const getNavigationItems = (userRole: string, notificationCount?: number) => {
         href: '/dashboard/chatbots',
         icon: MessageSquare,
         description: 'AI chatbot control panel and conversations'
+      },
+      {
+        title: 'Automation',
+        href: '/dashboard/automation',
+        icon: Zap,
+        description: 'MCP control and automated workflows',
+        badge: 'Beta',
+        badgeColor: 'bg-purple-100 text-purple-800 border-purple-300'
       },
       {
         title: 'Financial Oversight',
@@ -241,6 +258,13 @@ const getNavigationItems = (userRole: string, notificationCount?: number) => {
         notificationCount
       },
       {
+        title: 'Messages',
+        href: '/dashboard/messages',
+        icon: MessageCircle,
+        description: 'Internal admin messaging and communication',
+        notificationCount: messageCount
+      },
+      {
         title: 'My Giving',
         href: '/dashboard/donor',
         icon: Heart,
@@ -287,6 +311,14 @@ const getNavigationItems = (userRole: string, notificationCount?: number) => {
         href: '/dashboard/chatbots',
         icon: MessageSquare,
         description: 'AI chatbot control panel and conversations'
+      },
+      {
+        title: 'Automation',
+        href: '/dashboard/automation',
+        icon: Zap,
+        description: 'MCP control and automated workflows',
+        badge: 'Beta',
+        badgeColor: 'bg-purple-100 text-purple-800 border-purple-300'
       },
       {
         title: 'Financial Oversight',
@@ -336,6 +368,13 @@ const getNavigationItems = (userRole: string, notificationCount?: number) => {
         href: '/dashboard/shelter-admin',
         icon: Home,
         description: 'Shelter operations dashboard'
+      },
+      {
+        title: 'Messages',
+        href: '/dashboard/messages',
+        icon: MessageCircle,
+        description: 'Internal admin messaging and communication',
+        notificationCount: messageCount
       },
       {
         title: 'Participants',
@@ -482,7 +521,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     });
   }
 
-  const navigationItems = getNavigationItems(user?.role || '', notificationCounts?.totalNotifications);
+  const navigationItems = getNavigationItems(
+    user?.role || '', 
+    notificationCounts?.unreadMessages, 
+    notificationCounts?.unreadNotifications
+  );
 
   // Fetch notification counts
   useEffect(() => {
@@ -492,10 +535,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       }
 
       try {
-        const counts = await getNotificationCounts();
+        const counts = await getNotificationCounts(user.uid);
         setNotificationCounts(counts);
+        console.log('📊 Fetched notification counts:', counts);
       } catch (error) {
-        console.error('Error fetching notification counts:', error);
+        console.error('❌ Error fetching notification counts:', error);
       }
     };
 
@@ -595,13 +639,14 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     console.log('✅ NDA accepted - allowing dashboard access');
   };
 
-  const toggleSidebar = () => {
-    if (isMobile) {
-      setSidebarOpen(!sidebarOpen);
-    } else {
-      setSidebarCollapsed(!sidebarCollapsed);
-    }
-  };
+  // Toggle sidebar function (reserved for future use)
+  // const toggleSidebar = () => {
+  //   if (isMobile) {
+  //     setSidebarOpen(!sidebarOpen);
+  //   } else {
+  //     setSidebarCollapsed(!sidebarCollapsed);
+  //   }
+  // };
 
   const isActiveRoute = (href: string) => {
     if (href === '/dashboard' || href === '/dashboard/shelter-admin' || href === '/dashboard/donor' || href === '/dashboard/participant') {
@@ -738,7 +783,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               {/* Navigation */}
               <nav className="flex-1 overflow-y-auto p-4">
                 <div className="space-y-1">
-                  {navigationItems.map((item, index) => {
+                  {navigationItems.map((item) => {
                     const Icon = item.icon;
                     const isActive = isActiveRoute(item.href);
                     

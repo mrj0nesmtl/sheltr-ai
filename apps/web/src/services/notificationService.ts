@@ -1,506 +1,471 @@
-import { collection, getDocs, query, orderBy, limit, where, Timestamp, addDoc, serverTimestamp, FieldValue, doc, updateDoc } from 'firebase/firestore';
+import { 
+  collection, 
+  addDoc, 
+  query, 
+  where, 
+  getDocs, 
+  updateDoc, 
+  doc, 
+  orderBy, 
+  limit,
+  serverTimestamp,
+  Timestamp
+} from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
-// API base URL for notifications
-const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
-
-export interface EmailSignup {
-  id: string;
-  email: string;
-  source: string;
-  page: string;
-  signup_date: Timestamp;
-  user_agent?: string;
-  status: string;
-  created_at?: string;
+export interface MessageNotification {
+  id?: string;
+  userId: string;
+  type: 'message_sent' | 'message_received' | 'message_read' | 'message_replied';
+  messageId: string;
+  conversationId: string;
+  fromUserId: string;
+  fromUserDisplayName: string;
+  fromUserShortcode: string;
+  content: string;
+  isRead: boolean;
+  createdAt: Timestamp;
+  readAt?: Timestamp;
 }
 
-export interface ContactInquiryNotification {
-  id: string;
-  inquiry_id: string;
-  inquiry_type: string;
-  sender_email: string;
-  sender_name?: string;
-  subject: string;
-  priority: 'low' | 'normal' | 'high';
-  source: string;
-  status: 'new' | 'read' | 'responded';
-  created_at: Timestamp;
-  read_by?: string[];
+export interface NotificationSummary {
+  unreadMessages: number;
+  unreadNotifications: number;
+  lastActivity?: Timestamp;
 }
 
 export interface NotificationCounts {
-  totalEmailSignups: number;
-  recentEmailSignups: number;
-  pendingShelterapplications: number;
-  contactInquiries: number;
-  recentContactInquiries: number;
-  repliedContactInquiries: number;
-  totalNotifications: number;
+  unreadMessages: number;
+  unreadNotifications: number;
+}
+
+export interface EmailSignup {
+  id?: string;
+  email: string;
+  name?: string;
+  source: string;
+  createdAt: Timestamp;
+  status: 'active' | 'pending' | 'unsubscribed';
+}
+
+export interface ContactInquiryNotification {
+  id?: string;
+  email: string;
+  name: string;
+  subject: string;
+  message: string;
+  createdAt: Timestamp;
+  isRead: boolean;
+  priority: 'low' | 'normal' | 'high';
+}
+
+export interface AdminNotification {
+  id?: string;
+  userId: string;
+  type: 'system' | 'message' | 'inquiry' | 'alert';
+  title: string;
+  content: string;
+  isRead: boolean;
+  createdAt: Timestamp;
+  priority: 'low' | 'normal' | 'high' | 'urgent';
+}
+
+export class NotificationService {
+  /**
+   * Create a notification for message events
+   */
+  static async createMessageNotification(
+    userId: string,
+    type: MessageNotification['type'],
+    messageId: string,
+    conversationId: string,
+    fromUserId: string,
+    fromUserDisplayName: string,
+    fromUserShortcode: string,
+    content: string
+  ): Promise<boolean> {
+    try {
+      console.log(`🔔 Creating ${type} notification for user ${userId}`);
+      
+      const notificationData: Omit<MessageNotification, 'id'> = {
+        userId,
+        type,
+        messageId,
+        conversationId,
+        fromUserId,
+        fromUserDisplayName,
+        fromUserShortcode,
+        content: content.substring(0, 100), // Truncate for notification
+        isRead: false,
+        createdAt: serverTimestamp() as Timestamp
+      };
+
+      await addDoc(collection(db, 'message_notifications'), notificationData);
+      console.log(`✅ ${type} notification created for user ${userId}`);
+      return true;
+      
+    } catch (error) {
+      console.error('❌ Error creating message notification:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Get unread notifications for a user
+   */
+  static async getUnreadNotifications(userId: string): Promise<MessageNotification[]> {
+    try {
+      if (!userId) {
+        console.warn('⚠️ getUnreadNotifications called with undefined userId');
+        return [];
+      }
+      
+      console.log('🔍 Querying notifications for userId:', userId);
+      
+      const q = query(
+        collection(db, 'message_notifications'),
+        where('userId', '==', userId),
+        where('isRead', '==', false),
+        orderBy('createdAt', 'desc'),
+        limit(20)
+      );
+
+      const querySnapshot = await getDocs(q);
+      const notifications: MessageNotification[] = [];
+
+      querySnapshot.forEach((doc) => {
+        notifications.push({
+          id: doc.id,
+          ...doc.data()
+        } as MessageNotification);
+      });
+
+      return notifications;
+    } catch (error) {
+      console.error('❌ Error getting unread notifications:', error);
+      return [];
+    }
+  }
+
+  /**
+   * Mark notification as read
+   */
+  static async markNotificationAsRead(notificationId: string): Promise<boolean> {
+    try {
+      await updateDoc(doc(db, 'message_notifications', notificationId), {
+        isRead: true,
+        readAt: serverTimestamp()
+      });
+      return true;
+    } catch (error) {
+      console.error('❌ Error marking notification as read:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Get notification summary for a user (badge counts)
+   */
+  static async getNotificationSummary(userId: string): Promise<NotificationSummary> {
+    try {
+      if (!userId) {
+        console.warn('⚠️ getNotificationSummary called with undefined userId');
+        return {
+          unreadMessages: 0,
+          unreadNotifications: 0
+        };
+      }
+      
+      console.log('📊 Getting notification summary for userId:', userId);
+      
+      // Get unread message notifications
+      const unreadQuery = query(
+        collection(db, 'message_notifications'),
+        where('userId', '==', userId),
+        where('isRead', '==', false),
+        where('type', 'in', ['message_received', 'message_replied'])
+      );
+
+      const unreadSnapshot = await getDocs(unreadQuery);
+      const unreadMessages = unreadSnapshot.size;
+
+      // Get last activity
+      const lastActivityQuery = query(
+        collection(db, 'message_notifications'),
+        where('userId', '==', userId),
+        orderBy('createdAt', 'desc'),
+        limit(1)
+      );
+
+      const lastActivitySnapshot = await getDocs(lastActivityQuery);
+      let lastActivity: Timestamp | undefined;
+
+      if (!lastActivitySnapshot.empty) {
+        const lastDoc = lastActivitySnapshot.docs[0];
+        lastActivity = lastDoc.data().createdAt;
+      }
+
+      return {
+        unreadMessages,
+        unreadNotifications: unreadMessages,
+        lastActivity
+      };
+
+    } catch (error) {
+      console.error('❌ Error getting notification summary:', error);
+      return {
+        unreadMessages: 0,
+        unreadNotifications: 0
+      };
+    }
+  }
+
+  /**
+   * Create automatic status notifications for message lifecycle
+   */
+  static async handleMessageStatusChange(
+    messageId: string,
+    conversationId: string,
+    status: 'sent' | 'delivered' | 'read' | 'replied',
+    fromUserId: string,
+    toUserId: string,
+    fromUserDisplayName: string,
+    fromUserShortcode: string,
+    content: string
+  ): Promise<void> {
+    try {
+      console.log(`📊 Handling message status change: ${status}`);
+
+      switch (status) {
+        case 'sent':
+          // Notify sender that message was sent successfully
+          await this.createMessageNotification(
+            fromUserId,
+            'message_sent',
+            messageId,
+            conversationId,
+            fromUserId,
+            'System',
+            'system',
+            `Message sent to @${fromUserShortcode}`
+          );
+          break;
+
+        case 'delivered':
+          // Notify recipient of new message
+          await this.createMessageNotification(
+            toUserId,
+            'message_received',
+            messageId,
+            conversationId,
+            fromUserId,
+            fromUserDisplayName,
+            fromUserShortcode,
+            content
+          );
+          break;
+
+        case 'read':
+          // This will be triggered when recipient opens the conversation
+          console.log(`📖 Message ${messageId} marked as read`);
+          break;
+
+        case 'replied':
+          // Notify original sender that recipient replied
+          await this.createMessageNotification(
+            fromUserId,
+            'message_replied',
+            messageId,
+            conversationId,
+            toUserId,
+            fromUserDisplayName,
+            fromUserShortcode,
+            'Replied to your message'
+          );
+          break;
+      }
+
+    } catch (error) {
+      console.error('❌ Error handling message status change:', error);
+    }
+  }
 }
 
 /**
- * Fetch recent email signups from newsletter_signups collection
- * SESSION 13: MULTI-TENANT - Prioritize REAL database data over mock data
+ * Standalone function to get notification counts (for easier import)
  */
-export const getRecentEmailSignups = async (limitCount: number = 10): Promise<EmailSignup[]> => {
+export async function getNotificationCounts(userId: string): Promise<NotificationCounts> {
   try {
-    console.log('🔔 [SESSION 13] Fetching REAL email signups from newsletter_signups collection...');
-    
-    // PRIORITY 1: Real Firestore data from newsletter_signups collection
-    const signupsRef = collection(db, 'newsletter_signups');
-    const q = query(
-      signupsRef,
-      orderBy('signup_date', 'desc'),
-      limit(limitCount)
-    );
-    
-    const querySnapshot = await getDocs(q);
-    const signups: EmailSignup[] = [];
-    
-    querySnapshot.forEach((doc) => {
-      const data = doc.data();
-      signups.push({
-        id: doc.id,
-        email: data.email,
-        source: data.source || 'unknown',
-        page: data.page || 'unknown',
-        signup_date: data.signup_date,
-        user_agent: data.user_agent,
-        status: data.status || 'active',
-        created_at: data.signup_date?.toDate?.()?.toISOString() || new Date().toISOString()
-      });
-    });
-    
-    console.log(`✅ [SESSION 13] Found ${signups.length} REAL email signups from newsletter_signups collection`);
-    
-    // If we have real data, return it
-    if (signups.length > 0) {
-      console.log('📧 Real email signups:', signups.map(s => ({ email: s.email, source: s.source, page: s.page })));
-      return signups;
+    if (!userId) {
+      console.warn('⚠️ getNotificationCounts called with undefined userId');
+      return {
+        unreadMessages: 0,
+        unreadNotifications: 0
+      };
     }
     
-    // FALLBACK: Only use mock data if no real signups exist
-    console.log('⚠️ No real email signups found, checking API for backup data...');
-    
-    try {
-      const response = await fetch(`${apiBaseUrl}/api/v1/analytics/test-platform`);
-      if (response.ok) {
-        const data = await response.json();
-        const userData = data.data.users;
-        const totalUsers = userData.total || 0;
-        
-        // Only generate minimal mock data if absolutely no real data exists
-        if (totalUsers > 0) {
-          console.log('🎭 Generating minimal fallback data (no real signups found)');
-          const fallbackSignups: EmailSignup[] = [
-            {
-              id: 'fallback_1',
-              email: 'demo@sheltr.ai',
-              source: 'demo',
-              page: 'fallback',
-              signup_date: Timestamp.now(),
-              user_agent: 'SHELTR Demo System',
-              status: 'demo',
-              created_at: new Date().toISOString()
-            }
-          ];
-          
-          return fallbackSignups;
-        }
-      }
-    } catch (apiError) {
-      console.warn('⚠️ API also failed, returning empty array:', apiError);
-    }
-    
-    // Return empty array if no data available
-    console.log('ℹ️ No email signups available (neither real nor fallback)');
-    return [];
-    
-  } catch (error) {
-    console.error('❌ Error fetching email signups:', error);
-    return [];
-  }
-};
-
-/**
- * Get notification counts for Super Admin dashboard
- * SESSION 13: MULTI-TENANT - Use REAL database data first
- */
-export const getNotificationCounts = async (): Promise<NotificationCounts> => {
-  try {
-    console.log('🔔 [SESSION 13] Fetching REAL notification counts from database...');
-    
-    // PRIORITY 1: Real Firestore data from actual collections
-    console.log('🔔 Getting real data from newsletter_signups and applications...');
-    
-    // Get total email signups from real collection
-    const signupsRef = collection(db, 'newsletter_signups');
-    const totalSignupsSnapshot = await getDocs(signupsRef);
-    const totalEmailSignups = totalSignupsSnapshot.size;
-    
-    // Get recent email signups (last 7 days)
-    const sevenDaysAgo = new Date();
-    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-    
-    const recentSignupsQuery = query(
-      signupsRef,
-      where('signup_date', '>=', Timestamp.fromDate(sevenDaysAgo))
-    );
-    const recentSignupsSnapshot = await getDocs(recentSignupsQuery);
-    const recentEmailSignups = recentSignupsSnapshot.size;
-    
-    // Get pending shelter applications from multi-tenant structure
-    let pendingShelterapplications = 0;
-    try {
-      // Try global applications collection first
-      const globalAppsRef = collection(db, 'global/platform_admin/applications');
-      const globalAppsSnapshot = await getDocs(globalAppsRef);
-      pendingShelterapplications += globalAppsSnapshot.size;
-      
-      // Also check legacy shelter_applications collection
-      const legacyAppsRef = collection(db, 'shelter_applications');
-      const pendingQuery = query(
-        legacyAppsRef,
-        where('status', '==', 'pending_review')
-      );
-      const pendingSnapshot = await getDocs(pendingQuery);
-      pendingShelterapplications += pendingSnapshot.size;
-      
-    } catch {
-      console.log('ℹ️ No applications collections found yet');
-    }
-    
-    // Get contact inquiry metrics from actual contact_inquiries collection
-    let contactInquiries = 0;
-    let recentContactInquiries = 0;
-    let repliedContactInquiries = 0;
-    try {
-      const contactInquiriesRef = collection(db, 'contact_inquiries');
-      
-      // Get total contact inquiries
-      const totalInquiriesSnapshot = await getDocs(contactInquiriesRef);
-      contactInquiries = totalInquiriesSnapshot.size;
-      
-      // Get recent contact inquiries (last 7 days)
-      const recentInquiriesQuery = query(
-        contactInquiriesRef,
-        where('created_at', '>=', Timestamp.fromDate(sevenDaysAgo))
-      );
-      const recentInquiriesSnapshot = await getDocs(recentInquiriesQuery);
-      recentContactInquiries = recentInquiriesSnapshot.size;
-      
-      // Get replied contact inquiries
-      const repliedInquiriesQuery = query(
-        contactInquiriesRef,
-        where('responded', '==', true)
-      );
-      const repliedInquiriesSnapshot = await getDocs(repliedInquiriesQuery);
-      repliedContactInquiries = repliedInquiriesSnapshot.size;
-      
-    } catch {
-      console.log('ℹ️ No contact_inquiries collection found yet');
-    }
-    
-    const totalNotifications = recentEmailSignups + pendingShelterapplications + recentContactInquiries;
-    
-    const counts: NotificationCounts = {
-      totalEmailSignups,
-      recentEmailSignups,
-      pendingShelterapplications,
-      contactInquiries,
-      recentContactInquiries,
-      repliedContactInquiries,
-      totalNotifications
-    };
-    
-    console.log('✅ [SESSION 13] Real notification counts from database:', counts);
-    console.log(`📧 Real signups: ${totalEmailSignups} total, ${recentEmailSignups} recent`);
-    console.log(`📋 Pending applications: ${pendingShelterapplications}`);
-    console.log(`💬 Contact inquiries: ${contactInquiries} total, ${recentContactInquiries} recent, ${repliedContactInquiries} replied`);
-    
-    // If we have some real data, return it
-    if (totalEmailSignups > 0 || pendingShelterapplications > 0 || contactInquiries > 0) {
-      return counts;
-    }
-    
-    // FALLBACK: Only if absolutely no real data exists, use minimal mock data
-    console.log('⚠️ No real notification data found, using minimal fallback...');
+    console.log('🔢 Getting notification counts for userId:', userId);
+    const summary = await NotificationService.getNotificationSummary(userId);
+    console.log('✅ Notification counts result:', summary);
     
     return {
-      totalEmailSignups: 0,
-      recentEmailSignups: 0,
-      pendingShelterapplications: 0,
-      contactInquiries: 0,
-      recentContactInquiries: 0,
-      repliedContactInquiries: 0,
-      totalNotifications: 0
+      unreadMessages: summary.unreadMessages,
+      unreadNotifications: summary.unreadNotifications
     };
-    
   } catch (error) {
-    console.error('❌ Error fetching notification counts:', error);
+    console.error('❌ Error getting notification counts:', error);
     return {
-      totalEmailSignups: 0,
-      recentEmailSignups: 0,
-      pendingShelterapplications: 0,
-      contactInquiries: 0,
-      recentContactInquiries: 0,
-      repliedContactInquiries: 0,
-      totalNotifications: 0
+      unreadMessages: 0,
+      unreadNotifications: 0
     };
   }
-};
+}
 
 /**
- * Create a notification for contact inquiry
+ * Get recent email signups (placeholder for contact form integration)
  */
-export const createContactInquiryNotification = async (inquiryData: {
-  inquiry_id: string;
-  inquiry_type: string;
-  sender_email: string;
-  sender_name?: string;
+export async function getRecentEmailSignups(limit: number = 10): Promise<EmailSignup[]> {
+  try {
+    // This would query a contact_signups or similar collection
+    // For now, return empty array as this is primarily for contact forms
+    console.log('📧 Getting recent email signups (not implemented yet)');
+    return [];
+  } catch (error) {
+    console.error('❌ Error getting recent email signups:', error);
+    return [];
+  }
+}
+
+/**
+ * Create a contact inquiry notification (for contact forms)
+ */
+export async function createContactInquiryNotification(inquiryData: {
+  email: string;
+  name: string;
   subject: string;
-  priority: 'low' | 'normal' | 'high';
-  source: string;
-}): Promise<string> => {
+  message: string;
+  source?: string;
+}): Promise<boolean> {
   try {
-    console.log('🔔 Creating contact inquiry notification:', inquiryData);
+    console.log('📞 Creating contact inquiry notification:', inquiryData.email);
     
-    const notification: Omit<ContactInquiryNotification, 'id'> = {
-      inquiry_id: inquiryData.inquiry_id,
-      inquiry_type: inquiryData.inquiry_type,
-      sender_email: inquiryData.sender_email,
-      sender_name: inquiryData.sender_name,
+    const notificationData = {
+      email: inquiryData.email,
+      name: inquiryData.name,
       subject: inquiryData.subject,
-      priority: inquiryData.priority,
-      source: inquiryData.source,
-      status: 'new',
-      created_at: serverTimestamp(),
-      read_by: []
+      message: inquiryData.message,
+      source: inquiryData.source || 'contact-form',
+      createdAt: serverTimestamp(),
+      isRead: false,
+      priority: 'normal' as const
     };
 
-    const docRef = await addDoc(collection(db, 'admin_notifications'), notification);
-    console.log('✅ Contact inquiry notification created:', docRef.id);
-    return docRef.id;
+    await addDoc(collection(db, 'contact_inquiries'), notificationData);
+    console.log('✅ Contact inquiry notification created');
+    return true;
+    
   } catch (error) {
     console.error('❌ Error creating contact inquiry notification:', error);
-    throw error;
+    return false;
   }
-};
+}
 
 /**
- * Get recent contact inquiry notifications from actual contact_inquiries collection
+ * Get recent contact inquiries (for notifications dashboard)
  */
-export const getRecentContactInquiries = async (limitCount: number = 10): Promise<ContactInquiryNotification[]> => {
+export async function getRecentContactInquiries(limit: number = 10): Promise<ContactInquiryNotification[]> {
   try {
-    console.log('🔔 Fetching recent contact inquiries from contact_inquiries collection...');
+    console.log('📞 Getting recent contact inquiries...');
     
-    const contactInquiriesRef = collection(db, 'contact_inquiries');
     const q = query(
-      contactInquiriesRef,
-      orderBy('created_at', 'desc'),
-      limit(limitCount)
+      collection(db, 'contact_inquiries'),
+      orderBy('createdAt', 'desc'),
+      limit(limit)
     );
-    
+
     const querySnapshot = await getDocs(q);
-    const notifications: ContactInquiryNotification[] = [];
-    
+    const inquiries: ContactInquiryNotification[] = [];
+
     querySnapshot.forEach((doc) => {
-      const data = doc.data();
-      notifications.push({
+      inquiries.push({
         id: doc.id,
-        inquiry_id: doc.id, // Use the document ID as inquiry_id
-        inquiry_type: data.inquiry_type || 'contact_form',
-        sender_email: data.email,
-        sender_name: data.name,
-        subject: data.subject || `${data.inquiry_type || 'Contact'} inquiry`,
-        priority: data.priority || 'normal',
-        source: data.source || 'contact_form',
-        status: data.responded ? 'responded' : 'new',
-        created_at: data.created_at,
-        read_by: []
-      });
+        ...doc.data()
+      } as ContactInquiryNotification);
     });
-    
-    console.log(`✅ Found ${notifications.length} contact inquiries from contact_inquiries collection`);
-    return notifications;
+
+    console.log(`✅ Found ${inquiries.length} contact inquiries`);
+    return inquiries;
   } catch (error) {
-    console.error('❌ Error fetching contact inquiries:', error);
+    console.error('❌ Error getting recent contact inquiries:', error);
     return [];
   }
-};
+}
+
+/**
+ * Get admin notifications
+ */
+export async function getAdminNotifications(userId: string, limit: number = 20): Promise<AdminNotification[]> {
+  try {
+    // This would query admin notifications or use the message notifications
+    const messageNotifications = await NotificationService.getUnreadNotifications(userId);
+    
+    // Convert message notifications to admin notifications format
+    const adminNotifications: AdminNotification[] = messageNotifications.map(msg => ({
+      id: msg.id,
+      userId: msg.userId,
+      type: 'message' as const,
+      title: `Message from ${msg.fromUserDisplayName}`,
+      content: msg.content,
+      isRead: msg.isRead,
+      createdAt: msg.createdAt,
+      priority: msg.type === 'urgent' ? 'urgent' : 'normal'
+    }));
+    
+    return adminNotifications.slice(0, limit);
+  } catch (error) {
+    console.error('❌ Error getting admin notifications:', error);
+    return [];
+  }
+}
+
+/**
+ * Mark notification as read (wrapper function for easier import)
+ */
+export async function markNotificationAsRead(notificationId: string): Promise<boolean> {
+  try {
+    return await NotificationService.markNotificationAsRead(notificationId);
+  } catch (error) {
+    console.error('❌ Error marking notification as read:', error);
+    return false;
+  }
+}
 
 /**
  * Format relative time for notifications
  */
-export const formatRelativeTime = (date: Date): string => {
-  const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffMins = Math.floor(diffMs / (1000 * 60));
-  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-  
-  if (diffMins < 1) return 'Just now';
-  if (diffMins < 60) return `${diffMins} min${diffMins > 1 ? 's' : ''} ago`;
-  if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
-  if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
-  
-  return date.toLocaleDateString();
-};
-
-export interface AdminNotification {
-  id?: string;
-  type: 'user_signup' | 'donation' | 'contact_inquiry' | 'system_alert' | 'github_sync_required' | 'fraud_alert';
-  title: string;
-  message: string;
-  data?: Record<string, unknown>;
-  priority: 'low' | 'medium' | 'high';
-  read: boolean;
-  created_at: Timestamp | FieldValue;
-  target_roles?: string[];
+export function formatRelativeTime(timestamp: Timestamp | Date): string {
+  try {
+    const date = timestamp instanceof Timestamp ? timestamp.toDate() : timestamp;
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    
+    const diffMinutes = Math.floor(diffMs / (1000 * 60));
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    
+    if (diffMinutes < 1) {
+      return 'Just now';
+    } else if (diffMinutes < 60) {
+      return `${diffMinutes}m ago`;
+    } else if (diffHours < 24) {
+      return `${diffHours}h ago`;
+    } else if (diffDays < 7) {
+      return `${diffDays}d ago`;
+    } else {
+      return date.toLocaleDateString();
+    }
+  } catch (error) {
+    console.error('❌ Error formatting relative time:', error);
+    return 'Unknown';
+  }
 }
-
-/**
- * Create a general admin notification
- */
-const createAdminNotification = async (notification: Omit<AdminNotification, 'id' | 'read' | 'created_at'>): Promise<string> => {
-  try {
-    console.log('📢 Creating admin notification:', notification);
-
-    const notificationData = {
-      ...notification,
-      read: false,
-      created_at: serverTimestamp()
-    };
-
-    const docRef = await addDoc(collection(db, 'admin_notifications'), notificationData);
-    console.log('✅ Admin notification created with ID:', docRef.id);
-
-    return docRef.id;
-  } catch (error) {
-    console.error('❌ Error creating admin notification:', error);
-    throw error;
-  }
-};
-
-/**
- * Get recent admin notifications
- */
-export const getAdminNotifications = async (limitCount: number = 20): Promise<AdminNotification[]> => {
-  try {
-    console.log('🔔 [ADMIN NOTIFICATIONS] Fetching admin notifications...');
-    
-    const notificationsRef = collection(db, 'admin_notifications');
-    const q = query(
-      notificationsRef,
-      orderBy('created_at', 'desc'),
-      limit(limitCount)
-    );
-    
-    const querySnapshot = await getDocs(q);
-    const notifications: AdminNotification[] = [];
-    
-    querySnapshot.forEach((doc) => {
-      const data = doc.data();
-      notifications.push({
-        id: doc.id,
-        type: data.type,
-        title: data.title,
-        message: data.message,
-        data: data.data || {},
-        priority: data.priority,
-        read: data.read || false,
-        created_at: data.created_at,
-        target_roles: data.target_roles || []
-      });
-    });
-    
-    console.log(`✅ [ADMIN NOTIFICATIONS] Found ${notifications.length} admin notifications`);
-    return notifications;
-    
-  } catch (error) {
-    console.error('❌ [ADMIN NOTIFICATIONS] Error fetching admin notifications:', error);
-    return [];
-  }
-};
-
-/**
- * Mark an admin notification as read
- */
-export const markNotificationAsRead = async (notificationId: string): Promise<boolean> => {
-  try {
-    console.log(`🔔 [ADMIN NOTIFICATIONS] Marking notification ${notificationId} as read...`);
-    
-    const notificationRef = doc(db, 'admin_notifications', notificationId);
-    await updateDoc(notificationRef, {
-      read: true,
-      read_at: serverTimestamp()
-    });
-    
-    console.log(`✅ [ADMIN NOTIFICATIONS] Notification ${notificationId} marked as read`);
-    return true;
-    
-  } catch (error) {
-    console.error(`❌ [ADMIN NOTIFICATIONS] Error marking notification ${notificationId} as read:`, error);
-    return false;
-  }
-};
-
-/**
- * Create a fraud alert notification for all administrators
- */
-export const createFraudAlertNotification = async (fraudAlert: {
-  id: string;
-  level: 'low' | 'medium' | 'high';
-  description: string;
-  details: string;
-  timestamp: string;
-  status: string;
-}): Promise<string> => {
-  try {
-    console.log('🚨 [FRAUD ALERT] Creating fraud alert notification for all administrators...', fraudAlert);
-
-    const priorityMap = {
-      'low': 'medium' as const,
-      'medium': 'high' as const, 
-      'high': 'high' as const
-    };
-
-    const notification: Omit<AdminNotification, 'id' | 'read' | 'created_at'> = {
-      type: 'fraud_alert',
-      title: `🚨 Fraud Alert: ${fraudAlert.description}`,
-      message: `${fraudAlert.details} - Alert Level: ${fraudAlert.level.toUpperCase()}`,
-      data: {
-        fraud_alert_id: fraudAlert.id,
-        level: fraudAlert.level,
-        description: fraudAlert.description,
-        details: fraudAlert.details,
-        timestamp: fraudAlert.timestamp,
-        status: fraudAlert.status
-      },
-      priority: priorityMap[fraudAlert.level],
-      target_roles: ['super_admin', 'platform_admin'] // Notify all administrators
-    };
-
-    const notificationId = await createAdminNotification(notification);
-    
-    console.log(`✅ [FRAUD ALERT] Fraud alert notification created with ID: ${notificationId}`);
-    console.log(`🔔 [FRAUD ALERT] Notification sent to: super_admin, platform_admin`);
-    
-    return notificationId;
-  } catch (error) {
-    console.error('❌ [FRAUD ALERT] Error creating fraud alert notification:', error);
-    throw error;
-  }
-};
-
-// Export the service with the new functions
-export const notificationService = {
-  getNotificationCounts,
-  getRecentContactInquiries,
-  createContactInquiryNotification,
-  createAdminNotification,
-  createFraudAlertNotification,
-  getAdminNotifications,
-  markNotificationAsRead
-};

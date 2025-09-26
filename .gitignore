@@ -155,6 +155,10 @@ QUICK-MACBOOK-SYNC.md
 docs/platform-admin-welcome-letter.md
 docs/platform-admin/welcome-letter.md
 
+# Personalized welcome letters summary (contains implementation details)
+PERSONALIZED_WELCOME_LETTERS_SUMMARY.md
+**/PERSONALIZED_WELCOME_LETTERS_SUMMARY.md
+
 # Local scripts directory (contains sensitive operations)
 scripts/
 

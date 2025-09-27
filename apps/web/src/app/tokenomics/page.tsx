@@ -1,11 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { CreditCard, TrendingUp, Shield, Building2, DollarSign, Users, BarChart3, CheckCircle, ExternalLink, Eye, LogIn, Menu, X, FileText, BookOpen, Target, ArrowRight, Zap, AlertTriangle, Coins } from 'lucide-react';
+import { CreditCard, TrendingUp, Shield, Building2, Users, BarChart3, CheckCircle, Eye, LogIn, Menu, X, FileText, BookOpen, Zap, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
 import { ThemeToggle } from '@/components/theme-toggle';
 import Footer from '@/components/Footer';
 import ThemeLogo from '@/components/ThemeLogo';
@@ -143,8 +142,8 @@ export default function TokenomicsPage() {
                   🚨 Strategic Architecture Transformation
                 </h3>
                 <p className="text-amber-800 dark:text-amber-200 leading-relaxed mb-4">
-                  Following expert analysis by our CFO and payments specialist <strong>Doug Kukura</strong>, SHELTR has evolved from 
-                  a dual-token architecture to a revolutionary <strong>Single Stable Token Investment Fund</strong> model.
+                  Following expert peer-analysis by our collegues and payments specialists, SHELTR is evolving from 
+                  a dual-token architecture to a <strong>Single Stable Token Investment Fund</strong> model.
                 </p>
                 <div className="grid md:grid-cols-2 gap-4 text-sm">
                   <div>
@@ -178,10 +177,10 @@ export default function TokenomicsPage() {
             ENTERPRISE TOKENOMICS v2.0
           </Badge>
           <h1 className="text-5xl md:text-6xl font-bold mb-6 text-white">
-            Single-Token <span className="text-emerald-400">Stable Fund</span>
+            SHELTR <span className="text-emerald-400">SmartFund™</span>
           </h1>
           <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto">
-            Revolutionary enterprise-grade architecture combining <strong>Adyen virtual cards</strong>, <strong>Coinbase institutional staking</strong>, and <strong>SHELTR utility tracking</strong> for guaranteed stability and growth.
+             Enterprise-grade token architecture combining <strong>virtual cards</strong>, <strong>Coinbase institutional staking</strong>, and <strong>SHELTR utility tracking</strong> for transparency stability and growth.
           </p>
         </div>
       </section>
@@ -452,7 +451,7 @@ export default function TokenomicsPage() {
                     <CreditCard className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                   </div>
                   <div>
-                    <CardTitle className="text-2xl text-blue-600 dark:text-blue-400">Adyen Payment Platform</CardTitle>
+                    <CardTitle className="text-2xl text-blue-600 dark:text-blue-400">Payment-Rails</CardTitle>
                     <CardDescription className="text-blue-600/70">Global Payment Processing & Virtual Cards</CardDescription>
                   </div>
                 </div>
@@ -535,161 +534,6 @@ export default function TokenomicsPage() {
         </div>
       </section>
 
-      {/* Benefits Comparison */}
-      <section className="py-20 bg-gradient-to-r from-slate-50 to-gray-50 dark:from-slate-900 dark:to-gray-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4">Strategic Benefits</h2>
-            <p className="text-xl text-muted-foreground">Why enterprise partnerships deliver superior outcomes</p>
-          </div>
-
-          <div className="grid lg:grid-cols-2 gap-12">
-            <div>
-              <h3 className="text-2xl font-semibold mb-6 text-red-600">❌ Crypto Charity Risks</h3>
-              <div className="space-y-4">
-                <Card className="border-red-200 bg-red-50 dark:bg-red-900/10">
-                  <CardContent className="p-4">
-                    <div className="flex items-start space-x-3">
-                      <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
-                      <div>
-                        <h4 className="font-semibold text-red-700 dark:text-red-400">Market Volatility</h4>
-                        <p className="text-sm text-red-600 dark:text-red-300">20-80% value fluctuations expose vulnerable populations to financial risk</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-                <Card className="border-red-200 bg-red-50 dark:bg-red-900/10">
-                  <CardContent className="p-4">
-                    <div className="flex items-start space-x-3">
-                      <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
-                      <div>
-                        <h4 className="font-semibold text-red-700 dark:text-red-400">ICO Speculation</h4>
-                        <p className="text-sm text-red-600 dark:text-red-300">Token sales create regulatory uncertainty and speculative bubbles</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-                <Card className="border-red-200 bg-red-50 dark:bg-red-900/10">
-                  <CardContent className="p-4">
-                    <div className="flex items-start space-x-3">
-                      <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
-                      <div>
-                        <h4 className="font-semibold text-red-700 dark:text-red-400">DeFi Risks</h4>
-                        <p className="text-sm text-red-600 dark:text-red-300">Experimental protocols risk participant housing funds</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </div>
-
-            <div>
-              <h3 className="text-2xl font-semibold mb-6 text-emerald-600">✅ Enterprise Solutions</h3>
-              <div className="space-y-4">
-                <Card className="border-emerald-200 bg-emerald-50 dark:bg-emerald-900/10">
-                  <CardContent className="p-4">
-                    <div className="flex items-start space-x-3">
-                      <CheckCircle className="h-5 w-5 text-emerald-500 mt-0.5 flex-shrink-0" />
-                      <div>
-                        <h4 className="font-semibold text-emerald-700 dark:text-emerald-400">Zero Risk Protection</h4>
-                        <p className="text-sm text-emerald-600 dark:text-emerald-300">Adyen virtual cards eliminate cryptocurrency exposure for participants</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-                <Card className="border-emerald-200 bg-emerald-50 dark:bg-emerald-900/10">
-                  <CardContent className="p-4">
-                    <div className="flex items-start space-x-3">
-                      <CheckCircle className="h-5 w-5 text-emerald-500 mt-0.5 flex-shrink-0" />
-                      <div>
-                        <h4 className="font-semibold text-emerald-700 dark:text-emerald-400">Traditional Funding</h4>
-                        <p className="text-sm text-emerald-600 dark:text-emerald-300">Equity/debt financing eliminates ICO speculation and regulatory risks</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-                <Card className="border-emerald-200 bg-emerald-50 dark:bg-emerald-900/10">
-                  <CardContent className="p-4">
-                    <div className="flex items-start space-x-3">
-                      <CheckCircle className="h-5 w-5 text-emerald-500 mt-0.5 flex-shrink-0" />
-                      <div>
-                        <h4 className="font-semibold text-emerald-700 dark:text-emerald-400">Guaranteed Returns</h4>
-                        <p className="text-sm text-emerald-600 dark:text-emerald-300">Coinbase institutional staking provides 4-6% APY with daily liquidity</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Investment Case */}
-      <section className="py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4">Enterprise Investment Case</h2>
-            <p className="text-xl text-muted-foreground">Why institutional partners choose SHELTR's architecture</p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card className="text-center border-2 hover:shadow-lg transition-all">
-              <CardHeader>
-                <div className="w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Shield className="h-8 w-8 text-blue-600" />
-                </div>
-                <CardTitle className="text-xl">Government Ready</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground mb-4">
-                  Traditional business structure enables municipal contracts and federal program integration
-                </p>
-                <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg">
-                  <div className="text-2xl font-bold text-blue-600">$8B</div>
-                  <div className="text-sm text-muted-foreground">Annual municipal homelessness spending</div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="text-center border-2 hover:shadow-lg transition-all">
-              <CardHeader>
-                <div className="w-16 h-16 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <TrendingUp className="h-8 w-8 text-emerald-600" />
-                </div>
-                <CardTitle className="text-xl">Scalable Revenue</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground mb-4">
-                  Enterprise partnerships and government contracts provide predictable, recurring revenue
-                </p>
-                <div className="bg-emerald-50 dark:bg-emerald-900/20 p-3 rounded-lg">
-                  <div className="text-2xl font-bold text-emerald-600">95%</div>
-                  <div className="text-sm text-muted-foreground">Automation reduces marginal costs</div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="text-center border-2 hover:shadow-lg transition-all">
-              <CardHeader>
-                <div className="w-16 h-16 bg-purple-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Building2 className="h-8 w-8 text-purple-600" />
-                </div>
-                <CardTitle className="text-xl">Enterprise Scale</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground mb-4">
-                  Adyen and Coinbase infrastructure supports millions of transactions with institutional SLAs
-                </p>
-                <div className="bg-purple-50 dark:bg-purple-900/20 p-3 rounded-lg">
-                  <div className="text-2xl font-bold text-purple-600">99.99%</div>
-                  <div className="text-sm text-muted-foreground">Uptime guarantee</div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
 
       {/* Documentation Links */}
       <section className="py-16 bg-muted/30">

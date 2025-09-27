@@ -1,11 +1,11 @@
 # 🪙 SHELTR Tokenomics v2.0: Single-Token Stable Fund Architecture
 *Version: 2.0.0 - September, 2025*
 *Status: Strategic Implementation* 🚀
-*Architecture Lead: Doug Kukura, CFO & Payments Expert*
+*Architecture Leads: JY CTO + DK CFO*
 
 ## 🎯 **REVOLUTIONARY TOKENOMICS PIVOT**
 
-### **Doug's Expert Assessment**
+### **DK Expert Assessment**
 > *"The dual-token architecture introduces unnecessary complexity and market volatility risk for vulnerable populations. A single utility token pegged to USDT, combined with traditional funding and enterprise partnerships, provides stability, guaranteed returns, and eliminates ICO stigma while maintaining our mission integrity."*
 
 ### **Strategic Transformation**

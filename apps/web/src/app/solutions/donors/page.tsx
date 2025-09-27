@@ -391,72 +391,30 @@ export default function DonorsPage() {
         </div>
       </section>
 
-      {/* Pre-Launch Vision */}
+      {/* Call to Action */}
       <section className="py-20 bg-orange-500/5">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-6">Your Donations Will Create Real Change</h2>
-          <p className="text-xl text-muted-foreground mb-12">
-            Be among the first donors to make a verified difference in ending homelessness through blockchain transparency.
-          </p>
-          
-          <div className="grid md:grid-cols-4 gap-8 mb-12">
-            <Card className="border-orange-500/20 bg-orange-500/5">
-              <CardContent className="p-6 text-center">
-                <div className="text-3xl font-bold text-orange-600 dark:text-orange-400 mb-2">Q2 2025</div>
-                <p className="text-sm text-muted-foreground">Platform launch target</p>
-              </CardContent>
-            </Card>
-            <Card className="border-orange-500/20 bg-orange-500/5">
-              <CardContent className="p-6 text-center">
-                <div className="text-3xl font-bold text-orange-600 dark:text-orange-400 mb-2">100%</div>
-                <p className="text-sm text-muted-foreground">Donation transparency</p>
-              </CardContent>
-            </Card>
-            <Card className="border-orange-500/20 bg-orange-500/5">
-              <CardContent className="p-6 text-center">
-                <div className="text-3xl font-bold text-orange-600 dark:text-orange-400 mb-2">&lt;5s</div>
-                <p className="text-sm text-muted-foreground">Transaction speed</p>
-              </CardContent>
-            </Card>
-            <Card className="border-orange-500/20 bg-orange-500/5">
-              <CardContent className="p-6 text-center">
-                <div className="text-3xl font-bold text-orange-600 dark:text-orange-400 mb-2">~$0.01</div>
-                <p className="text-sm text-muted-foreground">Network fees</p>
-              </CardContent>
-            </Card>
-          </div>
-
-          <div className="bg-orange-500/10 p-8 rounded-lg border border-orange-500/20 mb-12">
-            <h3 className="text-xl font-semibold mb-4">Average Impact per $50 Donation</h3>
-            <div className="grid md:grid-cols-3 gap-6 text-center">
-              <div>
-                <div className="text-2xl font-bold text-orange-600 dark:text-orange-400">$40</div>
-                <p className="text-sm text-muted-foreground">Direct to participant</p>
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-orange-600 dark:text-orange-400">$7.50</div>
-                <p className="text-sm text-muted-foreground">Housing fund contribution</p>
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-orange-600 dark:text-orange-400">$2.50</div>
-                <p className="text-sm text-muted-foreground">Platform operations</p>
-              </div>
+          <div className="bg-orange-600/10 rounded-lg p-8 border border-orange-500/20">
+            <h2 className="text-3xl font-bold mb-6">Ready to Transform Lives?</h2>
+            <p className="text-xl text-muted-foreground mb-8">
+              Join the most transparent charitable giving platform ever created. Every donation is tracked, 
+              every impact is verified, and every dollar makes a real difference.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link href="/scan-give">
+                <Button size="lg" className="bg-orange-600 hover:bg-orange-700">
+                  <Heart className="h-4 w-4 mr-2" />
+                  Start Giving Today
+                </Button>
+              </Link>
+              <Link href="/register">
+                <Button variant="outline" size="lg" className="border-orange-500/20 text-orange-600 dark:text-orange-400">
+                  <QrCode className="h-4 w-4 mr-2" />
+                  Create Donor Account
+                </Button>
+              </Link>
             </div>
-          </div>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/register">
-              <Button size="lg" className="bg-orange-600 hover:bg-orange-700">
-                <Heart className="h-4 w-4 mr-2" />
-                Start Giving Today
-              </Button>
-            </Link>
-            <Link href="/scan-give">
-              <Button variant="outline" size="lg" className="border-orange-500/20 text-orange-600 dark:text-orange-400">
-                <Smartphone className="h-4 w-4 mr-2" />
-                Try Demo QR Code
-              </Button>
-            </Link>
           </div>
         </div>
       </section>

@@ -63,8 +63,8 @@ export default function HackingHomelessnessPage() {
               <Brain className="h-12 w-12 text-purple-600 mt-1" />
               <div className="flex-1">
                 <div className="mb-3">
-                  <h1 className="text-3xl sm:text-4xl font-bold mb-2 leading-tight">🧠 Hacking Homelessness: AI & Tech-for-Good Revolution</h1>
-                  <Badge className="bg-purple-500 text-white text-sm">STRATEGIC THESIS</Badge>
+                  <h1 className="text-3xl sm:text-4xl font-bold mb-2 leading-tight">Hacking Homelessness: AI & Tech-for-Good Revolution</h1>
+                  <Badge className="bg-purple-500 text-white text-sm">ACADEMIC THESIS</Badge>
                 </div>
                 <p className="text-lg text-muted-foreground mb-3">
                   Revolutionary AI-powered ecosystem combining enterprise payment infrastructure with blockchain transparency and physical infrastructure deployment

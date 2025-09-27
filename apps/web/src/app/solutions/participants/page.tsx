@@ -96,10 +96,15 @@ export default function ParticipantsPage() {
                 <CardTitle className="text-green-600 dark:text-green-400">Direct Financial Support</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground text-center">
+                <p className="text-muted-foreground text-center mb-4">
                   80% of all donations go directly to you for immediate needs like food, 
                   clothing, transportation, and essential services.
                 </p>
+                <div className="text-center">
+                  <Badge variant="outline" className="text-xs bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300 border-green-300">
+                    No strings attached
+                  </Badge>
+                </div>
               </CardContent>
             </Card>
 
@@ -109,10 +114,15 @@ export default function ParticipantsPage() {
                 <CardTitle className="text-green-600 dark:text-green-400">Housing Pathway</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground text-center">
+                <p className="text-muted-foreground text-center mb-4">
                   15% of donations automatically go towards housing solutions, 
-                  building a foundation for your permanent stability.
+                  building a foundation for your urgent stability.
                 </p>
+                <div className="text-center">
+                  <Badge variant="outline" className="text-xs bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border-blue-300">
+                    Creating Equity • Building Dignity 
+                  </Badge>
+                </div>
               </CardContent>
             </Card>
 
@@ -122,10 +132,15 @@ export default function ParticipantsPage() {
                 <CardTitle className="text-green-600 dark:text-green-400">Privacy Protected</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground text-center">
+                <p className="text-muted-foreground text-center mb-4">
                   Your personal information is secure and private. You control what 
                   you share and maintain dignity throughout your journey.
                 </p>
+                <div className="text-center">
+                  <Badge variant="outline" className="text-xs bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 border-purple-300">
+                    Your data, your control
+                  </Badge>
+                </div>
               </CardContent>
             </Card>
           </div>
@@ -282,6 +297,12 @@ export default function ParticipantsPage() {
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold mb-4">Simple Steps to Get Support</h2>
             <p className="text-xl text-muted-foreground">Getting help shouldn&apos;t be complicated</p>
+            <div className="mt-6 inline-flex items-center space-x-2 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-full px-6 py-2">
+              <Users className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+              <span className="text-sm text-blue-700 dark:text-blue-300 font-medium">
+                Most people get their QR code the same day they visit
+              </span>
+            </div>
           </div>
 
           <div className="grid lg:grid-cols-2 gap-12">
@@ -296,19 +317,19 @@ export default function ParticipantsPage() {
                 <div className="space-y-3">
                   <div className="flex items-center space-x-3">
                     <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-400" />
-                    <span>Visit any partner shelter or service center</span>
+                    <span>Visit any partner shelter or service center <em>(find locations near you)</em></span>
                   </div>
                   <div className="flex items-center space-x-3">
                     <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-400" />
-                    <span>Complete a simple registration process</span>
+                    <span>Complete a simple registration process <em>(usually takes 10-15 minutes)</em></span>
                   </div>
                   <div className="flex items-center space-x-3">
                     <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-400" />
-                    <span>Receive your unique QR code card</span>
+                    <span>Receive your unique QR code card <em>(yours to keep, works immediately)</em></span>
                   </div>
                   <div className="flex items-center space-x-3">
                     <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-400" />
-                    <span>Start receiving donations immediately</span>
+                    <span>Start receiving donations immediately <em>(no waiting period)</em></span>
                   </div>
                 </div>
               </CardContent>
@@ -354,7 +375,7 @@ export default function ParticipantsPage() {
                 <div className="space-y-3">
                   <div className="flex items-center space-x-3">
                     <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-400" />
-                    <span>Pre-paid cards for immediate use</span>
+                    <span>Pre-paid vitrual or cards for immediate use</span>
                   </div>
                   <div className="flex items-center space-x-3">
                     <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-400" />
@@ -404,115 +425,28 @@ export default function ParticipantsPage() {
         </div>
       </section>
 
-      {/* Path to Housing Success */}
-      <section className="py-20 bg-green-500/5">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-6">Your Path to Housing Success</h2>
-            <p className="text-xl text-muted-foreground">
-              How SHELTR tokens, PODS, and MOBI work together to provide immediate relief and long-term housing stability.
+      {/* Final Call to Action */}
+      <section className="py-16 bg-green-500/5">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="bg-green-600/10 rounded-lg p-8 border border-green-500/20">
+            <h3 className="text-2xl font-semibold mb-4">Ready to Start a SHELTR Journey?</h3>
+            <p className="text-muted-foreground mb-4">
+              Every person deserves dignity, respect, and the opportunity for a stable life. 
+              SHELTR provides some tools and support to make it happen.
             </p>
-          </div>
-          
-          <div className="grid md:grid-cols-3 gap-8 mb-12">
-            {/* Step 1: Immediate Relief */}
-            <Card className="border-green-500/20 bg-green-500/5">
-              <CardHeader>
-                <div className="w-12 h-12 bg-green-600 text-white rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-xl font-bold">1</span>
-                </div>
-                <CardTitle className="text-center">Immediate Relief</CardTitle>
-              </CardHeader>
-              <CardContent className="text-center">
-                <p className="text-sm text-muted-foreground mb-4">
-                  Receive SHELTR tokens directly for immediate needs like food, transportation, 
-                  and emergency shelter while PODS are being deployed.
-                </p>
-                <div className="bg-green-600/10 rounded-lg p-3">
-                  <div className="text-lg font-semibold text-green-600">$40 direct support</div>
-                  <div className="text-xs text-muted-foreground">per $50 donation received</div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Step 2: Housing Fund Building */}
-            <Card className="border-green-500/20 bg-green-500/5">
-              <CardHeader>
-                <div className="w-12 h-12 bg-green-600 text-white rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-xl font-bold">2</span>
-                </div>
-                <CardTitle className="text-center">Emergency PODS Deployment</CardTitle>
-              </CardHeader>
-              <CardContent className="text-center">
-                <p className="text-sm text-muted-foreground mb-4">
-                  15% of donations fund emergency PODS deployment through MOBI transport - 
-                  providing immediate secure shelter while building toward permanent housing.
-                </p>
-                <div className="bg-blue-600/10 rounded-lg p-3">
-                  <div className="text-lg font-semibold text-blue-600">$7.50 PODS fund</div>
-                  <div className="text-xs text-muted-foreground">per $50 donation received</div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Step 3: Sustainable Independence */}
-            <Card className="border-green-500/20 bg-green-500/5">
-              <CardHeader>
-                <div className="w-12 h-12 bg-green-600 text-white rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-xl font-bold">3</span>
-                </div>
-                <CardTitle className="text-center">Sustainable Independence</CardTitle>
-              </CardHeader>
-              <CardContent className="text-center">
-                <p className="text-sm text-muted-foreground mb-4">
-                  From PODS to permanent housing with continued MOBI access for transportation, 
-                  job training, healthcare access, and financial literacy support.
-                </p>
-                <div className="bg-purple-600/10 rounded-lg p-3">
-                  <div className="text-lg font-semibold text-purple-600">Ongoing support</div>
-                  <div className="text-xs text-muted-foreground">until sustainable independence</div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Call to Action */}
-          <div className="text-center">
-            <div className="bg-green-600/10 rounded-lg p-8 mb-8 border border-green-500/20">
-              <h3 className="text-xl font-semibold mb-4">Ready to Start Your Journey?</h3>
-              <p className="text-muted-foreground mb-6">
-                Every person deserves dignity, respect, and the opportunity for a stable life. 
-                SHELTR provides the tools and support to make it happen.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">Although these pages look awesome
-                <Link href="/register">
-                  <Button size="lg" className="bg-green-600 hover:bg-green-700">
-                    <Users className="h-4 w-4 mr-2" />
-                    Join SHELTR Today
-                  </Button>
-                </Link>
-                <Link href="/docs/participant-guide">
-                  <Button variant="outline" size="lg" className="border-green-500/20 text-green-600 dark:text-green-400">
-                    <Heart className="h-4 w-4 mr-2" />
-                    Get Support Guide
-                  </Button>
-                </Link>
-              </div>
-              
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link href="/pods">
-                  <Button variant="outline" size="lg" className="border-blue-500/20 text-blue-600 dark:text-blue-400">
-                    <Building2 className="h-4 w-4 mr-2" />
-                    Explore PODS
-                  </Button>
-                </Link>
-                <Link href="/pods/mobi">
-                  <Button variant="outline" size="lg" className="border-orange-500/20 text-orange-600 dark:text-orange-400">
-                    <Bike className="h-4 w-4 mr-2" />
-                    Explore MOBI
-                  </Button>
-                </Link>
-              </div>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link href="/register">
+                <Button size="lg" className="bg-green-600 hover:bg-green-700">
+                  <Users className="h-4 w-4 mr-2" />
+                  Join SHELTR Today
+                </Button>
+              </Link>
+              <Link href="/docs/participant-guide">
+                <Button variant="outline" size="lg" className="border-green-500/20 text-green-600 dark:text-green-400">
+                  <Heart className="h-4 w-4 mr-2" />
+                  Get Support Guide
+                </Button>
+              </Link>
             </div>
           </div>
         </div>

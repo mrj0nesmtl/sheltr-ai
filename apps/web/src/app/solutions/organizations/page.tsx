@@ -70,17 +70,19 @@ export default function OrganizationsPage() {
             </div>
             
             <h1 className="text-5xl md:text-6xl font-bold mb-8 text-white">
-              Beyond Traditional HMIS
+              Amplify Your Impact
             </h1>
             
             <p className="text-2xl font-medium text-gray-200 mb-4">
-              A Next Generation Shelter Platform
+              Next-Generation HMIS + Overflow Relief + Investment Vehicle
             </p>
             
             <p className="text-lg text-gray-300 mb-10 max-w-4xl mx-auto leading-relaxed">
-              <span className="font-semibold text-blue-300"> AI-powered analytics</span>, 
-              <span className="font-semibold text-purple-300"> blockchain donations</span>, and 
-              <span className="font-semibold text-green-300"> participant empowerment</span>. 
+              <span className="font-semibold text-blue-300">AI-powered analytics</span>, 
+              <span className="font-semibold text-purple-300"> blockchain transparency</span>, 
+              <span className="font-semibold text-green-300"> overflow assistance</span>, and 
+              <span className="font-semibold text-yellow-300"> community investment returns</span>. 
+              We're not competing—we're <strong className="text-white"> amplifying your mission</strong>.
             </p>
             
             </div>
@@ -97,16 +99,16 @@ export default function OrganizationsPage() {
                 Our Mission
               </Badge>
               <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
-                Empowering Organizations to Transform Lives
+                Partnership-Driven Tech for Good
               </h2>
             </div>
             
             <div className="prose prose-lg max-w-none dark:prose-invert">
               <p className="text-xl text-muted-foreground leading-relaxed mb-8">
-                How organizations serve their communities with technology 
-                creates a direct pathways from crisis to stability. Our platform will enable shelter to 
-                connect participants with immediate housing solutions—from tiny homes to apartments—while building 
-                sustainable financial foundations through community-powered DeFi strategies.
+                We're building technology that <strong>amplifies your existing work</strong>—not replacing it. 
+                SHELTR provides overflow relief when you're at capacity, creates new revenue streams through 
+                community investment, and modernizes your operations with next-generation HMIS capabilities. 
+                <em>Your mission remains yours. Our tech makes it more powerful.</em>
               </p>
               
               <div className="grid md:grid-cols-3 gap-8 mt-12">
@@ -114,10 +116,10 @@ export default function OrganizationsPage() {
                   <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Building2 className="h-8 w-8 text-blue-600 dark:text-blue-400" />
                   </div>
-                  <h3 className="text-lg font-semibold mb-2">Housing Solutions</h3>
+                  <h3 className="text-lg font-semibold mb-2">Overflow Relief & Housing Network</h3>
                   <p className="text-muted-foreground">
-                    Connect participants with verified tiny home builders, transitional apartments, and permanent housing 
-                    through a comprehensive provider network.
+                    When you're at capacity, seamlessly connect participants with PODS emergency housing, 
+                    transitional apartments, and permanent housing through our verified provider network.
                   </p>
                 </div>
                 
@@ -125,10 +127,10 @@ export default function OrganizationsPage() {
                   <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
                     <TrendingUp className="h-8 w-8 text-green-600 dark:text-green-400" />
                   </div>
-                  <h3 className="text-lg font-semibold mb-2">Financial Empowerment</h3>
+                  <h3 className="text-lg font-semibold mb-2">Community Investment Vehicle</h3>
                   <p className="text-muted-foreground">
-                    Elevate participants through skill development, job placement programs, and transparent 
-                    blockchain-verified community support systems.
+                    Generate sustainable revenue through our SmartFund™ model: 15% of donations create 
+                    housing infrastructure with guaranteed 4-6% APY returns, benefiting your organization.
                   </p>
                 </div>
                 
@@ -136,10 +138,10 @@ export default function OrganizationsPage() {
                   <div className="w-16 h-16 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Users className="h-8 w-8 text-purple-600 dark:text-purple-400" />
                   </div>
-                  <h3 className="text-lg font-semibold mb-2">Community Crowdfunding</h3>
+                  <h3 className="text-lg font-semibold mb-2">Next-Gen HMIS Platform</h3>
                   <p className="text-muted-foreground">
-                    Leverage technology to mobilize unprecedented community support with complete transparency 
-                    and direct impact tracking for every contribution.
+                    AI-powered analytics, blockchain transparency, and mobile-first design that makes 
+                    traditional HMIS feel like the past. Your data, your control, enhanced capabilities.
                   </p>
                 </div>
               </div>
@@ -406,10 +408,10 @@ export default function OrganizationsPage() {
               <Zap className="h-4 w-4 mr-2" />
               Tech Leadership
             </Badge>
-            <h2 className="text-4xl font-bold mb-6">Platform Features</h2>
+            <h2 className="text-4xl font-bold mb-6">Unicorn Technology Stack</h2>
             <p className="text-xl text-muted-foreground max-w-4xl mx-auto">
-              While traditional HMIS solutions focus on compliance, SHELTR revolutionizes operations 
-              with modern technology and participant empowerment. See the difference at a glance.
+              We've built what others only dream of: the first integrated HMIS-donation-investment platform. 
+              Our technology doesn't just manage data—it creates sustainable revenue streams and solves overflow challenges.
             </p>
           </div>
 
@@ -477,6 +479,27 @@ export default function OrganizationsPage() {
                     <td className="px-6 py-4 text-center text-red-600">3-12 months</td>
                   </tr>
                   <tr className="bg-gray-50 dark:bg-gray-700/30">
+                    <td className="px-6 py-4 font-medium">Overflow Relief Network</td>
+                    <td className="px-6 py-4 text-center"><CheckCircle className="h-5 w-5 text-green-600 mx-auto" /></td>
+                    <td className="px-6 py-4 text-center text-red-500">✗</td>
+                    <td className="px-6 py-4 text-center text-red-500">✗</td>
+                    <td className="px-6 py-4 text-center text-red-500">✗</td>
+                  </tr>
+                  <tr>
+                    <td className="px-6 py-4 font-medium">Investment Returns (APY)</td>
+                    <td className="px-6 py-4 text-center font-semibold text-green-600">4-6% Guaranteed</td>
+                    <td className="px-6 py-4 text-center text-red-500">✗</td>
+                    <td className="px-6 py-4 text-center text-red-500">✗</td>
+                    <td className="px-6 py-4 text-center text-red-500">✗</td>
+                  </tr>
+                  <tr className="bg-gray-50 dark:bg-gray-700/30">
+                    <td className="px-6 py-4 font-medium">Physical Infrastructure</td>
+                    <td className="px-6 py-4 text-center font-semibold text-green-600">PODS + MOBI + Drones</td>
+                    <td className="px-6 py-4 text-center text-red-500">✗</td>
+                    <td className="px-6 py-4 text-center text-red-500">✗</td>
+                    <td className="px-6 py-4 text-center text-red-500">✗</td>
+                  </tr>
+                  <tr>
                     <td className="px-6 py-4 font-medium">Pricing Model</td>
                     <td className="px-6 py-4 text-center font-semibold text-green-600">Free / Community Supported</td>
                     <td className="px-6 py-4 text-center text-red-600">Enterprise only</td>
@@ -526,17 +549,17 @@ export default function OrganizationsPage() {
 
             <Card className="border-green-500/20 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20">
               <CardHeader className="text-center">
-                <BarChart3 className="h-12 w-12 text-green-600 mx-auto mb-4" />
-                <CardTitle className="text-green-600">Rapid Implementation</CardTitle>
+                <TrendingUp className="h-12 w-12 text-green-600 mx-auto mb-4" />
+                <CardTitle className="text-green-600">Investment Vehicle</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground text-center mb-4">
-                  Start seeing results in weeks, not months, with our streamlined onboarding process.
+                  Generate sustainable revenue while solving homelessness through our revolutionary SmartFund™ model.
                 </p>
                 <ul className="text-sm space-y-2">
-                  <li className="flex items-center"><CheckCircle className="h-4 w-4 text-green-600 mr-2" />1-2 week implementation</li>
-                  <li className="flex items-center"><CheckCircle className="h-4 w-4 text-green-600 mr-2" />Data migration included</li>
-                  <li className="flex items-center"><CheckCircle className="h-4 w-4 text-green-600 mr-2" />24/7 launch support</li>
+                  <li className="flex items-center"><CheckCircle className="h-4 w-4 text-green-600 mr-2" />4-6% guaranteed APY returns</li>
+                  <li className="flex items-center"><CheckCircle className="h-4 w-4 text-green-600 mr-2" />15% of donations build infrastructure</li>
+                  <li className="flex items-center"><CheckCircle className="h-4 w-4 text-green-600 mr-2" />Coinbase institutional staking</li>
                 </ul>
               </CardContent>
             </Card>

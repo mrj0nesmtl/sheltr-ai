@@ -24,7 +24,8 @@ import {
   CheckSquare,
   BookOpen,
   Eye,
-  Github
+  Github,
+  CreditCard
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -130,6 +131,18 @@ export default function DocsPage() {
       link: "/docs/api",
       downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/03-api/README.md",
       lastUpdated: "September 21, 2025"
+    },
+    {
+      title: "Payment Rail Architecture",
+      description: "Revolutionary single-token stable fund system with Adyen payment processing and Coinbase institutional staking",
+      icon: CreditCard,
+      badge: "Enterprise",
+      badgeColor: "bg-emerald-600",
+      audience: "CFOs • Payment Architects • Enterprise Partners • Financial Teams",
+      topics: ["Adyen Integration", "Coinbase Staking", "Single-Token Model", "Enterprise Infrastructure", "Guaranteed Returns"],
+      link: "/docs/payment-rails",
+      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/payment-rails/sheltr-unified-payment-architecture.md",
+      lastUpdated: "September 26, 2025"
     },
     {
       title: "Chatbot Agent Architecture",

@@ -4,15 +4,15 @@
 
 Hey there Aryan! Welcome to the SHELTR Platform Team! 🚀
 
-I hope this message finds you well and as excited as I am about what we're building together. I can barely contain my enthusiasm as I write this – we've just reached an incredible milestone with SHELTR-AI, and you're about to be part of something truly revolutionary as our **Data Analyst & Insights** leader.
+I hope this message finds you well and as excited as I am about what we're building together.
 
 ## We're Ready for Data-Driven Impact! 🎉
 
-After months of intense development, late-night analytics sessions, and countless data pipeline iterations, **SHELTR-AI is now ready for internal testing and validation**. We're talking about a comprehensive platform that's going to change how we approach homelessness solutions forever – and you get to ensure the data insights and analytics that prove our impact and optimize our effectiveness!
+After months of intense development, late-night analytics sessions, and countless data pipeline iterations, **SHELTR is now ready for internal testing and validation**. We're talking about a comprehensive platform that's going to change how we approach homelessness solutions forever – and you get to ensure the data insights and analytics that prove our impact and optimize our effectiveness!
 
 ## Your Data & Analytics Mission 🎯
 
-As our **Data Analyst & Insights** specialist, you understand that data tells the story of real impact and guides strategic decisions. Over the next **7 days**, I'd love for you to:
+As our **Data Analyst & Insights** specialist, you understand that data tells the story of real impact and guides strategic decisions. Over the next **14 days**, I'd love for you to:
 
 1. **Analyze platform metrics** - what stories do our engagement numbers tell?
 2. **Test analytics dashboards** - assess our data visualization and reporting tools
@@ -23,7 +23,7 @@ As our **Data Analyst & Insights** specialist, you understand that data tells th
 
 ## Your Data & Analytics Ecosystem Links 📈
 
-Here's your treasure map to the SHELTR-AI ecosystem, with special focus on data and analytics:
+Here's your treasure map to the SHELTR ecosystem, with special focus on data and analytics:
 
 ### **Core Analytics & Dashboards**
 - **📊 Platform Analytics**: https://sheltr-ai.web.app/dashboard/analytics
@@ -122,10 +122,7 @@ We're not just testing a platform – we're validating the analytics that will p
 
 Your analytical leadership will determine whether we can prove our impact to donors, partners, and policymakers. The insights you generate today become the foundation for evidence-based social change.
 
-I'm genuinely excited to have your data analysis expertise on this journey. Together, we're going to build analytics that change lives, one meaningful insight and one data-driven decision at a time.
-
 Welcome to the team, welcome to the future of data-driven social impact, and welcome to SHELTR-AI! 🏠✨
-
 Let's measure what matters!
 
 With endless gratitude and analytical respect,

@@ -98,27 +98,27 @@ export default function DocsPage() {
     },
     {
       title: "Technical White Paper",
-      description: "Comprehensive technical documentation covering dual-token architecture, smart contracts, and implementation details",
+      description: "Revolutionary enterprise-grade platform combining traditional payment stability with blockchain transparency through single-token architecture",
       icon: FileText,
       badge: "Published",
-      badgeColor: "bg-blue-500",
-      audience: "Technical Teams • Partners",
-      topics: ["Dual-Token Economics", "Smart Contract Architecture", "Base Network Integration", "Security Framework", "Financial Projections"],
+      badgeColor: "bg-emerald-500",
+      audience: "CFOs • Payment Architects • Enterprise Partners • Investment Teams",
+      topics: ["Single-Token Stable Architecture", "Enterprise Payment Infrastructure", "Zero Risk Protection", "Guaranteed Returns", "Strategic Implementation"],
       link: "/docs/whitepaper",
       downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/whitepaper_final.md",
-      lastUpdated: "September 25, 2025"
+      lastUpdated: "September 26, 2025"
     },
     {
       title: "Blockchain Architecture",
-      description: "Deep technical dive into our Base network implementation, smart contracts, and verification systems",
+      description: "Single-token stable fund ecosystem with enterprise payment infrastructure and guaranteed institutional returns",
       icon: Shield,
-      badge: "Peer Review",
-      badgeColor: "bg-green-500",
-      audience: "Developers • Blockchain Engineers • Security Auditors",
-      topics: ["Smart Contract Code", "Base Network Integration", "Security Protocols", "Oracle Systems", "Token Utilities"],
+      badge: "Strategic Implementation",
+      badgeColor: "bg-emerald-500",
+      audience: "Developers • Blockchain Engineers • Enterprise Partners • Security Auditors",
+      topics: ["Single-Token Architecture", "Smart Contracts", "Base Network", "Enterprise Security", "Coinbase Integration", "Zero Risk Design"],
       link: "/docs/blockchain",
       downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/technical/blockchain.md",
-      lastUpdated: "September 21, 2025"
+      lastUpdated: "September 26, 2025"
     },
     {
       title: "API Documentation",

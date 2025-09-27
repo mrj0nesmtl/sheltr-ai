@@ -74,15 +74,15 @@ export default function DocsPage() {
   const coreDocuments = [
     {
       title: "Hacking Homelessness and the Theory of Change",
-      description: "Executive overview of our theory of change, market analysis, and social impact framework",
+      description: "Revolutionary AI-powered ecosystem combining enterprise payment infrastructure with blockchain transparency and physical infrastructure deployment",
       icon: Users,
-      badge: "Thesis",
+      badge: "Strategic Thesis",
       badgeColor: "bg-purple-500",
-      audience: "Executives • Impact Investors • Media • Partners",
-      topics: ["Theory of Change", "Market Analysis", "Social Impact", "Investment Thesis", "Implementation Roadmap"],
+      audience: "Executives • Impact Investors • AI Engineers • Tech-for-Good Partners",
+      topics: ["AI & Tech-for-Good Revolution", "Single-Token Stable Architecture", "Zero Risk Protection", "Enterprise Infrastructure", "Intelligent Resource Allocation"],
       link: "/docs/hacking-homelessness",
       downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/01-overview/hacking_homelessness.md",
-      lastUpdated: "September 21, 2025"
+      lastUpdated: "September 26, 2025"
     },
     {
       title: "Platform Architecture",

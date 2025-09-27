@@ -279,6 +279,105 @@ export default function BlockchainPage() {
             <div className="mb-8">
               <h2 className="text-3xl font-bold mb-6">Smart Contract Architecture</h2>
               
+              {/* Enterprise Contract Links */}
+              <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-6 mb-8">
+                <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-4 flex items-center gap-2">
+                  <Code className="h-5 w-5" />
+                  🔗 Enterprise Smart Contract Repository
+                </h3>
+                <div className="grid md:grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <h4 className="font-semibold mb-2 text-blue-700 dark:text-blue-300">Core Contracts</h4>
+                    <ul className="space-y-1 text-blue-600 dark:text-blue-400">
+                      <li>
+                        <a 
+                          href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/sheltr-tokens/src/SHELTRPaymentDistributor.sol" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="hover:underline"
+                        >
+                          • SHELTRPaymentDistributor.sol
+                        </a>
+                      </li>
+                      <li>
+                        <a 
+                          href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/sheltr-tokens/src/SHELTRStablecoin.sol" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="hover:underline"
+                        >
+                          • SHELTRStablecoin.sol
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold mb-2 text-purple-700 dark:text-purple-300">Integration Contracts</h4>
+                    <ul className="space-y-1 text-purple-600 dark:text-purple-400">
+                      <li>
+                        <a 
+                          href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/sheltr-tokens/src/AdyenPayoutIntegration.sol" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="hover:underline"
+                        >
+                          • AdyenPayoutIntegration.sol
+                        </a>
+                      </li>
+                      <li>
+                        <a 
+                          href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/sheltr-tokens/src/CoinbaseStakingIntegration.sol" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="hover:underline"
+                        >
+                          • CoinbaseStakingIntegration.sol
+                        </a>
+                      </li>
+                      <li>
+                        <a 
+                          href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/sheltr-tokens/src/BaseNetworkOptimization.sol" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="hover:underline"
+                        >
+                          • BaseNetworkOptimization.sol
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div className="mt-4 pt-4 border-t border-blue-200 dark:border-blue-700">
+                  <h4 className="font-semibold mb-2 text-emerald-700 dark:text-emerald-300">Deployment Scripts</h4>
+                  <div className="grid md:grid-cols-3 gap-2 text-xs">
+                    <a 
+                      href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/sheltr-tokens/script/DeployEnterpriseArchitecture.s.sol" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-emerald-600 dark:text-emerald-400 hover:underline"
+                    >
+                      • DeployEnterpriseArchitecture.s.sol
+                    </a>
+                    <a 
+                      href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/sheltr-tokens/script/SetupPartnershipIntegrations.s.sol" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-emerald-600 dark:text-emerald-400 hover:underline"
+                    >
+                      • SetupPartnershipIntegrations.s.sol
+                    </a>
+                    <a 
+                      href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/sheltr-tokens/script/ConfigureEnterpriseSettings.s.sol" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-emerald-600 dark:text-emerald-400 hover:underline"
+                    >
+                      • ConfigureEnterpriseSettings.s.sol
+                    </a>
+                  </div>
+                </div>
+              </div>
+              
               {/* Core Distribution Contract */}
               <Card className="mb-6 border-2">
                 <CardHeader>
@@ -286,7 +385,18 @@ export default function BlockchainPage() {
                     <Zap className="h-5 w-5 text-purple-600" />
                     SHELTRPaymentDistributor (Core Contract)
                   </CardTitle>
-                  <CardDescription>Enterprise-grade payment distribution with multi-signature governance</CardDescription>
+                  <CardDescription>
+                    Enterprise-grade payment distribution with multi-signature governance
+                    <br />
+                    <a 
+                      href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/sheltr-tokens/src/SHELTRPaymentDistributor.sol" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:underline text-sm"
+                    >
+                      📄 View Full Contract Source
+                    </a>
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="bg-slate-900 rounded-lg p-4 mb-4">
@@ -364,7 +474,18 @@ export default function BlockchainPage() {
                     <Coins className="h-5 w-5 text-emerald-600" />
                     SHELTRStablecoin (Housing Fund Token)
                   </CardTitle>
-                  <CardDescription>USDT-backed stablecoin for transparent housing fund tracking</CardDescription>
+                  <CardDescription>
+                    USDT-backed stablecoin for transparent housing fund tracking
+                    <br />
+                    <a 
+                      href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/sheltr-tokens/src/SHELTRStablecoin.sol" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:underline text-sm"
+                    >
+                      📄 View Full Contract Source
+                    </a>
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="bg-slate-900 rounded-lg p-4 mb-4">
@@ -462,16 +583,111 @@ export default function BlockchainPage() {
 
                 <Card className="border-2">
                   <CardHeader>
-                    <CardTitle>Contract Addresses</CardTitle>
+                    <CardTitle>Enterprise Contract Suite</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <ul className="space-y-2 text-sm">
-                      <li><strong>sheltrDistributor:</strong> TBD</li>
-                      <li><strong>sheltrStablecoin:</strong> TBD</li>
-                      <li><strong>usdtReserve:</strong> TBD</li>
-                      <li><strong>coinbaseStaking:</strong> TBD</li>
-                      <li><strong>adyenPayout:</strong> TBD</li>
-                    </ul>
+                    <div className="space-y-3 text-sm">
+                      <div>
+                        <strong className="text-purple-600">Core Contracts:</strong>
+                        <ul className="ml-4 mt-1 space-y-1">
+                          <li>
+                            <a 
+                              href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/sheltr-tokens/src/SHELTRPaymentDistributor.sol" 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="text-blue-600 hover:underline"
+                            >
+                              SHELTRPaymentDistributor
+                            </a>
+                            : TBD
+                          </li>
+                          <li>
+                            <a 
+                              href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/sheltr-tokens/src/SHELTRStablecoin.sol" 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="text-blue-600 hover:underline"
+                            >
+                              SHELTRStablecoin
+                            </a>
+                            : TBD
+                          </li>
+                        </ul>
+                      </div>
+                      <div>
+                        <strong className="text-emerald-600">Integration Contracts:</strong>
+                        <ul className="ml-4 mt-1 space-y-1">
+                          <li>
+                            <a 
+                              href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/sheltr-tokens/src/AdyenPayoutIntegration.sol" 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="text-blue-600 hover:underline"
+                            >
+                              AdyenPayoutIntegration
+                            </a>
+                            : TBD
+                          </li>
+                          <li>
+                            <a 
+                              href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/sheltr-tokens/src/CoinbaseStakingIntegration.sol" 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="text-blue-600 hover:underline"
+                            >
+                              CoinbaseStakingIntegration
+                            </a>
+                            : TBD
+                          </li>
+                          <li>
+                            <a 
+                              href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/sheltr-tokens/src/BaseNetworkOptimization.sol" 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="text-blue-600 hover:underline"
+                            >
+                              BaseNetworkOptimization
+                            </a>
+                            : TBD
+                          </li>
+                        </ul>
+                      </div>
+                      <div>
+                        <strong className="text-orange-600">Deployment Scripts:</strong>
+                        <ul className="ml-4 mt-1 space-y-1">
+                          <li>
+                            <a 
+                              href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/sheltr-tokens/script/DeployEnterpriseArchitecture.s.sol" 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="text-blue-600 hover:underline text-xs"
+                            >
+                              DeployEnterpriseArchitecture.s.sol
+                            </a>
+                          </li>
+                          <li>
+                            <a 
+                              href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/sheltr-tokens/script/SetupPartnershipIntegrations.s.sol" 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="text-blue-600 hover:underline text-xs"
+                            >
+                              SetupPartnershipIntegrations.s.sol
+                            </a>
+                          </li>
+                          <li>
+                            <a 
+                              href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/sheltr-tokens/script/ConfigureEnterpriseSettings.s.sol" 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="text-blue-600 hover:underline text-xs"
+                            >
+                              ConfigureEnterpriseSettings.s.sol
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
                   </CardContent>
                 </Card>
               </div>

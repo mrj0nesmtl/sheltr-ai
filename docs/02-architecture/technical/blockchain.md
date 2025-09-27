@@ -49,6 +49,26 @@ Our single-token stable architecture solves these fundamental issues:
 
 ## Smart Contract Architecture
 
+### 🔗 Enterprise Contract Repository
+
+Our revolutionary single-token architecture is implemented through 5 core enterprise-grade smart contracts and 3 comprehensive deployment scripts:
+
+#### **Core Contracts**
+- **[SHELTRPaymentDistributor.sol](https://github.com/mrj0nesmtl/sheltr-ai/blob/main/sheltr-tokens/src/SHELTRPaymentDistributor.sol)** - Core 80/15/5 distribution engine (434 lines)
+- **[SHELTRStablecoin.sol](https://github.com/mrj0nesmtl/sheltr-ai/blob/main/sheltr-tokens/src/SHELTRStablecoin.sol)** - Housing fund tracking token with USDT backing (458 lines)
+
+#### **Integration Contracts**
+- **[AdyenPayoutIntegration.sol](https://github.com/mrj0nesmtl/sheltr-ai/blob/main/sheltr-tokens/src/AdyenPayoutIntegration.sol)** - Zero-risk virtual card management (619 lines)
+- **[CoinbaseStakingIntegration.sol](https://github.com/mrj0nesmtl/sheltr-ai/blob/main/sheltr-tokens/src/CoinbaseStakingIntegration.sol)** - Guaranteed 4-6% APY returns (621 lines)
+- **[BaseNetworkOptimization.sol](https://github.com/mrj0nesmtl/sheltr-ai/blob/main/sheltr-tokens/src/BaseNetworkOptimization.sol)** - Ultra-low fee transaction management (548 lines)
+
+#### **Deployment Scripts**
+- **[DeployEnterpriseArchitecture.s.sol](https://github.com/mrj0nesmtl/sheltr-ai/blob/main/sheltr-tokens/script/DeployEnterpriseArchitecture.s.sol)** - Main deployment automation (316 lines)
+- **[SetupPartnershipIntegrations.s.sol](https://github.com/mrj0nesmtl/sheltr-ai/blob/main/sheltr-tokens/script/SetupPartnershipIntegrations.s.sol)** - Adyen + Coinbase setup (627 lines)
+- **[ConfigureEnterpriseSettings.s.sol](https://github.com/mrj0nesmtl/sheltr-ai/blob/main/sheltr-tokens/script/ConfigureEnterpriseSettings.s.sol)** - Enterprise configuration (657 lines)
+
+**Total Architecture**: 3,880 lines of enterprise-grade smart contract code
+
 ### Core Distribution Contract
 ```solidity
 // SPDX-License-Identifier: MIT
@@ -322,6 +342,9 @@ interface ISheltrStable {
 ```
 
 ### SHELTR Stablecoin Implementation
+
+**📄 Full Contract Source**: [SHELTRStablecoin.sol](https://github.com/mrj0nesmtl/sheltr-ai/blob/main/sheltr-tokens/src/SHELTRStablecoin.sol)
+
 ```solidity
 contract SHELTRStablecoin is ERC20, AccessControl, Pausable, ReentrancyGuard {
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
@@ -424,6 +447,64 @@ interface IAdyenPayout {
 }
 ```
 
+## Enterprise Integration Contracts
+
+### 🏦 AdyenPayoutIntegration.sol - Zero-Risk Virtual Card Management
+
+**📄 Full Contract Source**: [AdyenPayoutIntegration.sol](https://github.com/mrj0nesmtl/sheltr-ai/blob/main/sheltr-tokens/src/AdyenPayoutIntegration.sol)
+
+**Key Features**:
+- Global Visa/Mastercard virtual debit card issuance
+- PCI DSS Level 1 compliant payment processing
+- Real-time card loading and transaction monitoring
+- Zero cryptocurrency exposure for participants
+- Enterprise-grade fraud protection and compliance
+
+### 🏛️ CoinbaseStakingIntegration.sol - Guaranteed 4-6% APY Returns
+
+**📄 Full Contract Source**: [CoinbaseStakingIntegration.sol](https://github.com/mrj0nesmtl/sheltr-ai/blob/main/sheltr-tokens/src/CoinbaseStakingIntegration.sol)
+
+**Key Features**:
+- Coinbase Prime institutional custody integration
+- Guaranteed minimum 4-6% APY returns
+- Daily liquidity access for housing fund allocations
+- SOC 2 Type II certified security and compliance
+- Real-time yield calculation and distribution
+
+### ⚡ BaseNetworkOptimization.sol - Ultra-Low Fee Transaction Management
+
+**📄 Full Contract Source**: [BaseNetworkOptimization.sol](https://github.com/mrj0nesmtl/sheltr-ai/blob/main/sheltr-tokens/src/BaseNetworkOptimization.sol)
+
+**Key Features**:
+- Sub-cent transaction fees (~$0.01 vs $20+ Ethereum)
+- Batch processing for maximum cost efficiency
+- Dynamic gas optimization with real-time monitoring
+- Sub-second finality for instant donation processing
+- Enterprise-grade performance analytics
+
+### 🚀 Deployment & Configuration Scripts
+
+#### **Main Deployment**
+**📄 [DeployEnterpriseArchitecture.s.sol](https://github.com/mrj0nesmtl/sheltr-ai/blob/main/sheltr-tokens/script/DeployEnterpriseArchitecture.s.sol)**
+- Complete enterprise architecture deployment
+- Automatic role configuration and permissions
+- Integration verification and testing
+- Production-ready configuration
+
+#### **Partnership Setup**
+**📄 [SetupPartnershipIntegrations.s.sol](https://github.com/mrj0nesmtl/sheltr-ai/blob/main/sheltr-tokens/script/SetupPartnershipIntegrations.s.sol)**
+- Adyen payment processing configuration
+- Coinbase Prime institutional staking setup
+- Test participant registration and demo flows
+- Integration verification and testing
+
+#### **Enterprise Configuration**
+**📄 [ConfigureEnterpriseSettings.s.sol](https://github.com/mrj0nesmtl/sheltr-ai/blob/main/sheltr-tokens/script/ConfigureEnterpriseSettings.s.sol)**
+- Municipal contract compliance configuration
+- CFO and compliance officer role assignments
+- Performance optimization and monitoring setup
+- Production security hardening
+
 ## Base Network Integration
 
 ### Network Selection Rationale
@@ -446,11 +527,17 @@ const BASE_CONFIG = {
     rpcUrl: 'https://mainnet.base.org',
     blockTime: 2, // seconds
     contracts: {
-        sheltrDistributor: '0x...', // Main distribution contract
-        sheltrStablecoin: '0x...', // SHELTR Stablecoin Token
+        // Core Enterprise Contracts
+        sheltrPaymentDistributor: '0x...', // SHELTRPaymentDistributor.sol - Main distribution contract
+        sheltrStablecoin: '0x...', // SHELTRStablecoin.sol - Housing fund tracking token
+        
+        // Integration Contracts  
+        adyenPayoutIntegration: '0x...', // AdyenPayoutIntegration.sol - Virtual card management
+        coinbaseStakingIntegration: '0x...', // CoinbaseStakingIntegration.sol - Guaranteed returns
+        baseNetworkOptimization: '0x...', // BaseNetworkOptimization.sol - Ultra-low fees
+        
+        // External Dependencies
         usdtReserve: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913', // USDT on Base
-        coinbaseStaking: '0x...', // Coinbase staking pool
-        adyenPayout: '0x...', // Adyen payout integration
         priceOracle: '0x...', // Chainlink USDT/USD feed
         governance: '0x...', // Multi-sig governance
         treasury: '0x...' // Platform treasury
@@ -947,11 +1034,35 @@ The future of charitable giving combines traditional payment stability with bloc
 
 ---
 
-*For implementation details, see [Technical Integration Guide](../guides/integration-guide.md)*
-*For investment information, see [Investor Relations Portal](https://sheltr-ai.web.app/investor-access)*
+## 🔗 Enterprise Contract Repository
+
+### **Smart Contract Source Code**
+- **[SHELTRPaymentDistributor.sol](https://github.com/mrj0nesmtl/sheltr-ai/blob/main/sheltr-tokens/src/SHELTRPaymentDistributor.sol)** - Core 80/15/5 distribution engine (434 lines)
+- **[SHELTRStablecoin.sol](https://github.com/mrj0nesmtl/sheltr-ai/blob/main/sheltr-tokens/src/SHELTRStablecoin.sol)** - Housing fund tracking token (458 lines)
+- **[AdyenPayoutIntegration.sol](https://github.com/mrj0nesmtl/sheltr-ai/blob/main/sheltr-tokens/src/AdyenPayoutIntegration.sol)** - Virtual card management (619 lines)
+- **[CoinbaseStakingIntegration.sol](https://github.com/mrj0nesmtl/sheltr-ai/blob/main/sheltr-tokens/src/CoinbaseStakingIntegration.sol)** - Guaranteed returns (621 lines)
+- **[BaseNetworkOptimization.sol](https://github.com/mrj0nesmtl/sheltr-ai/blob/main/sheltr-tokens/src/BaseNetworkOptimization.sol)** - Ultra-low fees (548 lines)
+
+### **Deployment Scripts**
+- **[DeployEnterpriseArchitecture.s.sol](https://github.com/mrj0nesmtl/sheltr-ai/blob/main/sheltr-tokens/script/DeployEnterpriseArchitecture.s.sol)** - Main deployment (316 lines)
+- **[SetupPartnershipIntegrations.s.sol](https://github.com/mrj0nesmtl/sheltr-ai/blob/main/sheltr-tokens/script/SetupPartnershipIntegrations.s.sol)** - Partnership setup (627 lines)
+- **[ConfigureEnterpriseSettings.s.sol](https://github.com/mrj0nesmtl/sheltr-ai/blob/main/sheltr-tokens/script/ConfigureEnterpriseSettings.s.sol)** - Enterprise config (657 lines)
+
+**Total Enterprise Architecture**: 3,880 lines of production-ready smart contract code
+
+### **Related Documentation**
+- **[Technical Integration Guide](../guides/integration-guide.md)** - Implementation details
+- **[SHELTR Tokenomics Strategy](../../../sheltr-tokens/docs/SHELTR-TOKENOMICS-STRATEGY.md)** - Complete tokenomics
+- **[Technical Implementation Guide](../../../sheltr-tokens/docs/TECHNICAL-IMPLEMENTATION-GUIDE.md)** - Developer guide
+- **[Enterprise README](../../../sheltr-tokens/docs/README.md)** - Architecture overview
+
+### **Platform Access**
+- **[Investor Relations Portal](https://sheltr-ai.web.app/investor-access)** - Investment information
+- **[Live Blockchain Documentation](https://sheltr-ai.web.app/docs/blockchain)** - Interactive documentation
+- **[Enterprise Dashboard](https://sheltr-ai.web.app/dashboard)** - Platform access
 
 ---
-*Last Updated: September 26, 2025*
+*Last Updated: September 27, 2025*
 *Version: 2.0.0*
 *Status: STRATEGIC IMPLEMENTATION* 🚀
 *Classification: Enterprise-Grade Architecture Documentation*

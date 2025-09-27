@@ -1,35 +1,57 @@
-# SHELTR Tokenomics & Contract Strategy Documentation
+# SHELTR Enterprise Single-Token Strategy Documentation
 
 ## 🚀 Executive Summary
 
-SHELTR is launching a comprehensive dual-token ecosystem on Base blockchain with a strategic 100M token supply designed to fund operations, incentivize participation, and drive sustainable growth. The system combines immediate capital generation with long-term operational funding through a sophisticated vesting and treasury management structure.
+SHELTR has revolutionized charitable technology through a breakthrough **single-token stable fund architecture** that eliminates participant cryptocurrency exposure while maintaining complete blockchain transparency. Our enterprise-grade platform combines traditional payment infrastructure with guaranteed institutional returns, creating the world's first zero-risk charitable ecosystem with measurable social impact.
 
-## 📊 Tokenomics Overview
+## 🚨 **STRATEGIC TRANSFORMATION v2.0**
 
-### **Total Supply: 100,000,000 SHELTR**
+**SHELTR has evolved from dual-token complexity to revolutionary enterprise architecture:**
+- ❌ **Eliminated**: Dual-token confusion, ICO speculation, participant crypto exposure
+- ✅ **Implemented**: Single-token tracking, enterprise payments, guaranteed returns
+- 🎯 **Result**: Government-ready, CFO-approved, institutional-grade charitable platform
 
-| **Allocation** | **Tokens** | **Percentage** | **Release Strategy** |
-|----------------|------------|----------------|---------------------|
-| **Public Sale** | 50,000,000 | 50% | 33% per year, over 3 years, beginning Dec 2025 |
-| **Team & Advisors** | 12,000,000 | 12% | 3-year vesting (Jan 2026) |
-| **Reserve Fund** | 5,000,000 | 5% | Immediate access |
-| **Strategic Partnerships** | 10,000,000 | 10% | 3-year distribution |
-| **SHELTR Operations** | 13,000,000 | 13% | 3-year distribution |
-| **Participant Onboarding Rewards** | 10,000,000 | 10% | 3-year distribution |
+## 📊 Enterprise Architecture Overview
 
-## 🎯 Business Strategy
+### **Revolutionary Single-Token Model**
 
-### **Phase 1: Capital Generation (Q4 2025-2026)**
-- **Pre-Seed Sale**: 3M tokens at $0.05 (50% discount) → $150K USD
-- **Public Token Sale**: 100M tokens at $0.10 → **$10M USD total commitment**
-- **Year 1 Release**: ~33M tokens → **$1.57M USD actual capital**
-- **Reserve Fund Access**: 5M tokens for immediate operations
-- **Market Launch**: Direct liquidity injection on Base blockchain
+**SHELTR Stablecoin (Housing Fund Tracking Only)**
+- **Purpose**: Transparent housing fund growth tracking and blockchain verification
+- **Backing**: 1:1 USDT peg through Coinbase Prime institutional custody
+- **Participant Exposure**: **ZERO** - participants receive traditional virtual debit cards
+- **Returns**: Guaranteed 4-6% APY through Coinbase institutional staking
+- **Transparency**: Complete blockchain tracking without participant risk
 
-### **Phase 2: Operational Funding (2027-2028)**
-- **Sustained Development**: 66M tokens distributed over 2 years
-- **Team Retention**: 12M tokens vested to ensure long-term commitment
-- **Strategic Growth**: 10M tokens for partnerships and 13M for operations
+## 🎯 Enterprise Payment Architecture
+
+### **Zero-Risk Payment Flow**
+
+```
+💳 $100 Credit Card Donation
+    ↓ (Enterprise Payment Processing)
+🏦 Global Payment Gateway (PCI DSS Level 1)
+    ↓ (Instant Smart Distribution)
+┌─────────────────────────────────────────────────────────────┐
+│ 80% → Virtual Debit Card ($80)                             │
+│      ✅ Zero cryptocurrency exposure                        │
+│      ✅ Global Visa/Mastercard acceptance                   │
+│      ✅ Instant loading and activation                      │
+│      ✅ Zero fees for participants                          │
+├─────────────────────────────────────────────────────────────┤
+│ 15% → Housing Fund ($15)                                   │
+│      ✅ Coinbase Prime institutional custody                │
+│      ✅ Guaranteed 4-6% APY returns                        │
+│      ✅ SHELTR token tracking (1:1 USDT)                   │
+│      ✅ Daily liquidity access                             │
+├─────────────────────────────────────────────────────────────┤
+│ 5% → Shelter Operations ($5)                               │
+│      ✅ Community support and operations                    │
+│      ✅ AI-powered resource allocation                      │
+│      ✅ Transparent fund management                         │
+└─────────────────────────────────────────────────────────────┘
+    ↓ (Complete Transparency)
+⛓️ Base Network Blockchain Verification (~$0.01 fees)
+```
 
 ## 🏗️ Smart Contract Architecture 
 

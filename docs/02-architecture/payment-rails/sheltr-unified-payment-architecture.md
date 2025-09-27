@@ -4,7 +4,7 @@
 **Document Version**: 2.0.0  
 **Last Updated**: September 26, 2025  
 **Status**: Strategic Architecture Review  
-**Lead Architect**: Doug Kukura, CFO & Payments Expert  
+**Lead Architect**: DK, CFO & Payments Expert  
 
 ---
 
@@ -18,7 +18,7 @@ Following extensive analysis by our CFO and payments expert Doug Kukura, SHELTR 
 
 ## 🚨 **Strategic Pivot: Why Single Token?**
 
-### **Doug's Expert Analysis**
+### **DK Expert Analysis**
 
 > *"The dual-token architecture introduces unnecessary complexity and market volatility risk for vulnerable populations. A traditional funding approach with a single utility token pegged to USDT provides stability, guaranteed returns, and eliminates ICO stigma while maintaining our mission integrity."*
 

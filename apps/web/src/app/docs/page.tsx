@@ -377,7 +377,7 @@ export default function DocsPage() {
       <section 
         className="py-20 relative"
         style={{
-          backgroundImage: "url('/backgrounds/iamdocumentation.jpg')",
+          backgroundImage: "url('/backgrounds/hero-bg.jpg')",
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat'
@@ -393,7 +393,7 @@ export default function DocsPage() {
               Documentation
             </h1>
             <p className="text-xl mb-8 text-white/90">
-              Built on modern cloud infrastructure.
+              Built on modern cloud infrastructure with AI-powered intelligent systems.
             </p>
             
             {/* Tech Stack Badges */}
@@ -410,13 +410,25 @@ export default function DocsPage() {
               <Badge className="bg-gray-800 hover:bg-gray-900 text-white font-semibold px-3 py-1">
                 📱 EXPO
               </Badge>
+              <Badge className="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-3 py-1">
+                🤖 MCP INTEGRATION
+              </Badge>
+              <Badge className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-3 py-1">
+                🔍 SEMANTIC SEARCH
+              </Badge>
+              <Badge className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-3 py-1">
+                🧠 INTELLIGENT HYPERBOTS
+              </Badge>
+              <Badge className="bg-blue-700 hover:bg-blue-800 text-white font-semibold px-3 py-1">
+                🏦 COINBASE
+              </Badge>
               <Badge className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-3 py-1">
                 ⭐ STARS 12
               </Badge>
               <Badge className="bg-yellow-600 hover:bg-yellow-700 text-white font-semibold px-3 py-1">
                 📄 LICENSE MIT
               </Badge>
-              <Badge className="bg-blue-700 hover:bg-blue-800 text-white font-semibold px-3 py-1">
+              <Badge className="bg-slate-700 hover:bg-slate-800 text-white font-semibold px-3 py-1">
                 🐍 PYTHON 3.11+
               </Badge>
             </div>
@@ -424,7 +436,7 @@ export default function DocsPage() {
             {/* Last Updated Badge */}
             <div className="flex justify-center">
               <Badge className="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 text-sm">
-                📅 LAST UPDATED: September 1, 2025
+                📅 LAST UPDATED: September 27, 2025
               </Badge>
             </div>
           </div>

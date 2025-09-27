@@ -1,10 +1,11 @@
 import Link from 'next/link';
-import { ArrowLeft, MapPin, BarChart3, DollarSign, Handshake, Users, Globe, TrendingUp, FileText, CheckCircle, Shield, Database } from 'lucide-react';
+import { ArrowLeft, MapPin, BarChart3, DollarSign, Handshake, Users, Globe, TrendingUp, FileText, CheckCircle, Shield, Database, Brain, Zap, Target, Award } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ThemeToggle } from '@/components/theme-toggle';
 import Footer from '@/components/Footer';
+import ThemeLogo from '@/components/ThemeLogo';
 
 export default function GovernmentPage() {
   return (

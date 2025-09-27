@@ -275,9 +275,15 @@ export default function ScanGivePage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">How It Works</h2>
-            <p className="text-xl text-muted-foreground">
+            <p className="text-xl text-muted-foreground mb-4">
               Three simple steps to make a direct impact
             </p>
+            <div className="inline-flex items-center space-x-2 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-full px-6 py-2">
+              <QrCode className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+              <span className="text-sm text-blue-700 dark:text-blue-300 font-medium">
+                Average donation takes less than 30 seconds
+              </span>
+            </div>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
@@ -362,11 +368,15 @@ export default function ScanGivePage() {
             <p className="text-xl text-muted-foreground mb-6">
               Every donation is automatically split to maximize impact
             </p>
-            <div className="bg-muted/30 rounded-lg p-6 max-w-4xl mx-auto">
+            <div className="bg-gradient-to-r from-green-50/50 to-blue-50/50 dark:from-green-900/20 dark:to-blue-900/20 rounded-lg p-6 max-w-4xl mx-auto border border-green-200/50 dark:border-green-800/50">
               <h3 className="text-lg font-semibold mb-4 text-primary">SmartFund™ Investment Philosophy</h3>
-              <p className="text-base text-muted-foreground">
+              <p className="text-base text-muted-foreground mb-4">
                 Every donation is strategically distributed: <strong>80% directly empowers participants</strong> for immediate needs, <strong>15% funds housing solutions</strong> through the <Link href="/pods" className="text-blue-600 hover:text-blue-800 font-semibold underline">PODS</Link> deployment, and <strong>5% sustains platform operations</strong>. This creates a self-reinforcing cycle where immediate relief generates lasting systemic change, transforming charity into measurable investment with compound returns for the entire community.
               </p>
+              <div className="flex items-center justify-center space-x-2 text-sm text-green-700 dark:text-green-300">
+                <Shield className="h-4 w-4" />
+                <span className="font-medium">100% blockchain verified • Zero administrative overhead • Maximum impact guarantee</span>
+              </div>
             </div>
           </div>
 
@@ -539,7 +549,7 @@ export default function ScanGivePage() {
           <Badge variant="secondary" className="mb-4 bg-orange-500/10 text-orange-600 dark:text-orange-400 border-orange-500/20">
             Coming Soon
           </Badge>
-          <h2 className="text-3xl font-bold mb-6">Mobile Platfom</h2>
+          <h2 className="text-3xl font-bold mb-6">Mobile Platform</h2>
           <p className="text-xl text-muted-foreground mb-8">
             Scan QR codes, make instant donations, and track your impact - all from your mobile device.
           </p>

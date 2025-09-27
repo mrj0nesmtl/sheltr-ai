@@ -307,14 +307,8 @@ export default function ImpactPage() {
               </p>
               
               <p className="text-lg leading-relaxed mb-8">
-                When we first discovered Ryan and <a href="https://tinytinyhomes.ca/about-us/" target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline font-semibold">Tiny Tiny Homes</a> in Toronto, we recognized the immediate impact he was making. His ingenious mobile emergency shelters replace unsafe tent encampments with dignified, secure alternatives.
+                There are Angels amongst us. Builders and Creators inspired us to design a mobile emergency shelter that can replace unsafe tent encampments with dignified, secure alternatives. Our mission is to create systematic, scalable tech that can amplify the incredible work of these saints, and ensure every act of kindness creates lasting, measurable impact. <span className="text-blue-600 dark:text-blue-400 font-semibold">#tech4good</span>
               </p>
-              
-              <p className="text-lg leading-relaxed mb-8">
-                Ryan is not alone, there are Angels amongst us. Builders and Creators like this inspire our mission is to create systematic, scalable tech that can amplify the incredible work of these saints, and ensure every act of kindness creates lasting, measurable impact. <span className="text-blue-600 dark:text-blue-400 font-semibold">#tech4good</span>
-              </p>
-              
-              <h2 className="text-2xl font-bold text-center mb-8">Angels Amongst Us</h2>
             </div>
             
             {/* Social Impact Creators Grid */}

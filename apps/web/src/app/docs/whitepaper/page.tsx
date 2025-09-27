@@ -1,9 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowLeft, Download, Share, BookOpen, FileText, Code } from 'lucide-react';
+import { ArrowLeft, Download, Share, BookOpen, FileText, Code, Shield, CreditCard, TrendingUp, Building2, CheckCircle, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ThemeToggle } from '@/components/theme-toggle';
 import Footer from '@/components/Footer';
 import ThemeLogo from '@/components/ThemeLogo';
@@ -31,32 +32,60 @@ export default function WhitepaperPage() {
         </div>
       </nav>
 
+      {/* Strategic Pivot Alert */}
+      <section className="py-8 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border-b border-amber-200 dark:border-amber-800">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <div className="flex items-start gap-4">
+              <div className="w-10 h-10 bg-amber-500 rounded-full flex items-center justify-center flex-shrink-0">
+                <AlertTriangle className="h-5 w-5 text-white" />
+              </div>
+              <div>
+                <h3 className="text-lg font-bold mb-2 text-amber-900 dark:text-amber-100">
+                  🚨 Strategic Architecture Transformation v2.0
+                </h3>
+                <p className="text-amber-800 dark:text-amber-200 text-sm leading-relaxed">
+                  This whitepaper has been completely overhauled to reflect our new <strong>enterprise-grade single-token stable fund architecture</strong>, 
+                  eliminating ICO speculation and participant cryptocurrency exposure in favor of guaranteed institutional returns.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Document Header */}
-      <section className="py-12 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20">
+      <section className="py-12 bg-gradient-to-r from-emerald-50 to-blue-50 dark:from-emerald-900/20 dark:to-blue-900/20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="flex items-start gap-4 mb-6">
-              <FileText className="h-12 w-12 text-blue-600 mt-1" />
+              <FileText className="h-12 w-12 text-emerald-600 mt-1" />
               <div className="flex-1">
                 <div className="mb-3">
-                  <h1 className="text-3xl sm:text-4xl font-bold mb-2 leading-tight">Technical White Paper</h1>
-                  <Badge className="bg-blue-500 text-white text-sm">Published</Badge>
+                  <h1 className="text-3xl sm:text-4xl font-bold mb-2 leading-tight">Enterprise White Paper v2.0</h1>
+                  <Badge className="bg-emerald-500 text-white text-sm">STRATEGIC IMPLEMENTATION</Badge>
                 </div>
                 <p className="text-lg text-muted-foreground mb-3">
-                  Comprehensive technical documentation covering dual-token architecture, smart contracts, and implementation details
+                  Revolutionary enterprise-grade platform combining traditional payment stability with blockchain transparency through single-token architecture
                 </p>
                 <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground mb-4">
-                  <span>Version 1.4.0</span>
+                  <span>Version 2.0.0</span>
                   <span>•</span>
-                  <span>September 25, 2025</span>
+                  <span>September 26, 2025</span>
                   <span>•</span>
-                  <Badge className="bg-green-500 text-white text-xs">PEER REVIEW READY</Badge>
+                  <Badge className="bg-blue-500 text-white text-xs">ENTERPRISE READY</Badge>
                 </div>
                 
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                   <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/whitepaper_final.md" target="_blank" rel="noopener noreferrer">
-                    <Button variant="outline">
+                    <Button className="bg-emerald-600 hover:bg-emerald-700">
                       <Download className="h-4 w-4 mr-2" />
+                      View Full Paper
+                    </Button>
+                  </a>
+                  <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/whitepaper_final.md" target="_blank" rel="noopener noreferrer">
+                    <Button variant="outline">
+                      <Code className="h-4 w-4 mr-2" />
                       View on GitHub
                     </Button>
                   </a>
@@ -72,14 +101,14 @@ export default function WhitepaperPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             {/* Document Notice */}
-            <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-6 mb-8">
-              <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">
-                📋 Technical Specification Document
+            <div className="bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-lg p-6 mb-8">
+              <h3 className="font-semibold text-emerald-800 dark:text-emerald-200 mb-2">
+                📋 Enterprise Strategic Document
               </h3>
-              <p className="text-blue-700 dark:text-blue-300 text-sm">
-                This technical white paper contains comprehensive architecture documentation suitable for 
-                developers, technical teams, and integration partners. The full document is available 
-                for viewing in our GitHub repository.
+              <p className="text-emerald-700 dark:text-emerald-300 text-sm">
+                This enterprise whitepaper outlines our revolutionary single-token stable fund architecture, 
+                designed for CFOs, payment architects, enterprise partners, and institutional investors. 
+                The complete strategic analysis is available in our GitHub repository.
               </p>
             </div>
 
@@ -88,20 +117,21 @@ export default function WhitepaperPage() {
               <h2 className="text-2xl font-bold mb-4">Table of Contents</h2>
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <h3 className="font-semibold">Core Framework</h3>
+                  <h3 className="font-semibold">Enterprise Framework</h3>
                   <ul className="space-y-1 text-sm text-muted-foreground">
                     <li>• Theory of Change & Social Impact</li>
-                    <li>• Dual-Token Economic Model</li>
+                    <li>• Single-Token Stable Architecture</li>
+                    <li>• Enterprise Payment Infrastructure</li>
                     <li>• Technical Architecture</li>
                     <li>• Implementation Roadmap</li>
-                    <li>• Market Analysis & Competitive Landscape</li>
                   </ul>
                 </div>
                 <div className="space-y-2">
-                  <h3 className="font-semibold">Technical Analysis</h3>
-                  <ul className="space-y-1 text-sm text-muted-foreground">
+                  <h3 className="font-semibold">Strategic Analysis</h3>
+                  <ul className="space-y-1 text-muted-foreground text-sm">
+                    <li>• Market Analysis & Competitive Landscape</li>
                     <li>• Risk Assessment & Mitigation</li>
-                    <li>• Platform Economics & Sustainability</li>
+                    <li>• Business Model & Sustainability</li>
                     <li>• Regulatory Compliance & Legal Framework</li>
                     <li>• Success Metrics & Impact Measurement</li>
                   </ul>
@@ -115,59 +145,61 @@ export default function WhitepaperPage() {
                 <h2 className="text-3xl font-bold mb-6">Executive Abstract</h2>
                 <div className="prose prose-lg max-w-none dark:prose-invert">
                   <p>
-                    SHELTR represents a paradigm shift in addressing homelessness through technology-driven 
-                    charitable giving and dual-token economics. By seamlessly integrating blockchain transparency, 
-                    AI-powered financial guidance, and location-based services, SHELTR creates a direct bridge 
-                    between donors and individuals experiencing homelessness while building sustainable long-term solutions.
+                    SHELTR represents a revolutionary enterprise-grade platform that addresses homelessness through traditional payment 
+                    stability combined with blockchain transparency. By integrating <strong>payment processing</strong>, 
+                    <strong>Coinbase institutional staking</strong>, and <strong>single-token housing fund tracking</strong>, SHELTR creates 
+                    a zero-risk bridge between donors and individuals experiencing homelessness while building sustainable long-term solutions.
                   </p>
                   <p>
-                    Our revolutionary dual-token architecture combines <strong>SHELTR-S</strong> (stable utility token) 
-                    for participant protection with <strong>SHELTR</strong> (community governance token) for ecosystem growth. 
-                    This innovative approach ensures that 85% of donations reach participants as stable value, 
-                    10% funds housing solutions, and 5% supports the participant&apos;s registered shelter operations—all verified on-chain for complete transparency.
+                    Our breakthrough <strong>single-token stable architecture</strong> uses the SHELTR Stablecoin (USDT-pegged) exclusively 
+                    for housing fund tracking and transparency, while participants receive <strong>virtual debit cards</strong> with 80% of donations, 
+                    eliminating cryptocurrency volatility exposure. This innovative approach ensures <strong>100% of donations reach their intended purposes</strong>: 
+                    80% participant support via traditional payment cards, 15% housing fund growth through <strong>guaranteed 4-6% APY institutional staking</strong>, 
+                    and 5% shelter operations support—all verified on-chain for complete transparency with <strong>zero participant risk</strong>.
                   </p>
                   <p>
-                    Our platform launches with 100 SHELTR-S tokens ($100 value) gifted to every new participant, 
-                    creating immediate engagement and platform adoption through direct empowerment.
+                    Our platform launches with <strong>enterprise partnerships</strong> providing institutional-grade infrastructure, 
+                    <strong>traditional funding models</strong> eliminating ICO speculation, and <strong>guaranteed returns</strong> through 
+                    Coinbase Prime institutional custody and staking services.
                   </p>
                   
-                  <h3 className="text-xl font-semibold mb-4 mt-6">Technical Architecture Overview</h3>
+                  <h3 className="text-xl font-semibold mb-4 mt-6">Enterprise Payment Architecture</h3>
                   <p>
-                    SHELTR&apos;s technical foundation is built on Base network (Coinbase L2) for ultra-low transaction fees (~$0.01) 
-                    and 2-second finality. Our smart contract architecture implements OpenZeppelin security standards with 
-                    multi-signature governance (3-of-5 consensus) and emergency pause capabilities for maximum security.
+                    SHELTR&apos;s infrastructure is built on proven enterprise partnerships with payment processing for global credit card acceptance 
+                    and virtual card issuance, and Coinbase Prime for institutional-grade custody and staking. Our smart contract architecture 
+                    on Base network implements OpenZeppelin security standards with multi-signature governance and emergency pause capabilities.
                   </p>
                   <p>
                     The platform integrates Firebase Firestore for real-time multi-tenant data management, FastAPI for 
                     high-performance backend services, and Next.js 15 for enterprise-grade frontend experiences. 
-                    Our QR code system utilizes AES-256-GCM encryption with 24-hour key rotation for participant privacy protection.
+                    All participant funds are processed through traditional payment infrastructure with zero cryptocurrency exposure.
                   </p>
 
-                  <h3 className="text-xl font-semibold mb-4 mt-6">SmartFund™ Distribution Flow</h3>
+                  <h3 className="text-xl font-semibold mb-4 mt-6">Enterprise Payment Flow</h3>
                   <div className="bg-muted/20 rounded-lg p-6 my-6">
                     <div className="space-y-4">
-                      <div className="text-center font-semibold text-lg mb-4">Donation Processing Architecture</div>
+                      <div className="text-center font-semibold text-lg mb-4">Zero-Risk Payment Architecture</div>
                       <div className="flex flex-col space-y-3">
                         <div className="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-900/20 rounded">
-                          <span className="font-medium">💰 $100 Donation Input</span>
-                          <span className="text-sm text-muted-foreground">QR Code → Smart Contract</span>
+                          <span className="font-medium">💳 $100 Credit Card Donation</span>
+                          <span className="text-sm text-muted-foreground">Global Payment Processing</span>
                         </div>
                         <div className="flex justify-center">
                           <div className="w-px h-8 bg-border"></div>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                          <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded text-center">
-                            <div className="font-bold text-green-600">85%</div>
-                            <div className="text-sm">$85 → SHELTR-S</div>
-                            <div className="text-xs text-muted-foreground">Participant Wallet</div>
-                          </div>
-                          <div className="p-3 bg-purple-50 dark:bg-purple-900/20 rounded text-center">
-                            <div className="font-bold text-purple-600">10%</div>
-                            <div className="text-sm">$10 → Housing Fund</div>
-                            <div className="text-xs text-muted-foreground">DeFi Yield Strategy</div>
+                          <div className="p-3 bg-emerald-50 dark:bg-emerald-900/20 rounded text-center">
+                            <div className="font-bold text-emerald-600">80%</div>
+                            <div className="text-sm">$80 → Virtual Card</div>
+                            <div className="text-xs text-muted-foreground">Instant Debit Card</div>
                           </div>
                           <div className="p-3 bg-orange-50 dark:bg-orange-900/20 rounded text-center">
-                            <div className="font-bold text-orange-600">5%</div>
+                            <div className="font-bold text-orange-600">15%</div>
+                            <div className="text-sm">$15 → Housing Fund</div>
+                            <div className="text-xs text-muted-foreground">4-6% APY Guaranteed</div>
+                          </div>
+                          <div className="p-3 bg-purple-50 dark:bg-purple-900/20 rounded text-center">
+                            <div className="font-bold text-purple-600">5%</div>
                             <div className="text-sm">$5 → Shelter Ops</div>
                             <div className="text-xs text-muted-foreground">*Or Housing if Independent</div>
                           </div>
@@ -176,24 +208,24 @@ export default function WhitepaperPage() {
                           <div className="w-px h-8 bg-border"></div>
                         </div>
                         <div className="flex items-center justify-between p-3 bg-muted/30 rounded">
-                          <span className="font-medium">⛓️ Blockchain Verification</span>
-                          <span className="text-sm text-muted-foreground">Immutable Record</span>
+                          <span className="font-medium">⛓️ SHELTR Token Tracking</span>
+                          <span className="text-sm text-muted-foreground">Transparent Housing Fund Growth</span>
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  <h3 className="text-xl font-semibold mb-4 mt-6">Security & Compliance Framework</h3>
+                  <h3 className="text-xl font-semibold mb-4 mt-6">Enterprise Security & Compliance</h3>
                   <p>
-                    Every transaction is secured through multi-layer protection including formal verification of smart contracts, 
-                    quarterly security audits, and $1M insurance coverage. Our compliance framework adheres to CFTC utility token 
-                    classification, AML screening for transactions &gt;$1000, and GDPR/CCPA data protection standards.
+                    Every transaction is secured through enterprise-grade infrastructure including payment processing PCI DSS Level 1 compliance, 
+                    Coinbase Prime SOC 2 Type II certified custody, and Base network smart contract security. Our compliance framework 
+                    adheres to traditional business regulations, AML screening, and GDPR/CCPA data protection standards.
                   </p>
                   <div className="mt-6">
                     <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/whitepaper_final.md" target="_blank" rel="noopener noreferrer">
-                      <Button className="bg-blue-600 hover:bg-blue-700">
+                      <Button className="bg-emerald-600 hover:bg-emerald-700">
                         <Code className="h-4 w-4 mr-2" />
-                        Read Full Paper on GitHub
+                        Read Full Enterprise Paper
                       </Button>
                     </a>
                   </div>
@@ -201,431 +233,209 @@ export default function WhitepaperPage() {
               </div>
 
               <div className="grid md:grid-cols-3 gap-6">
+                <div className="bg-emerald-50 dark:bg-emerald-900/20 rounded-lg p-6">
+                  <h3 className="font-bold text-emerald-800 dark:text-emerald-200 mb-2">Zero Risk Protection</h3>
+                  <div className="text-2xl font-bold text-emerald-600 mb-1">100%</div>
+                  <p className="text-sm text-emerald-700 dark:text-emerald-300">
+                    Participant protection through traditional payment cards
+                  </p>
+                </div>
+                
+                <div className="bg-orange-50 dark:bg-orange-900/20 rounded-lg p-6">
+                  <h3 className="font-bold text-orange-800 dark:text-orange-200 mb-2">Guaranteed Returns</h3>
+                  <div className="text-2xl font-bold text-orange-600 mb-1">4-6% APY</div>
+                  <p className="text-sm text-orange-700 dark:text-orange-300">
+                    Housing fund growth through Coinbase institutional staking
+                  </p>
+                </div>
+                
                 <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-6">
-                  <h3 className="font-bold text-blue-800 dark:text-blue-200 mb-2">Platform Efficiency</h3>
-                  <div className="text-2xl font-bold text-blue-600 mb-1">100%</div>
+                  <h3 className="font-bold text-blue-800 dark:text-blue-200 mb-2">Enterprise SLA</h3>
+                  <div className="text-2xl font-bold text-blue-600 mb-1">99.99%</div>
                   <p className="text-sm text-blue-700 dark:text-blue-300">
-                    Of donations reach intended purposes vs. 60-70% traditional
-                  </p>
-                </div>
-                
-                <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-6">
-                  <h3 className="font-bold text-green-800 dark:text-green-200 mb-2">Transaction Speed</h3>
-                  <div className="text-2xl font-bold text-green-600 mb-1">&lt;5s</div>
-                  <p className="text-sm text-green-700 dark:text-green-300">
-                    Average processing time for donations and transfers
-                  </p>
-                </div>
-                
-                <div className="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-6">
-                  <h3 className="font-bold text-purple-800 dark:text-purple-200 mb-2">Network Fees</h3>
-                  <div className="text-2xl font-bold text-purple-600 mb-1">~$0.01</div>
-                  <p className="text-sm text-purple-700 dark:text-purple-300">
-                    Base blockchain transaction costs
+                    Uptime guarantee through institutional partnerships
                   </p>
                 </div>
               </div>
 
               <div>
-                <h2 className="text-3xl font-bold mb-6">Technical Highlights</h2>
+                <h2 className="text-3xl font-bold mb-6">Enterprise Architecture Highlights</h2>
                 <div className="grid md:grid-cols-2 gap-8">
                   <div>
-                    <h3 className="text-xl font-semibold mb-4">Architecture Innovation</h3>
+                    <h3 className="text-xl font-semibold mb-4">Infrastructure Innovation</h3>
                     <ul className="space-y-2">
                       <li className="flex items-start gap-2">
-                        <span className="text-blue-500 mt-1">•</span>
-                        <span>Dual-token architecture separating stability from growth</span>
+                        <CheckCircle className="h-5 w-5 text-emerald-500 mt-0.5 flex-shrink-0" />
+                        <span>Single-token stable architecture eliminating complexity</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="text-blue-500 mt-1">•</span>
-                        <span>Smart contract automation for transparent fund distribution</span>
+                        <CheckCircle className="h-5 w-5 text-emerald-500 mt-0.5 flex-shrink-0" />
+                        <span>Enterprise payment processing with virtual card issuance</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="text-blue-500 mt-1">•</span>
-                        <span>Cross-platform integration bridging traditional and crypto ecosystems</span>
+                        <CheckCircle className="h-5 w-5 text-emerald-500 mt-0.5 flex-shrink-0" />
+                        <span>Coinbase institutional custody and guaranteed staking returns</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="text-blue-500 mt-1">•</span>
-                        <span>Scalable infrastructure supporting global deployment</span>
+                        <CheckCircle className="h-5 w-5 text-emerald-500 mt-0.5 flex-shrink-0" />
+                        <span>Traditional funding model eliminating ICO speculation</span>
                       </li>
                     </ul>
                   </div>
                   
                   <div>
-                    <h3 className="text-xl font-semibold mb-4">Technical Implementation</h3>
+                    <h3 className="text-xl font-semibold mb-4">Enterprise Benefits</h3>
                     <ul className="space-y-2">
                       <li className="flex items-start gap-2">
-                        <span className="text-green-500 mt-1">•</span>
-                        <span>Base L2 network integration with minimal transaction fees</span>
+                        <CheckCircle className="h-5 w-5 text-emerald-500 mt-0.5 flex-shrink-0" />
+                        <span>Government-ready traditional business structure</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="text-green-500 mt-1">•</span>
-                        <span>SHELTR-S stable token with USDC backing for 0% volatility</span>
+                        <CheckCircle className="h-5 w-5 text-emerald-500 mt-0.5 flex-shrink-0" />
+                        <span>Municipal contract opportunities ($8B annual market)</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="text-green-500 mt-1">•</span>
-                        <span>Encrypted QR code system for secure participant identification</span>
+                        <CheckCircle className="h-5 w-5 text-emerald-500 mt-0.5 flex-shrink-0" />
+                        <span>Corporate CSR partnership integration</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="text-green-500 mt-1">•</span>
-                        <span>Multi-signature smart contracts with governance controls</span>
+                        <CheckCircle className="h-5 w-5 text-emerald-500 mt-0.5 flex-shrink-0" />
+                        <span>Scalable revenue through enterprise partnerships</span>
                       </li>
                     </ul>
                   </div>
                 </div>
               </div>
 
-              {/* Platform Dashboard Architecture */}
+              {/* Enterprise Partners */}
               <div>
-                <h2 className="text-3xl font-bold mb-6">Platform Dashboard Architecture</h2>
-                
-                {/* Multi-Tenant Dashboard System */}
-                <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-6 mb-8">
-                  <h3 className="text-xl font-semibold mb-4">🏗️ Multi-Tenant Dashboard System</h3>
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div>
-                      <h4 className="font-semibold text-blue-700 dark:text-blue-300 mb-3">Super Admin Dashboards</h4>
-                      <div className="space-y-2 text-sm">
-                        <div className="flex items-center gap-2">
-                          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                          <span><strong>Overview Dashboard:</strong> Platform-wide metrics & analytics</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                          <span><strong>Platform Management:</strong> System configuration & feature flags</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                          <span><strong>Shelter Network:</strong> Multi-tenant shelter management</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
-                          <span><strong>User Management:</strong> Role-based access control</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="w-2 h-2 bg-teal-500 rounded-full"></div>
-                          <span><strong>Knowledge Base:</strong> AI embeddings & document management</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-purple-700 dark:text-purple-300 mb-3">Advanced Features</h4>
-                      <div className="space-y-2 text-sm">
-                        <div className="flex items-center gap-2">
-                          <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                          <span><strong>Chatbot Control:</strong> 5 specialized AI agents with RAG</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                          <span><strong>Financial Oversight:</strong> SmartFund analytics & fraud detection</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="w-2 h-2 bg-pink-500 rounded-full"></div>
-                          <span><strong>Analytics Suite:</strong> Real-time metrics & predictive insights</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="w-2 h-2 bg-indigo-500 rounded-full"></div>
-                          <span><strong>Gallery Management:</strong> Dynamic content with hero images</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="w-2 h-2 bg-cyan-500 rounded-full"></div>
-                          <span><strong>Blog Management:</strong> SEO-optimized content system</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Role-Based Dashboard Architecture */}
-                <div className="bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-600 rounded-lg p-6 mb-8">
-                  <h3 className="text-xl font-semibold mb-4">🎭 5-Role Dashboard Architecture</h3>
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-sm">
-                      <thead>
-                        <tr className="border-b">
-                          <th className="text-left p-2 font-semibold">Dashboard Feature</th>
-                          <th className="text-center p-2 font-semibold text-red-600">Super Admin</th>
-                          <th className="text-center p-2 font-semibold text-blue-600">Platform Admin</th>
-                          <th className="text-center p-2 font-semibold text-green-600">Shelter Admin</th>
-                          <th className="text-center p-2 font-semibold text-purple-600">Participant</th>
-                          <th className="text-center p-2 font-semibold text-orange-600">Donor</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y">
-                        <tr>
-                          <td className="p-2 font-medium">Platform Overview</td>
-                          <td className="p-2 text-center"><span className="text-green-600 font-bold">✅ Full</span></td>
-                          <td className="p-2 text-center"><span className="text-green-600 font-bold">✅ Full</span></td>
-                          <td className="p-2 text-center"><span className="text-yellow-600">🔒 Shelter Only</span></td>
-                          <td className="p-2 text-center"><span className="text-red-600">❌</span></td>
-                          <td className="p-2 text-center"><span className="text-yellow-600">🔒 Personal</span></td>
-                        </tr>
-                        <tr>
-                          <td className="p-2 font-medium">AI Chatbot Control</td>
-                          <td className="p-2 text-center"><span className="text-green-600 font-bold">✅ All Agents</span></td>
-                          <td className="p-2 text-center"><span className="text-green-600 font-bold">✅ All Agents</span></td>
-                          <td className="p-2 text-center"><span className="text-yellow-600">🔒 Shelter Agent</span></td>
-                          <td className="p-2 text-center"><span className="text-yellow-600">🔒 Support Only</span></td>
-                          <td className="p-2 text-center"><span className="text-yellow-600">🔒 Donor Agent</span></td>
-                        </tr>
-                        <tr>
-                          <td className="p-2 font-medium">Knowledge Base Management</td>
-                          <td className="p-2 text-center"><span className="text-green-600 font-bold">✅ Full CRUD</span></td>
-                          <td className="p-2 text-center"><span className="text-green-600 font-bold">✅ Full CRUD</span></td>
-                          <td className="p-2 text-center"><span className="text-yellow-600">🔒 Read Only</span></td>
-                          <td className="p-2 text-center"><span className="text-red-600">❌</span></td>
-                          <td className="p-2 text-center"><span className="text-red-600">❌</span></td>
-                        </tr>
-                        <tr>
-                          <td className="p-2 font-medium">Financial Analytics</td>
-                          <td className="p-2 text-center"><span className="text-green-600 font-bold">✅ All Data</span></td>
-                          <td className="p-2 text-center"><span className="text-green-600 font-bold">✅ All Data</span></td>
-                          <td className="p-2 text-center"><span className="text-yellow-600">🔒 Shelter Only</span></td>
-                          <td className="p-2 text-center"><span className="text-yellow-600">🔒 Personal</span></td>
-                          <td className="p-2 text-center"><span className="text-yellow-600">🔒 Personal</span></td>
-                        </tr>
-                        <tr>
-                          <td className="p-2 font-medium">User Management</td>
-                          <td className="p-2 text-center"><span className="text-green-600 font-bold">✅ Platform Wide</span></td>
-                          <td className="p-2 text-center"><span className="text-green-600 font-bold">✅ Platform Wide</span></td>
-                          <td className="p-2 text-center"><span className="text-yellow-600">🔒 Shelter Users</span></td>
-                          <td className="p-2 text-center"><span className="text-red-600">❌</span></td>
-                          <td className="p-2 text-center"><span className="text-red-600">❌</span></td>
-                        </tr>
-                        <tr>
-                          <td className="p-2 font-medium">System Configuration</td>
-                          <td className="p-2 text-center"><span className="text-green-600 font-bold">✅ Full Access</span></td>
-                          <td className="p-2 text-center"><span className="text-yellow-600">🔒 Limited</span></td>
-                          <td className="p-2 text-center"><span className="text-red-600">❌</span></td>
-                          <td className="p-2 text-center"><span className="text-red-600">❌</span></td>
-                          <td className="p-2 text-center"><span className="text-red-600">❌</span></td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-
-                {/* Technical Dashboard Components */}
+                <h2 className="text-3xl font-bold mb-6">Enterprise Infrastructure Partners</h2>
                 <div className="grid md:grid-cols-2 gap-6">
-                  <div className="bg-gradient-to-r from-green-50 to-teal-50 dark:from-green-900/20 dark:to-teal-900/20 border border-green-200 dark:border-green-800 rounded-lg p-6">
-                    <h3 className="font-semibold text-green-700 dark:text-green-300 mb-3">🔧 Real-Time Components</h3>
-                    <div className="space-y-2 text-sm">
-                      <div><strong>Live Metrics:</strong> Firebase Firestore real-time listeners</div>
-                      <div><strong>Interactive Charts:</strong> Recharts with live data binding</div>
-                      <div><strong>Geographic Maps:</strong> React-Leaflet with OpenStreetMap</div>
-                      <div><strong>Notification System:</strong> Real-time alerts & messaging</div>
-                      <div><strong>Activity Feeds:</strong> Live platform activity streams</div>
-                    </div>
-                  </div>
-                  <div className="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-6">
-                    <h3 className="font-semibold text-purple-700 dark:text-purple-300 mb-3">🎨 UI/UX Architecture</h3>
-                    <div className="space-y-2 text-sm">
-                      <div><strong>Design System:</strong> Tailwind CSS + Shadcn/UI components</div>
-                      <div><strong>State Management:</strong> Zustand + React Query</div>
-                      <div><strong>Responsive Design:</strong> Mobile-first adaptive layouts</div>
-                      <div><strong>Dark Mode:</strong> System-wide theme switching</div>
-                      <div><strong>Accessibility:</strong> WCAG 2.1 AA compliance</div>
-                    </div>
-                  </div>
+                  <Card className="border-2 border-blue-500/20 bg-gradient-to-br from-blue-500/5 to-blue-500/10">
+                    <CardHeader>
+                      <div className="flex items-center space-x-3">
+                        <CreditCard className="h-8 w-8 text-blue-600" />
+                        <div>
+                          <CardTitle className="text-xl text-blue-600">Payment Processing</CardTitle>
+                          <CardDescription>Global payment processing and virtual card issuance</CardDescription>
+                        </div>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <ul className="space-y-2 text-sm">
+                        <li className="flex items-center gap-2">
+                          <CheckCircle className="h-4 w-4 text-blue-500" />
+                          <span>80% allocation to participant virtual cards</span>
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <CheckCircle className="h-4 w-4 text-blue-500" />
+                          <span>PCI DSS Level 1 compliance</span>
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <CheckCircle className="h-4 w-4 text-blue-500" />
+                          <span>Global Visa/Mastercard acceptance</span>
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <CheckCircle className="h-4 w-4 text-blue-500" />
+                          <span>Zero fees for participants</span>
+                        </li>
+                      </ul>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="border-2 border-orange-500/20 bg-gradient-to-br from-orange-500/5 to-orange-500/10">
+                    <CardHeader>
+                      <div className="flex items-center space-x-3">
+                        <Building2 className="h-8 w-8 text-orange-600" />
+                        <div>
+                          <CardTitle className="text-xl text-orange-600">Coinbase Institutional</CardTitle>
+                          <CardDescription>Custody and staking services for housing fund</CardDescription>
+                        </div>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <ul className="space-y-2 text-sm">
+                        <li className="flex items-center gap-2">
+                          <CheckCircle className="h-4 w-4 text-orange-500" />
+                          <span>15% housing fund allocation</span>
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <CheckCircle className="h-4 w-4 text-orange-500" />
+                          <span>4-6% APY guaranteed returns</span>
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <CheckCircle className="h-4 w-4 text-orange-500" />
+                          <span>SOC 2 Type II certified custody</span>
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <CheckCircle className="h-4 w-4 text-orange-500" />
+                          <span>Daily liquidity access</span>
+                        </li>
+                      </ul>
+                    </CardContent>
+                  </Card>
                 </div>
               </div>
 
-              {/* AI Systems & MCP Server Architecture */}
+              {/* Target Audience */}
               <div>
-                <h2 className="text-3xl font-bold mb-6">AI Systems & MCP Server Architecture</h2>
-                
-                {/* AI Chatbot System */}
-                <div className="grid md:grid-cols-2 gap-6 mb-8">
-                  <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-6">
-                    <h3 className="font-semibold text-blue-700 dark:text-blue-300 mb-4">🤖 5-Agent AI Chatbot System</h3>
-                    <div className="space-y-3 text-sm">
-                      <div className="flex justify-between">
-                        <span>Emergency Agent</span>
-                        <Badge className="bg-red-500 text-white">Crisis Response</Badge>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Support Agent</span>
-                        <Badge className="bg-blue-500 text-white">General Help</Badge>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Donor Relations Agent</span>
-                        <Badge className="bg-green-500 text-white">Donor Support</Badge>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Shelter Agent</span>
-                        <Badge className="bg-purple-500 text-white">Shelter Ops</Badge>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Super Admin Agent</span>
-                        <Badge className="bg-orange-500 text-white">System Admin</Badge>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border border-green-200 dark:border-green-800 rounded-lg p-6">
-                    <h3 className="font-semibold text-green-700 dark:text-green-300 mb-4">🧠 RAG Knowledge System</h3>
-                    <div className="space-y-3 text-sm">
-                      <div className="flex justify-between">
-                        <span>Knowledge Documents</span>
-                        <Badge className="bg-blue-500 text-white">250+ docs</Badge>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Vector Embeddings</span>
-                        <Badge className="bg-green-500 text-white">15,000+ chunks</Badge>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Embedding Model</span>
-                        <Badge className="bg-purple-500 text-white">text-embedding-3-small</Badge>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>LLM Model</span>
-                        <Badge className="bg-orange-500 text-white">GPT-4o-mini</Badge>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Response Time</span>
-                        <Badge className="bg-teal-500 text-white">&lt;2 seconds</Badge>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* MCP Server Integration */}
-                <div className="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-6 mb-8">
-                  <h3 className="text-xl font-semibold mb-4">🔌 MCP Server Integration Architecture</h3>
-                  <div className="grid md:grid-cols-3 gap-6">
-                    <div>
-                      <h4 className="font-semibold text-purple-700 dark:text-purple-300 mb-2">Firebase MCP Server</h4>
-                      <div className="space-y-1 text-sm">
-                        <div>• Direct Firestore access</div>
-                        <div>• Real-time data debugging</div>
-                        <div>• Firebase Auth integration</div>
-                        <div>• Multi-tenant operations</div>
-                        <div>• Analytics & metrics</div>
-                      </div>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-blue-700 dark:text-blue-300 mb-2">Knowledge Base MCP</h4>
-                      <div className="space-y-1 text-sm">
-                        <div>• Document processing</div>
-                        <div>• Vector search operations</div>
-                        <div>• Embedding generation</div>
-                        <div>• Content management</div>
-                        <div>• Quality scoring</div>
-                      </div>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-green-700 dark:text-green-300 mb-2">Platform Analytics MCP</h4>
-                      <div className="space-y-1 text-sm">
-                        <div>• Real-time metrics</div>
-                        <div>• User behavior tracking</div>
-                        <div>• Performance monitoring</div>
-                        <div>• System health checks</div>
-                        <div>• Automated reporting</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Technical Performance Metrics */}
-                <div className="bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-600 rounded-lg p-6 mb-8">
-                  <h3 className="font-semibold mb-4">⚡ Technical Performance Specifications</h3>
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-sm">
-                      <thead>
-                        <tr className="border-b">
-                          <th className="text-left p-2">System Component</th>
-                          <th className="text-center p-2">Performance Metric</th>
-                          <th className="text-center p-2">Current Achievement</th>
-                          <th className="text-center p-2">Target Specification</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y">
-                        <tr>
-                          <td className="p-2 font-medium">AI Response Time</td>
-                          <td className="p-2 text-center">Average latency</td>
-                          <td className="p-2 text-center"><Badge className="bg-green-500 text-white">&lt;2s</Badge></td>
-                          <td className="p-2 text-center">&lt;3s target</td>
-                        </tr>
-                        <tr>
-                          <td className="p-2 font-medium">Knowledge Base Search</td>
-                          <td className="p-2 text-center">Vector similarity</td>
-                          <td className="p-2 text-center"><Badge className="bg-blue-500 text-white">0.85+ cosine</Badge></td>
-                          <td className="p-2 text-center">0.80+ threshold</td>
-                        </tr>
-                        <tr>
-                          <td className="p-2 font-medium">Document Processing</td>
-                          <td className="p-2 text-center">Embedding generation</td>
-                          <td className="p-2 text-center"><Badge className="bg-purple-500 text-white">800 chunks/doc</Badge></td>
-                          <td className="p-2 text-center">Optimized chunking</td>
-                        </tr>
-                        <tr>
-                          <td className="p-2 font-medium">Multi-Tenant Isolation</td>
-                          <td className="p-2 text-center">Data security</td>
-                          <td className="p-2 text-center"><Badge className="bg-green-500 text-white">100% isolated</Badge></td>
-                          <td className="p-2 text-center">Zero cross-tenant access</td>
-                        </tr>
-                        <tr>
-                          <td className="p-2 font-medium">Real-time Updates</td>
-                          <td className="p-2 text-center">Firestore listeners</td>
-                          <td className="p-2 text-center"><Badge className="bg-orange-500 text-white">&lt;100ms</Badge></td>
-                          <td className="p-2 text-center">Real-time sync</td>
-                        </tr>
-                        <tr>
-                          <td className="p-2 font-medium">Dashboard Load Time</td>
-                          <td className="p-2 text-center">Initial render</td>
-                          <td className="p-2 text-center"><Badge className="bg-teal-500 text-white">&lt;1.5s</Badge></td>
-                          <td className="p-2 text-center">&lt;2s target</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-
-                {/* Advanced Technical Features */}
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 border border-orange-200 dark:border-orange-800 rounded-lg p-6">
-                    <h3 className="font-semibold text-orange-700 dark:text-orange-300 mb-3">🔬 Advanced AI Features</h3>
-                    <div className="space-y-2 text-sm">
-                      <div><strong>Intent Classification:</strong> 80%+ accuracy with LLM-powered routing</div>
-                      <div><strong>Context Management:</strong> Multi-turn conversation memory</div>
-                      <div><strong>RAG Integration:</strong> Semantic search with 15K+ embeddings</div>
-                      <div><strong>Auto-Summarization:</strong> Document processing pipeline</div>
-                      <div><strong>Quality Scoring:</strong> 100/100 document quality metrics</div>
-                    </div>
-                  </div>
-                  <div className="bg-gradient-to-r from-cyan-50 to-blue-50 dark:from-cyan-900/20 dark:to-blue-900/20 border border-cyan-200 dark:border-cyan-800 rounded-lg p-6">
-                    <h3 className="font-semibold text-cyan-700 dark:text-cyan-300 mb-3">⚙️ System Architecture</h3>
-                    <div className="space-y-2 text-sm">
-                      <div><strong>Microservices:</strong> FastAPI + Firebase + OpenAI integration</div>
-                      <div><strong>Async Processing:</strong> Celery + Redis queue management</div>
-                      <div><strong>Error Handling:</strong> Graceful fallbacks & retry mechanisms</div>
-                      <div><strong>Rate Limiting:</strong> OpenAI API cost optimization</div>
-                      <div><strong>Monitoring:</strong> Sentry + DataDog + custom metrics</div>
-                    </div>
-                  </div>
+                <h2 className="text-3xl font-bold mb-6">Target Audience</h2>
+                <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                  <Card className="text-center border-2">
+                    <CardContent className="pt-6">
+                      <Building2 className="h-10 w-10 mx-auto mb-3 text-blue-600" />
+                      <h3 className="font-semibold mb-2">CFOs & Financial Leaders</h3>
+                      <p className="text-sm text-muted-foreground">Strategic financial planning and risk management</p>
+                    </CardContent>
+                  </Card>
+                  <Card className="text-center border-2">
+                    <CardContent className="pt-6">
+                      <CreditCard className="h-10 w-10 mx-auto mb-3 text-emerald-600" />
+                      <h3 className="font-semibold mb-2">Payment Architects</h3>
+                      <p className="text-sm text-muted-foreground">Enterprise payment system design and integration</p>
+                    </CardContent>
+                  </Card>
+                  <Card className="text-center border-2">
+                    <CardContent className="pt-6">
+                      <Shield className="h-10 w-10 mx-auto mb-3 text-purple-600" />
+                      <h3 className="font-semibold mb-2">Enterprise Partners</h3>
+                      <p className="text-sm text-muted-foreground">Strategic partnership development and implementation</p>
+                    </CardContent>
+                  </Card>
+                  <Card className="text-center border-2">
+                    <CardContent className="pt-6">
+                      <TrendingUp className="h-10 w-10 mx-auto mb-3 text-orange-600" />
+                      <h3 className="font-semibold mb-2">Investment Teams</h3>
+                      <p className="text-sm text-muted-foreground">Traditional funding and institutional investment</p>
+                    </CardContent>
+                  </Card>
                 </div>
               </div>
 
-              {/* Full Document Access */}
-              <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg p-8 text-center">
-                <h2 className="text-2xl font-bold mb-4">Access Complete Technical Documentation</h2>
-                <p className="mb-6">
-                  View the full 67-page technical white paper with detailed architecture specifications, 
-                  smart contract code, and comprehensive implementation strategies.
-                </p>
-                <div className="flex gap-4 justify-center">
-                  <Link href="/docs/blockchain">
-                    <Button className="bg-white text-blue-600 hover:bg-blue-50">
-                      <Code className="h-4 w-4 mr-2" />
-                      Blockchain Architecture
-                    </Button>
-                  </Link>
-                  <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/whitepaper_final.md" target="_blank" rel="noopener noreferrer">
-                    <Button variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600">
-                      <Download className="h-4 w-4 mr-2" />
-                      View on GitHub
-                    </Button>
-                  </a>
+              {/* Document Information */}
+              <div className="bg-muted/30 rounded-lg p-6">
+                <h2 className="text-2xl font-bold mb-4">Document Information</h2>
+                <div className="grid md:grid-cols-2 gap-6 text-sm">
+                  <div>
+                    <h3 className="font-semibold mb-2 text-foreground">Version Details</h3>
+                    <ul className="space-y-1 text-muted-foreground">
+                      <li><strong>Version:</strong> 2.0.0</li>
+                      <li><strong>Last Updated:</strong> September 26, 2025</li>
+                      <li><strong>Status:</strong> Strategic Implementation - Enterprise Ready</li>
+                      <li><strong>Classification:</strong> Enterprise-Grade Strategic Documentation</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold mb-2 text-foreground">Key Topics Covered</h3>
+                    <div className="flex flex-wrap gap-2">
+                      <Badge variant="outline" className="text-xs">Single-Token Architecture</Badge>
+                      <Badge variant="outline" className="text-xs">Enterprise Partnerships</Badge>
+                      <Badge variant="outline" className="text-xs">Payment Processing</Badge>
+                      <Badge variant="outline" className="text-xs">Coinbase Staking</Badge>
+                      <Badge variant="outline" className="text-xs">Zero Risk Protection</Badge>
+                      <Badge variant="outline" className="text-xs">Traditional Funding</Badge>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -636,4 +446,4 @@ export default function WhitepaperPage() {
       <Footer />
     </div>
   );
-} 
+}

@@ -196,7 +196,7 @@ export default function TokenomicsPage() {
           <div className="grid lg:grid-cols-2 gap-12">
             <Card className="border-2 border-red-500/20 bg-red-500/5">
               <CardHeader>
-                <CardTitle className="text-xl text-red-600 dark:text-red-400">❌ Traditional Crypto Charity</CardTitle>
+                <CardTitle className="text-xl text-red-600 dark:text-red-400">❌ Traditional Token Architecture</CardTitle>
                 <CardDescription>High-risk models with participant exposure</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -227,14 +227,14 @@ export default function TokenomicsPage() {
 
             <Card className="border-2 border-emerald-500/20 bg-emerald-500/5">
               <CardHeader>
-                <CardTitle className="text-xl text-emerald-600 dark:text-emerald-400">✅ SHELTR Enterprise Model</CardTitle>
+                <CardTitle className="text-xl text-emerald-600 dark:text-emerald-400">✅ SHELTR SmartFund™ Model</CardTitle>
                 <CardDescription>Zero-risk architecture with guaranteed returns</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-3">
                   <div className="flex items-center space-x-3">
                     <CheckCircle className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
-                    <span>Adyen virtual cards for 80% participant allocation</span>
+                    <span>Virtual cards for 80% participant allocation</span>
                   </div>
                   <div className="flex items-center space-x-3">
                     <CheckCircle className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
@@ -263,7 +263,7 @@ export default function TokenomicsPage() {
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4">Revolutionary Payment Flow</h2>
+            <h2 className="text-3xl font-bold mb-4">Payment Flow Architecture</h2>
             <p className="text-xl text-muted-foreground">Direct credit card to virtual debit card with blockchain transparency</p>
           </div>
 
@@ -276,7 +276,7 @@ export default function TokenomicsPage() {
                     <CreditCard className="h-8 w-8 text-blue-600" />
                   </div>
                   <h3 className="font-semibold mb-2">1. Credit Card Donation</h3>
-                  <p className="text-sm text-muted-foreground">Donor uses credit card via Adyen payment processing</p>
+                  <p className="text-sm text-muted-foreground">Donor uses credit card via global payment processing</p>
                   <div className="mt-3 p-2 bg-blue-500/10 rounded-lg">
                     <div className="text-lg font-bold text-blue-600">$100</div>
                     <div className="text-xs text-muted-foreground">Example donation</div>
@@ -309,7 +309,7 @@ export default function TokenomicsPage() {
                     <CreditCard className="h-8 w-8 text-emerald-600" />
                   </div>
                   <h3 className="font-semibold mb-2">3. Virtual Debit Card</h3>
-                  <p className="text-sm text-muted-foreground">Instant Adyen virtual card loading for participant</p>
+                  <p className="text-sm text-muted-foreground">Instant virtual card loading for participant</p>
                   <div className="mt-3 p-2 bg-emerald-500/10 rounded-lg">
                     <div className="text-lg font-bold text-emerald-600">$80</div>
                     <div className="text-xs text-muted-foreground">Visa/Mastercard network</div>
@@ -503,7 +503,7 @@ export default function TokenomicsPage() {
               <CardContent className="space-y-4">
                 <div className="bg-orange-500/10 p-4 rounded-lg border border-orange-500/20">
                   <div className="text-2xl font-bold text-orange-600 dark:text-orange-400 mb-1">15% Housing Fund</div>
-                  <p className="text-sm text-orange-600/70">Guaranteed 4-6% APY institutional staking</p>
+                  <p className="text-sm text-orange-600/70">Guaranteed 4-6% APY institutional staking*</p>
                 </div>
                 
                 <div className="space-y-3">
@@ -551,7 +551,7 @@ export default function TokenomicsPage() {
                 <FileText className="h-8 w-8 mb-3 text-emerald-600" />
                 <CardTitle>Payment Rail Architecture</CardTitle>
                 <CardDescription>
-                  Complete technical specification for Adyen + Coinbase integration
+                  Complete technical specification for Payment Processing + Coinbase integration
                 </CardDescription>
               </CardHeader>
               <CardContent>

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import ThemeLogo from '@/components/ThemeLogo';
+import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -100,8 +101,12 @@ export default function FoundersOnlyPage() {
       <div className="container mx-auto px-4 py-8">
         {/* Welcome Section */}
         <div className="text-center mb-8">
-          <div className="w-20 h-20 bg-gradient-to-r from-purple-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Users className="h-10 w-10 text-white" />
+          <div className="flex items-center justify-center mb-6">
+            <img 
+              src="/logo-sheltr-white.png" 
+              alt="SHELTR Logo" 
+              className="h-16 w-auto"
+            />
           </div>
           <h1 className="text-3xl font-bold mb-2">SHELTR Founders Portal</h1>
           <p className="text-lg text-muted-foreground mb-4">
@@ -308,6 +313,20 @@ export default function FoundersOnlyPage() {
           </div>
         </div>
 
+        {/* Section Divider */}
+        <div className="max-w-4xl mx-auto mb-12">
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-300 dark:border-gray-600"></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-6 py-2 bg-background text-muted-foreground font-medium rounded-full border border-gray-200 dark:border-gray-700">
+                Quality Assurance & Testing Environment
+              </span>
+            </div>
+          </div>
+        </div>
+
         {/* Demo User Credentials for QA Testing */}
         <div className="max-w-4xl mx-auto mb-12">
           <Card className="border-emerald-200 dark:border-emerald-800">
@@ -345,19 +364,20 @@ export default function FoundersOnlyPage() {
                         </div>
                         <CardTitle className="text-blue-700 dark:text-blue-300 text-lg">Demo Donor</CardTitle>
                       </div>
+                      <div className="text-xs text-blue-600 dark:text-blue-400 font-medium">Jane Supporter</div>
                     </CardHeader>
                     <CardContent className="space-y-2">
                       <div>
-                        <Label className="text-xs font-medium text-blue-600 dark:text-blue-400">Username</Label>
-                        <p className="font-mono text-sm bg-white dark:bg-slate-800 p-2 rounded border">demo.donor</p>
-                      </div>
-                      <div>
                         <Label className="text-xs font-medium text-blue-600 dark:text-blue-400">Email</Label>
-                        <p className="font-mono text-sm bg-white dark:bg-slate-800 p-2 rounded border">demo.donor@sheltr-ai.com</p>
+                        <p className="font-mono text-sm bg-white dark:bg-slate-800 p-2 rounded border">donor@example.com</p>
                       </div>
                       <div>
                         <Label className="text-xs font-medium text-blue-600 dark:text-blue-400">Password</Label>
-                        <p className="font-mono text-sm bg-white dark:bg-slate-800 p-2 rounded border">Demo2024!</p>
+                        <p className="font-mono text-sm bg-white dark:bg-slate-800 p-2 rounded border">sheltr123</p>
+                      </div>
+                      <div>
+                        <Label className="text-xs font-medium text-blue-600 dark:text-blue-400">Role</Label>
+                        <p className="font-mono text-sm bg-white dark:bg-slate-800 p-2 rounded border">donor</p>
                       </div>
                     </CardContent>
                   </Card>
@@ -374,16 +394,16 @@ export default function FoundersOnlyPage() {
                     </CardHeader>
                     <CardContent className="space-y-2">
                       <div>
-                        <Label className="text-xs font-medium text-green-600 dark:text-green-400">Username</Label>
-                        <p className="font-mono text-sm bg-white dark:bg-slate-800 p-2 rounded border">demo.participant</p>
-                      </div>
-                      <div>
                         <Label className="text-xs font-medium text-green-600 dark:text-green-400">Email</Label>
-                        <p className="font-mono text-sm bg-white dark:bg-slate-800 p-2 rounded border">demo.participant@sheltr-ai.com</p>
+                        <p className="font-mono text-sm bg-white dark:bg-slate-800 p-2 rounded border">participant@example.com</p>
                       </div>
                       <div>
                         <Label className="text-xs font-medium text-green-600 dark:text-green-400">Password</Label>
-                        <p className="font-mono text-sm bg-white dark:bg-slate-800 p-2 rounded border">Demo2024!</p>
+                        <p className="font-mono text-sm bg-white dark:bg-slate-800 p-2 rounded border">sheltr123</p>
+                      </div>
+                      <div>
+                        <Label className="text-xs font-medium text-green-600 dark:text-green-400">Role</Label>
+                        <p className="font-mono text-sm bg-white dark:bg-slate-800 p-2 rounded border">participant</p>
                       </div>
                       <div className="mt-2 p-2 bg-green-100 dark:bg-green-900/30 rounded text-xs text-green-700 dark:text-green-300">
                         <strong>Connected to:</strong> Old Brewery Mission
@@ -403,16 +423,16 @@ export default function FoundersOnlyPage() {
                     </CardHeader>
                     <CardContent className="space-y-2">
                       <div>
-                        <Label className="text-xs font-medium text-purple-600 dark:text-purple-400">Username</Label>
-                        <p className="font-mono text-sm bg-white dark:bg-slate-800 p-2 rounded border">demo.shelter.admin</p>
-                      </div>
-                      <div>
                         <Label className="text-xs font-medium text-purple-600 dark:text-purple-400">Email</Label>
-                        <p className="font-mono text-sm bg-white dark:bg-slate-800 p-2 rounded border">demo.shelter.admin@sheltr-ai.com</p>
+                        <p className="font-mono text-sm bg-white dark:bg-slate-800 p-2 rounded border">shelteradmin@example.com</p>
                       </div>
                       <div>
                         <Label className="text-xs font-medium text-purple-600 dark:text-purple-400">Password</Label>
-                        <p className="font-mono text-sm bg-white dark:bg-slate-800 p-2 rounded border">Demo2024!</p>
+                        <p className="font-mono text-sm bg-white dark:bg-slate-800 p-2 rounded border">sheltr123</p>
+                      </div>
+                      <div>
+                        <Label className="text-xs font-medium text-purple-600 dark:text-purple-400">Role</Label>
+                        <p className="font-mono text-sm bg-white dark:bg-slate-800 p-2 rounded border">sheltr-admin</p>
                       </div>
                       <div className="mt-2 p-2 bg-purple-100 dark:bg-purple-900/30 rounded text-xs text-purple-700 dark:text-purple-300">
                         <strong>Organization:</strong> Old Brewery Mission
@@ -480,6 +500,9 @@ export default function FoundersOnlyPage() {
           </div>
         </div>
       </div>
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 }

@@ -7,6 +7,7 @@ import ThemeLogo from '@/components/ThemeLogo';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Label } from '@/components/ui/label';
 import { 
   Shield, 
   LogOut, 
@@ -111,6 +112,23 @@ export default function FoundersOnlyPage() {
           </Badge>
         </div>
 
+        {/* Founders Introduction */}
+        <div className="max-w-4xl mx-auto mb-8">
+          <Card className="p-6 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 border-blue-200 dark:border-blue-800">
+            <CardContent className="p-0">
+              <h2 className="text-xl font-bold mb-4 text-blue-800 dark:text-blue-200">Welcome to SHELTR&apos;s Executive Command Center</h2>
+              <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                Your Google email addresses provide you with comprehensive access to the SHELTR platform, including full Platform Administrator privileges and executive dashboard capabilities. As co-founders, you have unrestricted access to all system functions, financial oversight, user management, and strategic analytics. Upon logging into the main platform, you will be presented with a Non-Disclosure Agreement (NDA) and a personalized welcome letter tailored to your specific expertise and leadership role within SHELTR. This portal serves as your gateway to confidential business plans, financial reports, and strategic documentation that will be progressively published here as we advance toward our public launch.
+              </p>
+              <div className="mt-4 p-3 bg-amber-100 dark:bg-amber-900/30 rounded-lg border border-amber-200 dark:border-amber-800">
+                <p className="text-sm text-amber-800 dark:text-amber-200 font-medium">
+                  🔒 Confidential Access: Only the five SHELTR co-founders have access to this executive portal and its strategic resources.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
         {/* Security Advisory */}
         <div className="max-w-4xl mx-auto mb-8">
           <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
@@ -167,7 +185,7 @@ export default function FoundersOnlyPage() {
                     Enterprise
                   </Badge>
                 </div>
-                <CardTitle className="text-green-600">Payment Rails</CardTitle>
+                <CardTitle className="text-green-600">Proposed Payment Rails</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground mb-4">
@@ -288,6 +306,152 @@ export default function FoundersOnlyPage() {
               </CardContent>
             </Card>
           </div>
+        </div>
+
+        {/* Demo User Credentials for QA Testing */}
+        <div className="max-w-4xl mx-auto mb-12">
+          <Card className="border-emerald-200 dark:border-emerald-800">
+            <CardHeader>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg flex items-center justify-center">
+                  <Users className="h-5 w-5 text-emerald-600" />
+                </div>
+                <div>
+                  <CardTitle className="text-emerald-700 dark:text-emerald-300">QA Testing Demo Accounts</CardTitle>
+                  <p className="text-sm text-muted-foreground">Connected test accounts for comprehensive system validation</p>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-6">
+                {/* Introduction */}
+                <div className="bg-emerald-50 dark:bg-emerald-900/20 rounded-lg p-4 border border-emerald-200 dark:border-emerald-800">
+                  <p className="text-sm text-emerald-800 dark:text-emerald-200 leading-relaxed">
+                    These three interconnected demo accounts simulate the complete SHELTR ecosystem for testing purposes. 
+                    The <strong>Participant</strong> and <strong>Shelter Admin</strong> are connected to <strong>Old Brewery Mission</strong> for realistic data flow testing. 
+                    The Scan & Give system is currently awaiting payment rail and blockchain integration, but the data stream functions consistently. 
+                    <strong>Important:</strong> When logged in as Platform Administrators, donations will be credited to your accounts for testing purposes.
+                  </p>
+                </div>
+
+                {/* Demo Accounts Grid */}
+                <div className="grid md:grid-cols-3 gap-4">
+                  {/* Donor Account */}
+                  <Card className="border-blue-200 dark:border-blue-800 bg-blue-50/50 dark:bg-blue-900/10">
+                    <CardHeader className="pb-3">
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
+                          <span className="text-blue-600 font-semibold text-sm">D</span>
+                        </div>
+                        <CardTitle className="text-blue-700 dark:text-blue-300 text-lg">Demo Donor</CardTitle>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="space-y-2">
+                      <div>
+                        <Label className="text-xs font-medium text-blue-600 dark:text-blue-400">Username</Label>
+                        <p className="font-mono text-sm bg-white dark:bg-slate-800 p-2 rounded border">demo.donor</p>
+                      </div>
+                      <div>
+                        <Label className="text-xs font-medium text-blue-600 dark:text-blue-400">Email</Label>
+                        <p className="font-mono text-sm bg-white dark:bg-slate-800 p-2 rounded border">demo.donor@sheltr-ai.com</p>
+                      </div>
+                      <div>
+                        <Label className="text-xs font-medium text-blue-600 dark:text-blue-400">Password</Label>
+                        <p className="font-mono text-sm bg-white dark:bg-slate-800 p-2 rounded border">Demo2024!</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  {/* Participant Account */}
+                  <Card className="border-green-200 dark:border-green-800 bg-green-50/50 dark:bg-green-900/10">
+                    <CardHeader className="pb-3">
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center">
+                          <span className="text-green-600 font-semibold text-sm">P</span>
+                        </div>
+                        <CardTitle className="text-green-700 dark:text-green-300 text-lg">Demo Participant</CardTitle>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="space-y-2">
+                      <div>
+                        <Label className="text-xs font-medium text-green-600 dark:text-green-400">Username</Label>
+                        <p className="font-mono text-sm bg-white dark:bg-slate-800 p-2 rounded border">demo.participant</p>
+                      </div>
+                      <div>
+                        <Label className="text-xs font-medium text-green-600 dark:text-green-400">Email</Label>
+                        <p className="font-mono text-sm bg-white dark:bg-slate-800 p-2 rounded border">demo.participant@sheltr-ai.com</p>
+                      </div>
+                      <div>
+                        <Label className="text-xs font-medium text-green-600 dark:text-green-400">Password</Label>
+                        <p className="font-mono text-sm bg-white dark:bg-slate-800 p-2 rounded border">Demo2024!</p>
+                      </div>
+                      <div className="mt-2 p-2 bg-green-100 dark:bg-green-900/30 rounded text-xs text-green-700 dark:text-green-300">
+                        <strong>Connected to:</strong> Old Brewery Mission
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  {/* Shelter Admin Account */}
+                  <Card className="border-purple-200 dark:border-purple-800 bg-purple-50/50 dark:bg-purple-900/10">
+                    <CardHeader className="pb-3">
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center">
+                          <span className="text-purple-600 font-semibold text-sm">S</span>
+                        </div>
+                        <CardTitle className="text-purple-700 dark:text-purple-300 text-lg">Demo Shelter Admin</CardTitle>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="space-y-2">
+                      <div>
+                        <Label className="text-xs font-medium text-purple-600 dark:text-purple-400">Username</Label>
+                        <p className="font-mono text-sm bg-white dark:bg-slate-800 p-2 rounded border">demo.shelter.admin</p>
+                      </div>
+                      <div>
+                        <Label className="text-xs font-medium text-purple-600 dark:text-purple-400">Email</Label>
+                        <p className="font-mono text-sm bg-white dark:bg-slate-800 p-2 rounded border">demo.shelter.admin@sheltr-ai.com</p>
+                      </div>
+                      <div>
+                        <Label className="text-xs font-medium text-purple-600 dark:text-purple-400">Password</Label>
+                        <p className="font-mono text-sm bg-white dark:bg-slate-800 p-2 rounded border">Demo2024!</p>
+                      </div>
+                      <div className="mt-2 p-2 bg-purple-100 dark:bg-purple-900/30 rounded text-xs text-purple-700 dark:text-purple-300">
+                        <strong>Organization:</strong> Old Brewery Mission
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                {/* System Status Notice */}
+                <div className="bg-amber-50 dark:bg-amber-900/20 rounded-lg p-4 border border-amber-200 dark:border-amber-800">
+                  <div className="flex items-start gap-3">
+                    <div className="w-5 h-5 bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <span className="text-amber-600 text-xs">⚠</span>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-amber-800 dark:text-amber-200 text-sm mb-1">Payment & Blockchain Integration Status</h4>
+                      <p className="text-xs text-amber-700 dark:text-amber-300 leading-relaxed">
+                        The Scan & Give donation system is currently in development, awaiting full payment rail (Adyen) and blockchain (Coinbase Base) integration. 
+                        However, the data streaming and user interface components are fully functional for testing purposes. All donation flows will be simulated 
+                        until payment processing is activated.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Future Content Notice */}
+                <div className="bg-slate-50 dark:bg-slate-800 rounded-lg p-4 border border-slate-200 dark:border-slate-700">
+                  <div className="flex items-center gap-2 mb-2">
+                    <FileText className="h-4 w-4 text-slate-600" />
+                    <h4 className="font-semibold text-slate-700 dark:text-slate-300 text-sm">Coming Soon to This Portal</h4>
+                  </div>
+                  <p className="text-xs text-slate-600 dark:text-slate-400">
+                    Business plans, detailed financial reports, and strategic documentation will be progressively published 
+                    in this founders portal as we advance toward our public launch timeline.
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Footer Security Notice */}

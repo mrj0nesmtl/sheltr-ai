@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, ArrowRight, MessageCircle } from 'lucide-react';
+import { ArrowLeft, ArrowRight, MessageCircle, LogOut, User } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { useAuth } from '@/contexts/AuthContext';
@@ -13,7 +13,7 @@ interface MobileBottomNavProps {
 
 export function MobileBottomNav({ className = '', sidebarOpen = false }: MobileBottomNavProps) {
   const router = useRouter();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
 
   // Dashboard navigation order based on user role - matches sidebar menu order exactly
   const getDashboardRoutes = (role: string) => {
@@ -104,6 +104,15 @@ export function MobileBottomNav({ className = '', sidebarOpen = false }: MobileB
     }
   };
 
+  // Handle logout
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
+
   // Only show on mobile screens
   const [isMobile, setIsMobile] = useState(false);
 
@@ -178,14 +187,14 @@ export function MobileBottomNav({ className = '', sidebarOpen = false }: MobileB
             </div>
           </div>
 
-          {/* Forward Button */}
+          {/* Logout Button */}
           <button
-            onClick={navigateForward}
-            className="group flex items-center justify-center h-14 w-14 rounded-2xl bg-white/10 dark:bg-white/5 backdrop-blur-md border border-white/20 dark:border-white/10 hover:bg-white/20 dark:hover:bg-white/10 active:scale-95 transition-all duration-300 hover:shadow-lg flex-shrink-0"
-            title="Go Forward"
+            onClick={handleLogout}
+            className="group flex items-center justify-center h-14 w-14 rounded-2xl bg-red-500/10 dark:bg-red-400/10 backdrop-blur-md border border-red-300/30 dark:border-red-400/20 hover:bg-red-500/20 dark:hover:bg-red-400/20 active:scale-95 transition-all duration-300 hover:shadow-lg hover:shadow-red-500/20 flex-shrink-0"
+            title="Logout"
             style={{ height: '56px', width: '56px' }}
           >
-            <ArrowRight className="h-7 w-7 text-gray-800 dark:text-white group-hover:scale-110 transition-transform duration-200" />
+            <LogOut className="h-7 w-7 text-red-600 dark:text-red-400 group-hover:scale-110 transition-transform duration-200" />
           </button>
         </div>
 

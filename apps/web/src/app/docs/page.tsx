@@ -145,6 +145,18 @@ export default function DocsPage() {
       lastUpdated: "September 26, 2025"
     },
     {
+      title: "System Design Architecture",
+      description: "Multi-tenant SaaS architecture with enterprise payment infrastructure, visual flow diagrams, and comprehensive system integration",
+      icon: Building2,
+      badge: "Architecture",
+      badgeColor: "bg-blue-600",
+      audience: "System Architects • DevOps Engineers • Technical Leaders • Enterprise Partners",
+      topics: ["Multi-Tenant Architecture", "Enterprise Payment Flow", "Base Network Integration", "Visual System Diagrams", "Scalability Design"],
+      link: "/docs/system-design",
+      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/system-design.md",
+      lastUpdated: "September 28, 2025"
+    },
+    {
       title: "Chatbot Agent Architecture",
       description: "Comprehensive guide to SHELTR-AI's multi-agent chatbot system with MCP-powered workflow automation",
       icon: MessageSquare,

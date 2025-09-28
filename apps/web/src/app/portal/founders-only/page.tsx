@@ -20,7 +20,9 @@ import {
   TrendingUp,
   AlertTriangle,
   Users,
-  Lock
+  Lock,
+  Building2,
+  Blocks
 } from 'lucide-react';
 import { checkFounderAccess, clearFounderAccess, getFounderInfo } from '@/services/founderAccessService';
 
@@ -307,6 +309,78 @@ export default function FoundersOnlyPage() {
                     Access Platform
                     <ExternalLink className="h-4 w-4" />
                   </a>
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* System Design Architecture */}
+            <Card className="hover:shadow-lg transition-shadow cursor-pointer border-cyan-200 dark:border-cyan-800">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <Building2 className="h-8 w-8 text-cyan-600" />
+                  <Badge className="bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200">
+                    Architecture
+                  </Badge>
+                </div>
+                <CardTitle className="text-cyan-600">System Design Architecture</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Multi-tenant SaaS architecture with enterprise payment infrastructure and visual flow diagrams
+                </p>
+                <Button asChild className="w-full bg-cyan-600 hover:bg-cyan-700">
+                  <Link href="/docs/system-design" className="flex items-center gap-2">
+                    View Architecture
+                    <ExternalLink className="h-4 w-4" />
+                  </Link>
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Technical White Paper */}
+            <Card className="hover:shadow-lg transition-shadow cursor-pointer border-emerald-200 dark:border-emerald-800">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <FileText className="h-8 w-8 text-emerald-600" />
+                  <Badge className="bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200">
+                    v2.0
+                  </Badge>
+                </div>
+                <CardTitle className="text-emerald-600">Technical White Paper</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Revolutionary enterprise-grade platform with single-token architecture and blockchain transparency
+                </p>
+                <Button asChild className="w-full bg-emerald-600 hover:bg-emerald-700">
+                  <Link href="/docs/whitepaper" className="flex items-center gap-2">
+                    Read Whitepaper
+                    <ExternalLink className="h-4 w-4" />
+                  </Link>
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Blockchain Architecture */}
+            <Card className="hover:shadow-lg transition-shadow cursor-pointer border-amber-200 dark:border-amber-800">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <Blocks className="h-8 w-8 text-amber-600" />
+                  <Badge className="bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200">
+                    SmartFund™
+                  </Badge>
+                </div>
+                <CardTitle className="text-amber-600">Blockchain Architecture</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Single-token stable fund ecosystem with enterprise payment infrastructure and guaranteed returns
+                </p>
+                <Button asChild className="w-full bg-amber-600 hover:bg-amber-700">
+                  <Link href="/docs/blockchain" className="flex items-center gap-2">
+                    View Blockchain
+                    <ExternalLink className="h-4 w-4" />
+                  </Link>
                 </Button>
               </CardContent>
             </Card>

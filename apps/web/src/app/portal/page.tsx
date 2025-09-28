@@ -122,9 +122,6 @@ export default function FoundersPortalPage() {
                     <Users className="h-5 w-5 text-purple-600" />
                     Co-Founder Access
                   </h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Joel Yaffe • Alexander Kline • Marc Reichel • Doug Kukura • Morgan Hirtle
-                  </p>
                 </div>
                 
                 <form onSubmit={handleFounderLogin} className="space-y-4">

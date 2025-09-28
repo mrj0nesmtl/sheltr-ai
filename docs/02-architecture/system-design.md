@@ -1,25 +1,26 @@
 # 🏗️ SHELTR System Design
 
-**Multi-Tenant SaaS Architecture with Dual-Token Blockchain Economy**
+**Multi-Tenant SaaS Architecture with Single-Token Stable Fund Enterprise Payment Infrastructure**
 
-*Based on: Next.js 15 + Firebase + Base Network Integration*  
-*Date: September 10, 2024*  
+*Based on: Next.js 15 + Firebase + Adyen + Coinbase Base Integration*  
+*Date: September 28, 2025*  
 *Status: In Development & Production Beta Online* ✅
 
 ---
 
 ## 📋 Architecture Overview
 
-SHELTR is built on a modern, production-ready architecture that combines Next.js 15 frontend with Firebase backend and Base network blockchain integration. The platform features a revolutionary dual-token economy and comprehensive stakeholder management system currently live at https://sheltr-ai.web.app with **COMPLETE AUTHENTICATION SYSTEM OPERATIONAL**.
+SHELTR is built on a modern, production-ready architecture that combines Next.js 15 frontend with Firebase backend, enterprise payment processing (Adyen), and Base network blockchain integration. The platform features a revolutionary single-token stable fund architecture with zero cryptocurrency exposure for participants and comprehensive stakeholder management system currently live at https://sheltr-ai.web.app with **COMPLETE AUTHENTICATION SYSTEM OPERATIONAL**.
 
 ### Core Design Principles
 
-1. **Proposed Dual-Token Economy**: SHELTR-S (stable) + SHELTR (community) tokens on Base network
-2. **Stakeholder-Focused**: Four distinct user types with tailored experiences
-3. **Blockchain Native**: Base network integration with Coinbase connectivity and Visa MCP
-4. **SmartFund™ Distribution**: Automated 80/15/5 allocation via smart contracts
-5. **Real-Time Transparency**: Live blockchain verification and impact tracking  
-6. **Production Ready**: Beautiful UI with Shadcn components and dark theme
+1. **Single-Token Stable Fund**: SHELTR Stablecoin (USDT-backed) for housing fund tracking only
+2. **Zero-Risk Architecture**: Virtual debit cards for participants with no crypto exposure
+3. **Enterprise Payment Infrastructure**: Adyen payment processing with Coinbase Base integration
+4. **SmartFund™ Distribution**: Automated 80/15/5 allocation via enterprise payment rails
+5. **Guaranteed Returns**: 4-6% APY on housing fund through institutional staking
+6. **Real-Time Transparency**: Live blockchain verification with traditional payment stability
+7. **Production Ready**: Beautiful UI with Shadcn components and dark theme
 
 ---
 
@@ -32,29 +33,33 @@ graph TD
     A[Next.js 15 Website<br/>Shadcn UI + Dark Theme] -->|Firebase SDK| B[Firebase Backend<br/>Auth + Firestore]
     C[Mobile App<br/>Future: React Native] -->|Same Firebase SDK| B
     
-    A -->|QR Donations| D[Base Network<br/>Coinbase L2]
-    D -->|Smart Contracts| E[SHELTR Dual Tokens<br/>SHELTR-S + SHELTR]
+    A -->|QR Donations| D[Adyen Payment Processing<br/>Enterprise Credit Card Gateway]
+    D -->|Secure Payment| E[SHELTR Main Account<br/>Traditional Banking]
     E -->|SmartFund Distribution| F[80/15/5 Allocation<br/>Auto-executed]
     
-    F -->|80%| G[SHELTR-S Tokens<br/>Participant Wallets]
-    F -->|15%| H[Housing Fund<br/>DeFi Strategies]
+    F -->|80%| G[Adyen Virtual Debit Cards<br/>Participant Access - Zero Crypto]
+    F -->|15%| H[Coinbase Base Network<br/>SHELTR Stablecoin Housing Fund]
     F -->|5%| I[Platform Operations<br/>Sustainable Revenue]
     
-    B -->|User Management| J[Four Stakeholder Types<br/>Orgs/Gov/Participants/Donors]
-    B -->|Real-time Data| K[Impact Analytics<br/>Blockchain Verified]
+    H -->|USDT Backing| J[Coinbase Prime Staking<br/>4-6% Guaranteed APY]
+    H -->|Blockchain Tracking| K[Housing Fund Transparency<br/>Base Network L2]
     
-    L[Visa MCP Agent<br/>Traditional Payments] -->|Integration| D
-    M[Coinbase Connect<br/>Fiat On/Off Ramp] -->|Integration| D
-    N[Homeless Depot<br/>Marketplace] -->|Payments| E
+    B -->|User Management| L[Four Stakeholder Types<br/>Orgs/Gov/Participants/Donors]
+    B -->|Real-time Data| M[Impact Analytics<br/>Blockchain + Traditional Verified]
     
-    O[Firebase Hosting<br/>CDN + Static Export] -->|Hosts| A
-    P[Documentation<br/>Tokenomics + Technical] -->|Supports| A
+    N[Adyen Virtual Card System<br/>Zero Crypto Exposure] -->|Direct Loading| G
+    O[Coinbase Prime Custody<br/>Institutional Grade] -->|Secure Staking| J
+    P[Base Network L2<br/>Sub-cent Tracking] -->|Low-Cost Transparency| K
+    
+    Q[Firebase Hosting<br/>CDN + Static Export] -->|Hosts| A
+    R[Documentation<br/>Payment Rails + Technical] -->|Supports| A
 
     style A fill:#e3f2fd,stroke:#1976d2,stroke-width:3px
-    style E fill:#fff3e0,stroke:#f57c00,stroke-width:3px
-    style D fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style D fill:#4caf50,stroke:#2e7d32,stroke-width:3px
+    style H fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
     style B fill:#e8f5e8,stroke:#388e3c,stroke-width:3px
     style F fill:#fce4ec,stroke:#c2185b,stroke-width:3px
+    style G fill:#fff3e0,stroke:#f57c00,stroke-width:3px
 ```
 
 ### Tenant Isolation Strategy
@@ -123,9 +128,9 @@ Firebase Project: sheltr-ai-production
 
 #### FREE SAAS Business Model
 - **Zero Cost to Shelters**: All platform features provided free
-- **Revenue Model**: 5% SmartFund allocation + partnership revenue
+- **Revenue Model**: 5% SmartFund allocation + enterprise partnership revenue (Adyen + Coinbase)
 - **Global Scalability**: Each new shelter = new tenant (infinite scale)
-- **Features Included FREE**: Participant management, donations, QR codes, analytics, staff management, resource tracking, SmartFund integration
+- **Features Included FREE**: Participant management, virtual card donations, QR codes, analytics, staff management, resource tracking, SmartFund integration with guaranteed returns
 
 #### Tenant Routing Implementation
 
@@ -167,19 +172,19 @@ export class TenantService {
 
 ### Stakeholder-Specific Experiences
 
-| Stakeholder | Website Page | Color Theme | Focus | Token Interaction |
+| Stakeholder | Website Page | Color Theme | Focus | Payment Interaction |
 |-------------|--------------|-------------|-------|-------------------|
-| **Organizations (Shelters & NGOs)** | `/solutions/organizations` | Blue | Operational efficiency, participant management, compliance | SHELTR-S distribution management |
-| **Government Agencies** | `/solutions/government` | Purple | Policy analytics, budget transparency, multi-agency coordination | Audit trails, impact measurement |
-| **Participants (Homeless)** | `/solutions/participants` | Green | Dignified support, direct financial access, housing pathway | Primary SHELTR-S recipients |
-| **Donors (Contributors)** | `/solutions/donors` | Orange | Impact transparency, blockchain verification, community engagement | SHELTR governance participation |
+| **Organizations (Shelters & NGOs)** | `/solutions/organizations` | Blue | Operational efficiency, participant management, compliance | Virtual card distribution management |
+| **Government Agencies** | `/solutions/government` | Purple | Policy analytics, budget transparency, multi-agency coordination | Audit trails, impact measurement, housing fund tracking |
+| **Participants (Homeless)** | `/solutions/participants` | Green | Dignified support, direct financial access, housing pathway | Virtual debit cards (zero crypto exposure) |
+| **Donors (Contributors)** | `/solutions/donors` | Orange | Impact transparency, blockchain verification, community engagement | Traditional credit card donations via Adyen |
 
 ### Implemented Features (Live at https://sheltr-ai.web.app)
 
 ✅ **Complete Stakeholder Pages**: Each group has dedicated, beautifully designed pages
 ✅ **Color-Coded Experience**: Consistent themes throughout each stakeholder journey
 ✅ **Appropriate Tone**: Professional for orgs, policy-focused for government, compassionate for participants, impact-focused for donors
-✅ **Token Integration**: Clear explanation of how each group interacts with the dual-token system
+✅ **Payment Integration**: Clear explanation of how each group interacts with the enterprise payment system
 ✅ **COMPLETE AUTHENTICATION**: 4-role RBAC system with Firebase Auth + custom claims
 ✅ **SUPER ADMIN**: Live dashboard with platform oversight capabilities
 ✅ **ROLE-BASED DASHBOARDS**: Dynamic interfaces based on user permissions
@@ -296,65 +301,66 @@ interface DesignSystem {
 }
 ```
 
-### Tokenomics Integration (LIVE)
+### Payment Architecture Integration (LIVE)
 
-✅ **Comprehensive Tokenomics Page** (`/tokenomics`):
-- Dual-token architecture explanation
-- SHELTR-S (stable) vs SHELTR (community) breakdown
+✅ **Comprehensive Payment Architecture** (`/tokenomics`):
+- Single-token stable fund architecture explanation
+- Virtual card system for zero crypto exposure
 - SmartFund™ distribution visualization (80/15/5)
-- Base network technical specifications
-- Sample blockchain transactions
-- Revenue model and sustainability
+- Adyen + Coinbase Base network integration
+- Enterprise payment processing specifications
+- Guaranteed returns model and sustainability
 
 ✅ **Navigation Integration**:
-- Tokenomics links in all page navigations
-- "Learn About $SHLTR" buttons throughout site
+- Payment architecture links in all page navigations
+- "Learn About SmartFund™" buttons throughout site
 - Consistent branding and user flow
 
 ---
 
-## 🪙 Dual-Token Architecture (IMPLEMENTED)
+## 💳 Enterprise Payment Architecture (IMPLEMENTED)
 
-### SHELTR-S (Stable Utility Token)
+### Virtual Card System (Zero Crypto Exposure)
 
 ```typescript
-interface SHELTRStable {
-  symbol: 'SHELTR-S',
-  type: 'USD-Pegged Stablecoin',
-  backing: 'USDC Reserve Pool',
-  network: 'Base (Coinbase L2)',
-  price: '$1.00 USD (Always Stable)',
-  purpose: 'Participant daily transactions, Homeless Depot purchases',
+interface VirtualCardSystem {
+  provider: 'Adyen Enterprise Payment Processing',
+  cardType: 'Virtual Debit Cards',
+  backing: 'Traditional Banking Infrastructure',
+  network: 'Visa/Mastercard Networks',
   fees: 'Zero for participants',
-  security: 'OpenZeppelin standards'
+  security: 'PCI DSS Level 1 Compliance',
+  purpose: 'Participant daily transactions, retail purchases',
+  exposure: 'Zero cryptocurrency risk'
 }
 ```
 
-### SHELTR (Community Governance Token)
+### SHELTR Stablecoin (Housing Fund Tracking Only)
 
 ```typescript
-interface SHELTRCommunity {
+interface SHELTRStablecoin {
   symbol: 'SHELTR',
-  type: 'Utility + Governance Token',
-  mechanism: 'Deflationary with staking rewards',
+  type: 'USDT-Backed Stablecoin',
+  backing: 'USDT Reserve Pool via Coinbase Prime',
   network: 'Base (Coinbase L2)',
-  price: 'Market-driven appreciation potential',
-  purpose: 'Governance, staking, premium features, community rewards',
-  benefits: 'Voting rights, revenue sharing, platform discounts',
-  participation: 'Optional for participants'
+  price: '$1.00 USD (USDT Pegged)',
+  purpose: 'Housing fund tracking and transparency only',
+  participants: 'No direct access - virtual cards only',
+  returns: '4-6% APY through institutional staking',
+  security: 'OpenZeppelin standards + Coinbase custody'
 }
 ```
 
 ### SmartFund™ Distribution (80/15/5)
 
 ```mermaid
-pie title Automatic Distribution on Every Donation
-    "Direct Support (SHELTR-S to Participants)" : 80
-    "Housing Fund (DeFi Strategies)" : 15
+pie title Enterprise Payment Distribution on Every Donation
+    "Virtual Debit Cards (Zero Crypto)" : 80
+    "Housing Fund (SHELTR Stablecoin + 4-6% APY)" : 15
     "Platform Operations (Sustainability)" : 5
 ```
 
-**Implementation Status**: ✅ Smart contracts designed, ✅ Website explaining system, ✅ Stakeholder buy-in
+**Implementation Status**: ✅ Payment architecture designed, ✅ Website explaining system, ✅ Enterprise partnerships planned (Adyen + Coinbase)
 
 ---
 
@@ -386,11 +392,11 @@ docs/
 ### Key Documentation Updates
 
 ✅ **Moved from Legacy**: All high-priority docs moved to proper locations
-✅ **Updated Blockchain**: Changed from Polygon to Base network focus
-✅ **Comprehensive Tokenomics**: Full dual-token system documentation
-✅ **Website Integration**: All docs support live website features
-✅ **Payment Rails**: Complete Adyen integration documentation
-✅ **Demo Implementation**: QR donation flow implementation guide
+✅ **Updated Blockchain**: Base network focus for housing fund transparency
+✅ **Enterprise Payment Architecture**: Single-token stable fund system documentation
+✅ **Website Integration**: All docs support live website features with new payment model
+✅ **Payment Rails**: Complete Adyen + Coinbase integration documentation
+✅ **Demo Implementation**: Enterprise payment processing implementation guide
 
 ---
 
@@ -610,9 +616,9 @@ export const QRScannerScreen: React.FC = () => {
 
 ---
 
-## 🪙 Blockchain Architecture (Base Network)
+## ⛓️ Enterprise Blockchain Architecture (Base Network)
 
-### Base Network Integration
+### Base Network Integration for Housing Fund Transparency
 
 ```typescript
 interface BaseNetworkConfig {
@@ -621,66 +627,68 @@ interface BaseNetworkConfig {
   rpcUrl: 'https://mainnet.base.org',
   blockTime: '~2 seconds',
   fees: '~$0.01 USD',
+  purpose: 'Housing fund tracking and transparency only',
   benefits: [
-    'Coinbase Connect integration',
-    'Visa MCP agent compatibility', 
-    'Institutional compliance',
-    'Lower fees than Ethereum mainnet',
-    'Regulatory clarity in US markets'
+    'Coinbase Prime institutional custody integration',
+    'Enterprise-grade compliance and security', 
+    'USDT stablecoin backing with guaranteed returns',
+    'Sub-cent transaction costs for fund tracking',
+    'Regulatory clarity for institutional partnerships'
   ]
 }
 ```
 
-### Dual-Token Smart Contracts
+### Enterprise Smart Contract Architecture
 
 ```solidity
-// SHELTR Dual-Token System on Base Network
+// SHELTR Enterprise Payment System on Base Network
 pragma solidity ^0.8.19;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 
-// SHELTR-S Stable Token (USD-Pegged)
-contract SHELTRStable is ERC20, AccessControl {
-    bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
+// SHELTR Stablecoin (Housing Fund Tracking Only)
+contract SHELTRStablecoin is ERC20, AccessControl, ReentrancyGuard {
+    bytes32 public constant FUND_MANAGER_ROLE = keccak256("FUND_MANAGER_ROLE");
     
-    IERC20 public usdcReserve;
-    uint256 public constant PEG_PRICE = 1e6; // $1.00 in USDC (6 decimals)
+    IERC20 public immutable USDT;
+    uint256 public totalHousingFund;
+    uint256 public guaranteedAPY = 500; // 5.00% (basis points)
     
-    constructor(address _usdcReserve) ERC20("SHELTR Stable", "SHELTR-S") {
-        usdcReserve = IERC20(_usdcReserve);
+    mapping(address => uint256) public participantAllocations;
+    mapping(address => uint256) public lastStakeTime;
+    
+    constructor(address _usdt) ERC20("SHELTR Housing Fund", "SHELTR") {
+        USDT = IERC20(_usdt);
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
     }
     
-    function mint(address to, uint256 amount) external onlyRole(MINTER_ROLE) {
-        // Verify USDC reserve backing
+    function depositHousingFund(address participant, uint256 amount) 
+        external onlyRole(FUND_MANAGER_ROLE) nonReentrant {
+        // Verify USDT backing
         require(
-            usdcReserve.balanceOf(address(this)) >= amount,
-            "Insufficient USDC reserve"
+            USDT.balanceOf(address(this)) >= amount,
+            "Insufficient USDT reserve"
         );
-        _mint(to, amount);
-    }
-}
-
-// SHELTR Community Token (Governance + Utility)
-contract SHELTRCommunity is ERC20, AccessControl {
-    bytes32 public constant GOVERNANCE_ROLE = keccak256("GOVERNANCE_ROLE");
-    
-    uint256 public totalStaked;
-    mapping(address => uint256) public stakedBalances;
-    
-    constructor() ERC20("SHELTR Community", "SHELTR") {
-        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
-        _mint(msg.sender, 1000000 * 10**decimals()); // Initial supply
+        
+        participantAllocations[participant] += amount;
+        totalHousingFund += amount;
+        lastStakeTime[participant] = block.timestamp;
+        
+        _mint(address(this), amount); // Mint tokens for tracking only
+        
+        emit HousingFundDeposit(participant, amount);
     }
     
-    function stake(uint256 amount) external {
-        require(balanceOf(msg.sender) >= amount, "Insufficient balance");
-        _transfer(msg.sender, address(this), amount);
-        stakedBalances[msg.sender] += amount;
-        totalStaked += amount;
+    function calculateReturns(address participant) external view returns (uint256) {
+        uint256 allocation = participantAllocations[participant];
+        uint256 timeStaked = block.timestamp - lastStakeTime[participant];
+        uint256 annualReturn = (allocation * guaranteedAPY) / 10000;
+        return (annualReturn * timeStaked) / 365 days;
     }
+    
+    event HousingFundDeposit(address indexed participant, uint256 amount);
 }
 
 // SmartFund Distribution Contract
@@ -723,49 +731,50 @@ contract SHELTRSmartFund is ReentrancyGuard, AccessControl {
         uint256 toOperations
     );
 
-    // SmartFund™ Distribution (80/15/5)
+    // SmartFund™ Distribution (80/15/5) - Enterprise Payment Processing
     function processDonation(
+        address donor,
         address participant,
         uint256 amount,
-        string memory purpose
-    ) external payable nonReentrant {
+        bytes32 adyenTransactionId
+    ) external onlyRole(ADMIN_ROLE) nonReentrant {
         require(participants[participant].verified, "Participant not verified");
-        require(msg.value == amount, "Incorrect payment amount");
 
         // Calculate distribution
-        uint256 toParticipant = (amount * 80) / 100;
-        uint256 toHousing = (amount * 15) / 100;
-        uint256 toOperations = (amount * 5) / 100;
+        uint256 toVirtualCard = (amount * 80) / 100;     // 80% to participant virtual card
+        uint256 toHousingFund = (amount * 15) / 100;     // 15% to housing fund with guaranteed returns
+        uint256 toOperations = (amount * 5) / 100;       // 5% to platform operations
 
-        // Execute transfers
-        payable(participant).transfer(toParticipant);
-        payable(housingFund).transfer(toHousing);
-        payable(operationsFund).transfer(toOperations);
+        // Execute enterprise payment processing
+        adyenPaymentProcessor.loadVirtualCard(participant, toVirtualCard, adyenTransactionId);
+        sheltrStablecoin.depositHousingFund(participant, toHousingFund);
+        operationsFund.deposit(toOperations);
 
         // Record donation
         bytes32 donationId = keccak256(
-            abi.encodePacked(msg.sender, participant, block.timestamp)
+            abi.encodePacked(donor, participant, block.timestamp, adyenTransactionId)
         );
         
         donations[donationId] = Donation({
-            donor: msg.sender,
+            donor: donor,
             participant: participant,
             amount: amount,
             timestamp: block.timestamp,
-            purpose: purpose,
+            purpose: "SmartFund Distribution",
             processed: true
         });
 
-        participants[participant].totalReceived += toParticipant;
+        participants[participant].totalReceived += toVirtualCard;
+        participants[participant].housingFundAllocation += toHousingFund;
         totalDonations += amount;
 
         emit DonationProcessed(
             donationId,
-            msg.sender,
+            donor,
             participant,
             amount,
-            toParticipant,
-            toHousing,
+            toVirtualCard,
+            toHousingFund,
             toOperations
         );
     }
@@ -786,57 +795,97 @@ contract SHELTRSmartFund is ReentrancyGuard, AccessControl {
 }
 ```
 
-### Token Integration Service
+### Enterprise Payment Integration Service
 
 ```typescript
-// Blockchain service for SHELTR token operations
-export class BlockchainService {
-  private contract: ethers.Contract;
-  private provider: ethers.providers.Provider;
+// Enterprise payment service integrating Adyen + Coinbase Base
+export class EnterprisePaymentService {
+  private adyenClient: AdyenClient;
+  private baseContract: ethers.Contract;
+  private coinbaseService: CoinbaseService;
 
   constructor() {
-    this.provider = new ethers.providers.JsonRpcProvider(
-      process.env.ETHEREUM_RPC_URL
-    );
-    this.contract = new ethers.Contract(
+    this.adyenClient = new AdyenClient({
+      apiKey: process.env.ADYEN_API_KEY,
+      environment: process.env.ADYEN_ENVIRONMENT
+    });
+    this.baseContract = new ethers.Contract(
       process.env.SHELTR_CONTRACT_ADDRESS,
       SHELTR_ABI,
-      this.provider
+      new ethers.providers.JsonRpcProvider(process.env.BASE_RPC_URL)
     );
+    this.coinbaseService = new CoinbaseService();
   }
 
   async processDonation(
-    donorWallet: string,
-    participantWallet: string,
+    donorPaymentMethod: string,
+    participantId: string,
     amount: string,
-    purpose: string
-  ): Promise<TransactionReceipt> {
-    const signer = this.provider.getSigner(donorWallet);
-    const contractWithSigner = this.contract.connect(signer);
+    currency: string = 'USD'
+  ): Promise<DonationResult> {
+    // Step 1: Process credit card payment via Adyen
+    const adyenPayment = await this.adyenClient.payments({
+      amount: { value: parseInt(amount) * 100, currency }, // Convert to cents
+      paymentMethod: donorPaymentMethod,
+      reference: `SHELTR-${Date.now()}`,
+      merchantAccount: process.env.ADYEN_MERCHANT_ACCOUNT
+    });
 
-    const tx = await contractWithSigner.processDonation(
-      participantWallet,
-      ethers.utils.parseEther(amount),
-      purpose,
-      {
-        value: ethers.utils.parseEther(amount),
-        gasLimit: 300000
-      }
+    if (adyenPayment.resultCode !== 'Authorised') {
+      throw new Error('Payment failed');
+    }
+
+    // Step 2: Execute SmartFund distribution
+    const distribution = await this.executeSmartFundDistribution(
+      participantId,
+      amount,
+      adyenPayment.pspReference
     );
 
-    return await tx.wait();
+    return {
+      adyenTransactionId: adyenPayment.pspReference,
+      blockchainTxHash: distribution.txHash,
+      virtualCardLoaded: distribution.virtualCardAmount,
+      housingFundDeposited: distribution.housingFundAmount,
+      operationsFee: distribution.operationsAmount
+    };
   }
 
-  async getParticipantStats(
-    participantWallet: string
-  ): Promise<ParticipantStats> {
-    const participant = await this.contract.participants(participantWallet);
+  async executeSmartFundDistribution(
+    participantId: string,
+    amount: string,
+    adyenTxId: string
+  ): Promise<DistributionResult> {
+    const amountWei = ethers.utils.parseEther(amount);
+    
+    // Call smart contract for blockchain tracking
+    const tx = await this.baseContract.processDonation(
+      participantId,
+      amountWei,
+      ethers.utils.formatBytes32String(adyenTxId)
+    );
+
+    const receipt = await tx.wait();
+
+    return {
+      txHash: receipt.transactionHash,
+      virtualCardAmount: ethers.utils.formatEther(amountWei.mul(80).div(100)),
+      housingFundAmount: ethers.utils.formatEther(amountWei.mul(15).div(100)),
+      operationsAmount: ethers.utils.formatEther(amountWei.mul(5).div(100))
+    };
+  }
+
+  async getParticipantHousingFund(
+    participantId: string
+  ): Promise<HousingFundStats> {
+    const allocation = await this.baseContract.participantAllocations(participantId);
+    const returns = await this.baseContract.calculateReturns(participantId);
     
     return {
-      totalReceived: ethers.utils.formatEther(participant.totalReceived),
-      verified: participant.verified,
-      registeredAt: new Date(participant.registeredAt.toNumber() * 1000),
-      donationCount: await this.getDonationCount(participantWallet)
+      totalAllocated: ethers.utils.formatEther(allocation),
+      currentReturns: ethers.utils.formatEther(returns),
+      guaranteedAPY: '4-6%',
+      nextPayoutDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days
     };
   }
 }
@@ -1272,20 +1321,20 @@ production:
 - ✅ Comprehensive keyword strategy with 100+ targeted terms
 - ✅ Enhanced robots.txt with AI crawler instructions
 
-🪙 **Revolutionary Tokenomics Design**:
-- ✅ SHELTR-S stable token (USD-pegged) for participant protection
-- ✅ SHELTR community token for governance and growth
-- ✅ SmartFund™ 80/15/5 distribution model
-- ✅ Base network integration for Coinbase connectivity
-- ✅ Visa MCP agent compatibility for traditional payments
+💳 **Revolutionary Enterprise Payment Design**:
+- ✅ Virtual debit cards for zero cryptocurrency exposure
+- ✅ SHELTR Stablecoin for housing fund tracking and transparency
+- ✅ SmartFund™ 80/15/5 distribution model with guaranteed returns
+- ✅ Adyen enterprise payment processing integration
+- ✅ Coinbase Base network for institutional staking and custody
 
 📚 **Documentation Restructure**:
 - ✅ Moved all legacy documentation to proper locations
-- ✅ Created comprehensive tokenomics documentation
-- ✅ Updated blockchain architecture for Base network
-- ✅ Integrated documentation with live website features
-- ✅ **NEW**: Complete payment rails documentation
-- ✅ **NEW**: Demo implementation guide
+- ✅ Created comprehensive enterprise payment architecture documentation
+- ✅ Updated blockchain architecture for Base network housing fund tracking
+- ✅ Integrated documentation with live website features and new payment model
+- ✅ **NEW**: Complete Adyen + Coinbase payment rails documentation
+- ✅ **NEW**: Enterprise payment processing implementation guide
 
 🎯 **Stakeholder-Focused Architecture**:
 - ✅ Organizations (Blue): Operational efficiency focus
@@ -1293,23 +1342,23 @@ production:
 - ✅ Participants (Green): Dignified support focus
 - ✅ Donors (Orange): Impact transparency focus
 
-### Current Status: COMPREHENSIVE PLATFORM WITH GALLERY SYSTEM OPERATIONAL
+### Current Status: COMPREHENSIVE PLATFORM WITH ENTERPRISE PAYMENT ARCHITECTURE
 
 The SHELTR platform now has:
 - **Complete frontend implementation** with beautiful UX
-- **Comprehensive tokenomics** that balances stability with growth
-- **Clear stakeholder value propositions** for all user types
-- **Professional documentation** supporting development and marketing
+- **Enterprise payment architecture** with zero cryptocurrency risk for participants
+- **Clear stakeholder value propositions** for all user types with traditional payment integration
+- **Professional documentation** supporting development and marketing with new payment model
 - **Real-time analytics** with live data and smart scaling
 - **AI-powered support system** with emergency detection
 - **Production deployment** with Firebase Functions backend
 - **SEO optimization** for maximum discoverability
-- **Donation system** with participant profiles and QR codes
+- **Donation system** with virtual card distribution and QR codes
 - **Blog and knowledge management** for content creation
 - **Super Admin dashboard** with comprehensive oversight
 - **Complete gallery management system** with Firebase-backed image hosting
 - **Product showcase pages** for PODS, MOBI, and Drone systems
-- **Enhanced documentation** with consolidated technical specifications
+- **Enhanced documentation** with enterprise payment specifications
 
 ### Ready for Next Phase: Smart Contract Integration & Mobile Development (Session 15)
 

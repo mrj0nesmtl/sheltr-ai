@@ -1,6 +1,6 @@
 # Hacking Homelessness - Better to Solve than Manage.
 ### Author: Joel Yaffe
-### Updated: September 10, 2024
+### Updated: September 27, 2024
 ### Status: Published ✅
 
 ---

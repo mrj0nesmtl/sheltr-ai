@@ -42,7 +42,7 @@ export default function HackingHomelessnessPage() {
               </div>
               <div>
                 <h3 className="text-lg font-bold mb-2 text-amber-900 dark:text-amber-100">
-                  🚨 Theory of Change v2.0 - AI & Tech-for-Good Evolution
+                  🚨 Theory of Change v2.0 - Tech-for-Good Evolution
                 </h3>
                 <p className="text-amber-800 dark:text-amber-200 text-sm leading-relaxed">
                   Our foundational thesis has evolved to emphasize <strong>AI-powered resource allocation</strong>, 
@@ -63,27 +63,22 @@ export default function HackingHomelessnessPage() {
               <Brain className="h-12 w-12 text-purple-600 mt-1" />
               <div className="flex-1">
                 <div className="mb-3">
-                  <h1 className="text-3xl sm:text-4xl font-bold mb-2 leading-tight">Hacking Homelessness: AI & Tech-for-Good Revolution</h1>
+                  <h1 className="text-3xl sm:text-4xl font-bold mb-2 leading-tight">Hacking Homelessness: Better to Solve than Manage</h1>
                   <Badge className="bg-purple-500 text-white text-sm">THESIS</Badge>
                 </div>
                 <p className="text-lg text-muted-foreground mb-3">
                   Revolutionary AI-powered ecosystem combining enterprise payment infrastructure with blockchain transparency and physical infrastructure deployment
                 </p>
                 <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground mb-4">
-                  <span>Version 2.0.0 - AI & Enterprise Edition</span>
+                  <span>Version 2.0.0 - Published</span>
                   <span>•</span>
                   <span>September 26, 2025</span>
                   <span>•</span>
-                  <Badge className="bg-emerald-500 text-white text-xs">ENHANCED WITH AI & TECH-FOR-GOOD</Badge>
+                  <Badge className="bg-emerald-500 text-white text-xs">TECH-FOR-GOOD</Badge>
                 </div>
                 
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                  <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/01-overview/hacking_homelessness.md" target="_blank" rel="noopener noreferrer">
-                    <Button className="bg-purple-600 hover:bg-purple-700">
-                      <Download className="h-4 w-4 mr-2" />
-                      View Full Thesis
-                    </Button>
-                  </a>
+                  
                   <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/01-overview/hacking_homelessness.md" target="_blank" rel="noopener noreferrer">
                     <Button variant="outline">
                       <Brain className="h-4 w-4 mr-2" />
@@ -104,10 +99,10 @@ export default function HackingHomelessnessPage() {
             {/* Document Notice */}
             <div className="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-6 mb-8">
               <h3 className="font-semibold text-purple-800 dark:text-purple-200 mb-2">
-                🧠 AI & Tech-for-Good Strategic Thesis
+                Tech-for-Good Thesis
               </h3>
               <p className="text-purple-700 dark:text-purple-300 text-sm">
-                This strategic thesis presents SHELTR&apos;s revolutionary approach combining AI-powered resource allocation, 
+                This thesis presents SHELTR&apos;s revolutionary approach combining AI-powered resource allocation, 
                 enterprise payment infrastructure, and physical asset deployment to hack homelessness through technology innovation.
               </p>
             </div>
@@ -115,7 +110,7 @@ export default function HackingHomelessnessPage() {
             <div className="space-y-8">
               {/* Executive Abstract */}
               <div>
-                <h2 className="text-3xl font-bold mb-6">Executive Abstract: Better to Solve than Manage</h2>
+                <h2 className="text-3xl font-bold mb-6">Abstract: Better to Solve than Manage</h2>
                 <div className="space-y-4 text-lg leading-relaxed">
                   <p className="mb-4">
                     SHELTR was born from a simple but powerful realization: <strong>&ldquo;It&apos;s better to solve than to manage.&rdquo;</strong> 

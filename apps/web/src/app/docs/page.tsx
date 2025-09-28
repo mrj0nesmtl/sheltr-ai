@@ -157,6 +157,18 @@ export default function DocsPage() {
       lastUpdated: "September 28, 2025"
     },
     {
+      title: "Development Roadmap",
+      description: "60-day public launch timeline with client onboarding strategy, AI hyper chatbot achievements, and enterprise payment integration",
+      icon: Rocket,
+      badge: "Launch Plan",
+      badgeColor: "bg-orange-600",
+      audience: "Project Managers • Investors • Technical Teams • Business Partners",
+      topics: ["60-Day Launch Timeline", "Client Onboarding Strategy", "AI Hyper Chatbot", "Enterprise Payment Integration", "Success Metrics"],
+      link: "/docs/roadmap",
+      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/04-development/dev-roadmap.md",
+      lastUpdated: "September 27, 2025"
+    },
+    {
       title: "Chatbot Agent Architecture",
       description: "Comprehensive guide to SHELTR-AI's multi-agent chatbot system with MCP-powered workflow automation",
       icon: MessageSquare,

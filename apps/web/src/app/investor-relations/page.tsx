@@ -51,8 +51,8 @@ const investmentSlides = [
     type: 'title',
     title: 'SHELTR',
     subtitle: 'Hacking Homelessness Through Technology',
-    description: 'Pre-Seed ICO: $150K Raise',
-    highlight: 'Dual-Token Architecture for Social Impact',
+    description: 'Pre-Seed Traditional Funding: $250K Raise',
+    highlight: 'Enterprise Payment Infrastructure for Social Impact',
     icon: Coins,
     bgGradient: 'from-blue-600 to-purple-600',
     content: null
@@ -84,20 +84,20 @@ const investmentSlides = [
     id: 3,
     type: 'solution',
     title: 'SHELTR Solution',
-    subtitle: 'Revolutionary dual-token architecture with AI integration',
-    description: '100% efficiency through blockchain transparency and AI-powered insights',
+    subtitle: 'Disrrup enterprise payment infrastructure with AI integration',
+    description: '100% efficiency through blockchain transparency and traditional payment rails',
     icon: Shield,
     bgGradient: 'from-green-600 to-blue-600',
     content: {
       features: [
         'QR-code enabled direct donations',
         'Blockchain verification of every transaction',
-        'Dual-token architecture (SHELTR-S + SHELTR)',
-        'Smart contract automated distribution (85/10/5)',
+        'Single stable token architecture with USDT backing',
+        'Smart contract automated distribution (80/15/5)',
         'AI-powered chatbot with knowledge base integration',
         'Multi-tenant shelter management platform',
         'Real-time analytics and impact tracking',
-        'Visa MCP traditional payment integration'
+        'Enterprise payment processing (Adyen + Coinbase Base)'
       ],
       comparison: {
         traditional: '60-70% efficiency',
@@ -156,8 +156,8 @@ const investmentSlides = [
   {
     id: 6,
     type: 'tokens',
-    title: 'Dual-Token Economics',
-    subtitle: 'Revolutionary token architecture with updated distribution',
+    title: 'Enterprise Payment Architecture',
+    subtitle: 'Revolutionary payment infrastructure with enterprise partnerships',
     description: 'Stability for participants, growth for investors',
     icon: Coins,
     bgGradient: 'from-green-600 to-purple-600',
@@ -209,23 +209,23 @@ const investmentSlides = [
     id: 8,
     type: 'competitive',
     title: 'Competitive Advantages',
-    subtitle: 'First-mover in dual-token charitable architecture',
-    description: 'Regulatory-compliant utility token structure',
+    subtitle: 'First-mover in enterprise payment infrastructure for homelessness',
+    description: 'Traditional funding with blockchain transparency',
     icon: Award,
     bgGradient: 'from-yellow-600 to-orange-600',
     content: {
       advantages: [
-        'First dual-token charitable ecosystem',
-        'Regulatory-compliant (not securities)',
-        'Immediate utility through marketplace',
-        'Deflationary mechanics driving value',
-        'Community governance ensuring alignment'
+        'First enterprise payment infrastructure for homelessness',
+        'Traditional equity structure with blockchain transparency',
+        'Immediate utility through virtual card system',
+        'Zero-risk architecture for participants',
+        'Enterprise partnerships with Adyen and Coinbase'
       ],
       moats: [
         'Network effects from participant adoption',
         'Data moat from blockchain transparency',
-        'Regulatory moat from compliance structure',
-        'Technology moat from dual-token architecture'
+        'Regulatory moat from traditional compliance',
+        'Technology moat from enterprise payment architecture'
       ]
     }
   },
@@ -255,28 +255,28 @@ const investmentSlides = [
     id: 10,
     type: 'financial',
     title: 'Financial Projections',
-    subtitle: 'Clear path to profitability and token appreciation',
-    description: 'Conservative projections with significant upside potential',
+    subtitle: 'Clear path to profitability through traditional revenue streams',
+    description: 'Conservative projections with enterprise partnership upside',
     icon: BarChart3,
     bgGradient: 'from-green-600 to-blue-600',
     content: {
-      ico: {
-        round: 'Pre-Seed ICO',
-        price: '$0.05 per token',
-        target: '$150K raise',
-        tokens: '3M SHELTR tokens',
-        progress: 30
+      preseed: {
+        round: 'Pre-Seed Traditional Equity',
+        target: '$250K raise',
+        equity: '8-12%',
+        valuation: 'TBD (Pre-Revenue)',
+        progress: 0
       },
-      public: {
-        round: 'Public Launch (Q4 2025)',
-        price: '$0.10 per token',
-        allocation: '30M tokens',
-        marketCap: '$3M'
+      seed: {
+        round: 'Seed Round (Q2 2026)',
+        target: '$500K raise',
+        equity: '15-20%',
+        valuation: '$3M projected'
       },
       projections: {
-        year1: '$1M market cap',
-        year2: '$5M market cap',
-        year3: '$15M market cap'
+        year1: '$50K ARR',
+        year2: '$500K ARR',
+        year3: '$2M ARR'
       }
     }
   },
@@ -285,21 +285,21 @@ const investmentSlides = [
     type: 'funds',
     title: 'Use of Funds',
     subtitle: 'Strategic allocation for maximum growth',
-    description: '40% development, 30% marketing, 20% compliance, 10% operations',
+    description: '40% development, 30% partnerships, 20% compliance, 10% operations',
     icon: Building,
     bgGradient: 'from-purple-600 to-pink-600',
     content: {
       allocation: [
-        { category: 'Platform Development', percentage: 40, amount: '$60K', focus: 'Core technology and scaling' },
-        { category: 'Marketing & User Acquisition', percentage: 30, amount: '$45K', focus: 'Community building and growth' },
-        { category: 'Legal & Regulatory Compliance', percentage: 20, amount: '$30K', focus: 'Compliance framework' },
-        { category: 'Team & Operations', percentage: 10, amount: '$15K', focus: 'Key hires and infrastructure' }
+        { category: 'Platform Development', percentage: 40, amount: '$100K', focus: 'Core technology and scaling' },
+        { category: 'Enterprise Partnerships', percentage: 30, amount: '$75K', focus: 'Adyen, Coinbase, and shelter partnerships' },
+        { category: 'Legal & Regulatory Compliance', percentage: 20, amount: '$50K', focus: 'Traditional equity compliance' },
+        { category: 'Team & Operations', percentage: 10, amount: '$25K', focus: 'Key hires and infrastructure' }
       ],
       milestones: [
         'Q1 2025: Core platform launch',
-        'Q3 2025: AI & Knowledge Base',
-        'Q4 2025: Token launch ($SHLTR)',
-        'Q1-Q2 2026: Market expansion'
+        'Q4 2025: First shelter partnerships',
+        'Q1 2026: Enterprise payment integration',
+        'Q2 2026: Scale to 50+ shelters'
       ]
     }
   },
@@ -307,28 +307,28 @@ const investmentSlides = [
     id: 12,
     type: 'terms',
     title: 'Investment Terms',
-    subtitle: 'ICO structure with governance rights',
-    description: 'Token-based investment with immediate utility and governance',
+    subtitle: 'Traditional equity structure with governance rights',
+    description: 'Equity-based investment with board representation and governance',
     icon: FileText,
     bgGradient: 'from-indigo-600 to-purple-600',
     content: {
       structure: {
-        type: 'ICO (Initial Coin Offering)',
-        token: 'SHELTR (utility token)',
-        governance: 'Immediate voting rights',
-        vesting: 'No lock-up period'
+        type: 'Traditional Equity Investment',
+        instrument: 'Preferred Stock (Series Seed)',
+        governance: 'Board observer rights',
+        vesting: 'Standard 4-year vesting'
       },
       benefits: [
-        'Governance rights from day one',
-        'Staking rewards (8% APY target)',
-        'Platform fee revenue sharing',
-        'Deflationary mechanics (2% annual burn)',
-        'Premium marketplace features'
+        'Board observer rights',
+        'Quarterly investor updates',
+        'Revenue sharing participation',
+        'Anti-dilution protection',
+        'Liquidation preferences'
       ],
       timeline: {
-        ico: 'Q1 2025 (Current)',
-        public: 'Q4 2025',
-        exchange: 'Q1 2026'
+        preseed: 'Q4 2025 (Current)',
+        seed: 'Q2 2026',
+        seriesA: 'Q4 2026'
       }
     }
   },
@@ -375,7 +375,7 @@ const investmentSlides = [
     bgGradient: 'from-green-600 to-blue-600',
     content: {
       summary: [
-        'Revolutionary dual-token architecture',
+        'Revolutionary enterprise payment architecture',
         '$45B addressable market opportunity',
         '95% efficiency vs traditional 60-70%',
         'Immediate utility and governance rights',
@@ -385,7 +385,7 @@ const investmentSlides = [
         'Schedule investor meeting',
         'Review technical documentation',
         'Join community governance',
-        'Participate in token sale'
+        'Participate in equity round'
       ],
       contact: 'joel@arcanaconcept.com'
     }
@@ -1742,79 +1742,6 @@ export default function InvestorRelationsPage() {
         </div>
       </section>
 
-      {/* Funding Strategy Introduction */}
-      <section className="py-16 bg-white dark:bg-slate-900">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="mb-8">
-              <Badge variant="outline" className="mb-4 bg-blue-50 text-blue-700 border-blue-200">
-                Internal Strategy Review
-              </Badge>
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">
-                Two Funding Models Under Consideration
-              </h2>
-              <div className="prose prose-lg max-w-none text-gray-600 dark:text-gray-300">
-                <p className="text-lg leading-relaxed mb-6">
-                  As we approach late-stage development, we have identified two key funding models to reach our 
-                  fundraising objective of <strong>$150,000</strong> to complete development and launch the platform. 
-                  Our team is currently evaluating both approaches to determine the optimal path forward.
-                </p>
-                
-                <div className="grid md:grid-cols-2 gap-6 mt-8">
-                  <div 
-                    className="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg border border-blue-200 dark:border-blue-800 cursor-pointer transition-all duration-300 hover:bg-blue-100 dark:hover:bg-blue-900/30 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-lg transform hover:scale-105"
-                    onClick={() => {
-                      document.getElementById('option-a')?.scrollIntoView({ 
-                        behavior: 'smooth',
-                        block: 'start'
-                      });
-                    }}
-                  >
-                    <h3 className="text-xl font-semibold text-blue-700 dark:text-blue-300 mb-3 flex items-center">
-                      Option A: ICO Model
-                      <ChevronDown className="ml-2 h-4 w-4" />
-                    </h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      Initial Coin Offering with dual-token architecture featuring pre-launch discounted sale. 
-                      This page details the ICO structure, tokenomics, and blockchain-based funding approach.
-                    </p>
-                    <p className="text-xs text-blue-600 dark:text-blue-400 mt-2 font-medium">
-                      Click to explore Option A details ↓
-                    </p>
-                  </div>
-                  
-                  <div 
-                    className="bg-green-50 dark:bg-green-900/20 p-6 rounded-lg border border-green-200 dark:border-green-800 cursor-pointer transition-all duration-300 hover:bg-green-100 dark:hover:bg-green-900/30 hover:border-green-300 dark:hover:border-green-700 hover:shadow-lg transform hover:scale-105"
-                    onClick={() => {
-                      document.getElementById('option-b')?.scrollIntoView({ 
-                        behavior: 'smooth',
-                        block: 'start'
-                      });
-                    }}
-                  >
-                    <h3 className="text-xl font-semibold text-green-700 dark:text-green-300 mb-3 flex items-center">
-                      Option B: Traditional Funding
-                      <ChevronDown className="ml-2 h-4 w-4" />
-                    </h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      Conventional funding model including equity partnerships, SAFE notes, and strategic investor 
-                      relationships. Details available in our traditional strategy documentation.
-                    </p>
-                    <p className="text-xs text-green-600 dark:text-green-400 mt-2 font-medium">
-                      Click to jump to Option B section ↓
-                    </p>
-                  </div>
-                </div>
-                
-                <p className="text-base text-gray-500 dark:text-gray-400 mt-6 italic">
-                  This internal review will guide our decision-making process over the next 30 days before 
-                  finalizing our investment offering strategy.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Schedule Meeting Modal/Form */}
       {showScheduleForm && (
@@ -1983,27 +1910,27 @@ export default function InvestorRelationsPage() {
           </section>
         )}
 
-      {/* Option A - ICO Model */}
-      <section id="option-a" className="py-16">
+      {/* Investment Overview */}
+      <section id="investment-overview" className="py-16">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <Badge variant="outline" className="mb-4 bg-blue-50 text-blue-700 border-blue-200">
-              Option A
+              Investment Opportunity
             </Badge>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-              ICO Model: Dual-Token Architecture
+              Traditional Equity Investment: Enterprise Payment Infrastructure
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-8">
-              Initial Coin Offering with pre-launch discounted sale featuring our innovative dual-token ecosystem. 
-              <strong> Please explore all tabs in the toolbar below</strong> to understand the complete ICO structure, 
-              tokenomics, and blockchain-based funding approach.
+              Traditional equity investment with enterprise payment infrastructure and strategic partnerships. 
+              <strong> Please explore all tabs in the toolbar below</strong> to understand the complete equity structure, 
+              financial projections, and traditional funding approach.
             </p>
           </div>
           <div className="grid md:grid-cols-4 gap-6 mb-12">
             <Card className="text-center">
               <CardContent className="pt-6">
                 <Target className="h-12 w-12 mx-auto mb-4 text-green-600" />
-                <h3 className="text-2xl font-bold mb-2">$150K</h3>
+                <h3 className="text-2xl font-bold mb-2">$250K</h3>
                 <p className="text-muted-foreground">Pre-Seed Target</p>
               </CardContent>
             </Card>
@@ -2017,14 +1944,14 @@ export default function InvestorRelationsPage() {
             <Card className="text-center">
               <CardContent className="pt-6">
                 <Coins className="h-12 w-12 mx-auto mb-4 text-amber-600" />
-                <h3 className="text-2xl font-bold mb-2">$SHLTR</h3>
-                <p className="text-muted-foreground">Utility Token</p>
+                <h3 className="text-2xl font-bold mb-2">8-12%</h3>
+                <p className="text-muted-foreground">Equity Stake</p>
               </CardContent>
             </Card>
             <Card className="text-center">
               <CardContent className="pt-6">
                 <TrendingUp className="h-12 w-12 mx-auto mb-4 text-purple-600" />
-                <h3 className="text-2xl font-bold mb-2">30x</h3>
+                <h3 className="text-2xl font-bold mb-2">10-15x</h3>
                 <p className="text-muted-foreground">5-Year ROI Projection</p>
               </CardContent>
             </Card>
@@ -2034,7 +1961,7 @@ export default function InvestorRelationsPage() {
             <TabsList className="grid w-full grid-cols-5">
               <TabsTrigger value="overview">Executive Summary</TabsTrigger>
               <TabsTrigger value="product">Product & Technology</TabsTrigger>
-              <TabsTrigger value="tokenomics">Tokenomics</TabsTrigger>
+              <TabsTrigger value="tokenomics">Business Model</TabsTrigger>
               <TabsTrigger value="projections">Financial Projections</TabsTrigger>
               <TabsTrigger value="investment">Investment Terms</TabsTrigger>
             </TabsList>
@@ -2143,76 +2070,76 @@ export default function InvestorRelationsPage() {
                   <div className="space-y-6">
                     <div className="grid md:grid-cols-2 gap-6">
                       <div className="space-y-4">
-                        <h4 className="font-bold text-lg text-blue-700 dark:text-blue-300">Token-Based Investment Structure</h4>
+                        <h4 className="font-bold text-lg text-blue-700 dark:text-blue-300">Traditional Equity Investment Structure</h4>
                         <div className="space-y-3">
                           <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                            <h5 className="font-semibold">SHELTR-S (Stable Token)</h5>
-                            <p className="text-sm text-muted-foreground">USD-pegged utility token for participant protection. Every new participant receives 100 SHELTR-S tokens ($100 value) upon signup.</p>
+                            <h5 className="font-semibold">SmartFund™ Distribution Model</h5>
+                            <p className="text-sm text-muted-foreground">Revolutionary 80/15/5 split: Virtual cards for participants, housing fund with guaranteed 4-6% APY, and platform operations.</p>
                           </div>
-                          <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                            <h5 className="font-semibold">SHELTR (Growth Token)</h5>
-                            <p className="text-sm text-muted-foreground">Community governance token with deflationary mechanics. Pre-seed investors receive SHELTR tokens with 50% discount.</p>
+                          <div className="p-3 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg">
+                            <h5 className="font-semibold">Enterprise Payment Infrastructure</h5>
+                            <p className="text-sm text-muted-foreground">Adyen + Coinbase Base integration providing zero-risk architecture with institutional-grade staking and transparency.</p>
                           </div>
                         </div>
                       </div>
                       
                       <div className="space-y-4">
-                        <h4 className="font-bold text-lg text-green-700 dark:text-green-300">Multi-Round Strategy</h4>
+                        <h4 className="font-bold text-lg text-emerald-700 dark:text-emerald-300">Multi-Round Strategy</h4>
                         <div className="space-y-3">
-                          <div className="flex justify-between items-center p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                          <div className="flex justify-between items-center p-3 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg">
                             <div>
                               <h5 className="font-semibold">Pre-Seed (Current)</h5>
-                              <p className="text-sm text-muted-foreground">Platform completion & token launch</p>
+                              <p className="text-sm text-muted-foreground">Platform completion & enterprise integration</p>
                             </div>
-                            <span className="font-bold text-green-600">$150K</span>
+                            <span className="font-bold text-emerald-600">$250K</span>
                           </div>
                           <div className="flex justify-between items-center p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
                             <div>
-                              <h5 className="font-semibold">Seed Round (2025 Q4)</h5>
+                              <h5 className="font-semibold">Seed Round (2026 Q2)</h5>
                               <p className="text-sm text-muted-foreground">Market expansion & partnerships</p>
                             </div>
-                            <span className="font-bold text-purple-600">$1M</span>
+                            <span className="font-bold text-purple-600">$500K</span>
                           </div>
                           <div className="flex justify-between items-center p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg">
                             <div>
-                              <h5 className="font-semibold">Series A (2026)</h5>
-                              <p className="text-sm text-muted-foreground">Global scaling & institutional adoption</p>
+                              <h5 className="font-semibold">Series A (2026 Q4)</h5>
+                              <p className="text-sm text-muted-foreground">National scaling & institutional adoption</p>
                             </div>
-                            <span className="font-bold text-amber-600">$5M+</span>
+                            <span className="font-bold text-amber-600">$2M+</span>
                           </div>
                         </div>
                       </div>
                     </div>
 
-                    <div className="p-4 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg">
-                      <h4 className="font-bold mb-3">Why Token-Based Investment?</h4>
+                    <div className="p-4 bg-gradient-to-r from-emerald-50 to-blue-50 dark:from-emerald-900/20 dark:to-blue-900/20 rounded-lg">
+                      <h4 className="font-bold mb-3">Why Traditional Equity Investment?</h4>
                       <div className="grid md:grid-cols-2 gap-4 text-sm">
                         <ul className="space-y-2">
                           <li className="flex items-center gap-2">
-                            <CheckCircle className="h-4 w-4 text-green-500" />
-                            <span>Direct utility alignment with platform success</span>
+                            <CheckCircle className="h-4 w-4 text-emerald-500" />
+                            <span>Zero cryptocurrency risk for participants</span>
                           </li>
                           <li className="flex items-center gap-2">
-                            <CheckCircle className="h-4 w-4 text-green-500" />
-                            <span>Governance rights in platform decisions</span>
+                            <CheckCircle className="h-4 w-4 text-emerald-500" />
+                            <span>SEC-compliant traditional equity structure</span>
                           </li>
                           <li className="flex items-center gap-2">
-                            <CheckCircle className="h-4 w-4 text-green-500" />
-                            <span>Built-in liquidity through DeFi markets</span>
+                            <CheckCircle className="h-4 w-4 text-emerald-500" />
+                            <span>Enterprise partnerships with Adyen & Coinbase</span>
                           </li>
                         </ul>
                         <ul className="space-y-2">
                           <li className="flex items-center gap-2">
-                            <CheckCircle className="h-4 w-4 text-green-500" />
-                            <span>Global accessibility for international investors</span>
+                            <CheckCircle className="h-4 w-4 text-emerald-500" />
+                            <span>Guaranteed 4-6% APY on housing fund allocation</span>
                           </li>
                           <li className="flex items-center gap-2">
-                            <CheckCircle className="h-4 w-4 text-green-500" />
-                            <span>Deflationary mechanics drive long-term value</span>
+                            <CheckCircle className="h-4 w-4 text-emerald-500" />
+                            <span>Clear exit strategy through acquisition or IPO</span>
                           </li>
                           <li className="flex items-center gap-2">
-                            <CheckCircle className="h-4 w-4 text-green-500" />
-                            <span>Transparent on-chain fund management</span>
+                            <CheckCircle className="h-4 w-4 text-emerald-500" />
+                            <span>Transparent blockchain tracking with stability</span>
                           </li>
                         </ul>
                       </div>
@@ -2520,55 +2447,57 @@ export default function InvestorRelationsPage() {
               </Card>
             </TabsContent>
 
-            {/* Tokenomics */}
+            {/* Business Model */}
             <TabsContent value="tokenomics" className="space-y-8">
               <div className="grid md:grid-cols-2 gap-8">
                 <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
-                      <Coins className="h-5 w-5 text-amber-500" />
-                      $SHLTR Token Economics
+                      <TrendingUp className="h-5 w-5 text-emerald-500" />
+                      SmartFund™ Distribution Model
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4 text-center">
-                      <div className="p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg">
-                        <h4 className="font-bold text-2xl text-amber-600">100M</h4>
-                        <p className="text-sm">Total Supply</p>
-                      </div>
+                    <div className="grid grid-cols-3 gap-4 text-center">
                       <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                        <h4 className="font-bold text-2xl text-blue-600">$0.10</h4>
-                        <p className="text-sm">Initial Price</p>
+                        <h4 className="font-bold text-2xl text-blue-600">80%</h4>
+                        <p className="text-sm">Virtual Cards</p>
+                      </div>
+                      <div className="p-4 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg">
+                        <h4 className="font-bold text-2xl text-emerald-600">15%</h4>
+                        <p className="text-sm">Housing Fund</p>
+                      </div>
+                      <div className="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+                        <h4 className="font-bold text-2xl text-purple-600">5%</h4>
+                        <p className="text-sm">Operations</p>
                       </div>
                     </div>
                     
                     <div className="space-y-3">
-                      <h4 className="font-semibold">Token Distribution</h4>
+                      <h4 className="font-semibold">Revenue Distribution</h4>
                       <div className="space-y-2">
                         <div className="flex justify-between items-center">
-                          <span>Public Sale (50%)</span>
-                          <span className="font-mono">50,000,000 $SHLTR</span>
+                          <span>Participant Virtual Cards (80%)</span>
+                          <span className="font-mono text-blue-600">Immediate Impact</span>
                         </div>
                         <div className="flex justify-between items-center">
-                          <span>Team & Advisors (15%)</span>
-                          <span className="font-mono">15,000,000 $SHLTR</span>
+                          <span>Housing Fund + SHELTR Token (15%)</span>
+                          <span className="font-mono text-emerald-600">4-6% APY</span>
                         </div>
                         <div className="flex justify-between items-center">
-                          <span>SHELTR Operations (15%)</span>
-                          <span className="font-mono">15,000,000 $SHLTR</span>
+                          <span>Platform Operations (5%)</span>
+                          <span className="font-mono text-purple-600">Sustainability</span>
                         </div>
-                        <div className="flex justify-between items-center">
-                          <span>Participant Onboarding Rewards (10%)</span>
-                          <span className="font-mono">10,000,000 $SHLTR</span>
-                        </div>
-                        <div className="flex justify-between items-center">
-                          <span>Strategic Partnerships (5%)</span>
-                          <span className="font-mono">5,000,000 $SHLTR</span>
-                        </div>
-                        <div className="flex justify-between items-center">
-                          <span>Reserve Fund (5%)</span>
-                          <span className="font-mono">5,000,000 $SHLTR</span>
-                        </div>
+                      </div>
+                      
+                      <div className="mt-4 p-3 bg-gradient-to-r from-emerald-50 to-blue-50 dark:from-emerald-900/20 dark:to-blue-900/20 rounded-lg">
+                        <h5 className="font-semibold text-emerald-700 dark:text-emerald-300 mb-2">Zero Risk Architecture</h5>
+                        <ul className="text-sm space-y-1">
+                          <li>• Participants receive virtual debit cards only</li>
+                          <li>• No cryptocurrency exposure for end users</li>
+                          <li>• Enterprise payment processing (Adyen)</li>
+                          <li>• Guaranteed 4-6% APY on housing fund</li>
+                        </ul>
                       </div>
                     </div>
                   </CardContent>
@@ -2576,59 +2505,60 @@ export default function InvestorRelationsPage() {
 
                 <Card>
                   <CardHeader>
-                    <CardTitle>Token Utility & Value Drivers</CardTitle>
+                    <CardTitle>Enterprise Payment Infrastructure</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="space-y-3">
                       <div className="p-3 border rounded-lg">
-                        <h4 className="font-semibold text-green-700 dark:text-green-300">Transaction Fees</h4>
-                        <p className="text-sm text-muted-foreground">2% platform fee paid in $SHLTR</p>
+                        <h4 className="font-semibold text-blue-700 dark:text-blue-300">Adyen Integration</h4>
+                        <p className="text-sm text-muted-foreground">Global payment processing with enterprise-grade security</p>
                       </div>
                       <div className="p-3 border rounded-lg">
-                        <h4 className="font-semibold text-blue-700 dark:text-blue-300">Governance Rights</h4>
-                        <p className="text-sm text-muted-foreground">Vote on platform upgrades and policies</p>
+                        <h4 className="font-semibold text-emerald-700 dark:text-emerald-300">Coinbase Base Network</h4>
+                        <p className="text-sm text-muted-foreground">Sub-cent transactions and institutional staking</p>
                       </div>
                       <div className="p-3 border rounded-lg">
-                        <h4 className="font-semibold text-purple-700 dark:text-purple-300">Staking Rewards</h4>
-                        <p className="text-sm text-muted-foreground">Earn yield for providing liquidity</p>
+                        <h4 className="font-semibold text-purple-700 dark:text-purple-300">Virtual Card System</h4>
+                        <p className="text-sm text-muted-foreground">Instant loading with zero crypto exposure</p>
                       </div>
                       <div className="p-3 border rounded-lg">
-                        <h4 className="font-semibold text-orange-700 dark:text-orange-300">Welcome Bonus</h4>
-                        <p className="text-sm text-muted-foreground">New participants receive 100 SHELTR-S tokens</p>
+                        <h4 className="font-semibold text-orange-700 dark:text-orange-300">SHELTR Stablecoin</h4>
+                        <p className="text-sm text-muted-foreground">USDT-backed housing fund tracking token</p>
                       </div>
                     </div>
 
-                    <div className="mt-6 p-4 bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 rounded-lg">
-                      <h4 className="font-semibold mb-2">Deflationary Mechanics</h4>
+                    <div className="mt-6 p-4 bg-gradient-to-r from-emerald-50 to-blue-50 dark:from-emerald-900/20 dark:to-blue-900/20 rounded-lg">
+                      <h4 className="font-semibold mb-2">Investment Strategy Benefits</h4>
                       <ul className="text-sm space-y-1">
-                        <li>• 1% of transaction fees burned quarterly</li>
-                        <li>• Buy-back program from platform revenue</li>
-                        <li>• Staking locks reduce circulating supply</li>
+                        <li>• Guaranteed 4-6% APY on housing fund allocation</li>
+                        <li>• Coinbase institutional custody and staking</li>
+                        <li>• Transparent blockchain tracking of fund growth</li>
+                        <li>• Zero volatility risk for participants</li>
                       </ul>
                     </div>
                     
                     {/* ROI Visualization */}
-                    <div className="mt-6 p-4 bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 rounded-lg">
-                      <h4 className="font-semibold mb-4 text-center">Investment ROI Timeline</h4>
+                    <div className="mt-6 p-4 bg-gradient-to-r from-emerald-50 to-blue-50 dark:from-emerald-900/20 dark:to-blue-900/20 rounded-lg">
+                      <h4 className="font-semibold mb-4 text-center">Equity Valuation Timeline</h4>
                       <div className="grid grid-cols-5 gap-2">
                         {[
-                          { year: '2025', roi: '1x', price: '$0.05', label: 'Pre-Seed' },
-                          { year: '2026', roi: '5x', price: '$0.25', label: 'Token Launch' },
-                          { year: '2027', roi: '10x', price: '$0.50', label: 'Scale' },
-                          { year: '2028', roi: '17x', price: '$0.85', label: 'Expand' },
-                          { year: '2029', roi: '30x', price: '$1.20', label: 'Leader' }
+                          { year: '2025', roi: '1x', valuation: '$3M', label: 'Pre-Seed' },
+                          { year: '2026', roi: '3x', valuation: '$8M', label: 'Seed Round' },
+                          { year: '2027', roi: '6x', valuation: '$18M', label: 'Series A' },
+                          { year: '2028', roi: '10x', valuation: '$30M', label: 'Growth' },
+                          { year: '2029', roi: '15x', valuation: '$45M', label: 'Scale' }
                         ].map((item, index) => (
                           <div key={item.year} className="text-center">
                             <div className="relative h-32 flex flex-col justify-end">
                               <div 
-                                className="bg-gradient-to-b from-green-500 to-blue-500 rounded-t-lg mx-auto transition-all duration-500"
+                                className="bg-gradient-to-b from-emerald-500 to-blue-500 rounded-t-lg mx-auto transition-all duration-500"
                                 style={{ 
-                                  height: `${Math.max(20, (parseInt(item.roi) / 30) * 100)}px`,
+                                  height: `${Math.max(20, (parseInt(item.roi) / 15) * 100)}px`,
                                   width: '70%'
                                 }}
                               ></div>
-                              <div className="text-xs font-bold mt-1 text-green-600">{item.roi}</div>
-                              <div className="text-xs text-muted-foreground">{item.price}</div>
+                              <div className="text-xs font-bold mt-1 text-emerald-600">{item.roi}</div>
+                              <div className="text-xs text-muted-foreground">{item.valuation}</div>
                               <div className="text-xs font-medium">{item.year}</div>
                               <div className="text-xs text-muted-foreground">{item.label}</div>
                             </div>
@@ -2642,39 +2572,39 @@ export default function InvestorRelationsPage() {
 
               <Card>
                 <CardHeader>
-                  <CardTitle>Token Release Schedule</CardTitle>
+                  <CardTitle>Equity Vesting & Milestones</CardTitle>
                 </CardHeader>
-                                  <CardContent>
-                    <div className="space-y-4">
-                      <div className="grid md:grid-cols-3 gap-4">
-                        {[
-                          { year: 'Year 1', percentage: 40, description: 'Initial Release' },
-                          { year: 'Year 2', percentage: 35, description: 'Growth Phase' },
-                          { year: 'Year 3', percentage: 25, description: 'Final Unlock' }
-                        ].map((item, index) => (
-                          <div key={item.year} className="text-center">
-                            <div className="relative h-32 flex flex-col justify-end">
-                              <div 
-                                className="bg-gradient-to-b from-blue-500 to-blue-300 rounded-t-lg mx-auto transition-all duration-500"
-                                style={{ 
-                                  height: `${(item.percentage / 40) * 100}px`,
-                                  width: '60%'
-                                }}
-                              ></div>
-                              <div className="absolute inset-0 flex items-end justify-center pb-2">
-                                <span className="text-white font-bold text-sm">{item.percentage}%</span>
-                              </div>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="grid md:grid-cols-3 gap-4">
+                      {[
+                        { year: 'Year 1', percentage: 25, description: 'Platform Launch' },
+                        { year: 'Year 2', percentage: 35, description: 'Market Expansion' },
+                        { year: 'Year 3', percentage: 40, description: 'Scale & Growth' }
+                      ].map((item, index) => (
+                        <div key={item.year} className="text-center">
+                          <div className="relative h-32 flex flex-col justify-end">
+                            <div 
+                              className="bg-gradient-to-b from-emerald-500 to-emerald-300 rounded-t-lg mx-auto transition-all duration-500"
+                              style={{ 
+                                height: `${(item.percentage / 40) * 100}px`,
+                                width: '60%'
+                              }}
+                            ></div>
+                            <div className="absolute inset-0 flex items-end justify-center pb-2">
+                              <span className="text-white font-bold text-sm">{item.percentage}%</span>
                             </div>
-                            <span className="text-sm font-medium">{item.year}</span>
-                            <div className="text-xs text-muted-foreground">{item.description}</div>
                           </div>
-                        ))}
-                      </div>
-                      <p className="text-sm text-muted-foreground text-center">
-                        Three-year staggered release schedule ensures long-term value alignment and prevents market dumping
-                      </p>
+                          <span className="text-sm font-medium">{item.year}</span>
+                          <div className="text-xs text-muted-foreground">{item.description}</div>
+                        </div>
+                      ))}
                     </div>
-                  </CardContent>
+                    <p className="text-sm text-muted-foreground text-center">
+                      Standard 4-year vesting schedule with 1-year cliff ensures long-term commitment and value alignment
+                    </p>
+                  </div>
+                </CardContent>
               </Card>
             </TabsContent>
 
@@ -2683,11 +2613,17 @@ export default function InvestorRelationsPage() {
               <div className="grid md:grid-cols-2 gap-8">
                 <Card>
                   <CardHeader>
-                    <CardTitle>5-Year Growth Projections</CardTitle>
+                    <CardTitle>5-Year Revenue & Growth Projections</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
-                      {tokenProjections.map((projection, index) => (
+                      {[
+                        { year: 2025, users: 500, arr: 50000, valuation: 3000000, phase: 'Platform Launch' },
+                        { year: 2026, users: 2500, arr: 500000, valuation: 8000000, phase: 'Market Expansion' },
+                        { year: 2027, users: 8000, arr: 2000000, valuation: 18000000, phase: 'Scale Phase' },
+                        { year: 2028, users: 20000, arr: 5000000, valuation: 30000000, phase: 'Growth Phase' },
+                        { year: 2029, users: 50000, arr: 12000000, valuation: 45000000, phase: 'Market Leader' }
+                      ].map((projection, index) => (
                         <div key={projection.year} className="grid grid-cols-5 gap-2 p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
                           <div className="text-center">
                             <div className="font-bold">{projection.year}</div>
@@ -2695,15 +2631,15 @@ export default function InvestorRelationsPage() {
                           </div>
                           <div className="text-center">
                             <div className="font-bold text-blue-600">{projection.users.toLocaleString()}</div>
-                            <div className="text-xs text-muted-foreground">Users</div>
+                            <div className="text-xs text-muted-foreground">Active Users</div>
                           </div>
                           <div className="text-center">
-                            <div className="font-bold text-green-600">${projection.tokenValue}</div>
-                            <div className="text-xs text-muted-foreground">Token Value</div>
+                            <div className="font-bold text-emerald-600">${(projection.arr / 1000).toFixed(0)}K</div>
+                            <div className="text-xs text-muted-foreground">ARR</div>
                           </div>
                           <div className="text-center">
-                            <div className="font-bold text-purple-600">${(projection.marketCap / 1000000).toFixed(1)}M</div>
-                            <div className="text-xs text-muted-foreground">Market Cap</div>
+                            <div className="font-bold text-purple-600">${(projection.valuation / 1000000).toFixed(0)}M</div>
+                            <div className="text-xs text-muted-foreground">Valuation</div>
                           </div>
                           <div className="text-center">
                             <div className="text-xs font-medium text-amber-600">{projection.phase}</div>
@@ -2714,20 +2650,26 @@ export default function InvestorRelationsPage() {
                     </div>
                     
                     {/* Visual Growth Chart */}
-                    <div className="mt-6 p-4 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg">
-                      <h4 className="font-semibold mb-4 text-center">5-Year Growth Trajectory</h4>
+                    <div className="mt-6 p-4 bg-gradient-to-r from-emerald-50 to-blue-50 dark:from-emerald-900/20 dark:to-blue-900/20 rounded-lg">
+                      <h4 className="font-semibold mb-4 text-center">5-Year Revenue Growth Trajectory</h4>
                       <div className="grid grid-cols-5 gap-2">
-                        {tokenProjections.map((projection, index) => (
+                        {[
+                          { year: '2025', arr: 50000, label: '$50K' },
+                          { year: '2026', arr: 500000, label: '$500K' },
+                          { year: '2027', arr: 2000000, label: '$2M' },
+                          { year: '2028', arr: 5000000, label: '$5M' },
+                          { year: '2029', arr: 12000000, label: '$12M' }
+                        ].map((projection, index) => (
                           <div key={projection.year} className="text-center">
                             <div className="relative h-32 flex flex-col justify-end">
                               <div 
-                                className="bg-gradient-to-b from-blue-500 to-purple-500 rounded-t-lg mx-auto transition-all duration-500"
+                                className="bg-gradient-to-b from-emerald-500 to-blue-500 rounded-t-lg mx-auto transition-all duration-500"
                                 style={{ 
-                                  height: `${Math.max(20, (projection.marketCap / 120000000) * 100)}px`,
+                                  height: `${Math.max(20, (projection.arr / 12000000) * 100)}px`,
                                   width: '60%'
                                 }}
                               ></div>
-                              <div className="text-xs font-bold mt-1">${(projection.marketCap / 1000000).toFixed(0)}M</div>
+                              <div className="text-xs font-bold mt-1 text-emerald-600">{projection.label}</div>
                               <div className="text-xs text-muted-foreground">{projection.year}</div>
                             </div>
                           </div>
@@ -2739,11 +2681,16 @@ export default function InvestorRelationsPage() {
 
                 <Card>
                   <CardHeader>
-                    <CardTitle>Pre-Seed Fund Allocation</CardTitle>
+                    <CardTitle>Pre-Seed Fund Allocation ($250K)</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
-                      {fundingAllocation.map((item, index) => (
+                      {[
+                        { category: 'Platform Development', percentage: 40, amount: 100000, color: 'bg-blue-500' },
+                        { category: 'Enterprise Partnerships', percentage: 30, amount: 75000, color: 'bg-emerald-500' },
+                        { category: 'Legal & Regulatory Compliance', percentage: 20, amount: 50000, color: 'bg-purple-500' },
+                        { category: 'Team & Operations', percentage: 10, amount: 25000, color: 'bg-orange-500' }
+                      ].map((item, index) => (
                         <div key={index} className="space-y-2">
                           <div className="flex justify-between items-center">
                             <span className="font-medium">{item.category}</span>
@@ -2760,20 +2707,20 @@ export default function InvestorRelationsPage() {
                       ))}
                     </div>
                     
-                    <div className="mt-6 p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                      <h4 className="font-semibold text-green-700 dark:text-green-300 mb-2">Expected ROI Timeline</h4>
+                    <div className="mt-6 p-4 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg">
+                      <h4 className="font-semibold text-emerald-700 dark:text-emerald-300 mb-2">Expected Milestones</h4>
                       <div className="grid grid-cols-3 gap-4 text-center">
                         <div>
-                          <div className="font-bold text-lg">6 months</div>
-                          <div className="text-sm">MVP Launch</div>
+                          <div className="font-bold text-lg">Q4 2025</div>
+                          <div className="text-sm">Platform Launch</div>
                         </div>
                         <div>
-                          <div className="font-bold text-lg">12 months</div>
-                          <div className="text-sm">Token Generation</div>
+                          <div className="font-bold text-lg">Q1 2026</div>
+                          <div className="text-sm">Enterprise Integration</div>
                         </div>
                         <div>
-                          <div className="font-bold text-lg">24 months</div>
-                          <div className="text-sm">Market Expansion</div>
+                          <div className="font-bold text-lg">Q2 2026</div>
+                          <div className="text-sm">Scale to 50+ Shelters</div>
                         </div>
                       </div>
                     </div>
@@ -2783,61 +2730,92 @@ export default function InvestorRelationsPage() {
 
               <Card>
                 <CardHeader>
-                  <CardTitle>Revenue Projections & Business Model</CardTitle>
+                  <CardTitle>Revenue Model & SmartFund™ Economics</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="grid md:grid-cols-3 gap-6">
                     <div className="space-y-4">
-                      <h4 className="font-semibold text-blue-600">Platform Fees</h4>
+                      <h4 className="font-semibold text-blue-600">SaaS Subscription Revenue</h4>
                       <div className="space-y-2 text-sm">
                         <div className="flex justify-between">
-                          <span>Year 1:</span>
-                          <span className="font-mono">$25,000</span>
+                          <span>Shelter Basic Plan:</span>
+                          <span className="font-mono">$299/month</span>
                         </div>
                         <div className="flex justify-between">
-                          <span>Year 3:</span>
-                          <span className="font-mono">$375,000</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span>Year 5:</span>
-                          <span className="font-mono">$2,500,000</span>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="space-y-4">
-                      <h4 className="font-semibold text-green-600">Subscription Revenue</h4>
-                      <div className="space-y-2 text-sm">
-                        <div className="flex justify-between">
-                          <span>Enterprise Clients:</span>
-                          <span className="font-mono">$500/month</span>
+                          <span>Enterprise Plan:</span>
+                          <span className="font-mono">$999/month</span>
                         </div>
                         <div className="flex justify-between">
                           <span>Government Contracts:</span>
                           <span className="font-mono">$5,000/month</span>
                         </div>
-                        <div className="flex justify-between">
-                          <span>Premium Analytics:</span>
-                          <span className="font-mono">$100/month</span>
-                        </div>
+                      </div>
+                      <div className="p-2 bg-blue-50 dark:bg-blue-900/20 rounded text-xs">
+                        <strong>Year 5 Target:</strong> $8M ARR from subscriptions
                       </div>
                     </div>
                     
                     <div className="space-y-4">
-                      <h4 className="font-semibold text-purple-600">Token Appreciation</h4>
+                      <h4 className="font-semibold text-emerald-600">SmartFund™ Processing Fees</h4>
                       <div className="space-y-2 text-sm">
                         <div className="flex justify-between">
-                          <span>Initial Investment:</span>
-                          <span className="font-mono">$0.10/token</span>
+                          <span>Donation Processing:</span>
+                          <span className="font-mono">2.5% + $0.30</span>
                         </div>
                         <div className="flex justify-between">
-                          <span>3-Year Target:</span>
-                          <span className="font-mono">$0.50/token</span>
+                          <span>Housing Fund Returns:</span>
+                          <span className="font-mono">4-6% APY</span>
                         </div>
                         <div className="flex justify-between">
-                          <span>5-Year Target:</span>
-                          <span className="font-mono">$1.20/token</span>
+                          <span>Platform Revenue Share:</span>
+                          <span className="font-mono">0.5% of flow</span>
                         </div>
+                      </div>
+                      <div className="p-2 bg-emerald-50 dark:bg-emerald-900/20 rounded text-xs">
+                        <strong>Year 5 Target:</strong> $4M ARR from processing
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-4">
+                      <h4 className="font-semibold text-purple-600">Enterprise Partnerships</h4>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span>Adyen Partnership:</span>
+                          <span className="font-mono">Revenue Share</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Coinbase Integration:</span>
+                          <span className="font-mono">Staking Rewards</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>White-Label Licensing:</span>
+                          <span className="font-mono">$50K+ per deal</span>
+                        </div>
+                      </div>
+                      <div className="p-2 bg-purple-50 dark:bg-purple-900/20 rounded text-xs">
+                        <strong>Year 5 Target:</strong> $2M ARR from partnerships
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-6 p-4 bg-gradient-to-r from-emerald-50 to-blue-50 dark:from-emerald-900/20 dark:to-blue-900/20 rounded-lg">
+                    <h4 className="font-semibold mb-3">Total Addressable Market (TAM)</h4>
+                    <div className="grid md:grid-cols-4 gap-4 text-center">
+                      <div>
+                        <div className="font-bold text-lg text-blue-600">$21.9B</div>
+                        <div className="text-xs text-muted-foreground">US Shelter Industry</div>
+                      </div>
+                      <div>
+                        <div className="font-bold text-lg text-emerald-600">$10-20B</div>
+                        <div className="text-xs text-muted-foreground">Homelessness Donations</div>
+                      </div>
+                      <div>
+                        <div className="font-bold text-lg text-purple-600">$2-8B</div>
+                        <div className="text-xs text-muted-foreground">Digital Giving Segment</div>
+                      </div>
+                      <div>
+                        <div className="font-bold text-lg text-orange-600">1%</div>
+                        <div className="text-xs text-muted-foreground">Market Share Target</div>
                       </div>
                     </div>
                   </div>
@@ -2856,79 +2834,75 @@ export default function InvestorRelationsPage() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-6">
-                                          <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                        <h4 className="font-bold text-blue-700 dark:text-blue-300 mb-2">Dual-Token Investment Structure</h4>
-                        <div className="space-y-3 text-sm">
-                          <div className="border-b pb-2">
-                            <h5 className="font-semibold">SHELTR (Growth Token)</h5>
-                            <div className="flex justify-between">
-                              <span>Pre-Seed Price:</span>
-                              <span className="font-mono font-bold">$0.05/token</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span>Public Launch Price:</span>
-                              <span className="font-mono">$0.10/token</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span>5-Year Target:</span>
-                              <span className="font-mono text-green-600">$1.20/token</span>
-                            </div>
+                    <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                      <h4 className="font-bold text-blue-700 dark:text-blue-300 mb-2">Traditional Equity Investment</h4>
+                      <div className="space-y-3 text-sm">
+                        <div className="border-b pb-2">
+                          <h5 className="font-semibold">Series Seed Preferred Stock</h5>
+                          <div className="flex justify-between">
+                            <span>Pre-Money Valuation:</span>
+                            <span className="font-mono font-bold">TBD (Pre-Revenue)</span>
                           </div>
-                          <div className="border-b pb-2">
-                            <h5 className="font-semibold">SHELTR-S (Stable Token)</h5>
-                            <div className="flex justify-between">
-                              <span>Always Pegged:</span>
-                              <span className="font-mono">$1.00 USD</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span>Participant Welcome:</span>
-                              <span className="font-mono">100 tokens/signup</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span>USDC Backing:</span>
-                              <span className="font-mono text-green-600">100%</span>
-                            </div>
+                          <div className="flex justify-between">
+                            <span>Investment Amount:</span>
+                            <span className="font-mono">$250,000</span>
                           </div>
-                          <div>
-                            <div className="flex justify-between">
-                              <span>Minimum Investment:</span>
-                              <span className="font-mono">$5,000</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span>Maximum Investment:</span>
-                              <span className="font-mono">$37,500</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span>Total Pre-Seed:</span>
-                              <span className="font-mono font-bold">$150,000</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span>ROI Potential:</span>
-                              <span className="font-mono text-green-600 font-bold">30x (5 years)</span>
-                            </div>
+                          <div className="flex justify-between">
+                            <span>Equity Percentage:</span>
+                            <span className="font-mono text-green-600">8-12%</span>
+                          </div>
+                        </div>
+                        <div className="border-b pb-2">
+                          <h5 className="font-semibold">Investment Terms</h5>
+                          <div className="flex justify-between">
+                            <span>Minimum Investment:</span>
+                            <span className="font-mono">$10,000</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Maximum Investment:</span>
+                            <span className="font-mono">$50,000</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Liquidation Preference:</span>
+                            <span className="font-mono text-green-600">1x Non-Participating</span>
+                          </div>
+                        </div>
+                        <div>
+                          <div className="flex justify-between">
+                            <span>Anti-Dilution:</span>
+                            <span className="font-mono">Weighted Average</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Board Rights:</span>
+                            <span className="font-mono">Observer Rights</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>ROI Potential:</span>
+                            <span className="font-mono text-green-600 font-bold">10-15x (5 years)</span>
                           </div>
                         </div>
                       </div>
+                    </div>
 
-                    <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                      <h4 className="font-bold text-green-700 dark:text-green-300 mb-2">Investor Benefits</h4>
+                    <div className="p-4 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg">
+                      <h4 className="font-bold text-emerald-700 dark:text-emerald-300 mb-2">Investor Benefits</h4>
                       <ul className="text-sm space-y-1">
-                        <li>• 50% discount to public token price</li>
-                        <li>• Early access to platform features</li>
-                        <li>• Governance voting rights</li>
-                        <li>• Priority customer support</li>
-                        <li>• Quarterly investor updates</li>
-                        <li>• Optional advisory board participation</li>
+                        <li>• Board observer rights and governance participation</li>
+                        <li>• Quarterly investor updates and financial reports</li>
+                        <li>• Anti-dilution protection on future rounds</li>
+                        <li>• Pro-rata rights in subsequent funding</li>
+                        <li>• Access to enterprise partnership opportunities</li>
+                        <li>• Priority access to SmartFund™ investment returns</li>
                       </ul>
                     </div>
 
                     <div className="p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg">
                       <h4 className="font-bold text-amber-700 dark:text-amber-300 mb-2">Vesting Schedule</h4>
                       <div className="space-y-1 text-sm">
-                        <div>• 25% released at Token Generation Event (TGE)</div>
-                        <div>• 75% vested over 12 months</div>
-                        <div>• Monthly linear release</div>
-                        <div>• No cliff period for pre-seed investors</div>
+                        <div>• Standard 4-year vesting with 1-year cliff</div>
+                        <div>• 25% vests after 12 months</div>
+                        <div>• Remaining 75% vests monthly over 36 months</div>
+                        <div>• Acceleration on acquisition or IPO</div>
                       </div>
                     </div>
                   </CardContent>
@@ -2943,30 +2917,33 @@ export default function InvestorRelationsPage() {
                       <div className="p-4 border rounded-lg">
                         <h4 className="font-semibold mb-2">Regulatory Compliance</h4>
                         <ul className="text-sm space-y-1">
-                          <li>• SEC utility token classification</li>
-                          <li>• CFTC compliance for derivatives</li>
-                          <li>• International securities law review</li>
-                          <li>• Privacy regulations (GDPR, CCPA)</li>
+                          <li>• Delaware C-Corp structure with standard protections</li>
+                          <li>• SEC Regulation D (506(b)) private placement</li>
+                          <li>• Payment processing compliance (PCI DSS)</li>
+                          <li>• Privacy regulations (GDPR, CCPA, PIPEDA)</li>
+                          <li>• Financial services regulations (FinCEN, BSA)</li>
                         </ul>
                       </div>
 
                       <div className="p-4 border rounded-lg">
                         <h4 className="font-semibold mb-2">Investor Protections</h4>
                         <ul className="text-sm space-y-1">
-                          <li>• Accredited investor verification</li>
-                          <li>• Multi-signature treasury management</li>
-                          <li>• Third-party audit of smart contracts</li>
-                          <li>• Insurance coverage for platform funds</li>
+                          <li>• Accredited investor verification required</li>
+                          <li>• Standard preferred stock liquidation rights</li>
+                          <li>• Board observer rights and information access</li>
+                          <li>• Anti-dilution protection (weighted average)</li>
+                          <li>• Professional liability insurance coverage</li>
                         </ul>
                       </div>
 
                       <div className="p-4 border rounded-lg">
                         <h4 className="font-semibold mb-2">Documentation Required</h4>
                         <ul className="text-sm space-y-1">
-                          <li>• Accredited investor certification</li>
-                          <li>• KYC/AML verification</li>
-                          <li>• Investment agreement execution</li>
-                          <li>• Risk acknowledgment forms</li>
+                          <li>• Accredited investor certification (Form 506)</li>
+                          <li>• KYC/AML verification and background check</li>
+                          <li>• Stock purchase agreement execution</li>
+                          <li>• Investment representation letter</li>
+                          <li>• Risk acknowledgment and disclosure forms</li>
                         </ul>
                       </div>
                     </div>
@@ -2986,21 +2963,21 @@ export default function InvestorRelationsPage() {
                       </div>
                       <h4 className="font-semibold">Initial Contact</h4>
                       <p className="text-sm text-muted-foreground">
-                        Schedule a confidential call to discuss your investment interests and answer questions.
+                        Schedule a confidential call to discuss the investment opportunity, SmartFund™ model, and answer questions.
                       </p>
-                      <Button variant="outline" size="sm">
+                      <Button variant="outline" size="sm" onClick={handleScheduleButtonClick}>
                         <Calendar className="h-4 w-4 mr-2" />
                         Book Call
                       </Button>
                     </div>
 
                     <div className="text-center space-y-4">
-                      <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto">
+                      <div className="w-16 h-16 bg-emerald-500 rounded-full flex items-center justify-center mx-auto">
                         <span className="text-white font-bold text-xl">2</span>
                       </div>
                       <h4 className="font-semibold">Due Diligence</h4>
                       <p className="text-sm text-muted-foreground">
-                        Access detailed technical documentation, financial models, and legal frameworks.
+                        Access detailed financial projections, technical documentation, legal frameworks, and enterprise partnership agreements.
                       </p>
                       <Button variant="outline" size="sm">
                         <Download className="h-4 w-4 mr-2" />
@@ -3014,12 +2991,38 @@ export default function InvestorRelationsPage() {
                       </div>
                       <h4 className="font-semibold">Investment Execution</h4>
                       <p className="text-sm text-muted-foreground">
-                        Complete KYC verification and execute investment agreements with legal review.
+                        Complete accredited investor verification, execute stock purchase agreements, and join the SHELTR investor community.
                       </p>
                       <Button variant="outline" size="sm">
                         <Handshake className="h-4 w-4 mr-2" />
                         Invest Now
                       </Button>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-8 p-6 bg-gradient-to-r from-blue-50 to-emerald-50 dark:from-blue-900/20 dark:to-emerald-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                    <h4 className="font-semibold mb-3 text-center">Investment Timeline & Milestones</h4>
+                    <div className="grid md:grid-cols-4 gap-4 text-center">
+                      <div>
+                        <div className="font-bold text-lg text-blue-600">Q4 2025</div>
+                        <div className="text-sm text-muted-foreground">Platform Launch</div>
+                        <div className="text-xs text-blue-600">First shelter partnerships</div>
+                      </div>
+                      <div>
+                        <div className="font-bold text-lg text-emerald-600">Q1 2026</div>
+                        <div className="text-sm text-muted-foreground">Enterprise Integration</div>
+                        <div className="text-xs text-emerald-600">Adyen + Coinbase live</div>
+                      </div>
+                      <div>
+                        <div className="font-bold text-lg text-purple-600">Q2 2026</div>
+                        <div className="text-sm text-muted-foreground">Scale Phase</div>
+                        <div className="text-xs text-purple-600">50+ shelter network</div>
+                      </div>
+                      <div>
+                        <div className="font-bold text-lg text-orange-600">Q3 2026</div>
+                        <div className="text-sm text-muted-foreground">Series A</div>
+                        <div className="text-xs text-orange-600">$2M+ round</div>
+                      </div>
                     </div>
                   </div>
                 </CardContent>
@@ -3032,131 +3035,37 @@ export default function InvestorRelationsPage() {
       {/* Investment Deck Slideshow */}
       <InvestmentDeckSlideshow isOpen={deckOpen} onClose={() => setDeckOpen(false)} />
 
-      {/* Option B - Traditional Funding Strategy */}
-      <section id="option-b" className="py-16 bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-900/20 dark:to-indigo-900/20">
-        <div className="container mx-auto px-4 text-center">
-          <div className="max-w-4xl mx-auto">
-            <div className="mb-8">
-              <Badge variant="outline" className="mb-4 bg-blue-50 text-blue-700 border-blue-200">
-                Traditional Funding Strategy
-              </Badge>
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">
-                Option B: Traditional Funding Method
-              </h2>
-              <p className="text-lg text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
-                Another model we are considering is a comprehensive traditional funding strategy that 
-                leverages established financial structures and addresses regulatory considerations 
-                while maintaining our growth potential through strategic partnerships.
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-6 mb-10">
-              <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md border border-blue-200 dark:border-blue-800">
-                <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center mb-4 mx-auto">
-                  <ShieldCheck className="h-6 w-6 text-blue-600" />
-                </div>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Regulatory Compliance</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Traditional equity structure eliminates SEC token classification risks and regulatory uncertainty.
-                </p>
-              </div>
-
-              <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md border border-green-200 dark:border-green-800">
-                <div className="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center mb-4 mx-auto">
-                  <Handshake className="h-6 w-6 text-green-600" />
-                </div>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Strategic Partnerships</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Leverage established payment sector relationships for revenue-sharing and growth acceleration.
-                </p>
-              </div>
-
-              <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md border border-purple-200 dark:border-purple-800">
-                <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center mb-4 mx-auto">
-                  <TrendingUp className="h-6 w-6 text-purple-600" />
-                </div>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Proven Growth Model</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Traditional funding rounds with clear milestones: $150K → $500K → $2M over 18 months.
-                </p>
-              </div>
-            </div>
-
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-8 border-2 border-blue-300 dark:border-blue-700 mb-8">
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-                Key Benefits of the Traditional Funding Model
-              </h3>
-              <div className="grid md:grid-cols-2 gap-6 text-left">
-                <div className="space-y-3">
-                  <div className="flex items-start space-x-3">
-                    <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-gray-700 dark:text-gray-300">
-                      <strong>No Cryptocurrency Exposure:</strong> Pure equity investment without token volatility
-                    </span>
-                  </div>
-                  <div className="flex items-start space-x-3">
-                    <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-gray-700 dark:text-gray-300">
-                      <strong>Institutional Grade:</strong> Delaware C-Corp structure with standard investor protections
-                    </span>
-                  </div>
-                  <div className="flex items-start space-x-3">
-                    <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-gray-700 dark:text-gray-300">
-                      <strong>Payment Sector Expertise:</strong> Strategic CFO with 20+ years industry experience
-                    </span>
-                  </div>
-                </div>
-                <div className="space-y-3">
-                  <div className="flex items-start space-x-3">
-                    <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-gray-700 dark:text-gray-300">
-                      <strong>Clear Exit Strategy:</strong> Traditional acquisition or IPO pathways
-                    </span>
-                  </div>
-                  <div className="flex items-start space-x-3">
-                    <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-gray-700 dark:text-gray-300">
-                      <strong>Proven Revenue Model:</strong> SaaS subscriptions + transaction processing fees
-                    </span>
-                  </div>
-                  <div className="flex items-start space-x-3">
-                    <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-gray-700 dark:text-gray-300">
-                      <strong>Municipal Contracts:</strong> Government partnerships provide stable recurring revenue
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="space-y-4">
-              <Button 
-                size="lg" 
-                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 text-lg"
-                onClick={() => {
-                  sessionStorage.setItem('investor-relations-access', 'granted');
-                  window.open('/traditional-strategy', '_blank');
-                }}
-              >
-                <FileText className="mr-2 h-5 w-5" />
-                Access Option B: Traditional Funding Strategy
-              </Button>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
-                Confidential executive summary and partnership framework • Investment-grade documentation
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Footer */}
       <footer className="bg-slate-900 text-white py-12">
         <div className="container mx-auto px-4 text-center">
-          <div className="flex items-center justify-center space-x-2 mb-4">
+          <div className="flex items-center justify-center space-x-2 mb-6">
             <ThemeLogo />
             <Badge variant="secondary">INVESTOR RELATIONS</Badge>
           </div>
+          
+          {/* Documentation and GitHub Links */}
+          <div className="flex justify-center space-x-6 mb-6">
+            <Link 
+              href="/docs" 
+              className="flex items-center space-x-2 text-slate-300 hover:text-white transition-colors"
+            >
+              <FileText className="h-4 w-4" />
+              <span>Documentation Hub</span>
+            </Link>
+            <a 
+              href="https://github.com/mrj0nesmtl/sheltr-ai" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="flex items-center space-x-2 text-slate-300 hover:text-white transition-colors"
+            >
+              <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+              </svg>
+              <span>GitHub Repository</span>
+            </a>
+          </div>
+          
           <p className="text-slate-400 mb-4">
             This document contains confidential and proprietary information. Distribution is restricted to qualified investors only.
           </p>

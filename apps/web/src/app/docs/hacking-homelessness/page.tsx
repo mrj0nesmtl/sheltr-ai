@@ -64,7 +64,7 @@ export default function HackingHomelessnessPage() {
               <div className="flex-1">
                 <div className="mb-3">
                   <h1 className="text-3xl sm:text-4xl font-bold mb-2 leading-tight">Hacking Homelessness: AI & Tech-for-Good Revolution</h1>
-                  <Badge className="bg-purple-500 text-white text-sm">ACADEMIC THESIS</Badge>
+                  <Badge className="bg-purple-500 text-white text-sm">THESIS</Badge>
                 </div>
                 <p className="text-lg text-muted-foreground mb-3">
                   Revolutionary AI-powered ecosystem combining enterprise payment infrastructure with blockchain transparency and physical infrastructure deployment
@@ -254,7 +254,7 @@ export default function HackingHomelessnessPage() {
                     <CardHeader>
                       <CardTitle className="flex items-center gap-2 text-emerald-600">
                         <Heart className="h-5 w-5" />
-                        SHELTR AI Solution
+                        SHELTR Solution
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -299,7 +299,7 @@ export default function HackingHomelessnessPage() {
                       </div>
                       
                       <div className="bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-lg p-4">
-                        <h4 className="font-bold text-emerald-700 dark:text-emerald-300 mb-3">✅ SHELTR AI Ecosystem Solution</h4>
+                        <h4 className="font-bold text-emerald-700 dark:text-emerald-300 mb-3">✅ SHELTR Ecosystem Solution</h4>
                         <div className="space-y-2 text-sm">
                           <div className="flex items-center gap-2">
                             <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>

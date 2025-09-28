@@ -103,7 +103,7 @@ export default function PaymentRailsPage() {
                   🚨 Strategic Architecture Pivot
                 </h3>
                 <p className="text-amber-800 dark:text-amber-200 leading-relaxed">
-                  Following extensive analysis by our CFO and payments expert <strong>Doug Kukura</strong>, SHELTR has pivoted from 
+                  Following extensive analysis by our payments and blockchairn peers, SHELTR has pivoted from 
                   a dual-token architecture to a <strong>Single Stable Token Investment Fund</strong> model. This eliminates market 
                   volatility risks, reduces complexity, and provides guaranteed returns while maintaining complete blockchain transparency.
                 </p>
@@ -117,7 +117,7 @@ export default function PaymentRailsPage() {
       <section className="py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold mb-8 text-center">Executive Summary</h2>
+            <h2 className="text-3xl font-bold mb-8 text-center"> Payment Processing Summary</h2>
             
             <div className="grid md:grid-cols-2 gap-8 mb-12">
               <Card className="border-2 hover:shadow-lg transition-all">
@@ -344,7 +344,7 @@ export default function PaymentRailsPage() {
               <Card className="text-center">
                 <CardContent className="pt-6">
                   <Building2 className="h-8 w-8 mx-auto mb-3 text-blue-600" />
-                  <h3 className="font-semibold mb-2">CFOs</h3>
+                  <h3 className="font-semibold mb-2">Stakeholers</h3>
                   <p className="text-sm text-muted-foreground">Financial leadership and strategic planning</p>
                 </CardContent>
               </Card>

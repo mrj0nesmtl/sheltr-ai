@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { 
   Menu, 
@@ -15,7 +15,9 @@ import {
   Slack,
   BookOpen,
   ExternalLink,
-  Heart
+  Heart,
+  LogOut,
+  ChevronDown
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/theme-toggle';
@@ -24,8 +26,10 @@ import { useAuth } from '@/contexts/AuthContext';
 
 export default function PublicNavigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { user } = useAuth();
+  const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
+  const { user, logout } = useAuth();
   const isAuthenticated = !!user;
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const getDashboardUrl = () => {
     if (!user) return '/dashboard';
@@ -44,6 +48,30 @@ export default function PublicNavigation() {
         return '/dashboard';
     }
   };
+
+  // Handle logout
+  const handleLogout = async () => {
+    try {
+      await logout();
+      setIsUserDropdownOpen(false);
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsUserDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
     <nav className="bg-background/95 backdrop-blur-sm sticky top-0 z-50 border-b">
@@ -80,16 +108,40 @@ export default function PublicNavigation() {
             <ThemeToggle />
             {isAuthenticated ? (
               <>
-                <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-                  <User className="h-4 w-4" />
-                  <span>Welcome, {user?.displayName || user?.email}</span>
+                {/* User Dropdown */}
+                <div className="relative" ref={dropdownRef}>
+                  <button
+                    onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
+                    className="flex items-center space-x-2 text-sm text-muted-foreground hover:text-foreground transition-colors px-3 py-2 rounded-md hover:bg-muted"
+                  >
+                    <User className="h-4 w-4" />
+                    <span>Welcome, {user?.displayName || user?.email?.split('@')[0]}</span>
+                    <ChevronDown className={`h-4 w-4 transition-transform ${isUserDropdownOpen ? 'rotate-180' : ''}`} />
+                  </button>
+                  
+                  {/* Dropdown Menu */}
+                  {isUserDropdownOpen && (
+                    <div className="absolute right-0 mt-2 w-48 bg-background border border-border rounded-md shadow-lg z-50">
+                      <div className="py-1">
+                        <Link 
+                          href={getDashboardUrl()}
+                          className="flex items-center px-4 py-2 text-sm text-foreground hover:bg-muted transition-colors"
+                          onClick={() => setIsUserDropdownOpen(false)}
+                        >
+                          <LayoutDashboard className="h-4 w-4 mr-2" />
+                          Dashboard
+                        </Link>
+                        <button
+                          onClick={handleLogout}
+                          className="flex items-center w-full px-4 py-2 text-sm text-foreground hover:bg-muted transition-colors"
+                        >
+                          <LogOut className="h-4 w-4 mr-2" />
+                          Logout
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
-                <Link href={getDashboardUrl()}>
-                  <Button size="sm">
-                    <LayoutDashboard className="h-4 w-4 mr-2" />
-                    Dashboard
-                  </Button>
-                </Link>
               </>
             ) : (
               <>
@@ -150,6 +202,18 @@ export default function PublicNavigation() {
                       Go to Dashboard
                     </Button>
                   </Link>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="w-full justify-start" 
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      handleLogout();
+                    }}
+                  >
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Logout
+                  </Button>
                 </>
               ) : (
                 <div className="grid grid-cols-2 gap-3">

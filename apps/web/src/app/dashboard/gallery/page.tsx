@@ -50,7 +50,7 @@ import { collection, addDoc, updateDoc, deleteDoc, doc, getDocs, query } from 'f
 import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
 import { db, storage } from '@/lib/firebase';
 
-interface GalleryImage {
+interface GalleryMedia {
   id: string;
   src: string;
   title: string;
@@ -66,11 +66,15 @@ interface GalleryImage {
   uploadedBy: string;
   createdAt: Date;
   updatedAt: Date;
-  // Image metadata
+  // Media metadata
   width?: number;
   height?: number;
   aspectRatio?: string;
   fileSize?: number;
+  // Video-specific fields
+  mediaType: 'image' | 'video';
+  duration?: number; // Video duration in seconds
+  thumbnailUrl?: string; // Generated thumbnail for videos
 }
 
 const categories = ['pods', 'mobi', 'drones', 'technology', 'fabrication', 'concepts'];
@@ -103,19 +107,65 @@ const extractImageMetadata = (file: File): Promise<{ width: number; height: numb
   });
 };
 
-// Sortable Image Card Component
-interface SortableImageCardProps {
-  image: GalleryImage;
+// Helper function to extract video metadata
+const extractVideoMetadata = (file: File): Promise<{ width: number; height: number; aspectRatio: string; duration: number; thumbnailUrl: string }> => {
+  return new Promise((resolve) => {
+    const video = document.createElement('video');
+    video.preload = 'metadata';
+    
+    video.onloadedmetadata = () => {
+      const width = video.videoWidth;
+      const height = video.videoHeight;
+      const duration = video.duration;
+      const ratio = width / height;
+      
+      // Calculate aspect ratio
+      let aspectRatio = `${width}:${height}`;
+      if (Math.abs(ratio - 16/9) < 0.01) aspectRatio = '16:9';
+      else if (Math.abs(ratio - 4/3) < 0.01) aspectRatio = '4:3';
+      else if (Math.abs(ratio - 9/16) < 0.01) aspectRatio = '9:16';
+      else aspectRatio = `${Math.round(ratio * 100) / 100}:1`;
+      
+      // Generate thumbnail
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      
+      video.currentTime = Math.min(2, duration / 2); // Seek to 2 seconds or middle
+      
+      video.onseeked = () => {
+        ctx?.drawImage(video, 0, 0, width, height);
+        const thumbnailUrl = canvas.toDataURL('image/jpeg', 0.8);
+        resolve({ width, height, aspectRatio, duration, thumbnailUrl });
+      };
+    };
+    
+    video.onerror = () => resolve({ 
+      width: 0, 
+      height: 0, 
+      aspectRatio: 'Unknown', 
+      duration: 0, 
+      thumbnailUrl: '' 
+    });
+    
+    video.src = URL.createObjectURL(file);
+  });
+};
+
+// Sortable Media Card Component
+interface SortableMediaCardProps {
+  image: GalleryMedia;
   index: number;
-  onEdit: (image: GalleryImage) => void;
-  onDelete: (image: GalleryImage) => void;
-  onToggleHero: (image: GalleryImage) => void;
-  onToggleLandingHero: (image: GalleryImage) => void;
-  onTogglePrivacy: (image: GalleryImage) => void;
+  onEdit: (image: GalleryMedia) => void;
+  onDelete: (image: GalleryMedia) => void;
+  onToggleHero: (image: GalleryMedia) => void;
+  onToggleLandingHero: (image: GalleryMedia) => void;
+  onTogglePrivacy: (image: GalleryMedia) => void;
   onViewImage: (index: number) => void;
 }
 
-function SortableImageCard({ image, index, onEdit, onDelete, onToggleHero, onToggleLandingHero, onTogglePrivacy, onViewImage }: SortableImageCardProps) {
+function SortableMediaCard({ image, index, onEdit, onDelete, onToggleHero, onToggleLandingHero, onTogglePrivacy, onViewImage }: SortableMediaCardProps) {
   const {
     attributes,
     listeners,
@@ -139,12 +189,31 @@ function SortableImageCard({ image, index, onEdit, onDelete, onToggleHero, onTog
     >
       <div className="relative aspect-square cursor-pointer" onClick={() => onViewImage(index)}>
         <Image
-          src={image.src}
+          src={image.mediaType === 'video' && image.thumbnailUrl ? image.thumbnailUrl : image.src}
           alt={image.title}
           fill
           className="object-cover hover:scale-105 transition-transform duration-200"
           sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
         />
+        
+        {/* Video play indicator */}
+        {image.mediaType === 'video' && (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="bg-black/60 rounded-full p-3">
+              <svg className="h-8 w-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z"/>
+              </svg>
+            </div>
+          </div>
+        )}
+        
+        {/* Duration badge for videos */}
+        {image.mediaType === 'video' && image.duration && (
+          <div className="absolute bottom-2 right-2 bg-black/80 text-white text-xs px-2 py-1 rounded">
+            {Math.floor(image.duration / 60)}:{(image.duration % 60).toFixed(0).padStart(2, '0')}
+          </div>
+        )}
+        
         {/* View overlay on hover */}
         <div className="absolute inset-0 bg-black/0 hover:bg-black/20 transition-colors duration-200 flex items-center justify-center">
           <div className="opacity-0 hover:opacity-100 transition-opacity duration-200">
@@ -281,13 +350,13 @@ function SortableImageCard({ image, index, onEdit, onDelete, onToggleHero, onTog
 
 export default function GalleryManagementPage() {
   const { user, hasRole } = useAuth();
-  const [images, setImages] = useState<GalleryImage[]>([]);
-  const [filteredImages, setFilteredImages] = useState<GalleryImage[]>([]);
+  const [images, setImages] = useState<GalleryMedia[]>([]);
+  const [filteredImages, setFilteredImages] = useState<GalleryMedia[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [isLoading, setIsLoading] = useState(true);
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
-  const [editingImage, setEditingImage] = useState<GalleryImage | null>(null);
+  const [editingImage, setEditingImage] = useState<GalleryMedia | null>(null);
   const [uploading, setUploading] = useState(false);
   const [alert, setAlert] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const [isReordering, setIsReordering] = useState(false);
@@ -323,7 +392,7 @@ export default function GalleryManagementPage() {
   // Check permissions
   const canManageGallery = hasRole('super_admin') || hasRole('platform_admin');
 
-  // Load images from Firestore
+  // Load media from Firestore
   const loadImages = useCallback(async () => {
     try {
       const imagesQuery = query(
@@ -379,6 +448,10 @@ export default function GalleryManagementPage() {
 
     setUploading(true);
     try {
+      // Determine media type
+      const isVideo = file.type.startsWith('video/');
+      const mediaType = isVideo ? 'video' : 'image';
+      
       // Create unique filename
       const timestamp = Date.now();
       const filename = `gallery/${timestamp}_${file.name}`;
@@ -388,11 +461,33 @@ export default function GalleryManagementPage() {
       const snapshot = await uploadBytes(storageRef, file);
       const downloadURL = await getDownloadURL(snapshot.ref);
 
-      // Extract image metadata
-      const imageMetadata = await extractImageMetadata(file);
+      // Extract metadata based on file type
+      let metadata;
+      let thumbnailUrl = '';
+      let duration = 0;
+      
+      if (isVideo) {
+        const videoMetadata = await extractVideoMetadata(file);
+        metadata = {
+          width: videoMetadata.width,
+          height: videoMetadata.height,
+          aspectRatio: videoMetadata.aspectRatio
+        };
+        duration = videoMetadata.duration;
+        
+        // Upload thumbnail if generated
+        if (videoMetadata.thumbnailUrl) {
+          const thumbnailBlob = await fetch(videoMetadata.thumbnailUrl).then(r => r.blob());
+          const thumbnailRef = ref(storage, `gallery/thumbnails/${timestamp}_thumb.jpg`);
+          const thumbnailSnapshot = await uploadBytes(thumbnailRef, thumbnailBlob);
+          thumbnailUrl = await getDownloadURL(thumbnailSnapshot.ref);
+        }
+      } else {
+        metadata = await extractImageMetadata(file);
+      }
 
       // Save to Firestore
-      const imageData = {
+      const mediaData = {
         src: downloadURL,
         title: formData.title || file.name.replace(/\.[^/.]+$/, ""),
         category: formData.category,
@@ -407,29 +502,35 @@ export default function GalleryManagementPage() {
         uploadedBy: user.uid,
         createdAt: new Date(),
         updatedAt: new Date(),
-        // Image metadata
-        width: imageMetadata.width,
-        height: imageMetadata.height,
-        aspectRatio: imageMetadata.aspectRatio,
-        fileSize: file.size
+        // Media metadata
+        mediaType,
+        width: metadata.width,
+        height: metadata.height,
+        aspectRatio: metadata.aspectRatio,
+        fileSize: file.size,
+        // Video-specific fields
+        ...(isVideo && {
+          duration,
+          thumbnailUrl
+        })
       };
 
-      await addDoc(collection(db, 'gallery_images'), imageData);
+      await addDoc(collection(db, 'gallery_images'), mediaData);
       
-      showAlert('success', 'Image uploaded successfully!');
+      showAlert('success', `${mediaType === 'video' ? 'Video' : 'Image'} uploaded successfully!`);
       setUploadDialogOpen(false);
       setFormData({ title: '', category: '', description: '', tags: '', isPublic: true, isPrivate: false, isHero: false, isLandingHero: false });
       loadImages();
     } catch (error) {
-      console.error('Error uploading image:', error);
-      showAlert('error', 'Failed to upload image');
+      console.error('Error uploading media:', error);
+      showAlert('error', 'Failed to upload media');
     } finally {
       setUploading(false);
     }
   };
 
-  // Handle image update
-  const handleUpdateImage = async (imageId: string, updates: Partial<GalleryImage>) => {
+  // Handle media update
+  const handleUpdateImage = async (imageId: string, updates: Partial<GalleryMedia>) => {
     try {
       const imageRef = doc(db, 'gallery_images', imageId);
       await updateDoc(imageRef, {
@@ -715,7 +816,7 @@ export default function GalleryManagementPage() {
             Gallery Management
           </h1>
           <p className="text-muted-foreground mt-2">
-            Manage public gallery images and content. Total: {images.length} images
+            Manage public gallery media and content. Total: {images.length} items
           </p>
         </div>
         <div className="flex gap-2">
@@ -737,12 +838,12 @@ export default function GalleryManagementPage() {
             <DialogTrigger asChild>
               <Button>
                 <Plus className="h-4 w-4 mr-2" />
-                Upload Image
+                Upload Media
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-md">
               <DialogHeader>
-                <DialogTitle>Upload New Image</DialogTitle>
+                <DialogTitle>Upload New Media</DialogTitle>
               </DialogHeader>
               <div className="space-y-4">
                 <div>
@@ -750,7 +851,7 @@ export default function GalleryManagementPage() {
                   <Input
                     value={formData.title}
                     onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-                    placeholder="Image title"
+                    placeholder="Media title"
                   />
                 </div>
                 <div>
@@ -773,7 +874,7 @@ export default function GalleryManagementPage() {
                   <Textarea
                     value={formData.description}
                     onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                    placeholder="Image description"
+                    placeholder="Media description"
                     rows={3}
                   />
                 </div>
@@ -802,7 +903,7 @@ export default function GalleryManagementPage() {
                       checked={formData.isHero}
                       onChange={(e) => setFormData(prev => ({ ...prev, isHero: e.target.checked }))}
                     />
-                    <label htmlFor="isHero" className="text-sm">Set as hero image gallery</label>
+                    <label htmlFor="isHero" className="text-sm">Set as hero media gallery</label>
                   </div>
                   <div className="flex items-center gap-2">
                     <input
@@ -811,14 +912,14 @@ export default function GalleryManagementPage() {
                       checked={formData.isLandingHero}
                       onChange={(e) => setFormData(prev => ({ ...prev, isLandingHero: e.target.checked }))}
                     />
-                    <label htmlFor="isLandingHero" className="text-sm">Set as hero image landing page</label>
+                    <label htmlFor="isLandingHero" className="text-sm">Set as hero media landing page</label>
                   </div>
                 </div>
                 <div>
-                  <label className="text-sm font-medium">Select Image File</label>
+                  <label className="text-sm font-medium">Select Image or Video File</label>
                   <input
                     type="file"
-                    accept="image/*"
+                    accept="image/*,video/*"
                     onChange={(e) => {
                       const file = e.target.files?.[0];
                       if (file) handleFileUpload(file);
@@ -844,7 +945,7 @@ export default function GalleryManagementPage() {
         <div className="relative w-full lg:w-96">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search images..."
+            placeholder="Search media..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-10"
@@ -891,7 +992,7 @@ export default function GalleryManagementPage() {
         >
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {filteredImages.map((image, index) => (
-              <SortableImageCard
+              <SortableMediaCard
                 key={image.id}
                 image={image}
                 index={index}
@@ -910,8 +1011,8 @@ export default function GalleryManagementPage() {
       {filteredImages.length === 0 && (
         <div className="text-center py-12">
           <Camera className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-          <h3 className="text-lg font-semibold mb-2">No images found</h3>
-          <p className="text-muted-foreground">Upload your first image or adjust your search criteria</p>
+          <h3 className="text-lg font-semibold mb-2">No media found</h3>
+          <p className="text-muted-foreground">Upload your first media or adjust your search criteria</p>
         </div>
       )}
 
@@ -920,7 +1021,7 @@ export default function GalleryManagementPage() {
         <Dialog open={!!editingImage} onOpenChange={() => setEditingImage(null)}>
           <DialogContent className="max-w-md">
             <DialogHeader>
-              <DialogTitle>Edit Image</DialogTitle>
+              <DialogTitle>Edit Media</DialogTitle>
             </DialogHeader>
             <div className="space-y-4">
               <div>

@@ -27,8 +27,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { sanitizeForAttribute, sanitizeForDisplay, sanitizeTags, sanitizeUrl, sanitizeCategory, sanitizeDate } from '@/utils/sanitize';
 
-// Gallery image interface
-interface GalleryImage {
+// Gallery media interface
+interface GalleryMedia {
   id: string;
   src: string;
   title: string;
@@ -52,9 +52,9 @@ const gridSizes = [
 ];
 
 export default function GalleryPage() {
-  const [images, setImages] = useState<GalleryImage[]>([]);
-  const [filteredImages, setFilteredImages] = useState<GalleryImage[]>([]);
-  const [heroImage, setHeroImage] = useState<GalleryImage | null>(null);
+  const [images, setImages] = useState<GalleryMedia[]>([]);
+  const [filteredImages, setFilteredImages] = useState<GalleryMedia[]>([]);
+  const [heroImage, setHeroImage] = useState<GalleryMedia | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [gridSize, setGridSize] = useState(0);
@@ -170,7 +170,7 @@ export default function GalleryPage() {
             </div>
             <div className="flex items-center space-x-4">
               <Badge variant="outline" className="hidden sm:flex">
-                {filteredImages.length} images
+                {filteredImages.length} items
               </Badge>
               <ThemeToggle />
             </div>
@@ -206,7 +206,7 @@ export default function GalleryPage() {
             <div className="flex items-center justify-center gap-4 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <Camera className="h-4 w-4" />
-                <span>{filteredImages.length} Images</span>
+                <span>{filteredImages.length} Items</span>
               </div>
               <div className="w-1 h-1 bg-muted-foreground rounded-full"></div>
               <div className="flex items-center gap-2">
@@ -225,7 +225,7 @@ export default function GalleryPage() {
           <div className="relative w-full lg:w-96">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search images, tags, or descriptions..."
+              placeholder="Search media, tags, or descriptions..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10"
@@ -313,7 +313,7 @@ export default function GalleryPage() {
         {filteredImages.length === 0 && (
           <div className="text-center py-12">
             <Camera className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-lg font-semibold mb-2">No images found</h3>
+            <h3 className="text-lg font-semibold mb-2">No media found</h3>
             <p className="text-muted-foreground">Try adjusting your search or filter criteria</p>
           </div>
         )}

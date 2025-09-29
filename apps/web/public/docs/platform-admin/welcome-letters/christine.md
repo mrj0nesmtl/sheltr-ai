@@ -4,15 +4,15 @@
 
 Hey there Christine! Welcome to the SHELTR Team! 🚀
 
-I hope this message finds you well and as excited as I am about what we're building together. I can barely contain my enthusiasm as I write this – we've just reached an incredible milestone with SHELTR-AI, and you're about to be part of something truly revolutionary as our **Marketing, Outreach & Onboarding** leader.
+I hope this message finds you well and as excited as I am about what we're building together. You're about to be part of something truly disruptive as our **Marketing, Outreach & Onboarding** leader. (TBD ¯\_(ツ)_/¯ )
 
 ## We're Ready for Community Connection! 🎉
 
-After months of intense development, late-night outreach strategy sessions, and countless onboarding iterations, **SHELTR-AI is now ready for internal testing and validation**. We're talking about a comprehensive platform that's going to change how we approach homelessness solutions forever – and you get to ensure the community outreach and onboarding experience that makes our mission accessible to everyone!
+After months of intense development, marathon sessions, and countless iterations, **SHELTR is now ready for internal testing and validation**. We're talking about a comprehensive platform that's going to change how we approach homelessness solutions forever – and you get to ensure that our messaging, community outreach and onboarding experience that makes our mission accessible to everyone!
 
 ## Your Outreach & Onboarding Mission 🎯
 
-As our **Marketing, Outreach & Onboarding** specialist, you understand the critical importance of connecting with communities and creating welcoming experiences. Over the next **7 days**, I'd love for you to:
+As our **Marketing, Outreach & Onboarding** specialist, you understand the critical importance of connecting with communities and creating welcoming experiences. Over the next **30 days**, I'd love for you to:
 
 1. **Test onboarding flows** - how smooth is the journey for new users?
 2. **Evaluate community outreach** - assess our engagement with shelter networks
@@ -23,13 +23,12 @@ As our **Marketing, Outreach & Onboarding** specialist, you understand the criti
 
 ## Your Outreach & Onboarding Ecosystem Links 📢
 
-Here's your treasure map to the SHELTR-AI ecosystem, with special focus on community outreach and onboarding:
+Here's your treasure map to the SHELTR ecosystem, with special focus on community outreach and onboarding:
 
 ### **Community Onboarding & Support**
 - **🏠 Main Welcome Experience**: https://sheltr-ai.web.app
 - **🎓 User Journey Flows**: https://sheltr-ai.web.app/user-journeys/donors
 - **📞 Contact & Support**: https://sheltr-ai.web.app/contact
-- **🤝 How to Help**: https://sheltr-ai.web.app/blog/how-to-help-homelessness
 
 ### **Shelter Network Outreach**
 - **🏛️ Shelter Network**: https://sheltr-ai.web.app/shelters

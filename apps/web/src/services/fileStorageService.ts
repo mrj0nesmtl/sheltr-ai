@@ -51,9 +51,11 @@ export interface FileMetadata {
 // Allowed file types by category
 const ALLOWED_FILE_TYPES = {
   images: ['image/jpeg', 'image/png', 'image/webp', 'image/gif'],
+  videos: ['video/mp4', 'video/webm', 'video/mov', 'video/avi', 'video/quicktime'],
   documents: ['application/pdf', 'text/plain', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'],
   spreadsheets: ['application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
-  all: ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'application/pdf', 'text/plain', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']
+  media: ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'video/mp4', 'video/webm', 'video/mov', 'video/avi', 'video/quicktime'],
+  all: ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'video/mp4', 'video/webm', 'video/mov', 'video/avi', 'video/quicktime', 'application/pdf', 'text/plain', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']
 };
 
 // File size limits (in bytes)
@@ -61,6 +63,7 @@ const SIZE_LIMITS = {
   profilePicture: 5 * 1024 * 1024, // 5MB
   document: 10 * 1024 * 1024, // 10MB
   report: 50 * 1024 * 1024, // 50MB
+  video: 100 * 1024 * 1024, // 100MB for videos
   default: 10 * 1024 * 1024 // 10MB
 };
 

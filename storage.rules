@@ -105,11 +105,21 @@ service firebase.storage {
     }
 
     // =================================================================
-    // GALLERY IMAGES - Public gallery images
+    // GALLERY MEDIA - Public gallery images and videos
     // Publicly readable, admin-writable
     // =================================================================
     match /gallery/{document=**} {
-      // Read access: Anyone (public gallery images)
+      // Read access: Anyone (public gallery media)
+      allow read: if true;
+      
+      // Write access: Super Admin and Platform Admin only
+      allow write: if isSuperAdmin() || 
+                      (request.auth != null && getUserData().role == 'platform_admin');
+    }
+    
+    // Gallery thumbnails (generated from videos)
+    match /gallery/thumbnails/{document=**} {
+      // Read access: Anyone (public thumbnails)
       allow read: if true;
       
       // Write access: Super Admin and Platform Admin only

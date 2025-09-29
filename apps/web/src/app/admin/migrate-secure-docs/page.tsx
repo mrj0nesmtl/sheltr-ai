@@ -44,10 +44,10 @@ export default function MigrateSecureDocsPage() {
     'morganhirtle@gmail.com'
   ].includes(user.email);
 
-  // Debug logging
-  console.log('Debug - User object:', user);
-  console.log('Debug - User email:', user?.email);
-  console.log('Debug - Is authorized founder:', isAuthorizedFounder);
+  // Debug logging (can be removed after testing)
+  // console.log('Debug - User object:', user);
+  // console.log('Debug - User email:', user?.email);
+  // console.log('Debug - Is authorized founder:', isAuthorizedFounder);
 
   const addLog = (message: string) => {
     setResults(prev => ({
@@ -132,13 +132,6 @@ export default function MigrateSecureDocsPage() {
                 <p className="text-sm text-muted-foreground mt-1">
                   Only authorized founders can access the secure document migration tools.
                 </p>
-                <div className="mt-2 text-xs text-gray-500">
-                  <p>Debug Info:</p>
-                  <p>Email: {user?.email || 'Not available'}</p>
-                  <p>Role: {user?.role || 'Not available'}</p>
-                  <p>Is Founder: {isAuthorizedFounder ? 'Yes' : 'No'}</p>
-                  <p>Is Super Admin: {isSuperAdmin ? 'Yes' : 'No'}</p>
-                </div>
               </div>
             </div>
           </CardContent>

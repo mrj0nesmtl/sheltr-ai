@@ -384,6 +384,35 @@ export default function FoundersOnlyPage() {
                 </Button>
               </CardContent>
             </Card>
+
+            {/* Business Plan */}
+            <Card className="hover:shadow-lg transition-shadow cursor-pointer border-rose-200 dark:border-rose-800">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <FileText className="h-8 w-8 text-rose-600" />
+                  <Badge className="bg-rose-100 text-rose-800 dark:bg-rose-900 dark:text-rose-200">
+                    VC Ready
+                  </Badge>
+                </div>
+                <CardTitle className="text-rose-600">Business Plan</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Professional VC-worthy business plan with market analysis, financial projections, and exit strategy
+                </p>
+                <Button asChild className="w-full bg-rose-600 hover:bg-rose-700">
+                  <a 
+                    href="/docs/founders/sheltr-business-plan.md" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2"
+                  >
+                    View Business Plan
+                    <ExternalLink className="h-4 w-4" />
+                  </a>
+                </Button>
+              </CardContent>
+            </Card>
           </div>
         </div>
 

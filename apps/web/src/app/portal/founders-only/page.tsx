@@ -174,8 +174,8 @@ export default function FoundersOnlyPage() {
                 <p className="text-sm text-muted-foreground mb-4">
                   60-day public launch timeline with client onboarding strategy and AI achievements
                 </p>
-                <Button asChild className="w-full bg-orange-600 hover:bg-orange-700">
-                  <Link href="/docs/roadmap" className="flex items-center gap-2">
+                <Button asChild className="w-full bg-orange-600 hover:bg-orange-700 text-white border-0">
+                  <Link href="/docs/roadmap" className="flex items-center justify-center gap-2 text-white no-underline">
                     View Roadmap
                     <ExternalLink className="h-4 w-4" />
                   </Link>
@@ -198,8 +198,8 @@ export default function FoundersOnlyPage() {
                 <p className="text-sm text-muted-foreground mb-4">
                   Adyen + Coinbase integration architecture with single-token stable fund model
                 </p>
-                <Button asChild className="w-full bg-green-600 hover:bg-green-700">
-                  <Link href="/docs/payment-rails" className="flex items-center gap-2">
+                <Button asChild className="w-full bg-green-600 hover:bg-green-700 text-white border-0">
+                  <Link href="/docs/payment-rails" className="flex items-center justify-center gap-2 text-white no-underline">
                     View Architecture
                     <ExternalLink className="h-4 w-4" />
                   </Link>
@@ -222,8 +222,8 @@ export default function FoundersOnlyPage() {
                 <p className="text-sm text-muted-foreground mb-4">
                   Pre-seed funding information, financial projections, and investment terms
                 </p>
-                <Button asChild className="w-full bg-blue-600 hover:bg-blue-700">
-                  <Link href="/portal/investor-relations" className="flex items-center gap-2">
+                <Button asChild className="w-full bg-blue-600 hover:bg-blue-700 text-white border-0">
+                  <Link href="/portal/investor-relations" className="flex items-center justify-center gap-2 text-white no-underline">
                     View Details
                     <ExternalLink className="h-4 w-4" />
                   </Link>
@@ -246,8 +246,8 @@ export default function FoundersOnlyPage() {
                 <p className="text-sm text-muted-foreground mb-4">
                   Comprehensive technical documentation, whitepapers, and system architecture
                 </p>
-                <Button asChild className="w-full bg-purple-600 hover:bg-purple-700">
-                  <Link href="/docs" className="flex items-center gap-2">
+                <Button asChild className="w-full bg-purple-600 hover:bg-purple-700 text-white border-0">
+                  <Link href="/docs" className="flex items-center justify-center gap-2 text-white no-underline">
                     Browse Docs
                     <ExternalLink className="h-4 w-4" />
                   </Link>
@@ -270,12 +270,12 @@ export default function FoundersOnlyPage() {
                 <p className="text-sm text-muted-foreground mb-4">
                   Complete source code, smart contracts, and development history
                 </p>
-                <Button asChild variant="outline" className="w-full">
+                <Button asChild variant="outline" className="w-full border-2 hover:bg-gray-100 dark:hover:bg-gray-800">
                   <a 
                     href="https://github.com/mrj0nesmtl/sheltr-ai" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2"
+                    className="flex items-center justify-center gap-2 no-underline"
                   >
                     View Repository
                     <ExternalLink className="h-4 w-4" />
@@ -299,12 +299,12 @@ export default function FoundersOnlyPage() {
                 <p className="text-sm text-muted-foreground mb-4">
                   Access the live SHELTR platform with full administrative privileges
                 </p>
-                <Button asChild className="w-full bg-indigo-600 hover:bg-indigo-700">
+                <Button asChild className="w-full bg-indigo-600 hover:bg-indigo-700 text-white border-0">
                   <a 
                     href="https://sheltr-ai.web.app/dashboard" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2"
+                    className="flex items-center justify-center gap-2 text-white no-underline"
                   >
                     Access Platform
                     <ExternalLink className="h-4 w-4" />
@@ -328,8 +328,8 @@ export default function FoundersOnlyPage() {
                 <p className="text-sm text-muted-foreground mb-4">
                   Multi-tenant SaaS architecture with enterprise payment infrastructure and visual flow diagrams
                 </p>
-                <Button asChild className="w-full bg-cyan-600 hover:bg-cyan-700">
-                  <Link href="/docs/system-design" className="flex items-center gap-2">
+                <Button asChild className="w-full bg-cyan-600 hover:bg-cyan-700 text-white border-0">
+                  <Link href="/docs/system-design" className="flex items-center justify-center gap-2 text-white no-underline">
                     View Architecture
                     <ExternalLink className="h-4 w-4" />
                   </Link>
@@ -352,8 +352,8 @@ export default function FoundersOnlyPage() {
                 <p className="text-sm text-muted-foreground mb-4">
                   Revolutionary enterprise-grade platform with single-token architecture and blockchain transparency
                 </p>
-                <Button asChild className="w-full bg-emerald-600 hover:bg-emerald-700">
-                  <Link href="/docs/whitepaper" className="flex items-center gap-2">
+                <Button asChild className="w-full bg-emerald-600 hover:bg-emerald-700 text-white border-0">
+                  <Link href="/docs/whitepaper" className="flex items-center justify-center gap-2 text-white no-underline">
                     Read Whitepaper
                     <ExternalLink className="h-4 w-4" />
                   </Link>
@@ -376,8 +376,8 @@ export default function FoundersOnlyPage() {
                 <p className="text-sm text-muted-foreground mb-4">
                   Single-token stable fund ecosystem with enterprise payment infrastructure and guaranteed returns
                 </p>
-                <Button asChild className="w-full bg-amber-600 hover:bg-amber-700">
-                  <Link href="/docs/blockchain" className="flex items-center gap-2">
+                <Button asChild className="w-full bg-amber-600 hover:bg-amber-700 text-white border-0">
+                  <Link href="/docs/blockchain" className="flex items-center justify-center gap-2 text-white no-underline">
                     View Blockchain
                     <ExternalLink className="h-4 w-4" />
                   </Link>
@@ -400,8 +400,8 @@ export default function FoundersOnlyPage() {
                 <p className="text-sm text-muted-foreground mb-4">
                   Professional VC-worthy business plan with market analysis, financial projections, and exit strategy
                 </p>
-                <Button asChild className="w-full bg-rose-600 hover:bg-rose-700">
-                  <Link href="/secure-docs/business-plan" className="flex items-center gap-2">
+                <Button asChild className="w-full bg-rose-600 hover:bg-rose-700 text-white border-0">
+                  <Link href="/secure-docs/business-plan" className="flex items-center justify-center gap-2 text-white no-underline">
                     View Business Plan
                     <ExternalLink className="h-4 w-4" />
                   </Link>

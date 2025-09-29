@@ -828,6 +828,51 @@ service cloud.firestore {
     }
     
     // =================================================================
+    // SECURE DOCUMENT COLLECTIONS - Founders and Platform Admin sensitive documents
+    // =================================================================
+    
+    // Check if user is an authorized founder (by email)
+    function isAuthorizedFounder() {
+      return isAuthenticated() && request.auth.token.email in [
+        'joel.yaffe@gmail.com',
+        'alexanderkline13@gmail.com', 
+        'alaghetts@gmail.com',
+        'doug.kukura@gmail.com',
+        'morganhirtle@gmail.com'
+      ];
+    }
+    
+    // Founder documents - Business plans, strategic documents, confidential materials
+    match /founder_documents/{documentId} {
+      // Read: Only authorized founders can read founder documents
+      allow read: if isAuthorizedFounder();
+      
+      // Write: Only authorized founders can update founder documents
+      allow write: if isAuthorizedFounder();
+      
+      // Create: Only authorized founders can create founder documents
+      allow create: if isAuthorizedFounder();
+      
+      // Delete: Only authorized founders can delete founder documents
+      allow delete: if isAuthorizedFounder();
+    }
+    
+    // Platform admin documents - Welcome letters, internal documentation, training materials
+    match /platform_admin_documents/{documentId} {
+      // Read: Super Admin, Platform Admin, and authorized founders can read
+      allow read: if isSuperAdmin() || isPlatformAdmin() || isAuthorizedFounder();
+      
+      // Write: Super Admin and authorized founders can update documents
+      allow write: if isSuperAdmin() || isAuthorizedFounder();
+      
+      // Create: Super Admin and authorized founders can create documents
+      allow create: if isSuperAdmin() || isAuthorizedFounder();
+      
+      // Delete: Super Admin and authorized founders can delete documents
+      allow delete: if isSuperAdmin() || isAuthorizedFounder();
+    }
+    
+    // =================================================================
     // FALLBACK RULE - Deny all other access
     // =================================================================
     match /{document=**} {

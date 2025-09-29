@@ -173,3 +173,50 @@ sync-mac*.sh
 **/*.txt
 # Exception: Allow requirements.txt files (needed for Docker builds)
 !**/requirements.txt
+
+# =================================================================
+# SENSITIVE DOCUMENT SECURITY - Prevent accidental commits
+# =================================================================
+
+# Founders-only sensitive documents (moved to secure Firestore)
+apps/web/public/docs/founders/
+**/docs/founders/
+founders-only/
+**/founders-only/
+
+# Platform admin sensitive documents (moved to secure Firestore)
+apps/web/public/docs/platform-admin/
+**/docs/platform-admin/
+platform-admin-docs/
+**/platform-admin-docs/
+
+# Business plans and strategic documents
+*business-plan*.md
+*strategic-plan*.md
+*investor-deck*.pdf
+*pitch-deck*.pdf
+*financial-projections*.xlsx
+*cap-table*.xlsx
+
+# Welcome letters and personalized content
+*welcome-letter*.md
+*personalized-*.md
+welcome-letters/
+**/welcome-letters/
+
+# Internal documentation with sensitive information
+*internal-*.md
+*confidential-*.md
+*founders-*.md
+*admin-*.md
+
+# Temporary migration files
+migration-*.json
+*-migration.json
+secure-docs-*.json
+
+# Document backups during migration
+*.md.backup
+*.md.bak
+docs-backup/
+**/docs-backup/

@@ -326,10 +326,22 @@ export default function FoundersOnlyPage() {
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Multi-tenant SaaS architecture with enterprise payment infrastructure and visual flow diagrams
+                  Multi-tenant SaaS architecture with enterprise payment infrastructure, visual flow diagrams, and comprehensive system integration blueprints
                 </p>
-                <Button asChild className="w-full bg-cyan-600 hover:bg-cyan-700 text-white border-0">
-                  <Link href="/docs/system-design" className="flex items-center justify-center gap-2 text-white no-underline">
+                <Button 
+                  asChild 
+                  className="w-full"
+                  style={{ 
+                    backgroundColor: '#0891b2', 
+                    color: 'white',
+                    border: 'none'
+                  }}
+                >
+                  <Link 
+                    href="/docs/system-design" 
+                    className="flex items-center justify-center gap-2 text-white no-underline hover:no-underline"
+                    style={{ color: 'white' }}
+                  >
                     View Architecture
                     <ExternalLink className="h-4 w-4" />
                   </Link>
@@ -390,8 +402,8 @@ export default function FoundersOnlyPage() {
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <FileText className="h-8 w-8 text-rose-600" />
-                  <Badge className="bg-rose-100 text-rose-800 dark:bg-rose-900 dark:text-rose-200">
-                    VC Ready
+                  <Badge className="bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
+                    Secure
                   </Badge>
                 </div>
                 <CardTitle className="text-rose-600">Business Plan</CardTitle>
@@ -400,8 +412,20 @@ export default function FoundersOnlyPage() {
                 <p className="text-sm text-muted-foreground mb-4">
                   Professional VC-worthy business plan with market analysis, financial projections, and exit strategy
                 </p>
-                <Button asChild className="w-full bg-rose-600 hover:bg-rose-700 text-white border-0">
-                  <Link href="/secure-docs/business-plan" className="flex items-center justify-center gap-2 text-white no-underline">
+                <Button 
+                  asChild 
+                  className="w-full"
+                  style={{ 
+                    backgroundColor: '#dc2626', 
+                    color: 'white',
+                    border: 'none'
+                  }}
+                >
+                  <Link 
+                    href="/secure-docs/business-plan" 
+                    className="flex items-center justify-center gap-2 text-white no-underline hover:no-underline"
+                    style={{ color: 'white' }}
+                  >
                     View Business Plan
                     <ExternalLink className="h-4 w-4" />
                   </Link>

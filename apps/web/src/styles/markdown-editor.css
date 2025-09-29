@@ -23,6 +23,20 @@
   line-height: 1.6 !important;
 }
 
+/* Force white text in dark mode */
+.dark .w-md-editor-text {
+  color: #ffffff !important;
+}
+
+.dark .w-md-editor-text-container {
+  color: #ffffff !important;
+}
+
+/* Ensure proper contrast for all text elements in editor */
+.dark .w-md-editor-text * {
+  color: inherit !important;
+}
+
 .w-md-editor-text:focus {
   outline: none !important;
   box-shadow: none !important;

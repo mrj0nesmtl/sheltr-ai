@@ -401,15 +401,10 @@ export default function FoundersOnlyPage() {
                   Professional VC-worthy business plan with market analysis, financial projections, and exit strategy
                 </p>
                 <Button asChild className="w-full bg-rose-600 hover:bg-rose-700">
-                  <a 
-                    href="/docs/founders/sheltr-business-plan.md" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2"
-                  >
+                  <Link href="/secure-docs/business-plan" className="flex items-center gap-2">
                     View Business Plan
                     <ExternalLink className="h-4 w-4" />
-                  </a>
+                  </Link>
                 </Button>
               </CardContent>
             </Card>

@@ -383,10 +383,76 @@ export default function GalleryManagementPage() {
     isLandingHero: false
   });
 
+  // File selection state
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [fileMetadata, setFileMetadata] = useState<{
+    type: 'image' | 'video' | null;
+    size: string;
+    dimensions?: string;
+    duration?: string;
+  }>({ type: null, size: '' });
+
   // Helper function to show alerts
   const showAlert = (type: 'success' | 'error', message: string) => {
     setAlert({ type, message });
     setTimeout(() => setAlert(null), 5000); // Auto dismiss after 5 seconds
+  };
+
+  // Handle file selection and metadata extraction
+  const handleFileSelection = async (file: File) => {
+    setSelectedFile(file);
+    
+    // Auto-populate title from filename (remove extension)
+    const fileName = file.name.replace(/\.[^/.]+$/, "");
+    setFormData(prev => ({ ...prev, title: fileName }));
+    
+    // Determine file type
+    const isVideo = file.type.startsWith('video/');
+    const fileType = isVideo ? 'video' : 'image';
+    
+    // Format file size
+    const sizeInMB = (file.size / (1024 * 1024)).toFixed(2);
+    const sizeString = `${sizeInMB} MB`;
+    
+    // Extract metadata based on file type
+    let dimensions = '';
+    let duration = '';
+    
+    try {
+      if (isVideo) {
+        const videoMetadata = await extractVideoMetadata(file);
+        dimensions = `${videoMetadata.width} × ${videoMetadata.height}`;
+        duration = `${Math.floor(videoMetadata.duration / 60)}:${(videoMetadata.duration % 60).toFixed(0).padStart(2, '0')}`;
+      } else {
+        const imageMetadata = await extractImageMetadata(file);
+        dimensions = `${imageMetadata.width} × ${imageMetadata.height}`;
+      }
+    } catch (error) {
+      console.error('Error extracting metadata:', error);
+    }
+    
+    setFileMetadata({
+      type: fileType,
+      size: sizeString,
+      dimensions,
+      duration
+    });
+  };
+
+  // Reset form function
+  const resetForm = () => {
+    setFormData({ 
+      title: '', 
+      category: '', 
+      description: '', 
+      tags: '', 
+      isPublic: true, 
+      isPrivate: false, 
+      isHero: false, 
+      isLandingHero: false 
+    });
+    setSelectedFile(null);
+    setFileMetadata({ type: null, size: '' });
   };
 
   // Check permissions
@@ -443,22 +509,23 @@ export default function GalleryManagementPage() {
   }, [canManageGallery, loadImages]);
 
   // Handle file upload
-  const handleFileUpload = async (file: File) => {
-    if (!file || !user) return;
+  const handleFileUpload = async (file?: File) => {
+    const fileToUpload = file || selectedFile;
+    if (!fileToUpload || !user) return;
 
     setUploading(true);
     try {
       // Determine media type
-      const isVideo = file.type.startsWith('video/');
+      const isVideo = fileToUpload.type.startsWith('video/');
       const mediaType = isVideo ? 'video' : 'image';
       
       // Create unique filename
       const timestamp = Date.now();
-      const filename = `gallery/${timestamp}_${file.name}`;
+      const filename = `gallery/${timestamp}_${fileToUpload.name}`;
       
       // Upload to Firebase Storage
       const storageRef = ref(storage, filename);
-      const snapshot = await uploadBytes(storageRef, file);
+      const snapshot = await uploadBytes(storageRef, fileToUpload);
       const downloadURL = await getDownloadURL(snapshot.ref);
 
       // Extract metadata based on file type
@@ -467,7 +534,7 @@ export default function GalleryManagementPage() {
       let duration = 0;
       
       if (isVideo) {
-        const videoMetadata = await extractVideoMetadata(file);
+        const videoMetadata = await extractVideoMetadata(fileToUpload);
         metadata = {
           width: videoMetadata.width,
           height: videoMetadata.height,
@@ -483,13 +550,13 @@ export default function GalleryManagementPage() {
           thumbnailUrl = await getDownloadURL(thumbnailSnapshot.ref);
         }
       } else {
-        metadata = await extractImageMetadata(file);
+        metadata = await extractImageMetadata(fileToUpload);
       }
 
       // Save to Firestore
       const mediaData = {
         src: downloadURL,
-        title: formData.title || file.name.replace(/\.[^/.]+$/, ""),
+        title: formData.title || fileToUpload.name.replace(/\.[^/.]+$/, ""),
         category: formData.category,
         description: formData.description,
         tags: formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag),
@@ -507,7 +574,7 @@ export default function GalleryManagementPage() {
         width: metadata.width,
         height: metadata.height,
         aspectRatio: metadata.aspectRatio,
-        fileSize: file.size,
+        fileSize: fileToUpload.size,
         // Video-specific fields
         ...(isVideo && {
           duration,
@@ -519,7 +586,7 @@ export default function GalleryManagementPage() {
       
       showAlert('success', `${mediaType === 'video' ? 'Video' : 'Image'} uploaded successfully!`);
       setUploadDialogOpen(false);
-      setFormData({ title: '', category: '', description: '', tags: '', isPublic: true, isPrivate: false, isHero: false, isLandingHero: false });
+      resetForm();
       loadImages();
     } catch (error) {
       console.error('Error uploading media:', error);
@@ -841,98 +908,200 @@ export default function GalleryManagementPage() {
                 Upload Media
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-md">
+            <DialogContent className="max-w-lg">
               <DialogHeader>
                 <DialogTitle>Upload New Media</DialogTitle>
               </DialogHeader>
-              <div className="space-y-4">
-                <div>
-                  <label className="text-sm font-medium">Title</label>
-                  <Input
-                    value={formData.title}
-                    onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-                    placeholder="Media title"
-                  />
-                </div>
-                <div>
-                  <label className="text-sm font-medium">Category</label>
-                  <Select value={formData.category} onValueChange={(value) => setFormData(prev => ({ ...prev, category: value }))}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {categories.map(cat => (
-                        <SelectItem key={cat} value={cat}>
-                          {cat.charAt(0).toUpperCase() + cat.slice(1)}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <label className="text-sm font-medium">Description</label>
-                  <Textarea
-                    value={formData.description}
-                    onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                    placeholder="Media description"
-                    rows={3}
-                  />
-                </div>
-                <div>
-                  <label className="text-sm font-medium">Tags (comma separated)</label>
-                  <Input
-                    value={formData.tags}
-                    onChange={(e) => setFormData(prev => ({ ...prev, tags: e.target.value }))}
-                    placeholder="tag1, tag2, tag3"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
+              <div className="space-y-6">
+                {/* File Selection - Top Priority */}
+                <div className="space-y-3">
+                  <label className="text-sm font-medium">Select Media File</label>
+                  <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 text-center">
+                    {!selectedFile ? (
+                      <div className="space-y-3">
+                        <div className="mx-auto w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
+                          <Plus className="h-6 w-6 text-blue-600" />
+                        </div>
+                        <div>
+                          <Button
+                            type="button"
+                            onClick={() => document.getElementById('file-input')?.click()}
+                            className="bg-blue-600 hover:bg-blue-700"
+                          >
+                            Choose File
+                          </Button>
+                          <p className="text-xs text-muted-foreground mt-2">
+                            Images or Videos up to 100MB
+                          </p>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        <div className="mx-auto w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
+                          {fileMetadata.type === 'video' ? (
+                            <svg className="h-6 w-6 text-green-600" fill="currentColor" viewBox="0 0 24 24">
+                              <path d="M8 5v14l11-7z"/>
+                            </svg>
+                          ) : (
+                            <Camera className="h-6 w-6 text-green-600" />
+                          )}
+                        </div>
+                        <div>
+                          <p className="font-medium text-sm">{selectedFile.name}</p>
+                          <div className="text-xs text-muted-foreground space-y-1">
+                            <p>Size: {fileMetadata.size}</p>
+                            {fileMetadata.dimensions && <p>Dimensions: {fileMetadata.dimensions}</p>}
+                            {fileMetadata.duration && <p>Duration: {fileMetadata.duration}</p>}
+                          </div>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={() => {
+                              setSelectedFile(null);
+                              setFileMetadata({ type: null, size: '' });
+                              setFormData(prev => ({ ...prev, title: '' }));
+                            }}
+                            className="mt-2"
+                          >
+                            Change File
+                          </Button>
+                        </div>
+                      </div>
+                    )}
                     <input
-                      type="checkbox"
-                      id="isPublic"
-                      checked={formData.isPublic}
-                      onChange={(e) => setFormData(prev => ({ ...prev, isPublic: e.target.checked }))}
+                      id="file-input"
+                      type="file"
+                      accept="image/*,video/*"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) handleFileSelection(file);
+                      }}
+                      className="hidden"
                     />
-                    <label htmlFor="isPublic" className="text-sm">Make public</label>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      id="isHero"
-                      checked={formData.isHero}
-                      onChange={(e) => setFormData(prev => ({ ...prev, isHero: e.target.checked }))}
-                    />
-                    <label htmlFor="isHero" className="text-sm">Set as hero media gallery</label>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      id="isLandingHero"
-                      checked={formData.isLandingHero}
-                      onChange={(e) => setFormData(prev => ({ ...prev, isLandingHero: e.target.checked }))}
-                    />
-                    <label htmlFor="isLandingHero" className="text-sm">Set as hero media landing page</label>
                   </div>
                 </div>
-                <div>
-                  <label className="text-sm font-medium">Select Image or Video File</label>
-                  <input
-                    type="file"
-                    accept="image/*,video/*"
-                    onChange={(e) => {
-                      const file = e.target.files?.[0];
-                      if (file) handleFileUpload(file);
-                    }}
-                    className="w-full mt-1"
-                    disabled={uploading}
-                  />
-                </div>
-                {uploading && (
-                  <div className="text-center py-4">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-2"></div>
-                    <p className="text-sm text-muted-foreground">Uploading...</p>
-                  </div>
+
+                {/* Form Fields - Only show when file is selected */}
+                {selectedFile && (
+                  <>
+                    <div>
+                      <label className="text-sm font-medium">Title</label>
+                      <Input
+                        value={formData.title}
+                        onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+                        placeholder="Media title"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="text-sm font-medium">Category</label>
+                      <Select value={formData.category} onValueChange={(value) => setFormData(prev => ({ ...prev, category: value }))}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select category" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {categories.map(category => (
+                            <SelectItem key={category} value={category}>
+                              {category.charAt(0).toUpperCase() + category.slice(1)}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    
+                    <div>
+                      <label className="text-sm font-medium">Description</label>
+                      <Textarea
+                        value={formData.description}
+                        onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                        placeholder="Media description"
+                        rows={3}
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="text-sm font-medium">Tags (comma separated)</label>
+                      <Input
+                        value={formData.tags}
+                        onChange={(e) => setFormData(prev => ({ ...prev, tags: e.target.value }))}
+                        placeholder="tag1, tag2, tag3"
+                      />
+                    </div>
+
+                    {/* Video-specific fields */}
+                    {fileMetadata.type === 'video' && (
+                      <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 space-y-3">
+                        <h4 className="text-sm font-medium text-blue-900 dark:text-blue-100">Video Settings</h4>
+                        <div className="text-xs text-blue-700 dark:text-blue-300">
+                          <p>• Thumbnail will be auto-generated at 2 seconds</p>
+                          <p>• Duration: {fileMetadata.duration}</p>
+                          <p>• Resolution: {fileMetadata.dimensions}</p>
+                        </div>
+                      </div>
+                    )}
+                    
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="checkbox"
+                          id="isPublic"
+                          checked={formData.isPublic}
+                          onChange={(e) => setFormData(prev => ({ ...prev, isPublic: e.target.checked }))}
+                        />
+                        <label htmlFor="isPublic" className="text-sm">Make public</label>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="checkbox"
+                          id="isHero"
+                          checked={formData.isHero}
+                          onChange={(e) => setFormData(prev => ({ ...prev, isHero: e.target.checked }))}
+                        />
+                        <label htmlFor="isHero" className="text-sm">Set as hero media gallery</label>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="checkbox"
+                          id="isLandingHero"
+                          checked={formData.isLandingHero}
+                          onChange={(e) => setFormData(prev => ({ ...prev, isLandingHero: e.target.checked }))}
+                        />
+                        <label htmlFor="isLandingHero" className="text-sm">Set as hero media landing page</label>
+                      </div>
+                    </div>
+
+                    {/* Upload Button */}
+                    <div className="flex gap-2 pt-4">
+                      <Button
+                        onClick={() => handleFileUpload()}
+                        disabled={uploading || !formData.title || !formData.category}
+                        className="flex-1 bg-green-600 hover:bg-green-700"
+                      >
+                        {uploading ? (
+                          <>
+                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                            Uploading...
+                          </>
+                        ) : (
+                          <>
+                            <Save className="h-4 w-4 mr-2" />
+                            Upload {fileMetadata.type === 'video' ? 'Video' : 'Image'}
+                          </>
+                        )}
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => {
+                          setUploadDialogOpen(false);
+                          resetForm();
+                        }}
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </>
                 )}
               </div>
             </DialogContent>

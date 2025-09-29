@@ -1,0 +1,136 @@
+/* Markdown Editor Styles */
+.w-md-editor {
+  background-color: transparent !important;
+}
+
+.w-md-editor.w-md-editor-dark {
+  border: 1px solid hsl(var(--border)) !important;
+}
+
+.w-md-editor.w-md-editor-light {
+  border: 1px solid hsl(var(--border)) !important;
+}
+
+.w-md-editor-text-container {
+  background-color: hsl(var(--background)) !important;
+  color: hsl(var(--foreground)) !important;
+}
+
+.w-md-editor-text {
+  background-color: hsl(var(--background)) !important;
+  color: hsl(var(--foreground)) !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  line-height: 1.6 !important;
+}
+
+.w-md-editor-text:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.w-md-editor .w-md-editor-toolbar {
+  background-color: hsl(var(--muted)) !important;
+  border-bottom: 1px solid hsl(var(--border)) !important;
+}
+
+.w-md-editor .w-md-editor-toolbar button {
+  color: hsl(var(--muted-foreground)) !important;
+  border: none !important;
+  background: transparent !important;
+}
+
+.w-md-editor .w-md-editor-toolbar button:hover {
+  background-color: hsl(var(--accent)) !important;
+  color: hsl(var(--accent-foreground)) !important;
+}
+
+.w-md-editor .w-md-editor-toolbar button.active {
+  background-color: hsl(var(--primary)) !important;
+  color: hsl(var(--primary-foreground)) !important;
+}
+
+/* Custom scrollbar for editor */
+.w-md-editor-text::-webkit-scrollbar {
+  width: 8px;
+}
+
+.w-md-editor-text::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+}
+
+.w-md-editor-text::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground));
+  border-radius: 4px;
+}
+
+.w-md-editor-text::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--accent-foreground));
+}
+
+/* Ensure proper spacing in editor */
+.w-md-editor-text h1,
+.w-md-editor-text h2,
+.w-md-editor-text h3,
+.w-md-editor-text h4,
+.w-md-editor-text h5,
+.w-md-editor-text h6 {
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  font-weight: 600;
+}
+
+.w-md-editor-text p {
+  margin-bottom: 1em;
+  line-height: 1.6;
+}
+
+.w-md-editor-text ul,
+.w-md-editor-text ol {
+  margin-bottom: 1em;
+  padding-left: 1.5em;
+}
+
+.w-md-editor-text li {
+  margin-bottom: 0.25em;
+}
+
+.w-md-editor-text blockquote {
+  margin: 1em 0;
+  padding-left: 1em;
+  border-left: 4px solid hsl(var(--primary));
+  color: hsl(var(--muted-foreground));
+  font-style: italic;
+}
+
+.w-md-editor-text code {
+  background-color: hsl(var(--muted));
+  padding: 0.125em 0.25em;
+  border-radius: 0.25em;
+  font-size: 0.875em;
+}
+
+.w-md-editor-text pre {
+  background-color: hsl(var(--muted));
+  padding: 1em;
+  border-radius: 0.5em;
+  overflow-x: auto;
+  margin: 1em 0;
+}
+
+.w-md-editor-text table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1em 0;
+}
+
+.w-md-editor-text th,
+.w-md-editor-text td {
+  border: 1px solid hsl(var(--border));
+  padding: 0.5em;
+  text-align: left;
+}
+
+.w-md-editor-text th {
+  background-color: hsl(var(--muted));
+  font-weight: 600;
+}

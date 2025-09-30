@@ -22,9 +22,11 @@ import {
   Users,
   Lock,
   Building2,
-  Blocks
+  Blocks,
+  Camera
 } from 'lucide-react';
 import { checkFounderAccess, clearFounderAccess, getFounderInfo } from '@/services/founderAccessService';
+import FoundersGallery from '@/components/FoundersGallery';
 
 export default function FoundersOnlyPage() {
   const [isAuthorized, setIsAuthorized] = useState(false);
@@ -127,8 +129,8 @@ export default function FoundersOnlyPage() {
               <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
                 Your Google email addresses provide you with comprehensive access to the SHELTR platform, including full Platform Administrator privileges and executive dashboard capabilities. As co-founders, you have unrestricted access to all system functions, financial oversight, user management, and strategic analytics. Upon logging into the main platform, you will be presented with a Non-Disclosure Agreement (NDA) and a personalized welcome letter tailored to your specific expertise and leadership role within SHELTR. This portal serves as your gateway to confidential business plans, financial reports, and strategic documentation that will be progressively published here as we advance toward our public launch.
               </p>
-              <div className="mt-4 p-3 bg-amber-100 dark:bg-amber-900/30 rounded-lg border border-amber-200 dark:border-amber-800">
-                <p className="text-sm text-amber-800 dark:text-amber-200 font-medium">
+              <div className="mt-4 p-3 bg-amber-50 dark:bg-amber-900/40 rounded-lg border border-amber-300 dark:border-amber-700">
+                <p className="text-sm text-amber-900 dark:text-amber-100 font-medium">
                   🔒 Confidential Access: Only the five SHELTR co-founders have access to this executive portal and its strategic resources.
                 </p>
               </div>
@@ -397,6 +399,30 @@ export default function FoundersOnlyPage() {
               </CardContent>
             </Card>
 
+            {/* Gallery Management */}
+            <Card className="hover:shadow-lg transition-shadow cursor-pointer border-indigo-200 dark:border-indigo-800">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <Camera className="h-8 w-8 text-indigo-600" />
+                  <Badge className="bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200">
+                    Media Hub
+                  </Badge>
+                </div>
+                <CardTitle className="text-indigo-600">Gallery Management</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Upload and manage media content, videos, and images for platform and founders portal sharing
+                </p>
+                <Button asChild className="w-full bg-indigo-600 hover:bg-indigo-700 text-white border-0">
+                  <Link href="/dashboard/gallery" className="flex items-center justify-center gap-2 text-white no-underline">
+                    Manage Gallery
+                    <Camera className="h-4 w-4" />
+                  </Link>
+                </Button>
+              </CardContent>
+            </Card>
+
             {/* Business Plan */}
             <Card className="hover:shadow-lg transition-shadow cursor-pointer border-rose-200 dark:border-rose-800">
               <CardHeader>
@@ -594,6 +620,18 @@ export default function FoundersOnlyPage() {
               </div>
             </CardContent>
           </Card>
+        </div>
+
+        {/* Founders Gallery Section */}
+        <div className="max-w-6xl mx-auto mb-12">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold mb-4">Founders Gallery</h2>
+            <p className="text-muted-foreground">
+              Curated media content shared exclusively with SHELTR co-founders
+            </p>
+          </div>
+          
+          <FoundersGallery />
         </div>
 
         {/* Footer Security Notice */}

@@ -39,7 +39,9 @@ import {
   Zap,
   Award,
   Rocket,
-  FileText
+  FileText,
+  Home,
+  ArrowLeft
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -1738,6 +1740,56 @@ export default function InvestorRelationsPage() {
           </div>
         </div>
       </header>
+
+      {/* Breadcrumb Navigation */}
+      <div className="bg-white/50 dark:bg-slate-900/50 border-b">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => window.location.href = '/'}
+                className="hover:bg-muted p-1 h-auto"
+              >
+                <Home className="h-4 w-4" />
+              </Button>
+              <ChevronRight className="h-4 w-4" />
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => window.location.href = '/portal'}
+                className="hover:bg-muted px-2 py-1 h-auto"
+              >
+                Portal
+              </Button>
+              <ChevronRight className="h-4 w-4" />
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => window.location.href = '/portal/founders-only'}
+                className="hover:bg-muted px-2 py-1 h-auto"
+              >
+                Founders Only
+              </Button>
+              <ChevronRight className="h-4 w-4" />
+              <span className="font-medium text-foreground">
+                Investor Relations
+              </span>
+            </div>
+            
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => window.location.href = '/portal/founders-only'}
+              className="flex items-center gap-2"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Back to Portal
+            </Button>
+          </div>
+        </div>
+      </div>
 
       {/* Hero Section */}
       <section className="relative py-20 text-white overflow-hidden">

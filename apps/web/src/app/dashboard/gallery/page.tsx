@@ -62,6 +62,7 @@ interface GalleryMedia {
   isPrivate: boolean; // Hide from public gallery (internal use only)
   isHero: boolean; // Hero image for gallery page
   isLandingHero: boolean; // Hero image for landing page
+  isFoundersGallery: boolean; // Show in founders portal gallery
   order: number;
   uploadedBy: string;
   createdAt: Date;
@@ -380,7 +381,8 @@ export default function GalleryManagementPage() {
     isPublic: true,
     isPrivate: false,
     isHero: false,
-    isLandingHero: false
+    isLandingHero: false,
+    isFoundersGallery: false
   });
 
   // File selection state
@@ -449,7 +451,8 @@ export default function GalleryManagementPage() {
       isPublic: true, 
       isPrivate: false, 
       isHero: false, 
-      isLandingHero: false 
+      isLandingHero: false,
+      isFoundersGallery: false
     });
     setSelectedFile(null);
     setFileMetadata({ type: null, size: '' });
@@ -565,6 +568,7 @@ export default function GalleryManagementPage() {
         isPrivate: formData.isPrivate,
         isHero: formData.isHero,
         isLandingHero: formData.isLandingHero,
+        isFoundersGallery: formData.isFoundersGallery,
         order: images.length,
         uploadedBy: user.uid,
         createdAt: new Date(),
@@ -1050,6 +1054,15 @@ export default function GalleryManagementPage() {
                           onChange={(e) => setFormData(prev => ({ ...prev, isPublic: e.target.checked }))}
                         />
                         <label htmlFor="isPublic" className="text-sm">Make public</label>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="checkbox"
+                          id="isFoundersGallery"
+                          checked={formData.isFoundersGallery}
+                          onChange={(e) => setFormData(prev => ({ ...prev, isFoundersGallery: e.target.checked }))}
+                        />
+                        <label htmlFor="isFoundersGallery" className="text-sm">Share to Founders Portal</label>
                       </div>
                       <div className="flex items-center gap-2">
                         <input

@@ -2,7 +2,7 @@
 
 **Data Analyst & Insights Specialist**
 
-Welcome to the SHELTR Platform Team. You've been granted Platform  access to begin your discovery journey with our system.
+Welcome to the SHELTR Platform Team. You've been granted Platform access to begin your discovery journey with our system.
 
 ## Phase 1: Discovery & Documentation Study
 
@@ -81,4 +81,4 @@ Your role is to become a SHELTR expert first, then apply your analytical experti
 
 ---
 
-*Welcome letter for Aryan Srivastava - Platform Administrator & Data Analyst*
+*Welcome letter for Aryan Srivastava from Joel Yaffe - Re: Platform Data Analyst*

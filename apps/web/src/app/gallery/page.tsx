@@ -362,16 +362,28 @@ export default function GalleryPage() {
               <ChevronRight className="h-8 w-8" />
             </Button>
 
-            {/* Main Image */}
+            {/* Main Media */}
             <div className="relative max-w-5xl max-h-[80vh] w-full h-full">
-              <Image
-                src={sanitizeUrl(filteredImages[selectedImage].src) || '/images/fallback.jpg'}
-                alt={sanitizeForAttribute(filteredImages[selectedImage].title)}
-                fill
-                className="object-contain"
-                sizes="100vw"
-                priority
-              />
+              {filteredImages[selectedImage]?.mediaType === 'video' ? (
+                <video
+                  src={sanitizeUrl(filteredImages[selectedImage].src) || ''}
+                  controls
+                  autoPlay
+                  className="max-w-full max-h-full object-contain rounded-lg"
+                  style={{ maxHeight: 'calc(80vh - 60px)' }}
+                >
+                  Your browser does not support the video tag.
+                </video>
+              ) : (
+                <Image
+                  src={sanitizeUrl(filteredImages[selectedImage].src) || '/images/fallback.jpg'}
+                  alt={sanitizeForAttribute(filteredImages[selectedImage].title)}
+                  fill
+                  className="object-contain"
+                  sizes="100vw"
+                  priority
+                />
+              )}
             </div>
 
             {/* Image Info Panel */}

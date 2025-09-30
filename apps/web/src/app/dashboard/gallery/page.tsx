@@ -1273,7 +1273,7 @@ export default function GalleryManagementPage() {
         </Dialog>
       )}
 
-      {/* Image Viewer Modal */}
+      {/* Media Viewer Modal */}
       {viewerOpen && filteredImages.length > 0 && (
         <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center">
           {/* Close Button */}
@@ -1302,16 +1302,28 @@ export default function GalleryManagementPage() {
             </>
           )}
 
-          {/* Image */}
+          {/* Media Content */}
           <div className="relative max-w-[90vw] max-h-[90vh] flex items-center justify-center">
-            <Image
-              src={filteredImages[currentImageIndex]?.src || ''}
-              alt={filteredImages[currentImageIndex]?.title || ''}
-              width={1200}
-              height={800}
-              className="max-w-full max-h-full object-contain"
-              priority
-            />
+            {filteredImages[currentImageIndex]?.mediaType === 'video' ? (
+              <video
+                src={filteredImages[currentImageIndex]?.src || ''}
+                controls
+                autoPlay
+                className="max-w-full max-h-full object-contain rounded-lg"
+                style={{ maxHeight: 'calc(90vh - 120px)' }}
+              >
+                Your browser does not support the video tag.
+              </video>
+            ) : (
+              <Image
+                src={filteredImages[currentImageIndex]?.src || ''}
+                alt={filteredImages[currentImageIndex]?.title || ''}
+                width={1200}
+                height={800}
+                className="max-w-full max-h-full object-contain"
+                priority
+              />
+            )}
           </div>
 
           {/* Image Info */}
@@ -1322,7 +1334,11 @@ export default function GalleryManagementPage() {
                 <p className="text-sm text-gray-300 mb-2">{filteredImages[currentImageIndex]?.description}</p>
                 
                 {/* Enhanced Metadata Section */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs text-gray-400">
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-xs text-gray-400">
+                  <div>
+                    <span className="text-gray-500">Type:</span>
+                    <div className="text-white capitalize">{filteredImages[currentImageIndex]?.mediaType || 'Image'}</div>
+                  </div>
                   <div>
                     <span className="text-gray-500">Category:</span>
                     <div className="text-white">{filteredImages[currentImageIndex]?.category || 'N/A'}</div>
@@ -1331,6 +1347,14 @@ export default function GalleryManagementPage() {
                     <div>
                       <span className="text-gray-500">Dimensions:</span>
                       <div className="text-white">{filteredImages[currentImageIndex].width} × {filteredImages[currentImageIndex].height}</div>
+                    </div>
+                  )}
+                  {filteredImages[currentImageIndex]?.mediaType === 'video' && filteredImages[currentImageIndex]?.duration && (
+                    <div>
+                      <span className="text-gray-500">Duration:</span>
+                      <div className="text-white">
+                        {Math.floor(filteredImages[currentImageIndex].duration! / 60)}:{(filteredImages[currentImageIndex].duration! % 60).toFixed(0).padStart(2, '0')}
+                      </div>
                     </div>
                   )}
                   {filteredImages[currentImageIndex]?.aspectRatio && (

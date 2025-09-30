@@ -160,13 +160,10 @@ interface SortableMediaCardProps {
   index: number;
   onEdit: (image: GalleryMedia) => void;
   onDelete: (image: GalleryMedia) => void;
-  onToggleHero: (image: GalleryMedia) => void;
-  onToggleLandingHero: (image: GalleryMedia) => void;
-  onTogglePrivacy: (image: GalleryMedia) => void;
   onViewImage: (index: number) => void;
 }
 
-function SortableMediaCard({ image, index, onEdit, onDelete, onToggleHero, onToggleLandingHero, onTogglePrivacy, onViewImage }: SortableMediaCardProps) {
+function SortableMediaCard({ image, index, onEdit, onDelete, onViewImage }: SortableMediaCardProps) {
   const {
     attributes,
     listeners,
@@ -269,44 +266,6 @@ function SortableMediaCard({ image, index, onEdit, onDelete, onToggleHero, onTog
               +{image.tags.length - 3}
             </Badge>
           )}
-        </div>
-        <div className="space-y-2 mb-2">
-          <div className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              id={`hero-gallery-${image.id}`}
-              checked={image.isHero || false}
-              onChange={() => onToggleHero(image)}
-              className="w-4 h-4 text-yellow-600 bg-gray-100 border-gray-300 rounded focus:ring-yellow-500 dark:focus:ring-yellow-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-            />
-            <label htmlFor={`hero-gallery-${image.id}`} className="text-sm font-medium text-gray-900 dark:text-gray-300">
-              Hero Image Gallery
-            </label>
-          </div>
-          <div className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              id={`hero-landing-${image.id}`}
-              checked={image.isLandingHero || false}
-              onChange={() => onToggleLandingHero(image)}
-              className="w-4 h-4 text-orange-600 bg-gray-100 border-gray-300 rounded focus:ring-orange-500 dark:focus:ring-orange-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-            />
-            <label htmlFor={`hero-landing-${image.id}`} className="text-sm font-medium text-gray-900 dark:text-gray-300">
-              Hero Image Landing Page
-            </label>
-          </div>
-          <div className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              id={`private-${image.id}`}
-              checked={image.isPrivate || false}
-              onChange={() => onTogglePrivacy(image)}
-              className="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 rounded focus:ring-red-500 dark:focus:ring-red-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-            />
-            <label htmlFor={`private-${image.id}`} className="text-sm font-medium text-gray-900 dark:text-gray-300">
-              Hide from Public Gallery
-            </label>
-          </div>
         </div>
         {/* Image Metadata */}
         {(image.width && image.height) && (
@@ -615,93 +574,6 @@ export default function GalleryManagementPage() {
     } catch (error) {
       console.error('Error updating image:', error);
       showAlert('error', 'Failed to update image');
-    }
-  };
-
-  // Handle hero image toggle
-  const handleToggleHero = async (image: GalleryImage) => {
-    try {
-      setIsReordering(true);
-      
-      // If setting this image as hero, first unset any existing hero images
-      if (!image.isHero) {
-        const currentHeroImages = images.filter(img => img.isHero);
-        const unsetPromises = currentHeroImages.map(heroImage => 
-          updateDoc(doc(db, 'gallery_images', heroImage.id), { 
-            isHero: false,
-            updatedAt: new Date()
-          })
-        );
-        await Promise.all(unsetPromises);
-      }
-      
-      // Toggle the hero status of the current image
-      await updateDoc(doc(db, 'gallery_images', image.id), {
-        isHero: !image.isHero,
-        updatedAt: new Date()
-      });
-      
-      showAlert('success', image.isHero ? 'Hero image removed!' : 'Hero image set successfully!');
-      loadImages();
-    } catch (error) {
-      console.error('Error toggling hero image:', error);
-      showAlert('error', 'Failed to update hero image');
-    } finally {
-      setIsReordering(false);
-    }
-  };
-
-  // Handle landing page hero image toggle
-  const handleToggleLandingHero = async (image: GalleryImage) => {
-    try {
-      setIsReordering(true);
-      
-      // If setting this image as landing hero, first unset any existing landing hero images
-      if (!image.isLandingHero) {
-        const currentLandingHeroImages = images.filter(img => img.isLandingHero);
-        const unsetPromises = currentLandingHeroImages.map(heroImage => 
-          updateDoc(doc(db, 'gallery_images', heroImage.id), { 
-            isLandingHero: false,
-            updatedAt: new Date()
-          })
-        );
-        await Promise.all(unsetPromises);
-      }
-      
-      // Toggle the landing hero status of the current image
-      await updateDoc(doc(db, 'gallery_images', image.id), {
-        isLandingHero: !image.isLandingHero,
-        updatedAt: new Date()
-      });
-      
-      showAlert('success', image.isLandingHero ? 'Landing page hero image removed!' : 'Landing page hero image set successfully!');
-      loadImages();
-    } catch (error) {
-      console.error('Error toggling landing hero image:', error);
-      showAlert('error', 'Failed to update landing page hero image');
-    } finally {
-      setIsReordering(false);
-    }
-  };
-
-  // Handle privacy toggle (hide from public gallery)
-  const handleTogglePrivacy = async (image: GalleryImage) => {
-    try {
-      setIsReordering(true);
-      
-      // Toggle the privacy status of the current image
-      await updateDoc(doc(db, 'gallery_images', image.id), {
-        isPrivate: !image.isPrivate,
-        updatedAt: new Date()
-      });
-      
-      showAlert('success', image.isPrivate ? 'Image made visible in public gallery!' : 'Image hidden from public gallery!');
-      loadImages();
-    } catch (error) {
-      console.error('Error toggling privacy:', error);
-      showAlert('error', 'Failed to update privacy setting');
-    } finally {
-      setIsReordering(false);
     }
   };
 
@@ -1180,9 +1052,6 @@ export default function GalleryManagementPage() {
                 index={index}
                 onEdit={setEditingImage}
                 onDelete={handleDeleteImage}
-                onToggleHero={handleToggleHero}
-                onToggleLandingHero={handleToggleLandingHero}
-                onTogglePrivacy={handleTogglePrivacy}
                 onViewImage={handleViewImage}
               />
             ))}
@@ -1266,7 +1135,34 @@ export default function GalleryManagementPage() {
                     checked={editingImage.isHero || false}
                     onChange={(e) => setEditingImage(prev => prev ? { ...prev, isHero: e.target.checked } : null)}
                   />
-                  <label htmlFor="editIsHero" className="text-sm">Set as hero image</label>
+                  <label htmlFor="editIsHero" className="text-sm">Set as hero image for gallery</label>
+                </div>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="editIsLandingHero"
+                    checked={editingImage.isLandingHero || false}
+                    onChange={(e) => setEditingImage(prev => prev ? { ...prev, isLandingHero: e.target.checked } : null)}
+                  />
+                  <label htmlFor="editIsLandingHero" className="text-sm">Set as hero image for landing page</label>
+                </div>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="editIsPrivate"
+                    checked={editingImage.isPrivate || false}
+                    onChange={(e) => setEditingImage(prev => prev ? { ...prev, isPrivate: e.target.checked } : null)}
+                  />
+                  <label htmlFor="editIsPrivate" className="text-sm">Hide from public gallery</label>
+                </div>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="editIsFoundersGallery"
+                    checked={editingImage.isFoundersGallery || false}
+                    onChange={(e) => setEditingImage(prev => prev ? { ...prev, isFoundersGallery: e.target.checked } : null)}
+                  />
+                  <label htmlFor="editIsFoundersGallery" className="text-sm">Share to Founders Portal</label>
                 </div>
               </div>
               <div className="flex gap-2 pt-4">

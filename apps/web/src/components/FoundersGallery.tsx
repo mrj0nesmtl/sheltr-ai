@@ -37,10 +37,10 @@ export default function FoundersGallery() {
   useEffect(() => {
     const loadFoundersMedia = async () => {
       try {
+        // Simple query first - we'll sort in memory to avoid index issues
         const q = query(
           collection(db, 'gallery_images'),
-          where('isFoundersGallery', '==', true),
-          orderBy('createdAt', 'desc')
+          where('isFoundersGallery', '==', true)
         );
         
         const querySnapshot = await getDocs(q);
@@ -67,9 +67,14 @@ export default function FoundersGallery() {
           });
         });
         
+        // Sort by creation date (newest first)
+        mediaData.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+        
+        console.log('Founders gallery loaded:', mediaData.length, 'items');
         setMedia(mediaData);
       } catch (error) {
         console.error('Error loading founders gallery:', error);
+        console.error('Error details:', error);
       } finally {
         setLoading(false);
       }

@@ -129,10 +129,15 @@ export default function FoundersOnlyPage() {
               <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
                 Your Google email addresses provide you with comprehensive access to the SHELTR platform, including full Platform Administrator privileges and executive dashboard capabilities. As co-founders, you have unrestricted access to all system functions, financial oversight, user management, and strategic analytics. Upon logging into the main platform, you will be presented with a Non-Disclosure Agreement (NDA) and a personalized welcome letter tailored to your specific expertise and leadership role within SHELTR. This portal serves as your gateway to confidential business plans, financial reports, and strategic documentation that will be progressively published here as we advance toward our public launch.
               </p>
-              <div className="mt-4 p-3 bg-amber-50 dark:bg-amber-900/40 rounded-lg border border-amber-300 dark:border-amber-700">
-                <p className="text-sm text-amber-900 dark:text-amber-100 font-medium">
-                  🔒 Confidential Access: Only the five SHELTR co-founders have access to this executive portal and its strategic resources.
-                </p>
+              <div className="mt-4 p-4 bg-gradient-to-r from-purple-100 to-blue-100 dark:from-purple-900/30 dark:to-blue-900/30 rounded-lg border-2 border-purple-300 dark:border-purple-600">
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-6 bg-purple-600 rounded-full flex items-center justify-center">
+                    <span className="text-white text-sm">🔒</span>
+                  </div>
+                  <p className="text-purple-800 dark:text-purple-200 font-semibold text-sm">
+                    Confidential Access: Only the five SHELTR co-founders have access to this executive portal and its strategic resources.
+                  </p>
+                </div>
               </div>
             </CardContent>
           </Card>

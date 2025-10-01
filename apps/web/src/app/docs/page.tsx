@@ -25,7 +25,8 @@ import {
   BookOpen,
   Eye,
   Github,
-  CreditCard
+  CreditCard,
+  TreePine
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -268,12 +269,12 @@ export default function DocsPage() {
 
   const additionalResources = [
     {
-      title: "Development Roadmap",
-      description: "Detailed development timeline, milestones, and feature planning",
-      icon: Rocket,
-      link: "/docs/roadmap",
-      isInternal: true,
-      badge: "Planning"
+      title: "Project Tree",
+      description: "Comprehensive project structure reference for developers and contributors",
+      icon: TreePine,
+      link: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/PROJECT-TREE.md",
+      isInternal: false,
+      badge: "Reference"
     },
     {
       title: "GitHub Repository",

@@ -39,35 +39,88 @@ export interface NotificationCounts {
   unreadNotifications: number;
 }
 
+/**
+ * Extended notification counts for the admin dashboard
+ * This aggregates ALL notification types across the platform
+ */
+export interface NotificationDashboardCounts {
+  // Message Notifications
+  totalNotifications: number;
+  unreadMessages: number;
+  unreadNotifications: number;
+  
+  // Email Signups
+  totalEmailSignups: number;
+  recentEmailSignups: number; // Last 7 days
+  
+  // Contact Inquiries
+  contactInquiries: number;
+  recentContactInquiries: number; // Last 7 days
+  repliedContactInquiries: number;
+  unrepliedContactInquiries: number;
+  
+  // Admin Notifications
+  totalAdminNotifications: number;
+  unreadAdminNotifications: number;
+  securityAlerts: number;
+  fraudAlerts: number;
+  
+  // Shelter Applications (future)
+  pendingShelterapplications: number;
+  
+  // Active Users (from API)
+  activeUsers: number;
+}
+
 export interface EmailSignup {
   id?: string;
   email: string;
   name?: string;
   source: string;
-  createdAt: Timestamp;
+  page?: string;
+  signup_date?: Timestamp;
+  createdAt?: Timestamp;
   status: 'active' | 'pending' | 'unsubscribed';
 }
 
 export interface ContactInquiryNotification {
   id?: string;
-  email: string;
-  name: string;
+  email?: string;
+  sender_email?: string;
+  name?: string;
+  sender_name?: string;
   subject: string;
   message: string;
-  createdAt: Timestamp;
-  isRead: boolean;
+  inquiry_type: string;
+  source: string;
   priority: 'low' | 'normal' | 'high';
+  status: string;
+  responded: boolean;
+  created_at?: Timestamp;
+  createdAt?: Timestamp;
+  isRead?: boolean;
 }
 
 export interface AdminNotification {
   id?: string;
-  userId: string;
-  type: 'system' | 'message' | 'inquiry' | 'alert';
+  type: string; // platform_admin_login, fraud_alert, system_alert, etc.
   title: string;
-  content: string;
-  isRead: boolean;
-  createdAt: Timestamp;
-  priority: 'low' | 'normal' | 'high' | 'urgent';
+  message: string;
+  content?: string; // for backward compatibility
+  category?: string;
+  priority: 'low' | 'normal' | 'medium' | 'high' | 'urgent';
+  recipient_id?: string;
+  recipient_role?: string;
+  is_read?: boolean;
+  read?: boolean; // some use 'read' instead of 'is_read'
+  isRead?: boolean; // for backward compatibility
+  created_at?: Timestamp;
+  createdAt?: Timestamp;
+  read_at?: Timestamp;
+  expires_at?: Timestamp | null;
+  data?: any;
+  target_roles?: string[];
+  userId?: string; // for backward compatibility
 }
 
 export class NotificationService {
@@ -322,14 +375,37 @@ export async function getNotificationCounts(userId: string): Promise<Notificatio
 }
 
 /**
- * Get recent email signups (placeholder for contact form integration)
+ * Get recent email signups from newsletter_signups collection
  */
-export async function getRecentEmailSignups(limit: number = 10): Promise<EmailSignup[]> {
+export async function getRecentEmailSignups(maxResults: number = 10): Promise<EmailSignup[]> {
   try {
-    // This would query a contact_signups or similar collection
-    // For now, return empty array as this is primarily for contact forms
-    console.log('📧 Getting recent email signups (not implemented yet)');
-    return [];
+    console.log('📧 Getting recent email signups from newsletter_signups collection...');
+    
+    const q = query(
+      collection(db, 'newsletter_signups'),
+      orderBy('signup_date', 'desc'),
+      limit(maxResults)
+    );
+    
+    const querySnapshot = await getDocs(q);
+    const signups: EmailSignup[] = [];
+    
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      signups.push({
+        id: doc.id,
+        email: data.email,
+        name: data.name || data.attribution || undefined,
+        source: data.source || 'unknown',
+        page: data.page || 'unknown',
+        signup_date: data.signup_date,
+        status: data.status || 'active',
+        createdAt: data.signup_date || data.created_at
+      } as EmailSignup);
+    });
+    
+    console.log(`✅ Found ${signups.length} email signups`);
+    return signups;
   } catch (error) {
     console.error('❌ Error getting recent email signups:', error);
     return [];
@@ -373,14 +449,14 @@ export async function createContactInquiryNotification(inquiryData: {
 /**
  * Get recent contact inquiries (for notifications dashboard)
  */
-export async function getRecentContactInquiries(limit: number = 10): Promise<ContactInquiryNotification[]> {
+export async function getRecentContactInquiries(maxResults: number = 10): Promise<ContactInquiryNotification[]> {
   try {
     console.log('📞 Getting recent contact inquiries...');
     
     const q = query(
       collection(db, 'contact_inquiries'),
       orderBy('createdAt', 'desc'),
-      limit(limit)
+      limit(maxResults)
     );
 
     const querySnapshot = await getDocs(q);
@@ -402,29 +478,181 @@ export async function getRecentContactInquiries(limit: number = 10): Promise<Con
 }
 
 /**
- * Get admin notifications
+ * Get admin notifications from the admin_notifications collection
+ * This queries ONLY admin notifications (not message notifications)
  */
-export async function getAdminNotifications(userId: string, limit: number = 20): Promise<AdminNotification[]> {
+export async function getAdminNotifications(userId: string, maxResults: number = 20): Promise<AdminNotification[]> {
   try {
-    // This would query admin notifications or use the message notifications
-    const messageNotifications = await NotificationService.getUnreadNotifications(userId);
+    console.log('🔔 Getting admin notifications for userId:', userId);
     
-    // Convert message notifications to admin notifications format
-    const adminNotifications: AdminNotification[] = messageNotifications.map(msg => ({
-      id: msg.id,
-      userId: msg.userId,
-      type: 'message' as const,
-      title: `Message from ${msg.fromUserDisplayName}`,
-      content: msg.content,
-      isRead: msg.isRead,
-      createdAt: msg.createdAt,
-      priority: msg.type === 'urgent' ? 'urgent' : 'normal'
-    }));
+    // Query admin_notifications collection for this user
+    const q = query(
+      collection(db, 'admin_notifications'),
+      where('recipient_id', '==', userId),
+      orderBy('created_at', 'desc'),
+      limit(maxResults)
+    );
+
+    const querySnapshot = await getDocs(q);
+    const adminNotifications: AdminNotification[] = [];
+
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      adminNotifications.push({
+        id: doc.id,
+        type: data.type,
+        title: data.title,
+        message: data.message,
+        content: data.message, // for backward compatibility
+        category: data.category,
+        priority: data.priority || 'normal',
+        recipient_id: data.recipient_id,
+        recipient_role: data.recipient_role,
+        is_read: data.is_read,
+        read: data.read,
+        isRead: data.is_read || data.read || false,
+        created_at: data.created_at,
+        createdAt: data.created_at,
+        read_at: data.read_at,
+        expires_at: data.expires_at,
+        data: data.data,
+        target_roles: data.target_roles
+      });
+    });
     
-    return adminNotifications.slice(0, limit);
+    console.log(`✅ Found ${adminNotifications.length} admin notifications`);
+    return adminNotifications;
   } catch (error) {
     console.error('❌ Error getting admin notifications:', error);
     return [];
+  }
+}
+
+/**
+ * Get unified notification dashboard counts
+ * Aggregates ALL notification types for the admin dashboard
+ */
+export async function getNotificationDashboardCounts(
+  userId: string,
+  userRole: string
+): Promise<NotificationDashboardCounts> {
+  try {
+    console.log('📊 Getting dashboard notification counts for userId:', userId, 'role:', userRole);
+    
+    // Calculate date for "last 7 days"
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    const sevenDaysAgoTimestamp = Timestamp.fromDate(sevenDaysAgo);
+    
+    // 1. Get message notification counts
+    const messageNotificationsQuery = query(
+      collection(db, 'message_notifications'),
+      where('userId', '==', userId)
+    );
+    const messageNotificationsSnapshot = await getDocs(messageNotificationsQuery);
+    const totalNotifications = messageNotificationsSnapshot.size;
+    const unreadMessages = messageNotificationsSnapshot.docs.filter(
+      doc => !doc.data().isRead && (doc.data().type === 'message_received' || doc.data().type === 'message_replied')
+    ).length;
+    
+    // 2. Get email signups
+    const emailSignupsQuery = query(collection(db, 'newsletter_signups'));
+    const emailSignupsSnapshot = await getDocs(emailSignupsQuery);
+    const totalEmailSignups = emailSignupsSnapshot.size;
+    
+    // Count recent signups (last 7 days)
+    const recentEmailSignups = emailSignupsSnapshot.docs.filter(doc => {
+      const signupDate = doc.data().signup_date;
+      if (!signupDate) return false;
+      return signupDate.toDate() > sevenDaysAgo;
+    }).length;
+    
+    // 3. Get contact inquiries
+    const contactInquiriesQuery = query(collection(db, 'contact_inquiries'));
+    const contactInquiriesSnapshot = await getDocs(contactInquiriesQuery);
+    const contactInquiries = contactInquiriesSnapshot.size;
+    
+    // Count recent inquiries (last 7 days)
+    const recentContactInquiries = contactInquiriesSnapshot.docs.filter(doc => {
+      const createdAt = doc.data().created_at;
+      if (!createdAt) return false;
+      return createdAt.toDate() > sevenDaysAgo;
+    }).length;
+    
+    // Count replied vs unreplied
+    const repliedContactInquiries = contactInquiriesSnapshot.docs.filter(
+      doc => doc.data().responded === true
+    ).length;
+    const unrepliedContactInquiries = contactInquiriesSnapshot.docs.filter(
+      doc => doc.data().responded === false || doc.data().responded === undefined
+    ).length;
+    
+    // 4. Get admin notifications
+    const adminNotificationsQuery = query(
+      collection(db, 'admin_notifications'),
+      where('recipient_id', '==', userId)
+    );
+    const adminNotificationsSnapshot = await getDocs(adminNotificationsQuery);
+    const totalAdminNotifications = adminNotificationsSnapshot.size;
+    const unreadAdminNotifications = adminNotificationsSnapshot.docs.filter(
+      doc => !doc.data().is_read && !doc.data().read
+    ).length;
+    
+    // Count security and fraud alerts
+    const securityAlerts = adminNotificationsSnapshot.docs.filter(
+      doc => doc.data().type === 'system_alert'
+    ).length;
+    const fraudAlerts = adminNotificationsSnapshot.docs.filter(
+      doc => doc.data().type === 'fraud_alert'
+    ).length;
+    
+    // 5. Shelter applications (placeholder - collection doesn't exist yet)
+    const pendingShelterapplications = 0;
+    
+    // 6. Active users (placeholder - will be fetched from API separately)
+    const activeUsers = 0;
+    
+    const counts: NotificationDashboardCounts = {
+      totalNotifications,
+      unreadMessages,
+      unreadNotifications: unreadMessages + unreadAdminNotifications,
+      totalEmailSignups,
+      recentEmailSignups,
+      contactInquiries,
+      recentContactInquiries,
+      repliedContactInquiries,
+      unrepliedContactInquiries,
+      totalAdminNotifications,
+      unreadAdminNotifications,
+      securityAlerts,
+      fraudAlerts,
+      pendingShelterapplications,
+      activeUsers
+    };
+    
+    console.log('✅ Dashboard notification counts:', counts);
+    return counts;
+    
+  } catch (error) {
+    console.error('❌ Error getting notification dashboard counts:', error);
+    // Return zeros on error
+    return {
+      totalNotifications: 0,
+      unreadMessages: 0,
+      unreadNotifications: 0,
+      totalEmailSignups: 0,
+      recentEmailSignups: 0,
+      contactInquiries: 0,
+      recentContactInquiries: 0,
+      repliedContactInquiries: 0,
+      unrepliedContactInquiries: 0,
+      totalAdminNotifications: 0,
+      unreadAdminNotifications: 0,
+      securityAlerts: 0,
+      fraudAlerts: 0,
+      pendingShelterapplications: 0,
+      activeUsers: 0
+    };
   }
 }
 
@@ -480,14 +708,12 @@ export async function createFraudAlertNotification(alertData: {
   userId?: string;
 }): Promise<void> {
   try {
-    const notificationData: AdminNotification = {
-      id: '',
+    const notificationData = {
       type: 'fraud_alert',
       title: `Fraud Alert: ${alertData.level.toUpperCase()}`,
       message: alertData.description,
       details: alertData.details,
-      isRead: false,
-      createdAt: new Date(),
+      is_read: false,
       priority: alertData.level === 'high' ? 'high' : alertData.level === 'medium' ? 'medium' : 'low',
       target_roles: ['super_admin', 'platform_admin']
     };

@@ -139,10 +139,10 @@ export default function TokenomicsPage() {
               </div>
               <div>
                 <h3 className="text-xl font-bold mb-2 text-amber-900 dark:text-amber-100">
-                  🚨 Strategic Architecture Transformation
+                  Strategic Architecture Transformation
                 </h3>
                 <p className="text-amber-800 dark:text-amber-200 leading-relaxed mb-4">
-                  Following expert peer-analysis by our collegues and payments specialists, SHELTR is evolving from 
+                  October 1, 2025: Following expert peer-analysis by our collegues and payments specialists, SHELTR is evolving from 
                   a dual-token architecture to a <strong>Single Stable Token Investment Fund</strong> model.
                 </p>
                 <div className="grid md:grid-cols-2 gap-4 text-sm">

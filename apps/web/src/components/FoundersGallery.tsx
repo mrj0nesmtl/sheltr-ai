@@ -278,12 +278,23 @@ export default function FoundersGallery() {
           <div className="relative max-w-[90vw] max-h-[90vh] flex items-center justify-center">
             {media[selectedMedia]?.mediaType === 'video' ? (
               <video
-                src={media[selectedMedia]?.src || ''}
+                key={media[selectedMedia]?.src}
                 controls
                 autoPlay
+                playsInline
+                muted
                 className="max-w-full max-h-full object-contain rounded-lg"
                 style={{ maxHeight: 'calc(90vh - 120px)' }}
+                onError={(e) => {
+                  console.error('❌ Video load error:', e);
+                  console.error('Video src:', media[selectedMedia]?.src);
+                  console.error('Video element:', e.currentTarget);
+                }}
+                onLoadStart={() => console.log('🎥 Video loading:', media[selectedMedia]?.src)}
+                onCanPlay={() => console.log('✅ Video can play:', media[selectedMedia]?.title)}
               >
+                <source src={media[selectedMedia]?.src || ''} type="video/mp4" />
+                <source src={media[selectedMedia]?.src || ''} type="video/quicktime" />
                 Your browser does not support the video tag.
               </video>
             ) : (

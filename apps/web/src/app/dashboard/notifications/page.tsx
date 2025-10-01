@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
-import { getNotificationCounts, getRecentEmailSignups, getRecentContactInquiries, getAdminNotifications, markNotificationAsRead, NotificationCounts, EmailSignup, ContactInquiryNotification, AdminNotification, formatRelativeTime } from '@/services/notificationService';
+import { getNotificationDashboardCounts, getRecentEmailSignups, getRecentContactInquiries, getAdminNotifications, markNotificationAsRead, NotificationDashboardCounts, EmailSignup, ContactInquiryNotification, AdminNotification, formatRelativeTime } from '@/services/notificationService';
 import { 
   Mail, 
   Bell, 
@@ -28,7 +28,7 @@ import {
 
 export default function NotificationsPage() {
   const { user } = useAuth();
-  const [notificationCounts, setNotificationCounts] = useState<NotificationCounts | null>(null);
+  const [notificationCounts, setNotificationCounts] = useState<NotificationDashboardCounts | null>(null);
   const [allEmailSignups, setAllEmailSignups] = useState<EmailSignup[]>([]);
   const [filteredSignups, setFilteredSignups] = useState<EmailSignup[]>([]);
   const [allContactInquiries, setAllContactInquiries] = useState<ContactInquiryNotification[]>([]);
@@ -97,12 +97,19 @@ export default function NotificationsPage() {
         console.warn('⚠️ Could not fetch active users from API:', apiError);
       }
       
+      // Get user role (default to super_admin if not set)
+      const userRole = user?.role || 'super_admin';
+      const userId = user?.uid || '';
+      
       const [counts, emailSignups, contactInquiries, adminNotifications] = await Promise.all([
-        getNotificationCounts(),
+        getNotificationDashboardCounts(userId, userRole), // NEW: Unified dashboard counts
         getRecentEmailSignups(50), // Get more for the dedicated page
         getRecentContactInquiries(50), // Get recent contact inquiries
-        getAdminNotifications(50) // Get recent admin notifications
+        getAdminNotifications(userId, 50) // Get recent admin notifications
       ]);
+      
+      // Update active users count from API
+      counts.activeUsers = activeUsersCount;
       
       setNotificationCounts(counts);
       setAllEmailSignups(emailSignups);

@@ -42,7 +42,7 @@ export default function BlockchainPage() {
               </div>
               <div>
                 <h3 className="text-lg font-bold mb-2 text-amber-900 dark:text-amber-100">
-                  🚨 Blockchain Architecture v2.0 Transformation
+                  Blockchain Architecture v2.0 Transformation
                 </h3>
                 <p className="text-amber-800 dark:text-amber-200 text-sm leading-relaxed">
                   Our blockchain implementation has evolved from dual-token complexity to a <strong>single-token stable fund ecosystem</strong> 
@@ -62,7 +62,7 @@ export default function BlockchainPage() {
               <Shield className="h-12 w-12 text-emerald-600 mt-1" />
               <div className="flex-1">
                 <div className="mb-3">
-                  <h1 className="text-3xl sm:text-4xl font-bold mb-2 leading-tight">⛓️ SHELTR Blockchain Architecture v2.0</h1>
+                  <h1 className="text-3xl sm:text-4xl font-bold mb-2 leading-tight">SHELTR Blockchain Architecture v2.0</h1>
                   <Badge className="bg-emerald-500 text-white text-sm">STRATEGIC IMPLEMENTATION</Badge>
                 </div>
                 <p className="text-lg text-muted-foreground mb-3">

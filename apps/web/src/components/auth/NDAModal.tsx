@@ -190,7 +190,8 @@ export function NDAModal({ onAccept, onCancel }: NDAModalProps) {
                   <li>Use information solely for authorized platform administration</li>
                   <li>Not disclose information to unauthorized parties</li>
                   <li>Implement reasonable security measures to protect data</li>
-                  <li>Report any suspected data breaches immediately</li>
+                  <li>Report any suspected data breaches immediately to the Development Team</li>
+                  <li>Report all security concerns, vulnerabilities, or suspicious activities to the Development Team</li>
                   <li>Return/delete all confidential information upon role termination</li>
                 </ul>
               </div>
@@ -204,6 +205,24 @@ export function NDAModal({ onAccept, onCancel }: NDAModalProps) {
                   <li>Use confidential information for personal benefit</li>
                   <li>Discuss sensitive information outside secure channels</li>
                 </ul>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-semibold mb-3 text-red-600">🔒 SECURITY REPORTING</h3>
+                <div className="bg-red-50 dark:bg-red-900/20 rounded-lg p-4 border border-red-200 dark:border-red-800">
+                  <p className="font-medium text-red-800 dark:text-red-200 mb-2">
+                    <strong>IMPORTANT:</strong> Report all security concerns immediately to the Development Team
+                  </p>
+                  <ul className="list-disc pl-6 space-y-1 text-red-700 dark:text-red-300">
+                    <li>Suspected data breaches or unauthorized access attempts</li>
+                    <li>Security vulnerabilities or system weaknesses</li>
+                    <li>Suspicious user activities or unusual system behavior</li>
+                    <li>Any potential threats to platform or user data security</li>
+                  </ul>
+                  <p className="mt-3 text-sm text-red-600 dark:text-red-400">
+                    Contact the Development Team through secure channels immediately upon discovery of any security issues.
+                  </p>
+                </div>
               </div>
 
               <div>

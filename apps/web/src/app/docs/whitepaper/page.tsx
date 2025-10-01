@@ -42,7 +42,7 @@ export default function WhitepaperPage() {
               </div>
               <div>
                 <h3 className="text-lg font-bold mb-2 text-amber-900 dark:text-amber-100">
-                  🚨 Strategic Architecture Transformation v2.0
+                  Strategic Architecture Transformation v2.0
                 </h3>
                 <p className="text-amber-800 dark:text-amber-200 text-sm leading-relaxed">
                   This whitepaper has been completely overhauled to reflect our new <strong>enterprise-grade single-token stable fund architecture</strong>, 
@@ -62,18 +62,18 @@ export default function WhitepaperPage() {
               <FileText className="h-12 w-12 text-emerald-600 mt-1" />
               <div className="flex-1">
                 <div className="mb-3">
-                  <h1 className="text-3xl sm:text-4xl font-bold mb-2 leading-tight">Enterprise White Paper v2.0</h1>
-                  <Badge className="bg-emerald-500 text-white text-sm">STRATEGIC IMPLEMENTATION</Badge>
+                  <h1 className="text-3xl sm:text-4xl font-bold mb-2 leading-tight">White Paper v2.0</h1>
+                  <Badge className="bg-emerald-500 text-white text-sm">Peer Reviewed</Badge>
                 </div>
                 <p className="text-lg text-muted-foreground mb-3">
-                  Revolutionary enterprise-grade platform combining traditional payment stability with blockchain transparency through single-token architecture
+                  Enterprise-grade platform combining traditional payment stability with blockchain transparency through single-token architecture
                 </p>
                 <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground mb-4">
                   <span>Version 2.0.0</span>
                   <span>•</span>
                   <span>September 26, 2025</span>
                   <span>•</span>
-                  <Badge className="bg-blue-500 text-white text-xs">ENTERPRISE READY</Badge>
+                  <Badge className="bg-blue-500 text-white text-xs">Published</Badge>
                 </div>
                 
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
@@ -103,10 +103,10 @@ export default function WhitepaperPage() {
             {/* Document Notice */}
             <div className="bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-lg p-6 mb-8">
               <h3 className="font-semibold text-emerald-800 dark:text-emerald-200 mb-2">
-                📋 Enterprise Strategic Document
+                📋 Strategic Document
               </h3>
               <p className="text-emerald-700 dark:text-emerald-300 text-sm">
-                This enterprise whitepaper outlines our revolutionary single-token stable fund architecture, 
+                This  whitepaper outlines our revolutionary single-token stable fund architecture, 
                 designed for CFOs, payment architects, enterprise partners, and institutional investors. 
                 The complete strategic analysis is available in our GitHub repository.
               </p>
@@ -117,7 +117,7 @@ export default function WhitepaperPage() {
               <h2 className="text-2xl font-bold mb-4">Table of Contents</h2>
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <h3 className="font-semibold">Enterprise Framework</h3>
+                  <h3 className="font-semibold">Multi-Tenent SaaS Framework</h3>
                   <ul className="space-y-1 text-sm text-muted-foreground">
                     <li>• Theory of Change & Social Impact</li>
                     <li>• Single-Token Stable Architecture</li>
@@ -142,7 +142,7 @@ export default function WhitepaperPage() {
             {/* Key Highlights */}
             <div className="space-y-8">
               <div>
-                <h2 className="text-3xl font-bold mb-6">Executive Abstract</h2>
+                <h2 className="text-3xl font-bold mb-6">Abstract</h2>
                 <div className="prose prose-lg max-w-none dark:prose-invert">
                   <p>
                     SHELTR represents a revolutionary enterprise-grade platform that addresses homelessness through traditional payment 
@@ -151,7 +151,7 @@ export default function WhitepaperPage() {
                     a zero-risk bridge between donors and individuals experiencing homelessness while building sustainable long-term solutions.
                   </p>
                   <p>
-                    Our breakthrough <strong>single-token stable architecture</strong> uses the SHELTR Stablecoin (USDT-pegged) exclusively 
+                    Our <strong>single-token stable architecture</strong> uses the SHELTR Stablecoin (USDT-pegged) exclusively 
                     for housing fund tracking and transparency, while participants receive <strong>virtual debit cards</strong> with 80% of donations, 
                     eliminating cryptocurrency volatility exposure. This innovative approach ensures <strong>100% of donations reach their intended purposes</strong>: 
                     80% participant support via traditional payment cards, 15% housing fund growth through <strong>guaranteed 4-6% APY institutional staking</strong>, 
@@ -215,7 +215,7 @@ export default function WhitepaperPage() {
                     </div>
                   </div>
 
-                  <h3 className="text-xl font-semibold mb-4 mt-6">Enterprise Security & Compliance</h3>
+                  <h3 className="text-xl font-semibold mb-4 mt-6">Security & Compliance</h3>
                   <p>
                     Every transaction is secured through enterprise-grade infrastructure including payment processing PCI DSS Level 1 compliance, 
                     Coinbase Prime SOC 2 Type II certified custody, and Base network smart contract security. Our compliance framework 
@@ -259,7 +259,7 @@ export default function WhitepaperPage() {
               </div>
 
               <div>
-                <h2 className="text-3xl font-bold mb-6">Enterprise Architecture Highlights</h2>
+                <h2 className="text-3xl font-bold mb-6">Platform Architecture Highlights</h2>
                 <div className="grid md:grid-cols-2 gap-8">
                   <div>
                     <h3 className="text-xl font-semibold mb-4">Infrastructure Innovation</h3>
@@ -384,7 +384,7 @@ export default function WhitepaperPage() {
                   <Card className="text-center border-2">
                     <CardContent className="pt-6">
                       <Building2 className="h-10 w-10 mx-auto mb-3 text-blue-600" />
-                      <h3 className="font-semibold mb-2">CFOs & Financial Leaders</h3>
+                      <h3 className="font-semibold mb-2">Stakeholders</h3>
                       <p className="text-sm text-muted-foreground">Strategic financial planning and risk management</p>
                     </CardContent>
                   </Card>

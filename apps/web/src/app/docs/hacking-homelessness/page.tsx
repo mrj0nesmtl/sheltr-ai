@@ -42,7 +42,7 @@ export default function HackingHomelessnessPage() {
               </div>
               <div>
                 <h3 className="text-lg font-bold mb-2 text-amber-900 dark:text-amber-100">
-                  🚨 Theory of Change v2.0 - Tech-for-Good Evolution
+                  Theory of Change v2.0 - Tech-for-Good Evolution
                 </h3>
                 <p className="text-amber-800 dark:text-amber-200 text-sm leading-relaxed">
                   Our foundational thesis has evolved to emphasize <strong>AI-powered resource allocation</strong>, 

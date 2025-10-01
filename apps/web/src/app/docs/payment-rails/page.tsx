@@ -62,7 +62,7 @@ export default function PaymentRailsPage() {
             </div>
             <div className="flex justify-center mb-4">
               <Badge className="bg-emerald-600 text-white text-sm px-4 py-2">
-                Enterprise Architecture v2.0
+                Architecture v2.0
               </Badge>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
@@ -100,7 +100,7 @@ export default function PaymentRailsPage() {
               </div>
               <div>
                 <h3 className="text-xl font-bold mb-2 text-amber-900 dark:text-amber-100">
-                  🚨 Strategic Architecture Pivot
+                  Strategic Architecture Pivot
                 </h3>
                 <p className="text-amber-800 dark:text-amber-200 leading-relaxed">
                   Following extensive analysis by our payments and blockchairn peers, SHELTR has pivoted from 

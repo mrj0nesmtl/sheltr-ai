@@ -97,8 +97,8 @@ export default function DocsPage() {
       lastUpdated: "September 21, 2025"
     },
     {
-      title: "Technical White Paper",
-      description: "Revolutionary enterprise-grade platform combining traditional payment stability with blockchain transparency through single-token architecture",
+      title: "White Paper",
+      description: "Explore SHELTR's enterprise-grade platform combining traditional payment stability with blockchain transparency through single-token architecture",
       icon: FileText,
       badge: "Published",
       badgeColor: "bg-emerald-500",
@@ -145,7 +145,7 @@ export default function DocsPage() {
       lastUpdated: "September 26, 2025"
     },
     {
-      title: "System Design Architecture",
+      title: "Systems Design",
       description: "Multi-tenant SaaS architecture with enterprise payment infrastructure, visual flow diagrams, and comprehensive system integration",
       icon: Building2,
       badge: "Architecture",
@@ -169,7 +169,7 @@ export default function DocsPage() {
       lastUpdated: "September 27, 2025"
     },
     {
-      title: "Chatbot Agent Architecture",
+      title: "Agent Architecture",
       description: "Comprehensive guide to SHELTR-AI's multi-agent chatbot system with MCP-powered workflow automation",
       icon: MessageSquare,
       badge: "AI System",
@@ -181,7 +181,7 @@ export default function DocsPage() {
       lastUpdated: "September 22, 2025"
     },
     {
-      title: "MCP Integration Guide",
+      title: "MCP Integrations",
       description: "Model Context Protocol implementation enabling AI agents to execute real-world actions and automated workflows",
       icon: Rocket,
       badge: "MCP System",
@@ -193,8 +193,8 @@ export default function DocsPage() {
       lastUpdated: "September 22, 2025"
     },
     {
-      title: "OpenAI MCP Demo",
-      description: "Interactive demonstration of SHELTR-AI's enhanced chatbot powered by OpenAI Agents SDK and specialized MCP agents",
+      title: "OpenAI MCP",
+      description: "Interactive demonstration of SHELTR's enhanced chatbot powered by OpenAI Agents SDK and specialized MCP agents",
       icon: MessageSquare,
       badge: "Live Demo",
       badgeColor: "bg-gradient-to-r from-yellow-500 to-orange-600",
@@ -205,7 +205,7 @@ export default function DocsPage() {
       lastUpdated: "September 22, 2025"
     },
     {
-      title: "Complete Functionality Matrix",
+      title: "Functionality Matrix",
       description: "Comprehensive testing matrix for all features, data storage/retrieval, business logic, and user workflows",
       icon: CheckSquare,
       badge: "QA Framework",
@@ -253,7 +253,7 @@ export default function DocsPage() {
       lastUpdated: "September 21, 2025"
     },
     {
-      title: "Participant User Guide",
+      title: "Participant Guide",
       description: "Complete guide for participants using the SHELTR platform, from onboarding to advanced features",
       icon: Users,
       badge: "User Guide",
@@ -441,7 +441,7 @@ export default function DocsPage() {
                 🔍 SEMANTIC SEARCH
               </Badge>
               <Badge className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-3 py-1">
-                🧠 INTELLIGENT HYPERBOTS
+                🧠 HYPERBOTS
               </Badge>
               <Badge className="bg-blue-700 hover:bg-blue-800 text-white font-semibold px-3 py-1">
                 🏦 COINBASE
@@ -460,7 +460,7 @@ export default function DocsPage() {
             {/* Last Updated Badge */}
             <div className="flex justify-center">
               <Badge className="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 text-sm">
-                📅 LAST UPDATED: September 27, 2025
+                📅 LAST UPDATED: October 1, 2025
               </Badge>
             </div>
           </div>

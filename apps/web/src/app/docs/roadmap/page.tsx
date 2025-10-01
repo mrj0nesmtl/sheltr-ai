@@ -20,7 +20,9 @@ import {
   TrendingUp,
   Globe,
   Smartphone,
-  Blocks
+  Blocks,
+  Home,
+  ChevronRight
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -55,6 +57,39 @@ export default function RoadmapPage() {
           </div>
         </div>
       </header>
+
+      {/* Breadcrumb Navigation */}
+      <div className="bg-white/50 dark:bg-slate-900/50 border-b">
+        <div className="container mx-auto px-4 py-3">
+          <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              asChild
+              className="hover:bg-muted p-1 h-auto"
+            >
+              <Link href="/">
+                <Home className="h-4 w-4" />
+              </Link>
+            </Button>
+            <ChevronRight className="h-4 w-4" />
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              asChild
+              className="hover:bg-muted px-2 py-1 h-auto"
+            >
+              <Link href="/docs">
+                Documentation
+              </Link>
+            </Button>
+            <ChevronRight className="h-4 w-4" />
+            <span className="font-medium text-foreground">
+              Development Roadmap
+            </span>
+          </div>
+        </div>
+      </div>
 
       {/* Hero Section */}
       <section className="py-16 px-4">

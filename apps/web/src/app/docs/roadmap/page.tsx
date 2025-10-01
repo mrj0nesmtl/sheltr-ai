@@ -19,7 +19,8 @@ import {
   Clock,
   TrendingUp,
   Globe,
-  Smartphone
+  Smartphone,
+  Blocks
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -40,15 +41,15 @@ export default function RoadmapPage() {
               <ThemeLogo />
               <div>
                 <h1 className="text-xl font-bold">Development Roadmap</h1>
-                <p className="text-sm text-muted-foreground">60-Day Public Launch Timeline</p>
+                <p className="text-sm text-muted-foreground">180-Day Production Launch Timeline</p>
               </div>
             </Link>
             <div className="flex items-center space-x-4">
               <Badge className="bg-orange-600 hover:bg-orange-700 text-white">
-                v3.0 - Launch Plan
+                v4.0 - Production Plan
               </Badge>
               <Badge variant="outline" className="text-xs">
-                Updated: September 27, 2025
+                Updated: September 29, 2025
               </Badge>
             </div>
           </div>
@@ -61,14 +62,14 @@ export default function RoadmapPage() {
           <div className="text-center mb-12">
             <div className="flex items-center justify-center space-x-2 mb-4">
               <Rocket className="h-8 w-8 text-orange-600" />
-              <Badge className="bg-orange-600 text-white px-4 py-1">60-DAY LAUNCH PLAN</Badge>
+              <Badge className="bg-orange-600 text-white px-4 py-1">180-DAY PRODUCTION PLAN</Badge>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
-              Public Launch Timeline
+              Production Launch Timeline
             </h1>
             <p className="text-xl text-muted-foreground mb-8 max-w-4xl mx-auto">
-              Production-ready enterprise SaaS platform with AI hyper chatbot, knowledge base, 
-              and client onboarding strategy launching November 26, 2025
+              Enterprise-ready platform with complete payment rails, blockchain integration, 
+              and comprehensive testing launching Spring 2026
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button asChild size="lg" className="bg-orange-600 hover:bg-orange-700">
@@ -92,29 +93,29 @@ export default function RoadmapPage() {
             </div>
           </div>
 
-          {/* Launch Countdown */}
+          {/* Development Progress */}
           <div className="bg-gradient-to-r from-orange-100 to-red-100 dark:from-orange-900/20 dark:to-red-900/20 rounded-lg p-8 mb-12 text-center">
-            <h2 className="text-2xl font-bold mb-4">🚀 Launch Countdown</h2>
+            <h2 className="text-2xl font-bold mb-4">🚀 Development Progress</h2>
             <div className="grid md:grid-cols-4 gap-4 mb-6">
               <div className="bg-white dark:bg-slate-800 rounded-lg p-4">
-                <div className="text-2xl font-bold text-orange-600">60</div>
-                <div className="text-sm text-muted-foreground">Days to Launch</div>
+                <div className="text-2xl font-bold text-orange-600">180</div>
+                <div className="text-sm text-muted-foreground">Days to Production</div>
               </div>
               <div className="bg-white dark:bg-slate-800 rounded-lg p-4">
-                <div className="text-2xl font-bold text-green-600">3</div>
-                <div className="text-sm text-muted-foreground">Target Shelter Clients</div>
+                <div className="text-2xl font-bold text-green-600">5</div>
+                <div className="text-sm text-muted-foreground">Development Phases</div>
               </div>
               <div className="bg-white dark:bg-slate-800 rounded-lg p-4">
-                <div className="text-2xl font-bold text-blue-600">100+</div>
-                <div className="text-sm text-muted-foreground">Target Participants</div>
+                <div className="text-2xl font-bold text-blue-600">3</div>
+                <div className="text-sm text-muted-foreground">Major Integrations</div>
               </div>
               <div className="bg-white dark:bg-slate-800 rounded-lg p-4">
-                <div className="text-2xl font-bold text-purple-600">$10K+</div>
-                <div className="text-sm text-muted-foreground">Monthly Donations</div>
+                <div className="text-2xl font-bold text-purple-600">Q2</div>
+                <div className="text-sm text-muted-foreground">2026 Launch</div>
               </div>
             </div>
-            <Progress value={85} className="w-full max-w-md mx-auto" />
-            <p className="text-sm text-muted-foreground mt-2">Platform Completion: 85%</p>
+            <Progress value={65} className="w-full max-w-md mx-auto" />
+            <p className="text-sm text-muted-foreground mt-2">Platform Foundation: 65% Complete</p>
           </div>
         </div>
       </section>
@@ -123,9 +124,9 @@ export default function RoadmapPage() {
       <section className="py-12 px-4">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold mb-4">60-Day Launch Phases</h2>
+            <h2 className="text-3xl font-bold mb-4">180-Day Development Phases</h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              Structured approach from enterprise payment integration to public launch with real shelter clients
+              Comprehensive development approach from payment rails to blockchain integration and production testing
             </p>
           </div>
 
@@ -139,8 +140,8 @@ export default function RoadmapPage() {
                       <span className="text-orange-600 font-bold">1</span>
                     </div>
                     <div>
-                      <CardTitle className="text-orange-600">Enterprise Payment Integration</CardTitle>
-                      <CardDescription>October 1-15, 2025 • 2 Weeks</CardDescription>
+                      <CardTitle className="text-orange-600">Payment Rails Development</CardTitle>
+                      <CardDescription>October 2025 - January 2026 • 3 Months</CardDescription>
                     </div>
                   </div>
                   <Badge className="bg-orange-600 text-white">Critical Milestone</Badge>
@@ -152,30 +153,30 @@ export default function RoadmapPage() {
                     <h4 className="font-semibold mb-3">Key Deliverables</h4>
                     <ul className="space-y-2 text-sm">
                       <li className="flex items-center gap-2">
-                        <CheckCircle className="h-4 w-4 text-green-600" />
-                        <span>Adyen Production Setup</span>
+                        <Clock className="h-4 w-4 text-orange-600" />
+                        <span>Adyen Integration Architecture</span>
                       </li>
                       <li className="flex items-center gap-2">
-                        <CheckCircle className="h-4 w-4 text-green-600" />
-                        <span>Coinbase Base Integration</span>
+                        <Clock className="h-4 w-4 text-orange-600" />
+                        <span>Virtual Card System Development</span>
                       </li>
                       <li className="flex items-center gap-2">
-                        <CheckCircle className="h-4 w-4 text-green-600" />
-                        <span>Virtual Card System</span>
+                        <Clock className="h-4 w-4 text-orange-600" />
+                        <span>Payment Processing Logic</span>
                       </li>
                       <li className="flex items-center gap-2">
-                        <CheckCircle className="h-4 w-4 text-green-600" />
-                        <span>Security Audit</span>
+                        <Clock className="h-4 w-4 text-orange-600" />
+                        <span>Security Framework Implementation</span>
                       </li>
                     </ul>
                   </div>
                   <div>
                     <h4 className="font-semibold mb-3">Success Criteria</h4>
                     <ul className="space-y-2 text-sm">
-                      <li>• Live payment processing with virtual cards</li>
-                      <li>• SHELTR Stablecoin deployed on Base network</li>
-                      <li>• 80/15/5 SmartFund™ distribution working</li>
-                      <li>• Enterprise-grade security validation</li>
+                      <li>• Complete payment processing architecture</li>
+                      <li>• Virtual card system fully functional</li>
+                      <li>• SmartFund™ distribution logic implemented</li>
+                      <li>• Security framework validated and tested</li>
                     </ul>
                   </div>
                 </div>
@@ -191,49 +192,49 @@ export default function RoadmapPage() {
                       <span className="text-blue-600 font-bold">2</span>
                     </div>
                     <div>
-                      <CardTitle className="text-blue-600">Client Onboarding & Partnerships</CardTitle>
-                      <CardDescription>October 16-31, 2025 • 2 Weeks</CardDescription>
+                      <CardTitle className="text-blue-600">Blockchain Integration</CardTitle>
+                      <CardDescription>February - March 2026 • 2 Months</CardDescription>
                     </div>
                   </div>
-                  <Badge className="bg-blue-600 text-white">Shelter Partnerships</Badge>
+                  <Badge className="bg-blue-600 text-white">Smart Contracts</Badge>
                 </div>
               </CardHeader>
               <CardContent>
                 <div className="grid md:grid-cols-3 gap-6">
                   <div>
-                    <h4 className="font-semibold mb-3">Target Clients</h4>
+                    <h4 className="font-semibold mb-3">Blockchain Components</h4>
                     <ul className="space-y-2 text-sm">
                       <li className="flex items-center gap-2">
-                        <Building className="h-4 w-4 text-blue-600" />
-                        <span>Old Brewery Mission</span>
+                        <Blocks className="h-4 w-4 text-blue-600" />
+                        <span>SHELTR Stablecoin Contract</span>
                       </li>
                       <li className="flex items-center gap-2">
-                        <Building className="h-4 w-4 text-blue-600" />
-                        <span>Welcome Hall Mission</span>
+                        <Blocks className="h-4 w-4 text-blue-600" />
+                        <span>SmartFund Distribution</span>
                       </li>
                       <li className="flex items-center gap-2">
-                        <Building className="h-4 w-4 text-blue-600" />
-                        <span>YWCA Montreal</span>
+                        <Blocks className="h-4 w-4 text-blue-600" />
+                        <span>Base Network Integration</span>
                       </li>
                     </ul>
                   </div>
                   <div>
-                    <h4 className="font-semibold mb-3">5-Day Process</h4>
+                    <h4 className="font-semibold mb-3">Development Process</h4>
                     <ul className="space-y-2 text-sm">
-                      <li>• Day 1: Consultation & Demo</li>
-                      <li>• Day 2: Tenant Setup & Training</li>
-                      <li>• Day 3: Participant Registration</li>
-                      <li>• Day 4: Live Testing</li>
-                      <li>• Day 5: Go-Live & Monitoring</li>
+                      <li>• Smart contract architecture</li>
+                      <li>• Coinbase Base deployment</li>
+                      <li>• Token distribution logic</li>
+                      <li>• Security auditing</li>
+                      <li>• Integration testing</li>
                     </ul>
                   </div>
                   <div>
-                    <h4 className="font-semibold mb-3">Success Metrics</h4>
+                    <h4 className="font-semibold mb-3">Success Criteria</h4>
                     <ul className="space-y-2 text-sm">
-                      <li>• 25+ participants per shelter</li>
-                      <li>• $2K+ monthly donations</li>
-                      <li>• 100% staff adoption</li>
-                      <li>• 4.5+ satisfaction rating</li>
+                      <li>• Smart contracts deployed</li>
+                      <li>• Token distribution functional</li>
+                      <li>• Security audit passed</li>
+                      <li>• Integration tests complete</li>
                     </ul>
                   </div>
                 </div>
@@ -249,44 +250,44 @@ export default function RoadmapPage() {
                       <span className="text-green-600 font-bold">3</span>
                     </div>
                     <div>
-                      <CardTitle className="text-green-600">Public Launch & Marketing</CardTitle>
-                      <CardDescription>November 1-26, 2025 • 4 Weeks</CardDescription>
+                      <CardTitle className="text-green-600">Comprehensive Testing & QA</CardTitle>
+                      <CardDescription>April - May 2026 • 2 Months</CardDescription>
                     </div>
                   </div>
-                  <Badge className="bg-green-600 text-white">Go-Live</Badge>
+                  <Badge className="bg-green-600 text-white">Quality Assurance</Badge>
                 </div>
               </CardHeader>
               <CardContent>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <h4 className="font-semibold mb-3">Launch Activities</h4>
+                    <h4 className="font-semibold mb-3">Testing Activities</h4>
                     <ul className="space-y-2 text-sm">
                       <li className="flex items-center gap-2">
-                        <Globe className="h-4 w-4 text-green-600" />
-                        <span>sheltr.ai domain migration</span>
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <TrendingUp className="h-4 w-4 text-green-600" />
-                        <span>Marketing campaign launch</span>
+                        <Shield className="h-4 w-4 text-green-600" />
+                        <span>End-to-end user role testing</span>
                       </li>
                       <li className="flex items-center gap-2">
                         <Users className="h-4 w-4 text-green-600" />
-                        <span>Investor presentations</span>
+                        <span>Dashboard connectivity validation</span>
                       </li>
                       <li className="flex items-center gap-2">
-                        <Shield className="h-4 w-4 text-green-600" />
-                        <span>Scale operations support</span>
+                        <CreditCard className="h-4 w-4 text-green-600" />
+                        <span>Payment flow testing</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <Blocks className="h-4 w-4 text-green-600" />
+                        <span>Blockchain integration testing</span>
                       </li>
                     </ul>
                   </div>
                   <div>
-                    <h4 className="font-semibold mb-3">Success Targets</h4>
+                    <h4 className="font-semibold mb-3">Quality Targets</h4>
                     <ul className="space-y-2 text-sm">
-                      <li>• $10K+ monthly donations</li>
-                      <li>• 3+ shelter clients active</li>
-                      <li>• 100+ participants onboarded</li>
-                      <li>• 99.9% platform uptime</li>
-                      <li>• Sub-2s page load times</li>
+                      <li>• All user roles fully functional</li>
+                      <li>• Payment processing validated</li>
+                      <li>• Security audit completed</li>
+                      <li>• Performance benchmarks met</li>
+                      <li>• User acceptance testing passed</li>
                     </ul>
                   </div>
                 </div>
@@ -387,10 +388,10 @@ export default function RoadmapPage() {
       {/* Call to Action */}
       <section className="py-16 px-4 bg-gradient-to-r from-orange-600 to-red-600">
         <div className="container mx-auto max-w-4xl text-center text-white">
-          <h2 className="text-3xl font-bold mb-6">Ready for Public Launch</h2>
+          <h2 className="text-3xl font-bold mb-6">Production-Ready Development</h2>
           <p className="text-xl mb-8 opacity-90">
-            Join us on the journey to launch SHELTR as a production-ready enterprise platform 
-            with real shelter clients and AI-powered features by November 26, 2025.
+            Comprehensive 180-day development roadmap to deliver a fully-tested, enterprise-grade 
+            platform with complete payment rails and blockchain integration by Spring 2026.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button asChild size="lg" variant="secondary">

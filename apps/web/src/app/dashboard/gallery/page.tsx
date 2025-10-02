@@ -422,6 +422,9 @@ export default function GalleryManagementPage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [customThumbnail, setCustomThumbnail] = useState<File | null>(null);
   const [customThumbnailPreview, setCustomThumbnailPreview] = useState<string>('');
+  // Edit mode thumbnail state
+  const [editCustomThumbnail, setEditCustomThumbnail] = useState<File | null>(null);
+  const [editCustomThumbnailPreview, setEditCustomThumbnailPreview] = useState<string>('');
   const [fileMetadata, setFileMetadata] = useState<{
     type: 'image' | 'video' | null;
     size: string;
@@ -483,6 +486,15 @@ export default function GalleryManagementPage() {
     const previewUrl = URL.createObjectURL(file);
     setCustomThumbnailPreview(previewUrl);
     console.log(`📸 Custom thumbnail selected: ${file.name} (${(file.size / 1024).toFixed(2)} KB)`);
+  };
+
+  // Handle edit mode custom thumbnail selection
+  const handleEditCustomThumbnailSelection = (file: File) => {
+    setEditCustomThumbnail(file);
+    // Create preview URL
+    const previewUrl = URL.createObjectURL(file);
+    setEditCustomThumbnailPreview(previewUrl);
+    console.log(`📸 Edit mode custom thumbnail selected: ${file.name} (${(file.size / 1024).toFixed(2)} KB)`);
   };
 
   // Reset form function
@@ -686,18 +698,48 @@ export default function GalleryManagementPage() {
   // Handle media update
   const handleUpdateImage = async (imageId: string, updates: Partial<GalleryMedia>) => {
     try {
+      const updatedData: Partial<GalleryMedia> = { ...updates };
+      
+      // Handle custom thumbnail upload if provided
+      if (editCustomThumbnail && editingImage?.mediaType === 'video') {
+        console.log('📸 Uploading new custom thumbnail for video...');
+        
+        const timestamp = Date.now();
+        const thumbnailRef = ref(storage, `gallery/thumbnails/${timestamp}_${imageId}_thumb.jpg`);
+        const thumbnailMetadata = {
+          contentType: 'image/jpeg',
+          cacheControl: 'public, max-age=31536000'
+        };
+        
+        const thumbnailSnapshot = await uploadBytes(thumbnailRef, editCustomThumbnail, thumbnailMetadata);
+        
+        // Generate public thumbnail URL without token
+        const thumbBucketName = thumbnailSnapshot.ref.bucket;
+        const thumbFilePath = encodeURIComponent(thumbnailSnapshot.ref.fullPath);
+        const thumbnailUrl = `https://firebasestorage.googleapis.com/v0/b/${thumbBucketName}/o/${thumbFilePath}?alt=media`;
+        
+        updatedData.thumbnailUrl = thumbnailUrl;
+        console.log('✅ New thumbnail uploaded successfully');
+      }
+      
       const imageRef = doc(db, 'gallery_images', imageId);
       await updateDoc(imageRef, {
-        ...updates,
+        ...updatedData,
         updatedAt: new Date()
       });
       
-      showAlert('success', 'Image updated successfully!');
+      showAlert('success', 'Media updated successfully!');
       setEditingImage(null);
+      // Clean up edit mode thumbnail state
+      setEditCustomThumbnail(null);
+      if (editCustomThumbnailPreview) {
+        URL.revokeObjectURL(editCustomThumbnailPreview);
+      }
+      setEditCustomThumbnailPreview('');
       loadImages();
     } catch (error) {
-      console.error('Error updating image:', error);
-      showAlert('error', 'Failed to update image');
+      console.error('Error updating media:', error);
+      showAlert('error', 'Failed to update media');
     }
   };
 
@@ -1268,7 +1310,15 @@ export default function GalleryManagementPage() {
 
       {/* Edit Dialog */}
       {editingImage && (
-        <Dialog open={!!editingImage} onOpenChange={() => setEditingImage(null)}>
+        <Dialog open={!!editingImage} onOpenChange={() => {
+          setEditingImage(null);
+          // Clean up edit mode thumbnail state
+          setEditCustomThumbnail(null);
+          if (editCustomThumbnailPreview) {
+            URL.revokeObjectURL(editCustomThumbnailPreview);
+          }
+          setEditCustomThumbnailPreview('');
+        }}>
           <DialogContent className="max-w-md">
             <DialogHeader>
               <DialogTitle>Edit Media</DialogTitle>
@@ -1317,6 +1367,105 @@ export default function GalleryManagementPage() {
                   } : null)}
                 />
               </div>
+              
+              {/* Video Thumbnail Upload - Only for videos */}
+              {editingImage.mediaType === 'video' && (
+                <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 space-y-3">
+                  <h4 className="text-sm font-medium text-blue-900 dark:text-blue-100">Video Thumbnail</h4>
+                  
+                  {/* Current Thumbnail Preview */}
+                  {editingImage.thumbnailUrl && !editCustomThumbnailPreview && (
+                    <div className="space-y-2">
+                      <label className="text-xs text-blue-700 dark:text-blue-300">Current Thumbnail</label>
+                      <div className="relative w-full h-32 rounded border-2 border-blue-300 dark:border-blue-700">
+                        <Image
+                          src={editingImage.thumbnailUrl}
+                          alt="Current thumbnail"
+                          fill
+                          className="object-cover rounded"
+                        />
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Custom Thumbnail Upload */}
+                  <div className="space-y-2 pt-2 border-t border-blue-200 dark:border-blue-800">
+                    <label className="text-sm font-medium text-blue-900 dark:text-blue-100">
+                      {editingImage.thumbnailUrl ? 'Replace Thumbnail' : 'Add Thumbnail'}
+                    </label>
+                    <p className="text-xs text-blue-600 dark:text-blue-400">
+                      Upload a custom thumbnail image
+                    </p>
+                    
+                    {!editCustomThumbnail ? (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => document.getElementById('edit-thumbnail-input')?.click()}
+                        className="w-full"
+                      >
+                        <Camera className="h-4 w-4 mr-2" />
+                        {editingImage.thumbnailUrl ? 'Change Thumbnail' : 'Add Thumbnail'}
+                      </Button>
+                    ) : (
+                      <div className="space-y-2">
+                        {editCustomThumbnailPreview && (
+                          <div className="relative w-full h-32 rounded border-2 border-green-500">
+                            <Image
+                              src={editCustomThumbnailPreview}
+                              alt="New thumbnail preview"
+                              fill
+                              className="object-cover rounded"
+                            />
+                          </div>
+                        )}
+                        <div className="flex gap-2">
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={() => document.getElementById('edit-thumbnail-input')?.click()}
+                            className="flex-1"
+                          >
+                            Change
+                          </Button>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => {
+                              setEditCustomThumbnail(null);
+                              if (editCustomThumbnailPreview) {
+                                URL.revokeObjectURL(editCustomThumbnailPreview);
+                              }
+                              setEditCustomThumbnailPreview('');
+                            }}
+                            className="flex-1"
+                          >
+                            Remove
+                          </Button>
+                        </div>
+                        <p className="text-xs text-green-600 dark:text-green-400">
+                          ✓ New thumbnail will be uploaded when you save
+                        </p>
+                      </div>
+                    )}
+                    
+                    <input
+                      id="edit-thumbnail-input"
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) handleEditCustomThumbnailSelection(file);
+                      }}
+                      className="hidden"
+                    />
+                  </div>
+                </div>
+              )}
+              
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <input

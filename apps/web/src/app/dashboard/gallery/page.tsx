@@ -485,9 +485,17 @@ export default function GalleryManagementPage() {
       const timestamp = Date.now();
       const filename = `gallery/${timestamp}_${fileToUpload.name}`;
       
-      // Upload to Firebase Storage
+      // Upload to Firebase Storage with metadata for CORS
       const storageRef = ref(storage, filename);
-      const snapshot = await uploadBytes(storageRef, fileToUpload);
+      const uploadMetadata = {
+        contentType: fileToUpload.type,
+        cacheControl: 'public, max-age=31536000',
+        customMetadata: {
+          uploadedBy: user.uid,
+          uploadedAt: new Date().toISOString()
+        }
+      };
+      const snapshot = await uploadBytes(storageRef, fileToUpload, uploadMetadata);
       const downloadURL = await getDownloadURL(snapshot.ref);
 
       // Extract metadata based on file type
@@ -508,7 +516,11 @@ export default function GalleryManagementPage() {
         if (videoMetadata.thumbnailUrl) {
           const thumbnailBlob = await fetch(videoMetadata.thumbnailUrl).then(r => r.blob());
           const thumbnailRef = ref(storage, `gallery/thumbnails/${timestamp}_thumb.jpg`);
-          const thumbnailSnapshot = await uploadBytes(thumbnailRef, thumbnailBlob);
+          const thumbnailMetadata = {
+            contentType: 'image/jpeg',
+            cacheControl: 'public, max-age=31536000'
+          };
+          const thumbnailSnapshot = await uploadBytes(thumbnailRef, thumbnailBlob, thumbnailMetadata);
           thumbnailUrl = await getDownloadURL(thumbnailSnapshot.ref);
         }
       } else {

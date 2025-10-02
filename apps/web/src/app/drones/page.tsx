@@ -153,7 +153,7 @@ export default function DronesPage() {
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <Badge variant="outline" className="mb-6 border-2 border-blue-400 text-blue-400 px-4 py-2">
             <Star className="h-4 w-4 mr-2" />
-            Coming Soon
+            Future Release
           </Badge>
           
           <h1 className="text-5xl md:text-6xl font-bold mb-6 text-white">
@@ -161,16 +161,26 @@ export default function DronesPage() {
           </h1>
           
           <p className="text-xl text-gray-200 mb-8 max-w-3xl mx-auto">
-            Rapid drone delivery of essential supplies directly to SHELTR PODS using GPS precision. 
-            Donors can fund emergency packages that reach participants within minutes.
+            Rapid drone delivery of essential supplies directly to PODS using GPS precision. 
+            Donors can fund emergency packages that reach participants within hours.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button variant="outline" className="bg-transparent border-2 border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white transition-all duration-300" size="lg">
+            <Button 
+              variant="outline" 
+              className="bg-transparent border-2 border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white transition-all duration-300" 
+              size="lg"
+              onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
+            >
               <Package className="h-4 w-4 mr-2" />
               How It Works
             </Button>
-            <Button variant="outline" className="bg-transparent border-2 border-green-400 text-green-400 hover:bg-green-400 hover:text-white transition-all duration-300" size="lg">
+            <Button 
+              variant="outline" 
+              className="bg-transparent border-2 border-green-400 text-green-400 hover:bg-green-400 hover:text-white transition-all duration-300" 
+              size="lg"
+              onClick={() => document.getElementById('emergency-supply-packages')?.scrollIntoView({ behavior: 'smooth' })}
+            >
               <Heart className="h-4 w-4 mr-2" />
               Fund Emergency Supplies
             </Button>
@@ -179,7 +189,7 @@ export default function DronesPage() {
       </section>
 
       {/* How It Works */}
-      <section className="py-20">
+      <section id="how-it-works" className="py-20">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold mb-4">How Drone Delivery Works</h2>
@@ -220,7 +230,7 @@ export default function DronesPage() {
                 </div>
                 <CardTitle className="text-lg">3. Drone Dispatch</CardTitle>
                 <CardDescription>
-                  Autonomous drone navigates to participant's GPS location using secure coordinates
+                  Autonomous drone navigates to participant&apos;s GPS location using secure coordinates
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -232,7 +242,7 @@ export default function DronesPage() {
                 </div>
                 <CardTitle className="text-lg">4. Precise Delivery</CardTitle>
                 <CardDescription>
-                  Supplies delivered directly to SHELTR POD with QR code confirmation
+                  Supplies delivered directly to participant&apos;s POD with QR code confirmation
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -364,7 +374,7 @@ export default function DronesPage() {
       </section>
 
       {/* Emergency Supply Packages */}
-      <section className="py-20">
+      <section id="emergency-supply-packages" className="py-20">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold mb-4">Emergency Supply Packages</h2>
@@ -509,21 +519,43 @@ export default function DronesPage() {
         <div className="absolute inset-0 bg-black/70" />
         
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <Badge variant="outline" className="mb-6 border-2 border-yellow-400 text-yellow-400 px-4 py-2">
+            <Clock className="h-4 w-4 mr-2" />
+            Future Vision - Coming 2027
+          </Badge>
+          
           <h2 className="text-3xl font-bold mb-6 text-white">Ready to Support Emergency Response?</h2>
-          <p className="text-xl text-gray-200 mb-8">
+          <p className="text-xl text-gray-200 mb-6">
             Your donation can deliver life-saving supplies directly to those who need them most, 
             when they need them most.
           </p>
           
+          <div className="bg-blue-950/60 backdrop-blur-sm border border-blue-400/30 rounded-lg p-6 mb-8 max-w-2xl mx-auto">
+            <p className="text-sm text-blue-200">
+              <strong>Note:</strong> SHELTR&apos;s drone delivery system is not yet operational. 
+              We are currently awaiting government registration and regulatory changes to enable 
+              beyond-line-of-sight (BVLOS) drone operations. We anticipate new regulations and 
+              full operational capability by 2027.
+            </p>
+          </div>
+          
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button variant="outline" className="bg-transparent border-2 border-green-400 text-green-400 hover:bg-green-400 hover:text-white transition-all duration-300" size="lg">
-              <Heart className="h-4 w-4 mr-2" />
-              Start Funding Supplies
-            </Button>
-            <Button variant="outline" className="bg-transparent border-2 border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white transition-all duration-300" size="lg">
-              <Users className="h-4 w-4 mr-2" />
-              Learn More
-            </Button>
+            <Link href="/login">
+              <Button 
+                variant="outline" 
+                className="bg-transparent border-2 border-green-400 text-green-400 hover:bg-green-400 hover:text-white transition-all duration-300" 
+                size="lg"
+              >
+                <Heart className="h-4 w-4 mr-2" />
+                Start Funding Supplies
+              </Button>
+            </Link>
+            <Link href="https://github.com/mrj0nesmtl/sheltr-ai/tree/main/docs" target="_blank" rel="noopener noreferrer">
+              <Button variant="outline" className="bg-transparent border-2 border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white transition-all duration-300" size="lg">
+                <Users className="h-4 w-4 mr-2" />
+                Learn More
+              </Button>
+            </Link>
           </div>
         </div>
       </section>

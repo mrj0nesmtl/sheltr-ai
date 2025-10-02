@@ -2,7 +2,7 @@
 
 **Secure, Mobile, Functional Emergency Housing Units**
 
-*Version: 1.0 | Updated: September 10, 2025*
+*Version: 2.0 | Updated: October 2, 2025*
 
 ---
 
@@ -10,18 +10,22 @@
 
 The SHELTR PODS (Portable Optimized Dwelling System) represents a revolutionary approach to emergency housing, combining security, mobility, and functionality in a compact, deployable unit. Each POD is designed to provide dignified temporary housing while participants work toward permanent solutions.
 
+SHELTR mobile micro-housing units are engineered to provide safe, insulated, and weather-resistant accommodations for one or two occupants. Each unit is fabricated with mobility in mind (caster wheels or optional bike hitch) and incorporates sustainable power via solar energy, water systems, and emergency sanitation. Units are specifically engineered for Canadian and northern climates.
+
 ### Key Specifications
 
 | Specification | Value | Details |
 |---------------|--------|---------|
-| **Model A (1-Person)** | 7' × 4' × 6.5' | ~28 sq ft usable floor area |
-| **Model B (2-Person)** | 8' × 12' × 8' | ~96 sq ft usable floor area |
-| **Weight** | 2,400 lbs (Model B) | Towable by standard vehicle |
+| **Model A (1-Person)** | 7' L × 4' W × 6.5' H | ~28 sq ft usable floor area |
+| **Model B (2-Person)** | 12' L × 6' W × 7' H | ~72 sq ft usable floor area |
+| **Weight (Model A)** | 800 lbs (fully equipped) | Bike-towable option available |
+| **Weight (Model B)** | 1,450 lbs (fully equipped) | Towable by standard vehicle |
 | **Capacity** | 1-2 persons | Single or couple occupancy |
-| **Power System** | 200-400W Solar + 200Ah Battery | Off-grid capable |
+| **Power System** | 200-400W Solar + 100-200Ah Battery | Off-grid capable |
 | **Deployment Time** | < 30 minutes | Rapid emergency response |
-| **Mobility** | Trailer-mounted with caster wheels | Relocatable as needed |
+| **Mobility** | Heavy-duty caster wheels | Relocatable as needed |
 | **Winter Rating** | -25°C / -13°F | Sustained cold weather operation |
+| **Canadian Standards** | CSA, NBC 2020, CAN/ULC-S102 | Fully compliant |
 
 ---
 
@@ -30,18 +34,59 @@ The SHELTR PODS (Portable Optimized Dwelling System) represents a revolutionary 
 ### Core Components
 
 #### 1. Structural Framework
+
+**Primary Structure**
 ```
 🏗️ Frame Construction:
-├── Welded lightweight aluminum square tubing (powder-coated)
+├── Frame: Welded 6063-T5 aluminum square tubing
+│   ├── Powder-coated for corrosion resistance
+│   ├── ASTM B221 compliant
+│   └── Lightweight yet high structural integrity
+├── Exterior Panels: Powder-coated galvanized steel
+│   ├── Impact-resistant: 250 J/m
+│   ├── UV-resistant coating
+│   └── Matte dark gray finish standard
 ├── Structural Insulated Panels (SIPs):
-│   ├── Exterior: Powder-coated galvanized steel/aluminum composite
-│   ├── Insulation: Rigid closed-cell polyurethane (R-20 walls, R-30 roof)
-│   └── Interior: Marine-grade plywood with water-resistant laminate
-├── EPDM rubber membrane roofing with solar mounts
-├── Weather-resistant seals and vapor barriers
-├── Reinforced anchor points and stabilizer legs
-├── Steel-reinforced subfloor with anti-slip vinyl composite flooring
-└── Heavy-duty caster wheels with locking mechanism
+│   ├── Core: 3" rigid closed-cell polyurethane foam
+│   ├── Wall Insulation: R-20 thermal value
+│   ├── Roof Insulation: R-30 thermal value (4" polyisocyanurate foam)
+│   └── Floor Insulation: R-10 (2" XPS foam)
+└── Interior Lining: Marine-grade plywood with water-resistant laminate finish
+```
+
+**Roofing & Weatherproofing**
+```
+☔ Weather Barrier System:
+├── Roofing: EPDM rubber membrane
+│   ├── Solar panel mount integration
+│   ├── Ventilation unit mounting
+│   └── 20-year warranty
+├── Windows: Double-pane polycarbonate
+│   ├── Low-E coating
+│   ├── U-factor: 0.28
+│   └── Weather-sealed gaskets
+├── Entry Door: Gasketed insulated steel construction
+│   ├── Deadbolt locking mechanism
+│   └── Safety release from interior
+└── Vapor Barriers: Complete building envelope protection
+```
+
+**Flooring System**
+```
+🔨 Foundation & Flooring:
+├── Subfloor: Steel-reinforced with vapor barrier
+├── Insulation: Marine-grade plywood base
+├── Finish: Commercial-grade anti-slip vinyl composite tile (VCT)
+└── Sound-dampening: Rubber mat underlayment
+```
+
+**Mobility & Anchoring**
+```
+🚚 Transport & Stability:
+├── Wheels: Heavy-duty locking caster wheels
+├── Stabilizers: Retractable steel stabilizer legs
+├── Hitch: Optional bicycle hitch adapter (Model A)
+└── Tow Dolly: Compatible with standard tow systems
 ```
 
 #### 2. Power & Electrical Systems
@@ -102,6 +147,67 @@ The SHELTR PODS (Portable Optimized Dwelling System) represents a revolutionary 
 
 ---
 
+## 🏅 Canadian Standards & Compliance
+
+### Regulatory Certifications
+
+SHELTR PODS are designed and built to meet or exceed all applicable Canadian standards for emergency mobile shelters:
+
+#### **CSA Z240 RV Series**
+- Recreational vehicle standards for plumbing, heating, and electrical systems
+- Structure and safety requirements
+- Propane system compliance (Model B with optional heater)
+
+#### **NBC 2020 (National Building Code of Canada)**
+- Structural design and load requirements
+- Fire safety and egress standards
+- Energy efficiency requirements
+- Accessibility provisions
+
+#### **CAN/ULC-S102**
+- Fire testing standards for interior finishes
+- Surface burning characteristics
+- Flame spread and smoke development ratings
+- NFPA 701 compliant fire-retardant interior panels
+
+#### **CSA C22.1 (Canadian Electrical Code)**
+- Electrical system design and installation
+- GFCI protection requirements
+- Grounding and bonding standards
+- Solar integration compliance
+
+### Winter Rating Certification
+
+**Tested and Rated for Canadian Winters:**
+- Temperature Rating: **-25°C / -13°F** sustained operation
+- Insulation Performance: Verified R-values in field conditions
+- Weather Sealing: Wind and moisture penetration testing
+- Structural Integrity: Snow load testing (minimum 40 lb/sq ft)
+
+### Quality Assurance
+
+```
+✓ Structural Testing:
+  ├── Load bearing capacity (1.5x safety factor)
+  ├── Wind resistance (120 km/h sustained)
+  ├── Seismic testing (Zone 2 compliance)
+  └── Impact resistance testing
+
+✓ Environmental Testing:
+  ├── Extreme temperature cycling (-30°C to +50°C)
+  ├── UV exposure and weathering
+  ├── Moisture and condensation management
+  └── Thermal imaging verification
+
+✓ Safety Systems:
+  ├── Fire suppression testing
+  ├── Emergency egress validation
+  ├── Lock system fail-safe testing
+  └── Smoke/CO detector functionality
+```
+
+---
+
 ## 🔧 Technical Features
 
 ### Security Systems
@@ -151,12 +257,136 @@ interface PODSystem {
 - **Emergency response** coordination
 - **Usage analytics** and reporting
 
-#### Smart Add-ons (Optional)
-- **WiFi hotspot** for internet connectivity
-- **Bluetooth-controlled lighting** system
+#### Connectivity Features
+
+**Global Internet Access (Partnership In Progress)**
+```
+🌐 Starlink Integration:
+├── Satellite Internet: 50-200 Mbps global coverage
+├── Coverage Area: 70°N to 70°S latitude
+├── Cellular Backup: 4G/LTE failover
+├── System Monitoring: Real-time diagnostics
+├── OTA Updates: Remote firmware updates
+└── Emergency Services: Integrated alert system
+```
+
+**Smart Home Integration**
+- **WiFi hotspot** for internet connectivity (IEEE 802.11 b/g/n)
+- **Bluetooth-controlled lighting** system (BLE 5.0)
 - **Smart home integration** capabilities
 - **Mobile app control** for all systems
 - **Voice control** interface (optional)
+
+---
+
+## 🎨 Customization Options & Accessories
+
+### Available Upgrades
+
+SHELTR PODS can be customized with premium features to meet specific needs and preferences:
+
+#### **Exterior Customization**
+
+**Custom Paint Job** - *From $800 CAD*
+```
+🎨 Paint Options:
+├── Colors: Matte, satin, or high-gloss finishes
+│   ├── Standard colors (20+ options)
+│   ├── Custom color matching available
+│   └── Two-tone designs
+├── Finish Quality: Automotive-grade paint
+├── Durability: UV-resistant, chip-proof
+└── Warranty: 5-year finish warranty
+```
+
+**Branding & Graphics** - *Custom Quote*
+- Logo integration
+- QR code placement (standard on all units)
+- Custom decals and wraps
+- Reflective safety markings
+
+#### **Interior Upgrades**
+
+**Skylight Window** - *From $600 CAD*
+```
+☀️ Skylight Features:
+├── Size: 24" × 24" (Model B only)
+├── Material: UV-resistant acrylic dome
+├── Insulation: Double-wall construction (R-5)
+├── Ventilation: Manual or powered vent option
+├── Shade: Integrated blackout blind
+└── Weather: Rain sensor auto-close (powered option)
+```
+
+**Bunk Bed System** - *From $1,200 CAD*
+```
+🛏️ Bunk Configuration:
+├── Compatibility: Model B only (7'+ interior height)
+├── Frame: Aluminum construction with safety rails
+├── Mattresses: Memory foam (3" thickness)
+├── Weight Capacity: 300 lbs per bunk
+├── Storage: Integrated shelf and reading lights
+└── Assembly: Tool-free installation/removal
+```
+
+**Premium Lighting Upgrade** - *From $400 CAD*
+```
+💡 Smart LED System:
+├── Brightness: 100-2000 lumens adjustable
+├── Color Temperature: 2700K-6500K (CCT)
+├── RGB: Full color spectrum option
+├── Control: Mobile app, voice, or wall switch
+├── Zones: 3 independent lighting zones
+└── Power: Low energy draw (15W max)
+```
+
+#### **Power & Climate Upgrades**
+
+**Arctic Package** - *From $1,800 CAD*
+- Upgraded heating system (2000W ceramic)
+- Enhanced insulation (R-30 walls, R-40 roof)
+- Heated floor mat
+- Extended battery capacity (200Ah)
+- Arctic-rated door seals
+
+**Power Pro Package** - *From $2,500 CAD*
+- 400W solar panel array (expandable)
+- 200Ah LiFePO4 battery system
+- 2000W pure sine wave inverter
+- Additional 110V outlets (4 total)
+- Smart power monitoring system
+
+**Climate Control Pro** - *From $1,600 CAD*
+- 12,000 BTU air conditioning unit
+- Programmable thermostat
+- HEPA air filtration system
+- Humidity control
+- Automated climate management
+
+#### **Security & Technology**
+
+**Security Plus Package** - *From $900 CAD*
+- Interior/exterior HD cameras
+- Motion-activated exterior lighting
+- Perimeter sensors
+- Enhanced alarm system
+- Mobile alerts and monitoring
+
+**Smart Home Package** - *From $700 CAD*
+- Voice assistant integration (Alexa/Google)
+- Smart outlet control
+- Automated climate scheduling
+- Energy usage analytics
+- Remote system management
+
+#### **Water & Sanitation**
+
+**Water Upgrade** - *From $1,400 CAD*
+- Expanded water tank (40L Model A / 60L Model B)
+- Hot water heater (6 gallon)
+- Upgraded pump system
+- Water filtration system
+- Greywater management
 
 ---
 
@@ -497,6 +727,65 @@ monthly_maintenance = {
 
 ---
 
+## 📞 Contact & Support
+
+### Technical Information
+- **Email**: pods-technical@sheltr.ai
+- **Phone**: 1-800-SHELTR-POD
+- **Documentation**: [GitHub Repository](https://github.com/mrj0nesmtl/sheltr-ai)
+
+### Sales & Partnership
+- **Sales Inquiries**: sales@sheltr.ai
+- **Partnership Opportunities**: partnerships@sheltr.ai
+- **Custom Solutions**: custom@sheltr.ai
+
+### Support Resources
+- **Technical Support**: [Support Portal](https://support.sheltr.ai)
+- **Emergency Line**: 1-800-SHELTR-911
+- **Community Forum**: [SHELTR Community](https://community.sheltr.ai)
+- **Documentation Hub**: [Technical Docs](https://docs.sheltr.ai)
+
+---
+
+## 🔗 Related Documentation
+
+### Technical Documentation
+- **[POD Future Roadmap](./pod-roadmap.md)** - Upcoming features and innovations
+- **[POD Security Architecture](./pod-security.md)** - Detailed security specifications
+- **[SHELTR Implementation Guide](../technical/sheltr-implementation-guide-v2.md)** - Deployment guide
+
+### System Documentation
+- **[Platform Architecture](../README.md)** - Overall SHELTR ecosystem
+- **[Payment Rails](../payment-rails/)** - SmartFund & donation system
+- **[API Reference](../../03-api/README.md)** - Integration documentation
+
+### User Guides
+- **[Shelter Admin Guide](../../06-user-guides/shelter-admin-guide.md)** - POD management
+- **[Participant Guide](../../06-user-guides/participant-guide.md)** - Using your POD
+- **[Donor Guide](../../06-user-guides/donor-guide.md)** - Supporting POD deployments
+
+---
+
+## 📊 Document Information
+
+| Property | Value |
+|----------|-------|
+| **Document Version** | 2.0 |
+| **Last Updated** | October 2, 2025 |
+| **Author** | SHELTR Engineering Team |
+| **Status** | Current Production Specifications |
+| **Review Cycle** | Quarterly |
+| **Next Review** | January 1, 2026 |
+
+### Revision History
+
+| Version | Date | Changes | Author |
+|---------|------|---------|--------|
+| 2.0 | Oct 2, 2025 | Added Canadian standards, connectivity features, comprehensive customization options | Engineering Team |
+| 1.0 | Sep 10, 2025 | Initial technical documentation | Engineering Team |
+
+---
+
 **The SHELTR PODS system represents the future of emergency housing - secure, sustainable, and dignified temporary shelter that preserves human dignity while providing pathways to permanent solutions.** 🏠✨
 
-*For complete technical specifications and implementation details, visit our [GitHub Repository](https://github.com/mrj0nesmtl/sheltr-ai/docs/02-architecture/ecosystem/pods-system.md)*
+*For questions, feedback, or to report issues with this documentation, please contact: docs@sheltr.ai*

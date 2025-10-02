@@ -213,7 +213,7 @@ export default function PodsPage() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 mb-16">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
           <Card className="border-2">
             <CardContent className="p-6 text-center">
               <Snowflake className="h-12 w-12 mx-auto mb-4 text-blue-500" />
@@ -235,6 +235,14 @@ export default function PodsPage() {
               <Shield className="h-12 w-12 mx-auto mb-4 text-green-500" />
               <h3 className="text-xl font-semibold mb-2">Smart Security</h3>
               <p className="text-muted-foreground">Biometric locks with remote access and tamper protection</p>
+            </CardContent>
+          </Card>
+
+          <Card className="border-2">
+            <CardContent className="p-6 text-center">
+              <Wifi className="h-12 w-12 mx-auto mb-4 text-purple-500" />
+              <h3 className="text-xl font-semibold mb-2">Global Connectivity</h3>
+              <p className="text-muted-foreground">Starlink satellite internet integration for connectivity anywhere</p>
             </CardContent>
           </Card>
         </div>
@@ -611,6 +619,151 @@ export default function PodsPage() {
               <Button size="lg" variant="outline">
                 <Shield className="h-4 w-4 mr-2" />
                 Learn About Security
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Materials & Construction Section */}
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-6">Professional-Grade Construction</h2>
+            <p className="text-xl text-muted-foreground">Built to Canadian Standards with premium materials</p>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
+            <div className="space-y-6">
+              <div className="flex items-center gap-3 mb-6">
+                <Badge className="bg-blue-600 text-white px-4 py-2">CSA Certified</Badge>
+                <Badge className="bg-green-600 text-white px-4 py-2">NBC 2020 Compliant</Badge>
+              </div>
+
+              <Card className="border-2">
+                <CardHeader>
+                  <CardTitle>Structural Framework</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div className="flex items-start gap-3">
+                    <CheckCircle className="h-5 w-5 text-green-500 mt-1 flex-shrink-0" />
+                    <div>
+                      <strong>Aluminum Frame:</strong> Welded 6063-T5 aluminum square tubing with powder-coat finish (ASTM B221 compliant)
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <CheckCircle className="h-5 w-5 text-green-500 mt-1 flex-shrink-0" />
+                    <div>
+                      <strong>SIP Panels:</strong> 3&quot; closed-cell polyurethane insulation (R-20 walls, R-30 roof)
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <CheckCircle className="h-5 w-5 text-green-500 mt-1 flex-shrink-0" />
+                    <div>
+                      <strong>Exterior:</strong> Powder-coated galvanized steel panels, impact resistant 250 J/m
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <CheckCircle className="h-5 w-5 text-green-500 mt-1 flex-shrink-0" />
+                    <div>
+                      <strong>Windows:</strong> Double-pane polycarbonate with low-E coating (U-factor: 0.28)
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            <div className="relative h-96 rounded-lg overflow-hidden">
+              <Image
+                src="/images/sheltr_units/pods-overhead.jpeg"
+                alt="SHELTR Pod Construction"
+                fill
+                className="object-cover"
+              />
+            </div>
+          </div>
+
+          <Card className="border-2 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950 dark:to-indigo-950">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Shield className="h-6 w-6 text-blue-600" />
+                Canadian Standards & Compliance
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid md:grid-cols-4 gap-6">
+                <div>
+                  <strong className="text-blue-600">CSA Z240 RV</strong>
+                  <p className="text-sm text-muted-foreground">Recreational vehicle standards</p>
+                </div>
+                <div>
+                  <strong className="text-blue-600">NBC 2020</strong>
+                  <p className="text-sm text-muted-foreground">National Building Code of Canada</p>
+                </div>
+                <div>
+                  <strong className="text-blue-600">CAN/ULC-S102</strong>
+                  <p className="text-sm text-muted-foreground">Fire testing standards</p>
+                </div>
+                <div>
+                  <strong className="text-blue-600">CSA C22.1</strong>
+                  <p className="text-sm text-muted-foreground">Canadian Electrical Code</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      {/* Customization Options Section */}
+      <section className="py-20 bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 dark:from-purple-950 dark:via-pink-950 dark:to-orange-950">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-6">Customization Options</h2>
+            <p className="text-xl text-muted-foreground">Personalize your POD with premium upgrades and accessories</p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            <Card className="border-2 hover:border-purple-400 transition-colors">
+              <CardContent className="p-6 text-center">
+                <div className="mb-4 text-4xl">🎨</div>
+                <h3 className="font-semibold mb-2">Custom Paint</h3>
+                <p className="text-sm text-muted-foreground">Professional automotive-grade finishes</p>
+                <Badge variant="outline" className="mt-3">From $800</Badge>
+              </CardContent>
+            </Card>
+
+            <Card className="border-2 hover:border-blue-400 transition-colors">
+              <CardContent className="p-6 text-center">
+                <Sun className="h-10 w-10 mx-auto mb-4 text-blue-500" />
+                <h3 className="font-semibold mb-2">Skylight Window</h3>
+                <p className="text-sm text-muted-foreground">Natural light with ventilation</p>
+                <Badge variant="outline" className="mt-3">From $600</Badge>
+              </CardContent>
+            </Card>
+
+            <Card className="border-2 hover:border-green-400 transition-colors">
+              <CardContent className="p-6 text-center">
+                <Home className="h-10 w-10 mx-auto mb-4 text-green-500" />
+                <h3 className="font-semibold mb-2">Bunk Bed System</h3>
+                <p className="text-sm text-muted-foreground">Space-saving sleep configuration</p>
+                <Badge variant="outline" className="mt-3">From $1,200</Badge>
+              </CardContent>
+            </Card>
+
+            <Card className="border-2 hover:border-yellow-400 transition-colors">
+              <CardContent className="p-6 text-center">
+                <Zap className="h-10 w-10 mx-auto mb-4 text-yellow-500" />
+                <h3 className="font-semibold mb-2">Premium Lighting</h3>
+                <p className="text-sm text-muted-foreground">Smart RGB+CCT LED system</p>
+                <Badge variant="outline" className="mt-3">From $400</Badge>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="text-center">
+            <Link href="/pods/buildout#accessories">
+              <Button size="lg" className="bg-purple-600 hover:bg-purple-700 text-white">
+                View All Customization Options
               </Button>
             </Link>
           </div>

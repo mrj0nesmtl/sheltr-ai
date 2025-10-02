@@ -13,15 +13,20 @@ export interface GalleryImage {
   isPrivate: boolean; // Hide from public gallery (internal use only)
   isHero: boolean; // Hero image for gallery page
   isLandingHero: boolean; // Hero image for landing page
+  isFoundersGallery?: boolean; // Show in founders portal gallery
   order: number;
   uploadedBy: string;
   createdAt: Date;
   updatedAt: Date;
-  // Image metadata
+  // Media metadata (images and videos)
+  mediaType?: 'image' | 'video'; // Media type
   width?: number;
   height?: number;
   aspectRatio?: string;
   fileSize?: number;
+  // Video-specific fields
+  duration?: number; // Video duration in seconds
+  thumbnailUrl?: string; // Generated thumbnail for videos
 }
 
 export class GalleryService {

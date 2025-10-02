@@ -280,7 +280,7 @@ export default function GalleryPage() {
               <CardContent className="p-0 relative">
                 <div className="relative aspect-square">
                   <Image
-                    src={sanitizeUrl(image.src) || '/images/fallback.jpg'}
+                    src={sanitizeUrl(image.mediaType === 'video' ? (image.thumbnailUrl || image.src) : image.src) || '/images/fallback.jpg'}
                     alt={sanitizeForAttribute(image.title)}
                     fill
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
@@ -288,6 +288,25 @@ export default function GalleryPage() {
                     priority={index < 6}
                   />
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors" />
+                  
+                  {/* Video Play Indicator */}
+                  {image.mediaType === 'video' && (
+                    <>
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                        <div className="bg-white/90 rounded-full p-3 group-hover:scale-110 transition-transform">
+                          <svg className="h-6 w-6 text-gray-800" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z" />
+                          </svg>
+                        </div>
+                      </div>
+                      {image.duration && (
+                        <Badge className="absolute top-2 left-2 bg-black/70 text-white text-xs">
+                          {Math.floor(image.duration / 60)}:{(image.duration % 60).toFixed(0).padStart(2, '0')}
+                        </Badge>
+                      )}
+                    </>
+                  )}
+                  
                   <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
                     <Badge variant="secondary" className="text-xs">
                       {image.category}
@@ -366,12 +385,22 @@ export default function GalleryPage() {
             <div className="relative max-w-5xl max-h-[80vh] w-full h-full">
               {filteredImages[selectedImage]?.mediaType === 'video' ? (
                 <video
-                  src={sanitizeUrl(filteredImages[selectedImage].src) || ''}
+                  key={filteredImages[selectedImage]?.src}
                   controls
                   autoPlay
+                  playsInline
+                  muted
                   className="max-w-full max-h-full object-contain rounded-lg"
                   style={{ maxHeight: 'calc(80vh - 60px)' }}
+                  onError={(e) => {
+                    console.error('❌ Video load error:', e);
+                    console.error('Video src:', filteredImages[selectedImage]?.src);
+                  }}
+                  onLoadStart={() => console.log('🎥 Video loading:', filteredImages[selectedImage]?.src)}
+                  onCanPlay={() => console.log('✅ Video can play:', filteredImages[selectedImage]?.title)}
                 >
+                  <source src={sanitizeUrl(filteredImages[selectedImage].src) || ''} type="video/mp4" />
+                  <source src={sanitizeUrl(filteredImages[selectedImage].src) || ''} type="video/quicktime" />
                   Your browser does not support the video tag.
                 </video>
               ) : (

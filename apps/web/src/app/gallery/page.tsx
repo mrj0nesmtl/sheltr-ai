@@ -42,6 +42,10 @@ interface GalleryMedia {
   order: number;
   createdAt: Date;
   updatedAt: Date;
+  // Video-specific fields
+  mediaType?: 'image' | 'video';
+  duration?: number;
+  thumbnailUrl?: string;
 }
 
 const categories = ['all', 'pods', 'mobi', 'drones', 'technology', 'fabrication', 'concepts'];
@@ -386,10 +390,12 @@ export default function GalleryPage() {
               {filteredImages[selectedImage]?.mediaType === 'video' ? (
                 <video
                   key={filteredImages[selectedImage]?.src}
+                  src={sanitizeUrl(filteredImages[selectedImage].src) || ''}
                   controls
                   autoPlay
                   playsInline
                   muted
+                  preload="auto"
                   className="max-w-full max-h-full object-contain rounded-lg"
                   style={{ maxHeight: 'calc(80vh - 60px)' }}
                   onError={(e) => {
@@ -399,8 +405,6 @@ export default function GalleryPage() {
                   onLoadStart={() => console.log('🎥 Video loading:', filteredImages[selectedImage]?.src)}
                   onCanPlay={() => console.log('✅ Video can play:', filteredImages[selectedImage]?.title)}
                 >
-                  <source src={sanitizeUrl(filteredImages[selectedImage].src) || ''} type="video/mp4" />
-                  <source src={sanitizeUrl(filteredImages[selectedImage].src) || ''} type="video/quicktime" />
                   Your browser does not support the video tag.
                 </video>
               ) : (

@@ -47,7 +47,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { collection, addDoc, updateDoc, deleteDoc, doc, getDocs, query } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
+import { ref, uploadBytes, deleteObject } from 'firebase/storage';
 import { db, storage } from '@/lib/firebase';
 
 interface GalleryMedia {
@@ -427,7 +427,7 @@ export default function GalleryManagementPage() {
         collection(db, 'gallery_images')
       );
       const snapshot = await getDocs(imagesQuery);
-      const loadedImages: GalleryImage[] = [];
+      const loadedImages: GalleryMedia[] = [];
       
       snapshot.forEach((doc) => {
         const data = doc.data();
@@ -436,7 +436,7 @@ export default function GalleryManagementPage() {
           ...data,
           createdAt: data.createdAt?.toDate() || new Date(),
           updatedAt: data.updatedAt?.toDate() || new Date()
-        } as GalleryImage);
+        } as GalleryMedia);
       });
       
       // Sort images by order manually since we can't use orderBy in the query yet
@@ -496,7 +496,11 @@ export default function GalleryManagementPage() {
         }
       };
       const snapshot = await uploadBytes(storageRef, fileToUpload, uploadMetadata);
-      const downloadURL = await getDownloadURL(snapshot.ref);
+      
+      // Generate public URL without token (relies on Storage Rules for access)
+      const bucketName = snapshot.ref.bucket;
+      const filePath = encodeURIComponent(snapshot.ref.fullPath);
+      const downloadURL = `https://firebasestorage.googleapis.com/v0/b/${bucketName}/o/${filePath}?alt=media`;
 
       // Extract metadata based on file type
       let metadata;
@@ -521,7 +525,11 @@ export default function GalleryManagementPage() {
             cacheControl: 'public, max-age=31536000'
           };
           const thumbnailSnapshot = await uploadBytes(thumbnailRef, thumbnailBlob, thumbnailMetadata);
-          thumbnailUrl = await getDownloadURL(thumbnailSnapshot.ref);
+          
+          // Generate public thumbnail URL without token
+          const thumbBucketName = thumbnailSnapshot.ref.bucket;
+          const thumbFilePath = encodeURIComponent(thumbnailSnapshot.ref.fullPath);
+          thumbnailUrl = `https://firebasestorage.googleapis.com/v0/b/${thumbBucketName}/o/${thumbFilePath}?alt=media`;
         }
       } else {
         metadata = await extractImageMetadata(fileToUpload);
@@ -630,8 +638,8 @@ export default function GalleryManagementPage() {
   }, [viewerOpen, handleNextImage, handlePrevImage]);
 
   // Handle image deletion
-  const handleDeleteImage = async (image: GalleryImage) => {
-    if (!confirm('Are you sure you want to delete this image? This action cannot be undone.')) {
+  const handleDeleteImage = async (image: GalleryMedia) => {
+    if (!confirm('Are you sure you want to delete this media? This action cannot be undone.')) {
       return;
     }
 

@@ -113,12 +113,44 @@ const extractVideoMetadata = (file: File): Promise<{ width: number; height: numb
   return new Promise((resolve) => {
     const video = document.createElement('video');
     video.preload = 'metadata';
+    video.muted = true;
+    video.playsInline = true;
+    
+    console.log(`🎬 Extracting metadata for: ${file.name} (${file.type})`);
+    
+    // Timeout for the entire operation
+    const timeout = setTimeout(() => {
+      console.warn('⚠️ Video metadata extraction timed out, using defaults');
+      URL.revokeObjectURL(video.src);
+      resolve({ 
+        width: 1920, 
+        height: 1080, 
+        aspectRatio: '16:9', 
+        duration: 0, 
+        thumbnailUrl: '' 
+      });
+    }, 10000); // 10 second timeout
+    
+    video.onerror = (error) => {
+      console.error('❌ Video loading error:', error, `- File: ${file.name}`);
+      clearTimeout(timeout);
+      URL.revokeObjectURL(video.src);
+      resolve({ 
+        width: 1920, 
+        height: 1080, 
+        aspectRatio: '16:9', 
+        duration: 0, 
+        thumbnailUrl: '' 
+      });
+    };
     
     video.onloadedmetadata = () => {
-      const width = video.videoWidth;
-      const height = video.videoHeight;
-      const duration = video.duration;
+      const width = video.videoWidth || 1920;
+      const height = video.videoHeight || 1080;
+      const duration = video.duration || 0;
       const ratio = width / height;
+      
+      console.log(`✅ Video metadata loaded: ${width}x${height}, ${duration.toFixed(2)}s`);
       
       // Calculate aspect ratio
       let aspectRatio = `${width}:${height}`;
@@ -127,30 +159,72 @@ const extractVideoMetadata = (file: File): Promise<{ width: number; height: numb
       else if (Math.abs(ratio - 9/16) < 0.01) aspectRatio = '9:16';
       else aspectRatio = `${Math.round(ratio * 100) / 100}:1`;
       
-      // Generate thumbnail
-      const canvas = document.createElement('canvas');
-      canvas.width = width;
-      canvas.height = height;
-      const ctx = canvas.getContext('2d');
-      
-      video.currentTime = Math.min(2, duration / 2); // Seek to 2 seconds or middle
-      
-      video.onseeked = () => {
-        ctx?.drawImage(video, 0, 0, width, height);
-        const thumbnailUrl = canvas.toDataURL('image/jpeg', 0.8);
-        resolve({ width, height, aspectRatio, duration, thumbnailUrl });
-      };
+      // Try to generate thumbnail
+      try {
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        
+        if (!ctx) {
+          console.warn('⚠️ Canvas context not available, skipping thumbnail');
+          clearTimeout(timeout);
+          URL.revokeObjectURL(video.src);
+          resolve({ width, height, aspectRatio, duration, thumbnailUrl: '' });
+          return;
+        }
+        
+        console.log(`📸 Attempting to generate thumbnail...`);
+        
+        // Timeout for seeking operation
+        const seekTimeout = setTimeout(() => {
+          console.warn('⚠️ Video seeking timed out, skipping thumbnail');
+          clearTimeout(timeout);
+          URL.revokeObjectURL(video.src);
+          resolve({ width, height, aspectRatio, duration, thumbnailUrl: '' });
+        }, 5000);
+        
+        video.onseeked = () => {
+          try {
+            clearTimeout(seekTimeout);
+            clearTimeout(timeout);
+            console.log(`✅ Video seeked, drawing thumbnail...`);
+            ctx.drawImage(video, 0, 0, width, height);
+            const thumbnailUrl = canvas.toDataURL('image/jpeg', 0.8);
+            console.log(`✅ Thumbnail generated successfully (${thumbnailUrl.length} bytes)`);
+            URL.revokeObjectURL(video.src);
+            resolve({ width, height, aspectRatio, duration, thumbnailUrl });
+          } catch (error) {
+            console.error('❌ Error generating thumbnail:', error);
+            URL.revokeObjectURL(video.src);
+            resolve({ width, height, aspectRatio, duration, thumbnailUrl: '' });
+          }
+        };
+        
+        video.currentTime = Math.min(2, duration / 2); // Seek to 2 seconds or middle
+        console.log(`⏱️ Seeking to ${video.currentTime.toFixed(2)}s...`);
+      } catch (error) {
+        console.error('❌ Error in thumbnail generation setup:', error);
+        clearTimeout(timeout);
+        URL.revokeObjectURL(video.src);
+        resolve({ width, height, aspectRatio, duration, thumbnailUrl: '' });
+      }
     };
     
-    video.onerror = () => resolve({ 
-      width: 0, 
-      height: 0, 
-      aspectRatio: 'Unknown', 
-      duration: 0, 
-      thumbnailUrl: '' 
-    });
-    
-    video.src = URL.createObjectURL(file);
+    try {
+      video.src = URL.createObjectURL(file);
+      console.log(`🔗 Created object URL for video`);
+    } catch (error) {
+      console.error('❌ Error creating object URL:', error);
+      clearTimeout(timeout);
+      resolve({ 
+        width: 1920, 
+        height: 1080, 
+        aspectRatio: '16:9', 
+        duration: 0, 
+        thumbnailUrl: '' 
+      });
+    }
   });
 };
 
@@ -346,6 +420,8 @@ export default function GalleryManagementPage() {
 
   // File selection state
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [customThumbnail, setCustomThumbnail] = useState<File | null>(null);
+  const [customThumbnailPreview, setCustomThumbnailPreview] = useState<string>('');
   const [fileMetadata, setFileMetadata] = useState<{
     type: 'image' | 'video' | null;
     size: string;
@@ -400,6 +476,15 @@ export default function GalleryManagementPage() {
     });
   };
 
+  // Handle custom thumbnail selection
+  const handleCustomThumbnailSelection = (file: File) => {
+    setCustomThumbnail(file);
+    // Create preview URL
+    const previewUrl = URL.createObjectURL(file);
+    setCustomThumbnailPreview(previewUrl);
+    console.log(`📸 Custom thumbnail selected: ${file.name} (${(file.size / 1024).toFixed(2)} KB)`);
+  };
+
   // Reset form function
   const resetForm = () => {
     setFormData({ 
@@ -414,6 +499,11 @@ export default function GalleryManagementPage() {
       isFoundersGallery: false
     });
     setSelectedFile(null);
+    setCustomThumbnail(null);
+    if (customThumbnailPreview) {
+      URL.revokeObjectURL(customThumbnailPreview);
+    }
+    setCustomThumbnailPreview('');
     setFileMetadata({ type: null, size: '' });
   };
 
@@ -516,9 +606,22 @@ export default function GalleryManagementPage() {
         };
         duration = videoMetadata.duration;
         
-        // Upload thumbnail if generated
-        if (videoMetadata.thumbnailUrl) {
-          const thumbnailBlob = await fetch(videoMetadata.thumbnailUrl).then(r => r.blob());
+        // Upload thumbnail - prioritize custom thumbnail, then auto-generated
+        let thumbnailBlob: Blob | null = null;
+        
+        if (customThumbnail) {
+          // Use custom thumbnail
+          console.log('✅ Using custom thumbnail');
+          thumbnailBlob = customThumbnail;
+        } else if (videoMetadata.thumbnailUrl) {
+          // Use auto-generated thumbnail
+          console.log('✅ Using auto-generated thumbnail');
+          thumbnailBlob = await fetch(videoMetadata.thumbnailUrl).then(r => r.blob());
+        } else {
+          console.warn('⚠️ No thumbnail available for this video');
+        }
+        
+        if (thumbnailBlob) {
           const thumbnailRef = ref(storage, `gallery/thumbnails/${timestamp}_thumb.jpg`);
           const thumbnailMetadata = {
             contentType: 'image/jpeg',
@@ -530,6 +633,7 @@ export default function GalleryManagementPage() {
           const thumbBucketName = thumbnailSnapshot.ref.bucket;
           const thumbFilePath = encodeURIComponent(thumbnailSnapshot.ref.fullPath);
           thumbnailUrl = `https://firebasestorage.googleapis.com/v0/b/${thumbBucketName}/o/${thumbFilePath}?alt=media`;
+          console.log('✅ Thumbnail uploaded successfully');
         }
       } else {
         metadata = await extractImageMetadata(fileToUpload);
@@ -929,10 +1033,85 @@ export default function GalleryManagementPage() {
                     {fileMetadata.type === 'video' && (
                       <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 space-y-3">
                         <h4 className="text-sm font-medium text-blue-900 dark:text-blue-100">Video Settings</h4>
-                        <div className="text-xs text-blue-700 dark:text-blue-300">
-                          <p>• Thumbnail will be auto-generated at 2 seconds</p>
+                        <div className="text-xs text-blue-700 dark:text-blue-300 space-y-1">
                           <p>• Duration: {fileMetadata.duration}</p>
                           <p>• Resolution: {fileMetadata.dimensions}</p>
+                        </div>
+                        
+                        {/* Custom Thumbnail Upload */}
+                        <div className="space-y-2 pt-2 border-t border-blue-200 dark:border-blue-800">
+                          <label className="text-sm font-medium text-blue-900 dark:text-blue-100">
+                            Custom Thumbnail (Optional)
+                          </label>
+                          <p className="text-xs text-blue-600 dark:text-blue-400">
+                            Upload your own thumbnail or we&apos;ll auto-generate one
+                          </p>
+                          
+                          {!customThumbnail ? (
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => document.getElementById('thumbnail-input')?.click()}
+                              className="w-full"
+                            >
+                              <Camera className="h-4 w-4 mr-2" />
+                              Choose Thumbnail Image
+                            </Button>
+                          ) : (
+                            <div className="space-y-2">
+                              {customThumbnailPreview && (
+                                <div className="relative w-full h-32 rounded border-2 border-green-500">
+                                  <Image
+                                    src={customThumbnailPreview}
+                                    alt="Thumbnail preview"
+                                    fill
+                                    className="object-cover rounded"
+                                  />
+                                </div>
+                              )}
+                              <div className="flex gap-2">
+                                <Button
+                                  type="button"
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => document.getElementById('thumbnail-input')?.click()}
+                                  className="flex-1"
+                                >
+                                  Change
+                                </Button>
+                                <Button
+                                  type="button"
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => {
+                                    setCustomThumbnail(null);
+                                    if (customThumbnailPreview) {
+                                      URL.revokeObjectURL(customThumbnailPreview);
+                                    }
+                                    setCustomThumbnailPreview('');
+                                  }}
+                                  className="flex-1"
+                                >
+                                  Remove
+                                </Button>
+                              </div>
+                              <p className="text-xs text-green-600 dark:text-green-400">
+                                ✓ Custom thumbnail will be used
+                              </p>
+                            </div>
+                          )}
+                          
+                          <input
+                            id="thumbnail-input"
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (file) handleCustomThumbnailSelection(file);
+                            }}
+                            className="hidden"
+                          />
                         </div>
                       </div>
                     )}

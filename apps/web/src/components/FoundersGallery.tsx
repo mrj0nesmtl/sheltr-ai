@@ -1,11 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
+import { useState, useEffect, useCallback } from 'react';
+import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { Play, Image as ImageIcon, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 
@@ -93,17 +92,17 @@ export default function FoundersGallery() {
     setSelectedMedia(null);
   };
 
-  const nextMedia = () => {
+  const nextMedia = useCallback(() => {
     if (selectedMedia !== null && selectedMedia < media.length - 1) {
       setSelectedMedia(selectedMedia + 1);
     }
-  };
+  }, [selectedMedia, media.length]);
 
-  const prevMedia = () => {
+  const prevMedia = useCallback(() => {
     if (selectedMedia !== null && selectedMedia > 0) {
       setSelectedMedia(selectedMedia - 1);
     }
-  };
+  }, [selectedMedia]);
 
   // Keyboard navigation
   useEffect(() => {
@@ -125,7 +124,7 @@ export default function FoundersGallery() {
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [viewerOpen, selectedMedia]);
+  }, [viewerOpen, selectedMedia, nextMedia, prevMedia]);
 
   if (loading) {
     return (
@@ -145,7 +144,7 @@ export default function FoundersGallery() {
             No Media Shared Yet
           </h3>
           <p className="text-sm text-gray-500 dark:text-gray-500 text-center max-w-md">
-            Media marked as "Share to Founders Portal" in the gallery management will appear here.
+            Media marked as &quot;Share to Founders Portal&quot; in the gallery management will appear here.
           </p>
         </CardContent>
       </Card>
@@ -279,10 +278,12 @@ export default function FoundersGallery() {
             {media[selectedMedia]?.mediaType === 'video' ? (
               <video
                 key={media[selectedMedia]?.src}
+                src={media[selectedMedia]?.src || ''}
                 controls
                 autoPlay
                 playsInline
                 muted
+                preload="auto"
                 className="max-w-full max-h-full object-contain rounded-lg"
                 style={{ maxHeight: 'calc(90vh - 120px)' }}
                 onError={(e) => {
@@ -293,8 +294,6 @@ export default function FoundersGallery() {
                 onLoadStart={() => console.log('🎥 Video loading:', media[selectedMedia]?.src)}
                 onCanPlay={() => console.log('✅ Video can play:', media[selectedMedia]?.title)}
               >
-                <source src={media[selectedMedia]?.src || ''} type="video/mp4" />
-                <source src={media[selectedMedia]?.src || ''} type="video/quicktime" />
                 Your browser does not support the video tag.
               </video>
             ) : (

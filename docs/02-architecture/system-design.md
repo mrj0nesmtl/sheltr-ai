@@ -1204,7 +1204,7 @@ production:
 | Component | Status | Details |
 |-----------|--------|---------|
 | **Website** | ✅ LIVE | Complete with all stakeholder pages |
-| **Tokenomics** | ✅ DOCUMENTED | Full dual-token system explained |
+| **Tokenomics** | ✅ DOCUMENTED | Single SHELTR stablecoin stable fund model |
 | **Design System** | ✅ IMPLEMENTED | Shadcn UI + consistent branding |
 | **Firebase Setup** | ✅ CONFIGURED | Project created, hosting active |
 | **Documentation** | ✅ REORGANIZED | Moved from legacy, updated content |
@@ -1285,7 +1285,7 @@ production:
 🌐 **Complete Website Implementation**:
 - ✅ Beautiful Next.js 15 website with dark theme
 - ✅ Four stakeholder-specific pages with color-coded experiences
-- ✅ Comprehensive tokenomics page explaining dual-token system
+- ✅ Comprehensive tokenomics documentation explaining single SHELTR stablecoin model
 - ✅ Professional design using Shadcn UI components
 - ✅ Consistent branding and navigation throughout
 - ✅ **NEW**: Donation flow with participant profiles

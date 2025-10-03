@@ -313,6 +313,12 @@ class KnowledgeDashboardService:
     async def create_knowledge_document(self, document_data: Dict[str, Any]) -> str:
         """Create a new knowledge document"""
         try:
+            # Use provided file_path if available, otherwise generate from title
+            if 'file_path' in document_data:
+                file_path = document_data['file_path']
+            else:
+                file_path = f"knowledge-base/public/{document_data['title'].lower().replace(' ', '-')}.md"
+            
             # Add to Firestore
             doc_ref = self.db.collection('knowledge_documents').add({
                 'title': document_data['title'],
@@ -324,11 +330,11 @@ class KnowledgeDashboardService:
                 'updated_at': firestore.SERVER_TIMESTAMP,
                 'created_by': document_data.get('created_by', 'Super Admin'),
                 'view_count': 0,
-                'file_path': f"knowledge-base/public/{document_data['title'].lower().replace(' ', '-')}.md"
+                'file_path': file_path,
+                'file_size': document_data.get('file_size', 0)
             })
             
             # Upload to Firebase Storage
-            file_path = f"knowledge-base/public/{document_data['title'].lower().replace(' ', '-')}.md"
             blob = self.bucket.blob(file_path)
             blob.upload_from_string(document_data['content'], content_type='text/markdown')
             

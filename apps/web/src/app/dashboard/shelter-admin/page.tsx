@@ -30,7 +30,8 @@ export default function ShelterAdminDashboard() {
   // Load real shelter data based on user's shelter_id
   useEffect(() => {
     const loadShelterData = async () => {
-      const shelterId = user?.customClaims?.shelter_id || user?.shelterId || (user as any)?.shelter_id;
+      let shelterId = user?.customClaims?.shelter_id || user?.shelterId || (user as any)?.shelter_id;
+      
       console.log('🔍 Debug - User shelter data:', {
         userEmail: user?.email,
         shelter_id: user?.customClaims?.shelter_id,
@@ -38,6 +39,22 @@ export default function ShelterAdminDashboard() {
         user_shelter_id: (user as any)?.shelter_id,
         customClaims: user?.customClaims
       });
+      
+      // If no shelter_id in user object, try fetching directly from Firestore
+      if (!shelterId && user?.uid) {
+        console.log('🔄 No shelter_id in user object, querying Firestore directly...');
+        try {
+          const { getDoc, doc } = await import('firebase/firestore');
+          const { db } = await import('@/lib/firebase');
+          const userDoc = await getDoc(doc(db, 'users', user.uid));
+          if (userDoc.exists()) {
+            shelterId = userDoc.data().shelter_id;
+            console.log('✅ Found shelter_id in Firestore:', shelterId);
+          }
+        } catch (firestoreError) {
+          console.error('❌ Error querying Firestore for shelter_id:', firestoreError);
+        }
+      }
       
       if (!shelterId) {
         setError('No shelter assigned to this admin');
@@ -52,6 +69,7 @@ export default function ShelterAdminDashboard() {
         if (metrics) {
           setShelterMetrics(metrics);
           console.log('✅ Shelter data loaded:', metrics);
+          setError(null); // Clear any previous errors
         } else {
           setError('Shelter not found in database');
         }

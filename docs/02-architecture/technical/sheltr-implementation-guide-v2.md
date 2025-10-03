@@ -1,5 +1,5 @@
-# SHELTR v2.0 Implementation Guide
-*Single-Token Stable Fund Technical Implementation*
+# Base Stable Coin Implementation Guide
+*Utility Token Stable Fund Technical Implementation*
 
 **Document Version**: 2.0.0  
 **Last Updated**: September 26, 2025  

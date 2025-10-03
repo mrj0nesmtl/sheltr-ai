@@ -1,4 +1,4 @@
-# 🔌 SHELTR API Documentation - Current Implementation & Status
+# 🔌 API Documentation - Current Implementation & Status
 
 **FastAPI Backend for Shelter Management Platform**
 

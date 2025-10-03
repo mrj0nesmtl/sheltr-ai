@@ -1,4 +1,4 @@
-# SHELTR White Paper v2.0
+# White Paper v2.0
 *Enterprise-Grade Solutions for Homelessness - Stability Through Technology*
 
 **Authors**: Joel Yaffe (CTO, Founder) & Doug Kukura (CFO, Strategic Partnerships)  

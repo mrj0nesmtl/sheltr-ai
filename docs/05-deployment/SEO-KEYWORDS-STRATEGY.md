@@ -1,4 +1,4 @@
-# SHELTR-AI SEO & AI Discovery Keywords Strategy
+# SEO & AI Discovery Keywords Strategy
 
 ## Primary Keywords (High Volume, High Intent)
 

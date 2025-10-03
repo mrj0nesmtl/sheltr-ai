@@ -1,4 +1,4 @@
-# 🔔 SHELTR Notification System - Complete Debugging & Redesign Brief
+# 🔔 Notification System - Complete Debugging & Redesign Brief
 
 ## 🎯 Mission Objective
 Debug and potentially redesign the SHELTR notification system which is currently broken. The messaging system works perfectly, but the notification dashboard shows **zero data (0) in most metrics** despite notifications being created in Firebase.

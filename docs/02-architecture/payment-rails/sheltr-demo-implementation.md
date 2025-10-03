@@ -1,4 +1,4 @@
-# SHELTR QR Donation Demo - Implementation Plan & Status
+# QR Donation Demo - Implementation Plan & Status
 
 ## 🎯 **Demo Overview**
 

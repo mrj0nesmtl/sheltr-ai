@@ -77,25 +77,24 @@ async function deleteKnowledgeBase() {
     }
     console.log(`   ✅ Deleted ${docDeleteCount} documents\n`);
     
-    // Step 4: Delete all chunks
+    // Step 4: Delete all chunks (in smaller batches)
     console.log('🗑️  Step 4: Deleting chunks...');
-    const chunkBatch = db.batch();
     let chunkDeleteCount = 0;
+    const batchSize = 50; // Very small batch size - chunks have large embedding data
     
-    for (const chunk of chunksSnapshot.docs) {
-      chunkBatch.delete(chunk.ref);
-      chunkDeleteCount++;
+    for (let i = 0; i < chunksSnapshot.docs.length; i += batchSize) {
+      const batch = db.batch();
+      const chunkSlice = chunksSnapshot.docs.slice(i, i + batchSize);
       
-      // Firestore batch limit is 500
-      if (chunkDeleteCount % 500 === 0) {
-        await chunkBatch.commit();
-        console.log(`   Deleted ${chunkDeleteCount}/${chunkCount} chunks...`);
-      }
+      chunkSlice.forEach(chunk => {
+        batch.delete(chunk.ref);
+      });
+      
+      await batch.commit();
+      chunkDeleteCount += chunkSlice.length;
+      console.log(`   Deleted ${chunkDeleteCount}/${chunkCount} chunks...`);
     }
     
-    if (chunkDeleteCount % 500 !== 0) {
-      await chunkBatch.commit();
-    }
     console.log(`   ✅ Deleted ${chunkDeleteCount} chunks\n`);
     
     // Step 5: Verify deletion

@@ -1,4 +1,4 @@
-# SHELTR Unified Payment Architecture v2.0
+# Unified Payment Architecture v2.0
 *Revolutionary Single-Token Stable Fund System*
 
 **Document Version**: 2.0.0  

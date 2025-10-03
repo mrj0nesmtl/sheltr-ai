@@ -1,4 +1,4 @@
-# SHELTR Enterprise Single-Token Strategy Documentation
+# BASE L2 Enterprise Single-Token Strategy Documentation
 
 ## 🚀 Executive Summary
 

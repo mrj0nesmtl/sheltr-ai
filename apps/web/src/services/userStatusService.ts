@@ -68,38 +68,25 @@ export const useUserStatus = (userId: string) => {
 
   // Update user status in Firestore
   const updateStatus = useCallback(async (newStatus: UserStatus) => {
-    if (!userId) {
-      console.warn('No userId provided to updateStatus');
-      return;
-    }
+    if (!userId) return;
     
     try {
-      console.log(`Updating status for user ${userId} to ${newStatus}`);
-      
       // Use setDoc with merge to create document if it doesn't exist
       await setDoc(doc(db, 'user_status', userId), {
         status: newStatus,
         lastActivity: serverTimestamp(),
         ...(newStatus === 'offline' ? { lastSeen: serverTimestamp() } : {})
       }, { merge: true });
-      
-      console.log(`✅ Successfully updated status for user ${userId} to ${newStatus}`);
     } catch (error) {
-      console.error('❌ Error updating user status:', error);
-      console.error('User ID:', userId);
-      console.error('New Status:', newStatus);
-      
-      // Prevent infinite loops by not retrying on permission errors
-      if (error instanceof Error && error.message.includes('Missing or insufficient permissions')) {
-        console.warn('⚠️ Stopping status updates due to permission errors');
-        return;
+      // Only log errors if they're not permission-related (to avoid console spam)
+      if (error instanceof Error && !error.message?.includes('Missing or insufficient permissions')) {
+        console.error('❌ Error updating user status:', error);
       }
     }
   }, [userId]);
 
   // Manual status update (from user interaction)
   const updateManualStatus = useCallback(async (newStatus: UserStatus) => {
-    console.log(`🎯 Manual status change to: ${newStatus}`);
     setManualStatus(newStatus);
     await updateStatus(newStatus);
   }, [updateStatus]);
@@ -112,8 +99,6 @@ export const useUserStatus = (userId: string) => {
       return;
     }
 
-    console.log(`Initializing user status for user: ${userId}`);
-    
     // Flag to track if this is the initial load
     let isInitialLoad = true;
     
@@ -121,8 +106,6 @@ export const useUserStatus = (userId: string) => {
     const unsubscribe = onSnapshot(
       doc(db, 'user_status', userId),
       (docSnapshot) => {
-        console.log(`Status snapshot for user ${userId}:`, docSnapshot.exists(), docSnapshot.data());
-        
         if (docSnapshot.exists()) {
           const data = docSnapshot.data() as UserStatusData;
           
@@ -133,21 +116,17 @@ export const useUserStatus = (userId: string) => {
               // Preserve manual status settings
               setStatus(previousStatus);
               setManualStatus(previousStatus);
-              console.log(`🔄 Preserving manual status: ${previousStatus}`);
             } else {
               // Set to online for offline/online users
-              console.log(`🟢 Setting to online on login/refresh (was: ${previousStatus})`);
               updateStatus('online');
             }
             isInitialLoad = false;
           } else {
             // Not initial load - just update the status normally
             setStatus(data.status || 'offline');
-            console.log(`📡 Status updated from Firestore: ${data.status}`);
           }
         } else {
           // Document doesn't exist, create it with online status
-          console.log(`📝 No status document found for user ${userId}, creating with online status...`);
           updateStatus('online');
           isInitialLoad = false;
         }
@@ -164,23 +143,15 @@ export const useUserStatus = (userId: string) => {
       const currentStatus = statusRef.current;
       const currentManualStatus = manualStatusRef.current;
       
-      console.log(`📱 Visibility change - hidden: ${document.hidden}, manualStatus: ${currentManualStatus}, currentStatus: ${currentStatus}`);
-      
       if (document.hidden) {
         // Only auto-set to offline if user hasn't manually set busy or invisible
         if (!currentManualStatus || (currentManualStatus !== 'busy' && currentManualStatus !== 'invisible')) {
-          console.log('🌙 Setting to offline due to page hidden');
           updateStatus('offline');
-        } else {
-          console.log('🔒 Keeping manual status despite page hidden:', currentManualStatus);
         }
       } else {
         // Only auto-set to online if user was offline (not if they were busy/invisible)
         if (currentStatus === 'offline' && (!currentManualStatus || currentManualStatus === 'offline')) {
-          console.log('🌅 Setting to online due to page visible');
           updateStatus('online');
-        } else {
-          console.log('✋ Not changing status on page visible - current:', currentStatus, 'manual:', currentManualStatus);
         }
       }
     };

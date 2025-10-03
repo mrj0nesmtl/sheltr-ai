@@ -1,4 +1,4 @@
-# 🌐 SHELTR Platform Architecture
+# 🌐 Platform Architecture
 
 **Complete Site Structure, Role-Based Features, and Quality Assurance Framework**
 

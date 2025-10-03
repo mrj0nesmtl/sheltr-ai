@@ -1,4 +1,4 @@
-# SHELTR PODS - Future Features & Roadmap
+# PODS - Future Features & Roadmap
 
 **Innovation Pipeline for Next-Generation Emergency Housing**
 

@@ -1,4 +1,4 @@
-# SHELTR Chatbot Agent Architecture Documentation
+# Hyperbot Agent Architecture Documentation
 
 ## 🎯 **Overview**
 

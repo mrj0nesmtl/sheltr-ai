@@ -1,4 +1,4 @@
-# 🌟 SHELTR Overview
+# 🌟 Overview
 
 **Revolutionizing charitable giving through technology-driven transparency and direct impact**
 

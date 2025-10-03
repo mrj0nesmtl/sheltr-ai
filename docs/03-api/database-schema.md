@@ -1,4 +1,4 @@
-# SHELTR API Database Schema - Production Implementation
+# API Database Schema - Production Implementation
 
 ## Overview
 This document outlines the **current multi-tenant database structure** from an API perspective as of September 2, 2025, including operational collections, real data metrics, and production-ready architecture for backend services.

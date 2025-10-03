@@ -1,4 +1,4 @@
-# SHELTR-AI Model Context Protocol (MCP) Integration Guide
+# Model Context Protocol (MCP) Integration Guide
 
 ## 🎯 **Overview**
 

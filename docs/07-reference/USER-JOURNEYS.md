@@ -1,4 +1,4 @@
-# 🚀 SHELTR User Journeys: Complete User Experience Flows
+# 🚀 User Journeys: Complete User Experience Flows
 *Version: 1.0.0 - August 2025*
 *Status: Stakeholder Review* 📋
 

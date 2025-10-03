@@ -1,4 +1,4 @@
-# SHELTR x Adyen Payment Integration - Current Status
+# Adyen Payment Integration - Current Status
 
 ## 🎯 **Integration Overview**
 

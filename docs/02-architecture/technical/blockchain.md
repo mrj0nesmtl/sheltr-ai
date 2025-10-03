@@ -1,4 +1,4 @@
-# ⛓️ SHELTR Blockchain Architecture v2.0
+# ⛓️ Blockchain Architecture v2.0
 *Version: 2.0.0 - September, 2025*
 *Status: Strategic Implementation* 🚀
 

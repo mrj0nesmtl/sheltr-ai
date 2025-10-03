@@ -149,7 +149,7 @@ export function buildFolderTree(documents: KnowledgeDocument[]): FolderNode[] {
   const folderMap = new Map<string, FolderNode>();
   const rootFolders: FolderNode[] = [];
 
-  // Initialize folder structure
+  // Initialize folder structure (matches GitHub docs/ structure, excludes migration/archive folders)
   const folderStructure = [
     { path: '01-overview', name: '📋 Overview', description: 'Project introduction and goals' },
     { path: '02-architecture', name: '🏗️ Architecture', description: 'Technical system design' },
@@ -160,6 +160,7 @@ export function buildFolderTree(documents: KnowledgeDocument[]): FolderNode[] {
     { path: '07-reference', name: '📚 Reference', description: 'Technical reference' },
     { path: '08-integrations', name: '🔗 Integrations', description: 'Third-party integrations' },
     { path: '10-resources', name: '🎯 Resources', description: 'Templates and resources' }
+    // Note: 09-migration and platform-admin are intentionally excluded from sync
   ];
 
   // Create folder nodes

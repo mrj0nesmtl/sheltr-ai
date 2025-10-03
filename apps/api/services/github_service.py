@@ -190,11 +190,13 @@ class GitHubService:
             'development_archive',
             'legacy-migration-archived',
             'migration',
+            '09-migration',  # Explicitly exclude migration folder
             'archived',
             'old',
             'deprecated',
             'temp',
             'temporary',
+            'platform-admin',  # Exclude platform-admin (internal only)
             '.git',
             'node_modules',
             '__pycache__'

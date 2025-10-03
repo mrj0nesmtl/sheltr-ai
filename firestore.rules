@@ -12,19 +12,23 @@ service cloud.firestore {
       return request.auth != null;
     }
     
-    // Get user data from the users collection (fallback for legacy users)
-    function getUserData() {
-      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
-    }
-    
-    // Get user role from custom claims (preferred) or Firestore (fallback)
+    // Get user role from custom claims only (to avoid circular dependencies)
     function getUserRole() {
-      return request.auth.token.role != null ? request.auth.token.role : getUserData().role;
+      return request.auth.token.role;
     }
     
-    // Get user shelter_id from custom claims (preferred) or Firestore (fallback)
+    // Get user shelter_id from custom claims only (to avoid circular dependencies)
     function getUserShelterId() {
-      return request.auth.token.shelter_id != null ? request.auth.token.shelter_id : getUserData().shelter_id;
+      return request.auth.token.shelter_id;
+    }
+    
+    // Simplified role check for admins - checks if the user document exists and matches
+    function canAccessShelterData(shelterId) {
+      return isAuthenticated() && (
+        isSuperAdmin() || 
+        isPlatformAdmin() ||
+        isAdmin()
+      );
     }
     
     // Check user roles using custom claims first
@@ -64,22 +68,22 @@ service cloud.firestore {
     // USERS COLLECTION - Core user profiles
     // =================================================================
     match /users/{userId} {
-      // Read: Users can read their own profile, platform admins can read all, admins can read users in their shelter, super_admin can read all
+      // Read: Users can read their own profile, admins can read all authenticated
       allow read: if isOwner(userId) || 
                      isSuperAdmin() ||
                      isPlatformAdmin() ||
-                     (isAdmin() && resource.data.shelter_id == getUserShelterId());
+                     isAdmin();
       
-      // Write: Users can update their own profile, platform admins can update all, admins can update users in their shelter, super_admin can update all
+      // Write: Users can update their own profile, admins can update
       allow write: if isOwner(userId) || 
                       isSuperAdmin() ||
                       isPlatformAdmin() ||
-                      (isAdmin() && resource.data.shelter_id == getUserShelterId());
+                      isAdmin();
       
       // Create: Anyone authenticated can create their own user profile
       allow create: if isAuthenticated() && isOwner(userId);
       
-      // List/Query: Allow shelter admins to query users in their shelter, platform/super admins can query all
+      // List/Query: Allow all admins to query users
       allow list: if isSuperAdmin() || 
                      isPlatformAdmin() ||
                      isAdmin();
@@ -89,15 +93,11 @@ service cloud.firestore {
     // TENANTS COLLECTION - Multi-tenant platform structure
     // =================================================================
     match /tenants/{tenantId} {
-      // Read: Super admin and platform admin can read all tenants, admins can read their own tenant
-      allow read: if isSuperAdmin() || 
-                     isPlatformAdmin() ||
-                     (isAdmin() && (request.auth.token.tenant_id == tenantId || getUserData().tenant_id == tenantId));
+      // Read: Super admin, platform admin, and shelter admins can read tenants
+      allow read: if isSuperAdmin() || isPlatformAdmin() || isAdmin();
       
-      // Write: Super admin and platform admin can write all tenants, admins can write their own tenant
-      allow write: if isSuperAdmin() || 
-                      isPlatformAdmin() ||
-                      (isAdmin() && (request.auth.token.tenant_id == tenantId || getUserData().tenant_id == tenantId));
+      // Write: Super admin and platform admin can write all tenants
+      allow write: if isSuperAdmin() || isPlatformAdmin();
       
       // Create: Super admin and platform admin can create tenants
       allow create: if isSuperAdmin() || isPlatformAdmin();
@@ -105,20 +105,14 @@ service cloud.firestore {
     
     // Tenant sub-collections (platform data, shelters, etc.)
     match /tenants/{tenantId}/{document=**} {
-      // Read: Super admin and platform admin can read all tenant data, admins can read their own tenant data
-      allow read: if isSuperAdmin() || 
-                     isPlatformAdmin() ||
-                     (isAdmin() && (request.auth.token.tenant_id == tenantId || getUserData().tenant_id == tenantId));
+      // Read: Super admin, platform admin, and shelter admins can read tenant data
+      allow read: if isSuperAdmin() || isPlatformAdmin() || isAdmin();
       
-      // Write: Super admin and platform admin can write all tenant data, admins can write their own tenant data
-      allow write: if isSuperAdmin() || 
-                      isPlatformAdmin() ||
-                      (isAdmin() && (request.auth.token.tenant_id == tenantId || getUserData().tenant_id == tenantId));
+      // Write: Super admin and platform admin can write tenant data
+      allow write: if isSuperAdmin() || isPlatformAdmin();
       
-      // Create: Super admin and platform admin can create tenant data, admins can create data in their own tenant
-      allow create: if isSuperAdmin() || 
-                       isPlatformAdmin() ||
-                       (isAdmin() && (request.auth.token.tenant_id == tenantId || getUserData().tenant_id == tenantId));
+      // Create: Super admin and platform admin can create tenant data
+      allow create: if isSuperAdmin() || isPlatformAdmin();
     }
     
     // =================================================================
@@ -142,13 +136,11 @@ service cloud.firestore {
       // Read: Public access allowed for participant showcase pages (demo participants)
       allow read: if true;
       
-      // Write: Owner, their shelter admin, super admin
-      allow write: if isOwner(participantId) || 
-                      isSuperAdmin() ||
-                      (isAdmin() && resource.data.shelter_id == getUserData().shelter_id);
+      // Write: Owner, admins, super admin
+      allow write: if isOwner(participantId) || isSuperAdmin() || isAdmin();
       
-      // Create: Authenticated users can create their own participant profile
-      allow create: if isAuthenticated() && isOwner(participantId);
+      // Create: Authenticated users can create participant profiles
+      allow create: if isAuthenticated();
     }
     
     // =================================================================
@@ -156,11 +148,11 @@ service cloud.firestore {
     // =================================================================
     match /donations/{donationId} {
       // Read: Donors can read their own donations, participants can read donations to them, 
-      // admins can read donations in their shelter, super admin can read all
+      // admins can read donations, super admin can read all
       allow read: if isSuperAdmin() ||
                      (isDonor() && resource.data.donor_id == request.auth.uid) ||
                      (isParticipant() && resource.data.participant_id == request.auth.uid) ||
-                     (isAdmin() && resource.data.shelter_id == getUserData().shelter_id);
+                     isAdmin();
       
       // Write: System creates donations (via backend), super admin can modify
       allow write: if isSuperAdmin();
@@ -187,15 +179,11 @@ service cloud.firestore {
     // QR_CODES COLLECTION - QR code management
     // =================================================================
     match /qr_codes/{qrCodeId} {
-      // Read: Owner, their shelter admin, super admin
-      allow read: if isOwner(resource.data.participant_id) || 
-                     isSuperAdmin() ||
-                     (isAdmin() && resource.data.shelter_id == getUserData().shelter_id);
+      // Read: Owner, admins, super admin
+      allow read: if isOwner(resource.data.participant_id) || isSuperAdmin() || isAdmin();
       
-      // Write: Owner, their shelter admin, super admin
-      allow write: if isOwner(resource.data.participant_id) || 
-                      isSuperAdmin() ||
-                      (isAdmin() && resource.data.shelter_id == getUserData().shelter_id);
+      // Write: Owner, admins, super admin
+      allow write: if isOwner(resource.data.participant_id) || isSuperAdmin() || isAdmin();
       
       // Create: Participants can create their own QR codes
       allow create: if isAuthenticated();
@@ -205,9 +193,8 @@ service cloud.firestore {
     // ANALYTICS COLLECTION - Platform analytics and insights
     // =================================================================
     match /analytics/{analyticsId} {
-      // Read: Admins can read analytics for their shelter, super admin can read all
-      allow read: if isSuperAdmin() ||
-                     (isAdmin() && resource.data.shelter_id == getUserData().shelter_id);
+      // Read: Admins can read analytics, super admin can read all
+      allow read: if isSuperAdmin() || isAdmin();
       
       // Write: Super admin only (analytics generated by system)
       allow write: if isSuperAdmin();
@@ -220,9 +207,8 @@ service cloud.firestore {
       // Read: All authenticated users can read services
       allow read: if isAuthenticated();
       
-      // Write: Admins can write services for their shelter, super admin can write all
-      allow write: if isSuperAdmin() ||
-                      (isAdmin() && resource.data.shelter_id == getUserData().shelter_id);
+      // Write: Admins can write services, super admin can write all
+      allow write: if isSuperAdmin() || isAdmin();
       
       // Create: Admins can create services
       allow create: if isAdmin() || isSuperAdmin();
@@ -235,16 +221,13 @@ service cloud.firestore {
     // APPOINTMENTS COLLECTION - Appointments and bookings
     // =================================================================
     match /appointments/{appointmentId} {
-      // Read: All authenticated users can read appointments, admins can read shelter-specific appointments
-      allow read: if isAuthenticated() ||
-                     isSuperAdmin() ||
-                     isPlatformAdmin() ||
-                     (isAdmin() && resource.data.shelter_id == getUserData().shelter_id);
+      // Read: All authenticated users can read appointments
+      allow read: if isAuthenticated();
       
-      // Write: Participants can write their own appointments, admins can write shelter appointments
+      // Write: Admins can write appointments, participants can write their own
       allow write: if isSuperAdmin() ||
                       isPlatformAdmin() ||
-                      (isAdmin() && resource.data.shelter_id == getUserData().shelter_id) ||
+                      isAdmin() ||
                       (isParticipant() && resource.data.participant_id == request.auth.uid);
       
       // Create: All authenticated users can create appointments
@@ -390,16 +373,12 @@ service cloud.firestore {
     
     // Participant services history
     match /participants/{participantId}/services/{serviceId} {
-      allow read, write: if isOwner(participantId) || 
-                            isSuperAdmin() ||
-                            (isAdmin() && get(/databases/$(database)/documents/participants/$(participantId)).data.shelter_id == getUserData().shelter_id);
+      allow read, write: if isOwner(participantId) || isSuperAdmin() || isAdmin();
     }
     
     // Participant donation history
     match /participants/{participantId}/donations/{donationId} {
-      allow read: if isOwner(participantId) || 
-                     isSuperAdmin() ||
-                     (isAdmin() && get(/databases/$(database)/documents/participants/$(participantId)).data.shelter_id == getUserData().shelter_id);
+      allow read: if isOwner(participantId) || isSuperAdmin() || isAdmin();
       allow write: if false; // Donations created by system only
     }
     

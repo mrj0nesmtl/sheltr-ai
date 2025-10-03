@@ -10,6 +10,14 @@
       ]
     },
     {
+      "collectionGroup": "users",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {"fieldPath": "shelter_id", "order": "ASCENDING"},
+        {"fieldPath": "role", "order": "ASCENDING"}
+      ]
+    },
+    {
       "collectionGroup": "shelters",
       "queryScope": "COLLECTION",
       "fields": [

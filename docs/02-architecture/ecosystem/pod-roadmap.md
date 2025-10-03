@@ -16,7 +16,7 @@ This document outlines upcoming features, enhancements, and long-term vision for
 
 ### **Phase 1: Q1 2026 - Enhanced Connectivity & Smart Features**
 
-#### Starlink Integration (In Partnership Development)
+#### Starlink Integration (Possible Partnership)
 - **Status**: Partnership discussions in progress
 - **Features**:
   - Integrated Starlink Mini terminal mounting

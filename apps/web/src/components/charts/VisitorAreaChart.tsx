@@ -27,17 +27,25 @@ const chartConfig = {
   users: {
     label: "Users",
   },
+  super_admin: {
+    label: "Super Admins",
+    color: "hsl(0, 72%, 51%)", // Red
+  },
+  platform_admin: {
+    label: "Platform Admins",
+    color: "hsl(262, 83%, 58%)", // Purple
+  },
+  shelter_admin: {
+    label: "Shelter Admins",
+    color: "hsl(221, 83%, 53%)", // Blue
+  },
   participants: {
     label: "Participants",
-    color: "#000000", // Black
+    color: "hsl(142, 71%, 45%)", // Green
   },
   donors: {
     label: "Donors", 
-    color: "#666666", // Medium gray
-  },
-  admins: {
-    label: "Admins",
-    color: "#CCCCCC", // Light gray
+    color: "hsl(47, 96%, 53%)", // Yellow/Gold
   },
 } satisfies ChartConfig
 
@@ -170,41 +178,25 @@ export function VisitorAreaChart() {
         >
           <AreaChart data={filteredData}>
             <defs>
+              <linearGradient id="fillSuperAdmin" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="var(--color-super_admin)" stopOpacity={0.8} />
+                <stop offset="95%" stopColor="var(--color-super_admin)" stopOpacity={0.1} />
+              </linearGradient>
+              <linearGradient id="fillPlatformAdmin" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="var(--color-platform_admin)" stopOpacity={0.8} />
+                <stop offset="95%" stopColor="var(--color-platform_admin)" stopOpacity={0.1} />
+              </linearGradient>
+              <linearGradient id="fillShelterAdmin" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="var(--color-shelter_admin)" stopOpacity={0.8} />
+                <stop offset="95%" stopColor="var(--color-shelter_admin)" stopOpacity={0.1} />
+              </linearGradient>
               <linearGradient id="fillParticipants" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="5%"
-                  stopColor="var(--color-participants)"
-                  stopOpacity={0.8}
-                />
-                <stop
-                  offset="95%"
-                  stopColor="var(--color-participants)"
-                  stopOpacity={0.1}
-                />
+                <stop offset="5%" stopColor="var(--color-participants)" stopOpacity={0.8} />
+                <stop offset="95%" stopColor="var(--color-participants)" stopOpacity={0.1} />
               </linearGradient>
               <linearGradient id="fillDonors" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="5%"
-                  stopColor="var(--color-donors)"
-                  stopOpacity={0.8}
-                />
-                <stop
-                  offset="95%"
-                  stopColor="var(--color-donors)"
-                  stopOpacity={0.1}
-                />
-              </linearGradient>
-              <linearGradient id="fillAdmins" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="5%"
-                  stopColor="var(--color-admins)"
-                  stopOpacity={0.8}
-                />
-                <stop
-                  offset="95%"
-                  stopColor="var(--color-admins)"
-                  stopOpacity={0.1}
-                />
+                <stop offset="5%" stopColor="var(--color-donors)" stopOpacity={0.8} />
+                <stop offset="95%" stopColor="var(--color-donors)" stopOpacity={0.1} />
               </linearGradient>
             </defs>
             <CartesianGrid vertical={false} />
@@ -251,10 +243,24 @@ export function VisitorAreaChart() {
               stackId="a"
             />
             <Area
-              dataKey="admins"
+              dataKey="shelter_admin"
               type="natural"
-              fill="url(#fillAdmins)"
-              stroke="var(--color-admins)"
+              fill="url(#fillShelterAdmin)"
+              stroke="var(--color-shelter_admin)"
+              stackId="a"
+            />
+            <Area
+              dataKey="platform_admin"
+              type="natural"
+              fill="url(#fillPlatformAdmin)"
+              stroke="var(--color-platform_admin)"
+              stackId="a"
+            />
+            <Area
+              dataKey="super_admin"
+              type="natural"
+              fill="url(#fillSuperAdmin)"
+              stroke="var(--color-super_admin)"
               stackId="a"
             />
             <ChartLegend content={<ChartLegendContent />} />
@@ -262,7 +268,7 @@ export function VisitorAreaChart() {
         </ChartContainer>
         {stats && (
           <div className="flex w-full items-start gap-2 text-sm mt-4 pt-4 border-t">
-            <div className="grid gap-2">
+            <div className="grid gap-2 w-full">
               <div className="flex items-center gap-2 font-medium leading-none">
                 {stats.isGrowing ? (
                   <>
@@ -276,11 +282,13 @@ export function VisitorAreaChart() {
                   </>
                 )}
               </div>
-              <div className="flex items-center gap-2 leading-none text-muted-foreground">
-                Total Users: {stats.totalUsers} • 
-                Participants: {stats.current.participants} • 
-                Donors: {stats.current.donors} • 
-                Admins: {stats.current.admins}
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-1 leading-none text-muted-foreground text-xs">
+                <span className="font-semibold">Total Users: {stats.totalUsers}</span>
+                <span style={{color: 'hsl(142, 71%, 45%)'}}>■ Participants: {stats.current.participants || 0}</span>
+                <span style={{color: 'hsl(47, 96%, 53%)'}}>■ Donors: {stats.current.donors || 0}</span>
+                <span style={{color: 'hsl(221, 83%, 53%)'}}>■ Shelter Admins: {stats.current.shelter_admin || 0}</span>
+                <span style={{color: 'hsl(262, 83%, 58%)'}}>■ Platform Admins: {stats.current.platform_admin || 0}</span>
+                <span style={{color: 'hsl(0, 72%, 51%)'}}>■ Super Admins: {stats.current.super_admin || 0}</span>
               </div>
             </div>
           </div>

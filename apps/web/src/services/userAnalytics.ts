@@ -5,7 +5,9 @@ export interface UserAnalyticsData {
   date: string;
   participants: number;
   donors: number;
-  admins: number;
+  shelter_admin: number;
+  platform_admin: number;
+  super_admin: number;
 }
 
 // Cache for preventing multiple simultaneous calls
@@ -83,14 +85,23 @@ export const getUserAnalytics = async (forceFresh = false): Promise<UserAnalytic
     ]);
     const currentDonors = allDonorIds.size;
     
-    const currentAdmins = allUsers.filter(user => 
-      user.role === 'admin' || user.role === 'shelteradmin' || user.role === 'super_admin' || user.role === 'superadmin' || user.role === 'platform_admin'
+    // Count admins by type
+    const currentSuperAdmins = allUsers.filter(user => 
+      user.role === 'super_admin' || user.role === 'superadmin'
+    ).length;
+    const currentPlatformAdmins = allUsers.filter(user => 
+      user.role === 'platform_admin'
+    ).length;
+    const currentShelterAdmins = allUsers.filter(user => 
+      user.role === 'admin' || user.role === 'shelteradmin'
     ).length;
     
     console.log(`📊 [${timestamp}] CURRENT USER COUNTS:`);
     console.log(`   Participants: ${currentParticipants}`);
     console.log(`   Donors: ${currentDonors}`);
-    console.log(`   Admins: ${currentAdmins}`);
+    console.log(`   Shelter Admins: ${currentShelterAdmins}`);
+    console.log(`   Platform Admins: ${currentPlatformAdmins}`);
+    console.log(`   Super Admins: ${currentSuperAdmins}`);
     
     // Generate 90 days of historical data leading to current state
     const userAnalytics: UserAnalyticsData[] = [];
@@ -100,7 +111,9 @@ export const getUserAnalytics = async (forceFresh = false): Promise<UserAnalytic
     // Start with smaller base numbers 90 days ago
     const startParticipants = Math.max(0, currentParticipants - 3); // Started 3 less than current
     const startDonors = Math.max(0, currentDonors - 2); // Started 2 less than current  
-    const startAdmins = Math.max(1, currentAdmins - 1); // Started 1 less than current (min 1)
+    const startShelterAdmins = Math.max(0, currentShelterAdmins - 1);
+    const startPlatformAdmins = Math.max(0, currentPlatformAdmins - 1);
+    const startSuperAdmins = Math.max(1, currentSuperAdmins); // Super admins typically stable
     
     for (let i = 89; i >= 0; i--) {
       const date = new Date(today);
@@ -112,7 +125,9 @@ export const getUserAnalytics = async (forceFresh = false): Promise<UserAnalytic
       // Calculate user counts with realistic linear growth to current numbers
       const participants = Math.round(startParticipants + (currentParticipants - startParticipants) * growthProgress);
       const donors = Math.round(startDonors + (currentDonors - startDonors) * growthProgress);
-      const admins = Math.round(startAdmins + (currentAdmins - startAdmins) * growthProgress);
+      const shelterAdmins = Math.round(startShelterAdmins + (currentShelterAdmins - startShelterAdmins) * growthProgress);
+      const platformAdmins = Math.round(startPlatformAdmins + (currentPlatformAdmins - startPlatformAdmins) * growthProgress);
+      const superAdmins = Math.round(startSuperAdmins + (currentSuperAdmins - startSuperAdmins) * growthProgress);
       
       // Add small realistic variance (±5%) but keep final day exact
       // Use date-based seed for consistent variance per day
@@ -121,13 +136,17 @@ export const getUserAnalytics = async (forceFresh = false): Promise<UserAnalytic
       
       const finalParticipants = i === 0 ? currentParticipants : Math.max(0, Math.round(participants * variance));
       const finalDonors = i === 0 ? currentDonors : Math.max(0, Math.round(donors * variance));
-      const finalAdmins = i === 0 ? currentAdmins : Math.max(0, Math.round(admins * variance));
+      const finalShelterAdmins = i === 0 ? currentShelterAdmins : Math.max(0, Math.round(shelterAdmins * variance));
+      const finalPlatformAdmins = i === 0 ? currentPlatformAdmins : Math.max(0, Math.round(platformAdmins * variance));
+      const finalSuperAdmins = i === 0 ? currentSuperAdmins : Math.max(1, Math.round(superAdmins * variance));
       
       userAnalytics.push({
         date: date.toISOString().split('T')[0], // YYYY-MM-DD format
         participants: finalParticipants,
         donors: finalDonors,
-        admins: finalAdmins
+        shelter_admin: finalShelterAdmins,
+        platform_admin: finalPlatformAdmins,
+        super_admin: finalSuperAdmins
       });
     }
     
@@ -163,13 +182,17 @@ export const getUserAnalytics = async (forceFresh = false): Promise<UserAnalytic
       const growthFactor = (89 - i) / 89;
       const participants = Math.round(5 + growthFactor * 15); // 5 to 20
       const donors = Math.round(2 + growthFactor * 8); // 2 to 10
-      const admins = Math.round(1 + growthFactor * 4); // 1 to 5
+      const shelterAdmins = Math.round(1 + growthFactor * 3); // 1 to 4
+      const platformAdmins = Math.round(1 + growthFactor * 2); // 1 to 3
+      const superAdmins = 1; // Typically stable at 1
       
       fallbackData.push({
         date: date.toISOString().split('T')[0],
         participants,
         donors,
-        admins
+        shelter_admin: shelterAdmins,
+        platform_admin: platformAdmins,
+        super_admin: superAdmins
       });
     }
     
@@ -200,8 +223,16 @@ export const getUserAnalyticsStats = async () => {
       ? Math.round(((currentData.donors - previousData.donors) / previousData.donors) * 100)
       : 0;
     
-    const adminGrowth = previousData.admins > 0
-      ? Math.round(((currentData.admins - previousData.admins) / previousData.admins) * 100)
+    const shelterAdminGrowth = previousData.shelter_admin > 0
+      ? Math.round(((currentData.shelter_admin - previousData.shelter_admin) / previousData.shelter_admin) * 100)
+      : 0;
+    
+    const platformAdminGrowth = previousData.platform_admin > 0
+      ? Math.round(((currentData.platform_admin - previousData.platform_admin) / previousData.platform_admin) * 100)
+      : 0;
+    
+    const superAdminGrowth = previousData.super_admin > 0
+      ? Math.round(((currentData.super_admin - previousData.super_admin) / previousData.super_admin) * 100)
       : 0;
     
     // Calculate 30-day totals
@@ -209,7 +240,9 @@ export const getUserAnalyticsStats = async () => {
     const totalGrowth30Days = {
       participants: currentData.participants - (userAnalytics[userAnalytics.length - 31]?.participants || 0),
       donors: currentData.donors - (userAnalytics[userAnalytics.length - 31]?.donors || 0),
-      admins: currentData.admins - (userAnalytics[userAnalytics.length - 31]?.admins || 0)
+      shelter_admin: currentData.shelter_admin - (userAnalytics[userAnalytics.length - 31]?.shelter_admin || 0),
+      platform_admin: currentData.platform_admin - (userAnalytics[userAnalytics.length - 31]?.platform_admin || 0),
+      super_admin: currentData.super_admin - (userAnalytics[userAnalytics.length - 31]?.super_admin || 0)
     };
     
     return {
@@ -217,19 +250,21 @@ export const getUserAnalyticsStats = async () => {
       growth: {
         participants: participantGrowth,
         donors: donorGrowth,
-        admins: adminGrowth
+        shelter_admin: shelterAdminGrowth,
+        platform_admin: platformAdminGrowth,
+        super_admin: superAdminGrowth
       },
       growth30Days: totalGrowth30Days,
-      totalUsers: currentData.participants + currentData.donors + currentData.admins,
-      isGrowing: participantGrowth > 0 || donorGrowth > 0 || adminGrowth > 0
+      totalUsers: currentData.participants + currentData.donors + currentData.shelter_admin + currentData.platform_admin + currentData.super_admin,
+      isGrowing: participantGrowth > 0 || donorGrowth > 0 || shelterAdminGrowth > 0 || platformAdminGrowth > 0 || superAdminGrowth > 0
     };
     
   } catch (error) {
     console.error('❌ Error calculating user analytics stats:', error);
     return {
-      current: { date: new Date().toISOString().split('T')[0], participants: 0, donors: 0, admins: 0 },
-      growth: { participants: 0, donors: 0, admins: 0 },
-      growth30Days: { participants: 0, donors: 0, admins: 0 },
+      current: { date: new Date().toISOString().split('T')[0], participants: 0, donors: 0, shelter_admin: 0, platform_admin: 0, super_admin: 0 },
+      growth: { participants: 0, donors: 0, shelter_admin: 0, platform_admin: 0, super_admin: 0 },
+      growth30Days: { participants: 0, donors: 0, shelter_admin: 0, platform_admin: 0, super_admin: 0 },
       totalUsers: 0,
       isGrowing: false
     };

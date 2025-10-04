@@ -118,6 +118,7 @@ export interface AdminNotification {
   createdAt?: Timestamp;
   read_at?: Timestamp;
   expires_at?: Timestamp | null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data?: any;
   target_roles?: string[];
   userId?: string; // for backward compatibility
@@ -727,6 +728,134 @@ export async function createFraudAlertNotification(alertData: {
     console.log('✅ Fraud alert notification created:', alertData.level);
   } catch (error) {
     console.error('❌ Error creating fraud alert notification:', error);
+    throw error;
+  }
+}
+
+/**
+ * Get shelter-specific notification dashboard counts
+ * For Shelter Administrators - shows only data relevant to their shelter
+ */
+export async function getShelterNotificationCounts(userId: string, shelterId: string): Promise<NotificationDashboardCounts> {
+  try {
+    console.log('🏠 Getting shelter-specific notification counts for:', shelterId);
+    
+    // Get unread message notifications for this user
+    const messageNotificationsQuery = query(
+      collection(db, 'message_notifications'),
+      where('userId', '==', userId),
+      where('isRead', '==', false)
+    );
+    const messageNotificationsSnapshot = await getDocs(messageNotificationsQuery);
+    const unreadMessages = messageNotificationsSnapshot.size;
+    
+    // Get admin notifications for this user
+    const adminNotificationsQuery = query(
+      collection(db, 'admin_notifications'),
+      where('recipient_id', '==', userId),
+      where('is_read', '==', false)
+    );
+    const adminNotificationsSnapshot = await getDocs(adminNotificationsQuery);
+    const unreadAdminNotifications = adminNotificationsSnapshot.size;
+    
+    // Get total admin notifications
+    const totalAdminNotificationsQuery = query(
+      collection(db, 'admin_notifications'),
+      where('recipient_id', '==', userId)
+    );
+    const totalAdminNotificationsSnapshot = await getDocs(totalAdminNotificationsQuery);
+    const totalAdminNotifications = totalAdminNotificationsSnapshot.size;
+    
+    // Count security/fraud alerts
+    let securityAlerts = 0;
+    let fraudAlerts = 0;
+    adminNotificationsSnapshot.forEach(doc => {
+      const data = doc.data();
+      if (data.type === 'security_alert') securityAlerts++;
+      if (data.type === 'fraud_alert') fraudAlerts++;
+    });
+    
+    // Get shelter-specific participant counts
+    const participantsQuery = query(
+      collection(db, 'users'),
+      where('shelter_id', '==', shelterId),
+      where('role', '==', 'participant')
+    );
+    const participantsSnapshot = await getDocs(participantsQuery);
+    const totalParticipants = participantsSnapshot.size;
+    
+    // Count pending participant applications (last 7 days)
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    const sevenDaysAgoTimestamp = Timestamp.fromDate(sevenDaysAgo);
+    
+    let pendingParticipants = 0;
+    let recentParticipants = 0;
+    participantsSnapshot.forEach(doc => {
+      const data = doc.data();
+      if (data.status === 'pending' || data.status === 'pending_approval') {
+        pendingParticipants++;
+      }
+      if (data.createdAt && data.createdAt >= sevenDaysAgoTimestamp) {
+        recentParticipants++;
+      }
+    });
+    
+    // Get active participants (logged in last 24 hours)
+    const oneDayAgo = new Date();
+    oneDayAgo.setDate(oneDayAgo.getDate() - 1);
+    const oneDayAgoTimestamp = Timestamp.fromDate(oneDayAgo);
+    
+    let activeParticipants = 0;
+    participantsSnapshot.forEach(doc => {
+      const data = doc.data();
+      if (data.lastLoginAt && data.lastLoginAt >= oneDayAgoTimestamp) {
+        activeParticipants++;
+      }
+    });
+    
+    console.log('✅ Shelter notification counts:', {
+      unreadMessages,
+      unreadAdminNotifications,
+      totalAdminNotifications,
+      totalParticipants,
+      pendingParticipants,
+      recentParticipants,
+      activeParticipants,
+      securityAlerts,
+      fraudAlerts
+    });
+    
+    return {
+      // Message Notifications
+      totalNotifications: unreadMessages + unreadAdminNotifications,
+      unreadMessages,
+      unreadNotifications: unreadAdminNotifications,
+      
+      // Email Signups (not relevant for shelter admin)
+      totalEmailSignups: 0,
+      recentEmailSignups: 0,
+      
+      // Contact Inquiries (not relevant for shelter admin)
+      contactInquiries: 0,
+      recentContactInquiries: 0,
+      repliedContactInquiries: 0,
+      unrepliedContactInquiries: 0,
+      
+      // Admin Notifications
+      totalAdminNotifications,
+      unreadAdminNotifications,
+      securityAlerts,
+      fraudAlerts,
+      
+      // Shelter Applications -> Participant Applications
+      pendingShelterapplications: pendingParticipants,
+      
+      // Active Users -> Active Participants (last 24 hours)
+      activeUsers: activeParticipants
+    };
+  } catch (error) {
+    console.error('❌ Error getting shelter notification counts:', error);
     throw error;
   }
 }

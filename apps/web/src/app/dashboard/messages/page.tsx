@@ -44,6 +44,9 @@ export default function MessagesPage() {
   const [showNewMessage, setShowNewMessage] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [userShortcode, setUserShortcode] = useState<UserShortcode | null>(null);
+  const [showMentionDropdown, setShowMentionDropdown] = useState(false);
+  const [mentionSearch, setMentionSearch] = useState('');
+  const [mentionPosition, setMentionPosition] = useState(0);
 
   // Initialize user shortcode and load data
   useEffect(() => {
@@ -119,6 +122,43 @@ export default function MessagesPage() {
       console.error('❌ Error loading messages:', error);
     }
   };
+
+  const handleMessageInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const value = e.target.value;
+    const cursorPosition = e.target.selectionStart;
+    
+    setNewMessageContent(value);
+    
+    // Check for @ symbol to trigger mention dropdown
+    const textBeforeCursor = value.substring(0, cursorPosition);
+    const lastAtSymbol = textBeforeCursor.lastIndexOf('@');
+    
+    if (lastAtSymbol !== -1) {
+      const textAfterAt = textBeforeCursor.substring(lastAtSymbol + 1);
+      // Only show dropdown if there's no space after @ (still typing the mention)
+      if (!textAfterAt.includes(' ')) {
+        setMentionSearch(textAfterAt.toLowerCase());
+        setMentionPosition(lastAtSymbol);
+        setShowMentionDropdown(true);
+        return;
+      }
+    }
+    
+    setShowMentionDropdown(false);
+  };
+
+  const handleMentionSelect = (shortcode: string) => {
+    const beforeMention = newMessageContent.substring(0, mentionPosition);
+    const afterMention = newMessageContent.substring(mentionPosition).replace(/@\w*/, `@${shortcode} `);
+    setNewMessageContent(beforeMention + afterMention);
+    setShowMentionDropdown(false);
+    setMentionSearch('');
+  };
+
+  const filteredMentions = availableShortcodes.filter(sc => 
+    sc.shortcode.toLowerCase().includes(mentionSearch) ||
+    sc.displayName.toLowerCase().includes(mentionSearch)
+  ).slice(0, 5);
 
   const handleSendMessage = async () => {
     if (!user || !newMessageContent.trim()) return;
@@ -428,14 +468,40 @@ export default function MessagesPage() {
                 </ScrollArea>
 
                 {/* Reply Input */}
-                <div className="flex gap-2">
-                  <Textarea
-                    placeholder="Type your message... (or use @username format)"
-                    value={newMessageContent}
-                    onChange={(e) => setNewMessageContent(e.target.value)}
-                    className="flex-1"
-                    rows={2}
-                  />
+                <div className="relative flex gap-2">
+                  <div className="flex-1 relative">
+                    <Textarea
+                      placeholder="Type your message... (type @ to mention someone)"
+                      value={newMessageContent}
+                      onChange={handleMessageInput}
+                      className="flex-1"
+                      rows={2}
+                    />
+                    
+                    {/* @Mention Dropdown */}
+                    {showMentionDropdown && filteredMentions.length > 0 && (
+                      <div className="absolute bottom-full left-0 mb-2 w-full max-w-sm bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50 max-h-48 overflow-y-auto">
+                        {filteredMentions.map((sc) => (
+                          <button
+                            key={sc.id}
+                            onClick={() => handleMentionSelect(sc.shortcode)}
+                            className="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2 transition-colors"
+                          >
+                            <User className="h-4 w-4 text-gray-400" />
+                            <div className="flex-1">
+                              <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                                @{sc.shortcode}
+                              </div>
+                              <div className="text-xs text-gray-500 dark:text-gray-400">
+                                {sc.displayName} · {sc.role.replace('_', ' ')}
+                              </div>
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  
                   <Button
                     onClick={handleSendMessage}
                     disabled={isSending || !newMessageContent.trim()}
@@ -487,14 +553,37 @@ export default function MessagesPage() {
                 </select>
               </div>
               
-              <div>
+              <div className="relative">
                 <label className="block text-sm font-medium mb-2">Message</label>
                 <Textarea
-                  placeholder="Type your message... (or use @username format)"
+                  placeholder="Type your message... (type @ to mention someone)"
                   value={newMessageContent}
-                  onChange={(e) => setNewMessageContent(e.target.value)}
+                  onChange={handleMessageInput}
                   rows={4}
                 />
+                
+                {/* @Mention Dropdown for New Message */}
+                {showMentionDropdown && filteredMentions.length > 0 && (
+                  <div className="absolute bottom-full left-0 mb-2 w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50 max-h-48 overflow-y-auto">
+                    {filteredMentions.map((sc) => (
+                      <button
+                        key={sc.id}
+                        onClick={() => handleMentionSelect(sc.shortcode)}
+                        className="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2 transition-colors"
+                      >
+                        <User className="h-4 w-4 text-gray-400" />
+                        <div className="flex-1">
+                          <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                            @{sc.shortcode}
+                          </div>
+                          <div className="text-xs text-gray-500 dark:text-gray-400">
+                            {sc.displayName} · {sc.role.replace('_', ' ')}
+                          </div>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <div className="flex gap-2">

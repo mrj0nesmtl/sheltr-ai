@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Head from 'next/head';
-import { QrCode, Heart, Share2, MapPin, Target, Calendar, User, ExternalLink, Copy, Check, Home, ChevronRight, ArrowLeft, RefreshCw } from 'lucide-react';
+import { QrCode, Heart, Share2, MapPin, Target, User, ExternalLink, Copy, Check, Home, ChevronRight, ArrowLeft, RefreshCw, TrendingUp, Award, Calendar, Building } from 'lucide-react';
 import { getParticipantProfile, type ParticipantProfile } from '@/services/platformMetrics';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
@@ -13,10 +13,20 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import Footer from '@/components/Footer';
+import { Separator } from '@/components/ui/separator';
+import Image from 'next/image';
 import ThemeLogo from '@/components/ThemeLogo';
 
-interface Participant {
+interface ParticipantGoal {
+  id?: string;
+  title: string;
+  description?: string;
+  progress: number;
+  status?: string;
+  target_date?: string;
+}
+
+interface ParticipantData {
   id: string;
   firstName: string;
   lastName: string;
@@ -28,23 +38,16 @@ interface Participant {
     state: string;
     zipcode: string;
   };
-  goals: Array<{
-    id: string;
-    title: string;
-    description: string;
-    progress: number;
-    status: string;
-    target_date: string;
-  }>;
-  skills: string[];
-  interests: string[];
+  goals: ParticipantGoal[];
+  skills?: string[];
+  interests?: string[];
   total_received: number;
   donation_count: number;
   services_completed: number;
   progress: number;
-  qr_code: string;
+  qr_code?: string;
   photo_url?: string;
-  featured: boolean;
+  featured?: boolean;
   demo?: boolean;
 }
 
@@ -53,43 +56,37 @@ interface ParticipantProfileClientProps {
 }
 
 export function ParticipantProfileClient({ participantId }: ParticipantProfileClientProps) {
-  const [participant, setParticipant] = useState<Participant | null>(null);
+  
+  const [participant, setParticipant] = useState<ParticipantData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
-  const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
-  const [publicGoals, setPublicGoals] = useState<PublicGoalData[]>([]);
-  const [goalStats, setGoalStats] = useState<PublicGoalStats | null>(null);
-  const [goalsVisible, setGoalsVisible] = useState(true);
+  const [goalsVisible, setGoalsVisible] = useState(false);
 
-  // Function to load participant goals and privacy settings
-  const loadParticipantGoals = async (participantId: string) => {
+  const loadParticipantGoals = async (participantId: string): Promise<PublicGoalData | null> => {
     try {
-      console.log(`🎯 Loading goals for participant: ${participantId}`);
-      
-      // Get public goals and statistics
       const goalsData = await publicProfileService.getPublicGoals(participantId);
-      
-      if (goalsData) {
-        console.log(`✅ Loaded ${goalsData.goals.length} public goals`);
-        setPublicGoals(goalsData.goals);
-        setGoalStats(goalsData.stats);
-        setGoalsVisible(true);
-      } else {
-        console.log(`🔒 Goals sharing disabled or no goals found for ${participantId}`);
-        // Use demo goals as fallback
-        const demoData = publicProfileService.getDemoGoals(participantId);
-        setPublicGoals(demoData.goals);
-        setGoalStats(demoData.stats);
-        setGoalsVisible(true); // Show demo goals for now
-      }
-      
+      return goalsData;
     } catch (error) {
       console.error('Error loading participant goals:', error);
-      // Fallback to demo goals on error
-      const demoData = publicProfileService.getDemoGoals(participantId);
-      setPublicGoals(demoData.goals);
-      setGoalStats(demoData.stats);
+      return null;
+    }
+  };
+
+  const loadRealGoalsIfAvailable = async (participantId: string) => {
+    const goalsData = await loadParticipantGoals(participantId);
+    if (goalsData && goalsData.goals && goalsData.goals.length > 0) {
+      console.log('✅ [DEBUG] Found real goals for participant:', goalsData.goals.length);
+      return goalsData.goals.map((goal: PublicGoalData['goals'][0]) => ({
+        id: goal.id || '',
+        title: goal.title,
+        description: goal.description || '',
+        progress: goal.progress_percentage || 0,
+        status: goal.status || 'in_progress',
+        target_date: goal.target_date || ''
+      }));
+    } else {
+      console.log('⚠️ [DEBUG] No real goals found, using default goals');
       setGoalsVisible(true);
     }
   };
@@ -127,6 +124,9 @@ export function ParticipantProfileClient({ participantId }: ParticipantProfileCl
             // Fetch real donation data
             const donationData = await fetchParticipantDonations(participantId);
             
+            // Try to load real goals
+            const realGoals = await loadRealGoalsIfAvailable(participantId);
+            
             realParticipant = {
               id: participantId,
               firstName: realParticipantData.firstName,
@@ -135,50 +135,55 @@ export function ParticipantProfileClient({ participantId }: ParticipantProfileCl
               story: "Dedicated community member working towards housing stability and career growth. With SHELTR's support, I'm building skills and connections to create a better future for myself and help others in my community.",
               shelter_name: realParticipantData.shelterName || "Old Brewery Mission",
               location: { city: "Montreal", state: "QC", zipcode: "H2X 1Y5" },
-              goals: [
+              goals: realGoals || [
                 { id: "housing-goal", title: "Secure Stable Housing", description: "Find permanent housing solution", progress: 68, status: "in_progress", target_date: "2024-10-01" },
                 { id: "employment-goal", title: "Career Development", description: "Build skills and secure meaningful employment", progress: 55, status: "in_progress", target_date: "2024-09-15" },
                 { id: "community-goal", title: "Community Engagement", description: "Give back and help others in similar situations", progress: 42, status: "in_progress", target_date: "2024-12-01" }
               ],
-              skills: ["Communication", "Leadership", "Problem Solving", "Community Outreach"],
-              interests: ["Community Service", "Personal Development", "Mentoring", "Social Impact"],
+              skills: ["Community Outreach", "Leadership", "Communication", "Problem Solving"],
+              interests: ["Community Development", "Social Work", "Education"],
               total_received: donationData.total_received,
               donation_count: donationData.donation_count,
-              services_completed: 0,
+              services_completed: 8,
               progress: 55,
-              qr_code: `SHELTR-${realParticipantData.firstName.toUpperCase()}-${Date.now()}`,
+              qr_code: `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(`https://sheltr-ai.web.app/donate?demo=true&participant=${participantId}`)}&format=png`,
               featured: true,
               demo: false
             };
-          } else {
-                    // Try to find by name-based URL (michael-rodriguez)
-        const [firstName, lastName] = participantId.split('-').map(name => name.charAt(0).toUpperCase() + name.slice(1));
-        if (firstName && lastName) {
-          // First try to find by exact name match
-          let usersSnapshot = await getDocs(
-            query(collection(db, 'users'), 
-              where('firstName', '==', firstName),
-              where('lastName', '==', lastName),
-              where('role', '==', 'participant')
-            )
-          );
+            
+            setParticipant(realParticipant);
+            console.log('✅ [DEBUG] Real participant loaded:', realParticipant);
+            setLoading(false);
+            return;
+          }
+
+          // Try to find user by email (name-based URL like "michael-rodriguez")
+          const usersRef = collection(db, 'users');
+          const usersQuery = query(usersRef, where('role', '==', 'participant'));
+          const usersSnapshot = await getDocs(usersQuery);
           
-          // If not found, try to find by email (for participant@example.com)
-          if (usersSnapshot.empty) {
-            usersSnapshot = await getDocs(
-              query(collection(db, 'users'), 
-                where('email', '==', 'participant@example.com'),
-                where('role', '==', 'participant')
-              )
-            );
+          let userId = null;
+          let firstName = '';
+          let lastName = '';
+          
+          for (const doc of usersSnapshot.docs) {
+            const userData = doc.data();
+            const userFirstName = userData.firstName?.toLowerCase() || '';
+            const userLastName = userData.lastName?.toLowerCase() || '';
+            const fullNameSlug = `${userFirstName}-${userLastName}`;
+            
+            if (fullNameSlug === participantId.toLowerCase()) {
+              userId = doc.id;
+              firstName = userData.firstName || '';
+              lastName = userData.lastName || '';
+              break;
+            }
           }
           
-          if (!usersSnapshot.empty) {
-            const userData = usersSnapshot.docs[0].data();
-            const userId = usersSnapshot.docs[0].id;
-            
-            // Fetch real donation data for this user
+          if (userId) {
+            const userData = usersSnapshot.docs.find(doc => doc.id === userId)?.data();
             const donationData = await fetchParticipantDonations(userId);
+            const realGoals = await loadRealGoalsIfAvailable(userId);
             
             realParticipant = {
               id: userId,
@@ -188,38 +193,33 @@ export function ParticipantProfileClient({ participantId }: ParticipantProfileCl
               story: "Dedicated community member working towards housing stability and career growth. With SHELTR's support, I'm building skills and connections to create a better future for myself and help others in my community.",
               shelter_name: userData.shelterName || "Old Brewery Mission",
               location: { city: "Montreal", state: "QC", zipcode: "H2X 1Y5" },
-              goals: [
+              goals: realGoals || [
                 { id: "housing-goal", title: "Secure Stable Housing", description: "Find permanent housing solution", progress: 68, status: "in_progress", target_date: "2024-10-01" },
                 { id: "employment-goal", title: "Career Development", description: "Build skills and secure meaningful employment", progress: 55, status: "in_progress", target_date: "2024-09-15" },
                 { id: "community-goal", title: "Community Engagement", description: "Give back and help others in similar situations", progress: 42, status: "in_progress", target_date: "2024-12-01" }
               ],
-              skills: ["Communication", "Leadership", "Problem Solving", "Community Outreach"],
-              interests: ["Community Service", "Personal Development", "Mentoring", "Social Impact"],
+              skills: ["Community Outreach", "Leadership", "Communication", "Problem Solving"],
+              interests: ["Community Development", "Social Work", "Education"],
               total_received: donationData.total_received,
               donation_count: donationData.donation_count,
-              services_completed: 0,
+              services_completed: 8,
               progress: 55,
-              qr_code: `SHELTR-${userData.firstName?.toUpperCase() || firstName.toUpperCase()}-${Date.now()}`,
+              qr_code: `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(`https://sheltr-ai.web.app/donate?demo=true&participant=${participantId}`)}&format=png`,
               featured: true,
               demo: false
             };
-          }
-        }
-          }
-          
-          if (realParticipant) {
-            setParticipant(realParticipant);
-            console.log('✅ Real participant profile loaded:', realParticipant);
             
-            // Load participant goals
-            await loadParticipantGoals(realParticipant.id);
+            setParticipant(realParticipant);
+            console.log('✅ [DEBUG] Real participant loaded via name:', realParticipant);
+            setLoading(false);
             return;
           }
-        } catch (error) {
-          console.error('❌ Error loading real participant:', error);
-        }
 
-        // Fallback to demo data for demo-participant-001, michael-rodriguez, or if no real participant found
+        } catch (realParticipantError) {
+          console.log('⚠️ [DEBUG] Could not load real participant, falling back to demo:', realParticipantError);
+        }
+        
+        // Fallback to Michael Rodriguez demo data
         if (participantId === 'demo-participant-001' || participantId === 'michael-rodriguez') {
           // Fetch real donation data for this participant
           const donationData = await fetchParticipantDonations(participantId);
@@ -297,67 +297,54 @@ export function ParticipantProfileClient({ participantId }: ParticipantProfileCl
           };
           
           setParticipant(mockParticipant);
-          console.log('✅ [DEBUG] Demo participant loaded in catch block:', mockParticipant);
-          console.log(`💰 [DEBUG] Participant total_received: $${mockParticipant.total_received}`);
-          
-          // Load participant goals
-          await loadParticipantGoals(participantId);
-        } else {
-          setError('Failed to load participant profile');
+          console.log('✅ [DEBUG] Demo participant loaded (fallback):', mockParticipant);
+          setLoading(false);
+          return;
         }
-      } finally {
+        
+        setError('Failed to load participant');
         setLoading(false);
       }
     };
 
-  // Function to refresh participant data
   const refreshParticipantData = async () => {
-    setLastRefresh(new Date());
     setLoading(true);
     await loadParticipant();
+    setLoading(false);
   };
 
   useEffect(() => {
-    if (participantId) {
-      loadParticipant();
-    }
+    loadParticipant();
   }, [participantId]);
 
   const handleShare = async () => {
     const url = window.location.href;
-    
     if (navigator.share) {
       try {
         await navigator.share({
           title: `Support ${participant?.firstName} ${participant?.lastName}`,
-          text: `Help ${participant?.firstName} achieve their goals through SHELTR`,
+          text: participant?.story || '',
           url: url,
         });
       } catch (error) {
-        // Fallback to copy URL
-        copyUrl();
+        console.log('Error sharing:', error);
+        await navigator.clipboard.writeText(url);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
       }
     } else {
-      copyUrl();
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
     }
-  };
-
-  const copyUrl = () => {
-    navigator.clipboard.writeText(window.location.href);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
-  const handleDonate = () => {
-    window.location.href = `/donate?demo=${participant?.demo || false}&participant=${participantId}`;
   };
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-background to-muted flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading participant profile...</p>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading profile...</p>
         </div>
       </div>
     );
@@ -366,11 +353,17 @@ export function ParticipantProfileClient({ participantId }: ParticipantProfileCl
   if (error || !participant) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-background to-muted flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold mb-4">Profile Not Found</h1>
-          <p className="text-muted-foreground mb-6">{error || 'This participant profile does not exist.'}</p>
+        <div className="text-center max-w-md mx-auto px-4">
+          <div className="text-6xl mb-4">👤</div>
+          <h1 className="text-2xl font-bold mb-2">Participant Not Found</h1>
+          <p className="text-muted-foreground mb-6">
+            {error || "We couldn't find the participant you're looking for."}
+          </p>
           <Link href="/scan-give">
-            <Button>Back to Scan & Give</Button>
+            <Button>
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Scan & Give
+            </Button>
           </Link>
         </div>
       </div>
@@ -378,222 +371,123 @@ export function ParticipantProfileClient({ participantId }: ParticipantProfileCl
   }
 
   return (
-    <>
-      {participant && (
-        <Head>
-          <title>Support {participant.firstName} {participant.lastName} | SHELTR</title>
-          <meta name="description" content={`Help ${participant.firstName} achieve their goals through SHELTR. ${participant.story.substring(0, 150)}...`} />
-          <meta property="og:title" content={`Support ${participant.firstName} ${participant.lastName}`} />
-          <meta property="og:description" content={participant.story.substring(0, 200)} />
-          <meta property="og:image" content={participant.photo_url || '/images/logo.svg'} />
-          <meta property="og:url" content={`https://sheltr-ai.web.app/participant/${participant.id}`} />
-          <meta property="og:type" content="profile" />
-          <meta name="twitter:card" content="summary_large_image" />
-          <meta name="twitter:title" content={`Support ${participant.firstName} ${participant.lastName}`} />
-          <meta name="twitter:description" content={participant.story.substring(0, 200)} />
-          <meta name="twitter:image" content={participant.photo_url || '/images/logo.svg'} />
-        </Head>
-      )}
-      
-      <div className="min-h-screen bg-gradient-to-br from-background to-muted">
-        {/* Header */}
-        <header className="bg-background/95 backdrop-blur-sm sticky top-0 z-50 border-b">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center h-16">
-              <div className="flex items-center space-x-4">
-                <Link href="/" className="flex items-center">
-                  <ThemeLogo className="h-10 w-10" />
-                </Link>
-                
-                {/* Breadcrumb */}
-                <div className="hidden sm:flex items-center space-x-2 text-sm text-muted-foreground">
-                  <Link href="/scan-give" className="hover:text-foreground transition-colors">
-                    Scan & Give
-                  </Link>
-                  <ChevronRight className="h-4 w-4" />
-                  <span className="text-foreground font-medium">
-                    {participant.firstName} {participant.lastName}
-                  </span>
-                </div>
-              </div>
-              
-              <div className="flex items-center space-x-4">
-                <Button 
-                  onClick={refreshParticipantData} 
-                  variant="outline" 
-                  size="sm"
-                  disabled={loading}
-                  className="text-xs"
-                >
-                  <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
-                  Refresh
-                </Button>
-                {participant.demo && (
-                  <Badge variant="secondary" className="bg-orange-500 text-white">
-                    Demo Profile
-                  </Badge>
-                )}
-                <Button onClick={handleShare} variant="outline" size="sm">
-                  <Share2 className="h-4 w-4 mr-2" />
-                  {copied ? <Check className="h-4 w-4" /> : 'Share'}
-                </Button>
-              </div>
-            </div>
-          </div>
-        </header>
+    <div className="min-h-screen bg-gradient-to-br from-background to-muted">
+      <Head>
+        <title>{participant.firstName} {participant.lastName} - SHELTR Participant</title>
+        <meta name="description" content={participant.story} />
+      </Head>
 
-        {/* Mobile Breadcrumb */}
-        <div className="sm:hidden bg-background/50 border-b px-4 py-2">
-          <div className="flex items-center space-x-2">
+      {/* Header */}
+      <div className="bg-background/95 backdrop-blur-sm sticky top-0 z-50 border-b">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
             <Link href="/scan-give">
-              <Button variant="ghost" size="sm" className="p-1 h-8 w-8">
-                <ArrowLeft className="h-4 w-4" />
+              <Button variant="ghost" size="sm">
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Back to Scan & Give
               </Button>
             </Link>
-            <div className="flex items-center space-x-2 text-sm">
-              <Link href="/scan-give" className="text-muted-foreground hover:text-foreground transition-colors">
-                Scan & Give
-              </Link>
-              <ChevronRight className="h-4 w-4 text-muted-foreground" />
-              <span className="text-foreground font-medium">
-                {participant.firstName} {participant.lastName}
-              </span>
+            <div className="flex items-center gap-2">
+              {participant.demo && (
+                <Badge variant="secondary" className="bg-orange-500 text-white">Demo Profile</Badge>
+              )}
+              <Button variant="outline" size="sm" onClick={handleShare}>
+                <Share2 className="mr-2 h-4 w-4" />
+                {copied ? <Check className="h-4 w-4" /> : 'Share'}
+              </Button>
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Main Content */}
-        <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="grid lg:grid-cols-3 gap-8">
-            
-            {/* Left Column - Profile Info */}
-            <div className="lg:col-span-2 space-y-6">
-              
-              {/* Profile Header */}
-              <Card className="border-2">
-                <CardHeader className="text-center pb-4">
-                  <div className="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                    {participant.photo_url ? (
-                      <img 
-                        src={participant.photo_url} 
-                        alt={`${participant.firstName} ${participant.lastName}`}
-                        className="w-full h-full rounded-full object-cover"
-                      />
-                    ) : (
-                      <User className="h-12 w-12 text-primary" />
-                    )}
-                  </div>
-                  <CardTitle className="text-2xl">
-                    {participant.firstName} {participant.lastName}
-                  </CardTitle>
-                  <CardDescription className="text-lg">
-                    Age {participant.age} • {participant.shelter_name}
-                  </CardDescription>
-                  <div className="flex items-center justify-center gap-4 text-sm text-muted-foreground mt-2">
-                    <div className="flex items-center gap-1">
-                      <MapPin className="h-4 w-4" />
-                      {participant.location.city}, {participant.location.state}
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Target className="h-4 w-4" />
-                      {participant.progress}% Progress
-                    </div>
-                  </div>
-                  {participant.featured && (
-                    <Badge className="mt-2 bg-gradient-to-r from-orange-500 to-red-500 text-white">
-                      ⭐ Featured Participant
-                    </Badge>
-                  )}
-                </CardHeader>
-              </Card>
+      {/* Main Content */}
+      <div className="container mx-auto px-4 py-8 max-w-7xl">
+        {/* Hero Section */}
+        <div className="text-center mb-12">
+          {/* Profile Photo */}
+          <div className="inline-flex items-center justify-center w-24 h-24 bg-background rounded-full border-2 border-border shadow-lg mb-6">
+            {participant.photo_url ? (
+              <Image src={participant.photo_url} alt={`${participant.firstName} ${participant.lastName}`} width={96} height={96} className="rounded-full" />
+            ) : (
+              <User className="h-12 w-12 text-primary" />
+            )}
+          </div>
 
-              {/* Story */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Heart className="h-5 w-5 text-red-500" />
-                    Story
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground leading-relaxed">{participant.story}</p>
-                </CardContent>
-              </Card>
+          {/* Name & Details */}
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+            {participant.firstName} {participant.lastName}
+          </h1>
+          
+          <p className="text-lg text-muted-foreground mb-4">
+            Age {participant.age} • <Link href="/old-brewery-mission" className="hover:text-primary underline underline-offset-2 transition-colors">{participant.shelter_name}</Link>
+          </p>
 
-              {/* Goals & Progress */}
-              {goalsVisible && publicGoals.length > 0 && (
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Target className="h-5 w-5 text-blue-500" />
-                      Goals & Progress
-                    </CardTitle>
-                    <CardDescription>
-                      {participant.firstName}'s journey towards independence and stability
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                    
-                    {/* Goal Statistics */}
-                    {goalStats && (
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                        <div className="text-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                          <div className="text-2xl font-bold text-blue-600">{goalStats.totalGoals}</div>
-                          <div className="text-sm text-blue-600">Total Goals</div>
-                        </div>
-                        <div className="text-center p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                          <div className="text-2xl font-bold text-green-600">{goalStats.activeGoals}</div>
-                          <div className="text-sm text-green-600">Active</div>
-                        </div>
-                        <div className="text-center p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
-                          <div className="text-2xl font-bold text-purple-600">{goalStats.completedGoals}</div>
-                          <div className="text-sm text-purple-600">Completed</div>
-                        </div>
-                        <div className="text-center p-3 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
-                          <div className="text-2xl font-bold text-orange-600">{goalStats.averageProgress}%</div>
-                          <div className="text-sm text-orange-600">Avg Progress</div>
-                        </div>
+          {/* Location & Progress */}
+          <div className="flex items-center justify-center gap-4 flex-wrap mb-6">
+            <Badge variant="secondary" className="text-sm">
+              <MapPin className="h-4 w-4 mr-1" />
+              {participant.location.city}, {participant.location.state}
+            </Badge>
+            <Badge variant="outline" className="text-sm">
+              <Target className="h-4 w-4 mr-1" />
+              {participant.progress}% Complete
+            </Badge>
+            {participant.featured && (
+              <Badge className="text-sm bg-orange-500">
+                <Award className="h-4 w-4 mr-1" />
+                Featured Participant
+              </Badge>
+            )}
+          </div>
+        </div>
+
+        {/* Main Grid */}
+        <div className="grid lg:grid-cols-3 gap-8 mb-12">
+          {/* Left Column - Story & Goals */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Story Card */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Heart className="h-5 w-5 text-red-500" />
+                  Story
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground leading-relaxed">{participant.story}</p>
+              </CardContent>
+            </Card>
+
+            {/* Goals Card */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Target className="h-5 w-5 text-primary" />
+                  Current Goals
+                </CardTitle>
+                <CardDescription>Progress towards housing stability and personal growth</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {participant.goals.map((goal, index) => (
+                    <div key={index} className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="font-medium">{goal.title}</span>
+                        <span className="text-sm text-muted-foreground">{goal.progress}%</span>
                       </div>
-                    )}
-
-                    {/* Individual Goals */}
-                    <div className="space-y-4">
-                      {publicGoals.map((goal) => (
-                        <div key={goal.id} className="space-y-3 p-4 border rounded-lg bg-gray-50 dark:bg-gray-800/50">
-                          <div className="flex justify-between items-start">
-                            <div className="flex-1">
-                              <div className="flex items-center gap-2 mb-1">
-                                <h4 className="font-semibold">{goal.title}</h4>
-                                <Badge variant="secondary" className="text-xs">
-                                  {goal.category}
-                                </Badge>
-                              </div>
-                              <p className="text-sm text-muted-foreground mb-2">{goal.description}</p>
-                              <div className="text-xs text-muted-foreground">
-                                Target Date: {new Date(goal.targetDate).toLocaleDateString()}
-                              </div>
-                            </div>
-                            <div className="text-right ml-4">
-                              <div className="text-lg font-bold text-blue-600">{goal.progress}%</div>
-                              <div className="text-xs text-muted-foreground">Complete</div>
-                            </div>
-                          </div>
-                          <Progress value={goal.progress} className="h-3" />
-                        </div>
-                      ))}
+                      <Progress value={goal.progress} className="h-2" />
+                      {goal.description && (
+                        <p className="text-sm text-muted-foreground">{goal.description}</p>
+                      )}
                     </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
 
-                    <div className="text-center pt-4 border-t">
-                      <p className="text-sm text-muted-foreground">
-                        🎯 Your support helps {participant.firstName} achieve these meaningful goals
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
-
-              {/* Skills & Interests */}
-              <div className="grid md:grid-cols-2 gap-6">
+            {/* Skills & Interests */}
+            <div className="grid sm:grid-cols-2 gap-6">
+              {participant.skills && participant.skills.length > 0 && (
                 <Card>
                   <CardHeader>
                     <CardTitle className="text-lg">Skills</CardTitle>
@@ -601,14 +495,14 @@ export function ParticipantProfileClient({ participantId }: ParticipantProfileCl
                   <CardContent>
                     <div className="flex flex-wrap gap-2">
                       {participant.skills.map((skill, index) => (
-                        <Badge key={index} variant="secondary">
-                          {skill}
-                        </Badge>
+                        <Badge key={index} variant="secondary">{skill}</Badge>
                       ))}
                     </div>
                   </CardContent>
                 </Card>
+              )}
 
+              {participant.interests && participant.interests.length > 0 && (
                 <Card>
                   <CardHeader>
                     <CardTitle className="text-lg">Interests</CardTitle>
@@ -616,190 +510,128 @@ export function ParticipantProfileClient({ participantId }: ParticipantProfileCl
                   <CardContent>
                     <div className="flex flex-wrap gap-2">
                       {participant.interests.map((interest, index) => (
-                        <Badge key={index} variant="outline">
-                          {interest}
-                        </Badge>
+                        <Badge key={index} variant="outline">{interest}</Badge>
                       ))}
                     </div>
                   </CardContent>
                 </Card>
-              </div>
-            </div>
-
-            {/* Right Column - Action Panel */}
-            <div className="space-y-6">
-              
-              {/* QR Code & Donation */}
-              <Card className="border-2 border-primary/20">
-                <CardHeader className="text-center">
-                  <CardTitle className="text-lg">Support {participant.firstName}</CardTitle>
-                  <CardDescription>Scan or click to donate directly</CardDescription>
-                </CardHeader>
-                <CardContent className="text-center space-y-4">
-                  {/* QR Code Display */}
-                  <div className="bg-white p-4 rounded-lg mx-auto w-fit">
-                    <div className="w-32 h-32 bg-gray-100 flex items-center justify-center rounded overflow-hidden">
-                      {(participant.demo || participant.id === 'michael-rodriguez' || participant.id === 'demo-participant-001') ? (
-                        <img 
-                          src={`https://api.qrserver.com/v1/create-qr-code/?size=128x128&data=${encodeURIComponent(`https://sheltr-ai.web.app/donate?demo=true&participant=${participant.id}`)}&format=png`}
-                          alt={`QR Code for ${participant.firstName} ${participant.lastName}`}
-                          className="w-full h-full object-cover"
-                          onError={(e) => {
-                            console.log('🚫 QR Code image failed to load, showing fallback');
-                            // Fallback to text display if QR service fails
-                            e.currentTarget.style.display = 'none';
-                            e.currentTarget.nextElementSibling?.classList.remove('hidden');
-                          }}
-                          onLoad={() => {
-                            console.log('✅ QR Code image loaded successfully');
-                          }}
-                        />
-                      ) : (
-                        <QrCode className="h-16 w-16 text-gray-400" />
-                      )}
-                      <div className="hidden w-full h-full flex items-center justify-center">
-                        <span className="text-xs text-center font-mono break-all p-2">
-                          {participant.qr_code}
-                        </span>
-                      </div>
-                      <span className="sr-only">QR Code for {participant.qr_code}</span>
-                    </div>
-                  </div>
-                  
-                  <Button onClick={handleDonate} className="w-full" size="lg">
-                    <Heart className="h-5 w-5 mr-2" />
-                    Donate Now
-                  </Button>
-                  
-                  <div className="text-xs text-muted-foreground">
-                    Secure donations through Adyen
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Impact Stats */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Impact So Far</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-1 gap-4">
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-green-600">
-                        ${participant.total_received.toLocaleString()}
-                      </div>
-                      <div className="text-sm text-muted-foreground">Total Received</div>
-                    </div>
-                    
-                    <div className="grid grid-cols-2 gap-4 text-center">
-                      <div>
-                        <div className="text-xl font-bold text-blue-600">{participant.donation_count}</div>
-                        <div className="text-xs text-muted-foreground">Donations</div>
-                      </div>
-                      <div>
-                        <div className="text-xl font-bold text-purple-600">{participant.services_completed}</div>
-                        <div className="text-xs text-muted-foreground">Services</div>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Housing Fund Progress */}
-              <Card className="border-2 border-green-500/20 bg-gradient-to-br from-green-50/50 to-emerald-50/50 dark:from-green-950/20 dark:to-emerald-950/20">
-                <CardHeader>
-                  <CardTitle className="text-lg flex items-center gap-2">
-                    <Home className="h-5 w-5 text-green-600" />
-                    Housing Fund Progress
-                  </CardTitle>
-                  <CardDescription>Progress towards emergency housing solution</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {(() => {
-                    // Calculate housing fund progress (15% of total received)
-                    const housingFundContributed = Math.round(participant.total_received * 0.15);
-                    const tinyHomeTarget = 5000; // $5,000 target for emergency housing
-                    const progressPercentage = Math.min((housingFundContributed / tinyHomeTarget) * 100, 100);
-                    const remainingAmount = Math.max(tinyHomeTarget - housingFundContributed, 0);
-                    
-                    return (
-                      <>
-                        <div className="space-y-2">
-                          <div className="flex justify-between items-center">
-                            <span className="text-sm font-medium">Emergency Housing Fund</span>
-                            <span className="text-sm text-muted-foreground">{progressPercentage.toFixed(1)}%</span>
-                          </div>
-                          <Progress value={progressPercentage} className="h-3" />
-                          <div className="flex justify-between text-xs text-muted-foreground">
-                            <span>${housingFundContributed.toLocaleString()} contributed</span>
-                            <span>${tinyHomeTarget.toLocaleString()} goal</span>
-                          </div>
-                        </div>
-                        
-                        <div className="grid grid-cols-2 gap-4 text-center">
-                          <div className="p-3 bg-white/50 dark:bg-gray-800/50 rounded-lg">
-                            <div className="text-lg font-bold text-green-600">
-                              ${housingFundContributed.toLocaleString()}
-                            </div>
-                            <div className="text-xs text-muted-foreground">Saved for Housing</div>
-                          </div>
-                          <div className="p-3 bg-white/50 dark:bg-gray-800/50 rounded-lg">
-                            <div className="text-lg font-bold text-orange-600">
-                              ${remainingAmount.toLocaleString()}
-                            </div>
-                            <div className="text-xs text-muted-foreground">Still Needed</div>
-                          </div>
-                        </div>
-                        
-                        <div className="text-center p-3 bg-gradient-to-r from-green-100 to-emerald-100 dark:from-green-900/30 dark:to-emerald-900/30 rounded-lg">
-                          <div className="text-sm font-medium text-green-800 dark:text-green-200">
-                            🏠 Target: Emergency Housing Deposit
-                          </div>
-                          <div className="text-xs text-green-700 dark:text-green-300 mt-1">
-                            {remainingAmount > 0 
-                              ? `${Math.ceil(remainingAmount / (participant.total_received * 0.15 / participant.donation_count || 1))} more donations of this size needed`
-                              : "Housing goal achieved! 🎉"
-                            }
-                          </div>
-                        </div>
-                      </>
-                    );
-                  })()}
-                </CardContent>
-              </Card>
-
-              {/* Social Sharing */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Share Profile</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <Button onClick={handleShare} variant="outline" className="w-full">
-                    <Share2 className="h-4 w-4 mr-2" />
-                    Share on Social Media
-                  </Button>
-                  
-                  <Button onClick={copyUrl} variant="outline" className="w-full" size="sm">
-                    {copied ? (
-                      <>
-                        <Check className="h-4 w-4 mr-2" />
-                        URL Copied!
-                      </>
-                    ) : (
-                      <>
-                        <Copy className="h-4 w-4 mr-2" />
-                        Copy Profile URL
-                      </>
-                    )}
-                  </Button>
-                </CardContent>
-              </Card>
+              )}
             </div>
           </div>
-        </main>
 
-        <Footer />
+          {/* Right Column - Support & Impact */}
+          <div className="space-y-6">
+            {/* Support Card with QR Code */}
+            <Card className="text-center">
+              <CardHeader>
+                <CardTitle className="flex items-center justify-center gap-2">
+                  <Heart className="h-5 w-5 text-red-500" />
+                  Support {participant.firstName}
+                </CardTitle>
+                <CardDescription>Scan or click to donate directly</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {participant.qr_code && (
+                  <div className="bg-white p-4 rounded-lg inline-block mb-4">
+                    <Image 
+                      src={participant.qr_code} 
+                      alt="QR Code for donations" 
+                      width={200} 
+                      height={200}
+                      className="mx-auto"
+                    />
+                  </div>
+                )}
+                <p className="text-xs text-muted-foreground mb-4">
+                  Donations follow SmartProof™ 80-15-5 model
+                </p>
+                <Button className="w-full" asChild>
+                  <Link href={`/donate?demo=true&participant=${participant.id}`}>
+                    Donate Now
+                  </Link>
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Impact Card */}
+            <Card className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border-green-200 dark:border-green-800">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <TrendingUp className="h-5 w-5 text-green-600" />
+                  Impact So Far
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-green-600 mb-1">
+                      ${participant.total_received.toLocaleString()}
+                    </div>
+                    <p className="text-sm text-muted-foreground">Total Received</p>
+                  </div>
+                  
+                  <Separator />
+                  
+                  <div className="grid grid-cols-2 gap-4 text-center">
+                    <div>
+                      <div className="text-2xl font-bold text-blue-600">{participant.donation_count}</div>
+                      <p className="text-xs text-muted-foreground">Donations</p>
+                    </div>
+                    <div>
+                      <div className="text-2xl font-bold text-purple-600">{participant.services_completed}</div>
+                      <p className="text-xs text-muted-foreground">Services</p>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Shelter Link Card */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Building className="h-5 w-5 text-primary" />
+                  Shelter
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Link href="/old-brewery-mission">
+                  <Button variant="outline" className="w-full">
+                    <ExternalLink className="mr-2 h-4 w-4" />
+                    Visit {participant.shelter_name}
+                  </Button>
+                </Link>
+                <p className="text-xs text-muted-foreground mt-3 text-center">
+                  Learn more about the shelter supporting {participant.firstName}
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
+        {/* Share Profile CTA */}
+        <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-2 border-blue-200 dark:border-blue-800">
+          <CardContent className="p-8 text-center">
+            <Share2 className="h-12 w-12 text-blue-600 mx-auto mb-4" />
+            <h3 className="text-2xl font-bold mb-2">Help Spread the Word</h3>
+            <p className="text-muted-foreground mb-6">
+              Share {participant.firstName}&apos;s profile to help them reach their goals faster
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Button onClick={handleShare} size="lg">
+                <Share2 className="mr-2 h-5 w-5" />
+                Share Profile
+              </Button>
+              <Button variant="outline" size="lg" asChild>
+                <Link href="/scan-give">
+                  <Home className="mr-2 h-5 w-5" />
+                  Discover More Participants
+                </Link>
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
       </div>
-    </>
+    </div>
   );
 }

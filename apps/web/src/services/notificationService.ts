@@ -40,6 +40,49 @@ export interface NotificationCounts {
 }
 
 /**
+ * Shelter-specific email signup interface
+ */
+export interface ShelterEmailSignup {
+  id?: string;
+  email: string;
+  name?: string;
+  phone?: string;
+  shelter_id: string;
+  shelter_name: string;
+  source: 'public_page' | 'embedded_form' | 'manual';
+  page: 'shelter_public_page';
+  signup_date: Timestamp;
+  createdAt: Timestamp;
+  status: 'active' | 'pending' | 'unsubscribed';
+  interests?: string[];
+  message?: string;
+}
+
+/**
+ * Shelter-specific contact inquiry interface
+ */
+export interface ShelterContactInquiry {
+  id?: string;
+  shelter_id: string;
+  shelter_name: string;
+  sender_email: string;
+  sender_name: string;
+  sender_phone?: string;
+  subject: string;
+  message: string;
+  inquiry_type: 'general' | 'services' | 'volunteer' | 'donation' | 'partnership';
+  source: 'public_page';
+  priority: 'low' | 'normal' | 'high';
+  status: 'new' | 'in_progress' | 'resolved' | 'closed';
+  responded: boolean;
+  response_notes?: string;
+  created_at: Timestamp;
+  createdAt: Timestamp;
+  resolved_at?: Timestamp;
+  resolved_by?: string;
+}
+
+/**
  * Extended notification counts for the admin dashboard
  * This aggregates ALL notification types across the platform
  */
@@ -814,6 +857,47 @@ export async function getShelterNotificationCounts(userId: string, shelterId: st
       }
     });
     
+    // Get shelter-specific email signups
+    const shelterEmailSignupsQuery = query(
+      collection(db, 'shelter_email_signups'),
+      where('shelter_id', '==', shelterId)
+    );
+    const shelterEmailSignupsSnapshot = await getDocs(shelterEmailSignupsQuery);
+    const totalShelterEmailSignups = shelterEmailSignupsSnapshot.size;
+    
+    // Count recent signups (last 7 days)
+    let recentShelterEmailSignups = 0;
+    shelterEmailSignupsSnapshot.forEach(doc => {
+      const data = doc.data();
+      if (data.signup_date && data.signup_date >= sevenDaysAgoTimestamp) {
+        recentShelterEmailSignups++;
+      }
+    });
+    
+    // Get shelter-specific contact inquiries
+    const shelterContactInquiriesQuery = query(
+      collection(db, 'shelter_contact_inquiries'),
+      where('shelter_id', '==', shelterId)
+    );
+    const shelterContactInquiriesSnapshot = await getDocs(shelterContactInquiriesQuery);
+    const totalShelterContactInquiries = shelterContactInquiriesSnapshot.size;
+    
+    // Count recent, replied, and unreplied inquiries
+    let recentShelterContactInquiries = 0;
+    let repliedShelterContactInquiries = 0;
+    let unrepliedShelterContactInquiries = 0;
+    shelterContactInquiriesSnapshot.forEach(doc => {
+      const data = doc.data();
+      if (data.created_at && data.created_at >= sevenDaysAgoTimestamp) {
+        recentShelterContactInquiries++;
+      }
+      if (data.responded) {
+        repliedShelterContactInquiries++;
+      } else {
+        unrepliedShelterContactInquiries++;
+      }
+    });
+    
     console.log('✅ Shelter notification counts:', {
       unreadMessages,
       unreadAdminNotifications,
@@ -823,7 +907,11 @@ export async function getShelterNotificationCounts(userId: string, shelterId: st
       recentParticipants,
       activeParticipants,
       securityAlerts,
-      fraudAlerts
+      fraudAlerts,
+      totalShelterEmailSignups,
+      recentShelterEmailSignups,
+      totalShelterContactInquiries,
+      recentShelterContactInquiries
     });
     
     return {
@@ -832,15 +920,15 @@ export async function getShelterNotificationCounts(userId: string, shelterId: st
       unreadMessages,
       unreadNotifications: unreadAdminNotifications,
       
-      // Email Signups (not relevant for shelter admin)
-      totalEmailSignups: 0,
-      recentEmailSignups: 0,
+      // Email Signups (shelter-specific)
+      totalEmailSignups: totalShelterEmailSignups,
+      recentEmailSignups: recentShelterEmailSignups,
       
-      // Contact Inquiries (not relevant for shelter admin)
-      contactInquiries: 0,
-      recentContactInquiries: 0,
-      repliedContactInquiries: 0,
-      unrepliedContactInquiries: 0,
+      // Contact Inquiries (shelter-specific)
+      contactInquiries: totalShelterContactInquiries,
+      recentContactInquiries: recentShelterContactInquiries,
+      repliedContactInquiries: repliedShelterContactInquiries,
+      unrepliedContactInquiries: unrepliedShelterContactInquiries,
       
       // Admin Notifications
       totalAdminNotifications,
@@ -856,6 +944,114 @@ export async function getShelterNotificationCounts(userId: string, shelterId: st
     };
   } catch (error) {
     console.error('❌ Error getting shelter notification counts:', error);
+    throw error;
+  }
+}
+
+/**
+ * Create a shelter-specific email signup
+ */
+export async function createShelterEmailSignup(data: {
+  email: string;
+  name?: string;
+  phone?: string;
+  shelter_id: string;
+  shelter_name: string;
+  interests?: string[];
+  message?: string;
+}): Promise<string> {
+  try {
+    const signupData: ShelterEmailSignup = {
+      ...data,
+      source: 'public_page',
+      page: 'shelter_public_page',
+      signup_date: Timestamp.now(),
+      createdAt: Timestamp.now(),
+      status: 'active'
+    };
+
+    const docRef = await addDoc(collection(db, 'shelter_email_signups'), signupData);
+    console.log('✅ Shelter email signup created:', docRef.id);
+    return docRef.id;
+  } catch (error) {
+    console.error('❌ Error creating shelter email signup:', error);
+    throw error;
+  }
+}
+
+/**
+ * Get shelter-specific email signups
+ */
+export async function getShelterEmailSignups(
+  shelterId: string,
+  maxResults: number = 50
+): Promise<ShelterEmailSignup[]> {
+  try {
+    const signupsQuery = query(
+      collection(db, 'shelter_email_signups'),
+      where('shelter_id', '==', shelterId),
+      orderBy('signup_date', 'desc'),
+      limit(maxResults)
+    );
+    const snapshot = await getDocs(signupsQuery);
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as ShelterEmailSignup));
+  } catch (error) {
+    console.error('❌ Error getting shelter email signups:', error);
+    throw error;
+  }
+}
+
+/**
+ * Create a shelter-specific contact inquiry
+ */
+export async function createShelterContactInquiry(data: {
+  shelter_id: string;
+  shelter_name: string;
+  sender_email: string;
+  sender_name: string;
+  sender_phone?: string;
+  subject: string;
+  message: string;
+  inquiry_type: 'general' | 'services' | 'volunteer' | 'donation' | 'partnership';
+}): Promise<string> {
+  try {
+    const inquiryData: ShelterContactInquiry = {
+      ...data,
+      source: 'public_page',
+      priority: 'normal',
+      status: 'new',
+      responded: false,
+      created_at: Timestamp.now(),
+      createdAt: Timestamp.now()
+    };
+
+    const docRef = await addDoc(collection(db, 'shelter_contact_inquiries'), inquiryData);
+    console.log('✅ Shelter contact inquiry created:', docRef.id);
+    return docRef.id;
+  } catch (error) {
+    console.error('❌ Error creating shelter contact inquiry:', error);
+    throw error;
+  }
+}
+
+/**
+ * Get shelter-specific contact inquiries
+ */
+export async function getShelterContactInquiries(
+  shelterId: string,
+  maxResults: number = 50
+): Promise<ShelterContactInquiry[]> {
+  try {
+    const inquiriesQuery = query(
+      collection(db, 'shelter_contact_inquiries'),
+      where('shelter_id', '==', shelterId),
+      orderBy('created_at', 'desc'),
+      limit(maxResults)
+    );
+    const snapshot = await getDocs(inquiriesQuery);
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as ShelterContactInquiry));
+  } catch (error) {
+    console.error('❌ Error getting shelter contact inquiries:', error);
     throw error;
   }
 }

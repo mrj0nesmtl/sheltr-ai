@@ -41,7 +41,7 @@ export default function NotificationsPage() {
   const [activeUsers, setActiveUsers] = useState<number>(0);
 
   useEffect(() => {
-    if (user?.role === 'super_admin' || user?.role === 'platform_admin') {
+    if (user?.role === 'super_admin' || user?.role === 'platform_admin' || user?.role === 'admin') {
       loadNotifications();
     }
   }, [user?.role]);
@@ -146,12 +146,12 @@ export default function NotificationsPage() {
   };
 
   // Redirect if not super admin or platform admin
-  if (user?.role !== 'super_admin' && user?.role !== 'platform_admin') {
+  if (user?.role !== 'super_admin' && user?.role !== 'platform_admin' && user?.role !== 'admin') {
     return (
       <div className="p-6 text-center">
         <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
         <h1 className="text-2xl font-bold mb-2">Access Denied</h1>
-        <p className="text-gray-600">Only Super Admins and Platform Admins can view notifications.</p>
+        <p className="text-gray-600">Only Admins can view notifications.</p>
       </div>
     );
   }

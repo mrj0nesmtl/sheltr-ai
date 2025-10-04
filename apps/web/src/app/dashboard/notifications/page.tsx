@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
-import { getNotificationDashboardCounts, getRecentEmailSignups, getRecentContactInquiries, getAdminNotifications, markNotificationAsRead, NotificationDashboardCounts, EmailSignup, ContactInquiryNotification, AdminNotification, formatRelativeTime } from '@/services/notificationService';
+import { getNotificationDashboardCounts, getShelterNotificationCounts, getRecentEmailSignups, getRecentContactInquiries, getAdminNotifications, markNotificationAsRead, NotificationDashboardCounts, EmailSignup, ContactInquiryNotification, AdminNotification, formatRelativeTime } from '@/services/notificationService';
 import { 
   Mail, 
   Bell, 
@@ -44,6 +44,7 @@ export default function NotificationsPage() {
     if (user?.role === 'super_admin' || user?.role === 'platform_admin' || user?.role === 'admin') {
       loadNotifications();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.role]);
 
   // Filter signups, inquiries, and admin notifications based on search term
@@ -56,11 +57,11 @@ export default function NotificationsPage() {
       filteredSignupsResult = filteredSignupsResult.filter(signup => 
         signup.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
         signup.source.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        signup.page.toLowerCase().includes(searchTerm.toLowerCase())
+        signup.page?.toLowerCase().includes(searchTerm.toLowerCase())
       );
       
       filteredInquiriesResult = filteredInquiriesResult.filter(inquiry => 
-        inquiry.sender_email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        inquiry.sender_email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         inquiry.sender_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         inquiry.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
         inquiry.source.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -82,44 +83,81 @@ export default function NotificationsPage() {
   const loadNotifications = async () => {
     setLoading(true);
     try {
-      console.log('🔔 Loading all notifications...');
-      
-      // Get API data for active users
-      let activeUsersCount = 0;
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000'}/api/v1/analytics/test-platform`);
-        if (response.ok) {
-          const data = await response.json();
-          const userData = data.data.users;
-          activeUsersCount = userData.active_today !== undefined ? userData.active_today : (userData.total || 0);
-        }
-      } catch (apiError) {
-        console.warn('⚠️ Could not fetch active users from API:', apiError);
-      }
-      
-      // Get user role (default to super_admin if not set)
       const userRole = user?.role || 'super_admin';
       const userId = user?.uid || '';
       
-      const [counts, emailSignups, contactInquiries, adminNotifications] = await Promise.all([
-        getNotificationDashboardCounts(userId, userRole), // NEW: Unified dashboard counts
-        getRecentEmailSignups(50), // Get more for the dedicated page
-        getRecentContactInquiries(50), // Get recent contact inquiries
-        getAdminNotifications(userId, 50) // Get recent admin notifications
-      ]);
+      // Check if this is a Shelter Admin
+      const isShelterAdmin = userRole === 'admin';
       
-      // Update active users count from API
-      counts.activeUsers = activeUsersCount;
-      
-      setNotificationCounts(counts);
-      setAllEmailSignups(emailSignups);
-      setFilteredSignups(emailSignups);
-      setAllContactInquiries(contactInquiries);
-      setFilteredInquiries(contactInquiries);
-      setAllAdminNotifications(adminNotifications);
-      setFilteredAdminNotifications(adminNotifications);
-      setActiveUsers(activeUsersCount);
-      console.log('✅ All notifications loaded:', { counts, emailSignups, contactInquiries, adminNotifications, activeUsers: activeUsersCount });
+      if (isShelterAdmin) {
+        console.log('🏠 Loading shelter-specific notifications...');
+        
+        // Get shelter_id from user
+        const shelterId = user?.customClaims?.shelter_id || user?.shelterId || (user && 'shelter_id' in user ? (user as Record<string, unknown>).shelter_id : null) as string | undefined;
+        
+        if (!shelterId) {
+          console.error('❌ No shelter_id found for Shelter Admin');
+          setLoading(false);
+          return;
+        }
+        
+        // Load shelter-specific data
+        const [counts, adminNotifications] = await Promise.all([
+          getShelterNotificationCounts(userId, shelterId), // Shelter-specific counts
+          getAdminNotifications(userId, 50) // User's admin notifications
+        ]);
+        
+        setNotificationCounts(counts);
+        setAllAdminNotifications(adminNotifications);
+        setFilteredAdminNotifications(adminNotifications);
+        setActiveUsers(counts.activeUsers);
+        
+        // Clear platform-wide data (not relevant for shelter admin)
+        setAllEmailSignups([]);
+        setFilteredSignups([]);
+        setAllContactInquiries([]);
+        setFilteredInquiries([]);
+        
+        console.log('✅ Shelter notifications loaded:', { counts, adminNotifications });
+        
+      } else {
+        console.log('🔔 Loading platform-wide notifications...');
+        
+        // Get API data for active users (platform-wide)
+        let activeUsersCount = 0;
+        try {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000'}/api/v1/analytics/test-platform`);
+          if (response.ok) {
+            const data = await response.json();
+            const userData = data.data.users;
+            activeUsersCount = userData.active_today !== undefined ? userData.active_today : (userData.total || 0);
+          }
+        } catch (apiError) {
+          console.warn('⚠️ Could not fetch active users from API:', apiError);
+        }
+        
+        // Load platform-wide data (Super Admin / Platform Admin)
+        const [counts, emailSignups, contactInquiries, adminNotifications] = await Promise.all([
+          getNotificationDashboardCounts(userId, userRole), // Platform-wide counts
+          getRecentEmailSignups(50), // Get more for the dedicated page
+          getRecentContactInquiries(50), // Get recent contact inquiries
+          getAdminNotifications(userId, 50) // Get recent admin notifications
+        ]);
+        
+        // Update active users count from API
+        counts.activeUsers = activeUsersCount;
+        
+        setNotificationCounts(counts);
+        setAllEmailSignups(emailSignups);
+        setFilteredSignups(emailSignups);
+        setAllContactInquiries(contactInquiries);
+        setFilteredInquiries(contactInquiries);
+        setAllAdminNotifications(adminNotifications);
+        setFilteredAdminNotifications(adminNotifications);
+        setActiveUsers(activeUsersCount);
+        
+        console.log('✅ Platform notifications loaded:', { counts, emailSignups, contactInquiries, adminNotifications, activeUsers: activeUsersCount });
+      }
       
     } catch (error) {
       console.error('❌ Failed to load notifications:', error);
@@ -166,7 +204,10 @@ export default function NotificationsPage() {
             Notifications Center
           </h1>
           <p className="text-gray-600 text-sm sm:text-base">
-            Manage platform notifications and user communications
+            {user?.role === 'admin' 
+              ? 'Manage shelter notifications and communications'
+              : 'Manage platform notifications and user communications'
+            }
           </p>
         </div>
         <div className="flex items-center space-x-3">
@@ -205,28 +246,30 @@ export default function NotificationsPage() {
           </CardContent>
         </Card>
 
-        {/* Email Signups Card */}
-        <Card className="overflow-hidden">
-          <CardContent className="p-4 sm:p-6">
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center space-x-2">
-                <div className="p-2 bg-green-100 dark:bg-green-900/20 rounded-lg">
-                  <Mail className="h-4 w-4 text-green-600 dark:text-green-400" />
-                </div>
-                <div className="min-w-0">
-                  <p className="text-sm font-medium text-muted-foreground truncate">Email</p>
-                  <p className="text-xs text-muted-foreground">Signups</p>
+        {/* Email Signups Card - Only for Super Admin / Platform Admin */}
+        {user?.role !== 'admin' && (
+          <Card className="overflow-hidden">
+            <CardContent className="p-4 sm:p-6">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center space-x-2">
+                  <div className="p-2 bg-green-100 dark:bg-green-900/20 rounded-lg">
+                    <Mail className="h-4 w-4 text-green-600 dark:text-green-400" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium text-muted-foreground truncate">Email</p>
+                    <p className="text-xs text-muted-foreground">Signups</p>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="space-y-1">
-              <div className="text-2xl sm:text-3xl font-bold">{notificationCounts?.totalEmailSignups || 0}</div>
-              <p className="text-xs text-muted-foreground">
-                {notificationCounts?.recentEmailSignups || 0} new this week
-              </p>
-            </div>
-          </CardContent>
-        </Card>
+              <div className="space-y-1">
+                <div className="text-2xl sm:text-3xl font-bold">{notificationCounts?.totalEmailSignups || 0}</div>
+                <p className="text-xs text-muted-foreground">
+                  {notificationCounts?.recentEmailSignups || 0} new this week
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Pending Applications Card */}
         <Card className="overflow-hidden">
@@ -234,48 +277,58 @@ export default function NotificationsPage() {
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center space-x-2">
                 <div className="p-2 bg-orange-100 dark:bg-orange-900/20 rounded-lg">
-                  <Building className="h-4 w-4 text-orange-600 dark:text-orange-400" />
+                  {user?.role === 'admin' ? (
+                    <Users className="h-4 w-4 text-orange-600 dark:text-orange-400" />
+                  ) : (
+                    <Building className="h-4 w-4 text-orange-600 dark:text-orange-400" />
+                  )}
                 </div>
                 <div className="min-w-0">
                   <p className="text-sm font-medium text-muted-foreground truncate">Pending</p>
-                  <p className="text-xs text-muted-foreground">Applications</p>
+                  <p className="text-xs text-muted-foreground">
+                    {user?.role === 'admin' ? 'Participants' : 'Applications'}
+                  </p>
                 </div>
               </div>
             </div>
             <div className="space-y-1">
               <div className="text-2xl sm:text-3xl font-bold">{notificationCounts?.pendingShelterapplications || 0}</div>
-              <p className="text-xs text-muted-foreground">Shelter admin requests</p>
+              <p className="text-xs text-muted-foreground">
+                {user?.role === 'admin' ? 'Pending participant registrations' : 'Shelter admin requests'}
+              </p>
             </div>
           </CardContent>
         </Card>
 
-        {/* Contact Inquiries Card */}
-        <Card className="overflow-hidden">
-          <CardContent className="p-4 sm:p-6">
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center space-x-2">
-                <div className="p-2 bg-purple-100 dark:bg-purple-900/20 rounded-lg">
-                  <MessageSquare className="h-4 w-4 text-purple-600 dark:text-purple-400" />
-                </div>
-                <div className="min-w-0">
-                  <p className="text-sm font-medium text-muted-foreground truncate">Contact</p>
-                  <p className="text-xs text-muted-foreground">Inquiries</p>
+        {/* Contact Inquiries Card - Only for Super Admin / Platform Admin */}
+        {user?.role !== 'admin' && (
+          <Card className="overflow-hidden">
+            <CardContent className="p-4 sm:p-6">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center space-x-2">
+                  <div className="p-2 bg-purple-100 dark:bg-purple-900/20 rounded-lg">
+                    <MessageSquare className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium text-muted-foreground truncate">Contact</p>
+                    <p className="text-xs text-muted-foreground">Inquiries</p>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="space-y-1">
-              <div className="text-2xl sm:text-3xl font-bold">{notificationCounts?.contactInquiries || 0}</div>
-              <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-                <span>{notificationCounts?.recentContactInquiries || 0} new this week</span>
-                {(notificationCounts?.repliedContactInquiries || 0) > 0 && (
-                  <Badge variant="secondary" className="text-xs px-2 py-0.5">
-                    {notificationCounts?.repliedContactInquiries} replied
-                  </Badge>
-                )}
+              <div className="space-y-1">
+                <div className="text-2xl sm:text-3xl font-bold">{notificationCounts?.contactInquiries || 0}</div>
+                <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+                  <span>{notificationCounts?.recentContactInquiries || 0} new this week</span>
+                  {(notificationCounts?.repliedContactInquiries || 0) > 0 && (
+                    <Badge variant="secondary" className="text-xs px-2 py-0.5">
+                      {notificationCounts?.repliedContactInquiries} replied
+                    </Badge>
+                  )}
+                </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Security Notifications Card */}
         <Card className="overflow-hidden">
@@ -312,7 +365,8 @@ export default function NotificationsPage() {
 
       </div>
 
-      {/* Second Row of Metric Cards */}
+      {/* Second Row of Metric Cards - Only for Super Admin / Platform Admin */}
+      {user?.role !== 'admin' && (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8">
         
         {/* Pending Applications Card */}
@@ -382,6 +436,7 @@ export default function NotificationsPage() {
         </Card>
 
       </div>
+      )}
 
       {/* Notifications Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">

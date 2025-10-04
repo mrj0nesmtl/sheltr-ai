@@ -3,14 +3,15 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
-import { ArrowLeft, Heart, Shield, QrCode, User, MapPin, Target } from 'lucide-react';
+import { ArrowLeft, Heart, Shield, QrCode, User, MapPin, Target, Building, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { isSecureDomain } from '@/lib/urlSecurity';
 import { db } from '@/lib/firebase';
 import { getDonationMetrics } from '@/services/donationMetricsService';
+import { tenantService } from '@/services/tenantService';
 
 // Demo donation amounts
 const DEMO_AMOUNTS = [25, 50, 100, 200];
@@ -22,12 +23,24 @@ interface Participant {
   age: number;
   story: string;
   shelter_name: string;
+  shelter_id?: string;
   location: { city: string; state: string };
   progress: number;
   goals: Array<{ title: string; progress: number }>;
   total_received: number;
   donation_count: number;
   services_completed: number;
+}
+
+interface Shelter {
+  id: string;
+  name: string;
+  description: string;
+  address: string;
+  city: string;
+  province: string;
+  capacity?: number;
+  services: string[];
 }
 
 // Use unified donation metrics service for consistency
@@ -39,13 +52,17 @@ function DonatePageContent() {
   const { user } = useAuth();
   const searchParams = useSearchParams();
   const [participant, setParticipant] = useState<Participant | null>(null);
+  const [shelter, setShelter] = useState<Shelter | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedAmount, setSelectedAmount] = useState(100);
   const [customAmount, setCustomAmount] = useState('');
   const [isCustom, setIsCustom] = useState(false);
   const [processing, setProcessing] = useState(false);
   
+  const participantId = searchParams.get('participant');
+  const shelterId = searchParams.get('shelter');
   const isDemo = searchParams.get('demo') === 'true';
+  const donationType = shelterId ? 'shelter' : 'participant';
   const participantId = searchParams.get('participant');
 
   useEffect(() => {

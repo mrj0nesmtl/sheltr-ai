@@ -64,6 +64,52 @@ function DonatePageContent() {
   const isDemo = searchParams.get('demo') === 'true';
   const donationType = shelterId ? 'shelter' : 'participant';
 
+  // Load shelter if shelterId is present
+  useEffect(() => {
+    const loadShelter = async () => {
+      if (!shelterId) return;
+      
+      try {
+        setLoading(true);
+        // Get shelter from tenant service
+        const tenants = await tenantService.getAllShelterTenants();
+        const matchingShelter = tenants.find(t => 
+          t.id === shelterId || 
+          t.name.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '') === shelterId
+        );
+        
+        if (matchingShelter) {
+          setShelter({
+            id: matchingShelter.id,
+            name: matchingShelter.name,
+            description: matchingShelter.address || 'Supporting individuals experiencing homelessness in our community',
+            address: matchingShelter.address || '',
+            city: matchingShelter.city || '',
+            province: matchingShelter.province || '',
+            capacity: 300,
+            services: [
+              'Emergency Shelter',
+              'Meals & Necessities',
+              'Case Management',
+              'Housing Support',
+              'Mental Health Services',
+              'Job Training'
+            ]
+          });
+        }
+      } catch (error) {
+        console.error('Error loading shelter:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    if (shelterId) {
+      loadShelter();
+    }
+  }, [shelterId]);
+
+  // Load participant if participantId is present
   useEffect(() => {
     const loadParticipant = async () => {
       if (!participantId) return;
@@ -238,12 +284,23 @@ function DonatePageContent() {
 
   const calculateBreakdown = () => {
     const amount = isCustom ? parseFloat(customAmount) || 0 : selectedAmount;
-    return {
-      total: amount,
-      direct: Math.round(amount * 0.80 * 100) / 100,
-      housing: Math.round(amount * 0.15 * 100) / 100,
-      operations: Math.round(amount * 0.05 * 100) / 100,
-    };
+    
+    if (donationType === 'shelter') {
+      // Shelter donations: 95% to shelter, 5% platform fee
+      return {
+        total: amount,
+        shelterOperations: Math.round(amount * 0.95 * 100) / 100,
+        platformFee: Math.round(amount * 0.05 * 100) / 100,
+      };
+    } else {
+      // Participant donations: 80-15-5 SmartProof™ model
+      return {
+        total: amount,
+        direct: Math.round(amount * 0.80 * 100) / 100,
+        housing: Math.round(amount * 0.15 * 100) / 100,
+        operations: Math.round(amount * 0.05 * 100) / 100,
+      };
+    }
   };
 
   if (loading) {
@@ -257,7 +314,8 @@ function DonatePageContent() {
     );
   }
 
-  if (!participant) {
+  // Check if we have the required data based on donation type
+  if (donationType === 'participant' && !participant) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted/30">
         <div className="text-center max-w-md mx-auto px-4">
@@ -270,6 +328,26 @@ function DonatePageContent() {
             <Button>
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Scan & Give
+            </Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  if (donationType === 'shelter' && !shelter) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted/30">
+        <div className="text-center max-w-md mx-auto px-4">
+          <Building className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+          <h1 className="text-2xl font-bold text-destructive mb-2">Shelter Not Found</h1>
+          <p className="text-muted-foreground mb-6">
+            We couldn&apos;t find the shelter you&apos;re trying to support. Please check the link and try again.
+          </p>
+          <Link href="/">
+            <Button>
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back to Home
             </Button>
           </Link>
         </div>

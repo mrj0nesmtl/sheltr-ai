@@ -12,7 +12,7 @@ The next generation platform for transparent charitable giving and homelessness 
 [![GitHub Stars](https://img.shields.io/github/stars/mrj0nesmtl/sheltr-ai?style=for-the-badge)](https://github.com/mrj0nesmtl/sheltr-ai)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg?style=for-the-badge)](https://www.python.org/downloads/)
-[![Last Updated](https://img.shields.io/badge/Last%20Updated-September%2023%2C%202025-brightgreen?style=for-the-badge)](https://github.com/mrj0nesmtl/sheltr-ai)
+[![Last Updated](https://img.shields.io/badge/Last%20Updated-October%204%2C%202025-brightgreen?style=for-the-badge)](https://github.com/mrj0nesmtl/sheltr-ai)
 
 ---
 
@@ -25,9 +25,12 @@ The next generation platform for transparent charitable giving and homelessness 
 - **🤖 AI Chatbot System**: **LIVE** with role-aware MCP integration
 - **📊 Multi-Tenant Dashboards**: **5-ROLE RBAC** system operational
 - **🔐 Enterprise Security**: **ALL VULNERABILITIES RESOLVED** (GitHub CodeQL)
-- **💰 Donation Architecture**: **PRODUCTION-READY** with proper tenant structure
-- **📚 Knowledge Base**: **57+ DOCUMENTS** with AI embeddings
+- **💰 Dual Donation System**: **100% COMPLETE** - Participant (80-15-5) + Shelter (95-5) flows
+- **🏠 Public Pages**: **REDESIGNED** - Modern shelter + participant pages with email capture
+- **📧 Email Lead System**: **OPERATIONAL** - Shelter-specific email signup integration
+- **📚 Knowledge Base**: **60+ DOCUMENTS** with AI embeddings and GitHub sync
 - **📝 Blog System**: **LIVE** with SEO optimization and markdown import
+- **💬 Internal Messaging**: **ENHANCED** with @mention autocomplete and auto-recipient detection
 
 ---
 
@@ -47,7 +50,24 @@ The next generation platform for transparent charitable giving and homelessness 
 
 ---
 
-## 🌟 **Revolutionary Features - SEPTEMBER 2025**
+## 🌟 **Revolutionary Features - OCTOBER 2025**
+
+### 💰 **Complete Donation System** 🆕
+- **✅ Dual Donation Flows** - Participant (80-15-5 SmartProof™) + Shelter (95-5 direct support)
+- **✅ Account Connection UI** - Login/register prompts for guests, personalized welcome for authenticated users
+- **✅ Smart Routing** - Automatic detection and handling of participant vs shelter donations
+- **✅ Transparent Breakdowns** - Beautiful gradient cards showing exact fund distribution
+- **✅ Impact Previews** - Shows what each donation supports based on donation type
+- **✅ Housing Fund Tracking** - Real-time progress visualization for participant housing goals
+- **✅ Production Ready** - Framework ready for Adyen payment integration
+
+### 🏠 **Public Page Excellence** 🆕
+- **✅ Shelter Pages Redesigned** - Modern hero sections with image galleries and service grids
+- **✅ Participant Profiles Enhanced** - Professional layouts with housing fund progress components
+- **✅ Email Signup Integration** - Shelter-specific lead capture with real-time Firebase submission
+- **✅ Clean URL Structure** - Fixed shelter public page URLs (no /shelter/ prefix)
+- **✅ Mobile Optimized** - Perfect responsive design across all devices
+- **✅ QR Code Integration** - Easy donation access via QR codes on public pages
 
 ### 🤖 **Advanced AI Agent System**
 - **✅ Role-Aware Chatbots** - Dynamic behavior based on user authentication
@@ -78,9 +98,11 @@ The next generation platform for transparent charitable giving and homelessness 
 - **✅ Migration Tools** - Safe data migration with verification
 
 ### 📚 **Knowledge Base & Content Management**
-- **✅ AI-Powered Knowledge Base** - 57+ documents with vector embeddings
-- **✅ GitHub Sync** - Automated documentation updates with quality scoring
+- **✅ AI-Powered Knowledge Base** - 60+ documents with vector embeddings
+- **✅ GitHub Sync** - Automated documentation updates with quality scoring and exclusions
+- **✅ Clean Slate Operations** - Full KB wipe and resync capabilities with proper folder exclusions
 - **✅ Semantic Search** - Intelligent document retrieval for chatbot
+- **✅ Single-Token Model** - Updated all documentation from dual-token to single stablecoin architecture
 - **✅ Professional Blog System** - Live blog with SEO optimization
 - **✅ Content Sanitization** - Secure content handling and display
 
@@ -90,6 +112,9 @@ The next generation platform for transparent charitable giving and homelessness 
 - **✅ Theme System** - Dark/light mode with persistent preferences
 - **✅ Navigation Enhancement** - Role-aware menus and breadcrumbs
 - **✅ Contact Management** - Real-time inquiry handling with CSV export
+- **✅ Internal Messaging** - @mention autocomplete with auto-recipient detection for replies 🆕
+- **✅ Notification System** - Auto-clearing badges when messages are read and replied to 🆕
+- **✅ Shelter Admin Tools** - Tenant-specific notification center with accurate metrics 🆕
 
 ---
 
@@ -342,7 +367,7 @@ function distributeDonation(address participant, uint256 amount) external {
 
 ## 🚀 **Development Status & Roadmap**
 
-### **🎯 Current Phase: SESSION 14 READY ✅ - Beta Launch Preparation + User Experience Excellence**
+### **🎯 Current Phase: SESSION 22 COMPLETE ✅ - Dual Donation System + Public Page Excellence**
 - ✅ Repository structure and documentation
 - ✅ Python virtual environment setup  
 - ✅ FastAPI backend foundation
@@ -387,8 +412,13 @@ function distributeDonation(address participant, uint256 amount) external {
 - ✅ **🆕 KNOWLEDGE BASE DASHBOARD**: Document management, embeddings, semantic search
 - ✅ **🆕 USER-AWARENESS NAVIGATION**: Personal welcome messages + role-based dashboard routing
 - ✅ **🆕 SHELTR WORDMARK INTEGRATION**: Professional branding enhancement on key pages
-- 🔄 **CURRENT: SESSION 14**: Beta launch preparation, Platform Administrator completion, payment integration
-- ⏳ Production deployment and stakeholder demonstrations
+- ✅ **🆕 SESSION 14-21**: PODS ecosystem, drone delivery, blog system, knowledge base management
+- ✅ **🆕 SESSION 22 - DUAL DONATION SYSTEM**: Complete participant + shelter donation flows operational
+- ✅ **🆕 PUBLIC PAGE REDESIGNS**: Modern shelter and participant pages with email signup
+- ✅ **🆕 INTERNAL MESSAGING ENHANCEMENTS**: @mention autocomplete + auto-recipient detection
+- ✅ **🆕 SHELTER ADMIN TOOLS**: Tenant-specific notification center with accurate metrics
+- 🔄 **NEXT: PAYMENT INTEGRATION**: Adyen integration for live transaction processing
+- ⏳ Mobile app development and production launch preparation
 
 ### **📅 Upcoming Milestones**
 - **Week 3-4**: ✅ **COMPLETED EARLY** - Authentication system fully operational
@@ -397,8 +427,9 @@ function distributeDonation(address participant, uint256 amount) external {
 - **Week 9-10**: ✅ **COMPLETED** - Session 9 Data Connectivity Revolution + Complete User Guides
 - **Week 11-12**: ✅ **COMPLETED** - Session 11 AI Enhancement Series + Session 12 Technical Perfection
 - **Week 13-14**: ✅ **COMPLETED** - Session 13.1-13.2 Multi-tenant platform + User-awareness navigation
-- **Week 15-16**: 🔄 **CURRENT** - Session 14 Beta launch preparation + Payment integration
-- **Week 17-18**: Public launch + Stakeholder onboarding + Mobile app development
+- **Week 15-16**: ✅ **COMPLETED** - Session 14-22 Beta features + PODS ecosystem + Donation system
+- **Week 17-18**: 🔄 **CURRENT** - Payment integration (Adyen) + Mobile app development + Production polish
+- **Week 19-20**: Public launch + Stakeholder onboarding + Marketing campaigns
 
 **→ [Complete Roadmap](docs/04-development/dev-roadmap.md)**
 
@@ -427,6 +458,6 @@ function distributeDonation(address participant, uint256 amount) external {
 
 **📖 "Great documentation is the foundation of great software - and great impact."**
 
-*Last Updated: September 21, 2025 - Blog System Implementation Complete: Production blog with SEO optimization, Session 15+ achievements documented*
+*Last Updated: October 4, 2025 - Session 22 Complete: Dual donation system operational, public pages redesigned, shelter email signup system launched, messaging enhancements with @mention autocomplete*
 
 **🌐 [Visit Live Site](https://sheltr-ai.web.app) | 🚀 [Get Started](docs/01-overview/README.md) | 🤝 [Contribute](CONTRIBUTING.md) | 💝 [Donate](https://sheltr-ai.web.app/scan-give) | 📖 [Documentation Hub](docs/TABLE_OF_CONTENTS.md) | 🪙 [Token Ecosystem](sheltr-tokens/docs/README.md)**

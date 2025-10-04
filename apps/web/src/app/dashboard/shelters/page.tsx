@@ -130,7 +130,9 @@ export default function ShelterNetwork() {
 
   // Generate QR code data for shelter
   const generateShelterQRCode = (shelter: Shelter) => {
-    return `https://sheltr-ai.web.app/shelter/${shelter.id}`;
+    // Use shelter.slug if available, otherwise fallback to shelter.id
+    const slugOrId = shelter.slug || shelter.id;
+    return `https://sheltr-ai.web.app/${slugOrId}`;
   };
 
   // Copy to clipboard function

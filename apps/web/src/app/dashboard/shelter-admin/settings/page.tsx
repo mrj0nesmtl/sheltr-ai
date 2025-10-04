@@ -61,7 +61,7 @@ export default function SettingsPage() {
     operatingHours: '24/7',
     checkInTime: '8:00 PM',
     checkOutTime: '7:00 AM',
-    qrCode: 'https://sheltr-ai.web.app/shelter/old-brewery-mission',
+    qrCode: 'https://sheltr-ai.web.app/old-brewery-mission',
     socialMedia: {
       facebook: 'https://facebook.com/OldBreweryMission',
       twitter: 'https://twitter.com/OBMission',
@@ -255,7 +255,9 @@ export default function SettingsPage() {
             <div className="flex items-center space-x-2">
               <Globe className="h-5 w-5 text-blue-600" />
               <CardTitle className="text-blue-900 dark:text-blue-100">Public Page Preview</CardTitle>
-              <Badge variant="outline">Live at sheltr-ai.web.app/shelter/downtown-hope</Badge>
+              <Badge variant="outline">
+                Live at sheltr-ai.web.app/{shelterData?.shelterId || formData.name.toLowerCase().replace(/\s+/g, '-')}
+              </Badge>
             </div>
           </CardHeader>
           <CardContent className="p-8">

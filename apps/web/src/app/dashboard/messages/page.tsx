@@ -174,9 +174,26 @@ export default function MessagesPage() {
     }
   };
 
-  const formatTimeAgo = (date: Date) => {
+  const formatTimeAgo = (date: Date | any) => {
+    // Handle Firestore Timestamp or invalid date
+    let dateObj: Date;
+    
+    if (!date) return 'Unknown';
+    
+    if (date instanceof Date) {
+      dateObj = date;
+    } else if (date.toDate && typeof date.toDate === 'function') {
+      // Firestore Timestamp
+      dateObj = date.toDate();
+    } else if (date.seconds) {
+      // Firestore Timestamp object
+      dateObj = new Date(date.seconds * 1000);
+    } else {
+      return 'Unknown';
+    }
+
     const now = new Date();
-    const diffMs = now.getTime() - date.getTime();
+    const diffMs = now.getTime() - dateObj.getTime();
     const diffMins = Math.floor(diffMs / 60000);
     const diffHours = Math.floor(diffMins / 60);
     const diffDays = Math.floor(diffHours / 24);
@@ -185,7 +202,7 @@ export default function MessagesPage() {
     if (diffMins < 60) return `${diffMins}m ago`;
     if (diffHours < 24) return `${diffHours}h ago`;
     if (diffDays < 7) return `${diffDays}d ago`;
-    return date.toLocaleDateString();
+    return dateObj.toLocaleDateString();
   };
 
   const getMessageStatusIcon = (status: string) => {

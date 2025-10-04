@@ -709,18 +709,33 @@ function DonatePageContent() {
                   <div className="bg-muted/50 rounded-lg p-4 space-y-2">
                     <h4 className="font-semibold text-sm">Your Impact:</h4>
                     <div className="space-y-1 text-sm">
-                      <div className="flex justify-between">
-                        <span>Direct to {participant.firstName}:</span>
-                        <span className="font-medium text-primary">${breakdown.direct}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Housing Fund:</span>
-                        <span className="font-medium text-green-600">${breakdown.housing}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Operations:</span>
-                        <span className="font-medium text-blue-600">${breakdown.operations}</span>
-                      </div>
+                      {donationType === 'participant' && participant ? (
+                        <>
+                          <div className="flex justify-between">
+                            <span>Direct to {participant.firstName}:</span>
+                            <span className="font-medium text-primary">${breakdown.direct}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Housing Fund:</span>
+                            <span className="font-medium text-green-600">${breakdown.housing}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Operations:</span>
+                            <span className="font-medium text-blue-600">${breakdown.operations}</span>
+                          </div>
+                        </>
+                      ) : donationType === 'shelter' && shelter ? (
+                        <>
+                          <div className="flex justify-between">
+                            <span>To {shelter.name}:</span>
+                            <span className="font-medium text-green-600">${breakdown.shelterOperations}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Platform Fee:</span>
+                            <span className="font-medium text-blue-600">${breakdown.platformFee}</span>
+                          </div>
+                        </>
+                      ) : null}
                       <div className="flex justify-between font-semibold pt-2 border-t">
                         <span>Total:</span>
                         <span>${breakdown.total}</span>

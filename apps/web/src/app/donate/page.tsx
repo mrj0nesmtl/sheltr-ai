@@ -363,9 +363,9 @@ function DonatePageContent() {
       <div className="bg-background/95 backdrop-blur-sm border-b sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <Link href="/scan-give" className="flex items-center text-muted-foreground hover:text-foreground">
+            <Link href={donationType === 'shelter' ? `/${shelterId}` : "/scan-give"} className="flex items-center text-muted-foreground hover:text-foreground">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
+              {donationType === 'shelter' ? 'Back to Shelter' : 'Back to Scan & Give'}
             </Link>
             {isDemo && (
               <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
@@ -391,52 +391,53 @@ function DonatePageContent() {
 
           <div className="grid lg:grid-cols-2 gap-8">
             
-            {/* Left Column: Participant Info */}
+            {/* Left Column: Profile Info */}
             <div className="space-y-6">
               
-              {/* Participant Profile */}
-              <Card className="border-2 border-primary/20 shadow-lg">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
-                      <User className="h-6 w-6 text-primary" />
+              {donationType === 'participant' && participant ? (
+                /* Participant Profile */
+                <Card className="border-2 border-primary/20 shadow-lg">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-3">
+                      <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                        <User className="h-6 w-6 text-primary" />
+                      </div>
+                      <div>
+                        <h2 className="text-2xl font-bold">
+                          Support {participant.firstName} {participant.lastName}
+                        </h2>
+                        <p className="text-muted-foreground font-normal">
+                          Age {participant.age} • {participant.shelter_name}
+                        </p>
+                      </div>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <p className="leading-relaxed">{participant.story}</p>
+                    
+                    <div className="flex flex-wrap gap-2">
+                      <Badge variant="secondary">
+                        <MapPin className="h-3 w-3 mr-1" />
+                        {participant.location.city}, {participant.location.state}
+                      </Badge>
+                      <Badge variant="outline">
+                        <Target className="h-3 w-3 mr-1" />
+                        {participant.progress}% Progress
+                      </Badge>
                     </div>
-                    <div>
-                      <h2 className="text-2xl font-bold">
-                        Support {participant.firstName} {participant.lastName}
-                      </h2>
-                      <p className="text-muted-foreground font-normal">
-                        Age {participant.age} • {participant.shelter_name}
-                      </p>
-                    </div>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <p className="leading-relaxed">{participant.story}</p>
-                  
-                  <div className="flex flex-wrap gap-2">
-                    <Badge variant="secondary">
-                      <MapPin className="h-3 w-3 mr-1" />
-                      {participant.location.city}, {participant.location.state}
-                    </Badge>
-                    <Badge variant="outline">
-                      <Target className="h-3 w-3 mr-1" />
-                      {participant.progress}% Progress
-                    </Badge>
-                  </div>
 
-                  {/* Goals */}
-                  {participant.goals && participant.goals.length > 0 && (
-                    <div className="space-y-2">
-                      <h4 className="font-semibold text-sm">Current Goals:</h4>
-                      {participant.goals.slice(0, 3).map((goal, index) => (
-                        <div key={index} className="flex items-center justify-between text-sm">
-                          <span>{goal.title}</span>
-                          <span className="text-muted-foreground">{goal.progress}%</span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                    {/* Goals */}
+                    {participant.goals && participant.goals.length > 0 && (
+                      <div className="space-y-2">
+                        <h4 className="font-semibold text-sm">Current Goals:</h4>
+                        {participant.goals.slice(0, 3).map((goal, index) => (
+                          <div key={index} className="flex items-center justify-between text-sm">
+                            <span>{goal.title}</span>
+                            <span className="text-muted-foreground">{goal.progress}%</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
 
                   {/* Stats */}
                   <div className="grid grid-cols-3 gap-4 pt-4 border-t">
@@ -461,8 +462,70 @@ function DonatePageContent() {
                   </div>
                 </CardContent>
               </Card>
+              ) : donationType === 'shelter' && shelter ? (
+                /* Shelter Profile */
+                <Card className="border-2 border-primary/20 shadow-lg">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-3">
+                      <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                        <Building className="h-6 w-6 text-primary" />
+                      </div>
+                      <div>
+                        <h2 className="text-2xl font-bold">
+                          Support {shelter.name}
+                        </h2>
+                        <p className="text-muted-foreground font-normal">
+                          {shelter.city}, {shelter.province}
+                        </p>
+                      </div>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <p className="leading-relaxed">{shelter.description}</p>
+                    
+                    {/* Address */}
+                    {shelter.address && (
+                      <div className="flex items-start gap-2 p-3 bg-muted/50 rounded-lg">
+                        <MapPin className="h-4 w-4 text-muted-foreground mt-0.5 flex-shrink-0" />
+                        <div className="text-sm">
+                          <p>{shelter.address}</p>
+                          <p>{shelter.city}, {shelter.province}</p>
+                        </div>
+                      </div>
+                    )}
 
-              {/* SmartFund™ Breakdown */}
+                    {/* Services */}
+                    {shelter.services && shelter.services.length > 0 && (
+                      <div className="space-y-2">
+                        <h4 className="font-semibold text-sm">Services Provided:</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {shelter.services.map((service, index) => (
+                            <Badge key={index} variant="secondary" className="text-xs">
+                              {service}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Capacity */}
+                    {shelter.capacity && (
+                      <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-4 mt-4 border-t">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <Home className="h-5 w-5 text-green-600" />
+                            <span className="text-sm font-medium">Shelter Capacity</span>
+                          </div>
+                          <span className="text-2xl font-bold text-green-600">{shelter.capacity} beds</span>
+                        </div>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              ) : null}
+
+              {/* Breakdown Card */}
+              {donationType === 'participant' && (
               <Card>
                 <CardHeader>
                   <CardTitle className="text-lg flex items-center gap-2">
@@ -536,6 +599,60 @@ function DonatePageContent() {
                   </div>
                 </CardContent>
               </Card>
+              )}
+
+              {/* Shelter Breakdown Card */}
+              {donationType === 'shelter' && shelter && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <Shield className="h-5 w-5 text-green-600" />
+                    Donation Breakdown
+                  </CardTitle>
+                  <CardDescription>Direct support to shelter operations</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
+                      <div>
+                        <div className="font-semibold text-lg">Shelter Operations</div>
+                        <div className="text-sm text-muted-foreground">Direct support for {shelter.name}</div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-2xl font-bold text-green-600">95%</div>
+                        <div className="text-lg text-green-600">${breakdown.shelterOperations}</div>
+                      </div>
+                    </div>
+                    
+                    <div className="flex justify-between items-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                      <div>
+                        <div className="font-semibold">Platform Fee</div>
+                        <div className="text-sm text-muted-foreground">System maintenance & security</div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-2xl font-bold text-blue-600">5%</div>
+                        <div className="text-lg text-blue-600">${breakdown.platformFee}</div>
+                      </div>
+                    </div>
+
+                    {/* What Your Donation Supports */}
+                    <div className="mt-6 p-4 bg-gradient-to-r from-primary/10 to-primary/5 rounded-lg border">
+                      <h4 className="font-semibold mb-3 flex items-center gap-2">
+                        <Heart className="h-4 w-4 text-primary" />
+                        Your Impact
+                      </h4>
+                      <div className="space-y-2 text-sm text-muted-foreground">
+                        <p>✓ Emergency shelter beds and safe spaces</p>
+                        <p>✓ Daily meals and basic necessities</p>
+                        <p>✓ Case management and support services</p>
+                        <p>✓ Housing assistance programs</p>
+                        <p>✓ Mental health and wellness services</p>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              )}
             </div>
             
             {/* Right Column: Donation Form */}

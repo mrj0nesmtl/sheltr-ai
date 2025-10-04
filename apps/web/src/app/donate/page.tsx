@@ -63,7 +63,6 @@ function DonatePageContent() {
   const shelterId = searchParams.get('shelter');
   const isDemo = searchParams.get('demo') === 'true';
   const donationType = shelterId ? 'shelter' : 'participant';
-  const participantId = searchParams.get('participant');
 
   useEffect(() => {
     const loadParticipant = async () => {

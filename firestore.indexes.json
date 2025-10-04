@@ -117,6 +117,15 @@
       "collectionGroup": "internal_messages",
       "queryScope": "COLLECTION",
       "fields": [
+        {"fieldPath": "conversationId", "order": "ASCENDING"},
+        {"fieldPath": "isDeleted", "order": "ASCENDING"},
+        {"fieldPath": "createdAt", "order": "DESCENDING"}
+      ]
+    },
+    {
+      "collectionGroup": "internal_messages",
+      "queryScope": "COLLECTION",
+      "fields": [
         {"fieldPath": "toUserId", "order": "ASCENDING"},
         {"fieldPath": "status", "order": "ASCENDING"},
         {"fieldPath": "createdAt", "order": "DESCENDING"}

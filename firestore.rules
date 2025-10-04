@@ -579,14 +579,18 @@ service cloud.firestore {
     // ADMIN NOTIFICATIONS COLLECTION - Administrative notifications
     // =================================================================
     match /admin_notifications/{notificationId} {
-      // Read: Super Admin and Platform Admin can read notifications
-      allow read: if isSuperAdmin() || isPlatformAdmin();
+      // Read: Admins can read their own notifications, Super Admin can read all
+      allow read: if isAuthenticated() && 
+        (isSuperAdmin() || isPlatformAdmin() || 
+         (isAdmin() && resource.data.recipient_id == request.auth.uid));
       
-      // Write: Super Admin and Platform Admin can update notifications (mark as read)
-      allow write: if isSuperAdmin() || isPlatformAdmin();
+      // Write: Admins can update their own notifications (mark as read)
+      allow write: if isAuthenticated() && 
+        (isSuperAdmin() || isPlatformAdmin() || 
+         (isAdmin() && resource.data.recipient_id == request.auth.uid));
       
-      // Create: System can create notifications (authenticated users for testing)
-      allow create: if isAuthenticated();
+      // Create: Any authenticated admin can create notifications
+      allow create: if isAuthenticated() && (isSuperAdmin() || isPlatformAdmin() || isAdmin());
       
       // Delete: Super Admin only
       allow delete: if isSuperAdmin();

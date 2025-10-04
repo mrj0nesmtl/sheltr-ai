@@ -370,6 +370,13 @@ const getNavigationItems = (userRole: string, messageCount?: number, notificatio
         description: 'Shelter operations dashboard'
       },
       {
+        title: 'Notifications',
+        href: '/dashboard/notifications',
+        icon: Bell,
+        description: 'Manage notifications and alerts',
+        notificationCount
+      },
+      {
         title: 'Messages',
         href: '/dashboard/messages',
         icon: MessageCircle,
@@ -530,7 +537,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   // Fetch notification counts
   useEffect(() => {
     const fetchNotificationCounts = async () => {
-      if (!user || !['super_admin', 'platform_admin'].includes(user.role || '')) {
+      if (!user || !['super_admin', 'platform_admin', 'admin'].includes(user.role || '')) {
         return;
       }
 

@@ -586,6 +586,78 @@ export function ParticipantProfileClient({ participantId }: ParticipantProfileCl
               </CardContent>
             </Card>
 
+            {/* Housing Fund Progress Card */}
+            <Card className="bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 border-blue-200 dark:border-blue-800">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Home className="h-5 w-5 text-blue-600" />
+                  Housing Fund Progress
+                </CardTitle>
+                <CardDescription>Progress towards emergency housing solution</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {(() => {
+                    const housingGoal = 5000; // $5,000 emergency housing deposit
+                    const housingFund = Math.floor(participant.total_received * 0.15); // 15% of total donations
+                    const stillNeeded = Math.max(0, housingGoal - housingFund);
+                    const progressPercentage = Math.min(100, Math.floor((housingFund / housingGoal) * 100));
+                    const donationsNeeded = Math.ceil(stillNeeded / 0.15); // How much in total donations needed to reach goal
+                    
+                    return (
+                      <>
+                        {/* Progress Bar */}
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="font-medium">Emergency Housing Fund</span>
+                            <span className="font-bold text-blue-600">{progressPercentage}%</span>
+                          </div>
+                          <Progress value={progressPercentage} className="h-3" />
+                        </div>
+
+                        {/* Amount Details */}
+                        <div className="bg-background/50 rounded-lg p-4 space-y-3">
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm text-muted-foreground">Saved for Housing</span>
+                            <span className="text-lg font-bold text-blue-600">${housingFund.toLocaleString()}</span>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm text-muted-foreground">Goal Amount</span>
+                            <span className="text-sm font-medium">${housingGoal.toLocaleString()}</span>
+                          </div>
+                          <Separator />
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm font-medium text-orange-600 dark:text-orange-400">Still Needed</span>
+                            <span className="text-lg font-bold text-orange-600 dark:text-orange-400">${stillNeeded.toLocaleString()}</span>
+                          </div>
+                        </div>
+
+                        {/* Call to Action */}
+                        <div className="bg-blue-100 dark:bg-blue-900/30 rounded-lg p-3 text-center">
+                          <p className="text-xs text-muted-foreground mb-1">
+                            <Target className="h-3 w-3 inline mr-1" />
+                            Target: Emergency Housing Deposit
+                          </p>
+                          <p className="text-sm font-medium">
+                            {stillNeeded > 0 ? (
+                              <>~{Math.ceil(donationsNeeded / participant.donation_count)} more donations of this size needed</>
+                            ) : (
+                              <>🎉 Goal Reached! Ready for housing transition</>
+                            )}
+                          </p>
+                        </div>
+
+                        {/* SmartProof Explanation */}
+                        <div className="text-xs text-muted-foreground text-center pt-2 border-t">
+                          <p>15% of every donation automatically saved through SmartProof™ 80-15-5 model</p>
+                        </div>
+                      </>
+                    );
+                  })()}
+                </div>
+              </CardContent>
+            </Card>
+
             {/* Shelter Link Card */}
             <Card>
               <CardHeader>

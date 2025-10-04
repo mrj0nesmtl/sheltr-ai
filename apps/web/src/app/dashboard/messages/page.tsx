@@ -134,6 +134,21 @@ export default function MessagesPage() {
       content = mcpCommand.parsedCommand.content;
     }
 
+    // If replying in an existing conversation, auto-detect recipient from conversation
+    if (!recipientShortcode && selectedConversation) {
+      const conversation = conversations.find(c => c.conversationId === selectedConversation);
+      if (conversation) {
+        // Get the other participant's shortcode (not the current user's)
+        const otherParticipant = conversation.participantShortcodes.find(
+          sc => sc !== userShortcode?.shortcode
+        );
+        if (otherParticipant) {
+          recipientShortcode = otherParticipant;
+          console.log('🎯 Auto-detected recipient from conversation:', recipientShortcode);
+        }
+      }
+    }
+
     if (!recipientShortcode) {
       alert('Please select a recipient or use @username format');
       return;

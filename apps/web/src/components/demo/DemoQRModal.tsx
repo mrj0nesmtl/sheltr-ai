@@ -59,7 +59,7 @@ export function DemoQRModal({ open, onOpenChange, participant, qrCodeUrl }: Demo
             <div className="flex-1 min-w-0">
               <h3 className="text-xl font-semibold">{participant.firstName} {participant.lastName}</h3>
               <p className="text-muted-foreground text-sm mb-2">
-                Age {participant.age} • {participant.shelter_name || 'Demo Shelter'}
+                Age {participant.age} • <Link href="/old-brewery-mission" className="hover:text-primary underline underline-offset-2 transition-colors">{participant.shelter_name || 'Demo Shelter'}</Link>
               </p>
               <p className="text-sm leading-relaxed mb-3">{participant.story}</p>
               

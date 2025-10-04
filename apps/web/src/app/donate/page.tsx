@@ -663,6 +663,54 @@ function DonatePageContent() {
                 </CardHeader>
                 <CardContent className="space-y-6">
                   
+                  {/* Account Status */}
+                  <div className="space-y-3">
+                    {user ? (
+                      /* Logged In - Account Connected */
+                      <div className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-lg p-4 border-2 border-green-200 dark:border-green-800">
+                        <div className="flex items-center justify-center mb-2">
+                          <Badge className="bg-green-600 hover:bg-green-600">
+                            ✓ Account Connected
+                          </Badge>
+                        </div>
+                        <div className="text-center">
+                          <p className="font-semibold text-lg">Welcome back, {user.displayName || user.email?.split('@')[0]}!</p>
+                          <p className="text-sm text-muted-foreground mt-1">
+                            Your donation will be automatically tracked in your dashboard.
+                          </p>
+                          <p className="text-sm text-green-600 dark:text-green-400 mt-2 font-medium">
+                            Ready to make a difference?
+                          </p>
+                        </div>
+                      </div>
+                    ) : (
+                      /* Not Logged In - Prompt to Connect */
+                      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg p-4 border-2 border-blue-200 dark:border-blue-800">
+                        <div className="text-center space-y-3">
+                          <p className="font-semibold">Track Your Impact</p>
+                          <p className="text-sm text-muted-foreground">
+                            Sign in to track your donations and see your impact over time.
+                          </p>
+                          <div className="flex gap-2">
+                            <Link href="/login" className="flex-1">
+                              <Button variant="default" className="w-full">
+                                Sign In
+                              </Button>
+                            </Link>
+                            <Link href="/register" className="flex-1">
+                              <Button variant="outline" className="w-full">
+                                Register
+                              </Button>
+                            </Link>
+                          </div>
+                          <p className="text-xs text-muted-foreground">
+                            Or continue as guest below
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  
                   {/* Amount Selection */}
                   <div className="space-y-4">
                     <h3 className="font-semibold">Choose Amount</h3>

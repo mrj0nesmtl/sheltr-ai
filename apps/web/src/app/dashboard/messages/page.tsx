@@ -117,9 +117,51 @@ export default function MessagesPage() {
       if (response.success) {
         setMessages(response.data);
         console.log('✅ Loaded messages:', response.data.length);
+        
+        // Mark all unread messages in this conversation as read
+        const unreadMessages = response.data.filter(
+          (msg: InternalMessage) => msg.toUserId === user.uid && msg.status !== 'read'
+        );
+        
+        for (const message of unreadMessages) {
+          await MessageService.markMessageAsRead(message.id || '', user.uid);
+        }
+        
+        // Mark conversation notifications as read
+        await markConversationNotificationsAsRead(conversationId);
+        
+        // Reload conversations to update unread counts
+        await loadConversations();
+        
+        console.log(`✅ Marked ${unreadMessages.length} messages as read`);
       }
     } catch (error) {
       console.error('❌ Error loading messages:', error);
+    }
+  };
+
+  const markConversationNotificationsAsRead = async (conversationId: string) => {
+    if (!user) return;
+    
+    try {
+      const { NotificationService } = await import('@/services/notificationService');
+      const notifications = await NotificationService.getUnreadNotifications(user.uid);
+      
+      // Filter notifications for this conversation
+      const conversationNotifications = notifications.filter(
+        n => n.conversationId === conversationId
+      );
+      
+      // Mark each as read
+      for (const notification of conversationNotifications) {
+        if (notification.id) {
+          await NotificationService.markNotificationAsRead(notification.id);
+        }
+      }
+      
+      console.log(`✅ Marked ${conversationNotifications.length} notifications as read`);
+    } catch (error) {
+      console.error('❌ Error marking notifications as read:', error);
     }
   };
 

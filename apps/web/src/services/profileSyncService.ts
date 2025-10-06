@@ -70,6 +70,39 @@ export class ProfileSyncService {
       const userDoc = await getDoc(doc(db, 'users', userId));
       const userData = userDoc.exists() ? userDoc.data() : {};
       
+      // Try to get profile picture URL from Firebase Storage
+      let profilePictureUrl = userData.profilePicture || '';
+      
+      // If no profile picture in userData, try to fetch from Storage
+      if (!profilePictureUrl) {
+        try {
+          const { ref: storageRef, getDownloadURL } = await import('firebase/storage');
+          const { storage } = await import('@/lib/firebase');
+          
+          // Try common profile picture paths
+          const possiblePaths = [
+            `profiles/${userId}/avatar.jpg`,
+            `profiles/${userId}/avatar.png`,
+            `profiles/${userId}/profile.jpg`
+          ];
+          
+          for (const path of possiblePaths) {
+            try {
+              const fileRef = storageRef(storage, path);
+              profilePictureUrl = await getDownloadURL(fileRef);
+              console.log(`✅ Found profile picture at: ${path}`);
+              break;
+            } catch (err) {
+              // Continue to next path
+            }
+          }
+        } catch (error) {
+          console.log('ℹ️ No profile picture found in Storage');
+        }
+      }
+      
+      console.log('🖼️ Profile picture URL for sync:', profilePictureUrl || 'None');
+      
       // Map Super Admin profile to Platform Admin structure
       const platformAdminData: Partial<PlatformAdminProfile> = {
         firstName: superAdminProfile.firstName,
@@ -84,8 +117,10 @@ export class ProfileSyncService {
         location: superAdminProfile.location || 'Vancouver, BC',
         bio: superAdminProfile.bio || 'Founder and CEO of SHELTR-AI, pioneering innovative solutions to revolutionize homelessness services through cutting-edge technology and compassionate action.',
         
-        // Set as public and first in order
-        profileVisibility: 'public',
+        // Sync privacy settings from Super Admin profile
+        profileVisibility: superAdminProfile.profileVisibility || 'public',
+        showContactInfo: superAdminProfile.showContactInfo ?? true,
+        showExperience: superAdminProfile.showExperience ?? true,
         displayOrder: -1, // Always first
         
         // Default expertise for CEO
@@ -111,19 +146,21 @@ export class ProfileSyncService {
         // Update base user fields
         displayName: platformAdminData.displayName,
         email: platformAdminData.email,
-        profilePicture: userData.profilePicture || '', // Preserve existing profile picture
+        profilePicture: profilePictureUrl, // Use fetched or existing profile picture
         
         // Update adminProfile nested object
         adminProfile: {
           ...userData.adminProfile, // Preserve existing adminProfile data
           ...platformAdminData,
-          profilePicture: userData.profilePicture || '', // Ensure profile picture is in adminProfile too
+          profilePicture: profilePictureUrl, // Sync profile picture to adminProfile
         },
         
         // Update privacy settings
         privacy: {
           ...userData.privacy,
-          profileVisibility: 'public'
+          profileVisibility: superAdminProfile.profileVisibility || 'public',
+          showContactInfo: superAdminProfile.showContactInfo ?? true,
+          showExperience: superAdminProfile.showExperience ?? true
         },
         
         // Metadata
@@ -140,17 +177,24 @@ export class ProfileSyncService {
           lastName: superAdminProfile?.lastName,
           jobTitle: superAdminProfile?.jobTitle,
           bio: superAdminProfile?.bio,
-          location: superAdminProfile?.location
+          location: superAdminProfile?.location,
+          profileVisibility: superAdminProfile?.profileVisibility
         },
         syncedPlatformData: {
           firstName: platformAdminData.firstName,
           lastName: platformAdminData.lastName,
           jobTitle: platformAdminData.jobTitle,
           bio: platformAdminData.bio,
-          location: platformAdminData.location
+          location: platformAdminData.location,
+          profileVisibility: platformAdminData.profileVisibility
         }
       });
-      console.log('📸 Profile picture preserved:', userData.profilePicture || 'None');
+      console.log('📸 Profile picture synced:', profilePictureUrl || 'None');
+      console.log('🔒 Privacy settings synced:', {
+        profileVisibility: superAdminProfile.profileVisibility || 'public',
+        showContactInfo: superAdminProfile.showContactInfo ?? true,
+        showExperience: superAdminProfile.showExperience ?? true
+      });
       
       return true;
     } catch (error) {

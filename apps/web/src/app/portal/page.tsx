@@ -11,7 +11,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { 
   Lock, 
-  Shield, 
   CheckCircle, 
   AlertTriangle,
   ArrowRight,
@@ -20,6 +19,7 @@ import {
   EyeOff,
   Users
 } from 'lucide-react';
+import Image from 'next/image';
 import { authenticateFounder, setFounderAccess } from '@/services/founderAccessService';
 import { useAuth } from '@/contexts/AuthContext';
 import { auth } from '@/lib/firebase';
@@ -137,11 +137,17 @@ export default function FoundersPortalPage() {
           <Card className="shadow-xl">
             <CardHeader className="text-center">
               <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Shield className="h-8 w-8 text-white" />
+                <Image 
+                  src="/logo.svg" 
+                  alt="SHELTR Logo" 
+                  width={32} 
+                  height={32}
+                  className="brightness-0 invert"
+                />
               </div>
-              <CardTitle className="text-2xl">Founders Portal Access</CardTitle>
+              <CardTitle className="text-2xl">Portal Access</CardTitle>
               <p className="text-muted-foreground">
-                This area is restricted to SHELTR co-founders only.
+                This area is restricted to SHELTR co-founders.
               </p>
             </CardHeader>
             
@@ -167,13 +173,6 @@ export default function FoundersPortalPage() {
 
               {/* Founder Login */}
               <div className="space-y-4">
-                <div className="text-center mb-4">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center justify-center gap-2">
-                    <Users className="h-5 w-5 text-purple-600" />
-                    Co-Founder Access
-                  </h3>
-                </div>
-                
                 <form onSubmit={handleFounderLogin} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="email">Email Address</Label>
@@ -182,7 +181,7 @@ export default function FoundersPortalPage() {
                       <Input
                         id="email"
                         type="email"
-                        placeholder="founder@sheltr-ai.com"
+                        placeholder="Enter your email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         className="pl-10"

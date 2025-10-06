@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Menu, X, LogIn, Mail, Linkedin, Globe, Heart, Users, Award, Building2, Calendar, Twitter, Loader2 } from 'lucide-react';
+import { Menu, X, LogIn, Mail, Linkedin, Globe, Heart, Users, Award, Building2, Calendar, Twitter, Loader2, Share2, Rss, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -310,40 +310,119 @@ export default function TeamPage() {
         </div>
       </section>
 
-      {/* In Memory Section */}
-      {inMemoryMembers.length > 0 && (
-        <section className="py-16 bg-muted/30">
+      {/* Social Media Connection Section */}
+      <section className="py-16 bg-gradient-to-br from-primary/5 to-blue-500/5">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <h2 className="text-2xl font-bold mb-4 flex items-center justify-center">
-                <Heart className="h-6 w-6 mr-2 text-red-500" />
-                In Loving Memory
+              <h2 className="text-3xl font-bold mb-4 flex items-center justify-center">
+                <Share2 className="h-7 w-7 mr-3 text-primary" />
+                Connect With Us
               </h2>
-              <p className="text-muted-foreground">
-                Honoring those who helped shape our vision and will forever be part of our story.
+              <p className="text-muted-foreground text-lg">
+                Follow our journey and stay updated on our mission to revolutionize homelessness solutions
               </p>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {inMemoryMembers.map((member, index) => (
-                <Card key={index} className="text-center border-red-200 dark:border-red-800">
-                  <CardHeader>
-                    <CardTitle className="text-lg">{member.name}</CardTitle>
-                    <CardDescription className="font-medium text-red-600 dark:text-red-400">
-                      {member.role}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm text-muted-foreground italic">
-                      {member.description}
-                    </p>
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
+              {/* Bluesky */}
+              <a
+                href="https://bsky.app/profile/sheltr.bsky.social"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group"
+              >
+                <Card className="text-center hover:shadow-lg transition-all duration-300 hover:scale-105 border-blue-200 dark:border-blue-800 cursor-pointer">
+                  <CardContent className="pt-6 pb-6">
+                    <div className="flex flex-col items-center space-y-3">
+                      <div className="h-12 w-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <svg className="h-7 w-7 text-white" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+                        </svg>
+                      </div>
+                      <span className="font-semibold text-sm group-hover:text-primary transition-colors">Bluesky</span>
+                    </div>
                   </CardContent>
                 </Card>
-              ))}
+              </a>
+
+              {/* X (Twitter) */}
+              <a
+                href="https://x.com/sheltr_ai"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group"
+              >
+                <Card className="text-center hover:shadow-lg transition-all duration-300 hover:scale-105 border-gray-200 dark:border-gray-800 cursor-pointer">
+                  <CardContent className="pt-6 pb-6">
+                    <div className="flex flex-col items-center space-y-3">
+                      <div className="h-12 w-12 bg-gradient-to-br from-gray-800 to-black rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <Twitter className="h-6 w-6 text-white" />
+                      </div>
+                      <span className="font-semibold text-sm group-hover:text-primary transition-colors">X</span>
+                    </div>
+                  </CardContent>
+                </Card>
+              </a>
+
+              {/* TikTok */}
+              <a
+                href="https://www.tiktok.com/@sheltr.ai"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group"
+              >
+                <Card className="text-center hover:shadow-lg transition-all duration-300 hover:scale-105 border-pink-200 dark:border-pink-800 cursor-pointer">
+                  <CardContent className="pt-6 pb-6">
+                    <div className="flex flex-col items-center space-y-3">
+                      <div className="h-12 w-12 bg-gradient-to-br from-pink-500 to-cyan-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <svg className="h-6 w-6 text-white" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                        </svg>
+                      </div>
+                      <span className="font-semibold text-sm group-hover:text-primary transition-colors">TikTok</span>
+                    </div>
+                  </CardContent>
+                </Card>
+              </a>
+
+              {/* Blog */}
+              <a
+                href="/blog"
+                className="group"
+              >
+                <Card className="text-center hover:shadow-lg transition-all duration-300 hover:scale-105 border-orange-200 dark:border-orange-800 cursor-pointer">
+                  <CardContent className="pt-6 pb-6">
+                    <div className="flex flex-col items-center space-y-3">
+                      <div className="h-12 w-12 bg-gradient-to-br from-orange-400 to-red-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <Rss className="h-6 w-6 text-white" />
+                      </div>
+                      <span className="font-semibold text-sm group-hover:text-primary transition-colors">Blog</span>
+                    </div>
+                  </CardContent>
+                </Card>
+              </a>
+
+              {/* Arcana Concept */}
+              <a
+                href="https://www.arcanaconcept.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group"
+              >
+                <Card className="text-center hover:shadow-lg transition-all duration-300 hover:scale-105 border-purple-200 dark:border-purple-800 cursor-pointer">
+                  <CardContent className="pt-6 pb-6">
+                    <div className="flex flex-col items-center space-y-3">
+                      <div className="h-12 w-12 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <ExternalLink className="h-6 w-6 text-white" />
+                      </div>
+                      <span className="font-semibold text-sm group-hover:text-primary transition-colors">Arcana</span>
+                    </div>
+                  </CardContent>
+                </Card>
+              </a>
             </div>
           </div>
         </section>
-      )}
 
       {/* Call to Action */}
       <section className="py-16">

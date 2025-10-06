@@ -55,8 +55,15 @@ export class TeamSyncService {
     try {
       console.log('🔄 Syncing public team members from Platform Admin profiles...');
       
-      // Get all platform admin profiles (all public for QA stage)
-      const publicProfiles = await PlatformAdminProfileService.getAllPlatformAdminProfiles(false);
+      // Get all platform admin profiles
+      const allProfiles = await PlatformAdminProfileService.getAllPlatformAdminProfiles(false);
+      
+      // Filter to only include profiles with public visibility (or undefined for backwards compatibility)
+      const publicProfiles = allProfiles.filter(profile => 
+        !profile.profileVisibility || profile.profileVisibility === 'public'
+      );
+      
+      console.log(`📊 Profile visibility filter: ${allProfiles.length} total profiles, ${publicProfiles.length} public profiles`);
       
       // Transform to public team member format
       const teamMembers: PublicTeamMember[] = publicProfiles.map(profile => 
@@ -130,29 +137,41 @@ export class TeamSyncService {
           console.log('Using fallback defaults for Joel');
         }
         
-        const joelMember: PublicTeamMember = {
-          id: joelEmail,
-          name: joelProfile?.displayName || 'Joel Yaffe',
-          displayName: joelProfile?.displayName || 'Joel Yaffe',
-          email: joelEmail,
-          jobTitle: joelProfile?.jobTitle || 'Chief Executive Officer & Founder',
-          department: joelProfile?.department || 'Leadership', 
-          specialization: joelProfile?.specialization || 'Visionary Leadership & Strategic Direction',
-          bio: joelProfile?.bio || 'Founder and CEO of SHELTR-AI, pioneering innovative solutions to revolutionize homelessness services through cutting-edge technology and compassionate action.',
-          profilePicture: joelProfile?.profilePicture || '', // Use actual profile picture if available
-          expertise: joelProfile?.expertise || ['Strategic Leadership', 'Social Impact', 'Technology Innovation', 'Nonprofit Management', 'Systems Thinking'],
-          yearsOfExperience: joelProfile?.yearsOfExperience || 25,
-          joinDate: joelProfile?.joinDate || '2024-01-01',
-          profileComplete: joelProfile?.profileComplete || true,
-          isFoundingMember: true,
-          displayOrder: -1, // Always first
-          phone: joelProfile?.phone || '',
-          linkedIn: joelProfile?.linkedIn || '',
-          twitter: joelProfile?.twitter || '',
-          website: joelProfile?.website || '',
-          education: joelProfile?.education || [],
-          certifications: joelProfile?.certifications || []
-        };
+        // Check if Joel's profile should be public
+        const joelVisibility = joelProfile?.profileVisibility || 'public'; // Default to public for backwards compatibility
+        
+        // Only add Joel if his profile is set to public
+        if (joelVisibility === 'public') {
+          const joelMember: PublicTeamMember = {
+            id: joelEmail,
+            name: joelProfile?.displayName || 'Joel Yaffe',
+            displayName: joelProfile?.displayName || 'Joel Yaffe',
+            email: joelEmail,
+            jobTitle: joelProfile?.jobTitle || 'Chief Executive Officer & Founder',
+            department: joelProfile?.department || 'Leadership', 
+            specialization: joelProfile?.specialization || 'Visionary Leadership & Strategic Direction',
+            bio: joelProfile?.bio || 'Founder and CEO of SHELTR-AI, pioneering innovative solutions to revolutionize homelessness services through cutting-edge technology and compassionate action.',
+            profilePicture: joelProfile?.profilePicture || '', // Use actual profile picture if available
+            expertise: joelProfile?.expertise || ['Strategic Leadership', 'Social Impact', 'Technology Innovation', 'Nonprofit Management', 'Systems Thinking'],
+            yearsOfExperience: joelProfile?.yearsOfExperience || 25,
+            joinDate: joelProfile?.joinDate || '2024-01-01',
+            profileComplete: joelProfile?.profileComplete || true,
+            isFoundingMember: true,
+            displayOrder: -1, // Always first
+            phone: joelProfile?.phone || '',
+            linkedIn: joelProfile?.linkedIn || '',
+            twitter: joelProfile?.twitter || '',
+            website: joelProfile?.website || '',
+            education: joelProfile?.education || [],
+            certifications: joelProfile?.certifications || []
+          };
+          
+          console.log('✅ Joel\'s profile is public, adding to team page');
+          // Add Joel at the beginning
+          teamMembers.unshift(joelMember);
+        } else {
+          console.log(`ℹ️ Joel\'s profile visibility is set to "${joelVisibility}", not adding to public team page`);
+        }
         
         console.log('🖼️ Joel\'s profile picture:', joelProfile?.profilePicture ? 'Found' : 'Using initials fallback');
         console.log('📊 Joel\'s profile data:', {
@@ -165,9 +184,6 @@ export class TeamSyncService {
           location: joelProfile?.location || 'Using fallback',
           fullProfile: joelProfile
         });
-        
-        // Add Joel at the beginning
-        teamMembers.unshift(joelMember);
       }
       
       // Sort by Super Admin custom order (displayOrder) if available, otherwise use hierarchy

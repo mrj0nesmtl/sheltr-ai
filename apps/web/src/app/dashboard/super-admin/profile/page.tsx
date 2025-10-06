@@ -209,7 +209,7 @@ export default function SuperAdminProfilePage() {
       </div>
 
       <Tabs defaultValue="profile" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="profile" className="flex items-center space-x-2">
             <User className="h-4 w-4" />
             <span>Profile</span>
@@ -217,6 +217,10 @@ export default function SuperAdminProfilePage() {
           <TabsTrigger value="security" className="flex items-center space-x-2">
             <Shield className="h-4 w-4" />
             <span>Security</span>
+          </TabsTrigger>
+          <TabsTrigger value="privacy" className="flex items-center space-x-2">
+            <Eye className="h-4 w-4" />
+            <span>Privacy</span>
           </TabsTrigger>
           <TabsTrigger value="preferences" className="flex items-center space-x-2">
             <Settings className="h-4 w-4" />
@@ -451,6 +455,88 @@ export default function SuperAdminProfilePage() {
                 <Switch
                   checked={formData.loginAlerts ?? false}
                   onCheckedChange={(checked: boolean) => handleBooleanChange('loginAlerts', checked)}
+                  disabled={!isEditing}
+                />
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Privacy Tab */}
+        <TabsContent value="privacy" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2">
+                <Eye className="h-5 w-5" />
+                <span>Privacy Settings</span>
+              </CardTitle>
+              <CardDescription>
+                Control who can see your profile information
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="space-y-2">
+                <Label htmlFor="profileVisibility">Profile Visibility</Label>
+                <Select
+                  value={formData.profileVisibility || 'team'}
+                  onValueChange={(value) => handleInputChange('profileVisibility', value)}
+                  disabled={!isEditing}
+                >
+                  <SelectTrigger id="profileVisibility">
+                    <SelectValue placeholder="Select visibility" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="public">
+                      <div className="flex items-center">
+                        <Globe className="h-4 w-4 mr-2" />
+                        Public - Visible on team page to everyone
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="team">
+                      <div className="flex items-center">
+                        <Building className="h-4 w-4 mr-2" />
+                        Team - Visible to platform administrators
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="private">
+                      <div className="flex items-center">
+                        <EyeOff className="h-4 w-4 mr-2" />
+                        Private - Only visible to you
+                      </div>
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+                <p className="text-sm text-muted-foreground">
+                  {formData.profileVisibility === 'public' && 'Your profile will appear on the public team page at /team'}
+                  {formData.profileVisibility === 'team' && 'Your profile will only be visible to other platform administrators'}
+                  {formData.profileVisibility === 'private' && 'Your profile will be hidden from the team page'}
+                </p>
+              </div>
+              
+              <div className="flex items-center justify-between">
+                <div>
+                  <Label>Show Contact Information</Label>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    Allow team members to see your phone and social links
+                  </p>
+                </div>
+                <Switch
+                  checked={formData.showContactInfo ?? true}
+                  onCheckedChange={(checked: boolean) => handleBooleanChange('showContactInfo', checked)}
+                  disabled={!isEditing}
+                />
+              </div>
+              
+              <div className="flex items-center justify-between">
+                <div>
+                  <Label>Show Experience Details</Label>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    Display your years of experience and expertise areas
+                  </p>
+                </div>
+                <Switch
+                  checked={formData.showExperience ?? true}
+                  onCheckedChange={(checked: boolean) => handleBooleanChange('showExperience', checked)}
                   disabled={!isEditing}
                 />
               </div>

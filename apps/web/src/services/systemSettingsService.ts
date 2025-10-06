@@ -61,6 +61,12 @@ export interface SuperAdminProfile {
   emailNotifications: boolean;
   smsNotifications: boolean;
   loginAlerts: boolean;
+  
+  // Privacy Settings
+  profileVisibility?: 'public' | 'team' | 'private';
+  showContactInfo?: boolean;
+  showExperience?: boolean;
+  
   lastUpdated: Date;
   updatedBy: string;
 }

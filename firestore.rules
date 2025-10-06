@@ -579,7 +579,8 @@ service cloud.firestore {
     // ADMIN NOTIFICATIONS COLLECTION - Administrative notifications
     // =================================================================
     match /admin_notifications/{notificationId} {
-      // Read: Admins can read their own notifications, Super Admin can read all
+      // Read: Super Admin and Platform Admin can read all notifications
+      // Shelter Admins can read their own notifications
       allow read: if isAuthenticated() && 
         (isSuperAdmin() || isPlatformAdmin() || 
          (isAdmin() && resource.data.recipient_id == request.auth.uid));
@@ -594,6 +595,57 @@ service cloud.firestore {
       
       // Delete: Super Admin only
       allow delete: if isSuperAdmin();
+      
+      // List/Query: Super Admin and Platform Admin can query all
+      allow list: if isAuthenticated() && (isSuperAdmin() || isPlatformAdmin());
+    }
+    
+    // =================================================================
+    // SHELTER EMAIL SIGNUPS COLLECTION - Shelter-specific email captures
+    // =================================================================
+    match /shelter_email_signups/{signupId} {
+      // Read: Super Admin and Platform Admin can read all, Shelter Admins can read their own shelter's signups
+      allow read: if isAuthenticated() && 
+        (isSuperAdmin() || isPlatformAdmin() || 
+         (isAdmin() && resource.data.shelter_id == getUserShelterId()));
+      
+      // Create: Public can create signups (for public shelter page forms)
+      allow create: if request.resource.data.keys().hasAll(['email', 'shelter_id']);
+      
+      // Update: Admins can update status (mark as contacted, unsubscribed, etc.)
+      allow update: if isAuthenticated() && 
+        (isSuperAdmin() || isPlatformAdmin() || 
+         (isAdmin() && resource.data.shelter_id == getUserShelterId()));
+      
+      // Delete: Super Admin only
+      allow delete: if isSuperAdmin();
+      
+      // List/Query: Super Admin and Platform Admin can query all
+      allow list: if isAuthenticated() && (isSuperAdmin() || isPlatformAdmin());
+    }
+    
+    // =================================================================
+    // SHELTER CONTACT INQUIRIES COLLECTION - Shelter-specific contact forms
+    // =================================================================
+    match /shelter_contact_inquiries/{inquiryId} {
+      // Read: Super Admin and Platform Admin can read all, Shelter Admins can read their own shelter's inquiries
+      allow read: if isAuthenticated() && 
+        (isSuperAdmin() || isPlatformAdmin() || 
+         (isAdmin() && resource.data.shelter_id == getUserShelterId()));
+      
+      // Create: Public can create inquiries (for public shelter page contact forms)
+      allow create: if request.resource.data.keys().hasAll(['shelter_id', 'sender_email', 'message']);
+      
+      // Update: Admins can update inquiries (respond, mark as resolved, etc.)
+      allow update: if isAuthenticated() && 
+        (isSuperAdmin() || isPlatformAdmin() || 
+         (isAdmin() && resource.data.shelter_id == getUserShelterId()));
+      
+      // Delete: Super Admin only
+      allow delete: if isSuperAdmin();
+      
+      // List/Query: Super Admin and Platform Admin can query all
+      allow list: if isAuthenticated() && (isSuperAdmin() || isPlatformAdmin());
     }
     
     // =================================================================

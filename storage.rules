@@ -50,14 +50,13 @@ service firebase.storage {
     }
 
     // =================================================================
-    // USER PROFILE PICTURES - Public within organization
-    // Accessible by: Owner, shelter admins, super admin
+    // USER PROFILE PICTURES - Publicly Readable
+    // Read by: Anyone (for public team page and profiles)
+    // Write by: Owner only
     // =================================================================
     match /profiles/{userId}/{document=**} {
-      // Read access: Owner, any shelter admin, super admin
-      allow read: if isOwner(userId) || 
-                     getUserData().role == 'shelter_admin' || 
-                     isSuperAdmin();
+      // Read access: Anyone (public profile pictures for team page)
+      allow read: if true;
       
       // Write access: Owner only (with file type and size validation)
       allow write: if isOwner(userId) && 

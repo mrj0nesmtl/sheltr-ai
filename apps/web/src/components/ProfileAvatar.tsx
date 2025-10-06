@@ -32,6 +32,12 @@ export const markUserAsNoAvatar = (userId: string) => {
   });
 };
 
+// Helper function to clear cache for a specific user (useful after profile picture upload)
+export const clearProfilePictureCache = (userId: string) => {
+  profilePicCache.delete(userId);
+  console.log(`🗑️ Cleared profile picture cache for user: ${userId}`);
+};
+
 export function ProfileAvatar({ userId, size = 'medium', className = '', showStatus = false }: ProfileAvatarProps) {
   const [profilePicUrl, setProfilePicUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);

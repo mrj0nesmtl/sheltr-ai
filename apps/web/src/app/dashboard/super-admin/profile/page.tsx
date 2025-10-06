@@ -11,7 +11,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
-import { ProfileAvatar } from '@/components/ProfileAvatar';
+import { ProfileAvatar, clearProfilePictureCache } from '@/components/ProfileAvatar';
 import { UserStatusSelector } from '@/components/UserStatusSelector';
 import { 
   SystemSettingsService, 
@@ -145,6 +145,10 @@ export default function SuperAdminProfilePage() {
         // Trigger sync to Platform Admin profile for Team page
         console.log('🔄 Syncing profile picture to Team page...');
         await ProfileSyncService.syncSuperAdminToPlatformAdmin(user.uid);
+        
+        // Clear the profile picture cache to force reload of new image
+        console.log('🗑️ Clearing profile picture cache...');
+        clearProfilePictureCache(user.uid);
         
         console.log('✅ Profile picture updated and synced to Team page!');
         alert('Profile picture updated successfully!');

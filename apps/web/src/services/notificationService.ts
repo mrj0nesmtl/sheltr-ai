@@ -286,6 +286,15 @@ export class NotificationService {
       const unreadSnapshot = await getDocs(unreadQuery);
       const unreadMessages = unreadSnapshot.size;
 
+      // Get unread admin notifications (for super_admin and platform_admin)
+      const adminNotificationsQuery = query(
+        collection(db, 'admin_notifications'),
+        where('read', '==', false)
+      );
+
+      const adminNotificationsSnapshot = await getDocs(adminNotificationsQuery);
+      const unreadAdminNotifications = adminNotificationsSnapshot.size;
+
       // Get last activity
       const lastActivityQuery = query(
         collection(db, 'message_notifications'),
@@ -302,9 +311,11 @@ export class NotificationService {
         lastActivity = lastDoc.data().createdAt;
       }
 
+      console.log(`✅ Notification counts: ${unreadMessages} unread messages, ${unreadAdminNotifications} unread admin notifications`);
+
       return {
         unreadMessages,
-        unreadNotifications: unreadMessages,
+        unreadNotifications: unreadMessages + unreadAdminNotifications,
         lastActivity
       };
 
@@ -419,14 +430,15 @@ export async function getNotificationCounts(userId: string): Promise<Notificatio
 }
 
 /**
- * Get recent email signups from newsletter_signups collection
+ * Get recent email signups from shelter_email_signups collection (shelter-specific email captures from public pages)
+ * NOTE: This is different from newsletter_signups which is platform-wide newsletter subscriptions
  */
 export async function getRecentEmailSignups(maxResults: number = 10): Promise<EmailSignup[]> {
   try {
-    console.log('📧 Getting recent email signups from newsletter_signups collection...');
+    console.log('📧 Getting recent shelter email signups from shelter_email_signups collection...');
     
     const q = query(
-      collection(db, 'newsletter_signups'),
+      collection(db, 'shelter_email_signups'),
       orderBy('signup_date', 'desc'),
       limit(maxResults)
     );
@@ -440,15 +452,15 @@ export async function getRecentEmailSignups(maxResults: number = 10): Promise<Em
         id: doc.id,
         email: data.email,
         name: data.name || data.attribution || undefined,
-        source: data.source || 'unknown',
-        page: data.page || 'unknown',
+        source: data.source || 'shelter_page',
+        page: data.shelter_name || 'unknown',
         signup_date: data.signup_date,
         status: data.status || 'active',
         createdAt: data.signup_date || data.created_at
       } as EmailSignup);
     });
     
-    console.log(`✅ Found ${signups.length} email signups`);
+    console.log(`✅ Found ${signups.length} shelter email signups`);
     return signups;
   } catch (error) {
     console.error('❌ Error getting recent email signups:', error);
@@ -599,8 +611,8 @@ export async function getNotificationDashboardCounts(
       doc => !doc.data().isRead && (doc.data().type === 'message_received' || doc.data().type === 'message_replied')
     ).length;
     
-    // 2. Get email signups
-    const emailSignupsQuery = query(collection(db, 'newsletter_signups'));
+    // 2. Get shelter email signups (shelter-specific email captures, not newsletter)
+    const emailSignupsQuery = query(collection(db, 'shelter_email_signups'));
     const emailSignupsSnapshot = await getDocs(emailSignupsQuery);
     const totalEmailSignups = emailSignupsSnapshot.size;
     

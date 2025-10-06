@@ -11,6 +11,7 @@ import Footer from '@/components/Footer';
 import ThemeLogo from '@/components/ThemeLogo';
 import { useAuth } from '@/contexts/AuthContext';
 import { PublicChatbot } from '@/components/PublicChatbot';
+import NewsletterSignup from '@/components/NewsletterSignup';
 
 export default function AboutPage() {
   const { user, hasRole } = useAuth();
@@ -550,6 +551,9 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
+
+      {/* Newsletter Signup */}
+      <NewsletterSignup source="about" variant="banner" />
 
       <Footer />
       <PublicChatbot />

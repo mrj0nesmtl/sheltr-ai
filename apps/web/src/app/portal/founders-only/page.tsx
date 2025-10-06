@@ -286,7 +286,7 @@ export default function FoundersOnlyPage() {
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <Shield className="h-8 w-8 text-indigo-600" />
-                  <Badge className="bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200">
+                  <Badge className="bg-indigo-600 text-white dark:bg-indigo-500 dark:text-white">
                     Live Platform
                   </Badge>
                 </div>
@@ -339,7 +339,7 @@ export default function FoundersOnlyPage() {
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <FileText className="h-8 w-8 text-emerald-600" />
-                  <Badge className="bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200">
+                  <Badge className="bg-emerald-600 text-white dark:bg-emerald-500 dark:text-white">
                     v2.0
                   </Badge>
                 </div>
@@ -383,21 +383,21 @@ export default function FoundersOnlyPage() {
             </Card>
 
             {/* Gallery Management */}
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer border-indigo-200 dark:border-indigo-800">
+            <Card className="hover:shadow-lg transition-shadow cursor-pointer border-violet-200 dark:border-violet-800">
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <Camera className="h-8 w-8 text-indigo-600" />
-                  <Badge className="bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200">
+                  <Camera className="h-8 w-8 text-violet-600" />
+                  <Badge className="bg-violet-600 text-white dark:bg-violet-500 dark:text-white">
                     Media Hub
                   </Badge>
                 </div>
-                <CardTitle className="text-indigo-600">Gallery Management</CardTitle>
+                <CardTitle className="text-violet-600">Gallery Management</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground mb-4">
                   Upload and manage media content, videos, and images for platform and founders portal sharing
                 </p>
-                <Button asChild variant="outline" className="w-full border-2 border-indigo-600 text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 dark:text-indigo-400 dark:border-indigo-400">
+                <Button asChild variant="outline" className="w-full border-2 border-violet-600 text-violet-600 hover:bg-violet-50 dark:hover:bg-violet-900/20 dark:text-violet-400 dark:border-violet-400">
                   <Link href="/dashboard/gallery" className="flex items-center justify-center gap-2 no-underline">
                     Manage Gallery
                     <Camera className="h-4 w-4" />
@@ -411,7 +411,7 @@ export default function FoundersOnlyPage() {
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <FileText className="h-8 w-8 text-rose-600" />
-                  <Badge className="bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
+                  <Badge className="bg-rose-600 text-white dark:bg-rose-500 dark:text-white">
                     Secure
                   </Badge>
                 </div>
@@ -424,6 +424,30 @@ export default function FoundersOnlyPage() {
                 <Button asChild variant="outline" className="w-full border-2 border-rose-600 text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/20 dark:text-rose-400 dark:border-rose-400">
                   <Link href="/secure-docs/business-plan" className="flex items-center justify-center gap-2 no-underline">
                     View Business Plan
+                    <ExternalLink className="h-4 w-4" />
+                  </Link>
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Leadership Team */}
+            <Card className="hover:shadow-lg transition-shadow cursor-pointer border-teal-200 dark:border-teal-800">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <Users className="h-8 w-8 text-teal-600" />
+                  <Badge className="bg-teal-100 text-teal-800 dark:bg-teal-900 dark:text-teal-200">
+                    Team
+                  </Badge>
+                </div>
+                <CardTitle className="text-teal-600">Leadership Team</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Meet the SHELTR leadership team, founders, and key contributors driving our mission
+                </p>
+                <Button asChild variant="outline" className="w-full border-2 border-teal-600 text-teal-600 hover:bg-teal-50 dark:hover:bg-teal-900/20 dark:text-teal-400 dark:border-teal-400">
+                  <Link href="/team" className="flex items-center justify-center gap-2 no-underline">
+                    View Team
                     <ExternalLink className="h-4 w-4" />
                   </Link>
                 </Button>

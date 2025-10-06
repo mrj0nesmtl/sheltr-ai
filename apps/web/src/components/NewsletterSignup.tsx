@@ -138,7 +138,7 @@ export default function NewsletterSignup({ source, variant = 'default', classNam
                         <Sparkles className="h-6 w-6 text-primary" />
                       </div>
                     </div>
-                    <h2 className="text-3xl font-bold">Join the Revolution</h2>
+                    <h2 className="text-3xl font-bold">Join the Disruption</h2>
                     <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
                       Be the first to hear about breakthrough innovations, inspiring success stories, and opportunities to make a real difference in the lives of those experiencing homelessness.
                     </p>

@@ -18,6 +18,9 @@ import {
   type SuperAdminProfile
 } from '@/services/systemSettingsService';
 import { ProfileSyncService } from '@/services/profileSyncService';
+import { uploadProfilePicture } from '@/services/fileStorageService';
+import { doc, updateDoc } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 import {
   User, 
   Briefcase,
@@ -41,7 +44,8 @@ import {
   EyeOff,
   Camera,
   Upload,
-  Crown
+  Crown,
+  Loader2
 } from 'lucide-react';
 
 export default function SuperAdminProfilePage() {
@@ -50,6 +54,7 @@ export default function SuperAdminProfilePage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [uploadingPicture, setUploadingPicture] = useState(false);
   const [formData, setFormData] = useState<Partial<SuperAdminProfile>>({});
 
   // Load profile data
@@ -114,6 +119,45 @@ export default function SuperAdminProfilePage() {
       ...prev,
       [field]: value
     }));
+  };
+
+  // Handle profile picture upload
+  const handleProfilePictureUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file || !user?.uid) return;
+
+    try {
+      setUploadingPicture(true);
+      console.log('🔄 Uploading Super Admin profile picture...');
+
+      // Upload the image to Firebase Storage
+      const profilePictureUrl = await uploadProfilePicture(file, user.uid);
+      
+      if (profilePictureUrl) {
+        console.log('✅ Profile picture uploaded:', profilePictureUrl);
+        
+        // Update the user document with the profile picture URL
+        await updateDoc(doc(db, 'users', user.uid), {
+          profilePicture: profilePictureUrl,
+          updated_at: new Date()
+        });
+        
+        // Trigger sync to Platform Admin profile for Team page
+        console.log('🔄 Syncing profile picture to Team page...');
+        await ProfileSyncService.syncSuperAdminToPlatformAdmin(user.uid);
+        
+        console.log('✅ Profile picture updated and synced to Team page!');
+        alert('Profile picture updated successfully!');
+        
+        // Force page reload to show new picture
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error('❌ Error uploading profile picture:', error);
+      alert('Error uploading profile picture. Please try again.');
+    } finally {
+      setUploadingPicture(false);
+    }
   };
 
   const handleSave = async () => {
@@ -240,13 +284,26 @@ export default function SuperAdminProfilePage() {
                     size="large"
                     showStatus={true}
                   />
+                  <input
+                    type="file"
+                    id="profile-picture-upload"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleProfilePictureUpload}
+                  />
                   <Button
                     size="sm"
                     variant="outline"
                     className="absolute -bottom-2 -right-2 h-8 w-8 rounded-full p-0"
-                    disabled={!isEditing}
+                    disabled={uploadingPicture}
+                    onClick={() => document.getElementById('profile-picture-upload')?.click()}
+                    type="button"
                   >
-                    <Camera className="h-3 w-3" />
+                    {uploadingPicture ? (
+                      <Loader2 className="h-3 w-3 animate-spin" />
+                    ) : (
+                      <Camera className="h-3 w-3" />
+                    )}
                   </Button>
                 </div>
                 

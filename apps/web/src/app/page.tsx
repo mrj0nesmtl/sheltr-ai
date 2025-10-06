@@ -11,6 +11,7 @@ import ThemeLogo from '@/components/ThemeLogo';
 import { PublicChatbot } from '@/components/PublicChatbot';
 import { useAuth } from '@/contexts/AuthContext';
 import { GalleryService, GalleryImage } from '@/services/galleryService';
+import NewsletterSignup from '@/components/NewsletterSignup';
 
 export default function HomePage() {
   const { user, hasRole } = useAuth();
@@ -463,6 +464,9 @@ export default function HomePage() {
             </div>
           </div>
         </section>
+
+        {/* Newsletter Signup */}
+        <NewsletterSignup source="landing" variant="banner" />
       
       <Footer />
       

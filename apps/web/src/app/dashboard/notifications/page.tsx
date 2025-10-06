@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { getNotificationDashboardCounts, getShelterNotificationCounts, getRecentEmailSignups, getRecentContactInquiries, getAdminNotifications, markNotificationAsRead, NotificationDashboardCounts, EmailSignup, ContactInquiryNotification, AdminNotification, formatRelativeTime } from '@/services/notificationService';
+import { getAllNewsletterSignups, getNewsletterCount, NewsletterSignup } from '@/services/newsletterService';
 import { 
   Mail, 
   Bell, 
@@ -35,6 +36,9 @@ export default function NotificationsPage() {
   const [filteredInquiries, setFilteredInquiries] = useState<ContactInquiryNotification[]>([]);
   const [allAdminNotifications, setAllAdminNotifications] = useState<AdminNotification[]>([]);
   const [filteredAdminNotifications, setFilteredAdminNotifications] = useState<AdminNotification[]>([]);
+  const [allNewsletterSignups, setAllNewsletterSignups] = useState<NewsletterSignup[]>([]);
+  const [filteredNewsletterSignups, setFilteredNewsletterSignups] = useState<NewsletterSignup[]>([]);
+  const [newsletterCount, setNewsletterCount] = useState<number>(0);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState('all');
@@ -47,11 +51,12 @@ export default function NotificationsPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.role]);
 
-  // Filter signups, inquiries, and admin notifications based on search term
+  // Filter signups, inquiries, admin notifications, and newsletter signups based on search term
   useEffect(() => {
     let filteredSignupsResult = allEmailSignups;
     let filteredInquiriesResult = allContactInquiries;
     let filteredAdminNotificationsResult = allAdminNotifications;
+    let filteredNewsletterResult = allNewsletterSignups;
     
     if (searchTerm) {
       filteredSignupsResult = filteredSignupsResult.filter(signup => 
@@ -73,12 +78,19 @@ export default function NotificationsPage() {
         notification.message.toLowerCase().includes(searchTerm.toLowerCase()) ||
         notification.type.toLowerCase().includes(searchTerm.toLowerCase())
       );
+      
+      filteredNewsletterResult = filteredNewsletterResult.filter(signup => 
+        signup.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (signup.name && signup.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        signup.source.toLowerCase().includes(searchTerm.toLowerCase())
+      );
     }
 
     setFilteredSignups(filteredSignupsResult);
     setFilteredInquiries(filteredInquiriesResult);
     setFilteredAdminNotifications(filteredAdminNotificationsResult);
-  }, [allEmailSignups, allContactInquiries, allAdminNotifications, searchTerm]);
+    setFilteredNewsletterSignups(filteredNewsletterResult);
+  }, [allEmailSignups, allContactInquiries, allAdminNotifications, allNewsletterSignups, searchTerm]);
 
   const loadNotifications = async () => {
     setLoading(true);
@@ -137,11 +149,13 @@ export default function NotificationsPage() {
         }
         
         // Load platform-wide data (Super Admin / Platform Admin)
-        const [counts, emailSignups, contactInquiries, adminNotifications] = await Promise.all([
+        const [counts, emailSignups, contactInquiries, adminNotifications, newsletterSignups, totalNewsletterCount] = await Promise.all([
           getNotificationDashboardCounts(userId, userRole), // Platform-wide counts
           getRecentEmailSignups(50), // Get more for the dedicated page
           getRecentContactInquiries(50), // Get recent contact inquiries
-          getAdminNotifications(userId, 50) // Get recent admin notifications
+          getAdminNotifications(userId, 50), // Get recent admin notifications
+          getAllNewsletterSignups(100), // Get newsletter signups
+          getNewsletterCount() // Get total newsletter count
         ]);
         
         // Update active users count from API
@@ -154,9 +168,12 @@ export default function NotificationsPage() {
         setFilteredInquiries(contactInquiries);
         setAllAdminNotifications(adminNotifications);
         setFilteredAdminNotifications(adminNotifications);
+        setAllNewsletterSignups(newsletterSignups);
+        setFilteredNewsletterSignups(newsletterSignups);
+        setNewsletterCount(totalNewsletterCount);
         setActiveUsers(activeUsersCount);
         
-        console.log('✅ Platform notifications loaded:', { counts, emailSignups, contactInquiries, adminNotifications, activeUsers: activeUsersCount });
+        console.log('✅ Platform notifications loaded:', { counts, emailSignups, contactInquiries, adminNotifications, newsletterSignups, newsletterCount: totalNewsletterCount, activeUsers: activeUsersCount });
       }
       
     } catch (error) {
@@ -179,6 +196,23 @@ export default function NotificationsPage() {
     const a = document.createElement('a');
     a.href = url;
     a.download = `sheltr-email-signups-${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  };
+
+  const exportNewsletterSignups = () => {
+    const csvContent = [
+      'Email,Name,Source,Status,Subscribed Date',
+      ...filteredNewsletterSignups.map(signup => 
+        `${signup.email},"${signup.name || 'N/A'}",${signup.source},${signup.status},"${signup.subscribed_at instanceof Date ? signup.subscribed_at.toISOString() : 'N/A'}"`
+      )
+    ].join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `sheltr-newsletter-signups-${new Date().toISOString().split('T')[0]}.csv`;
     a.click();
     window.URL.revokeObjectURL(url);
   };
@@ -265,6 +299,36 @@ export default function NotificationsPage() {
                 <div className="text-2xl sm:text-3xl font-bold">{notificationCounts?.totalEmailSignups || 0}</div>
                 <p className="text-xs text-muted-foreground">
                   {notificationCounts?.recentEmailSignups || 0} new this week
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Newsletter Signups Card - Only for Super Admin / Platform Admin */}
+        {user?.role !== 'admin' && (
+          <Card className="overflow-hidden bg-gradient-to-br from-cyan-50 to-blue-50 dark:from-cyan-900/20 dark:to-blue-900/20 border-cyan-200 dark:border-cyan-800">
+            <CardContent className="p-4 sm:p-6">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center space-x-2">
+                  <div className="p-2 bg-cyan-100 dark:bg-cyan-900/40 rounded-lg">
+                    <Mail className="h-4 w-4 text-cyan-600 dark:text-cyan-400" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium text-muted-foreground truncate">Newsletter</p>
+                    <p className="text-xs text-muted-foreground">Subscribers</p>
+                  </div>
+                </div>
+              </div>
+              <div className="space-y-1">
+                <div className="text-2xl sm:text-3xl font-bold">{newsletterCount}</div>
+                <p className="text-xs text-muted-foreground">
+                  {allNewsletterSignups.filter(s => {
+                    const signupDate = s.subscribed_at instanceof Date ? s.subscribed_at : new Date();
+                    const oneWeekAgo = new Date();
+                    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+                    return signupDate >= oneWeekAgo;
+                  }).length} new this week
                 </p>
               </div>
             </CardContent>
@@ -440,12 +504,13 @@ export default function NotificationsPage() {
 
       {/* Notifications Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-6">
+        <TabsList className="grid w-full grid-cols-4 sm:grid-cols-7">
           <TabsTrigger value="all">All Notifications</TabsTrigger>
           <TabsTrigger value="security">Security</TabsTrigger>
           <TabsTrigger value="admin-notifications">Admin</TabsTrigger>
           <TabsTrigger value="contact-inquiries">Contact</TabsTrigger>
           <TabsTrigger value="email-signups">Email</TabsTrigger>
+          <TabsTrigger value="newsletter">Newsletter</TabsTrigger>
           <TabsTrigger value="applications">Apps</TabsTrigger>
         </TabsList>
 
@@ -1090,6 +1155,83 @@ export default function NotificationsPage() {
                   <h3 className="text-lg font-medium mb-2">No email signups found</h3>
                   <p className="text-gray-500">
                     {searchTerm ? 'Try adjusting your search terms' : 'Email signups will appear here as users subscribe'}
+                  </p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Newsletter Tab */}
+        <TabsContent value="newsletter" className="space-y-4">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <div>
+                <CardTitle>Newsletter Subscribers ({filteredNewsletterSignups.length})</CardTitle>
+                <CardDescription>Manage newsletter subscribers and export data</CardDescription>
+              </div>
+              <Button 
+                variant="outline" 
+                onClick={exportNewsletterSignups} 
+                disabled={filteredNewsletterSignups.length === 0}
+              >
+                <Download className="w-4 h-4 mr-2" />
+                Export CSV
+              </Button>
+            </CardHeader>
+            <CardContent>
+              {loading ? (
+                <div className="flex items-center justify-center py-8">
+                  <Loader2 className="h-6 w-6 animate-spin mr-2" />
+                  <span>Loading newsletter subscribers...</span>
+                </div>
+              ) : filteredNewsletterSignups.length > 0 ? (
+                <div className="space-y-3">
+                  {filteredNewsletterSignups.map((signup, index) => (
+                    <div key={`${signup.email}-${index}`} className="flex items-start justify-between p-4 border border-cyan-700/50 bg-gradient-to-r from-cyan-900/20 to-blue-900/20 rounded-lg hover:from-cyan-800/30 hover:to-blue-800/30 transition-colors">
+                      <div className="flex items-start space-x-3 flex-1">
+                        <div className="w-2 h-2 bg-cyan-500 rounded-full mt-2"></div>
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-2">
+                            <p className="font-medium">{signup.email}</p>
+                            {signup.name && (
+                              <Badge variant="outline" className="text-xs">
+                                {signup.name}
+                              </Badge>
+                            )}
+                          </div>
+                          <div className="flex flex-wrap gap-2 mt-2">
+                            <Badge variant="outline" className="text-xs bg-cyan-100 dark:bg-cyan-900/40 border-cyan-300 dark:border-cyan-700">
+                              📍 {signup.source}
+                            </Badge>
+                            <Badge 
+                              variant="outline" 
+                              className={`text-xs ${
+                                signup.status === 'active' 
+                                  ? 'bg-green-100 dark:bg-green-900/40 border-green-300 dark:border-green-700' 
+                                  : 'bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-700'
+                              }`}
+                            >
+                              {signup.status === 'active' ? '✓ Active' : '✕ Unsubscribed'}
+                            </Badge>
+                          </div>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            Subscribed {signup.subscribed_at instanceof Date ? formatRelativeTime(signup.subscribed_at) : 'recently'}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <Mail className="h-12 w-12 text-cyan-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-medium mb-2">No newsletter subscribers yet</h3>
+                  <p className="text-muted-foreground">
+                    {searchTerm ? 'Try adjusting your search terms' : 'Newsletter subscribers will appear here as users sign up from your public pages'}
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Newsletter signup forms are active on: Landing page, About page
                   </p>
                 </div>
               )}

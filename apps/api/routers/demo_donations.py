@@ -173,12 +173,16 @@ async def get_demo_participant(participant_id: str):
 async def create_payment_session(request: DemoDonationRequest):
     """
     Create a payment session for demo donation
+    Includes proper donor tracking for dashboard metrics
     """
     try:
         # Generate unique donation ID
         donation_id = str(uuid.uuid4())
         
-        # Create donation record
+        # Enhance donor_info with donor_id if available
+        donor_info = request.donor_info or {}
+        
+        # Create donation record with proper donor tracking
         donation_data = {
             "id": donation_id,
             "participant_id": request.participant_id,
@@ -186,7 +190,8 @@ async def create_payment_session(request: DemoDonationRequest):
                 "total": request.amount,
                 "currency": "USD"
             },
-            "donor_info": request.donor_info or {},
+            "donor_info": donor_info,
+            "donor_id": donor_info.get("donor_id"),  # Extract for easy querying
             "demo_session_id": request.demo_session_id,
             "status": "pending",
             "payment_data": {
@@ -201,6 +206,8 @@ async def create_payment_session(request: DemoDonationRequest):
         firebase_service.db.collection('demo_donations').document(donation_id).set(donation_data)
         
         logger.info(f"Created payment session for donation: {donation_id}")
+        if donor_info.get("donor_id"):
+            logger.info(f"  Donor: {donor_info.get('donor_id')} ({donor_info.get('email', 'no email')})")
         
         return {
             "success": True,

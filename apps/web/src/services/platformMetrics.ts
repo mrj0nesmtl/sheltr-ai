@@ -859,59 +859,111 @@ export const getDonorMetrics = async (donorId: string): Promise<DonorMetrics | n
       donorName = 'Jane Supporter'; // Default for demo
     }
 
-    // Get real donation data from tenant collection (already updated above)
+    // Get donation data from both tenant and demo collections
     let totalDonated = 0;
     let donationsThisYear = 0;
     let lastDonation: string | null = null;
     let sheltersSupported = 0;
     let participantsHelped = 0;
     
+    const uniqueShelters = new Set<string>();
+    const uniqueParticipants = new Set<string>();
+    const currentYear = new Date().getFullYear();
+    
+    // Get user email for demo_donations lookup
+    let donorEmail: string | null = null;
     try {
-      // Query donations by donor_id from tenant collection
-      const donationsQuery = query(
+      const userDoc = await getDoc(doc(db, 'users', donorId));
+      if (userDoc.exists()) {
+        donorEmail = userDoc.data().email;
+      }
+    } catch (err) {
+      console.log('⚠️ Could not get donor email:', err);
+    }
+    
+    try {
+      // 1. Query tenant donations by donor_id
+      const tenantDonationsQuery = query(
         collection(db, 'tenants/YDJCJnuLGMC9mWOWDSOa/donations'),
         where('donor_id', '==', donorId)
       );
-      const donationsSnapshot = await getDocs(donationsQuery);
+      const tenantDonationsSnapshot = await getDocs(tenantDonationsQuery);
       
-      const uniqueShelters = new Set<string>();
-      const uniqueParticipants = new Set<string>();
-      const currentYear = new Date().getFullYear();
+      console.log(`💰 Found ${tenantDonationsSnapshot.size} tenant donations for donor ${donorId}`);
       
-      donationsSnapshot.forEach(doc => {
+      tenantDonationsSnapshot.forEach(doc => {
         const donation = doc.data();
-        const amount = donation.amount?.total || donation.amount || 0;
+        // Only count completed donations
+        if (donation.status !== 'completed') return;
         
+        const amount = donation.amount?.total || donation.amount || 0;
         totalDonated += amount;
         
-        // Count this year's donations
         const donationDate = donation.created_at?.toDate?.() || new Date(donation.created_at || Date.now());
         if (donationDate.getFullYear() === currentYear) {
           donationsThisYear++;
         }
         
-        // Track last donation
         if (!lastDonation || donationDate > new Date(lastDonation)) {
           lastDonation = donationDate.toISOString();
         }
         
-        // Track unique shelters and participants
-        if (donation.shelter_id) {
-          uniqueShelters.add(donation.shelter_id);
-        }
-        if (donation.participant_id) {
-          uniqueParticipants.add(donation.participant_id);
-        }
+        if (donation.shelter_id) uniqueShelters.add(donation.shelter_id);
+        if (donation.participant_id) uniqueParticipants.add(donation.participant_id);
       });
+      
+      // 2. Query demo_donations collection
+      const demoDonationsSnapshot = await getDocs(collection(db, 'demo_donations'));
+      let demoDonationsCount = 0;
+      
+      demoDonationsSnapshot.forEach(doc => {
+        const donation = doc.data();
+        // Only count completed donations
+        if (donation.status !== 'completed') return;
+        
+        // Check if donation belongs to this donor (by UID or email)
+        const donorInfo = donation.donor_info || {};
+        const isDonorMatch = donorInfo.donor_id === donorId || 
+                           donorInfo.email === donorEmail ||
+                           donation.donor_id === donorId;
+        
+        if (!isDonorMatch) return;
+        
+        demoDonationsCount++;
+        const amount = donation.amount?.total || donation.amount || 0;
+        totalDonated += amount;
+        
+        const donationDate = donation.created_at?.toDate?.() || new Date(donation.created_at || Date.now());
+        if (donationDate.getFullYear() === currentYear) {
+          donationsThisYear++;
+        }
+        
+        if (!lastDonation || donationDate > new Date(lastDonation)) {
+          lastDonation = donationDate.toISOString();
+        }
+        
+        // Get shelter/participant from SmartFund distribution if available
+        if (donation.smartfund_distribution) {
+          const dist = donation.smartfund_distribution;
+          if (dist.shelter_id) uniqueShelters.add(dist.shelter_id);
+        }
+        if (donation.participant_id) uniqueParticipants.add(donation.participant_id);
+      });
+      
+      console.log(`💰 Found ${demoDonationsCount} demo donations for donor ${donorId}`);
       
       sheltersSupported = uniqueShelters.size;
       participantsHelped = uniqueParticipants.size;
       
-      console.log(`💰 Found ${donationsSnapshot.size} donations for donor ${donorId}:`, {
+      console.log(`✅ Total donor stats:`, {
         totalDonated,
         donationsThisYear,
         sheltersSupported,
-        participantsHelped
+        participantsHelped,
+        sources: {
+          tenant: tenantDonationsSnapshot.size,
+          demo: demoDonationsCount
+        }
       });
       
     } catch (error) {
@@ -951,31 +1003,74 @@ export const getDonationHistory = async (donorId: string): Promise<DonationRecor
   try {
     console.log(`📋 Fetching donation history for: ${donorId}`);
     
-    // Get real donation data from tenant collection
-    const donationsQuery = query(
-      collection(db, 'tenants/YDJCJnuLGMC9mWOWDSOa/donations'),
-      where('donor_id', '==', donorId),
-      orderBy('created_at', 'desc')
-    );
-    const donationsSnapshot = await getDocs(donationsQuery);
-    
     const donationRecords: DonationRecord[] = [];
     
-    donationsSnapshot.forEach(doc => {
+    // Get user email for demo_donations lookup
+    let donorEmail: string | null = null;
+    try {
+      const userDoc = await getDoc(doc(db, 'users', donorId));
+      if (userDoc.exists()) {
+        donorEmail = userDoc.data().email;
+      }
+    } catch (err) {
+      console.log('⚠️ Could not get donor email:', err);
+    }
+    
+    // 1. Get tenant donations
+    const tenantDonationsQuery = query(
+      collection(db, 'tenants/YDJCJnuLGMC9mWOWDSOa/donations'),
+      where('donor_id', '==', donorId)
+    );
+    const tenantDonationsSnapshot = await getDocs(tenantDonationsQuery);
+    
+    tenantDonationsSnapshot.forEach(doc => {
       const donation = doc.data();
       const donationDate = donation.created_at?.toDate?.() || new Date(donation.created_at || Date.now());
       
       donationRecords.push({
         id: doc.id,
-        date: donationDate.toISOString().split('T')[0], // YYYY-MM-DD format
+        date: donationDate.toISOString().split('T')[0],
         amount: donation.amount?.total || donation.amount || 0,
         shelter: donation.shelter_name || 'Old Brewery Mission',
-        participant: donation.participant_name || 'Michael Rodriguez',
+        shelter_id: donation.shelter_id,
         type: donation.type || 'one-time',
         status: donation.status === 'completed' ? 'completed' : 
                donation.status === 'pending' ? 'pending' : 'failed',
         impact: `Helped ${donation.participant_name || 'participant'} with ${donation.purpose || 'support'}`,
-        receipt_available: true
+        receipt_available: donation.status === 'completed'
+      });
+    });
+    
+    // 2. Get demo donations
+    const demoDonationsSnapshot = await getDocs(collection(db, 'demo_donations'));
+    
+    demoDonationsSnapshot.forEach(doc => {
+      const donation = doc.data();
+      
+      // Check if donation belongs to this donor
+      const donorInfo = donation.donor_info || {};
+      const isDonorMatch = donorInfo.donor_id === donorId || 
+                         donorInfo.email === donorEmail ||
+                         donation.donor_id === donorId;
+      
+      if (!isDonorMatch) return;
+      
+      const donationDate = donation.created_at?.toDate?.() || new Date(donation.created_at || Date.now());
+      const distribution = donation.smartfund_distribution || {};
+      
+      donationRecords.push({
+        id: doc.id,
+        date: donationDate.toISOString().split('T')[0],
+        amount: donation.amount?.total || donation.amount || 0,
+        shelter: distribution.shelter_name || 'Old Brewery Mission',
+        shelter_id: distribution.shelter_id || donation.participant_id,
+        type: 'one-time',
+        status: donation.status === 'completed' ? 'completed' : 
+               donation.status === 'pending' ? 'pending' : 'failed',
+        impact: distribution.recipient_type === 'shelter' 
+          ? `SmartFund: $${distribution.direct} direct, $${distribution.housing} housing, $${distribution.shelter_operations} to ${distribution.shelter_name}`
+          : `SmartFund: $${distribution.direct || 0} direct, $${distribution.housing || 0} housing`,
+        receipt_available: donation.status === 'completed'
       });
     });
     

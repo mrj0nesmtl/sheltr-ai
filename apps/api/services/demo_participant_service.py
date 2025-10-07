@@ -408,10 +408,17 @@ class DemoParticipantService:
     async def update_participant_from_donation(
         self, 
         participant_id: str, 
-        donation_amount: float
+        donation_amount: float,
+        distribution: Dict[str, Any] = None
     ) -> Dict[str, Any]:
         """
         Update participant stats when demo donation is completed
+        Uses DIRECT AMOUNT (80%) not total donation amount
+        
+        Args:
+            participant_id: Participant ID
+            donation_amount: Amount to add to total_received (should be direct amount, 80%)
+            distribution: Full SmartFund distribution details (optional, for tracking)
         """
         try:
             # First try to update demo_participants collection
@@ -424,13 +431,25 @@ class DemoParticipantService:
                     new_total = current_data.get("total_received", 0) + donation_amount
                     new_count = current_data.get("donation_count", 0) + 1
                     
-                    doc_ref.update({
+                    update_data = {
                         "total_received": new_total,
                         "donation_count": new_count,
                         "updated_at": datetime.now(timezone.utc)
-                    })
+                    }
                     
-                    logger.info(f"Updated demo participant {participant_id}: +${donation_amount}")
+                    # Add housing fund tracking if distribution provided
+                    if distribution and "housing" in distribution:
+                        current_housing = current_data.get("housing_fund_balance", 0)
+                        update_data["housing_fund_balance"] = current_housing + distribution["housing"]
+                    
+                    doc_ref.update(update_data)
+                    
+                    logger.info(f"Updated demo participant {participant_id}: +${donation_amount} (direct amount)")
+                    if distribution:
+                        logger.info(f"  Housing fund: +${distribution.get('housing', 0)}")
+                        if distribution.get("recipient_type") == "shelter":
+                            logger.info(f"  Shelter operations: ${distribution.get('shelter_operations', 0)} → {distribution.get('shelter_name')}")
+                    
                     return await self.get_participant_stats(participant_id)
             except Exception as demo_error:
                 logger.warning(f"Failed to update demo participant {participant_id}: {demo_error}")
@@ -449,13 +468,23 @@ class DemoParticipantService:
                     new_total = current_total + donation_amount
                     new_count = current_count + 1
                     
-                    user_doc_ref.update({
+                    update_data = {
                         "total_received": new_total,
                         "donation_count": new_count,
                         "updated_at": datetime.now(timezone.utc)
-                    })
+                    }
                     
-                    logger.info(f"Updated real user {participant_id}: +${donation_amount}")
+                    # Add housing fund tracking if distribution provided
+                    if distribution and "housing" in distribution:
+                        current_housing = user_data.get("housing_fund_balance", 0)
+                        update_data["housing_fund_balance"] = current_housing + distribution["housing"]
+                    
+                    user_doc_ref.update(update_data)
+                    
+                    logger.info(f"Updated real user {participant_id}: +${donation_amount} (direct amount)")
+                    if distribution:
+                        logger.info(f"  Housing fund: +${distribution.get('housing', 0)}")
+                    
                     return {
                         "total_received": new_total,
                         "donation_count": new_count,
@@ -465,7 +494,7 @@ class DemoParticipantService:
                 logger.warning(f"Failed to update real user {participant_id}: {user_error}")
             
             # If both fail, just log the donation for tracking
-            logger.info(f"Donation recorded for {participant_id}: +${donation_amount} (no participant record updated)")
+            logger.info(f"Donation recorded for {participant_id}: +${donation_amount} (direct amount, no participant record updated)")
             return {
                 "total_received": donation_amount,
                 "donation_count": 1,

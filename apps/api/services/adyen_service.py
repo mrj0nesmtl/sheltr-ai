@@ -229,9 +229,20 @@ class AdyenPaymentService:
             logger.error(f"Webhook signature verification failed: {e}")
             return False
     
-    async def process_smartfund_distribution(self, payment_notification: Dict[str, Any]) -> Dict[str, Any]:
+    async def process_smartfund_distribution(
+        self, 
+        payment_notification: Dict[str, Any],
+        participant_id: str = None,
+        participant_data: Dict[str, Any] = None
+    ) -> Dict[str, Any]:
         """
         Process SmartFund™ distribution based on payment notification
+        Routes 5% to affiliated shelter or platform based on participant's shelter_id
+        
+        Args:
+            payment_notification: Adyen payment notification
+            participant_id: Participant ID (optional, for lookup)
+            participant_data: Participant data (optional, to avoid lookup)
         """
         try:
             # Extract payment details
@@ -242,26 +253,65 @@ class AdyenPaymentService:
             # Convert from minor units
             total_amount = amount_value / 100
             
-            # Calculate SmartFund distribution (80-15-5)
+            # Calculate base SmartFund distribution (80-15-5)
+            direct_amount = round(total_amount * 0.80, 2)
+            housing_amount = round(total_amount * 0.15, 2)
+            operations_amount = round(total_amount * 0.05, 2)
+            
             distribution = {
                 "total": total_amount,
-                "direct": round(total_amount * 0.80, 2),      # 80% to participant
-                "housing": round(total_amount * 0.15, 2),     # 15% to housing fund
-                "operations": round(total_amount * 0.05, 2),  # 5% to operations
+                "direct": direct_amount,
+                "housing": housing_amount,
                 "currency": amount_currency,
                 "reference": merchant_reference,
                 "processed_at": datetime.now(timezone.utc).isoformat(),
                 "status": "completed"
             }
             
-            logger.info(f"SmartFund distribution processed: {merchant_reference} - ${total_amount}")
+            # Determine where 5% operations fee goes (shelter or platform)
+            shelter_id = None
+            shelter_name = None
             
-            # In production, this would:
-            # 1. Transfer direct amount to participant wallet
-            # 2. Add housing amount to housing fund pool
-            # 3. Record operations revenue
-            # 4. Update participant total_received
-            # 5. Send notifications to participant and donor
+            # Try to get shelter affiliation
+            if participant_data:
+                shelter_id = participant_data.get("shelter_id") or participant_data.get("shelterId")
+                shelter_name = participant_data.get("shelter_name") or participant_data.get("shelterName")
+            elif participant_id:
+                # Lookup participant data from Firestore
+                try:
+                    from services.firebase_service import FirebaseService
+                    firebase = FirebaseService()
+                    
+                    # Try users collection first
+                    user_doc = firebase.db.collection('users').document(participant_id).get()
+                    if user_doc.exists:
+                        user_data = user_doc.to_dict()
+                        shelter_id = user_data.get("shelter_id") or user_data.get("shelterId")
+                        shelter_name = user_data.get("shelter_name") or user_data.get("shelterName")
+                    else:
+                        # Try demo_participants collection
+                        demo_doc = firebase.db.collection('demo_participants').document(participant_id).get()
+                        if demo_doc.exists:
+                            demo_data = demo_doc.to_dict()
+                            shelter_id = demo_data.get("shelter_id") or demo_data.get("shelterId")
+                            shelter_name = demo_data.get("shelter_name") or demo_data.get("shelterName")
+                except Exception as lookup_error:
+                    logger.warning(f"Could not lookup participant shelter affiliation: {lookup_error}")
+            
+            # Route 5% based on shelter affiliation
+            if shelter_id:
+                distribution["shelter_operations"] = operations_amount
+                distribution["shelter_id"] = shelter_id
+                distribution["shelter_name"] = shelter_name
+                distribution["recipient_type"] = "shelter"
+                logger.info(f"💰 Routing 5% (${operations_amount}) to shelter: {shelter_name} ({shelter_id})")
+            else:
+                distribution["platform_operations"] = operations_amount
+                distribution["recipient_type"] = "platform"
+                logger.info(f"💰 Routing 5% (${operations_amount}) to platform operations")
+            
+            logger.info(f"SmartFund distribution processed: {merchant_reference} - ${total_amount} "
+                       f"(${direct_amount} direct, ${housing_amount} housing, ${operations_amount} to {distribution['recipient_type']})")
             
             return distribution
             

@@ -1,12 +1,13 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
+import { getDonorMetrics, getDonationHistory } from '@/services/platformMetrics';
 import { 
   Heart, 
   Users, 
@@ -26,15 +27,42 @@ import {
 export default function DonorImpactPage() {
   const { user } = useAuth();
   const [selectedTimeframe, setSelectedTimeframe] = useState('all');
+  const [donorMetrics, setDonorMetrics] = useState<any>(null);
+  const [donationHistory, setDonationHistory] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // Mock impact data
+  // Load real donor data
+  useEffect(() => {
+    const loadData = async () => {
+      if (!user?.uid) return;
+      
+      try {
+        const [metrics, history] = await Promise.all([
+          getDonorMetrics(user.uid),
+          getDonationHistory(user.uid)
+        ]);
+        
+        setDonorMetrics(metrics);
+        setDonationHistory(history);
+        console.log('✅ Loaded donor impact data:', { metrics, historyCount: history.length });
+      } catch (error) {
+        console.error('❌ Failed to load impact data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    loadData();
+  }, [user]);
+
+  // Calculate impact stats from real data
   const impactStats = {
-    totalDonated: 2850,
-    peopleHelped: 23,
-    mealsProvided: 142,
-    nightsShelter: 8,
-    jobsSecured: 3,
-    programsSupported: 7
+    totalDonated: donorMetrics?.totalDonated || 0,
+    peopleHelped: donorMetrics?.participantsHelped || 0,
+    mealsProvided: Math.floor((donorMetrics?.totalDonated || 0) / 5), // Estimate: $5 per meal
+    nightsShelter: Math.floor((donorMetrics?.totalDonated || 0) / 50), // Estimate: $50 per night
+    jobsSecured: donorMetrics?.participantsHelped || 0,
+    programsSupported: donorMetrics?.sheltersSupported || 0
   };
 
   const impactByCategory = [

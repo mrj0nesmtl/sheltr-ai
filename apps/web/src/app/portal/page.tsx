@@ -124,7 +124,7 @@ export default function FoundersPortalPage() {
             
             <div className="flex items-center space-x-4">
               <Lock className="h-4 w-4 text-purple-600" />
-              <span className="text-sm text-muted-foreground">Founders Portal</span>
+              <span className="text-sm text-muted-foreground">Portal</span>
             </div>
           </div>
         </div>
@@ -147,7 +147,7 @@ export default function FoundersPortalPage() {
               </div>
               <CardTitle className="text-2xl">Portal Access</CardTitle>
               <p className="text-muted-foreground">
-                This area is restricted to SHELTR co-founders.
+                This area is restricted to SHELTR Leadership.
               </p>
             </CardHeader>
             
@@ -304,7 +304,7 @@ export default function FoundersPortalPage() {
                   Security & Confidentiality
                 </h4>
                 <p className="text-sm text-purple-600 dark:text-purple-400 mt-1">
-                  All information beyond this point is highly confidential and proprietary to SHELTR co-founders. 
+                  All information beyond this point is highly confidential and proprietary to SHELTR. 
                   Access is logged and monitored for security purposes.
                 </p>
               </div>

@@ -251,7 +251,28 @@ export default function UserManagement() {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-call
           const allUsersMap = new (Map as any)();
           
-          // Add admin users
+          // Add platform admins (CRITICAL: was missing!)
+          platformAdmins.forEach(u => {
+            allUsersMap.set(u.id, {
+              id: u.id,
+              name: u.name,
+              firstName: u.firstName || u.name?.split(' ')[0] || '',
+              lastName: u.lastName || u.name?.split(' ').slice(1).join(' ') || '',
+              email: u.email,
+              shelter: u.shelter || 'N/A',
+              shelter_id: u.shelter_id || '',
+              role: u.role || 'platform_admin',
+              status: u.status,
+              lastLogin: u.lastLogin || 'Never',
+              participants: u.participants || 0,
+              joinDate: u.joinDate,
+              created_at: u.created_at || u.joinDate,
+              updated_at: u.updated_at || '',
+              UserType: 'Platform Admin'
+            });
+          });
+          
+          // Add shelter admin users
           adminUsers.forEach(u => {
             allUsersMap.set(u.id, {
               id: u.id,
@@ -268,7 +289,7 @@ export default function UserManagement() {
               joinDate: u.joinDate,
               created_at: u.created_at || u.joinDate,
               updated_at: u.updated_at || '',
-              UserType: 'Admin'
+              UserType: 'Shelter Admin'
             });
           });
           
@@ -353,7 +374,7 @@ export default function UserManagement() {
           try {
             console.log('📊 Using enhanced export service...');
             const enhancedData = await UserExportService.getEnhancedUserData(
-              adminUsers, 
+              [...platformAdmins, ...adminUsers], // Combine platform admins + shelter admins
               participantUsers, 
               donorUsers, 
               orphanedUsers

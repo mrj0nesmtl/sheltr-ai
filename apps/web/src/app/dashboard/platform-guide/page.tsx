@@ -184,7 +184,7 @@ export default function PlatformGuide() {
           <Shield className="h-10 w-10 text-purple-600 ml-4" />
         </div>
         <p className="text-xl text-gray-600 dark:text-gray-400 max-w-4xl mx-auto">
-          Comprehensive guide to SHELTR-AI platform administration. This guide covers all features available 
+          Comprehensive guide to SHELTR's platform administration. This guide covers all features available 
           to Platform Administrators and provides detailed instructions for effective platform management.
         </p>
         <div className="flex items-center justify-center space-x-2 mt-4">

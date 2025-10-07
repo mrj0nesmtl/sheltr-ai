@@ -190,6 +190,10 @@ apps/web/public/docs/platform-admin/
 platform-admin-docs/
 **/platform-admin-docs/
 
+# Platform admin credentials file (CRITICAL - NEVER COMMIT)
+docs/platform-admin/platform-admin-credentials.md
+**/platform-admin-credentials.md
+
 # Business plans and strategic documents
 *business-plan*.md
 *strategic-plan*.md

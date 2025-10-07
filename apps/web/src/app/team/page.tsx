@@ -10,7 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { ThemeToggle } from '@/components/theme-toggle';
 import Footer from '@/components/Footer';
 import ThemeLogo from '@/components/ThemeLogo';
-import { TeamSyncService, type PublicTeamMember } from '@/services/teamSyncService';
+import { PublicTeamService, type PublicTeamMember } from '@/services/publicTeamService';
 
 export default function TeamPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -32,8 +32,8 @@ export default function TeamPage() {
         console.log('🔄 Loading dynamic team data from Platform Admin profiles...');
         
         const [members, stats] = await Promise.all([
-          TeamSyncService.getPublicTeamMembers(),
-          TeamSyncService.getTeamStats()
+          PublicTeamService.getPublicTeamMembers(),
+          PublicTeamService.getTeamStats()
         ]);
         
         setTeamMembers(members);

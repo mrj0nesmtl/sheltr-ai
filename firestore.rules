@@ -886,6 +886,15 @@ service cloud.firestore {
       allow delete: if isSuperAdmin();
     }
     
+    // Founder Card Orders - Custom card ordering for Founders Portal Quick Access Links
+    match /founder_card_orders/{userId} {
+      // Users can only read and write their own card order
+      allow read: if isAuthenticated() && request.auth.uid == userId;
+      allow write: if isAuthenticated() && request.auth.uid == userId;
+      allow create: if isAuthenticated() && request.auth.uid == userId;
+      allow delete: if isAuthenticated() && request.auth.uid == userId;
+    }
+    
     // Platform admin documents - Welcome letters, internal documentation, training materials
     match /platform_admin_documents/{documentId} {
       // Read: Super Admin and Platform Admin (all Founders Portal users) can read

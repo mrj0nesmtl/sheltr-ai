@@ -23,16 +23,340 @@ import {
   Lock,
   Building2,
   Blocks,
-  Camera
+  Camera,
+  GripVertical,
+  RotateCcw
 } from 'lucide-react';
 import { checkFounderAccess, clearFounderAccess, getFounderInfo } from '@/services/founderAccessService';
 import FoundersGallery from '@/components/FoundersGallery';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  rectSortingStrategy,
+  useSortable,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+import { getUserCardOrder, saveUserCardOrder, resetUserCardOrder } from '@/services/founderCardOrderService';
+
+// Define card data structure
+interface QuickAccessCard {
+  id: string;
+  icon: React.ReactNode;
+  badgeText: string;
+  badgeClass: string;
+  title: string;
+  titleColor: string;
+  description: string;
+  buttonText: string;
+  buttonClass: string;
+  href: string;
+  isExternal?: boolean;
+  borderClass?: string;
+}
+
+// Sortable Card Component
+function SortableCard({ card }: { card: QuickAccessCard }) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: card.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  return (
+    <div ref={setNodeRef} style={style} className="relative group">
+      {/* Drag Handle */}
+      <div
+        {...attributes}
+        {...listeners}
+        className="absolute top-2 left-2 z-10 cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 dark:bg-slate-800/90 rounded p-1 border border-gray-300 dark:border-gray-600 shadow-sm"
+      >
+        <GripVertical className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+      </div>
+
+      <Card className={`hover:shadow-lg transition-shadow cursor-pointer ${card.borderClass || ''} h-full`}>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            {card.icon}
+            <Badge className={card.badgeClass}>
+              {card.badgeText}
+            </Badge>
+          </div>
+          <CardTitle className={card.titleColor}>{card.title}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm text-muted-foreground mb-4">
+            {card.description}
+          </p>
+          {card.isExternal ? (
+            <Button asChild variant="outline" className={`w-full ${card.buttonClass}`}>
+              <a
+                href={card.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 no-underline"
+              >
+                {card.buttonText}
+                <ExternalLink className="h-4 w-4" />
+              </a>
+            </Button>
+          ) : (
+            <Button asChild variant="outline" className={`w-full ${card.buttonClass}`}>
+              <Link href={card.href} className="flex items-center justify-center gap-2 no-underline">
+                {card.buttonText}
+                <ExternalLink className="h-4 w-4" />
+              </Link>
+            </Button>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+// Default card configuration (outside component to avoid recreation)
+const DEFAULT_CARDS: QuickAccessCard[] = [
+    {
+      id: 'dev-roadmap',
+      icon: <Rocket className="h-8 w-8 text-orange-600" />,
+      badgeText: 'Launch Plan',
+      badgeClass: 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200',
+      title: 'Development Roadmap',
+      titleColor: 'text-orange-600',
+      description: '60-day public launch timeline with client onboarding strategy and AI achievements',
+      buttonText: 'View Roadmap',
+      buttonClass: 'border-2 border-orange-600 text-orange-600 hover:bg-orange-50 dark:hover:bg-orange-900/20 dark:text-orange-400 dark:border-orange-400',
+      href: '/docs/roadmap',
+      borderClass: 'border-orange-200 dark:border-orange-800',
+    },
+    {
+      id: 'payment-rails',
+      icon: <CreditCard className="h-8 w-8 text-green-600" />,
+      badgeText: 'Enterprise',
+      badgeClass: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
+      title: 'Proposed Payment Rails',
+      titleColor: 'text-green-600',
+      description: 'Adyen + Coinbase integration architecture with single-token stable fund model',
+      buttonText: 'View Architecture',
+      buttonClass: 'border-2 border-green-600 text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20 dark:text-green-400 dark:border-green-400',
+      href: '/docs/payment-rails',
+      borderClass: 'border-green-200 dark:border-green-800',
+    },
+    {
+      id: 'investor-relations',
+      icon: <TrendingUp className="h-8 w-8 text-blue-600" />,
+      badgeText: 'Pre-Seed',
+      badgeClass: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
+      title: 'Investor Relations',
+      titleColor: 'text-blue-600',
+      description: 'Pre-seed funding information, financial projections, and investment terms',
+      buttonText: 'View Details',
+      buttonClass: 'border-2 border-blue-600 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 dark:text-blue-400 dark:border-blue-400',
+      href: '/portal/investor-relations',
+      borderClass: 'border-blue-200 dark:border-blue-800',
+    },
+    {
+      id: 'documentation',
+      icon: <FileText className="h-8 w-8 text-purple-600" />,
+      badgeText: 'Complete',
+      badgeClass: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200',
+      title: 'Documentation Hub',
+      titleColor: 'text-purple-600',
+      description: 'Comprehensive technical documentation, whitepapers, and system architecture',
+      buttonText: 'Browse Docs',
+      buttonClass: 'border-2 border-purple-600 text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20 dark:text-purple-400 dark:border-purple-400',
+      href: '/docs',
+      borderClass: 'border-purple-200 dark:border-purple-800',
+    },
+    {
+      id: 'github',
+      icon: <Github className="h-8 w-8 text-gray-600" />,
+      badgeText: 'Source Code',
+      badgeClass: 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200',
+      title: 'GitHub Repository',
+      titleColor: 'text-gray-600',
+      description: 'Complete source code, smart contracts, and development history',
+      buttonText: 'View Repository',
+      buttonClass: 'border-2 hover:bg-gray-100 dark:hover:bg-gray-800',
+      href: 'https://github.com/mrj0nesmtl/sheltr-ai',
+      isExternal: true,
+      borderClass: 'border-gray-200 dark:border-gray-800',
+    },
+    {
+      id: 'platform-access',
+      icon: <Shield className="h-8 w-8 text-indigo-600" />,
+      badgeText: 'Live Platform',
+      badgeClass: 'bg-indigo-600 text-white dark:bg-indigo-500 dark:text-white',
+      title: 'SHELTR Platform',
+      titleColor: 'text-indigo-600',
+      description: 'Access the live SHELTR platform with full administrative privileges',
+      buttonText: 'Access Platform',
+      buttonClass: 'border-2 border-indigo-600 text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 dark:text-indigo-400 dark:border-indigo-400',
+      href: 'https://sheltr-ai.web.app/dashboard',
+      isExternal: true,
+      borderClass: 'border-indigo-200 dark:border-indigo-800',
+    },
+    {
+      id: 'system-design',
+      icon: <Building2 className="h-8 w-8 text-cyan-600" />,
+      badgeText: 'Architecture',
+      badgeClass: 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200',
+      title: 'System Design Architecture',
+      titleColor: 'text-cyan-600',
+      description: 'Multi-tenant SaaS architecture with enterprise payment infrastructure, visual flow diagrams, and comprehensive system integration blueprints',
+      buttonText: 'View Architecture',
+      buttonClass: 'border-2 border-cyan-600 text-cyan-600 hover:bg-cyan-50 dark:hover:bg-cyan-900/20 dark:text-cyan-400 dark:border-cyan-400',
+      href: '/docs/system-design',
+      borderClass: 'border-cyan-200 dark:border-cyan-800',
+    },
+    {
+      id: 'whitepaper',
+      icon: <FileText className="h-8 w-8 text-emerald-600" />,
+      badgeText: 'v2.0',
+      badgeClass: 'bg-emerald-600 text-white dark:bg-emerald-500 dark:text-white',
+      title: 'Technical White Paper',
+      titleColor: 'text-emerald-600',
+      description: 'Revolutionary enterprise-grade platform with single-token architecture and blockchain transparency',
+      buttonText: 'Read Whitepaper',
+      buttonClass: 'border-2 border-emerald-600 text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 dark:text-emerald-400 dark:border-emerald-400',
+      href: '/docs/whitepaper',
+      borderClass: 'border-emerald-200 dark:border-emerald-800',
+    },
+    {
+      id: 'blockchain',
+      icon: <Blocks className="h-8 w-8 text-amber-600" />,
+      badgeText: 'SmartFund™',
+      badgeClass: 'bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200',
+      title: 'Blockchain Architecture',
+      titleColor: 'text-amber-600',
+      description: 'Single-token stable fund ecosystem with enterprise payment infrastructure and guaranteed returns',
+      buttonText: 'View Blockchain',
+      buttonClass: 'border-2 border-amber-600 text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-900/20 dark:text-amber-400 dark:border-amber-400',
+      href: '/docs/blockchain',
+      borderClass: 'border-amber-200 dark:border-amber-800',
+    },
+    {
+      id: 'gallery',
+      icon: <Camera className="h-8 w-8 text-violet-600" />,
+      badgeText: 'Media Hub',
+      badgeClass: 'bg-violet-600 text-white dark:bg-violet-500 dark:text-white',
+      title: 'Gallery Management',
+      titleColor: 'text-violet-600',
+      description: 'Upload and manage media content, videos, and images for platform and founders portal sharing',
+      buttonText: 'Manage Gallery',
+      buttonClass: 'border-2 border-violet-600 text-violet-600 hover:bg-violet-50 dark:hover:bg-violet-900/20 dark:text-violet-400 dark:border-violet-400',
+      href: '/dashboard/gallery',
+      borderClass: 'border-violet-200 dark:border-violet-800',
+    },
+    {
+      id: 'business-plan',
+      icon: <FileText className="h-8 w-8 text-rose-600" />,
+      badgeText: 'Secure',
+      badgeClass: 'bg-rose-600 text-white dark:bg-rose-500 dark:text-white',
+      title: 'Business Plan',
+      titleColor: 'text-rose-600',
+      description: 'Professional VC-worthy business plan with market analysis, financial projections, and exit strategy',
+      buttonText: 'View Business Plan',
+      buttonClass: 'border-2 border-rose-600 text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/20 dark:text-rose-400 dark:border-rose-400',
+      href: '/secure-docs/business-plan',
+      borderClass: 'border-rose-200 dark:border-rose-800',
+    },
+    {
+      id: 'design-guide',
+      icon: <FileText className="h-8 w-8 text-orange-600" />,
+      badgeText: 'Secure',
+      badgeClass: 'bg-orange-600 text-white dark:bg-orange-500 dark:text-white',
+      title: 'Brand & Design Guide',
+      titleColor: 'text-orange-600',
+      description: 'Comprehensive brand system overview for Royaltri design team - components, colors, navigation, and UX flows',
+      buttonText: 'View Design Guide',
+      buttonClass: 'border-2 border-orange-600 text-orange-600 hover:bg-orange-50 dark:hover:bg-orange-900/20 dark:text-orange-400 dark:border-orange-400',
+      href: '/secure-docs/royaltri-design-guide',
+      borderClass: 'border-orange-200 dark:border-orange-800',
+    },
+    {
+      id: 'msb-guide',
+      icon: <Shield className="h-8 w-8 text-red-600" />,
+      badgeText: 'Legal',
+      badgeClass: 'bg-red-600 text-white dark:bg-red-500 dark:text-white',
+      title: 'MSB Registration Guide',
+      titleColor: 'text-red-600',
+      description: 'Canadian regulatory compliance guide for crypto-enabled donation platforms - FINTRAC MSB requirements and incorporation',
+      buttonText: 'View Legal Guide',
+      buttonClass: 'border-2 border-red-600 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 dark:text-red-400 dark:border-red-400',
+      href: '/secure-docs/msb-registration-canada',
+      borderClass: 'border-red-200 dark:border-red-800',
+    },
+    {
+      id: 'shelter-research',
+      icon: <FileText className="h-8 w-8 text-indigo-600" />,
+      badgeText: 'Research',
+      badgeClass: 'bg-indigo-600 text-white dark:bg-indigo-500 dark:text-white',
+      title: 'Shelter Research Hub',
+      titleColor: 'text-indigo-600',
+      description: 'Comprehensive research on homeless shelters, HMIS systems, state-by-state analysis, and innovative programs across North America',
+      buttonText: 'Browse Research',
+      buttonClass: 'border-2 border-indigo-600 text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 dark:text-indigo-400 dark:border-indigo-400',
+      href: '/secure-docs/shelter-research',
+      borderClass: 'border-indigo-200 dark:border-indigo-800',
+    },
+    {
+      id: 'leadership-team',
+      icon: <Users className="h-8 w-8 text-teal-600" />,
+      badgeText: 'Team',
+      badgeClass: 'bg-teal-100 text-teal-800 dark:bg-teal-900 dark:text-teal-200',
+      title: 'Leadership Team',
+      titleColor: 'text-teal-600',
+      description: 'Meet the SHELTR leadership team, founders, and key contributors driving our mission',
+      buttonText: 'View Team',
+      buttonClass: 'border-2 border-teal-600 text-teal-600 hover:bg-teal-50 dark:hover:bg-teal-900/20 dark:text-teal-400 dark:border-teal-400',
+      href: '/team',
+      borderClass: 'border-teal-200 dark:border-teal-800',
+    },
+  ];
 
 export default function FoundersOnlyPage() {
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [founderInfo, setFounderInfo] = useState<{ email: string; name?: string; userId?: string } | null>(null);
+  const [cardOrder, setCardOrder] = useState<string[]>([]);
+  const [isSaving, setIsSaving] = useState(false);
   const router = useRouter();
+
+  // Configure drag sensors
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8, // 8px movement required to start drag
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  // Get ordered cards
+  const orderedCards = cardOrder.length > 0
+    ? cardOrder.map(id => DEFAULT_CARDS.find(card => card.id === id)).filter(Boolean) as QuickAccessCard[]
+    : DEFAULT_CARDS;
 
   useEffect(() => {
     // Check if user has valid founder access
@@ -48,11 +372,70 @@ export default function FoundersOnlyPage() {
     setIsAuthorized(true);
     setFounderInfo(founder);
     setIsLoading(false);
+
+    // Load saved card order
+    if (founder.userId) {
+      getUserCardOrder(founder.userId).then(savedOrder => {
+        if (savedOrder && savedOrder.length > 0) {
+          setCardOrder(savedOrder);
+        } else {
+          // Set default order
+          setCardOrder(DEFAULT_CARDS.map(card => card.id));
+        }
+      });
+    }
   }, [router]);
 
   const handleLogout = () => {
     clearFounderAccess();
     router.push('/');
+  };
+
+  // Handle drag end
+  const handleDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      setCardOrder((items) => {
+        const oldIndex = items.indexOf(active.id as string);
+        const newIndex = items.indexOf(over.id as string);
+        const newOrder = arrayMove(items, oldIndex, newIndex);
+
+        // Save to Firestore
+        if (founderInfo?.userId) {
+          setIsSaving(true);
+          saveUserCardOrder(founderInfo.userId, newOrder)
+            .then(() => {
+              console.log('✅ Card order saved');
+              setIsSaving(false);
+            })
+            .catch((error) => {
+              console.error('❌ Failed to save card order:', error);
+              setIsSaving(false);
+            });
+        }
+
+        return newOrder;
+      });
+    }
+  };
+
+  // Reset to default order
+  const handleResetOrder = async () => {
+    if (!founderInfo?.userId) return;
+
+    const defaultOrder = DEFAULT_CARDS.map(card => card.id);
+    setCardOrder(defaultOrder);
+    setIsSaving(true);
+
+    try {
+      await resetUserCardOrder(founderInfo.userId);
+      console.log('✅ Card order reset to default');
+      setIsSaving(false);
+    } catch (error) {
+      console.error('❌ Failed to reset card order:', error);
+      setIsSaving(false);
+    }
   };
 
   if (isLoading) {
@@ -153,355 +536,45 @@ export default function FoundersOnlyPage() {
 
         {/* Quick Links Grid */}
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-2xl font-bold mb-6 text-center">Quick Access Links</h2>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* Development Roadmap */}
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer border-orange-200 dark:border-orange-800">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <Rocket className="h-8 w-8 text-orange-600" />
-                  <Badge className="bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200">
-                    Launch Plan
-                  </Badge>
-                </div>
-                <CardTitle className="text-orange-600">Development Roadmap</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground mb-4">
-                  60-day public launch timeline with client onboarding strategy and AI achievements
-                </p>
-                <Button asChild variant="outline" className="w-full border-2 border-orange-600 text-orange-600 hover:bg-orange-50 dark:hover:bg-orange-900/20 dark:text-orange-400 dark:border-orange-400">
-                  <Link href="/docs/roadmap" className="flex items-center justify-center gap-2 no-underline">
-                    View Roadmap
-                    <ExternalLink className="h-4 w-4" />
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* Payment Rails */}
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer border-green-200 dark:border-green-800">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CreditCard className="h-8 w-8 text-green-600" />
-                  <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
-                    Enterprise
-                  </Badge>
-                </div>
-                <CardTitle className="text-green-600">Proposed Payment Rails</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Adyen + Coinbase integration architecture with single-token stable fund model
-                </p>
-                <Button asChild variant="outline" className="w-full border-2 border-green-600 text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20 dark:text-green-400 dark:border-green-400">
-                  <Link href="/docs/payment-rails" className="flex items-center justify-center gap-2 no-underline">
-                    View Architecture
-                    <ExternalLink className="h-4 w-4" />
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* Investor Relations */}
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer border-blue-200 dark:border-blue-800">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <TrendingUp className="h-8 w-8 text-blue-600" />
-                  <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-                    Pre-Seed
-                  </Badge>
-                </div>
-                <CardTitle className="text-blue-600">Investor Relations</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Pre-seed funding information, financial projections, and investment terms
-                </p>
-                <Button asChild variant="outline" className="w-full border-2 border-blue-600 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 dark:text-blue-400 dark:border-blue-400">
-                  <Link href="/portal/investor-relations" className="flex items-center justify-center gap-2 no-underline">
-                    View Details
-                    <ExternalLink className="h-4 w-4" />
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* Documentation Hub */}
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer border-purple-200 dark:border-purple-800">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <FileText className="h-8 w-8 text-purple-600" />
-                  <Badge className="bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
-                    Complete
-                  </Badge>
-                </div>
-                <CardTitle className="text-purple-600">Documentation Hub</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Comprehensive technical documentation, whitepapers, and system architecture
-                </p>
-                <Button asChild variant="outline" className="w-full border-2 border-purple-600 text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20 dark:text-purple-400 dark:border-purple-400">
-                  <Link href="/docs" className="flex items-center justify-center gap-2 no-underline">
-                    Browse Docs
-                    <ExternalLink className="h-4 w-4" />
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* GitHub Repository */}
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer border-gray-200 dark:border-gray-800">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <Github className="h-8 w-8 text-gray-600" />
-                  <Badge className="bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200">
-                    Source Code
-                  </Badge>
-                </div>
-                <CardTitle className="text-gray-600">GitHub Repository</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Complete source code, smart contracts, and development history
-                </p>
-                <Button asChild variant="outline" className="w-full border-2 hover:bg-gray-100 dark:hover:bg-gray-800">
-                  <a 
-                    href="https://github.com/mrj0nesmtl/sheltr-ai" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 no-underline"
-                  >
-                    View Repository
-                    <ExternalLink className="h-4 w-4" />
-                  </a>
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* Platform Access */}
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer border-indigo-200 dark:border-indigo-800">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <Shield className="h-8 w-8 text-indigo-600" />
-                  <Badge className="bg-indigo-600 text-white dark:bg-indigo-500 dark:text-white">
-                    Live Platform
-                  </Badge>
-                </div>
-                <CardTitle className="text-indigo-600">SHELTR Platform</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Access the live SHELTR platform with full administrative privileges
-                </p>
-                <Button asChild variant="outline" className="w-full border-2 border-indigo-600 text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 dark:text-indigo-400 dark:border-indigo-400">
-                  <a 
-                    href="https://sheltr-ai.web.app/dashboard" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 no-underline"
-                  >
-                    Access Platform
-                    <ExternalLink className="h-4 w-4" />
-                  </a>
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* System Design Architecture */}
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer border-cyan-200 dark:border-cyan-800">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <Building2 className="h-8 w-8 text-cyan-600" />
-                  <Badge className="bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200">
-                    Architecture
-                  </Badge>
-                </div>
-                <CardTitle className="text-cyan-600">System Design Architecture</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Multi-tenant SaaS architecture with enterprise payment infrastructure, visual flow diagrams, and comprehensive system integration blueprints
-                </p>
-                <Button asChild variant="outline" className="w-full border-2 border-cyan-600 text-cyan-600 hover:bg-cyan-50 dark:hover:bg-cyan-900/20 dark:text-cyan-400 dark:border-cyan-400">
-                  <Link href="/docs/system-design" className="flex items-center justify-center gap-2 no-underline">
-                    View Architecture
-                    <ExternalLink className="h-4 w-4" />
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* Technical White Paper */}
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer border-emerald-200 dark:border-emerald-800">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <FileText className="h-8 w-8 text-emerald-600" />
-                  <Badge className="bg-emerald-600 text-white dark:bg-emerald-500 dark:text-white">
-                    v2.0
-                  </Badge>
-                </div>
-                <CardTitle className="text-emerald-600">Technical White Paper</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Revolutionary enterprise-grade platform with single-token architecture and blockchain transparency
-                </p>
-                <Button asChild variant="outline" className="w-full border-2 border-emerald-600 text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 dark:text-emerald-400 dark:border-emerald-400">
-                  <Link href="/docs/whitepaper" className="flex items-center justify-center gap-2 no-underline">
-                    Read Whitepaper
-                    <ExternalLink className="h-4 w-4" />
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* Blockchain Architecture */}
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer border-amber-200 dark:border-amber-800">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <Blocks className="h-8 w-8 text-amber-600" />
-                  <Badge className="bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200">
-                    SmartFund™
-                  </Badge>
-                </div>
-                <CardTitle className="text-amber-600">Blockchain Architecture</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Single-token stable fund ecosystem with enterprise payment infrastructure and guaranteed returns
-                </p>
-                <Button asChild variant="outline" className="w-full border-2 border-amber-600 text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-900/20 dark:text-amber-400 dark:border-amber-400">
-                  <Link href="/docs/blockchain" className="flex items-center justify-center gap-2 no-underline">
-                    View Blockchain
-                    <ExternalLink className="h-4 w-4" />
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* Gallery Management */}
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer border-violet-200 dark:border-violet-800">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <Camera className="h-8 w-8 text-violet-600" />
-                  <Badge className="bg-violet-600 text-white dark:bg-violet-500 dark:text-white">
-                    Media Hub
-                  </Badge>
-                </div>
-                <CardTitle className="text-violet-600">Gallery Management</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Upload and manage media content, videos, and images for platform and founders portal sharing
-                </p>
-                <Button asChild variant="outline" className="w-full border-2 border-violet-600 text-violet-600 hover:bg-violet-50 dark:hover:bg-violet-900/20 dark:text-violet-400 dark:border-violet-400">
-                  <Link href="/dashboard/gallery" className="flex items-center justify-center gap-2 no-underline">
-                    Manage Gallery
-                    <Camera className="h-4 w-4" />
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* Business Plan */}
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer border-rose-200 dark:border-rose-800">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <FileText className="h-8 w-8 text-rose-600" />
-                  <Badge className="bg-rose-600 text-white dark:bg-rose-500 dark:text-white">
-                    Secure
-                  </Badge>
-                </div>
-                <CardTitle className="text-rose-600">Business Plan</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Professional VC-worthy business plan with market analysis, financial projections, and exit strategy
-                </p>
-                <Button asChild variant="outline" className="w-full border-2 border-rose-600 text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/20 dark:text-rose-400 dark:border-rose-400">
-                  <Link href="/secure-docs/business-plan" className="flex items-center justify-center gap-2 no-underline">
-                    View Business Plan
-                    <ExternalLink className="h-4 w-4" />
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* Design System Guide - Royaltri */}
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer border-orange-200 dark:border-orange-800">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <FileText className="h-8 w-8 text-orange-600" />
-                  <Badge className="bg-orange-600 text-white dark:bg-orange-500 dark:text-white">
-                    Secure
-                  </Badge>
-                </div>
-                <CardTitle className="text-orange-600">Brand & Design Guide</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Comprehensive brand system overview for Royaltri design team - components, colors, navigation, and UX flows
-                </p>
-                <Button asChild variant="outline" className="w-full border-2 border-orange-600 text-orange-600 hover:bg-orange-50 dark:hover:bg-orange-900/20 dark:text-orange-400 dark:border-orange-400">
-                  <Link href="/secure-docs/royaltri-design-guide" className="flex items-center justify-center gap-2 no-underline">
-                    View Design Guide
-                    <ExternalLink className="h-4 w-4" />
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* MSB Registration Guide */}
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer border-red-200 dark:border-red-800">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <Shield className="h-8 w-8 text-red-600" />
-                  <Badge className="bg-red-600 text-white dark:bg-red-500 dark:text-white">
-                    Legal
-                  </Badge>
-                </div>
-                <CardTitle className="text-red-600">MSB Registration Guide</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Canadian regulatory compliance guide for crypto-enabled donation platforms - FINTRAC MSB requirements and incorporation
-                </p>
-                <Button asChild variant="outline" className="w-full border-2 border-red-600 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 dark:text-red-400 dark:border-red-400">
-                  <Link href="/secure-docs/msb-registration-canada" className="flex items-center justify-center gap-2 no-underline">
-                    View Legal Guide
-                    <Shield className="h-4 w-4" />
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* Leadership Team */}
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer border-teal-200 dark:border-teal-800">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <Users className="h-8 w-8 text-teal-600" />
-                  <Badge className="bg-teal-100 text-teal-800 dark:bg-teal-900 dark:text-teal-200">
-                    Team
-                  </Badge>
-                </div>
-                <CardTitle className="text-teal-600">Leadership Team</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Meet the SHELTR leadership team, founders, and key contributors driving our mission
-                </p>
-                <Button asChild variant="outline" className="w-full border-2 border-teal-600 text-teal-600 hover:bg-teal-50 dark:hover:bg-teal-900/20 dark:text-teal-400 dark:border-teal-400">
-                  <Link href="/team" className="flex items-center justify-center gap-2 no-underline">
-                    View Team
-                    <ExternalLink className="h-4 w-4" />
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold">Quick Access Links</h2>
+            <div className="flex items-center gap-3">
+              {isSaving && (
+                <span className="text-sm text-muted-foreground flex items-center gap-2">
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-purple-600"></div>
+                  Saving...
+                </span>
+              )}
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleResetOrder}
+                disabled={isSaving}
+                className="flex items-center gap-2"
+              >
+                <RotateCcw className="h-4 w-4" />
+                Reset Order
+              </Button>
+            </div>
           </div>
+          
+          <div className="mb-4 text-sm text-muted-foreground text-center">
+            💡 Hover over any card and drag the grip icon to rearrange
+          </div>
+
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+          >
+            <SortableContext items={cardOrder} strategy={rectSortingStrategy}>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {orderedCards.map((card) => (
+                  <SortableCard key={card.id} card={card} />
+                ))}
+              </div>
+            </SortableContext>
+          </DndContext>
         </div>
 
         {/* Section Divider */}

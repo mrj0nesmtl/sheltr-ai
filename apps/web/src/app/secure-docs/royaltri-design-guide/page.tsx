@@ -13,18 +13,11 @@ export default function RoyaltriDesignGuidePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Check if user is authorized founder or Platform Admin
-  const isAuthorizedUser = user?.email && [
-    // Founders
-    'joel.yaffe@gmail.com',
-    'alexanderkline13@gmail.com', 
-    'alaghetts@gmail.com',
-    'doug.kukura@gmail.com',
-    'morganhirtle@gmail.com',
-    // Royaltri Team (Platform Admins)
-    'senw@royaltri.com',
-    'admin@royaltri.com'
-  ].includes(user.email);
+  // Check if user has Founders Portal access (Super Admin or Platform Admin)
+  const isAuthorizedUser = user && (
+    user.role === 'super_admin' || 
+    user.role === 'platform_admin'
+  );
 
   useEffect(() => {
     const findDesignGuide = async () => {
@@ -90,7 +83,7 @@ export default function RoyaltriDesignGuidePage() {
               <div>
                 <h3 className="font-semibold">Access Denied</h3>
                 <p className="text-sm text-muted-foreground mt-1">
-                  Only authorized founders and design team members can access the brand design guide.
+                  Only users with Founders Portal access (Super Admin and Platform Administrators) can access the brand design guide.
                 </p>
               </div>
             </div>

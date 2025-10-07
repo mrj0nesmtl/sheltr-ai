@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { getDonorMetrics, getDonationHistory } from '@/services/platformMetrics';
 import { 
   Heart, 
   Calendar, 
@@ -28,50 +29,33 @@ import {
 export default function DonorDonationsPage() {
   const { user } = useAuth();
   const [searchTerm, setSearchTerm] = useState('');
+  const [donorMetrics, setDonorMetrics] = useState<any>(null);
+  const [donationHistory, setDonationHistory] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // Mock data for donations
-  const donationHistory = [
-    {
-      id: 'DN001',
-      amount: 150.00,
-      shelter: 'Downtown Hope Shelter',
-      date: '2024-01-09',
-      type: 'one-time',
-      status: 'completed',
-      impact: 'Provided 30 meals',
-      receipt: 'available'
-    },
-    {
-      id: 'DN002', 
-      amount: 75.00,
-      shelter: 'Old Brewery Mission',
-      date: '2024-01-01',
-      type: 'monthly',
-      status: 'completed',
-      impact: 'Provided 15 meals',
-      receipt: 'available'
-    },
-    {
-      id: 'DN003',
-      amount: 200.00,
-      shelter: 'Union Gospel Mission',
-      date: '2023-12-15',
-      type: 'one-time',
-      status: 'completed', 
-      impact: 'Provided 2 nights shelter',
-      receipt: 'available'
-    },
-    {
-      id: 'DN004',
-      amount: 75.00,
-      shelter: 'Old Brewery Mission',
-      date: '2023-12-01',
-      type: 'monthly',
-      status: 'completed',
-      impact: 'Provided 15 meals',
-      receipt: 'available'
-    }
-  ];
+  // Load real donor data
+  useEffect(() => {
+    const loadData = async () => {
+      if (!user?.uid) return;
+      
+      try {
+        const [metrics, history] = await Promise.all([
+          getDonorMetrics(user.uid),
+          getDonationHistory(user.uid)
+        ]);
+        
+        setDonorMetrics(metrics);
+        setDonationHistory(history);
+        console.log('✅ Loaded donor donations:', { metrics, historyCount: history.length });
+      } catch (error) {
+        console.error('❌ Failed to load donation data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    loadData();
+  }, [user]);
 
   const recurringGifts = [
     {
@@ -188,8 +172,10 @@ export default function DonorDonationsPage() {
             <div className="flex items-center">
               <Heart className="h-8 w-8 text-purple-600" />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Donated</p>
-                <p className="text-2xl font-bold text-gray-900">$2,850</p>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Donated</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                  ${donorMetrics?.totalDonated?.toLocaleString() || 0}
+                </p>
               </div>
             </div>
           </CardContent>
@@ -200,8 +186,10 @@ export default function DonorDonationsPage() {
             <div className="flex items-center">
               <Calendar className="h-8 w-8 text-green-600" />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Active Recurring</p>
-                <p className="text-2xl font-bold text-gray-900">2</p>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Active Recurring</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {donorMetrics?.recurringDonations || 0}
+                </p>
               </div>
             </div>
           </CardContent>
@@ -212,8 +200,10 @@ export default function DonorDonationsPage() {
             <div className="flex items-center">
               <CheckCircle2 className="h-8 w-8 text-blue-600" />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Donations</p>
-                <p className="text-2xl font-bold text-gray-900">12</p>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Donations</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {donationHistory?.length || 0}
+                </p>
               </div>
             </div>
           </CardContent>
@@ -224,8 +214,10 @@ export default function DonorDonationsPage() {
             <div className="flex items-center">
               <CreditCard className="h-8 w-8 text-orange-600" />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">This Month</p>
-                <p className="text-2xl font-bold text-gray-900">$225</p>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">This Year</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                  ${donorMetrics?.donationsThisYear || 0}
+                </p>
               </div>
             </div>
           </CardContent>
@@ -271,31 +263,40 @@ export default function DonorDonationsPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {donationHistory.map((donation) => (
-                  <div key={donation.id} className="flex items-center justify-between p-4 border rounded-lg">
-                    <div className="flex items-center space-x-4">
-                      {getStatusIcon(donation.status)}
-                      <div>
-                        <p className="font-medium">${donation.amount.toFixed(2)}</p>
-                        <p className="text-sm text-gray-600">{donation.shelter}</p>
-                      </div>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-sm text-gray-600">{donation.date}</p>
-                      <Badge variant="secondary" className={getStatusColor(donation.status)}>
-                        {donation.type}
-                      </Badge>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-sm font-medium text-green-600">{donation.impact}</p>
-                      <p className="text-xs text-gray-500">Direct Impact</p>
-                    </div>
-                    <Button variant="outline" size="sm">
-                      <Download className="h-4 w-4 mr-2" />
-                      Receipt
-                    </Button>
+                {loading ? (
+                  <div className="text-center py-8 text-gray-500">Loading donations...</div>
+                ) : donationHistory.length === 0 ? (
+                  <div className="text-center py-8 text-gray-500">
+                    <Heart className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+                    <p>No donations yet. Start your giving journey today!</p>
                   </div>
-                ))}
+                ) : (
+                  donationHistory.map((donation) => (
+                    <div key={donation.id} className="flex items-center justify-between p-4 border rounded-lg dark:border-gray-700">
+                      <div className="flex items-center space-x-4">
+                        <CheckCircle2 className="h-5 w-5 text-green-600" />
+                        <div>
+                          <p className="font-medium dark:text-white">${donation.amount?.toFixed(2)}</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">{donation.shelter || donation.participantName || 'Direct Donation'}</p>
+                        </div>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-sm text-gray-600 dark:text-gray-400">{donation.date || new Date(donation.timestamp).toLocaleDateString()}</p>
+                        <Badge variant="secondary">
+                          one-time
+                        </Badge>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-sm font-medium text-green-600">{donation.impact || 'Thank you!'}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">Direct Impact</p>
+                      </div>
+                      <Button variant="outline" size="sm">
+                        <Download className="h-4 w-4 mr-2" />
+                        Receipt
+                      </Button>
+                    </div>
+                  ))
+                )}
               </div>
             </CardContent>
           </Card>

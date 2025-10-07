@@ -346,12 +346,6 @@ const getNavigationItems = (userRole: string, messageCount?: number, notificatio
         separator: true
       },
       {
-        title: 'Platform Administration Guide',
-        href: '/dashboard/admin-guide',
-        icon: BookOpen,
-        description: 'Comprehensive guide for Platform Administrators'
-      },
-      {
         title: 'Security & Compliance',
         href: '/dashboard/security',
         icon: Shield,

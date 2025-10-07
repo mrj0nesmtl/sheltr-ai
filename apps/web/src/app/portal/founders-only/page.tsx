@@ -112,12 +112,12 @@ export default function FoundersOnlyPage() {
               className="h-16 w-auto"
             />
           </div>
-          <h1 className="text-3xl font-bold mb-2">SHELTR Founders Portal</h1>
+          <h1 className="text-3xl font-bold mb-2">Portal</h1>
           <p className="text-lg text-muted-foreground mb-4">
-            Confidential access for co-founders and strategic leadership
+            Confidential access for strategic leadership
           </p>
           <Badge variant="outline" className="border-purple-600 text-purple-600 dark:text-purple-400 dark:border-purple-400 px-4 py-1">
-            🔒 Restricted Access • Co-Founders Only
+            🔒 Restricted Access
           </Badge>
         </div>
 
@@ -424,6 +424,30 @@ export default function FoundersOnlyPage() {
                 <Button asChild variant="outline" className="w-full border-2 border-rose-600 text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/20 dark:text-rose-400 dark:border-rose-400">
                   <Link href="/secure-docs/business-plan" className="flex items-center justify-center gap-2 no-underline">
                     View Business Plan
+                    <ExternalLink className="h-4 w-4" />
+                  </Link>
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Design System Guide - Royaltri */}
+            <Card className="hover:shadow-lg transition-shadow cursor-pointer border-orange-200 dark:border-orange-800">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <FileText className="h-8 w-8 text-orange-600" />
+                  <Badge className="bg-orange-600 text-white dark:bg-orange-500 dark:text-white">
+                    Secure
+                  </Badge>
+                </div>
+                <CardTitle className="text-orange-600">Brand & Design Guide</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Comprehensive brand system overview for Royaltri design team - components, colors, navigation, and UX flows
+                </p>
+                <Button asChild variant="outline" className="w-full border-2 border-orange-600 text-orange-600 hover:bg-orange-50 dark:hover:bg-orange-900/20 dark:text-orange-400 dark:border-orange-400">
+                  <Link href="/secure-docs/royaltri-design-guide" className="flex items-center justify-center gap-2 no-underline">
+                    View Design Guide
                     <ExternalLink className="h-4 w-4" />
                   </Link>
                 </Button>

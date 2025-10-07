@@ -866,45 +866,39 @@ service cloud.firestore {
     // SECURE DOCUMENT COLLECTIONS - Founders and Platform Admin sensitive documents
     // =================================================================
     
-    // Check if user is an authorized founder (by email)
-    function isAuthorizedFounder() {
-      return isAuthenticated() && request.auth.token.email in [
-        'joel.yaffe@gmail.com',
-        'alexanderkline13@gmail.com', 
-        'alaghetts@gmail.com',
-        'doug.kukura@gmail.com',
-        'morganhirtle@gmail.com'
-      ];
+    // Check if user has Founders Portal access (Super Admin or Platform Admin)
+    function hasFoundersPortalAccess() {
+      return isAuthenticated() && (isSuperAdmin() || isPlatformAdmin());
     }
     
-    // Founder documents - Business plans, strategic documents, confidential materials
+    // Founder documents - Business plans, strategic documents, confidential materials, design guides
     match /founder_documents/{documentId} {
-      // Read: Only authorized founders can read founder documents
-      allow read: if isAuthorizedFounder();
+      // Read: Super Admin and Platform Admin (all Founders Portal users) can read
+      allow read: if hasFoundersPortalAccess();
       
-      // Write: Only authorized founders can update founder documents
-      allow write: if isAuthorizedFounder();
+      // Write: Super Admin and Platform Admin can update founder documents
+      allow write: if hasFoundersPortalAccess();
       
-      // Create: Only authorized founders can create founder documents
-      allow create: if isAuthorizedFounder();
+      // Create: Super Admin and Platform Admin can create founder documents
+      allow create: if hasFoundersPortalAccess();
       
-      // Delete: Only authorized founders can delete founder documents
-      allow delete: if isAuthorizedFounder();
+      // Delete: Super Admin only can delete founder documents
+      allow delete: if isSuperAdmin();
     }
     
     // Platform admin documents - Welcome letters, internal documentation, training materials
     match /platform_admin_documents/{documentId} {
-      // Read: Super Admin, Platform Admin, and authorized founders can read
-      allow read: if isSuperAdmin() || isPlatformAdmin() || isAuthorizedFounder();
+      // Read: Super Admin and Platform Admin (all Founders Portal users) can read
+      allow read: if hasFoundersPortalAccess();
       
-      // Write: Super Admin and authorized founders can update documents
-      allow write: if isSuperAdmin() || isAuthorizedFounder();
+      // Write: Super Admin can update documents
+      allow write: if isSuperAdmin();
       
-      // Create: Super Admin and authorized founders can create documents
-      allow create: if isSuperAdmin() || isAuthorizedFounder();
+      // Create: Super Admin can create documents
+      allow create: if isSuperAdmin();
       
-      // Delete: Super Admin and authorized founders can delete documents
-      allow delete: if isSuperAdmin() || isAuthorizedFounder();
+      // Delete: Super Admin can delete documents
+      allow delete: if isSuperAdmin();
     }
     
     // =================================================================

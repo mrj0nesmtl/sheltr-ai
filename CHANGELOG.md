@@ -1,6 +1,6 @@
 # 📝 SHELTR-AI Changelog
 
-All notable changes to the SHELTR-AI project will be documented in this file.
+All notable changes to the SHELTR project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
@@ -16,6 +16,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **📊 STREAMLINED STATISTICS**: Removed "Founders" stat, kept Team Members (13), Departments (6), Avg. Experience (2 years)
 - **🎯 DRAG-AND-DROP TEAM ORDERING**: Super Admin can reorder Platform Admins in User Management, order syncs to public team page
 - **🌐 GLOBAL DEFAULT SYSTEM**: Super Admin sets default card order in Founders Portal, becomes global default for all Platform Admins
+- **🎵 SPOTIFY INTEGRATION**: Added Spotify podcast link to team page "Connect With Us" section
+- **🔗 LINKEDIN SYNC BUTTON**: Platform Admins can now open their LinkedIn profiles to sync photos manually
+- **🐛 CRITICAL BUG FIXES**: Fixed duplicate Platform Guide links, corrected donor display names, removed scraped LinkedIn photos
 
 #### 👥 Team Page Complete Rebuild
 - **Public Team Members Collection**: New `team_members` collection with public read access for unauthenticated users
@@ -59,6 +62,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Personal Overrides**: Platform Admins can customize their own order while Super Admin default applies to new users
 - **FirestoreCardOrderService**: New service managing user-specific and global default card orders
 - **Visual Feedback**: "Set as Global Default" button, "Saving..." and "Global Default Set!" indicators
+
+#### 🎵 Spotify & Social Media Integration
+- **Spotify Podcast Card**: Added to team page "Connect With Us" section
+- **Tomes of Arcana**: Links to https://open.spotify.com/show/3Q2RpnzF9sUv26yPMP9tWI
+- **6-Card Grid**: Updated layout from 5 to 6 cards (Bluesky, X, TikTok, Blog, Arcana, Spotify)
+- **Responsive Design**: `grid-cols-2 md:grid-cols-3 lg:grid-cols-6` for optimal mobile/desktop display
+- **Spotify Branding**: Authentic green gradient and official Spotify logo SVG
+
+#### 🔗 LinkedIn Profile Sync Button
+- **Platform Admin Profiles**: New "Sync from LinkedIn" button in Profile Picture section
+- **Conditional Display**: Only shows when Platform Admin has LinkedIn URL configured
+- **Opens in New Tab**: Button opens LinkedIn profile for manual photo download
+- **User Control**: Free, reliable solution giving Platform Admins full control over their photos
+- **Fallback Strategy**: Uploaded photos take priority, LinkedIn sync as backup option
+
+#### 🐛 Critical Bug Fixes
+- **Duplicate Platform Guide**: Removed duplicate "Platform Administration Guide" link from bottom of Platform Admin sidebar
+- **Correct Link**: Kept "Platform Guide" with "Start" badge pointing to `/dashboard/platform-guide`
+- **Removed Dead Link**: Deleted duplicate at `/dashboard/admin-guide` after separator
+- **Jane Supporter Display Name**: Fixed donor account showing "David Donor" on homepage navigation
+- **Firestore Update**: Corrected `displayName`, `name`, `firstName`, `lastName` fields for donor@example.com (UID: rWM6e8zfa5UoRVe5tHe6cldQkh32)
+- **Firebase Auth Sync**: Also updated Firebase Auth `displayName` field
+- **Reset Scraped Photos**: Removed LinkedIn scraped profile pictures for Alexander Kline and Doug Kukura
+- **Initials Display**: Both users now display initials until they manually upload photos
+- **Multi-Collection Cleanup**: Removed `profilePicture` from `users`, `admin_profiles`, and `team_members` collections
 
 #### 🔧 Technical Excellence & Architecture
 - **Firebase MCP Integration**: Used Firebase MCP to check user access and collection structures

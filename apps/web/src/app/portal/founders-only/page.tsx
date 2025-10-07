@@ -454,6 +454,30 @@ export default function FoundersOnlyPage() {
               </CardContent>
             </Card>
 
+            {/* MSB Registration Guide */}
+            <Card className="hover:shadow-lg transition-shadow cursor-pointer border-red-200 dark:border-red-800">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <Shield className="h-8 w-8 text-red-600" />
+                  <Badge className="bg-red-600 text-white dark:bg-red-500 dark:text-white">
+                    Legal
+                  </Badge>
+                </div>
+                <CardTitle className="text-red-600">MSB Registration Guide</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Canadian regulatory compliance guide for crypto-enabled donation platforms - FINTRAC MSB requirements and incorporation
+                </p>
+                <Button asChild variant="outline" className="w-full border-2 border-red-600 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 dark:text-red-400 dark:border-red-400">
+                  <Link href="/secure-docs/msb-registration-canada" className="flex items-center justify-center gap-2 no-underline">
+                    View Legal Guide
+                    <Shield className="h-4 w-4" />
+                  </Link>
+                </Button>
+              </CardContent>
+            </Card>
+
             {/* Leadership Team */}
             <Card className="hover:shadow-lg transition-shadow cursor-pointer border-teal-200 dark:border-teal-800">
               <CardHeader>

@@ -34,6 +34,9 @@ export default function ShelterResearchHubPage() {
 
       try {
         setLoading(true);
+        
+        // Try to get all founder documents
+        // The service may fail if Firestore indexes aren't ready yet
         const allDocs = await SecureDocumentService.getAllFounderDocuments();
         
         // Filter for shelter-research category
@@ -46,7 +49,13 @@ export default function ShelterResearchHubPage() {
         setFilteredDocuments(shelterDocs);
       } catch (err: any) {
         console.error('Error loading shelter research documents:', err);
-        setError(err.message || 'Failed to load research documents');
+        
+        // Check if it's an index error
+        if (err.message && err.message.includes('index')) {
+          setError('Firestore indexes are being created. This usually takes 5-10 minutes. Please refresh the page in a few minutes.');
+        } else {
+          setError(err.message || 'Failed to load research documents');
+        }
       } finally {
         setLoading(false);
       }
@@ -170,19 +179,99 @@ export default function ShelterResearchHubPage() {
   }
 
   if (error) {
+    const isIndexError = error.includes('index') || error.includes('Index');
+    
     return (
-      <div className="container mx-auto px-4 py-8">
-        <Card className="border-red-200 dark:border-red-800">
+      <div className="container mx-auto px-4 py-8 max-w-4xl">
+        <Card className={isIndexError ? 'border-amber-200 dark:border-amber-800' : 'border-red-200 dark:border-red-800'}>
           <CardContent className="p-6">
-            <div className="flex items-center gap-3 text-red-600 dark:text-red-400">
+            <div className={`flex items-center gap-3 ${isIndexError ? 'text-amber-600 dark:text-amber-400' : 'text-red-600 dark:text-red-400'}`}>
               <AlertTriangle className="h-5 w-5" />
-              <div>
-                <h3 className="font-semibold">Error Loading Documents</h3>
+              <div className="flex-1">
+                <h3 className="font-semibold">
+                  {isIndexError ? 'Firestore Indexes Building' : 'Error Loading Documents'}
+                </h3>
                 <p className="text-sm text-muted-foreground mt-1">{error}</p>
+                
+                {isIndexError && (
+                  <div className="mt-4 p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
+                    <h4 className="font-semibold text-sm mb-2">What's happening?</h4>
+                    <ul className="text-sm space-y-1 list-disc list-inside text-muted-foreground">
+                      <li>Firebase is building composite indexes for the research hub</li>
+                      <li>This is a one-time setup that usually takes 5-10 minutes</li>
+                      <li>You can monitor progress in the Firebase Console</li>
+                      <li>Once complete, the page will work perfectly</li>
+                    </ul>
+                    <div className="mt-4 flex gap-2">
+                      <Button
+                        onClick={() => window.location.reload()}
+                        variant="outline"
+                        size="sm"
+                        className="border-amber-600 text-amber-600 hover:bg-amber-50"
+                      >
+                        Refresh Page
+                      </Button>
+                      <Button
+                        asChild
+                        variant="outline"
+                        size="sm"
+                      >
+                        <a
+                          href="https://console.firebase.google.com/project/sheltr-ai/firestore/indexes"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          Check Index Status
+                          <ExternalLink className="h-3 w-3 ml-2" />
+                        </a>
+                      </Button>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </CardContent>
         </Card>
+
+        {/* Temporary Access: Direct Links While Indexes Build */}
+        {isIndexError && (
+          <Card className="mt-6">
+            <CardHeader>
+              <CardTitle className="text-lg">Direct Document Access</CardTitle>
+              <p className="text-sm text-muted-foreground">
+                While indexes are building, you can access documents directly using these links:
+              </p>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <Button asChild variant="outline" className="w-full justify-start">
+                  <Link href="/secure-docs/shelter-research/general-research">
+                    <FileText className="h-4 w-4 mr-2 text-purple-600" />
+                    General Research & HMIS Overview
+                  </Link>
+                </Button>
+                <Button asChild variant="outline" className="w-full justify-start">
+                  <Link href="/secure-docs/shelter-research/shelters-state-by-state">
+                    <FileText className="h-4 w-4 mr-2 text-blue-600" />
+                    US State-by-State Shelter Analysis
+                  </Link>
+                </Button>
+                <Button asChild variant="outline" className="w-full justify-start">
+                  <Link href="/secure-docs/shelter-research/top-shelters-canada">
+                    <FileText className="h-4 w-4 mr-2 text-red-600" />
+                    Top Homeless Shelters in Canada
+                  </Link>
+                </Button>
+                <Button asChild variant="outline" className="w-full justify-start">
+                  <Link href="/secure-docs/shelter-research/unique-shelter-programs">
+                    <FileText className="h-4 w-4 mr-2 text-green-600" />
+                    Unique & Innovative Shelter Programs
+                  </Link>
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
       </div>
     );
   }

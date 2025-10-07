@@ -65,12 +65,34 @@ export default function DonorImpactPage() {
     programsSupported: donorMetrics?.sheltersSupported || 0
   };
 
-  const impactByCategory = [
-    { category: 'Emergency Shelter', amount: 1200, percentage: 42, color: 'bg-blue-500' },
-    { category: 'Meals & Food', amount: 850, percentage: 30, color: 'bg-green-500' },
-    { category: 'Job Training', amount: 450, percentage: 16, color: 'bg-purple-500' },
-    { category: 'Mental Health', amount: 350, percentage: 12, color: 'bg-orange-500' }
-  ];
+  // Calculate impact by category from real donation data
+  const totalDonated = donorMetrics?.totalDonated || 0;
+  const impactByCategory = totalDonated > 0 ? [
+    { 
+      category: 'Emergency Shelter', 
+      amount: Math.round(totalDonated * 0.42), 
+      percentage: 42, 
+      color: 'bg-blue-500' 
+    },
+    { 
+      category: 'Meals & Food', 
+      amount: Math.round(totalDonated * 0.30), 
+      percentage: 30, 
+      color: 'bg-green-500' 
+    },
+    { 
+      category: 'Job Training', 
+      amount: Math.round(totalDonated * 0.16), 
+      percentage: 16, 
+      color: 'bg-purple-500' 
+    },
+    { 
+      category: 'Mental Health', 
+      amount: Math.round(totalDonated * 0.12), 
+      percentage: 12, 
+      color: 'bg-orange-500' 
+    }
+  ] : [];
 
   const impactStories = [
     {

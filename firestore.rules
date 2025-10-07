@@ -106,12 +106,34 @@ service cloud.firestore {
     // Tenant sub-collections (platform data, shelters, etc.)
     match /tenants/{tenantId}/{document=**} {
       // Read: Super admin, platform admin, and shelter admins can read tenant data
+      // EXCEPT for donations which have more specific rules below
       allow read: if isSuperAdmin() || isPlatformAdmin() || isAdmin();
       
       // Write: Super admin and platform admin can write tenant data
       allow write: if isSuperAdmin() || isPlatformAdmin();
       
       // Create: Super admin and platform admin can create tenant data
+      allow create: if isSuperAdmin() || isPlatformAdmin();
+    }
+    
+    // Tenant donations - Allow donors to read their own donations
+    match /tenants/{tenantId}/donations/{donationId} {
+      // Read: Admins can read all, donors can read their own donations
+      allow read: if isSuperAdmin() || 
+                     isPlatformAdmin() || 
+                     isAdmin() ||
+                     (isDonor() && resource.data.donor_id == request.auth.uid);
+      
+      // List/Query: Admins can list all, donors can query their own
+      allow list: if isSuperAdmin() || 
+                     isPlatformAdmin() || 
+                     isAdmin() ||
+                     isDonor();
+      
+      // Write: Super admin and platform admin only
+      allow write: if isSuperAdmin() || isPlatformAdmin();
+      
+      // Create: System creates donations
       allow create: if isSuperAdmin() || isPlatformAdmin();
     }
     

@@ -85,6 +85,24 @@ function SuperAdminStatusBadge({ userId }: { userId: string }) {
   );
 }
 
+// Dynamic status badge component for platform admins (simplified online/offline)
+function PlatformAdminStatusBadge({ userId }: { userId: string }) {
+  const { status } = useOtherUserStatus(userId);
+  
+  const isOnline = status === 'online' || status === 'busy';
+  
+  return (
+    <Badge className={`${
+      isOnline 
+        ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100' 
+        : 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100'
+    } shrink-0`}>
+      <div className={`w-2 h-2 rounded-full mr-1.5 ${isOnline ? 'bg-green-500' : 'bg-gray-400'}`} />
+      {isOnline ? 'Online' : 'Offline'}
+    </Badge>
+  );
+}
+
 // Dynamic status icon component for super admins
 function SuperAdminStatusIcon({ userId }: { userId: string }) {
   const { status } = useOtherUserStatus(userId);
@@ -1607,9 +1625,7 @@ export default function UserManagement() {
                         </div>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <Badge className="bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-100">
-                          {admin.status || 'Active'}
-                        </Badge>
+                        <PlatformAdminStatusBadge userId={admin.id} />
                         <div className="flex space-x-1">
                           <Button 
                             variant="ghost" 

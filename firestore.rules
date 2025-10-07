@@ -888,11 +888,23 @@ service cloud.firestore {
     
     // Founder Card Orders - Custom card ordering for Founders Portal Quick Access Links
     match /founder_card_orders/{userId} {
-      // Users can only read and write their own card order
-      allow read: if isAuthenticated() && request.auth.uid == userId;
-      allow write: if isAuthenticated() && request.auth.uid == userId;
-      allow create: if isAuthenticated() && request.auth.uid == userId;
-      allow delete: if isAuthenticated() && request.auth.uid == userId;
+      // Special case: global_default can be read by all authenticated users
+      // but only written by Super Admin
+      allow read: if userId == 'global_default' 
+        ? isAuthenticated() 
+        : (isAuthenticated() && request.auth.uid == userId);
+      
+      allow write: if userId == 'global_default'
+        ? isSuperAdmin()
+        : (isAuthenticated() && request.auth.uid == userId);
+      
+      allow create: if userId == 'global_default'
+        ? isSuperAdmin()
+        : (isAuthenticated() && request.auth.uid == userId);
+      
+      allow delete: if userId == 'global_default'
+        ? isSuperAdmin()
+        : (isAuthenticated() && request.auth.uid == userId);
     }
     
     // Platform admin documents - Welcome letters, internal documentation, training materials

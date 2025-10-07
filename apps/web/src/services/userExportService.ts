@@ -57,16 +57,20 @@ export class UserExportService {
       const accessLogsMap = await this.getRecentAccessLogs();
       console.log(`🔍 Found access logs for ${accessLogsMap.size} users`);
       
-      // Add admin users
+      // Add admin users (Platform Admins + Shelter Admins combined)
       adminUsers.forEach(u => {
         const accessLog = accessLogsMap.get(u.email);
+        // Differentiate Platform Admin vs Shelter Admin by role or shelter
+        const userType = u.role === 'platform_admin' ? 'Platform Admin' : 
+                        u.shelter && u.shelter !== 'N/A' ? 'Shelter Admin' : 'Admin';
+        
         allUsersMap.set(u.id, {
           id: u.id,
           name: u.name,
           firstName: u.firstName || u.name?.split(' ')[0] || '',
           lastName: u.lastName || u.name?.split(' ').slice(1).join(' ') || '',
           email: u.email,
-          shelter: u.shelter,
+          shelter: u.shelter || 'N/A',
           shelter_id: u.shelter_id || '',
           role: u.role,
           status: u.status,
@@ -75,7 +79,7 @@ export class UserExportService {
           joinDate: u.joinDate,
           created_at: u.created_at || u.joinDate,
           updated_at: u.updated_at || '',
-          UserType: 'Admin',
+          UserType: userType,
           realLastLogin: accessLog?.timestamp || 'No recent login',
           deviceInfo: accessLog?.deviceInfo || 'Unknown',
           ipAddress: accessLog?.ipAddress || 'Unknown',

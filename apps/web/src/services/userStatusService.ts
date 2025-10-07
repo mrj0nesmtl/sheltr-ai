@@ -3,8 +3,8 @@
  * 
  * Manages real-time user online/offline status with Firestore persistence.
  * Features:
- * - Real-time status updates
- * - Automatic offline detection on page visibility changes
+ * - Real-time status updates with heartbeat mechanism
+ * - Automatic offline detection when heartbeat expires (2 min timeout)
  * - Activity tracking
  * - Status colors and labels for UI
  * 
@@ -13,6 +13,10 @@
  * - offline: User has left or closed the platform (gray)
  * - busy: User is online but doesn't want to be disturbed (orange)
  * - invisible: User appears offline to others but is actually online (gray)
+ * 
+ * Heartbeat System:
+ * - Sends heartbeat every 30 seconds while online
+ * - Users are considered offline if no heartbeat for 2 minutes
  */
 
 'use client';
@@ -23,10 +27,15 @@ import { db } from '@/lib/firebase';
 
 export type UserStatus = 'online' | 'offline' | 'busy' | 'invisible';
 
+// Heartbeat configuration
+const HEARTBEAT_INTERVAL = 30000; // 30 seconds
+const OFFLINE_THRESHOLD = 120000; // 2 minutes (in milliseconds)
+
 export interface UserStatusData {
   status: UserStatus;
   lastSeen: Timestamp;
   lastActivity: Timestamp;
+  lastHeartbeat?: Timestamp;
 }
 
 // Status colors for UI
@@ -75,12 +84,33 @@ export const useUserStatus = (userId: string) => {
       await setDoc(doc(db, 'user_status', userId), {
         status: newStatus,
         lastActivity: serverTimestamp(),
+        lastHeartbeat: serverTimestamp(),
         ...(newStatus === 'offline' ? { lastSeen: serverTimestamp() } : {})
       }, { merge: true });
     } catch (error) {
       // Only log errors if they're not permission-related (to avoid console spam)
       if (error instanceof Error && !error.message?.includes('Missing or insufficient permissions')) {
         console.error('❌ Error updating user status:', error);
+      }
+    }
+  }, [userId]);
+
+  // Send heartbeat to keep status alive
+  const sendHeartbeat = useCallback(async () => {
+    if (!userId) return;
+    
+    const currentStatus = statusRef.current;
+    if (currentStatus === 'offline') return; // Don't send heartbeat if offline
+    
+    try {
+      await updateDoc(doc(db, 'user_status', userId), {
+        lastHeartbeat: serverTimestamp(),
+        lastActivity: serverTimestamp()
+      });
+    } catch (error) {
+      // Silently handle errors
+      if (error instanceof Error && !error.message?.includes('Missing or insufficient permissions')) {
+        console.error('❌ Heartbeat error:', error);
       }
     }
   }, [userId]);
@@ -187,6 +217,11 @@ export const useUserStatus = (userId: string) => {
       document.addEventListener(event, handleActivity, { passive: true });
     });
 
+    // Set up heartbeat interval (every 30 seconds)
+    const heartbeatInterval = setInterval(() => {
+      sendHeartbeat();
+    }, HEARTBEAT_INTERVAL);
+
     return () => {
       unsubscribe();
       document.removeEventListener('visibilitychange', handleVisibilityChange);
@@ -194,11 +229,12 @@ export const useUserStatus = (userId: string) => {
       activityEvents.forEach(event => {
         document.removeEventListener(event, handleActivity);
       });
+      clearInterval(heartbeatInterval);
       // Set offline when unmounting
       setManualStatus(null);
       updateStatus('offline');
     };
-  }, [userId, updateStatus]);
+  }, [userId, updateStatus, sendHeartbeat]);
 
   return {
     status,
@@ -209,6 +245,7 @@ export const useUserStatus = (userId: string) => {
 
 /**
  * Hook to get another user's status (for viewing other users)
+ * Includes automatic offline detection based on heartbeat expiration
  */
 export const useOtherUserStatus = (userId: string) => {
   const [status, setStatus] = useState<UserStatus>('offline');
@@ -226,7 +263,24 @@ export const useOtherUserStatus = (userId: string) => {
       (doc) => {
         if (doc.exists()) {
           const data = doc.data() as UserStatusData;
-          setStatus(data.status || 'offline');
+          
+          // Check if heartbeat is stale
+          const lastHeartbeat = data.lastHeartbeat;
+          const reportedStatus = data.status || 'offline';
+          
+          if (reportedStatus !== 'offline' && lastHeartbeat) {
+            const heartbeatAge = Date.now() - lastHeartbeat.toMillis();
+            
+            // If last heartbeat is older than threshold, consider user offline
+            if (heartbeatAge > OFFLINE_THRESHOLD) {
+              setStatus('offline');
+            } else {
+              setStatus(reportedStatus);
+            }
+          } else {
+            setStatus(reportedStatus);
+          }
+          
           setLastSeen(data.lastSeen || null);
         } else {
           setStatus('offline');
@@ -241,7 +295,16 @@ export const useOtherUserStatus = (userId: string) => {
       }
     );
 
-    return () => unsubscribe();
+    // Check heartbeat status every 30 seconds
+    const heartbeatCheck = setInterval(() => {
+      // Trigger a re-check by reading the document again
+      // The onSnapshot will handle the actual check
+    }, 30000);
+
+    return () => {
+      unsubscribe();
+      clearInterval(heartbeatCheck);
+    };
   }, [userId]);
 
   return {

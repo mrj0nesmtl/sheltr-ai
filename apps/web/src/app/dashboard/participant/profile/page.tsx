@@ -173,17 +173,20 @@ export default function ParticipantProfile() {
     try {
       console.log(`🔍 [PROFILE] Fetching real donation data for: ${participantId}`);
       
-      // Query all donations for this participant
-      const donationsQuery = query(
-        collection(db, 'demo_donations'),
-        where('participant_id', '==', participantId)
-      );
-      const donationsSnapshot = await getDocs(donationsQuery);
-      
       let totalReceived = 0;
       let donationCount = 0;
       
-      donationsSnapshot.docs.forEach(doc => {
+      // Query BOTH collections: demo_donations AND tenants/.../donations
+      
+      // 1. Query demo_donations
+      const demoQuery = query(
+        collection(db, 'demo_donations'),
+        where('participant_id', '==', participantId),
+        where('status', '==', 'completed')
+      );
+      const demoSnapshot = await getDocs(demoQuery);
+      
+      demoSnapshot.docs.forEach(doc => {
         const donationData = doc.data();
         const amount = donationData.amount?.total || donationData.amount || 0;
         if (amount > 0) {
@@ -192,12 +195,32 @@ export default function ParticipantProfile() {
         }
       });
       
+      console.log(`💰 [DEMO] Found ${demoSnapshot.size} completed donations in demo_donations`);
+      
+      // 2. Query tenants/YDJCJnuLGMC9mWOWDSOa/donations
+      const tenantQuery = query(
+        collection(db, 'tenants/YDJCJnuLGMC9mWOWDSOa/donations'),
+        where('participant_id', '==', participantId),
+        where('status', '==', 'completed')
+      );
+      const tenantSnapshot = await getDocs(tenantQuery);
+      
+      tenantSnapshot.docs.forEach(doc => {
+        const donationData = doc.data();
+        const amount = donationData.amount?.total || donationData.amount || 0;
+        if (amount > 0) {
+          totalReceived += amount;
+          donationCount++;
+        }
+      });
+      
+      console.log(`💰 [TENANT] Found ${tenantSnapshot.size} completed donations in tenant collection`);
+      console.log(`💰 [TOTAL] ${donationCount} donations totaling $${totalReceived} for ${participantId}`);
+      
       // Calculate estimated stats (in real app, these would come from analytics)
       const profileViews = donationCount * 5; // Estimate 5 views per donation
       const supporterCount = donationCount; // Assume each donation is from unique supporter
       const goalProgress = Math.min(Math.round((totalReceived / 1000) * 100), 100); // Progress toward $1000 goal
-      
-      console.log(`💰 [PROFILE] Found ${donationCount} donations totaling $${totalReceived} for ${participantId}`);
       
       return {
         totalReceived,

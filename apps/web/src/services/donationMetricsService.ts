@@ -37,10 +37,11 @@ export const getDonationMetrics = async (participantId: string): Promise<Donatio
     // Query the tenant donation collection for Old Brewery Mission
     const tenantDonationsQuery = query(
       collection(db, 'tenants/YDJCJnuLGMC9mWOWDSOa/donations'),
-      where('participant_id', 'in', participantIds)
+      where('participant_id', 'in', participantIds),
+      where('status', '==', 'completed')
     );
     const tenantDonationsSnapshot = await getDocs(tenantDonationsQuery);
-    console.log(`📊 [DONATION-METRICS] Found ${tenantDonationsSnapshot.size} donations in tenant collection`);
+    console.log(`📊 [DONATION-METRICS] Found ${tenantDonationsSnapshot.size} completed donations in tenant collection`);
     
     // Process donations from tenant collection
     const processedDonationIds = new Set<string>(); // Prevent double-counting

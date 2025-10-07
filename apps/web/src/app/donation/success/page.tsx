@@ -35,25 +35,37 @@ function SuccessPageContent() {
       setShowAnimation(true);
       
       // Create donation automatically for demo donations
-      if (isDemo) {
+      if (isDemo && user?.uid) {
         try {
-          console.log('🎯 Automatically creating demo donation...');
-          const { addDoc, collection, serverTimestamp } = await import('firebase/firestore');
+          console.log('🎯 Automatically creating demo donation with SmartFund distribution...');
+          const { addDoc, collection, serverTimestamp, doc, updateDoc, increment } = await import('firebase/firestore');
           const { db } = await import('@/lib/firebase');
+          
+          // Calculate SmartFund distribution
+          const totalAmount = parseFloat(amount);
+          const directAmount = Math.round(totalAmount * 0.80 * 100) / 100;
+          const housingAmount = Math.round(totalAmount * 0.15 * 100) / 100;
+          const operationsAmount = Math.round(totalAmount * 0.05 * 100) / 100;
           
           const donationData = {
             participant_id: 'michael-rodriguez',
             participant_name: participantName,
-            shelter_id: 'YDJCJnuLGMC9mWOWDSOa', // Old Brewery Mission tenant ID
+            shelter_id: 'old-brewery-mission',
             shelter_name: 'Old Brewery Mission',
             amount: { 
-              total: parseFloat(amount), 
-              currency: 'USD' 
+              total: totalAmount, 
+              currency: 'USD',
+              breakdown: {
+                direct: directAmount,
+                housing: housingAmount,
+                operations: operationsAmount
+              }
             },
-            donor_id: user?.uid || 'anonymous', // Track user ID if logged in
+            donor_id: user.uid,
             donor_info: { 
-              name: user?.displayName || user?.email || 'Anonymous Donor', 
-              email: user?.email || 'anonymous@sheltr.ai' 
+              name: user.displayName || user.email || 'Anonymous Donor', 
+              email: user.email || 'anonymous@sheltr.ai',
+              donor_id: user.uid
             },
             status: 'completed',
             type: 'one-time',
@@ -62,17 +74,57 @@ function SuccessPageContent() {
               adyen_reference: reference, 
               status: 'completed' 
             },
+            smartfund_distribution: {
+              total: totalAmount,
+              direct: directAmount,
+              housing: housingAmount,
+              shelter_operations: operationsAmount,
+              currency: 'USD',
+              recipient_type: 'shelter',
+              shelter_id: 'old-brewery-mission',
+              shelter_name: 'Old Brewery Mission',
+              processed_at: new Date().toISOString(),
+              status: 'completed'
+            },
             created_at: serverTimestamp(),
             updated_at: serverTimestamp(),
+            completed_at: serverTimestamp(),
             demo: true,
-            source: user?.uid ? 'scan-give-logged-in' : 'scan-give-anonymous',
-            anonymous: !user?.uid,
+            source: 'scan-give-logged-in',
+            anonymous: false,
             public: true
           };
           
-          console.log('📝 Creating automatic demo donation:', donationData);
+          console.log('📝 Creating demo donation with SmartFund:', donationData);
           const docRef = await addDoc(collection(db, 'tenants/YDJCJnuLGMC9mWOWDSOa/donations'), donationData);
-          console.log('✅ Automatic demo donation created with ID:', docRef.id);
+          console.log('✅ Demo donation created with ID:', docRef.id);
+          
+          // Update Michael's participant stats
+          try {
+            const participantRef = doc(db, 'users', 'dFJNlIh2g4R8vAvxvIvWZtwu8zw1');
+            await updateDoc(participantRef, {
+              total_received: increment(directAmount),
+              donation_count: increment(1),
+              housing_fund_balance: increment(housingAmount),
+              updated_at: serverTimestamp()
+            });
+            console.log('✅ Updated Michael\'s stats:', { direct: directAmount, housing: housingAmount });
+          } catch (error) {
+            console.error('❌ Error updating participant stats:', error);
+          }
+          
+          // Update Old Brewery Mission shelter operations
+          try {
+            const shelterRef = doc(db, 'shelters', 'old-brewery-mission');
+            await updateDoc(shelterRef, {
+              operations_revenue: increment(operationsAmount),
+              total_donations_received: increment(totalAmount),
+              updated_at: serverTimestamp()
+            });
+            console.log('✅ Updated Old Brewery Mission operations:', { operations: operationsAmount });
+          } catch (error) {
+            console.error('❌ Error updating shelter operations:', error);
+          }
           
         } catch (error) {
           console.error('❌ Error creating automatic demo donation:', error);

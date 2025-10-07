@@ -82,7 +82,10 @@ export default function TeamPage() {
         </div>
         <div className="space-y-1">
           <CardTitle className="text-lg">{member.displayName}</CardTitle>
-          <p className="text-sm font-medium text-blue-600 dark:text-blue-400">{member.jobTitle}</p>
+          {/* Display specialization as the primary job title for more exciting descriptions */}
+          <p className="text-sm font-medium text-blue-600 dark:text-blue-400">
+            {member.specialization || member.jobTitle}
+          </p>
           <div className="flex items-center justify-center text-xs text-muted-foreground">
             <Building2 className="h-3 w-3 mr-1" />
             {member.department}
@@ -95,15 +98,6 @@ export default function TeamPage() {
           <p className="text-sm text-muted-foreground text-center leading-relaxed">
             {member.bio}
           </p>
-        )}
-        
-        {/* Specialization */}
-        {member.specialization && (
-          <div className="text-center">
-            <Badge variant="outline" className="text-xs">
-              {member.specialization}
-            </Badge>
-          </div>
         )}
         
         {/* Expertise */}
@@ -254,14 +248,10 @@ export default function TeamPage() {
           </p>
           
           {!loading && (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-2xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-2xl mx-auto">
               <div className="text-center">
                 <div className="text-3xl font-bold text-primary">{teamStats.totalMembers}</div>
                 <div className="text-sm text-muted-foreground">Team Members</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-primary">{teamStats.foundingMembers}</div>
-                <div className="text-sm text-muted-foreground">Founders</div>
               </div>
               <div className="text-center">
                 <div className="text-3xl font-bold text-primary">{teamStats.departments.length}</div>
@@ -269,7 +259,7 @@ export default function TeamPage() {
               </div>
               <div className="text-center">
                 <div className="text-3xl font-bold text-primary">{teamStats.averageExperience}</div>
-                <div className="text-sm text-muted-foreground">Avg. Experience</div>
+                <div className="text-sm text-muted-foreground">Avg. Experience (Years)</div>
               </div>
             </div>
           )}

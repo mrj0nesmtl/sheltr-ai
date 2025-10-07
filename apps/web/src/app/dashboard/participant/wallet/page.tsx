@@ -191,18 +191,21 @@ export default function ParticipantWallet() {
     try {
       console.log(`🔍 [WALLET] Fetching real wallet data for: ${participantId}`);
       
-      // Query all donations for this participant
-      const donationsQuery = query(
-        collection(db, 'demo_donations'),
-        where('participant_id', '==', participantId)
-      );
-      const donationsSnapshot = await getDocs(donationsQuery);
-      
       let totalReceived = 0;
       let transactionCount = 0;
       let lastTransactionDate: Date | null = null;
       
-      donationsSnapshot.docs.forEach(doc => {
+      // Query BOTH collections: demo_donations AND tenants/.../donations
+      
+      // 1. Query demo_donations
+      const demoQuery = query(
+        collection(db, 'demo_donations'),
+        where('participant_id', '==', participantId),
+        where('status', '==', 'completed')
+      );
+      const demoSnapshot = await getDocs(demoQuery);
+      
+      demoSnapshot.docs.forEach(doc => {
         const donationData = doc.data();
         const amount = donationData.amount?.total || donationData.amount || 0;
         const timestamp = donationData.created_at?.toDate() || new Date();
@@ -216,6 +219,33 @@ export default function ParticipantWallet() {
           }
         }
       });
+      
+      console.log(`💰 [DEMO] Found ${demoSnapshot.size} completed donations in demo_donations`);
+      
+      // 2. Query tenants/YDJCJnuLGMC9mWOWDSOa/donations
+      const tenantQuery = query(
+        collection(db, 'tenants/YDJCJnuLGMC9mWOWDSOa/donations'),
+        where('participant_id', '==', participantId),
+        where('status', '==', 'completed')
+      );
+      const tenantSnapshot = await getDocs(tenantQuery);
+      
+      tenantSnapshot.docs.forEach(doc => {
+        const donationData = doc.data();
+        const amount = donationData.amount?.total || donationData.amount || 0;
+        const timestamp = donationData.created_at?.toDate() || new Date();
+        
+        if (amount > 0) {
+          totalReceived += amount;
+          transactionCount++;
+          
+          if (!lastTransactionDate || timestamp > lastTransactionDate) {
+            lastTransactionDate = timestamp;
+          }
+        }
+      });
+      
+      console.log(`💰 [TENANT] Found ${tenantSnapshot.size} completed donations in tenant collection`);
       
       // Calculate 80/15 split for SHELTR tokens
       const sheltrStableBalance = Math.round(totalReceived * 0.80); // 80% to stable coin

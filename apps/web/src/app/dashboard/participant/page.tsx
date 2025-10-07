@@ -153,25 +153,27 @@ export default function ParticipantDashboard() {
     try {
       console.log(`🔍 [PARTICIPANT-DASHBOARD] Fetching real donation data for: ${participantId}`);
       
-      // Query all donations for this participant
-      const donationsQuery = query(
-        collection(db, 'demo_donations'),
-        where('participant_id', '==', participantId)
-      );
-      const donationsSnapshot = await getDocs(donationsQuery);
-      
       let totalReceived = 0;
       let donationCount = 0;
       let lastDonationDate = new Date(0); // Unix epoch start
       
-      donationsSnapshot.docs.forEach(doc => {
+      // Query BOTH collections: demo_donations AND tenants/.../donations
+      
+      // 1. Query demo_donations
+      const demoQuery = query(
+        collection(db, 'demo_donations'),
+        where('participant_id', '==', participantId),
+        where('status', '==', 'completed')
+      );
+      const demoSnapshot = await getDocs(demoQuery);
+      
+      demoSnapshot.docs.forEach(doc => {
         const donationData = doc.data();
         const amount = donationData.amount?.total || donationData.amount || 0;
         if (amount > 0) {
           totalReceived += amount;
           donationCount++;
           
-          // Track latest donation
           const createdAt = donationData.created_at?.toDate ? donationData.created_at.toDate() : new Date(donationData.created_at);
           if (createdAt > lastDonationDate) {
             lastDonationDate = createdAt;
@@ -179,7 +181,32 @@ export default function ParticipantDashboard() {
         }
       });
       
-      console.log(`💰 [PARTICIPANT-DASHBOARD] Found ${donationCount} donations totaling $${totalReceived} for ${participantId}`);
+      console.log(`💰 [DEMO] Found ${demoSnapshot.size} completed donations in demo_donations`);
+      
+      // 2. Query tenants/YDJCJnuLGMC9mWOWDSOa/donations
+      const tenantQuery = query(
+        collection(db, 'tenants/YDJCJnuLGMC9mWOWDSOa/donations'),
+        where('participant_id', '==', participantId),
+        where('status', '==', 'completed')
+      );
+      const tenantSnapshot = await getDocs(tenantQuery);
+      
+      tenantSnapshot.docs.forEach(doc => {
+        const donationData = doc.data();
+        const amount = donationData.amount?.total || donationData.amount || 0;
+        if (amount > 0) {
+          totalReceived += amount;
+          donationCount++;
+          
+          const createdAt = donationData.created_at?.toDate ? donationData.created_at.toDate() : new Date(donationData.created_at);
+          if (createdAt > lastDonationDate) {
+            lastDonationDate = createdAt;
+          }
+        }
+      });
+      
+      console.log(`💰 [TENANT] Found ${tenantSnapshot.size} completed donations in tenant collection`);
+      console.log(`💰 [TOTAL] ${donationCount} donations totaling $${totalReceived} for ${participantId}`);
       
       return {
         totalReceived,

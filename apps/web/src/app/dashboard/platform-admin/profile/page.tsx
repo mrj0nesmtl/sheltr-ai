@@ -419,8 +419,28 @@ export default function PlatformAdminProfilePage() {
                       </>
                     )}
                   </Button>
+                  
+                  {/* Sync from LinkedIn Button */}
+                  {profile?.linkedIn && (
+                    <Button 
+                      variant="outline" 
+                      className="w-full" 
+                      onClick={() => {
+                        if (profile.linkedIn) {
+                          window.open(profile.linkedIn, '_blank', 'noopener,noreferrer');
+                        }
+                      }}
+                    >
+                      <Linkedin className="h-4 w-4 mr-2" />
+                      Sync from LinkedIn
+                    </Button>
+                  )}
+                  
                   <p className="text-xs text-gray-500">
-                    JPG, PNG or GIF (max. 2MB)
+                    {profile?.linkedIn 
+                      ? 'Upload your photo or sync from your LinkedIn profile'
+                      : 'JPG, PNG or GIF (max. 2MB)'
+                    }
                   </p>
                 </div>
               </CardContent>

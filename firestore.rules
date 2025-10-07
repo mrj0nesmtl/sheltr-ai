@@ -886,6 +886,15 @@ service cloud.firestore {
       allow delete: if isSuperAdmin();
     }
     
+    // Public Team Members - World-readable collection for team page
+    match /team_members/{memberId} {
+      // Read: Anyone can read (public team page)
+      allow read: if true;
+      
+      // Write: Only Super Admin can write
+      allow write, create, update, delete: if isSuperAdmin();
+    }
+    
     // Founder Card Orders - Custom card ordering for Founders Portal Quick Access Links
     match /founder_card_orders/{userId} {
       // Special case: global_default can be read by all authenticated users

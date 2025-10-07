@@ -25,10 +25,13 @@ import {
   Blocks,
   Camera,
   GripVertical,
-  RotateCcw
+  RotateCcw,
+  Star,
+  CheckCircle2
 } from 'lucide-react';
 import { checkFounderAccess, clearFounderAccess, getFounderInfo } from '@/services/founderAccessService';
 import FoundersGallery from '@/components/FoundersGallery';
+import { useAuth } from '@/contexts/AuthContext';
 import {
   DndContext,
   closestCenter,
@@ -46,7 +49,7 @@ import {
   useSortable,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { getUserCardOrder, saveUserCardOrder, resetUserCardOrder } from '@/services/founderCardOrderService';
+import { getUserCardOrder, saveUserCardOrder, resetUserCardOrder, setGlobalDefaultOrder, getGlobalDefaultOrder } from '@/services/founderCardOrderService';
 
 // Define card data structure
 interface QuickAccessCard {
@@ -339,7 +342,10 @@ export default function FoundersOnlyPage() {
   const [founderInfo, setFounderInfo] = useState<{ email: string; name?: string; userId?: string } | null>(null);
   const [cardOrder, setCardOrder] = useState<string[]>([]);
   const [isSaving, setIsSaving] = useState(false);
+  const [isSettingGlobal, setIsSettingGlobal] = useState(false);
+  const [globalDefaultSet, setGlobalDefaultSet] = useState(false);
   const router = useRouter();
+  const { user } = useAuth();
 
   // Configure drag sensors
   const sensors = useSensors(
@@ -420,23 +426,59 @@ export default function FoundersOnlyPage() {
     }
   };
 
-  // Reset to default order
+  // Reset to global default order
   const handleResetOrder = async () => {
     if (!founderInfo?.userId) return;
 
-    const defaultOrder = DEFAULT_CARDS.map(card => card.id);
-    setCardOrder(defaultOrder);
     setIsSaving(true);
 
     try {
+      // Reset user's personal order
       await resetUserCardOrder(founderInfo.userId);
-      console.log('✅ Card order reset to default');
+      
+      // Load the global default (or fallback to hardcoded default)
+      const globalDefault = await getGlobalDefaultOrder();
+      const defaultOrder = globalDefault || DEFAULT_CARDS.map(card => card.id);
+      setCardOrder(defaultOrder);
+      
+      console.log('✅ Card order reset to global default');
       setIsSaving(false);
     } catch (error) {
       console.error('❌ Failed to reset card order:', error);
       setIsSaving(false);
     }
   };
+
+  // Set current order as global default (Super Admin only)
+  const handleSetGlobalDefault = async () => {
+    if (!user || user.role !== 'super_admin' || !founderInfo?.userId) {
+      console.warn('⚠️ Only Super Admin can set global default');
+      return;
+    }
+
+    setIsSettingGlobal(true);
+
+    try {
+      await setGlobalDefaultOrder(
+        cardOrder,
+        founderInfo.userId,
+        founderInfo.name || user.email || 'Super Admin'
+      );
+      setGlobalDefaultSet(true);
+      
+      // Show success message for 3 seconds
+      setTimeout(() => setGlobalDefaultSet(false), 3000);
+      
+      console.log('✅ Global default set successfully');
+      setIsSettingGlobal(false);
+    } catch (error) {
+      console.error('❌ Failed to set global default:', error);
+      setIsSettingGlobal(false);
+    }
+  };
+
+  // Check if user is Super Admin
+  const isSuperAdmin = user?.role === 'super_admin';
 
   if (isLoading) {
     return (
@@ -545,21 +587,51 @@ export default function FoundersOnlyPage() {
                   Saving...
                 </span>
               )}
+              {isSettingGlobal && (
+                <span className="text-sm text-purple-600 dark:text-purple-400 flex items-center gap-2">
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-purple-600"></div>
+                  Setting Global Default...
+                </span>
+              )}
+              {globalDefaultSet && (
+                <span className="text-sm text-green-600 dark:text-green-400 flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4" />
+                  Global Default Set!
+                </span>
+              )}
+              {isSuperAdmin && (
+                <Button
+                  variant="default"
+                  size="sm"
+                  onClick={handleSetGlobalDefault}
+                  disabled={isSaving || isSettingGlobal}
+                  className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white"
+                >
+                  <Star className="h-4 w-4" />
+                  Set as Global Default
+                </Button>
+              )}
               <Button
                 variant="outline"
                 size="sm"
                 onClick={handleResetOrder}
-                disabled={isSaving}
+                disabled={isSaving || isSettingGlobal}
                 className="flex items-center gap-2"
               >
                 <RotateCcw className="h-4 w-4" />
-                Reset Order
+                Reset to Default
               </Button>
             </div>
           </div>
           
           <div className="mb-4 text-sm text-muted-foreground text-center">
-            💡 Hover over any card and drag the grip icon to rearrange
+            {isSuperAdmin ? (
+              <>
+                ⭐ <strong>Super Admin:</strong> Your card order can be set as the global default for all Platform Admins
+              </>
+            ) : (
+              <>💡 Hover over any card and drag the grip icon to rearrange</>
+            )}
           </div>
 
           <DndContext

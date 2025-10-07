@@ -754,16 +754,25 @@ export default function UserManagement() {
     try {
       console.log('💾 Saving Platform Admin display order...');
       
-      // Update each admin's displayOrder in the database
-      const updatePromises = orderedAdmins.map((admin, index) => 
-        PlatformAdminProfileService.updatePlatformAdminProfile(admin.id, {
+      // Update each admin's displayOrder in both admin_profiles AND team_members collections
+      const updatePromises = orderedAdmins.map(async (admin, index) => {
+        // Update admin_profiles collection
+        await PlatformAdminProfileService.updatePlatformAdminProfile(admin.id, {
           displayOrder: index
-        })
-      );
+        });
+        
+        // Also update team_members collection for public team page
+        const teamMemberRef = doc(db, 'team_members', admin.id);
+        await updateDoc(teamMemberRef, {
+          displayOrder: index
+        });
+        
+        console.log(`✅ Updated displayOrder=${index} for ${admin.firstName} ${admin.lastName}`);
+      });
       
       await Promise.all(updatePromises);
       
-      console.log('✅ Platform Admin display order saved successfully');
+      console.log('✅ Platform Admin display order saved successfully to both collections');
     } catch (error) {
       console.error('❌ Error saving Platform Admin display order:', error);
     }

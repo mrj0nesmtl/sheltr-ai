@@ -168,6 +168,9 @@ service cloud.firestore {
       // Read: Public access allowed for participant showcase pages and demo functionality
       allow read: if true;
       
+      // List/Query: Authenticated users can query demo donations (for donor/participant dashboards)
+      allow list: if isAuthenticated();
+      
       // Write: Super admin can modify demo donations
       allow write: if isSuperAdmin();
       

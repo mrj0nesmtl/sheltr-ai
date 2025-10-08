@@ -6,7 +6,7 @@ import { SecureDocumentService, SecureDocument } from '@/services/secureDocument
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { AlertTriangle, Loader2, Shield, FileText, ExternalLink, Search } from 'lucide-react';
+import { AlertTriangle, Loader2, Shield, FileText, ExternalLink, Search, Home, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import { Input } from '@/components/ui/input';
 
@@ -297,6 +297,23 @@ export default function ShelterResearchHubPage() {
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-7xl">
+      {/* Breadcrumb Navigation */}
+      <div className="flex items-center space-x-2 text-sm text-muted-foreground mb-6">
+        <Link href="/" className="hover:text-foreground transition-colors">
+          <Home className="h-4 w-4" />
+        </Link>
+        <ChevronRight className="h-4 w-4" />
+        <Link href="/portal" className="hover:text-foreground transition-colors">
+          Portal
+        </Link>
+        <ChevronRight className="h-4 w-4" />
+        <Link href="/portal/founders-only" className="hover:text-foreground transition-colors">
+          Founders Only
+        </Link>
+        <ChevronRight className="h-4 w-4" />
+        <span className="font-medium text-foreground">Shelter Research Hub</span>
+      </div>
+
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-4">

@@ -110,6 +110,20 @@ export default function SecureDocumentViewer({
   const canEdit = () => {
     if (!user?.email) return false;
     
+    // Disable editing for specific document categories and titles
+    const nonEditableCategories = ['shelter-research', 'brand-design', 'legal'];
+    const nonEditableTitles = ['business-plan', 'msb-registration-canada', 'royaltri-design-guide'];
+    
+    // Check if document is in a non-editable category or has a non-editable title
+    if (document) {
+      if (nonEditableCategories.includes(document.category)) {
+        return false;
+      }
+      if (nonEditableTitles.includes(document.title)) {
+        return false;
+      }
+    }
+    
     // Check if user is authorized founder
     const authorizedEmails = [
       'joel.yaffe@gmail.com',

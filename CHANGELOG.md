@@ -7,6 +7,95 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.35.0] - 2025-10-08 (Session 22.7: Global Donation Reset + Data Backup System + Donor UI Improvements)
+
+### 🎯 Session 22.7 Major Achievements (CLEAN SLATE + BACKUP SYSTEM)
+- **🧹 GLOBAL DONATION RESET**: Cleared all donation data (128 donations) for clean testing baseline
+- **💾 BACKUP SYSTEM**: Created comprehensive backup script - 134.76 KB backup file with full restore capability
+- **🔄 MULTI-COLLECTION QUERIES**: Fixed participant/donor dashboards to query BOTH `demo_donations` AND `tenants/.../donations`
+- **💰 DONOR UI IMPROVEMENTS**: Renamed "SHELTR Portfolio" to "Wallet" in donor sidebar for clarity
+- **✅ DUAL-ROLE USER SUPPORT**: Reset script handles Super Admin/Platform Admin users who also donate
+- **📊 CLEAN BASELINE ACHIEVED**: All dashboards now at $0 - ready for comprehensive donation flow testing
+
+#### 🧹 Global Donation Data Reset
+- **Backup Created First**: Saved 60 demo donations + 67 tenant donations + user/shelter stats before deletion
+- **128 Donations Deleted**: Cleared `demo_donations`, `donations`, and `tenants/.../donations` collections
+- **15 Users Reset**: All participant and donor stats (including dual-role admins) reset to $0
+- **10 Shelters Reset**: All shelter operations revenue reset to $0
+- **Reversible Process**: Full backup saved to `/backups/donation-backup-[timestamp].json`
+
+#### 💾 Comprehensive Backup System
+- **Auto-Timestamped Backups**: Creates dated backup files in `/backups/` directory
+- **Complete Data Preservation**: Backs up donations, user stats, shelter stats with all timestamps
+- **JSON Format**: Human-readable backup format for easy inspection/restoration
+- **Restore Capability**: Restore script ready (not yet implemented but backup structure supports it)
+
+#### 🔄 Multi-Collection Query Fixes
+- **Participant Dashboard**: Now queries BOTH collections, handles empty results gracefully
+- **Participant Wallet**: Updated to aggregate from both donation sources
+- **Participant Profile**: Combined donation metrics from multiple collections
+- **Donor Dashboards**: Updated `platformMetrics.ts` to query both collections with status filtering
+- **Public Profile**: `donationMetricsService.ts` now filters for `status: 'completed'` donations only
+
+#### 💰 Donor UI Improvements
+- **Sidebar Menu Renamed**: "SHELTR Portfolio" → "Wallet" for clearer donor experience
+- **Description Updated**: "Your blockchain rewards" → "Manage your wallet and balance"
+- **Future-Ready**: Sets foundation for wallet loading/withdrawal features
+
+#### ✅ Dual-Role User Support
+- **Super Admin Donors**: Reset script now handles Super Admins with donor stats
+- **Platform Admin Donors**: Reset script handles Platform Admins with donor stats  
+- **Comprehensive Check**: Resets `totalDonated` for ANY user with donor-related fields
+- **"My Giving" Dashboards**: All admin "My Giving" dashboards reset alongside pure donors
+
+### 🛠️ Technical Changes
+
+#### Backend (Python)
+- **No changes this session** - All changes were frontend and database operations
+
+#### Frontend (Next.js/React)
+- **Dashboard Layout** (`apps/web/src/app/dashboard/layout.tsx`):
+  - Renamed donor sidebar item from "SHELTR Portfolio" to "Wallet"
+  - Updated description for clearer donor-focused messaging
+
+#### Services
+- **No service changes** - Multi-collection queries were already implemented in previous session
+
+#### Scripts (Local Tools - Not in Git)
+- **Backup Script** (`scripts/backup-donation-data.js`):
+  - Backs up 6 collections: demo_donations, donations, tenant_donations, shelter_operations, user_stats, shelter_stats
+  - Creates timestamped JSON backup files
+  - Converts Firestore timestamps to ISO strings for portability
+  
+- **Reset Script** (`scripts/reset-all-donation-data.js`):
+  - Deletes all donation records from 3 collections
+  - Resets user stats (participants and donors, including dual-role admins)
+  - Resets shelter operations stats
+  - Comprehensive logging with step-by-step progress
+
+### 📊 Testing & Verification
+- ✅ Super Admin dashboard shows $0 total donations after reset
+- ⚠️ Participant/Donor dashboards need hard refresh (browser cache) to show $0
+- ✅ Backup/restore system validated with 134.76 KB backup file
+- ✅ All user accounts remain intact after reset
+- ✅ All shelter profiles remain intact after reset
+
+### 🐛 Bug Fixes
+- **Browser Caching**: Users may need hard refresh (Cmd+Shift+R) to see reset data
+- **Service Account Path**: Fixed backup/reset scripts to use correct `apps/api/service-account-key.json`
+
+### 📋 Next Steps (Ready for Testing)
+1. Hard refresh all dashboards to clear browser cache
+2. Verify all metrics show $0 across all user roles
+3. Make test donation ($50 Jane → Michael) via Scan & Give
+4. Verify donation propagates correctly to all 4 dashboards:
+   - Jane: +$50 donated, 1 donation
+   - Michael: +$50 received, $40 wallet, $7.50 housing
+   - Shelter: +$2.50 operations
+   - Super Admin: +$50 platform metrics
+
+---
+
 ## [2.34.0] - 2025-10-07 (Session 22.6: Team Page Revolution + LinkedIn Integration + Drag-and-Drop Ordering System)
 
 ### 🎯 Session 22.6 Major Achievements (TEAM PAGE TRANSFORMATION + LINKEDIN INTEGRATION)

@@ -439,7 +439,7 @@ const getNavigationItems = (userRole: string, messageCount?: number, notificatio
       },
       {
         title: 'Wallet',
-        href: '/dashboard/donor/sheltr-portfolio',
+        href: '/dashboard/donor/wallet',
         icon: Wallet,
         description: 'Manage your wallet and balance'
       },

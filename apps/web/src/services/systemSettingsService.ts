@@ -62,6 +62,17 @@ export interface SuperAdminProfile {
   smsNotifications: boolean;
   loginAlerts: boolean;
   
+  // Professional Information
+  department?: string;
+  specialization?: string;
+  yearsOfExperience?: number;
+  expertise?: string[];
+  
+  // Social Media & Contact
+  linkedIn?: string;
+  twitter?: string;
+  website?: string;
+  
   // Privacy Settings
   profileVisibility?: 'public' | 'team' | 'private';
   showContactInfo?: boolean;

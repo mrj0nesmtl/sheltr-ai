@@ -24,10 +24,7 @@ import { db } from '@/lib/firebase';
 import {
   User, 
   Briefcase,
-  GraduationCap,
-  Award,
   Globe,
-  Phone,
   Mail,
   Save,
   Edit3,
@@ -36,16 +33,16 @@ import {
   Trash2,
   Building,
   MapPin,
-  Calendar,
   Shield,
   Settings,
   Bell,
   Eye,
-  EyeOff,
   Camera,
-  Upload,
   Crown,
-  Loader2
+  Loader2,
+  Award,
+  Linkedin,
+  Twitter
 } from 'lucide-react';
 
 export default function SuperAdminProfilePage() {
@@ -55,6 +52,7 @@ export default function SuperAdminProfilePage() {
   const [saving, setSaving] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [uploadingPicture, setUploadingPicture] = useState(false);
+  const [activeTab, setActiveTab] = useState('profile');
   const [formData, setFormData] = useState<Partial<SuperAdminProfile>>({});
 
   // Load profile data
@@ -81,16 +79,26 @@ export default function SuperAdminProfilePage() {
             lastName: user.displayName?.split(' ').slice(1).join(' ') || '',
             email: user.email || '',
             phone: '',
-            jobTitle: 'Super Administrator',
+            jobTitle: 'Chief Executive Officer & Founder',
             company: 'SHELTR-AI Technologies Inc.',
-            location: 'Vancouver, BC',
+            location: 'Montreal, QC',
             bio: '',
+            department: 'Leadership',
+            specialization: 'Strategic Leadership & Technology Innovation',
+            yearsOfExperience: 25,
+            expertise: [],
+            linkedIn: '',
+            twitter: '',
+            website: '',
             timezone: 'America/Montreal',
             language: 'en',
             twoFactorEnabled: false,
             emailNotifications: true,
             smsNotifications: false,
             loginAlerts: true,
+            profileVisibility: 'public',
+            showContactInfo: true,
+            showExperience: true,
             lastUpdated: new Date(),
             updatedBy: user.uid
           };
@@ -98,7 +106,7 @@ export default function SuperAdminProfilePage() {
           setFormData(defaultProfile);
         }
       } catch (error) {
-        console.error('Error loading super admin profile:', error);
+        console.error('Error loading Super Admin profile:', error);
       } finally {
         setLoading(false);
       }
@@ -107,18 +115,29 @@ export default function SuperAdminProfilePage() {
     loadProfile();
   }, [user]);
 
-  const handleInputChange = (field: keyof SuperAdminProfile, value: any) => {
+  // Handle input changes
+  const handleInputChange = (field: keyof SuperAdminProfile, value: string | number | boolean | string[]) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
     }));
   };
 
-  const handleBooleanChange = (field: keyof SuperAdminProfile, value: boolean) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value
-    }));
+  // Handle expertise changes
+  const handleExpertiseChange = (index: number, value: string) => {
+    const newExpertise = [...(formData.expertise || [])];
+    newExpertise[index] = value;
+    handleInputChange('expertise', newExpertise);
+  };
+
+  const addExpertise = () => {
+    handleInputChange('expertise', [...(formData.expertise || []), '']);
+  };
+
+  const removeExpertise = (index: number) => {
+    const newExpertise = [...(formData.expertise || [])];
+    newExpertise.splice(index, 1);
+    handleInputChange('expertise', newExpertise);
   };
 
   // Handle profile picture upload
@@ -128,42 +147,28 @@ export default function SuperAdminProfilePage() {
 
     try {
       setUploadingPicture(true);
-      console.log('🔄 Uploading Super Admin profile picture...');
-
-      // Upload the image to Firebase Storage
       const profilePictureUrl = await uploadProfilePicture(file, user.uid);
       
       if (profilePictureUrl) {
-        console.log('✅ Profile picture uploaded:', profilePictureUrl);
-        
-        // Update the user document with the profile picture URL
+        // Update Firestore user document
         await updateDoc(doc(db, 'users', user.uid), {
-          profilePicture: profilePictureUrl,
-          updated_at: new Date()
+          profilePicture: profilePictureUrl
         });
         
-        // Trigger sync to Platform Admin profile for Team page
-        console.log('🔄 Syncing profile picture to Team page...');
-        await ProfileSyncService.syncSuperAdminToPlatformAdmin(user.uid);
+        // Clear cache and reload
+        await clearProfilePictureCache(user.uid);
         
-        // Clear the profile picture cache to force reload of new image
-        console.log('🗑️ Clearing profile picture cache...');
-        clearProfilePictureCache(user.uid);
-        
-        console.log('✅ Profile picture updated and synced to Team page!');
         alert('Profile picture updated successfully!');
-        
-        // Force page reload to show new picture
-        window.location.reload();
       }
     } catch (error) {
-      console.error('❌ Error uploading profile picture:', error);
-      alert('Error uploading profile picture. Please try again.');
+      console.error('Error uploading profile picture:', error);
+      alert('Failed to upload profile picture');
     } finally {
       setUploadingPicture(false);
     }
   };
 
+  // Save profile changes
   const handleSave = async () => {
     if (!user?.uid) return;
 
@@ -208,20 +213,28 @@ export default function SuperAdminProfilePage() {
 
   if (loading) {
     return (
-      <div className="container mx-auto p-6 max-w-4xl">
-        <div className="animate-pulse">
-          <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/3 mb-6"></div>
-          <div className="grid gap-6">
-            <div className="h-64 bg-gray-200 dark:bg-gray-700 rounded"></div>
-            <div className="h-96 bg-gray-200 dark:bg-gray-700 rounded"></div>
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold">Super Admin Profile</h1>
+            <p className="text-gray-600 dark:text-gray-400 mt-2">Loading your profile...</p>
           </div>
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <Card className="animate-pulse">
+            <CardContent className="p-6">
+              <div className="w-32 h-32 bg-gray-200 rounded-full mx-auto mb-4"></div>
+              <div className="h-4 bg-gray-200 rounded mb-2"></div>
+              <div className="h-4 bg-gray-200 rounded w-2/3 mx-auto"></div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto p-6 max-w-4xl space-y-6">
+    <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
@@ -232,65 +245,80 @@ export default function SuperAdminProfilePage() {
             <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
               Super Admin Profile
             </h1>
-            <p className="text-muted-foreground">
+            <p className="text-gray-600 dark:text-gray-400 mt-2">
               Manage your super administrator profile and system preferences
             </p>
           </div>
         </div>
-        
         <div className="flex items-center space-x-3">
+          <UserStatusSelector userId={user?.uid || ''} />
           {isEditing ? (
-            <>
-              <Button variant="outline" onClick={handleCancel} disabled={saving}>
-                <X className="h-4 w-4 mr-2" />
-                Cancel
-              </Button>
-              <Button onClick={handleSave} disabled={saving}>
-                <Save className="h-4 w-4 mr-2" />
+            <div className="flex space-x-2">
+              <Button 
+                onClick={handleSave} 
+                disabled={saving}
+                className="bg-purple-600 hover:bg-purple-700"
+              >
+                <Save className="w-4 h-4 mr-2" />
                 {saving ? 'Saving...' : 'Save Changes'}
               </Button>
-            </>
+              <Button variant="outline" onClick={handleCancel}>
+                <X className="w-4 h-4 mr-2" />
+                Cancel
+              </Button>
+            </div>
           ) : (
-            <Button onClick={() => setIsEditing(true)}>
-              <Edit3 className="h-4 w-4 mr-2" />
+            <Button onClick={() => setIsEditing(true)} variant="outline">
+              <Edit3 className="w-4 h-4 mr-2" />
               Edit Profile
             </Button>
           )}
         </div>
       </div>
 
-      <Tabs defaultValue="profile" className="space-y-6">
+      {/* Profile Status Badge */}
+      <Card className="border-2 border-purple-200 bg-purple-50 dark:border-purple-800 dark:bg-purple-900/20">
+        <CardContent className="p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <Crown className="h-5 w-5 text-purple-600" />
+              <div>
+                <p className="font-medium text-purple-900 dark:text-purple-100">Super Administrator</p>
+                <p className="text-sm text-purple-700 dark:text-purple-300">
+                  Full platform access with elevated privileges
+                </p>
+              </div>
+            </div>
+            <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white">
+              Super Admin
+            </Badge>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
         <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="profile" className="flex items-center space-x-2">
-            <User className="h-4 w-4" />
-            <span>Profile</span>
-          </TabsTrigger>
-          <TabsTrigger value="security" className="flex items-center space-x-2">
-            <Shield className="h-4 w-4" />
-            <span>Security</span>
-          </TabsTrigger>
-          <TabsTrigger value="privacy" className="flex items-center space-x-2">
-            <Eye className="h-4 w-4" />
-            <span>Privacy</span>
-          </TabsTrigger>
-          <TabsTrigger value="preferences" className="flex items-center space-x-2">
-            <Settings className="h-4 w-4" />
-            <span>Preferences</span>
-          </TabsTrigger>
+          <TabsTrigger value="profile">Profile</TabsTrigger>
+          <TabsTrigger value="professional">Professional</TabsTrigger>
+          <TabsTrigger value="privacy">Privacy</TabsTrigger>
+          <TabsTrigger value="preferences">Preferences</TabsTrigger>
         </TabsList>
 
         {/* Profile Tab */}
         <TabsContent value="profile" className="space-y-6">
-          {/* Profile Header Card */}
-          <Card className="border-2 border-purple-200 dark:border-purple-800 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20">
-            <CardContent className="p-6">
-              <div className="flex items-center space-x-6">
-                <div className="relative">
-                  <ProfileAvatar 
-                    userId={user?.uid || ''} 
-                    size="large"
-                    showStatus={true}
-                  />
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Profile Picture & Basic Info */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <User className="h-5 w-5 mr-2" />
+                  Profile Picture
+                </CardTitle>
+                <CardDescription>Your professional headshot</CardDescription>
+              </CardHeader>
+              <CardContent className="text-center space-y-4">
+                <div className="relative mx-auto w-fit">
+                  <ProfileAvatar userId={user?.uid || ''} size="large" showStatus={true} />
                   <input
                     type="file"
                     id="profile-picture-upload"
@@ -313,214 +341,262 @@ export default function SuperAdminProfilePage() {
                     )}
                   </Button>
                 </div>
-                
-                <div className="flex-1 space-y-2">
-                  <div className="flex items-center space-x-3">
-                    <h2 className="text-2xl font-bold text-purple-700 dark:text-purple-300">
-                      {profile?.firstName} {profile?.lastName}
-                    </h2>
-                    <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white">
-                      <Crown className="h-3 w-3 mr-1" />
-                      Super Administrator
-                    </Badge>
+                <div>
+                  <p className="font-medium">{profile?.firstName} {profile?.lastName}</p>
+                  <p className="text-sm text-muted-foreground">{profile?.jobTitle}</p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Basic Info */}
+            <Card className="lg:col-span-2">
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <User className="h-5 w-5 mr-2" />
+                  Basic Information
+                </CardTitle>
+                <CardDescription>Your personal and contact information</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="firstName">First Name</Label>
+                    <Input
+                      id="firstName"
+                      value={formData.firstName || ''}
+                      onChange={(e) => handleInputChange('firstName', e.target.value)}
+                      disabled={!isEditing}
+                    />
                   </div>
                   
-                  <div className="flex items-center space-x-4 text-sm text-muted-foreground">
-                    <div className="flex items-center space-x-1">
-                      <Mail className="h-4 w-4" />
-                      <span>{profile?.email}</span>
-                    </div>
-                    <div className="flex items-center space-x-1">
-                      <Building className="h-4 w-4" />
-                      <span>{profile?.company}</span>
-                    </div>
-                    <div className="flex items-center space-x-1">
-                      <MapPin className="h-4 w-4" />
-                      <span>{profile?.location}</span>
-                    </div>
+                  <div>
+                    <Label htmlFor="lastName">Last Name</Label>
+                    <Input
+                      id="lastName"
+                      value={formData.lastName || ''}
+                      onChange={(e) => handleInputChange('lastName', e.target.value)}
+                      disabled={!isEditing}
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="email">Email Address</Label>
+                    <Input
+                      id="email"
+                      value={formData.email || ''}
+                      onChange={(e) => handleInputChange('email', e.target.value)}
+                      disabled={!isEditing}
+                    />
                   </div>
                   
-                  <UserStatusSelector userId={user?.uid || ''} />
+                  <div>
+                    <Label htmlFor="phone">Phone Number</Label>
+                    <Input
+                      id="phone"
+                      value={formData.phone || ''}
+                      onChange={(e) => handleInputChange('phone', e.target.value)}
+                      disabled={!isEditing}
+                      placeholder="(555) 123-4567"
+                    />
+                  </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
+                
+                <div>
+                  <Label htmlFor="bio">Professional Bio</Label>
+                  <Textarea
+                    id="bio"
+                    value={formData.bio || ''}
+                    onChange={(e) => handleInputChange('bio', e.target.value)}
+                    disabled={!isEditing}
+                    placeholder="Brief description of your role and expertise..."
+                    rows={3}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
 
-          {/* Basic Information */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <User className="h-5 w-5" />
-                <span>Basic Information</span>
-              </CardTitle>
-              <CardDescription>
-                Your personal and contact information
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="firstName">First Name</Label>
-                  <Input
-                    id="firstName"
-                    value={formData.firstName || ''}
-                    onChange={(e) => handleInputChange('firstName', e.target.value)}
-                    disabled={!isEditing}
-                  />
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="lastName">Last Name</Label>
-                  <Input
-                    id="lastName"
-                    value={formData.lastName || ''}
-                    onChange={(e) => handleInputChange('lastName', e.target.value)}
-                    disabled={!isEditing}
-                  />
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email Address</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    value={formData.email || ''}
-                    onChange={(e) => handleInputChange('email', e.target.value)}
-                    disabled={!isEditing}
-                  />
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="phone">Phone Number</Label>
-                  <Input
-                    id="phone"
-                    value={formData.phone || ''}
-                    onChange={(e) => handleInputChange('phone', e.target.value)}
-                    disabled={!isEditing}
-                  />
-                </div>
-              </div>
-              
-              <div className="space-y-2">
-                <Label htmlFor="bio">Bio</Label>
-                <Textarea
-                  id="bio"
-                  value={formData.bio || ''}
-                  onChange={(e) => handleInputChange('bio', e.target.value)}
-                  disabled={!isEditing}
-                  rows={3}
-                  placeholder="Tell us about yourself..."
-                />
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Professional Information */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <Briefcase className="h-5 w-5" />
-                <span>Professional Information</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="jobTitle">Position</Label>
+        {/* Professional Tab */}
+        <TabsContent value="professional" className="space-y-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Role Information */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Briefcase className="h-5 w-5 mr-2" />
+                  Role Information
+                </CardTitle>
+                <CardDescription>Your position and responsibilities</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <Label htmlFor="jobTitle">Job Title</Label>
                   <Input
                     id="jobTitle"
                     value={formData.jobTitle || ''}
                     onChange={(e) => handleInputChange('jobTitle', e.target.value)}
                     disabled={!isEditing}
+                    placeholder="e.g., Chief Executive Officer"
                   />
                 </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="company">Company</Label>
-                  <Input
-                    id="company"
-                    value={formData.company || ''}
-                    onChange={(e) => handleInputChange('company', e.target.value)}
-                    disabled={!isEditing}
-                  />
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="location">Location</Label>
-                  <Input
-                    id="location"
-                    value={formData.location || ''}
-                    onChange={(e) => handleInputChange('location', e.target.value)}
-                    disabled={!isEditing}
-                  />
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="timezone">Timezone</Label>
-                  <Select 
-                    value={formData.timezone || ''} 
-                    onValueChange={(value) => handleInputChange('timezone', value)}
-                    disabled={!isEditing}
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="America/Montreal">America/Montreal</SelectItem>
-                      <SelectItem value="America/Toronto">America/Toronto</SelectItem>
-                      <SelectItem value="America/Vancouver">America/Vancouver</SelectItem>
-                      <SelectItem value="America/New_York">America/New_York</SelectItem>
-                      <SelectItem value="America/Los_Angeles">America/Los_Angeles</SelectItem>
-                      <SelectItem value="Europe/London">Europe/London</SelectItem>
-                      <SelectItem value="Europe/Paris">Europe/Paris</SelectItem>
-                      <SelectItem value="Asia/Tokyo">Asia/Tokyo</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
 
-        {/* Security Tab */}
-        <TabsContent value="security" className="space-y-6">
+                <div>
+                  <Label htmlFor="department">Department</Label>
+                  <Input
+                    id="department"
+                    value={formData.department || ''}
+                    onChange={(e) => handleInputChange('department', e.target.value)}
+                    disabled={!isEditing}
+                    placeholder="e.g., Leadership, Engineering"
+                  />
+                </div>
+                
+                <div>
+                  <Label htmlFor="specialization">Specialization</Label>
+                  <Input
+                    id="specialization"
+                    value={formData.specialization || ''}
+                    onChange={(e) => handleInputChange('specialization', e.target.value)}
+                    disabled={!isEditing}
+                    placeholder="e.g., Strategic Leadership & Technology Innovation"
+                  />
+                </div>
+                
+                <div>
+                  <Label htmlFor="yearsOfExperience">Years of Experience</Label>
+                  <Input
+                    id="yearsOfExperience"
+                    type="number"
+                    value={formData.yearsOfExperience || 0}
+                    onChange={(e) => handleInputChange('yearsOfExperience', parseInt(e.target.value) || 0)}
+                    disabled={!isEditing}
+                    min="0"
+                    max="50"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="company">Company</Label>
+                    <Input
+                      id="company"
+                      value={formData.company || ''}
+                      onChange={(e) => handleInputChange('company', e.target.value)}
+                      disabled={!isEditing}
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="location">Location</Label>
+                    <Input
+                      id="location"
+                      value={formData.location || ''}
+                      onChange={(e) => handleInputChange('location', e.target.value)}
+                      disabled={!isEditing}
+                      placeholder="e.g., Montreal, QC"
+                    />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            
+            {/* Contact & Social */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Globe className="h-5 w-5 mr-2" />
+                  Contact & Social
+                </CardTitle>
+                <CardDescription>Professional links and contact methods</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <Label htmlFor="linkedIn" className="flex items-center">
+                    <Linkedin className="h-4 w-4 mr-2" />
+                    LinkedIn Profile
+                  </Label>
+                  <Input
+                    id="linkedIn"
+                    value={formData.linkedIn || ''}
+                    onChange={(e) => handleInputChange('linkedIn', e.target.value)}
+                    disabled={!isEditing}
+                    placeholder="https://linkedin.com/in/username"
+                  />
+                </div>
+                
+                <div>
+                  <Label htmlFor="twitter" className="flex items-center">
+                    <Twitter className="h-4 w-4 mr-2" />
+                    Twitter Profile
+                  </Label>
+                  <Input
+                    id="twitter"
+                    value={formData.twitter || ''}
+                    onChange={(e) => handleInputChange('twitter', e.target.value)}
+                    disabled={!isEditing}
+                    placeholder="https://twitter.com/username"
+                  />
+                </div>
+                
+                <div>
+                  <Label htmlFor="website">Personal Website</Label>
+                  <Input
+                    id="website"
+                    value={formData.website || ''}
+                    onChange={(e) => handleInputChange('website', e.target.value)}
+                    disabled={!isEditing}
+                    placeholder="https://yourwebsite.com"
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+          
+          {/* Expertise */}
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <Shield className="h-5 w-5" />
-                <span>Security Settings</span>
+              <CardTitle className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <Award className="h-5 w-5 mr-2" />
+                  Areas of Expertise
+                </div>
+                {isEditing && (
+                  <Button onClick={addExpertise} size="sm" variant="outline">
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Expertise
+                  </Button>
+                )}
               </CardTitle>
-              <CardDescription>
-                Manage your account security and authentication preferences
-              </CardDescription>
+              <CardDescription>Your key skills and specializations</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center justify-between p-4 border rounded-lg">
-                <div className="space-y-1">
-                  <h4 className="font-medium">Two-Factor Authentication</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Add an extra layer of security to your account
-                  </p>
-                </div>
-                <Switch
-                  checked={formData.twoFactorEnabled ?? false}
-                  onCheckedChange={(checked: boolean) => handleBooleanChange('twoFactorEnabled', checked)}
-                  disabled={!isEditing}
-                />
-              </div>
-              
-              <div className="flex items-center justify-between p-4 border rounded-lg">
-                <div className="space-y-1">
-                  <h4 className="font-medium">Login Alerts</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Get notified when someone signs into your account
-                  </p>
-                </div>
-                <Switch
-                  checked={formData.loginAlerts ?? false}
-                  onCheckedChange={(checked: boolean) => handleBooleanChange('loginAlerts', checked)}
-                  disabled={!isEditing}
-                />
+            <CardContent>
+              <div className="space-y-3">
+                {(formData.expertise || []).map((expertise, index) => (
+                  <div key={index} className="flex items-center space-x-2">
+                    <Input
+                      value={expertise}
+                      onChange={(e) => handleExpertiseChange(index, e.target.value)}
+                      disabled={!isEditing}
+                      placeholder="e.g., Strategic Leadership"
+                    />
+                    {isEditing && (
+                      <Button
+                        onClick={() => removeExpertise(index)}
+                        size="sm"
+                        variant="outline"
+                        className="text-red-600 hover:text-red-700"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    )}
+                  </div>
+                ))}
+                {(!formData.expertise || formData.expertise.length === 0) && !isEditing && (
+                  <p className="text-gray-500 italic">No expertise areas added yet</p>
+                )}
               </div>
             </CardContent>
           </Card>
@@ -530,77 +606,70 @@ export default function SuperAdminProfilePage() {
         <TabsContent value="privacy" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <Eye className="h-5 w-5" />
-                <span>Privacy Settings</span>
+              <CardTitle className="flex items-center">
+                <Shield className="h-5 w-5 mr-2" />
+                Privacy Settings
               </CardTitle>
-              <CardDescription>
-                Control who can see your profile information
-              </CardDescription>
+              <CardDescription>Control who can see your profile information</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="space-y-2">
+              <div>
                 <Label htmlFor="profileVisibility">Profile Visibility</Label>
                 <Select
-                  value={formData.profileVisibility || 'team'}
-                  onValueChange={(value) => handleInputChange('profileVisibility', value)}
+                  value={formData.profileVisibility || 'public'}
+                  onValueChange={(value: 'public' | 'team' | 'private') => handleInputChange('profileVisibility', value)}
                   disabled={!isEditing}
                 >
                   <SelectTrigger id="profileVisibility">
-                    <SelectValue placeholder="Select visibility" />
+                    <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="public">
-                      <div className="flex items-center">
-                        <Globe className="h-4 w-4 mr-2" />
-                        Public - Visible on team page to everyone
+                      <div className="flex items-center space-x-2">
+                        <Eye className="h-4 w-4" />
+                        <span>Public - Visible to everyone</span>
                       </div>
                     </SelectItem>
                     <SelectItem value="team">
-                      <div className="flex items-center">
-                        <Building className="h-4 w-4 mr-2" />
-                        Team - Visible to platform administrators
+                      <div className="flex items-center space-x-2">
+                        <User className="h-4 w-4" />
+                        <span>Team - Visible to team members only</span>
                       </div>
                     </SelectItem>
                     <SelectItem value="private">
-                      <div className="flex items-center">
-                        <EyeOff className="h-4 w-4 mr-2" />
-                        Private - Only visible to you
+                      <div className="flex items-center space-x-2">
+                        <Shield className="h-4 w-4" />
+                        <span>Private - Hidden from everyone</span>
                       </div>
                     </SelectItem>
                   </SelectContent>
                 </Select>
-                <p className="text-sm text-muted-foreground">
-                  {formData.profileVisibility === 'public' && 'Your profile will appear on the public team page at /team'}
-                  {formData.profileVisibility === 'team' && 'Your profile will only be visible to other platform administrators'}
-                  {formData.profileVisibility === 'private' && 'Your profile will be hidden from the team page'}
-                </p>
               </div>
-              
+
               <div className="flex items-center justify-between">
-                <div>
+                <div className="space-y-0.5">
                   <Label>Show Contact Information</Label>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Allow team members to see your phone and social links
+                  <p className="text-sm text-muted-foreground">
+                    Display email and phone on team page
                   </p>
                 </div>
                 <Switch
                   checked={formData.showContactInfo ?? true}
-                  onCheckedChange={(checked: boolean) => handleBooleanChange('showContactInfo', checked)}
+                  onCheckedChange={(checked) => handleInputChange('showContactInfo', checked)}
                   disabled={!isEditing}
                 />
               </div>
-              
+
               <div className="flex items-center justify-between">
-                <div>
-                  <Label>Show Experience Details</Label>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Display your years of experience and expertise areas
+                <div className="space-y-0.5">
+                  <Label>Show Experience</Label>
+                  <p className="text-sm text-muted-foreground">
+                    Display years of experience and expertise
                   </p>
                 </div>
                 <Switch
                   checked={formData.showExperience ?? true}
-                  onCheckedChange={(checked: boolean) => handleBooleanChange('showExperience', checked)}
+                  onCheckedChange={(checked) => handleInputChange('showExperience', checked)}
                   disabled={!isEditing}
                 />
               </div>
@@ -612,70 +681,106 @@ export default function SuperAdminProfilePage() {
         <TabsContent value="preferences" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <Bell className="h-5 w-5" />
-                <span>Notification Preferences</span>
+              <CardTitle className="flex items-center">
+                <Settings className="h-5 w-5 mr-2" />
+                System Preferences
               </CardTitle>
-              <CardDescription>
-                Choose how you want to receive notifications
-              </CardDescription>
+              <CardDescription>Your system and notification preferences</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center justify-between p-4 border rounded-lg">
-                <div className="space-y-1">
-                  <h4 className="font-medium">Email Notifications</h4>
+            <CardContent className="space-y-6">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="timezone">Timezone</Label>
+                  <Select
+                    value={formData.timezone || 'America/Montreal'}
+                    onValueChange={(value) => handleInputChange('timezone', value)}
+                    disabled={!isEditing}
+                  >
+                    <SelectTrigger id="timezone">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="America/Montreal">America/Montreal</SelectItem>
+                      <SelectItem value="America/Toronto">America/Toronto</SelectItem>
+                      <SelectItem value="America/Vancouver">America/Vancouver</SelectItem>
+                      <SelectItem value="America/New_York">America/New_York</SelectItem>
+                      <SelectItem value="America/Los_Angeles">America/Los_Angeles</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <Label htmlFor="language">Language</Label>
+                  <Select
+                    value={formData.language || 'en'}
+                    onValueChange={(value) => handleInputChange('language', value)}
+                    disabled={!isEditing}
+                  >
+                    <SelectTrigger id="language">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="en">English</SelectItem>
+                      <SelectItem value="fr">French</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div className="space-y-0.5">
+                  <Label>Email Notifications</Label>
                   <p className="text-sm text-muted-foreground">
-                    Receive notifications via email
+                    Receive email notifications for important updates
                   </p>
                 </div>
                 <Switch
-                  checked={formData.emailNotifications ?? false}
-                  onCheckedChange={(checked: boolean) => handleBooleanChange('emailNotifications', checked)}
+                  checked={formData.emailNotifications ?? true}
+                  onCheckedChange={(checked) => handleInputChange('emailNotifications', checked)}
                   disabled={!isEditing}
                 />
               </div>
-              
-              <div className="flex items-center justify-between p-4 border rounded-lg">
-                <div className="space-y-1">
-                  <h4 className="font-medium">SMS Notifications</h4>
+
+              <div className="flex items-center justify-between">
+                <div className="space-y-0.5">
+                  <Label>SMS Notifications</Label>
                   <p className="text-sm text-muted-foreground">
-                    Receive notifications via SMS
+                    Receive SMS alerts for critical system events
                   </p>
                 </div>
                 <Switch
                   checked={formData.smsNotifications ?? false}
-                  onCheckedChange={(checked: boolean) => handleBooleanChange('smsNotifications', checked)}
+                  onCheckedChange={(checked) => handleInputChange('smsNotifications', checked)}
                   disabled={!isEditing}
                 />
               </div>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <Globe className="h-5 w-5" />
-                <span>Language & Region</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="language">Language</Label>
-                <Select 
-                  value={formData.language || ''} 
-                  onValueChange={(value) => handleInputChange('language', value)}
+
+              <div className="flex items-center justify-between">
+                <div className="space-y-0.5">
+                  <Label>Login Alerts</Label>
+                  <p className="text-sm text-muted-foreground">
+                    Get notified when someone logs into your account
+                  </p>
+                </div>
+                <Switch
+                  checked={formData.loginAlerts ?? true}
+                  onCheckedChange={(checked) => handleInputChange('loginAlerts', checked)}
                   disabled={!isEditing}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="en">English</SelectItem>
-                    <SelectItem value="fr">Français</SelectItem>
-                    <SelectItem value="es">Español</SelectItem>
-                    <SelectItem value="de">Deutsch</SelectItem>
-                  </SelectContent>
-                </Select>
+                />
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div className="space-y-0.5">
+                  <Label>Two-Factor Authentication</Label>
+                  <p className="text-sm text-muted-foreground">
+                    Add an extra layer of security to your account
+                  </p>
+                </div>
+                <Switch
+                  checked={formData.twoFactorEnabled ?? false}
+                  onCheckedChange={(checked) => handleInputChange('twoFactorEnabled', checked)}
+                  disabled={!isEditing}
+                />
               </div>
             </CardContent>
           </Card>

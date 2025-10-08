@@ -112,10 +112,11 @@ export class ProfileSyncService {
         phone: superAdminProfile.phone || '',
         jobTitle: superAdminProfile.jobTitle || 'Chief Executive Officer & Founder',
         company: superAdminProfile.company || 'SHELTR-AI Technologies Inc.',
-        department: 'Leadership',
-        specialization: 'Strategic Leadership & Technology Innovation',
-        location: superAdminProfile.location || 'Vancouver, BC',
+        department: superAdminProfile.department || 'Leadership',
+        specialization: superAdminProfile.specialization || 'Strategic Leadership & Technology Innovation',
+        location: superAdminProfile.location || 'Montreal, QC',
         bio: superAdminProfile.bio || 'Founder and CEO of SHELTR-AI, pioneering innovative solutions to revolutionize homelessness services through cutting-edge technology and compassionate action.',
+        yearsOfExperience: superAdminProfile.yearsOfExperience || 25,
         
         // Sync privacy settings from Super Admin profile
         profileVisibility: superAdminProfile.profileVisibility || 'public',
@@ -123,15 +124,17 @@ export class ProfileSyncService {
         showExperience: superAdminProfile.showExperience ?? true,
         displayOrder: -1, // Always first
         
-        // Default expertise for CEO
-        expertise: ['Strategic Leadership', 'Technology Innovation', 'Social Impact', 'Blockchain', 'AI/ML'],
+        // Sync expertise from Super Admin profile (or use defaults)
+        expertise: superAdminProfile.expertise && superAdminProfile.expertise.length > 0 
+          ? superAdminProfile.expertise 
+          : ['Strategic Leadership', 'Technology Innovation', 'Social Impact', 'Blockchain', 'AI/ML'],
         certifications: [],
         education: [],
         
-        // Contact info (if available)
-        linkedIn: '',
-        twitter: '',
-        website: '',
+        // Sync social media links from Super Admin profile
+        linkedIn: superAdminProfile.linkedIn || '',
+        twitter: superAdminProfile.twitter || '',
+        website: superAdminProfile.website || '',
         
         // Profile completeness
         profileComplete: true,

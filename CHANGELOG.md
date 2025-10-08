@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Individual Document Pages**: All 4 shelter research documents now accessible (General Research, US State-by-State, Top Shelters Canada, Unique Programs)
 - **🔧 CORRUPTED DOCUMENT TITLE FIX**: Fixed "General Research" document which had corrupted title "General Researc" (truncated), causing broken URLs
 - **🚪 FOUNDERS PORTAL ACCESS FOR ALL PLATFORM ADMINS**: Removed hardcoded email whitelist, now checks Firestore user role (`platform_admin` or `super_admin`)
+- **✨ DOCUMENT TITLE DISPLAY FIX**: Secure document viewer now displays proper formatted titles (e.g., "MSB Registration Guide" instead of "msb-registration-canada")
 
 #### Technical Changes
 - **`apps/web/src/app/secure-docs/shelter-research/[slug]/client-page.tsx`**:
@@ -34,6 +35,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - **IMPACT**: All Platform Admins (Sen Wong, Royaltri team, etc.) can now access Founders Portal
   - Updated both Google OAuth login and email/password login flows
   - Fixed TypeScript linting errors and improved error handling
+
+- **Document Title Display** (`apps/web/src/components/SecureDocumentViewer.tsx`):
+  - **FIXED**: Title display now uses `metadata.displayTitle` field instead of raw slug
+  - **Before**: Displayed `msb-registration-canada`, `royaltri-design-guide`, `general-research`
+  - **After**: Displays "MSB Registration Guide", "Brand & Design Guide", "General Shelter Research & HMIS Overview"
+  - Updated both main document header (line 263) and breadcrumb navigation (line 168)
 
 ### 📊 Testing & Verification
 - ✅ Shelter Research Hub page accessible (list view)

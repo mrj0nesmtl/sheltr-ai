@@ -7,6 +7,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.36.1] - 2025-10-08 (Session 22.9: Critical Auth Fix for Shelter Research Documents)
+
+### 🐛 Critical Bug Fixes
+- **🔐 SHELTER RESEARCH ACCESS RESTORED**: Fixed race condition preventing Platform Admins from accessing individual shelter research documents in production
+- **Authentication Loading State**: Added proper `authLoading` checks to shelter research document client component
+- **Individual Document Pages**: All 4 shelter research documents now accessible (General Research, US State-by-State, Top Shelters Canada, Unique Programs)
+- **🔧 CORRUPTED DOCUMENT TITLE FIX**: Fixed "General Research" document which had corrupted title "General Researc" (truncated), causing broken URLs
+
+#### Technical Changes
+- **`apps/web/src/app/secure-docs/shelter-research/[slug]/client-page.tsx`**:
+  - Added `authLoading` state from `useAuth()` hook
+  - Implemented "Checking authentication..." loading screen
+  - Updated `useEffect` dependency array to include `authLoading`
+  - Fixed TypeScript linter error: Changed `err: any` to `err instanceof Error` check
+
+- **Firestore Data Fix** (Document ID: `InJjr7N2XinWhAvvXyPz`):
+  - Corrected corrupted title from `"General Researc"` to `"general-research"`
+  - Added proper `slug` field for consistent URL routing
+  - Updated `metadata.displayTitle` to match other documents
+
+### 📊 Testing & Verification
+- ✅ Shelter Research Hub page accessible (list view)
+- ✅ Individual research documents accessible (all 4 documents)
+- ✅ Super Admin access confirmed in production
+- ✅ Platform Admin access confirmed in production
+- ✅ Proper loading states displayed during auth initialization
+
+### 🎯 Production Status
+- **ALL SECURE DOCUMENTS NOW WORKING**: MSB Registration, Royaltri Design Guide, Business Plan, and all 4 Shelter Research documents fully accessible to authorized users in production
+
+---
+
 ## [2.36.0] - 2025-10-08 (Session 22.8: Donor & Participant UI Revolution + Shelter Admin Wallet + Complete Dashboard Redesigns)
 
 ### 🎯 Session 22.8 Major Achievements (COMPLETE DASHBOARD TRANSFORMATION)

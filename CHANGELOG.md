@@ -7,13 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [2.36.1] - 2025-10-08 (Session 22.9: Critical Auth Fix for Shelter Research Documents)
+## [2.36.1] - 2025-10-08 (Session 22.9: Critical Auth Fix for Shelter Research Documents + Portal Access for All Platform Admins)
 
 ### 🐛 Critical Bug Fixes
 - **🔐 SHELTER RESEARCH ACCESS RESTORED**: Fixed race condition preventing Platform Admins from accessing individual shelter research documents in production
 - **Authentication Loading State**: Added proper `authLoading` checks to shelter research document client component
 - **Individual Document Pages**: All 4 shelter research documents now accessible (General Research, US State-by-State, Top Shelters Canada, Unique Programs)
 - **🔧 CORRUPTED DOCUMENT TITLE FIX**: Fixed "General Research" document which had corrupted title "General Researc" (truncated), causing broken URLs
+- **🚪 FOUNDERS PORTAL ACCESS FOR ALL PLATFORM ADMINS**: Removed hardcoded email whitelist, now checks Firestore user role (`platform_admin` or `super_admin`)
 
 #### Technical Changes
 - **`apps/web/src/app/secure-docs/shelter-research/[slug]/client-page.tsx`**:
@@ -23,9 +24,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Fixed TypeScript linter error: Changed `err: any` to `err instanceof Error` check
 
 - **Firestore Data Fix** (Document ID: `InJjr7N2XinWhAvvXyPz`):
-  - Corrected corrupted title from `"General Researc"` to `"general-research"`
+  - Corrected corrupted title from `"General Resear c"` to `"general-research"`
   - Added proper `slug` field for consistent URL routing
   - Updated `metadata.displayTitle` to match other documents
+
+- **Portal Access Authorization** (`apps/web/src/app/portal/page.tsx` & `apps/web/src/services/founderAccessService.ts`):
+  - **REMOVED**: Hardcoded `AUTHORIZED_FOUNDERS` email whitelist (only 5 emails)
+  - **ADDED**: Dynamic Firestore role checking for `super_admin` and `platform_admin` roles
+  - **IMPACT**: All Platform Admins (Sen Wong, Royaltri team, etc.) can now access Founders Portal
+  - Updated both Google OAuth login and email/password login flows
+  - Fixed TypeScript linting errors and improved error handling
 
 ### 📊 Testing & Verification
 - ✅ Shelter Research Hub page accessible (list view)
@@ -33,9 +41,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - ✅ Super Admin access confirmed in production
 - ✅ Platform Admin access confirmed in production
 - ✅ Proper loading states displayed during auth initialization
+- ✅ Founders Portal now accessible to **ALL Platform Admins** (not just hardcoded 5 emails)
+- ⏳ **AWAITING CONFIRMATION**: Sen Wong (senw@royaltri.com) and Royaltri Admin (admin@royaltri.com) to test portal access
 
 ### 🎯 Production Status
 - **ALL SECURE DOCUMENTS NOW WORKING**: MSB Registration, Royaltri Design Guide, Business Plan, and all 4 Shelter Research documents fully accessible to authorized users in production
+- **FOUNDERS PORTAL NOW OPEN TO ALL PLATFORM ADMINS**: No more hardcoded email restrictions - all users with `platform_admin` or `super_admin` role can access
 
 ---
 

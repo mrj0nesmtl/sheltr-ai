@@ -3,7 +3,7 @@
  * Manages enhanced profile data for platform administrators including roles, specializations, and metadata
  */
 
-import { doc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, getDoc, updateDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
 // Enhanced Platform Administrator Profile Interface
@@ -208,7 +208,7 @@ export class PlatformAdminProfileService {
   ): Promise<boolean> {
     try {
       // Prepare update object
-      const updateData: any = {
+      const updateData: Record<string, unknown> = {
         updated_at: serverTimestamp(),
       };
       
@@ -229,7 +229,7 @@ export class PlatformAdminProfileService {
       }
       
       // Admin profile updates
-      const adminProfileUpdates: any = {};
+      const adminProfileUpdates: Record<string, unknown> = {};
       
       if (updates.department !== undefined) {
         adminProfileUpdates.department = updates.department;
@@ -308,6 +308,16 @@ export class PlatformAdminProfileService {
       // Update the document
       await updateDoc(doc(db, 'users', userId), updateData);
       
+      // 🔄 SYNC TO PUBLIC TEAM PAGE: Update team_members collection
+      try {
+        console.log('🔄 Syncing profile updates to public team_members collection...');
+        await this.syncToPublicTeamCollection(userId, updates);
+        console.log('✅ Successfully synced to team_members collection');
+      } catch (syncError) {
+        console.error('⚠️ Warning: Failed to sync to team_members collection:', syncError);
+        // Don't fail the entire update if team sync fails
+      }
+      
       console.log('Platform admin profile updated successfully:', userId);
       return true;
       
@@ -315,6 +325,116 @@ export class PlatformAdminProfileService {
       console.error('Error updating platform admin profile:', error);
       return false;
     }
+  }
+  
+  /**
+   * Sync Platform Admin profile changes to the public team_members collection
+   * This ensures the team page always shows current data
+   */
+  private static async syncToPublicTeamCollection(
+    userId: string,
+    _updates: PlatformAdminProfileUpdate
+  ): Promise<void> {
+    try {
+      // Get the full profile to build complete team member data
+      const fullProfile = await this.getPlatformAdminProfile(userId);
+      if (!fullProfile) {
+        console.log('⚠️ No profile found to sync to team_members');
+        return;
+      }
+      
+      // Check if user has public visibility (or undefined for backwards compatibility)
+      const isPublic = !fullProfile.profileVisibility || fullProfile.profileVisibility === 'public';
+      
+      const teamMemberRef = doc(db, 'team_members', userId);
+      
+      if (!isPublic) {
+        // If profile is now private, remove from team_members
+        try {
+          await updateDoc(teamMemberRef, { _deleted: true });
+          console.log('🔒 Marked team member as private');
+        } catch {
+          // Document might not exist, which is fine for private profiles
+          console.log('ℹ️ Team member document does not exist (profile is private)');
+        }
+        return;
+      }
+      
+      // Build team member data from profile
+      const teamMemberData = {
+        id: userId,
+        name: `${fullProfile.firstName} ${fullProfile.lastName}`.trim(),
+        displayName: fullProfile.displayName || `${fullProfile.firstName} ${fullProfile.lastName}`.trim(),
+        email: fullProfile.email,
+        jobTitle: fullProfile.jobTitle || 'Platform Administrator',
+        department: fullProfile.department || 'General',
+        specialization: fullProfile.specialization || '',
+        bio: fullProfile.bio || '',
+        profilePicture: fullProfile.profilePicture,
+        expertise: fullProfile.expertise || [],
+        yearsOfExperience: fullProfile.yearsOfExperience || 0,
+        
+        // Contact info
+        phone: fullProfile.phone,
+        linkedIn: fullProfile.linkedIn,
+        twitter: fullProfile.twitter,
+        website: fullProfile.website,
+        
+        // Professional details
+        education: fullProfile.education,
+        certifications: fullProfile.certifications,
+        
+        // Metadata
+        role: fullProfile.accessLevel || 'platform_admin',
+        joinDate: fullProfile.joinDate || new Date().toISOString(),
+        profileComplete: fullProfile.profileComplete || false,
+        isFoundingMember: this.isFoundingMember(fullProfile.email, fullProfile.joinDate),
+        displayOrder: fullProfile.displayOrder,
+        
+        // Sync timestamp
+        lastSynced: new Date().toISOString(),
+        _deleted: false
+      };
+      
+      // Use setDoc with merge to create or update
+      await setDoc(teamMemberRef, teamMemberData, { merge: true });
+      console.log(`✅ Synced ${fullProfile.firstName} ${fullProfile.lastName} to team_members collection`);
+      
+    } catch (error) {
+      console.error('❌ Error syncing to team_members collection:', error);
+      throw error;
+    }
+  }
+  
+  /**
+   * Determine if a user is a founding member based on join date
+   */
+  private static isFoundingMember(email: string, joinDate?: string): boolean {
+    // Hardcoded founding members by email
+    const foundingEmails = [
+      'joel.yaffe@gmail.com',
+      'alexanderkline13@gmail.com',
+      'alaghetts@gmail.com',
+      'doug.kukura@gmail.com',
+      'morganhirtle@gmail.com'
+    ];
+    
+    if (foundingEmails.includes(email.toLowerCase())) {
+      return true;
+    }
+    
+    // Check join date (before 2025)
+    if (joinDate) {
+      try {
+        const joinDateTime = new Date(joinDate).getTime();
+        const foundingCutoff = new Date('2025-01-01').getTime();
+        return joinDateTime < foundingCutoff;
+      } catch {
+        return false;
+      }
+    }
+    
+    return false;
   }
   
   /**

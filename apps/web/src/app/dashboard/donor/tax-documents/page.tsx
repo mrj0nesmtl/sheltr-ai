@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { getDonorMetrics, getDonationHistory } from '@/services/platformMetrics';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -22,96 +23,111 @@ import {
   Archive
 } from 'lucide-react';
 
+interface YearlyRecord {
+  year: string;
+  amount: number;
+  donations: number;
+  status: 'current' | 'complete';
+}
+
 export default function DonorTaxDocumentsPage() {
   const { user } = useAuth();
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedYear, setSelectedYear] = useState('2024');
+  const [selectedYear, setSelectedYear] = useState('2025');
+  const [loading, setLoading] = useState(true);
+  
+  // Real data from Firestore
+  const [taxSummary, setTaxSummary] = useState({
+    currentYear: 2025,
+    totalDeductible: 0,
+    numberOfDonations: 0,
+    eligibleDeductions: 0,
+    estimatedTaxSaving: 0
+  });
+  
+  const [yearlyRecords, setYearlyRecords] = useState<YearlyRecord[]>([]);
+  const [donationReceipts, setDonationReceipts] = useState<any[]>([]);
 
-  // Mock tax document data
-  const taxSummary = {
-    currentYear: 2024,
-    totalDeductible: 2850,
-    numberOfDonations: 12,
-    eligibleDeductions: 2850,
-    estimatedTaxSaving: 855 // Assuming 30% tax bracket
-  };
+  useEffect(() => {
+    const loadTaxData = async () => {
+      if (!user?.uid) return;
+      
+      try {
+        const [metrics, history] = await Promise.all([
+          getDonorMetrics(user.uid),
+          getDonationHistory(user.uid)
+        ]);
+        
+        const currentYear = new Date().getFullYear();
+        const totalDonated = metrics.totalDonated || 0;
+        const donationCount = metrics.totalDonations || 0;
+        
+        // Group donations by year
+        const donationsByYear: { [year: string]: { amount: number; count: number } } = {};
+        history.forEach(donation => {
+          const year = new Date(donation.date).getFullYear().toString();
+          if (!donationsByYear[year]) {
+            donationsByYear[year] = { amount: 0, count: 0 };
+          }
+          donationsByYear[year].amount += donation.amount;
+          donationsByYear[year].count += 1;
+        });
+        
+        // Create yearly records
+        const years: YearlyRecord[] = Object.keys(donationsByYear)
+          .sort((a, b) => parseInt(b) - parseInt(a))
+          .map(year => ({
+            year,
+            amount: donationsByYear[year].amount,
+            donations: donationsByYear[year].count,
+            status: year === currentYear.toString() ? 'current' : 'complete'
+          }));
+        
+        // If current year has no donations, add it with $0
+        if (!donationsByYear[currentYear.toString()]) {
+          years.unshift({
+            year: currentYear.toString(),
+            amount: 0,
+            donations: 0,
+            status: 'current'
+          });
+        }
+        
+        setTaxSummary({
+          currentYear,
+          totalDeductible: donationsByYear[currentYear.toString()]?.amount || 0,
+          numberOfDonations: donationsByYear[currentYear.toString()]?.count || 0,
+          eligibleDeductions: donationsByYear[currentYear.toString()]?.amount || 0,
+          estimatedTaxSaving: Math.round((donationsByYear[currentYear.toString()]?.amount || 0) * 0.3)
+        });
+        
+        setYearlyRecords(years);
+        setDonationReceipts(history);
+        
+        console.log('✅ Loaded tax documents data:', {
+          totalDonated,
+          donationCount,
+          yearlyRecords: years
+        });
+        
+      } catch (error) {
+        console.error('❌ Failed to load tax data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    loadTaxData();
+  }, [user]);
 
-  const yearlyRecords = [
-    { year: '2024', amount: 2850, donations: 12, status: 'current' },
-    { year: '2023', amount: 2200, donations: 8, status: 'complete' },
-    { year: '2022', amount: 1800, donations: 6, status: 'complete' },
-    { year: '2021', amount: 1500, donations: 5, status: 'complete' }
-  ];
-
-  const donationReceipts = [
-    {
-      id: 'RC-2024-001',
-      date: '2024-01-09',
-      amount: 150.00,
-      shelter: 'Downtown Hope Shelter',
-      receiptNumber: 'DHS-2024-0109-001',
-      status: 'available',
-      type: 'one-time',
-      method: 'Credit Card'
-    },
-    {
-      id: 'RC-2024-002',
-      date: '2024-01-01',
-      amount: 75.00,
-      shelter: 'Old Brewery Mission',
-      receiptNumber: 'OBM-2024-0101-001',
-      status: 'available',
-      type: 'monthly',
-      method: 'Bank Transfer'
-    },
-    {
-      id: 'RC-2023-012',
-      date: '2023-12-15',
-      amount: 200.00,
-      shelter: 'Union Gospel Mission',
-      receiptNumber: 'UGM-2023-1215-001',
-      status: 'available',
-      type: 'one-time',
-      method: 'Credit Card'
-    },
-    {
-      id: 'RC-2023-011',
-      date: '2023-12-01',
-      amount: 75.00,
-      shelter: 'Old Brewery Mission',
-      receiptNumber: 'OBM-2023-1201-001',
-      status: 'available',
-      type: 'monthly',
-      method: 'Bank Transfer'
-    }
-  ];
-
-  const annualForms = [
-    {
-      year: '2024',
-      form: 'Annual Donation Summary',
-      description: 'Complete tax summary for 2024',
-      status: 'processing',
-      availableDate: '2025-01-31',
-      amount: 2850
-    },
-    {
-      year: '2023',
-      form: 'Annual Donation Summary',
-      description: 'Complete tax summary for 2023',
-      status: 'available',
-      availableDate: '2024-01-31',
-      amount: 2200
-    },
-    {
-      year: '2022',
-      form: 'Annual Donation Summary',
-      description: 'Complete tax summary for 2022',
-      status: 'available',
-      availableDate: '2023-01-31',
-      amount: 1800
-    }
-  ];
+  const annualForms = yearlyRecords.map(record => ({
+    year: record.year,
+    form: 'Annual Donation Summary',
+    description: `Complete tax summary for ${record.year}`,
+    status: parseInt(record.year) < new Date().getFullYear() ? 'available' : 'processing',
+    availableDate: `${parseInt(record.year) + 1}-01-31`,
+    amount: record.amount
+  }));
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -148,6 +164,17 @@ export default function DonorTaxDocumentsPage() {
     );
   }
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-96">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading tax documents...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -173,10 +200,10 @@ export default function DonorTaxDocumentsPage() {
       </div>
 
       {/* Tax Summary Card */}
-      <Card className="bg-gradient-to-r from-green-50 to-blue-50 border-green-200">
+      <Card className="bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-950/20 dark:to-blue-950/20 border-green-200 dark:border-green-800">
         <CardHeader>
           <CardTitle className="flex items-center">
-            <FileText className="h-6 w-6 text-green-600 mr-2" />
+            <FileText className="h-6 w-6 text-green-600 dark:text-green-400 mr-2" />
             {taxSummary.currentYear} Tax Year Summary
           </CardTitle>
           <CardDescription>
@@ -186,24 +213,24 @@ export default function DonorTaxDocumentsPage() {
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div className="text-center">
-              <p className="text-2xl font-bold text-green-600">${taxSummary.totalDeductible.toLocaleString()}</p>
-              <p className="text-sm text-gray-600">Total Deductible</p>
+              <p className="text-2xl font-bold text-green-600 dark:text-green-400">${taxSummary.totalDeductible.toLocaleString()}</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Total Deductible</p>
             </div>
             <div className="text-center">
-              <p className="text-2xl font-bold text-blue-600">{taxSummary.numberOfDonations}</p>
-              <p className="text-sm text-gray-600">Donations</p>
+              <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{taxSummary.numberOfDonations}</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Donations</p>
             </div>
             <div className="text-center">
-              <p className="text-2xl font-bold text-purple-600">${taxSummary.estimatedTaxSaving.toLocaleString()}</p>
-              <p className="text-sm text-gray-600">Est. Tax Savings*</p>
+              <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">${taxSummary.estimatedTaxSaving.toLocaleString()}</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Est. Tax Savings*</p>
             </div>
             <div className="text-center">
-              <p className="text-2xl font-bold text-orange-600">100%</p>
-              <p className="text-sm text-gray-600">Eligible</p>
+              <p className="text-2xl font-bold text-orange-600 dark:text-orange-400">100%</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Eligible</p>
             </div>
           </div>
-          <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-            <p className="text-sm text-yellow-800">
+          <div className="mt-4 p-3 bg-yellow-50 dark:bg-yellow-950/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+            <p className="text-sm text-yellow-800 dark:text-yellow-300">
               <strong>Note:</strong> *Estimated tax savings based on 30% tax bracket. Consult your tax advisor for accurate calculations.
             </p>
           </div>
@@ -271,37 +298,65 @@ export default function DonorTaxDocumentsPage() {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                {donationReceipts.map((receipt) => (
-                  <div key={receipt.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50">
-                    <div className="flex items-center space-x-4">
-                      {getStatusIcon(receipt.status)}
-                      <div>
-                        <p className="font-medium">Receipt #{receipt.receiptNumber}</p>
-                        <p className="text-sm text-gray-600">{receipt.shelter}</p>
-                        <p className="text-xs text-gray-500">{receipt.method} • {receipt.type}</p>
+              {donationReceipts.length === 0 ? (
+                <div className="text-center py-12">
+                  <FileText className="mx-auto h-12 w-12 text-muted-foreground/50" />
+                  <h3 className="mt-4 text-lg font-semibold">No receipts yet</h3>
+                  <p className="text-sm text-muted-foreground mt-2">
+                    Your donation receipts will appear here
+                  </p>
+                  <Button className="mt-4" onClick={() => window.location.href = '/donate'}>
+                    Make Your First Donation
+                  </Button>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {donationReceipts
+                    .filter(receipt => 
+                      receipt.participant_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                      receipt.shelter_name?.toLowerCase().includes(searchTerm.toLowerCase())
+                    )
+                    .map((receipt) => (
+                      <div key={receipt.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                        <div className="flex items-center space-x-4">
+                          <CheckCircle2 className="h-4 w-4 text-green-600" />
+                          <div>
+                            <p className="font-medium">Receipt #{receipt.reference || receipt.id.slice(-8)}</p>
+                            <p className="text-sm text-gray-600 dark:text-gray-400">
+                              {receipt.participant_name ? `To: ${receipt.participant_name}` : 'Direct donation'}
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              {receipt.shelter_name || 'SHELTR Platform'} • one-time
+                            </p>
+                          </div>
+                        </div>
+                        <div className="text-center">
+                          <p className="font-medium">${receipt.amount.toFixed(2)}</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">
+                            {new Date(receipt.date).toLocaleDateString('en-US', {
+                              month: 'short',
+                              day: 'numeric',
+                              year: 'numeric'
+                            })}
+                          </p>
+                        </div>
+                        <div className="flex space-x-2">
+                          <Button variant="outline" size="sm">
+                            <Eye className="h-4 w-4 mr-2" />
+                            View
+                          </Button>
+                          <Button variant="outline" size="sm">
+                            <Download className="h-4 w-4 mr-2" />
+                            PDF
+                          </Button>
+                          <Button variant="outline" size="sm">
+                            <Printer className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </div>
-                    </div>
-                    <div className="text-center">
-                      <p className="font-medium">${receipt.amount.toFixed(2)}</p>
-                      <p className="text-sm text-gray-600">{receipt.date}</p>
-                    </div>
-                    <div className="flex space-x-2">
-                      <Button variant="outline" size="sm">
-                        <Eye className="h-4 w-4 mr-2" />
-                        View
-                      </Button>
-                      <Button variant="outline" size="sm">
-                        <Download className="h-4 w-4 mr-2" />
-                        PDF
-                      </Button>
-                      <Button variant="outline" size="sm">
-                        <Printer className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                    ))}
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>

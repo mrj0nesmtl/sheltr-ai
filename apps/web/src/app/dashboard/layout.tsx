@@ -438,10 +438,10 @@ const getNavigationItems = (userRole: string, messageCount?: number, notificatio
         description: 'Download receipts and tax forms'
       },
       {
-        title: 'SHELTR Portfolio',
+        title: 'Wallet',
         href: '/dashboard/donor/sheltr-portfolio',
         icon: Wallet,
-        description: 'Your blockchain rewards'
+        description: 'Manage your wallet and balance'
       },
       {
         title: 'Settings',

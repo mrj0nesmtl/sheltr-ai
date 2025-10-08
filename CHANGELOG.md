@@ -17,6 +17,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **🚪 FOUNDERS PORTAL ACCESS FOR ALL PLATFORM ADMINS**: Removed hardcoded email whitelist, now checks Firestore user role (`platform_admin` or `super_admin`)
 - **✨ DOCUMENT TITLE DISPLAY FIX**: Secure document viewer now displays proper formatted titles (e.g., "MSB Registration Guide" instead of "msb-registration-canada")
 
+### ✨ New Features
+- **🧭 BREADCRUMB NAVIGATION**: Added breadcrumb navigation to Shelter Research Hub page (Home > Portal > Founders Only > Shelter Research Hub)
+- **🔒 DISABLED EDITING FOR RESEARCH DOCUMENTS**: Removed edit functionality from Business Plan, all Shelter Research documents, MSB Registration Guide, and Brand & Design Guide for data integrity
+
 #### Technical Changes
 - **`apps/web/src/app/secure-docs/shelter-research/[slug]/client-page.tsx`**:
   - Added `authLoading` state from `useAuth()` hook
@@ -41,6 +45,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - **Before**: Displayed `msb-registration-canada`, `royaltri-design-guide`, `general-research`
   - **After**: Displays "MSB Registration Guide", "Brand & Design Guide", "General Shelter Research & HMIS Overview"
   - Updated both main document header (line 263) and breadcrumb navigation (line 168)
+
+- **Breadcrumb Navigation** (`apps/web/src/app/secure-docs/shelter-research/page.tsx`):
+  - Added clickable breadcrumb navigation: Home > Portal > Founders Only > Shelter Research Hub
+  - Consistent with other secure document pages
+  - Improves user navigation and orientation within the platform
+
+- **Document Editing Restrictions** (`apps/web/src/components/SecureDocumentViewer.tsx`):
+  - **Non-Editable Categories**: `shelter-research`, `brand-design`, `legal`
+  - **Non-Editable Titles**: `business-plan`, `msb-registration-canada`, `royaltri-design-guide`
+  - Edit button and "Edit Document" option now hidden for these documents
+  - Prevents accidental modifications to reference/research documents
 
 ### 📊 Testing & Verification
 - ✅ Shelter Research Hub page accessible (list view)

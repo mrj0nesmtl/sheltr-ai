@@ -11,7 +11,7 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 
 export default function ShelterResearchDocumentClient() {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const params = useParams();
   const slug = params?.slug as string;
   
@@ -27,6 +27,11 @@ export default function ShelterResearchDocumentClient() {
 
   useEffect(() => {
     const findDocument = async () => {
+      // Wait for auth to finish loading before checking authorization
+      if (authLoading) {
+        return;
+      }
+
       if (!user || !isAuthorizedUser) {
         setError('Access denied - Founders Portal access required');
         setLoading(false);
@@ -52,16 +57,30 @@ export default function ShelterResearchDocumentClient() {
         } else {
           setError('Research document not found. Please ensure it has been migrated to secure storage.');
         }
-      } catch (err: any) {
+      } catch (err) {
         console.error('Error finding research document:', err);
-        setError(err.message || 'Failed to load research document');
+        setError(err instanceof Error ? err.message : 'Failed to load research document');
       } finally {
         setLoading(false);
       }
     };
 
     findDocument();
-  }, [user, isAuthorizedUser, slug]);
+  }, [user, isAuthorizedUser, slug, authLoading]);
+
+  // Show loading state while auth is initializing
+  if (authLoading) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-center p-8">
+          <div className="text-center">
+            <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-blue-600" />
+            <p className="text-muted-foreground">Checking authentication...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (!user) {
     return (

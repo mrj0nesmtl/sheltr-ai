@@ -396,6 +396,12 @@ const getNavigationItems = (userRole: string, messageCount?: number, notificatio
         description: 'Manage beds, meals, and supplies'
       },
       {
+        title: 'Wallet',
+        href: '/dashboard/shelter-admin/wallet',
+        icon: Wallet,
+        description: 'Track operations revenue and donations'
+      },
+      {
         title: 'Reports',
         href: '/dashboard/shelter-admin/reports',
         icon: BarChart3,

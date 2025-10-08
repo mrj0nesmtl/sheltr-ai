@@ -11,7 +11,7 @@ import Link from 'next/link';
 import { Input } from '@/components/ui/input';
 
 export default function ShelterResearchHubPage() {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [documents, setDocuments] = useState<SecureDocument[]>([]);
   const [filteredDocuments, setFilteredDocuments] = useState<SecureDocument[]>([]);
   const [loading, setLoading] = useState(true);
@@ -26,6 +26,11 @@ export default function ShelterResearchHubPage() {
 
   useEffect(() => {
     const loadDocuments = async () => {
+      // WAIT for auth to finish loading before checking authorization
+      if (authLoading) {
+        return;
+      }
+
       if (!user || !isAuthorizedUser) {
         setError('Access denied - Founders Portal access required');
         setLoading(false);
@@ -62,7 +67,7 @@ export default function ShelterResearchHubPage() {
     };
 
     loadDocuments();
-  }, [user, isAuthorizedUser]);
+  }, [user, isAuthorizedUser, authLoading]);
 
   // Filter documents based on search
   useEffect(() => {
@@ -124,6 +129,20 @@ export default function ShelterResearchHubPage() {
         };
     }
   };
+
+  // Show loading while auth is initializing
+  if (authLoading) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-center p-8">
+          <div className="text-center">
+            <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-blue-600" />
+            <p className="text-muted-foreground">Checking authentication...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (!user) {
     return (

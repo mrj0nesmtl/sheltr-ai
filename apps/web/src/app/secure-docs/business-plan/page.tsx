@@ -8,7 +8,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { AlertTriangle, Loader2, Shield } from 'lucide-react';
 
 export default function BusinessPlanPage() {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [documentId, setDocumentId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -24,6 +24,11 @@ export default function BusinessPlanPage() {
 
   useEffect(() => {
     const findBusinessPlan = async () => {
+      // WAIT for auth to finish loading before checking authorization
+      if (authLoading) {
+        return;
+      }
+
       if (!user || !isAuthorizedFounder) {
         setError('Access denied - founders only');
         setLoading(false);
@@ -54,7 +59,21 @@ export default function BusinessPlanPage() {
     };
 
     findBusinessPlan();
-  }, [user, isAuthorizedFounder]);
+  }, [user, isAuthorizedFounder, authLoading]);
+
+  // Show loading while auth is initializing
+  if (authLoading) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-center p-8">
+          <div className="text-center">
+            <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-blue-600" />
+            <p className="text-muted-foreground">Checking authentication...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (!user) {
     return (

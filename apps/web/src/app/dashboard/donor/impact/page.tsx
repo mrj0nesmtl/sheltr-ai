@@ -2,26 +2,21 @@
 
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { getDonorMetrics, getDonationHistory } from '@/services/platformMetrics';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Progress } from '@/components/ui/progress';
-import { getDonorMetrics, getDonationHistory } from '@/services/platformMetrics';
 import { 
   Heart, 
   Users, 
   Home, 
   Utensils, 
-  GraduationCap,
-  Briefcase,
   TrendingUp,
-  Calendar,
-  MapPin,
   Share2,
   Download,
-  ChevronRight,
-  Star
+  Sparkles,
+  Award,
+  Target
 } from 'lucide-react';
 
 export default function DonorImpactPage() {
@@ -31,7 +26,6 @@ export default function DonorImpactPage() {
   const [donationHistory, setDonationHistory] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Load real donor data
   useEffect(() => {
     const loadData = async () => {
       if (!user?.uid) return;
@@ -55,444 +49,340 @@ export default function DonorImpactPage() {
     loadData();
   }, [user]);
 
-  // Calculate impact stats from real data
-  const impactStats = {
-    totalDonated: donorMetrics?.totalDonated || 0,
-    peopleHelped: donorMetrics?.participantsHelped || 0,
-    mealsProvided: Math.floor((donorMetrics?.totalDonated || 0) / 5), // Estimate: $5 per meal
-    nightsShelter: Math.floor((donorMetrics?.totalDonated || 0) / 50), // Estimate: $50 per night
-    jobsSecured: donorMetrics?.participantsHelped || 0,
-    programsSupported: donorMetrics?.sheltersSupported || 0
-  };
-
-  // Calculate impact by category from real donation data
-  const totalDonated = donorMetrics?.totalDonated || 0;
-  const impactByCategory = totalDonated > 0 ? [
-    { 
-      category: 'Emergency Shelter', 
-      amount: Math.round(totalDonated * 0.42), 
-      percentage: 42, 
-      color: 'bg-blue-500' 
-    },
-    { 
-      category: 'Meals & Food', 
-      amount: Math.round(totalDonated * 0.30), 
-      percentage: 30, 
-      color: 'bg-green-500' 
-    },
-    { 
-      category: 'Job Training', 
-      amount: Math.round(totalDonated * 0.16), 
-      percentage: 16, 
-      color: 'bg-purple-500' 
-    },
-    { 
-      category: 'Mental Health', 
-      amount: Math.round(totalDonated * 0.12), 
-      percentage: 12, 
-      color: 'bg-orange-500' 
-    }
-  ] : [];
-
-  const impactStories = [
-    {
-      id: 1,
-      name: 'Maria S.',
-      image: '/api/placeholder/64/64',
-      story: 'Thanks to your support, I was able to get back on my feet after losing my job. The shelter provided me with a safe place to stay while I completed job training.',
-      outcome: 'Now employed as a certified nursing assistant',
-      date: '3 months ago',
-      shelter: 'Downtown Hope Shelter'
-    },
-    {
-      id: 2,
-      name: 'Robert T.',
-      image: '/api/placeholder/64/64',
-      story: 'Your donations helped me through the hardest time of my life. The counseling services gave me the tools to overcome addiction.',
-      outcome: 'Celebrating 6 months of sobriety',
-      date: '6 months ago',
-      shelter: 'Old Brewery Mission'
-    },
-    {
-      id: 3,
-      name: 'Jennifer M.',
-      image: '/api/placeholder/64/64',
-      story: 'The emergency shelter was there when I needed it most. Your kindness gave me hope during a dark period.',
-      outcome: 'Secured permanent housing',
-      date: '1 year ago',
-      shelter: 'Union Gospel Mission'
-    }
-  ];
-
-  const communityImpact = [
-    { metric: 'Bed Occupancy Rate', value: '94%', change: '+3%', trend: 'up' },
-    { metric: 'Program Completion', value: '87%', change: '+12%', trend: 'up' },
-    { metric: 'Job Placement Rate', value: '78%', change: '+8%', trend: 'up' },
-    { metric: 'Housing Retention', value: '92%', change: '+5%', trend: 'up' }
-  ];
-
-  const shelterProgress = [
-    {
-      shelter: 'Downtown Hope Shelter',
-      goal: 50000,
-      raised: 38500,
-      percentage: 77,
-      donors: 156,
-      daysLeft: 45
-    },
-    {
-      shelter: 'Old Brewery Mission',
-      goal: 30000,
-      raised: 28200,
-      percentage: 94,
-      donors: 98,
-      daysLeft: 12
-    },
-    {
-      shelter: 'Union Gospel Mission',
-      goal: 40000,
-      raised: 22100,
-      percentage: 55,
-      donors: 87,
-      daysLeft: 78
-    }
-  ];
-
-  // Only show for donor role
   if (user?.role !== 'donor' && user?.role !== 'super_admin') {
     return (
       <div className="flex items-center justify-center h-64">
-        <p className="text-gray-500">Access denied. Donor role required.</p>
+        <p className="text-muted-foreground">Access denied. Donor role required.</p>
       </div>
     );
   }
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-96">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading your impact...</p>
+        </div>
+      </div>
+    );
+  }
+
+  const totalDonated = donorMetrics?.totalDonated || 0;
+  const peopleHelped = donorMetrics?.participantsHelped || 0;
+  const mealsProvided = Math.floor(totalDonated / 5); // $5 per meal
+  const nightsShelter = Math.floor(totalDonated / 50); // $50 per night
+  const sheltersSupported = donorMetrics?.sheltersSupported || 0;
+
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-            Your Impact
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-2">
-            See the real difference your donations are making in our community
+          <h1 className="text-3xl font-bold tracking-tight">Your Impact</h1>
+          <p className="text-muted-foreground mt-2">
+            See the difference you're making in people's lives
           </p>
         </div>
-        <div className="flex gap-3">
-          <Button variant="outline">
+        <div className="flex gap-2">
+          <Button variant="outline" size="sm">
             <Share2 className="h-4 w-4 mr-2" />
-            Share Impact
+            Share
           </Button>
-          <Button variant="outline">
+          <Button variant="outline" size="sm">
             <Download className="h-4 w-4 mr-2" />
-            Download Report
+            Report
           </Button>
         </div>
       </div>
 
-      {/* Timeframe Selector */}
-      <Card>
-        <CardContent className="p-4">
-          <div className="flex items-center justify-between">
-            <h3 className="font-medium">Impact Timeframe</h3>
-            <div className="flex gap-2">
-              {['3m', '6m', '1y', 'all'].map((period) => (
-                <Button
-                  key={period}
-                  variant={selectedTimeframe === period ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => setSelectedTimeframe(period)}
-                >
-                  {period === 'all' ? 'All Time' : period.toUpperCase()}
-                </Button>
-              ))}
+      {/* Timeframe Selector - Compact */}
+      <div className="flex items-center justify-end gap-2">
+        {['3m', '6m', '1y', 'all'].map((period) => (
+          <Button
+            key={period}
+            variant={selectedTimeframe === period ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setSelectedTimeframe(period)}
+          >
+            {period === 'all' ? 'All Time' : period.toUpperCase()}
+          </Button>
+        ))}
+      </div>
+
+      {/* Hero Impact Card */}
+      <Card className="border-primary/20 bg-gradient-to-br from-primary/5 via-background to-background">
+        <CardContent className="pt-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+            {/* Total Donated - Largest */}
+            <div className="lg:col-span-2">
+              <div className="flex items-start space-x-4">
+                <div className="h-14 w-14 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <Heart className="h-7 w-7 text-primary" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">Total Donated</p>
+                  <p className="text-4xl font-bold mt-1">${totalDonated.toLocaleString()}</p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {donorMetrics?.totalDonations || 0} {donorMetrics?.totalDonations === 1 ? 'donation' : 'donations'}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* People Helped */}
+            <div>
+              <div className="flex items-start space-x-3">
+                <div className="h-12 w-12 rounded-lg bg-blue-500/10 flex items-center justify-center flex-shrink-0">
+                  <Users className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                </div>
+                <div>
+                  <p className="text-xs font-medium text-muted-foreground">People Helped</p>
+                  <p className="text-3xl font-bold mt-1">{peopleHelped}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Meals Provided */}
+            <div>
+              <div className="flex items-start space-x-3">
+                <div className="h-12 w-12 rounded-lg bg-green-500/10 flex items-center justify-center flex-shrink-0">
+                  <Utensils className="h-6 w-6 text-green-600 dark:text-green-400" />
+                </div>
+                <div>
+                  <p className="text-xs font-medium text-muted-foreground">Meals Provided</p>
+                  <p className="text-3xl font-bold mt-1">{mealsProvided}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Nights Shelter */}
+            <div>
+              <div className="flex items-start space-x-3">
+                <div className="h-12 w-12 rounded-lg bg-orange-500/10 flex items-center justify-center flex-shrink-0">
+                  <Home className="h-6 w-6 text-orange-600 dark:text-orange-400" />
+                </div>
+                <div>
+                  <p className="text-xs font-medium text-muted-foreground">Nights Shelter</p>
+                  <p className="text-3xl font-bold mt-1">{nightsShelter}</p>
+                </div>
+              </div>
             </div>
           </div>
         </CardContent>
       </Card>
 
-      {/* Impact Summary */}
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center">
-              <Heart className="h-8 w-8 text-purple-600" />
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Donated</p>
-                <p className="text-2xl font-bold text-gray-900">${impactStats.totalDonated.toLocaleString()}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center">
-              <Users className="h-8 w-8 text-blue-600" />
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">People Helped</p>
-                <p className="text-2xl font-bold text-gray-900">{impactStats.peopleHelped}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center">
-              <Utensils className="h-8 w-8 text-green-600" />
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Meals Provided</p>
-                <p className="text-2xl font-bold text-gray-900">{impactStats.mealsProvided}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center">
-              <Home className="h-8 w-8 text-orange-600" />
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Nights Shelter</p>
-                <p className="text-2xl font-bold text-gray-900">{impactStats.nightsShelter}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center">
-              <Briefcase className="h-8 w-8 text-indigo-600" />
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Jobs Secured</p>
-                <p className="text-2xl font-bold text-gray-900">{impactStats.jobsSecured}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center">
-              <GraduationCap className="h-8 w-8 text-pink-600" />
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Programs Supported</p>
-                <p className="text-2xl font-bold text-gray-900">{impactStats.programsSupported}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Main Content Tabs */}
-      <Tabs defaultValue="breakdown" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="breakdown">Impact Breakdown</TabsTrigger>
-          <TabsTrigger value="stories">Success Stories</TabsTrigger>
-          <TabsTrigger value="community">Community Impact</TabsTrigger>
-          <TabsTrigger value="campaigns">Active Campaigns</TabsTrigger>
-        </TabsList>
-
-        {/* Impact Breakdown Tab */}
-        <TabsContent value="breakdown" className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Donation Breakdown by Category</CardTitle>
-                <CardDescription>
-                  See how your donations are being used across different programs
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {impactByCategory.map((category) => (
-                    <div key={category.category} className="space-y-2">
-                      <div className="flex justify-between text-sm">
-                        <span className="font-medium">{category.category}</span>
-                        <span className="text-gray-600">${category.amount} ({category.percentage}%)</span>
-                      </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2">
-                        <div 
-                          className={`${category.color} h-2 rounded-full`}
-                          style={{ width: `${category.percentage}%` }}
-                        ></div>
-                      </div>
-                    </div>
-                  ))}
+      {/* SmartFund Distribution Breakdown */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center">
+            <Target className="h-5 w-5 mr-2 text-primary" />
+            SmartFund™ Distribution
+          </CardTitle>
+          <CardDescription>
+            How your ${totalDonated.toLocaleString()} has been allocated
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {/* Direct to Participants - 80% */}
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center space-x-2">
+                  <div className="h-3 w-3 rounded-full bg-blue-500"></div>
+                  <span className="font-medium">Direct to Participants</span>
                 </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Monthly Impact Trend</CardTitle>
-                <CardDescription>
-                  Your impact over the past 12 months
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">This Month</span>
-                    <span className="text-2xl font-bold text-green-600">+15%</span>
-                  </div>
-                  <div className="text-sm text-gray-600">
-                    Your donations helped 4 more people this month compared to last month
-                  </div>
-                  <div className="grid grid-cols-3 gap-4 mt-6">
-                    <div className="text-center">
-                      <p className="text-2xl font-bold text-blue-600">8</p>
-                      <p className="text-xs text-gray-600">People Housed</p>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-2xl font-bold text-green-600">45</p>
-                      <p className="text-xs text-gray-600">Meals Served</p>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-2xl font-bold text-purple-600">2</p>
-                      <p className="text-xs text-gray-600">Jobs Found</p>
-                    </div>
-                  </div>
+                <div className="text-right">
+                  <span className="font-bold">${(totalDonated * 0.8).toFixed(2)}</span>
+                  <span className="text-muted-foreground ml-2">80%</span>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+              <div className="w-full bg-muted rounded-full h-3">
+                <div className="bg-blue-500 h-3 rounded-full" style={{ width: '80%' }}></div>
+              </div>
+              <p className="text-xs text-muted-foreground mt-1">
+                Directly supporting {peopleHelped} {peopleHelped === 1 ? 'person' : 'people'} in need
+              </p>
+            </div>
+
+            {/* Housing Fund - 15% */}
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center space-x-2">
+                  <div className="h-3 w-3 rounded-full bg-green-500"></div>
+                  <span className="font-medium">Housing Fund</span>
+                </div>
+                <div className="text-right">
+                  <span className="font-bold">${(totalDonated * 0.15).toFixed(2)}</span>
+                  <span className="text-muted-foreground ml-2">15%</span>
+                </div>
+              </div>
+              <div className="w-full bg-muted rounded-full h-3">
+                <div className="bg-green-500 h-3 rounded-full" style={{ width: '15%' }}></div>
+              </div>
+              <p className="text-xs text-muted-foreground mt-1">
+                Building long-term housing solutions
+              </p>
+            </div>
+
+            {/* Shelter Operations - 5% */}
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center space-x-2">
+                  <div className="h-3 w-3 rounded-full bg-orange-500"></div>
+                  <span className="font-medium">Shelter Operations</span>
+                </div>
+                <div className="text-right">
+                  <span className="font-bold">${(totalDonated * 0.05).toFixed(2)}</span>
+                  <span className="text-muted-foreground ml-2">5%</span>
+                </div>
+              </div>
+              <div className="w-full bg-muted rounded-full h-3">
+                <div className="bg-orange-500 h-3 rounded-full" style={{ width: '5%' }}></div>
+              </div>
+              <p className="text-xs text-muted-foreground mt-1">
+                Supporting {sheltersSupported} {sheltersSupported === 1 ? 'shelter' : 'shelters'}
+              </p>
+            </div>
           </div>
-        </TabsContent>
+        </CardContent>
+      </Card>
 
-        {/* Success Stories Tab */}
-        <TabsContent value="stories" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Success Stories</CardTitle>
-              <CardDescription>
-                Real stories from people whose lives were changed by your generosity
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-6">
-                {impactStories.map((story) => (
-                  <div key={story.id} className="border rounded-lg p-6">
-                    <div className="flex items-start space-x-4">
-                      <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
-                        <Users className="h-8 w-8 text-gray-400" />
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between mb-2">
-                          <h3 className="font-semibold">{story.name}</h3>
-                          <div className="flex items-center space-x-2">
-                            <MapPin className="h-4 w-4 text-gray-400" />
-                            <span className="text-sm text-gray-600">{story.shelter}</span>
-                          </div>
-                        </div>
-                        <p className="text-gray-700 mb-3">"{story.story}"</p>
-                        <div className="flex items-center justify-between">
-                          <Badge variant="secondary" className="bg-green-100 text-green-800">
-                            <Star className="h-3 w-3 mr-1" />
-                            {story.outcome}
-                          </Badge>
-                          <span className="text-sm text-gray-500">{story.date}</span>
-                        </div>
-                      </div>
+      {/* Recent Donations Impact */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center">
+            <Sparkles className="h-5 w-5 mr-2 text-primary" />
+            Recent Impact
+          </CardTitle>
+          <CardDescription>
+            Your latest {donationHistory.length} {donationHistory.length === 1 ? 'donation' : 'donations'}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {donationHistory.length === 0 ? (
+            <div className="text-center py-12">
+              <Heart className="mx-auto h-12 w-12 text-muted-foreground/50" />
+              <h3 className="mt-4 text-lg font-semibold">No donations yet</h3>
+              <p className="text-sm text-muted-foreground mt-2">
+                Make your first donation to start creating impact
+              </p>
+              <Button className="mt-4" onClick={() => window.location.href = '/donate'}>
+                Make a Donation
+              </Button>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {donationHistory.slice(0, 5).map((donation) => (
+                <div
+                  key={donation.id}
+                  className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors"
+                >
+                  <div className="flex items-center space-x-4">
+                    <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+                      <Heart className="h-5 w-5 text-primary" />
+                    </div>
+                    <div>
+                      <p className="font-medium">
+                        {donation.participant_name ? `Donation to ${donation.participant_name}` : 'Direct donation'}
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        {new Date(donation.date).toLocaleDateString('en-US', {
+                          month: 'short',
+                          day: 'numeric',
+                          year: 'numeric'
+                        })}
+                      </p>
                     </div>
                   </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        {/* Community Impact Tab */}
-        <TabsContent value="community" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Community-Wide Impact</CardTitle>
-              <CardDescription>
-                See how your contributions are helping improve overall shelter performance
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {communityImpact.map((metric) => (
-                  <div key={metric.metric} className="text-center p-4 border rounded-lg">
-                    <p className="text-sm text-gray-600 mb-1">{metric.metric}</p>
-                    <p className="text-2xl font-bold text-gray-900 mb-1">{metric.value}</p>
-                    <div className="flex items-center justify-center">
-                      <TrendingUp className="h-4 w-4 text-green-600 mr-1" />
-                      <span className="text-sm text-green-600">{metric.change}</span>
-                    </div>
+                  <div className="text-right">
+                    <p className="font-bold text-lg">${donation.amount.toFixed(2)}</p>
+                    <Badge variant="secondary" className="mt-1">
+                      {donation.impact}
+                    </Badge>
                   </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+                </div>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Network-Wide Statistics</CardTitle>
-              <CardDescription>
-                Your donations are part of a larger community effort
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="text-center">
-                  <p className="text-3xl font-bold text-purple-600">847</p>
-                  <p className="text-sm text-gray-600">Total People Served This Month</p>
+      {/* Impact Achievement Badges */}
+      {totalDonated > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center">
+              <Award className="h-5 w-5 mr-2 text-primary" />
+              Your Achievements
+            </CardTitle>
+            <CardDescription>
+              Milestones you've reached through your generosity
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {totalDonated >= 100 && (
+                <div className="text-center p-4 border rounded-lg bg-gradient-to-br from-yellow-500/10 to-orange-500/10">
+                  <div className="text-3xl mb-2">🌟</div>
+                  <p className="font-semibold">First $100</p>
+                  <p className="text-xs text-muted-foreground">Giving Champion</p>
                 </div>
-                <div className="text-center">
-                  <p className="text-3xl font-bold text-green-600">95%</p>
-                  <p className="text-sm text-gray-600">Average Satisfaction Rate</p>
+              )}
+              {peopleHelped >= 1 && (
+                <div className="text-center p-4 border rounded-lg bg-gradient-to-br from-blue-500/10 to-purple-500/10">
+                  <div className="text-3xl mb-2">❤️</div>
+                  <p className="font-semibold">First Life</p>
+                  <p className="text-xs text-muted-foreground">Changed</p>
                 </div>
-                <div className="text-center">
-                  <p className="text-3xl font-bold text-blue-600">$127K</p>
-                  <p className="text-sm text-gray-600">Total Raised This Month</p>
+              )}
+              {mealsProvided >= 10 && (
+                <div className="text-center p-4 border rounded-lg bg-gradient-to-br from-green-500/10 to-emerald-500/10">
+                  <div className="text-3xl mb-2">🍽️</div>
+                  <p className="font-semibold">10+ Meals</p>
+                  <p className="text-xs text-muted-foreground">Fed</p>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
+              )}
+              {nightsShelter >= 1 && (
+                <div className="text-center p-4 border rounded-lg bg-gradient-to-br from-orange-500/10 to-red-500/10">
+                  <div className="text-3xl mb-2">🏠</div>
+                  <p className="font-semibold">Shelter</p>
+                  <p className="text-xs text-muted-foreground">Provider</p>
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
-        {/* Active Campaigns Tab */}
-        <TabsContent value="campaigns" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Active Fundraising Campaigns</CardTitle>
-              <CardDescription>
-                Current campaigns where your additional support can make a difference
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-6">
-                {shelterProgress.map((campaign) => (
-                  <div key={campaign.shelter} className="border rounded-lg p-6">
-                    <div className="flex items-center justify-between mb-4">
-                      <h3 className="font-semibold">{campaign.shelter}</h3>
-                      <Badge variant="outline">{campaign.daysLeft} days left</Badge>
-                    </div>
-                    <div className="mb-4">
-                      <div className="flex justify-between text-sm mb-2">
-                        <span>Progress</span>
-                        <span>${campaign.raised.toLocaleString()} of ${campaign.goal.toLocaleString()}</span>
-                      </div>
-                      <Progress value={campaign.percentage} className="h-2" />
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600">{campaign.donors} donors</span>
-                      <Button size="sm">
-                        Contribute
-                        <ChevronRight className="h-4 w-4 ml-1" />
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+      {/* Monthly Trend */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center">
+            <TrendingUp className="h-5 w-5 mr-2 text-primary" />
+            Monthly Trend
+          </CardTitle>
+          <CardDescription>
+            Your giving activity this year
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-3 gap-4">
+            <div className="text-center p-4 border rounded-lg">
+              <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{peopleHelped}</p>
+              <p className="text-sm text-muted-foreground mt-1">People Housed</p>
+            </div>
+            <div className="text-center p-4 border rounded-lg">
+              <p className="text-2xl font-bold text-green-600 dark:text-green-400">{mealsProvided}</p>
+              <p className="text-sm text-muted-foreground mt-1">Meals Served</p>
+            </div>
+            <div className="text-center p-4 border rounded-lg">
+              <p className="text-2xl font-bold text-orange-600 dark:text-orange-400">{nightsShelter}</p>
+              <p className="text-sm text-muted-foreground mt-1">Nights Safe</p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
-} 
+}

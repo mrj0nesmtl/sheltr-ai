@@ -7,6 +7,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.36.3] - 2025-10-08 (Session 22.11: Unified Profile Dashboards - Super Admin & Platform Admin Feature Parity)
+
+### ✨ New Features
+- **🔗 SOCIAL MEDIA LINKS ADDED**: Super Admin profile dashboard now includes LinkedIn, Twitter, and Website fields
+- **📊 PROFESSIONAL TAB**: Added dedicated "Professional" tab matching Platform Admin dashboard structure
+- **🎯 EXPERTISE MANAGEMENT**: Dynamic expertise areas with add/remove functionality
+- **⚙️ UNIFIED UX**: Both Super Admin and Platform Admin profiles now have identical layout and features
+- **🔄 AUTO-SYNC SOCIAL MEDIA**: Social links, expertise, and professional info automatically sync to team page
+
+### 📊 Technical Changes
+- **`systemSettingsService.ts`**:
+  - Added `department`, `specialization`, `yearsOfExperience`, `expertise[]` to `SuperAdminProfile` interface
+  - Added `linkedIn`, `twitter`, `website` social media fields
+  
+- **`super-admin/profile/page.tsx`**:
+  - Complete rewrite to match Platform Admin profile structure
+  - Added 4-tab layout: Profile | Professional | Privacy | Preferences
+  - Added Contact & Social card with LinkedIn, Twitter, Website inputs
+  - Added Areas of Expertise card with dynamic add/remove
+  - Improved visual hierarchy and component organization
+  
+- **`profileSyncService.ts`**:
+  - `syncSuperAdminToPlatformAdmin()` now syncs social media links
+  - Syncs expertise arrays from Super Admin to Platform Admin
+  - Syncs department, specialization, yearsOfExperience
+
+### 🎨 UX Improvements
+- Consistent tab navigation across both profile types
+- Better visual grouping with cards
+- Purple/pink gradient branding for Super Admin
+- Inline expertise management (no modal required)
+- Improved form layout and spacing
+
+---
+
 ## [2.36.2] - 2025-10-08 (Session 22.10: Profile Sync Fix - Super Admin Bio Not Updating on Team Page)
 
 ### 🐛 Critical Bug Fixes

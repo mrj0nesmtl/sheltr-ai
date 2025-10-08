@@ -950,11 +950,11 @@ export default function GalleryManagementPage() {
                 Upload Media
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-lg">
+            <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>Upload New Media</DialogTitle>
               </DialogHeader>
-              <div className="space-y-6">
+              <div className="space-y-6 pb-24 sm:pb-6">
                 {/* File Selection - Top Priority */}
                 <div className="space-y-3">
                   <label className="text-sm font-medium">Select Media File</label>
@@ -1319,11 +1319,11 @@ export default function GalleryManagementPage() {
           }
           setEditCustomThumbnailPreview('');
         }}>
-          <DialogContent className="max-w-md">
+          <DialogContent className="max-w-md max-h-[85vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Edit Media</DialogTitle>
             </DialogHeader>
-            <div className="space-y-4">
+            <div className="space-y-4 pb-24 sm:pb-6">
               <div>
                 <label className="text-sm font-medium">Title</label>
                 <Input

@@ -1,9 +1,32 @@
-# 📝 SHELTR-AI Changelog
+# 📝 SHELTR Changelog
 
 All notable changes to the SHELTR project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+---
+
+## [2.36.4] - 2025-10-08 (Session 22.12: Mobile Gallery Upload Fix - Dialog Overflow)
+
+### 🐛 Critical Bug Fixes
+- **📱 MOBILE UPLOAD DIALOG FIXED**: Gallery upload and edit dialogs now properly scrollable on mobile devices
+- **Bottom Navigation Overlap**: Added sufficient bottom padding (`pb-24` on mobile, `pb-6` on desktop) to prevent content being hidden behind mobile navigation bars
+- **Viewport Height Constraint**: Dialogs now max-height of 85vh with overflow-y-auto for proper scrolling
+- **Upload Button Accessible**: Submit/upload buttons now always visible and accessible on all devices
+
+### 📊 Technical Changes
+- **`dashboard/gallery/page.tsx`**:
+  - Upload dialog: Added `max-h-[85vh] overflow-y-auto` to DialogContent
+  - Upload form: Added `pb-24 sm:pb-6` bottom padding (24 spacing units on mobile, 6 on desktop)
+  - Edit dialog: Added same scrolling and padding fixes
+  - Ensures form content doesn't get hidden behind mobile bottom navigation bars
+
+### 🎨 UX Improvements
+- Smooth scrolling in upload/edit dialogs
+- All form fields and buttons accessible on mobile devices
+- Consistent padding across different screen sizes
+- Better mobile-first design considerations
 
 ---
 

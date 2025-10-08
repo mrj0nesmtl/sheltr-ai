@@ -7,6 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.36.2] - 2025-10-08 (Session 22.10: Profile Sync Fix - Super Admin Bio Not Updating on Team Page)
+
+### 🐛 Critical Bug Fixes
+- **🔄 PROFILE SYNC FIXED**: Super Admin and Platform Admin profile changes now automatically sync to public team page
+- **Root Cause**: Profile updates were saved to `admin_profiles` → `users.adminProfile` but NOT syncing to `team_members` collection (which the team page reads from)
+- **Solution**: Added automatic sync to `team_members` collection whenever Platform Admin profiles are updated
+- **Impact**: Joel's bio changes in Super Admin Profile Dashboard will now immediately appear on the team page
+
+### ✨ New Features
+- **Automatic Team Page Sync**: Profile changes (bio, job title, expertise, etc.) now automatically propagate to team page
+- **Privacy-Aware Sync**: Profile visibility settings are respected (private profiles are excluded from team page)
+
+### 📊 Technical Changes
+- **`platformAdminProfileService.ts`**:
+  - Added `syncToPublicTeamCollection()` method to write profile data to `team_members` collection
+  - Automatically called after every profile update
+  - Respects privacy settings (public/private visibility)
+  - Maps `accessLevel` to `role` for team member data
+  
+- **`profileSyncService.ts`**:
+  - `syncSuperAdminToPlatformAdmin()` now triggers `team_members` sync after updating `users.adminProfile`
+  - Ensures Super Admin profile changes reach the public team page
+
+---
+
 ## [2.36.1] - 2025-10-08 (Session 22.9: Critical Auth Fix for Shelter Research Documents + Portal Access for All Platform Admins)
 
 ### 🐛 Critical Bug Fixes

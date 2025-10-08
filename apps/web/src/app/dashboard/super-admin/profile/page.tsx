@@ -181,8 +181,11 @@ export default function SuperAdminProfilePage() {
       
       if (success) {
         // Sync to Platform Admin profile for Team page
-        console.log('🔄 Syncing Super Admin profile to Team page...');
+        console.log('🔄 Syncing Super Admin profile to Platform Admin structure...');
         await ProfileSyncService.syncSuperAdminToPlatformAdmin(user.uid);
+        
+        // Note: The syncSuperAdminToPlatformAdmin function updates users.adminProfile,
+        // which will automatically trigger a sync to team_members via PlatformAdminProfileService
         
         setProfile({ ...profile, ...updateData } as SuperAdminProfile);
         setIsEditing(false);

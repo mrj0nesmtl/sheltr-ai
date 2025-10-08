@@ -169,6 +169,16 @@ export class ProfileSyncService {
       
       await updateDoc(doc(db, 'users', userId), userUpdateData);
       
+      // 🔄 CRITICAL: Sync to team_members collection for public team page
+      try {
+        console.log('🔄 Syncing Super Admin profile to public team_members collection...');
+        await PlatformAdminProfileService.updatePlatformAdminProfile(userId, platformAdminData);
+        console.log('✅ Successfully synced to team_members collection');
+      } catch (syncError) {
+        console.error('⚠️ Warning: Failed to sync to team_members collection:', syncError);
+        // Don't fail the entire sync if team sync fails
+      }
+      
       console.log('✅ Successfully synced Super Admin profile to Platform Admin structure');
       console.log('🔍 Sync details:', {
         userId,

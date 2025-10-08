@@ -165,7 +165,7 @@ export default function SecureDocumentViewer({
       </Button>
       <ChevronRight className="h-4 w-4" />
       <span className="font-medium text-foreground">
-        {document?.title || 'Document'}
+        {document?.metadata?.displayTitle || document?.title || 'Document'}
       </span>
     </div>
   );
@@ -260,7 +260,7 @@ export default function SecureDocumentViewer({
                 </div>
                 <div>
                   <CardTitle className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                    {document.title}
+                    {document.metadata?.displayTitle || document.title}
                   </CardTitle>
                   <div className="flex items-center gap-2 mt-1">
                     <Badge className="bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">

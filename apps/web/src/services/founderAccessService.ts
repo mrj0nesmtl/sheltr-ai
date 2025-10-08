@@ -1,4 +1,4 @@
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
@@ -16,58 +16,50 @@ export interface FounderAccessAttempt {
 }
 
 /**
- * Authorized SHELTR co-founders
- */
-const AUTHORIZED_FOUNDERS = [
-  { email: 'joel.yaffe@gmail.com', name: 'Joel Yaffe' },
-  { email: 'alexanderkline13@gmail.com', name: 'Alexander Kline' },
-  { email: 'alaghetts@gmail.com', name: 'Marc Reichel' },
-  { email: 'doug.kukura@gmail.com', name: 'Doug Kukura' },
-  { email: 'morganhirtle@gmail.com', name: 'Morgan Hirtle' }
-];
-
-/**
- * Authenticate SHELTR co-founder
+ * Authenticate SHELTR Platform Administrator or Super Admin
+ * Now checks Firestore role instead of hardcoded list
  */
 export async function authenticateFounder(email: string, password: string): Promise<{
   success: boolean;
-  user?: unknown;
+  user?: { uid: string; email: string | null; displayName: string | null };
   name?: string;
   error?: string;
 }> {
   try {
-    // Check if email is in authorized founders list
-    const founder = AUTHORIZED_FOUNDERS.find(f => f.email.toLowerCase() === email.toLowerCase());
+    // Sign in with Firebase Auth first
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
     
-    if (!founder) {
-      // Log failed attempt - unauthorized email
+    // Get user data from Firestore to check role
+    const userDocRef = doc(db, 'users', user.uid);
+    const userDoc = await getDoc(userDocRef);
+    
+    if (!userDoc.exists()) {
+      // Log failed attempt - user document not found
       await logFounderAccessAttempt({
         email,
+        userId: user.uid,
         timestamp: serverTimestamp(),
         success: false,
-        errorMessage: 'Email not authorized for founders portal'
+        errorMessage: 'User document not found in Firestore'
       });
       
       return {
         success: false,
-        error: 'This email is not authorized for founders portal access. Contact Joel Yaffe if you believe this is an error.'
+        error: 'User account not found in system. Please contact SHELTR Team.'
       };
     }
-
-    // Sign in with Firebase Auth
-    const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    const user = userCredential.user;
     
-    // Get user role from token
-    const idTokenResult = await user.getIdTokenResult();
-    const role = idTokenResult.claims.role as string;
+    const userData = userDoc.data();
+    const role = userData.role;
+    const userName = userData.name || userData.displayName || user.displayName || email.split('@')[0];
     
     // Check if user has admin privileges (super_admin or platform_admin)
     if (role === 'super_admin' || role === 'platform_admin') {
       // Log successful founder login
       await logFounderAccessAttempt({
         email,
-        founderName: founder.name,
+        founderName: userName,
         userId: user.uid,
         timestamp: serverTimestamp(),
         success: true
@@ -75,14 +67,14 @@ export async function authenticateFounder(email: string, password: string): Prom
       
       return {
         success: true,
-        user,
-        name: founder.name
+        user: { uid: user.uid, email: user.email, displayName: user.displayName },
+        name: userName
       };
     } else {
       // User exists but doesn't have required role
       await logFounderAccessAttempt({
         email,
-        founderName: founder.name,
+        founderName: userName,
         userId: user.uid,
         timestamp: serverTimestamp(),
         success: false,

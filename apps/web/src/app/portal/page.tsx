@@ -6,7 +6,6 @@ import Link from 'next/link';
 import ThemeLogo from '@/components/ThemeLogo';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { 
@@ -16,8 +15,7 @@ import {
   ArrowRight,
   Mail,
   Eye,
-  EyeOff,
-  Users
+  EyeOff
 } from 'lucide-react';
 import Image from 'next/image';
 import { authenticateFounder, setFounderAccess } from '@/services/founderAccessService';
@@ -54,7 +52,7 @@ export default function FoundersPortalPage() {
       } else {
         setError(result.error || 'Authentication failed');
       }
-    } catch (err) {
+    } catch {
       setError('Login failed. Please try again.');
     } finally {
       setIsVerifying(false);
@@ -69,40 +67,46 @@ export default function FoundersPortalPage() {
       // Use the existing Google OAuth from AuthContext
       await loginWithGoogle();
       
-      // After successful Google login, check if user is an authorized founder
+      // After successful Google login, check if user has platform_admin or super_admin role
       // The AuthContext will handle the Firebase authentication
-      // We need to check if the logged-in user is in our founders list
       
       // Get the current user after Google login
       const currentUser = auth.currentUser;
       if (currentUser?.email) {
-        // Check if this email is in our authorized founders list
-        const authorizedEmails = [
-          'joel.yaffe@gmail.com',
-          'alexanderkline13@gmail.com', 
-          'alaghetts@gmail.com',
-          'doug.kukura@gmail.com',
-          'morganhirtle@gmail.com'
-        ];
+        // Check user's role in Firestore
+        const { doc, getDoc } = await import('firebase/firestore');
+        const { db } = await import('@/lib/firebase');
         
-        if (authorizedEmails.includes(currentUser.email.toLowerCase())) {
-          // Set founder access session
-          const founderName = currentUser.displayName || currentUser.email.split('@')[0];
-          setFounderAccess({
-            email: currentUser.email,
-            name: founderName,
-            userId: currentUser.uid
-          });
+        const userDocRef = doc(db, 'users', currentUser.uid);
+        const userDoc = await getDoc(userDocRef);
+        
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          const userRole = userData.role;
           
-          // Redirect to founders-only page
-          router.push('/portal/founders-only');
+          // Allow access for Super Admins and Platform Admins
+          if (userRole === 'super_admin' || userRole === 'platform_admin') {
+            // Set founder access session
+            const founderName = currentUser.displayName || userData.name || currentUser.email.split('@')[0];
+            setFounderAccess({
+              email: currentUser.email,
+              name: founderName,
+              userId: currentUser.uid
+            });
+            
+            // Redirect to founders-only page
+            router.push('/portal/founders-only');
+          } else {
+            setError('This Google account is not authorized for founders portal access. Contact Joel Yaffe if you believe this is an error.');
+          }
         } else {
-          setError('This Google account is not authorized for founders portal access. Contact Joel Yaffe if you believe this is an error.');
+          setError('User account not found in system. Please contact SHELTR Team.');
         }
       }
-    } catch (err: any) {
+    } catch (err) {
       console.error('Google login error:', err);
-      setError(err.message || 'Google login failed. Please try again.');
+      const errorMessage = err instanceof Error ? err.message : 'Google login failed. Please try again.';
+      setError(errorMessage);
     } finally {
       setIsVerifying(false);
     }

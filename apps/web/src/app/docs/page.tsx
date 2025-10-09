@@ -69,8 +69,8 @@ export default function DocsPage() {
       title: "Hacking Homelessness and the Theory of Change",
       description: "Revolutionary AI-powered ecosystem combining enterprise payment infrastructure with blockchain transparency and physical infrastructure deployment",
       icon: Users,
-      badge: "Strategic Thesis",
-      badgeColor: "bg-purple-500",
+      badge: "Strategic Vision",
+      badgeColor: "border-purple-400 text-purple-400",
       audience: "Executives • Impact Investors • AI Engineers • Tech-for-Good Partners",
       topics: ["AI & Tech-for-Good Revolution", "Single-Token Stable Architecture", "Zero Risk Protection", "Enterprise Infrastructure", "Intelligent Resource Allocation"],
       link: "/docs/hacking-homelessness",
@@ -81,8 +81,8 @@ export default function DocsPage() {
       title: "Platform Architecture",
       description: "Complete site structure, role-based features, and comprehensive quality assurance testing framework",
       icon: Building,
-      badge: "Framework",
-      badgeColor: "bg-indigo-500",
+      badge: "Architecture",
+      badgeColor: "border-blue-400 text-blue-400",
       audience: "QA Engineers • Developers • Project Managers • Technical Teams",
       topics: ["Site Architecture", "Role-Based Access", "Mobile Testing", "Authentication Flow", "Business Logic QA"],
       link: "/docs/website-architecture",
@@ -94,7 +94,7 @@ export default function DocsPage() {
       description: "Explore SHELTR's enterprise-grade platform combining traditional payment stability with blockchain transparency through single-token architecture",
       icon: FileText,
       badge: "Published",
-      badgeColor: "bg-emerald-500",
+      badgeColor: "border-emerald-400 text-emerald-400",
       audience: "CFOs • Payment Architects • Enterprise Partners • Investment Teams",
       topics: ["Single-Token Stable Architecture", "Enterprise Payment Infrastructure", "Zero Risk Protection", "Guaranteed Returns", "Strategic Implementation"],
       link: "/docs/whitepaper",
@@ -105,8 +105,8 @@ export default function DocsPage() {
       title: "Blockchain Architecture",
       description: "Single-token stable fund ecosystem with enterprise payment infrastructure and guaranteed institutional returns",
       icon: Shield,
-      badge: "Strategic Implementation",
-      badgeColor: "bg-emerald-500",
+      badge: "Implementation",
+      badgeColor: "border-emerald-400 text-emerald-400",
       audience: "Developers • Blockchain Engineers • Enterprise Partners • Security Auditors",
       topics: ["Single-Token Architecture", "Smart Contracts", "Base Network", "Enterprise Security", "Coinbase Integration", "Zero Risk Design"],
       link: "/docs/blockchain",
@@ -118,7 +118,7 @@ export default function DocsPage() {
       description: "Comprehensive API reference for developers, integration guides, and technical specifications",
       icon: Code,
       badge: "Technical",
-      badgeColor: "bg-orange-500",
+      badgeColor: "border-orange-400 text-orange-400",
       audience: "Developers • System Integrators • Technical Partners",
       topics: ["REST API Endpoints", "Authentication", "Rate Limiting", "Error Handling", "SDK Integration"],
       link: "/docs/api",
@@ -130,7 +130,7 @@ export default function DocsPage() {
       description: "Revolutionary single-token stable fund system with Adyen payment processing and Coinbase institutional staking",
       icon: CreditCard,
       badge: "Enterprise",
-      badgeColor: "bg-emerald-600",
+      badgeColor: "border-emerald-400 text-emerald-400",
       audience: "CFOs • Payment Architects • Enterprise Partners • Financial Teams",
       topics: ["Adyen Integration", "Coinbase Staking", "Single-Token Model", "Enterprise Infrastructure", "Guaranteed Returns"],
       link: "/docs/payment-rails",
@@ -142,7 +142,7 @@ export default function DocsPage() {
       description: "Multi-tenant SaaS architecture with enterprise payment infrastructure, visual flow diagrams, and comprehensive system integration",
       icon: Building2,
       badge: "Architecture",
-      badgeColor: "bg-blue-600",
+      badgeColor: "border-blue-400 text-blue-400",
       audience: "System Architects • DevOps Engineers • Technical Leaders • Enterprise Partners",
       topics: ["Multi-Tenant Architecture", "Enterprise Payment Flow", "Base Network Integration", "Visual System Diagrams", "Scalability Design"],
       link: "/docs/system-design",
@@ -154,7 +154,7 @@ export default function DocsPage() {
       description: "60-day public launch timeline with client onboarding strategy, AI hyper chatbot achievements, and enterprise payment integration",
       icon: Rocket,
       badge: "Launch Plan",
-      badgeColor: "bg-orange-600",
+      badgeColor: "border-orange-400 text-orange-400",
       audience: "Project Managers • Investors • Technical Teams • Business Partners",
       topics: ["60-Day Launch Timeline", "Client Onboarding Strategy", "AI Hyper Chatbot", "Enterprise Payment Integration", "Success Metrics"],
       link: "/docs/roadmap",
@@ -166,7 +166,7 @@ export default function DocsPage() {
       description: "Comprehensive guide to SHELTR-AI's multi-agent chatbot system with MCP-powered workflow automation",
       icon: MessageSquare,
       badge: "AI System",
-      badgeColor: "bg-purple-600",
+      badgeColor: "border-amber-400 text-amber-400",
       audience: "AI Engineers • Developers • System Architects • Technical Teams",
       topics: ["Multi-Agent System", "MCP Integration", "Workflow Automation", "RAG Integration", "Role-Based Routing"],
       link: "/docs/chatbot-architecture",
@@ -178,7 +178,7 @@ export default function DocsPage() {
       description: "Model Context Protocol implementation enabling AI agents to execute real-world actions and automated workflows",
       icon: Rocket,
       badge: "MCP System",
-      badgeColor: "bg-gradient-to-r from-blue-600 to-purple-600",
+      badgeColor: "border-purple-400 text-purple-400",
       audience: "AI Engineers • Full-Stack Developers • System Architects • DevOps Engineers",
       topics: ["Model Context Protocol", "Workflow Automation", "Tool Integration", "FastAPI Backend", "React Frontend"],
       link: "/docs/mcp-integration",
@@ -190,7 +190,7 @@ export default function DocsPage() {
       description: "Interactive demonstration of SHELTR's enhanced chatbot powered by OpenAI Agents SDK and specialized MCP agents",
       icon: MessageSquare,
       badge: "Live Demo",
-      badgeColor: "bg-gradient-to-r from-yellow-500 to-orange-600",
+      badgeColor: "border-amber-400 text-amber-400",
       audience: "All Users • Administrators • Developers • Stakeholders",
       topics: ["OpenAI Agents SDK", "Specialized AI Agents", "Role-Based Access", "Real-Time Chat", "MCP Integration"],
       link: "/docs/mcp-demo",
@@ -202,7 +202,7 @@ export default function DocsPage() {
       description: "Comprehensive testing matrix for all features, data storage/retrieval, business logic, and user workflows",
       icon: CheckSquare,
       badge: "QA Framework",
-      badgeColor: "bg-green-600",
+      badgeColor: "border-teal-400 text-teal-400",
       audience: "QA Engineers • Developers • Project Managers • Technical Teams",
       topics: ["Testing Matrix", "Business Logic", "User Workflows", "Data Validation", "Platform Status"],
       link: "/docs/functionality-matrix",
@@ -214,7 +214,7 @@ export default function DocsPage() {
       description: "Complete guide for updating SHELTR-AI Knowledge Base documents with embedding regeneration",
       icon: BookOpen,
       badge: "AI System",
-      badgeColor: "bg-blue-600",
+      badgeColor: "border-amber-400 text-amber-400",
       audience: "Developers • System Administrators • Content Managers • Technical Teams",
       topics: ["Document Updates", "Embedding Regeneration", "RAG System", "Firebase Storage", "Chatbot Integration"],
       link: "/docs/knowledge-base-guide",
@@ -226,7 +226,7 @@ export default function DocsPage() {
       description: "Comprehensive guide for shelter administrators managing operations, participants, and services with SHELTR-AI",
       icon: Building2,
       badge: "Admin Guide",
-      badgeColor: "bg-blue-600",
+      badgeColor: "border-blue-400 text-blue-400",
       audience: "Shelter Administrators • Operations Managers • Staff",
       topics: ["Dashboard Management", "Participant Registration", "Service Coordination", "Resource Management", "Analytics & Reporting"],
       link: "/docs/shelter-admin-guide",
@@ -238,7 +238,7 @@ export default function DocsPage() {
       description: "Complete guide for donors making transparent, impactful donations through QR codes and the SmartFund™ model",
       icon: Heart,
       badge: "Donor Guide",
-      badgeColor: "bg-red-600",
+      badgeColor: "border-red-400 text-red-400",
       audience: "Donors • Community Supporters • Corporate Partners",
       topics: ["QR Code Giving", "SmartFund™ Model", "Impact Tracking", "Payment Security", "Community Building"],
       link: "/docs/donor-guide",
@@ -250,7 +250,7 @@ export default function DocsPage() {
       description: "Complete guide for participants using the SHELTR platform, from onboarding to advanced features",
       icon: Users,
       badge: "User Guide",
-      badgeColor: "bg-teal-500",
+      badgeColor: "border-teal-400 text-teal-400",
       audience: "Participants • Support Staff • Shelter Administrators",
       topics: ["Platform Onboarding", "QR Code Usage", "Wallet Management", "Service Access", "Support Resources"],
       link: "/docs/participant-guide",
@@ -391,7 +391,7 @@ export default function DocsPage() {
                       <div className="w-14 h-14 bg-gradient-to-br from-primary/30 to-primary/10 rounded-xl flex items-center justify-center shadow-sm">
                         <doc.icon className="h-7 w-7 text-primary" />
                       </div>
-                      <Badge className={`${doc.badgeColor} text-white text-xs px-2 py-1 font-medium`}>
+                      <Badge variant="outline" className={`${doc.badgeColor} hover:bg-opacity-10 backdrop-blur-sm bg-background/50 text-xs px-2 py-1 font-medium`}>
                         {doc.badge}
                       </Badge>
                     </div>
@@ -419,7 +419,7 @@ export default function DocsPage() {
                       <div>
                         <div className="flex items-center gap-3 mb-2">
                           <CardTitle className="text-2xl">{doc.title}</CardTitle>
-                          <Badge className={`${doc.badgeColor} text-white text-sm px-3 py-1`}>
+                          <Badge variant="outline" className={`${doc.badgeColor} hover:bg-opacity-10 backdrop-blur-sm bg-background/50 text-sm px-3 py-1`}>
                             {doc.badge}
                           </Badge>
                         </div>

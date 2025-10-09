@@ -6,9 +6,8 @@ import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ThemeToggle } from '@/components/theme-toggle';
 import Footer from '@/components/Footer';
-import ThemeLogo from '@/components/ThemeLogo';
+import PublicNavigation from '@/components/PublicNavigation';
 import { 
   ArrowLeft,
   Battery,
@@ -30,111 +29,10 @@ import {
 } from 'lucide-react';
 
 export default function MobiPage() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
-      <nav className="bg-background/95 backdrop-blur-sm sticky top-0 z-50 border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <Link href="/">
-                <ThemeLogo />
-              </Link>
-            </div>
-            
-            {/* Desktop Navigation */}
-            <div className="hidden md:block">
-              <div className="ml-10 flex items-baseline space-x-4">
-                <Link href="/" className="text-muted-foreground hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors">
-                  Home
-                </Link>
-                <Link href="/about" className="text-muted-foreground hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors">
-                  About
-                </Link>
-                <Link href="/solutions" className="text-muted-foreground hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors">
-                  Solutions
-                </Link>
-                <Link href="/pods" className="text-muted-foreground hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors">
-                  PODS
-                </Link>
-                <Link href="/pods/mobi" className="text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors">
-                  MOBI
-                </Link>
-                <Link href="/scan-give" className="text-muted-foreground hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors">
-                  Scan & Give
-                </Link>
-                <Link href="/impact" className="text-muted-foreground hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors">
-                  Impact
-                </Link>
-              </div>
-            </div>
-
-            {/* Desktop Right Side */}
-            <div className="hidden md:flex items-center space-x-4">
-              <ThemeToggle />
-              <Link href="/login">
-                <Button variant="ghost" size="sm">
-                  <LogIn className="h-4 w-4 mr-2" />
-                  Sign In
-                </Button>
-              </Link>
-              <Link href="/register">
-                <Button size="sm">Get Started</Button>
-              </Link>
-            </div>
-
-            {/* Mobile menu button */}
-            <div className="md:hidden flex items-center space-x-2">
-              <ThemeToggle />
-              <button
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="text-muted-foreground hover:text-primary p-2"
-              >
-                {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-              </button>
-            </div>
-          </div>
-
-          {/* Mobile Navigation */}
-          {isMenuOpen && (
-            <div className="md:hidden">
-              <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t">
-                <Link href="/" className="text-muted-foreground hover:text-primary block px-3 py-2 rounded-md text-base font-medium transition-colors">
-                  Home
-                </Link>
-                <Link href="/about" className="text-muted-foreground hover:text-primary block px-3 py-2 rounded-md text-base font-medium transition-colors">
-                  About
-                </Link>
-                <Link href="/solutions" className="text-muted-foreground hover:text-primary block px-3 py-2 rounded-md text-base font-medium transition-colors">
-                  Solutions
-                </Link>
-                <Link href="/pods" className="text-muted-foreground hover:text-primary block px-3 py-2 rounded-md text-base font-medium transition-colors">
-                  PODS
-                </Link>
-                <Link href="/pods/mobi" className="text-primary block px-3 py-2 rounded-md text-base font-medium transition-colors">
-                  MOBI
-                </Link>
-                <Link href="/scan-give" className="text-muted-foreground hover:text-primary block px-3 py-2 rounded-md text-base font-medium transition-colors">
-                  Scan & Give
-                </Link>
-                <Link href="/impact" className="text-muted-foreground hover:text-primary block px-3 py-2 rounded-md text-base font-medium transition-colors">
-                  Impact
-                </Link>
-                <div className="border-t pt-4 mt-4">
-                  <Link href="/login" className="text-muted-foreground hover:text-primary block px-3 py-2 rounded-md text-base font-medium transition-colors">
-                    Sign In
-                  </Link>
-                  <Link href="/register" className="text-muted-foreground hover:text-primary block px-3 py-2 rounded-md text-base font-medium transition-colors">
-                    Get Started
-                  </Link>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      </nav>
+      <PublicNavigation />
 
       {/* Hero Section */}
       <section className="relative py-24 overflow-hidden">

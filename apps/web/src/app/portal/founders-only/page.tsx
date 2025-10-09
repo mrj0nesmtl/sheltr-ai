@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -394,10 +394,45 @@ export default function FoundersOnlyPage() {
     })
   );
 
-  // Get ordered cards
-  const orderedCards = cardOrder.length > 0
-    ? cardOrder.map(id => DEFAULT_CARDS.find(card => card.id === id)).filter(Boolean) as QuickAccessCard[]
-    : DEFAULT_CARDS;
+  // Get ordered cards - IMPORTANT: Always include all cards from DEFAULT_CARDS
+  // This ensures new cards are shown even if they're not in the saved order yet
+  const orderedCards = React.useMemo(() => {
+    if (cardOrder.length === 0) {
+      return DEFAULT_CARDS;
+    }
+    
+    // Find cards that exist in savedOrder
+    const existingCards = cardOrder
+      .map(id => DEFAULT_CARDS.find(card => card.id === id))
+      .filter(Boolean) as QuickAccessCard[];
+    
+    // Find new cards that aren't in savedOrder yet
+    const newCards = DEFAULT_CARDS.filter(
+      card => !cardOrder.includes(card.id)
+    );
+    
+    console.log('🔍 Card Order Debug:', {
+      savedOrder: cardOrder,
+      existingCardsCount: existingCards.length,
+      newCardsDetected: newCards.map(c => c.id),
+      totalCards: existingCards.length + newCards.length,
+    });
+    
+    // Return existing cards in saved order + new cards at the end
+    return [...existingCards, ...newCards];
+  }, [cardOrder]);
+
+  // Full card order including new cards (for DnD context)
+  const fullCardOrder = React.useMemo(() => {
+    const existingIds = cardOrder.filter(id => 
+      DEFAULT_CARDS.some(card => card.id === id)
+    );
+    const newIds = DEFAULT_CARDS
+      .filter(card => !cardOrder.includes(card.id))
+      .map(card => card.id);
+    
+    return [...existingIds, ...newIds];
+  }, [cardOrder]);
 
   useEffect(() => {
     // Check if user has valid founder access
@@ -418,10 +453,32 @@ export default function FoundersOnlyPage() {
     if (founder.userId) {
       getUserCardOrder(founder.userId).then(savedOrder => {
         if (savedOrder && savedOrder.length > 0) {
-          setCardOrder(savedOrder);
+          console.log('📋 Loaded saved card order:', savedOrder);
+          
+          // Check if there are new cards in DEFAULT_CARDS that aren't in savedOrder
+          const allDefaultIds = DEFAULT_CARDS.map(card => card.id);
+          const newCardIds = allDefaultIds.filter(id => !savedOrder.includes(id));
+          
+          if (newCardIds.length > 0) {
+            console.log('🆕 Detected new cards not in saved order:', newCardIds);
+            // Merge: keep saved order + append new cards at the end
+            const mergedOrder = [...savedOrder, ...newCardIds];
+            setCardOrder(mergedOrder);
+            
+            // Auto-save the merged order to Firestore
+            if (founder.userId) {
+              saveUserCardOrder(founder.userId, mergedOrder).catch(err => 
+                console.error('Failed to auto-save merged order:', err)
+              );
+            }
+          } else {
+            setCardOrder(savedOrder);
+          }
         } else {
           // Set default order
-          setCardOrder(DEFAULT_CARDS.map(card => card.id));
+          const defaultOrder = DEFAULT_CARDS.map(card => card.id);
+          console.log('📋 No saved order, using default:', defaultOrder);
+          setCardOrder(defaultOrder);
         }
       });
     }
@@ -437,27 +494,36 @@ export default function FoundersOnlyPage() {
     const { active, over } = event;
 
     if (over && active.id !== over.id) {
-      setCardOrder((items) => {
-        const oldIndex = items.indexOf(active.id as string);
-        const newIndex = items.indexOf(over.id as string);
-        const newOrder = arrayMove(items, oldIndex, newIndex);
+      // Use fullCardOrder for drag operations (includes new cards)
+      const currentOrder = fullCardOrder;
+      const oldIndex = currentOrder.indexOf(active.id as string);
+      const newIndex = currentOrder.indexOf(over.id as string);
+      const newOrder = arrayMove(currentOrder, oldIndex, newIndex);
 
-        // Save to Firestore
-        if (founderInfo?.userId) {
-          setIsSaving(true);
-          saveUserCardOrder(founderInfo.userId, newOrder)
-            .then(() => {
-              console.log('✅ Card order saved');
-              setIsSaving(false);
-            })
-            .catch((error) => {
-              console.error('❌ Failed to save card order:', error);
-              setIsSaving(false);
-            });
-        }
-
-        return newOrder;
+      console.log('🔄 Drag end:', {
+        from: active.id,
+        to: over.id,
+        oldIndex,
+        newIndex,
+        newOrder,
       });
+
+      // Update state
+      setCardOrder(newOrder);
+
+      // Save to Firestore
+      if (founderInfo?.userId) {
+        setIsSaving(true);
+        saveUserCardOrder(founderInfo.userId, newOrder)
+          .then(() => {
+            console.log('✅ Card order saved');
+            setIsSaving(false);
+          })
+          .catch((error) => {
+            console.error('❌ Failed to save card order:', error);
+            setIsSaving(false);
+          });
+      }
     }
   };
 
@@ -772,7 +838,7 @@ export default function FoundersOnlyPage() {
             collisionDetection={closestCenter}
             onDragEnd={handleDragEnd}
           >
-            <SortableContext items={cardOrder} strategy={rectSortingStrategy}>
+            <SortableContext items={fullCardOrder} strategy={rectSortingStrategy}>
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {orderedCards.map((card) => (
                   <SortableCard key={card.id} card={card} />

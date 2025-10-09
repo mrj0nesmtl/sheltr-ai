@@ -2,20 +2,18 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Menu, X, LogIn, ArrowRight, Heart, Wallet, Home, QrCode, Shield, BarChart3, UserPlus, Users, FileText, Mail, ExternalLink, Building2, MessageCircle } from 'lucide-react';
+import { ArrowRight, Heart, QrCode, Shield, BarChart3, Home, Wallet } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { ThemeToggle } from '@/components/theme-toggle';
 import Footer from '@/components/Footer';
-import ThemeLogo from '@/components/ThemeLogo';
 import { PublicChatbot } from '@/components/PublicChatbot';
 import { useAuth } from '@/contexts/AuthContext';
 import { GalleryService, GalleryImage } from '@/services/galleryService';
 import NewsletterSignup from '@/components/NewsletterSignup';
+import PublicNavigation from '@/components/PublicNavigation';
 
 export default function HomePage() {
   const { user, hasRole } = useAuth();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [landingHeroImage, setLandingHeroImage] = useState<GalleryImage | null>(null);
 
   // Load landing hero image
@@ -34,223 +32,8 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      {/* Navigation */}
-      <nav className="bg-background/95 backdrop-blur-sm sticky top-0 z-50 border-b">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center h-16">
-              <div className="flex items-center">
-                <ThemeLogo />
-              </div>
-              
-              {/* Desktop Navigation */}
-              <div className="hidden md:block">
-                <div className="ml-10 flex items-baseline space-x-4">
-                  <Link href="/about" className="hover:text-primary px-3 py-2 text-sm font-medium">
-                    About
-                  </Link>
-                  <Link href="/solutions" className="hover:text-primary px-3 py-2 text-sm font-medium">
-                    Solutions
-                  </Link>
-                  <Link href="/scan-give" className="hover:text-primary px-3 py-2 text-sm font-medium">
-                    Scan & Give
-                  </Link>
-                  <Link href="/impact" className="hover:text-primary px-3 py-2 text-sm font-medium">
-                    Impact
-                  </Link>
-                </div>
-              </div>
-
-              <div className="hidden md:flex items-center space-x-4">
-                <ThemeToggle />
-                {user ? (
-                  // Logged in user navigation
-                  <>
-                    <span className="text-sm text-muted-foreground">
-                      Welcome, {user.displayName || user.email}
-                    </span>
-                    <Link href={hasRole('donor') ? '/dashboard/donor' : hasRole('super_admin') ? '/dashboard' : hasRole('platform_admin') ? '/dashboard' : hasRole('participant') ? '/dashboard/participant' : '/dashboard'}>
-                      <Button variant="ghost" size="sm">
-                        <BarChart3 className="h-4 w-4 mr-2" />
-                        Dashboard
-                      </Button>
-                    </Link>
-                  </>
-                ) : (
-                  // Non-logged in navigation
-                  <>
-                    <Link href="/login">
-                      <Button variant="ghost" size="sm">
-                        <LogIn className="h-4 w-4 mr-2" />
-                        Sign In
-                      </Button>
-                    </Link>
-                    <Link href="/register">
-                      <Button size="sm">Get Started</Button>
-                    </Link>
-                  </>
-                )}
-              </div>
-
-              {/* Mobile menu button */}
-              <div className="md:hidden flex items-center space-x-2">
-                <ThemeToggle />
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setIsMenuOpen(!isMenuOpen)}
-                  className="p-2"
-                >
-                  {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-                </Button>
-              </div>
-            </div>
-
-            {/* Enhanced Mobile Navigation Menu */}
-            {isMenuOpen && (
-              <div className="md:hidden">
-                <div className="bg-background/95 backdrop-blur-md border-t shadow-lg">
-                  {/* Main Navigation */}
-                  <div className="px-4 py-6 space-y-1">
-                    <div className="mb-4">
-                      <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
-                        Platform
-                      </h3>
-                      <div className="space-y-1">
-                        <Link 
-                          href="/about" 
-                          className="flex items-center px-3 py-3 text-base font-medium hover:bg-muted/50 rounded-lg transition-colors"
-                          onClick={() => setIsMenuOpen(false)}
-                        >
-                          <Users className="h-5 w-5 mr-3 text-muted-foreground" />
-                          About SHELTR
-                        </Link>
-                        <Link 
-                          href="/solutions" 
-                          className="flex items-center px-3 py-3 text-base font-medium hover:bg-muted/50 rounded-lg transition-colors"
-                          onClick={() => setIsMenuOpen(false)}
-                        >
-                          <Building2 className="h-5 w-5 mr-3 text-muted-foreground" />
-                          Solutions
-                        </Link>
-                        <Link 
-                          href="/scan-give" 
-                          className="flex items-center px-3 py-3 text-base font-medium hover:bg-muted/50 rounded-lg transition-colors"
-                          onClick={() => setIsMenuOpen(false)}
-                        >
-                          <QrCode className="h-5 w-5 mr-3 text-muted-foreground" />
-                          Scan & Give
-                        </Link>
-                        <Link 
-                          href="/impact" 
-                          className="flex items-center px-3 py-3 text-base font-medium hover:bg-muted/50 rounded-lg transition-colors"
-                          onClick={() => setIsMenuOpen(false)}
-                        >
-                          <BarChart3 className="h-5 w-5 mr-3 text-muted-foreground" />
-                          Impact Dashboard
-                        </Link>
-                        <Link 
-                          href="/contact" 
-                          className="flex items-center px-3 py-3 text-base font-medium hover:bg-muted/50 rounded-lg transition-colors"
-                          onClick={() => setIsMenuOpen(false)}
-                        >
-                          <MessageCircle className="h-5 w-5 mr-3 text-muted-foreground" />
-                          Contact Us
-                        </Link>
-                      </div>
-                    </div>
-
-                    {/* Documentation & Resources */}
-                    <div className="mb-4">
-                      <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
-                        Resources
-                      </h3>
-                      <div className="space-y-1">
-                        <Link 
-                          href="/docs" 
-                          className="flex items-center px-3 py-3 text-base font-medium hover:bg-muted/50 rounded-lg transition-colors"
-                          onClick={() => setIsMenuOpen(false)}
-                        >
-                          <FileText className="h-5 w-5 mr-3 text-muted-foreground" />
-                          Documentation
-                        </Link>
-                        <Link 
-                          href="/tokenomics" 
-                          className="flex items-center px-3 py-3 text-base font-medium hover:bg-muted/50 rounded-lg transition-colors"
-                          onClick={() => setIsMenuOpen(false)}
-                        >
-                          <Wallet className="h-5 w-5 mr-3 text-muted-foreground" />
-                          Tokenomics
-                        </Link>
-                        <a 
-                          href="mailto:info@arcanaconcept.com" 
-                          className="flex items-center px-3 py-3 text-base font-medium hover:bg-muted/50 rounded-lg transition-colors"
-                          onClick={() => setIsMenuOpen(false)}
-                        >
-                          <Mail className="h-5 w-5 mr-3 text-muted-foreground" />
-                          Contact Support
-                        </a>
-                        <a 
-                          href="https://github.com/mrj0nesmtl/sheltr-ai" 
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center px-3 py-3 text-base font-medium hover:bg-muted/50 rounded-lg transition-colors"
-                          onClick={() => setIsMenuOpen(false)}
-                        >
-                          <ExternalLink className="h-5 w-5 mr-3 text-muted-foreground" />
-                          GitHub Repository
-                        </a>
-                      </div>
-                    </div>
-
-                    {/* Action Buttons */}
-                    <div className="border-t pt-4 space-y-3">
-                      {user ? (
-                        // Logged in mobile menu
-                        <>
-                          <div className="text-sm text-muted-foreground px-3 py-2">
-                            Welcome, {user.displayName || user.email}
-                          </div>
-                          <Link href={hasRole('donor') ? '/dashboard/donor' : hasRole('super_admin') ? '/dashboard' : hasRole('platform_admin') ? '/dashboard' : hasRole('participant') ? '/dashboard/participant' : '/dashboard'} onClick={() => setIsMenuOpen(false)}>
-                            <Button variant="ghost" size="lg" className="w-full justify-center h-12 text-base">
-                              <BarChart3 className="h-5 w-5 mr-2" />
-                              Dashboard
-                            </Button>
-                          </Link>
-                        </>
-                      ) : (
-                        // Non-logged in mobile menu
-                        <>
-                          <Link href="/login" onClick={() => setIsMenuOpen(false)}>
-                            <Button variant="ghost" size="lg" className="w-full justify-center h-12 text-base">
-                              <LogIn className="h-5 w-5 mr-2" />
-                              Sign In
-                            </Button>
-                          </Link>
-                          <Link href="/register" onClick={() => setIsMenuOpen(false)}>
-                            <Button size="lg" className="w-full h-12 text-base bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
-                              <UserPlus className="h-5 w-5 mr-2" />
-                              Get Started
-                            </Button>
-                          </Link>
-                        </>
-                      )}
-                    </div>
-
-                    {/* Footer Info */}
-                    <div className="border-t pt-4 text-center">
-                      <p className="text-xs text-muted-foreground">
-                        Transforming charitable giving through blockchain
-                      </p>
-                      <p className="text-xs text-muted-foreground mt-1">
-                        © 2025 SHELTR
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        </nav>
+      {/* Navigation - Now using unified PublicNavigation component */}
+      <PublicNavigation />
 
         {/* Hero Section - Transform Donations into Impact */}
         <section 
@@ -295,7 +78,7 @@ export default function HomePage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <p className="text-xl md:text-2xl text-muted-foreground max-w-4xl mx-auto">
-                Let's create a world where every act of kindness is amplified 
+                Let&apos;s create a world where every act of kindness is amplified 
                 and ensures lasting, measurable impact for everyone in the ecosystem. 
               </p>
             </div>

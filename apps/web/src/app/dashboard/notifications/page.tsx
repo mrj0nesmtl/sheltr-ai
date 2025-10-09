@@ -256,31 +256,10 @@ export default function NotificationsPage() {
         </div>
       </div>
 
-      {/* Notification Summary Cards - Redesigned for Perfect Responsiveness (3x2 Grid) */}
+      {/* Notification Summary Cards - Simplified (2x2 Grid) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8">
         
-        {/* Total Notifications Card */}
-        <Card className="overflow-hidden">
-          <CardContent className="p-4 sm:p-6">
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center space-x-2">
-                <div className="p-2 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
-                  <Bell className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-                </div>
-                <div className="min-w-0">
-                  <p className="text-sm font-medium text-muted-foreground truncate">Total</p>
-                  <p className="text-xs text-muted-foreground">Notifications</p>
-                </div>
-              </div>
-            </div>
-            <div className="space-y-1">
-              <div className="text-2xl sm:text-3xl font-bold">{notificationCounts?.totalNotifications || 0}</div>
-              <p className="text-xs text-muted-foreground">Active items</p>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Email Signups Card - Only for Super Admin / Platform Admin */}
+        {/* Shelter Email Signups Card - Only for Super Admin / Platform Admin */}
         {user?.role !== 'admin' && (
           <Card className="overflow-hidden">
             <CardContent className="p-4 sm:p-6">
@@ -290,7 +269,7 @@ export default function NotificationsPage() {
                     <Mail className="h-4 w-4 text-green-600 dark:text-green-400" />
                   </div>
                   <div className="min-w-0">
-                    <p className="text-sm font-medium text-muted-foreground truncate">Email</p>
+                    <p className="text-sm font-medium text-muted-foreground truncate">Shelter Email</p>
                     <p className="text-xs text-muted-foreground">Signups</p>
                   </div>
                 </div>
@@ -429,78 +408,6 @@ export default function NotificationsPage() {
 
       </div>
 
-      {/* Second Row of Metric Cards - Only for Super Admin / Platform Admin */}
-      {user?.role !== 'admin' && (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8">
-        
-        {/* Pending Applications Card */}
-        <Card className="overflow-hidden">
-          <CardContent className="p-4 sm:p-6">
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center space-x-2">
-                <div className="p-2 bg-orange-100 dark:bg-orange-900/20 rounded-lg">
-                  <Building className="h-4 w-4 text-orange-600 dark:text-orange-400" />
-                </div>
-                <div className="min-w-0">
-                  <p className="text-sm font-medium text-muted-foreground truncate">Pending</p>
-                  <p className="text-xs text-muted-foreground">Applications</p>
-                </div>
-              </div>
-            </div>
-            <div className="space-y-1">
-              <div className="text-2xl sm:text-3xl font-bold">{notificationCounts?.pendingShelterapplications || 0}</div>
-              <p className="text-xs text-muted-foreground">Shelter admin requests</p>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Active Users Card */}
-        <Card className="overflow-hidden">
-          <CardContent className="p-4 sm:p-6">
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center space-x-2">
-                <div className="p-2 bg-indigo-100 dark:bg-indigo-900/20 rounded-lg">
-                  <Users className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
-                </div>
-                <div className="min-w-0">
-                  <p className="text-sm font-medium text-muted-foreground truncate">Active</p>
-                  <p className="text-xs text-muted-foreground">Users</p>
-                </div>
-              </div>
-            </div>
-            <div className="space-y-1">
-              <div className="text-2xl sm:text-3xl font-bold">{activeUsers}</div>
-              <p className="text-xs text-muted-foreground">Last 24 hours</p>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* System Health Card */}
-        <Card className="overflow-hidden">
-          <CardContent className="p-4 sm:p-6">
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center space-x-2">
-                <div className="p-2 bg-green-100 dark:bg-green-900/20 rounded-lg">
-                  <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
-                </div>
-                <div className="min-w-0">
-                  <p className="text-sm font-medium text-muted-foreground truncate">System</p>
-                  <p className="text-xs text-muted-foreground">Health</p>
-                </div>
-              </div>
-            </div>
-            <div className="space-y-1">
-              <div className="text-2xl sm:text-3xl font-bold">100%</div>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <p className="text-xs text-muted-foreground">All systems operational</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-      </div>
-      )}
 
       {/* Notifications Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">

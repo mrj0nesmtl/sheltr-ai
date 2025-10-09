@@ -11,9 +11,6 @@ import {
   Book,
   Code,
   Building,
-  LogIn,
-  Menu,
-  X,
   ArrowRight,
   Rocket,
   Heart,
@@ -32,16 +29,12 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { ThemeToggle } from '@/components/theme-toggle';
 import Footer from '@/components/Footer';
-import ThemeLogo from '@/components/ThemeLogo';
 import { useState } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
 import { UnifiedInquiryService } from '@/services/unifiedInquiryService';
+import PublicNavigation from '@/components/PublicNavigation';
 
 export default function DocsPage() {
-  const { user, hasRole } = useAuth();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
@@ -304,99 +297,8 @@ export default function DocsPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
-      {/* Navigation */}
-      <nav className="bg-background/95 backdrop-blur-sm sticky top-0 z-50 border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <Link href="/" className="flex items-center">
-              <ThemeLogo />
-            </Link>
-            <div className="hidden md:flex space-x-8">
-              <Link href="/" className="text-muted-foreground hover:text-primary transition-colors">Home</Link>
-              <Link href="/about" className="text-muted-foreground hover:text-primary transition-colors">About</Link>
-              <Link href="/solutions" className="text-muted-foreground hover:text-primary transition-colors">Solutions</Link>
-              <Link href="/scan-give" className="text-muted-foreground hover:text-primary transition-colors">Scan & Give</Link>
-              <Link href="/impact" className="text-muted-foreground hover:text-primary transition-colors">Impact</Link>
-              <Link href="/docs" className="text-foreground hover:text-primary transition-colors">Docs</Link>
-            </div>
-            <div className="flex items-center space-x-4">
-              <ThemeToggle />
-              <div className="hidden md:flex items-center space-x-4">
-                {user ? (
-                  // Logged in user navigation
-                  <>
-                    <span className="text-sm text-muted-foreground">
-                      Welcome, {user.displayName || user.email}
-                    </span>
-                    <Link href={hasRole('donor') ? '/dashboard/donor' : hasRole('super_admin') ? '/dashboard' : hasRole('platform_admin') ? '/dashboard' : hasRole('participant') ? '/dashboard/participant' : '/dashboard'}>
-                      <Button variant="ghost" size="sm">
-                        <ArrowRight className="h-4 w-4 mr-2" />
-                        Dashboard
-                      </Button>
-                    </Link>
-                  </>
-                ) : (
-                  // Non-logged in navigation
-                  <>
-                    <Link href="/login">
-                      <Button variant="ghost" size="sm">
-                        <LogIn className="h-4 w-4 mr-2" />
-                        Sign In
-                      </Button>
-                    </Link>
-                    <Link href="/register">
-                      <Button size="sm">
-                        Get Started
-                      </Button>
-                    </Link>
-                  </>
-                )}
-              </div>
-              
-              {/* Mobile menu button */}
-              <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden"
-              >
-                {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-              </button>
-            </div>
-          </div>
-          
-          {/* Mobile menu */}
-          {mobileMenuOpen && (
-            <div className="md:hidden">
-              <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-background border-t">
-                <Link href="/" className="block px-3 py-2 text-muted-foreground hover:text-primary">Home</Link>
-                <Link href="/about" className="block px-3 py-2 text-muted-foreground hover:text-primary">About</Link>
-                <Link href="/solutions" className="block px-3 py-2 text-muted-foreground hover:text-primary">Solutions</Link>
-                <Link href="/scan-give" className="block px-3 py-2 text-muted-foreground hover:text-primary">Scan & Give</Link>
-                <Link href="/impact" className="block px-3 py-2 text-muted-foreground hover:text-primary">Impact</Link>
-                <Link href="/docs" className="block px-3 py-2 text-foreground hover:text-primary">Docs</Link>
-                <div className="border-t pt-3 mt-3">
-                  {user ? (
-                    // Logged in mobile menu
-                    <>
-                      <div className="text-sm text-muted-foreground px-3 py-2">
-                        Welcome, {user.displayName || user.email}
-                      </div>
-                      <Link href={hasRole('donor') ? '/dashboard/donor' : hasRole('super_admin') ? '/dashboard' : hasRole('platform_admin') ? '/dashboard' : hasRole('participant') ? '/dashboard/participant' : '/dashboard'} className="block px-3 py-2 text-muted-foreground hover:text-primary">
-                        Dashboard
-                      </Link>
-                    </>
-                  ) : (
-                    // Non-logged in mobile menu
-                    <>
-                      <Link href="/login" className="block px-3 py-2 text-muted-foreground hover:text-primary">Sign In</Link>
-                      <Link href="/register" className="block px-3 py-2 text-muted-foreground hover:text-primary">Get Started</Link>
-                    </>
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      </nav>
+      {/* Navigation - Now using unified PublicNavigation component */}
+      <PublicNavigation />
 
       {/* Hero Section */}
       <section 

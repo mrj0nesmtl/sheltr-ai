@@ -55,7 +55,7 @@ export default function DonorsPage() {
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/scan-give">
-              <Button size="lg" className="bg-orange-600 hover:bg-orange-700 text-white">
+              <Button size="lg" variant="outline" className="border-2 border-orange-400 text-orange-400 hover:bg-orange-500/10 backdrop-blur-sm bg-black/20">
                 <QrCode className="h-4 w-4 mr-2" />
                 Start Giving Today
               </Button>
@@ -384,7 +384,7 @@ export default function DonorsPage() {
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/scan-give">
-                <Button size="lg" className="bg-orange-600 hover:bg-orange-700">
+                <Button size="lg" variant="outline" className="border-2 border-orange-400 text-orange-400 hover:bg-orange-500/10 backdrop-blur-sm dark:text-orange-300 dark:border-orange-300">
                   <Heart className="h-4 w-4 mr-2" />
                   Start Giving Today
                 </Button>
@@ -434,7 +434,7 @@ export default function DonorsPage() {
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/scan-give">
-              <Button size="lg" className="bg-orange-600 hover:bg-orange-700">
+              <Button size="lg" variant="outline" className="border-2 border-orange-400 text-orange-400 hover:bg-orange-500/10 backdrop-blur-sm dark:text-orange-300 dark:border-orange-300">
                 <Heart className="h-4 w-4 mr-2" />
                 Start Giving Today
               </Button>

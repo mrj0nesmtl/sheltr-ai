@@ -1,11 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowLeft, Heart, Users, TrendingUp, ExternalLink, Play } from 'lucide-react';
+import { Heart, Users, TrendingUp, ExternalLink, Play } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ThemeToggle } from '@/components/theme-toggle';
 import {
   Carousel,
   CarouselContent,
@@ -14,7 +13,7 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import Footer from '@/components/Footer';
-import ThemeLogo from '@/components/ThemeLogo';
+import PublicNavigation from '@/components/PublicNavigation';
 
 // TikTok video data for carousel - using clickable preview cards
 const tiktokVideos = [
@@ -131,26 +130,8 @@ const tiktokVideos = [
 export default function AngelsPage() {
   return (
     <div className="min-h-screen bg-background">
-
-      {/* Navigation */}
-      <nav className="bg-background/95 backdrop-blur-sm sticky top-0 z-50 border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <Link href="/" className="flex items-center">
-              <ThemeLogo />
-            </Link>
-            <div className="flex items-center space-x-4">
-              <Link href="/impact">
-                <Button variant="ghost" size="sm">
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Back to Impact
-                </Button>
-              </Link>
-              <ThemeToggle />
-            </div>
-          </div>
-        </div>
-      </nav>
+      {/* Navigation - Now using unified PublicNavigation component */}
+      <PublicNavigation />
 
       {/* Hero Section */}
       <section className="relative py-16 bg-cover bg-center bg-no-repeat" style={{backgroundImage: 'url(/backgrounds/hero-bg.jpg)'}}>

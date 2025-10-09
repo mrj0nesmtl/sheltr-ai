@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
-import { ArrowLeft, Heart, Shield, QrCode, User, MapPin, Target, Building, Home } from 'lucide-react';
+import { Heart, Shield, QrCode, User, MapPin, Target, Building, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -12,6 +12,7 @@ import { isSecureDomain } from '@/lib/urlSecurity';
 import { db } from '@/lib/firebase';
 import { getDonationMetrics } from '@/services/donationMetricsService';
 import { tenantService } from '@/services/tenantService';
+import PublicNavigation from '@/components/PublicNavigation';
 
 // Demo donation amounts
 const DEMO_AMOUNTS = [25, 50, 100, 200];
@@ -359,22 +360,8 @@ function DonatePageContent() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted/30">
-      {/* Header */}
-      <div className="bg-background/95 backdrop-blur-sm border-b sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <Link href={donationType === 'shelter' ? `/${shelterId}` : "/scan-give"} className="flex items-center text-muted-foreground hover:text-foreground">
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              {donationType === 'shelter' ? 'Back to Shelter' : 'Back to Scan & Give'}
-            </Link>
-            {isDemo && (
-              <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
-                🎭 Demo Mode
-              </Badge>
-            )}
-          </div>
-        </div>
-      </div>
+      {/* Navigation - Now using unified PublicNavigation component */}
+      <PublicNavigation />
 
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">

@@ -1223,19 +1223,19 @@ production:
 
 ### Next Deployment Steps
 
-1. **Smart Contract Deployment** (Q1 2025)
+1. **Smart Contract Deployment** (Q1 2026)
    - Deploy SHELTR-S stable token on Base network
    - Deploy SHELTR community token
    - Deploy SmartFund distribution contract
    - Set up Coinbase Connect integration
 
-2. **Production Website** (Q1 2025)
-   - Deploy to custom domain (sheltr.ai)
+2. **Production Website** (Q1 2026)
+   - Deploy to custom domain (sheltrops.com)
    - Enable Firebase authentication
    - Connect to live smart contracts
    - Implement real QR code generation
 
-3. **Mobile Application** (Q2 2025)
+3. **Mobile Application** (Q2 2026)
    - React Native app with same design system
    - QR code scanning functionality
    - Wallet integration

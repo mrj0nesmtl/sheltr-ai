@@ -413,46 +413,47 @@ export default function ParticipantDashboard() {
               <Wallet className="h-5 w-5" />
               <span>Digital Wallet</span>
             </CardTitle>
-            <CardDescription>Your SHELTR blockchain wallet</CardDescription>
+            <CardDescription>Virtual debit card & SmartFund savings</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="p-3 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg">
+            {/* Virtual Debit Account - 80% */}
+            <div className="p-4 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-lg border-2 border-green-200 dark:border-green-800">
               <div className="flex items-center justify-between mb-2">
                 <div>
-                  <span className="text-sm font-medium">SHELTR Stable Coin</span>
-                  <div className="text-xs text-muted-foreground">USDC • 80% of donations</div>
+                  <span className="text-sm font-semibold text-green-700 dark:text-green-400">Virtual Debit Account</span>
+                  <div className="text-xs text-muted-foreground">Everyday spending • Tap & Go</div>
                 </div>
-                <span className="text-lg font-bold text-green-600">
-                  ${participantData ? Math.round(participantData.totalReceived * 0.80).toLocaleString() : 0}
-                </span>
+                <CreditCard className="h-5 w-5 text-green-600" />
               </div>
-              <div className="flex items-center justify-between">
-                <div>
-                  <span className="text-sm font-medium">SHELTR Utility Token</span>
-                  <div className="text-xs text-muted-foreground">Housing Growth Fund • DeFi • 15%</div>
-                </div>
-                <span className="text-lg font-bold text-blue-600">
-                  ${participantData ? Math.round(participantData.totalReceived * 0.15).toLocaleString() : 0}
-                </span>
+              <div className="text-2xl font-bold text-green-600 dark:text-green-400">
+                ${participantData ? Math.round(participantData.totalReceived * 0.80).toLocaleString() : 0}
+              </div>
+              <div className="text-xs text-muted-foreground mt-1">
+                80% of donations • Virtual card ready
               </div>
             </div>
-            
-            <div className="space-y-2">
-              <div className="flex items-center justify-between text-sm">
-                <span>Wallet Address:</span>
-                <Button variant="ghost" size="sm" className="h-auto p-1">
-                  <Copy className="h-3 w-3" />
-                </Button>
+
+            {/* SmartFund Savings - 15% */}
+            <div className="p-4 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg border-2 border-blue-200 dark:border-blue-800">
+              <div className="flex items-center justify-between mb-2">
+                <div>
+                  <span className="text-sm font-semibold text-blue-700 dark:text-blue-400">SmartFund Savings</span>
+                  <div className="text-xs text-muted-foreground">Pod purchase savings • USDC staking</div>
+                </div>
+                <Home className="h-5 w-5 text-blue-600" />
               </div>
-              <div className="text-xs font-mono bg-gray-100 dark:bg-gray-800 p-2 rounded break-all">
-                0x742d35Cc6634C0532925a3b8D6Fd7Fd4
+              <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                ${participantData ? Math.round(participantData.totalReceived * 0.15).toLocaleString() : 0}
+              </div>
+              <div className="text-xs text-muted-foreground mt-1">
+                15% of donations • Coinbase institutional
               </div>
             </div>
 
             <Link href="/dashboard/participant/wallet" className="block">
               <Button className="w-full h-10" variant="outline">
                 <Eye className="mr-2 h-4 w-4" />
-                View Transaction History
+                Manage Wallet & Accounts
               </Button>
             </Link>
           </CardContent>

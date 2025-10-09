@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Search, Calendar, Clock, User, Tag, Filter } from 'lucide-react';
 import { blogService, BlogPost, BlogCategory, BlogTag } from '@/services/blogService';
 import Footer from '@/components/Footer';
-import ThemeLogo from '@/components/ThemeLogo';
+import PublicNavigation from '@/components/PublicNavigation';
 
 export default function BlogPage() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
@@ -92,31 +92,18 @@ export default function BlogPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="bg-background/95 backdrop-blur-sm sticky top-0 z-50 border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <Link href="/">
-              <ThemeLogo />
-            </Link>
-            <div className="flex items-center space-x-4">
-              <Link href="/">
-                <Button variant="ghost">Back to Home</Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </header>
+      {/* Navigation */}
+      <PublicNavigation />
 
       {/* Hero Section */}
       <section className="relative py-16 bg-cover bg-center bg-no-repeat" style={{backgroundImage: 'url(/backgrounds/hero-bg.jpg)'}}>
-        <div className="absolute inset-0 bg-black/40" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-background dark:from-black/80 dark:via-black/70 dark:to-background" />
         <div className="relative max-w-4xl mx-auto px-4 text-center">
           <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
+            <h1 className="text-4xl md:text-5xl font-bold mb-6 text-white drop-shadow-lg">
               SHELTR Blog
             </h1>
-            <p className="text-xl text-muted-foreground mb-8">
+            <p className="text-xl text-white/90 mb-8 drop-shadow-md">
               Insights, updates, and stories from the SHELTR community
             </p>
             

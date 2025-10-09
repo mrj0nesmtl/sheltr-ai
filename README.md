@@ -12,7 +12,7 @@ The next generation platform for transparent charitable giving and homelessness 
 [![GitHub Stars](https://img.shields.io/github/stars/mrj0nesmtl/sheltr-ai?style=for-the-badge)](https://github.com/mrj0nesmtl/sheltr-ai)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg?style=for-the-badge)](https://www.python.org/downloads/)
-[![Last Updated](https://img.shields.io/badge/Last%20Updated-October%204%2C%202025-brightgreen?style=for-the-badge)](https://github.com/mrj0nesmtl/sheltr-ai)
+[![Last Updated](https://img.shields.io/badge/Last%20Updated-October%209%2C%202025-brightgreen?style=for-the-badge)](https://github.com/mrj0nesmtl/sheltr-ai)
 
 ---
 
@@ -31,6 +31,8 @@ The next generation platform for transparent charitable giving and homelessness 
 - **📚 Knowledge Base**: **60+ DOCUMENTS** with AI embeddings and GitHub sync
 - **📝 Blog System**: **LIVE** with SEO optimization and markdown import
 - **💬 Internal Messaging**: **ENHANCED** with @mention autocomplete and auto-recipient detection
+- **📱 Unified Mobile Navigation**: **100% COVERAGE** - All 19 public pages with consistent hamburger menu
+- **⚖️ Legal Pages**: **PROFESSIONAL** - Privacy & Terms with hero backgrounds and collapsible sections
 
 ---
 

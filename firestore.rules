@@ -957,6 +957,56 @@ service cloud.firestore {
     }
     
     // =================================================================
+    // DONOR NOTIFICATIONS COLLECTION - Donation confirmations and receipts for donors
+    // =================================================================
+    match /donor_notifications/{notificationId} {
+      // Read: Donors can read their own notifications, admins can read all
+      allow read: if isAuthenticated() && (
+        (isDonor() && resource.data.userId == request.auth.uid) ||
+        isSuperAdmin() ||
+        isPlatformAdmin() ||
+        isAdmin()
+      );
+      
+      // Write: Donors can mark their own notifications as read
+      allow update: if isDonor() && resource.data.userId == request.auth.uid;
+      
+      // Create: System creates notifications (admins can create for testing)
+      allow create: if isSuperAdmin() || isPlatformAdmin() || isAdmin();
+      
+      // Delete: Super Admin only
+      allow delete: if isSuperAdmin();
+      
+      // List/Query: Donors can query their own, admins can query all
+      allow list: if isAuthenticated() && (isDonor() || isSuperAdmin() || isPlatformAdmin() || isAdmin());
+    }
+    
+    // =================================================================
+    // PARTICIPANT NOTIFICATIONS COLLECTION - Donation receipts and service updates for participants
+    // =================================================================
+    match /participant_notifications/{notificationId} {
+      // Read: Participants can read their own notifications, admins can read all
+      allow read: if isAuthenticated() && (
+        (isParticipant() && resource.data.userId == request.auth.uid) ||
+        isSuperAdmin() ||
+        isPlatformAdmin() ||
+        isAdmin()
+      );
+      
+      // Write: Participants can mark their own notifications as read
+      allow update: if isParticipant() && resource.data.userId == request.auth.uid;
+      
+      // Create: System creates notifications (admins can create for testing)
+      allow create: if isSuperAdmin() || isPlatformAdmin() || isAdmin();
+      
+      // Delete: Super Admin only
+      allow delete: if isSuperAdmin();
+      
+      // List/Query: Participants can query their own, admins can query all
+      allow list: if isAuthenticated() && (isParticipant() || isSuperAdmin() || isPlatformAdmin() || isAdmin());
+    }
+    
+    // =================================================================
     // FALLBACK RULE - Deny all other access
     // =================================================================
     match /{document=**} {

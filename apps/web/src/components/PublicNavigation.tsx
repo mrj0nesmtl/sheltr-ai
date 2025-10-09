@@ -165,11 +165,15 @@ export default function PublicNavigation() {
           <div className="md:hidden flex items-center space-x-2">
             <ThemeToggle />
             <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              onClick={() => {
+                console.log('🍔 Mobile menu toggled:', !isMenuOpen);
+                setIsMenuOpen(!isMenuOpen);
+              }}
               className="inline-flex items-center justify-center p-2 rounded-md hover:text-primary hover:bg-muted focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary"
-              aria-expanded="false"
+              aria-expanded={isMenuOpen}
+              aria-label={isMenuOpen ? "Close main menu" : "Open main menu"}
             >
-              <span className="sr-only">Open main menu</span>
+              <span className="sr-only">{isMenuOpen ? "Close main menu" : "Open main menu"}</span>
               {isMenuOpen ? (
                 <X className="block h-6 w-6" aria-hidden="true" />
               ) : (
@@ -182,7 +186,7 @@ export default function PublicNavigation() {
 
       {/* Enhanced Mobile menu */}
       {isMenuOpen && (
-        <div className="md:hidden fixed inset-0 top-16 bg-background z-40 overflow-y-auto">
+        <div className="md:hidden bg-background/98 backdrop-blur-md border-t shadow-lg overflow-y-auto max-h-[calc(100vh-4rem)]">
           <div className="px-4 py-6 space-y-6">
             
             {/* Quick Actions */}
@@ -466,29 +470,10 @@ export default function PublicNavigation() {
               </div>
             </div>
 
-            {/* Built by Arcana */}
-            <div className="border-t pt-4">
-              <a
-                href="https://www.arcanaconcept.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20 rounded-lg border border-blue-200 dark:border-blue-800 hover:border-blue-300 dark:hover:border-blue-700 transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                <div className="text-center">
-                  <p className="text-sm font-medium text-blue-800 dark:text-blue-200">Built by Arcana</p>
-                  <p className="text-xs text-blue-600 dark:text-blue-300 flex items-center justify-center">
-                    www.arcanaconcept.com
-                    <ExternalLink className="h-3 w-3 ml-1" />
-                  </p>
-                </div>
-              </a>
-            </div>
-
             {/* Footer info */}
             <div className="text-center pt-4 border-t">
               <p className="text-xs text-muted-foreground">
-                &copy; 2025 SHELTR. Built with ❤️ for a better world.
+                &copy; 2025 SHELTR
               </p>
             </div>
           </div>

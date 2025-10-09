@@ -165,7 +165,7 @@ export default function ShelterPageClient({ slug }: ShelterPageClientProps) {
             verified: publicConfig?.verified ?? true,
             status: publicConfig?.status || 'active',
             lastUpdated: publicConfig?.last_updated,
-            qr_code: publicConfig?.qr_code
+            qr_code: publicConfig?.qrCode?.url || publicConfig?.qr_code // Support both qrCode object and legacy qr_code string
           };
           
           setShelter(shelterData);

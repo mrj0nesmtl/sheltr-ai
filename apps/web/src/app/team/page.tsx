@@ -2,18 +2,15 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Menu, X, LogIn, Mail, Linkedin, Globe, Heart, Users, Award, Building2, Calendar, Twitter, Loader2, Share2, Rss, ExternalLink } from 'lucide-react';
+import { Mail, Linkedin, Globe, Heart, Users, Award, Building2, Calendar, Twitter, Loader2, Share2, Rss, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-// Using custom avatar implementation instead of external component
-import { ThemeToggle } from '@/components/theme-toggle';
 import Footer from '@/components/Footer';
-import ThemeLogo from '@/components/ThemeLogo';
 import { PublicTeamService, type PublicTeamMember } from '@/services/publicTeamService';
+import PublicNavigation from '@/components/PublicNavigation';
 
 export default function TeamPage() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [teamMembers, setTeamMembers] = useState<PublicTeamMember[]>([]);
   const [teamStats, setTeamStats] = useState({
     totalMembers: 0,
@@ -167,72 +164,8 @@ export default function TeamPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Navigation */}
-      <nav className="bg-background/95 backdrop-blur-sm sticky top-0 z-50 border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <Link href="/">
-                <ThemeLogo />
-              </Link>
-            </div>
-            
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex space-x-8">
-              <Link href="/about" className="text-muted-foreground hover:text-primary transition-colors">
-                About
-              </Link>
-              <Link href="/solutions" className="text-muted-foreground hover:text-primary transition-colors">
-                Solutions
-              </Link>
-              <Link href="/scan-give" className="text-muted-foreground hover:text-primary transition-colors">
-                Scan & Give
-              </Link>
-              <Link href="/impact" className="text-muted-foreground hover:text-primary transition-colors">
-                Impact
-              </Link>
-            </div>
-
-            <div className="flex items-center space-x-4">
-              <ThemeToggle />
-              <Button variant="outline" asChild>
-                <Link href="/login">
-                  <LogIn className="h-4 w-4 mr-2" />
-                  Sign In
-                </Link>
-              </Button>
-              
-              {/* Mobile menu button */}
-              <button
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="md:hidden p-2 rounded-md hover:bg-accent"
-              >
-                {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-              </button>
-            </div>
-          </div>
-
-          {/* Mobile Navigation */}
-          {isMenuOpen && (
-            <div className="md:hidden py-4 border-t">
-              <div className="flex flex-col space-y-2">
-                <Link href="/about" className="px-4 py-2 text-muted-foreground hover:text-primary transition-colors">
-                  About
-                </Link>
-                <Link href="/solutions" className="px-4 py-2 text-muted-foreground hover:text-primary transition-colors">
-                  Solutions
-                </Link>
-                <Link href="/scan-give" className="px-4 py-2 text-muted-foreground hover:text-primary transition-colors">
-                  Scan & Give
-                </Link>
-                <Link href="/impact" className="px-4 py-2 text-muted-foreground hover:text-primary transition-colors">
-                  Impact
-                </Link>
-              </div>
-            </div>
-          )}
-        </div>
-      </nav>
+      {/* Navigation - Now using unified PublicNavigation component */}
+      <PublicNavigation />
 
       {/* Hero Section */}
       <section className="relative py-20 overflow-hidden">

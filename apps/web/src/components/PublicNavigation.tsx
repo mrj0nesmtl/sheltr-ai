@@ -12,7 +12,7 @@ import {
   LayoutDashboard,
   Github,
   Globe,
-  Slack,
+  Music,
   BookOpen,
   ExternalLink,
   Heart,
@@ -245,11 +245,11 @@ export default function PublicNavigation() {
                   <Home className="h-4 w-4 mr-2" />
                   Platform
                 </h3>
-                <ul className="space-y-2">
+                <ul className="space-y-1">
                   <li>
                     <Link
                       href="/"
-                      className="text-sm text-muted-foreground hover:text-primary transition-colors block py-1"
+                      className="text-xs text-muted-foreground hover:text-primary transition-colors block py-0.5"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       Home
@@ -258,7 +258,7 @@ export default function PublicNavigation() {
                   <li>
                     <Link
                       href="/about"
-                      className="text-sm text-muted-foreground hover:text-primary transition-colors block py-1"
+                      className="text-xs text-muted-foreground hover:text-primary transition-colors block py-0.5"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       About
@@ -267,7 +267,7 @@ export default function PublicNavigation() {
                   <li>
                     <Link
                       href="/solutions"
-                      className="text-sm text-muted-foreground hover:text-primary transition-colors block py-1"
+                      className="text-xs text-muted-foreground hover:text-primary transition-colors block py-0.5"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       Solutions
@@ -276,7 +276,7 @@ export default function PublicNavigation() {
                   <li>
                     <Link
                       href="/pods"
-                      className="text-sm text-muted-foreground hover:text-primary transition-colors block py-1"
+                      className="text-xs text-muted-foreground hover:text-primary transition-colors block py-0.5"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       Pods
@@ -284,17 +284,8 @@ export default function PublicNavigation() {
                   </li>
                   <li>
                     <Link
-                      href="/scan-give"
-                      className="text-sm text-muted-foreground hover:text-primary transition-colors block py-1"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      Scan & Give
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
                       href="/impact"
-                      className="text-sm text-muted-foreground hover:text-primary transition-colors block py-1"
+                      className="text-xs text-muted-foreground hover:text-primary transition-colors block py-0.5"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       Impact
@@ -309,11 +300,20 @@ export default function PublicNavigation() {
                   <Github className="h-4 w-4 mr-2" />
                   Technology
                 </h3>
-                <ul className="space-y-2">
+                <ul className="space-y-1">
+                  <li>
+                    <Link
+                      href="/scan-give"
+                      className="text-xs text-muted-foreground hover:text-primary transition-colors block py-0.5"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      Scan & Give
+                    </Link>
+                  </li>
                   <li>
                     <Link
                       href="/tokenomics"
-                      className="text-sm text-muted-foreground hover:text-primary transition-colors block py-1"
+                      className="text-xs text-muted-foreground hover:text-primary transition-colors block py-0.5"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       Tokenomics
@@ -322,7 +322,7 @@ export default function PublicNavigation() {
                   <li>
                     <Link
                       href="/docs/whitepaper"
-                      className="text-sm text-muted-foreground hover:text-primary transition-colors block py-1"
+                      className="text-xs text-muted-foreground hover:text-primary transition-colors block py-0.5"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       White Paper
@@ -333,7 +333,7 @@ export default function PublicNavigation() {
                       href="https://github.com/mrj0nesmtl/sheltr-ai"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center py-1"
+                      className="text-xs text-muted-foreground hover:text-primary transition-colors flex items-center py-0.5"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       <Github className="h-3 w-3 mr-1" />
@@ -349,11 +349,11 @@ export default function PublicNavigation() {
                   <User className="h-4 w-4 mr-2" />
                   Community
                 </h3>
-                <ul className="space-y-2">
+                <ul className="space-y-1">
                   <li>
                     <Link
                       href="/angels"
-                      className="text-sm text-muted-foreground hover:text-primary transition-colors block py-1"
+                      className="text-xs text-muted-foreground hover:text-primary transition-colors block py-0.5"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       Angels
@@ -362,7 +362,7 @@ export default function PublicNavigation() {
                   <li>
                     <Link
                       href="/blog"
-                      className="text-sm text-muted-foreground hover:text-primary transition-colors block py-1"
+                      className="text-xs text-muted-foreground hover:text-primary transition-colors block py-0.5"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       Blog
@@ -373,7 +373,7 @@ export default function PublicNavigation() {
                       href="https://bsky.app/profile/sheltrops.bsky.social"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-sm text-muted-foreground hover:text-primary transition-colors block py-1"
+                      className="text-xs text-muted-foreground hover:text-primary transition-colors block py-0.5"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       BlueSky
@@ -388,11 +388,11 @@ export default function PublicNavigation() {
                   <Heart className="h-4 w-4 mr-2" />
                   Support
                 </h3>
-                <ul className="space-y-2">
+                <ul className="space-y-1">
                   <li>
                     <Link
                       href="/terms"
-                      className="text-sm text-muted-foreground hover:text-primary transition-colors block py-1"
+                      className="text-xs text-muted-foreground hover:text-primary transition-colors block py-0.5"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       Terms
@@ -401,16 +401,20 @@ export default function PublicNavigation() {
                   <li>
                     <Link
                       href="/privacy"
-                      className="text-sm text-muted-foreground hover:text-primary transition-colors block py-1"
+                      className="text-xs text-muted-foreground hover:text-primary transition-colors block py-0.5"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       Privacy
                     </Link>
                   </li>
                   <li>
-                    <span className="text-sm text-muted-foreground/60 block py-1">
-                      🤖 AI Support (Soon)
-                    </span>
+                    <Link
+                      href="/contact"
+                      className="text-xs text-muted-foreground hover:text-primary transition-colors block py-0.5"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      Contact
+                    </Link>
                   </li>
                 </ul>
               </div>
@@ -447,14 +451,14 @@ export default function PublicNavigation() {
                 </a>
                 
                 <a
-                  href="https://slack.com/sheltr-ai"
+                  href="https://open.spotify.com/show/3Q2RpnzF9sUv26yPMP9tWI?si=7096be4358e94b57"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center p-3 bg-muted hover:bg-muted/80 rounded-lg transition-colors"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  <Slack className="h-5 w-5 mr-2" />
-                  <span className="text-sm font-medium">Slack</span>
+                  <Music className="h-5 w-5 mr-2" />
+                  <span className="text-sm font-medium">Spotify</span>
                 </a>
                 
                 <a

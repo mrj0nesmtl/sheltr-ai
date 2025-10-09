@@ -28,6 +28,7 @@ import { MakeNewDonationModal } from '@/components/donor/MakeNewDonationModal';
 import { RecurringGiftModal } from '@/components/donor/RecurringGiftModal';
 import { TaxDocumentsModal } from '@/components/donor/TaxDocumentsModal';
 import { FindNewSheltersModal } from '@/components/donor/FindNewSheltersModal';
+import DonorNotifications from '@/components/DonorNotifications';
 
 export default function DonorDashboard() {
   const { user, hasRole } = useAuth();
@@ -287,6 +288,11 @@ export default function DonorDashboard() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Notifications Section */}
+      {user?.uid && (
+        <DonorNotifications userId={user.uid} />
+      )}
 
       {/* Donation Management & Impact */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

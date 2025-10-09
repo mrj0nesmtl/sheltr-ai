@@ -10,6 +10,7 @@ import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import Link from 'next/link';
 import { generateProfileQRCodeUrl, getParticipantProfileUrl } from '@/utils/profileUrls';
+import ParticipantNotifications from '@/components/ParticipantNotifications';
 import { 
   User, 
   Calendar, 
@@ -397,6 +398,11 @@ export default function ParticipantDashboard() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Notifications Section */}
+      {user?.uid && (
+        <ParticipantNotifications userId={user.uid} />
+      )}
 
       {/* Wallet & QR Code Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

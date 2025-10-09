@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { getNotificationDashboardCounts, getShelterNotificationCounts, getRecentEmailSignups, getRecentContactInquiries, getAdminNotifications, markNotificationAsRead, NotificationDashboardCounts, EmailSignup, ContactInquiryNotification, AdminNotification, formatRelativeTime } from '@/services/notificationService';
-import { getAllNewsletterSignups, getNewsletterCount, NewsletterSignup } from '@/services/newsletterService';
+import { UnifiedInquiryService, NewsletterSignup } from '@/services/unifiedInquiryService';
 import { 
   Mail, 
   Bell, 
@@ -154,8 +154,8 @@ export default function NotificationsPage() {
           getRecentEmailSignups(50), // Get more for the dedicated page
           getRecentContactInquiries(50), // Get recent contact inquiries
           getAdminNotifications(userId, 50), // Get recent admin notifications
-          getAllNewsletterSignups(100), // Get newsletter signups
-          getNewsletterCount() // Get total newsletter count
+          UnifiedInquiryService.getAllNewsletterSignups(100), // Get newsletter signups from unified collection
+          UnifiedInquiryService.getNewsletterCount() // Get total newsletter count from unified collection
         ]);
         
         // Update active users count from API
@@ -405,6 +405,31 @@ export default function NotificationsPage() {
             </div>
           </CardContent>
         </Card>
+
+        {/* Participant Signups Card - Only for Super Admin / Platform Admin */}
+        {user?.role !== 'admin' && (
+          <Card className="overflow-hidden">
+            <CardContent className="p-4 sm:p-6">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center space-x-2">
+                  <div className="p-2 bg-indigo-100 dark:bg-indigo-900/20 rounded-lg">
+                    <Users className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium text-muted-foreground truncate">Participant</p>
+                    <p className="text-xs text-muted-foreground">Signups</p>
+                  </div>
+                </div>
+              </div>
+              <div className="space-y-1">
+                <div className="text-2xl sm:text-3xl font-bold">{notificationCounts?.totalParticipants || 0}</div>
+                <p className="text-xs text-muted-foreground">
+                  {notificationCounts?.recentParticipants || 0} new this week
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
       </div>
 

@@ -44,18 +44,28 @@ export function getDonationUrl(participantId: string, isDemo: boolean = false): 
 
 /**
  * Generates a QR code URL pointing to the participant's profile
+ * NOTE: QR codes ALWAYS use production URL, even in development,
+ * because they need to be scannable by external users
  */
 export function generateProfileQRCodeUrl(participantId: string, size: number = 128): string {
-  const profileUrl = getParticipantProfileUrl(participantId);
-  return `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(profileUrl)}&format=png`;
+  const productionUrl = `https://sheltr-ai.web.app/participant/${participantId}`;
+  return `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(productionUrl)}&format=png`;
 }
 
 /**
  * Generates a QR code URL pointing to the donation page
+ * NOTE: QR codes ALWAYS use production URL, even in development,
+ * because they need to be scannable by external users
  */
 export function generateDonationQRCodeUrl(participantId: string, size: number = 128, isDemo: boolean = false): string {
-  const donationUrl = getDonationUrl(participantId, isDemo);
-  return `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(donationUrl)}&format=png`;
+  const params = new URLSearchParams();
+  if (isDemo) {
+    params.set('demo', 'true');
+  }
+  params.set('participant', participantId);
+  
+  const productionUrl = `https://sheltr-ai.web.app/donate?${params.toString()}`;
+  return `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(productionUrl)}&format=png`;
 }
 
 /**

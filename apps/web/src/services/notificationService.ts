@@ -113,6 +113,10 @@ export interface NotificationDashboardCounts {
   
   // Active Users (from API)
   activeUsers: number;
+  
+  // Participant Signups
+  totalParticipants: number;
+  recentParticipants: number; // Last 7 days
 }
 
 export interface EmailSignup {
@@ -668,6 +672,22 @@ export async function getNotificationDashboardCounts(
     // 6. Active users (placeholder - will be fetched from API separately)
     const activeUsers = 0;
     
+    // 7. Get participant signups
+    const participantsQuery = query(
+      collection(db, 'users'),
+      where('role', '==', 'participant')
+    );
+    const participantsSnapshot = await getDocs(participantsQuery);
+    const totalParticipants = participantsSnapshot.size;
+    
+    // Count recent participants (last 7 days)
+    const recentParticipants = participantsSnapshot.docs.filter(doc => {
+      const createdAt = doc.data().created_at || doc.data().createdAt;
+      if (!createdAt) return false;
+      const createdDate = createdAt.toDate ? createdAt.toDate() : new Date(createdAt);
+      return createdDate > sevenDaysAgo;
+    }).length;
+    
     const counts: NotificationDashboardCounts = {
       totalNotifications,
       unreadMessages,
@@ -683,7 +703,9 @@ export async function getNotificationDashboardCounts(
       securityAlerts,
       fraudAlerts,
       pendingShelterapplications,
-      activeUsers
+      activeUsers,
+      totalParticipants,
+      recentParticipants
     };
     
     console.log('✅ Dashboard notification counts:', counts);
@@ -707,7 +729,9 @@ export async function getNotificationDashboardCounts(
       securityAlerts: 0,
       fraudAlerts: 0,
       pendingShelterapplications: 0,
-      activeUsers: 0
+      activeUsers: 0,
+      totalParticipants: 0,
+      recentParticipants: 0
     };
   }
 }

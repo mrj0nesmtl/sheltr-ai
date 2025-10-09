@@ -401,60 +401,6 @@ export default function DonorsPage() {
       </section>
 
       {/* Getting Started */}
-      <section className="py-20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-6">Ready to Make a Difference?</h2>
-          <p className="text-xl text-muted-foreground mb-12">
-            Start your giving journey in just minutes and see immediate impact.
-          </p>
-          
-          <div className="grid md:grid-cols-3 gap-8 mb-12">
-            <div className="text-center">
-              <div className="w-12 h-12 bg-orange-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-orange-600 dark:text-orange-400 font-bold">1</span>
-              </div>
-              <h3 className="font-semibold mb-2">Find a QR Code</h3>
-              <p className="text-sm text-muted-foreground">Look for SHELTR QR codes or visit our platform</p>
-            </div>
-            <div className="text-center">
-              <div className="w-12 h-12 bg-orange-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-orange-600 dark:text-orange-400 font-bold">2</span>
-              </div>
-              <h3 className="font-semibold mb-2">Choose Your Impact</h3>
-              <p className="text-sm text-muted-foreground">Select donation amount and see transparent breakdown</p>
-            </div>
-            <div className="text-center">
-              <div className="w-12 h-12 bg-orange-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-orange-600 dark:text-orange-400 font-bold">3</span>
-              </div>
-              <h3 className="font-semibold mb-2">Track Your Impact</h3>
-              <p className="text-sm text-muted-foreground">Receive updates and see how your generosity helps</p>
-            </div>
-          </div>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/scan-give">
-              <Button size="lg" variant="outline" className="border-2 border-orange-400 text-orange-400 hover:bg-orange-500/10 backdrop-blur-sm dark:text-orange-300 dark:border-orange-300">
-                <Heart className="h-4 w-4 mr-2" />
-                Start Giving Today
-              </Button>
-            </Link>
-            <Link href="/pods">
-              <Button variant="outline" size="lg" className="border-blue-500/20 text-blue-600 dark:text-blue-400">
-                <Building2 className="h-4 w-4 mr-2" />
-                Explore PODS
-              </Button>
-            </Link>
-            <Link href="/pods/mobi">
-              <Button variant="outline" size="lg" className="border-green-500/20 text-green-600 dark:text-green-400">
-                <Bike className="h-4 w-4 mr-2" />
-                Explore MOBI
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
-
       <Footer />
     </div>
   );

@@ -29,6 +29,7 @@ export interface ShelterTenant {
   type: 'Emergency Shelter' | 'Transitional Housing' | 'Family Shelter' | 'Youth Shelter' | 'Day Center';
   capacity: number;
   currentOccupancy: number;
+  participants?: number; // Number of enrolled participants (cached for public display)
   status: 'active' | 'pending' | 'inactive';
   contact: {
     name: string;

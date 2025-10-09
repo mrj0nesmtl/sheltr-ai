@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getShelterMetrics, ShelterMetrics } from '@/services/platformMetrics';
+import { generateShelterQRCode } from '@/services/qrCodeService';
 import { 
   QrCode, 
   Camera, 
@@ -46,6 +47,8 @@ export default function SettingsPage() {
   const [shelterData, setShelterData] = useState<ShelterMetrics | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [generatingQR, setGeneratingQR] = useState(false);
+  const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
 
   // Real shelter configuration - this would come from a detailed shelter profile
   const [formData, setFormData] = useState({
@@ -143,9 +146,36 @@ export default function SettingsPage() {
     console.log('Saving shelter configuration:', formData);
   };
 
-  const generateQRCode = () => {
-    // Generate new QR code
-    console.log('Generating new QR code for:', formData.qrCode);
+  const generateQRCode = async () => {
+    if (!shelterData?.shelterId) {
+      console.error('No shelter ID available');
+      alert('Error: Unable to generate QR code. Shelter ID not found.');
+      return;
+    }
+
+    try {
+      setGeneratingQR(true);
+      console.log(`🔄 Generating QR code for shelter: ${shelterData.shelterName} (${shelterData.shelterId})`);
+      
+      const result = await generateShelterQRCode(
+        shelterData.shelterId,
+        shelterData.shelterName || 'Shelter',
+        {
+          size: 400,
+          margin: 2
+        }
+      );
+
+      setQrCodeUrl(result.qrCodeUrl);
+      console.log('✅ QR code generated successfully:', result.qrCodeUrl);
+      alert('QR code generated successfully! It will now appear on your public shelter page.');
+      
+    } catch (error) {
+      console.error('❌ Error generating QR code:', error);
+      alert(`Failed to generate QR code: ${error}`);
+    } finally {
+      setGeneratingQR(false);
+    }
   };
 
   const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -729,25 +759,60 @@ export default function SettingsPage() {
                   <CardDescription>Quick access to your shelter's public page</CardDescription>
                 </CardHeader>
                 <CardContent className="text-center space-y-4">
-                  <div className="inline-block p-4 border-2 border-dashed border-gray-300 rounded-lg">
-                    <QrCode className="h-32 w-32 mx-auto text-gray-400" />
-                  </div>
+                  {qrCodeUrl ? (
+                    <div className="inline-block p-4 bg-white rounded-lg">
+                      <img 
+                        src={qrCodeUrl} 
+                        alt="Shelter QR Code" 
+                        className="h-48 w-48 mx-auto"
+                      />
+                    </div>
+                  ) : (
+                    <div className="inline-block p-4 border-2 border-dashed border-gray-300 rounded-lg">
+                      <QrCode className="h-32 w-32 mx-auto text-gray-400" />
+                    </div>
+                  )}
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Links to: {formData.qrCode}
+                    Links to: https://sheltr-ai.web.app/{shelterData?.shelterId || 'old-brewery-mission'}
                   </p>
                   <div className="flex space-x-2 justify-center">
-                    <Button variant="outline" onClick={generateQRCode}>
-                      <QrCode className="mr-2 h-4 w-4" />
-                      Regenerate
+                    <Button 
+                      variant="outline" 
+                      onClick={generateQRCode}
+                      disabled={generatingQR}
+                    >
+                      {generatingQR ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Generating...
+                        </>
+                      ) : (
+                        <>
+                          <QrCode className="mr-2 h-4 w-4" />
+                          Regenerate
+                        </>
+                      )}
                     </Button>
-                    <Button variant="outline">
-                      <Download className="mr-2 h-4 w-4" />
-                      Download PNG
-                    </Button>
-                    <Button variant="outline">
-                      <Copy className="mr-2 h-4 w-4" />
-                      Copy Link
-                    </Button>
+                    {qrCodeUrl && (
+                      <>
+                        <Button variant="outline" asChild>
+                          <a href={qrCodeUrl} download="shelter-qr-code.png">
+                            <Download className="mr-2 h-4 w-4" />
+                            Download PNG
+                          </a>
+                        </Button>
+                        <Button 
+                          variant="outline"
+                          onClick={() => {
+                            navigator.clipboard.writeText(`https://sheltr-ai.web.app/${shelterData?.shelterId || 'old-brewery-mission'}`);
+                            alert('Link copied to clipboard!');
+                          }}
+                        >
+                          <Copy className="mr-2 h-4 w-4" />
+                          Copy Link
+                        </Button>
+                      </>
+                    )}
                   </div>
                 </CardContent>
               </Card>

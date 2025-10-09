@@ -1,6 +1,16 @@
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, query, where, getDocs, orderBy, limit } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { createContactInquiryNotification } from './notificationService';
+
+export interface NewsletterSignup {
+  email: string;
+  name?: string;
+  source: 'landing' | 'about' | 'team' | 'other' | string;
+  subscribed_at: Date;
+  status: 'active' | 'unsubscribed';
+  ip_address?: string;
+  user_agent?: string;
+}
 
 export interface UnifiedInquiry {
   // Core fields
@@ -102,9 +112,15 @@ export class UnifiedInquiryService {
     name?: string;
     user_id?: string;
   }): Promise<string> {
+    // Check for duplicate newsletter signup
+    const isDuplicate = await this.isNewsletterSubscriber(data.email);
+    if (isDuplicate) {
+      throw new Error('This email is already subscribed to our newsletter');
+    }
+
     const inquiry: UnifiedInquiry = {
       name: data.name,
-      email: data.email,
+      email: data.email.toLowerCase(),
       subject: 'Newsletter Signup',
       message: `User signed up for newsletter updates from ${data.page}`,
       inquiry_type: 'newsletter_signup',
@@ -273,5 +289,110 @@ export class UnifiedInquiryService {
     await createInquiryNotification(docRef.id, inquiry);
     
     return docRef.id;
+  }
+
+  // ========================================
+  // NEWSLETTER MANAGEMENT FUNCTIONS
+  // ========================================
+
+  /**
+   * Check if email is already subscribed to newsletter
+   */
+  static async isNewsletterSubscriber(email: string): Promise<boolean> {
+    try {
+      const q = query(
+        collection(db, 'contact_inquiries'),
+        where('inquiry_type', '==', 'newsletter_signup'),
+        where('email', '==', email.toLowerCase()),
+        where('status', 'in', ['new', 'in_progress']) // Active subscribers
+      );
+      
+      const querySnapshot = await getDocs(q);
+      return !querySnapshot.empty;
+    } catch (error) {
+      console.error('❌ Error checking newsletter subscriber:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Get all newsletter signups from contact_inquiries collection
+   */
+  static async getAllNewsletterSignups(maxResults: number = 100): Promise<NewsletterSignup[]> {
+    try {
+      console.log('📧 [UNIFIED] Getting newsletter signups from contact_inquiries...');
+      
+      const q = query(
+        collection(db, 'contact_inquiries'),
+        where('inquiry_type', '==', 'newsletter_signup'),
+        orderBy('created_at', 'desc'),
+        limit(maxResults)
+      );
+      
+      const querySnapshot = await getDocs(q);
+      const signups: NewsletterSignup[] = [];
+      
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        signups.push({
+          email: data.email,
+          name: data.name || '',
+          source: data.source || 'other',
+          subscribed_at: data.created_at?.toDate() || new Date(),
+          status: data.status === 'closed' ? 'unsubscribed' : 'active',
+          user_agent: data.user_agent
+        });
+      });
+      
+      console.log(`✅ [UNIFIED] Found ${signups.length} newsletter signups`);
+      return signups;
+    } catch (error) {
+      console.error('❌ Error getting newsletter signups:', error);
+      return [];
+    }
+  }
+
+  /**
+   * Get newsletter signup count (active subscribers only)
+   */
+  static async getNewsletterCount(): Promise<number> {
+    try {
+      console.log('🔢 [UNIFIED] Counting active newsletter subscribers...');
+      
+      const q = query(
+        collection(db, 'contact_inquiries'),
+        where('inquiry_type', '==', 'newsletter_signup'),
+        where('status', 'in', ['new', 'in_progress']) // Active subscribers
+      );
+      
+      const querySnapshot = await getDocs(q);
+      const count = querySnapshot.size;
+      
+      console.log(`✅ [UNIFIED] Newsletter subscriber count: ${count}`);
+      return count;
+    } catch (error) {
+      console.error('❌ Error getting newsletter count:', error);
+      return 0;
+    }
+  }
+
+  /**
+   * Export newsletter emails (for CSV downloads)
+   */
+  static async exportNewsletterEmails(): Promise<string[]> {
+    try {
+      console.log('📤 [UNIFIED] Exporting newsletter emails...');
+      
+      const signups = await this.getAllNewsletterSignups(1000);
+      const emails = signups
+        .filter(signup => signup.status === 'active')
+        .map(signup => signup.email);
+      
+      console.log(`✅ [UNIFIED] Exported ${emails.length} newsletter emails`);
+      return emails;
+    } catch (error) {
+      console.error('❌ Error exporting newsletter emails:', error);
+      return [];
+    }
   }
 }

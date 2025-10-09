@@ -147,7 +147,10 @@ export default function SettingsPage() {
   };
 
   const generateQRCode = async () => {
-    if (!shelterData?.shelterId) {
+    // Get shelter ID from user's custom claims
+    const shelterId = user?.customClaims?.shelter_id || user?.shelterId || (user as any)?.shelter_id;
+    
+    if (!shelterId) {
       console.error('No shelter ID available');
       alert('Error: Unable to generate QR code. Shelter ID not found.');
       return;
@@ -155,11 +158,11 @@ export default function SettingsPage() {
 
     try {
       setGeneratingQR(true);
-      console.log(`🔄 Generating QR code for shelter: ${shelterData.shelterName} (${shelterData.shelterId})`);
+      console.log(`🔄 Generating QR code for shelter: ${shelterData?.shelterName} (${shelterId})`);
       
       const result = await generateShelterQRCode(
-        shelterData.shelterId,
-        shelterData.shelterName || 'Shelter',
+        shelterId,
+        shelterData?.shelterName || 'Shelter',
         {
           size: 400,
           margin: 2
@@ -773,7 +776,7 @@ export default function SettingsPage() {
                     </div>
                   )}
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Links to: https://sheltr-ai.web.app/{shelterData?.shelterId || 'old-brewery-mission'}
+                    Links to: https://sheltr-ai.web.app/{user?.customClaims?.shelter_id || 'old-brewery-mission'}
                   </p>
                   <div className="flex space-x-2 justify-center">
                     <Button 
@@ -793,26 +796,34 @@ export default function SettingsPage() {
                         </>
                       )}
                     </Button>
-                    {qrCodeUrl && (
-                      <>
-                        <Button variant="outline" asChild>
-                          <a href={qrCodeUrl} download="shelter-qr-code.png">
-                            <Download className="mr-2 h-4 w-4" />
-                            Download PNG
-                          </a>
-                        </Button>
-                        <Button 
-                          variant="outline"
-                          onClick={() => {
-                            navigator.clipboard.writeText(`https://sheltr-ai.web.app/${shelterData?.shelterId || 'old-brewery-mission'}`);
-                            alert('Link copied to clipboard!');
-                          }}
-                        >
-                          <Copy className="mr-2 h-4 w-4" />
-                          Copy Link
-                        </Button>
-                      </>
-                    )}
+                    <Button 
+                      variant="outline"
+                      disabled={!qrCodeUrl}
+                      asChild={!!qrCodeUrl}
+                    >
+                      {qrCodeUrl ? (
+                        <a href={qrCodeUrl} download="shelter-qr-code.png">
+                          <Download className="mr-2 h-4 w-4" />
+                          Download PNG
+                        </a>
+                      ) : (
+                        <>
+                          <Download className="mr-2 h-4 w-4" />
+                          Download PNG
+                        </>
+                      )}
+                    </Button>
+                    <Button 
+                      variant="outline"
+                      onClick={() => {
+                        const link = `https://sheltr-ai.web.app/${user?.customClaims?.shelter_id || 'old-brewery-mission'}`;
+                        navigator.clipboard.writeText(link);
+                        alert('Link copied to clipboard!');
+                      }}
+                    >
+                      <Copy className="mr-2 h-4 w-4" />
+                      Copy Link
+                    </Button>
                   </div>
                 </CardContent>
               </Card>

@@ -1,38 +1,19 @@
+'use client';
+
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowLeft, Heart, Shield, BarChart3, QrCode, Eye, Zap, TrendingUp, CheckCircle, Smartphone, Globe, Users, Target, Gift, Repeat, Bike, Building2, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ThemeToggle } from '@/components/theme-toggle';
 import Footer from '@/components/Footer';
+import PublicNavigation from '@/components/PublicNavigation';
 
 export default function DonorsPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
       {/* Navigation */}
-      <nav className="bg-background/95 backdrop-blur-sm sticky top-0 z-50 border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <Link href="/" className="flex items-center">
-              <img src="/logo.svg" alt="SHELTR" className="h-6 w-auto hover:opacity-80 transition-opacity" />
-            </Link>
-            <div className="hidden md:flex space-x-8">
-              <Link href="/" className="text-muted-foreground hover:text-primary transition-colors">Home</Link>
-              <Link href="/about" className="text-muted-foreground hover:text-primary transition-colors">About</Link>
-              <Link href="/solutions" className="text-muted-foreground hover:text-primary transition-colors">Solutions</Link>
-              <Link href="/scan-give" className="text-muted-foreground hover:text-primary transition-colors">Scan & Give</Link>
-              <Link href="/tokenomics" className="text-muted-foreground hover:text-primary transition-colors">Tokenomics</Link>
-              <Link href="/impact" className="text-muted-foreground hover:text-primary transition-colors">Impact</Link>
-            </div>
-            <div className="flex items-center space-x-4">
-              <ThemeToggle />
-              <Button variant="ghost" size="sm">Sign In</Button>
-              <Button>Get Started</Button>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <PublicNavigation />
 
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">

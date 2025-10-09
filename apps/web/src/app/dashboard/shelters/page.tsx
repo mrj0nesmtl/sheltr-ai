@@ -168,13 +168,10 @@ export default function ShelterNetwork() {
     window.open(url, '_blank');
   };
 
-  // View shelter function
+  // View shelter function - Navigate to dedicated page
   const viewShelter = (shelter: Shelter) => {
-    // Close any other open modals first
-    setSelectedShelterForEdit(null);
-    setShowDeleteConfirm(null);
-    // Then open the view modal
-    setSelectedShelterForView(shelter);
+    console.log(`👁️ Navigating to shelter view:`, shelter.name);
+    window.location.href = `/dashboard/shelters/${shelter.id}/view`;
   };
 
   // Get participant count for shelter (mock data for now)
@@ -222,23 +219,10 @@ export default function ShelterNetwork() {
   };
 
 
-  // Edit shelter
-  const editShelter = async (shelter: Shelter) => {
-    setSelectedShelterForEdit(shelter);
-    setEditFormData({
-      name: shelter.name || '',
-      location: shelter.location || '',
-      email: shelter.contact.email || '',
-      phone: shelter.contact.phone || '',
-      capacity: shelter.capacity || 0,
-      verified: shelter.verified || false
-    });
-    
-    // Load administrators for this shelter
-    await loadShelterAdministrators(shelter.id);
-    await loadAvailableAdministrators();
-    
-    console.log(`✏️ Editing shelter:`, shelter.name);
+  // Edit shelter - Navigate to dedicated page
+  const editShelter = (shelter: Shelter) => {
+    console.log(`✏️ Navigating to shelter edit:`, shelter.name);
+    window.location.href = `/dashboard/shelters/${shelter.id}/edit`;
   };
 
   // Load administrators assigned to this shelter
@@ -1239,9 +1223,8 @@ export default function ShelterNetwork() {
         </TabsContent>
       </Tabs>
 
-
-      {/* Edit Shelter Modal */}
-      {selectedShelterForEdit && (
+      {/* Delete Confirmation Modal */}
+      {showDeleteConfirm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
             <h3 className="text-lg font-semibold mb-4">Edit Shelter</h3>

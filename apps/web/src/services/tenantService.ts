@@ -133,6 +133,7 @@ export class TenantService {
             type: shelterData.type || 'Emergency Shelter',
             capacity: shelterData.capacity || 0,
             currentOccupancy: shelterData.currentOccupancy || 0,
+            participants: shelterData.participants || 0, // Include cached participant count
             status: shelterData.status || 'active',
             contact: shelterData.contact || { name: '', email: '', phone: '' },
             coordinates: shelterData.coordinates || { lat: 45.5017, lng: -73.5673 }, // Default Montreal
@@ -180,6 +181,7 @@ export class TenantService {
               type: shelterData.type || 'Emergency Shelter',
               capacity: shelterData.capacity || 0,
               currentOccupancy: shelterData.currentOccupancy || 0,
+              participants: shelterData.participants || 0, // Include cached participant count
               status: shelterData.status || 'active',
               contact: shelterData.contact || { name: '', email: '', phone: '' },
               coordinates: shelterData.coordinates || { lat: 45.5017, lng: -73.5673 }, // Default Montreal

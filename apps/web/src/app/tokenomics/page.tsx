@@ -1,124 +1,20 @@
 'use client';
 
 import Link from 'next/link';
-import { CreditCard, TrendingUp, Shield, Building2, Users, BarChart3, CheckCircle, Eye, LogIn, Menu, X, FileText, BookOpen, Zap, AlertTriangle } from 'lucide-react';
+import { CreditCard, TrendingUp, Shield, Building2, Users, CheckCircle, Eye, FileText, BookOpen, Zap, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ThemeToggle } from '@/components/theme-toggle';
 import Footer from '@/components/Footer';
-import ThemeLogo from '@/components/ThemeLogo';
-import { useState } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
 import { PublicChatbot } from '@/components/PublicChatbot';
+import PublicNavigation from '@/components/PublicNavigation';
 
 export default function TokenomicsPage() {
-  const { user, hasRole } = useAuth();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
-      {/* Navigation */}
-      <nav className="bg-background/95 backdrop-blur-sm sticky top-0 z-50 border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <Link href="/" className="flex items-center">
-              <ThemeLogo />
-            </Link>
-            <div className="hidden md:flex space-x-8">
-              <Link href="/about" className="text-muted-foreground hover:text-primary transition-colors">About</Link>
-              <Link href="/solutions" className="text-muted-foreground hover:text-primary transition-colors">Solutions</Link>
-              <Link href="/scan-give" className="text-muted-foreground hover:text-primary transition-colors">Scan & Give</Link>
-              <Link href="/impact" className="text-muted-foreground hover:text-primary transition-colors">Impact</Link>
-            </div>
-            <div className="flex items-center space-x-4">
-              <ThemeToggle />
-              <div className="hidden md:flex items-center space-x-4">
-                {user ? (
-                  // Logged in user navigation
-                  <>
-                    <span className="text-sm text-muted-foreground">
-                      Welcome, {user.displayName || user.email}
-                    </span>
-                    <Link href={hasRole('donor') ? '/dashboard/donor' : hasRole('super_admin') ? '/dashboard' : hasRole('platform_admin') ? '/dashboard' : hasRole('participant') ? '/dashboard/participant' : '/dashboard'}>
-                      <Button variant="ghost" size="sm">
-                        <BarChart3 className="h-4 w-4 mr-2" />
-                        Dashboard
-                      </Button>
-                    </Link>
-                  </>
-                ) : (
-                  // Non-logged in navigation
-                  <>
-                    <Link href="/login">
-                      <Button variant="ghost" size="sm">
-                        <LogIn className="h-4 w-4 mr-2" />
-                        Sign In
-                      </Button>
-                    </Link>
-                    <Link href="/register">
-                      <Button size="sm">
-                        Get Started
-                      </Button>
-                    </Link>
-                  </>
-                )}
-              </div>
-              
-              {/* Mobile menu button */}
-              <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden"
-              >
-                {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-              </button>
-            </div>
-          </div>
-          
-          {/* Mobile menu */}
-          {mobileMenuOpen && (
-            <div className="md:hidden">
-              <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-background border-t">
-                <Link href="/about" className="block px-3 py-2 text-muted-foreground hover:text-primary">About</Link>
-                <Link href="/solutions" className="block px-3 py-2 text-muted-foreground hover:text-primary">Solutions</Link>
-                <Link href="/scan-give" className="block px-3 py-2 text-muted-foreground hover:text-primary">Scan & Give</Link>
-                <Link href="/impact" className="block px-3 py-2 text-muted-foreground hover:text-primary">Impact</Link>
-                <div className="border-t pt-3 mt-3">
-                  {user ? (
-                    // Logged in mobile menu
-                    <>
-                      <div className="text-sm text-muted-foreground px-3 py-2">
-                        Welcome, {user.displayName || user.email}
-                      </div>
-                      <Link href={hasRole('donor') ? '/dashboard/donor' : hasRole('super_admin') ? '/dashboard' : hasRole('platform_admin') ? '/dashboard' : hasRole('participant') ? '/dashboard/participant' : '/dashboard'} className="block">
-                        <Button variant="ghost" className="w-full justify-start">
-                          <BarChart3 className="h-4 w-4 mr-2" />
-                          Dashboard
-                        </Button>
-                      </Link>
-                    </>
-                  ) : (
-                    // Non-logged in mobile menu
-                    <>
-                      <Link href="/login" className="block">
-                        <Button variant="ghost" className="w-full justify-start">
-                          <LogIn className="h-4 w-4 mr-2" />
-                          Sign In
-                        </Button>
-                      </Link>
-                      <Link href="/register" className="block">
-                        <Button className="w-full">
-                          Get Started
-                        </Button>
-                      </Link>
-                    </>
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      </nav>
+      {/* Navigation - Now using unified PublicNavigation component */}
+      <PublicNavigation />
 
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -174,13 +70,13 @@ export default function TokenomicsPage() {
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <Badge variant="secondary" className="mb-6 bg-white/20 text-white border-white/30 backdrop-blur-sm">
-            ENTERPRISE TOKENOMICS v2.0
+            TOKENOMICS v2.0
           </Badge>
           <h1 className="text-5xl md:text-6xl font-bold mb-6 text-white">
             SHELTR <span className="text-emerald-400">SmartFund™</span>
           </h1>
           <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto">
-             Enterprise-grade token architecture combining <strong>virtual cards</strong>, <strong>Coinbase institutional staking</strong>, and <strong>SHELTR utility tracking</strong> for transparency stability and growth.
+             Enterprise-grade token architecture combining <strong>virtual cards</strong>, <strong> institutional staking</strong>, and <strong> utility tracking</strong> for transparency stability and growth.
           </p>
         </div>
       </section>
@@ -189,7 +85,7 @@ export default function TokenomicsPage() {
       <section className="py-20 bg-gradient-to-r from-green-500/5 to-emerald-500/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4">Enterprise Payment Architecture</h2>
+            <h2 className="text-3xl font-bold mb-4">Payment Architecture</h2>
             <p className="text-xl text-muted-foreground">How our single-token model achieves 100% efficiency with zero participant risk</p>
           </div>
 
@@ -263,8 +159,8 @@ export default function TokenomicsPage() {
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4">Payment Flow Architecture</h2>
-            <p className="text-xl text-muted-foreground">Direct credit card to virtual debit card with blockchain transparency</p>
+            <h2 className="text-3xl font-bold mb-4">Payment Flow</h2>
+            <p className="text-xl text-muted-foreground">Direct to virtual debit card with blockchain transparency</p>
           </div>
 
           <Card className="border-2 border-gray-200 dark:border-gray-700 bg-gradient-to-br from-slate-50 to-gray-50 dark:from-slate-900 dark:to-gray-900">
@@ -338,8 +234,8 @@ export default function TokenomicsPage() {
       <section className="py-20 bg-gradient-to-r from-emerald-500/5 to-blue-500/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4">SHELTR Stablecoin Architecture</h2>
-            <p className="text-xl text-muted-foreground">Single utility token for transparent housing fund tracking</p>
+            <h2 className="text-3xl font-bold mb-4">Stablecoin Architecture</h2>
+            <p className="text-xl text-muted-foreground">Utility token for transparent housing fund tracking</p>
           </div>
 
           <div className="max-w-4xl mx-auto">
@@ -438,7 +334,7 @@ export default function TokenomicsPage() {
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4">Enterprise Infrastructure Partners</h2>
+            <h2 className="text-3xl font-bold mb-4">Infrastructure Partners</h2>
             <p className="text-xl text-muted-foreground">Institutional-grade payment processing and custody services</p>
           </div>
 
@@ -539,7 +435,7 @@ export default function TokenomicsPage() {
       <section className="py-16 bg-muted/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Technical Documentation</h2>
+            <h2 className="text-3xl font-bold mb-4">Documentation</h2>
             <p className="text-xl text-muted-foreground">
               Explore detailed architecture, implementation guides, and strategic analysis
             </p>

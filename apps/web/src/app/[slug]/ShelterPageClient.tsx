@@ -29,6 +29,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { tenantService, ShelterTenant } from '@/services/tenantService';
 import { shelterService, ShelterPublicConfig } from '@/services/shelterService';
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 
 interface ShelterConfig {
   id: string;
@@ -99,6 +101,7 @@ export default function ShelterPageClient({ slug }: ShelterPageClientProps) {
   const [shelter, setShelter] = useState<ShelterConfig | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [participantCount, setParticipantCount] = useState<number>(0);
   
   // Email signup form state
   const [signupEmail, setSignupEmail] = useState('');
@@ -166,6 +169,21 @@ export default function ShelterPageClient({ slug }: ShelterPageClientProps) {
           };
           
           setShelter(shelterData);
+          
+          // Fetch participant count for this shelter
+          try {
+            const participantsQuery = query(
+              collection(db, 'users'),
+              where('role', '==', 'participant'),
+              where('shelterId', '==', matchingShelter.id)
+            );
+            const participantsSnapshot = await getDocs(participantsQuery);
+            setParticipantCount(participantsSnapshot.size);
+            console.log(`📊 Found ${participantsSnapshot.size} participants for shelter: ${matchingShelter.name}`);
+          } catch (participantError) {
+            console.error('Error fetching participant count:', participantError);
+            setParticipantCount(0);
+          }
         } else {
           setError('Shelter not found');
         }
@@ -308,14 +326,14 @@ export default function ShelterPageClient({ slug }: ShelterPageClientProps) {
             {shelter.description}
           </p>
 
-          {/* Capacity Badge */}
-          {shelter.available_beds !== undefined && (
-            <div className="inline-flex items-center gap-2 bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-400 px-4 py-2 rounded-full">
-              <Users className="h-4 w-4" />
-              <span className="font-medium">{shelter.available_beds} beds available</span>
-              <span className="text-sm text-muted-foreground">(Real Data)</span>
-            </div>
-          )}
+          {/* Participants Badge */}
+          <div className="inline-flex items-center gap-2 bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 px-4 py-2 rounded-full">
+            <Users className="h-4 w-4" />
+            <span className="font-medium">
+              {participantCount} {participantCount === 1 ? 'participant' : 'participants'} enrolled
+            </span>
+            <span className="text-sm text-muted-foreground">(Real Data)</span>
+          </div>
         </div>
 
         {/* Images Gallery (if available) */}

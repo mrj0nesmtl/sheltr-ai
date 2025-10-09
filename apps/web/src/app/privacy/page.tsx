@@ -1,10 +1,16 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowLeft, Shield, Eye, Database, Brain, Lock, Globe } from 'lucide-react';
+import { Shield, Eye, Database, Brain, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
 import Footer from '@/components/Footer';
 import PublicNavigation from '@/components/PublicNavigation';
 
@@ -15,23 +21,51 @@ export default function PrivacyPage() {
       <PublicNavigation />
 
       {/* Header */}
-      <section className="py-12 bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20">
-        <div className="container mx-auto px-4">
+      <section className="relative py-12 sm:py-16 overflow-hidden">
+        {/* Background Image */}
+        <div 
+          className="absolute inset-0 z-0"
+          style={{
+            backgroundImage: 'url(/backgrounds/sheltr-bg-2.jpg)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+        />
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 z-10 bg-gradient-to-b from-green-900/90 via-blue-900/85 to-background dark:from-green-950/95 dark:via-blue-950/90 dark:to-background" />
+        <div className="container mx-auto px-4 relative z-20">
           <div className="max-w-4xl mx-auto">
-            <div className="flex items-center gap-4 mb-6">
-              <Eye className="h-12 w-12 text-green-600" />
+            {/* Mobile Layout */}
+            <div className="block sm:hidden text-center space-y-4">
+              <Eye className="h-16 w-16 text-green-400 mx-auto drop-shadow-lg" />
               <div>
-                <div className="flex items-center gap-2 mb-2">
-                  <h1 className="text-4xl font-bold">Privacy Policy</h1>
-                  <Badge className="bg-green-500 text-white">Privacy</Badge>
-                </div>
-                <p className="text-lg text-muted-foreground">
-                  How SHELTR-AI Protects Your Data and Privacy
+                <Badge variant="outline" className="border-green-400 text-green-400 bg-green-950/30 backdrop-blur-sm mb-3">Privacy</Badge>
+                <h1 className="text-3xl font-bold mb-3 text-white drop-shadow-lg">Privacy Policy</h1>
+                <p className="text-base text-white/90 mb-3 drop-shadow-md">
+                  How SHELTR Protects Your Data and Privacy
                 </p>
-                <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
+                <div className="text-xs text-white/80 space-y-1">
+                  <div>Effective: January 25, 2025</div>
+                  <div>Last Updated: October 9, 2025</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Desktop Layout */}
+            <div className="hidden sm:flex items-start gap-6">
+              <Eye className="h-16 w-16 text-green-400 flex-shrink-0 mt-2 drop-shadow-lg" />
+              <div className="flex-1">
+                <div className="flex items-center gap-3 mb-3">
+                  <h1 className="text-4xl lg:text-5xl font-bold text-white drop-shadow-lg">Privacy Policy</h1>
+                  <Badge variant="outline" className="border-green-400 text-green-400 bg-green-950/30 backdrop-blur-sm">Privacy</Badge>
+                </div>
+                <p className="text-lg text-white/90 mb-3 drop-shadow-md">
+                  How SHELTR Protects Your Data and Privacy
+                </p>
+                <div className="flex items-center gap-4 text-sm text-white/80">
                   <span>Effective: January 25, 2025</span>
                   <span>•</span>
-                  <span>Last Updated: January 25, 2025</span>
+                  <span>Last Updated: October 9, 2025</span>
                 </div>
               </div>
             </div>
@@ -43,47 +77,72 @@ export default function PrivacyPage() {
       <section className="py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            {/* Privacy Highlights */}
-            <div className="mb-8 grid md:grid-cols-3 gap-4">
-              <Card className="border-green-200 bg-green-50 dark:bg-green-900/20">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-green-800 dark:text-green-200">
-                    <Shield className="h-5 w-5" />
-                    Privacy First
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="text-green-700 dark:text-green-300 text-sm">
-                  <p>We collect only necessary data and use privacy-preserving technologies where possible.</p>
-                </CardContent>
-              </Card>
+            {/* Privacy Highlights - Collapsible */}
+            <div className="mb-8">
+              <Accordion type="single" collapsible className="space-y-3">
+                <AccordionItem value="privacy-first" className="border-2 border-green-200 dark:border-green-900 rounded-lg bg-green-50/50 dark:bg-green-900/10 px-4">
+                  <AccordionTrigger className="hover:no-underline py-4">
+                    <div className="flex items-center gap-3 text-left">
+                      <Shield className="h-5 w-5 text-green-600 flex-shrink-0" />
+                      <span className="font-semibold text-sm sm:text-base text-green-800 dark:text-green-200">
+                        Privacy First
+                      </span>
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent className="text-green-700 dark:text-green-300 text-xs sm:text-sm pb-4">
+                    <p>
+                      We collect only necessary data and use privacy-preserving technologies where possible.
+                    </p>
+                  </AccordionContent>
+                </AccordionItem>
 
-              <Card className="border-blue-200 bg-blue-50 dark:bg-blue-900/20">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-blue-800 dark:text-blue-200">
-                    <Brain className="h-5 w-5" />
-                    AI Transparency
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="text-blue-700 dark:text-blue-300 text-sm">
-                  <p>Clear disclosure of how AI systems use your data and make decisions affecting you.</p>
-                </CardContent>
-              </Card>
+                <AccordionItem value="ai-transparency" className="border-2 border-blue-200 dark:border-blue-900 rounded-lg bg-blue-50/50 dark:bg-blue-900/10 px-4">
+                  <AccordionTrigger className="hover:no-underline py-4">
+                    <div className="flex items-center gap-3 text-left">
+                      <Brain className="h-5 w-5 text-blue-600 flex-shrink-0" />
+                      <span className="font-semibold text-sm sm:text-base text-blue-800 dark:text-blue-200">
+                        AI Transparency
+                      </span>
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent className="text-blue-700 dark:text-blue-300 text-xs sm:text-sm pb-4">
+                    <p>
+                      Clear disclosure of how AI systems use your data and make decisions affecting you.
+                    </p>
+                  </AccordionContent>
+                </AccordionItem>
 
-              <Card className="border-purple-200 bg-purple-50 dark:bg-purple-900/20">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-purple-800 dark:text-purple-200">
-                    <Database className="h-5 w-5" />
-                    Blockchain Balance
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="text-purple-700 dark:text-purple-300 text-sm">
-                  <p>Transparency through blockchain while protecting personal information through careful design.</p>
-                </CardContent>
-              </Card>
+                <AccordionItem value="blockchain-balance" className="border-2 border-purple-200 dark:border-purple-900 rounded-lg bg-purple-50/50 dark:bg-purple-900/10 px-4">
+                  <AccordionTrigger className="hover:no-underline py-4">
+                    <div className="flex items-center gap-3 text-left">
+                      <Database className="h-5 w-5 text-purple-600 flex-shrink-0" />
+                      <span className="font-semibold text-sm sm:text-base text-purple-800 dark:text-purple-200">
+                        Blockchain Balance
+                      </span>
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent className="text-purple-700 dark:text-purple-300 text-xs sm:text-sm pb-4">
+                    <p>
+                      Transparency through blockchain while protecting personal information through careful design.
+                    </p>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
             </div>
 
             {/* Privacy Policy Content */}
-            <div className="prose prose-lg max-w-none dark:prose-invert">
+            <Card className="border-2">
+              <CardContent className="p-6 sm:p-8 lg:p-12">
+                <div className="prose prose-lg max-w-none dark:prose-invert 
+                  prose-headings:scroll-mt-20 
+                  prose-h2:text-2xl prose-h2:font-bold prose-h2:mt-8 prose-h2:mb-6 prose-h2:pb-3 prose-h2:border-b prose-h2:border-border
+                  prose-h2:first:mt-0
+                  prose-h3:text-xl prose-h3:font-semibold prose-h3:mt-8 prose-h3:mb-4
+                  prose-p:mb-4 prose-p:leading-relaxed prose-p:text-muted-foreground
+                  prose-ul:my-4 prose-ul:space-y-2
+                  prose-li:leading-relaxed prose-li:text-muted-foreground
+                  prose-strong:text-foreground prose-strong:font-semibold"
+                >
               <h2>1. Introduction</h2>
               <p>
                 SHELTR-AI Technologies Inc. ("Company", "we", "us", or "our") is committed to protecting your privacy. 
@@ -381,31 +440,39 @@ export default function PrivacyPage() {
                 <li><strong>SOX:</strong> Sarbanes-Oxley Act financial data requirements</li>
                 <li><strong>PCI DSS:</strong> Payment Card Industry Data Security Standard</li>
               </ul>
-            </div>
+                </div>
+              </CardContent>
+            </Card>
 
             {/* Privacy Footer */}
-            <div className="mt-12 p-6 bg-slate-50 dark:bg-slate-800 rounded-lg">
-              <h3 className="font-semibold mb-4">Your Privacy Matters</h3>
-              <p className="text-sm text-muted-foreground">
-                We are committed to protecting your privacy and being transparent about our data practices. 
-                If you have any questions or concerns about this Privacy Policy or our data handling practices, 
-                please don't hesitate to contact our Privacy Officer.
-              </p>
-              <div className="flex gap-4 mt-4">
-                <Link href="/terms">
-                  <Button variant="outline" size="sm">
-                    <Shield className="h-4 w-4 mr-2" />
-                    Terms of Service
-                  </Button>
-                </Link>
-                <a href="mailto:privacy@sheltr-ai.com">
-                  <Button variant="outline" size="sm">
-                    <Lock className="h-4 w-4 mr-2" />
-                    Contact Privacy Team
-                  </Button>
-                </a>
-              </div>
-            </div>
+            <Card className="mt-8 border-2 border-green-200 dark:border-green-900 bg-green-50/50 dark:bg-green-900/10">
+              <CardContent className="p-6 sm:p-8">
+                <div className="flex items-start gap-4 mb-4">
+                  <Eye className="h-6 w-6 text-green-600 flex-shrink-0 mt-1" />
+                  <div>
+                    <h3 className="font-semibold text-lg mb-2">Your Privacy Matters</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                      We are committed to protecting your privacy and being transparent about our data practices. 
+                      If you have any questions or concerns about this Privacy Policy or our data handling practices, 
+                      please don&apos;t hesitate to contact our Privacy Officer.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <Link href="/terms">
+                    <Button variant="outline" size="sm" className="border-green-300 hover:bg-green-100 dark:border-green-700 dark:hover:bg-green-900/20">
+                      <FileText className="h-4 w-4 mr-2" />
+                      Terms of Service
+                    </Button>
+                  </Link>
+                  <a href="mailto:privacy@sheltr.com">
+                    <Button variant="outline" size="sm" className="border-green-300 hover:bg-green-100 dark:border-green-700 dark:hover:bg-green-900/20">
+                      Contact Privacy Team
+                    </Button>
+                  </a>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>

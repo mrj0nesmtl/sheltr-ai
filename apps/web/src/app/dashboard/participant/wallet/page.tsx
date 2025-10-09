@@ -447,44 +447,67 @@ export default function ParticipantWallet() {
           <CardTitle className="flex items-center space-x-2">
             <Wallet className="h-5 w-5" />
             <span>Digital Wallet</span>
-            <Badge variant="outline" className="ml-2">
+            <Badge variant="outline" className="ml-2 border-green-500 text-green-600 bg-transparent">
               <Shield className="h-3 w-3 mr-1" />
-              SHELTR Testnet
+              Live Data
             </Badge>
           </CardTitle>
-          <CardDescription>Your SHELTR blockchain wallet</CardDescription>
+          <CardDescription>Virtual debit card & SmartFund savings accounts</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          {/* Token Balances with 80/15 Split */}
-          <div className="p-4 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-green-600">
-                  {realWalletData.sheltrStableBalance.toLocaleString()}
+          {/* Virtual Debit Account - 80% */}
+          <div className="p-4 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-lg border-2 border-green-200 dark:border-green-800">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center space-x-2">
+                <div className="p-2 bg-green-100 dark:bg-green-900/40 rounded-lg">
+                  <CreditCard className="h-5 w-5 text-green-600" />
                 </div>
-                <div className="text-xs text-muted-foreground">SHELTR Stable Coin</div>
-                <div className="text-xs text-green-700">USDC • 80% of donations</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-blue-600">
-                  {realWalletData.sheltrUtilityBalance.toLocaleString()}
+                <div>
+                  <p className="text-sm font-semibold text-green-700 dark:text-green-400">Virtual Debit Account</p>
+                  <p className="text-xs text-muted-foreground">Everyday spending • Tap & Go with Aiden</p>
                 </div>
-                <div className="text-xs text-muted-foreground">SHELTR Utility Token</div>
-                <div className="text-xs text-blue-700">Housing Growth Fund • DeFi • 15%</div>
               </div>
             </div>
-            
-            {/* Total Received Summary */}
-            <div className="mt-4 pt-4 border-t border-white/20">
-              <div className="text-center">
-                <div className="text-sm text-gray-600 dark:text-gray-400">Total Received</div>
-                <div className="text-lg font-bold text-gray-900 dark:text-white">
-                  ${realWalletData.totalReceived.toLocaleString()}
+            <div className="text-3xl font-bold text-green-600 dark:text-green-400">
+              ${realWalletData.sheltrStableBalance.toLocaleString()}
+            </div>
+            <p className="text-xs text-muted-foreground mt-2">
+              80% of donations • Virtual card ready for use
+            </p>
+          </div>
+
+          {/* SmartFund Savings - 15% */}
+          <div className="p-4 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg border-2 border-blue-200 dark:border-blue-800">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center space-x-2">
+                <div className="p-2 bg-blue-100 dark:bg-blue-900/40 rounded-lg">
+                  <Home className="h-5 w-5 text-blue-600" />
                 </div>
-                <div className="text-xs text-gray-500">
-                  {realWalletData.transactionCount} transactions
+                <div>
+                  <p className="text-sm font-semibold text-blue-700 dark:text-blue-400">SmartFund Savings</p>
+                  <p className="text-xs text-muted-foreground">Pod purchase fund • USDC staking</p>
                 </div>
               </div>
+            </div>
+            <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
+              ${realWalletData.sheltrUtilityBalance.toLocaleString()}
+            </div>
+            <p className="text-xs text-muted-foreground mt-2">
+              15% of donations • Coinbase institutional staking • Pooled with other participants
+            </p>
+          </div>
+
+          {/* Total Received Summary */}
+          <div className="p-4 bg-gradient-to-r from-gray-50 to-slate-50 dark:from-gray-900/20 dark:to-slate-900/20 rounded-lg border">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-medium text-muted-foreground">Total Received</span>
+              <Badge variant="outline" className="text-xs">
+                {realWalletData.transactionCount} donations
+              </Badge>
+            </div>
+            <div className="text-2xl font-bold">${realWalletData.totalReceived.toLocaleString()}</div>
+            <div className="mt-2 text-xs text-muted-foreground">
+              5% shelter operations fee already deducted
             </div>
           </div>
 
@@ -527,11 +550,14 @@ export default function ParticipantWallet() {
             </Button>
           </div>
 
-          {/* Network Status */}
+          {/* Account Info */}
           <div className="pt-2 border-t">
             <div className="flex items-center justify-between text-xs text-muted-foreground">
-              <span>Network: SHELTR Testnet</span>
-              <span>Block: {Math.floor(Math.random() * 100000) + 686595}</span>
+              <span>Accounts: Secured & Encrypted</span>
+              <Badge variant="outline" className="border-green-500 text-green-600 bg-transparent text-xs">
+                <Shield className="h-3 w-3 mr-1" />
+                Live
+              </Badge>
             </div>
           </div>
         </CardContent>

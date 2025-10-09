@@ -426,6 +426,13 @@ const getNavigationItems = (userRole: string, messageCount?: number, notificatio
         description: 'Your giving dashboard'
       },
       {
+        title: 'Notifications',
+        href: '/dashboard/donor/notifications',
+        icon: Bell,
+        description: 'Your donation notifications',
+        notificationCount
+      },
+      {
         title: 'Donations',
         href: '/dashboard/donor/donations',
         icon: Heart,
@@ -466,6 +473,13 @@ const getNavigationItems = (userRole: string, messageCount?: number, notificatio
         href: '/dashboard/participant',
         icon: Home,
         description: 'Your personal dashboard'
+      },
+      {
+        title: 'Notifications',
+        href: '/dashboard/participant/notifications',
+        icon: Bell,
+        description: 'Your donation notifications',
+        notificationCount
       },
       {
         title: 'Profile',
@@ -537,14 +551,28 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   // Fetch notification counts
   useEffect(() => {
     const fetchNotificationCounts = async () => {
-      if (!user || !['super_admin', 'platform_admin', 'admin'].includes(user.role || '')) {
-        return;
-      }
+      if (!user) return;
 
       try {
-        const counts = await getNotificationCounts(user.uid);
-        setNotificationCounts(counts);
-        console.log('📊 Fetched notification counts:', counts);
+        // Admin roles get full notification counts
+        if (['super_admin', 'platform_admin', 'admin'].includes(user.role || '')) {
+          const counts = await getNotificationCounts(user.uid);
+          setNotificationCounts(counts);
+          console.log('📊 Fetched admin notification counts:', counts);
+        } 
+        // Donor and Participant get their specific notification counts
+        else if (['donor', 'participant'].includes(user.role || '')) {
+          // Import the specific services
+          const { DonorNotificationService } = await import('@/services/donorNotificationService');
+          const { ParticipantNotificationService } = await import('@/services/participantNotificationService');
+          
+          const count = user.role === 'donor' 
+            ? await DonorNotificationService.getNotificationCount(user.uid)
+            : await ParticipantNotificationService.getNotificationCount(user.uid);
+          
+          setNotificationCounts({ unreadNotifications: count, unreadMessages: 0 });
+          console.log(`📊 Fetched ${user.role} notification count:`, count);
+        }
       } catch (error) {
         console.error('❌ Error fetching notification counts:', error);
       }

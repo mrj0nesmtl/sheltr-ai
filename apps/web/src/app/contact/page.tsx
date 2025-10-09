@@ -1,9 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
 import { UnifiedInquiryService } from '@/services/unifiedInquiryService';
-import { Mail, Phone, MapPin, MessageCircle, Send, ExternalLink, Github, FileText, Sparkles, Users, Heart, BarChart3, LogIn } from 'lucide-react';
+import { Mail, Phone, MapPin, MessageCircle, Send, ExternalLink, Github, FileText, Sparkles, Users, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -13,12 +12,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import Link from 'next/link';
 import Image from 'next/image';
 import Footer from '@/components/Footer';
-import ThemeLogo from '@/components/ThemeLogo';
 import Head from 'next/head';
 import { PublicChatbot } from '@/components/PublicChatbot';
+import PublicNavigation from '@/components/PublicNavigation';
 
 export default function ContactPage() {
-  const { user, hasRole } = useAuth();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -93,61 +91,8 @@ export default function ContactPage() {
       </Head>
 
       <div className="min-h-screen bg-background">
-        {/* Header Navigation */}
-        <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
-          <nav className="container mx-auto px-4 py-4">
-            <div className="flex items-center justify-between">
-              <Link href="/" className="flex items-center space-x-2">
-                <ThemeLogo className="h-8 w-auto" />
-              </Link>
-              
-              {/* Desktop Navigation */}
-              <div className="hidden md:flex items-center space-x-8">
-                <Link href="/about" className="text-muted-foreground hover:text-foreground transition-colors">
-                  About
-                </Link>
-                <Link href="/solutions" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Solutions
-                </Link>
-                <Link href="/scan-give" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Scan & Give
-                </Link>
-                <Link href="/impact" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Impact
-                </Link>
-              </div>
-
-              {/* User Awareness Navigation */}
-              <div className="hidden md:flex items-center space-x-4">
-                {user ? (
-                  <>
-                    <span className="text-sm text-muted-foreground">
-                      Welcome, {user.displayName || user.email}
-                    </span>
-                    <Link href={hasRole('donor') ? '/dashboard/donor' : hasRole('super_admin') ? '/dashboard' : hasRole('platform_admin') ? '/dashboard' : hasRole('participant') ? '/dashboard/participant' : '/dashboard'}>
-                      <Button variant="ghost" size="sm">
-                        <BarChart3 className="h-4 w-4 mr-2" />
-                        Dashboard
-                      </Button>
-                    </Link>
-                  </>
-                ) : (
-                  <>
-                    <Link href="/login">
-                      <Button variant="ghost" size="sm">
-                        <LogIn className="h-4 w-4 mr-2" />
-                        Sign In
-                      </Button>
-                    </Link>
-                    <Link href="/register">
-                      <Button size="sm">Get Started</Button>
-                    </Link>
-                  </>
-                )}
-              </div>
-            </div>
-          </nav>
-        </header>
+        {/* Navigation - Now using unified PublicNavigation component */}
+        <PublicNavigation />
 
         {/* Hero Section */}
         <section className="py-20 bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">

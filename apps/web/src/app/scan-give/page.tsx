@@ -1,23 +1,21 @@
 'use client';
 
 import Link from 'next/link';
-import { QrCode, Heart, Shield, Check, LogIn, Menu, X, BarChart3, User } from 'lucide-react';
+import { QrCode, Heart, Shield, Check, User, BarChart3, LogIn } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ThemeToggle } from '@/components/theme-toggle';
 import Footer from '@/components/Footer';
-import ThemeLogo from '@/components/ThemeLogo';
 import { useState } from 'react';
 import { DemoQRModal } from '@/components/demo/DemoQRModal';
 import { PublicChatbot } from '@/components/PublicChatbot';
 import { UnifiedInquiryService } from '@/services/unifiedInquiryService';
 import { getDonationMetrics } from '@/services/donationMetricsService';
+import PublicNavigation from '@/components/PublicNavigation';
 
 export default function ScanGivePage() {
   const { user, hasRole } = useAuth();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showDemoQR, setShowDemoQR] = useState(false);
   const [demoParticipant, setDemoParticipant] = useState<object | null>(null);
   const [qrCodeUrl, setQrCodeUrl] = useState('');
@@ -136,107 +134,8 @@ export default function ScanGivePage() {
   };
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
-      {/* Navigation */}
-      <nav className="bg-background/95 backdrop-blur-sm sticky top-0 z-50 border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-                         <Link href="/" className="flex items-center">
-               <ThemeLogo />
-             </Link>
-            <div className="hidden md:flex space-x-8">
-              <Link href="/about" className="text-muted-foreground hover:text-primary transition-colors">About</Link>
-              <Link href="/solutions" className="text-muted-foreground hover:text-primary transition-colors">Solutions</Link>
-              <Link href="/scan-give" className="text-foreground hover:text-primary transition-colors">Scan & Give</Link>
-              <Link href="/impact" className="text-muted-foreground hover:text-primary transition-colors">Impact</Link>
-            </div>
-            <div className="flex items-center space-x-4">
-              <ThemeToggle />
-              <div className="hidden md:flex items-center space-x-4">
-                {user ? (
-                  // Logged in user navigation
-                  <>
-                    <span className="text-sm text-muted-foreground">
-                      Welcome, {user.displayName || user.email}
-                    </span>
-                    <Link href={hasRole('donor') ? '/dashboard/donor' : hasRole('super_admin') ? '/dashboard' : hasRole('participant') ? '/dashboard/participant' : '/dashboard'}>
-                      <Button variant="ghost" size="sm">
-                        <BarChart3 className="h-4 w-4 mr-2" />
-                        Dashboard
-                      </Button>
-                    </Link>
-                  </>
-                ) : (
-                  // Non-logged in navigation
-                  <>
-                    <Link href="/login">
-                      <Button variant="ghost" size="sm">
-                        <LogIn className="h-4 w-4 mr-2" />
-                        Sign In
-                      </Button>
-                    </Link>
-                    <Link href="/register">
-                      <Button>
-                        Get Started
-                      </Button>
-                    </Link>
-                  </>
-                )}
-              </div>
-              <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden p-2 text-muted-foreground hover:text-foreground"
-              >
-                {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-              </button>
-            </div>
-          </div>
-        </div>
-        
-        {/* Mobile Menu */}
-        {mobileMenuOpen && (
-          <div className="md:hidden bg-background border-b">
-            <div className="px-4 py-4 space-y-3">
-              <Link href="/" className="block text-muted-foreground hover:text-primary transition-colors py-2">Home</Link>
-              <Link href="/about" className="block text-muted-foreground hover:text-primary transition-colors py-2">About</Link>
-              <Link href="/solutions" className="block text-muted-foreground hover:text-primary transition-colors py-2">Solutions</Link>
-              <Link href="/scan-give" className="block text-foreground hover:text-primary transition-colors py-2">Scan & Give</Link>
-              <Link href="/tokenomics" className="block text-muted-foreground hover:text-primary transition-colors py-2">Tokenomics</Link>
-              <Link href="/impact" className="block text-muted-foreground hover:text-primary transition-colors py-2">Impact</Link>
-              <div className="border-t pt-4 space-y-3">
-                {user ? (
-                  // Logged in mobile menu
-                  <>
-                    <div className="text-sm text-muted-foreground px-3 py-2">
-                      Welcome, {user.displayName || user.email}
-                    </div>
-                    <Link href={hasRole('donor') ? '/dashboard/donor' : hasRole('super_admin') ? '/dashboard' : hasRole('participant') ? '/dashboard/participant' : '/dashboard'} className="block">
-                      <Button variant="ghost" className="w-full justify-start">
-                        <BarChart3 className="h-4 w-4 mr-2" />
-                        Dashboard
-                      </Button>
-                    </Link>
-                  </>
-                ) : (
-                  // Non-logged in mobile menu
-                  <>
-                    <Link href="/login" className="block">
-                      <Button variant="ghost" className="w-full justify-start">
-                        <LogIn className="h-4 w-4 mr-2" />
-                        Sign In
-                      </Button>
-                    </Link>
-                    <Link href="/register" className="block">
-                      <Button className="w-full">
-                        Get Started
-                      </Button>
-                    </Link>
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
-      </nav>
+      {/* Navigation - Now using unified PublicNavigation component */}
+      <PublicNavigation />
 
       {/* Hero Section */}
       <section 

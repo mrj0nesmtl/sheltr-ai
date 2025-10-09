@@ -50,8 +50,7 @@ export default function DocsPage() {
       await UnifiedInquiryService.createNewsletterSignup({
         email: email.trim(),
         source: 'docs_page_cta',
-        page: 'documentation_hub',
-        user_id: user?.uid
+        page: 'documentation_hub'
       });
 
       setSubmitMessage('✅ Thank you! We\'ll be in touch soon.');
@@ -325,44 +324,44 @@ export default function DocsPage() {
             
             {/* Tech Stack Badges */}
             <div className="flex flex-wrap justify-center gap-2 mb-6">
-              <Badge className="bg-amber-500 hover:bg-amber-600 text-white font-semibold px-3 py-1">
+              <Badge variant="outline" className="border-amber-400 text-amber-400 hover:bg-amber-400/10 backdrop-blur-sm bg-black/20 font-semibold px-3 py-1">
                 🔥 FIREBASE
               </Badge>
-              <Badge className="bg-teal-600 hover:bg-teal-700 text-white font-semibold px-3 py-1">
+              <Badge variant="outline" className="border-teal-400 text-teal-400 hover:bg-teal-400/10 backdrop-blur-sm bg-black/20 font-semibold px-3 py-1">
                 ⚡ FASTAPI
               </Badge>
-              <Badge className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-3 py-1">
+              <Badge variant="outline" className="border-blue-400 text-blue-400 hover:bg-blue-400/10 backdrop-blur-sm bg-black/20 font-semibold px-3 py-1">
                 ⚛️ REACT
               </Badge>
-              <Badge className="bg-gray-800 hover:bg-gray-900 text-white font-semibold px-3 py-1">
+              <Badge variant="outline" className="border-gray-400 text-gray-300 hover:bg-gray-400/10 backdrop-blur-sm bg-black/20 font-semibold px-3 py-1">
                 📱 EXPO
               </Badge>
-              <Badge className="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-3 py-1">
+              <Badge variant="outline" className="border-purple-400 text-purple-400 hover:bg-purple-400/10 backdrop-blur-sm bg-black/20 font-semibold px-3 py-1">
                 🤖 MCP INTEGRATION
               </Badge>
-              <Badge className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-3 py-1">
+              <Badge variant="outline" className="border-indigo-400 text-indigo-400 hover:bg-indigo-400/10 backdrop-blur-sm bg-black/20 font-semibold px-3 py-1">
                 🔍 SEMANTIC SEARCH
               </Badge>
-              <Badge className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-3 py-1">
+              <Badge variant="outline" className="border-emerald-400 text-emerald-400 hover:bg-emerald-400/10 backdrop-blur-sm bg-black/20 font-semibold px-3 py-1">
                 🧠 HYPERBOTS
               </Badge>
-              <Badge className="bg-blue-700 hover:bg-blue-800 text-white font-semibold px-3 py-1">
+              <Badge variant="outline" className="border-blue-500 text-blue-400 hover:bg-blue-400/10 backdrop-blur-sm bg-black/20 font-semibold px-3 py-1">
                 🏦 COINBASE
               </Badge>
-              <Badge className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-3 py-1">
+              <Badge variant="outline" className="border-blue-300 text-blue-300 hover:bg-blue-300/10 backdrop-blur-sm bg-black/20 font-semibold px-3 py-1">
                 ⭐ STARS 12
               </Badge>
-              <Badge className="bg-yellow-600 hover:bg-yellow-700 text-white font-semibold px-3 py-1">
+              <Badge variant="outline" className="border-yellow-400 text-yellow-400 hover:bg-yellow-400/10 backdrop-blur-sm bg-black/20 font-semibold px-3 py-1">
                 📄 LICENSE MIT
               </Badge>
-              <Badge className="bg-slate-700 hover:bg-slate-800 text-white font-semibold px-3 py-1">
+              <Badge variant="outline" className="border-slate-400 text-slate-300 hover:bg-slate-400/10 backdrop-blur-sm bg-black/20 font-semibold px-3 py-1">
                 🐍 PYTHON 3.11+
               </Badge>
             </div>
             
             {/* Last Updated Badge */}
             <div className="flex justify-center">
-              <Badge className="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 text-sm">
+              <Badge variant="outline" className="border-green-400 text-green-400 hover:bg-green-400/10 backdrop-blur-sm bg-black/20 font-semibold px-4 py-2 text-sm">
                 📅 LAST UPDATED: October 1, 2025
               </Badge>
             </div>

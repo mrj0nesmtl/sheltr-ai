@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
+import PublicNavigation from '@/components/PublicNavigation';
 import { 
   MapPin, 
   Users, 
@@ -283,23 +284,8 @@ export default function ShelterPageClient({ slug }: ShelterPageClientProps) {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
-      {/* Header */}
-      <div className="bg-background/95 backdrop-blur-sm sticky top-0 z-50 border-b">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <Link href="/shelters">
-              <Button variant="ghost" size="sm">
-                <ChevronLeft className="mr-2 h-4 w-4" />
-                Back to Shelters
-              </Button>
-            </Link>
-            <Button variant="outline" size="sm" onClick={handleShare}>
-              <Share2 className="mr-2 h-4 w-4" />
-              Share
-            </Button>
-          </div>
-        </div>
-      </div>
+      {/* Navigation */}
+      <PublicNavigation />
 
       {/* Main Content */}
       <div className="container mx-auto px-4 py-8 max-w-7xl">

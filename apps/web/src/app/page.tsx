@@ -58,12 +58,12 @@ export default function HomePage() {
               </h1>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/scan-give">
-                  <Button variant="outline" size="lg" className="w-full sm:w-auto text-lg px-8 py-4 border-green-500 text-green-500 hover:bg-green-500 hover:text-white">
+                  <Button variant="outline" size="lg" className="w-full sm:w-auto text-lg px-8 py-4 bg-transparent border-2 border-green-400 text-green-400 hover:bg-green-500 hover:text-white hover:border-green-500 backdrop-blur-sm transition-all">
                     Scan & Give
                   </Button>
                 </Link>
                 <Link href="/about">
-                  <Button variant="outline" size="lg" className="w-full sm:w-auto text-lg px-8 py-4 bg-white/10 border-white text-white hover:bg-white hover:text-black">
+                  <Button variant="outline" size="lg" className="w-full sm:w-auto text-lg px-8 py-4 bg-transparent border-2 border-white/60 text-white hover:bg-white hover:text-black hover:border-white backdrop-blur-sm transition-all">
                     <ArrowRight className="h-5 w-5 mr-2" />
                     Learn More
                   </Button>

@@ -16,7 +16,7 @@ service firebase.storage {
     // Helper function to check if user is shelter admin for specific shelter
     function isShelterAdmin(shelterId) {
       return request.auth != null && 
-             getUserData().role == 'shelter_admin' && 
+             getUserData().role == 'admin' && 
              getUserData().shelter_id == shelterId;
     }
     

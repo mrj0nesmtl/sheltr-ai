@@ -308,8 +308,19 @@ export default function ShelterPageClient({ slug }: ShelterPageClientProps) {
             )}
           </div>
 
-          {/* Shelter Name */}
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">{shelter.name}</h1>
+          {/* Shelter Name with Verified Badge */}
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <h1 className="text-4xl md:text-5xl font-bold">{shelter.name}</h1>
+            {shelter.verified && (
+              <Badge 
+                variant="outline" 
+                className="border-green-500 text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 text-sm font-medium px-3 py-1"
+              >
+                <Shield className="h-3.5 w-3.5 mr-1" />
+                Verified
+              </Badge>
+            )}
+          </div>
           
           {/* Description */}
           <p className="text-lg text-muted-foreground max-w-3xl mx-auto mb-6">
@@ -552,23 +563,6 @@ export default function ShelterPageClient({ slug }: ShelterPageClientProps) {
                 </Button>
               </CardContent>
             </Card>
-
-            {/* Verification Badge */}
-            {shelter.verified && (
-              <Card className="bg-green-50 dark:bg-green-900/10 border-green-200 dark:border-green-800">
-                <CardContent className="pt-6">
-                  <div className="flex items-center justify-center gap-2 text-green-700 dark:text-green-400">
-                    <Shield className="h-5 w-5" />
-                    <span className="font-medium">Verified Shelter</span>
-                  </div>
-                  {shelter.lastUpdated && (
-                    <p className="text-xs text-center text-muted-foreground mt-2">
-                      Last updated: {new Date(shelter.lastUpdated).toLocaleDateString()}
-                    </p>
-                  )}
-                </CardContent>
-              </Card>
-            )}
           </div>
         </div>
 

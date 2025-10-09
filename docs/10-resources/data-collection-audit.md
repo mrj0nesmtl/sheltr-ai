@@ -128,15 +128,18 @@ await UnifiedInquiryService.createPartnershipWaitlist({
 ---
 
 ### 6. **Individual Shelter Page Email Signup**
-- **Location:** `/[slug]` (Dynamic shelter pages)
+- **Location:** `/[slug]` (Dynamic shelter pages, e.g., `/old-brewery-mission`)
 - **Component:** `apps/web/src/app/[slug]/ShelterPageClient.tsx`
 - **Service:** `notificationService.ts` → `createShelterEmailSignup()`
-- **Current Collection:** ⚠️ **Unknown/TBD**
+- **Current Collection:** `shelter_email_signups` ✅
+- **Notification Status:** 🔴 **BROKEN - NO ADMIN NOTIFICATIONS CREATED!**
 - **Data Captured:**
   - Email (required)
   - Name (optional)
   - Shelter ID
   - Shelter Name
+  - Source: `public_page`
+  - Page: `shelter_public_page`
 
 **Example Code:**
 ```typescript
@@ -144,6 +147,12 @@ await createShelterEmailSignup({
   email, name, shelter_id, shelter_name
 });
 ```
+
+**🚨 CRITICAL ISSUE:**
+- ✅ Email stored in `shelter_email_signups` collection
+- ❌ **NO notifications sent to Super Admins**
+- ❌ **NO notifications sent to Platform Admins**
+- ❌ **NO notifications sent to Shelter Admin** (shelter-specific)
 
 ---
 
@@ -235,7 +244,24 @@ await createShelterEmailSignup({
 
 ## ⚠️ Issues & Inconsistencies
 
-### 1. **Duplicate Newsletter Handling**
+### 1. **🔴 CRITICAL: Shelter Email Signups - No Admin Notifications**
+- **Issue:** `createShelterEmailSignup()` stores data but **NEVER notifies admins**
+- **Impact:** 
+  - Super Admins miss shelter signup notifications
+  - Platform Admins miss shelter signup notifications
+  - Shelter Admins don't know when someone signs up for their shelter's updates
+- **Location:** `apps/web/src/services/notificationService.ts` (lines 966-992)
+- **Current Behavior:**
+  ```typescript
+  // Only stores in database - NO notifications!
+  const docRef = await addDoc(collection(db, 'shelter_email_signups'), signupData);
+  console.log('✅ Shelter email signup created:', docRef.id);
+  return docRef.id; // ❌ Missing notification creation!
+  ```
+- **Required Fix:** Add notification creation after storing signup
+- **Priority:** 🔴 **CRITICAL - Must fix before unified migration**
+
+### 2. **Duplicate Newsletter Handling**
 - **Issue:** Newsletter signups are stored in TWO places:
   - `newsletter_signups` collection (via NewsletterSignup component)
   - `contact_inquiries` collection (via UnifiedInquiryService from other pages)
@@ -243,11 +269,6 @@ await createShelterEmailSignup({
 - **Example:**
   - Landing page signup → `newsletter_signups`
   - Docs page signup → `contact_inquiries` (type: newsletter_signup)
-
-### 2. **Shelter Email Signups - Unknown Collection**
-- **Issue:** `createShelterEmailSignup()` in notificationService doesn't specify collection
-- **Impact:** Unclear where shelter-specific email signups are stored
-- **Needs:** Investigation of `notificationService.ts`
 
 ### 3. **Inconsistent Metadata**
 - **Issue:** Different touchpoints capture different metadata levels

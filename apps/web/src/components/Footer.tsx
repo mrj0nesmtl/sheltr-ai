@@ -52,28 +52,37 @@ export default function Footer() {
 
           {/* Center - Main Navigation */}
           <div className="lg:w-2/3">
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-              {/* Platform & Technology Combined */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              {/* Platform */}
               <div>
                 <h3 className="text-sm font-semibold mb-2">Platform</h3>
                 <ul className="space-y-1 text-xs text-muted-foreground">
+                  <li><Link href="/" className="hover:text-blue-400 transition-all duration-300 hover:translate-x-1">Home</Link></li>
+                  <li><Link href="/about" className="hover:text-blue-400 transition-all duration-300 hover:translate-x-1">About</Link></li>
                   <li><Link href="/solutions" className="hover:text-blue-400 transition-all duration-300 hover:translate-x-1">Solutions</Link></li>
-                  <li><Link href="/tokenomics" className="hover:text-blue-400 transition-all duration-300 hover:translate-x-1">Token</Link></li>
-                  <li><Link href="/scan-give" className="hover:text-blue-400 transition-all duration-300 hover:translate-x-1">Scan</Link></li>
                   <li><Link href="/pods" className="hover:text-blue-400 transition-all duration-300 hover:translate-x-1">Pods</Link></li>
-                  <li><Link href="/pods/mobi" className="hover:text-blue-400 transition-all duration-300 hover:translate-x-1">Mobi</Link></li>
-                  <li><Link href="/drones" className="hover:text-blue-400 transition-all duration-300 hover:translate-x-1">Drones</Link></li>
+                  <li><Link href="/impact" className="hover:text-blue-400 transition-all duration-300 hover:translate-x-1">Impact</Link></li>
                 </ul>
               </div>
               
-              {/* Resources */}
+              {/* Technology */}
               <div>
-                <h3 className="text-sm font-semibold mb-2">Resources</h3>
+                <h3 className="text-sm font-semibold mb-2">Technology</h3>
                 <ul className="space-y-1 text-xs text-muted-foreground">
-                  <li><Link href="/docs" className="hover:text-green-400 transition-all duration-300 hover:translate-x-1">Documentation</Link></li>
+                  <li><Link href="/scan-give" className="hover:text-green-400 transition-all duration-300 hover:translate-x-1">Scan & Give</Link></li>
+                  <li><Link href="/tokenomics" className="hover:text-green-400 transition-all duration-300 hover:translate-x-1">Tokenomics</Link></li>
                   <li><Link href="/docs/whitepaper" className="hover:text-green-400 transition-all duration-300 hover:translate-x-1">White Paper</Link></li>
-                  <li><Link href="/angels" className="hover:text-green-400 transition-all duration-300 hover:translate-x-1">Angels</Link></li>
-                  <li><Link href="/blog" className="hover:text-green-400 transition-all duration-300 hover:translate-x-1">Blog</Link></li>
+                  <li><a href="https://github.com/mrj0nesmtl/sheltr-ai" target="_blank" rel="noopener noreferrer" className="hover:text-green-400 transition-all duration-300 hover:translate-x-1">GitHub</a></li>
+                </ul>
+              </div>
+              
+              {/* Community */}
+              <div>
+                <h3 className="text-sm font-semibold mb-2">Community</h3>
+                <ul className="space-y-1 text-xs text-muted-foreground">
+                  <li><Link href="/angels" className="hover:text-orange-400 transition-all duration-300 hover:translate-x-1">Angels</Link></li>
+                  <li><Link href="/blog" className="hover:text-orange-400 transition-all duration-300 hover:translate-x-1">Blog</Link></li>
+                  <li><a href="https://bsky.app/profile/sheltrops.bsky.social" target="_blank" rel="noopener noreferrer" className="hover:text-orange-400 transition-all duration-300 hover:translate-x-1">BlueSky</a></li>
                 </ul>
               </div>
               
@@ -81,9 +90,9 @@ export default function Footer() {
               <div>
                 <h3 className="text-sm font-semibold mb-2">Support</h3>
                 <ul className="space-y-1 text-xs text-muted-foreground">
-                  <li><Link href="/contact" className="hover:text-purple-400 transition-all duration-300 hover:translate-x-1">Contact</Link></li>
                   <li><Link href="/terms" className="hover:text-purple-400 transition-all duration-300 hover:translate-x-1">Terms</Link></li>
                   <li><Link href="/privacy" className="hover:text-purple-400 transition-all duration-300 hover:translate-x-1">Privacy</Link></li>
+                  <li><Link href="/contact" className="hover:text-purple-400 transition-all duration-300 hover:translate-x-1">Contact</Link></li>
                 </ul>
               </div>
             </div>

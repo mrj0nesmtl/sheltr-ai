@@ -1,10 +1,8 @@
 'use client';
 
 import Image from 'next/image';
-import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { 
-  ArrowLeft,
   Search,
   Filter,
   Grid3X3,
@@ -24,8 +22,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import { ThemeToggle } from '@/components/theme-toggle';
 import { sanitizeForAttribute, sanitizeForDisplay, sanitizeTags, sanitizeUrl, sanitizeCategory, sanitizeDate } from '@/utils/sanitize';
+import PublicNavigation from '@/components/PublicNavigation';
 
 // Gallery media interface
 interface GalleryMedia {
@@ -156,31 +154,8 @@ export default function GalleryPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
-      {/* Header */}
-      <header className="bg-background/95 backdrop-blur-sm sticky top-0 z-40 border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-4">
-              <Link href="/">
-                <Button variant="ghost" size="sm">
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Back to Home
-                </Button>
-              </Link>
-              <div className="flex items-center">
-                <Camera className="h-6 w-6 mr-2 text-primary" />
-                <h1 className="text-xl font-bold">SHELTR Gallery</h1>
-              </div>
-            </div>
-            <div className="flex items-center space-x-4">
-              <Badge variant="outline" className="hidden sm:flex">
-                {filteredImages.length} items
-              </Badge>
-              <ThemeToggle />
-            </div>
-          </div>
-        </div>
-      </header>
+      {/* Navigation - Now using unified PublicNavigation component */}
+      <PublicNavigation />
 
       {/* Hero Banner */}
       <div className="relative overflow-hidden bg-gradient-to-br from-primary/10 via-background to-muted/20">

@@ -429,7 +429,7 @@ export default function PublicNavigation() {
               
               <div className="grid grid-cols-2 gap-3 mb-4">
                 <a
-                  href="https://substack.com/sheltr-ai"
+                  href="https://arcanaconcept.substack.com/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center p-3 bg-muted hover:bg-muted/80 rounded-lg transition-colors"

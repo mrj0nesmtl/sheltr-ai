@@ -170,20 +170,10 @@ export default function ShelterPageClient({ slug }: ShelterPageClientProps) {
           
           setShelter(shelterData);
           
-          // Fetch participant count for this shelter
-          try {
-            const participantsQuery = query(
-              collection(db, 'users'),
-              where('role', '==', 'participant'),
-              where('shelterId', '==', matchingShelter.id)
-            );
-            const participantsSnapshot = await getDocs(participantsQuery);
-            setParticipantCount(participantsSnapshot.size);
-            console.log(`📊 Found ${participantsSnapshot.size} participants for shelter: ${matchingShelter.name}`);
-          } catch (participantError) {
-            console.error('Error fetching participant count:', participantError);
-            setParticipantCount(0);
-          }
+          // Get participant count from tenant document (public data)
+          // This avoids security rule issues with querying the users collection
+          setParticipantCount(matchingShelter.participants || 0);
+          console.log(`📊 Participant count for ${matchingShelter.name}: ${matchingShelter.participants || 0}`);
         } else {
           setError('Shelter not found');
         }

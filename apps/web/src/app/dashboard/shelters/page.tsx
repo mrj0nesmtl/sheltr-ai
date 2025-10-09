@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Switch } from '@/components/ui/switch';
 import { useState, useEffect } from 'react';
 import { firestoreService, Shelter, PendingApplication } from '@/services/firestore';
 import { AdminUser } from '@/services/platformMetrics';
@@ -229,7 +230,8 @@ export default function ShelterNetwork() {
       location: shelter.location || '',
       email: shelter.contact.email || '',
       phone: shelter.contact.phone || '',
-      capacity: shelter.capacity || 0
+      capacity: shelter.capacity || 0,
+      verified: shelter.verified || false
     });
     
     // Load administrators for this shelter
@@ -338,6 +340,7 @@ export default function ShelterNetwork() {
         capacity: editFormData.capacity,
         'contact.email': editFormData.email,
         'contact.phone': editFormData.phone,
+        verified: editFormData.verified,
         updatedAt: new Date()
       });
 
@@ -349,6 +352,7 @@ export default function ShelterNetwork() {
               name: editFormData.name,
               location: editFormData.location,
               capacity: editFormData.capacity,
+              verified: editFormData.verified,
               contact: {
                 ...shelter.contact,
                 email: editFormData.email,
@@ -360,7 +364,7 @@ export default function ShelterNetwork() {
 
       console.log(`✅ Successfully updated shelter: ${editFormData.name}`);
       setSelectedShelterForEdit(null);
-      setEditFormData({ name: '', location: '', email: '', phone: '', capacity: 0 });
+      setEditFormData({ name: '', location: '', email: '', phone: '', capacity: 0, verified: false });
       alert(`Shelter "${editFormData.name}" updated successfully!`);
       
     } catch (error) {
@@ -1332,6 +1336,23 @@ export default function ShelterNetwork() {
                     onChange={(e) => setEditFormData(prev => ({ ...prev, phone: e.target.value }))}
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                     placeholder="Enter phone number"
+                  />
+                </div>
+
+                {/* Verified Status */}
+                <div className="flex items-center justify-between p-4 border-2 border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-900/10 rounded-lg">
+                  <div>
+                    <label className="text-sm font-medium text-green-700 dark:text-green-400 flex items-center gap-2">
+                      <Shield className="h-4 w-4" />
+                      Verified Shelter Status
+                    </label>
+                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                      Verified shelters display a badge on their public page
+                    </p>
+                  </div>
+                  <Switch
+                    checked={editFormData.verified}
+                    onCheckedChange={(checked) => setEditFormData(prev => ({ ...prev, verified: checked }))}
                   />
                 </div>
               </div>

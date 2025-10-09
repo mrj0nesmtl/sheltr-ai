@@ -53,7 +53,7 @@ export default function ParticipantsPage() {
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/register">
-              <Button size="lg" className="bg-green-600 hover:bg-green-700 text-white">
+              <Button size="lg" variant="outline" className="border-2 border-green-400 text-green-400 hover:bg-green-500/10 backdrop-blur-sm bg-black/20">
                 <Users className="h-4 w-4 mr-2" />
                 Get Started Today
               </Button>
@@ -417,7 +417,7 @@ export default function ParticipantsPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/register">
-                <Button size="lg" className="bg-green-600 hover:bg-green-700">
+                <Button size="lg" variant="outline" className="border-2 border-green-400 text-green-400 hover:bg-green-500/10 backdrop-blur-sm dark:text-green-300 dark:border-green-300">
                   <Users className="h-4 w-4 mr-2" />
                   Join SHELTR Today
                 </Button>

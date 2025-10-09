@@ -3,7 +3,9 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import ThemeLogo from '@/components/ThemeLogo';
+import { ThemeToggle } from '@/components/theme-toggle';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -28,7 +30,12 @@ import {
   RotateCcw,
   Star,
   CheckCircle2,
-  MessageSquare
+  MessageSquare,
+  Menu,
+  X,
+  Home,
+  BarChart3,
+  User
 } from 'lucide-react';
 import { checkFounderAccess, clearFounderAccess, getFounderInfo } from '@/services/founderAccessService';
 import FoundersGallery from '@/components/FoundersGallery';
@@ -358,6 +365,7 @@ export default function FoundersOnlyPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [isSettingGlobal, setIsSettingGlobal] = useState(false);
   const [globalDefaultSet, setGlobalDefaultSet] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const router = useRouter();
   const { user } = useAuth();
 
@@ -519,13 +527,15 @@ export default function FoundersOnlyPage() {
               <ThemeLogo />
             </Link>
             
-            <div className="flex items-center space-x-4">
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center gap-4">
               <div className="flex items-center space-x-2">
                 <Shield className="h-4 w-4 text-purple-600" />
                 <span className="text-sm text-muted-foreground">
                   Welcome, {founderInfo?.name || 'Founder'}
                 </span>
               </div>
+              <ThemeToggle />
               <Button 
                 variant="outline" 
                 size="sm" 
@@ -536,8 +546,98 @@ export default function FoundersOnlyPage() {
                 Logout
               </Button>
             </div>
+
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="md:hidden p-2 hover:bg-accent rounded-md transition-colors"
+              aria-label="Toggle menu"
+            >
+              {isMobileMenuOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
+            </button>
           </div>
         </div>
+
+        {/* Mobile Navigation Menu */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden bg-background/98 backdrop-blur-md border-t shadow-lg">
+            <div className="container mx-auto px-4 py-4 space-y-4">
+              {/* User Info */}
+              <div className="flex items-center gap-3 pb-4 border-b">
+                <div className="w-10 h-10 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
+                  <User className="h-5 w-5 text-purple-600" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-semibold truncate">
+                    {founderInfo?.name || 'Founder'}
+                  </p>
+                  <p className="text-xs text-muted-foreground truncate">
+                    {founderInfo?.email}
+                  </p>
+                  <Badge variant="outline" className="mt-1 border-green-500 text-green-600 text-xs">
+                    <span className="w-1.5 h-1.5 bg-green-500 rounded-full mr-1.5"></span>
+                    Online
+                  </Badge>
+                </div>
+              </div>
+
+              {/* Menu Items */}
+              <div className="space-y-2">
+                <Link
+                  href="/"
+                  className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-accent transition-colors"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <Home className="h-5 w-5 text-muted-foreground" />
+                  <span className="text-sm font-medium">Home</span>
+                </Link>
+                
+                <Link
+                  href="/dashboard"
+                  className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-accent transition-colors"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <BarChart3 className="h-5 w-5 text-muted-foreground" />
+                  <span className="text-sm font-medium">My Dashboard</span>
+                </Link>
+
+                <Link
+                  href="/portal/founders-only"
+                  className="flex items-center gap-3 px-3 py-2 rounded-lg bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <Shield className="h-5 w-5 text-purple-600" />
+                  <span className="text-sm font-medium text-purple-600">Founders Portal</span>
+                  <Badge className="ml-auto bg-purple-600 text-white text-xs">Active</Badge>
+                </Link>
+              </div>
+
+              {/* Theme Toggle */}
+              <div className="flex items-center justify-between px-3 py-2 border-t pt-4">
+                <span className="text-sm font-medium">Theme</span>
+                <ThemeToggle />
+              </div>
+
+              {/* Logout Button */}
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  handleLogout();
+                }}
+                className="w-full flex items-center justify-center gap-2 border-red-200 text-red-600 hover:bg-red-50 dark:border-red-900 dark:text-red-400 dark:hover:bg-red-900/20"
+              >
+                <LogOut className="h-4 w-4" />
+                Logout
+              </Button>
+            </div>
+          </div>
+        )}
       </header>
 
       {/* Main Content */}
@@ -545,17 +645,19 @@ export default function FoundersOnlyPage() {
         {/* Welcome Section */}
         <div className="text-center mb-8">
           <div className="flex items-center justify-center mb-6">
-            <img 
+            <Image 
               src="/logo-sheltr-white.png" 
               alt="SHELTR Logo" 
-              className="h-16 w-auto"
+              width={200}
+              height={64}
+              className="h-12 sm:h-16 w-auto"
             />
           </div>
-          <h1 className="text-3xl font-bold mb-2">Portal</h1>
-          <p className="text-lg text-muted-foreground mb-4">
+          <h1 className="text-2xl sm:text-3xl font-bold mb-2">Portal</h1>
+          <p className="text-base sm:text-lg text-muted-foreground mb-4 px-4">
             Confidential access for strategic leadership
           </p>
-          <Badge variant="outline" className="border-purple-600 text-purple-600 dark:text-purple-400 dark:border-purple-400 px-4 py-1">
+          <Badge variant="outline" className="border-purple-600 text-purple-600 dark:text-purple-400 dark:border-purple-400 px-4 py-1 text-xs sm:text-sm">
             🔒 Restricted Access
           </Badge>
         </div>
@@ -592,9 +694,9 @@ export default function FoundersOnlyPage() {
 
         {/* Quick Links Grid */}
         <div className="max-w-6xl mx-auto">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold">Quick Access Links</h2>
-            <div className="flex items-center gap-3">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+            <h2 className="text-xl sm:text-2xl font-bold">Quick Access Links</h2>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
               {isSaving && (
                 <span className="text-sm text-muted-foreground flex items-center gap-2">
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-purple-600"></div>
@@ -613,32 +715,36 @@ export default function FoundersOnlyPage() {
                   Global Default Set!
                 </span>
               )}
-              {isSuperAdmin && (
+              <div className="flex flex-wrap gap-2 w-full sm:w-auto">
+                {isSuperAdmin && (
+                  <Button
+                    variant="default"
+                    size="sm"
+                    onClick={handleSetGlobalDefault}
+                    disabled={isSaving || isSettingGlobal}
+                    className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white flex-1 sm:flex-initial"
+                  >
+                    <Star className="h-4 w-4" />
+                    <span className="hidden sm:inline">Set as Global Default</span>
+                    <span className="sm:hidden">Set Global</span>
+                  </Button>
+                )}
                 <Button
-                  variant="default"
+                  variant="outline"
                   size="sm"
-                  onClick={handleSetGlobalDefault}
+                  onClick={handleResetOrder}
                   disabled={isSaving || isSettingGlobal}
-                  className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white"
+                  className="flex items-center gap-2 flex-1 sm:flex-initial"
                 >
-                  <Star className="h-4 w-4" />
-                  Set as Global Default
+                  <RotateCcw className="h-4 w-4" />
+                  <span className="hidden sm:inline">Reset to Default</span>
+                  <span className="sm:hidden">Reset</span>
                 </Button>
-              )}
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleResetOrder}
-                disabled={isSaving || isSettingGlobal}
-                className="flex items-center gap-2"
-              >
-                <RotateCcw className="h-4 w-4" />
-                Reset to Default
-              </Button>
+              </div>
             </div>
           </div>
           
-          <div className="mb-4 text-sm text-muted-foreground text-center">
+          <div className="mb-4 text-xs sm:text-sm text-muted-foreground text-center px-4">
             {isSuperAdmin ? (
               <>
                 ⭐ <strong>Super Admin:</strong> Your card order can be set as the global default for all Platform Admins

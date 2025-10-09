@@ -103,7 +103,7 @@ function SortableCard({ card }: { card: QuickAccessCard }) {
         <GripVertical className="h-5 w-5 text-gray-600 dark:text-gray-400" />
       </div>
 
-      <Card className={`hover:shadow-lg transition-shadow cursor-pointer ${card.borderClass || ''} h-full`}>
+      <Card className={`hover:shadow-lg transition-shadow cursor-pointer border-2 border-gray-300 dark:border-gray-700 ${card.borderClass || ''} h-full`}>
         <CardHeader>
           <div className="flex items-center justify-between">
             {card.icon}

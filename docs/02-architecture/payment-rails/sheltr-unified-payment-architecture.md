@@ -10,7 +10,7 @@
 
 ## 🎯 **Executive Summary**
 
-Following extensive analysis by our CFO and payments expert Doug Kukura, SHELTR is pivoting from a dual-token architecture to a **Single Stable Token Investment Fund** model. This revolutionary approach eliminates market volatility risks, reduces complexity, and provides guaranteed returns while maintaining complete blockchain transparency.
+Following extensive analysis by our partner and payments expert DK, SHELTR is pivoting from a dual-token architecture to a **Single Stable Token Investment Fund** model. This revolutionary approach eliminates market volatility risks, reduces complexity, and provides guaranteed returns while maintaining complete blockchain transparency.
 
 **Key Innovation**: Direct credit card donations → Adyen payment rails → Smart contract distribution → 80% participant debit cards + 20% Base SHELTR Stablecoin pool generating 4-6% APY.
 

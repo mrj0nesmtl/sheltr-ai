@@ -44,7 +44,7 @@ export default function GovernmentPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/register">
-              <Button size="lg" className="bg-purple-600 hover:bg-purple-700">
+              <Button size="lg" variant="outline" className="border-2 border-purple-400 text-purple-400 hover:bg-purple-500/10 backdrop-blur-sm bg-black/20">
                 <MapPin className="h-4 w-4 mr-2" />
                 Partner With SHELTR
               </Button>
@@ -285,7 +285,7 @@ export default function GovernmentPage() {
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/register">
-              <Button size="lg" className="bg-purple-600 hover:bg-purple-700">
+              <Button size="lg" variant="outline" className="border-2 border-purple-400 text-purple-400 hover:bg-purple-500/10 backdrop-blur-sm dark:text-purple-300 dark:border-purple-300">
                 <MapPin className="h-4 w-4 mr-2" />
                 Partner With SHELTR
               </Button>

@@ -607,7 +607,7 @@ export default function OrganizationsPage() {
             </p>
             <div className="flex justify-center">
               <Link href="/contact">
-                <Button size="lg" className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white shadow-lg px-8">
+                <Button size="lg" variant="outline" className="border-2 border-green-400 text-green-400 hover:bg-green-500/10 backdrop-blur-sm dark:text-green-300 dark:border-green-300 px-8">
                   <Rocket className="h-5 w-5 mr-2" />
                   Connect with Us
                 </Button>

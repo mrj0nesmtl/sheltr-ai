@@ -27,7 +27,8 @@ import {
   GripVertical,
   RotateCcw,
   Star,
-  CheckCircle2
+  CheckCircle2,
+  MessageSquare
 } from 'lucide-react';
 import { checkFounderAccess, clearFounderAccess, getFounderInfo } from '@/services/founderAccessService';
 import FoundersGallery from '@/components/FoundersGallery';
@@ -333,6 +334,19 @@ const DEFAULT_CARDS: QuickAccessCard[] = [
       buttonClass: 'border-2 border-teal-600 text-teal-600 hover:bg-teal-50 dark:hover:bg-teal-900/20 dark:text-teal-400 dark:border-teal-400',
       href: '/team',
       borderClass: 'border-teal-200 dark:border-teal-800',
+    },
+    {
+      id: 'mcp-demo',
+      icon: <MessageSquare className="h-8 w-8 text-purple-600" />,
+      badgeText: 'Live Demo',
+      badgeClass: 'bg-purple-600 text-white dark:bg-purple-500 dark:text-white',
+      title: 'OpenAI MCP Demo',
+      titleColor: 'text-purple-600',
+      description: 'Interactive demonstration of SHELTR\'s enhanced chatbot powered by OpenAI Agents SDK and specialized MCP agents',
+      buttonText: 'Try Demo',
+      buttonClass: 'border-2 border-purple-600 text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20 dark:text-purple-400 dark:border-purple-400',
+      href: '/docs/mcp-demo',
+      borderClass: 'border-purple-200 dark:border-purple-800',
     },
   ];
 

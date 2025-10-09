@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, Calendar, User, Eye, Share2 } from 'lucide-react';
 import Footer from '@/components/Footer';
-import ThemeLogo from '@/components/ThemeLogo';
+import PublicNavigation from '@/components/PublicNavigation';
 import { blogService, BlogPost } from '@/services/blogService';
 import ReactMarkdown from 'react-markdown';
 
@@ -63,26 +63,7 @@ export default function BlogPostClient({ slug }: BlogPostClientProps) {
   if (loading) {
     return (
       <div className="min-h-screen bg-background">
-        <header className="bg-background/95 backdrop-blur-sm sticky top-0 z-50 border-b">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center h-16">
-              <Link href="/">
-                <ThemeLogo />
-              </Link>
-              <nav className="hidden md:flex space-x-8">
-                <Link href="/" className="text-foreground/60 hover:text-foreground transition-colors">
-                  Home
-                </Link>
-                <Link href="/about" className="text-foreground/60 hover:text-foreground transition-colors">
-                  About
-                </Link>
-                <Link href="/blog" className="text-foreground font-medium">
-                  Blog
-                </Link>
-              </nav>
-            </div>
-          </div>
-        </header>
+        <PublicNavigation />
         
         <div className="container mx-auto px-4 py-16">
           <div className="text-center">
@@ -99,26 +80,7 @@ export default function BlogPostClient({ slug }: BlogPostClientProps) {
   if (error || !post) {
     return (
       <div className="min-h-screen bg-background">
-        <header className="bg-background/95 backdrop-blur-sm sticky top-0 z-50 border-b">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center h-16">
-              <Link href="/">
-                <ThemeLogo />
-              </Link>
-              <nav className="hidden md:flex space-x-8">
-                <Link href="/" className="text-foreground/60 hover:text-foreground transition-colors">
-                  Home
-                </Link>
-                <Link href="/about" className="text-foreground/60 hover:text-foreground transition-colors">
-                  About
-                </Link>
-                <Link href="/blog" className="text-foreground font-medium">
-                  Blog
-                </Link>
-              </nav>
-            </div>
-          </div>
-        </header>
+        <PublicNavigation />
         
         <div className="container mx-auto px-4 py-16">
           <div className="text-center">
@@ -171,27 +133,7 @@ export default function BlogPostClient({ slug }: BlogPostClientProps) {
         ))}
       </head>
 
-      {/* Header */}
-      <header className="bg-background/95 backdrop-blur-sm sticky top-0 z-50 border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <Link href="/">
-              <ThemeLogo />
-            </Link>
-            <nav className="hidden md:flex space-x-8">
-              <Link href="/" className="text-foreground/60 hover:text-foreground transition-colors">
-                Home
-              </Link>
-              <Link href="/about" className="text-foreground/60 hover:text-foreground transition-colors">
-                About
-              </Link>
-              <Link href="/blog" className="text-foreground font-medium">
-                Blog
-              </Link>
-            </nav>
-          </div>
-        </div>
-      </header>
+      <PublicNavigation />
 
       {/* Article Content */}
       <article className="container mx-auto px-4 py-8 max-w-4xl">

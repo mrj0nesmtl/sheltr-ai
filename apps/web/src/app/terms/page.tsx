@@ -1,10 +1,16 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowLeft, Shield, AlertTriangle, FileText, Scale } from 'lucide-react';
+import { Shield, AlertTriangle, Scale, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
 import Footer from '@/components/Footer';
 import PublicNavigation from '@/components/PublicNavigation';
 
@@ -15,23 +21,51 @@ export default function TermsPage() {
       <PublicNavigation />
 
       {/* Header */}
-      <section className="py-12 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20">
-        <div className="container mx-auto px-4">
+      <section className="relative py-12 sm:py-16 overflow-hidden">
+        {/* Background Image */}
+        <div 
+          className="absolute inset-0 z-0"
+          style={{
+            backgroundImage: 'url(/backgrounds/sheltr-bg-3.jpg)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+        />
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 z-10 bg-gradient-to-b from-blue-900/90 via-purple-900/85 to-background dark:from-blue-950/95 dark:via-purple-950/90 dark:to-background" />
+        <div className="container mx-auto px-4 relative z-20">
           <div className="max-w-4xl mx-auto">
-            <div className="flex items-center gap-4 mb-6">
-              <Scale className="h-12 w-12 text-blue-600" />
+            {/* Mobile Layout */}
+            <div className="block sm:hidden text-center space-y-4">
+              <Scale className="h-16 w-16 text-blue-400 mx-auto drop-shadow-lg" />
               <div>
-                <div className="flex items-center gap-2 mb-2">
-                  <h1 className="text-4xl font-bold">Terms of Service</h1>
-                  <Badge className="bg-blue-500 text-white">Legal</Badge>
-                </div>
-                <p className="text-lg text-muted-foreground">
-                  SHELTR-AI Platform Terms and Conditions
+                <Badge variant="outline" className="border-blue-400 text-blue-400 bg-blue-950/30 backdrop-blur-sm mb-3">Legal</Badge>
+                <h1 className="text-3xl font-bold mb-3 text-white drop-shadow-lg">Terms of Service</h1>
+                <p className="text-base text-white/90 mb-3 drop-shadow-md">
+                  SHELTR Platform Terms and Conditions
                 </p>
-                <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
+                <div className="text-xs text-white/80 space-y-1">
+                  <div>Effective: July 31, 2025</div>
+                  <div>Last Updated: October 9, 2025</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Desktop Layout */}
+            <div className="hidden sm:flex items-start gap-6">
+              <Scale className="h-16 w-16 text-blue-400 flex-shrink-0 mt-2 drop-shadow-lg" />
+              <div className="flex-1">
+                <div className="flex items-center gap-3 mb-3">
+                  <h1 className="text-4xl lg:text-5xl font-bold text-white drop-shadow-lg">Terms of Service</h1>
+                  <Badge variant="outline" className="border-blue-400 text-blue-400 bg-blue-950/30 backdrop-blur-sm">Legal</Badge>
+                </div>
+                <p className="text-lg text-white/90 mb-3 drop-shadow-md">
+                  SHELTR Platform Terms and Conditions
+                </p>
+                <div className="flex items-center gap-4 text-sm text-white/80">
                   <span>Effective: July 31, 2025</span>
                   <span>•</span>
-                  <span>Last Updated: July 31, 2025</span>
+                  <span>Last Updated: October 9, 2025</span>
                 </div>
               </div>
             </div>
@@ -43,49 +77,66 @@ export default function TermsPage() {
       <section className="py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            {/* Important Warnings */}
-            <div className="mb-8 space-y-4">
-              <Card className="border-red-200 bg-red-50 dark:bg-red-900/20">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-red-800 dark:text-red-200">
-                    <AlertTriangle className="h-5 w-5" />
-                    Cryptocurrency & Token Investment Warning
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="text-red-700 dark:text-red-300 text-sm">
-                  <p className="mb-2">
-                    <strong>HIGH-RISK INVESTMENT:</strong> SHELTR and SHELTR-S tokens are digital assets that carry significant financial risk. 
-                    Token values can fluctuate dramatically and you may lose your entire investment.
-                  </p>
-                  <ul className="list-disc list-inside space-y-1">
-                    <li>Tokens are not securities and provide no ownership rights in SHELTR-AI Technologies Inc.</li>
-                    <li>No guarantee of return on investment or token value appreciation</li>
-                    <li>Regulatory changes may affect token utility or legal status</li>
-                    <li>Platform development may not proceed as planned</li>
-                    <li>Smart contracts may contain bugs or vulnerabilities</li>
-                  </ul>
-                </CardContent>
-              </Card>
+            {/* Important Warnings - Collapsible */}
+            <div className="mb-8">
+              <Accordion type="single" collapsible className="space-y-3">
+                <AccordionItem value="crypto-warning" className="border-2 border-red-200 dark:border-red-900 rounded-lg bg-red-50/50 dark:bg-red-900/10 px-4">
+                  <AccordionTrigger className="hover:no-underline py-4">
+                    <div className="flex items-center gap-3 text-left">
+                      <AlertTriangle className="h-5 w-5 text-red-600 flex-shrink-0" />
+                      <span className="font-semibold text-sm sm:text-base text-red-800 dark:text-red-200">
+                        Cryptocurrency & Token Investment Warning
+                      </span>
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent className="text-red-700 dark:text-red-300 text-xs sm:text-sm pb-4">
+                    <p className="mb-3">
+                      <strong>HIGH-RISK INVESTMENT:</strong> SHELTR and SHELTR-S tokens are digital assets that carry significant financial risk. 
+                      Token values can fluctuate dramatically and you may lose your entire investment.
+                    </p>
+                    <ul className="list-disc list-inside space-y-1.5 ml-2">
+                      <li>Tokens are not securities and provide no ownership rights in SHELTR Technologies Inc.</li>
+                      <li>No guarantee of return on investment or token value appreciation</li>
+                      <li>Regulatory changes may affect token utility or legal status</li>
+                      <li>Platform development may not proceed as planned</li>
+                      <li>Smart contracts may contain bugs or vulnerabilities</li>
+                    </ul>
+                  </AccordionContent>
+                </AccordionItem>
 
-              <Card className="border-amber-200 bg-amber-50 dark:bg-amber-900/20">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-amber-800 dark:text-amber-200">
-                    <Shield className="h-5 w-5" />
-                    AI & Automated Systems Notice
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="text-amber-700 dark:text-amber-300 text-sm">
-                  <p>
-                    SHELTR employs artificial intelligence and automated systems for various platform functions. 
-                    These systems may make errors or produce unexpected results. Users acknowledge that AI recommendations 
-                    are not financial, legal, or professional advice and should conduct their own due diligence.
-                  </p>
-                </CardContent>
-              </Card>
+                <AccordionItem value="ai-notice" className="border-2 border-amber-200 dark:border-amber-900 rounded-lg bg-amber-50/50 dark:bg-amber-900/10 px-4">
+                  <AccordionTrigger className="hover:no-underline py-4">
+                    <div className="flex items-center gap-3 text-left">
+                      <Shield className="h-5 w-5 text-amber-600 flex-shrink-0" />
+                      <span className="font-semibold text-sm sm:text-base text-amber-800 dark:text-amber-200">
+                        AI & Automated Systems Notice
+                      </span>
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent className="text-amber-700 dark:text-amber-300 text-xs sm:text-sm pb-4">
+                    <p>
+                      SHELTR employs artificial intelligence and automated systems for various platform functions. 
+                      These systems may make errors or produce unexpected results. Users acknowledge that AI recommendations 
+                      are not financial, legal, or professional advice and should conduct their own due diligence.
+                    </p>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
             </div>
 
             {/* Terms Content */}
-            <div className="prose prose-lg max-w-none dark:prose-invert">
+            <Card className="border-2">
+              <CardContent className="p-6 sm:p-8 lg:p-12">
+                <div className="prose prose-lg max-w-none dark:prose-invert 
+                  prose-headings:scroll-mt-20 
+                  prose-h2:text-2xl prose-h2:font-bold prose-h2:mt-8 prose-h2:mb-6 prose-h2:pb-3 prose-h2:border-b prose-h2:border-border
+                  prose-h2:first:mt-0
+                  prose-h3:text-xl prose-h3:font-semibold prose-h3:mt-8 prose-h3:mb-4
+                  prose-p:mb-4 prose-p:leading-relaxed prose-p:text-muted-foreground
+                  prose-ul:my-4 prose-ul:space-y-2
+                  prose-li:leading-relaxed prose-li:text-muted-foreground
+                  prose-strong:text-foreground prose-strong:font-semibold"
+                >
               <h2>1. Acceptance of Terms</h2>
               <p>
                 By accessing or using the SHELTR platform ("Platform"), including the website, mobile applications, 
@@ -372,30 +423,39 @@ export default function TermsPage() {
                 These Terms, together with the Privacy Policy, constitute the entire agreement 
                 between you and the Company regarding the Platform.
               </p>
-            </div>
+                </div>
+              </CardContent>
+            </Card>
 
             {/* Legal Footer */}
-            <div className="mt-12 p-6 bg-slate-50 dark:bg-slate-800 rounded-lg">
-              <h3 className="font-semibold mb-4">Legal Disclaimer</h3>
-              <p className="text-sm text-muted-foreground">
-                This document was last updated on July 25, 2025. These Terms of Service are subject to change. 
-                Users are encouraged to review these terms regularly. For specific legal advice regarding your 
-                situation, please consult with a qualified attorney.
-              </p>
-              <div className="flex gap-4 mt-4">
-                <Link href="/privacy">
-                  <Button variant="outline" size="sm">
-                    <FileText className="h-4 w-4 mr-2" />
-                    Privacy Policy
-                  </Button>
-                </Link>
-                <a href="mailto:legal@sheltr-ai.com">
-                  <Button variant="outline" size="sm">
-                    Contact Legal Team
-                  </Button>
-                </a>
-              </div>
-            </div>
+            <Card className="mt-8 border-2 border-blue-200 dark:border-blue-900 bg-blue-50/50 dark:bg-blue-900/10">
+              <CardContent className="p-6 sm:p-8">
+                <div className="flex items-start gap-4 mb-4">
+                  <Scale className="h-6 w-6 text-blue-600 flex-shrink-0 mt-1" />
+                  <div>
+                    <h3 className="font-semibold text-lg mb-2">Legal Disclaimer</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                      This document was last updated on July 25, 2025. These Terms of Service are subject to change. 
+                      Users are encouraged to review these terms regularly. For specific legal advice regarding your 
+                      situation, please consult with a qualified attorney.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <Link href="/privacy">
+                    <Button variant="outline" size="sm" className="border-blue-300 hover:bg-blue-100 dark:border-blue-700 dark:hover:bg-blue-900/20">
+                      <FileText className="h-4 w-4 mr-2" />
+                      Privacy Policy
+                    </Button>
+                  </Link>
+                  <a href="mailto:legal@sheltr.com">
+                    <Button variant="outline" size="sm" className="border-blue-300 hover:bg-blue-100 dark:border-blue-700 dark:hover:bg-blue-900/20">
+                      Contact Legal Team
+                    </Button>
+                  </a>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>

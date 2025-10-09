@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Footer from '@/components/Footer';
+import PublicNavigation from '@/components/PublicNavigation';
 import { 
   ArrowLeft,
   Battery,
@@ -41,6 +42,9 @@ import {
 export default function PodsBuildoutPage() {
   return (
     <div className="min-h-screen bg-background">
+      {/* Navigation */}
+      <PublicNavigation />
+
       {/* Hero Section */}
       <section className="relative py-24 overflow-hidden">
         {/* Background Image */}

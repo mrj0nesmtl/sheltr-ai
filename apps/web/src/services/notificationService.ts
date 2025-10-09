@@ -962,6 +962,7 @@ export async function getShelterNotificationCounts(userId: string, shelterId: st
 
 /**
  * Create a shelter-specific email signup
+ * Notifies: Super Admins, Platform Admins, and the specific Shelter Admin
  */
 export async function createShelterEmailSignup(data: {
   email: string;
@@ -984,6 +985,64 @@ export async function createShelterEmailSignup(data: {
 
     const docRef = await addDoc(collection(db, 'shelter_email_signups'), signupData);
     console.log('✅ Shelter email signup created:', docRef.id);
+
+    // 🔔 CREATE ADMIN NOTIFICATIONS
+    try {
+      // Get all Super Admins and Platform Admins
+      const adminsQuery = query(
+        collection(db, 'users'),
+        where('role', 'in', ['super_admin', 'platform_admin'])
+      );
+      const adminsSnapshot = await getDocs(adminsQuery);
+
+      // Get shelter-specific admin (if exists)
+      const shelterAdminQuery = query(
+        collection(db, 'users'),
+        where('role', '==', 'admin'),
+        where('shelter_id', '==', data.shelter_id)
+      );
+      const shelterAdminSnapshot = await getDocs(shelterAdminQuery);
+
+      // Combine all admin IDs
+      const adminIds = new Set<string>();
+      adminsSnapshot.forEach(doc => adminIds.add(doc.id));
+      shelterAdminSnapshot.forEach(doc => adminIds.add(doc.id));
+
+      console.log(`📧 Notifying ${adminIds.size} administrators about shelter email signup`);
+
+      // Create notification for each admin
+      const notificationPromises = Array.from(adminIds).map(async (adminId) => {
+        const notificationData = {
+          type: 'shelter_email_signup',
+          title: `New Email Signup: ${data.shelter_name}`,
+          message: `${data.name || 'Someone'} (${data.email}) signed up for updates from ${data.shelter_name}`,
+          priority: 'low' as const,
+          recipient_id: adminId,
+          category: 'email_signup',
+          is_read: false,
+          read: false,
+          created_at: serverTimestamp(),
+          data: {
+            shelter_id: data.shelter_id,
+            shelter_name: data.shelter_name,
+            signup_email: data.email,
+            signup_name: data.name,
+            signup_id: docRef.id,
+            source: 'shelter_public_page'
+          }
+        };
+
+        return addDoc(collection(db, 'admin_notifications'), notificationData);
+      });
+
+      await Promise.all(notificationPromises);
+      console.log(`✅ Created ${adminIds.size} admin notifications for shelter email signup`);
+
+    } catch (notificationError) {
+      console.error('⚠️ Error creating admin notifications (non-blocking):', notificationError);
+      // Don't throw - notification failure shouldn't block signup creation
+    }
+
     return docRef.id;
   } catch (error) {
     console.error('❌ Error creating shelter email signup:', error);

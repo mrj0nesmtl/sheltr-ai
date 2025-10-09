@@ -1,0 +1,398 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { 
+  ArrowLeft, 
+  Building2, 
+  MapPin, 
+  Users, 
+  Bed, 
+  DollarSign, 
+  Phone, 
+  Mail, 
+  Globe, 
+  Calendar, 
+  CheckCircle, 
+  AlertCircle,
+  Edit,
+  QrCode,
+  Shield,
+  TrendingUp,
+  Activity,
+  Clock
+} from 'lucide-react';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+import { Shelter } from '@/services/firestore';
+import Link from 'next/link';
+
+export default function ShelterViewPage() {
+  const params = useParams();
+  const router = useRouter();
+  const shelterId = params.shelterId as string;
+  
+  const [shelter, setShelter] = useState<Shelter | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadShelter = async () => {
+      try {
+        console.log(`🏠 Loading shelter details for: ${shelterId}`);
+        const shelterRef = doc(db, 'shelters', shelterId);
+        const shelterSnap = await getDoc(shelterRef);
+        
+        if (shelterSnap.exists()) {
+          setShelter({ id: shelterSnap.id, ...shelterSnap.data() } as Shelter);
+          console.log('✅ Shelter loaded successfully');
+        } else {
+          setError('Shelter not found');
+        }
+      } catch (err) {
+        console.error('❌ Error loading shelter:', err);
+        setError('Failed to load shelter details');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (shelterId) {
+      loadShelter();
+    }
+  }, [shelterId]);
+
+  if (loading) {
+    return (
+      <div className="p-8">
+        <div className="flex items-center justify-center h-64">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-muted-foreground">Loading shelter details...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !shelter) {
+    return (
+      <div className="p-8">
+        <div className="flex items-center justify-center h-64">
+          <div className="text-center">
+            <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+            <h2 className="text-xl font-bold mb-2">Error Loading Shelter</h2>
+            <p className="text-muted-foreground mb-4">{error}</p>
+            <Button onClick={() => router.back()}>
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Go Back
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const occupancyPercentage = Math.round((shelter.currentOccupancy / shelter.capacity) * 100);
+
+  return (
+    <div className="p-8 space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => router.push('/dashboard/shelters')}
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Shelters
+          </Button>
+          <div>
+            <h1 className="text-3xl font-bold flex items-center gap-3">
+              <Building2 className="h-8 w-8 text-primary" />
+              {shelter.name}
+              {shelter.verified && (
+                <Badge variant="outline" className="border-green-500 text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20">
+                  <Shield className="h-3 w-3 mr-1" />
+                  Verified
+                </Badge>
+              )}
+            </h1>
+            <p className="text-muted-foreground flex items-center gap-2 mt-1">
+              <MapPin className="h-4 w-4" />
+              {shelter.location}
+            </p>
+          </div>
+        </div>
+        <div className="flex gap-2">
+          <Link href={`/dashboard/shelters/${shelterId}/edit`}>
+            <Button variant="default">
+              <Edit className="h-4 w-4 mr-2" />
+              Edit Shelter
+            </Button>
+          </Link>
+          <Button variant="outline" asChild>
+            <Link href={`/${shelterId}`} target="_blank">
+              <Globe className="h-4 w-4 mr-2" />
+              View Public Page
+            </Link>
+          </Button>
+        </div>
+      </div>
+
+      {/* Status Badge */}
+      <div className="flex gap-2">
+        <Badge 
+          variant={shelter.status === 'active' ? 'default' : 'secondary'}
+          className={
+            shelter.status === 'active' ? 'bg-green-600' :
+            shelter.status === 'pending' ? 'bg-yellow-600' :
+            'bg-gray-600'
+          }
+        >
+          {shelter.status}
+        </Badge>
+        <Badge variant="outline">{shelter.type}</Badge>
+      </div>
+
+      {/* Key Statistics */}
+      <div>
+        <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+          <Activity className="h-5 w-5" />
+          Key Statistics
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-medium text-muted-foreground">Total Capacity</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center gap-2">
+                <Bed className="h-5 w-5 text-blue-500" />
+                <span className="text-3xl font-bold text-blue-600 dark:text-blue-400">{shelter.capacity}</span>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-medium text-muted-foreground">Occupied</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center gap-2">
+                <Users className="h-5 w-5 text-orange-500" />
+                <span className="text-3xl font-bold text-orange-600 dark:text-orange-400">{occupancyPercentage}%</span>
+              </div>
+              <p className="text-xs text-muted-foreground mt-1">{shelter.currentOccupancy} / {shelter.capacity} beds</p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-medium text-muted-foreground">Participants</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center gap-2">
+                <Users className="h-5 w-5 text-purple-500" />
+                <span className="text-3xl font-bold text-purple-600 dark:text-purple-400">{shelter.participants || 0}</span>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-medium text-muted-foreground">Compliance</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center gap-2">
+                <TrendingUp className="h-5 w-5 text-green-500" />
+                <span className="text-3xl font-bold text-green-600 dark:text-green-400">{shelter.complianceScore}%</span>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+
+      {/* Main Content Grid */}
+      <div className="grid lg:grid-cols-2 gap-6">
+        {/* Basic Information */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <MapPin className="h-5 w-5" />
+              Basic Information
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <label className="text-sm font-medium text-muted-foreground">Name</label>
+              <p className="text-lg font-semibold">{shelter.name}</p>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-muted-foreground">Type</label>
+              <p className="text-lg">{shelter.type}</p>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-muted-foreground">Location</label>
+              <p className="text-lg">{shelter.location}</p>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-muted-foreground">Address</label>
+              <p className="text-lg">{shelter.address}</p>
+            </div>
+            {shelter.coordinates && (
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Coordinates</label>
+                <p className="text-sm font-mono">
+                  {shelter.coordinates.lat.toFixed(6)}, {shelter.coordinates.lng.toFixed(6)}
+                </p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Contact Information */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Phone className="h-5 w-5" />
+              Contact Information
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex items-center gap-3">
+              <Mail className="h-5 w-5 text-muted-foreground" />
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Email</label>
+                <p className="text-lg">{shelter.contact.email}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <Phone className="h-5 w-5 text-muted-foreground" />
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Phone</label>
+                <p className="text-lg">{shelter.contact.phone}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <Users className="h-5 w-5 text-muted-foreground" />
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Contact Name</label>
+                <p className="text-lg">{shelter.contact.name}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Financial Overview */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <DollarSign className="h-5 w-5" />
+              Financial Overview
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-center p-6 bg-green-50 dark:bg-green-900/10 rounded-lg">
+              <div className="text-4xl font-bold text-green-600 dark:text-green-400 mb-2">
+                ${shelter.totalDonations?.toLocaleString() || '0'}
+              </div>
+              <p className="text-sm text-muted-foreground">Total Donations Received</p>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Shelter QR Code */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <QrCode className="h-5 w-5" />
+              Shelter QR Code
+            </CardTitle>
+            <CardDescription>Quick access to public page</CardDescription>
+          </CardHeader>
+          <CardContent className="text-center">
+            <div className="inline-block p-4 bg-white rounded-lg border-2 border-dashed">
+              <QrCode className="h-32 w-32 mx-auto text-gray-400" />
+            </div>
+            <p className="text-sm text-muted-foreground mt-3">
+              Links to: https://sheltr-ai.web.app/{shelterId}
+            </p>
+            <Button variant="outline" className="mt-3">
+              <QrCode className="h-4 w-4 mr-2" />
+              Generate QR Code
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Timeline & Dates */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Clock className="h-5 w-5" />
+            Timeline & Dates
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <label className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+                <Calendar className="h-4 w-4" />
+                Join Date
+              </label>
+              <p className="text-lg font-semibold mt-1">
+                {new Date(shelter.joinDate).toLocaleDateString()}
+              </p>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+                <CheckCircle className="h-4 w-4" />
+                Last Inspection
+              </label>
+              <p className="text-lg font-semibold mt-1">
+                {new Date(shelter.lastInspection).toLocaleDateString()}
+              </p>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+                <Activity className="h-4 w-4" />
+                Last Updated
+              </label>
+              <p className="text-lg font-semibold mt-1">
+                {shelter.updatedAt?.toDate ? new Date(shelter.updatedAt.toDate()).toLocaleDateString() : 'N/A'}
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Tenant Information */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Building2 className="h-5 w-5" />
+            Tenant Information
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-2">
+            <div>
+              <label className="text-sm font-medium text-muted-foreground">Tenant ID</label>
+              <p className="text-sm font-mono bg-muted px-3 py-2 rounded-md mt-1">{shelter.tenantId}</p>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-muted-foreground">Shelter ID</label>
+              <p className="text-sm font-mono bg-muted px-3 py-2 rounded-md mt-1">{shelter.id}</p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+

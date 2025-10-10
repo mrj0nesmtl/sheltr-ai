@@ -42,6 +42,8 @@ export default function ShelterViewClient() {
   const [notificationCount, setNotificationCount] = useState(0);
   const [donorCount, setDonorCount] = useState(0);
   const [totalDonations, setTotalDonations] = useState(0);
+  const [operationsRevenue, setOperationsRevenue] = useState(0); // 5% from participant donations
+  const [directDonations, setDirectDonations] = useState(0); // Direct shelter donations
 
   useEffect(() => {
     const loadShelter = async () => {
@@ -86,7 +88,15 @@ export default function ShelterViewClient() {
           
           // Calculate REAL donation totals from actual donation collections
           let realDonationTotal = 0;
+          let operationsRevenueTotal = 0; // 5% from participant donations
+          let directDonationsTotal = 0; // Direct shelter donations
           const uniqueDonors = new Set<string>();
+          
+          // Get list of participant IDs affiliated with this shelter
+          const shelterParticipantIds = new Set<string>();
+          participantsSnap.forEach((doc) => {
+            shelterParticipantIds.add(doc.id);
+          });
           
           // Check demo_donations collection
           try {
@@ -94,10 +104,18 @@ export default function ShelterViewClient() {
             const demoDonationsSnap = await getDocs(demoDonationsRef);
             demoDonationsSnap.forEach((doc) => {
               const data = doc.data();
-              // Check if donation is associated with this shelter's participants
-              if (data.participant_id) {
-                // We'll count this as part of the shelter if the participant belongs to this shelter
-                realDonationTotal += data.total_amount || 0;
+              const totalAmount = data.total_amount || 0;
+              
+              if (data.participant_id && shelterParticipantIds.has(data.participant_id)) {
+                // Participant donation - shelter gets 5% operations fee
+                const operationsFee = totalAmount * 0.05;
+                operationsRevenueTotal += operationsFee;
+                realDonationTotal += totalAmount;
+                if (data.donor_id) uniqueDonors.add(data.donor_id);
+              } else if (!data.participant_id && data.shelter_id === shelterSnap.id) {
+                // Direct donation to shelter (no participant)
+                directDonationsTotal += totalAmount;
+                realDonationTotal += totalAmount;
                 if (data.donor_id) uniqueDonors.add(data.donor_id);
               }
             });
@@ -113,8 +131,20 @@ export default function ShelterViewClient() {
               const tenantDonationsSnap = await getDocs(tenantDonationsRef);
               tenantDonationsSnap.forEach((doc) => {
                 const data = doc.data();
-                realDonationTotal += data.total_amount || data.amount || 0;
-                if (data.donor_id) uniqueDonors.add(data.donor_id);
+                const totalAmount = data.total_amount || data.amount || 0;
+                
+                if (data.participant_id && shelterParticipantIds.has(data.participant_id)) {
+                  // Participant donation - shelter gets 5% operations fee
+                  const operationsFee = totalAmount * 0.05;
+                  operationsRevenueTotal += operationsFee;
+                  realDonationTotal += totalAmount;
+                  if (data.donor_id) uniqueDonors.add(data.donor_id);
+                } else if (!data.participant_id) {
+                  // Direct donation to shelter (no participant)
+                  directDonationsTotal += totalAmount;
+                  realDonationTotal += totalAmount;
+                  if (data.donor_id) uniqueDonors.add(data.donor_id);
+                }
               });
             }
           } catch (error) {
@@ -122,10 +152,14 @@ export default function ShelterViewClient() {
           }
           
           setTotalDonations(realDonationTotal);
+          setOperationsRevenue(operationsRevenueTotal);
+          setDirectDonations(directDonationsTotal);
           setDonorCount(uniqueDonors.size);
           
           console.log(`💰 Calculated real totals for ${shelterSnap.id}:`, {
             totalDonations: realDonationTotal,
+            operationsRevenue: operationsRevenueTotal,
+            directDonations: directDonationsTotal,
             uniqueDonors: uniqueDonors.size
           });
         } else {
@@ -378,13 +412,43 @@ export default function ShelterViewClient() {
               <DollarSign className="h-5 w-5" />
               Financial Overview
             </CardTitle>
+            <CardDescription>Revenue breakdown by source</CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="text-center p-6 bg-green-50 dark:bg-green-900/10 rounded-lg">
-              <div className="text-4xl font-bold text-green-600 dark:text-green-400 mb-2">
-                ${totalDonations.toLocaleString()}
+          <CardContent className="space-y-4">
+            {/* 5% Operations Revenue */}
+            <div className="p-4 bg-purple-50 dark:bg-purple-900/10 rounded-lg border border-purple-200 dark:border-purple-800">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm font-medium text-purple-700 dark:text-purple-300">5% Operations Fee</span>
+                <Badge variant="outline" className="border-purple-400 text-purple-600 dark:text-purple-400 text-xs">
+                  SmartFund™
+                </Badge>
               </div>
-              <p className="text-sm text-muted-foreground">Total Donations Received</p>
+              <div className="text-3xl font-bold text-purple-600 dark:text-purple-400">
+                ${operationsRevenue.toLocaleString()}
+              </div>
+              <p className="text-xs text-muted-foreground mt-1">From affiliated participant donations</p>
+            </div>
+
+            {/* Direct Donations */}
+            <div className="p-4 bg-green-50 dark:bg-green-900/10 rounded-lg border border-green-200 dark:border-green-800">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm font-medium text-green-700 dark:text-green-300">Direct Donations</span>
+                <Badge variant="outline" className="border-green-400 text-green-600 dark:text-green-400 text-xs">
+                  Direct
+                </Badge>
+              </div>
+              <div className="text-3xl font-bold text-green-600 dark:text-green-400">
+                ${directDonations.toLocaleString()}
+              </div>
+              <p className="text-xs text-muted-foreground mt-1">From shelter QR code donations</p>
+            </div>
+
+            {/* Total Revenue */}
+            <div className="pt-4 border-t">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium text-muted-foreground">Total Revenue</span>
+                <span className="text-2xl font-bold">${totalDonations.toLocaleString()}</span>
+              </div>
             </div>
           </CardContent>
         </Card>

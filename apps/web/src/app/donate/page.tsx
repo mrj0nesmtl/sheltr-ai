@@ -219,7 +219,7 @@ function DonatePageContent() {
         return;
       }
 
-      // Create payment session
+      // Create payment session with donor information
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/demo/donations/payment-session`, {
         method: 'POST',
         headers: {
@@ -229,6 +229,11 @@ function DonatePageContent() {
           participant_id: participant.id,
           amount: donationAmount,
           demo_session_id: searchParams.get('session_id') || undefined,
+          donor_info: user ? {
+            donor_id: user.uid,
+            name: user.displayName || user.email || 'Anonymous Donor',
+            email: user.email || 'anonymous@sheltr.ai'
+          } : undefined,
         }),
       });
 

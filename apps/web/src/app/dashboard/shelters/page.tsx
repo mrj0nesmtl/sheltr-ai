@@ -614,7 +614,7 @@ export default function ShelterNetwork() {
       )}
 
       {/* Platform Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Shelters</CardTitle>
@@ -637,18 +637,15 @@ export default function ShelterNetwork() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Platform Capacity</CardTitle>
+            <CardTitle className="text-sm font-medium">Total Participants</CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{shelterMetrics.totalCapacity.toLocaleString()}</div>
+            <div className="text-2xl font-bold">{shelterMetrics.totalParticipants.toLocaleString()}</div>
             <div className="flex items-center space-x-4 text-xs text-muted-foreground mt-2">
               <span className="flex items-center">
-                <Activity className="h-3 w-3 text-blue-500 mr-1" />
-                {shelterMetrics.currentOccupants.toLocaleString()} Occupied
-              </span>
-              <span className={`flex items-center ${getOccupancyColor(shelterMetrics.occupancyRate)}`}>
-                {shelterMetrics.occupancyRate}% Average
+                <Activity className="h-3 w-3 text-purple-500 mr-1" />
+                Globally Across All Shelters
               </span>
             </div>
           </CardContent>
@@ -666,25 +663,6 @@ export default function ShelterNetwork() {
               <span className="flex items-center text-green-600">
                 <TrendingUp className="h-3 w-3 mr-1" />
                 New Partners
-              </span>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Compliance Score</CardTitle>
-            <Shield className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className={`text-2xl font-bold ${getComplianceColor(shelterMetrics.complianceScore)}`}>
-              {shelterMetrics.complianceScore}%
-            </div>
-            <div className="flex items-center space-x-4 text-xs text-muted-foreground mt-2">
-              <span>Platform Average</span>
-              <span className="flex items-center text-green-600">
-                <Shield className="h-3 w-3 mr-1" />
-                Excellent
               </span>
             </div>
           </CardContent>

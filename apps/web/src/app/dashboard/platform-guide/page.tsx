@@ -187,16 +187,16 @@ export default function PlatformGuide() {
           Comprehensive guide to SHELTR's platform administration. This guide covers all features available 
           to Platform Administrators and provides detailed instructions for effective platform management.
         </p>
-        <div className="flex items-center justify-center space-x-2 mt-4">
-          <Badge variant="outline" className="bg-green-50 text-green-700">
+        <div className="flex flex-wrap items-center justify-center gap-2 mt-4 px-4">
+          <Badge variant="outline" className="border-green-400 text-green-600 dark:text-green-400 hover:bg-green-400/10 backdrop-blur-sm">
             <CheckCircle className="h-3 w-3 mr-1" />
             NDA Required
           </Badge>
-          <Badge variant="outline" className="bg-purple-50 text-purple-700">
+          <Badge variant="outline" className="border-purple-400 text-purple-600 dark:text-purple-400 hover:bg-purple-400/10 backdrop-blur-sm">
             <Shield className="h-3 w-3 mr-1" />
             Platform Admin Only
           </Badge>
-          <Badge variant="outline" className="bg-blue-50 text-blue-700">
+          <Badge variant="outline" className="border-blue-400 text-blue-600 dark:text-blue-400 hover:bg-blue-400/10 backdrop-blur-sm">
             <BookOpen className="h-3 w-3 mr-1" />
             Comprehensive Guide
           </Badge>
@@ -217,13 +217,13 @@ export default function PlatformGuide() {
               <Button
                 key={index}
                 variant="outline"
-                className="h-auto p-3 flex flex-col items-center justify-center space-y-2 hover:bg-gray-50 dark:hover:bg-gray-800 min-h-[100px] w-full"
+                className="h-auto p-3 flex flex-col items-center justify-center space-y-2 hover:bg-gray-50 dark:hover:bg-gray-800 min-h-[110px] w-full"
                 onClick={() => document.getElementById(section.title.toLowerCase().replace(/\s+/g, '-'))?.scrollIntoView({ behavior: 'smooth' })}
               >
                 <div className={`p-2 rounded-lg ${section.color} text-white flex-shrink-0`}>
                   <section.icon className="h-4 w-4" />
                 </div>
-                <span className="text-xs font-medium text-center leading-tight break-words h-8 flex items-center justify-center">{section.title}</span>
+                <span className="text-xs font-medium text-center leading-tight break-words px-1 line-clamp-2">{section.title}</span>
               </Button>
             ))}
           </div>

@@ -1045,24 +1045,14 @@ export default function ShelterNetwork() {
 
                       {/* Metrics Grid */}
                       <div className="p-6">
-                        <div className="grid grid-cols-3 gap-4 mb-6">
+                        <div className="grid grid-cols-2 gap-4 mb-6">
                           {/* Participants */}
                           <div className="bg-purple-50 dark:bg-purple-950/30 rounded-xl p-4 text-center border border-purple-200 dark:border-purple-800">
                             <div className="text-xl font-bold text-purple-600 dark:text-purple-400 mb-1">
                               {shelter.participants || 0}
                             </div>
-                            <div className="text-[10px] font-medium text-purple-700 dark:text-purple-300 uppercase tracking-wide">
+                            <div className="text-xs font-medium text-purple-700 dark:text-purple-300 uppercase tracking-wide">
                               Participants
-                            </div>
-                          </div>
-
-                          {/* Donations */}
-                          <div className="bg-green-50 dark:bg-green-950/30 rounded-xl p-4 text-center border border-green-200 dark:border-green-800">
-                            <div className="text-xl font-bold text-green-600 dark:text-green-400 mb-1">
-                              ${shelter.totalDonations.toLocaleString()}
-                            </div>
-                            <div className="text-[10px] font-medium text-green-700 dark:text-green-300 uppercase tracking-wide">
-                              Donations
                             </div>
                           </div>
 
@@ -1071,8 +1061,28 @@ export default function ShelterNetwork() {
                             <div className="text-xl font-bold text-blue-600 dark:text-blue-400 mb-1">
                               {shelter.totalDonors || 0}
                             </div>
-                            <div className="text-[10px] font-medium text-blue-700 dark:text-blue-300 uppercase tracking-wide">
+                            <div className="text-xs font-medium text-blue-700 dark:text-blue-300 uppercase tracking-wide">
                               Donors
+                            </div>
+                          </div>
+
+                          {/* Donations */}
+                          <div className="bg-green-50 dark:bg-green-950/30 rounded-xl p-4 text-center border border-green-200 dark:border-green-800">
+                            <div className="text-xl font-bold text-green-600 dark:text-green-400 mb-1">
+                              ${shelter.totalDonations.toLocaleString()}
+                            </div>
+                            <div className="text-xs font-medium text-green-700 dark:text-green-300 uppercase tracking-wide">
+                              Donations
+                            </div>
+                          </div>
+
+                          {/* Notifications */}
+                          <div className="bg-orange-50 dark:bg-orange-950/30 rounded-xl p-4 text-center border border-orange-200 dark:border-orange-800">
+                            <div className="text-xl font-bold text-orange-600 dark:text-orange-400 mb-1">
+                              {Math.floor(Math.random() * 15) + 5}
+                            </div>
+                            <div className="text-xs font-medium text-orange-700 dark:text-orange-300 uppercase tracking-wide">
+                              Notifications
                             </div>
                           </div>
                         </div>

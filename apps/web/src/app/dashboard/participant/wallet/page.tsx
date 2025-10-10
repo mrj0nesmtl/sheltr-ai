@@ -28,6 +28,7 @@ import {
   ArrowDownLeft,
   Target,
   Award,
+  CreditCard,
   Shield
 } from 'lucide-react';
 

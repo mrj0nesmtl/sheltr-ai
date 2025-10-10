@@ -56,8 +56,26 @@ export default function ShelterEditClient() {
     const loadShelter = async () => {
       try {
         console.log(`🏠 Loading shelter for edit: ${shelterId}`);
-        const shelterRef = doc(db, 'shelters', shelterId);
-        const shelterSnap = await getDoc(shelterRef);
+        
+        // First try direct ID lookup
+        let shelterRef = doc(db, 'shelters', shelterId);
+        let shelterSnap = await getDoc(shelterRef);
+        let actualShelterId = shelterId;
+        
+        // If not found by ID, try looking up by tenantId
+        if (!shelterSnap.exists()) {
+          console.log(`🔍 Shelter not found by ID, trying tenant ID lookup...`);
+          const sheltersRef = collection(db, 'shelters');
+          const q = query(sheltersRef, where('tenantId', '==', shelterId));
+          const querySnapshot = await getDocs(q);
+          
+          if (!querySnapshot.empty) {
+            const foundDoc = querySnapshot.docs[0];
+            actualShelterId = foundDoc.id;
+            shelterSnap = foundDoc;
+            console.log('✅ Shelter found by tenantId, using ID:', actualShelterId);
+          }
+        }
         
         if (shelterSnap.exists()) {
           const shelterData = { id: shelterSnap.id, ...shelterSnap.data() } as Shelter;
@@ -76,12 +94,12 @@ export default function ShelterEditClient() {
             verified: shelterData.verified || false
           });
           
-          // Load administrators
-          await loadAdministrators(shelterId);
+          // Load administrators using actual shelter ID
+          await loadAdministrators(actualShelterId);
           
           console.log('✅ Shelter loaded successfully');
         } else {
-          setError('Shelter not found');
+          setError('Shelter not found. Please navigate from the shelters list.');
         }
       } catch (err) {
         console.error('❌ Error loading shelter:', err);

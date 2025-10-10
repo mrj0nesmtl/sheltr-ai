@@ -43,14 +43,33 @@ export default function ShelterViewClient() {
     const loadShelter = async () => {
       try {
         console.log(`🏠 Loading shelter details for: ${shelterId}`);
-        const shelterRef = doc(db, 'shelters', shelterId);
-        const shelterSnap = await getDoc(shelterRef);
+        
+        // First try direct ID lookup
+        let shelterRef = doc(db, 'shelters', shelterId);
+        let shelterSnap = await getDoc(shelterRef);
+        
+        // If not found by ID, try looking up by tenantId
+        if (!shelterSnap.exists()) {
+          console.log(`🔍 Shelter not found by ID, trying tenant ID lookup...`);
+          const { collection: firestoreCollection, query, where, getDocs } = await import('firebase/firestore');
+          const sheltersRef = firestoreCollection(db, 'shelters');
+          const q = query(sheltersRef, where('tenantId', '==', shelterId));
+          const querySnapshot = await getDocs(q);
+          
+          if (!querySnapshot.empty) {
+            const foundDoc = querySnapshot.docs[0];
+            setShelter({ id: foundDoc.id, ...foundDoc.data() } as Shelter);
+            console.log('✅ Shelter loaded successfully by tenantId');
+            setLoading(false);
+            return;
+          }
+        }
         
         if (shelterSnap.exists()) {
           setShelter({ id: shelterSnap.id, ...shelterSnap.data() } as Shelter);
-          console.log('✅ Shelter loaded successfully');
+          console.log('✅ Shelter loaded successfully by ID');
         } else {
-          setError('Shelter not found');
+          setError('Shelter not found. Please navigate from the shelters list.');
         }
       } catch (err) {
         console.error('❌ Error loading shelter:', err);

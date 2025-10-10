@@ -872,11 +872,11 @@ export default function ShelterNetwork() {
                     {/* Mobile Layout - Completely Redesigned */}
                     <div className="block sm:hidden">
                       {/* Header Section */}
-                      <div className="p-4 bg-gradient-to-r from-blue-50 via-white to-blue-50 dark:from-blue-950/30 dark:via-slate-900 dark:to-blue-950/30">
+                      <div className="p-4 bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-gray-700">
                         <div className="flex items-start justify-between mb-3">
                           <div className="flex items-center space-x-3 flex-1 min-w-0">
-                            <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
-                              <Building2 className="h-7 w-7 text-white" />
+                            <div className="w-14 h-14 bg-gray-100 dark:bg-gray-800 rounded-2xl flex items-center justify-center border border-gray-200 dark:border-gray-700">
+                              <Building2 className="h-7 w-7 text-gray-700 dark:text-gray-300" />
                             </div>
                             <div className="flex-1 min-w-0">
                               <h3 className="font-bold text-lg leading-tight truncate text-gray-900 dark:text-white">
@@ -1045,24 +1045,14 @@ export default function ShelterNetwork() {
 
                       {/* Metrics Grid */}
                       <div className="p-6">
-                        <div className="grid grid-cols-2 gap-4 mb-6">
-                          {/* Capacity */}
-                          <div className="bg-blue-50 dark:bg-blue-950/30 rounded-xl p-4 text-center border border-blue-200 dark:border-blue-800">
-                            <div className="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-1">
-                              {shelter.capacity}
+                        <div className="grid grid-cols-3 gap-4 mb-6">
+                          {/* Participants */}
+                          <div className="bg-purple-50 dark:bg-purple-950/30 rounded-xl p-4 text-center border border-purple-200 dark:border-purple-800">
+                            <div className="text-2xl font-bold text-purple-600 dark:text-purple-400 mb-1">
+                              {shelter.participants || 0}
                             </div>
-                            <div className="text-xs font-medium text-blue-700 dark:text-blue-300 uppercase tracking-wide">
-                              Capacity
-                            </div>
-                          </div>
-
-                          {/* Occupancy */}
-                          <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4 text-center border border-gray-200 dark:border-gray-700">
-                            <div className={`text-2xl font-bold mb-1 ${getOccupancyColor(getOccupancyPercentage(shelter))}`}>
-                              {getOccupancyPercentage(shelter)}%
-                            </div>
-                            <div className="text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wide">
-                              Occupied
+                            <div className="text-xs font-medium text-purple-700 dark:text-purple-300 uppercase tracking-wide">
+                              Participants
                             </div>
                           </div>
 
@@ -1076,13 +1066,13 @@ export default function ShelterNetwork() {
                             </div>
                           </div>
 
-                          {/* Compliance */}
-                          <div className="bg-orange-50 dark:bg-orange-950/30 rounded-xl p-4 text-center border border-orange-200 dark:border-orange-800">
-                            <div className={`text-xl font-bold mb-1 ${getComplianceColor(shelter.complianceScore)}`}>
-                              {shelter.complianceScore}%
+                          {/* Donors */}
+                          <div className="bg-blue-50 dark:bg-blue-950/30 rounded-xl p-4 text-center border border-blue-200 dark:border-blue-800">
+                            <div className="text-xl font-bold text-blue-600 dark:text-blue-400 mb-1">
+                              {shelter.totalDonors || 0}
                             </div>
-                            <div className="text-xs font-medium text-orange-700 dark:text-orange-300 uppercase tracking-wide">
-                              Compliance
+                            <div className="text-xs font-medium text-blue-700 dark:text-blue-300 uppercase tracking-wide">
+                              Donors
                             </div>
                           </div>
                         </div>

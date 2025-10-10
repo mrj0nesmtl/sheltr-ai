@@ -36,6 +36,7 @@ export interface Shelter {
   currentOccupancy: number;
   participants: number;
   totalDonations: number;
+  totalDonors?: number;
   status: 'active' | 'pending' | 'inactive' | 'under_review';
   complianceScore: number;
   lastInspection: string;

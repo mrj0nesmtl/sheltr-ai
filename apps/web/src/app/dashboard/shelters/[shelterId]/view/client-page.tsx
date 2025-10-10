@@ -25,7 +25,7 @@ import {
   Activity,
   Clock
 } from 'lucide-react';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { Shelter } from '@/services/firestore';
 import Link from 'next/link';
@@ -38,6 +38,9 @@ export default function ShelterViewClient() {
   const [shelter, setShelter] = useState<Shelter | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [participantCount, setParticipantCount] = useState(0);
+  const [notificationCount, setNotificationCount] = useState(0);
+  const [donorCount, setDonorCount] = useState(0);
 
   useEffect(() => {
     const loadShelter = async () => {
@@ -66,8 +69,22 @@ export default function ShelterViewClient() {
         }
         
         if (shelterSnap.exists()) {
-          setShelter({ id: shelterSnap.id, ...shelterSnap.data() } as Shelter);
+          const shelterData = { id: shelterSnap.id, ...shelterSnap.data() } as Shelter;
+          setShelter(shelterData);
           console.log('✅ Shelter loaded successfully by ID');
+          
+          // Load participant count
+          const participantsQuery = query(collection(db, 'users'), where('shelter_id', '==', shelterSnap.id), where('role', '==', 'participant'));
+          const participantsSnap = await getDocs(participantsQuery);
+          setParticipantCount(participantsSnap.size);
+          
+          // Load notification count
+          const notificationsQuery = query(collection(db, 'shelter_email_signups'), where('shelter_id', '==', shelterSnap.id));
+          const notificationsSnap = await getDocs(notificationsQuery);
+          setNotificationCount(notificationsSnap.size);
+          
+          // Calculate donor count (approximate from donations / 50)
+          setDonorCount(Math.floor((shelterData.totalDonations || 0) / 50) || 0);
         } else {
           setError('Shelter not found. Please navigate from the shelters list.');
         }
@@ -114,8 +131,6 @@ export default function ShelterViewClient() {
       </div>
     );
   }
-
-  const occupancyPercentage = Math.round((shelter.currentOccupancy / shelter.capacity) * 100);
 
   return (
     <div className="p-4 md:p-8 space-y-6">
@@ -188,31 +203,7 @@ export default function ShelterViewClient() {
           Key Statistics
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Total Capacity</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-center gap-2">
-                <Bed className="h-5 w-5 text-blue-500" />
-                <span className="text-3xl font-bold text-blue-600 dark:text-blue-400">{shelter.capacity}</span>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Occupied</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-center gap-2">
-                <Users className="h-5 w-5 text-orange-500" />
-                <span className="text-3xl font-bold text-orange-600 dark:text-orange-400">{occupancyPercentage}%</span>
-              </div>
-              <p className="text-xs text-muted-foreground mt-1">{shelter.currentOccupancy} / {shelter.capacity} beds</p>
-            </CardContent>
-          </Card>
-
+          {/* Participants */}
           <Card>
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-medium text-muted-foreground">Participants</CardTitle>
@@ -220,19 +211,46 @@ export default function ShelterViewClient() {
             <CardContent>
               <div className="flex items-center gap-2">
                 <Users className="h-5 w-5 text-purple-500" />
-                <span className="text-3xl font-bold text-purple-600 dark:text-purple-400">{shelter.participants || 0}</span>
+                <span className="text-3xl font-bold text-purple-600 dark:text-purple-400">{participantCount}</span>
               </div>
             </CardContent>
           </Card>
 
+          {/* Donors */}
           <Card>
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Compliance</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">Donors</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center gap-2">
-                <TrendingUp className="h-5 w-5 text-green-500" />
-                <span className="text-3xl font-bold text-green-600 dark:text-green-400">{shelter.complianceScore}%</span>
+                <Users className="h-5 w-5 text-blue-500" />
+                <span className="text-3xl font-bold text-blue-600 dark:text-blue-400">{donorCount}</span>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Donations */}
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-medium text-muted-foreground">Donations</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center gap-2">
+                <DollarSign className="h-5 w-5 text-green-500" />
+                <span className="text-3xl font-bold text-green-600 dark:text-green-400">${shelter.totalDonations?.toLocaleString() || '0'}</span>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Notifications */}
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-medium text-muted-foreground">Notifications</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center gap-2">
+                <AlertCircle className="h-5 w-5 text-orange-500" />
+                <span className="text-3xl font-bold text-orange-600 dark:text-orange-400">{notificationCount}</span>
               </div>
             </CardContent>
           </Card>
@@ -368,7 +386,7 @@ export default function ShelterViewClient() {
                 Join Date
               </label>
               <p className="text-lg font-semibold mt-1">
-                {new Date(shelter.joinDate).toLocaleDateString()}
+                {shelter.createdAt?.toDate ? new Date(shelter.createdAt.toDate()).toLocaleDateString() : '—'}
               </p>
             </div>
             <div>
@@ -377,7 +395,7 @@ export default function ShelterViewClient() {
                 Last Inspection
               </label>
               <p className="text-lg font-semibold mt-1">
-                {new Date(shelter.lastInspection).toLocaleDateString()}
+                {shelter.lastInspection && shelter.lastInspection !== '2024-01-15' ? new Date(shelter.lastInspection).toLocaleDateString() : '—'}
               </p>
             </div>
             <div>
@@ -386,7 +404,7 @@ export default function ShelterViewClient() {
                 Last Updated
               </label>
               <p className="text-lg font-semibold mt-1">
-                {shelter.updatedAt?.toDate ? new Date(shelter.updatedAt.toDate()).toLocaleDateString() : 'N/A'}
+                {shelter.updatedAt?.toDate ? new Date(shelter.updatedAt.toDate()).toLocaleDateString() : '—'}
               </p>
             </div>
           </div>

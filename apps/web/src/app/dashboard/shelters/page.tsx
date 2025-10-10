@@ -999,7 +999,7 @@ export default function ShelterNetwork() {
                     {/* Desktop Layout - Profile Style Card */}
                     <div className="hidden sm:block p-0">
                       {/* Header with Shelter Info */}
-                      <div className="relative bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-800 dark:to-blue-900 p-6 text-white">
+                      <div className="relative bg-white dark:bg-slate-900 p-6 border-b border-gray-200 dark:border-gray-700">
                         <div className="absolute top-4 right-4">
                           <Badge 
                             className={`${getStatusColor(shelter.status)} text-xs font-medium`}
@@ -1009,18 +1009,18 @@ export default function ShelterNetwork() {
                           </Badge>
                         </div>
                         <div className="flex items-start space-x-4">
-                          <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center shadow-lg">
-                            <Building2 className="h-8 w-8 text-white" />
+                          <div className="w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-2xl flex items-center justify-center border border-gray-200 dark:border-gray-700">
+                            <Building2 className="h-8 w-8 text-gray-700 dark:text-gray-300" />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <h3 className="text-xl font-bold text-white mb-1 truncate">
+                            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-1 truncate">
                               {shelter.name}
                             </h3>
-                            <div className="flex items-center text-blue-100 text-sm mb-2">
+                            <div className="flex items-center text-gray-600 dark:text-gray-400 text-sm mb-2">
                               <MapPin className="h-4 w-4 mr-2 shrink-0" />
                               <span className="truncate">{shelter.location}</span>
                             </div>
-                            <div className="text-blue-200 text-sm">
+                            <div className="text-gray-500 dark:text-gray-500 text-sm">
                               {shelter.type}
                             </div>
                           </div>
@@ -1048,7 +1048,7 @@ export default function ShelterNetwork() {
                         <div className="grid grid-cols-3 gap-4 mb-6">
                           {/* Participants */}
                           <div className="bg-purple-50 dark:bg-purple-950/30 rounded-xl p-4 text-center border border-purple-200 dark:border-purple-800">
-                            <div className="text-2xl font-bold text-purple-600 dark:text-purple-400 mb-1">
+                            <div className="text-xl font-bold text-purple-600 dark:text-purple-400 mb-1">
                               {shelter.participants || 0}
                             </div>
                             <div className="text-xs font-medium text-purple-700 dark:text-purple-300 uppercase tracking-wide">

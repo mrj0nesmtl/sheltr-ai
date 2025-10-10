@@ -29,7 +29,8 @@ import {
   Target,
   Award,
   CreditCard,
-  Shield
+  Shield,
+  Home
 } from 'lucide-react';
 
 // Interface for real wallet data

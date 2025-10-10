@@ -6,9 +6,6 @@ export async function generateStaticParams() {
   ];
 }
 
-// Disable dynamic routes for production static export
-export const dynamicParams = false;
-
 export default function ShelterViewPage() {
   return <ShelterViewClient />;
 }

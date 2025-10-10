@@ -47,6 +47,7 @@ export interface Shelter {
   joinDate: string;
   rating: number;
   tenantId: string;
+  verified?: boolean;
   createdAt: Timestamp;
   updatedAt: Timestamp;
   // Migration metadata (optional)

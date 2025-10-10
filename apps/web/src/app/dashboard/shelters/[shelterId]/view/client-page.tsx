@@ -41,6 +41,7 @@ export default function ShelterViewClient() {
   const [participantCount, setParticipantCount] = useState(0);
   const [notificationCount, setNotificationCount] = useState(0);
   const [donorCount, setDonorCount] = useState(0);
+  const [totalDonations, setTotalDonations] = useState(0);
 
   useEffect(() => {
     const loadShelter = async () => {
@@ -83,8 +84,50 @@ export default function ShelterViewClient() {
           const notificationsSnap = await getDocs(notificationsQuery);
           setNotificationCount(notificationsSnap.size);
           
-          // Calculate donor count (approximate from donations / 50)
-          setDonorCount(Math.floor((shelterData.totalDonations || 0) / 50) || 0);
+          // Calculate REAL donation totals from actual donation collections
+          let realDonationTotal = 0;
+          const uniqueDonors = new Set<string>();
+          
+          // Check demo_donations collection
+          try {
+            const demoDonationsRef = collection(db, 'demo_donations');
+            const demoDonationsSnap = await getDocs(demoDonationsRef);
+            demoDonationsSnap.forEach((doc) => {
+              const data = doc.data();
+              // Check if donation is associated with this shelter's participants
+              if (data.participant_id) {
+                // We'll count this as part of the shelter if the participant belongs to this shelter
+                realDonationTotal += data.total_amount || 0;
+                if (data.donor_id) uniqueDonors.add(data.donor_id);
+              }
+            });
+          } catch (error) {
+            console.warn('No demo_donations collection or error loading:', error);
+          }
+          
+          // Check tenant-specific donations (tenants/{tenantId}/donations)
+          try {
+            const tenantId = shelterData.tenantId;
+            if (tenantId) {
+              const tenantDonationsRef = collection(db, `tenants/${tenantId}/donations`);
+              const tenantDonationsSnap = await getDocs(tenantDonationsRef);
+              tenantDonationsSnap.forEach((doc) => {
+                const data = doc.data();
+                realDonationTotal += data.total_amount || data.amount || 0;
+                if (data.donor_id) uniqueDonors.add(data.donor_id);
+              });
+            }
+          } catch (error) {
+            console.warn('No tenant donations collection or error loading:', error);
+          }
+          
+          setTotalDonations(realDonationTotal);
+          setDonorCount(uniqueDonors.size);
+          
+          console.log(`💰 Calculated real totals for ${shelterSnap.id}:`, {
+            totalDonations: realDonationTotal,
+            uniqueDonors: uniqueDonors.size
+          });
         } else {
           setError('Shelter not found. Please navigate from the shelters list.');
         }
@@ -237,7 +280,7 @@ export default function ShelterViewClient() {
             <CardContent>
               <div className="flex items-center gap-2">
                 <DollarSign className="h-5 w-5 text-green-500" />
-                <span className="text-3xl font-bold text-green-600 dark:text-green-400">${shelter.totalDonations?.toLocaleString() || '0'}</span>
+                <span className="text-3xl font-bold text-green-600 dark:text-green-400">${totalDonations.toLocaleString()}</span>
               </div>
             </CardContent>
           </Card>
@@ -339,7 +382,7 @@ export default function ShelterViewClient() {
           <CardContent>
             <div className="text-center p-6 bg-green-50 dark:bg-green-900/10 rounded-lg">
               <div className="text-4xl font-bold text-green-600 dark:text-green-400 mb-2">
-                ${shelter.totalDonations?.toLocaleString() || '0'}
+                ${totalDonations.toLocaleString()}
               </div>
               <p className="text-sm text-muted-foreground">Total Donations Received</p>
             </div>

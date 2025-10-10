@@ -126,6 +126,19 @@ function SuccessPageContent() {
             console.error('❌ Error updating shelter operations:', error);
           }
           
+          // Update donor (Jane's) stats
+          try {
+            const donorRef = doc(db, 'users', user.uid);
+            await updateDoc(donorRef, {
+              totalDonated: increment(totalAmount),
+              donation_count: increment(1),
+              updated_at: serverTimestamp()
+            });
+            console.log('✅ Updated donor stats:', { donor: user.uid, amount: totalAmount });
+          } catch (error) {
+            console.error('❌ Error updating donor stats:', error);
+          }
+          
         } catch (error) {
           console.error('❌ Error creating automatic demo donation:', error);
         }

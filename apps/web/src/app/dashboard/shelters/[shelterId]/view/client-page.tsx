@@ -118,48 +118,51 @@ export default function ShelterViewClient() {
   const occupancyPercentage = Math.round((shelter.currentOccupancy / shelter.capacity) * 100);
 
   return (
-    <div className="p-8 space-y-6">
+    <div className="p-4 md:p-8 space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => router.push('/dashboard/shelters')}
-          >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Shelters
-          </Button>
-          <div>
-            <h1 className="text-3xl font-bold flex items-center gap-3">
-              <Building2 className="h-8 w-8 text-primary" />
-              {shelter.name}
+      <div className="space-y-4">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => router.push('/dashboard/shelters')}
+          className="mb-2"
+        >
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Back to Shelters
+        </Button>
+        
+        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+          <div className="flex-1 min-w-0">
+            <h1 className="text-2xl md:text-3xl font-bold flex items-center gap-2 md:gap-3 flex-wrap mb-2">
+              <Building2 className="h-6 w-6 md:h-8 md:w-8 text-primary flex-shrink-0" />
+              <span className="break-words">{shelter.name}</span>
               {shelter.verified && (
-                <Badge variant="outline" className="border-green-500 text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20">
+                <Badge variant="outline" className="border-green-500 text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 text-xs md:text-sm">
                   <Shield className="h-3 w-3 mr-1" />
                   Verified
                 </Badge>
               )}
             </h1>
-            <p className="text-muted-foreground flex items-center gap-2 mt-1">
+            <p className="text-muted-foreground flex items-center gap-2 text-sm md:text-base">
               <MapPin className="h-4 w-4" />
               {shelter.location}
             </p>
           </div>
-        </div>
-        <div className="flex gap-2">
-          <Link href={`/dashboard/shelters/${shelterId}/edit`}>
-            <Button variant="default">
-              <Edit className="h-4 w-4 mr-2" />
-              Edit Shelter
-            </Button>
-          </Link>
-          <Button variant="outline" asChild>
-            <Link href={`/${shelterId}`} target="_blank">
-              <Globe className="h-4 w-4 mr-2" />
-              View Public Page
+          <div className="flex gap-2 flex-shrink-0 mt-2 md:mt-0">
+            <Link href={`/dashboard/shelters/${shelterId}/edit`}>
+              <Button variant="default" size="sm">
+                <Edit className="h-4 w-4 mr-2" />
+                Edit
+              </Button>
             </Link>
-          </Button>
+            <Button variant="outline" size="sm" asChild>
+              <Link href={`/${shelterId}`} target="_blank">
+                <Globe className="h-4 w-4 mr-2" />
+                <span className="hidden md:inline">View Public Page</span>
+                <span className="md:hidden">Public</span>
+              </Link>
+            </Button>
+          </div>
         </div>
       </div>
 

@@ -50,6 +50,7 @@ export default function ShelterNetwork() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('directory');
   const [shelterNotifications, setShelterNotifications] = useState<Record<string, number>>({});
+  const [shelterParticipants, setShelterParticipants] = useState<Record<string, number>>({});
   
   // Edit state
   const [selectedShelterForView, setSelectedShelterForView] = useState<Shelter | null>(null);
@@ -538,9 +539,35 @@ export default function ShelterNetwork() {
     }
   };
 
+  // Load participant counts for each shelter
+  const loadParticipantCounts = async () => {
+    try {
+      const counts: Record<string, number> = {};
+      
+      // Query users with role 'participant' grouped by shelter_id
+      const participantsRef = collection(db, 'users');
+      const participantsQuery = query(participantsRef, where('role', '==', 'participant'));
+      const participantsSnapshot = await getDocs(participantsQuery);
+      
+      participantsSnapshot.forEach((doc) => {
+        const data = doc.data();
+        const shelterId = data.shelter_id;
+        if (shelterId) {
+          counts[shelterId] = (counts[shelterId] || 0) + 1;
+        }
+      });
+      
+      setShelterParticipants(counts);
+      console.log('✅ Loaded participant counts:', counts);
+    } catch (error) {
+      console.error('❌ Error loading participant counts:', error);
+    }
+  };
+
   useEffect(() => {
     loadData();
     loadNotificationCounts();
+    loadParticipantCounts();
   }, []);
 
   // Calculate INDUSTRY-STANDARD shelter management KPIs (SESSION 13)
@@ -943,7 +970,7 @@ export default function ShelterNetwork() {
                       <div className="p-4">
                         <div className="grid grid-cols-2 gap-4">
                           <div className="bg-purple-50 dark:bg-purple-950/30 rounded-xl p-3 text-center">
-                            <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">{shelter.participants || 0}</div>
+                            <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">{shelterParticipants[shelter.id] || 0}</div>
                             <div className="text-xs font-medium text-purple-700 dark:text-purple-300 uppercase tracking-wide">Participants</div>
                           </div>
                           <div className="bg-blue-50 dark:bg-blue-950/30 rounded-xl p-3 text-center">
@@ -1075,7 +1102,7 @@ export default function ShelterNetwork() {
                           {/* Participants */}
                           <div className="bg-purple-50 dark:bg-purple-950/30 rounded-xl p-4 text-center border border-purple-200 dark:border-purple-800">
                             <div className="text-xl font-bold text-purple-600 dark:text-purple-400 mb-1">
-                              {shelter.participants || 0}
+                              {shelterParticipants[shelter.id] || 0}
                             </div>
                             <div className="text-xs font-medium text-purple-700 dark:text-purple-300 uppercase tracking-wide">
                               Participants

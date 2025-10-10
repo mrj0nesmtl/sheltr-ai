@@ -219,12 +219,13 @@ export default function FoundersPortalPage() {
 
                   <Button 
                     type="submit" 
-                    className="w-full bg-purple-600 hover:bg-purple-700"
+                    variant="outline"
+                    className="w-full border-2 border-purple-400 text-purple-400 hover:bg-purple-500/10 backdrop-blur-sm bg-black/20 dark:text-purple-300 dark:border-purple-300"
                     disabled={isVerifying}
                   >
                     {isVerifying ? (
                       <>
-                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-purple-400 mr-2"></div>
                         Authenticating...
                       </>
                     ) : (

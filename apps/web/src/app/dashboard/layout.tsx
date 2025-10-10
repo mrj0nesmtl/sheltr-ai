@@ -562,16 +562,17 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         } 
         // Donor and Participant get their specific notification counts
         else if (['donor', 'participant'].includes(user.role || '')) {
-          // Import the specific services
-          const { DonorNotificationService } = await import('@/services/donorNotificationService');
-          const { ParticipantNotificationService } = await import('@/services/participantNotificationService');
-          
-          const count = user.role === 'donor' 
-            ? await DonorNotificationService.getNotificationCount(user.uid)
-            : await ParticipantNotificationService.getNotificationCount(user.uid);
-          
-          setNotificationCounts({ unreadNotifications: count, unreadMessages: 0 });
-          console.log(`📊 Fetched ${user.role} notification count:`, count);
+          if (user.role === 'donor') {
+            const { getDonorNotificationCounts } = await import('@/services/donorNotificationService');
+            const counts = await getDonorNotificationCounts(user.uid);
+            setNotificationCounts({ unreadNotifications: counts.unread, unreadMessages: 0 });
+            console.log('📊 Fetched donor notification counts:', counts);
+          } else {
+            const { getParticipantNotificationCounts } = await import('@/services/participantNotificationService');
+            const counts = await getParticipantNotificationCounts(user.uid);
+            setNotificationCounts({ unreadNotifications: counts.unread, unreadMessages: 0 });
+            console.log('📊 Fetched participant notification counts:', counts);
+          }
         }
       } catch (error) {
         console.error('❌ Error fetching notification counts:', error);

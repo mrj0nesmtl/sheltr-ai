@@ -1051,7 +1051,7 @@ export default function ShelterNetwork() {
                             <div className="text-xl font-bold text-purple-600 dark:text-purple-400 mb-1">
                               {shelter.participants || 0}
                             </div>
-                            <div className="text-xs font-medium text-purple-700 dark:text-purple-300 uppercase tracking-wide">
+                            <div className="text-[10px] font-medium text-purple-700 dark:text-purple-300 uppercase tracking-wide">
                               Participants
                             </div>
                           </div>
@@ -1061,7 +1061,7 @@ export default function ShelterNetwork() {
                             <div className="text-xl font-bold text-green-600 dark:text-green-400 mb-1">
                               ${shelter.totalDonations.toLocaleString()}
                             </div>
-                            <div className="text-xs font-medium text-green-700 dark:text-green-300 uppercase tracking-wide">
+                            <div className="text-[10px] font-medium text-green-700 dark:text-green-300 uppercase tracking-wide">
                               Donations
                             </div>
                           </div>
@@ -1071,7 +1071,7 @@ export default function ShelterNetwork() {
                             <div className="text-xl font-bold text-blue-600 dark:text-blue-400 mb-1">
                               {shelter.totalDonors || 0}
                             </div>
-                            <div className="text-xs font-medium text-blue-700 dark:text-blue-300 uppercase tracking-wide">
+                            <div className="text-[10px] font-medium text-blue-700 dark:text-blue-300 uppercase tracking-wide">
                               Donors
                             </div>
                           </div>

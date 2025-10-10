@@ -116,19 +116,21 @@ service cloud.firestore {
       allow create: if isSuperAdmin() || isPlatformAdmin();
     }
     
-    // Tenant donations - Allow donors to read their own donations
+    // Tenant donations - Allow donors and participants to read their own donations
     match /tenants/{tenantId}/donations/{donationId} {
-      // Read: Admins can read all, donors can read their own donations
+      // Read: Admins can read all, donors can read their own donations, participants can read donations to them
       allow read: if isSuperAdmin() || 
                      isPlatformAdmin() || 
                      isAdmin() ||
-                     (isDonor() && resource.data.donor_id == request.auth.uid);
+                     (isDonor() && resource.data.donor_id == request.auth.uid) ||
+                     (isParticipant() && resource.data.participant_id == request.auth.uid);
       
-      // List/Query: Admins can list all, donors can query their own
+      // List/Query: Admins can list all, donors and participants can query their own
       allow list: if isSuperAdmin() || 
                      isPlatformAdmin() || 
                      isAdmin() ||
-                     isDonor();
+                     isDonor() ||
+                     isParticipant();
       
       // Write: Super admin and platform admin only
       allow write: if isSuperAdmin() || isPlatformAdmin();

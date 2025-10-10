@@ -47,8 +47,12 @@ function SuccessPageContent() {
           const housingAmount = Math.round(totalAmount * 0.15 * 100) / 100;
           const operationsAmount = Math.round(totalAmount * 0.05 * 100) / 100;
           
+          // Get Michael's actual Firebase UID (not the slug)
+          const participantUserId = 'dFJNlIh2g4R8vAvxvIvWZtwu8zw1'; // Michael's Firebase UID
+          
           const donationData = {
-            participant_id: 'michael-rodriguez',
+            participant_id: participantUserId, // Use Firebase UID instead of slug
+            participant_slug: 'michael-rodriguez', // Keep slug for reference
             participant_name: participantName,
             shelter_id: 'old-brewery-mission',
             shelter_name: 'Old Brewery Mission',
@@ -103,14 +107,19 @@ function SuccessPageContent() {
           
           // Update Michael's participant stats
           try {
-            const participantRef = doc(db, 'users', 'dFJNlIh2g4R8vAvxvIvWZtwu8zw1');
+            const participantRef = doc(db, 'users', participantUserId);
             await updateDoc(participantRef, {
-              total_received: increment(directAmount),
+              total_received: increment(totalAmount), // Total amount received (for display)
               donation_count: increment(1),
               housing_fund_balance: increment(housingAmount),
               updated_at: serverTimestamp()
             });
-            console.log('✅ Updated Michael\'s stats:', { direct: directAmount, housing: housingAmount });
+            console.log('✅ Updated participant stats:', { 
+              participantId: participantUserId,
+              total: totalAmount,
+              direct: directAmount, 
+              housing: housingAmount 
+            });
           } catch (error) {
             console.error('❌ Error updating participant stats:', error);
           }

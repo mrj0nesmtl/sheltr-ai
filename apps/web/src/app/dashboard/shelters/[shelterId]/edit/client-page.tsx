@@ -266,41 +266,43 @@ export default function ShelterEditClient() {
   }
 
   return (
-    <div className="p-8 space-y-6">
+    <div className="p-4 md:p-8 space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => router.push('/dashboard/shelters')}
-          >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Shelters
-          </Button>
-          <div>
-            <h1 className="text-3xl font-bold flex items-center gap-3">
-              <Building2 className="h-8 w-8 text-primary" />
-              Edit Shelter: {shelter?.name}
+      <div className="space-y-4">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => router.push('/dashboard/shelters')}
+          className="mb-2"
+        >
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Back to Shelters
+        </Button>
+        
+        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+          <div className="flex-1 min-w-0">
+            <h1 className="text-2xl md:text-3xl font-bold flex items-center gap-2 md:gap-3 flex-wrap mb-2">
+              <Building2 className="h-6 w-6 md:h-8 md:w-8 text-primary flex-shrink-0" />
+              <span className="break-words">Edit Shelter: {shelter?.name}</span>
             </h1>
-            <p className="text-muted-foreground mt-1">
+            <p className="text-muted-foreground text-sm md:text-base">
               Update shelter information and manage administrators
             </p>
           </div>
+          <Button onClick={handleSave} disabled={saving} size="sm" className="flex-shrink-0 w-full md:w-auto">
+            {saving ? (
+              <>
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                Saving...
+              </>
+            ) : (
+              <>
+                <Save className="h-4 w-4 mr-2" />
+                Save Changes
+              </>
+            )}
+          </Button>
         </div>
-        <Button onClick={handleSave} disabled={saving}>
-          {saving ? (
-            <>
-              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              Saving...
-            </>
-          ) : (
-            <>
-              <Save className="h-4 w-4 mr-2" />
-              Save Changes
-            </>
-          )}
-        </Button>
       </div>
 
       {/* Success/Error Messages */}

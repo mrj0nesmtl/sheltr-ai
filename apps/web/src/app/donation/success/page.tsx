@@ -96,7 +96,9 @@ function SuccessPageContent() {
           };
           
           console.log('📝 Creating demo donation with SmartFund:', donationData);
-          const docRef = await addDoc(collection(db, 'tenants/YDJCJnuLGMC9mWOWDSOa/donations'), donationData);
+          // TODO: Switch to tenant-specific collection when payment rails are ready
+          // const docRef = await addDoc(collection(db, 'tenants/YDJCJnuLGMC9mWOWDSOa/donations'), donationData);
+          const docRef = await addDoc(collection(db, 'demo_donations'), donationData);
           console.log('✅ Demo donation created with ID:', docRef.id);
           
           // Update Michael's participant stats

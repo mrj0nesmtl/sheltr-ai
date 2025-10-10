@@ -49,6 +49,7 @@ export default function ShelterNetwork() {
   const [pendingApplications, setPendingApplications] = useState<PendingApplication[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('directory');
+  const [shelterNotifications, setShelterNotifications] = useState<Record<string, number>>({});
   
   // Edit state
   const [selectedShelterForView, setSelectedShelterForView] = useState<Shelter | null>(null);
@@ -513,8 +514,33 @@ export default function ShelterNetwork() {
     }
   };
 
+  // Load notification counts for each shelter
+  const loadNotificationCounts = async () => {
+    try {
+      const counts: Record<string, number> = {};
+      
+      // Query shelter_email_signups grouped by shelter_id
+      const signupsRef = collection(db, 'shelter_email_signups');
+      const signupsSnapshot = await getDocs(signupsRef);
+      
+      signupsSnapshot.forEach((doc) => {
+        const data = doc.data();
+        const shelterId = data.shelter_id;
+        if (shelterId) {
+          counts[shelterId] = (counts[shelterId] || 0) + 1;
+        }
+      });
+      
+      setShelterNotifications(counts);
+      console.log('✅ Loaded notification counts:', counts);
+    } catch (error) {
+      console.error('❌ Error loading notification counts:', error);
+    }
+  };
+
   useEffect(() => {
     loadData();
+    loadNotificationCounts();
   }, []);
 
   // Calculate INDUSTRY-STANDARD shelter management KPIs (SESSION 13)
@@ -934,7 +960,7 @@ export default function ShelterNetwork() {
                           </div>
                           <div className="bg-orange-50 dark:bg-orange-950/30 rounded-xl p-3 text-center">
                             <div className="text-2xl font-bold text-orange-600 dark:text-orange-400">
-                              {Math.floor(Math.random() * 15) + 5}
+                              {shelterNotifications[shelter.id] || 0}
                             </div>
                             <div className="text-xs font-medium text-orange-700 dark:text-orange-300 uppercase tracking-wide">Notifications</div>
                           </div>
@@ -1079,7 +1105,7 @@ export default function ShelterNetwork() {
                           {/* Notifications */}
                           <div className="bg-orange-50 dark:bg-orange-950/30 rounded-xl p-4 text-center border border-orange-200 dark:border-orange-800">
                             <div className="text-xl font-bold text-orange-600 dark:text-orange-400 mb-1">
-                              {Math.floor(Math.random() * 15) + 5}
+                              {shelterNotifications[shelter.id] || 0}
                             </div>
                             <div className="text-xs font-medium text-orange-700 dark:text-orange-300 uppercase tracking-wide">
                               Notifications

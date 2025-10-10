@@ -54,6 +54,15 @@
       ]
     },
     {
+      "collectionGroup": "demo_donations",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {"fieldPath": "participant_id", "order": "ASCENDING"},
+        {"fieldPath": "status", "order": "ASCENDING"},
+        {"fieldPath": "created_at", "order": "DESCENDING"}
+      ]
+    },
+    {
       "collectionGroup": "knowledge_documents",
       "queryScope": "COLLECTION",
       "fields": [

@@ -521,6 +521,7 @@ export default function ShelterNetwork() {
   const totalCapacity = filteredShelters.reduce((acc, s) => acc + s.capacity, 0);
   const currentOccupants = filteredShelters.reduce((acc, s) => acc + (s.currentOccupancy || 0), 0);
   const totalDonations = filteredShelters.reduce((acc, s) => acc + (s.totalDonations || 0), 0);
+  const totalParticipants = filteredShelters.reduce((acc, s) => acc + (s.participants || 0), 0);
   const activeShelters = filteredShelters.filter(s => s.status === 'active').length;
   
   const shelterMetrics = {
@@ -529,6 +530,7 @@ export default function ShelterNetwork() {
     allShelters: uniqueShelters.length, // Keep original count for "of X shelters" display
     activeShelters,
     pendingApplications: pendingApplications.length,
+    totalParticipants,
     
     // INDUSTRY STANDARD: Occupancy Rate (Most Important KPI)
     occupancyRate: filteredShelters.length > 0 

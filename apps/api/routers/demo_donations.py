@@ -304,6 +304,14 @@ async def process_demo_webhook_notification(notification: Dict[str, Any]) -> Non
             if participant_id:
                 await demo_service.update_participant_from_donation(participant_id, direct_amount, distribution)
             
+            # Update donor stats (if donor_id is present)
+            donation_doc = await get_donation_by_reference(merchant_reference)
+            if donation_doc:
+                donor_id = donation_doc.get("donor_id")
+                if donor_id:
+                    total_amount = distribution["total"]
+                    await update_donor_stats(donor_id, total_amount)
+            
             # Update shelter operations revenue if routed to shelter
             if distribution.get("recipient_type") == "shelter":
                 await update_shelter_operations(
@@ -383,6 +391,50 @@ async def get_participant_from_reference(reference: str) -> Optional[str]:
     except Exception as e:
         logger.error(f"Failed to get participant from reference: {e}")
         return None
+
+async def get_donation_by_reference(reference: str) -> Optional[Dict[str, Any]]:
+    """
+    Get donation document by payment reference
+    """
+    try:
+        # Find donation by reference
+        donations_query = firebase_service.db.collection('demo_donations')\
+            .where('payment_data.adyen_reference', '==', reference)\
+            .limit(1)
+        
+        docs = list(donations_query.stream())
+        if docs:
+            return docs[0].to_dict()
+        
+        return None
+        
+    except Exception as e:
+        logger.error(f"Failed to get donation by reference: {e}")
+        return None
+
+async def update_donor_stats(donor_id: str, amount: float) -> None:
+    """
+    Update donor's totalDonated and donation_count stats
+    """
+    try:
+        from google.cloud.firestore import Increment
+        
+        donor_ref = firebase_service.db.collection('users').document(donor_id)
+        donor_doc = donor_ref.get()
+        
+        if donor_doc.exists:
+            # Update donor stats using Firestore Increment for atomic updates
+            donor_ref.update({
+                "totalDonated": Increment(amount),
+                "donation_count": Increment(1),
+                "updated_at": datetime.now(timezone.utc)
+            })
+            logger.info(f"✅ Updated donor {donor_id}: +${amount} (totalDonated)")
+        else:
+            logger.warning(f"⚠️ Donor document not found: {donor_id}")
+        
+    except Exception as e:
+        logger.error(f"❌ Failed to update donor stats for {donor_id}: {e}")
 
 async def update_shelter_operations(
     shelter_id: str,

@@ -265,12 +265,12 @@ export default function DocsPage() {
       badge: "Public"
     },
     {
-      title: "Tokenomics Deep Dive",
-      description: "Detailed analysis of SHELTR and SHELTR-S token economics",
-      icon: Coins,
-      link: "/tokenomics",
-      isInternal: true,
-      badge: "Interactive"
+      title: "Changelog",
+      description: "Complete version history and platform development progress",
+      icon: BookOpen,
+      link: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/CHANGELOG.md",
+      isInternal: false,
+      badge: "Updates"
     },
     {
       title: "Community Support",

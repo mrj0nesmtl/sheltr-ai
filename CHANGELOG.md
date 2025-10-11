@@ -7,6 +7,108 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.47.0] - 2025-10-11 (Session 22.19: DIRECT SHELTER DONATIONS + PARTICIPANT PUBLIC PAGE LINKS)
+
+### 🎯 Session 22.19 Final Achievements (SHELTER DONATIONS + UX ENHANCEMENTS)
+- **✅ DIRECT SHELTER DONATIONS ENABLED**: Public shelter donation page now fully functional
+- **✅ SHELTER CAPACITY BADGE REPOSITIONED**: Moved to header for better visual hierarchy
+- **✅ 95/5 DONATION SPLIT IMPLEMENTED**: Shelter receives 95%, platform gets 5%
+- **✅ PARTICIPANT PUBLIC PAGE LINKS FIXED**: Shelter admin can now link to participant's public page using name slug
+
+#### 🎁 New Feature #1: Direct Shelter Donations
+**Files Modified**:
+- `apps/web/src/app/donate/page.tsx` (lines 208-364, 460-483)
+- `apps/api/routers/demo_donations.py` (lines 36-42, 174-280, 293-413, 636-684)
+
+**Frontend Changes**:
+1. **Moved Shelter Capacity Badge** (lines 460-483)
+   - Previously: Bottom of card in `CardContent`
+   - Now: Top-right of header in `CardTitle`
+   - Better visual hierarchy, cleaner design
+
+2. **Implemented `handleDonate()` for Shelters** (lines 208-364)
+   - Validates donation type (`participant` or `shelter`)
+   - Creates payment session with `shelter_id` and `donation_type: 'shelter'`
+   - Redirects to success page with shelter name
+   - Supports both authenticated and guest donors
+
+**Backend Changes**:
+1. **Updated `DemoDonationRequest` Model** (lines 36-42)
+   ```python
+   class DemoDonationRequest(BaseModel):
+       participant_id: Optional[str] = Field(None, description="Optional for shelter donations")
+       shelter_id: Optional[str] = Field(None, description="Shelter ID for direct donations")
+       donation_type: Optional[str] = Field("participant", description="'participant' or 'shelter'")
+       amount: float = Field(..., ge=1.0, le=10000.0)
+       donor_info: Optional[Dict[str, str]] = None
+       demo_session_id: Optional[str] = None
+   ```
+
+2. **Enhanced `create_payment_session` Endpoint** (lines 174-280)
+   - Validates donation type and required fields
+   - Handles participant donations (existing 80/15/5 logic)
+   - Handles shelter donations (new 95/5 logic)
+   - Creates donation records with `donation_type` field
+   - Returns appropriate response based on type
+
+3. **Updated `process_demo_webhook_notification`** (lines 293-413)
+   - Detects donation type from donation document
+   - **Shelter Donations**: 95% to shelter operations, 5% platform fee
+   - **Participant Donations**: 80% direct, 15% housing, 5% operations
+   - Routes funds to correct destination based on type
+   - Updates shelter stats for direct donations
+
+4. **New Function: `update_shelter_operations_direct()`** (lines 636-684)
+   - Updates `operations_revenue` with 95% of donation
+   - Increments `total_donations_received`
+   - Tracks `direct_donation_count`
+   - Creates transaction in `shelter_operations_transactions`
+   - Different from `update_shelter_operations()` which handles 5% routing
+
+**Donation Flow Comparison**:
+| Type | Amount | Direct/Ops | Housing | Platform |
+|------|--------|------------|---------|----------|
+| Participant | $100 | $80 direct | $15 housing | $5 shelter ops |
+| Shelter | $100 | $95 shelter ops | - | $5 platform |
+
+**Result**:
+- `/donate?shelter=old-brewery-mission` page is now fully functional
+- Gunnar Blaze (Platform Admin) can donate directly to shelter
+- Shelter receives 95% of donations to operations fund
+- All metrics update atomically in Firestore
+
+#### 🎨 UX Enhancement #2: Participant Public Page Links
+**File Modified**: `apps/web/src/app/dashboard/shelter-admin/participants/page.tsx` (lines 565-577)
+
+**Change**:
+- Globe icon button now generates **name-based slug** instead of Firebase UID
+- Example: `michael-rodriguez` instead of `dFJNlIh2g4R8vAvxvIvWZtwu8zw1`
+- Opens participant's public page in new tab
+
+**Code**:
+```typescript
+<Button 
+  variant="ghost" 
+  size="sm"
+  onClick={() => {
+    // Generate slug from participant name (firstname-lastname)
+    const nameParts = participant.name.toLowerCase().split(' ');
+    const slug = nameParts.join('-');
+    window.open(`/participant/${slug}`, '_blank');
+  }}
+  title="View Public Page"
+>
+  <Globe className="h-4 w-4" />
+</Button>
+```
+
+**Result**:
+- Shelter admin (Sarah Manager) can click Globe icon on Michael's card
+- Opens: `http://localhost:3000/participant/michael-rodriguez`
+- Shows Michael's public donation page with story, goals, and QR code
+
+---
+
 ## [2.44.0] - 2025-10-11 (Session 22.18: SUPER ADMIN DASHBOARD, SHELTER NETWORK & NDA FIXES COMPLETE)
 
 ### 🎯 Session 22.18 Final Achievements (SUPER ADMIN + SHELTER NETWORK + NDA FIXES)

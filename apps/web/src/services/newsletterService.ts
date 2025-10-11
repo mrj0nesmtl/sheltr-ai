@@ -50,6 +50,15 @@ export async function addNewsletterSignup(
     }
 
     // Add new signup
+    console.log('📧 Preparing to add newsletter signup...');
+    console.log('📧 Firestore db:', db ? 'initialized' : 'NOT initialized');
+    console.log('📧 Collection name:', NEWSLETTER_COLLECTION);
+    
+    // Validate inputs
+    if (!email || !email.includes('@')) {
+      throw new Error('Invalid email address');
+    }
+    
     const signupData: NewsletterSignup = {
       email: email.toLowerCase(),
       name: name || '',
@@ -57,8 +66,11 @@ export async function addNewsletterSignup(
       subscribed_at: new Date(),
       status: 'active'
     };
+    
+    console.log('📧 Signup data prepared:', signupData);
 
     const docRef = await addDoc(collection(db, NEWSLETTER_COLLECTION), signupData);
+    console.log('✅ Document added successfully with ID:', docRef.id);
     
     console.log('✅ Newsletter signup added:', docRef.id);
 
@@ -76,14 +88,31 @@ export async function addNewsletterSignup(
     };
   } catch (error: any) {
     console.error('❌ Error adding newsletter signup:', error);
+    
+    // Extract error details
+    const errorCode = error?.code || 'unknown';
+    const errorMessage = error?.message || error?.toString() || 'Unknown error';
+    
     console.error('❌ Error details:', {
-      code: error?.code,
-      message: error?.message,
-      stack: error?.stack
+      code: errorCode,
+      message: errorMessage,
+      name: error?.name,
+      fullError: JSON.stringify(error, Object.getOwnPropertyNames(error))
     });
+    
+    // User-friendly error messages
+    let userMessage = 'An error occurred. Please try again later.';
+    if (errorCode.includes('permission')) {
+      userMessage = 'Permission denied. Please try again or contact support.';
+    } else if (errorCode.includes('network')) {
+      userMessage = 'Network error. Please check your connection and try again.';
+    } else if (errorMessage) {
+      userMessage = errorMessage;
+    }
+    
     return {
       success: false,
-      message: error?.message || 'An error occurred. Please try again later.'
+      message: userMessage
     };
   }
 }

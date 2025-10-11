@@ -511,11 +511,13 @@ export async function createContactInquiryNotification(inquiryData: {
  */
 export async function getRecentContactInquiries(maxResults: number = 10): Promise<ContactInquiryNotification[]> {
   try {
-    console.log('📞 Getting recent contact inquiries...');
+    console.log('📞 [UNIFIED] Getting recent contact inquiries from contact_inquiries collection...');
     
+    // Query unified contact_inquiries collection (created by UnifiedInquiryService)
+    // Uses 'created_at' field (snake_case) from unified service
     const q = query(
       collection(db, 'contact_inquiries'),
-      orderBy('createdAt', 'desc'),
+      orderBy('created_at', 'desc'),
       limit(maxResults)
     );
 
@@ -523,13 +525,24 @@ export async function getRecentContactInquiries(maxResults: number = 10): Promis
     const inquiries: ContactInquiryNotification[] = [];
 
     querySnapshot.forEach((doc) => {
+      const data = doc.data();
       inquiries.push({
         id: doc.id,
-        ...doc.data()
+        sender_name: data.name || '',
+        sender_email: data.email || '',
+        subject: data.subject || 'No Subject',
+        inquiry_type: data.inquiry_type || 'general',
+        source: data.source || 'unknown',
+        priority: data.priority || 'normal',
+        status: data.status || 'new',
+        created_at: data.created_at,
+        message: data.message || '',
+        ...data
       } as ContactInquiryNotification);
     });
 
-    console.log(`✅ Found ${inquiries.length} contact inquiries`);
+    console.log(`✅ [UNIFIED] Found ${inquiries.length} contact inquiries`);
+    console.log(`📊 [UNIFIED] Inquiry types:`, inquiries.map(i => i.inquiry_type).join(', '));
     return inquiries;
   } catch (error) {
     console.error('❌ Error getting recent contact inquiries:', error);

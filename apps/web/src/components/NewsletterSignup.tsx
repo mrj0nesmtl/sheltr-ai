@@ -39,7 +39,9 @@ export default function NewsletterSignup({ source, variant = 'default', classNam
     setErrorMessage('');
 
     try {
+      console.log('📧 Attempting newsletter signup:', { email, name, source });
       const result = await addNewsletterSignup(email, name, source);
+      console.log('📧 Newsletter signup result:', result);
       
       if (result.success) {
         setIsSuccess(true);
@@ -51,10 +53,12 @@ export default function NewsletterSignup({ source, variant = 'default', classNam
           setIsSuccess(false);
         }, 5000);
       } else {
+        console.error('❌ Newsletter signup failed:', result.message);
         setErrorMessage(result.message);
       }
-    } catch (error) {
-      setErrorMessage('An error occurred. Please try again.');
+    } catch (error: any) {
+      console.error('❌ Newsletter signup exception:', error);
+      setErrorMessage(error?.message || 'An error occurred. Please try again.');
     } finally {
       setIsSubmitting(false);
     }

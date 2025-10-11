@@ -74,11 +74,16 @@ export async function addNewsletterSignup(
       success: true,
       message: 'Successfully subscribed to our newsletter!'
     };
-  } catch (error) {
+  } catch (error: any) {
     console.error('❌ Error adding newsletter signup:', error);
+    console.error('❌ Error details:', {
+      code: error?.code,
+      message: error?.message,
+      stack: error?.stack
+    });
     return {
       success: false,
-      message: 'An error occurred. Please try again later.'
+      message: error?.message || 'An error occurred. Please try again later.'
     };
   }
 }

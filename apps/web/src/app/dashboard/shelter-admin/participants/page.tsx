@@ -570,7 +570,12 @@ export default function ParticipantsPage() {
                           <Button 
                             variant="ghost" 
                             size="sm"
-                            onClick={() => window.open(`/participant/${participant.id}`, '_blank')}
+                            onClick={() => {
+                              // Generate slug from participant name (firstname-lastname)
+                              const nameParts = participant.name.toLowerCase().split(' ');
+                              const slug = nameParts.join('-');
+                              window.open(`/participant/${slug}`, '_blank');
+                            }}
                             title="View Public Page"
                           >
                             <Globe className="h-4 w-4" />
@@ -656,7 +661,12 @@ export default function ParticipantsPage() {
                           <Button 
                             variant="ghost" 
                             size="sm"
-                            onClick={() => window.open(`/participant/${participant.id}`, '_blank')}
+                            onClick={() => {
+                              // Generate slug from participant name (firstname-lastname)
+                              const nameParts = participant.name.toLowerCase().split(' ');
+                              const slug = nameParts.join('-');
+                              window.open(`/participant/${slug}`, '_blank');
+                            }}
                             title="View Public Page"
                           >
                             <Globe className="h-4 w-4" />
@@ -742,7 +752,12 @@ export default function ParticipantsPage() {
                           <Button 
                             variant="ghost" 
                             size="sm"
-                            onClick={() => window.open(`/participant/${participant.id}`, '_blank')}
+                            onClick={() => {
+                              // Generate slug from participant name (firstname-lastname)
+                              const nameParts = participant.name.toLowerCase().split(' ');
+                              const slug = nameParts.join('-');
+                              window.open(`/participant/${slug}`, '_blank');
+                            }}
                             title="View Public Page"
                           >
                             <Globe className="h-4 w-4" />
@@ -828,7 +843,12 @@ export default function ParticipantsPage() {
                           <Button 
                             variant="ghost" 
                             size="sm"
-                            onClick={() => window.open(`/participant/${participant.id}`, '_blank')}
+                            onClick={() => {
+                              // Generate slug from participant name (firstname-lastname)
+                              const nameParts = participant.name.toLowerCase().split(' ');
+                              const slug = nameParts.join('-');
+                              window.open(`/participant/${slug}`, '_blank');
+                            }}
                             title="View Public Page"
                           >
                             <Globe className="h-4 w-4" />

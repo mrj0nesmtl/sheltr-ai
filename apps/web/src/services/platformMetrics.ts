@@ -94,6 +94,8 @@ export interface ShelterMetrics {
   totalAppointments: number;
   capacity: number;
   occupancyRate: number;
+  totalDonations?: number;
+  qrCodeScans?: number;
 }
 
 /**
@@ -476,13 +478,35 @@ export const getShelterMetrics = async (shelterId: string): Promise<ShelterMetri
     const capacity = shelterData.capacity || 0;
     const occupancyRate = capacity > 0 ? Math.round((totalParticipants / capacity) * 100) : 0;
     
+    // Get total donations from demo_donations collection
+    let totalDonations = 0;
+    try {
+      const donationsQuery = query(
+        collection(db, 'demo_donations'),
+        where('shelter_id', '==', shelterId)
+      );
+      const donationsSnapshot = await getDocs(donationsQuery);
+      totalDonations = donationsSnapshot.docs.reduce((total, doc) => {
+        const donation = doc.data();
+        return total + (donation.amount?.total || donation.amount || 0);
+      }, 0);
+      console.log(`💰 [SHELTER METRICS] Found ${donationsSnapshot.size} donations, total: $${totalDonations}`);
+    } catch (error) {
+      console.warn('⚠️ Could not fetch donations for shelter metrics:', error);
+    }
+    
+    // Get QR code scans (placeholder for now - we can track this later)
+    const qrCodeScans = 0; // TODO: Implement QR code scan tracking
+    
     const metrics: ShelterMetrics = {
       shelterName: shelterData.name || 'Unknown Shelter',
       totalParticipants,
       totalServices,
       totalAppointments,
       capacity,
-      occupancyRate
+      occupancyRate,
+      totalDonations,
+      qrCodeScans
     };
     
     console.log('✅ Shelter metrics loaded:', metrics);

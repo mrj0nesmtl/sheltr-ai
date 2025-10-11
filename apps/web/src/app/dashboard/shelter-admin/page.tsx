@@ -159,19 +159,6 @@ export default function ShelterAdminDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Bed Occupancy</CardTitle>
-            <Bed className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{shelterMetrics.totalParticipants}/{shelterMetrics.capacity}</div>
-            <p className="text-xs text-muted-foreground">
-              {occupancyRate}% occupancy • {shelterMetrics.capacity - shelterMetrics.totalParticipants} available
-            </p>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Active Participants</CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
@@ -185,26 +172,39 @@ export default function ShelterAdminDashboard() {
         
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Daily Meals</CardTitle>
-            <Utensils className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">Participants Onboarded</CardTitle>
+            <UserPlus className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{shelterMetrics.totalAppointments || '-'}</div>
+            <div className="text-2xl font-bold">{shelterMetrics.totalParticipants}</div>
             <p className="text-xs text-muted-foreground">
-              Total appointments scheduled
+              Total participants registered
             </p>
           </CardContent>
         </Card>
         
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Monthly Donations</CardTitle>
+            <CardTitle className="text-sm font-medium">Total Donations</CardTitle>
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">$-</div>
+            <div className="text-2xl font-bold">${shelterMetrics.totalDonations?.toLocaleString() || 0}</div>
             <p className="text-xs text-muted-foreground">
-              Services: {shelterMetrics.totalServices}
+              All-time donations received
+            </p>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">QR Code Scans</CardTitle>
+            <Activity className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{shelterMetrics.qrCodeScans || 0}</div>
+            <p className="text-xs text-muted-foreground">
+              Total QR code interactions
             </p>
           </CardContent>
         </Card>

@@ -34,19 +34,35 @@ export default function ContactPage() {
     
     try {
       console.log('💬 [CONTACT] Submitting contact inquiry via unified service');
+      console.log('📋 [CONTACT] Form data:', formData);
       
       // Build inquiry data, only including fields with values
-      const inquiryData: any = {
-        name: formData.name,
-        email: formData.email,
-        inquiry_type: formData.type,
-        subject: formData.subject,
-        message: formData.message
+      const inquiryData: {
+        name: string;
+        email: string;
+        inquiry_type: string;
+        subject: string;
+        message: string;
+        organization?: string;
+        user_id?: string;
+      } = {
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        inquiry_type: formData.type || 'general', // Default to 'general' if empty
+        subject: formData.subject.trim(),
+        message: formData.message.trim()
       };
       
-      // Only add optional fields if they have values
-      if (formData.organization) inquiryData.organization = formData.organization;
-      if (user?.uid) inquiryData.user_id = user.uid;
+      // Only add optional fields if they have actual values (not empty strings)
+      if (formData.organization?.trim()) {
+        inquiryData.organization = formData.organization.trim();
+      }
+      // Note: user_id would be added here if we had auth context
+      // if (user?.uid) {
+      //   inquiryData.user_id = user.uid;
+      // }
+      
+      console.log('📤 [CONTACT] Sending inquiry data:', inquiryData);
       
       const inquiryId = await UnifiedInquiryService.createContactInquiry(inquiryData);
       
@@ -64,10 +80,21 @@ export default function ContactPage() {
         message: ''
       });
       
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('❌ [CONTACT] Error submitting contact form:', error);
+      
+      // Type guard for error object
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      
+      if (error instanceof Error) {
+        console.error('❌ [CONTACT] Error details:', {
+          message: error.message,
+          stack: error.stack
+        });
+      }
+      
       // You could show an error message here
-      alert('There was an error submitting your message. Please try again or email us directly at joel@arcanaconcept.com');
+      alert(`There was an error submitting your message: ${errorMessage}. Please try again or email us directly at joel@arcanaconcept.com`);
     } finally {
       setIsSubmitting(false);
     }
@@ -112,8 +139,8 @@ export default function ContactPage() {
                 Get in Touch
               </h1>
               <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-                Ready to join the movement? Whether you're a shelter, donor, participant, or partner, 
-                we're here to help you make an impact.
+                Ready to join the movement? Whether you&apos;re a shelter, donor, participant, or partner, 
+                we&apos;re here to help you make an impact.
               </p>
               <div className="flex flex-wrap justify-center gap-4">
                 <Badge variant="secondary" className="px-4 py-2">
@@ -268,7 +295,7 @@ export default function ContactPage() {
                   <CardHeader>
                     <CardTitle className="text-2xl">Send us a Message</CardTitle>
                     <p className="text-muted-foreground">
-                      Tell us about your interest in SHELTR. We'll get back to you within 24 hours.
+                      Tell us about your interest in SHELTR. We&apos;ll get back to you within 24 hours.
                     </p>
                   </CardHeader>
                   <CardContent>
@@ -279,7 +306,7 @@ export default function ContactPage() {
                         </div>
                         <h3 className="text-xl font-semibold mb-2">Message Sent!</h3>
                         <p className="text-muted-foreground mb-6">
-                          Thank you for reaching out. We'll respond within 24 hours.
+                          Thank you for reaching out. We&apos;ll respond within 24 hours.
                         </p>
                         <Button onClick={() => setSubmitted(false)} variant="outline">
                           Send Another Message

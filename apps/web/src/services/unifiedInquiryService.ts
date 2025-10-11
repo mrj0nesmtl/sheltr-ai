@@ -44,16 +44,15 @@ export interface UnifiedInquiry {
 const createInquiryNotification = async (inquiryId: string, inquiry: UnifiedInquiry): Promise<void> => {
   try {
     await createContactInquiryNotification({
-      inquiry_id: inquiryId,
-      inquiry_type: inquiry.inquiry_type,
-      sender_email: inquiry.email,
-      sender_name: inquiry.name,
+      email: inquiry.email,
+      name: inquiry.name || 'Unknown',
       subject: inquiry.subject || `${inquiry.inquiry_type} from ${inquiry.source}`,
-      priority: inquiry.priority,
+      message: inquiry.message || `New ${inquiry.inquiry_type} inquiry (ID: ${inquiryId})`,
       source: inquiry.source
     });
   } catch (error) {
     console.error('❌ Failed to create notification (non-blocking):', error);
+    console.error('❌ Notification error details:', error);
     // Don't throw - notification failure shouldn't block inquiry creation
   }
 };

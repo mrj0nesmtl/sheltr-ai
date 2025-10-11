@@ -285,12 +285,22 @@ export default function SettingsPage() {
         // Public Page Preview
         <Card className="border-2 border-blue-200 dark:border-blue-800">
           <CardHeader className="bg-blue-50 dark:bg-blue-900/20">
-            <div className="flex items-center space-x-2">
-              <Globe className="h-5 w-5 text-blue-600" />
-              <CardTitle className="text-blue-900 dark:text-blue-100">Public Page Preview</CardTitle>
-              <Badge variant="outline">
-                Live at sheltr-ai.web.app/{shelterData?.shelterId || formData.name.toLowerCase().replace(/\s+/g, '-')}
-              </Badge>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <Globe className="h-5 w-5 text-blue-600" />
+                <CardTitle className="text-blue-900 dark:text-blue-100">Public Page Preview</CardTitle>
+              </div>
+              <a 
+                href={`https://sheltr-ai.web.app/${shelterData?.shelterId || 'old-brewery-mission'}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center space-x-2 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
+              >
+                <Badge variant="outline" className="cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-900/30">
+                  Live at sheltr-ai.web.app/{shelterData?.shelterId || 'old-brewery-mission'}
+                </Badge>
+                <ExternalLink className="h-4 w-4" />
+              </a>
             </div>
           </CardHeader>
           <CardContent className="p-8">
@@ -427,6 +437,141 @@ export default function SettingsPage() {
           </TabsList>
 
           <TabsContent value="general" className="space-y-6">
+            {/* Shelter Logo Section */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <Image className="h-5 w-5" />
+                  <span>Shelter Logo</span>
+                </CardTitle>
+                <CardDescription>Upload your shelter's logo for public page and branding</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center space-x-6">
+                  <div className="flex-shrink-0">
+                    <div className="w-32 h-32 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+                      {formData.photos[0]?.url ? (
+                        <img 
+                          src={formData.photos[0].url} 
+                          alt="Shelter Logo" 
+                          className="w-full h-full object-contain rounded-lg"
+                        />
+                      ) : (
+                        <Image className="h-12 w-12 text-gray-400" />
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex-1 space-y-2">
+                    <p className="text-sm text-muted-foreground">
+                      Upload a high-quality logo (recommended: 512x512px, PNG or SVG format)
+                    </p>
+                    <div className="flex space-x-2">
+                      <Button variant="outline" size="sm" disabled={!isEditing}>
+                        <Upload className="mr-2 h-4 w-4" />
+                        Upload Logo
+                      </Button>
+                      {formData.photos[0]?.url && (
+                        <Button variant="outline" size="sm" disabled={!isEditing}>
+                          <Trash2 className="mr-2 h-4 w-4" />
+                          Remove
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Shelter Administrator Profile Section */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <Users className="h-5 w-5" />
+                  <span>Shelter Administrator Profile</span>
+                </CardTitle>
+                <CardDescription>Administrator information displayed on public page</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  {/* Admin Profile Picture */}
+                  <div className="space-y-4">
+                    <label className="text-sm font-medium">Profile Picture</label>
+                    <div className="w-32 h-32 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-full flex items-center justify-center bg-gray-50 dark:bg-gray-900 mx-auto">
+                      {user?.photoURL ? (
+                        <img 
+                          src={user.photoURL} 
+                          alt="Administrator" 
+                          className="w-full h-full object-cover rounded-full"
+                        />
+                      ) : (
+                        <Users className="h-12 w-12 text-gray-400" />
+                      )}
+                    </div>
+                    <Button variant="outline" size="sm" className="w-full" disabled={!isEditing}>
+                      <Camera className="mr-2 h-4 w-4" />
+                      Upload Photo
+                    </Button>
+                  </div>
+
+                  {/* Admin Details */}
+                  <div className="lg:col-span-2 space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-medium">First Name</label>
+                        <input 
+                          type="text" 
+                          value={user?.displayName?.split(' ')[0] || 'Sarah'}
+                          disabled={!isEditing}
+                          className="w-full mt-1 p-2 border rounded-md bg-white dark:bg-gray-950"
+                          placeholder="First Name"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium">Last Name</label>
+                        <input 
+                          type="text" 
+                          value={user?.displayName?.split(' ')[1] || 'Manager'}
+                          disabled={!isEditing}
+                          className="w-full mt-1 p-2 border rounded-md bg-white dark:bg-gray-950"
+                          placeholder="Last Name"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium">Title / Position</label>
+                      <input 
+                        type="text" 
+                        value="Shelter Administrator"
+                        disabled={!isEditing}
+                        className="w-full mt-1 p-2 border rounded-md bg-white dark:bg-gray-950"
+                        placeholder="e.g., Executive Director"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium">Contact Email</label>
+                      <input 
+                        type="email" 
+                        value={user?.email || formData.email}
+                        disabled={!isEditing}
+                        className="w-full mt-1 p-2 border rounded-md bg-white dark:bg-gray-950"
+                        placeholder="admin@shelter.org"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium">Bio / About</label>
+                      <textarea 
+                        disabled={!isEditing}
+                        rows={3}
+                        className="w-full mt-1 p-2 border rounded-md bg-white dark:bg-gray-950"
+                        placeholder="Brief introduction about the administrator..."
+                        defaultValue="Dedicated to providing compassionate care and comprehensive support services to individuals experiencing homelessness in our community."
+                      />
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <Card>
                 <CardHeader>

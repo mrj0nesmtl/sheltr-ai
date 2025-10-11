@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { MapPin, Users, Heart, ExternalLink, Phone, Mail, Clock, MapIcon, Filter, Search, Map } from 'lucide-react';
+import { MapPin, Users, Heart, ExternalLink, Phone, Mail, Clock, MapIcon, Filter, Search, Map, Home } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ShelterTenant } from '@/services/tenantService';
@@ -28,8 +28,19 @@ export default function SheltersPage() {
     const loadShelters = async () => {
       try {
         const publicShelters = await shelterService.getAllPublicShelters();
-        setSheltersData(publicShelters);
-        setFilteredShelters(publicShelters);
+        
+        // Sort: Active shelters first, then alphabetically
+        const sortedShelters = publicShelters.sort((a, b) => {
+          // Old Brewery Mission (active) first
+          if (a.shelter.status === 'active' && b.shelter.status !== 'active') return -1;
+          if (a.shelter.status !== 'active' && b.shelter.status === 'active') return 1;
+          
+          // Then alphabetically by name
+          return a.shelter.name.localeCompare(b.shelter.name);
+        });
+        
+        setSheltersData(sortedShelters);
+        setFilteredShelters(sortedShelters);
       } catch (error) {
         console.error('Error loading shelters:', error);
       } finally {
@@ -161,22 +172,21 @@ export default function SheltersPage() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-white mb-4 drop-shadow-md">
-            SHELTR Affiliated Shelters
+            SHELTR for Shelters
           </h1>
           <p className="text-xl text-gray-100 max-w-3xl mx-auto drop-shadow-md">
-            Discover the network of shelters working together to provide safety, support, and hope 
-            to those experiencing homelessness across Montreal.
+          SHELTR provides overflow relief when you're at capacity, creates new revenue streams through community investment, and modernizes your operations with next-generation HMIS capabilities. Your mission remains yours. Our tech makes it more powerful.
           </p>
           <div className="mt-6 flex justify-center items-center space-x-6">
             <div className="flex items-center text-white bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full border border-white/30">
-              <Heart className="h-5 w-5 text-red-400 mr-2" />
-              <span className="font-medium">{sheltersData.length} Partner Shelters</span>
+              <Home className="h-5 w-5 text-gray-200 mr-2" />
+              <span className="font-medium">
+                {sheltersData.filter(item => item.shelter.status === 'active').length} Active Shelter{sheltersData.filter(item => item.shelter.status === 'active').length !== 1 ? 's' : ''}
+              </span>
             </div>
             <div className="flex items-center text-white bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full border border-white/30">
               <Users className="h-5 w-5 text-gray-200 mr-2" />
-              <span className="font-medium">
-                {sheltersData.reduce((total, item) => total + item.shelter.capacity, 0)} Total Beds
-              </span>
+              <span className="font-medium">1 Registered Participant</span>
             </div>
           </div>
         </div>
@@ -350,41 +360,40 @@ export default function SheltersPage() {
                 </CardHeader>
 
                 <CardContent className="pt-0">
-                  {/* Capacity Info */}
-                  <div className="mb-4">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-sm font-medium text-gray-200">Capacity</span>
-                      <span className={`text-sm font-semibold ${getOccupancyColor(occupancyPercentage)}`}>
-                        {shelter.currentOccupancy}/{shelter.capacity} ({occupancyPercentage}%)
-                      </span>
-                    </div>
-                    <div className="w-full bg-gray-700 rounded-full h-2">
-                      <div
-                        className={`h-2 rounded-full transition-all duration-300 ${
-                          occupancyPercentage >= 90 ? 'bg-red-500' :
-                          occupancyPercentage >= 70 ? 'bg-orange-500' :
-                          occupancyPercentage >= 50 ? 'bg-yellow-500' :
-                          'bg-green-500'
-                        }`}
-                        style={{ width: `${Math.min(occupancyPercentage, 100)}%` }}
-                      ></div>
-                    </div>
-                  </div>
-
                   {/* Contact Info */}
                   {shelter.contact && (
-                    <div className="mb-4 space-y-1">
+                    <div className="mb-4 space-y-2">
                       {shelter.contact.phone && (
-                        <div className="flex items-center text-sm text-gray-400">
+                        <a 
+                          href={`tel:${shelter.contact.phone}`}
+                          className="flex items-center text-sm text-gray-400 hover:text-gray-200 transition-colors"
+                          onClick={(e) => e.stopPropagation()}
+                        >
                           <Phone className="h-4 w-4 mr-2 text-gray-500" />
-                          {shelter.contact.phone}
-                        </div>
+                          <span className="hover:underline">{shelter.contact.phone}</span>
+                        </a>
                       )}
                       {shelter.contact.email && (
-                        <div className="flex items-center text-sm text-gray-400">
+                        <a 
+                          href={`mailto:${shelter.contact.email}`}
+                          className="flex items-center text-sm text-gray-400 hover:text-gray-200 transition-colors"
+                          onClick={(e) => e.stopPropagation()}
+                        >
                           <Mail className="h-4 w-4 mr-2 text-gray-500" />
-                          {shelter.contact.email}
-                        </div>
+                          <span className="hover:underline">{shelter.contact.email}</span>
+                        </a>
+                      )}
+                      {shelter.contact.website && (
+                        <a 
+                          href={shelter.contact.website}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center text-sm text-gray-400 hover:text-gray-200 transition-colors"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <ExternalLink className="h-4 w-4 mr-2 text-gray-500" />
+                          <span className="hover:underline">Visit Website</span>
+                        </a>
                       )}
                     </div>
                   )}

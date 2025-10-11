@@ -34,7 +34,9 @@ router = APIRouter(
 
 # Pydantic Models
 class DemoDonationRequest(BaseModel):
-    participant_id: str = Field(..., description="Demo participant ID")
+    participant_id: Optional[str] = Field(None, description="Demo participant ID (optional for shelter donations)")
+    shelter_id: Optional[str] = Field(None, description="Shelter ID (for direct shelter donations)")
+    donation_type: Optional[str] = Field("participant", description="Type of donation: 'participant' or 'shelter'")
     amount: float = Field(..., ge=1.0, le=10000.0, description="Donation amount in USD")
     donor_info: Optional[Dict[str, str]] = Field(None, description="Optional donor information")
     demo_session_id: Optional[str] = Field(None, description="Demo session tracking ID")
@@ -175,29 +177,27 @@ async def create_payment_session(request: DemoDonationRequest):
     Create a payment session for demo donation
     Includes proper donor tracking for dashboard metrics
     FIXED: Maps participant slugs to Firebase UIDs
+    NEW: Supports direct shelter donations
     """
     try:
+        # Validate request
+        donation_type = request.donation_type or "participant"
+        
+        if donation_type == "participant" and not request.participant_id:
+            raise HTTPException(status_code=400, detail="participant_id required for participant donations")
+        if donation_type == "shelter" and not request.shelter_id:
+            raise HTTPException(status_code=400, detail="shelter_id required for shelter donations")
+        
         # Generate unique donation ID
         donation_id = str(uuid.uuid4())
         
         # Enhance donor_info with donor_id if available
         donor_info = request.donor_info or {}
         
-        # Map participant slug to Firebase UID for consistency
-        participant_id = request.participant_id
-        participant_slug = request.participant_id
-        
-        # Map known slugs to Firebase UIDs
-        if participant_id in ['michael-rodriguez', 'demo-participant-001']:
-            participant_id = 'dFJNlIh2g4R8vAvxvIvWZtwu8zw1'  # Michael's Firebase UID
-            participant_slug = 'michael-rodriguez'
-            logger.info(f"🔄 Mapped slug '{request.participant_id}' to UID: {participant_id}")
-        
-        # Create donation record with proper donor tracking
+        # Create base donation record
         donation_data = {
             "id": donation_id,
-            "participant_id": participant_id,  # Firebase UID
-            "participant_slug": participant_slug,  # Keep slug for reference
+            "donation_type": donation_type,
             "amount": {
                 "total": request.amount,
                 "currency": "USD"
@@ -214,25 +214,64 @@ async def create_payment_session(request: DemoDonationRequest):
             "updated_at": datetime.now(timezone.utc)
         }
         
+        # Handle participant donation
+        if donation_type == "participant":
+            # Map participant slug to Firebase UID for consistency
+            participant_id = request.participant_id
+            participant_slug = request.participant_id
+            
+            # Map known slugs to Firebase UIDs
+            if participant_id in ['michael-rodriguez', 'demo-participant-001']:
+                participant_id = 'dFJNlIh2g4R8vAvxvIvWZtwu8zw1'  # Michael's Firebase UID
+                participant_slug = 'michael-rodriguez'
+                logger.info(f"🔄 Mapped slug '{request.participant_id}' to UID: {participant_id}")
+            
+            donation_data["participant_id"] = participant_id  # Firebase UID
+            donation_data["participant_slug"] = participant_slug  # Keep slug for reference
+            
+            # Get participant's shelter for operations routing
+            try:
+                participant = await demo_service.get_demo_participant(participant_id)
+                if participant:
+                    shelter_id = participant.get("shelter_id") or participant.get("shelterId")
+                    if shelter_id:
+                        donation_data["shelter_id"] = shelter_id
+                        logger.info(f"🏠 Participant's shelter: {shelter_id}")
+            except Exception as e:
+                logger.warning(f"Could not fetch participant shelter: {e}")
+            
+            logger.info(f"💚 Created participant donation session: {donation_id}")
+            logger.info(f"  Participant UID: {participant_id} (slug: {participant_slug})")
+        
+        # Handle shelter donation
+        elif donation_type == "shelter":
+            donation_data["shelter_id"] = request.shelter_id
+            # No participant_id for direct shelter donations
+            logger.info(f"💚 Created shelter donation session: {donation_id}")
+            logger.info(f"  Shelter ID: {request.shelter_id}")
+        
+        # Log donor info
+        if donor_info.get("donor_id"):
+            logger.info(f"  Donor: {donor_info.get('name', 'Unknown')} ({donor_info.get('email', 'no email')})")
+        
         # Save to Firestore
         firebase_service.db.collection('demo_donations').document(donation_id).set(donation_data)
-        
-        logger.info(f"Created payment session for donation: {donation_id}")
-        logger.info(f"  Participant UID: {participant_id} (slug: {participant_slug})")
-        if donor_info.get("donor_id"):
-            logger.info(f"  Donor: {donor_info.get('donor_id')} ({donor_info.get('email', 'no email')})")
         
         return {
             "success": True,
             "data": {
                 "donation_id": donation_id,
                 "session_id": f"CS_{donation_id[:8]}",
-                "participant_id": request.participant_id,
+                "donation_type": donation_type,
+                "participant_id": request.participant_id if donation_type == "participant" else None,
+                "shelter_id": request.shelter_id if donation_type == "shelter" else None,
                 "amount": request.amount,
                 "reference": f"DEMO-{donation_id}"
             }
         }
         
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Failed to create payment session: {e}")
         raise HTTPException(
@@ -252,10 +291,19 @@ async def process_demo_webhook_notification(notification: Dict[str, Any]) -> Non
         logger.info(f"Processing demo webhook: {event_code} for {merchant_reference}")
         
         if event_code == "AUTHORISATION" and success == "true":
-            # Get participant ID first (needed for shelter routing)
-            participant_id = await get_participant_from_reference(merchant_reference)
+            # Get donation document to determine donation type
+            donation_doc = await get_donation_by_reference(merchant_reference)
+            if not donation_doc:
+                logger.error(f"❌ No donation found for reference: {merchant_reference}")
+                return
             
-            # Payment successful - process SmartFund distribution
+            donation_type = donation_doc.get("donation_type", "participant")
+            participant_id = donation_doc.get("participant_id")
+            shelter_id = donation_doc.get("shelter_id")
+            amount_value = notification.get("amount", {}).get("value", 10000)
+            total_amount = amount_value / 100
+            
+            # Payment successful - process distribution based on type
             try:
                 adyen_service = get_adyen_service()
                 distribution = await adyen_service.process_smartfund_distribution(
@@ -264,75 +312,101 @@ async def process_demo_webhook_notification(notification: Dict[str, Any]) -> Non
                 )
             except Exception as e:
                 logger.warning(f"Adyen service not available for SmartFund processing: {e}")
-                # Create mock distribution for demo mode
-                amount_value = notification.get("amount", {}).get("value", 10000)
-                total_amount = amount_value / 100
                 
-                # Get participant data to check shelter affiliation
-                participant_data = None
-                if participant_id:
-                    try:
-                        participant = await demo_service.get_demo_participant(participant_id)
-                        participant_data = participant
-                    except:
-                        pass
-                
-                # Calculate distribution with shelter routing
-                direct_amount = round(total_amount * 0.80, 2)
-                housing_amount = round(total_amount * 0.15, 2)
-                operations_amount = round(total_amount * 0.05, 2)
-                
-                distribution = {
-                    "total": total_amount,
-                    "direct": direct_amount,
-                    "housing": housing_amount,
-                    "currency": "USD",
-                    "reference": merchant_reference,
-                    "processed_at": datetime.now(timezone.utc).isoformat(),
-                    "status": "completed"
-                }
-                
-                # Route 5% based on shelter affiliation
-                shelter_id = None
-                shelter_name = None
-                if participant_data:
-                    shelter_id = participant_data.get("shelter_id") or participant_data.get("shelterId")
-                    shelter_name = participant_data.get("shelter_name") or participant_data.get("shelterName")
-                
-                if shelter_id:
-                    distribution["shelter_operations"] = operations_amount
-                    distribution["shelter_id"] = shelter_id
-                    distribution["shelter_name"] = shelter_name
-                    distribution["recipient_type"] = "shelter"
-                    logger.info(f"💰 Demo: Routing 5% (${operations_amount}) to shelter: {shelter_name}")
+                if donation_type == "shelter":
+                    # 🏠 SHELTER DONATION: 95% to shelter, 5% platform fee
+                    logger.info(f"💚 Processing shelter donation: ${total_amount}")
+                    shelter_amount = round(total_amount * 0.95, 2)
+                    platform_fee = round(total_amount * 0.05, 2)
+                    
+                    distribution = {
+                        "total": total_amount,
+                        "shelter_operations": shelter_amount,
+                        "platform_fee": platform_fee,
+                        "currency": "USD",
+                        "reference": merchant_reference,
+                        "processed_at": datetime.now(timezone.utc).isoformat(),
+                        "status": "completed",
+                        "donation_type": "shelter"
+                    }
+                    
+                    logger.info(f"💰 Shelter donation distribution: 95% (${shelter_amount}) to shelter, 5% (${platform_fee}) platform")
+                    
                 else:
-                    distribution["platform_operations"] = operations_amount
-                    distribution["recipient_type"] = "platform"
-                    logger.info(f"💰 Demo: Routing 5% (${operations_amount}) to platform")
+                    # 🧑 PARTICIPANT DONATION: 80-15-5 SmartFund™ model
+                    logger.info(f"💚 Processing participant donation: ${total_amount}")
+                    
+                    # Get participant data to check shelter affiliation
+                    participant_data = None
+                    if participant_id:
+                        try:
+                            participant = await demo_service.get_demo_participant(participant_id)
+                            participant_data = participant
+                        except:
+                            pass
+                    
+                    # Calculate distribution with shelter routing
+                    direct_amount = round(total_amount * 0.80, 2)
+                    housing_amount = round(total_amount * 0.15, 2)
+                    operations_amount = round(total_amount * 0.05, 2)
+                    
+                    distribution = {
+                        "total": total_amount,
+                        "direct": direct_amount,
+                        "housing": housing_amount,
+                        "currency": "USD",
+                        "reference": merchant_reference,
+                        "processed_at": datetime.now(timezone.utc).isoformat(),
+                        "status": "completed",
+                        "donation_type": "participant"
+                    }
+                    
+                    # Route 5% based on shelter affiliation
+                    shelter_name = None
+                    if not shelter_id and participant_data:
+                        shelter_id = participant_data.get("shelter_id") or participant_data.get("shelterId")
+                        shelter_name = participant_data.get("shelter_name") or participant_data.get("shelterName")
+                    
+                    if shelter_id:
+                        distribution["shelter_operations"] = operations_amount
+                        distribution["shelter_id"] = shelter_id
+                        distribution["shelter_name"] = shelter_name
+                        distribution["recipient_type"] = "shelter"
+                        logger.info(f"💰 Demo: Routing 5% (${operations_amount}) to shelter: {shelter_name}")
+                    else:
+                        distribution["platform_operations"] = operations_amount
+                        distribution["recipient_type"] = "platform"
+                        logger.info(f"💰 Demo: Routing 5% (${operations_amount}) to platform")
             
             # Update donation record
             await update_donation_on_success(merchant_reference, distribution)
             
-            # Update participant stats with DIRECT AMOUNT (80% only)
-            direct_amount = distribution["direct"]
-            housing_amount = distribution.get("housing", 0)
-            if participant_id:
+            # Update participant stats (only for participant donations)
+            if donation_type == "participant" and participant_id:
+                direct_amount = distribution.get("direct", 0)
+                housing_amount = distribution.get("housing", 0)
                 logger.info(f"💰 Updating participant {participant_id} stats: +${direct_amount} (direct)")
                 await update_participant_stats(participant_id, direct_amount, housing_amount)
             
             # Update donor stats (if donor_id is present)
-            donation_doc = await get_donation_by_reference(merchant_reference)
-            if donation_doc:
-                donor_id = donation_doc.get("donor_id")
-                if donor_id:
-                    total_amount = distribution["total"]
-                    logger.info(f"💰 Updating donor {donor_id} stats: +${total_amount} (total)")
-                    await update_donor_stats(donor_id, total_amount)
+            donor_id = donation_doc.get("donor_id")
+            if donor_id:
+                logger.info(f"💰 Updating donor {donor_id} stats: +${total_amount} (total)")
+                await update_donor_stats(donor_id, total_amount)
             
-            # Update shelter operations revenue if routed to shelter
-            if distribution.get("recipient_type") == "shelter":
+            # Update shelter operations revenue
+            if donation_type == "shelter" and shelter_id:
+                # Direct shelter donation - shelter gets 95%
+                await update_shelter_operations_direct(
+                    shelter_id=shelter_id,
+                    amount=distribution["shelter_operations"],
+                    donation_reference=merchant_reference,
+                    donor_id=donor_id
+                )
+            elif distribution.get("recipient_type") == "shelter":
+                # Participant donation routing - shelter gets 5%
                 await update_shelter_operations(
-                    shelter_id=distribution["shelter_id"],
+                    shelter_id=shelter_id,
                     amount=distribution["shelter_operations"],
                     participant_id=participant_id,
                     donation_reference=merchant_reference
@@ -518,7 +592,7 @@ async def update_shelter_operations(
     donation_reference: str
 ) -> None:
     """
-    Update shelter's operations revenue from donation routing
+    Update shelter's operations revenue from participant donation routing (5%)
     """
     try:
         from google.cloud.firestore import Increment
@@ -527,19 +601,19 @@ async def update_shelter_operations(
         shelter_doc = shelter_ref.get()
         
         if shelter_doc.exists:
-            # Update existing shelter
+            # Update existing shelter - operations revenue from routing
             shelter_ref.update({
-                "total_operations_received": Increment(amount),
-                "operations_donation_count": Increment(1),
+                "operations_revenue": Increment(amount),  # 5% from participant donations
+                "total_donations_received": Increment(amount),  # Also count towards total
                 "updated_at": datetime.now(timezone.utc)
             })
-            logger.info(f"✅ Updated shelter {shelter_id} operations: +${amount}")
+            logger.info(f"✅ Updated shelter {shelter_id} operations (routing): +${amount}")
         else:
             # Create shelter record if doesn't exist
             shelter_ref.set({
                 "id": shelter_id,
-                "total_operations_received": amount,
-                "operations_donation_count": 1,
+                "operations_revenue": amount,
+                "total_donations_received": amount,
                 "created_at": datetime.now(timezone.utc),
                 "updated_at": datetime.now(timezone.utc)
             })
@@ -557,6 +631,56 @@ async def update_shelter_operations(
         
     except Exception as e:
         logger.error(f"Failed to update shelter operations: {e}")
+        # Don't raise - shelter update failure shouldn't break donation flow
+
+async def update_shelter_operations_direct(
+    shelter_id: str,
+    amount: float,
+    donation_reference: str,
+    donor_id: Optional[str] = None
+) -> None:
+    """
+    Update shelter's direct donation revenue (95% from direct shelter donations)
+    """
+    try:
+        from google.cloud.firestore import Increment
+        
+        shelter_ref = firebase_service.db.collection('shelters').document(shelter_id)
+        shelter_doc = shelter_ref.get()
+        
+        if shelter_doc.exists:
+            # Update existing shelter - direct donation revenue
+            shelter_ref.update({
+                "operations_revenue": Increment(amount),  # 95% from direct shelter donations
+                "total_donations_received": Increment(amount),  # Count towards total
+                "direct_donation_count": Increment(1),
+                "updated_at": datetime.now(timezone.utc)
+            })
+            logger.info(f"✅ Updated shelter {shelter_id} direct donation: +${amount}")
+        else:
+            # Create shelter record if doesn't exist
+            shelter_ref.set({
+                "id": shelter_id,
+                "operations_revenue": amount,
+                "total_donations_received": amount,
+                "direct_donation_count": 1,
+                "created_at": datetime.now(timezone.utc),
+                "updated_at": datetime.now(timezone.utc)
+            })
+            logger.info(f"✅ Created shelter {shelter_id} with direct donation: ${amount}")
+        
+        # Track shelter operation transaction
+        firebase_service.db.collection('shelter_operations_transactions').add({
+            "shelter_id": shelter_id,
+            "amount": amount,
+            "donor_id": donor_id,
+            "donation_reference": donation_reference,
+            "timestamp": datetime.now(timezone.utc),
+            "type": "direct_donation"
+        })
+        
+    except Exception as e:
+        logger.error(f"Failed to update shelter direct donation: {e}")
         # Don't raise - shelter update failure shouldn't break donation flow
 
 async def track_demo_event(

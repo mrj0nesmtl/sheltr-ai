@@ -35,15 +35,20 @@ export default function ContactPage() {
     try {
       console.log('💬 [CONTACT] Submitting contact inquiry via unified service');
       
-      const inquiryId = await UnifiedInquiryService.createContactInquiry({
+      // Build inquiry data, only including fields with values
+      const inquiryData: any = {
         name: formData.name,
         email: formData.email,
-        organization: formData.organization || undefined,
         inquiry_type: formData.type,
         subject: formData.subject,
-        message: formData.message,
-        user_id: user?.uid || undefined
-      });
+        message: formData.message
+      };
+      
+      // Only add optional fields if they have values
+      if (formData.organization) inquiryData.organization = formData.organization;
+      if (user?.uid) inquiryData.user_id = user.uid;
+      
+      const inquiryId = await UnifiedInquiryService.createContactInquiry(inquiryData);
       
       console.log('✅ [CONTACT] Contact inquiry saved with ID:', inquiryId);
       

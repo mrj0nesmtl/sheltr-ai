@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **✅ UNIFIED INQUIRY SERVICE IMPLEMENTED**: All emails route to `contact_inquiries` collection
 - **✅ ADMIN NOTIFICATIONS RESTORED**: All forms trigger proper admin notifications
 - **✅ DASHBOARD NOTIFICATIONS FIXED**: Super Admin & Platform Admin dashboards now display unified inquiries
+- **✅ GUEST USER SUPPORT FIXED**: Unauthenticated users can now submit all forms
 - **✅ SYSTEM DOCUMENTATION CREATED**: Comprehensive email collection audit completed
 
 #### 🐛 Bug Fix: Newsletter Signup Component Not Working
@@ -96,6 +97,48 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - ✅ Contact inquiries sorted by newest first
 - ✅ Includes newsletter signups, contact forms, app notifications, partnership waitlist
 - ✅ Inquiry type badges show correct types (newsletter_signup, contact_form, etc.)
+
+#### 🐛 Bug Fix: Firestore Error for Guest Users
+**Root Cause**:
+- `UnifiedInquiryService` was setting `user_id: undefined` for unauthenticated users
+- Firestore doesn't allow `undefined` values in documents
+- Error: `Function addDoc() called with invalid data. Unsupported field value: undefined`
+
+**Files Modified**:
+- `apps/web/src/services/unifiedInquiryService.ts` (all inquiry creation methods)
+
+**Changes Made**:
+1. **Base Object Pattern** - Build inquiry with only required fields first
+2. **Conditional Field Addition** - Only add optional fields if they have values
+   ```typescript
+   // Build base inquiry
+   const inquiry: UnifiedInquiry = {
+     email: data.email,
+     subject: 'Newsletter Signup',
+     inquiry_type: 'newsletter_signup',
+     // ... required fields only
+   };
+   
+   // Add optional fields only if defined
+   if (data.name) inquiry.name = data.name;
+   if (data.user_id) inquiry.user_id = data.user_id;
+   if (data.organization) inquiry.organization = data.organization;
+   ```
+
+3. **Applied to All Methods**:
+   - `createContactInquiry()` - Contact forms
+   - `createNewsletterSignup()` - Newsletter signups
+   - `createPartnershipWaitlist()` - Partnership inquiries
+   - `createAppNotificationSignup()` - App notifications
+   - `createInvestorInquiry()` - Investor inquiries
+   - `createSupportRequest()` - Support requests
+
+**Impact**:
+- ✅ Guest users (not logged in) can submit all forms
+- ✅ Unauthenticated newsletter signups work perfectly
+- ✅ No Firestore validation errors
+- ✅ Documents only contain fields with actual values
+- ✅ All 8 email touch points work for both authenticated and guest users
 
 #### 📊 Email Collection System Overview
 **Collections**:

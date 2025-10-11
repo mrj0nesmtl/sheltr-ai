@@ -425,35 +425,33 @@ export default function ShelterNetwork() {
       const shelterTenants = await tenantService.getAllShelterTenants();
       console.log(`🏠 Found ${shelterTenants.length} shelter tenants`);
       
-      // Load real donation data
+      // Load real donation data from demo_donations collection
       const donationsByShelter: Record<string, number> = {};
       
-      // Get donations from tenant collections
-      for (const tenant of shelterTenants) {
-        try {
-          const tenantDonationsSnapshot = await getDocs(collection(db, `tenants/${tenant.id}/donations`));
-          console.log(`💰 Found ${tenantDonationsSnapshot.size} donations for tenant ${tenant.name}`);
+      // ⚡ FIX: Query demo_donations collection instead of tenant collections
+      try {
+        const demoDonationsSnapshot = await getDocs(collection(db, 'demo_donations'));
+        console.log(`💰 [SHELTER NETWORK] Found ${demoDonationsSnapshot.size} total donations in demo_donations`);
+        
+        demoDonationsSnapshot.docs.forEach(doc => {
+          const donationData = doc.data();
+          const shelterId = donationData?.shelter_id;
+          const amount = donationData?.amount?.total || donationData?.amount || 0;
           
-          tenantDonationsSnapshot.docs.forEach(doc => {
-            const donationData = doc.data();
-            const amount = donationData?.amount?.total || donationData?.amount || 0;
-            
-            console.log(`🔍 [DEBUG] Processing donation:`, {
-              id: doc.id,
-              participant_id: donationData?.participant_id,
-              shelter_id: donationData?.shelter_id,
-              amount: amount,
-              tenant_id: tenant.id
-            });
-            
-            if (amount > 0) {
-              donationsByShelter[tenant.id] = (donationsByShelter[tenant.id] || 0) + amount;
-              console.log(`💰 Added $${amount} for tenant ${tenant.id}, total: $${donationsByShelter[tenant.id]}`);
-            }
+          console.log(`🔍 [DEBUG] Processing donation:`, {
+            id: doc.id,
+            participant_id: donationData?.participant_id,
+            shelter_id: shelterId,
+            amount: amount
           });
-        } catch (error) {
-          console.warn(`⚠️ Could not fetch donations for tenant ${tenant.id}:`, error);
-        }
+          
+          if (shelterId && amount > 0) {
+            donationsByShelter[shelterId] = (donationsByShelter[shelterId] || 0) + amount;
+            console.log(`💰 Added $${amount} for shelter ${shelterId}, total: $${donationsByShelter[shelterId]}`);
+          }
+        });
+      } catch (error) {
+        console.warn('⚠️ Could not fetch donations from demo_donations:', error);
       }
       
       console.log('💰 [SHELTER NETWORK] Final donations by shelter:', donationsByShelter);

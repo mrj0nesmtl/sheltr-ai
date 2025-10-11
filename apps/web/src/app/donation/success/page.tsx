@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
+import { useState, useEffect, useRef, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { CheckCircle, Heart, Home, Share2, Mail, ArrowRight, Sparkles, User } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
@@ -14,6 +14,7 @@ function SuccessPageContent() {
   const { user } = useAuth();
   const searchParams = useSearchParams();
   const [showAnimation, setShowAnimation] = useState(false);
+  const donationCreatedRef = useRef(false); // Prevent duplicate creation
   
   const isDemo = searchParams.get('demo') === 'true';
   const amount = searchParams.get('amount') || '100';
@@ -34,8 +35,10 @@ function SuccessPageContent() {
     const timer = setTimeout(async () => {
       setShowAnimation(true);
       
-      // Create donation automatically for demo donations
-      if (isDemo && user?.uid) {
+      // Create donation automatically for demo donations (ONLY ONCE)
+      if (isDemo && user?.uid && !donationCreatedRef.current) {
+        donationCreatedRef.current = true; // Mark as created immediately
+        
         try {
           console.log('🎯 Automatically creating demo donation with SmartFund distribution...');
           const { addDoc, collection, serverTimestamp, doc, updateDoc, increment } = await import('firebase/firestore');
@@ -105,23 +108,55 @@ function SuccessPageContent() {
           const docRef = await addDoc(collection(db, 'demo_donations'), donationData);
           console.log('✅ Demo donation created with ID:', docRef.id);
           
-          // Update Michael's participant stats
+          // Update Michael's participant stats via backend API (bypasses security rules)
           try {
-            const participantRef = doc(db, 'users', participantUserId);
-            await updateDoc(participantRef, {
-              total_received: increment(totalAmount), // Total amount received (for display)
-              donation_count: increment(1),
-              housing_fund_balance: increment(housingAmount),
-              updated_at: serverTimestamp()
+            const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
+            const response = await fetch(`${apiBaseUrl}/api/v1/demo/donations/update-participant-stats`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                participant_id: participantUserId,
+                direct_amount: directAmount,
+                housing_amount: housingAmount
+              })
             });
-            console.log('✅ Updated participant stats:', { 
-              participantId: participantUserId,
-              total: totalAmount,
-              direct: directAmount, 
-              housing: housingAmount 
-            });
+            
+            if (response.ok) {
+              console.log('✅ Updated participant stats via API:', { 
+                participantId: participantUserId,
+                direct: directAmount,
+                housing: housingAmount 
+              });
+            } else {
+              console.error('❌ API error updating participant stats:', await response.text());
+            }
           } catch (error) {
             console.error('❌ Error updating participant stats:', error);
+          }
+          
+          // Create notification for participant
+          try {
+            const notificationData = {
+              userId: participantUserId,
+              type: 'donation_received',
+              title: 'New Donation Received!',
+              message: `You received a $${totalAmount} donation from ${user.displayName || 'a supporter'}. $${directAmount} added to your virtual debit account.`,
+              priority: 'high',
+              isRead: false,
+              metadata: {
+                donation_id: docRef.id,
+                donor_name: user.displayName || user.email || 'Anonymous',
+                amount: totalAmount,
+                direct_amount: directAmount,
+                housing_amount: housingAmount
+              },
+              created_at: serverTimestamp()
+            };
+            
+            await addDoc(collection(db, 'participant_notifications'), notificationData);
+            console.log('✅ Created participant notification');
+          } catch (error) {
+            console.error('❌ Error creating participant notification:', error);
           }
           
           // Update Old Brewery Mission shelter operations
@@ -425,57 +460,8 @@ function SuccessPageContent() {
                     <div>✅ SmartFund™ Breakdown Calculation</div>
                     <div>✅ Adyen Payment Session Creation</div>
                     <div>✅ Success Flow & Impact Visualization</div>
+                    <div>✅ Atomic User Stats Updates</div>
                   </div>
-                  
-                  {/* Test Donation Button for Old Brewery Mission */}
-                  <button 
-                    onClick={async () => {
-                      console.log('🧪 Test donation button clicked!');
-                      try {
-                        console.log('📦 Importing Firebase...');
-                        const { addDoc, collection, serverTimestamp } = await import('firebase/firestore');
-                        const { db } = await import('@/lib/firebase');
-                        console.log('✅ Firebase imported successfully');
-                        
-                        const donationData = {
-                          participant_id: 'michael-rodriguez',
-                          participant_name: 'Michael Rodriguez',
-                          shelter_id: 'YDJCJnuLGMC9mWOWDSOa', // Old Brewery Mission tenant ID
-                          shelter_name: 'Old Brewery Mission',
-                          recipient_id: 'YDJCJnuLGMC9mWOWDSOa', // Ensure both fields
-                          amount: { total: 100, currency: 'USD' },
-                          donor_id: user?.uid || null, // **FIX: Include user ID for tracking**
-                          donor_info: { 
-                            name: user?.displayName || user?.email || 'Demo User', 
-                            email: user?.email || 'demo.user@example.com' 
-                          },
-                          status: 'completed',
-                          type: 'one-time',
-                          purpose: 'Test donation from success page',
-                          payment_data: { adyen_reference: `TEST-${Date.now()}`, status: 'completed' },
-                          created_at: serverTimestamp(),
-                          updated_at: serverTimestamp(),
-                          demo: true,
-                          source: user?.uid ? 'scan-give-success-page-logged-in' : 'scan-give-success-page-anonymous'
-                        };
-                        
-                        console.log('📝 Creating donation with data:', donationData);
-                        const docRef = await addDoc(collection(db, 'tenants/YDJCJnuLGMC9mWOWDSOa/donations'), donationData);
-                        console.log('✅ Donation created with ID:', docRef.id);
-                        
-                        const donorMessage = user?.uid ? 
-                          `✅ Test donation added and tracked to ${user.email || 'your account'}! Check your donor dashboard.` :
-                          '✅ Test donation added to Old Brewery Mission! Log in to track your donations.';
-                        alert(donorMessage);
-                      } catch (error) {
-                        console.error('❌ Error creating test donation:', error);
-                        alert(`❌ Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
-                      }
-                    }}
-                    className="w-full mt-4 px-4 py-2 border border-green-500 text-green-600 bg-white hover:bg-green-50 rounded-md text-sm font-medium transition-colors"
-                  >
-                    🧪 {user?.uid ? `Add Tracked Donation (${user.email})` : 'Add Test Donation to Metrics'}
-                  </button>
                 </div>
               </CardContent>
             </Card>

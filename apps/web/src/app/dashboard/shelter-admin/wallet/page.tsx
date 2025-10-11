@@ -49,60 +49,55 @@ export default function ShelterAdminWalletPage() {
         const userData = userDoc.data();
         const shelterId = userData?.shelter_id || 'old-brewery-mission';
         
-        // Get shelter name
+        // Get shelter info and stats directly from shelter document
         const shelterDoc = await getDoc(doc(db, 'shelters', shelterId));
+        let operationsRevenue = 0;
+        
         if (shelterDoc.exists()) {
-          setShelterName(shelterDoc.data().name || 'Your Shelter');
+          const shelterData = shelterDoc.data();
+          setShelterName(shelterData.name || 'Your Shelter');
+          // Read operations revenue directly from shelter document (updated by success page)
+          operationsRevenue = shelterData.operations_revenue || 0;
+          console.log(`📊 Shelter operations revenue from doc: $${operationsRevenue}`);
         }
 
-        // Query shelter operations transactions (5% split)
-        const opsQuery = query(
-          collection(db, 'shelter_operations_transactions'),
-          where('shelter_id', '==', shelterId)
+        // Query demo_donations for participant donations to this shelter (5% operations fee)
+        const participantDonationsQuery = query(
+          collection(db, 'demo_donations'),
+          where('shelter_id', '==', shelterId),
+          where('status', '==', 'completed')
         );
-        const opsSnapshot = await getDocs(opsQuery);
+        const participantDonationsSnapshot = await getDocs(participantDonationsQuery);
         
-        let operationsRevenue = 0;
         const opsTransactions: any[] = [];
+        let calculatedOpsRevenue = 0;
         
-        opsSnapshot.docs.forEach(doc => {
+        participantDonationsSnapshot.docs.forEach(doc => {
           const data = doc.data();
-          operationsRevenue += data.amount || 0;
+          // 5% goes to shelter operations from each participant donation
+          const opsAmount = data.amount?.breakdown?.operations || (data.amount?.total * 0.05) || 0;
+          calculatedOpsRevenue += opsAmount;
+          
           opsTransactions.push({
             id: doc.id,
             type: 'operations',
-            amount: data.amount,
-            participant: data.participant_id,
-            date: data.timestamp?.toDate() || new Date(),
-            reference: data.donation_reference
-          });
-        });
-
-        // Query direct shelter donations (via QR code)
-        const directQuery = query(
-          collection(db, 'tenants/YDJCJnuLGMC9mWOWDSOa/donations'),
-          where('shelter_id', '==', shelterId),
-          where('participant_id', '==', null), // Direct to shelter, not participant
-          where('status', '==', 'completed')
-        );
-        const directSnapshot = await getDocs(directQuery);
-        
-        let directDonations = 0;
-        const directTransactions: any[] = [];
-        
-        directSnapshot.docs.forEach(doc => {
-          const data = doc.data();
-          const amount = data.amount?.total || data.amount || 0;
-          directDonations += amount;
-          directTransactions.push({
-            id: doc.id,
-            type: 'direct',
-            amount: amount,
-            donor: data.donor_info?.name || 'Anonymous',
+            amount: opsAmount,
+            participant: data.participant_name || 'Participant',
+            donor: data.donor_info?.name || 'Anonymous Donor',
             date: data.created_at?.toDate() || new Date(),
             reference: data.payment_data?.adyen_reference
           });
         });
+
+        console.log(`💰 Calculated operations revenue from ${participantDonationsSnapshot.size} participant donations: $${calculatedOpsRevenue}`);
+
+        // Query direct shelter donations (future: when shelter has own QR code)
+        // For now, this will be 0 as we don't have direct shelter donations yet
+        const directDonations = 0;
+        const directTransactions: any[] = [];
+        
+        // Use whichever is higher (shelter doc or calculated) to handle any sync issues
+        operationsRevenue = Math.max(operationsRevenue, calculatedOpsRevenue);
 
         // Combine and sort transactions by date
         const allTransactions = [...opsTransactions, ...directTransactions].sort(

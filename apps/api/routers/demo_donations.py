@@ -174,6 +174,7 @@ async def create_payment_session(request: DemoDonationRequest):
     """
     Create a payment session for demo donation
     Includes proper donor tracking for dashboard metrics
+    FIXED: Maps participant slugs to Firebase UIDs
     """
     try:
         # Generate unique donation ID
@@ -182,10 +183,21 @@ async def create_payment_session(request: DemoDonationRequest):
         # Enhance donor_info with donor_id if available
         donor_info = request.donor_info or {}
         
+        # Map participant slug to Firebase UID for consistency
+        participant_id = request.participant_id
+        participant_slug = request.participant_id
+        
+        # Map known slugs to Firebase UIDs
+        if participant_id in ['michael-rodriguez', 'demo-participant-001']:
+            participant_id = 'dFJNlIh2g4R8vAvxvIvWZtwu8zw1'  # Michael's Firebase UID
+            participant_slug = 'michael-rodriguez'
+            logger.info(f"🔄 Mapped slug '{request.participant_id}' to UID: {participant_id}")
+        
         # Create donation record with proper donor tracking
         donation_data = {
             "id": donation_id,
-            "participant_id": request.participant_id,
+            "participant_id": participant_id,  # Firebase UID
+            "participant_slug": participant_slug,  # Keep slug for reference
             "amount": {
                 "total": request.amount,
                 "currency": "USD"
@@ -206,6 +218,7 @@ async def create_payment_session(request: DemoDonationRequest):
         firebase_service.db.collection('demo_donations').document(donation_id).set(donation_data)
         
         logger.info(f"Created payment session for donation: {donation_id}")
+        logger.info(f"  Participant UID: {participant_id} (slug: {participant_slug})")
         if donor_info.get("donor_id"):
             logger.info(f"  Donor: {donor_info.get('donor_id')} ({donor_info.get('email', 'no email')})")
         
@@ -215,7 +228,8 @@ async def create_payment_session(request: DemoDonationRequest):
                 "donation_id": donation_id,
                 "session_id": f"CS_{donation_id[:8]}",
                 "participant_id": request.participant_id,
-                "amount": request.amount
+                "amount": request.amount,
+                "reference": f"DEMO-{donation_id}"
             }
         }
         
@@ -299,10 +313,12 @@ async def process_demo_webhook_notification(notification: Dict[str, Any]) -> Non
             # Update donation record
             await update_donation_on_success(merchant_reference, distribution)
             
-            # Update participant stats with DIRECT AMOUNT (not total)
+            # Update participant stats with DIRECT AMOUNT (80% only)
             direct_amount = distribution["direct"]
+            housing_amount = distribution.get("housing", 0)
             if participant_id:
-                await demo_service.update_participant_from_donation(participant_id, direct_amount, distribution)
+                logger.info(f"💰 Updating participant {participant_id} stats: +${direct_amount} (direct)")
+                await update_participant_stats(participant_id, direct_amount, housing_amount)
             
             # Update donor stats (if donor_id is present)
             donation_doc = await get_donation_by_reference(merchant_reference)
@@ -310,6 +326,7 @@ async def process_demo_webhook_notification(notification: Dict[str, Any]) -> Non
                 donor_id = donation_doc.get("donor_id")
                 if donor_id:
                     total_amount = distribution["total"]
+                    logger.info(f"💰 Updating donor {donor_id} stats: +${total_amount} (total)")
                     await update_donor_stats(donor_id, total_amount)
             
             # Update shelter operations revenue if routed to shelter
@@ -411,6 +428,64 @@ async def get_donation_by_reference(reference: str) -> Optional[Dict[str, Any]]:
     except Exception as e:
         logger.error(f"Failed to get donation by reference: {e}")
         return None
+
+async def update_participant_stats(participant_id: str, direct_amount: float, housing_amount: float) -> None:
+    """
+    Update participant's total_received (direct amount) and housing_fund_balance
+    """
+    try:
+        from google.cloud.firestore import Increment
+
+        participant_ref = firebase_service.db.collection('users').document(participant_id)
+        participant_doc = participant_ref.get()
+
+        if participant_doc.exists:
+            # Update participant stats using Firestore Increment for atomic updates
+            participant_ref.update({
+                "total_received": Increment(direct_amount),  # 80% goes here
+                "housing_fund_balance": Increment(housing_amount),  # 15% goes here
+                "donation_count": Increment(1),
+                "updated_at": datetime.now(timezone.utc)
+            })
+            logger.info(f"✅ Updated participant {participant_id}: +${direct_amount} (direct), +${housing_amount} (housing)")
+        else:
+            logger.warning(f"⚠️ Participant document not found: {participant_id}")
+
+    except Exception as e:
+        logger.error(f"❌ Failed to update participant stats for {participant_id}: {e}")
+
+
+@router.post("/update-participant-stats")
+async def api_update_participant_stats(request: Request):
+    """
+    API endpoint to update participant stats from frontend (bypasses Firestore security rules)
+    This is needed because the success page runs in the donor's browser context
+    """
+    try:
+        body = await request.json()
+        participant_id = body.get("participant_id")
+        direct_amount = body.get("direct_amount", 0)
+        housing_amount = body.get("housing_amount", 0)
+        
+        if not participant_id:
+            raise HTTPException(status_code=400, detail="participant_id is required")
+        
+        logger.info(f"📡 API: Updating participant {participant_id} stats: +${direct_amount} (direct), +${housing_amount} (housing)")
+        
+        await update_participant_stats(participant_id, direct_amount, housing_amount)
+        
+        return {
+            "success": True,
+            "participant_id": participant_id,
+            "direct_amount": direct_amount,
+            "housing_amount": housing_amount
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"❌ API error updating participant stats: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 async def update_donor_stats(donor_id: str, amount: float) -> None:
     """

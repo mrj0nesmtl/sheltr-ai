@@ -667,55 +667,109 @@ function DonatePageContent() {
 
               {/* Shelter Breakdown Card */}
               {donationType === 'shelter' && shelter && (
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg flex items-center gap-2">
-                    <Shield className="h-5 w-5 text-green-600" />
-                    Donation Breakdown
-                  </CardTitle>
-                  <CardDescription>Direct support to shelter operations</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
-                      <div>
-                        <div className="font-semibold text-lg">Shelter Operations</div>
-                        <div className="text-sm text-muted-foreground">Direct support for {shelter.name}</div>
+              <>
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      <Shield className="h-5 w-5 text-green-600" />
+                      Donation Breakdown
+                    </CardTitle>
+                    <CardDescription>Direct support to shelter operations</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div className="flex justify-between items-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
+                        <div>
+                          <div className="font-semibold text-lg">Shelter Operations</div>
+                          <div className="text-sm text-muted-foreground">Direct support for {shelter.name}</div>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-2xl font-bold text-green-600">95%</div>
+                          <div className="text-lg text-green-600">${breakdown.shelterOperations}</div>
+                        </div>
                       </div>
-                      <div className="text-right">
-                        <div className="text-2xl font-bold text-green-600">95%</div>
-                        <div className="text-lg text-green-600">${breakdown.shelterOperations}</div>
+                      
+                      <div className="flex justify-between items-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                        <div>
+                          <div className="font-semibold">Platform Fee</div>
+                          <div className="text-sm text-muted-foreground">System maintenance & security</div>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-2xl font-bold text-blue-600">5%</div>
+                          <div className="text-lg text-blue-600">${breakdown.platformFee}</div>
+                        </div>
                       </div>
-                    </div>
-                    
-                    <div className="flex justify-between items-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-                      <div>
-                        <div className="font-semibold">Platform Fee</div>
-                        <div className="text-sm text-muted-foreground">System maintenance & security</div>
-                      </div>
-                      <div className="text-right">
-                        <div className="text-2xl font-bold text-blue-600">5%</div>
-                        <div className="text-lg text-blue-600">${breakdown.platformFee}</div>
-                      </div>
-                    </div>
 
-                    {/* What Your Donation Supports */}
-                    <div className="mt-6 p-4 bg-gradient-to-r from-primary/10 to-primary/5 rounded-lg border">
-                      <h4 className="font-semibold mb-3 flex items-center gap-2">
-                        <Heart className="h-4 w-4 text-primary" />
-                        Your Impact
-                      </h4>
-                      <div className="space-y-2 text-sm text-muted-foreground">
-                        <p>✓ Emergency shelter beds and safe spaces</p>
-                        <p>✓ Daily meals and basic necessities</p>
-                        <p>✓ Case management and support services</p>
-                        <p>✓ Housing assistance programs</p>
-                        <p>✓ Mental health and wellness services</p>
+                      {/* What Your Donation Supports */}
+                      <div className="mt-6 p-4 bg-gradient-to-r from-primary/10 to-primary/5 rounded-lg border">
+                        <h4 className="font-semibold mb-3 flex items-center gap-2">
+                          <Heart className="h-4 w-4 text-primary" />
+                          Your Impact
+                        </h4>
+                        <div className="space-y-2 text-sm text-muted-foreground">
+                          <p>✓ Emergency shelter beds and safe spaces</p>
+                          <p>✓ Daily meals and basic necessities</p>
+                          <p>✓ Case management and support services</p>
+                          <p>✓ Housing assistance programs</p>
+                          <p>✓ Mental health and wellness services</p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+
+                {/* Sign In / Register Prompt for Shelter Donations */}
+                {!user && (
+                  <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-blue-500/5">
+                    <CardHeader>
+                      <CardTitle className="text-lg flex items-center gap-2">
+                        <User className="h-5 w-5 text-primary" />
+                        Track Your Charitable Giving
+                      </CardTitle>
+                      <CardDescription>Create an account to receive tax receipts and track your impact</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-4">
+                        <div className="space-y-2 text-sm text-muted-foreground">
+                          <p className="flex items-start gap-2">
+                            <span className="text-primary font-bold">✓</span>
+                            <span>Automatic tax receipts for all donations</span>
+                          </p>
+                          <p className="flex items-start gap-2">
+                            <span className="text-primary font-bold">✓</span>
+                            <span>Track your giving history and total impact</span>
+                          </p>
+                          <p className="flex items-start gap-2">
+                            <span className="text-primary font-bold">✓</span>
+                            <span>Support multiple shelters from one dashboard</span>
+                          </p>
+                          <p className="flex items-start gap-2">
+                            <span className="text-primary font-bold">✓</span>
+                            <span>Receive updates on how your donations help</span>
+                          </p>
+                        </div>
+                        
+                        <div className="flex gap-2 pt-2">
+                          <Link href="/register" className="flex-1">
+                            <Button variant="default" className="w-full">
+                              Create Account
+                            </Button>
+                          </Link>
+                          <Link href="/login" className="flex-1">
+                            <Button variant="outline" className="w-full">
+                              Sign In
+                            </Button>
+                          </Link>
+                        </div>
+                        
+                        <p className="text-xs text-center text-muted-foreground">
+                          Or continue as guest (no tax receipt)
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+              </>
               )}
             </div>
             

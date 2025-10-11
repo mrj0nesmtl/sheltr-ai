@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { collection, addDoc, Timestamp } from 'firebase/firestore';
+import { collection, addDoc, Timestamp, doc, updateDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { 
   Users, 
@@ -33,7 +33,11 @@ import {
   Bed,
   Loader2,
   Save,
-  X
+  X,
+  Globe,
+  ExternalLink,
+  Ban,
+  CheckCircle2
 } from 'lucide-react';
 import { getShelterParticipants, getShelterMetrics, ShelterParticipant, ShelterMetrics } from '@/services/platformMetrics';
 import { UserStatusIndicator } from '@/components/UserStatusIndicator';
@@ -185,12 +189,58 @@ export default function ParticipantsPage() {
     }
   };
 
+  // Toggle participant status (disable/enable)
+  const handleToggleParticipantStatus = async (participantId: string, currentStatus: string) => {
+    const shelterId = user?.customClaims?.shelter_id || user?.shelterId || (user as any)?.shelter_id;
+    
+    if (!shelterId) {
+      alert('Error: No shelter assigned to this admin');
+      return;
+    }
+
+    const newStatus = currentStatus === 'disabled' ? 'active' : 'disabled';
+    const action = newStatus === 'disabled' ? 'disable' : 'enable';
+    
+    const confirmed = confirm(
+      `Are you sure you want to ${action} this participant's profile?\n\n` +
+      `This will ${newStatus === 'disabled' ? 'hide their public page and prevent donations' : 'restore their public page and allow donations'}.`
+    );
+    
+    if (!confirmed) return;
+
+    try {
+      console.log(`🔄 ${action === 'disable' ? 'Disabling' : 'Enabling'} participant ${participantId}...`);
+      
+      const participantRef = doc(db, 'users', participantId);
+      await updateDoc(participantRef, {
+        status: newStatus,
+        updated_at: Timestamp.now(),
+        disabledBy: newStatus === 'disabled' ? user.uid : null,
+        disabledAt: newStatus === 'disabled' ? Timestamp.now() : null,
+        disabledReason: newStatus === 'disabled' ? 'Terms of Service violation - Shelter Admin action' : null
+      });
+      
+      console.log(`✅ Participant ${action}d successfully`);
+      
+      // Reload participants data
+      const updatedParticipants = await getShelterParticipants(shelterId);
+      setParticipants(updatedParticipants);
+      
+      alert(`✅ Participant profile ${action}d successfully`);
+      
+    } catch (error) {
+      console.error(`❌ Error ${action}ing participant:`, error);
+      alert(`Error ${action}ing participant. Please try again.`);
+    }
+  };
+
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
       case 'active': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100';
       case 'new': return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100';
       case 'transitioning': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-100';
       case 'inactive': return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100';
+      case 'disabled': return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-100';
       default: return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100'; // Default to active
     }
   };
@@ -517,14 +567,29 @@ export default function ParticipantsPage() {
                           </p>
                         </div>
                         <div className="flex space-x-2">
-                          <Button variant="ghost" size="sm">
-                            <Eye className="h-4 w-4" />
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            onClick={() => window.open(`/participant/${participant.id}`, '_blank')}
+                            title="View Public Page"
+                          >
+                            <Globe className="h-4 w-4" />
                           </Button>
-                          <Button variant="ghost" size="sm">
+                          <Button variant="ghost" size="sm" title="Edit Profile">
                             <Edit className="h-4 w-4" />
                           </Button>
-                          <Button variant="ghost" size="sm">
-                            <MoreVertical className="h-4 w-4" />
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            onClick={() => handleToggleParticipantStatus(participant.id, participant.status)}
+                            className={participant.status === 'disabled' ? 'text-green-600 hover:text-green-700' : 'text-red-600 hover:text-red-700'}
+                            title={participant.status === 'disabled' ? 'Enable Profile' : 'Disable Profile'}
+                          >
+                            {participant.status === 'disabled' ? (
+                              <CheckCircle2 className="h-4 w-4" />
+                            ) : (
+                              <Ban className="h-4 w-4" />
+                            )}
                           </Button>
                         </div>
                       </div>
@@ -588,14 +653,29 @@ export default function ParticipantsPage() {
                           </p>
                         </div>
                         <div className="flex space-x-2">
-                          <Button variant="ghost" size="sm">
-                            <Eye className="h-4 w-4" />
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            onClick={() => window.open(`/participant/${participant.id}`, '_blank')}
+                            title="View Public Page"
+                          >
+                            <Globe className="h-4 w-4" />
                           </Button>
-                          <Button variant="ghost" size="sm">
+                          <Button variant="ghost" size="sm" title="Edit Profile">
                             <Edit className="h-4 w-4" />
                           </Button>
-                          <Button variant="ghost" size="sm">
-                            <MoreVertical className="h-4 w-4" />
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            onClick={() => handleToggleParticipantStatus(participant.id, participant.status)}
+                            className={participant.status === 'disabled' ? 'text-green-600 hover:text-green-700' : 'text-red-600 hover:text-red-700'}
+                            title={participant.status === 'disabled' ? 'Enable Profile' : 'Disable Profile'}
+                          >
+                            {participant.status === 'disabled' ? (
+                              <CheckCircle2 className="h-4 w-4" />
+                            ) : (
+                              <Ban className="h-4 w-4" />
+                            )}
                           </Button>
                         </div>
                       </div>
@@ -659,14 +739,29 @@ export default function ParticipantsPage() {
                           </p>
                         </div>
                         <div className="flex space-x-2">
-                          <Button variant="ghost" size="sm">
-                            <Eye className="h-4 w-4" />
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            onClick={() => window.open(`/participant/${participant.id}`, '_blank')}
+                            title="View Public Page"
+                          >
+                            <Globe className="h-4 w-4" />
                           </Button>
-                          <Button variant="ghost" size="sm">
+                          <Button variant="ghost" size="sm" title="Edit Profile">
                             <Edit className="h-4 w-4" />
                           </Button>
-                          <Button variant="ghost" size="sm">
-                            <MoreVertical className="h-4 w-4" />
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            onClick={() => handleToggleParticipantStatus(participant.id, participant.status)}
+                            className={participant.status === 'disabled' ? 'text-green-600 hover:text-green-700' : 'text-red-600 hover:text-red-700'}
+                            title={participant.status === 'disabled' ? 'Enable Profile' : 'Disable Profile'}
+                          >
+                            {participant.status === 'disabled' ? (
+                              <CheckCircle2 className="h-4 w-4" />
+                            ) : (
+                              <Ban className="h-4 w-4" />
+                            )}
                           </Button>
                         </div>
                       </div>
@@ -730,14 +825,29 @@ export default function ParticipantsPage() {
                           </p>
                         </div>
                         <div className="flex space-x-2">
-                          <Button variant="ghost" size="sm">
-                            <Eye className="h-4 w-4" />
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            onClick={() => window.open(`/participant/${participant.id}`, '_blank')}
+                            title="View Public Page"
+                          >
+                            <Globe className="h-4 w-4" />
                           </Button>
-                          <Button variant="ghost" size="sm">
+                          <Button variant="ghost" size="sm" title="Edit Profile">
                             <Edit className="h-4 w-4" />
                           </Button>
-                          <Button variant="ghost" size="sm">
-                            <MoreVertical className="h-4 w-4" />
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            onClick={() => handleToggleParticipantStatus(participant.id, participant.status)}
+                            className={participant.status === 'disabled' ? 'text-green-600 hover:text-green-700' : 'text-red-600 hover:text-red-700'}
+                            title={participant.status === 'disabled' ? 'Enable Profile' : 'Disable Profile'}
+                          >
+                            {participant.status === 'disabled' ? (
+                              <CheckCircle2 className="h-4 w-4" />
+                            ) : (
+                              <Ban className="h-4 w-4" />
+                            )}
                           </Button>
                         </div>
                       </div>

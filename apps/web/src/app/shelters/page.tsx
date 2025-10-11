@@ -116,7 +116,7 @@ export default function SheltersPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+      <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200">
         <div className="container mx-auto px-4 py-12">
           <div className="text-center">
             <div className="animate-pulse">
@@ -154,7 +154,7 @@ export default function SheltersPage() {
           zIndex: -2
         }}
       />
-      <div className="fixed inset-0 bg-gradient-to-br from-gray-900/60 via-blue-900/50 to-indigo-900/60 z-[-1]" />
+      <div className="fixed inset-0 bg-gradient-to-br from-gray-900/70 via-gray-800/60 to-black/70 z-[-1]" />
       
       <PublicNavigation />
       <div className="container mx-auto px-4 py-12 relative z-10">
@@ -173,7 +173,7 @@ export default function SheltersPage() {
               <span className="font-medium">{sheltersData.length} Partner Shelters</span>
             </div>
             <div className="flex items-center text-white bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full border border-white/30">
-              <Users className="h-5 w-5 text-blue-400 mr-2" />
+              <Users className="h-5 w-5 text-gray-200 mr-2" />
               <span className="font-medium">
                 {sheltersData.reduce((total, item) => total + item.shelter.capacity, 0)} Total Beds
               </span>
@@ -260,7 +260,7 @@ export default function SheltersPage() {
               <Link href={`/${shelterSlug}`} key={shelter.id}>
                 <Card className="group hover:shadow-xl transition-all duration-300 overflow-hidden cursor-pointer bg-gray-900/95 backdrop-blur-sm border border-gray-700/50 hover:bg-gray-800 hover:scale-[1.02] dark:bg-gray-900/95 dark:border-gray-700/50 dark:hover:bg-gray-800">
                   {/* Shelter Image/Logo */}
-                  <div className="relative h-48 bg-gradient-to-br from-blue-500 via-indigo-600 to-purple-600">
+                  <div className="relative h-48 bg-gradient-to-br from-gray-700 via-gray-800 to-gray-900">
                     {config.backgroundImageUrl ? (
                       <Image
                         src={config.backgroundImageUrl}
@@ -427,7 +427,7 @@ export default function SheltersPage() {
 
         {/* Call to Action */}
         <div className="mt-16">
-          <div className="bg-gradient-to-br from-gray-900 via-blue-900 to-indigo-900 rounded-xl shadow-xl overflow-hidden">
+          <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-black rounded-xl shadow-xl overflow-hidden">
             <div className="px-8 py-12 md:px-12 md:py-16">
               <div className="max-w-4xl mx-auto text-center">
                 <div className="flex justify-center mb-6">
@@ -445,7 +445,7 @@ export default function SheltersPage() {
                 <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
                   Expanding Across Canada
                 </h2>
-                <p className="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
+                <p className="text-xl text-gray-100 mb-8 max-w-3xl mx-auto">
                   We&apos;re actively seeking shelter partners and affiliates across Canada to join our revolutionary platform. 
                   Be part of the future of transparent, blockchain-powered homelessness support.
                 </p>
@@ -458,7 +458,7 @@ export default function SheltersPage() {
                       </div>
                     </div>
                     <h3 className="text-lg font-semibold text-white mb-2">Coast to Coast</h3>
-                    <p className="text-blue-100 text-sm">
+                    <p className="text-gray-200 text-sm">
                       From Vancouver to Halifax, we&apos;re building a national network
                     </p>
                   </div>
@@ -470,7 +470,7 @@ export default function SheltersPage() {
                       </div>
                     </div>
                     <h3 className="text-lg font-semibold text-white mb-2">FREE Platform</h3>
-                    <p className="text-blue-100 text-sm">
+                    <p className="text-gray-200 text-sm">
                       Our platform is completely free for all shelter partners
                     </p>
                   </div>
@@ -482,7 +482,7 @@ export default function SheltersPage() {
                       </div>
                     </div>
                     <h3 className="text-lg font-semibold text-white mb-2">Expert Support</h3>
-                    <p className="text-blue-100 text-sm">
+                    <p className="text-gray-200 text-sm">
                       Full onboarding, training, and ongoing technical support
                     </p>
                   </div>
@@ -492,7 +492,7 @@ export default function SheltersPage() {
                   <h3 className="text-xl font-semibold text-white mb-4">
                     Interested in Partnering?
                   </h3>
-                  <p className="text-blue-100 mb-6">
+                  <p className="text-gray-200 mb-6">
                     Join our waitlist to be the first to know when we launch in your region.
                   </p>
                   

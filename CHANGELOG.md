@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **✅ NEWSLETTER SIGNUP FIXED**: All public email touch points now working
 - **✅ UNIFIED INQUIRY SERVICE IMPLEMENTED**: All emails route to `contact_inquiries` collection
 - **✅ ADMIN NOTIFICATIONS RESTORED**: All forms trigger proper admin notifications
+- **✅ DASHBOARD NOTIFICATIONS FIXED**: Super Admin & Platform Admin dashboards now display unified inquiries
 - **✅ SYSTEM DOCUMENTATION CREATED**: Comprehensive email collection audit completed
 
 #### 🐛 Bug Fix: Newsletter Signup Component Not Working
@@ -58,6 +59,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - ✅ Admin notifications properly triggered for Super Admin & Platform Admin
 - ✅ All public touch points working: Landing `/`, About `/about`, Team `/team`
 - ✅ Consistent with other email collection forms (contact, docs, shelters)
+
+#### 🐛 Bug Fix: Dashboard Notifications Not Showing Unified Inquiries
+**Root Cause**:
+- `getRecentContactInquiries()` was using wrong field name `createdAt` (camelCase)
+- `UnifiedInquiryService` creates documents with `created_at` (snake_case)
+- Missing Firestore indexes for `contact_inquiries` collection
+
+**Files Modified**:
+- `apps/web/src/services/notificationService.ts` (lines 512-551)
+- `firestore.indexes.json` (lines 202-224)
+
+**Changes Made**:
+1. **Fixed Field Name in Query** (line 520)
+   ```typescript
+   // OLD:
+   orderBy('createdAt', 'desc')
+   
+   // NEW:
+   orderBy('created_at', 'desc')  // Matches UnifiedInquiryService field name
+   ```
+
+2. **Enhanced Data Mapping** (lines 527-541)
+   - Properly maps unified inquiry fields to notification format
+   - Adds fallback values for missing fields
+   - Logs inquiry types for debugging
+
+3. **Added Firestore Indexes** (firestore.indexes.json)
+   - Simple index: `created_at DESC` for basic queries
+   - Compound index: `inquiry_type ASC, created_at DESC` for filtered queries
+   - Compound index: `status ASC, created_at DESC` for status filtering
+
+**Impact**:
+- ✅ Super Admin dashboard now displays all contact inquiries
+- ✅ Platform Admin dashboard now displays all contact inquiries
+- ✅ Contact inquiries sorted by newest first
+- ✅ Includes newsletter signups, contact forms, app notifications, partnership waitlist
+- ✅ Inquiry type badges show correct types (newsletter_signup, contact_form, etc.)
 
 #### 📊 Email Collection System Overview
 **Collections**:

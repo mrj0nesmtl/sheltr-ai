@@ -995,7 +995,10 @@ service cloud.firestore {
         isAdmin()
       );
       
-      // Write: Participants can mark their own notifications as read
+      // Create: Allow authenticated users to create notifications (for donation flow)
+      allow create: if isAuthenticated();
+      
+      // Update: Participants can mark their own notifications as read
       allow update: if isParticipant() && resource.data.userId == request.auth.uid;
       
       // Create: System creates notifications (admins can create for testing)

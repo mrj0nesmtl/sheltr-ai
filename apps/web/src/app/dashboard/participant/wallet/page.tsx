@@ -180,91 +180,79 @@ export default function ParticipantWallet() {
 
   // Get participant ID for consistent data queries
   const getParticipantId = () => {
-    // For Michael Rodriguez, use consistent ID across platform
-    if (user?.email === 'participant@example.com' || user?.email === 'michael.rodriguez@example.com') {
-      return 'michael-rodriguez';
-    }
-    // For other participants, derive from email or user ID
+    // ALWAYS use Firebase UID for consistent data access
     return user?.uid || 'demo-participant-001';
   };
 
-  // Function to get real wallet data from Firestore
+  // Function to get real wallet data from user document (FAST & ACCURATE)
   const getRealWalletData = async (participantId: string): Promise<RealWalletData> => {
     try {
       console.log(`🔍 [WALLET] Fetching real wallet data for: ${participantId}`);
       
-      let totalReceived = 0;
-      let transactionCount = 0;
-      let lastTransactionDate: Date | null = null;
+      // Read from user document (fastest, single query)
+      const { doc, getDoc } = await import('firebase/firestore');
+      const userRef = doc(db, 'users', participantId);
+      const userSnap = await getDoc(userRef);
       
-      // Query BOTH collections: demo_donations AND tenants/.../donations
-      
-      // 1. Query demo_donations
-      const demoQuery = query(
-        collection(db, 'demo_donations'),
-        where('participant_id', '==', participantId),
-        where('status', '==', 'completed')
-      );
-      const demoSnapshot = await getDocs(demoQuery);
-      
-      demoSnapshot.docs.forEach(doc => {
-        const donationData = doc.data();
-        const amount = donationData.amount?.total || donationData.amount || 0;
-        const timestamp = donationData.created_at?.toDate() || new Date();
+      if (userSnap.exists()) {
+        const userData = userSnap.data();
+        const totalReceived = userData.total_received || 0; // Direct amount (80%)
+        const housingFundBalance = userData.housing_fund_balance || 0; // 15%
+        const donationCount = userData.donation_count || 0;
         
-        if (amount > 0) {
-          totalReceived += amount;
-          transactionCount++;
-          
-          if (!lastTransactionDate || timestamp > lastTransactionDate) {
-            lastTransactionDate = timestamp;
-          }
-        }
-      });
-      
-      console.log(`💰 [DEMO] Found ${demoSnapshot.size} completed donations in demo_donations`);
-      
-      // 2. Query tenants/YDJCJnuLGMC9mWOWDSOa/donations
-      const tenantQuery = query(
-        collection(db, 'tenants/YDJCJnuLGMC9mWOWDSOa/donations'),
-        where('participant_id', '==', participantId),
-        where('status', '==', 'completed')
-      );
-      const tenantSnapshot = await getDocs(tenantQuery);
-      
-      tenantSnapshot.docs.forEach(doc => {
-        const donationData = doc.data();
-        const amount = donationData.amount?.total || donationData.amount || 0;
-        const timestamp = donationData.created_at?.toDate() || new Date();
+        console.log(`✅ [USER-DOC] Participant wallet stats:`, {
+          totalReceived,
+          housingFundBalance,
+          donationCount
+        });
         
-        if (amount > 0) {
-          totalReceived += amount;
-          transactionCount++;
+        // Query latest donation for last transaction date
+        let lastTransactionDate: Date | null = null;
+        
+        try {
+          const demoQuery = query(
+            collection(db, 'demo_donations'),
+            where('participant_id', '==', participantId),
+            where('status', '==', 'completed'),
+            limit(1)
+          );
+          const demoSnapshot = await getDocs(demoQuery);
           
-          if (!lastTransactionDate || timestamp > lastTransactionDate) {
-            lastTransactionDate = timestamp;
+          if (!demoSnapshot.empty) {
+            const lastDonation = demoSnapshot.docs[0].data();
+            lastTransactionDate = lastDonation.created_at?.toDate?.() || new Date(lastDonation.created_at || Date.now());
           }
+        } catch (error) {
+          console.warn('⚠️ Could not fetch last transaction date:', error);
         }
-      });
-      
-      console.log(`💰 [TENANT] Found ${tenantSnapshot.size} completed donations in tenant collection`);
-      
-      // Calculate 80/15 split for SHELTR tokens
-      const sheltrStableBalance = Math.round(totalReceived * 0.80); // 80% to stable coin
-      const sheltrUtilityBalance = Math.round(totalReceived * 0.15); // 15% to utility token
-      
-      console.log(`💰 [WALLET] Calculated balances for ${participantId}:`);
-      console.log(`  Total Received: $${totalReceived}`);
-      console.log(`  SHELTR Stable (80%): ${sheltrStableBalance} USDC`);
-      console.log(`  SHELTR Utility (15%): ${sheltrUtilityBalance} Tokens`);
-      
-      return {
-        totalReceived,
-        sheltrStableBalance,
-        sheltrUtilityBalance,
-        transactionCount,
-        lastTransactionDate
-      };
+        
+        // totalReceived is already 80% (direct amount)
+        // housingFundBalance is already 15%
+        const sheltrStableBalance = totalReceived; // Already 80%
+        const sheltrUtilityBalance = housingFundBalance; // Already 15%
+        
+        console.log(`💰 [WALLET] Calculated balances for ${participantId}:`);
+        console.log(`  Total Received: $${totalReceived}`);
+        console.log(`  SHELTR Stable (80%): ${sheltrStableBalance}`);
+        console.log(`  SHELTR Utility (15%): ${sheltrUtilityBalance}`);
+        
+        return {
+          totalReceived,
+          sheltrStableBalance,
+          sheltrUtilityBalance,
+          transactionCount: donationCount,
+          lastTransactionDate
+        };
+      } else {
+        console.warn('⚠️ User document not found, returning $0');
+        return {
+          totalReceived: 0,
+          sheltrStableBalance: 0,
+          sheltrUtilityBalance: 0,
+          transactionCount: 0,
+          lastTransactionDate: null
+        };
+      }
     } catch (error) {
       console.error('❌ Error fetching real wallet data:', error);
       return {

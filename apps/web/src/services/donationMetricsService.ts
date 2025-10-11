@@ -9,88 +9,61 @@ export interface DonationMetrics {
 
 /**
  * Unified donation metrics service to ensure consistent data across all pages
- * Uses the same comprehensive query strategy as the participant public page
+ * FIXED: Now queries demo_donations collection for accurate beta testing metrics
+ * Participant ID must be Firebase UID (e.g., dFJNlIh2g4R8vAvxvIvWZtwu8zw1)
  */
-export const getDonationMetrics = async (participantId: string): Promise<DonationMetrics> => {
+export const getDonationMetrics = async (participantIdOrSlug: string): Promise<DonationMetrics> => {
   try {
-    console.log(`🔍 [DONATION-METRICS] Fetching donation data for: ${participantId}`);
+    console.log(`🔍 [DONATION-METRICS] Fetching donation data for: ${participantIdOrSlug}`);
+    
+    // Map slug to Firebase UID if needed (for backwards compatibility)
+    let participantUid = participantIdOrSlug;
+    if (participantIdOrSlug === 'michael-rodriguez' || participantIdOrSlug === 'demo-participant-001') {
+      participantUid = 'dFJNlIh2g4R8vAvxvIvWZtwu8zw1'; // Michael's Firebase UID
+      console.log(`🔄 [DONATION-METRICS] Mapped slug '${participantIdOrSlug}' to UID: ${participantUid}`);
+    }
+    
+    // Query demo_donations collection with Firebase UID
+    console.log(`🔍 [DONATION-METRICS] Querying demo_donations for participant: ${participantUid}`);
+    const demoDonationsQuery = query(
+      collection(db, 'demo_donations'),
+      where('participant_id', '==', participantUid),
+      where('status', '==', 'completed')
+    );
+    const demoDonationsSnapshot = await getDocs(demoDonationsQuery);
+    console.log(`📊 [DONATION-METRICS] Found ${demoDonationsSnapshot.size} completed donations in demo_donations`);
     
     let total_received = 0;
     let donation_count = 0;
     
-    // For michael-rodriguez, also check for donations with different IDs for backwards compatibility
-    const participantIds = [participantId];
-    if (participantId === 'michael-rodriguez') {
-      participantIds.push('demo-participant-001', 'michael-rodriguez');
-    } else if (participantId === 'demo-participant-001') {
-      participantIds.push('michael-rodriguez');
-    }
-    
-    // ALWAYS include michael-rodriguez for our test donations
-    if (!participantIds.includes('michael-rodriguez')) {
-      participantIds.push('michael-rodriguez');
-    }
-    
-    // Comprehensive approach: Query ALL Old Brewery Mission donations, then filter by participant
-    console.log(`🔍 [DONATION-METRICS] Querying ALL Old Brewery Mission donations...`);
-    
-    // Query the tenant donation collection for Old Brewery Mission
-    const tenantDonationsQuery = query(
-      collection(db, 'tenants/YDJCJnuLGMC9mWOWDSOa/donations'),
-      where('participant_id', 'in', participantIds),
-      where('status', '==', 'completed')
-    );
-    const tenantDonationsSnapshot = await getDocs(tenantDonationsQuery);
-    console.log(`📊 [DONATION-METRICS] Found ${tenantDonationsSnapshot.size} completed donations in tenant collection`);
-    
-    // Process donations from tenant collection
-    const processedDonationIds = new Set<string>(); // Prevent double-counting
-    
-    console.log(`🔄 [DONATION-METRICS] Processing donations from tenant collection...`);
-    
-    tenantDonationsSnapshot.docs.forEach(doc => {
-      // Skip if we've already processed this donation
-      if (processedDonationIds.has(doc.id)) {
-        console.log(`⏭️ [DONATION-METRICS] Skipped duplicate donation ${doc.id}`);
-        return;
-      }
-      
+    // Process donations - sum up DIRECT amounts (80% of each donation)
+    demoDonationsSnapshot.docs.forEach(doc => {
       const donationData = doc.data();
-      const donationParticipantId = donationData?.participant_id;
+      const amount = donationData.amount || {};
       
-      // Only count donations for this specific participant
-      const isForThisParticipant = participantIds.includes(donationParticipantId);
-      
-      console.log(`💰 [DONATION-METRICS] Processing donation:`, {
-        id: doc.id,
-        participant_id: donationParticipantId,
-        shelter_id: donationData?.shelter_id,
-        isForThisParticipant
+      console.log(`💰 [DONATION-METRICS] Processing donation ${doc.id}:`, {
+        participant_id: donationData.participant_id,
+        amount: amount,
+        breakdown: amount.breakdown
       });
       
-      if (isForThisParticipant) {
-        const amount = donationData.amount || {};
-        
-        // Handle different amount formats
-        let donationValue = 0;
-        if (typeof amount === 'object') {
-          donationValue = amount.total || amount.amount || 0;
-        } else {
-          donationValue = amount || 0;
-        }
-        
-        console.log(`💵 [DONATION-METRICS] Donation value: ${donationValue} for participant ${donationParticipantId}`);
-        if (donationValue > 0) {
-          total_received += donationValue;
-          donation_count++;
-          processedDonationIds.add(doc.id); // Mark as processed
-          console.log(`✅ [DONATION-METRICS] Added $${donationValue}, total now: $${total_received}`);
-        }
+      // Get DIRECT amount (80%) from breakdown, fallback to total if breakdown missing
+      let donationValue = 0;
+      if (amount.breakdown?.direct) {
+        donationValue = amount.breakdown.direct; // Use 80% direct amount
+      } else if (amount.total) {
+        // Fallback: calculate 80% if breakdown missing
+        donationValue = Math.round(amount.total * 0.80 * 100) / 100;
+      }
+      
+      if (donationValue > 0) {
+        total_received += donationValue;
+        donation_count++;
+        console.log(`✅ [DONATION-METRICS] Added $${donationValue} (direct amount), total now: $${total_received}`);
       }
     });
     
-    console.log(`💰 [DONATION-METRICS] Final metrics for ${participantId}: $${total_received} from ${donation_count} donations`);
-    console.log(`💰 [DONATION-METRICS] Checked participant IDs:`, participantIds);
+    console.log(`💰 [DONATION-METRICS] Final metrics for ${participantIdOrSlug}: $${total_received} from ${donation_count} donations`);
     
     return {
       total_received,
@@ -99,7 +72,7 @@ export const getDonationMetrics = async (participantId: string): Promise<Donatio
     };
     
   } catch (error) {
-    console.error(`❌ Error fetching donation metrics for ${participantId}:`, error);
+    console.error(`❌ Error fetching donation metrics for ${participantIdOrSlug}:`, error);
     return {
       total_received: 0,
       donation_count: 0,

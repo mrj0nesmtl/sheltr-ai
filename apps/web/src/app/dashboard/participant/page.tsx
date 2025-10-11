@@ -136,6 +136,7 @@ const mockTransactions = [
 // Interface for participant data
 interface ParticipantData {
   totalReceived: number;
+  housingFundBalance: number; // 15% housing fund
   donationCount: number;
   servicesCompleted: number;
   qrScans: number;
@@ -149,77 +150,74 @@ export default function ParticipantDashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Function to get participant's real donation data from Firestore
+  // Function to get participant's real donation data from user doc (FAST & ACCURATE)
   const getParticipantRealData = async (participantId: string) => {
     try {
       console.log(`🔍 [PARTICIPANT-DASHBOARD] Fetching real donation data for: ${participantId}`);
       
-      let totalReceived = 0;
-      let donationCount = 0;
-      let lastDonationDate = new Date(0); // Unix epoch start
+      // FIRST: Read from user document (fastest, single query)
+      const { doc, getDoc } = await import('firebase/firestore');
+      const userRef = doc(db, 'users', participantId);
+      const userSnap = await getDoc(userRef);
       
-      // Query BOTH collections: demo_donations AND tenants/.../donations
-      
-      // 1. Query demo_donations
-      const demoQuery = query(
-        collection(db, 'demo_donations'),
-        where('participant_id', '==', participantId),
-        where('status', '==', 'completed')
-      );
-      const demoSnapshot = await getDocs(demoQuery);
-      
-      demoSnapshot.docs.forEach(doc => {
-        const donationData = doc.data();
-        const amount = donationData.amount?.total || donationData.amount || 0;
-        if (amount > 0) {
-          totalReceived += amount;
-          donationCount++;
+      if (userSnap.exists()) {
+        const userData = userSnap.data();
+        const totalReceived = userData.total_received || 0;
+        const housingFundBalance = userData.housing_fund_balance || 0;
+        const donationCount = userData.donation_count || 0;
+        
+        console.log(`✅ [USER-DOC] Participant stats:`, {
+          totalReceived,
+          housingFundBalance,
+          donationCount
+        });
+        
+        // Query latest donation for lastDonation date
+        let lastDonationDate = new Date(0);
+        
+        try {
+          const { limit, orderBy } = await import('firebase/firestore');
+          const demoQuery = query(
+            collection(db, 'demo_donations'),
+            where('participant_id', '==', participantId),
+            where('status', '==', 'completed'),
+            orderBy('created_at', 'desc'),
+            limit(1)
+          );
+          const demoSnapshot = await getDocs(demoQuery);
           
-          const createdAt = donationData.created_at?.toDate ? donationData.created_at.toDate() : new Date(donationData.created_at);
-          if (createdAt > lastDonationDate) {
-            lastDonationDate = createdAt;
+          if (!demoSnapshot.empty) {
+            const lastDonation = demoSnapshot.docs[0].data();
+            lastDonationDate = lastDonation.created_at?.toDate ? lastDonation.created_at.toDate() : new Date(lastDonation.created_at);
           }
+        } catch (error) {
+          console.warn('⚠️ Could not fetch last donation date:', error);
         }
-      });
-      
-      console.log(`💰 [DEMO] Found ${demoSnapshot.size} completed donations in demo_donations`);
-      
-      // 2. Query tenants/YDJCJnuLGMC9mWOWDSOa/donations
-      const tenantQuery = query(
-        collection(db, 'tenants/YDJCJnuLGMC9mWOWDSOa/donations'),
-        where('participant_id', '==', participantId),
-        where('status', '==', 'completed')
-      );
-      const tenantSnapshot = await getDocs(tenantQuery);
-      
-      tenantSnapshot.docs.forEach(doc => {
-        const donationData = doc.data();
-        const amount = donationData.amount?.total || donationData.amount || 0;
-        if (amount > 0) {
-          totalReceived += amount;
-          donationCount++;
-          
-          const createdAt = donationData.created_at?.toDate ? donationData.created_at.toDate() : new Date(donationData.created_at);
-          if (createdAt > lastDonationDate) {
-            lastDonationDate = createdAt;
-          }
-        }
-      });
-      
-      console.log(`💰 [TENANT] Found ${tenantSnapshot.size} completed donations in tenant collection`);
-      console.log(`💰 [TOTAL] ${donationCount} donations totaling $${totalReceived} for ${participantId}`);
-      
-      return {
-        totalReceived,
-        donationCount,
-        servicesCompleted: 8, // Keep static for demo
-        qrScans: donationCount * 2, // Estimate QR scans as double donations
-        lastDonation: donationCount > 0 ? lastDonationDate.toLocaleDateString() : 'No donations yet'
-      };
+        
+        return {
+          totalReceived,
+          housingFundBalance,
+          donationCount,
+          servicesCompleted: 8, // Keep static for demo
+          qrScans: donationCount * 2, // Estimate QR scans as double donations
+          lastDonation: donationCount > 0 ? lastDonationDate.toLocaleDateString() : 'No donations yet'
+        };
+      } else {
+        console.warn('⚠️ User document not found, falling back to $0');
+        return {
+          totalReceived: 0,
+          housingFundBalance: 0,
+          donationCount: 0,
+          servicesCompleted: 0,
+          qrScans: 0,
+          lastDonation: 'No donations yet'
+        };
+      }
     } catch (error) {
       console.error('❌ Error fetching participant real data:', error);
       return {
         totalReceived: 0,
+        housingFundBalance: 0,
         donationCount: 0,
         servicesCompleted: 0,
         qrScans: 0,
@@ -296,11 +294,8 @@ export default function ParticipantDashboard() {
 
   // Get participant ID for data queries
   const getParticipantId = () => {
-    // For Michael Rodriguez, use consistent ID across platform
-    if (user?.email === 'participant@example.com' || user?.email === 'michael.rodriguez@example.com') {
-      return 'michael-rodriguez';
-    }
-    // For other participants, derive from email or user ID
+    // ALWAYS use Firebase UID for consistent data access
+    // The getParticipantRealData function expects UID, not slug
     return user?.uid || 'demo-participant-001';
   };
 
@@ -426,7 +421,7 @@ export default function ParticipantDashboard() {
                 <CreditCard className="h-5 w-5 text-green-600" />
               </div>
               <div className="text-2xl font-bold text-green-600 dark:text-green-400">
-                ${participantData ? Math.round(participantData.totalReceived * 0.80).toLocaleString() : 0}
+                ${participantData?.totalReceived?.toLocaleString() || 0}
               </div>
               <div className="text-xs text-muted-foreground mt-1">
                 80% of donations • Virtual card ready
@@ -443,7 +438,7 @@ export default function ParticipantDashboard() {
                 <Home className="h-5 w-5 text-blue-600" />
               </div>
               <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                ${participantData ? Math.round(participantData.totalReceived * 0.15).toLocaleString() : 0}
+                ${participantData?.housingFundBalance?.toLocaleString() || 0}
               </div>
               <div className="text-xs text-muted-foreground mt-1">
                 15% of donations • Coinbase institutional

@@ -5,7 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Mail, Send, CheckCircle, Loader2, Sparkles } from 'lucide-react';
-import { addNewsletterSignup } from '@/services/newsletterService';
+import { UnifiedInquiryService } from '@/services/unifiedInquiryService';
 
 interface NewsletterSignupProps {
   source: 'landing' | 'about' | 'team' | 'other';
@@ -39,23 +39,30 @@ export default function NewsletterSignup({ source, variant = 'default', classNam
     setErrorMessage('');
 
     try {
-      console.log('📧 Attempting newsletter signup:', { email, name, source });
-      const result = await addNewsletterSignup(email, name, source);
-      console.log('📧 Newsletter signup result:', result);
+      console.log('📧 Attempting newsletter signup via UnifiedInquiryService:', { email, name, source });
       
-      if (result.success) {
-        setIsSuccess(true);
-        setEmail('');
-        setName('');
-        
-        // Reset success message after 5 seconds
-        setTimeout(() => {
-          setIsSuccess(false);
-        }, 5000);
-      } else {
-        console.error('❌ Newsletter signup failed:', result.message);
-        setErrorMessage(result.message);
-      }
+      // Get current page for tracking
+      const currentPage = typeof window !== 'undefined' 
+        ? window.location.pathname.replace('/', '') || 'landing'
+        : 'landing';
+      
+      await UnifiedInquiryService.createNewsletterSignup({
+        email: email.trim(),
+        name: name.trim() || undefined,
+        source: source,
+        page: currentPage
+      });
+      
+      console.log('✅ Newsletter signup successful');
+      setIsSuccess(true);
+      setEmail('');
+      setName('');
+      
+      // Reset success message after 5 seconds
+      setTimeout(() => {
+        setIsSuccess(false);
+      }, 5000);
+      
     } catch (error: any) {
       console.error('❌ Newsletter signup exception:', error);
       setErrorMessage(error?.message || 'An error occurred. Please try again.');

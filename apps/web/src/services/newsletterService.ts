@@ -62,8 +62,13 @@ export async function addNewsletterSignup(
     
     console.log('✅ Newsletter signup added:', docRef.id);
 
-    // Create notification for admins
-    await createAdminNotification(email, name, source);
+    // Create notification for admins (non-blocking, fails silently if user not authenticated)
+    try {
+      await createAdminNotification(email, name, source);
+    } catch (notifError) {
+      console.warn('⚠️ Could not create admin notification (user may not be authenticated):', notifError);
+      // Don't fail the whole signup if notification fails
+    }
 
     return {
       success: true,

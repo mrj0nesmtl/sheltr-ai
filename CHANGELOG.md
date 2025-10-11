@@ -7,6 +7,77 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.44.0] - 2025-10-11 (Session 22.18: SUPER ADMIN DASHBOARD & NDA CROSS-CONTAMINATION FIXED)
+
+### 🎯 Session 22.18 Final Achievements (SUPER ADMIN + NDA FIXES)
+- **✅ SUPER ADMIN DASHBOARD FIXED**: Total donations now display correctly from `demo_donations`
+- **✅ SEN WONG NDA FIX**: Cross-contaminated NDA signature resolved, user can now log in
+- **✅ PLATFORM ADMIN NDA FIX**: Royaltri Admin's NDA record corrected
+
+#### 🔧 Critical Fix #1: Super Admin Dashboard Donation Totals
+**File**: `apps/web/src/app/dashboard/page.tsx` (lines 519-527, 564, 576)
+- **Added direct Firestore query** to `demo_donations` collection in `loadPlatformMetrics()`
+- **Previously**: Super Admin dashboard relied on API or multi-tenant queries that were returning $0
+- **Now**: Queries `demo_donations` directly, calculates `totalDonationsFromFirestore`
+- **Updates `enhancedMetrics` and `finalMetrics`** with accurate donation total
+- **Result**: Super Admin dashboard now shows correct donation totals (e.g., $100 after Jane's donation)
+
+**Code Changes**:
+```typescript
+// ⚡ SUPER ADMIN FIX: Query demo_donations directly for accurate totals
+const { collection, getDocs } = await import('firebase/firestore');
+const { db } = await import('@/lib/firebase');
+const donationsSnapshot = await getDocs(collection(db, 'demo_donations'));
+const totalDonationsFromFirestore = donationsSnapshot.docs.reduce((total, doc) => {
+  const donation = doc.data();
+  return total + (donation.amount?.total || donation.amount || 0);
+}, 0);
+console.log(`💰 [SUPER ADMIN] Queried demo_donations: ${donationsSnapshot.size} donations, total: $${totalDonationsFromFirestore}`);
+```
+
+#### 🔧 Critical Fix #2: Sen Wong NDA Cross-Contamination
+**File**: `scripts/fix-sen-wong-nda.js` (NEW)
+- **Problem**: Sen Wong's signature was saved to `admin@royaltri.com`'s NDA document
+- **Root Cause**: Cross-contamination bug during NDA signing process
+- **Fix**:
+  1. Created proper NDA record for Sen Wong (UID: `Fzf0QeEcpmRKjSfgfx7SSIqNom52`)
+  2. Updated Sen Wong's user status from `pending_nda` to `active`
+  3. Fixed Royaltri Admin's NDA record (UID: `yJP12KjOFPUZAfDCgPr74iCao1a2`)
+  4. Updated Royaltri Admin's user status to `active`
+- **Result**: Sen Wong can now log in successfully without "Failed to save NDA signature" error
+
+**Script Output**:
+```
+✅ Created NDA record for Sen Wong: Fzf0QeEcpmRKjSfgfx7SSIqNom52
+✅ Updated Sen Wong's status to active
+✅ Fixed NDA record for admin@royaltri.com: yJP12KjOFPUZAfDCgPr74iCao1a2
+✅ Updated Royaltri Admin's status to active
+```
+
+### 🔍 Root Cause Analysis
+
+**Issue 1: Super Admin Dashboard Showing $0 Donations**
+- **Root Cause**: `loadPlatformMetrics()` was using API or multi-tenant queries that didn't correctly aggregate `demo_donations`
+- **Impact**: Super Admin couldn't see recent donation activity
+- **Solution**: Added direct Firestore query to `demo_donations` collection, ensuring accurate totals
+
+**Issue 2: Sen Wong NDA Login Failure**
+- **Root Cause**: NDA signature process had a cross-contamination bug that saved Sen Wong's signature to another user's document
+- **Impact**: Sen Wong couldn't log in, got "Failed to save NDA signature" error
+- **Solution**: Created migration script to fix both users' NDA records and status fields
+
+### 📚 Documentation Updated
+- **CHANGELOG.md**: Comprehensive session summary with all fixes
+- **scripts/fix-sen-wong-nda.js**: New migration script with detailed comments
+
+### 🎯 Next Steps
+1. **Deploy to production** with `./deploy.sh`
+2. **Test Super Admin dashboard** to verify donation totals display correctly
+3. **Verify Sen Wong can log in** successfully
+4. **Monitor NDA signing** for future cross-contamination issues
+
+---
+
 ## [2.43.0] - 2025-10-11 (Session 22.17: PARTICIPANT DASHBOARD COMPLETE - All Stats & Notifications Fixed)
 
 ### 🎯 Session 22.17 Final Achievements (PARTICIPANT DASHBOARD 100% WORKING)

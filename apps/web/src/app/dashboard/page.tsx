@@ -515,6 +515,17 @@ The permissions issue might be elsewhere. Check console for other errors.`);
       
       // PRODUCTION FIX: Always use multi-tenant platform metrics for consistency
       console.log('🏢 [PRODUCTION FIX] Using multi-tenant platform metrics for data consistency...');
+      
+      // ⚡ SUPER ADMIN FIX: Query demo_donations directly for accurate totals
+      const { collection, getDocs } = await import('firebase/firestore');
+      const { db } = await import('@/lib/firebase');
+      const donationsSnapshot = await getDocs(collection(db, 'demo_donations'));
+      const totalDonationsFromFirestore = donationsSnapshot.docs.reduce((total, doc) => {
+        const donation = doc.data();
+        return total + (donation.amount?.total || donation.amount || 0);
+      }, 0);
+      console.log(`💰 [SUPER ADMIN] Queried demo_donations: ${donationsSnapshot.size} donations, total: $${totalDonationsFromFirestore}`);
+      
       const [metrics, investorMetrics, realPlatformAdmins] = await Promise.all([
         getPlatformMetricsFromTenants().then(result => {
           console.log('🔍 [DEEP DEBUG] getPlatformMetricsFromTenants returned platformAdmins:', result.platformAdmins);
@@ -548,20 +559,24 @@ The permissions issue might be elsewhere. Check console for other errors.`);
         investorAccessAttempts: investorMetrics.totalAttempts,
         investorAccessLogins: investorMetrics.successfulLogins,
         // CONSISTENCY FIX: Use real platform admin count from User Management function
-        platformAdmins: correctPlatformAdminCount
+        platformAdmins: correctPlatformAdminCount,
+        // ⚡ SUPER ADMIN FIX: Use accurate donation total from demo_donations
+        totalDonations: totalDonationsFromFirestore
       };
       
       console.log(`🔧 [CONSISTENCY FIX] Platform admin count corrected: ${metrics.platformAdmins} → ${correctPlatformAdminCount} (from ${realPlatformAdmins.length} real admins)`);
+      console.log(`💰 [SUPER ADMIN FIX] Total donations updated: ${metrics.totalDonations} → $${totalDonationsFromFirestore}`);
       console.log(`🔍 [DEBUG] Real platform admins found:`, realPlatformAdmins.map(admin => `${admin.firstName} ${admin.lastName} (${admin.email})`));
       console.log(`🔍 [DEBUG] Enhanced metrics platformAdmins:`, enhancedMetrics.platformAdmins);
       
       // Use the corrected platform admin count from User Management function
       const finalMetrics = {
         ...enhancedMetrics,
-        platformAdmins: realPlatformAdmins.length // Use real count from getPlatformAdmins()
+        platformAdmins: realPlatformAdmins.length, // Use real count from getPlatformAdmins()
+        totalDonations: totalDonationsFromFirestore // ⚡ Ensure donation total is preserved
       };
       
-      console.log(`🚨 [FINAL DEBUG] Setting state with platformAdmins: ${finalMetrics.platformAdmins}`);
+      console.log(`🚨 [FINAL DEBUG] Setting state with platformAdmins: ${finalMetrics.platformAdmins}, totalDonations: $${finalMetrics.totalDonations}`);
       setPlatformMetrics(finalMetrics);
       console.log('✅ [SESSION 13] Multi-tenant platform metrics loaded with investor access:', finalMetrics);
     } catch (error) {

@@ -7,6 +7,106 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.48.0] - 2025-10-11 (Session 22.20: EMAIL COLLECTION SYSTEM FIX)
+
+### 🎯 Session 22.20 Final Achievements (EMAIL SIGNUP SYSTEM RESTORATION)
+- **✅ NEWSLETTER SIGNUP FIXED**: All public email touch points now working
+- **✅ UNIFIED INQUIRY SERVICE IMPLEMENTED**: All emails route to `contact_inquiries` collection
+- **✅ ADMIN NOTIFICATIONS RESTORED**: All forms trigger proper admin notifications
+- **✅ SYSTEM DOCUMENTATION CREATED**: Comprehensive email collection audit completed
+
+#### 🐛 Bug Fix: Newsletter Signup Component Not Working
+**Root Cause**: 
+- `NewsletterSignup.tsx` component was using **legacy** `newsletterService.ts`
+- Legacy service was writing to old `newsletter_signups` collection
+- Migration to `UnifiedInquiryService` was documented but **never implemented** in the component
+
+**Files Modified**:
+- `apps/web/src/components/NewsletterSignup.tsx` (lines 8, 41-71)
+- `apps/web/src/services/newsletterService.ts` (enhanced error logging)
+
+**Changes Made**:
+1. **Updated Import** (line 8)
+   ```typescript
+   // OLD:
+   import { addNewsletterSignup } from '@/services/newsletterService';
+   
+   // NEW:
+   import { UnifiedInquiryService } from '@/services/unifiedInquiryService';
+   ```
+
+2. **Updated handleSubmit Logic** (lines 41-71)
+   ```typescript
+   // OLD: Legacy method
+   const result = await addNewsletterSignup(email, name, source);
+   
+   // NEW: Unified method
+   await UnifiedInquiryService.createNewsletterSignup({
+     email: email.trim(),
+     name: name.trim() || undefined,
+     source: source,
+     page: currentPage
+   });
+   ```
+
+3. **Added Page Tracking** (lines 45-47)
+   - Automatically detects current page for analytics
+   - Tracks newsletter signups by landing/about/team pages
+
+**Impact**:
+- ✅ Newsletter signups now save to `contact_inquiries` collection
+- ✅ Admin notifications properly triggered for Super Admin & Platform Admin
+- ✅ All public touch points working: Landing `/`, About `/about`, Team `/team`
+- ✅ Consistent with other email collection forms (contact, docs, shelters)
+
+#### 📊 Email Collection System Overview
+**Collections**:
+1. **`contact_inquiries`** (Unified Collection)
+   - Contact form submissions (`inquiry_type: 'contact_form'`)
+   - Newsletter signups (`inquiry_type: 'newsletter_signup'`)
+   - Partnership waitlist (`inquiry_type: 'partnership_waitlist'`)
+   - App notifications (`inquiry_type: 'app_notification'`)
+   - Investor inquiries (`inquiry_type: 'investor_inquiry'`)
+
+2. **`shelter_email_signups`** (Shelter-Specific)
+   - Email signups from individual shelter public pages
+   - Notifies shelter admin + platform admins
+
+3. **`newsletter_signups`** (Legacy - Migrated)
+   - Old collection, data migrated to `contact_inquiries`
+   - Maintained for backward compatibility
+
+**Active Email Touch Points** (All ✅ Working):
+- `/` - Landing page newsletter signup
+- `/about` - About page newsletter signup
+- `/team` - Team page newsletter signup
+- `/contact` - Contact form
+- `/docs` - Documentation page CTA
+- `/scan-give` - Mobile app notification request
+- `/shelters` - Partnership waitlist
+- `/[slug]` - Individual shelter email signups (e.g., `/old-brewery-mission`)
+
+**Admin Dashboard Access**:
+- Super Admin: `/dashboard/notifications` → "Contact Inquiries" tab
+- Platform Admin: `/dashboard/notifications` → "Contact Inquiries" tab
+- Shelter Admin: `/dashboard/shelter-admin/notifications` → Email signups for their shelter
+
+#### 📚 Documentation Created
+**New File**: `docs/04-development/SHELTER-EMAIL-SIGNUP-SYSTEM.md`
+- Complete email collection system architecture
+- Service layer documentation
+- Firestore rules for email collections
+- Admin notification flow
+- Testing checklist
+- Migration notes
+
+**Reference**: `docs/10-resources/public-forms-routing-audit.md`
+- Comprehensive audit of all public forms
+- Database collection mapping
+- Migration script documentation
+
+---
+
 ## [2.47.0] - 2025-10-11 (Session 22.19: DIRECT SHELTER DONATIONS + PARTICIPANT PUBLIC PAGE LINKS)
 
 ### 🎯 Session 22.19 Final Achievements (SHELTER DONATIONS + UX ENHANCEMENTS)

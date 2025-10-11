@@ -7,10 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [2.44.0] - 2025-10-11 (Session 22.18: SUPER ADMIN DASHBOARD & NDA CROSS-CONTAMINATION FIXED)
+## [2.44.0] - 2025-10-11 (Session 22.18: SUPER ADMIN DASHBOARD, SHELTER NETWORK & NDA FIXES COMPLETE)
 
-### 🎯 Session 22.18 Final Achievements (SUPER ADMIN + NDA FIXES)
+### 🎯 Session 22.18 Final Achievements (SUPER ADMIN + SHELTER NETWORK + NDA FIXES)
 - **✅ SUPER ADMIN DASHBOARD FIXED**: Total donations now display correctly from `demo_donations`
+- **✅ SHELTER NETWORK PAGE FIXED**: Shelter cards now show accurate donation totals
+- **✅ SHELTER DETAIL PAGE FIXED**: Individual shelter view shows correct donation breakdown
 - **✅ SEN WONG NDA FIX**: Cross-contaminated NDA signature resolved, user can now log in
 - **✅ PLATFORM ADMIN NDA FIX**: Royaltri Admin's NDA record corrected
 
@@ -54,6 +56,49 @@ console.log(`💰 [SUPER ADMIN] Queried demo_donations: ${donationsSnapshot.size
 ✅ Updated Royaltri Admin's status to active
 ```
 
+#### 🔧 Critical Fix #3: Shelter Network Directory Donation Totals
+**File**: `apps/web/src/app/dashboard/shelters/page.tsx` (lines 428-455)
+- **Replaced tenant-specific query** (`tenants/${tenant.id}/donations`) with `demo_donations` query
+- **Previously**: Queried empty `tenants/.../donations` subcollections, always returned $0
+- **Now**: Queries `demo_donations` collection, groups by `shelter_id`
+- **Result**: Shelter cards now show accurate donation totals (e.g., $100 for Old Brewery Mission)
+
+**Code Changes**:
+```typescript
+// ⚡ FIX: Query demo_donations collection instead of tenant collections
+const demoDonationsSnapshot = await getDocs(collection(db, 'demo_donations'));
+demoDonationsSnapshot.docs.forEach(doc => {
+  const donationData = doc.data();
+  const shelterId = donationData?.shelter_id;
+  const amount = donationData?.amount?.total || 0;
+  if (shelterId && amount > 0) {
+    donationsByShelter[shelterId] = (donationsByShelter[shelterId] || 0) + amount;
+  }
+});
+```
+
+#### 🔧 Critical Fix #4: Individual Shelter View Donation Breakdown
+**File**: `apps/web/src/app/dashboard/shelters/[shelterId]/view/client-page.tsx` (lines 101-145)
+- **Fixed field path** from `data.total_amount` to `data.amount?.total`
+- **Added comprehensive logging** for debugging donation calculations
+- **Enhanced shelter_id matching** to catch all relevant donations
+- **Previously**: Always showed $0 because field path was incorrect
+- **Now**: Shows correct breakdown (total donations, operations revenue, direct donations)
+- **Result**: Shelter detail page shows accurate financial data
+
+**Code Changes**:
+```typescript
+// ⚡ FIX: Use correct field path amount.total instead of total_amount
+const totalAmount = data.amount?.total || data.total_amount || 0;
+
+// Enhanced matching logic
+if (data.shelter_id === shelterSnap.id) {
+  const operationsFee = totalAmount * 0.05;
+  operationsRevenueTotal += operationsFee;
+  realDonationTotal += totalAmount;
+}
+```
+
 ### 🔍 Root Cause Analysis
 
 **Issue 1: Super Admin Dashboard Showing $0 Donations**
@@ -61,7 +106,13 @@ console.log(`💰 [SUPER ADMIN] Queried demo_donations: ${donationsSnapshot.size
 - **Impact**: Super Admin couldn't see recent donation activity
 - **Solution**: Added direct Firestore query to `demo_donations` collection, ensuring accurate totals
 
-**Issue 2: Sen Wong NDA Login Failure**
+**Issue 2: Shelter Network Pages Showing $0 Donations**
+- **Root Cause 1**: Shelter directory was querying empty `tenants/.../donations` subcollections instead of `demo_donations`
+- **Root Cause 2**: Shelter detail page was using incorrect field path `total_amount` instead of `amount.total`
+- **Impact**: All shelter pages showed $0 donations despite successful transactions
+- **Solution**: Updated both pages to query `demo_donations` with correct field paths
+
+**Issue 3: Sen Wong NDA Login Failure**
 - **Root Cause**: NDA signature process had a cross-contamination bug that saved Sen Wong's signature to another user's document
 - **Impact**: Sen Wong couldn't log in, got "Failed to save NDA signature" error
 - **Solution**: Created migration script to fix both users' NDA records and status fields

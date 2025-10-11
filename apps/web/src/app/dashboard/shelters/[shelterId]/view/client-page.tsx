@@ -102,9 +102,21 @@ export default function ShelterViewClient() {
           try {
             const demoDonationsRef = collection(db, 'demo_donations');
             const demoDonationsSnap = await getDocs(demoDonationsRef);
+            console.log(`💰 [SHELTER VIEW] Found ${demoDonationsSnap.size} donations in demo_donations`);
+            
             demoDonationsSnap.forEach((doc) => {
               const data = doc.data();
-              const totalAmount = data.total_amount || 0;
+              // ⚡ FIX: Use correct field path amount.total instead of total_amount
+              const totalAmount = data.amount?.total || data.total_amount || 0;
+              
+              console.log(`🔍 [DEBUG] Processing donation ${doc.id}:`, {
+                participant_id: data.participant_id,
+                shelter_id: data.shelter_id,
+                amount: totalAmount,
+                shelterParticipantIds: Array.from(shelterParticipantIds),
+                isParticipantMatch: data.participant_id && shelterParticipantIds.has(data.participant_id),
+                isShelterMatch: data.shelter_id === shelterSnap.id
+              });
               
               if (data.participant_id && shelterParticipantIds.has(data.participant_id)) {
                 // Participant donation - shelter gets 5% operations fee
@@ -112,11 +124,20 @@ export default function ShelterViewClient() {
                 operationsRevenueTotal += operationsFee;
                 realDonationTotal += totalAmount;
                 if (data.donor_id) uniqueDonors.add(data.donor_id);
+                console.log(`✅ Added participant donation: $${totalAmount}, operations fee: $${operationsFee}`);
               } else if (!data.participant_id && data.shelter_id === shelterSnap.id) {
                 // Direct donation to shelter (no participant)
                 directDonationsTotal += totalAmount;
                 realDonationTotal += totalAmount;
                 if (data.donor_id) uniqueDonors.add(data.donor_id);
+                console.log(`✅ Added direct shelter donation: $${totalAmount}`);
+              } else if (data.shelter_id === shelterSnap.id) {
+                // ⚡ FIX: Also count donations where shelter_id matches, even if participant is from another shelter
+                const operationsFee = totalAmount * 0.05;
+                operationsRevenueTotal += operationsFee;
+                realDonationTotal += totalAmount;
+                if (data.donor_id) uniqueDonors.add(data.donor_id);
+                console.log(`✅ Added shelter-matched donation: $${totalAmount}, operations fee: $${operationsFee}`);
               }
             });
           } catch (error) {

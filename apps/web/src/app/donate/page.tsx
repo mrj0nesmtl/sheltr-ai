@@ -206,7 +206,15 @@ function DonatePageContent() {
   }, [participantId, isDemo]);
 
   const handleDonate = async () => {
-    if (!participant) return;
+    // Validate we have either participant or shelter
+    if (donationType === 'participant' && !participant) {
+      alert('Please select a participant to support.');
+      return;
+    }
+    if (donationType === 'shelter' && !shelter) {
+      alert('Please select a shelter to support.');
+      return;
+    }
     
     setProcessing(true);
     
@@ -219,65 +227,132 @@ function DonatePageContent() {
         return;
       }
 
-      // Create payment session with donor information
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/demo/donations/payment-session`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          participant_id: participant.id,
+      if (donationType === 'shelter') {
+        // 🆕 SHELTER DONATION FLOW
+        console.log('💚 Creating shelter donation:', {
+          shelter_id: shelter.id,
           amount: donationAmount,
-          demo_session_id: searchParams.get('session_id') || undefined,
-          donor_info: user ? {
-            donor_id: user.uid,
-            name: user.displayName || user.email || 'Anonymous Donor',
-            email: user.email || 'anonymous@sheltr.ai'
-          } : undefined,
-        }),
-      });
+          donor: user?.displayName || 'Guest'
+        });
 
-      const result = await response.json();
-
-      if (result.success) {
-        // In a real implementation, this would redirect to Adyen payment page
-        // For demo, simulate successful payment and redirect to success page
-        console.log('Demo payment session created:', result.data);
-        
-        // Simulate successful payment by calling the webhook simulation endpoint
-        try {
-          const simulateResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/demo/donations/simulate-success/${result.data.donation_id}`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
+        // Create payment session for shelter donation
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/demo/donations/payment-session`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            shelter_id: shelter.id,
+            amount: donationAmount,
+            donation_type: 'shelter',
+            donor_info: user ? {
+              donor_id: user.uid,
+              name: user.displayName || user.email || 'Anonymous Donor',
+              email: user.email || 'anonymous@sheltr.ai'
+            } : {
+              name: 'Anonymous Donor',
+              email: 'anonymous@sheltr.ai'
             },
-          });
+          }),
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          console.log('✅ Shelter payment session created:', result.data);
           
-          if (simulateResponse.ok) {
-            console.log('✅ Donation success simulated, updating participant stats...');
-          } else {
-            console.warn('⚠️ Failed to simulate donation success, but continuing...');
+          // Simulate successful payment by calling the webhook simulation endpoint
+          try {
+            const simulateResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/demo/donations/simulate-success/${result.data.donation_id}`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            });
+            
+            if (simulateResponse.ok) {
+              console.log('✅ Shelter donation success simulated');
+            } else {
+              console.warn('⚠️ Failed to simulate donation success, but continuing...');
+            }
+          } catch (simulateError) {
+            console.warn('⚠️ Error simulating donation success:', simulateError);
           }
-        } catch (simulateError) {
-          console.warn('⚠️ Error simulating donation success:', simulateError);
+          
+          // Redirect to success page after 1 second
+          setTimeout(() => {
+            window.location.href = `/donation/success?demo=true&amount=${donationAmount}&shelter=${shelter.name}&reference=${result.data.reference}`;
+          }, 1000);
+        } else {
+          throw new Error(result.message || 'Payment session creation failed');
         }
-        
-        // Redirect to success page after 1 second
-        setTimeout(() => {
-          window.location.href = `/donation/success?demo=true&amount=${donationAmount}&participant=${participant.firstName}&reference=${result.data.reference}`;
-        }, 1000);
+
       } else {
-        throw new Error(result.message || 'Payment session creation failed');
+        // 🧑 PARTICIPANT DONATION FLOW (existing logic)
+        // Create payment session with donor information
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/demo/donations/payment-session`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            participant_id: participant.id,
+            amount: donationAmount,
+            demo_session_id: searchParams.get('session_id') || undefined,
+            donor_info: user ? {
+              donor_id: user.uid,
+              name: user.displayName || user.email || 'Anonymous Donor',
+              email: user.email || 'anonymous@sheltr.ai'
+            } : undefined,
+          }),
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          // In a real implementation, this would redirect to Adyen payment page
+          // For demo, simulate successful payment and redirect to success page
+          console.log('Demo payment session created:', result.data);
+          
+          // Simulate successful payment by calling the webhook simulation endpoint
+          try {
+            const simulateResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/demo/donations/simulate-success/${result.data.donation_id}`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            });
+            
+            if (simulateResponse.ok) {
+              console.log('✅ Donation success simulated, updating participant stats...');
+            } else {
+              console.warn('⚠️ Failed to simulate donation success, but continuing...');
+            }
+          } catch (simulateError) {
+            console.warn('⚠️ Error simulating donation success:', simulateError);
+          }
+          
+          // Redirect to success page after 1 second
+          setTimeout(() => {
+            window.location.href = `/donation/success?demo=true&amount=${donationAmount}&participant=${participant.firstName}&reference=${result.data.reference}`;
+          }, 1000);
+        } else {
+          throw new Error(result.message || 'Payment session creation failed');
+        }
       }
     } catch (error) {
       console.error('Payment error:', error);
       
       // In demo mode, if payment fails, offer to skip to success
-      if (isDemo) {
+      if (isDemo || donationType === 'shelter') {
         const skipToSuccess = confirm('Demo payment failed (expected without live Adyen). Skip to success page to see full flow?');
         if (skipToSuccess) {
           const donationAmount = isCustom ? parseFloat(customAmount) : selectedAmount;
-          window.location.href = `/donation/success?demo=true&amount=${donationAmount}&participant=${participant.firstName}&reference=DEMO-FALLBACK-${Date.now()}`;
+          if (donationType === 'shelter') {
+            window.location.href = `/donation/success?demo=true&amount=${donationAmount}&shelter=${shelter.name}&reference=DEMO-FALLBACK-${Date.now()}`;
+          } else {
+            window.location.href = `/donation/success?demo=true&amount=${donationAmount}&participant=${participant.firstName}&reference=DEMO-FALLBACK-${Date.now()}`;
+          }
           return;
         }
       }
@@ -462,7 +537,7 @@ function DonatePageContent() {
                       <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
                         <Building className="h-6 w-6 text-primary" />
                       </div>
-                      <div>
+                      <div className="flex-1">
                         <h2 className="text-2xl font-bold">
                           Support {shelter.name}
                         </h2>
@@ -470,6 +545,16 @@ function DonatePageContent() {
                           {shelter.city}, {shelter.province}
                         </p>
                       </div>
+                      {/* Capacity Badge - Moved to header */}
+                      {shelter.capacity && (
+                        <div className="flex items-center gap-2 bg-green-50 dark:bg-green-900/20 px-4 py-2 rounded-lg border border-green-200 dark:border-green-800">
+                          <Home className="h-5 w-5 text-green-600" />
+                          <div className="text-right">
+                            <div className="text-2xl font-bold text-green-600">{shelter.capacity}</div>
+                            <div className="text-xs text-muted-foreground">beds</div>
+                          </div>
+                        </div>
+                      )}
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
@@ -496,19 +581,6 @@ function DonatePageContent() {
                               {service}
                             </Badge>
                           ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Capacity */}
-                    {shelter.capacity && (
-                      <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-4 mt-4 border-t">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <Home className="h-5 w-5 text-green-600" />
-                            <span className="text-sm font-medium">Shelter Capacity</span>
-                          </div>
-                          <span className="text-2xl font-bold text-green-600">{shelter.capacity} beds</span>
                         </div>
                       </div>
                     )}

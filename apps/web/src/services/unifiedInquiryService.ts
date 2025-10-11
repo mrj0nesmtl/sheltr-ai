@@ -75,10 +75,10 @@ export class UnifiedInquiryService {
     message: string;
     user_id?: string;
   }): Promise<string> {
+    // Build inquiry object, excluding undefined fields
     const inquiry: UnifiedInquiry = {
       name: data.name,
       email: data.email,
-      organization: data.organization,
       subject: data.subject,
       message: data.message,
       inquiry_type: 'contact_form',
@@ -86,13 +86,16 @@ export class UnifiedInquiryService {
       priority: data.inquiry_type === 'partnership' || data.inquiry_type === 'investor' ? 'high' : 'normal',
       status: 'new',
       responded: false,
-      user_id: data.user_id,
-      user_agent: typeof navigator !== 'undefined' ? navigator.userAgent : undefined,
-      page_url: typeof window !== 'undefined' ? window.location.href : undefined,
-      referrer: typeof document !== 'undefined' ? document.referrer : undefined,
       created_at: serverTimestamp(),
       updated_at: serverTimestamp()
     };
+    
+    // Only add optional fields if they have values
+    if (data.organization) inquiry.organization = data.organization;
+    if (data.user_id) inquiry.user_id = data.user_id;
+    if (typeof navigator !== 'undefined' && navigator.userAgent) inquiry.user_agent = navigator.userAgent;
+    if (typeof window !== 'undefined' && window.location.href) inquiry.page_url = window.location.href;
+    if (typeof document !== 'undefined' && document.referrer) inquiry.referrer = document.referrer;
 
     const docRef = await addDoc(collection(db, 'contact_inquiries'), inquiry);
     
@@ -118,8 +121,8 @@ export class UnifiedInquiryService {
       throw new Error('This email is already subscribed to our newsletter');
     }
 
+    // Build inquiry object, excluding undefined fields (Firestore doesn't allow undefined)
     const inquiry: UnifiedInquiry = {
-      name: data.name,
       email: data.email.toLowerCase(),
       subject: 'Newsletter Signup',
       message: `User signed up for newsletter updates from ${data.page}`,
@@ -128,13 +131,16 @@ export class UnifiedInquiryService {
       priority: 'low',
       status: 'new',
       responded: false,
-      user_id: data.user_id,
-      user_agent: typeof navigator !== 'undefined' ? navigator.userAgent : undefined,
-      page_url: typeof window !== 'undefined' ? window.location.href : undefined,
-      referrer: typeof document !== 'undefined' ? document.referrer : undefined,
       created_at: serverTimestamp(),
       updated_at: serverTimestamp()
     };
+    
+    // Only add optional fields if they have values
+    if (data.name) inquiry.name = data.name;
+    if (data.user_id) inquiry.user_id = data.user_id;
+    if (typeof navigator !== 'undefined' && navigator.userAgent) inquiry.user_agent = navigator.userAgent;
+    if (typeof window !== 'undefined' && window.location.href) inquiry.page_url = window.location.href;
+    if (typeof document !== 'undefined' && document.referrer) inquiry.referrer = document.referrer;
 
     const docRef = await addDoc(collection(db, 'contact_inquiries'), inquiry);
     
@@ -154,10 +160,9 @@ export class UnifiedInquiryService {
     name?: string;
     user_id?: string;
   }): Promise<string> {
+    // Build inquiry object, excluding undefined fields
     const inquiry: UnifiedInquiry = {
-      name: data.name,
       email: data.email,
-      organization: data.organization,
       subject: 'Partnership Waitlist',
       message: `Organization interested in partnering with SHELTR. Signed up for partnership waitlist from ${data.source}`,
       inquiry_type: 'partnership_waitlist',
@@ -165,13 +170,17 @@ export class UnifiedInquiryService {
       priority: 'high',
       status: 'new',
       responded: false,
-      user_id: data.user_id,
-      user_agent: typeof navigator !== 'undefined' ? navigator.userAgent : undefined,
-      page_url: typeof window !== 'undefined' ? window.location.href : undefined,
-      referrer: typeof document !== 'undefined' ? document.referrer : undefined,
       created_at: serverTimestamp(),
       updated_at: serverTimestamp()
     };
+    
+    // Only add optional fields if they have values
+    if (data.name) inquiry.name = data.name;
+    if (data.organization) inquiry.organization = data.organization;
+    if (data.user_id) inquiry.user_id = data.user_id;
+    if (typeof navigator !== 'undefined' && navigator.userAgent) inquiry.user_agent = navigator.userAgent;
+    if (typeof window !== 'undefined' && window.location.href) inquiry.page_url = window.location.href;
+    if (typeof document !== 'undefined' && document.referrer) inquiry.referrer = document.referrer;
 
     const docRef = await addDoc(collection(db, 'contact_inquiries'), inquiry);
     
@@ -190,8 +199,8 @@ export class UnifiedInquiryService {
     name?: string;
     user_id?: string;
   }): Promise<string> {
+    // Build inquiry object, excluding undefined fields
     const inquiry: UnifiedInquiry = {
-      name: data.name,
       email: data.email,
       subject: 'App Launch Notification',
       message: `User requested to be notified when the SHELTR mobile app launches. Signed up from ${data.source}`,
@@ -200,13 +209,16 @@ export class UnifiedInquiryService {
       priority: 'normal',
       status: 'new',
       responded: false,
-      user_id: data.user_id,
-      user_agent: typeof navigator !== 'undefined' ? navigator.userAgent : undefined,
-      page_url: typeof window !== 'undefined' ? window.location.href : undefined,
-      referrer: typeof document !== 'undefined' ? document.referrer : undefined,
       created_at: serverTimestamp(),
       updated_at: serverTimestamp()
     };
+    
+    // Only add optional fields if they have values
+    if (data.name) inquiry.name = data.name;
+    if (data.user_id) inquiry.user_id = data.user_id;
+    if (typeof navigator !== 'undefined' && navigator.userAgent) inquiry.user_agent = navigator.userAgent;
+    if (typeof window !== 'undefined' && window.location.href) inquiry.page_url = window.location.href;
+    if (typeof document !== 'undefined' && document.referrer) inquiry.referrer = document.referrer;
 
     const docRef = await addDoc(collection(db, 'contact_inquiries'), inquiry);
     
@@ -227,10 +239,9 @@ export class UnifiedInquiryService {
     source: string;
     user_id?: string;
   }): Promise<string> {
+    // Build inquiry object, excluding undefined fields
     const inquiry: UnifiedInquiry = {
-      name: data.name,
       email: data.email,
-      organization: data.organization,
       subject: 'Investor Inquiry',
       message: data.message || `Investor inquiry from ${data.source}`,
       inquiry_type: 'investor_inquiry',
@@ -238,13 +249,17 @@ export class UnifiedInquiryService {
       priority: 'high',
       status: 'new',
       responded: false,
-      user_id: data.user_id,
-      user_agent: typeof navigator !== 'undefined' ? navigator.userAgent : undefined,
-      page_url: typeof window !== 'undefined' ? window.location.href : undefined,
-      referrer: typeof document !== 'undefined' ? document.referrer : undefined,
       created_at: serverTimestamp(),
       updated_at: serverTimestamp()
     };
+    
+    // Only add optional fields if they have values
+    if (data.name) inquiry.name = data.name;
+    if (data.organization) inquiry.organization = data.organization;
+    if (data.user_id) inquiry.user_id = data.user_id;
+    if (typeof navigator !== 'undefined' && navigator.userAgent) inquiry.user_agent = navigator.userAgent;
+    if (typeof window !== 'undefined' && window.location.href) inquiry.page_url = window.location.href;
+    if (typeof document !== 'undefined' && document.referrer) inquiry.referrer = document.referrer;
 
     const docRef = await addDoc(collection(db, 'contact_inquiries'), inquiry);
     
@@ -265,8 +280,8 @@ export class UnifiedInquiryService {
     source: string;
     user_id?: string;
   }): Promise<string> {
+    // Build inquiry object, excluding undefined fields
     const inquiry: UnifiedInquiry = {
-      name: data.name,
       email: data.email,
       subject: data.subject || 'Support Request',
       message: data.message || `Support request from ${data.source}`,
@@ -275,13 +290,16 @@ export class UnifiedInquiryService {
       priority: 'normal',
       status: 'new',
       responded: false,
-      user_id: data.user_id,
-      user_agent: typeof navigator !== 'undefined' ? navigator.userAgent : undefined,
-      page_url: typeof window !== 'undefined' ? window.location.href : undefined,
-      referrer: typeof document !== 'undefined' ? document.referrer : undefined,
       created_at: serverTimestamp(),
       updated_at: serverTimestamp()
     };
+    
+    // Only add optional fields if they have values
+    if (data.name) inquiry.name = data.name;
+    if (data.user_id) inquiry.user_id = data.user_id;
+    if (typeof navigator !== 'undefined' && navigator.userAgent) inquiry.user_agent = navigator.userAgent;
+    if (typeof window !== 'undefined' && window.location.href) inquiry.page_url = window.location.href;
+    if (typeof document !== 'undefined' && document.referrer) inquiry.referrer = document.referrer;
 
     const docRef = await addDoc(collection(db, 'contact_inquiries'), inquiry);
     

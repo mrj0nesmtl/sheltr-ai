@@ -90,6 +90,52 @@ async def get_active_donation_targets():
                 except Exception as e:
                     logger.warning(f"Could not fetch shelter name for participant {doc.id}: {e}")
             
+            # Calculate actual total received from demo_donations
+            # Using SmartProof 80-15-5 model: 80% direct, 15% housing, 5% shelter
+            total_full_donations = 0
+            total_direct_amount = 0  # 80% that goes directly to participant
+            donation_count = 0
+            try:
+                donations_query = db.collection('demo_donations')\
+                    .where('participant_id', '==', doc.id)\
+                    .where('status', '==', 'completed')\
+                    .stream()
+                
+                for donation_doc in donations_query:
+                    donation_data = donation_doc.to_dict()
+                    amount = donation_data.get('amount', {})
+                    
+                    # Get breakdown if available
+                    if isinstance(amount, dict):
+                        breakdown = amount.get('breakdown', {})
+                        if breakdown and 'direct' in breakdown:
+                            # Use the 80% direct amount from breakdown
+                            direct = breakdown.get('direct', 0)
+                            total_direct_amount += direct
+                            # Calculate full amount from direct (direct / 0.80)
+                            total_full_donations += amount.get('total', direct / 0.80)
+                        else:
+                            # No breakdown, calculate 80% manually
+                            full = amount.get('total', 0)
+                            total_full_donations += full
+                            total_direct_amount += full * 0.80
+                    else:
+                        # Simple number format
+                        total_full_donations += amount
+                        total_direct_amount += amount * 0.80
+                    
+                    donation_count += 1
+                
+                logger.info(f"  💰 {data.get('firstName')} {data.get('lastName')}: ${total_direct_amount:.2f} direct (80%) from ${total_full_donations:.2f} total ({donation_count} donations)")
+            except Exception as e:
+                logger.warning(f"Could not fetch donations for participant {doc.id}: {e}")
+            
+            # Calculate housing fund as 15% of the DIRECT amount (matches frontend logic)
+            # Frontend does: housingFund = participant.total_received * 0.15
+            # where total_received is the 80% direct amount
+            housing_fund = int(total_direct_amount * 0.15)
+            housing_goal = 5000  # Standard emergency housing deposit goal
+            
             participant = {
                 'id': doc.id,
                 'name': f"{data.get('firstName', '')} {data.get('lastName', '')}".strip() or 'Anonymous',
@@ -99,9 +145,12 @@ async def get_active_donation_targets():
                 'shelter_id': data.get('shelter_id'),
                 'story': data.get('bio') or data.get('story') or 'Seeking support and assistance',
                 'goal': data.get('goal') or 'Achieving stability and independence',
-                'raised': data.get('totalReceived', 0),
-                'target': data.get('donationGoal', 2000),
-                'status': data.get('status', 'verified')
+                'raised': housing_fund,  # Housing fund (15% of direct amount)
+                'target': housing_goal,  # $5,000 emergency housing goal
+                'total_received': int(total_direct_amount),  # 80% direct amount (matches frontend)
+                'total_full_donations': int(total_full_donations),  # 100% full donation amount
+                'donation_count': donation_count,
+                'status': data.get('status', 'active')
             }
             verified_participants.append(participant)
         

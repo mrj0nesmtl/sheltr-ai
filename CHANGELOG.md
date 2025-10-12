@@ -7,6 +7,199 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.49.0] - 2025-10-12 (Session 22.21: DONOR DASHBOARD UI/UX ENHANCEMENTS)
+
+### 🎯 Session 22.21 Final Achievements (DONOR EXPERIENCE IMPROVEMENTS)
+- **✅ DONATION HISTORY FIXED**: Participant names now display correctly instead of shelter names
+- **✅ SMARTFUND BREAKDOWN CORRECTED**: Fixed $0 values, now showing actual 80-15-5 distribution
+- **✅ SORTING IMPLEMENTED**: Donations now properly sorted by timestamp (newest first)
+- **✅ QUICK STATS REDESIGNED**: Beautiful gradient cards with themed colors and contextual data
+- **✅ PAYMENT METHODS REORGANIZED**: Moved from donations to settings dashboard
+- **✅ NAVIGATION ENHANCED**: Bidirectional clickable links between donations and wallet
+- **✅ HOVER EFFECTS ADDED**: Interactive animations throughout donor dashboards
+
+#### 🎨 Major UI/UX Overhaul: Donor Donations Dashboard
+
+**1. Fixed Donation History Display Issues** 🐛
+- **Participant Name Display**: Changed from showing shelter name to participant name for direct donations
+  - Updated `platformMetrics.ts` to use `donation.participant_name` as primary display field
+  - Fallback to `donation.shelter_name` for shelter-only donations
+- **SmartFund Breakdown**: Fixed $0 values issue
+  - Changed from non-existent `smartfund_distribution` to `amount.breakdown`
+  - Now correctly displays: `$20 direct, $3.75 housing` instead of `$0 direct, $0 housing`
+- **Sorting**: Implemented proper timestamp-based sorting
+  - Added `timestamp` field to `DonationRecord` interface
+  - Sort by numeric timestamp instead of string dates
+  - Ensures newest donations always appear first
+
+**2. Redesigned Quick Stats Cards** 🎨
+- **Gradient Backgrounds**: Each card has themed gradient (purple, green, blue, orange)
+- **Icon Repositioning**: Moved to top-right in circular badges
+- **Enhanced Typography**: Increased number size from `text-2xl` to `text-3xl`
+- **Contextual Footer**: Added meaningful metrics
+  - Total Donated: "Tax deductible: $625"
+  - Active Recurring: "Consistent support"
+  - Total Donations: "Across 1 shelters"
+  - This Year: "Year-to-date impact"
+- **Responsive Grid**: Mobile (1 col) → Tablet (2 col) → Desktop (4 col)
+- **Dark Mode**: Proper gradient overlays and themed borders
+
+**3. Compacted Donation History Items** 📋
+- **Reduced Font Sizes**: Amount badges and labels now more compact
+- **Better Layout**: Amount + badge inline, SmartFund breakdown below
+- **Mobile Responsive**: Flex column on mobile, flex row on desktop
+- **Icon Sizes**: Reduced from `h-5` to `h-4` for better proportion
+- **Receipt Button**: Smaller (`h-8`), icon-only on mobile
+
+**4. Payment Methods Reorganization** 🔄
+- **Moved Location**: From donations page to settings page
+- **New Tab**: Added "Payment Methods" tab in settings (5 tabs total)
+- **URL Parameters**: Deep linking support with `?tab=payment`
+- **Connected Navigation**:
+  - Wallet → "Manage Payment Methods" → Settings (Payment tab)
+  - Wallet → "Go to Payment Methods" → Settings (Payment tab)
+- **Cleaned Donations Page**: Now focuses on history, recurring gifts, preferences (3 tabs)
+
+**5. Bidirectional Navigation** 🔗
+- **Donation → Wallet Links**:
+  - Recent donation items now clickable
+  - Links to `/dashboard/donor/wallet?transaction={id}`
+  - Hover effects: background, border, text color, icon animation
+  - ChevronRight icon slides right on hover
+- **Wallet → Donations Links**:
+  - Transaction items link back to donations page
+  - Highlighted transaction shows:
+    - Primary background tint
+    - Ring effect border
+    - "Viewing" badge
+  - ArrowLeft icon slides left on hover
+- **Connected "View All Donations" Button**: Links to donations dashboard
+
+#### 📁 Files Modified
+
+**Core Service Updates**:
+- `apps/web/src/services/platformMetrics.ts`
+  - Fixed `getDonationHistory` to use `amount.breakdown.*` instead of `smartfund_distribution.*`
+  - Added participant name priority display logic
+  - Added `timestamp` field for proper sorting
+  - Updated `DonationRecord` interface with `timestamp` and `participantName` fields
+
+**Dashboard Pages**:
+- `apps/web/src/app/dashboard/donor/donations/page.tsx`
+  - Redesigned quick stats cards with gradients
+  - Compacted donation history item layout
+  - Removed payment methods tab (moved to settings)
+  - Removed `paymentMethods` mock data
+  - Updated TabsList from 4 to 3 tabs
+- `apps/web/src/app/dashboard/donor/page.tsx`
+  - Added Link import from next/link
+  - Made donation items clickable with hover effects
+  - Connected "View All Donations" button
+  - Links to wallet with transaction ID parameter
+- `apps/web/src/app/dashboard/donor/wallet/page.tsx`
+  - Added useSearchParams for URL parameter detection
+  - Implemented transaction highlighting
+  - Made transactions clickable back to donations
+  - Added ArrowLeft icon for back navigation
+  - Enhanced hover effects and animations
+- `apps/web/src/app/dashboard/donor/settings/page.tsx`
+  - Added Payment Methods tab (4th tab)
+  - Implemented URL parameter support (`?tab=payment`)
+  - Added controlled tab state with `activeTab`
+  - Displays credit card and bank account payment methods
+  - Responsive layout for mobile/desktop
+
+**Backend API**:
+- `apps/api/routers/donations.py` (New File)
+  - Created `get_active_donation_targets` endpoint
+  - Fetches active shelters and verified participants
+  - Calculates SmartFund 80-15-5 breakdown correctly
+  - Bypasses client-side Firestore security rules
+- `apps/api/main.py`
+  - Added donations router to FastAPI app
+  - Registered `/api/v1/donations/*` routes
+
+**Component Updates**:
+- `apps/web/src/components/donor/MakeNewDonationModal.tsx`
+  - Replaced hardcoded data with API calls
+  - Fixed participant housing fund calculations
+  - Implemented real donation creation logic
+  - Updates shelter stats on donation
+- `apps/web/src/components/donor/RecurringGiftModal.tsx`
+  - Dynamic shelter loading from API
+  - Real recurring gift creation to Firestore
+  - Saves to `recurring_gifts` collection
+- `apps/web/src/components/ui/tooltip.tsx` (New File)
+  - Created missing Shadcn/ui Tooltip component
+  - Radix UI implementation with proper styling
+
+#### 🐛 Bug Fixes
+
+1. **Donation Display Issues** (Critical)
+   - Participant names showing as shelter names → Fixed
+   - SmartFund showing $0 values → Fixed
+   - Donations not sorted correctly → Fixed
+
+2. **Data Accuracy Issues**
+   - Michael Rodriguez housing fund mismatch ($0 vs $159) → Fixed
+   - Backend now calculates 15% of 80% direct amount
+   - Matches frontend SmartProof 80-15-5 model
+
+3. **UI/UX Issues**
+   - Payment methods on wrong page → Moved to settings
+   - Buttons not connected → All navigation working
+   - No hover feedback → Added comprehensive hover effects
+   - Quick stats visually unappealing → Complete redesign
+
+4. **Firestore Permission Errors**
+   - Client-side queries blocked by security rules → Backend API created
+   - Donors couldn't see shelters/participants → API bypasses rules
+
+#### 🎨 Design Improvements
+
+**Color Theming**:
+- Purple: Total Donated
+- Green: Active Recurring Gifts
+- Blue: Total Donations
+- Orange: This Year
+
+**Hover Effects**:
+- Smooth `transition-all` animations
+- Group hover states for coordinated effects
+- Icon animations (slide left/right)
+- Color transitions to primary theme
+- Background and border color changes
+
+**Accessibility**:
+- Ring effects for highlighted items
+- Clear cursor pointers
+- Hover tooltips on icons
+- Visual feedback for all interactions
+
+**Dark Mode**:
+- Proper gradient overlays
+- Themed borders and backgrounds
+- Badge color adjustments
+- Maintained contrast ratios
+
+#### 📊 Technical Debt Resolved
+
+- Removed unused payment methods mock data
+- Consolidated duplicate preference settings
+- Fixed TypeScript interface mismatches
+- Removed hardcoded shelter/participant data
+- Implemented proper data fetching patterns
+- Added missing UI components (Tooltip)
+
+#### 🚀 Performance Optimizations
+
+- Timestamp-based sorting (numeric vs string comparison)
+- Efficient data fetching with API endpoints
+- Reduced client-side Firestore queries
+- Proper use of Next.js Link for navigation
+
+---
+
 ## [2.48.0] - 2025-10-11 (Session 22.20: EMAIL COLLECTION SYSTEM FIX)
 
 ### 🎯 Session 22.20 Final Achievements (EMAIL SIGNUP SYSTEM RESTORATION)

@@ -19,7 +19,12 @@ function SuccessPageContent() {
   const isDemo = searchParams.get('demo') === 'true';
   const amount = searchParams.get('amount') || '100';
   const participantName = searchParams.get('participant') || 'Michael';
-  const reference = searchParams.get('ref') || 'DEMO-' + Date.now();
+  const shelterName = searchParams.get('shelter') || 'Old Brewery Mission';
+  const reference = searchParams.get('ref') || searchParams.get('reference') || 'DEMO-' + Date.now();
+  
+  // Generate profile links
+  const participantSlug = 'michael-rodriguez'; // Could be derived from participantName
+  const shelterSlug = 'old-brewery-mission'; // Could be derived from shelterName
 
   // Calculate SmartFund™ breakdown
   const donationAmount = parseFloat(amount);
@@ -276,7 +281,11 @@ function SuccessPageContent() {
             </h1>
             
             <p className="text-lg text-muted-foreground">
-              Thank you for supporting {participantName} through SHELTR
+              Thank you for supporting{' '}
+              <Link href={`/participant/${participantSlug}`} className="text-primary hover:underline font-medium">
+                {participantName}
+              </Link>
+              {' '}through SHELTR
             </p>
 
             {isDemo && (
@@ -304,7 +313,12 @@ function SuccessPageContent() {
                 <div className="border-t pt-4 space-y-3">
                   <div className="flex justify-between">
                     <div>
-                      <div className="font-medium">Direct to {participantName}</div>
+                      <div className="font-medium">
+                        Direct to{' '}
+                        <Link href={`/participant/${participantSlug}`} className="text-primary hover:underline">
+                          {participantName}
+                        </Link>
+                      </div>
                       <div className="text-sm text-muted-foreground">Immediate support</div>
                     </div>
                     <div className="text-right">
@@ -360,7 +374,10 @@ function SuccessPageContent() {
                 <div className="p-4 bg-primary/5 rounded-lg">
                   <div className="text-2xl font-bold text-primary">${breakdown.direct}</div>
                   <div className="text-sm text-muted-foreground">
-                    Available immediately to {participantName}
+                    Available immediately to{' '}
+                    <Link href={`/participant/${participantSlug}`} className="text-primary hover:underline font-medium">
+                      {participantName}
+                    </Link>
                   </div>
                 </div>
                 <div className="p-4 bg-green-50 dark:bg-green-950/30 rounded-lg">
@@ -385,57 +402,64 @@ function SuccessPageContent() {
               <CardTitle>Continue Your SHELTR Journey</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <Button 
                   onClick={handleShare}
                   variant="outline" 
-                  className="h-12"
+                  className="h-11"
                 >
                   <Share2 className="h-4 w-4 mr-2" />
                   Share Your Impact
                 </Button>
                 
-                <Link href="/register">
-                  <Button className="w-full h-12">
-                    <Mail className="h-4 w-4 mr-2" />
-                    Get Updates
+                <Link href={`/participant/${participantSlug}`}>
+                  <Button variant="outline" className="w-full h-11 border-green-500 text-green-600 hover:bg-green-50 dark:hover:bg-green-950/30">
+                    <User className="h-4 w-4 mr-2" />
+                    View {participantName}&apos;s Profile
                   </Button>
                 </Link>
               </div>
               
-              <div className="text-center">
-                <p className="text-sm text-muted-foreground mb-3">
-                  Join SHELTR to track your impact and support more participants
-                </p>
-                <Link href="/register">
-                  <Button size="lg" className="bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90">
-                    <ArrowRight className="h-4 w-4 mr-2" />
-                    Create SHELTR Account
-                  </Button>
-                </Link>
+              <div className="text-center pt-2">
+                {user ? (
+                  // Logged-in users see dashboard link
+                  <div className="space-y-3">
+                    <p className="text-sm text-muted-foreground">
+                      Track your impact and view donation history
+                    </p>
+                    <Link href="/dashboard/donor">
+                      <Button size="lg" className="bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90">
+                        <ArrowRight className="h-4 w-4 mr-2" />
+                        Go to Your Dashboard
+                      </Button>
+                    </Link>
+                  </div>
+                ) : (
+                  // Anonymous users see account creation
+                  <div className="space-y-3">
+                    <p className="text-sm text-muted-foreground">
+                      Create an account to track your impact and support more participants
+                    </p>
+                    <Link href="/register">
+                      <Button size="lg" className="bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90">
+                        <ArrowRight className="h-4 w-4 mr-2" />
+                        Create SHELTR Account
+                      </Button>
+                    </Link>
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>
 
-          {/* Call to Action */}
+          {/* Footer CTA */}
           <div className="text-center space-y-4">
-            <div className="flex gap-4 justify-center">
-              <Link href="/scan-give">
-                <Button variant="outline" size="lg">
-                  <Home className="h-4 w-4 mr-2" />
-                  Back to Scan & Give
-                </Button>
-              </Link>
-              
-              {participantName && (
-                <Link href={`/participant/michael-rodriguez`}>
-                  <Button variant="outline" size="lg" className="border-green-500 text-green-600 hover:bg-green-50">
-                    <User className="h-4 w-4 mr-2" />
-                    View {participantName}'s Profile
-                  </Button>
-                </Link>
-              )}
-            </div>
+            <Link href="/scan-give">
+              <Button variant="outline" size="lg">
+                <Home className="h-4 w-4 mr-2" />
+                Back to Scan & Give
+              </Button>
+            </Link>
             
             <div className="text-sm text-muted-foreground">
               Help us end homelessness, one scan at a time.

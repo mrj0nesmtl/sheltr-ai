@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { getNotificationDashboardCounts, getShelterNotificationCounts, getRecentEmailSignups, getRecentContactInquiries, getAdminNotifications, markNotificationAsRead, NotificationDashboardCounts, EmailSignup, ContactInquiryNotification, AdminNotification, formatRelativeTime } from '@/services/notificationService';
 import { UnifiedInquiryService, NewsletterSignup } from '@/services/unifiedInquiryService';
 import { 
@@ -24,7 +25,10 @@ import {
   CheckCircle,
   MessageSquare,
   Shield,
-  ShieldAlert
+  ShieldAlert,
+  Inbox,
+  UserCog,
+  Newspaper
 } from 'lucide-react';
 
 export default function NotificationsPage() {
@@ -436,15 +440,105 @@ export default function NotificationsPage() {
 
       {/* Notifications Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4 sm:grid-cols-7">
-          <TabsTrigger value="all">All Notifications</TabsTrigger>
-          <TabsTrigger value="security">Security</TabsTrigger>
-          <TabsTrigger value="admin-notifications">Admin</TabsTrigger>
-          <TabsTrigger value="contact-inquiries">Contact</TabsTrigger>
-          <TabsTrigger value="email-signups">Email</TabsTrigger>
-          <TabsTrigger value="newsletter">Newsletter</TabsTrigger>
-          <TabsTrigger value="applications">Apps</TabsTrigger>
-        </TabsList>
+        <TooltipProvider>
+          <TabsList className="grid w-full grid-cols-6 lg:grid-cols-6 gap-1 bg-muted p-1">
+            {/* All Notifications */}
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <TabsTrigger 
+                  value="all" 
+                  className="flex items-center gap-2 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm data-[state=active]:border data-[state=active]:border-primary/50"
+                >
+                  <Inbox className="h-4 w-4" />
+                  <span className="hidden lg:inline">All</span>
+                </TabsTrigger>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>All Notifications</p>
+              </TooltipContent>
+            </Tooltip>
+
+            {/* Security */}
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <TabsTrigger 
+                  value="security" 
+                  className="flex items-center gap-2 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm data-[state=active]:border data-[state=active]:border-primary/50"
+                >
+                  <Shield className="h-4 w-4" />
+                  <span className="hidden lg:inline">Security</span>
+                </TabsTrigger>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Security</p>
+              </TooltipContent>
+            </Tooltip>
+
+            {/* Admin Notifications */}
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <TabsTrigger 
+                  value="admin-notifications" 
+                  className="flex items-center gap-2 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm data-[state=active]:border data-[state=active]:border-primary/50"
+                >
+                  <UserCog className="h-4 w-4" />
+                  <span className="hidden lg:inline">Admin</span>
+                </TabsTrigger>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Admin</p>
+              </TooltipContent>
+            </Tooltip>
+
+            {/* Contact Inquiries */}
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <TabsTrigger 
+                  value="contact-inquiries" 
+                  className="flex items-center gap-2 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm data-[state=active]:border data-[state=active]:border-primary/50"
+                >
+                  <MessageSquare className="h-4 w-4" />
+                  <span className="hidden lg:inline">Contact</span>
+                </TabsTrigger>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Contact</p>
+              </TooltipContent>
+            </Tooltip>
+
+            {/* Email Signups */}
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <TabsTrigger 
+                  value="email-signups" 
+                  className="flex items-center gap-2 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm data-[state=active]:border data-[state=active]:border-primary/50"
+                >
+                  <Mail className="h-4 w-4" />
+                  <span className="hidden lg:inline">Email</span>
+                </TabsTrigger>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Email</p>
+              </TooltipContent>
+            </Tooltip>
+
+            {/* Newsletter */}
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <TabsTrigger 
+                  value="newsletter" 
+                  className="flex items-center gap-2 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm data-[state=active]:border data-[state=active]:border-primary/50"
+                >
+                  <Newspaper className="h-4 w-4" />
+                  <span className="hidden lg:inline">Newsletter</span>
+                </TabsTrigger>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Newsletter</p>
+              </TooltipContent>
+            </Tooltip>
+          </TabsList>
+        </TooltipProvider>
 
         {/* Search and Filter Bar */}
         <div className="flex flex-col sm:flex-row gap-4">

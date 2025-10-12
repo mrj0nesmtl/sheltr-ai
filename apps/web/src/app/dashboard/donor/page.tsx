@@ -28,7 +28,6 @@ import { MakeNewDonationModal } from '@/components/donor/MakeNewDonationModal';
 import { RecurringGiftModal } from '@/components/donor/RecurringGiftModal';
 import { TaxDocumentsModal } from '@/components/donor/TaxDocumentsModal';
 import { FindNewSheltersModal } from '@/components/donor/FindNewSheltersModal';
-import DonorNotifications from '@/components/DonorNotifications';
 
 export default function DonorDashboard() {
   const { user, hasRole } = useAuth();
@@ -102,16 +101,11 @@ export default function DonorDashboard() {
   const displayDonations = recentDonations;
 
   // Dynamic impact metrics based on real data
+  // Only show unique metrics not already displayed in top stats
   const getImpactMetrics = () => {
     if (!donorMetrics) return [];
     
     return [
-      {
-        icon: Users,
-        label: "People Helped",
-        value: donorMetrics.participantsHelped || 0,
-        description: "Direct impact on participants"
-      },
       {
         icon: MapPin,
         label: "Shelters Supported",
@@ -123,12 +117,6 @@ export default function DonorDashboard() {
         label: "Total Donations",
         value: donorMetrics.donationsThisYear || 0,
         description: "Contributions this year"
-      },
-      {
-        icon: Award,
-        label: "Impact Score",
-        value: `${donorMetrics.impactScore || 0}%`,
-        description: "Community impact rating"
       }
     ];
   };
@@ -289,11 +277,6 @@ export default function DonorDashboard() {
         </Card>
       </div>
 
-      {/* Notifications Section */}
-      {user?.uid && (
-        <DonorNotifications userId={user.uid} />
-      )}
-
       {/* Donation Management & Impact */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Quick Actions */}
@@ -395,8 +378,8 @@ export default function DonorDashboard() {
         </Card>
       </div>
 
-      {/* Impact Visualization */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      {/* Additional Impact Metrics */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {impactMetrics.map((metric, index) => {
           const Icon = metric.icon;
           return (

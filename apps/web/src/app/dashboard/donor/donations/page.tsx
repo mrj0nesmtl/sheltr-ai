@@ -190,60 +190,92 @@ export default function DonorDonationsPage() {
         onClose={() => setShowDonationModal(false)} 
       />
 
-      {/* Quick Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Card>
+      {/* Quick Stats - Enhanced Design */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Total Donated */}
+        <Card className="relative overflow-hidden border-purple-200 dark:border-purple-800 bg-gradient-to-br from-purple-50 to-white dark:from-purple-900/20 dark:to-background">
           <CardContent className="p-6">
-            <div className="flex items-center">
-              <Heart className="h-8 w-8 text-purple-600" />
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Donated</p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+            <div className="flex items-start justify-between">
+              <div className="space-y-2">
+                <p className="text-sm font-medium text-purple-600 dark:text-purple-400">
+                  Total Donated
+                </p>
+                <p className="text-3xl font-bold text-purple-900 dark:text-purple-100">
                   ${donorMetrics?.totalDonated?.toLocaleString() || 0}
                 </p>
               </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center">
-              <Calendar className="h-8 w-8 text-green-600" />
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Active Recurring</p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                  {donorMetrics?.recurringDonations || 0}
-                </p>
+              <div className="rounded-full bg-purple-100 dark:bg-purple-900/40 p-3">
+                <Heart className="h-6 w-6 text-purple-600 dark:text-purple-400" />
               </div>
             </div>
+            <div className="mt-4 flex items-center text-xs text-purple-600 dark:text-purple-400">
+              <span>Tax deductible: ${donorMetrics?.taxDeductible?.toLocaleString() || 0}</span>
+            </div>
           </CardContent>
         </Card>
 
-        <Card>
+        {/* Active Recurring */}
+        <Card className="relative overflow-hidden border-green-200 dark:border-green-800 bg-gradient-to-br from-green-50 to-white dark:from-green-900/20 dark:to-background">
           <CardContent className="p-6">
-            <div className="flex items-center">
-              <CheckCircle2 className="h-8 w-8 text-blue-600" />
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Donations</p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+            <div className="flex items-start justify-between">
+              <div className="space-y-2">
+                <p className="text-sm font-medium text-green-600 dark:text-green-400">
+                  Active Recurring
+                </p>
+                <p className="text-3xl font-bold text-green-900 dark:text-green-100">
+                  {recurringGifts?.filter(g => g.status === 'active').length || 0}
+                </p>
+              </div>
+              <div className="rounded-full bg-green-100 dark:bg-green-900/40 p-3">
+                <Calendar className="h-6 w-6 text-green-600 dark:text-green-400" />
+              </div>
+            </div>
+            <div className="mt-4 flex items-center text-xs text-green-600 dark:text-green-400">
+              <span>Consistent support</span>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Total Donations */}
+        <Card className="relative overflow-hidden border-blue-200 dark:border-blue-800 bg-gradient-to-br from-blue-50 to-white dark:from-blue-900/20 dark:to-background">
+          <CardContent className="p-6">
+            <div className="flex items-start justify-between">
+              <div className="space-y-2">
+                <p className="text-sm font-medium text-blue-600 dark:text-blue-400">
+                  Total Donations
+                </p>
+                <p className="text-3xl font-bold text-blue-900 dark:text-blue-100">
                   {donationHistory?.length || 0}
                 </p>
               </div>
+              <div className="rounded-full bg-blue-100 dark:bg-blue-900/40 p-3">
+                <CheckCircle2 className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+              </div>
+            </div>
+            <div className="mt-4 flex items-center text-xs text-blue-600 dark:text-blue-400">
+              <span>Across {donorMetrics?.sheltersSupported || 1} shelters</span>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        {/* This Year */}
+        <Card className="relative overflow-hidden border-orange-200 dark:border-orange-800 bg-gradient-to-br from-orange-50 to-white dark:from-orange-900/20 dark:to-background">
           <CardContent className="p-6">
-            <div className="flex items-center">
-              <CreditCard className="h-8 w-8 text-orange-600" />
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">This Year</p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+            <div className="flex items-start justify-between">
+              <div className="space-y-2">
+                <p className="text-sm font-medium text-orange-600 dark:text-orange-400">
+                  This Year
+                </p>
+                <p className="text-3xl font-bold text-orange-900 dark:text-orange-100">
                   ${donorMetrics?.donationsThisYear || 0}
                 </p>
               </div>
+              <div className="rounded-full bg-orange-100 dark:bg-orange-900/40 p-3">
+                <CreditCard className="h-6 w-6 text-orange-600 dark:text-orange-400" />
+              </div>
+            </div>
+            <div className="mt-4 flex items-center text-xs text-orange-600 dark:text-orange-400">
+              <span>Year-to-date impact</span>
             </div>
           </CardContent>
         </Card>

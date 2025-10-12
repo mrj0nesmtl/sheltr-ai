@@ -20,13 +20,9 @@ export function RecurringGiftModal({ isOpen, onClose }: RecurringGiftModalProps)
   const [shelter, setShelter] = useState<string>('');
   const [startDate, setStartDate] = useState<string>('');
   const [isProcessing, setIsProcessing] = useState(false);
+  const [shelters, setShelters] = useState<Array<{ id: string; name: string }>>([]);
 
   const predefinedAmounts = ['25', '50', '100', '200'];
-  const shelters = [
-    { id: 'old-brewery-mission', name: 'Old Brewery Mission' },
-    { id: 'dans-la-rue', name: 'Dans la rue' },
-    { id: 'mission-bon-accueil', name: 'Mission Bon Accueil' }
-  ];
 
   const frequencies = [
     { value: 'weekly', label: 'Weekly', description: 'Every week' },
@@ -34,6 +30,38 @@ export function RecurringGiftModal({ isOpen, onClose }: RecurringGiftModalProps)
     { value: 'quarterly', label: 'Quarterly', description: 'Every 3 months' },
     { value: 'annually', label: 'Annually', description: 'Every year' }
   ];
+
+  // Load active shelters from backend API
+  React.useEffect(() => {
+    const loadActiveShelters = async () => {
+      if (!isOpen) return;
+      
+      try {
+        console.log('🏢 Loading active shelters for recurring gift...');
+        const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
+        const response = await fetch(`${API_BASE_URL}/api/v1/donations/active-donation-targets`);
+        
+        if (!response.ok) {
+          throw new Error(`API request failed: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        const activeShelters = (data.active_shelters || []).map((s: any) => ({
+          id: s.id,
+          name: s.name
+        }));
+        
+        setShelters(activeShelters);
+        console.log(`✅ Loaded ${activeShelters.length} active shelter(s) for recurring gift`);
+      } catch (error) {
+        console.error('❌ Error loading shelters for recurring gift:', error);
+        // Fallback to empty array if API fails
+        setShelters([]);
+      }
+    };
+    
+    loadActiveShelters();
+  }, [isOpen]);
 
   const handleSubmit = async () => {
     if (!amount || !frequency || !shelter || !startDate) {

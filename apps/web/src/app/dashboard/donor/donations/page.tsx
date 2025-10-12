@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { getDonorMetrics, getDonationHistory } from '@/services/platformMetrics';
+import { MakeNewDonationModal } from '@/components/donor/MakeNewDonationModal';
 import { 
   Heart, 
   Calendar, 
@@ -45,6 +46,7 @@ export default function DonorDonationsPage() {
   const [donationHistory, setDonationHistory] = useState<any[]>([]);
   const [recurringGifts, setRecurringGifts] = useState<RecurringGift[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showDonationModal, setShowDonationModal] = useState(false);
 
   // Load real donor data including recurring gifts
   useEffect(() => {
@@ -172,11 +174,21 @@ export default function DonorDonationsPage() {
             Manage your giving, track impact, and update payment methods
           </p>
         </div>
-        <Button className="bg-purple-600 hover:bg-purple-700">
+        <Button 
+          variant="outline" 
+          className="border-purple-600 text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20"
+          onClick={() => setShowDonationModal(true)}
+        >
           <Plus className="h-4 w-4 mr-2" />
           Make New Donation
         </Button>
       </div>
+      
+      {/* Make New Donation Modal */}
+      <MakeNewDonationModal 
+        isOpen={showDonationModal} 
+        onClose={() => setShowDonationModal(false)} 
+      />
 
       {/* Quick Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">

@@ -34,6 +34,7 @@ from routers.chatbot_dashboard import router as chatbot_dashboard_router
 from routers.authenticated_chatbot import router as authenticated_chatbot_router
 from routers.mcp import router as mcp_router
 from routers.migration import router as migration_router
+from routers.donations import router as donations_router
 
 # Import Firebase service for initialization
 from services.firebase_service import FirebaseService
@@ -217,6 +218,7 @@ app.include_router(knowledge_dashboard_router, prefix="/api/v1")
 app.include_router(chatbot_dashboard_router, prefix="/api/v1")
 app.include_router(authenticated_chatbot_router, prefix="/api/v1")
 app.include_router(migration_router, prefix="/api/v1")
+app.include_router(donations_router, prefix="/api/v1")
 
 # Health check endpoints
 @app.get("/", tags=["Health"])

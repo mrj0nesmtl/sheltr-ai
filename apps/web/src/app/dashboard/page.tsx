@@ -16,9 +16,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { ChatbotWidget } from '@/components/ChatbotWidget';
-import { StatusDebugger } from '@/components/StatusDebugger';
-import { getPlatformMetrics, getPlatformMetricsFromTenants, PlatformMetrics } from '@/services/platformMetrics';
-import { getNotificationCounts, getRecentEmailSignups, NotificationCounts, EmailSignup, formatRelativeTime } from '@/services/notificationService';
+import { getPlatformMetricsFromTenants, PlatformMetrics } from '@/services/platformMetrics';
+import { getNotificationDashboardCounts, getRecentEmailSignups, NotificationDashboardCounts, EmailSignup, formatRelativeTime } from '@/services/notificationService';
 import { analyticsService } from '@/services/analyticsService';
 import { VisitorAreaChart } from '@/components/charts/VisitorAreaChart';
 import { 
@@ -28,7 +27,6 @@ import {
   TrendingUp, 
   AlertTriangle, 
   Activity,
-  Settings,
   BarChart3,
   Loader2,
   Mail,
@@ -55,14 +53,13 @@ export default function DashboardPage() {
   const [platformMetrics, setPlatformMetrics] = useState<PlatformMetrics | null>(null);
   const [metricsLoading, setMetricsLoading] = useState(false);
   const [refreshingActivity, setRefreshingActivity] = useState(false);
-  const [notificationCounts, setNotificationCounts] = useState<NotificationCounts | null>(null);
+  const [notificationCounts, setNotificationCounts] = useState<NotificationDashboardCounts | null>(null);
   const [recentEmailSignups, setRecentEmailSignups] = useState<EmailSignup[]>([]);
   const [notificationsLoading, setNotificationsLoading] = useState(false);
   
   // Role simulation for Super Admin testing
   const [simulatedRole, setSimulatedRole] = useState<string | null>(null);
-  const [simulatedUser, setSimulatedUser] = useState<any | null>(null);
-  const [showRoleSelector, setShowRoleSelector] = useState(false);
+  const [simulatedUser, setSimulatedUser] = useState<{uid: string; email: string; firstName: string; lastName: string; displayName: string; role: string} | null>(null);
   
   // Demo accounts for role simulation
   const demoAccounts = {
@@ -120,6 +117,8 @@ export default function DashboardPage() {
   const effectiveUser = getEffectiveUser();
   
   // Super Admin function to fix ALL Platform Admin custom claims at once
+  // Currently unused but kept for future debugging needs
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const fixAllPlatformAdminClaims = async () => {
     if (!user || user.role !== 'super_admin') {
       alert('This function is only for Super Administrators');
@@ -162,7 +161,7 @@ export default function DashboardPage() {
       if (result.success) {
         alert(`SUCCESS! Fixed custom claims for ${result.data.total_fixed} Platform Administrators.
         
-Fixed users: ${result.data.fixed_users.map((u: any) => u.email).join(', ')}
+Fixed users: ${result.data.fixed_users.map((u: {email: string}) => u.email).join(', ')}
 ${result.data.errors.length > 0 ? `\nErrors: ${result.data.errors.join(', ')}` : ''}
 
 All Platform Admins should now be able to see their dashboard metrics!`);
@@ -170,13 +169,16 @@ All Platform Admins should now be able to see their dashboard metrics!`);
         throw new Error(result.message || 'Unknown error');
       }
       
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('❌ Bulk fix failed:', error);
-      alert(`Error fixing Platform Admin claims: ${error.message}`);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      alert(`Error fixing Platform Admin claims: ${errorMessage}`);
     }
   };
   
   // Temporary function to fix Platform Admin custom claims
+  // Currently unused but kept for future debugging needs
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const fixPlatformAdminClaims = async () => {
     if (!user || user.role !== 'platform_admin') {
       console.log('❌ Not a platform admin or user not found');
@@ -265,9 +267,10 @@ Firestore Role: ${firestoreRole}
 The permissions issue might be elsewhere. Check console for other errors.`);
       }
       
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('❌ Error diagnosing custom claims:', error);
-      alert(`Error during diagnosis: ${error.message}`);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      alert(`Error during diagnosis: ${errorMessage}`);
     }
   };
   
@@ -299,72 +302,181 @@ The permissions issue might be elsewhere. Check console for other errors.`);
       loadSimplePlatformMetrics(); // Use simple approach for Platform Admins
       loadNotifications();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.role]);
 
-  // Generate REAL platform activity from actual database events
+  // Enhanced platform activity from multiple real data sources
   const generateRealPlatformActivity = async () => {
     try {
-      const { collection, getDocs, query, orderBy, limit, where } = await import('firebase/firestore');
+      const { collection, getDocs, query, orderBy, limit } = await import('firebase/firestore');
       const { db } = await import('@/lib/firebase');
       
-      const activity = [];
+      const allActivities: Array<{action: string, details: string, time: string, timestamp: number}> = [];
       
-      // Get recent user registrations (real timestamps)
+      // Helper function to format time
+      const formatTimeAgo = (timestamp: unknown) => {
+        if (!timestamp) return 'Recently';
+        
+        try {
+          const date = (timestamp as {toDate?: () => Date}).toDate ? (timestamp as {toDate: () => Date}).toDate() : new Date(timestamp as string | number | Date);
+          const diffMs = Date.now() - date.getTime();
+          const diffMins = Math.floor(diffMs / 60000);
+          const diffHours = Math.floor(diffMs / 3600000);
+          const diffDays = Math.floor(diffMs / 86400000);
+          
+          if (diffMins < 1) return 'Just now';
+          if (diffMins < 60) return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
+          if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+          if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+          return `${Math.floor(diffDays / 7)} week${Math.floor(diffDays / 7) > 1 ? 's' : ''} ago`;
+        } catch {
+          return 'Recently';
+        }
+      };
+      
+      // 1. Get recent donations (from demo_donations and main donations)
+      try {
+        const donationsQuery = query(
+          collection(db, 'demo_donations'),
+          orderBy('created_at', 'desc'),
+          limit(3)
+        );
+        const donationsSnapshot = await getDocs(donationsQuery);
+        
+        donationsSnapshot.docs.forEach((doc) => {
+          const donation = doc.data();
+          const amount = donation.amount?.total || donation.amount || 0;
+          const timestamp = donation.created_at?.toDate?.()?.getTime() || Date.now();
+          
+          allActivities.push({
+            action: '💰 New donation received',
+            details: `$${amount.toFixed(2)} donated to ${donation.participant_name || 'participant'} at ${donation.shelter_name || 'shelter'}`,
+            time: formatTimeAgo(donation.created_at),
+            timestamp
+          });
+        });
+      } catch (error) {
+        console.warn('Could not load donation activity:', error);
+      }
+      
+      // 2. Get recent contact inquiries
+      try {
+        const inquiriesQuery = query(
+          collection(db, 'contact_inquiries'),
+          orderBy('created_at', 'desc'),
+          limit(3)
+        );
+        const inquiriesSnapshot = await getDocs(inquiriesQuery);
+        
+        inquiriesSnapshot.docs.forEach((doc) => {
+          const inquiry = doc.data();
+          const timestamp = inquiry.created_at?.toDate?.()?.getTime() || Date.now();
+          
+          const typeEmoji = inquiry.inquiry_type === 'newsletter_signup' ? '📧' :
+                           inquiry.inquiry_type === 'partnership_waitlist' ? '🤝' :
+                           inquiry.inquiry_type === 'investor_inquiry' ? '💼' : '📨';
+          
+          const typeName = inquiry.inquiry_type === 'newsletter_signup' ? 'Newsletter signup' :
+                          inquiry.inquiry_type === 'partnership_waitlist' ? 'Partnership inquiry' :
+                          inquiry.inquiry_type === 'investor_inquiry' ? 'Investor inquiry' :
+                          inquiry.inquiry_type === 'contact_form' ? 'Contact form submission' : 'New inquiry';
+          
+          allActivities.push({
+            action: `${typeEmoji} ${typeName}`,
+            details: `${inquiry.name || inquiry.email} - ${inquiry.subject || 'Contact request'}`,
+            time: formatTimeAgo(inquiry.created_at),
+            timestamp
+          });
+        });
+      } catch (error) {
+        console.warn('Could not load inquiry activity:', error);
+      }
+      
+      // 3. Get recent shelter additions
+      try {
+        const sheltersQuery = query(
+          collection(db, 'tenants'),
+          orderBy('created_at', 'desc'),
+          limit(2)
+        );
+        const sheltersSnapshot = await getDocs(sheltersQuery);
+        
+        sheltersSnapshot.docs.forEach((doc) => {
+          const shelter = doc.data();
+          const timestamp = shelter.created_at?.toDate?.()?.getTime() || Date.now();
+          
+          allActivities.push({
+            action: '🏢 New shelter registered',
+            details: `${shelter.name} joined the platform`,
+            time: formatTimeAgo(shelter.created_at),
+            timestamp
+          });
+        });
+      } catch (error) {
+        console.warn('Could not load shelter activity:', error);
+      }
+      
+      // 4. Get recent user registrations (participants and donors only, no admins)
       try {
         const recentUsersQuery = query(
           collection(db, 'users'),
           orderBy('created_at', 'desc'),
-          limit(3)
+          limit(5)
         );
         const usersSnapshot = await getDocs(recentUsersQuery);
         
         usersSnapshot.docs.forEach((doc) => {
           const userData = doc.data();
-          const createdAt = userData.created_at;
-          let timeAgo = 'Recently';
+          const timestamp = userData.created_at?.toDate?.()?.getTime() || Date.now();
           
-          if (createdAt && createdAt.toDate) {
-            const diffMs = Date.now() - createdAt.toDate().getTime();
-            const diffMins = Math.floor(diffMs / 60000);
-            const diffHours = Math.floor(diffMs / 3600000);
-            const diffDays = Math.floor(diffMs / 86400000);
-            
-            if (diffMins < 1) timeAgo = 'Just now';
-            else if (diffMins < 60) timeAgo = `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
-            else if (diffHours < 24) timeAgo = `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
-            else timeAgo = `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+          // Only show participant and donor registrations (skip admins)
+          if (userData.role === 'participant') {
+            allActivities.push({
+              action: '👤 New participant joined',
+              details: `${userData.firstName || userData.email || 'User'} registered for assistance`,
+              time: formatTimeAgo(userData.created_at),
+              timestamp
+            });
+          } else if (userData.role === 'donor') {
+            allActivities.push({
+              action: '❤️ New donor joined',
+              details: `${userData.firstName || userData.email || 'User'} signed up to help`,
+              time: formatTimeAgo(userData.created_at),
+              timestamp
+            });
           }
-          
-          const role = userData.role === 'platform_admin' ? 'Platform Admin' :
-                      userData.role === 'admin' ? 'Shelter Admin' :
-                      userData.role === 'participant' ? 'Participant' :
-                      userData.role === 'donor' ? 'Donor' : 'User';
-          
-          activity.push({
-            action: `New ${role} joined`,
-            details: `${userData.firstName || userData.email || 'User'} registered on the platform`,
-            time: timeAgo
-          });
         });
       } catch (error) {
         console.warn('Could not load user activity:', error);
       }
       
-      // Add current metrics loading as most recent activity
-      activity.unshift({
-        action: 'Platform metrics updated',
-        details: 'Dashboard data refreshed with real-time statistics',
-        time: 'Just now'
-      });
+      // Sort all activities by timestamp (most recent first)
+      allActivities.sort((a, b) => b.timestamp - a.timestamp);
       
-      return activity.slice(0, 4); // Return max 4 items
+      // Return top 5 most recent activities
+      const recentActivities = allActivities.slice(0, 5).map(({ action, details, time }) => ({
+        action,
+        details,
+        time
+      }));
+      
+      // If no activities found, show fallback
+      if (recentActivities.length === 0) {
+        return [{
+          action: '✅ Platform online',
+          details: 'All systems operational',
+          time: 'Just now'
+        }];
+      }
+      
+      return recentActivities;
       
     } catch (error) {
-      console.error('Error generating real activity:', error);
+      console.error('Error generating enhanced activity:', error);
       return [
         {
-          action: 'Platform metrics loaded',
-          details: 'Dashboard data synchronized successfully',
+          action: '⚠️ Activity loading error',
+          details: 'Could not fetch recent platform activities',
           time: 'Just now'
         }
       ];
@@ -378,7 +490,7 @@ The permissions issue might be elsewhere. Check console for other errors.`);
       console.log('📊 [SIMPLE] Loading Platform Admin metrics directly...');
       
       // Import Firebase functions
-      const { collection, getDocs, query, where } = await import('firebase/firestore');
+      const { collection, getDocs } = await import('firebase/firestore');
       const { db } = await import('@/lib/firebase');
       
       // Get basic counts from collections Platform Admins can definitely access
@@ -418,7 +530,7 @@ The permissions issue might be elsewhere. Check console for other errors.`);
       console.log('✅ [SIMPLE] Platform Admin metrics loaded:', simpleMetrics);
       setPlatformMetrics(simpleMetrics);
       
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('❌ [SIMPLE] Failed to load simple metrics:', error);
       
       // Fallback metrics
@@ -607,13 +719,15 @@ The permissions issue might be elsewhere. Check console for other errors.`);
   };
 
   const loadNotifications = async () => {
+    if (!user?.uid || !user?.role) return;
+    
     setNotificationsLoading(true);
     try {
       console.log('🔔 Loading notifications...');
       
       // Load notification counts and recent email signups in parallel
       const [counts, emailSignups] = await Promise.all([
-        getNotificationCounts(),
+        getNotificationDashboardCounts(user.uid, user.role),
         getRecentEmailSignups(5) // Get last 5 signups
       ]);
       
@@ -625,10 +739,23 @@ The permissions issue might be elsewhere. Check console for other errors.`);
       console.error('❌ Failed to load notifications:', error);
       // Set fallback data
       setNotificationCounts({
+        totalNotifications: 0,
+        unreadMessages: 0,
+        unreadNotifications: 0,
         totalEmailSignups: 0,
         recentEmailSignups: 0,
+        contactInquiries: 0,
+        recentContactInquiries: 0,
+        repliedContactInquiries: 0,
+        unrepliedContactInquiries: 0,
+        totalAdminNotifications: 0,
+        unreadAdminNotifications: 0,
+        securityAlerts: 0,
+        fraudAlerts: 0,
         pendingShelterapplications: 0,
-        totalNotifications: 0
+        activeUsers: 0,
+        totalParticipants: 0,
+        recentParticipants: 0
       });
       setRecentEmailSignups([]);
     } finally {
@@ -867,11 +994,6 @@ The permissions issue might be elsewhere. Check console for other errors.`);
               <span className="hidden sm:inline">Super Admin</span>
             </Badge>
           </div>
-        </div>
-
-        {/* Debug Tool for Status Testing */}
-        <div className="mb-8">
-          <StatusDebugger />
         </div>
 
         {/* Platform Statistics */}
@@ -1481,7 +1603,7 @@ The permissions issue might be elsewhere. Check console for other errors.`);
           <div className="flex-1">
             <h1 className="text-2xl sm:text-3xl font-bold flex items-center">
               <Building className="h-8 w-8 mr-3" />
-              {effectiveUser?.displayName}'s Shelter
+              {effectiveUser?.displayName}&apos;s Shelter
               {user?.role === 'super_admin' && (
                 <Badge variant="secondary" className="ml-3 bg-blue-100 text-blue-800 text-xs">
                   SIMULATION MODE
@@ -1491,7 +1613,7 @@ The permissions issue might be elsewhere. Check console for other errors.`);
             <p className="text-gray-600 text-sm sm:text-base">
               {user?.role === 'super_admin' 
                 ? `Super Admin simulating ${effectiveUser?.displayName} (${effectiveUser?.email})`
-                : 'Shelter Operations Dashboard • Today\'s Date: ' + new Date().toLocaleDateString() + ' • Status: ✅ Real Data Connected'
+                : 'Shelter Operations Dashboard • Today&apos;s Date: ' + new Date().toLocaleDateString() + ' • Status: ✅ Real Data Connected'
               }
             </p>
           </div>

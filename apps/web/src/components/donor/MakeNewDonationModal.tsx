@@ -5,7 +5,6 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -46,65 +45,61 @@ export function MakeNewDonationModal({ isOpen, onClose }: MakeNewDonationModalPr
   const [shelters, setShelters] = useState<Shelter[]>([]);
   const [participants, setParticipants] = useState<Participant[]>([]);
 
-  // Mock data for shelters
+  // Load active donation targets from backend API (bypasses Firestore security rules)
   useEffect(() => {
-    setShelters([
-      {
-        id: 'old-brewery-mission',
-        name: 'Old Brewery Mission',
-        location: 'Montreal, QC',
-        description: 'Providing shelter and support services since 1889',
-        participantCount: 45,
-        totalDonations: 125000
-      },
-      {
-        id: 'dans-la-rue',
-        name: 'Dans la rue',
-        location: 'Montreal, QC', 
-        description: 'Supporting homeless youth in Montreal',
-        participantCount: 23,
-        totalDonations: 67000
-      },
-      {
-        id: 'mission-bon-accueil',
-        name: 'Mission Bon Accueil',
-        location: 'Montreal, QC',
-        description: 'Emergency shelter and rehabilitation services',
-        participantCount: 38,
-        totalDonations: 89000
+    const loadRealData = async () => {
+      try {
+        console.log('🏢 Fetching active donation targets from backend API...');
+        
+        // Use backend API endpoint to get active shelters and verified participants
+        const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
+        const response = await fetch(`${API_BASE_URL}/api/v1/donations/active-donation-targets`);
+        
+        if (!response.ok) {
+          throw new Error(`API request failed: ${response.status} ${response.statusText}`);
+        }
+        
+        const data = await response.json();
+        
+        console.log('📊 API Response:', {
+          success: data.success,
+          sheltersCount: data.counts?.shelters,
+          participantsCount: data.counts?.participants
+        });
+        
+        // Set shelters data
+        const loadedShelters: Shelter[] = data.active_shelters || [];
+        setShelters(loadedShelters);
+        console.log(`✅ Loaded ${loadedShelters.length} active shelter(s):`, 
+          loadedShelters.map(s => `${s.name} (${s.location})`)
+        );
+        
+        // Set participants data
+        const loadedParticipants: Participant[] = data.verified_participants || [];
+        setParticipants(loadedParticipants);
+        console.log(`✅ Loaded ${loadedParticipants.length} verified participant(s):`, 
+          loadedParticipants.map(p => p.name)
+        );
+        
+        if (loadedShelters.length === 0) {
+          console.warn('⚠️ No active shelters found in database');
+        }
+        
+        if (loadedParticipants.length === 0) {
+          console.warn('⚠️ No verified participants found in database');
+        }
+        
+      } catch (error) {
+        console.error('❌ Error loading donation data from API:', error);
+        // Show user-friendly error
+        alert('Unable to load donation options. Please make sure the backend API is running.');
       }
-    ]);
-
-    setParticipants([
-      {
-        id: 'michael-rodriguez',
-        name: 'Michael Rodriguez',
-        shelter: 'Old Brewery Mission',
-        story: 'Working towards stable housing and employment',
-        goal: 'Secure permanent housing',
-        raised: 850,
-        target: 2000
-      },
-      {
-        id: 'participant-2',
-        name: 'Sarah Johnson',
-        shelter: 'Dans la rue',
-        story: 'Young mother seeking stable housing for her family',
-        goal: 'Family housing program',
-        raised: 1200,
-        target: 3000
-      },
-      {
-        id: 'participant-3',
-        name: 'David Chen',
-        shelter: 'Mission Bon Accueil',
-        story: 'Recovering from addiction, rebuilding life',
-        goal: 'Job training program',
-        raised: 450,
-        target: 1500
-      }
-    ]);
-  }, []);
+    };
+    
+    if (isOpen) {
+      loadRealData();
+    }
+  }, [isOpen]);
 
   const handleDonationSubmit = async () => {
     if (!selectedTarget || !amount || parseFloat(amount) <= 0) {
@@ -158,7 +153,7 @@ export function MakeNewDonationModal({ isOpen, onClose }: MakeNewDonationModalPr
             Make New Donation
           </DialogTitle>
           <DialogDescription>
-            Choose how you'd like to help - donate to a shelter, support a specific participant, or scan a QR code
+            Choose how you&apos;d like to help - donate to a shelter, support a specific participant, or scan a QR code
           </DialogDescription>
         </DialogHeader>
 
@@ -180,84 +175,104 @@ export function MakeNewDonationModal({ isOpen, onClose }: MakeNewDonationModalPr
 
           {/* Shelters Tab */}
           <TabsContent value="shelters" className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {shelters.map((shelter) => (
-                <Card 
-                  key={shelter.id}
-                  className={`cursor-pointer transition-all ${
-                    selectedTarget === shelter.id 
-                      ? 'ring-2 ring-blue-500 bg-blue-50 dark:bg-blue-900/20' 
-                      : 'hover:shadow-md'
-                  }`}
-                  onClick={() => setSelectedTarget(shelter.id)}
-                >
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-lg">{shelter.name}</CardTitle>
-                    <CardDescription>{shelter.location}</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">
-                      {shelter.description}
-                    </p>
-                    <div className="flex justify-between items-center text-sm">
-                      <div className="flex items-center gap-4">
-                        <span className="flex items-center gap-1">
-                          <Users className="h-4 w-4" />
-                          {shelter.participantCount} people
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <DollarSign className="h-4 w-4" />
-                          ${shelter.totalDonations.toLocaleString()} raised
-                        </span>
+            {shelters.length === 0 ? (
+              <Card>
+                <CardContent className="text-center py-8">
+                  <Building className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+                  <p className="text-gray-600 dark:text-gray-400 mb-2">No active shelters available</p>
+                  <p className="text-sm text-muted-foreground">Check console for debugging information</p>
+                </CardContent>
+              </Card>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {shelters.map((shelter) => (
+                  <Card 
+                    key={shelter.id}
+                    className={`cursor-pointer transition-all ${
+                      selectedTarget === shelter.id 
+                        ? 'ring-2 ring-blue-500 bg-blue-50 dark:bg-blue-900/20' 
+                        : 'hover:shadow-md'
+                    }`}
+                    onClick={() => setSelectedTarget(shelter.id)}
+                  >
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-lg">{shelter.name}</CardTitle>
+                      <CardDescription>{shelter.location}</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">
+                        {shelter.description}
+                      </p>
+                      <div className="flex justify-between items-center text-sm">
+                        <div className="flex items-center gap-4">
+                          <span className="flex items-center gap-1">
+                            <Users className="h-4 w-4" />
+                            {shelter.participantCount} people
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <DollarSign className="h-4 w-4" />
+                            ${shelter.totalDonations.toLocaleString()} raised
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
           </TabsContent>
 
           {/* Participants Tab */}
           <TabsContent value="participants" className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {participants.map((participant) => (
-                <Card 
-                  key={participant.id}
-                  className={`cursor-pointer transition-all ${
-                    selectedTarget === participant.id 
-                      ? 'ring-2 ring-blue-500 bg-blue-50 dark:bg-blue-900/20' 
-                      : 'hover:shadow-md'
-                  }`}
-                  onClick={() => setSelectedTarget(participant.id)}
-                >
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-lg">{participant.name}</CardTitle>
-                    <CardDescription>
-                      <Badge variant="outline">{participant.shelter}</Badge>
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
-                      {participant.story}
-                    </p>
-                    <p className="text-sm font-medium mb-3">Goal: {participant.goal}</p>
-                    
-                    <div className="space-y-2">
-                      <div className="flex justify-between text-sm">
-                        <span>Progress</span>
-                        <span>${participant.raised} / ${participant.target}</span>
+            {participants.length === 0 ? (
+              <Card>
+                <CardContent className="text-center py-8">
+                  <Users className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+                  <p className="text-gray-600 dark:text-gray-400 mb-2">No verified participants available</p>
+                  <p className="text-sm text-muted-foreground">Check console for debugging information</p>
+                </CardContent>
+              </Card>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {participants.map((participant) => (
+                  <Card 
+                    key={participant.id}
+                    className={`cursor-pointer transition-all ${
+                      selectedTarget === participant.id 
+                        ? 'ring-2 ring-blue-500 bg-blue-50 dark:bg-blue-900/20' 
+                        : 'hover:shadow-md'
+                    }`}
+                    onClick={() => setSelectedTarget(participant.id)}
+                  >
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-lg">{participant.name}</CardTitle>
+                      <CardDescription>
+                        <Badge variant="outline">{participant.shelter}</Badge>
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
+                        {participant.story}
+                      </p>
+                      <p className="text-sm font-medium mb-3">Goal: {participant.goal}</p>
+                      
+                      <div className="space-y-2">
+                        <div className="flex justify-between text-sm">
+                          <span>Progress</span>
+                          <span>${participant.raised} / ${participant.target}</span>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div 
+                            className="bg-green-600 h-2 rounded-full" 
+                            style={{ width: `${Math.min((participant.raised / participant.target) * 100, 100)}%` }}
+                          ></div>
+                        </div>
                       </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2">
-                        <div 
-                          className="bg-green-600 h-2 rounded-full" 
-                          style={{ width: `${Math.min((participant.raised / participant.target) * 100, 100)}%` }}
-                        ></div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
           </TabsContent>
 
           {/* QR Scan Tab */}
@@ -269,7 +284,7 @@ export function MakeNewDonationModal({ isOpen, onClose }: MakeNewDonationModalPr
                   Scan QR Code
                 </CardTitle>
                 <CardDescription>
-                  Scan a participant's QR code to make a direct donation
+                  Scan a participant&apos;s QR code to make a direct donation
                 </CardDescription>
               </CardHeader>
               <CardContent className="text-center space-y-4">

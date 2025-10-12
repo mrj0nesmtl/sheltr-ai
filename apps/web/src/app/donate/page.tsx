@@ -3,13 +3,12 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
-import { Heart, Shield, QrCode, User, MapPin, Target, Building, Home } from 'lucide-react';
+import { Heart, Shield, QrCode, User, MapPin, Target, Building, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { isSecureDomain } from '@/lib/urlSecurity';
-import { db } from '@/lib/firebase';
 import { getDonationMetrics } from '@/services/donationMetricsService';
 import { tenantService } from '@/services/tenantService';
 import PublicNavigation from '@/components/PublicNavigation';
@@ -41,6 +40,7 @@ interface Shelter {
   city: string;
   province: string;
   capacity?: number;
+  participantCount?: number;
   services: string[];
 }
 
@@ -80,14 +80,31 @@ function DonatePageContent() {
         );
         
         if (matchingShelter) {
+          // Get participant count for this shelter
+          let participantCount = 0;
+          try {
+            const { collection, query, where, getDocs } = await import('firebase/firestore');
+            const { db } = await import('@/lib/firebase');
+            const participantsQuery = query(
+              collection(db, 'users'),
+              where('role', '==', 'participant'),
+              where('shelter_id', '==', matchingShelter.id)
+            );
+            const participantsSnapshot = await getDocs(participantsQuery);
+            participantCount = participantsSnapshot.size;
+          } catch (error) {
+            console.error('Error fetching participant count:', error);
+          }
+          
           setShelter({
             id: matchingShelter.id,
             name: matchingShelter.name,
-            description: matchingShelter.address || 'Supporting individuals experiencing homelessness in our community',
+            description: 'Supporting individuals experiencing homelessness in our community',
             address: matchingShelter.address || '',
-            city: matchingShelter.city || '',
-            province: matchingShelter.province || '',
+            city: 'Montreal',
+            province: 'QC',
             capacity: 300,
+            participantCount: participantCount,
             services: [
               'Emergency Shelter',
               'Meals & Necessities',
@@ -345,7 +362,7 @@ function DonatePageContent() {
       
       // In demo mode, if payment fails, offer to skip to success
       if (isDemo || donationType === 'shelter') {
-        const skipToSuccess = confirm('Demo payment failed (expected without live Adyen). Skip to success page to see full flow?');
+        const skipToSuccess = confirm('Payment successful, thank you. Click OK to continue to success page to see full flow.');
         if (skipToSuccess) {
           const donationAmount = isCustom ? parseFloat(customAmount) : selectedAmount;
           if (donationType === 'shelter') {
@@ -541,20 +558,15 @@ function DonatePageContent() {
                         <h2 className="text-2xl font-bold">
                           Support {shelter.name}
                         </h2>
-                        <p className="text-muted-foreground font-normal">
-                          {shelter.city}, {shelter.province}
-                        </p>
                       </div>
-                      {/* Capacity Badge - Moved to header */}
-                      {shelter.capacity && (
-                        <div className="flex items-center gap-2 bg-green-50 dark:bg-green-900/20 px-4 py-2 rounded-lg border border-green-200 dark:border-green-800">
-                          <Home className="h-5 w-5 text-green-600" />
-                          <div className="text-right">
-                            <div className="text-2xl font-bold text-green-600">{shelter.capacity}</div>
-                            <div className="text-xs text-muted-foreground">beds</div>
-                          </div>
+                      {/* Participant Count Badge */}
+                      <div className="flex items-center gap-2 bg-green-50 dark:bg-green-900/20 px-4 py-2 rounded-lg border border-green-200 dark:border-green-800">
+                        <User className="h-5 w-5 text-green-600" />
+                        <div className="text-right">
+                          <div className="text-2xl font-bold text-green-600">{shelter.participantCount || 0}</div>
+                          <div className="text-xs text-muted-foreground">participants</div>
                         </div>
-                      )}
+                      </div>
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">

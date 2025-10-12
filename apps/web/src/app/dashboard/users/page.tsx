@@ -1618,7 +1618,7 @@ export default function UserManagement() {
                   {reorderablePlatformAdmins.map((admin, index) => (
                     <div 
                       key={admin.id} 
-                      className={`flex items-center justify-between p-4 bg-gradient-to-r from-orange-50 to-yellow-50 dark:from-orange-900/20 dark:to-yellow-900/20 rounded-lg border border-orange-200 dark:border-orange-800 ${
+                      className={`p-4 bg-gradient-to-r from-orange-50 to-yellow-50 dark:from-orange-900/20 dark:to-yellow-900/20 rounded-lg border border-orange-200 dark:border-orange-800 ${
                         user?.role === 'super_admin' ? 'cursor-move transition-all duration-200 hover:shadow-md' : ''
                       } ${isDragging && draggedIndex === index ? 'opacity-50 scale-95' : ''}`}
                       draggable={user?.role === 'super_admin'}
@@ -1627,54 +1627,117 @@ export default function UserManagement() {
                       onDragOver={handleDragOver}
                       onDrop={(e) => handleDrop(e, index)}
                     >
-                      <div className="flex items-center space-x-4">
-                        {/* Drag Handle (Super Admin only) */}
-                        {user?.role === 'super_admin' && (
-                          <div className="flex-shrink-0 text-orange-400 hover:text-orange-600 transition-colors">
-                            <GripVertical className="h-5 w-5" />
+                      {/* Mobile Layout */}
+                      <div className="block sm:hidden space-y-4">
+                        {/* Top Row: Icon, Name, Status */}
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-3 flex-1 min-w-0">
+                            {user?.role === 'super_admin' && (
+                              <div className="flex-shrink-0 text-orange-400">
+                                <GripVertical className="h-5 w-5" />
+                              </div>
+                            )}
+                            <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-full flex items-center justify-center shadow-lg">
+                              <Star className="h-6 w-6 text-white" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="font-bold text-base text-orange-700 dark:text-orange-300 truncate">
+                                {admin.firstName} {admin.lastName}
+                              </div>
+                              <div className="text-sm text-orange-600 dark:text-orange-400 truncate">
+                                {admin.email}
+                              </div>
+                            </div>
                           </div>
-                        )}
-                        <div className="relative">
-                          <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-full flex items-center justify-center shadow-lg">
-                            <Star className="h-6 w-6 text-white" />
-                          </div>
-                          <div className="absolute -bottom-0.5 -right-0.5">
-                            <UserStatusIndicator userId={admin.id} size="md" />
-                          </div>
+                          <PlatformAdminStatusBadge userId={admin.id} />
                         </div>
-                        <div>
-                          <div className="font-bold text-orange-700 dark:text-orange-300">
-                            {admin.firstName} {admin.lastName}
-                          </div>
-                          <div className="text-sm text-orange-600 dark:text-orange-400">
-                            {admin.email}
-                          </div>
-                          <div className="text-xs text-muted-foreground">
-                            {getPlatformAdminRole(admin.email)}
-                          </div>
+                        
+                        {/* Role Description */}
+                        <div className="text-sm text-muted-foreground flex items-center">
+                          <Building2 className="h-3 w-3 mr-1" />
+                          {getPlatformAdminRole(admin.email)}
                         </div>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <PlatformAdminStatusBadge userId={admin.id} />
-                        <div className="flex space-x-1">
-                          <Button 
-                            variant="ghost" 
-                            size="sm" 
-                            title="View Profile"
-                            onClick={() => handleViewProfile(admin, 'platform_admin')}
-                          >
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                          {canEditUser('platform_admin', admin.id) && (
+                        
+                        {/* Actions */}
+                        <div className="flex items-center justify-between pt-2 border-t border-orange-200 dark:border-orange-700">
+                          <div className="text-sm">
+                            <div className="font-medium text-orange-700 dark:text-orange-300">Platform Admin</div>
+                            <div className="text-xs text-muted-foreground">Team Member</div>
+                          </div>
+                          <div className="flex space-x-1">
                             <Button 
                               variant="ghost" 
                               size="sm" 
-                              title="Edit Profile"
-                              onClick={() => handleEditProfile(admin, 'platform_admin')}
+                              title="View Profile"
+                              onClick={() => handleViewProfile(admin, 'platform_admin')}
                             >
-                              <Edit className="h-4 w-4" />
+                              <Eye className="h-4 w-4" />
                             </Button>
+                            {canEditUser('platform_admin', admin.id) && (
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                title="Edit Profile"
+                                onClick={() => handleEditProfile(admin, 'platform_admin')}
+                              >
+                                <Edit className="h-4 w-4" />
+                              </Button>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Desktop Layout */}
+                      <div className="hidden sm:flex items-center justify-between">
+                        <div className="flex items-center space-x-4">
+                          {/* Drag Handle (Super Admin only) */}
+                          {user?.role === 'super_admin' && (
+                            <div className="flex-shrink-0 text-orange-400 hover:text-orange-600 transition-colors">
+                              <GripVertical className="h-5 w-5" />
+                            </div>
                           )}
+                          <div className="relative">
+                            <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-full flex items-center justify-center shadow-lg">
+                              <Star className="h-6 w-6 text-white" />
+                            </div>
+                            <div className="absolute -bottom-0.5 -right-0.5">
+                              <UserStatusIndicator userId={admin.id} size="md" />
+                            </div>
+                          </div>
+                          <div>
+                            <div className="font-bold text-orange-700 dark:text-orange-300">
+                              {admin.firstName} {admin.lastName}
+                            </div>
+                            <div className="text-sm text-orange-600 dark:text-orange-400">
+                              {admin.email}
+                            </div>
+                            <div className="text-xs text-muted-foreground">
+                              {getPlatformAdminRole(admin.email)}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <PlatformAdminStatusBadge userId={admin.id} />
+                          <div className="flex space-x-1">
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              title="View Profile"
+                              onClick={() => handleViewProfile(admin, 'platform_admin')}
+                            >
+                              <Eye className="h-4 w-4" />
+                            </Button>
+                            {canEditUser('platform_admin', admin.id) && (
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                title="Edit Profile"
+                                onClick={() => handleEditProfile(admin, 'platform_admin')}
+                              >
+                                <Edit className="h-4 w-4" />
+                              </Button>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -1687,9 +1750,9 @@ export default function UserManagement() {
 
         {/* Admin Users Tab */}
         <TabsContent value="admins" className="space-y-4">
-          <div className="flex justify-between items-center">
-            <h3 className="text-lg font-medium">Shelter Administrators</h3>
-            <div className="flex space-x-2">
+          <div>
+            <h3 className="text-lg font-medium mb-3">Shelter Administrators</h3>
+            <div className="flex flex-wrap gap-2">
               <Button variant="outline" size="sm">
                 <Search className="mr-2 h-4 w-4" />
                 Search
@@ -1698,8 +1761,8 @@ export default function UserManagement() {
                 <Filter className="mr-2 h-4 w-4" />
                 Filter
               </Button>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 size="sm"
                 onClick={() => exportUsers('admins')}
               >
@@ -1720,20 +1783,15 @@ export default function UserManagement() {
                   {adminUsers.map((admin) => (
                   <div key={admin.id} className="p-4 sm:p-6 border-b last:border-b-0">
                     {/* Mobile Layout */}
-                    <div className="block sm:hidden space-y-3">
+                    <div className="block sm:hidden space-y-4">
                       {/* Top Row: Icon, Name, Status */}
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-3 flex-1 min-w-0">
-                          <div className="relative">
-                            <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
-                              <UserCog className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                            </div>
-                            <div className="absolute -bottom-0.5 -right-0.5">
-                              <UserStatusIndicator userId={admin.id} size="sm" />
-                            </div>
+                          <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
+                            <UserCog className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <div className="font-medium truncate">{admin.name}</div>
+                            <div className="font-bold text-base truncate">{admin.name}</div>
                             <div className="text-sm text-muted-foreground truncate">{admin.email}</div>
                           </div>
                         </div>
@@ -1743,39 +1801,39 @@ export default function UserManagement() {
                       </div>
                       
                       {/* Shelter and Role */}
-                      <div className="space-y-1">
-                        <div className="text-sm text-muted-foreground flex items-center">
-                          <Building2 className="h-3 w-3 mr-1" />
-                          {admin.shelter} • {admin.role}
+                      <div className="text-sm text-muted-foreground flex items-center">
+                        <Building2 className="h-3 w-3 mr-1" />
+                        {admin.shelter} • {admin.role}
+                      </div>
+                      
+                      {/* Metrics Grid */}
+                      <div className="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                          <div className="font-medium text-blue-700 dark:text-blue-300">{admin.participants}</div>
+                          <div className="text-xs text-muted-foreground">Participants</div>
                         </div>
-                        {admin.shelter_id && shelterData.get(admin.shelter_id) && (
-                          <div className="text-xs text-blue-600 dark:text-blue-400 flex items-center">
-                            <Globe className="h-3 w-3 mr-1" />
+                        <div>
+                          <div className="font-medium">Recent</div>
+                          <div className="text-xs text-muted-foreground">{admin.lastLogin}</div>
+                        </div>
+                      </div>
+                      
+                      {/* Actions */}
+                      <div className="flex items-center justify-between pt-2 border-t border-blue-200 dark:border-blue-700">
+                        <div className="text-sm">
+                          {admin.shelter_id && shelterData.get(admin.shelter_id) && (
                             <button 
                               onClick={() => {
                                 const url = getShelterPublicUrl(admin.shelter_id);
                                 if (url) window.open(url, '_blank');
                               }}
-                              className="hover:underline truncate max-w-[200px]"
+                              className="text-xs text-blue-600 dark:text-blue-400 hover:underline flex items-center truncate max-w-[180px]"
                               title="Open public shelter page"
                             >
+                              <Globe className="h-3 w-3 mr-1" />
                               {getShelterPublicUrl(admin.shelter_id)?.replace(window.location.origin + '/', '') || 'Public Page'}
                             </button>
-                          </div>
-                        )}
-                      </div>
-                      
-                      {/* Metrics and Actions */}
-                      <div className="flex items-center justify-between">
-                        <div className="flex space-x-4">
-                          <div className="text-center">
-                            <div className="text-lg font-bold text-blue-600 dark:text-blue-400">{admin.participants}</div>
-                            <div className="text-xs text-muted-foreground">Participants</div>
-                          </div>
-                          <div className="text-center">
-                            <div className="text-sm font-medium">{admin.lastLogin}</div>
-                            <div className="text-xs text-muted-foreground">Last Login</div>
-                          </div>
+                          )}
                         </div>
                         <div className="flex space-x-1">
                           <Button 
@@ -1797,38 +1855,16 @@ export default function UserManagement() {
                             </Button>
                           )}
                           {admin.shelter_id && shelterData.get(admin.shelter_id) && (
-                            <>
-                              <Button 
-                                variant="ghost" 
-                                size="sm"
-                                onClick={() => handleViewShelterQR(admin.shelter_id)}
-                                title="View Shelter QR Code"
-                                className="text-orange-600 hover:text-orange-700"
-                              >
-                                <QrCode className="h-4 w-4" />
-                              </Button>
-                              <Button 
-                                variant="ghost" 
-                                size="sm"
-                                onClick={() => handleCopyShelterUrl(admin.shelter_id)}
-                                title="Copy Shelter Public URL"
-                                className="text-blue-600 hover:text-blue-700"
-                              >
-                                <Globe className="h-4 w-4" />
-                              </Button>
-                            </>
+                            <Button 
+                              variant="ghost" 
+                              size="sm"
+                              onClick={() => handleViewShelterQR(admin.shelter_id)}
+                              title="View Shelter QR Code"
+                              className="text-orange-600 hover:text-orange-700"
+                            >
+                              <QrCode className="h-4 w-4" />
+                            </Button>
                           )}
-                          <Button 
-                            variant="ghost" 
-                            size="sm"
-                            onClick={() => toggleUserStatus(admin.id, admin.status, 'admin')}
-                            title={admin.status === 'active' ? 'Suspend User' : 'Activate User'}
-                          >
-                            {admin.status === 'active' ? 
-                              <Ban className="h-4 w-4 text-red-500" /> : 
-                              <CheckCircle className="h-4 w-4 text-green-500" />
-                            }
-                          </Button>
                         </div>
                       </div>
                     </div>
@@ -1957,9 +1993,9 @@ export default function UserManagement() {
 
         {/* Participants Tab */}
         <TabsContent value="participants" className="space-y-4">
-          <div className="flex justify-between items-center">
-            <h3 className="text-lg font-medium">Homeless Participants</h3>
-            <div className="flex space-x-2">
+          <div>
+            <h3 className="text-lg font-medium mb-3">Homeless Participants</h3>
+            <div className="flex flex-wrap gap-2">
               <Button variant="outline" size="sm">
                 <Search className="mr-2 h-4 w-4" />
                 Search
@@ -1990,20 +2026,15 @@ export default function UserManagement() {
                   {participantUsers.map((participant) => (
                   <div key={participant.id} className="p-4 sm:p-6 border-b last:border-b-0">
                     {/* Mobile Layout */}
-                    <div className="block sm:hidden space-y-3">
+                    <div className="block sm:hidden space-y-4">
                       {/* Top Row: Icon, Name, Status */}
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-3 flex-1 min-w-0">
-                          <div className="relative">
-                            <div className="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
-                              <UserCheck className="h-5 w-5 text-green-600 dark:text-green-400" />
-                            </div>
-                            <div className="absolute -bottom-0.5 -right-0.5">
-                              <UserStatusIndicator userId={participant.id} size="sm" />
-                            </div>
+                          <div className="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
+                            <UserCheck className="h-6 w-6 text-green-600 dark:text-green-400" />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <div className="font-medium truncate">{participant.name}</div>
+                            <div className="font-bold text-base truncate">{participant.name}</div>
                             <div className="text-sm text-muted-foreground truncate">{participant.email}</div>
                           </div>
                         </div>
@@ -2019,42 +2050,41 @@ export default function UserManagement() {
                       </div>
                       
                       {/* Metrics Grid */}
-                      <div className="grid grid-cols-3 gap-3 text-center">
+                      <div className="grid grid-cols-2 gap-4 text-sm">
                         <div>
-                          <div className="text-lg font-bold text-green-600 dark:text-green-400">${participant.totalReceived.toLocaleString()}</div>
+                          <div className="font-medium text-green-700 dark:text-green-300">${participant.totalReceived.toLocaleString()}</div>
                           <div className="text-xs text-muted-foreground">Total Received</div>
                         </div>
                         <div>
-                          <div className="text-lg font-bold text-blue-600 dark:text-blue-400">{participant.qrScans}</div>
-                          <div className="text-xs text-muted-foreground">QR Scans</div>
-                        </div>
-                        <div>
-                          <div className="text-sm font-medium">{participant.lastDonation}</div>
-                          <div className="text-xs text-muted-foreground">Last Donation</div>
+                          <div className="font-medium text-blue-700 dark:text-blue-300">{participant.qrScans} scans</div>
+                          <div className="text-xs text-muted-foreground">QR Activity</div>
                         </div>
                       </div>
                       
                       {/* Actions */}
-                      <div className="flex justify-end space-x-1 pt-2 border-t border-gray-200 dark:border-gray-700">
-                        <Button 
-                          variant="ghost" 
-                          size="sm"
-                          onClick={() => viewUser(participant, 'participant')}
-                          title="View Details"
-                        >
-                          <Eye className="h-4 w-4" />
-                        </Button>
-                        <Button 
-                          variant="ghost" 
-                          size="sm"
-                          onClick={() => showParticipantQR(participant)}
-                          title="Show QR Code"
-                        >
-                          <QrCode className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="sm">
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
+                      <div className="flex items-center justify-between pt-2 border-t border-green-200 dark:border-green-700">
+                        <div className="text-sm">
+                          <div className="font-medium">Last Donation</div>
+                          <div className="text-xs text-muted-foreground">{participant.lastDonation}</div>
+                        </div>
+                        <div className="flex space-x-1">
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            onClick={() => viewUser(participant, 'participant')}
+                            title="View Details"
+                          >
+                            <Eye className="h-4 w-4" />
+                          </Button>
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            onClick={() => showParticipantQR(participant)}
+                            title="Show QR Code"
+                          >
+                            <QrCode className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </div>
                     </div>
 
@@ -2155,9 +2185,9 @@ export default function UserManagement() {
 
         {/* Donors Tab */}
         <TabsContent value="donors" className="space-y-4">
-          <div className="flex justify-between items-center">
-            <h3 className="text-lg font-medium">Platform Donors</h3>
-            <div className="flex space-x-2">
+          <div>
+            <h3 className="text-lg font-medium mb-3">Platform Donors</h3>
+            <div className="flex flex-wrap gap-2">
               <Button variant="outline" size="sm">
                 <Search className="mr-2 h-4 w-4" />
                 Search
@@ -2188,20 +2218,15 @@ export default function UserManagement() {
                   {donorUsers.map((donor) => (
                   <div key={donor.id} className="p-4 sm:p-6 border-b last:border-b-0">
                     {/* Mobile Layout */}
-                    <div className="block sm:hidden space-y-3">
+                    <div className="block sm:hidden space-y-4">
                       {/* Top Row: Icon, Name, Status */}
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-3 flex-1 min-w-0">
-                          <div className="relative">
-                            <div className="w-10 h-10 bg-red-100 dark:bg-red-900 rounded-full flex items-center justify-center">
-                              <Heart className="h-5 w-5 text-red-600 dark:text-red-400" />
-                            </div>
-                            <div className="absolute -bottom-0.5 -right-0.5">
-                              <UserStatusIndicator userId={donor.id} size="sm" />
-                            </div>
+                          <div className="w-12 h-12 bg-red-100 dark:bg-red-900 rounded-full flex items-center justify-center">
+                            <Heart className="h-6 w-6 text-red-600 dark:text-red-400" />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <div className="font-medium truncate">{donor.name}</div>
+                            <div className="font-bold text-base truncate">{donor.name}</div>
                             <div className="text-sm text-muted-foreground truncate">{donor.email}</div>
                           </div>
                         </div>
@@ -2217,29 +2242,41 @@ export default function UserManagement() {
                       </div>
                       
                       {/* Metrics Grid */}
-                      <div className="grid grid-cols-3 gap-3 text-center">
+                      <div className="grid grid-cols-2 gap-4 text-sm">
                         <div>
-                          <div className="text-lg font-bold text-green-600 dark:text-green-400">${donor.totalDonated.toLocaleString()}</div>
+                          <div className="font-medium text-green-700 dark:text-green-300">${donor.totalDonated.toLocaleString()}</div>
                           <div className="text-xs text-muted-foreground">Total Donated</div>
                         </div>
                         <div>
-                          <div className="text-lg font-bold text-blue-600 dark:text-blue-400">{donor.donationCount}</div>
+                          <div className="font-medium text-blue-700 dark:text-blue-300">{donor.donationCount} times</div>
                           <div className="text-xs text-muted-foreground">Donations</div>
-                        </div>
-                        <div>
-                          <div className="text-sm font-medium">{donor.lastDonation}</div>
-                          <div className="text-xs text-muted-foreground">Last Donation</div>
                         </div>
                       </div>
                       
                       {/* Actions */}
-                      <div className="flex justify-end space-x-1 pt-2 border-t border-gray-200 dark:border-gray-700">
-                        <Button variant="ghost" size="sm">
-                          <Eye className="h-4 w-4" />
-                        </Button>
-                        <Button variant="ghost" size="sm">
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
+                      <div className="flex items-center justify-between pt-2 border-t border-red-200 dark:border-red-700">
+                        <div className="text-sm">
+                          <div className="font-medium">Last Donation</div>
+                          <div className="text-xs text-muted-foreground">{donor.lastDonation}</div>
+                        </div>
+                        <div className="flex space-x-1">
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            onClick={() => viewUser(donor, 'donor')}
+                            title="View Details"
+                          >
+                            <Eye className="h-4 w-4" />
+                          </Button>
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            onClick={() => editUser(donor, 'donor')}
+                            title="Edit User"
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </div>
                     </div>
 

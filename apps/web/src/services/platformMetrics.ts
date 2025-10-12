@@ -1098,7 +1098,14 @@ export const getDonationHistory = async (donorId: string): Promise<DonationRecor
       });
     });
     
-    console.log(`✅ Found ${donationRecords.length} donation records for donor ${donorId}`);
+    // Sort by date (most recent first)
+    donationRecords.sort((a, b) => {
+      const dateA = new Date(a.date).getTime();
+      const dateB = new Date(b.date).getTime();
+      return dateB - dateA; // Descending order (newest first)
+    });
+    
+    console.log(`✅ Found ${donationRecords.length} donation records for donor ${donorId} (sorted by date, newest first)`);
     return donationRecords;
   } catch (error) {
     console.error('❌ Error fetching donation history:', error);

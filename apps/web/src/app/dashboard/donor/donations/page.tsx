@@ -329,28 +329,31 @@ export default function DonorDonationsPage() {
                   </div>
                 ) : (
                   donationHistory.map((donation) => (
-                    <div key={donation.id} className="flex items-center justify-between p-4 border rounded-lg dark:border-gray-700">
-                      <div className="flex items-center space-x-4">
-                        <CheckCircle2 className="h-5 w-5 text-green-600" />
-                        <div>
-                          <p className="font-medium dark:text-white">${donation.amount?.toFixed(2)}</p>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">{donation.shelter || donation.participantName || 'Direct Donation'}</p>
+                    <div key={donation.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-3 border rounded-lg dark:border-gray-700 gap-3">
+                      <div className="flex items-center space-x-3 flex-1 min-w-0">
+                        <CheckCircle2 className="h-4 w-4 text-green-600 flex-shrink-0" />
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-2">
+                            <p className="font-semibold text-lg dark:text-white">${donation.amount?.toFixed(2)}</p>
+                            <Badge variant="secondary" className="text-xs">
+                              {donation.type || 'one-time'}
+                            </Badge>
+                          </div>
+                          <p className="text-xs text-gray-600 dark:text-gray-400 truncate">{donation.shelter || 'Direct Donation'}</p>
                         </div>
                       </div>
-                      <div className="text-center">
-                        <p className="text-sm text-gray-600 dark:text-gray-400">{donation.date || new Date(donation.timestamp).toLocaleDateString()}</p>
-                        <Badge variant="secondary">
-                          one-time
-                        </Badge>
+                      
+                      <div className="flex items-center justify-between sm:justify-end gap-4 sm:gap-6">
+                        <div className="text-left sm:text-right">
+                          <p className="text-xs text-gray-500 dark:text-gray-400">{donation.date || new Date(donation.timestamp).toLocaleDateString()}</p>
+                          <p className="text-xs font-medium text-green-600 truncate max-w-[200px]">{donation.impact || 'Direct Impact'}</p>
+                        </div>
+                        
+                        <Button variant="outline" size="sm" className="flex-shrink-0 h-8">
+                          <Download className="h-3 w-3 sm:mr-2" />
+                          <span className="hidden sm:inline">Receipt</span>
+                        </Button>
                       </div>
-                      <div className="text-center">
-                        <p className="text-sm font-medium text-green-600">{donation.impact || 'Thank you!'}</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">Direct Impact</p>
-                      </div>
-                      <Button variant="outline" size="sm">
-                        <Download className="h-4 w-4 mr-2" />
-                        Receipt
-                      </Button>
                     </div>
                   ))
                 )}

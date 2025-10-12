@@ -850,9 +850,11 @@ export interface DonorMetrics {
 export interface DonationRecord {
   id: string;
   date: string;
+  timestamp: number;  // For proper sorting
   amount: number;
   shelter: string;
   shelter_id?: string;
+  participantName?: string;  // For displaying participant name
   type: 'one-time' | 'recurring';
   status: 'completed' | 'pending' | 'failed';
   impact?: string;
@@ -1054,6 +1056,7 @@ export const getDonationHistory = async (donorId: string): Promise<DonationRecor
       donationRecords.push({
         id: doc.id,
         date: donationDate.toISOString().split('T')[0],
+        timestamp: donationDate.getTime(), // Add timestamp for proper sorting
         amount: donation.amount?.total || donation.amount || 0,
         shelter: donation.shelter_name || 'Old Brewery Mission',
         shelter_id: donation.shelter_id,
@@ -1080,29 +1083,34 @@ export const getDonationHistory = async (donorId: string): Promise<DonationRecor
       if (!isDonorMatch) return;
       
       const donationDate = donation.created_at?.toDate?.() || new Date(donation.created_at || Date.now());
-      const distribution = donation.smartfund_distribution || {};
+      const amount = donation.amount || {};
+      const breakdown = amount.breakdown || {};
+      
+      // Determine display name: participant name if available, otherwise shelter
+      const displayName = donation.participant_name || donation.shelter_name || 'Old Brewery Mission';
+      const isDirectToParticipant = !!donation.participant_id;
       
       donationRecords.push({
         id: doc.id,
         date: donationDate.toISOString().split('T')[0],
-        amount: donation.amount?.total || donation.amount || 0,
-        shelter: distribution.shelter_name || 'Old Brewery Mission',
-        shelter_id: distribution.shelter_id || donation.participant_id,
+        timestamp: donationDate.getTime(), // Add timestamp for proper sorting
+        amount: amount.total || donation.amount || 0,
+        shelter: displayName,  // Show participant name if available
+        shelter_id: donation.shelter_id || donation.participant_id,
+        participantName: donation.participant_name,  // Add participant name field
         type: 'one-time',
         status: donation.status === 'completed' ? 'completed' : 
                donation.status === 'pending' ? 'pending' : 'failed',
-        impact: distribution.recipient_type === 'shelter' 
-          ? `SmartFund: $${distribution.direct} direct, $${distribution.housing} housing, $${distribution.shelter_operations} to ${distribution.shelter_name}`
-          : `SmartFund: $${distribution.direct || 0} direct, $${distribution.housing || 0} housing`,
+        impact: isDirectToParticipant
+          ? `SmartFund: $${breakdown.direct || 0} direct, $${breakdown.housing || 0} housing`
+          : `SmartFund: $${breakdown.direct || 0} direct, $${breakdown.housing || 0} housing, $${breakdown.shelter || 0} to ${donation.shelter_name || 'shelter'}`,
         receipt_available: donation.status === 'completed'
       });
     });
     
-    // Sort by date (most recent first)
+    // Sort by timestamp (most recent first)
     donationRecords.sort((a, b) => {
-      const dateA = new Date(a.date).getTime();
-      const dateB = new Date(b.date).getTime();
-      return dateB - dateA; // Descending order (newest first)
+      return b.timestamp - a.timestamp; // Descending order (newest first)
     });
     
     console.log(`✅ Found ${donationRecords.length} donation records for donor ${donorId} (sorted by date, newest first)`);

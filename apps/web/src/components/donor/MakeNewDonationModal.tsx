@@ -29,6 +29,7 @@ interface Participant {
   id: string;
   name: string;
   shelter: string;
+  shelter_id?: string;
   story: string;
   goal: string;
   raised: number;
@@ -107,19 +108,117 @@ export function MakeNewDonationModal({ isOpen, onClose }: MakeNewDonationModalPr
       return;
     }
 
+    if (!user) {
+      alert('You must be logged in to make a donation');
+      return;
+    }
+
     setIsProcessing(true);
     
     try {
-      // Simulate donation processing
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      const { collection, addDoc, serverTimestamp, doc, updateDoc, increment } = await import('firebase/firestore');
+      const { db } = await import('@/lib/firebase');
       
-      // Here you would integrate with your payment processor and donation API
-      console.log('Processing donation:', {
-        target: selectedTarget,
-        amount: parseFloat(amount),
-        type: donationType,
-        donor: user?.uid
-      });
+      const donationAmount = parseFloat(amount);
+      
+      // Determine if this is a shelter or participant donation
+      const isParticipantDonation = participants.some(p => p.id === selectedTarget);
+      const isShelterDonation = shelters.some(s => s.id === selectedTarget);
+      
+      let participantId = null;
+      let participantName = null;
+      let shelterId = null;
+      let shelterName = null;
+      
+      if (isParticipantDonation) {
+        const participant = participants.find(p => p.id === selectedTarget);
+        participantId = selectedTarget;
+        participantName = participant?.name || 'Unknown Participant';
+        shelterId = participant?.shelter_id || null;
+        shelterName = participant?.shelter || 'Unknown Shelter';
+      } else if (isShelterDonation) {
+        const shelter = shelters.find(s => s.id === selectedTarget);
+        shelterId = selectedTarget;
+        shelterName = shelter?.name || 'Unknown Shelter';
+      }
+      
+      // Calculate SmartProof 80-15-5 breakdown
+      const directAmount = Math.round(donationAmount * 0.80 * 100) / 100;
+      const housingAmount = Math.round(donationAmount * 0.15 * 100) / 100;
+      const shelterAmount = Math.round(donationAmount * 0.05 * 100) / 100;
+      
+      // Create donation document
+      const donationData = {
+        // Core donation info
+        amount: {
+          total: donationAmount,
+          breakdown: {
+            direct: directAmount,
+            housing: housingAmount,
+            shelter: shelterAmount
+          }
+        },
+        status: 'completed',
+        created_at: serverTimestamp(),
+        
+        // Donor info
+        donor_id: user.uid,
+        donor_info: {
+          donor_id: user.uid,
+          email: user.email || '',
+          name: user.displayName || user.email || 'Anonymous Donor'
+        },
+        
+        // Participant info (if applicable)
+        ...(participantId && {
+          participant_id: participantId,
+          participant_name: participantName
+        }),
+        
+        // Shelter info
+        ...(shelterId && {
+          shelter_id: shelterId,
+          shelter_name: shelterName
+        }),
+        
+        // SmartFund distribution
+        smartfund_distribution: {
+          direct_to_participant: directAmount,
+          housing_fund: housingAmount,
+          shelter_operations: shelterAmount,
+          ...(shelterId && { shelter_id: shelterId }),
+          ...(participantId && { participant_id: participantId })
+        },
+        
+        // Payment info
+        payment_method: 'quick_action',
+        payment_provider: 'internal',
+        donation_type: donationType,
+        
+        // Metadata
+        source: 'donor_dashboard_quick_action',
+        platform: 'web'
+      };
+      
+      console.log('💰 Creating donation:', donationData);
+      
+      // Add donation to demo_donations collection
+      const donationRef = await addDoc(collection(db, 'demo_donations'), donationData);
+      console.log('✅ Donation created with ID:', donationRef.id);
+      
+      // Update shelter stats if applicable
+      if (shelterId) {
+        try {
+          const shelterRef = doc(db, 'shelters', shelterId);
+          await updateDoc(shelterRef, {
+            totalDonations: increment(donationAmount),
+            updated_at: serverTimestamp()
+          });
+          console.log('✅ Updated shelter stats');
+        } catch (error) {
+          console.warn('Could not update shelter stats:', error);
+        }
+      }
       
       alert(`Donation of $${amount} submitted successfully!`);
       onClose();
@@ -129,8 +228,11 @@ export function MakeNewDonationModal({ isOpen, onClose }: MakeNewDonationModalPr
       setAmount('');
       setDonationType('one-time');
       
+      // Refresh the page to update stats
+      window.location.reload();
+      
     } catch (error) {
-      console.error('Donation failed:', error);
+      console.error('❌ Donation failed:', error);
       alert('Donation failed. Please try again.');
     } finally {
       setIsProcessing(false);

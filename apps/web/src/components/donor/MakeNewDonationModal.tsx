@@ -203,16 +203,14 @@ export function MakeNewDonationModal({ isOpen, onClose }: MakeNewDonationModalPr
                       <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">
                         {shelter.description}
                       </p>
-                      <div className="flex justify-between items-center text-sm">
-                        <div className="flex items-center gap-4">
-                          <span className="flex items-center gap-1">
-                            <Users className="h-4 w-4" />
-                            {shelter.participantCount} people
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <DollarSign className="h-4 w-4" />
-                            ${shelter.totalDonations.toLocaleString()} raised
-                          </span>
+                      <div className="flex items-center gap-6 text-sm text-muted-foreground">
+                        <div className="flex items-center gap-1.5">
+                          <Users className="h-4 w-4" />
+                          <span>{shelter.participantCount} people</span>
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                          <DollarSign className="h-4 w-4" />
+                          <span>${shelter.totalDonations.toLocaleString()} raised</span>
                         </div>
                       </div>
                     </CardContent>

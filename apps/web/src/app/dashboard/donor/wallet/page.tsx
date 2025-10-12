@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { getDonorMetrics, getDonationHistory } from '@/services/platformMetrics';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -107,9 +108,11 @@ export default function DonorWalletPage() {
             <p className="text-xs text-muted-foreground mt-1">
               {donationCount} {donationCount === 1 ? 'donation' : 'donations'} all time
             </p>
-            <Button className="w-full mt-4" size="sm" variant="outline">
-              View History
-            </Button>
+            <Link href="/dashboard/donor/donations" className="w-full mt-4 block">
+              <Button className="w-full" size="sm" variant="outline">
+                View History
+              </Button>
+            </Link>
           </CardContent>
         </Card>
 
@@ -123,10 +126,12 @@ export default function DonorWalletPage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              <Button className="w-full" size="sm" variant="outline">
-                <CreditCard className="mr-2 h-4 w-4" />
-                Add Payment Method
-              </Button>
+              <Link href="/dashboard/donor/settings?tab=payment" className="w-full block">
+                <Button className="w-full" size="sm" variant="outline">
+                  <CreditCard className="mr-2 h-4 w-4" />
+                  Manage Payment Methods
+                </Button>
+              </Link>
               <Button className="w-full" size="sm" variant="outline">
                 <Download className="mr-2 h-4 w-4" />
                 Export Statements
@@ -208,14 +213,16 @@ export default function DonorWalletPage() {
         <CardContent>
           <div className="text-center py-8">
             <CreditCard className="mx-auto h-12 w-12 text-muted-foreground/50" />
-            <h3 className="mt-4 text-lg font-semibold">No payment methods</h3>
+            <h3 className="mt-4 text-lg font-semibold">Manage Your Payment Methods</h3>
             <p className="text-sm text-muted-foreground mt-2">
-              Add a payment method to make donations faster
+              View and manage your saved payment methods in Settings
             </p>
-            <Button className="mt-4" variant="outline">
-              <Plus className="mr-2 h-4 w-4" />
-              Add Payment Method
-            </Button>
+            <Link href="/dashboard/donor/settings?tab=payment">
+              <Button className="mt-4" variant="outline">
+                <CreditCard className="mr-2 h-4 w-4" />
+                Go to Payment Methods
+              </Button>
+            </Link>
           </div>
         </CardContent>
       </Card>

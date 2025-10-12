@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { getDoc, doc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
@@ -33,6 +34,9 @@ import {
 
 export default function DonorSettingsPage() {
   const { user } = useAuth();
+  const searchParams = useSearchParams();
+  const tabFromUrl = searchParams.get('tab');
+  const [activeTab, setActiveTab] = useState(tabFromUrl || 'profile');
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
@@ -195,11 +199,12 @@ export default function DonorSettingsPage() {
       </div>
 
       {/* Main Content */}
-      <Tabs defaultValue="profile" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="profile">Profile</TabsTrigger>
           <TabsTrigger value="notifications">Notifications</TabsTrigger>
           <TabsTrigger value="privacy">Privacy & Security</TabsTrigger>
+          <TabsTrigger value="payment">Payment Methods</TabsTrigger>
           <TabsTrigger value="preferences">Preferences</TabsTrigger>
         </TabsList>
 
@@ -453,6 +458,79 @@ export default function DonorSettingsPage() {
                     Read our <a href="/privacy" className="underline">Privacy Policy</a> for more details.
                   </p>
                 </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Payment Methods Tab */}
+        <TabsContent value="payment" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Payment Methods</CardTitle>
+              <CardDescription>
+                Manage your saved payment methods for donations
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {/* Credit Card */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 border rounded-lg gap-4">
+                  <div className="flex items-center space-x-4">
+                    <div className="h-12 w-12 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center">
+                      <CreditCard className="h-6 w-6 text-gray-600 dark:text-gray-400" />
+                    </div>
+                    <div>
+                      <div className="flex items-center space-x-2">
+                        <p className="font-medium">Credit Card</p>
+                        <Badge variant="secondary" className="bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
+                          Default
+                        </Badge>
+                      </div>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">•••• •••• •••• 4532</p>
+                      <p className="text-xs text-gray-500">Visa</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between sm:justify-end gap-4">
+                    <div className="text-left sm:text-right">
+                      <p className="text-sm text-gray-600 dark:text-gray-400">Expires</p>
+                      <p className="text-sm font-medium">12/26</p>
+                    </div>
+                    <div className="flex space-x-2">
+                      <Button variant="outline" size="sm">
+                        <Edit3 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Bank Account */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 border rounded-lg gap-4">
+                  <div className="flex items-center space-x-4">
+                    <div className="h-12 w-12 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center">
+                      <CreditCard className="h-6 w-6 text-gray-600 dark:text-gray-400" />
+                    </div>
+                    <div>
+                      <p className="font-medium">Bank Account</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">•••• •••• 8901</p>
+                      <p className="text-xs text-gray-500">TD Bank</p>
+                    </div>
+                  </div>
+                  <div className="flex space-x-2">
+                    <Button variant="outline" size="sm">
+                      <Edit3 className="h-4 w-4" />
+                    </Button>
+                    <Button variant="outline" size="sm" className="text-red-600 hover:text-red-700 dark:text-red-400">
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Add New Payment Method Button */}
+                <Button className="w-full sm:w-auto" variant="outline">
+                  <CreditCard className="h-4 w-4 mr-2" />
+                  Add Payment Method
+                </Button>
               </div>
             </CardContent>
           </Card>

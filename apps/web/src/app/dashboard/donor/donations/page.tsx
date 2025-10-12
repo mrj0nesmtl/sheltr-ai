@@ -105,25 +105,6 @@ export default function DonorDonationsPage() {
     loadData();
   }, [user]);
 
-  const paymentMethods = [
-    {
-      id: 'PM001',
-      type: 'Credit Card',
-      details: '•••• •••• •••• 4532',
-      brand: 'Visa',
-      isDefault: true,
-      expiryDate: '12/26'
-    },
-    {
-      id: 'PM002',
-      type: 'Bank Account',
-      details: '•••• •••• 8901',
-      brand: 'TD Bank',
-      isDefault: false,
-      expiryDate: null
-    }
-  ];
-
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'completed':
@@ -283,10 +264,9 @@ export default function DonorDonationsPage() {
 
       {/* Main Content */}
       <Tabs defaultValue="history" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="history">Donation History</TabsTrigger>
           <TabsTrigger value="recurring">Recurring Gifts</TabsTrigger>
-          <TabsTrigger value="payment">Payment Methods</TabsTrigger>
           <TabsTrigger value="preferences">Preferences</TabsTrigger>
         </TabsList>
 
@@ -413,61 +393,6 @@ export default function DonorDonationsPage() {
                       <Button variant="outline" size="sm" className="text-red-600 hover:text-red-700">
                         <Trash2 className="h-4 w-4" />
                       </Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        {/* Payment Methods Tab */}
-        <TabsContent value="payment" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Payment Methods</CardTitle>
-              <CardDescription>
-                Manage your saved payment methods for donations
-              </CardDescription>
-              <Button className="w-fit">
-                <Plus className="h-4 w-4 mr-2" />
-                Add Payment Method
-              </Button>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {paymentMethods.map((method) => (
-                  <div key={method.id} className="flex items-center justify-between p-4 border rounded-lg">
-                    <div className="flex items-center space-x-4">
-                      <CreditCard className="h-8 w-8 text-gray-400" />
-                      <div>
-                        <div className="flex items-center space-x-2">
-                          <p className="font-medium">{method.type}</p>
-                          {method.isDefault && (
-                            <Badge variant="secondary" className="bg-purple-100 text-purple-800">
-                              Default
-                            </Badge>
-                          )}
-                        </div>
-                        <p className="text-sm text-gray-600">{method.details}</p>
-                        <p className="text-xs text-gray-500">{method.brand}</p>
-                      </div>
-                    </div>
-                    {method.expiryDate && (
-                      <div className="text-center">
-                        <p className="text-sm text-gray-600">Expires</p>
-                        <p className="text-sm font-medium">{method.expiryDate}</p>
-                      </div>
-                    )}
-                    <div className="flex space-x-2">
-                      <Button variant="outline" size="sm">
-                        <Edit3 className="h-4 w-4" />
-                      </Button>
-                      {!method.isDefault && (
-                        <Button variant="outline" size="sm" className="text-red-600 hover:text-red-700">
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      )}
                     </div>
                   </div>
                 ))}

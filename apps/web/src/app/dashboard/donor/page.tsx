@@ -331,28 +331,34 @@ export default function DonorDashboard() {
             <div className="space-y-4">
               {displayDonations.length > 0 ? (
                 displayDonations.map((donation) => (
-                  <div key={donation.id} className="flex items-center justify-between p-3 border rounded-lg">
-                    <div className="flex-1 space-y-1">
-                      <div className="flex items-center space-x-2">
-                        <p className="text-sm font-medium">${donation.amount.toFixed(2)}</p>
-                        <Badge variant={donation.type === 'recurring' ? 'default' : 'outline'}>
-                          {donation.type}
-                        </Badge>
-                        {donation.status === 'completed' && (
-                          <Badge variant="default" className="bg-green-100 text-green-800">
-                            ✓ Completed
+                  <Link 
+                    key={donation.id} 
+                    href={`/dashboard/donor/wallet?transaction=${donation.id}`}
+                    className="block"
+                  >
+                    <div className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50 hover:border-primary/50 transition-all cursor-pointer group">
+                      <div className="flex-1 space-y-1">
+                        <div className="flex items-center space-x-2">
+                          <p className="text-sm font-medium group-hover:text-primary transition-colors">${donation.amount.toFixed(2)}</p>
+                          <Badge variant={donation.type === 'recurring' ? 'default' : 'outline'}>
+                            {donation.type}
                           </Badge>
-                        )}
+                          {donation.status === 'completed' && (
+                            <Badge variant="default" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                              ✓ Completed
+                            </Badge>
+                          )}
+                        </div>
+                        <p className="text-xs text-muted-foreground">
+                          {donation.shelter} • {new Date(donation.date).toLocaleDateString()}
+                        </p>
+                        <p className="text-xs text-green-600 dark:text-green-400">
+                          {donation.impact}
+                        </p>
                       </div>
-                      <p className="text-xs text-muted-foreground">
-                        {donation.shelter} • {new Date(donation.date).toLocaleDateString()}
-                      </p>
-                      <p className="text-xs text-green-600">
-                        {donation.impact}
-                      </p>
+                      <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
                     </div>
-                    <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                  </div>
+                  </Link>
                 ))
               ) : (
                 <div className="text-center py-8">

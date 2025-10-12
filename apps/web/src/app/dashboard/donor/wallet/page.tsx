@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { getDonorMetrics, getDonationHistory } from '@/services/platformMetrics';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -16,11 +17,14 @@ import {
   History,
   Download,
   Calendar,
-  CreditCard
+  CreditCard,
+  ArrowLeft
 } from 'lucide-react';
 
 export default function DonorWalletPage() {
   const { user } = useAuth();
+  const searchParams = useSearchParams();
+  const highlightTransactionId = searchParams.get('transaction');
   const [walletBalance, setWalletBalance] = useState(0);
   const [totalDonated, setTotalDonated] = useState(0);
   const [donationCount, setDonationCount] = useState(0);
@@ -169,36 +173,60 @@ export default function DonorWalletPage() {
             </div>
           ) : (
             <div className="space-y-4">
-              {recentTransactions.map((transaction, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors"
-                >
-                  <div className="flex items-center space-x-4">
-                    <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-                      <ArrowUpRight className="h-5 w-5 text-primary" />
+              {recentTransactions.map((transaction, index) => {
+                const isHighlighted = highlightTransactionId === transaction.id;
+                return (
+                  <Link 
+                    key={index}
+                    href={`/dashboard/donor/donations`}
+                    className="block"
+                  >
+                    <div
+                      className={`flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-all cursor-pointer group ${
+                        isHighlighted ? 'bg-primary/5 border-primary ring-2 ring-primary/20' : ''
+                      }`}
+                    >
+                      <div className="flex items-center space-x-4 flex-1">
+                        <div className={`h-10 w-10 rounded-full flex items-center justify-center ${
+                          isHighlighted ? 'bg-primary/20' : 'bg-primary/10'
+                        }`}>
+                          <ArrowUpRight className={`h-5 w-5 ${isHighlighted ? 'text-primary' : 'text-primary'}`} />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2">
+                            <p className={`font-medium truncate ${isHighlighted ? 'text-primary' : 'group-hover:text-primary transition-colors'}`}>
+                              {transaction.shelter || 'Direct Donation'}
+                            </p>
+                            {isHighlighted && (
+                              <Badge variant="outline" className="bg-primary/10 text-primary border-primary">
+                                Viewing
+                              </Badge>
+                            )}
+                          </div>
+                          <p className="text-sm text-muted-foreground">
+                            {new Date(transaction.date).toLocaleDateString('en-US', {
+                              month: 'short',
+                              day: 'numeric',
+                              year: 'numeric'
+                            })}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="text-right flex items-center gap-3">
+                        <div>
+                          <p className="font-semibold text-primary">
+                            -${transaction.amount.toFixed(2)}
+                          </p>
+                          <Badge variant="outline" className="mt-1">
+                            {transaction.status}
+                          </Badge>
+                        </div>
+                        <ArrowLeft className="h-4 w-4 text-muted-foreground group-hover:text-primary group-hover:-translate-x-1 transition-all" />
+                      </div>
                     </div>
-                    <div>
-                      <p className="font-medium">{transaction.participant}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {new Date(transaction.date).toLocaleDateString('en-US', {
-                          month: 'short',
-                          day: 'numeric',
-                          year: 'numeric'
-                        })}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-semibold text-primary">
-                      -${transaction.amount.toFixed(2)}
-                    </p>
-                    <Badge variant="outline" className="mt-1">
-                      {transaction.status}
-                    </Badge>
-                  </div>
-                </div>
-              ))}
+                  </Link>
+                );
+              })}
             </div>
           )}
         </CardContent>

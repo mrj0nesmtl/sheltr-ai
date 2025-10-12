@@ -2,6 +2,7 @@
 
 import { useAuth } from '@/contexts/AuthContext';
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -369,9 +370,11 @@ export default function DonorDashboard() {
             </div>
             {displayDonations.length > 0 && (
               <div className="mt-4">
-                <Button variant="outline" className="w-full">
-                  View All Donations
-                </Button>
+                <Link href="/dashboard/donor/donations" className="block">
+                  <Button variant="outline" className="w-full">
+                    View All Donations
+                  </Button>
+                </Link>
               </div>
             )}
           </CardContent>

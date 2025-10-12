@@ -26,19 +26,36 @@ import {
   AlertCircle
 } from 'lucide-react';
 
+interface RecurringGift {
+  id: string;
+  amount: number;
+  shelter: string;
+  shelter_id: string;
+  frequency: string;
+  nextDate: string;
+  status: 'active' | 'paused' | 'cancelled';
+  startDate: string;
+  totalDonated: number;
+}
+
 export default function DonorDonationsPage() {
   const { user } = useAuth();
   const [searchTerm, setSearchTerm] = useState('');
   const [donorMetrics, setDonorMetrics] = useState<any>(null);
   const [donationHistory, setDonationHistory] = useState<any[]>([]);
+  const [recurringGifts, setRecurringGifts] = useState<RecurringGift[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Load real donor data
+  // Load real donor data including recurring gifts
   useEffect(() => {
     const loadData = async () => {
       if (!user?.uid) return;
       
       try {
+        const { collection, query, where, getDocs, orderBy } = await import('firebase/firestore');
+        const { db } = await import('@/lib/firebase');
+        
+        // Load donor metrics and donation history
         const [metrics, history] = await Promise.all([
           getDonorMetrics(user.uid),
           getDonationHistory(user.uid)
@@ -46,7 +63,36 @@ export default function DonorDonationsPage() {
         
         setDonorMetrics(metrics);
         setDonationHistory(history);
-        console.log('✅ Loaded donor donations:', { metrics, historyCount: history.length });
+        
+        // Load recurring gifts from Firestore
+        console.log('🔄 Loading recurring gifts for donor:', user.uid);
+        const recurringQuery = query(
+          collection(db, 'recurring_gifts'),
+          where('donor_id', '==', user.uid),
+          orderBy('created_at', 'desc')
+        );
+        
+        const recurringSnapshot = await getDocs(recurringQuery);
+        const gifts: RecurringGift[] = [];
+        
+        recurringSnapshot.forEach((doc) => {
+          const data = doc.data();
+          gifts.push({
+            id: doc.id,
+            amount: data.amount || 0,
+            shelter: data.shelter_name || 'Unknown Shelter',
+            shelter_id: data.shelter_id || '',
+            frequency: data.frequency || 'monthly',
+            nextDate: data.next_payment_date || new Date().toISOString().split('T')[0],
+            status: data.status || 'active',
+            startDate: data.start_date || data.created_at?.toDate?.()?.toISOString().split('T')[0] || 'Unknown',
+            totalDonated: data.total_donated || 0
+          });
+        });
+        
+        setRecurringGifts(gifts);
+        console.log(`✅ Loaded ${gifts.length} recurring gift(s)`);
+        console.log('✅ Loaded donor donations:', { metrics, historyCount: history.length, recurringCount: gifts.length });
       } catch (error) {
         console.error('❌ Failed to load donation data:', error);
       } finally {
@@ -56,39 +102,6 @@ export default function DonorDonationsPage() {
     
     loadData();
   }, [user]);
-
-  const recurringGifts = [
-    {
-      id: 'RG001',
-      amount: 75.00,
-      shelter: 'Old Brewery Mission',
-      frequency: 'Monthly',
-      nextDate: '2024-02-01',
-      status: 'active',
-      startDate: '2023-06-01',
-      totalDonated: 600.00
-    },
-    {
-      id: 'RG002',
-      amount: 50.00,
-      shelter: 'Downtown Hope Shelter', 
-      frequency: 'Quarterly',
-      nextDate: '2024-04-01',
-      status: 'active',
-      startDate: '2023-01-01',
-      totalDonated: 200.00
-    },
-    {
-      id: 'RG003',
-      amount: 25.00,
-      shelter: 'Union Gospel Mission',
-      frequency: 'Weekly',
-      nextDate: '2024-01-16',
-      status: 'paused',
-      startDate: '2023-08-01',
-      totalDonated: 125.00
-    }
-  ];
 
   const paymentMethods = [
     {

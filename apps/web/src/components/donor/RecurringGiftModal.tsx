@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -15,6 +16,7 @@ interface RecurringGiftModalProps {
 }
 
 export function RecurringGiftModal({ isOpen, onClose }: RecurringGiftModalProps) {
+  const { user } = useAuth();
   const [amount, setAmount] = useState<string>('');
   const [frequency, setFrequency] = useState<string>('monthly');
   const [shelter, setShelter] = useState<string>('');
@@ -69,18 +71,59 @@ export function RecurringGiftModal({ isOpen, onClose }: RecurringGiftModalProps)
       return;
     }
 
+    if (!user) {
+      alert('You must be logged in to set up a recurring gift');
+      return;
+    }
+
     setIsProcessing(true);
     
     try {
-      // Simulate processing
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      const { collection, addDoc, serverTimestamp } = await import('firebase/firestore');
+      const { db } = await import('@/lib/firebase');
       
-      console.log('Setting up recurring gift:', {
-        amount: parseFloat(amount),
-        frequency,
-        shelter,
-        startDate
-      });
+      const donationAmount = parseFloat(amount);
+      const selectedShelter = shelters.find(s => s.id === shelter);
+      
+      // Calculate next payment date based on frequency
+      const start = new Date(startDate);
+      let nextPaymentDate = new Date(start);
+      switch (frequency) {
+        case 'weekly':
+          nextPaymentDate.setDate(nextPaymentDate.getDate() + 7);
+          break;
+        case 'monthly':
+          nextPaymentDate.setMonth(nextPaymentDate.getMonth() + 1);
+          break;
+        case 'quarterly':
+          nextPaymentDate.setMonth(nextPaymentDate.getMonth() + 3);
+          break;
+        case 'annually':
+          nextPaymentDate.setFullYear(nextPaymentDate.getFullYear() + 1);
+          break;
+      }
+      
+      // Create recurring gift document
+      const recurringGiftData = {
+        donor_id: user.uid,
+        donor_email: user.email || '',
+        donor_name: user.displayName || user.email || 'Anonymous Donor',
+        shelter_id: shelter,
+        shelter_name: selectedShelter?.name || 'Unknown Shelter',
+        amount: donationAmount,
+        frequency: frequency,
+        status: 'active',
+        start_date: startDate,
+        next_payment_date: nextPaymentDate.toISOString().split('T')[0],
+        total_donated: 0, // Will be updated with each payment
+        payment_count: 0,
+        created_at: serverTimestamp(),
+        updated_at: serverTimestamp()
+      };
+      
+      console.log('💳 Creating recurring gift:', recurringGiftData);
+      const recurringRef = await addDoc(collection(db, 'recurring_gifts'), recurringGiftData);
+      console.log('✅ Recurring gift created with ID:', recurringRef.id);
       
       alert(`Recurring gift of $${amount} ${frequency} set up successfully!`);
       onClose();
@@ -91,8 +134,11 @@ export function RecurringGiftModal({ isOpen, onClose }: RecurringGiftModalProps)
       setShelter('');
       setStartDate('');
       
+      // Refresh the page to show the new recurring gift
+      window.location.reload();
+      
     } catch (error) {
-      console.error('Failed to set up recurring gift:', error);
+      console.error('❌ Failed to set up recurring gift:', error);
       alert('Failed to set up recurring gift. Please try again.');
     } finally {
       setIsProcessing(false);

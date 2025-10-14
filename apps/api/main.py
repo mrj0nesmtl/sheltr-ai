@@ -22,7 +22,7 @@ from contextlib import asynccontextmanager
 # Import routers
 from routers.auth import router as auth_router
 from routers.analytics import router as analytics_router
-from routers.chatbot import router as chatbot_router
+# REMOVED: chatbot_router (legacy, caused route conflicts with public/authenticated)
 from routers.public_chatbot import router as public_chatbot_router
 from routers.knowledge import router as knowledge_router
 from routers.services import router as services_router
@@ -206,7 +206,7 @@ async def general_exception_handler(request: Request, exc: Exception):
 # Include routers with API version prefix
 app.include_router(auth_router, prefix="/api/v1")
 app.include_router(analytics_router, prefix="/api/v1")
-app.include_router(chatbot_router, prefix="/api/v1")
+# REMOVED: chatbot_router registration (caused /chatbot/* route conflicts)
 app.include_router(public_chatbot_router, prefix="/api/v1")
 app.include_router(knowledge_router, prefix="/api/v1")
 app.include_router(services_router, prefix="/api/v1")

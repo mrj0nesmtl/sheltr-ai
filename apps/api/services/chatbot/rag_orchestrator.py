@@ -422,34 +422,50 @@ class RAGOrchestrator:
         actions = []
         results = knowledge_results.get('results', [])
         
-        # Add knowledge-specific actions
+        # For public information agent, provide helpful conversation starters
+        # instead of showing documentation links
+        if agent_type == "public_information":
+            actions = self._get_public_conversation_starters(intent)
+            return actions
+        
+        # For other agents, show knowledge-specific actions
         if results:
-            # Add "View Full Document" actions for relevant documents
-            seen_documents = set()
-            for result in results[:2]:  # Top 2 results
-                doc_title = result.get('document_title', '')
-                doc_id = result.get('document_id', '')
+            # Only show documentation for authenticated users (admins, participants, donors)
+            # Skip showing technical/internal docs to public users
+            if agent_type != "public_information":
+                # Add "View Full Document" actions for relevant documents
+                seen_documents = set()
+                for result in results[:2]:  # Top 2 results
+                    doc_title = result.get('document_title', '')
+                    doc_id = result.get('document_id', '')
+                    doc_category = result.get('document_category', '')
+                    
+                    # Skip internal/technical documentation for public conversations
+                    skip_categories = ['development', 'technical', 'api', 'migration', 'admin']
+                    if any(skip in doc_category.lower() for skip in skip_categories):
+                        continue
+                    
+                    if doc_id and doc_id not in seen_documents:
+                        actions.append({
+                            'type': 'view_document',
+                            'label': f"View: {doc_title[:30]}...",
+                            'data': {
+                                'document_id': doc_id,
+                                'title': doc_title
+                            }
+                        })
+                        seen_documents.add(doc_id)
                 
-                if doc_id and doc_id not in seen_documents:
+                # Add search action for more information
+                if len(actions) > 0:  # Only if we have relevant docs
                     actions.append({
-                        'type': 'view_document',
-                        'label': f"View: {doc_title[:30]}...",
+                        'type': 'search_more',
+                        'label': 'Search for More Information',
                         'data': {
-                            'document_id': doc_id,
-                            'title': doc_title
+                            'query': knowledge_results.get('query', ''),
+                            'suggested_categories': self._get_relevant_categories(agent_type, intent)
                         }
                     })
-                    seen_documents.add(doc_id)
-            
-            # Add search action for more information
-            actions.append({
-                'type': 'search_more',
-                'label': 'Search for More Information',
-                'data': {
-                    'query': knowledge_results.get('query', ''),
-                    'suggested_categories': self._get_relevant_categories(agent_type, intent)
-                }
-            })
         
         # Add standard agent actions
         if agent_type == "emergency":
@@ -479,6 +495,51 @@ class RAGOrchestrator:
             })
         
         return actions
+    
+    def _get_public_conversation_starters(self, intent: Intent) -> List[Dict[str, Any]]:
+        """Get helpful conversation starters for public users based on their intent"""
+        
+        # Map intents to relevant conversation starters
+        conversation_starters = {
+            IntentCategory.DONATION: [
+                {'type': 'info', 'label': 'How do I donate?', 'url': '/scan-give'},
+                {'type': 'info', 'label': 'What is the SmartFund?', 'url': '/tokenomics'},
+                {'type': 'info', 'label': 'How does blockchain transparency work?', 'url': '/solutions/donors'}
+            ],
+            IntentCategory.SHELTER_OPERATIONS: [
+                {'type': 'info', 'label': 'How do I sign up my shelter?', 'url': '/contact'},
+                {'type': 'info', 'label': 'Is the platform free for shelters?', 'url': '/solutions/shelters'},
+                {'type': 'info', 'label': 'What features do shelters get?', 'url': '/solutions/shelters'}
+            ],
+            IntentCategory.PARTICIPANT_SERVICES: [
+                {'type': 'info', 'label': 'How do I participate?', 'url': '/solutions/participants'},
+                {'type': 'info', 'label': 'What is a POD?', 'url': '/about'},
+                {'type': 'info', 'label': 'How do I get a POD?', 'url': '/solutions/participants'}
+            ],
+            IntentCategory.PLATFORM_INFO: [
+                {'type': 'info', 'label': 'What is SHELTR?', 'url': '/about'},
+                {'type': 'info', 'label': 'How does SHELTR make money?', 'url': '/tokenomics'},
+                {'type': 'info', 'label': 'What blockchain is SHELTR on?', 'url': '/tokenomics'}
+            ],
+            IntentCategory.TECHNICAL: [
+                {'type': 'info', 'label': 'How does SHELTR use blockchain?', 'url': '/tokenomics'},
+                {'type': 'info', 'label': 'What is the SmartFund?', 'url': '/tokenomics'},
+                {'type': 'info', 'label': 'How do I donate?', 'url': '/scan-give'}
+            ]
+        }
+        
+        # Get starters based on intent category
+        starters = conversation_starters.get(intent.category, [])
+        
+        # If no specific starters for this intent, provide general ones
+        if not starters:
+            starters = [
+                {'type': 'info', 'label': 'What is SHELTR?', 'url': '/about'},
+                {'type': 'info', 'label': 'How do I donate?', 'url': '/scan-give'},
+                {'type': 'info', 'label': 'How do I participate?', 'url': '/solutions/participants'}
+            ]
+        
+        return starters
     
     def _generate_citations(self, knowledge_results: Dict[str, Any]) -> List[Dict[str, Any]]:
         """Generate source citations for knowledge-based responses"""

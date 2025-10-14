@@ -75,12 +75,21 @@ class IntentClassifier:
     """Classifies user messages into intents"""
     
     def __init__(self):
+        # Only trigger emergency for IMMEDIATE life-threatening situations
         self.emergency_patterns = [
-            r"\b(emergency|crisis|urgent|help\s+now|danger|suicide|harm)\b",
-            r"\b(haven't\s+eaten|no\s+food|starving|hungry)\b",
-            r"\b(need\s+shelter\s+tonight|nowhere\s+to\s+go|homeless)\b",
-            r"\b(hurt|injured|sick|medical\s+emergency)\b",
-            r"\b(threat|violence|abuse|scared)\b"
+            r"\b(suicide|suicidal|kill\s+myself|end\s+my\s+life|want\s+to\s+die)\b",
+            r"\b(self[\s-]?harm|cutting\s+myself|hurting\s+myself)\b",
+            r"\b(immediate\s+danger|life\s+threatening|medical\s+emergency)\b",
+            r"\b(abuse|violence|threatened|attacked|beaten)\b.*\b(now|tonight|help)\b",
+            r"\b(overdose|od|took\s+pills)\b"
+        ]
+        
+        # Participant support patterns (help but not emergency)
+        self.participant_inquiry_patterns = [
+            r"\b(i\s+am\s+homeless|i'm\s+homeless|experiencing\s+homelessness)\b",
+            r"\b(need\s+shelter|need\s+housing|looking\s+for\s+shelter)\b",
+            r"\b(need\s+help|can\s+you\s+help|how\s+can\s+you\s+help)\b",
+            r"\b(no\s+place\s+to\s+stay|nowhere\s+to\s+go|living\s+on\s+street)\b"
         ]
         
         self.service_patterns = [
@@ -106,7 +115,7 @@ class IntentClassifier:
         try:
             message_lower = message.lower()
             
-            # Check for emergency patterns first
+            # Check for LIFE-THREATENING emergency patterns first (suicide, violence, OD)
             for pattern in self.emergency_patterns:
                 if re.search(pattern, message_lower):
                     return Intent(
@@ -116,6 +125,17 @@ class IntentClassifier:
                         entities={"original_message": message},
                         urgency=UrgencyLevel.CRITICAL,
                         requires_escalation=True
+                    )
+            
+            # Check for participant inquiry patterns (homeless, need help, seeking shelter)
+            for pattern in self.participant_inquiry_patterns:
+                if re.search(pattern, message_lower):
+                    return Intent(
+                        category=IntentCategory.PARTICIPANT_SERVICES,
+                        subcategory="participant_inquiry",
+                        confidence=0.90,
+                        entities={"query_type": "participant_help", "user_role": user_role},
+                        urgency=UrgencyLevel.HIGH  # Important but not critical
                     )
             
             # Check for service booking patterns

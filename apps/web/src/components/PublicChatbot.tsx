@@ -201,24 +201,29 @@ export const PublicChatbot: React.FC<PublicChatbotProps> = ({ className = '' }) 
     setIsLoading(true);
 
     try {
-      // SIMPLIFIED: Always use Next.js API route (consistent dev/prod behavior)
-      // This avoids direct Cloud Run calls and ensures proper environment variable handling
-      const apiUrl = isAuthenticated 
-        ? '/api/chatbot/authenticated' 
-        : '/api/chatbot/public';
+      // Call backend API directly (static export doesn't support Next.js API routes)
+      const backendUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
+      const endpoint = isAuthenticated ? '/api/v1/chatbot/authenticated' : '/api/v1/chatbot/public';
+      const apiUrl = `${backendUrl}${endpoint}`;
+      
+      console.log(`[PublicChatbot] Calling: ${apiUrl}`);
       
       const requestBody = {
         message: userMessage.text,
-        sessionId: getSessionId(),
-        userRole: userRole,
-        context: {
+        user_id: isAuthenticated ? user?.uid : getSessionId(),
+        user_role: userRole,
+        conversation_context: {
           page: window.location.pathname,
-          userAgent: navigator.userAgent,
+          user_agent: navigator.userAgent,
           timestamp: new Date().toISOString(),
           authenticated: isAuthenticated,
-          userId: user?.uid,
-          email: user?.email,
-          firstName: firstName
+          session_type: isAuthenticated ? 'authenticated' : 'public',
+          anonymous: !isAuthenticated,
+          ...(isAuthenticated && {
+            user_id: user?.uid,
+            email: user?.email,
+            first_name: firstName
+          })
         }
       };
       

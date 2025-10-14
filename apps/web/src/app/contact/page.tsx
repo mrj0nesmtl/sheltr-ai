@@ -418,18 +418,12 @@ export default function ContactPage() {
                 Ready to Make an Impact?
               </h2>
               <p className="text-xl text-blue-100 mb-8">
-                Explore our network of partner shelters and see how SHELTR is creating 
-                transparent, immediate impact for people experiencing homelessness.
+                See how SHELTR is creating transparent, immediate impact for people 
+                experiencing homelessness through blockchain-powered giving.
               </p>
               <div className="flex flex-wrap justify-center gap-4">
-                <Link href="/shelters">
-                  <Button size="lg" variant="secondary" className="bg-white text-blue-600 hover:bg-gray-100">
-                    <MapPin className="h-5 w-5 mr-2" />
-                    Explore Shelters
-                  </Button>
-                </Link>
                 <Link href="/scan-give">
-                  <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+                  <Button size="lg" variant="secondary" className="bg-white text-blue-600 hover:bg-gray-100">
                     <Heart className="h-5 w-5 mr-2" />
                     Try Scan & Give
                   </Button>

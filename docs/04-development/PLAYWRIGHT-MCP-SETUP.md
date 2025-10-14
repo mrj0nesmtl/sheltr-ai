@@ -39,11 +39,15 @@ npm install -g @executeautomation/playwright-mcp-server
 
 ### Step 2: Configure Cursor MCP Settings
 
-Edit `.cursor/mcp.json` in your project root:
+Edit `~/.cursor/mcp.json` (global Cursor configuration):
 
 ```json
 {
   "mcpServers": {
+    "firebase": {
+      "command": "npx",
+      "args": ["-y", "firebase-tools@latest", "experimental:mcp"]
+    },
     "playwright": {
       "command": "npx",
       "args": ["-y", "@executeautomation/playwright-mcp-server"]
@@ -52,12 +56,15 @@ Edit `.cursor/mcp.json` in your project root:
 }
 ```
 
+**Note**: This is your **global Cursor MCP configuration** located at `~/.cursor/mcp.json` (Mac/Linux) or `%APPDATA%\.cursor\mcp.json` (Windows). This makes both Firebase and Playwright MCP servers available across all your projects.
+
 ### Step 3: Restart Cursor
 
 After adding the configuration:
-1. Save the `.cursor/mcp.json` file
-2. Completely quit and restart Cursor
-3. The Playwright MCP server will be available for AI agents
+1. Save the `~/.cursor/mcp.json` file
+2. **Completely quit Cursor** (Cmd+Q on Mac, not just close the window)
+3. Reopen Cursor
+4. Both Firebase and Playwright MCP servers should now show green lights in **Cursor Settings > Tools & MCP**
 
 ## Verification
 

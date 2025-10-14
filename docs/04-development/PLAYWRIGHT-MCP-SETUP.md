@@ -50,13 +50,23 @@ Edit `~/.cursor/mcp.json` (global Cursor configuration):
     },
     "playwright": {
       "command": "npx",
-      "args": ["-y", "@executeautomation/playwright-mcp-server"]
+      "args": ["-y", "@executeautomation/playwright-mcp-server"],
+      "env": {
+        "PLAYWRIGHT_CHROME_PATH": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+      }
     }
   }
 }
 ```
 
 **Note**: This is your **global Cursor MCP configuration** located at `~/.cursor/mcp.json` (Mac/Linux) or `%APPDATA%\.cursor\mcp.json` (Windows). This makes both Firebase and Playwright MCP servers available across all your projects.
+
+**Chrome Configuration**:
+- `PLAYWRIGHT_CHROME_PATH` tells Playwright to use your local Chrome installation instead of bundled Chromium
+- For Windows, use: `"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"`
+- For Linux, use: `"/usr/bin/google-chrome"` or `"/usr/bin/chrome"`
+- **Important**: Playwright launches Chrome in a clean profile for test isolation (similar to incognito mode)
+- This ensures tests don't interfere with your personal browsing data
 
 ### Step 3: Restart Cursor
 
@@ -246,6 +256,39 @@ Test the about page on different devices:
 1. Check file permissions in the project directory
 2. Specify an absolute path for screenshot saving
 3. Verify the directory exists before saving
+
+### Google Sign-In / Authentication Issues
+**Problem**: Chrome launched by Playwright doesn't recognize your Google login.
+
+**Why**: Playwright launches browsers in a clean, isolated profile (similar to incognito mode) for test isolation. This means:
+- No saved cookies or login sessions
+- No browser extensions
+- No saved passwords
+- Fresh state every time
+
+**Solutions**:
+
+1. **For Testing Authentication Flows** (Recommended):
+   ```
+   Test the login flow step-by-step:
+   1. Navigate to login page
+   2. Fill email field
+   3. Fill password field
+   4. Click sign-in button
+   5. Verify successful login
+   ```
+
+2. **For Manual Testing with Saved Sessions**:
+   - Use your regular Chrome browser (not Playwright)
+   - Playwright is best for automated testing, not manual browsing
+   - Keep Playwright sessions isolated and automated
+
+3. **For Testing with Persistent State** (Advanced):
+   - Playwright can be configured to use a persistent context
+   - This requires custom setup beyond the MCP server
+   - Not recommended for test automation (defeats isolation purpose)
+
+**Best Practice**: Keep automated tests independent of login state when possible. Use test accounts or mock authentication for reliable, repeatable tests.
 
 ## Best Practices
 

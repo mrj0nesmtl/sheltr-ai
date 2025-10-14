@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Coins, Shield, Zap, QrCode, UserCheck, CreditCard, Database, Smartphone, Building2, Handshake, Globe, ArrowRight, Users, Heart, Target } from 'lucide-react';
+import { Coins, Shield, Zap, QrCode, UserCheck, CreditCard, Database, Smartphone, Building2, Handshake, Globe, ArrowRight, Users, Heart, Target, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -31,14 +31,13 @@ export default function AboutPage() {
         <div className="relative z-10 container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <Badge variant="secondary" className="mb-6 bg-white/20 text-white border-white/30 backdrop-blur-sm">
-              BLOCKCHAIN POWERED
+              BLOCKCHAIN SECURED
             </Badge>
             <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
               Transforming Donations into <span className="text-blue-400">Impact</span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-4xl mx-auto">
-              SHELTR serves everyone in the ecosystem through a unified platform that ensures 
-              transparency, dignity, and maximum impact for every participant.
+              Transparency for all. Impact for all.
             </p>
           </div>
         </div>
@@ -53,7 +52,7 @@ export default function AboutPage() {
                 What is SHELTR?
               </h2>
               <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                We&apos;re a blockchain-powered QR code platform that enables <strong>direct participant empowerment </strong> 
+                We&apos;re a QR-powered donation platform that enables <strong>direct participant empowerment </strong> 
                 through transparent donations and smart contracts.
               </p>
             </div>
@@ -209,18 +208,27 @@ export default function AboutPage() {
               </div>
             </div>
 
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-8 border-2 border-white/20">
-              <div className="text-center">
-                <h3 className="text-2xl font-bold mb-4 text-white">Transparency, Dignity, Accountability</h3>
-                <p className="text-lg text-gray-200 mb-6">
-                  Every transaction is recorded on the blockchain. Donors can track their impact in real-time, 
-                  and participants maintain full control over their funds.
+            <div className="bg-gradient-to-br from-white/10 via-blue-500/10 to-purple-500/10 backdrop-blur-sm rounded-xl p-10 border border-white/30 shadow-2xl">
+              <div className="text-center max-w-3xl mx-auto">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-500/20 rounded-full mb-6 border-2 border-blue-400/50">
+                  <Heart className="h-8 w-8 text-blue-300" />
+                </div>
+                <h3 className="text-3xl font-bold mb-4 text-white">Ready to Make a Difference?</h3>
+                <p className="text-lg text-gray-200 mb-8 leading-relaxed">
+                  Discover how SHELTR creates pathways out of homelessness for donors, participants, 
+                  and organizations. Choose your role and see how you can be part of the solution.
                 </p>
-                <div className="flex justify-center">
+                <div className="flex flex-col sm:flex-row justify-center gap-4">
                   <Link href="/solutions">
-                    <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
+                    <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 font-semibold">
                       <Heart className="h-5 w-5 mr-2" />
                       Explore Solutions
+                    </Button>
+                  </Link>
+                  <Link href="/scan-give">
+                    <Button size="lg" variant="outline" className="border-white/50 text-white hover:bg-white/10">
+                      <Sparkles className="h-5 w-5 mr-2" />
+                      Start Giving
                     </Button>
                   </Link>
                 </div>

@@ -19,7 +19,7 @@ export default function SolutionsPage() {
       <section className="relative py-24 bg-cover bg-center bg-no-repeat" style={{backgroundImage: 'url(/backgrounds/solutions-bg.jpg)'}}>
         <div className="absolute inset-0 bg-black/60" />
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <Badge variant="secondary" className="mb-4">Better to Solve</Badge>
+          <Badge variant="secondary" className="mb-4">Better-to-Solve</Badge>
           <h1 className="text-5xl font-bold mb-6 text-white">
             One Platform, <span className="text-blue-400">Every</span> Stakeholder
           </h1>
@@ -35,7 +35,7 @@ export default function SolutionsPage() {
             <div className="text-center mb-16">
               <h2 className="text-3xl font-bold mb-4">How SHELTR Works</h2>
               <p className="text-xl text-muted-foreground max-w-4xl mx-auto mb-6">
-                SHELTR operates as a unified ecosystem where every stakeholder contributes to and benefits from a revolutionary approach to addressing homelessness. Our platform transforms traditional charity into strategic investment through the SmartFund™ allocation system.
+                SHELTR operates as a unified ecosystem where every stakeholder contributes and benefits from a revolutionary approach to addressing the unhoused. SHELTR builds upon traditional HMIS systems by unleashing intelligent systems into the status quo.
               </p>
                <div className="bg-muted/30 rounded-lg p-6 max-w-4xl mx-auto">
                  <p className="text-base text-muted-foreground">
@@ -53,7 +53,7 @@ export default function SolutionsPage() {
                 </div>
                 <CardTitle className="text-2xl">Participants</CardTitle>
                 <CardDescription className="text-lg">
-                  Empowered through direct financial support, PODS and MOBI access, and pathway to temporary, mobile housing
+                  Empowered through direct QR code support, PODS and MOBI's are provided as and pathway to safe, mobile mini-housing.
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -69,7 +69,7 @@ export default function SolutionsPage() {
                     <DollarSign className="h-5 w-5 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0" />
                     <div>
                       <h4 className="font-medium">Direct Financial Support</h4>
-                      <p className="text-sm text-muted-foreground">80% of donations go directly to personal needs</p>
+                      <p className="text-sm text-muted-foreground">80% of donations are immediately depositited to a Participant's virtual card. These funds are available to purchase food, clothing, transportation, and essential services.</p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
@@ -99,7 +99,7 @@ export default function SolutionsPage() {
                 </div>
                 <CardTitle className="text-2xl">Donors</CardTitle>
                 <CardDescription className="text-lg">
-                  Strategic investment through SmartFund™ with transparent, measurable community returns
+                  Give with attitude. Demand a return. SmartFund™ with transparent, measurable returns
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -108,21 +108,21 @@ export default function SolutionsPage() {
                     <Shield className="h-5 w-5 text-orange-600 dark:text-orange-400 mt-0.5 flex-shrink-0" />
                     <div>
                       <h4 className="font-medium">Blockchain Transparency</h4>
-                      <p className="text-sm text-muted-foreground">Every donation tracked and verified on the blockchain</p>
+                      <p className="text-sm text-muted-foreground">Your donation is contolled by an immutable smart contract, with its mission publicly verifiable on the blockchain</p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
                     <BarChart3 className="h-5 w-5 text-orange-600 dark:text-orange-400 mt-0.5 flex-shrink-0" />
                     <div>
                       <h4 className="font-medium">Impact Measurement</h4>
-                      <p className="text-sm text-muted-foreground">Real-time updates on how your donation helps</p>
+                      <p className="text-sm text-muted-foreground">Updates on how your donation helped, and the impact it had.</p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
                     <QrCode className="h-5 w-5 text-orange-600 dark:text-orange-400 mt-0.5 flex-shrink-0" />
                     <div>
-                      <h4 className="font-medium">Easy Giving</h4>
-                      <p className="text-sm text-muted-foreground">Instant donations via QR code scanning</p>
+                      <h4 className="font-medium">Giving with Purpose</h4>
+                      <p className="text-sm text-muted-foreground">Instant donations via QR code scanning. No intermediaries, no delays, no hidden fees.</p>
                     </div>
                   </div>
                 </div>
@@ -130,7 +130,7 @@ export default function SolutionsPage() {
                   <Link href="/solutions/donors">
                     <Button className="w-full border-2 border-black text-black hover:bg-black hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black" variant="outline" size="sm">
                       <Heart className="h-4 w-4 mr-2" />
-                      Start Giving Today
+                      Learn More
                     </Button>
                   </Link>
                 </div>
@@ -282,14 +282,14 @@ export default function SolutionsPage() {
       {/* Call to Action */}
       <section className="py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-6">Ready to look at how we address the unhoused?</h2>
+          <h2 className="text-3xl font-bold mb-6">Unhoused in the Age of Abundance</h2>
           <p className="text-xl text-muted-foreground mb-8">
-            Create lasting change.
+            We need to lean in.
           </p>
           
           <div className="flex justify-center">
             <Link href="/docs">
-              <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white">
+              <Button size="lg" variant="outline" className="border-blue-600 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/30">
                 <BookOpen className="h-4 w-4 mr-2" />
                 Learn More
               </Button>

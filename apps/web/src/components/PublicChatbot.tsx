@@ -143,8 +143,15 @@ export const PublicChatbot: React.FC<PublicChatbotProps> = ({ className = '' }) 
     }
   }, [getWelcomeMessage, messages.length]);
 
-  // Persist chat state across pages
+  // Persist chat state ONLY for authenticated users
   useEffect(() => {
+    if (!isAuthenticated) {
+      // For public users, clear any old chat history (privacy)
+      localStorage.removeItem('sheltr-public-chat');
+      return;
+    }
+    
+    // For authenticated users, load their chat history
     const savedMessages = localStorage.getItem('sheltr-public-chat');
     if (savedMessages) {
       try {
@@ -157,13 +164,18 @@ export const PublicChatbot: React.FC<PublicChatbotProps> = ({ className = '' }) 
         console.warn('Failed to load chat history:', error);
       }
     }
-  }, []);
+  }, [isAuthenticated]);
 
   useEffect(() => {
+    // Only save chat history for authenticated users
+    if (!isAuthenticated) {
+      return;
+    }
+    
     if (messages.length > 1) { // Don't save just the welcome message
       localStorage.setItem('sheltr-public-chat', JSON.stringify(messages));
     }
-  }, [messages]);
+  }, [messages, isAuthenticated]);
 
   // Auto-scroll to bottom when messages change
   const scrollToBottom = () => {
@@ -269,7 +281,7 @@ export const PublicChatbot: React.FC<PublicChatbotProps> = ({ className = '' }) 
     localStorage.removeItem('sheltr-public-chat');
     setMessages([{
       id: 'welcome',
-      text: "👋 Hello! I'm the SHELTR AI Assistant. I can help you learn about our platform, find resources, or answer questions about blockchain-powered charitable giving. How can I help you today?",
+      text: getWelcomeMessage(), // Use personalized welcome message
       isUser: false,
       timestamp: new Date()
     }]);

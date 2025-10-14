@@ -602,27 +602,27 @@ class ChatbotOrchestrator:
             return ChatResponse(
                 message="""🏠 **Welcome to SHELTR - We're Here to Help**
 
-I understand you're looking for support. SHELTR partners with homeless shelters to provide direct assistance and housing support:
+I understand you're looking for support. SHELTR is designed for unhoused community members like you—whether you're living on the streets, staying with a shelter, or somewhere in between.
 
 **How SHELTR Can Help You:**
-• **Get a Profile**: Partner shelters can set you up with your own SHELTR profile
-• **Receive Direct Donations**: People donate directly to you via QR code (no middleman!)
-• **Build Your Housing Fund**: 15% of donations automatically go toward your housing deposit
-• **Track Your Progress**: See your path to stable housing in real-time
-• **Get a POD**: Ask your shelter about SHELTR PODs - secure, private emergency housing units
+• **Get Your Own Profile**: You can sign up directly or through a partner shelter
+• **Receive Direct Donations**: People donate directly to you via your personal QR code (no middleman!)
+• **Build Your Housing Fund**: 15% of every donation automatically goes toward your housing deposit
+• **Track Your Progress**: Watch your housing fund grow toward stable housing in real-time
+• **Get a POD**: SHELTR PODs are secure, private emergency housing units - a step up from tents or streets
 
 **Your Next Steps:**
-1. Ask your current shelter if they partner with SHELTR
-2. They'll help you create your participant profile  
-3. Start receiving direct support from generous donors
-4. Watch your housing fund grow toward your goal
+1. **With a shelter?** Ask if they're a SHELTR partner and can set you up
+2. **Street-involved?** Contact us directly at /contact - we'll help you get started
+3. **Either way:** Once registered, you get your QR code and start receiving support
+4. Watch your housing fund grow toward your independence goal
 
 **Need Immediate Help?**
 • Find participating shelters in your area
-• Contact us at /contact to get connected
+• Contact us directly to get connected
 • Call 211 for local homeless services (US/Canada)
 
-You're not alone in this. SHELTR gives you dignity, transparency, and a real path forward. 💙""",
+You're not alone in this. SHELTR gives you dignity, transparency, and a real path forward—wherever you are right now. 💙""",
                 actions=[
                     {
                         "type": "link",

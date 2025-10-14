@@ -31,51 +31,98 @@ export async function POST(request: NextRequest) {
 
     // Note: Rate limiting would be implemented here in production with Redis
     
-    // Call backend API
+    // Call backend API with timeout
     const backendUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
     
-    const response = await fetch(`${backendUrl}/api/v1/chatbot/public`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        message,
-        user_id: sessionId,
-        user_role: 'public',
-        conversation_context: {
-          page: context?.page || '/',
-          user_agent: context?.userAgent || 'unknown',
-          session_type: 'public',
-          anonymous: true,
-          ...context
-        }
-      }),
-    });
+    console.log(`[Public Chat API] Calling backend: ${backendUrl}/api/v1/chatbot/public`);
+    
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+    
+    try {
+      const response = await fetch(`${backendUrl}/api/v1/chatbot/public`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message,
+          user_id: sessionId,
+          user_role: 'public',
+          conversation_context: {
+            page: context?.page || '/',
+            user_agent: context?.userAgent || 'unknown',
+            session_type: 'public',
+            anonymous: true,
+            ...context
+          }
+        }),
+        signal: controller.signal
+      });
 
-    if (!response.ok) {
-      throw new Error(`Backend responded with ${response.status}`);
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        console.warn(`[Public Chat API] Backend responded with ${response.status}, using fallback`);
+        throw new Error(`Backend responded with ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log('[Public Chat API] Backend response received successfully');
+      
+      return NextResponse.json({
+        success: true,
+        response: data.response || data.message,
+        actions: data.actions || [],
+        follow_up: data.follow_up,
+        conversation_id: data.conversation_id,
+        timestamp: new Date().toISOString()
+      });
+    } catch (fetchError) {
+      clearTimeout(timeoutId);
+      console.warn('[Public Chat API] Backend fetch failed, using smart fallback:', fetchError);
+      throw fetchError; // Re-throw to trigger main fallback logic
     }
 
-    const data = await response.json();
-    
-    return NextResponse.json({
-      success: true,
-      response: data.response || data.message,
-      actions: data.actions || [],
-      follow_up: data.follow_up,
-      conversation_id: data.conversation_id,
-      timestamp: new Date().toISOString()
-    });
-
   } catch (error) {
-    console.error('Public chatbot API error:', error);
+    console.error('[Public Chat API] Error occurred, generating fallback response:', error);
     
     // Enhanced fallback with SmartFund knowledge
     const messageText = message.toLowerCase();
     let response: string;
+    let suggestedActions = [];
     
-    if (messageText.includes('smartfund') || messageText.includes('smart fund')) {
+    // Check for participant/homeless queries first
+    if (messageText.includes('homeless') || messageText.includes('need help') || messageText.includes('participant') || messageText.includes('housing')) {
+      response = `🏠 **Welcome to SHELTR - We're Here to Help**
+
+I understand you're looking for support. SHELTR partners with homeless shelters to provide direct assistance:
+
+**How SHELTR Can Help You:**
+• **Get Support**: Partner shelters can set you up with a SHELTR profile
+• **Receive Direct Donations**: People can donate directly to you via QR code
+• **Build Housing Fund**: 15% of donations go toward your housing deposit
+• **Track Progress**: See your path to stable housing in real-time
+
+**Next Steps:**
+1. Ask your shelter if they partner with SHELTR
+2. They'll help you create your participant profile
+3. Start receiving direct support from donors
+4. Build toward your housing goals
+
+**Need Immediate Help?**
+• Contact local shelters in your area
+• Call 211 for homeless services (US/Canada)
+• Visit /contact on our website to reach our team
+
+Would you like to know more about how SHELTR participants receive support?`;
+      
+      suggestedActions = [
+        { type: 'link', text: 'Learn About Participant Benefits', url: '/solutions/participants' },
+        { type: 'link', text: 'Contact Us', url: '/contact' },
+        { type: 'link', text: 'Find Participating Shelters', url: '/about' }
+      ];
+    } else if (messageText.includes('smartfund') || messageText.includes('smart fund')) {
       response = `🏠 **SmartFund Donation Distribution Model**
 
 SHELTR's SmartFund is our intelligent donation allocation system that ensures maximum impact:
@@ -135,16 +182,25 @@ The combination of SmartFund allocation and blockchain transparency ensures your
         "SHELTR combines technology with compassion to create direct impact through our SmartFund system. Feel free to ask about donations, blockchain, or how to support participants!"
       ];
       response = fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
+      
+      suggestedActions = [
+        { type: 'link', text: 'Learn More About SHELTR', url: '/about' },
+        { type: 'link', text: 'How to Donate', url: '/scan-give' },
+        { type: 'link', text: 'View Our Team', url: '/team' }
+      ];
     }
+    
+    // Use context-appropriate actions or default ones
+    const finalActions = suggestedActions.length > 0 ? suggestedActions : [
+      { type: 'link', text: 'Learn More About SHELTR', url: '/about' },
+      { type: 'link', text: 'How to Donate', url: '/scan-give' },
+      { type: 'link', text: 'View Our Team', url: '/team' }
+    ];
     
     return NextResponse.json({
       success: true,
       response: response,
-      actions: [
-        { type: 'link', text: 'Learn More About SHELTR', url: '/about' },
-        { type: 'link', text: 'How to Donate', url: '/scan-give' },
-        { type: 'link', text: 'View Our Team', url: '/team' }
-      ],
+      actions: finalActions,
       fallback: true,
       timestamp: new Date().toISOString()
     });

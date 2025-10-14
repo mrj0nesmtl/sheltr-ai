@@ -51,11 +51,11 @@ export default function OrganizationsPage() {
             </div>
             
             <h1 className="text-5xl md:text-6xl font-bold mb-8 text-white">
-              Amplify Your Impact
+              Your Impact <span className="text-blue-400">Amplified</span>
             </h1>
             
             <p className="text-2xl font-medium text-gray-200 mb-4">
-              Next-Generation HMIS + Overflow Relief + Investment Vehicle
+              Next-Generation HMIS + Overflow Relief Ecosystem
             </p>
             
             <p className="text-lg text-gray-300 mb-10 max-w-4xl mx-auto leading-relaxed">
@@ -63,7 +63,7 @@ export default function OrganizationsPage() {
               <span className="font-semibold text-purple-300"> blockchain transparency</span>, 
               <span className="font-semibold text-green-300"> overflow assistance</span>, and 
               <span className="font-semibold text-yellow-300"> community investment returns</span>. 
-              We're not competing—we're <strong className="text-white"> amplifying your mission</strong>.
+              We're not competing—we're <strong className="text-white"> amplifying your impact</strong>.
             </p>
             
             </div>
@@ -77,19 +77,17 @@ export default function OrganizationsPage() {
             <div className="mb-8">
               <Badge className="bg-green-100 text-green-800 border-green-200 mb-4">
                 <Heart className="h-4 w-4 mr-2" />
-                Our Mission
+                Tech-for-Good
               </Badge>
               <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
-                Partnership-Driven Tech for Good
+                Partnership-Driven
               </h2>
             </div>
             
             <div className="prose prose-lg max-w-none dark:prose-invert">
-              <p className="text-xl text-muted-foreground leading-relaxed mb-8">
-                We're building technology that <strong>amplifies your existing work</strong>—not replacing it. 
+              <p className="text-xl text-muted-foreground leading-relaxed mb-8"> 
                 SHELTR provides overflow relief when you're at capacity, creates new revenue streams through 
                 community investment, and modernizes your operations with next-generation HMIS capabilities. 
-                <em>Your mission remains yours. Our tech makes it more powerful.</em>
               </p>
               
               <div className="grid md:grid-cols-3 gap-8 mt-12">
@@ -97,10 +95,10 @@ export default function OrganizationsPage() {
                   <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Building2 className="h-8 w-8 text-blue-600 dark:text-blue-400" />
                   </div>
-                  <h3 className="text-lg font-semibold mb-2">Overflow Relief & Housing Network</h3>
+                  <h3 className="text-lg font-semibold mb-2">Overflow Relief</h3>
                   <p className="text-muted-foreground">
                     When you're at capacity, seamlessly connect participants with PODS emergency housing, 
-                    transitional apartments, and permanent housing through our verified provider network.
+                    transitional apartments, and permanent housing through our verified provider network*.
                   </p>
                 </div>
                 
@@ -108,10 +106,10 @@ export default function OrganizationsPage() {
                   <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
                     <TrendingUp className="h-8 w-8 text-green-600 dark:text-green-400" />
                   </div>
-                  <h3 className="text-lg font-semibold mb-2">Community Investment Vehicle</h3>
+                  <h3 className="text-lg font-semibold mb-2">Community Investment</h3>
                   <p className="text-muted-foreground">
                     Generate sustainable revenue through our SmartFund™ model: 15% of donations create 
-                    housing infrastructure with guaranteed 4-6% APY returns, benefiting your organization.
+                    housing infrastructure with guaranteed 4-6% APY returns, benefiting all.
                   </p>
                 </div>
                 
@@ -119,9 +117,9 @@ export default function OrganizationsPage() {
                   <div className="w-16 h-16 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Users className="h-8 w-8 text-purple-600 dark:text-purple-400" />
                   </div>
-                  <h3 className="text-lg font-semibold mb-2">Next-Gen HMIS Platform</h3>
+                  <h3 className="text-lg font-semibold mb-2">Next-Gen HMIS</h3>
                   <p className="text-muted-foreground">
-                    AI-powered analytics, blockchain transparency, and mobile-first design that makes 
+                    Powerful analytics, blockchain transparency, and mobile-first design that makes 
                     traditional HMIS feel like the past. Your data, your control, enhanced capabilities.
                   </p>
                 </div>
@@ -129,8 +127,8 @@ export default function OrganizationsPage() {
               
               <div className="mt-12 bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg border border-gray-200 dark:border-gray-700">
                 <blockquote className="text-lg italic text-foreground border-l-4 border-blue-500 pl-6">
-                  Sheltr is creating an ecosystem where technology, community, and compassion converge to <strong>solve homelessness</strong> at its root. Every 
-                  participant becomes empowered with direct access to housing, funding, and opportunity."
+                  Sheltr is creating an ecosystem where technology, community, and compassion converge to <strong>hack</strong> homelessness at its root. Every 
+                  participant is empowered with direct access to a new opportunity."
                 </blockquote>
                 <cite className="block text-right text-muted-foreground mt-4">— SHELTR</cite>
               </div>
@@ -233,7 +231,6 @@ export default function OrganizationsPage() {
               </Button>
             </Link>
           </div>
-          
         </div>
       </section>
 
@@ -241,7 +238,7 @@ export default function OrganizationsPage() {
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4">NextGeneration Operational Platform</h2>
+            <h2 className="text-3xl font-bold mb-4">NextGeneration HMIS</h2>
             <p className="text-xl text-muted-foreground">Everything you need to run efficient, impactful programs</p>
           </div>
 
@@ -597,13 +594,13 @@ export default function OrganizationsPage() {
                   <p className="text-muted-foreground">Start seeing results immediately with 24/7 support and continuous optimization guidance</p>
                 </div>
               </div>
-            </div>\n          </div>
-          
+            </div>
+          </div>
           {/* Final CTA */}
           <div className="text-center bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg">
-            <h3 className="text-2xl font-bold mb-4">Ready to Transform Your Operations?</h3>
+            <h3 className="text-2xl font-bold mb-4">Ready for some Disruption?</h3>
             <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Join the growing number of organizations choosing SHELTR for their homeless services technology needs.
+              Join the growing number of organizations looking at SHELTR for their overflow relief.
             </p>
             <div className="flex justify-center">
               <Link href="/contact">

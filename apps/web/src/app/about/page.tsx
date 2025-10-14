@@ -140,39 +140,72 @@ export default function AboutPage() {
             </div>
 
             <div className="grid md:grid-cols-3 gap-8 mb-12">
-              <div className="text-center">
-                <div className="bg-blue-600 text-white rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4 text-2xl font-bold">
-                  80%
+              {/* 80% - Direct to Participants */}
+              <div className="relative group">
+                <div className="bg-gradient-to-br from-blue-900/40 to-blue-800/20 backdrop-blur-sm rounded-xl p-8 border border-blue-400/30 hover:border-blue-400/60 transition-all duration-300 h-full">
+                  <div className="flex items-start gap-4 mb-6">
+                    <div className="relative">
+                      <div className="w-16 h-16 rounded-lg border-2 border-blue-400 bg-blue-500/10 flex items-center justify-center">
+                        <span className="text-3xl font-bold text-blue-300">80</span>
+                      </div>
+                      <div className="absolute -top-1 -right-1 text-blue-300 text-lg font-semibold">%</div>
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-xl font-semibold text-white mb-2">Direct to Participants</h3>
+                      <div className="h-1 w-20 bg-gradient-to-r from-blue-400 to-transparent rounded-full"></div>
+                    </div>
+                  </div>
+                  <p className="text-gray-300 leading-relaxed">
+                    Deposited and immediately accessible to Participants. 
+                    Zero volatility risk ensures purchasing power remains stable at $1.00 USD value. 
+                    Participants maintain complete autonomy over spending decisions and essential purchases.
+                  </p>
                 </div>
-                <h3 className="text-xl font-semibold mb-3 text-white">Direct to Participants</h3>
-                <p className="text-gray-200">
-                  Deposited and immediately accessible to Participants. 
-                  Zero volatility risk ensures purchasing power remains stable at $1.00 USD value. 
-                  Participants maintain complete autonomy over spending decisions and essential purchases.
-                </p>
               </div>
 
-              <div className="text-center">
-                <div className="bg-green-600 text-white rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4 text-2xl font-bold">
-                  15%
+              {/* 15% - Housing Allocation */}
+              <div className="relative group">
+                <div className="bg-gradient-to-br from-green-900/40 to-green-800/20 backdrop-blur-sm rounded-xl p-8 border border-green-400/30 hover:border-green-400/60 transition-all duration-300 h-full">
+                  <div className="flex items-start gap-4 mb-6">
+                    <div className="relative">
+                      <div className="w-16 h-16 rounded-lg border-2 border-green-400 bg-green-500/10 flex items-center justify-center">
+                        <span className="text-3xl font-bold text-green-300">15</span>
+                      </div>
+                      <div className="absolute -top-1 -right-1 text-green-300 text-lg font-semibold">%</div>
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-xl font-semibold text-white mb-2">Housing Allocation</h3>
+                      <div className="h-1 w-20 bg-gradient-to-r from-green-400 to-transparent rounded-full"></div>
+                    </div>
+                  </div>
+                  <p className="text-gray-300 leading-relaxed">
+                    SmartFund™ contracts automatically direct 15% towards participants&apos; emergency housing goals like tiny homes. 
+                    AI-optimized token staking compounds these funds over time. 
+                    Each participant builds their housing fund through every donation received.
+                  </p>
                 </div>
-                <h3 className="text-xl font-semibold mb-3 text-white">Housing Allocation</h3>
-                <p className="text-gray-200">
-                  SmartFund™ contracts automatically direct 15% towards participants&apos; emergency housing goals like tiny homes. 
-                  AI-optimized token staking compounds these funds over time. 
-                  Each participant builds their housing fund through every donation received.
-                </p>
               </div>
 
-              <div className="text-center">
-                <div className="bg-orange-600 text-white rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4 text-2xl font-bold">
-                  5%
+              {/* 5% - Shelter Operations */}
+              <div className="relative group">
+                <div className="bg-gradient-to-br from-orange-900/40 to-orange-800/20 backdrop-blur-sm rounded-xl p-8 border border-orange-400/30 hover:border-orange-400/60 transition-all duration-300 h-full">
+                  <div className="flex items-start gap-4 mb-6">
+                    <div className="relative">
+                      <div className="w-16 h-16 rounded-lg border-2 border-orange-400 bg-orange-500/10 flex items-center justify-center">
+                        <span className="text-3xl font-bold text-orange-300">5</span>
+                      </div>
+                      <div className="absolute -top-1 -right-1 text-orange-300 text-lg font-semibold">%</div>
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-xl font-semibold text-white mb-2">Shelter Operations</h3>
+                      <div className="h-1 w-20 bg-gradient-to-r from-orange-400 to-transparent rounded-full"></div>
+                    </div>
+                  </div>
+                  <p className="text-gray-300 leading-relaxed">
+                    Covers the shelter&apos;s onboarding, participant training materials, audits, and continuous platform upgrades.  
+                    Ensures 99.99% uptime through distributed cloud architecture and automated monitoring systems.
+                  </p>
                 </div>
-                <h3 className="text-xl font-semibold mb-3 text-white">Shelter Operations</h3>
-                <p className="text-gray-200">
-                  Covers the shelter&apos;s onboarding, participant training materials, audits, and continuous platform upgrades.  
-                  Ensures 99.99% uptime through distributed cloud architecture and automated monitoring systems.
-                </p>
               </div>
             </div>
 
@@ -365,7 +398,7 @@ export default function AboutPage() {
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">Hacking Homelessness</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Listen to our featured podcast episode on Tomes of Arcana discussing SHELTR's mission and technology
+              Listen to our featured podcast episode on Tomes of Arcana discussing SHELTR&apos;s mission and technology
             </p>
           </div>
 

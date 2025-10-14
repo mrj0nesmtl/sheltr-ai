@@ -189,16 +189,13 @@ export const PublicChatbot: React.FC<PublicChatbotProps> = ({ className = '' }) 
     setIsLoading(true);
 
     try {
-      // Use different endpoints based on authentication
-      const isDevelopment = process.env.NODE_ENV === 'development';
-      const apiUrl = isDevelopment 
-        ? (isAuthenticated ? '/api/chatbot/authenticated' : '/api/chatbot/public')
-        : (isAuthenticated 
-            ? 'https://sheltr-api-714964620823.us-central1.run.app/api/v1/chatbot/authenticated'
-            : 'https://sheltr-api-714964620823.us-central1.run.app/api/v1/chatbot/public');
+      // SIMPLIFIED: Always use Next.js API route (consistent dev/prod behavior)
+      // This avoids direct Cloud Run calls and ensures proper environment variable handling
+      const apiUrl = isAuthenticated 
+        ? '/api/chatbot/authenticated' 
+        : '/api/chatbot/public';
       
-      // Prepare the request body based on authentication and endpoint
-      const requestBody = isDevelopment ? {
+      const requestBody = {
         message: userMessage.text,
         sessionId: getSessionId(),
         userRole: userRole,
@@ -210,20 +207,6 @@ export const PublicChatbot: React.FC<PublicChatbotProps> = ({ className = '' }) 
           userId: user?.uid,
           email: user?.email,
           firstName: firstName
-        }
-      } : {
-        message: userMessage.text,
-        user_id: getSessionId(),
-        user_role: userRole,
-        conversation_context: {
-          page: window.location.pathname,
-          user_agent: navigator.userAgent,
-          session_type: isAuthenticated ? 'authenticated' : 'public',
-          anonymous: !isAuthenticated,
-          timestamp: new Date().toISOString(),
-          user_id: user?.uid,
-          email: user?.email,
-          first_name: firstName
         }
       };
       

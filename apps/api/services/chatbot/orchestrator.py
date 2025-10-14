@@ -86,10 +86,12 @@ class IntentClassifier:
         
         # Participant support patterns (help but not emergency)
         self.participant_inquiry_patterns = [
-            r"\b(i\s+am\s+homeless|i'm\s+homeless|experiencing\s+homelessness)\b",
-            r"\b(need\s+shelter|need\s+housing|looking\s+for\s+shelter)\b",
-            r"\b(need\s+help|can\s+you\s+help|how\s+can\s+you\s+help)\b",
-            r"\b(no\s+place\s+to\s+stay|nowhere\s+to\s+go|living\s+on\s+street)\b"
+            r"\b(i\s+am\s+homeless|i'm\s+homeless|am\s+homeless|experiencing\s+homelessness)\b",
+            r"\b(need\s+shelter|need\s+housing|looking\s+for\s+shelter|need\s+a\s+place)\b",
+            r"\b(need\s+help|can\s+you\s+help|how\s+can\s+you\s+help|help\s+me)\b",
+            r"\b(no\s+place\s+to\s+stay|nowhere\s+to\s+go|living\s+on\s+street)\b",
+            r"\b(need\s+(a\s+)?pod|get\s+(a\s+)?pod|looking\s+for\s+pod|want\s+(a\s+)?pod)\b",
+            r"\b(participant|become\s+participant|sign\s+up\s+as\s+participant)\b"
         ]
         
         self.service_patterns = [
@@ -595,7 +597,52 @@ class ChatbotOrchestrator:
     
     async def _handle_participant_support(self, intent: Intent, context: ConversationContext) -> ChatResponse:
         """Handle participant-specific requests"""
-        if intent.subcategory == "service_booking":
+        if intent.subcategory == "participant_inquiry":
+            # Someone experiencing homelessness asking about SHELTR
+            return ChatResponse(
+                message="""🏠 **Welcome to SHELTR - We're Here to Help**
+
+I understand you're looking for support. SHELTR partners with homeless shelters to provide direct assistance and housing support:
+
+**How SHELTR Can Help You:**
+• **Get a Profile**: Partner shelters can set you up with your own SHELTR profile
+• **Receive Direct Donations**: People donate directly to you via QR code (no middleman!)
+• **Build Your Housing Fund**: 15% of donations automatically go toward your housing deposit
+• **Track Your Progress**: See your path to stable housing in real-time
+• **Get a POD**: Ask your shelter about SHELTR PODs - secure, private emergency housing units
+
+**Your Next Steps:**
+1. Ask your current shelter if they partner with SHELTR
+2. They'll help you create your participant profile  
+3. Start receiving direct support from generous donors
+4. Watch your housing fund grow toward your goal
+
+**Need Immediate Help?**
+• Find participating shelters in your area
+• Contact us at /contact to get connected
+• Call 211 for local homeless services (US/Canada)
+
+You're not alone in this. SHELTR gives you dignity, transparency, and a real path forward. 💙""",
+                actions=[
+                    {
+                        "type": "link",
+                        "label": "Learn About Participant Benefits",
+                        "url": "/solutions/participants"
+                    },
+                    {
+                        "type": "link",
+                        "label": "Find Participating Shelters",
+                        "url": "/shelters"
+                    },
+                    {
+                        "type": "link",
+                        "label": "Contact Us for Help",
+                        "url": "/contact"
+                    }
+                ],
+                agent_used="participant_support"
+            )
+        elif intent.subcategory == "service_booking":
             service_type = intent.entities.get("service_type", "service")
             return ChatResponse(
                 message=f"I can help you book a {service_type}. Let me show you the available options at nearby shelters.",

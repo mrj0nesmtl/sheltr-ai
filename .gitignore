@@ -225,3 +225,5 @@ secure-docs-*.json
 *.md.bak
 docs-backup/
 **/docs-backup/
+
+# Production fix documentation with API keys

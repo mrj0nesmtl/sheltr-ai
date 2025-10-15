@@ -70,6 +70,20 @@ import {
 import { chatbotDashboardService, ChatSession, ChatMessage, AgentConfig } from '@/services/chatbotDashboardService';
 import { useAuth } from '@/contexts/AuthContext';
 
+// Agent color mapping for badges (outline style)
+const agentColors: Record<string, string> = {
+  'general': 'border-blue-500 text-blue-600 dark:text-blue-400',
+  'sheltr_support': 'border-green-500 text-green-600 dark:text-green-400',
+  'technical_expert': 'border-purple-500 text-purple-600 dark:text-purple-400',
+  'business_analyst': 'border-orange-500 text-orange-600 dark:text-orange-400',
+  'creative_writer': 'border-pink-500 text-pink-600 dark:text-pink-400',
+};
+
+// Helper function to get agent color classes
+const getAgentColorClass = (agentType: string): string => {
+  return agentColors[agentType] || 'border-gray-500 text-gray-600 dark:text-gray-400';
+};
+
 export default function ChatbotDashboard() {
   const { user } = useAuth();
   const [sessions, setSessions] = useState<ChatSession[]>([]);
@@ -733,7 +747,7 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
                       
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                          <Badge variant="outline" className="text-xs">
+                          <Badge variant="outline" className={`text-xs ${getAgentColorClass(session.agent_type || '')}`}>
                             {session.agent_type || 'Unknown'}
                           </Badge>
                           <Badge variant="secondary" className="text-xs">
@@ -806,7 +820,7 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
                     <div>
                       <h2 className="font-semibold text-base">{currentSession.title}</h2>
                       <div className="flex items-center gap-2 mt-1">
-                        <Badge variant="outline" className="text-xs">
+                        <Badge variant="outline" className={`text-xs ${getAgentColorClass(currentSession.agent_type)}`}>
                           {currentSession.agent_type}
                         </Badge>
                         <Badge variant="secondary" className="text-xs">

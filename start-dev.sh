@@ -130,8 +130,8 @@ if wait_for_service "http://localhost:8000/health" "Backend API"; then
     
     # Test knowledge base
     echo -e "${BLUE}📚 Testing Knowledge Base...${NC}"
-    if curl -s "http://localhost:8000/api/v1/knowledge/status" >/dev/null 2>&1; then
-        echo -e "${GREEN}✅ Knowledge Base: 61+ Documents Ready for RAG${NC}"
+    if curl -s "http://localhost:8000/api/v1/knowledge/health" >/dev/null 2>&1; then
+        echo -e "${GREEN}✅ Knowledge Base: RAG Ready with Enhanced Embeddings${NC}"
     else
         echo -e "${YELLOW}⚠️  Knowledge Base: Service unavailable${NC}"
     fi
@@ -177,11 +177,12 @@ echo "  • Shelter Admin: Shelter operations + participant management"
 echo "  • Participant: QR code access + SmartFund™ wallet"
 echo "  • Donor: Donation tracking + impact visibility"
 echo ""
-echo -e "${GREEN}🤖 Enhanced AI Features:${NC}"
-echo "  • Knowledge Base: 61+ documents with 100% quality embeddings"
-echo "  • Real-time Chatbot: http://localhost:8000/api/v1/chatbot/health"
-echo "  • GitHub Sync: Automatic documentation updates"
-echo "  • RAG Search: Advanced retrieval with MCP integration"
+echo -e "${GREEN}🤖 Enhanced AI Features (Session 23+):${NC}"
+echo "  • FAQ System: 86 FAQs with <1s response time"
+echo "  • RAG Engine: Advanced retrieval with 8s timeout + fallback"
+echo "  • Multi-Agent System: 5 specialized AI agents"
+echo "  • Chatbot Health: http://localhost:8000/api/v1/chatbot/health"
+echo "  • Knowledge Base: http://localhost:8000/api/v1/knowledge/health"
 echo ""
 echo -e "${GREEN}🛡️ Security & Compliance:${NC}"
 echo "  • Real-time Access Logging: All login attempts tracked"
@@ -195,26 +196,26 @@ echo "  • Fraud Detection: Real-time monitoring"
 echo "  • Financial Dashboard: http://localhost:3000/dashboard/financial"
 echo "  • Donation Tracking: End-to-end transparency"
 echo ""
-echo -e "${YELLOW}📋 Session 15+ Testing Commands:${NC}"
+echo -e "${YELLOW}📋 Session 23+ Testing Commands:${NC}"
 echo "  • View backend logs: tail -f logs/backend.log"
 echo "  • View frontend logs: tail -f logs/frontend.log"
+echo "  • Test public chatbot: Visit homepage, ask FAQ questions"
+echo "  • Test authenticated chatbot: Login, use dashboard widget"
+echo "  • Test chatbot dashboard: http://localhost:3000/dashboard/chatbots"
+echo "  • Test multi-agent system: Try all 5 specialized agents"
 echo "  • Test role-based access: Login as different user types"
-echo "  • Test security logging: Check /dashboard/security after login"
-echo "  • Test NDA system: Login as Platform Admin"
-echo "  • Test knowledge base: Run GitHub sync from dashboard"
-echo "  • Test financial data: Check fraud detection & audit trail"
 echo "  • Stop services: ./stop-dev.sh"
 echo ""
-echo -e "${YELLOW}🧪 Multi-Role Business Logic Testing:${NC}"
+echo -e "${YELLOW}🧪 Dashboard Testing:${NC}"
+echo "  • Chatbot Control Panel: http://localhost:3000/dashboard/chatbots"
 echo "  • Platform Admin Dashboard: http://localhost:3000/dashboard"
 echo "  • Donor Dashboard: http://localhost:3000/dashboard/donor"
 echo "  • Participant Dashboard: http://localhost:3000/dashboard/participant"
 echo "  • Security & Compliance: http://localhost:3000/dashboard/security"
-echo "  • System Settings: http://localhost:3000/dashboard/settings"
 echo "  • Knowledge Base: http://localhost:3000/dashboard/knowledge"
 echo "  • Financial Oversight: http://localhost:3000/dashboard/financial"
 echo ""
-echo -e "${BLUE}🎯 Session 15+ Ready: Multi-Role Business Logic Testing + Security Dashboard! (Sep 21, 2025)${NC}"
+echo -e "${BLUE}🎯 Session 23 Ready: Complete Chatbot Overhaul + FAQ Expansion! (Oct 15, 2025)${NC}"
 
 # Keep the script running to show real-time status
 echo -e "${BLUE}👀 Monitoring services... (Press Ctrl+C to stop)${NC}"
@@ -282,7 +283,7 @@ while true; do
         fi
         
         # Test knowledge base health
-        if ! curl -s "http://localhost:8000/api/v1/knowledge/status" >/dev/null 2>&1; then
+        if ! curl -s "http://localhost:8000/api/v1/knowledge/health" >/dev/null 2>&1; then
             knowledge_status="🟡"
         fi
         
@@ -296,6 +297,6 @@ while true; do
             donation_status="🟡"
         fi
         
-        echo -e "${BLUE}📊 Session 15+ Status: Backend ${backend_status} | Frontend ${frontend_status} | AI ${ai_status} | Knowledge ${knowledge_status} | Security ${security_status} | Donations ${donation_status} | $(date '+%H:%M:%S')${NC}"
+        echo -e "${BLUE}📊 Session 23 Status: Backend ${backend_status} | Frontend ${frontend_status} | AI ${ai_status} | Knowledge ${knowledge_status} | Security ${security_status} | Donations ${donation_status} | $(date '+%H:%M:%S')${NC}"
     fi
 done 

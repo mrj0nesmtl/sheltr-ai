@@ -1,8 +1,8 @@
 # ✅ Authenticated Chatbot Fix - Authorization Header Missing
 
 **Date:** October 15, 2025 - 7:00 PM  
-**Status:** 🟢 FIXED  
-**Time to Fix:** 15 minutes  
+**Status:** 🟢 FIXED (Updated 7:45 PM)  
+**Time to Fix:** 30 minutes (including second iteration)  
 
 ---
 
@@ -49,19 +49,27 @@ headers: {
 
 ## 🛠️ **The Fix**
 
-Added Firebase ID token to Authorization header for authenticated requests:
+### **Iteration 1:** Added Authorization header (but used wrong method)
+### **Iteration 2:** Use `getCurrentToken()` from AuthContext ✅
 
 ```typescript
-// Get Firebase auth token for authenticated requests
+// 1. Destructure getCurrentToken from useAuth hook
+const { user, hasRole, getCurrentToken } = useAuth();
+
+// 2. Get Firebase auth token using the AuthContext helper
 const headers: HeadersInit = {
   'Content-Type': 'application/json',
 };
 
 if (isAuthenticated && user) {
   try {
-    const token = await user.getIdToken();
-    headers['Authorization'] = `Bearer ${token}`;
-    console.log('[PublicChatbot] Added auth token for authenticated request');
+    const token = await getCurrentToken();  // ← Use helper method!
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+      console.log('[PublicChatbot] Added auth token for authenticated request');
+    } else {
+      console.warn('[PublicChatbot] No auth token available');
+    }
   } catch (error) {
     console.error('[PublicChatbot] Failed to get auth token:', error);
   }
@@ -69,10 +77,14 @@ if (isAuthenticated && user) {
 
 const response = await fetch(apiUrl, {
   method: 'POST',
-  headers,  // ← Now includes Authorization!
+  headers,  // ← Now includes Authorization with valid token!
   body: JSON.stringify(requestBody),
 });
 ```
+
+### **Why This Works:**
+
+The `AuthContext` provides a `getCurrentToken()` helper that internally calls `auth.currentUser.getIdToken()`. The `user` object from `useAuth()` is an `AuthUser` interface, but we need to use the Firebase `auth.currentUser` to get the token.
 
 ---
 
@@ -267,9 +279,11 @@ if not authorization:
 ## 📊 **Impact**
 
 ### **Files Changed:** 1
-### **Lines Added:** 16
-### **Lines Removed:** 3
-### **Commit:** `2094dab4`
+### **Lines Added:** 20
+### **Lines Removed:** 7
+### **Commits:** 
+- `2094dab4` - Initial fix (added Authorization header)
+- `b40ccc0a` - **Final fix** (use getCurrentToken() method)
 
 ### **Resolution Time:**
 - Issue identified: 5 minutes

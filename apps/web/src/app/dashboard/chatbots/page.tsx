@@ -376,8 +376,12 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
       try {
         const startTime = Date.now();
         
-        // Find the selected agent configuration
-        const selectedAgentConfig = agents.find(agent => agent.id === selectedAgent) || {
+        // Use the session's agent type (not the dropdown selection)
+        // This ensures consistency: once a session is created with an agent, it stays with that agent
+        const sessionAgentType = currentSession.agent_type || selectedAgent || 'general';
+        
+        // Find the agent configuration for this session
+        const selectedAgentConfig = agents.find(agent => agent.id === sessionAgentType) || {
           id: 'general',
           name: 'General Assistant',
           description: 'A helpful general purpose assistant',

@@ -191,10 +191,10 @@ Users can hold multiple roles simultaneously:
 - [Claude Agent Briefing](docs/CLAUDE-AGENT-BRIEFING.md)
 - [Agent Communication Protocols](docs/CLAUDE-AGENT-COMMUNICATION.md)
 
-### 🪙 **🆕 [SHELTR Token Ecosystem](sheltr-tokens/docs/)**
-- [Token Ecosystem Overview](sheltr-tokens/docs/README.md) - Complete blockchain architecture  
-- [Tokenomics Strategy](sheltr-tokens/docs/SHELTR-TOKENOMICS-STRATEGY.md) - 100M supply, **12% team allocation**, 3-year release schedule
-- [Technical Implementation Guide](sheltr-tokens/docs/TECHNICAL-IMPLEMENTATION-GUIDE.md) - Smart contracts & deployment guide
+### 🪙 **🆕 [SHELTR Enterprise Token Ecosystem](sheltr-tokens/docs/)**
+- [Token Ecosystem Overview](sheltr-tokens/docs/README.md) - Single-token stable fund architecture  
+- [Enterprise Tokenomics Strategy](sheltr-tokens/docs/SHELTR-TOKENOMICS-STRATEGY.md) - Zero participant crypto exposure, guaranteed 4-6% APY returns
+- [Technical Implementation Guide](sheltr-tokens/docs/TECHNICAL-IMPLEMENTATION-GUIDE.md) - Enterprise smart contracts & Base network deployment
 
 ---
 

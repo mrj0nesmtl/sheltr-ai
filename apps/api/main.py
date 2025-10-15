@@ -119,8 +119,12 @@ app = FastAPI(
             "description": "Development server"
         },
         {
+            "url": "https://sheltr-api-714964620823.us-central1.run.app",
+            "description": "Production server (Cloud Run)"
+        },
+        {
             "url": "https://api.sheltr.ai",
-            "description": "Production server"
+            "description": "Future custom domain (reserved)"
         }
     ],
     lifespan=lifespan
@@ -132,10 +136,9 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:3000",           # Next.js dev server
         "http://127.0.0.1:3000",         # Alternative localhost
-        "https://sheltr-ai.web.app",      # Firebase hosting
+        "https://sheltr-ai.web.app",      # Main production domain (Firebase hosting)
         "https://sheltr-ai.firebaseapp.com",  # Firebase alternative domain
-        "https://api.sheltr.ai",          # Production API domain
-        "https://sheltr.ai",              # Main domain
+        "https://api.sheltr.ai",          # Future custom API domain (reserved)
     ],
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],

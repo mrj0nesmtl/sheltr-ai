@@ -227,11 +227,24 @@ export const PublicChatbot: React.FC<PublicChatbotProps> = ({ className = '' }) 
         }
       };
       
+      // Get Firebase auth token for authenticated requests
+      const headers: HeadersInit = {
+        'Content-Type': 'application/json',
+      };
+      
+      if (isAuthenticated && user) {
+        try {
+          const token = await user.getIdToken();
+          headers['Authorization'] = `Bearer ${token}`;
+          console.log('[PublicChatbot] Added auth token for authenticated request');
+        } catch (error) {
+          console.error('[PublicChatbot] Failed to get auth token:', error);
+        }
+      }
+      
       const response = await fetch(apiUrl, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers,
         body: JSON.stringify(requestBody),
       });
 

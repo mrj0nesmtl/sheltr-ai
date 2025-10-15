@@ -179,11 +179,13 @@ Title:"""
             session_ref = self.db.collection('chat_sessions').document(session_id)
             session_data = session_ref.get().to_dict()
             
+            generated_title = None  # Track if we generated a new title
             if session_data and session_data.get('title', '').startswith('New Chat'):
                 # This is the first message, generate a better title
                 logger.info(f"📝 Auto-generating title for session {session_id} from first message")
                 new_title = await self.generate_session_title(user_message)
                 session_ref.update({'title': new_title})
+                generated_title = new_title  # Store for response
                 logger.info(f"✅ Session title updated to: {new_title}")
             
             # Prepare conversation context
@@ -236,12 +238,20 @@ IMPORTANT: Always provide complete, well-structured responses. Finish your thoug
             
             await self.add_chat_message(session_id, 'assistant', response, metadata)
             
+            # Prepare response data
+            response_data = {
+                'message': response,
+                'metadata': metadata
+            }
+            
+            # Include the generated title if one was created
+            if generated_title:
+                response_data['session_title'] = generated_title
+                logger.info(f"📤 Returning new session title in response: {generated_title}")
+            
             return {
                 'success': True,
-                'data': {
-                    'message': response,
-                    'metadata': metadata
-                }
+                'data': response_data
             }
             
         except Exception as e:

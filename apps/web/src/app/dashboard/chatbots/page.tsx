@@ -422,8 +422,16 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
             ...currentSession,
             message_count: currentSession.message_count + 2, // user + assistant message
             last_message: aiMessage.content.slice(0, 50) + (aiMessage.content.length > 50 ? '...' : ''),
-            updated_at: new Date().toISOString()
+            updated_at: new Date().toISOString(),
+            // Update title if backend generated one
+            title: response.data.session_title || currentSession.title
           };
+          
+          // Log if title was auto-generated
+          if (response.data.session_title) {
+            console.log('[ChatbotDashboard] 🎉 Auto-generated title:', response.data.session_title);
+          }
+          
           setCurrentSession(updatedSession);
           
           // Update the session in the sessions list

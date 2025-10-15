@@ -273,6 +273,63 @@ async def health_check():
             }
         )
 
+@app.get("/debug/network-test", tags=["Debug"])
+async def test_network_connectivity():
+    """Test external network connectivity from Cloud Run (DEBUG ONLY)"""
+    import httpx
+    import socket
+    results = {}
+    
+    # Test 1: DNS Resolution
+    try:
+        ip = socket.gethostbyname("api.openai.com")
+        results["dns_openai"] = {"success": True, "ip": ip}
+    except Exception as e:
+        results["dns_openai"] = {"success": False, "error": str(e)}
+    
+    # Test 2: HTTPS to Google (control test)
+    try:
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            r = await client.get("https://www.google.com")
+            results["https_google"] = {"success": True, "status": r.status_code}
+    except Exception as e:
+        results["https_google"] = {"success": False, "error": str(e)}
+    
+    # Test 3: HTTPS to OpenAI
+    try:
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            r = await client.get("https://api.openai.com/v1")
+            results["https_openai"] = {"success": True, "status": r.status_code}
+    except Exception as e:
+        results["https_openai"] = {"success": False, "error": str(e)}
+    
+    # Test 4: OpenAI with API Key
+    try:
+        api_key = os.getenv("OPENAI_API_KEY", "")
+        has_key = bool(api_key and api_key != "your_openai_api_key_here")
+        if has_key:
+            async with httpx.AsyncClient(timeout=10.0) as client:
+                r = await client.get(
+                    "https://api.openai.com/v1/models",
+                    headers={"Authorization": f"Bearer {api_key}"}
+                )
+                results["openai_api_auth"] = {"success": True, "status": r.status_code}
+        else:
+            results["openai_api_auth"] = {"success": False, "error": "No API key configured"}
+    except Exception as e:
+        results["openai_api_auth"] = {"success": False, "error": str(e)}
+    
+    return {
+        "timestamp": time.time(),
+        "environment": os.getenv("ENVIRONMENT", "unknown"),
+        "tests": results,
+        "summary": {
+            "total_tests": len(results),
+            "passed": sum(1 for r in results.values() if r.get("success")),
+            "failed": sum(1 for r in results.values() if not r.get("success"))
+        }
+    }
+
 @app.get("/openapi.json", include_in_schema=False)
 async def get_openapi_endpoint():
     """Custom OpenAPI schema endpoint"""

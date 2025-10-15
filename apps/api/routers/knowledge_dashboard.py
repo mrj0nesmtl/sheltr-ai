@@ -362,3 +362,60 @@ async def sync_github_files(
     except Exception as e:
         logger.error(f"Error syncing GitHub files: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/clear-knowledge-base")
+async def clear_knowledge_base(
+    current_user: Dict = Depends(get_current_user)
+):
+    """Clear all documents from the knowledge base (Super Admin only)"""
+    try:
+        # Verify super admin access
+        if current_user.get('role') != 'super_admin':
+            raise HTTPException(status_code=403, detail="Super admin access required")
+        
+        logger.info(f"Clearing knowledge base - requested by {current_user.get('email')}")
+        
+        # Get knowledge service
+        from services.knowledge_dashboard_service import KnowledgeDashboardService
+        kb_service = KnowledgeDashboardService()
+        
+        # Get all documents
+        documents = await kb_service.get_knowledge_documents()
+        logger.info(f"Found {len(documents)} documents to clear")
+        
+        deleted_count = 0
+        
+        # Delete from Firebase Storage
+        for doc in documents:
+            try:
+                file_path = doc.get('file_path', '')
+                if file_path:
+                    blob = kb_service.bucket.blob(file_path)
+                    if blob.exists():
+                        blob.delete()
+                        logger.info(f"Deleted storage file: {file_path}")
+                deleted_count += 1
+            except Exception as e:
+                logger.warning(f"Error deleting storage file {file_path}: {str(e)}")
+        
+        # Delete from Firestore
+        docs = kb_service.db.collection('knowledge_documents').stream()
+        firestore_deleted = 0
+        for doc in docs:
+            doc.reference.delete()
+            firestore_deleted += 1
+        
+        logger.info(f"Knowledge base cleared - {deleted_count} storage files, {firestore_deleted} Firestore docs")
+        
+        return {
+            "success": True,
+            "message": "Knowledge base cleared successfully",
+            "storage_files_deleted": deleted_count,
+            "firestore_docs_deleted": firestore_deleted
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error clearing knowledge base: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))

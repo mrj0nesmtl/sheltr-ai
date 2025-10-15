@@ -174,7 +174,7 @@ class ChatbotDashboardService {
    */
   async getChatMessages(sessionId: string): Promise<ChatMessagesResponse> {
     try {
-      const response = await fetch(`${this.baseUrl}/api/v1/api/v1/chatbot-dashboard/sessions/${sessionId}/messages`, {
+      const response = await fetch(`${this.baseUrl}/api/v1/chatbot-dashboard/sessions/${sessionId}/messages`, {
         headers: await this.getAuthHeaders(),
       });
 

@@ -30,9 +30,19 @@ class OpenAIService:
                 self.available = False
                 return
             
+            # Configure HTTP client with better timeout and retry settings for Cloud Run
+            import httpx
+            http_client = httpx.AsyncClient(
+                timeout=httpx.Timeout(30.0, connect=15.0),  # 15s connect, 30s total
+                limits=httpx.Limits(max_connections=100, max_keepalive_connections=20),
+                follow_redirects=True
+            )
+            
             self.client = openai.AsyncOpenAI(
                 api_key=api_key,
-                timeout=float(os.getenv("OPENAI_TIMEOUT", 30))
+                timeout=float(os.getenv("OPENAI_TIMEOUT", 30)),
+                max_retries=3,
+                http_client=http_client
             )
             
             # Configuration

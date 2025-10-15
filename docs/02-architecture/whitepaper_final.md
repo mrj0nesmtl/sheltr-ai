@@ -69,7 +69,7 @@ To eliminate barriers between compassionate donors and vulnerable populations wh
 
 ### 1.2 Our Theory of Change
 
-**Core Hypothesis**: Direct, transparent, blockchain-verified transactions combined with sustainable token economics can increase charitable efficiency from 60% to 100% while building long-term solutions. Every dollar donated reaches its intended purpose: 85% participant support + 10% housing + 5% shelter operations.
+**Core Hypothesis**: Direct, transparent, blockchain-verified transactions combined with enterprise payment infrastructure can increase charitable efficiency from 60% to 100% while building long-term solutions. Every dollar donated reaches its intended purpose: 80% participant support (via virtual debit cards) + 15% housing fund (guaranteed 4-6% APY) + 5% shelter operations.
 
 ```mermaid
 graph TD
@@ -90,24 +90,26 @@ graph TD
 
 ### 1.3 Three-Pillar Impact Framework
 
-#### Pillar 1: Immediate Dignity (85% allocation)
-**Objective**: Preserve human dignity through instant, stable value delivery
-- **SHELTR-S tokens** maintain $1.00 USD value regardless of market conditions
+#### Pillar 1: Immediate Dignity (80% allocation)
+**Objective**: Preserve human dignity through instant, stable value delivery via virtual debit cards
+- **Adyen virtual debit cards** maintain stable value with global Visa/Mastercard acceptance
+- **Zero cryptocurrency exposure** for participants - traditional payment infrastructure
 - **Zero transaction fees** for participants using essential services
-- **Welcome bonus**: 100 SHELTR-S tokens ($100 value) for every new participant
-- **24/7 access** through QR codes and partner merchant network
+- **Instant card loading** through enterprise payment processing
+- **24/7 access** through global ATM/POS networks
 
 **Impact Metrics**:
 - Average support delivery: <1 hour (vs. 24-72 hours traditional)
 - Purchasing power preservation: 100% (no volatility risk)
 - Participant autonomy: Complete control over fund utilization
 
-#### Pillar 2: Sustainable Solutions (10% allocation)
-**Objective**: Build long-term housing infrastructure through smart contract governance
-- **SmartFund™ housing initiative** automatically allocates 10% of donations
-- **DeFi yield strategies** targeting 6-8% annual growth
-- **Community governance** via SHELTR token voting on fund allocation
-- **Transparent tracking** of housing placements and success rates
+#### Pillar 2: Sustainable Solutions (15% allocation)
+**Objective**: Build long-term housing infrastructure through guaranteed institutional returns
+- **SmartFund™ housing initiative** automatically allocates 15% of donations
+- **Coinbase institutional staking** providing guaranteed 4-6% APY
+- **SHELTR Stablecoin tracking** (1:1 USDT-backed) for complete transparency
+- **Zero risk** through enterprise custody and traditional financial infrastructure
+- **Transparent tracking** of housing fund growth and allocations
 
 **Housing Fund Allocation**:
 ```
@@ -228,9 +230,9 @@ contract SHELTRStable {
 ```mermaid
 graph LR
     A[$100 Donation] -->|Smart Contract| B[Automatic Split]
-    B -->|85%| C[85 SHELTR-S tokens]
-    B -->|10%| D[Housing Fund USDC]
-    B -->|5%| E[Shelter Operations USDC]
+    B -->|80%| C[$80 Virtual Debit Card]
+    B -->|15%| D[Housing Fund SHELTR Stablecoin]
+    B -->|5%| E[Shelter Operations USD]
     
     C -->|Instant| F[Participant Wallet]
     D -->|DeFi| G[Yield Generation]

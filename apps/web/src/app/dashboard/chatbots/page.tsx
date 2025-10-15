@@ -833,19 +833,7 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
                     </div>
                   </div>
                   
-                  <div className="flex items-center gap-1">
-                    <Button variant="ghost" size="sm" className="h-8 px-2 hidden sm:flex">
-                      <History className="h-3 w-3 mr-1" />
-                      <span className="text-xs">History</span>
-                    </Button>
-                    <Button variant="ghost" size="sm" className="h-8 px-2 hidden sm:flex">
-                      <Settings className="h-3 w-3 mr-1" />
-                      <span className="text-xs">Settings</span>
-                    </Button>
-                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                      <BarChart3 className="h-3 w-3" />
-                    </Button>
-                  </div>
+                  {/* Top action buttons removed - will be implemented in future phases */}
                 </div>
               </div>
 
@@ -929,15 +917,6 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
                   </div>
                   
                   <div className="flex items-center gap-1">
-                    <Button variant="ghost" size="sm" className="h-9 w-9 p-0 hidden sm:flex">
-                      <Upload className="h-4 w-4" />
-                    </Button>
-                    <Button variant="ghost" size="sm" className="h-9 w-9 p-0 hidden sm:flex">
-                      <Paperclip className="h-4 w-4" />
-                    </Button>
-                    <Button variant="ghost" size="sm" className="h-9 w-9 p-0 hidden sm:flex">
-                      <Globe className="h-4 w-4" />
-                    </Button>
                     <Button
                       onClick={sendMessage}
                       disabled={!newMessage.trim() || isTyping}
@@ -957,17 +936,35 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
                   </div>
                   
                   <div className="flex items-center gap-1">
-                    <Button variant="ghost" size="sm" className="h-7 px-2 text-xs hidden sm:flex">
-                      <Mic className="h-3 w-3 mr-1" />
-                      Voice
-                    </Button>
-                    <Button variant="ghost" size="sm" className="h-7 px-2 text-xs hidden sm:flex">
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="h-7 px-2 text-xs hidden sm:flex"
+                      title="Upload image to gallery (Vision AI coming soon)"
+                      disabled={true}
+                    >
                       <Image className="h-3 w-3 mr-1" />
-                      Image
+                      Gallery
                     </Button>
-                    <Button variant="ghost" size="sm" className="h-7 px-2 text-xs hidden sm:flex">
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="h-7 px-2 text-xs hidden sm:flex"
+                      title="Upload file to Knowledge Base"
+                      disabled={true}
+                    >
                       <File className="h-3 w-3 mr-1" />
-                      File
+                      Knowledge
+                    </Button>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="h-7 px-2 text-xs hidden sm:flex"
+                      title="Search the web for real-time information"
+                      disabled={true}
+                    >
+                      <Globe className="h-3 w-3 mr-1" />
+                      Web Search
                     </Button>
                   </div>
                 </div>

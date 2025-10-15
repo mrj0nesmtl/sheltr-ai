@@ -22,7 +22,11 @@ class FAQService:
     def _initialize_faq_database(self) -> Dict[str, Dict[str, Any]]:
         """Initialize the FAQ database with common questions and answers"""
         
-        return {
+        # Import expanded FAQs
+        from services.expanded_faqs import get_all_expanded_faqs
+        
+        # Start with base FAQs, then merge with expanded FAQs
+        base_faqs = {
             # Platform Overview
             "what_is_sheltr": {
                 "questions": [
@@ -273,7 +277,15 @@ class FAQService:
                     {"type": "phone", "text": "Crisis Text Line", "url": "sms:741741"}
                 ]
             }
-                }
+        }
+        
+        # Merge with expanded FAQs (84 additional FAQs)
+        expanded_faqs = get_all_expanded_faqs()
+        base_faqs.update(expanded_faqs)
+        
+        logger.info(f"FAQ database initialized with {len(base_faqs)} FAQs")
+        
+        return base_faqs
     
     def _initialize_role_specific_faqs(self) -> Dict[str, Dict[str, Dict[str, Any]]]:
         """Initialize role-specific FAQ collections for different user types"""

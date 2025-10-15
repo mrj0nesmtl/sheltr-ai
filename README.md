@@ -1,4 +1,4 @@
-# 🏠 SHELTR-AI
+# 🏠 SHELTR
 **Better to Solve than Manage.** 
 
 The next generation platform for transparent charitable giving and homelessness support built on modern cloud infrastructure, AI agents, and blockchain technology.

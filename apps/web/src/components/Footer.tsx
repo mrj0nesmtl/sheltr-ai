@@ -71,7 +71,7 @@ export default function Footer() {
                 <ul className="space-y-1 text-xs text-muted-foreground">
                   <li><Link href="/scan-give" className="hover:text-green-400 transition-all duration-300 hover:translate-x-1">Scan & Give</Link></li>
                   <li><Link href="/tokenomics" className="hover:text-green-400 transition-all duration-300 hover:translate-x-1">Tokenomics</Link></li>
-                  <li><Link href="/docs/whitepaper" className="hover:text-green-400 transition-all duration-300 hover:translate-x-1">White Paper</Link></li>
+                  <li><Link href="/docs" className="hover:text-green-400 transition-all duration-300 hover:translate-x-1">Documentation</Link></li>
                   <li><a href="https://github.com/mrj0nesmtl/sheltr-ai" target="_blank" rel="noopener noreferrer" className="hover:text-green-400 transition-all duration-300 hover:translate-x-1">GitHub</a></li>
                 </ul>
               </div>

@@ -48,7 +48,7 @@ class OpenAIService:
             # Configuration
             self.model = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
             self.fallback_model = os.getenv("OPENAI_FALLBACK_MODEL", "gpt-3.5-turbo")
-            self.max_tokens = int(os.getenv("OPENAI_MAX_TOKENS", 150))
+            self.max_tokens = int(os.getenv("OPENAI_MAX_TOKENS", 2000))  # Increased from 150 to 2000 for complete responses
             self.temperature = float(os.getenv("OPENAI_TEMPERATURE", 0.7))
             self.max_context_tokens = int(os.getenv("OPENAI_MAX_CONTEXT_TOKENS", 4000))
             

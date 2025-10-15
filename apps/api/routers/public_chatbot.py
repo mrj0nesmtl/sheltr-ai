@@ -327,7 +327,7 @@ async def public_chat(message_data: PublicChatMessage, request: Request):
             await analytics_service.track_event(
                 event_type="public_chat_interaction",
                 user_id=f"public_{hash(message_data.user_id) % 10000}",  # Anonymized
-                data={
+                metadata={  # Changed from 'data' to 'metadata' to match function signature
                     "message_length": len(message_data.message),
                     "page": enhanced_context.get("page", "/"),
                     "agent_used": response.agent_used,
@@ -405,4 +405,30 @@ async def public_chatbot_health():
             "fallback_responses": True
         },
         "timestamp": datetime.now().isoformat()
+    })
+
+@router.get(
+    "/health",
+    summary="Chatbot system health check",
+    description="Check overall chatbot system health (public + authenticated)"
+)
+async def chatbot_health():
+    """Check overall chatbot system health"""
+    from services.openai_service import openai_service
+    import time
+    
+    return JSONResponse({
+        "status": "healthy",
+        "public_endpoint": "operational",
+        "authenticated_endpoint": "operational",
+        "rag_available": openai_service.is_available(),
+        "openai_service": "available" if openai_service.is_available() else "unavailable",
+        "services": {
+            "orchestrator": "operational",
+            "rag_orchestrator": "operational",
+            "faq_service": "operational",
+            "analytics": "operational"
+        },
+        "timestamp": time.time(),
+        "iso_timestamp": datetime.now().isoformat()
     })

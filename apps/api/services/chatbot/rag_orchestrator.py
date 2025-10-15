@@ -500,31 +500,32 @@ class RAGOrchestrator:
         """Get helpful conversation starters for public users based on their intent"""
         
         # Map intents to relevant conversation starters
+        # Note: Using actual IntentCategory enum values (EMERGENCY, INFORMATION, ACTION, SUPPORT, NAVIGATION)
         conversation_starters = {
-            IntentCategory.DONATION: [
+            IntentCategory.ACTION: [
                 {'type': 'info', 'label': 'How do I donate?', 'url': '/scan-give'},
                 {'type': 'info', 'label': 'What is the SmartFund?', 'url': '/tokenomics'},
                 {'type': 'info', 'label': 'How does blockchain transparency work?', 'url': '/solutions/donors'}
             ],
-            IntentCategory.SHELTER_OPERATIONS: [
+            IntentCategory.SUPPORT: [
                 {'type': 'info', 'label': 'How do I sign up my shelter?', 'url': '/contact'},
                 {'type': 'info', 'label': 'Is the platform free for shelters?', 'url': '/solutions/shelters'},
                 {'type': 'info', 'label': 'What features do shelters get?', 'url': '/solutions/shelters'}
             ],
-            IntentCategory.PARTICIPANT_SERVICES: [
-                {'type': 'info', 'label': 'How do I participate?', 'url': '/solutions/participants'},
-                {'type': 'info', 'label': 'What is a POD?', 'url': '/about'},
-                {'type': 'info', 'label': 'How do I get a POD?', 'url': '/solutions/participants'}
-            ],
-            IntentCategory.PLATFORM_INFO: [
+            IntentCategory.INFORMATION: [
                 {'type': 'info', 'label': 'What is SHELTR?', 'url': '/about'},
                 {'type': 'info', 'label': 'How does SHELTR make money?', 'url': '/tokenomics'},
                 {'type': 'info', 'label': 'What blockchain is SHELTR on?', 'url': '/tokenomics'}
             ],
-            IntentCategory.TECHNICAL: [
-                {'type': 'info', 'label': 'How does SHELTR use blockchain?', 'url': '/tokenomics'},
-                {'type': 'info', 'label': 'What is the SmartFund?', 'url': '/tokenomics'},
-                {'type': 'info', 'label': 'How do I donate?', 'url': '/scan-give'}
+            IntentCategory.NAVIGATION: [
+                {'type': 'info', 'label': 'How do I participate?', 'url': '/solutions/participants'},
+                {'type': 'info', 'label': 'What is a POD?', 'url': '/about'},
+                {'type': 'info', 'label': 'How do I get a POD?', 'url': '/solutions/participants'}
+            ],
+            IntentCategory.EMERGENCY: [
+                {'type': 'emergency_call', 'label': 'Call 911 Now', 'data': {'phone': '911'}},
+                {'type': 'crisis_hotline', 'label': 'Crisis Text Line', 'data': {'phone': '741741'}},
+                {'type': 'info', 'label': 'Find Local Services', 'url': '/contact'}
             ]
         }
         
@@ -590,11 +591,21 @@ class RAGOrchestrator:
         """Generate fallback response when RAG fails"""
         
         # Import the standard orchestrator for fallback
-        from services.chatbot.orchestrator import chatbot_orchestrator
+        from services.chatbot.orchestrator import chatbot_orchestrator, ConversationContext
+        
+        # Create a proper ConversationContext object from the dict
+        # Get or create conversation context properly
+        context = await chatbot_orchestrator._get_conversation_context(
+            user_id=conversation_context.get('user_id', 'unknown'),
+            user_role=user_role
+        )
+        
+        # Store the current message for the handler to use
+        context.current_message = user_message
         
         return await chatbot_orchestrator._generate_ai_response(
             intent=intent,
-            context=conversation_context,
+            context=context,  # Now passing ConversationContext object
             agent=agent_type
         )
 

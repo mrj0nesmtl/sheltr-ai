@@ -133,7 +133,7 @@ class IntentClassifier:
             for pattern in self.participant_inquiry_patterns:
                 if re.search(pattern, message_lower):
                     return Intent(
-                        category=IntentCategory.PARTICIPANT_SERVICES,
+                        category=IntentCategory.SUPPORT,  # Changed from PARTICIPANT_SERVICES to SUPPORT
                         subcategory="participant_inquiry",
                         confidence=0.90,
                         entities={"query_type": "participant_help", "user_role": user_role},
@@ -478,30 +478,39 @@ class ChatbotOrchestrator:
                 "escalated": context.escalation_level > 0,
                 "emergency_detected": intent.category == IntentCategory.EMERGENCY,
                 "mobile_user": False,  # TODO: Detect from request headers
-                "shelter_id": getattr(context, 'shelter_id', None)
+                "shelter_id": getattr(context, 'shelter_id', None),
+                "user_id": context.user_id  # Add user_id for fallback handling
             }
             
-            # Try RAG-enhanced response first
+            # Try RAG-enhanced response first with timeout
             try:
                 # Import RAG orchestrator (lazy import to avoid circular imports)
                 from services.chatbot.rag_orchestrator import rag_orchestrator
+                import asyncio
                 
-                # Generate RAG-enhanced response
-                rag_response = await rag_orchestrator.generate_knowledge_enhanced_response(
-                    user_message=current_message,
-                    user_role=context.user_role,
-                    conversation_context=conversation_context,
-                    agent_type=agent,
-                    intent=intent
+                # Add 8-second timeout for RAG response to prevent slow responses
+                rag_response = await asyncio.wait_for(
+                    rag_orchestrator.generate_knowledge_enhanced_response(
+                        user_message=current_message,
+                        user_role=context.user_role,
+                        conversation_context=conversation_context,
+                        agent_type=agent,
+                        intent=intent
+                    ),
+                    timeout=8.0  # 8 second timeout
                 )
                 
-                logger.info(f"RAG response generated with {rag_response.metadata.get('sources_used', 0)} knowledge sources")
+                logger.info(f"✅ RAG response generated in time with {rag_response.metadata.get('sources_used', 0)} knowledge sources")
                 return rag_response
                 
-            except Exception as rag_error:
-                logger.warning(f"RAG response failed, falling back to standard AI: {str(rag_error)}")
+            except (asyncio.TimeoutError, Exception) as error:
+                # Handle both timeout and other RAG failures
+                if isinstance(error, asyncio.TimeoutError):
+                    logger.warning(f"⏱️ RAG response timeout (>8s), falling back to standard AI")
+                else:
+                    logger.warning(f"❌ RAG response failed, falling back to standard AI: {str(error)}")
                 
-                # Fallback to standard AI response
+                # Fallback to standard AI response (same for both timeout and error)
                 ai_context = {
                     "user_role": context.user_role,
                     "intent_category": intent.category.value,
@@ -540,7 +549,7 @@ class ChatbotOrchestrator:
                     agent_used=f"{agent}_ai_fallback",
                     escalation_triggered=escalation_triggered,
                     follow_up=await self._generate_follow_up(intent, ai_context),
-                    metadata={'rag_failed': True, 'fallback_used': True}
+                    metadata={'rag_failed': True, 'fallback_used': True, 'timeout': isinstance(error, asyncio.TimeoutError)}
                 )
             
         except Exception as e:

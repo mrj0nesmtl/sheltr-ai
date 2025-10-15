@@ -71,7 +71,71 @@
 
 ---
 
+## 🚨 Phase 0: Fix RAG Fallback Issue (30 minutes) - **DO THIS FIRST!**
+
+### **CRITICAL ISSUE DISCOVERED:**
+
+**Problem:** FAQ queries work perfectly, but RAG/AI fallback crashes with:
+```
+"I'm having trouble connecting right now. You can always contact us 
+directly or explore our help sections!"
+```
+
+**Test Cases:**
+- ✅ PASS: "when does sheltr launch?" - FAQ works (<1s)
+- ✅ PASS: "what is the sheltr ecosystem?" - FAQ works (<1s)
+- ❌ FAIL: "explain blockchain verification" - RAG crashes
+- ❌ FAIL: "compare sheltr to traditional charities" - RAG crashes
+
+**Root Cause (Likely):**
+- OpenAI API key not available in production environment
+- When RAG fails, fallback to OpenAI doesn't work
+- Error handling returns generic message instead of helpful response
+
+**Files to Check:**
+```python
+# 1. Check environment variables
+apps/api/.env or production environment
+- OPENAI_API_KEY should be: sk-...
+
+# 2. Check OpenAI service
+apps/api/services/openai_service.py
+- Verify is_available() returns True
+
+# 3. Check fallback logic
+apps/api/services/chatbot/orchestrator.py (lines ~506-553)
+- Verify ChatResponse returned, not error string
+```
+
+**Quick Fix:**
+```bash
+# 1. Check if OpenAI key is set
+echo $OPENAI_API_KEY
+
+# 2. If missing, add to environment and restart
+export OPENAI_API_KEY="sk-your-key-here"
+pkill -f uvicorn
+cd apps/api && source .venv/bin/activate
+nohup uvicorn main:app --host 0.0.0.0 --port 8000 --reload > ../../logs/backend.log 2>&1 &
+
+# 3. Test RAG query
+curl -X POST http://localhost:8000/api/v1/chatbot/public \
+  -H "Content-Type: application/json" \
+  -d '{"message": "explain blockchain verification", "user_id": "test", "context": {}}'
+```
+
+**Success Criteria:**
+- ✅ Complex queries return detailed answers (not error)
+- ✅ Response time 2-8 seconds (acceptable)
+- ✅ Logs show: FAQ → RAG → OpenAI fallback chain working
+
+**Reference:** See [CHATBOT-RAG-FALLBACK-ISSUE.md](CHATBOT-RAG-FALLBACK-ISSUE.md) for detailed analysis.
+
+---
+
 ## 🧪 Phase 1: Chatbot Testing (30 minutes)
+
+**⚠️ ONLY DO THIS AFTER PHASE 0 RAG FIX IS COMPLETE!**
 
 ### **Public Chatbot Tests:**
 

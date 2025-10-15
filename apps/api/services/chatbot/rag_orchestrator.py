@@ -43,7 +43,7 @@ class RAGOrchestrator:
         
         return await self._enhance_search_query(query, agent_type, intent)
     
-    async def search_knowledge_base(self, query: str, user_role: str = "general") -> str:
+    async def search_knowledge_base(self, query: str, user_role: str = "general", agent_type: str = "general") -> str:
         """Public method to search knowledge base - used by dashboard service"""
         try:
             # Create a minimal intent for the search
@@ -57,11 +57,11 @@ class RAGOrchestrator:
                 requires_escalation=False
             )
             
-            # Search for relevant knowledge
+            # Search for relevant knowledge with correct agent type
             knowledge_results = await self._search_relevant_knowledge(
                 query=query,
                 user_role=user_role,
-                agent_type="general",
+                agent_type=agent_type,  # Use provided agent_type instead of hardcoded "general"
                 intent=intent
             )
             

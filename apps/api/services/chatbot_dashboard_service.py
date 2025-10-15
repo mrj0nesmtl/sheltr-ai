@@ -144,7 +144,10 @@ class ChatbotDashboardService:
                 user_message, 
                 agent_type=agent_type  # Pass agent type for specialized query enhancement
             )
-            relevant_context = await self.rag_orchestrator.search_knowledge_base(enhanced_query)
+            relevant_context = await self.rag_orchestrator.search_knowledge_base(
+                enhanced_query,
+                agent_type=agent_type  # Pass agent type to knowledge search as well
+            )
             
             # Prepare system message with context
             system_message = f"""{instructions}

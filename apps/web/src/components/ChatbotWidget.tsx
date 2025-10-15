@@ -34,7 +34,7 @@ export const ChatbotWidget: React.FC = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const popoutWindowRef = useRef<Window | null>(null);
   
-  const { user, hasRole } = useAuth();
+  const { user, hasRole, getCurrentToken } = useAuth();
 
   // Determine user role and permissions
   const getUserRole = () => {
@@ -174,30 +174,48 @@ export const ChatbotWidget: React.FC = () => {
     setIsTyping(true);
 
     try {
-      // Use authenticated chatbot endpoint for dashboard users
-      const apiUrl = '/api/chatbot/authenticated';
+      // Use backend API authenticated chatbot endpoint
+      const backendUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
+      const apiUrl = `${backendUrl}/api/v1/chatbot/authenticated`;
       
       const requestBody = {
         message: messageText.trim(),
-        sessionId: user.uid || `dashboard_${Date.now()}`,
-        userRole: userRole,
-        context: {
+        user_id: user.uid || `dashboard_${Date.now()}`,
+        user_role: userRole,
+        conversation_context: {
           page: '/dashboard',
-          userAgent: navigator.userAgent,
+          user_agent: navigator.userAgent,
           timestamp: new Date().toISOString(),
           authenticated: true,
-          userId: user.uid,
+          session_type: 'authenticated',
+          anonymous: false,
+          user_id: user.uid,
           email: user.email,
-          firstName: firstName,
-          conversationId: conversationId
+          first_name: firstName,
+          conversation_id: conversationId
         }
       };
       
+      // Get Firebase auth token
+      const headers: HeadersInit = {
+        'Content-Type': 'application/json',
+      };
+      
+      if (user && getCurrentToken) {
+        try {
+          const token = await getCurrentToken();
+          if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+            console.log('[ChatbotWidget] Added auth token for authenticated request');
+          }
+        } catch (error) {
+          console.error('[ChatbotWidget] Failed to get auth token:', error);
+        }
+      }
+      
       const response = await fetch(apiUrl, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers,
         body: JSON.stringify(requestBody),
       });
 

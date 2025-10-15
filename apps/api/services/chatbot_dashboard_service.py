@@ -34,6 +34,18 @@ class ChatbotDashboardService:
                 session_data['id'] = doc.id
                 session_data['created_at'] = session_data.get('created_at').isoformat() if session_data.get('created_at') else None
                 session_data['updated_at'] = session_data.get('updated_at').isoformat() if session_data.get('updated_at') else None
+                
+                # Get actual message count and last message from chat_messages collection
+                messages = await self.get_chat_messages(doc.id)
+                session_data['message_count'] = len(messages)
+                
+                # Get last message content
+                if messages:
+                    last_msg = messages[-1]  # Last message (sorted by timestamp)
+                    session_data['last_message'] = last_msg.get('content', '')[:50] + ('...' if len(last_msg.get('content', '')) > 50 else '')
+                else:
+                    session_data['last_message'] = 'No messages yet'
+                
                 sessions.append(session_data)
             
             # Sort by updated_at descending
@@ -85,6 +97,48 @@ class ChatbotDashboardService:
             logger.error(f"Failed to get chat messages: {str(e)}")
             return []
     
+    async def generate_session_title(self, first_user_message: str) -> str:
+        """Generate a concise title for a chat session based on the first message"""
+        try:
+            # Use OpenAI to generate a short, descriptive title
+            prompt = f"""Generate a very short (3-6 words) title for a chat conversation that starts with this message:
+
+"{first_user_message[:200]}"
+
+Requirements:
+- Maximum 6 words
+- Descriptive and specific
+- No quotes or punctuation at the end
+- Title case
+
+Examples:
+- "Virtual Debit Card Overview"
+- "SHELTR Platform Introduction"
+- "Participant Privacy Guidelines"
+
+Title:"""
+            
+            title = await self.openai_service.generate_response(
+                message=prompt,
+                context={},
+                system_prompt="You are a helpful assistant that generates concise, descriptive titles. Respond with ONLY the title, nothing else."
+            )
+            
+            # Clean up the title
+            title = title.strip().strip('"').strip("'")
+            
+            # Limit to 60 characters max
+            if len(title) > 60:
+                title = title[:57] + "..."
+            
+            return title
+            
+        except Exception as e:
+            logger.error(f"Failed to generate session title: {str(e)}")
+            # Fallback: Use first few words of message
+            words = first_user_message.split()[:5]
+            return ' '.join(words) + ('...' if len(first_user_message.split()) > 5 else '')
+    
     async def add_chat_message(self, session_id: str, role: str, content: str, metadata: Optional[Dict] = None) -> str:
         """Add a new message to a chat session"""
         try:
@@ -119,6 +173,18 @@ class ChatbotDashboardService:
             
             # Get conversation history for context
             messages = await self.get_chat_messages(session_id)
+            
+            # Auto-generate title if this is the first user message
+            # Check if session has a generic title (starts with "New Chat")
+            session_ref = self.db.collection('chat_sessions').document(session_id)
+            session_data = session_ref.get().to_dict()
+            
+            if session_data and session_data.get('title', '').startswith('New Chat'):
+                # This is the first message, generate a better title
+                logger.info(f"📝 Auto-generating title for session {session_id} from first message")
+                new_title = await self.generate_session_title(user_message)
+                session_ref.update({'title': new_title})
+                logger.info(f"✅ Session title updated to: {new_title}")
             
             # Prepare conversation context
             conversation_history = []

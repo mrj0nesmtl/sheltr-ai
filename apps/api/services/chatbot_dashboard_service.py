@@ -134,11 +134,16 @@ class ChatbotDashboardService:
                 'content': user_message
             })
             
-            # Get agent instructions
+            # Get agent instructions and type
             instructions = agent_config.get('instructions', 'You are a helpful AI assistant.')
+            agent_type = agent_config.get('id', 'general')  # Extract agent type from config
+            logger.info(f"🤖 Using agent: {agent_type} for chatbot dashboard session {session_id}")
             
-            # Use RAG orchestrator for enhanced responses
-            enhanced_query = await self.rag_orchestrator.enhance_search_query(user_message)
+            # Use RAG orchestrator for enhanced responses WITH agent context
+            enhanced_query = await self.rag_orchestrator.enhance_search_query(
+                user_message, 
+                agent_type=agent_type  # Pass agent type for specialized query enhancement
+            )
             relevant_context = await self.rag_orchestrator.search_knowledge_base(enhanced_query)
             
             # Prepare system message with context

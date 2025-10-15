@@ -75,7 +75,7 @@ EXPANDED_FAQS = {
             "modular housing pods",
             "what is a pod"
         ],
-        "answer": "PODS are revolutionary modular housing units (64-96 sq ft) with solar power, climate control, smart locks, and mobility features. They cost $12,000-$18,000 per unit and are funded through our housing fund. Designed for dignity, security, and rapid deployment.",
+        "answer": "PODS are revolutionary modular housing units (64-96 sq ft) with solar power, climate control, smart locks, and mobility features. The base model starts at $5,000 per unit and is funded through our housing fund. Designed for dignity, security, and rapid deployment.",
         "category": "ecosystem",
         "agent_suggestion": "participant_support",
         "keywords": ["pods", "housing", "modular", "units", "shelter"],

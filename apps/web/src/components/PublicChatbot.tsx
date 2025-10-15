@@ -38,7 +38,7 @@ export const PublicChatbot: React.FC<PublicChatbotProps> = ({ className = '' }) 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
   // Smart positioning detection and role awareness
-  const { user, hasRole } = useAuth();
+  const { user, hasRole, getCurrentToken } = useAuth();
   const pathname = usePathname();
 
   // Determine user role and permissions
@@ -234,9 +234,13 @@ export const PublicChatbot: React.FC<PublicChatbotProps> = ({ className = '' }) 
       
       if (isAuthenticated && user) {
         try {
-          const token = await user.getIdToken();
-          headers['Authorization'] = `Bearer ${token}`;
-          console.log('[PublicChatbot] Added auth token for authenticated request');
+          const token = await getCurrentToken();
+          if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+            console.log('[PublicChatbot] Added auth token for authenticated request');
+          } else {
+            console.warn('[PublicChatbot] No auth token available');
+          }
         } catch (error) {
           console.error('[PublicChatbot] Failed to get auth token:', error);
         }

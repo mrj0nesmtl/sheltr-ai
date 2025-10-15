@@ -856,7 +856,7 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
                     <Bot className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
                     <p className="text-sm text-muted-foreground mb-4">Start a conversation</p>
                     <p className="text-xs text-muted-foreground">
-                      Agent: {agents.find(a => a.id === selectedAgent)?.name || 'Unknown'}
+                      Agent: {agents.find(a => a.id === currentSession.agent_type)?.name || 'Unknown'}
                     </p>
                   </div>
                 ) : (
@@ -951,9 +951,9 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
                 {/* Quick Actions */}
                 <div className="flex items-center justify-between mt-2 pt-2 border-t">
                   <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <span>Model: {selectedModel}</span>
+                    <span>Model: {currentSession.model || selectedModel}</span>
                     <span className="hidden sm:inline">•</span>
-                    <span className="hidden sm:inline">Agent: {agents.find(a => a.id === selectedAgent)?.name || 'None'}</span>
+                    <span className="hidden sm:inline">Agent: {agents.find(a => a.id === currentSession.agent_type)?.name || 'None'}</span>
                   </div>
                   
                   <div className="flex items-center gap-1">

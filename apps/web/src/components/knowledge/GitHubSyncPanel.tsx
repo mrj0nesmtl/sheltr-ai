@@ -47,6 +47,7 @@ interface GitHubSyncPanelProps {
 export const GitHubSyncPanel: React.FC<GitHubSyncPanelProps> = ({ onSyncComplete }) => {
   const [isScanning, setIsScanning] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
+  const [isClearing, setIsClearing] = useState(false);
   const [changes, setChanges] = useState<SyncChanges | null>(null);
   const [syncResults, setSyncResults] = useState<{ successful: number; failed: number; details: { file: string; status: string; error?: string }[] } | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -222,6 +223,49 @@ export const GitHubSyncPanel: React.FC<GitHubSyncPanelProps> = ({ onSyncComplete
     }
   };
 
+  const clearKnowledgeBase = async () => {
+    if (!confirm('⚠️ WARNING: This will delete ALL documents from the knowledge base. Are you sure you want to continue?')) {
+      return;
+    }
+
+    setIsClearing(true);
+    setError(null);
+
+    try {
+      const token = await getAuthToken();
+      const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
+
+      const response = await fetch(`${baseUrl}/api/v1/knowledge-dashboard/clear-knowledge-base`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      alert(`✅ Knowledge base cleared successfully!\n\nStorage files deleted: ${data.storage_files_deleted}\nFirestore docs deleted: ${data.firestore_docs_deleted}\n\nYou can now scan GitHub to sync fresh documentation.`);
+      
+      // Reset changes state
+      setChanges(null);
+      setSyncResults(null);
+      
+      // Call the callback to refresh
+      if (onSyncComplete) {
+        onSyncComplete();
+      }
+    } catch (error) {
+      console.error('Error clearing knowledge base:', error);
+      setError('Failed to clear knowledge base. Please try again.');
+    } finally {
+      setIsClearing(false);
+    }
+  };
+
   const totalChanges = changes ? changes.new.length + changes.modified.length : 0;
 
   return (
@@ -251,27 +295,38 @@ export const GitHubSyncPanel: React.FC<GitHubSyncPanelProps> = ({ onSyncComplete
         </Alert>
 
         {/* Scan Button */}
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           <Button 
             onClick={scanForChanges} 
-            disabled={isScanning || isSyncing}
+            disabled={isScanning || isSyncing || isClearing}
             variant="outline"
-            className="flex-1 border-gray-300 hover:border-red-500 hover:text-red-600"
+            className="flex-1 min-w-[140px] border-gray-300 hover:border-red-500 hover:text-red-600"
           >
             <RefreshCw className={`h-4 w-4 mr-2 ${isScanning ? 'animate-spin' : ''}`} />
-            {isScanning ? 'Scanning GitHub...' : 'Scan for Changes'}
+            {isScanning ? 'Scanning...' : 'Scan for Changes'}
           </Button>
           
           {changes && totalChanges > 0 && (
             <Button 
               onClick={syncAllFiles}
-              disabled={isSyncing}
-              className="flex-1 bg-red-600 hover:bg-red-700 text-white border-red-600"
+              disabled={isSyncing || isClearing}
+              className="flex-1 min-w-[140px] bg-red-600 hover:bg-red-700 text-white border-red-600"
             >
               <Download className={`h-4 w-4 mr-2 ${isSyncing ? 'animate-bounce' : ''}`} />
               {isSyncing ? 'Syncing...' : `Sync ${totalChanges} Files`}
             </Button>
           )}
+          
+          <Button 
+            onClick={clearKnowledgeBase} 
+            disabled={isScanning || isSyncing || isClearing}
+            variant="destructive"
+            className="flex-shrink-0 bg-orange-600 hover:bg-orange-700"
+            title="Clear all documents from Knowledge Base (use before fresh sync)"
+          >
+            <Database className={`h-4 w-4 mr-2 ${isClearing ? 'animate-pulse' : ''}`} />
+            {isClearing ? 'Clearing...' : 'Clear KB'}
+          </Button>
         </div>
 
         {/* Error Display */}

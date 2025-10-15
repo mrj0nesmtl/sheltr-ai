@@ -224,10 +224,15 @@ async def authenticated_chat(
             conversation_context=enhanced_context
         )
         
+        # Generate conversation ID if not in metadata
+        conversation_id = f"auth_{message_data.user_id}_{int(time.time())}"
+        if orchestrator_response.metadata and 'conversation_id' in orchestrator_response.metadata:
+            conversation_id = orchestrator_response.metadata['conversation_id']
+        
         return AuthenticatedChatResponse(
             success=True,
             response=orchestrator_response.message,
-            conversation_id=orchestrator_response.conversation_id,
+            conversation_id=conversation_id,
             actions=orchestrator_response.actions or [],
             follow_up=orchestrator_response.follow_up,
             mcp_tool_used=None,

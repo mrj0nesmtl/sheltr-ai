@@ -398,20 +398,28 @@ async def clear_knowledge_base(
             except Exception as e:
                 logger.warning(f"Error deleting storage file {file_path}: {str(e)}")
         
-        # Delete from Firestore
+        # Delete from Firestore - knowledge_documents
         docs = kb_service.db.collection('knowledge_documents').stream()
         firestore_deleted = 0
         for doc in docs:
             doc.reference.delete()
             firestore_deleted += 1
         
-        logger.info(f"Knowledge base cleared - {deleted_count} storage files, {firestore_deleted} Firestore docs")
+        # Delete from Firestore - knowledge_chunks (embeddings)
+        chunks = kb_service.db.collection('knowledge_chunks').stream()
+        chunks_deleted = 0
+        for chunk in chunks:
+            chunk.reference.delete()
+            chunks_deleted += 1
+        
+        logger.info(f"Knowledge base cleared - {deleted_count} storage files, {firestore_deleted} Firestore docs, {chunks_deleted} chunks")
         
         return {
             "success": True,
             "message": "Knowledge base cleared successfully",
             "storage_files_deleted": deleted_count,
-            "firestore_docs_deleted": firestore_deleted
+            "firestore_docs_deleted": firestore_deleted,
+            "chunks_deleted": chunks_deleted
         }
         
     except HTTPException:

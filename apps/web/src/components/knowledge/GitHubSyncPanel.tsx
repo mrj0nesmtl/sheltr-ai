@@ -42,13 +42,20 @@ interface SyncProgress {
 
 interface GitHubSyncPanelProps {
   onSyncComplete?: () => void;
+  userRole?: string; // User role for access control
 }
 
-export const GitHubSyncPanel: React.FC<GitHubSyncPanelProps> = ({ onSyncComplete }) => {
+export const GitHubSyncPanel: React.FC<GitHubSyncPanelProps> = ({ onSyncComplete, userRole }) => {
   const [isScanning, setIsScanning] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
   const [isClearing, setIsClearing] = useState(false);
   const [changes, setChanges] = useState<SyncChanges | null>(null);
+  
+  // Debug: Log user role for Clear KB button visibility
+  React.useEffect(() => {
+    console.log('[GitHubSyncPanel] User role:', userRole);
+    console.log('[GitHubSyncPanel] Clear KB visible:', userRole === 'super_admin');
+  }, [userRole]);
   const [syncResults, setSyncResults] = useState<{ successful: number; failed: number; details: { file: string; status: string; error?: string }[] } | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [syncProgress, setSyncProgress] = useState<SyncProgress | null>(null);
@@ -317,16 +324,19 @@ export const GitHubSyncPanel: React.FC<GitHubSyncPanelProps> = ({ onSyncComplete
             </Button>
           )}
           
-          <Button 
-            onClick={clearKnowledgeBase} 
-            disabled={isScanning || isSyncing || isClearing}
-            variant="destructive"
-            className="flex-shrink-0 bg-orange-600 hover:bg-orange-700"
-            title="Clear all documents from Knowledge Base (use before fresh sync)"
-          >
-            <Database className={`h-4 w-4 mr-2 ${isClearing ? 'animate-pulse' : ''}`} />
-            {isClearing ? 'Clearing...' : 'Clear KB'}
-          </Button>
+          {/* Clear KB button - Super Admin only */}
+          {userRole === 'super_admin' && (
+            <Button 
+              onClick={clearKnowledgeBase} 
+              disabled={isScanning || isSyncing || isClearing}
+              variant="destructive"
+              className="flex-shrink-0 bg-orange-600 hover:bg-orange-700"
+              title="Clear all documents from Knowledge Base (Super Admin only)"
+            >
+              <Database className={`h-4 w-4 mr-2 ${isClearing ? 'animate-pulse' : ''}`} />
+              {isClearing ? 'Clearing...' : 'Clear KB'}
+            </Button>
+          )}
         </div>
 
         {/* Error Display */}

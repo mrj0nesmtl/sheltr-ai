@@ -9,6 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
+import { useAuth } from '@/contexts/AuthContext';
 import { 
   Plus, 
   Edit, 
@@ -47,6 +48,8 @@ import { Breadcrumb, buildBreadcrumb } from '@/components/knowledge/Breadcrumb';
 import { GitHubSyncPanel } from '@/components/knowledge/GitHubSyncPanel';
 
 export default function KnowledgeDashboard() {
+  const { user } = useAuth(); // Get user for access control
+  const userRole = user?.role; // Extract role from user object
   const [documents, setDocuments] = useState<KnowledgeDocument[]>([]);
   const [stats, setStats] = useState<KnowledgeStats>({
     total_documents: 0,
@@ -417,7 +420,7 @@ export default function KnowledgeDashboard() {
 
       {/* GitHub Sync Panel - Full Width at Top */}
       <div className="mb-6">
-        <GitHubSyncPanel onSyncComplete={loadKnowledgeData} />
+        <GitHubSyncPanel onSyncComplete={loadKnowledgeData} userRole={userRole} />
       </div>
 
       {/* AI Knowledge Helper Component */}

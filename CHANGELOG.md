@@ -7,6 +7,94 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.53.1] - 2025-10-15 (CLEAR KB ACCESS CONTROL)
+
+### 🔒 Security Enhancement
+- **✅ SUPER ADMIN ONLY**: Clear KB button now restricted to Super Admin role
+- **✅ ROLE-BASED ACCESS**: Frontend checks `userRole === 'super_admin'` before showing button
+- **✅ BACKEND PROTECTION**: Existing backend validation ensures 403 error for non-super admins
+- **✅ UI CONSISTENCY**: Button hidden for Platform Admins and other roles
+
+### 📝 Changes
+- **Frontend:** Added `userRole` prop to `GitHubSyncPanel` component
+- **Frontend:** Conditional rendering of Clear KB button based on role
+- **Frontend:** Added `useAuth` to Knowledge Dashboard page
+- **Backend:** Already had role check (no changes needed)
+
+### 🎯 Access Matrix
+| Role | Can See Clear KB Button | Can Execute Clear KB |
+|------|------------------------|---------------------|
+| **Super Admin** | ✅ Yes | ✅ Yes |
+| **Platform Admin** | ❌ No | ❌ No (403 error) |
+| **Shelter Admin** | ❌ No | ❌ No (403 error) |
+| **Other Roles** | ❌ No | ❌ No (403 error) |
+
+---
+
+## [2.53.0] - 2025-10-15 (KNOWLEDGE BASE SYNC FIX - COMPLETE ✅)
+
+### 🎯 Session 24 Achievements (PRODUCTION KNOWLEDGE BASE FULLY OPERATIONAL)
+
+#### 🔧 Backend Fixes
+- **✅ CLEAR KB FUNCTION**: Now deletes both `knowledge_documents` and `knowledge_chunks` collections
+- **✅ GITHUB ENV VARS**: Added GitHub token to Cloud Run deployment
+- **✅ PRODUCTION SCAN**: Fixed scan showing 0 files after clear operation
+- **✅ PRODUCTION SYNC**: Successfully synced 105 documents with embeddings
+
+#### 📚 Documentation
+- **✅ KNOWLEDGE-BASE-COLLECTIONS-EXPLAINED.md**: Complete architecture guide for Firestore collections
+- **✅ SESSION-24-KNOWLEDGE-BASE-SYNC-FIX.md**: Full session summary with troubleshooting guide
+- **✅ Deployment Script**: Updated with GitHub environment variables
+
+#### 🐛 Bug Fixes
+- **Fixed:** Orphaned chunks in `knowledge_chunks` after Clear KB operation
+- **Fixed:** Production GitHub scan not detecting files (missing GITHUB_TOKEN)
+- **Fixed:** Clear operation leaving stale embeddings data
+
+#### 🔍 Root Cause Analysis
+**Issue:** Production scan showed "0 New files" after clear, localhost showed "105 New files"
+
+**Diagnosis:**
+1. Backend not deployed with `GITHUB_TOKEN` environment variable
+2. Clear KB function only deleted `knowledge_documents`, left orphaned `knowledge_chunks`
+
+**Fix:**
+1. Added GitHub env vars to `deploy.sh` backend deployment
+2. Updated Clear KB endpoint to delete both Firestore collections
+3. Redeployed backend to Cloud Run
+
+**Result:** ✅ Production now scans correctly, showing 105 files ready to sync
+
+#### 📊 Final Production State
+**Collections Structure:**
+- **`knowledge_documents`**: 105 documents with metadata and content ✅
+- **`knowledge_chunks`**: ~500-1000 OpenAI embeddings for RAG semantic search ✅
+- **Firebase Storage**: 105 documentation files stored ✅
+- **Both collections synced** and operational for chatbot functionality ✅
+
+**Sync Results:**
+```
+✅ 105 documents ingested
+✅ ~500-1000 embeddings generated
+✅ Production KB matches localhost
+✅ Chatbot has full knowledge base access
+```
+
+#### 🚀 Production Knowledge Base Status
+- **Scan:** ✅ Operational (detects 105 files)
+- **Sync:** ✅ Complete (all documents + embeddings)
+- **Chatbot RAG:** ✅ Fully functional
+- **Cost:** ~$0.05 (embeddings one-time cost)
+
+#### 🎓 Technical Learnings
+1. Firestore collections must be cleared together (documents + chunks)
+2. Cloud Run requires explicit environment variable configuration
+3. MCP Firebase tools excellent for production debugging
+4. Clear operations should be comprehensive (Storage + ALL related collections)
+5. Production/localhost parity requires consistent deployment
+
+---
+
 ## [2.52.0] - 2025-10-15 (SESSION 23: COMPLETE CHATBOT DASHBOARD OVERHAUL)
 
 ### 🎯 Session 23 Achievements (CHATBOT CONTROL PANEL PERFECTION)

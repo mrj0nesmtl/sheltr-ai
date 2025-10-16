@@ -106,6 +106,19 @@ deploy_backend() {
     
     # Deploy to Cloud Run
     echo -e "${YELLOW}🚀 Deploying to Cloud Run...${NC}"
+    
+    # Get GITHUB_TOKEN from environment or .env file
+    if [ -z "$GITHUB_TOKEN" ]; then
+        if [ -f "apps/api/.env" ]; then
+            GITHUB_TOKEN=$(grep GITHUB_TOKEN apps/api/.env | cut -d '=' -f2)
+        fi
+    fi
+    
+    if [ -z "$GITHUB_TOKEN" ]; then
+        echo -e "${RED}❌ GITHUB_TOKEN not found in environment or apps/api/.env${NC}"
+        exit 1
+    fi
+    
     gcloud run deploy sheltr-api \
         --image gcr.io/sheltr-ai/sheltr-api:latest \
         --region us-central1 \
@@ -117,7 +130,7 @@ deploy_backend() {
         --min-instances 0 \
         --timeout 300 \
         --service-account firebase-adminsdk-fbsvc@sheltr-ai.iam.gserviceaccount.com \
-        --set-env-vars="GOOGLE_CLOUD_PROJECT=sheltr-ai,ENVIRONMENT=production,FIREBASE_STORAGE_BUCKET=sheltr-ai.firebasestorage.app,OPENAI_MODEL=gpt-4o-mini,OPENAI_MAX_TOKENS=150,OPENAI_TEMPERATURE=0.7,OPENAI_TIMEOUT=30,OPENAI_FALLBACK_MODEL=gpt-3.5-turbo,OPENAI_MAX_CONTEXT_TOKENS=4000,OPENAI_RATE_LIMIT_PER_MINUTE=60,FRONTEND_URL=https://sheltr-ai.web.app" \
+        --set-env-vars="GOOGLE_CLOUD_PROJECT=sheltr-ai,ENVIRONMENT=production,FIREBASE_STORAGE_BUCKET=sheltr-ai.firebasestorage.app,OPENAI_MODEL=gpt-4o-mini,OPENAI_MAX_TOKENS=2000,OPENAI_TEMPERATURE=0.7,OPENAI_TIMEOUT=30,OPENAI_FALLBACK_MODEL=gpt-3.5-turbo,OPENAI_MAX_CONTEXT_TOKENS=4000,OPENAI_RATE_LIMIT_PER_MINUTE=60,FRONTEND_URL=https://sheltr-ai.web.app,GITHUB_TOKEN=$GITHUB_TOKEN,GITHUB_OWNER=mrj0nesmtl,GITHUB_REPO=sheltr-ai,GITHUB_DOCS_PATH=docs" \
         --update-secrets="OPENAI_API_KEY=openai-api-key:latest" \
         >> logs/deploy-backend.log 2>&1
     check_status "Cloud Run deployment"

@@ -36,7 +36,7 @@ markdown>=3.4.0
 # Blockchain and Crypto (temporarily removed for deployment)
 # web3==6.9.0
 # eth-account==0.10.0
-cryptography==44.0.1
+cryptography==46.0.3
 
 # HTTP Client and Async
 httpx==0.28.1

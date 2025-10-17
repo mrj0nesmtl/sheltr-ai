@@ -1,8 +1,7 @@
 # 🪙 Tokenomics v2.0: Single-Token Stable Fund Architecture
 *Version: 2.0.0 - September, 2025*
 *Status: Strategic Implementation* 🚀
-*Architecture Leads: JY CTO + DK CFO*
-
+*Architecture Leads: JY CTO
 ## 🎯 **REVOLUTIONARY TOKENOMICS PIVOT**
 
 ### **DK Expert Assessment**

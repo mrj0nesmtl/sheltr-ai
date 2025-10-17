@@ -1,110 +1,218 @@
 # 💻 Development Documentation
 
-This section contains development guides, standards, and processes for the SHELTR-AI platform.
-
-## 📋 Current Session Documents
-
-### 🚀 Session 14: AI Systems & Production Readiness (Current)
-- **[SESSION-14-KICKOFF.md](SESSION-14-KICKOFF.md)** - Session 14 objectives and AI system integration focus
-
-### 🔥 Session 13: Business Logic Testing & Implementation (Completed)
-- **[BUSINESS-LOGIC-TESTING.md](BUSINESS-LOGIC-TESTING.md)** - High-level testing overview and coordination
-- **Role-Based Testing Modules** (see development archive for detailed documents):
-  - Super Admin dashboard testing (500+ test cases)
-  - Shelter Admin operations testing (300+ test cases)
-  - Participant experience testing (200+ test cases)
-  - Donor experience and revenue testing (300+ test cases)
-
-## 🏗️ Platform Architecture & Features
-
-### 🤖 AI & Knowledge Management
-- **[CHATBOT-AGENT-ARCHITECTURE.md](CHATBOT-AGENT-ARCHITECTURE.md)** - Multi-agent AI system design and RAG architecture
-- **[KNOWLEDGE-BASE-SYNC-SYSTEM.md](KNOWLEDGE-BASE-SYNC-SYSTEM.md)** - GitHub documentation synchronization system
-- **[KNOWLEDGE-BASE-UPDATE-GUIDE.md](KNOWLEDGE-BASE-UPDATE-GUIDE.md)** - Knowledge base management procedures
-
-### 📊 Platform Features & Testing
-- **[COMPLETE-FUNCTIONALITY-MATRIX.md](COMPLETE-FUNCTIONALITY-MATRIX.md)** - Comprehensive feature coverage matrix
-- **[dev-roadmap.md](dev-roadmap.md)** - Development timeline and technical milestones
-
-### 🔧 Development Tools & Setup
-- **[QUICK-MACBOOK-SYNC.md](QUICK-MACBOOK-SYNC.md)** - macOS development environment setup
-
-## 📚 Development Archive
-
-Historical development sessions and milestone documentation:
-
-### 🗄️ Session History (Sessions 1-12)
-- **[development_archive/](development_archive/)** - Complete archive of development sessions 1-12
-  - **Sessions 1-3**: Foundation, website launch, authentication & RBAC
-  - **Sessions 4-6**: Super Admin dashboard, GitHub security, multi-dashboard development
-  - **Sessions 7-9**: Chatbot implementation, analytics, data connectivity revolution
-  - **Sessions 10-12**: Enterprise features, AI enhancement, technical perfection
-
-### 🔑 Key Historical Documents
-- **[development_archive/SESSION-13-BUSINESS-LOGIC-TESTING.md](development_archive/SESSION-13-BUSINESS-LOGIC-TESTING.md)** - Session 13 testing and implementation
-- **[development_archive/SESSION-12-KICKOFF-PROMPT.md](development_archive/SESSION-12-KICKOFF-PROMPT.md)** - Technical perfection and AI integration
-- **[development_archive/SESSION-11-AI-MINI-SESSIONS-OVERVIEW.md](development_archive/SESSION-11-AI-MINI-SESSIONS-OVERVIEW.md)** - AI enhancement series
-- **[development_archive/SESSION-09-DATA-CONNECTIVITY.md](development_archive/SESSION-09-DATA-CONNECTIVITY.md)** - Database architecture overhaul
-- **[development_archive/SESSION-05-GITHUB-SECURITY-SUPER-ADMIN.md](development_archive/SESSION-05-GITHUB-SETUP.md)** - Security implementation
-
-## 🎯 Testing & Quality Assurance
-
-### 🔍 Current Testing Focus
-**SESSION 14 PRODUCTION READINESS PRIORITIES:**
-1. **🤖 AI System Integration** - Chatbot agents and knowledge base validation
-2. **📊 Multi-Tenant Platform** - 10+ shelter tenants with complete data isolation
-3. **🔐 Security & Routing** - Production routing fixes and security hardening
-4. **📱 User Experience** - Professional navigation and branding validation
-5. **🚀 Beta Launch Preparation** - Final testing and validation for public beta
-
-### 📈 Platform Readiness Status (Session 14)
-- **Overall Platform**: 98% Ready for Production
-- **Multi-Tenant Architecture**: 100% Functional with 10+ shelter tenants
-- **AI Systems**: 95%+ accuracy with 2,500+ chat sessions
-- **Security**: All critical vulnerabilities resolved
-- **User Experience**: Professional navigation and branding complete
-- **Data Integration**: Real-time multi-tenant data connectivity operational
-
-## 📁 Directory Structure
-
-```
-docs/04-development/
-├── README.md                           # This file - Development overview
-├── SESSION-14-KICKOFF.md              # Current session objectives
-├── BUSINESS-LOGIC-TESTING.md          # Session 13 testing overview
-├── dev-roadmap.md                     # Development timeline
-├── COMPLETE-FUNCTIONALITY-MATRIX.md   # Feature coverage matrix
-├── CHATBOT-AGENT-ARCHITECTURE.md     # AI system design
-├── KNOWLEDGE-BASE-SYNC-SYSTEM.md     # Documentation sync system
-├── KNOWLEDGE-BASE-UPDATE-GUIDE.md    # Knowledge base management
-├── SHELTR-AI-IMPLEMENTATION-PLAN.md  # Platform implementation plan
-├── SHELTR-AI-DOCS-PLAN.md            # Documentation strategy
-├── QUICK-MACBOOK-SYNC.md             # Development environment setup
-└── development_archive/               # Sessions 1-13 archive (40+ files)
-    ├── SESSION-13-*.md               # Session 13 detailed documents
-    ├── SESSION-12-*.md               # Session 12 technical perfection
-    ├── SESSION-11-*.md               # Session 11 AI enhancement series
-    ├── SESSION-10-*.md               # Session 10 enterprise features
-    ├── SESSION-09-*.md               # Session 09 data connectivity
-    ├── SESSION-08-*.md               # Session 08 core business logic
-    ├── SESSION-07-*.md               # Session 07 chatbot implementation
-    ├── SESSION-06-*.md               # Session 06 multi-dashboard
-    ├── SESSION-05-*.md               # Session 05 GitHub security
-    ├── SESSION-04-*.md               # Session 04 super admin dashboard
-    ├── SESSION-03-*.md               # Session 03 authentication & RBAC
-    ├── SESSION-02-*.md               # Session 02 website launch
-    └── SESSION-01-*.md               # Session 01 foundation
-```
-
-## 🔗 Related Documentation
-
-- [API Documentation](../03-api/README.md)
-- [Architecture](../02-architecture/README.md)
-- [Deployment](../05-deployment/README.md)
-- [User Guides](../06-user-guides/README.md)
+**Current Status:** Production-ready platform with advanced AI systems and comprehensive knowledge base  
+**Last Updated:** October 16, 2025  
+**Version:** 2.53.3
 
 ---
 
-**Total Documentation**: 50+ development documents  
-**Test Cases**: 1,300+ comprehensive test cases across all user roles  
-**Current Focus**: Session 14 AI system integration and beta launch preparation
+## 📋 **Current Active Documents**
+
+All documents in this directory (`docs/04-development/`) are **current and actively maintained**. Historical session documents have been archived to `development_archive/`.
+
+---
+
+## 🤖 **AI & Chatbot Systems**
+
+### **Agent Architecture**
+- **[SHELTR-AGENT-ARCHITECTURE.md](SHELTR-AGENT-ARCHITECTURE.md)** - Comprehensive guide to SHELTR's multi-agent chatbot system
+  - Public chatbot with FAQ-first strategy
+  - Authenticated chat with enhanced RAG
+  - Dashboard with 5 specialized agents
+  - 107 documents, 1,059 chunks, 209,212 words
+
+### **Chatbot Features & Roadmap**
+- **[CHATBOT-FEATURES-ROADMAP.md](CHATBOT-FEATURES-ROADMAP.md)** - Future enhancements and planned features
+  - Voice input integration
+  - Image upload with Vision API
+  - Web search capabilities
+  - Multi-language support
+
+### **MCP Integration**
+- **[MCP-INTEGRATION-GUIDE.md](MCP-INTEGRATION-GUIDE.md)** - Model Context Protocol implementation
+  - Tool execution for authenticated users
+  - Analytics generation
+  - Platform data queries
+  - User management tools
+
+---
+
+## 📚 **Knowledge Base Management**
+
+### **Knowledge Base Guides**
+- **[KNOWLEDGE-BASE-UPDATE-GUIDE.md](KNOWLEDGE-BASE-UPDATE-GUIDE.md)** - How to update and sync knowledge base documents
+  - GitHub sync process
+  - Embedding regeneration
+  - Quality scoring system
+  - Best practices
+
+- **[KNOWLEDGE-BASE-EDIT-DELETE-FLOW.md](KNOWLEDGE-BASE-EDIT-DELETE-FLOW.md)** - ⚠️ **CRITICAL** - Understanding UI edits vs GitHub sync
+  - What happens when you edit in UI
+  - What happens when you delete in UI
+  - Sync conflicts and solutions
+  - Recommended workflows
+
+---
+
+## 🔔 **Notification System**
+
+### **Notification Debugging & Metrics**
+- **[NOTIFICATION_SYSTEM_DEBUG_PROMPT.md](NOTIFICATION_SYSTEM_DEBUG_PROMPT.md)** - Session 23 notification system debug kickoff
+  - Quista metrics issues
+  - Notification delivery problems
+  - Forensic analysis approach
+
+- **[NOTIFICATION-METRICS-GUIDE.md](NOTIFICATION-METRICS-GUIDE.md)** - Notification system metrics and monitoring
+  - Metric types and tracking
+  - Performance monitoring
+  - Troubleshooting guide
+
+---
+
+## 📊 **Platform Features & Testing**
+
+### **Functionality Matrix**
+- **[COMPLETE-FUNCTIONALITY-MATRIX-UPDATED.md](COMPLETE-FUNCTIONALITY-MATRIX-UPDATED.md)** - Comprehensive feature coverage matrix
+  - All platform features documented
+  - Implementation status
+  - Testing coverage
+
+### **Development Roadmap**
+- **[dev-roadmap.md](dev-roadmap.md)** - Development timeline and technical milestones
+  - Feature priorities
+  - Release schedule
+  - Technical debt tracking
+
+---
+
+## 📅 **Recent Session Documentation**
+
+### **Session 23: Chatbot Overhaul & Knowledge Base Sync**
+- **[SESSION-23-KICKOFF-NOTIFICATION-DEBUG.md](SESSION-23-KICKOFF-NOTIFICATION-DEBUG.md)** - Session 23 kickoff prompt
+  - Notification system debugging
+  - Chatbot testing with new FAQs
+  - Deep dive forensic analysis
+
+- **[SESSION-23-FINAL-STATUS.md](SESSION-23-FINAL-STATUS.md)** - Session 23 completion summary
+  - Chatbot implementation complete
+  - Knowledge base sync operational
+  - Production deployment successful
+
+---
+
+## 📁 **Directory Structure**
+
+```
+docs/04-development/
+├── README.md                                    # This file - Development overview
+│
+├── 🤖 AI & Chatbot Systems
+│   ├── SHELTR-AGENT-ARCHITECTURE.md           # Multi-agent system guide (932 lines)
+│   ├── CHATBOT-FEATURES-ROADMAP.md            # Future features roadmap
+│   └── MCP-INTEGRATION-GUIDE.md               # MCP tool integration
+│
+├── 📚 Knowledge Base Management
+│   ├── KNOWLEDGE-BASE-UPDATE-GUIDE.md         # Update & sync procedures
+│   └── KNOWLEDGE-BASE-EDIT-DELETE-FLOW.md     # ⚠️ Critical UI vs GitHub guide
+│
+├── 🔔 Notification System
+│   ├── NOTIFICATION_SYSTEM_DEBUG_PROMPT.md    # Debug session kickoff
+│   └── NOTIFICATION-METRICS-GUIDE.md          # Metrics & monitoring
+│
+├── 📊 Platform Features
+│   ├── COMPLETE-FUNCTIONALITY-MATRIX-UPDATED.md  # Feature coverage
+│   └── dev-roadmap.md                         # Development timeline
+│
+├── 📅 Recent Sessions
+│   ├── SESSION-23-KICKOFF-NOTIFICATION-DEBUG.md  # Session 23 kickoff
+│   └── SESSION-23-FINAL-STATUS.md             # Session 23 summary
+│
+└── 🗄️ development_archive/                    # Historical sessions (28+ files)
+    ├── Chatbot debug & testing docs
+    ├── Agent selection & color coding
+    ├── FAQ expansion & testing
+    ├── Donation flow fixes
+    ├── RAG troubleshooting & production fixes
+    └── Knowledge base sync sessions
+```
+
+---
+
+## 🎯 **Current Platform Status**
+
+### **AI Systems** ✅ Production Ready
+- **107 Documents** in knowledge base
+- **1,059 Chunks** for semantic search
+- **209,212 Words** indexed
+- **10 Categories** organized
+- **5 Specialized Agents** operational
+- **86 FAQs** for instant responses
+
+### **Chatbot Implementation** ✅ Complete
+- **Public Chatbot**: FAQ-first strategy (<1s response)
+- **Authenticated Chat**: Enhanced RAG with MCP tools
+- **Dashboard Agents**: 5 specialized personalities
+- **Knowledge Base**: Real-time GitHub sync
+- **Production**: Deployed and operational
+
+### **Recent Achievements** (v2.53.x)
+- ✅ Comprehensive Agent Architecture documentation
+- ✅ Live knowledge base statistics integration
+- ✅ 28 session docs archived for organization
+- ✅ Knowledge base edit/delete flow documented
+- ✅ Clear KB access restricted to Super Admin
+- ✅ Production knowledge base sync operational
+
+---
+
+## 🔗 **Related Documentation**
+
+- [API Documentation](../03-api/README.md) - Backend API reference
+- [Architecture](../02-architecture/README.md) - System design & tokenomics
+- [Deployment](../05-deployment/README.md) - Deployment guides
+- [User Guides](../06-user-guides/README.md) - Role-specific guides
+
+---
+
+## 📚 **Documentation Archive**
+
+Historical development sessions and milestone documentation have been moved to:
+
+**[development_archive/](development_archive/)** - 28+ archived documents including:
+- Chatbot debug sessions (Sessions 15-23)
+- Agent testing and selection
+- FAQ expansion and testing
+- Donation flow fixes
+- RAG troubleshooting
+- Knowledge base sync sessions
+- Production fixes and deployments
+
+---
+
+## 🚀 **Quick Reference**
+
+### **For Developers:**
+- Start with [SHELTR-AGENT-ARCHITECTURE.md](SHELTR-AGENT-ARCHITECTURE.md) for AI system overview
+- Review [MCP-INTEGRATION-GUIDE.md](MCP-INTEGRATION-GUIDE.md) for tool integration
+- Check [dev-roadmap.md](dev-roadmap.md) for upcoming features
+
+### **For Content Managers:**
+- Read [KNOWLEDGE-BASE-UPDATE-GUIDE.md](KNOWLEDGE-BASE-UPDATE-GUIDE.md) for sync procedures
+- ⚠️ **MUST READ**: [KNOWLEDGE-BASE-EDIT-DELETE-FLOW.md](KNOWLEDGE-BASE-EDIT-DELETE-FLOW.md) before editing docs
+
+### **For Platform Admins:**
+- Review [NOTIFICATION-METRICS-GUIDE.md](NOTIFICATION-METRICS-GUIDE.md) for monitoring
+- Check [COMPLETE-FUNCTIONALITY-MATRIX-UPDATED.md](COMPLETE-FUNCTIONALITY-MATRIX-UPDATED.md) for feature status
+
+---
+
+**Total Active Documents**: 12 current guides  
+**Archived Documents**: 28+ historical sessions  
+**Current Focus**: AI systems, knowledge base management, and notification debugging  
+**Platform Status**: Production-ready with 107 documents and 5 specialized agents
+
+---
+
+**Last Updated:** October 16, 2025  
+**Version:** 2.53.3  
+**Status:** ✅ Production Ready

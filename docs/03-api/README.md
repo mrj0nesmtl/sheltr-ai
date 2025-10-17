@@ -1,38 +1,45 @@
 # 🔌 API Documentation - Current Implementation & Status
 
-**FastAPI Backend for Shelter Management Platform**
+**FastAPI Backend for SHELTR Platform**
 
 *Base URL: `http://localhost:8000` (Development) | `https://sheltr-api-714964620823.us-central1.run.app` (Production)*  
 *Authentication: Firebase ID tokens* ✅ **OPERATIONAL**  
-*Current Version: 2.16.0*  
+*Current Version: 2.53.3*  
 *Live Frontend: https://sheltr-ai.web.app* ✅ **AUTHENTICATION ACTIVE**
 
-**🎯 Last Updated**: August 29, 2025  
-**📊 Current Status**: Production-ready multi-tenant platform with real data connectivity  
+**🎯 Last Updated**: October 16, 2025  
+**📊 Current Status**: Production-ready multi-tenant platform with AI agent system  
 **🔗 Data Integration**: Fully operational with comprehensive dashboard integration  
-**✅ Platform Status**: Multi-tenant architecture complete, ready for beta launch  
+**✅ Platform Status**: Multi-tenant architecture complete, AI systems operational
 
 ---
 
-## 🎉 Recent Major Achievements (Sessions 13.1-13.2)
+## 🎉 **Recent Major Achievements (v2.53.x)**
 
-### **🏗️ MULTI-TENANT PLATFORM TRANSFORMATION COMPLETE**
-- **✅ Multi-Tenant Architecture**: Successfully migrated from single-tenant to true multi-tenant platform with 10 shelter tenants
-- **✅ Real Data Connectivity Revolution**: Transformed all Super Admin dashboards from mock data to live multi-tenant Firestore integration
-- **✅ Financial Oversight with Interactive Charts**: Beautiful SmartFund analytics with transaction volume & frequency visualization
-- **✅ Michael Rodriguez Demo Integration**: Complete participant profile with $267 real donation tracking across Old Brewery Mission
-- **✅ Tenant Service Architecture**: Production-ready `tenantService.ts` for multi-tenant operations and data isolation
+### **🤖 AI AGENT SYSTEM COMPLETE**
+- **✅ Multi-Agent Chatbot**: 5 specialized agents with distinct personalities
+- **✅ Knowledge Base**: 107 documents, 1,059 chunks, 209,212 words indexed
+- **✅ RAG Integration**: Semantic search with OpenAI embeddings (1536 dims)
+- **✅ FAQ System**: 86 FAQs with <1s response time
+- **✅ MCP Tools**: Authenticated users can execute platform actions
+- **✅ Production Ready**: Deployed and operational
 
-### **🧭 USER-AWARENESS NAVIGATION REVOLUTION**
-- **✅ Intelligent Role-Based Routing**: Complete implementation across all 6 major public pages
-- **✅ Professional Branding**: SHELTR wordmark integration enhancing brand recognition
-- **✅ Seamless User Experience**: Welcome messages and dashboard links for logged-in users
-- **✅ Mobile-First Navigation**: Consistent user-awareness pattern across desktop and mobile interfaces
-- **✅ Production-Ready UX**: Professional user experience ready for beta launch
+### **📚 KNOWLEDGE BASE REVOLUTION**
+- **✅ GitHub Sync**: Real-time synchronization with progress tracking
+- **✅ Auto-Embeddings**: Automatic regeneration on document updates
+- **✅ Quality Scoring**: 100/100 optimization for all documents
+- **✅ Clear KB Access**: Super Admin-only database clearing
+- **✅ Comprehensive Docs**: Complete edit/delete flow documentation
+
+### **🏗️ MULTI-TENANT PLATFORM**
+- **✅ 10 Shelter Tenants**: Montreal shelters with data isolation
+- **✅ Real Data**: $1,534 total donations, $76.7 platform revenue
+- **✅ Michael Rodriguez**: Demo participant with $267 real donations
+- **✅ Tenant Service**: Production-ready multi-tenant operations
 
 ---
 
-## 🚀 Quick Start
+## 🚀 **Quick Start**
 
 ### Authentication
 
@@ -70,20 +77,24 @@ curl -X GET \
 
 ---
 
-## 🏗️ Data Architecture (Current Implementation)
+## 🏗️ **Data Architecture (Current Implementation)**
 
 ### **Production-Ready Multi-Tenant Database Structure**
 
 Our API connects to the **fully operational multi-tenant Firestore structure**:
 
 ```
-/shelters/{shelter-id}           ← Root-level shelter collection (✅ 10 Montreal shelters)
-/users/{user-id}                 ← Universal user management (✅ Multi-tenant ready)
-/services/{service-id}           ← Service management (✅ Shelter-specific)
-/demo_donations/{donation-id}     ← Real donation tracking (✅ $1,534 total platform)
-/tenants/{tenant-id}             ← Multi-tenant structure (✅ 10 shelter tenants)
+/shelters/{shelter-id}              ← Root-level shelter collection (✅ 10 Montreal shelters)
+/users/{user-id}                    ← Universal user management (✅ Multi-tenant ready)
+/services/{service-id}              ← Service management (✅ Shelter-specific)
+/demo_donations/{donation-id}       ← Real donation tracking (✅ $1,534 total platform)
+/tenants/{tenant-id}                ← Multi-tenant structure (✅ 10 shelter tenants)
 /demo_participants/{participant-id} ← Participant profiles (✅ Michael Rodriguez active)
-/newsletter_signups/{signup-id}   ← Newsletter management (✅ Real data)
+/newsletter_signups/{signup-id}     ← Newsletter management (✅ Real data)
+/knowledge_documents/{document-id}  ← Knowledge base docs (✅ 107 documents)
+/knowledge_chunks/{chunk-id}        ← Embeddings for RAG (✅ 1,059 chunks)
+/chat_sessions/{session-id}         ← Dashboard chat sessions (✅ Persistent)
+/chat_messages/{message-id}         ← Chat message history (✅ Stored)
 ```
 
 ### **User-Shelter Associations (Operational)**
@@ -99,25 +110,27 @@ Data isolation is achieved through **user-shelter linking**:
 - **Active Shelters**: 10 Montreal shelters
 - **User Count**: 9 users, 1 participant, 6 admins
 - **Demo Participant**: Michael Rodriguez with $267 real donations
+- **Knowledge Base**: 107 documents, 1,059 chunks, 209,212 words
 
 ---
 
-## 🎯 Four-Role System (Fully Operational)
+## 🎯 **Four-Role System (Fully Operational)**
 
 ### Role-Based Access Control ✅ **LIVE & TESTED**
 
 | Role | Access Level | Current Status | Test Account |
 |------|--------------|----------------|--------------|
-| **Super Admin** | Platform-wide access | ✅ **Joel's Dashboard Active** | `joel.yaffe@gmail.com` |
+| **Super Admin** | Platform-wide access + AI tools | ✅ **Joel's Dashboard Active** | `joel.yaffe@gmail.com` |
+| **Platform Admin** | Multi-tenant management | ✅ **Analytics & Reports** | `platformadmin@example.com` |
 | **Shelter Admin** | Shelter-specific data | ✅ **Old Brewery Mission Active** | `shelteradmin@example.com` |
 | **Participant** | Personal profile + shelter data | ✅ **Real Shelter Association** | `participant@example.com` |
-| **Donor** | Donation tracking | ✅ **Ready for Session 14** | `donor@example.com` |
+| **Donor** | Donation tracking | ✅ **Ready for Testing** | `donor@example.com` |
 
 ---
 
-## 📚 API Endpoints (Current Implementation)
+## 📚 **API Endpoints (Current Implementation)**
 
-### 🔐 Authentication (`/auth`)
+### 🔐 **Authentication** (`/auth`)
 **Router**: `routers/auth.py` - User registration, login, and role management
 
 - `POST /auth/register` - Register new user with role-based tenant assignment
@@ -128,7 +141,9 @@ Data isolation is achieved through **user-shelter linking**:
 - `PUT /auth/role/{user_id}` - Update user role (super_admin only)
 - `DELETE /auth/user/{user_id}` - Delete user (super_admin only)
 
-### 📊 Analytics (`/analytics`)
+---
+
+### 📊 **Analytics** (`/analytics`)
 **Router**: `routers/analytics.py` - Platform and shelter analytics
 
 - `GET /analytics/platform` - Platform-wide metrics (super_admin only)
@@ -136,42 +151,63 @@ Data isolation is achieved through **user-shelter linking**:
 - `GET /analytics/user/{user_id}` - User activity analytics
 - `POST /analytics/report` - Generate custom analytics report
 
-### 💬 Chatbot (`/chatbot`)
-**Router**: `routers/chatbot.py` - AI-powered chat assistance
+---
 
-- `POST /chatbot/message` - Send message to chatbot
-- `GET /chatbot/history/{user_id}` - Get chat history
-- `DELETE /chatbot/history/{user_id}` - Clear chat history
+### 🤖 **Chatbot Systems** (Multiple Routers)
 
-### 🛠️ Services (`/services`)
-**Router**: `routers/services.py` - Shelter service management
+#### **Public Chatbot** (`/chatbot/public`)
+**Router**: `routers/public_chatbot.py` - Anonymous public chatbot
 
-- `GET /services/` - List services (filtered by user's shelter)
-- `POST /services/` - Create new service (admin access)
-- `GET /services/{service_id}` - Get service details
-- `PUT /services/{service_id}` - Update service (admin access)
-- `DELETE /services/{service_id}` - Delete service (admin access)
+- `POST /chatbot/public` - Send message to public chatbot
+- `GET /chatbot/health` - Chatbot system health check
 
-### 👥 Users (`/users`)
-**Router**: `routers/users.py` - User profile and management
+**Features:**
+- FAQ-first strategy (86 FAQs, <1s response)
+- Intent classification (emergency, information, action, support)
+- Role detection (participant, donor, admin, public)
+- Rate limiting (10 req/hour per IP)
 
-- `GET /users/profile` - Get current user profile
-- `PUT /users/profile` - Update current user profile
-- `GET /users/{user_id}` - Get specific user profile (admin access)
-- `PUT /users/{user_id}` - Update specific user profile (admin access)
+---
 
-### 🎭 Demo Donations (`/demo/donations`)
-**Router**: `routers/demo_donations.py` - Adyen-powered QR donation demo
+#### **Authenticated Chatbot** (`/chatbot/authenticated`)
+**Router**: `routers/authenticated_chatbot.py` - Logged-in user chatbot
 
-- `GET /demo/donations/` - List all demo donations
-- `GET /demo/donations/participant/{participant_id}` - Get demo participant info
-- `POST /demo/donations/payment-session` - Create Adyen payment session
-- `POST /demo/donations/simulate-success/{donation_id}` - Simulate successful payment
-- `POST /demo/donations/webhook` - Adyen webhook handler
-- `GET /demo/donations/stats/{participant_id}` - Get demo participant statistics
+- `POST /chatbot/authenticated` - Send message to authenticated chatbot
 
-### 📚 Knowledge Base (`/knowledge`)
-**Router**: `routers/knowledge.py` - Document management for Super Admins
+**Features:**
+- Full knowledge base access (107 documents)
+- MCP tool integration (analytics, queries, notifications)
+- Role-based responses (super_admin, platform_admin, admin)
+- Enhanced RAG (10 results vs 5 for public)
+- Rate limiting (100 req/hour per user, 500 for super_admin)
+
+---
+
+#### **Chatbot Dashboard** (`/chatbot-dashboard`)
+**Router**: `routers/chatbot_dashboard.py` - Agent management and chat sessions
+
+- `GET /chatbot-dashboard/agents` - List available agents
+- `GET /chatbot-dashboard/sessions` - Get user's chat sessions
+- `POST /chatbot-dashboard/sessions` - Create new chat session
+- `GET /chatbot-dashboard/sessions/{session_id}` - Get session details
+- `POST /chatbot-dashboard/sessions/{session_id}/send` - Send message in session
+- `DELETE /chatbot-dashboard/sessions/{session_id}` - Delete chat session
+- `GET /chatbot-dashboard/sessions/{session_id}/messages` - Get session messages
+- `POST /chatbot-dashboard/agents` - Save agent configuration (super_admin)
+
+**5 Specialized Agents:**
+1. 🔵 **General Assistant** - General platform help
+2. 🟢 **SHELTR Support** - Platform-specific expertise
+3. 🟣 **Technical Expert** - Development & architecture
+4. 🟠 **Business Analyst** - Strategy & analytics
+5. 🩷 **Creative Writer** - Content & storytelling
+
+---
+
+### 📚 **Knowledge Base** (Multiple Routers)
+
+#### **Knowledge Base** (`/knowledge`)
+**Router**: `routers/knowledge.py` - Document management
 
 - `GET /knowledge/` - List all knowledge base documents
 - `POST /knowledge/upload` - Upload new document
@@ -182,7 +218,103 @@ Data isolation is achieved through **user-shelter linking**:
 
 ---
 
-## 🔒 Authentication & Security (Current Implementation)
+#### **Knowledge Dashboard** (`/knowledge-dashboard`)
+**Router**: `routers/knowledge_dashboard.py` - Advanced KB management (Super Admin)
+
+- `GET /knowledge-dashboard/documents` - List all documents with stats
+- `GET /knowledge-dashboard/documents/{document_id}` - Get document details
+- `PUT /knowledge-dashboard/documents/{document_id}` - Update document
+- `PUT /knowledge-dashboard/documents/{document_id}/upload` - Update from file
+- `DELETE /knowledge-dashboard/documents/{document_id}` - Delete document
+- `POST /knowledge-dashboard/scan-github-changes` - Scan GitHub for changes
+- `POST /knowledge-dashboard/sync-github-files` - Sync files from GitHub
+- `POST /knowledge-dashboard/clear-knowledge-base` - Clear all documents (super_admin)
+
+**Features:**
+- Real-time GitHub sync with progress tracking
+- Automatic embedding regeneration
+- Quality scoring (100/100 optimization)
+- 107 documents, 1,059 chunks, 209,212 words
+- Super Admin-only clear database function
+
+---
+
+### 🛠️ **Services** (`/services`)
+**Router**: `routers/services.py` - Shelter service management
+
+- `GET /services/` - List services (filtered by user's shelter)
+- `POST /services/` - Create new service (admin access)
+- `GET /services/{service_id}` - Get service details
+- `PUT /services/{service_id}` - Update service (admin access)
+- `DELETE /services/{service_id}` - Delete service (admin access)
+
+---
+
+### 👥 **Users** (`/users`)
+**Router**: `routers/users.py` - User profile and management
+
+- `GET /users/profile` - Get current user profile
+- `PUT /users/profile` - Update current user profile
+- `GET /users/{user_id}` - Get specific user profile (admin access)
+- `PUT /users/{user_id}` - Update specific user profile (admin access)
+
+---
+
+### 🎭 **Demo Donations** (`/demo/donations`)
+**Router**: `routers/demo_donations.py` - Adyen-powered QR donation demo
+
+- `GET /demo/donations/` - List all demo donations
+- `GET /demo/donations/participant/{participant_id}` - Get demo participant info
+- `POST /demo/donations/payment-session` - Create Adyen payment session
+- `POST /demo/donations/simulate-success/{donation_id}` - Simulate successful payment
+- `POST /demo/donations/webhook` - Adyen webhook handler
+- `GET /demo/donations/stats/{participant_id}` - Get demo participant statistics
+
+---
+
+### 💰 **Donations** (`/donations`)
+**Router**: `routers/donations.py` - Production donation system
+
+- `POST /donations/` - Create new donation
+- `GET /donations/` - List donations (filtered by role)
+- `GET /donations/{donation_id}` - Get donation details
+- `PUT /donations/{donation_id}` - Update donation status
+
+---
+
+### 📝 **Blog** (`/blog`)
+**Router**: `routers/blog.py` - Blog post management
+
+- `GET /blog/posts` - List blog posts
+- `POST /blog/posts` - Create new blog post (admin)
+- `GET /blog/posts/{post_id}` - Get blog post details
+- `PUT /blog/posts/{post_id}` - Update blog post (admin)
+- `DELETE /blog/posts/{post_id}` - Delete blog post (admin)
+
+---
+
+### 🔧 **MCP Tools** (`/mcp`)
+**Router**: `routers/mcp.py` - Model Context Protocol tool execution
+
+- `POST /mcp/execute` - Execute MCP tool (authenticated users)
+
+**Available Tools:**
+- `generate_impact_report` - Analytics generation (super_admin, platform_admin)
+- `query_platform_data` - Firestore queries (super_admin, platform_admin, admin)
+- `send_notification` - Send notifications (super_admin, platform_admin)
+- `manage_user_account` - User management (super_admin only)
+
+---
+
+### 🔄 **Migration** (`/migration`)
+**Router**: `routers/migration.py` - Data migration utilities
+
+- `POST /migration/import` - Import data from external sources
+- `GET /migration/status` - Get migration status
+
+---
+
+## 🔒 **Authentication & Security (Current Implementation)**
 
 ### Firebase ID Token Authentication ✅ **OPERATIONAL**
 
@@ -223,24 +355,9 @@ allow_origins=[
 ],
 ```
 
-### Middleware Stack
-
-```python
-# Performance monitoring
-@app.middleware("http")
-async def add_process_time_header(request: Request, call_next):
-    # Adds X-Process-Time header
-    # Logs slow requests (>1.0s)
-
-# Global exception handling
-@app.exception_handler(HTTPException)
-async def http_exception_handler(request: Request, exc: HTTPException):
-    # Standardized error responses
-```
-
 ---
 
-## 🏥 Health & Status (Current Implementation)
+## 🏥 **Health & Status (Current Implementation)**
 
 ### Root Health Check
 
@@ -252,12 +369,14 @@ GET /
 {
   "success": true,
   "message": "SHELTR-AI API is running",
-  "version": "2.16.0",
+  "version": "2.53.3",
   "status": "healthy",
   "services": {
     "authentication": "✅ operational",
     "database": "✅ multi-tenant ready", 
-    "multi_tenant": "✅ operational"
+    "multi_tenant": "✅ operational",
+    "ai_agents": "✅ 5 agents active",
+    "knowledge_base": "✅ 107 documents"
   }
 }
 ```
@@ -273,19 +392,44 @@ GET /health
   "success": true,
   "timestamp": 1691827200.0,
   "status": "healthy",
-  "version": "2.16.0",
+  "version": "2.53.3",
   "environment": "production",
   "services": {
     "api": "✅ operational",
     "firebase_auth": "✅ operational",
     "firestore": "✅ multi-tenant ready",
-    "storage": "✅ organized"
+    "storage": "✅ organized",
+    "chatbot": "✅ 5 agents operational",
+    "knowledge_base": "✅ 107 docs, 1,059 chunks"
   },
   "metrics": {
     "uptime": 1691827200.0,
     "memory_usage": "unknown",
     "response_time": "< 50ms"
   }
+}
+```
+
+### Chatbot Health Check
+
+```http
+GET /chatbot/health
+```
+
+```json
+{
+  "status": "healthy",
+  "public_endpoint": "operational",
+  "authenticated_endpoint": "operational",
+  "rag_available": true,
+  "openai_service": "available",
+  "services": {
+    "orchestrator": "operational",
+    "rag_orchestrator": "operational",
+    "faq_service": "operational",
+    "analytics": "operational"
+  },
+  "timestamp": 1691827200.0
 }
 ```
 
@@ -297,201 +441,63 @@ GET /docs
 
 **Live Swagger UI** with SHELTR-AI branding at `https://sheltr-api-714964620823.us-central1.run.app/docs`
 
-### OpenAPI Schema
+---
 
-```http
-GET /openapi.json
-```
+## 📊 **Current Implementation Status**
 
-Complete OpenAPI 3.0 specification for all endpoints.
+### ✅ **Completed (v2.53.x)**
+- **AI Agent System**: 5 specialized agents with distinct personalities
+- **Knowledge Base**: 107 documents, 1,059 chunks, 209,212 words
+- **RAG Integration**: Semantic search with OpenAI embeddings
+- **FAQ System**: 86 FAQs with <1s response time
+- **MCP Tools**: Authenticated tool execution
+- **GitHub Sync**: Real-time documentation synchronization
+- **Multi-Tenant Architecture**: 10 shelter tenants with data isolation
+- **Real Data Connectivity**: All dashboards connected to live Firestore
+- **Production Deployment**: Google Cloud Run containerized deployment
+- **Security**: All CodeQL warnings resolved
+
+### 🎯 **Current Priorities**
+- **Beta Launch Preparation**: Final testing and validation
+- **Advanced Analytics**: Enhanced reporting features
+- **Mobile App Development**: Native iOS and Android apps
+- **Blockchain Integration**: Smart contract deployment
+- **International Expansion**: Multi-language support
+
+### 📋 **Platform Readiness Metrics**
+- **Multi-Tenant Operations**: 100% functional with 10 shelter tenants
+- **AI Systems**: 95%+ accuracy with 5 specialized agents
+- **Knowledge Base**: 107 documents with auto-sync
+- **Real Data Integration**: 100% of dashboards connected
+- **User Experience**: Professional navigation complete
+- **Security**: All critical vulnerabilities resolved
+- **Performance**: Optimized queries and efficient loading
 
 ---
 
-## 📝 Request/Response Examples (Real Implementation)
+## 🛠️ **Tools & Resources**
 
-### User Registration
+### Development Tools
+- **Interactive API Docs**: `https://sheltr-api-714964620823.us-central1.run.app/docs` (Swagger UI)
+- **OpenAPI Schema**: `https://sheltr-api-714964620823.us-central1.run.app/openapi.json`
+- **Health Monitoring**: `https://sheltr-api-714964620823.us-central1.run.app/health`
+- **Chatbot Health**: `https://sheltr-api-714964620823.us-central1.run.app/chatbot/health`
 
-```http
-POST /auth/register
-Authorization: Bearer <firebase-id-token>
-Content-Type: application/json
+### Frontend Integration
+- **CORS Configured**: For Next.js development and production
+- **Performance Monitoring**: Request timing headers
+- **Error Handling**: Standardized error responses
+- **Authentication**: Firebase ID token validation
 
-{
-  "email": "newuser@example.com",
-  "password": "securepassword123",
-  "first_name": "Jane",
-  "last_name": "Smith",
-  "role": "participant",
-  "shelter_id": "old-brewery-mission"
-}
-```
-
-```json
-{
-  "success": true,
-  "data": {
-    "user": {
-      "uid": "user_uuid_789",
-      "email": "newuser@example.com",
-      "role": "participant",
-      "shelter_id": "old-brewery-mission",
-      "tenant_id": "shelter-old-brewery-mission"
-    },
-    "custom_claims": {
-      "role": "participant",
-      "shelter_id": "old-brewery-mission",
-      "tenant_id": "shelter-old-brewery-mission"
-    }
-  },
-  "message": "User registered successfully"
-}
-```
-
-### Get User Profile
-
-```http
-GET /auth/profile
-Authorization: Bearer <firebase-id-token>
-```
-
-```json
-{
-  "success": true,
-  "data": {
-    "uid": "user_uuid_123",
-    "email": "shelteradmin@example.com",
-    "first_name": "Admin",
-    "last_name": "User", 
-    "role": "admin",
-    "shelter_id": "old-brewery-mission",
-    "tenant_id": "shelter-old-brewery-mission",
-    "status": "active",
-    "created_at": "2025-08-09T...",
-    "last_active": "2025-08-09T..."
-  }
-}
-```
-
-### Demo Donation (Adyen Integration)
-
-```http
-POST /demo/donations/payment-session
-Content-Type: application/json
-
-{
-  "participant_id": "demo-participant-001",
-  "amount": 25.0,
-  "donor_info": {
-    "name": "Anonymous Donor"
-  }
-}
-```
-
-```json
-{
-  "success": true,
-  "data": {
-    "session_id": "CS_123456789",
-    "session_data": "eyJjb3VudHJ5Q29kZSI6IkNBIiw...",
-    "payment_id": "payment_uuid_456",
-    "participant": {
-      "id": "demo-participant-001",
-      "name": "Michael Rodriguez",
-      "story": "Dedicated community member working towards housing stability",
-      "progress": {
-        "housing": 68,
-        "employment": 55,
-        "financial_stability": 42
-      }
-    }
-  }
-}
-```
-
-### Simulate Successful Payment
-
-```http
-POST /demo/donations/simulate-success/{donation_id}
-Content-Type: application/json
-
-{
-  "status": "completed",
-  "amount": 100.00
-}
-```
-
-```json
-{
-  "success": true,
-  "data": {
-    "donation_id": "donation_uuid_123",
-    "status": "completed",
-    "participant_updated": true,
-    "wallet_updated": true
-  },
-  "message": "Payment simulation completed successfully"
-}
-```
+### Testing & Validation
+- **Role-Based Testing**: 5 test accounts for each user role
+- **Real Data**: Connected to multi-tenant database structure
+- **Production Ready**: Deployed and operational backend
+- **AI Testing**: 5 specialized agents with distinct personalities
 
 ---
 
-## 🚨 Error Handling (Current Implementation)
-
-### Standard Error Response
-
-```json
-{
-  "success": false,
-  "error": "HTTPException",
-  "message": "User not found or access denied",
-  "status_code": 404
-}
-```
-
-### Global Exception Handling
-
-```python
-# HTTP exceptions
-@app.exception_handler(HTTPException)
-async def http_exception_handler(request: Request, exc: HTTPException):
-    return JSONResponse(
-        status_code=exc.status_code,
-        content={
-            "success": False,
-            "error": "HTTPException", 
-            "message": exc.detail,
-            "status_code": exc.status_code
-        }
-    )
-
-# Internal server errors
-@app.exception_handler(Exception)
-async def general_exception_handler(request: Request, exc: Exception):
-    logger.error(f"Unhandled exception: {str(exc)}", exc_info=True)
-    return JSONResponse(
-        status_code=500,
-        content={
-            "success": False,
-            "error": "InternalServerError",
-            "message": "An internal server error occurred",
-            "status_code": 500
-        }
-    )
-```
-
-### Common Error Scenarios
-
-| Error | HTTP Status | Description | Example |
-|-------|-------------|-------------|---------|
-| **Authentication Failed** | 401 | Invalid Firebase ID token | Missing or expired token |
-| **Authorization Failed** | 403 | Insufficient role permissions | Participant trying to access admin endpoint |
-| **Resource Not Found** | 404 | Requested resource doesn't exist | User profile not found |
-| **Validation Error** | 422 | Invalid request data | Missing required fields |
-| **Service Unavailable** | 503 | External service down | Adyen service not configured |
-
----
-
-## 🚀 Development & Deployment
+## 🚀 **Development & Deployment**
 
 ### Local Development Setup
 
@@ -519,6 +525,18 @@ FIREBASE_PRIVATE_KEY_ID=your_key_id
 FIREBASE_PRIVATE_KEY=your_private_key
 FIREBASE_CLIENT_EMAIL=your_service_account_email
 
+# OpenAI (for AI agents)
+OPENAI_API_KEY=sk-proj-...
+OPENAI_MODEL=gpt-4o-mini
+OPENAI_MAX_TOKENS=2000
+OPENAI_TEMPERATURE=0.7
+
+# GitHub (for knowledge base sync)
+GITHUB_TOKEN=ghp_...
+GITHUB_OWNER=mrj0nesmtl
+GITHUB_REPO=sheltr-ai
+GITHUB_DOCS_PATH=docs
+
 # Optional (Adyen demo)
 ADYEN_API_KEY=your_adyen_key
 ADYEN_MERCHANT_ACCOUNT=your_merchant_account
@@ -529,87 +547,27 @@ ADYEN_MERCHANT_ACCOUNT=your_merchant_account
 - **Backend**: FastAPI on Google Cloud Run (Containerized)
 - **Database**: Firebase Firestore with multi-tenant architecture
 - **Authentication**: Firebase Auth with custom claims
+- **AI Services**: OpenAI GPT-4o-mini with embeddings
+- **Knowledge Base**: Firebase Storage + Firestore with GitHub sync
 - **Frontend Integration**: CORS-enabled for https://sheltr-ai.web.app
 - **Container Registry**: Google Container Registry (gcr.io/sheltr-ai/sheltr-api)
 - **Auto-scaling**: 0-10 instances based on demand
 
 ---
 
-## 📊 Current Implementation Status
+## 📚 **Related Documentation**
 
-### ✅ **Completed (Sessions 13.1-13.2)**
-- **Multi-Tenant Architecture**: Complete with 10 shelter tenants and data isolation
-- **Real Data Connectivity**: All Super Admin dashboards connected to live Firestore data
-- **Financial Analytics**: Complete SmartFund tracking with $76.7 platform revenue
-- **Michael Rodriguez Demo**: Fully integrated participant profile with $267 real donations
-- **User-Awareness Navigation**: Complete implementation across all 6 major public pages
-- **Professional Branding**: SHELTR wordmark integration enhancing brand recognition
-- **Production Deployment**: Google Cloud Run containerized deployment
-- **Security Improvements**: All CodeQL security warnings resolved
-- **Dependabot Updates**: 24 pull requests reviewed and ready for merge
-
-### 🎯 **Current Priorities (Session 14+)**
-- **Beta Launch Preparation**: Final testing and validation for public beta
-- **Advanced Analytics**: Enhanced reporting and business intelligence features
-- **Mobile App Development**: Native iOS and Android applications
-- **Blockchain Integration**: Smart contract deployment and token distribution
-- **International Expansion**: Multi-language support and global deployment
-
-### 📋 **Platform Readiness Metrics**
-- **Multi-Tenant Operations**: 100% functional with 10 shelter tenants
-- **Real Data Integration**: 100% of Super Admin dashboards connected
-- **User Experience**: Professional navigation and branding complete
-- **Security**: All critical vulnerabilities resolved
-- **Performance**: Optimized queries and efficient data loading
+- [Development Guides](../04-development/README.md) - Development documentation
+- [SHELTR Agent Architecture](../04-development/SHELTR-AGENT-ARCHITECTURE.md) - AI system guide
+- [Knowledge Base Guide](../04-development/KNOWLEDGE-BASE-UPDATE-GUIDE.md) - KB management
+- [MCP Integration](../04-development/MCP-INTEGRATION-GUIDE.md) - Tool execution
+- [Architecture](../02-architecture/README.md) - System design & tokenomics
+- [Deployment](../05-deployment/README.md) - Deployment guides
 
 ---
 
-## 🛠️ Tools & Resources
+**This FastAPI backend powers the SHELTR multi-tenant platform with advanced AI agent systems, comprehensive knowledge base, and production-ready multi-tenant architecture.** 🚀✨
 
-### Development Tools
-- **Interactive API Docs**: `https://sheltr-api-714964620823.us-central1.run.app/docs` (Swagger UI)
-- **OpenAPI Schema**: `https://sheltr-api-714964620823.us-central1.run.app/openapi.json`
-- **Health Monitoring**: `https://sheltr-api-714964620823.us-central1.run.app/health`
-
-### Frontend Integration
-- **CORS Configured**: For Next.js development and production
-- **Performance Monitoring**: Request timing headers
-- **Error Handling**: Standardized error responses
-- **Authentication**: Firebase ID token validation
-
-### Testing & Validation
-- **Role-Based Testing**: 4 test accounts for each user role
-- **Real Data**: Connected to multi-tenant database structure
-- **Production Ready**: Deployed and operational backend
-
-### Multi-Tenant Architecture
-- **TenantService**: Complete `tenantService.ts` for cross-tenant operations
-- **Data Isolation**: Proper shelter-specific data access controls
-- **Scalable Infrastructure**: Ready for unlimited shelter onboarding
-- **Security Rules**: Comprehensive Firestore security with RBAC
-
----
-
-## 🚀 Session 14+ Roadmap
-
-### **Phase 1: Beta Launch Preparation**
-- **Final Testing**: Comprehensive role-based testing across all user types
-- **Performance Optimization**: Advanced caching and query optimization
-- **Security Audit**: Final security review and penetration testing
-- **Documentation**: Complete user guides and API documentation
-
-### **Phase 2: Advanced Features**
-- **Mobile Applications**: Native iOS and Android app development
-- **Blockchain Integration**: Smart contract deployment and token distribution
-- **AI Enhancement**: Advanced analytics and predictive modeling
-- **International Support**: Multi-language and multi-currency support
-
-### **Phase 3: Enterprise Features**
-- **White-Label Platform**: Licensing system for other organizations
-- **Advanced Analytics**: Business intelligence and reporting tools
-- **API Marketplace**: Third-party integrations and partnerships
-- **Global Deployment**: International expansion and localization
-
----
-
-**This FastAPI backend powers the SHELTR multi-tenant platform and is ready for beta launch with comprehensive real data connectivity and professional user experience.** 🚀✨ 
+**Last Updated:** October 16, 2025  
+**Version:** 2.53.3  
+**Status:** ✅ Production Ready with AI Agents

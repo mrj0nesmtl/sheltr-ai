@@ -91,35 +91,58 @@ export default function KnowledgeBaseGuidePage() {
             </div>
 
             <div className="bg-green-50 dark:bg-green-900/20 border-l-4 border-green-500 p-4 mb-12">
-              <h3 className="text-green-800 dark:text-green-200 font-semibold mb-2">🚀 Current Knowledge Base Status - Session 15+ Revolution</h3>
-              <p className="text-green-700 dark:text-green-300 text-sm">
-                <strong>Live Documents</strong>: 61 active documents synced from GitHub repository<br/>
-                <strong>Folder Structure</strong>: 10 major categories with organized folder tree navigation<br/>
-                <strong>GitHub Integration</strong>: Real-time sync with progress tracking and change detection<br/>
-                <strong>Enhanced UI</strong>: Desktop-optimized layout, dedicated edit pages, educational components<br/>
-                <strong>Embeddings</strong>: 100+ high-quality embedding chunks for advanced RAG system<br/>
-                <strong>Status</strong>: ✅ Production-ready multi-agent chatbot system operational
+              <h3 className="text-green-800 dark:text-green-200 font-semibold mb-2">🚀 Live Knowledge Base Statistics</h3>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+                <div className="bg-white dark:bg-gray-800 rounded-lg p-3 border border-green-200 dark:border-green-700">
+                  <div className="text-xs text-green-600 dark:text-green-400 font-medium mb-1">Total Documents</div>
+                  <div className="text-2xl font-bold text-green-800 dark:text-green-200">107</div>
+                </div>
+                <div className="bg-white dark:bg-gray-800 rounded-lg p-3 border border-green-200 dark:border-green-700">
+                  <div className="text-xs text-green-600 dark:text-green-400 font-medium mb-1">Active Documents</div>
+                  <div className="text-2xl font-bold text-green-800 dark:text-green-200">107</div>
+                </div>
+                <div className="bg-white dark:bg-gray-800 rounded-lg p-3 border border-green-200 dark:border-green-700">
+                  <div className="text-xs text-green-600 dark:text-green-400 font-medium mb-1">Total Chunks</div>
+                  <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">1,059</div>
+                </div>
+                <div className="bg-white dark:bg-gray-800 rounded-lg p-3 border border-green-200 dark:border-green-700">
+                  <div className="text-xs text-green-600 dark:text-green-400 font-medium mb-1">Pending Embeddings</div>
+                  <div className="text-2xl font-bold text-orange-600 dark:text-orange-400">1</div>
+                </div>
+                <div className="bg-white dark:bg-gray-800 rounded-lg p-3 border border-green-200 dark:border-green-700">
+                  <div className="text-xs text-green-600 dark:text-green-400 font-medium mb-1">Total Words</div>
+                  <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">209,212</div>
+                </div>
+                <div className="bg-white dark:bg-gray-800 rounded-lg p-3 border border-green-200 dark:border-green-700">
+                  <div className="text-xs text-green-600 dark:text-green-400 font-medium mb-1">Categories</div>
+                  <div className="text-2xl font-bold text-cyan-600 dark:text-cyan-400">10</div>
+                </div>
+              </div>
+              <p className="text-green-700 dark:text-green-300 text-sm mt-4">
+                <strong>Status</strong>: ✅ Production-ready multi-agent chatbot system operational with real-time GitHub sync, RAG-powered semantic search, and comprehensive knowledge coverage across all platform domains.
               </p>
             </div>
 
             <div className="grid lg:grid-cols-3 gap-8 mb-12">
               <Card>
                 <CardHeader>
-                  <CardTitle>Document Categories (61 Total)</CardTitle>
+                  <CardTitle>Document Categories (107 Total)</CardTitle>
                   <CardDescription>
                     Complete GitHub repository documentation organized by category
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <ul className="space-y-2 text-sm">
-                    <li>• <strong>Overview</strong> (11 docs) → Platform overviews, plans</li>
-                    <li>• <strong>Architecture</strong> (16 docs) → System design, blockchain</li>
-                    <li>• <strong>API</strong> (4 docs) → Database schema, reference</li>
-                    <li>• <strong>Development</strong> (15+ docs) → Guides, session docs</li>
-                    <li>• <strong>Deployment</strong> (5 docs) → Firebase, Cloud Run</li>
-                    <li>• <strong>User Guides</strong> (4 docs) → Role-specific guides</li>
-                    <li>• <strong>Reference</strong> (4 docs) → API, database schema</li>
-                    <li>• <strong>Integrations</strong> (2 docs) → Firebase integration</li>
+                    <li>• <strong>Overview</strong> → Platform overviews, plans, mission</li>
+                    <li>• <strong>Architecture</strong> → System design, blockchain, tokenomics</li>
+                    <li>• <strong>API</strong> → Database schema, endpoints, reference</li>
+                    <li>• <strong>Development</strong> → Guides, session docs, implementation</li>
+                    <li>• <strong>Deployment</strong> → Firebase, Cloud Run, monitoring</li>
+                    <li>• <strong>User Guides</strong> → Role-specific guides, tutorials</li>
+                    <li>• <strong>Reference</strong> → API docs, database schema, specs</li>
+                    <li>• <strong>Integrations</strong> → Firebase, payment rails, external APIs</li>
+                    <li>• <strong>Migration</strong> → Legacy system migration docs</li>
+                    <li>• <strong>Resources</strong> → Additional resources, references</li>
                   </ul>
                 </CardContent>
               </Card>
@@ -175,15 +198,17 @@ export default function KnowledgeBaseGuidePage() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    <div>
-                      <h4 className="font-semibold mb-2">🧠 Embedding Technology</h4>
-                      <ul className="space-y-1 text-xs">
-                        <li>• <strong>Model</strong>: text-embedding-3-small (OpenAI)</li>
-                        <li>• <strong>Strategy</strong>: Overlapping chunks for context</li>
-                        <li>• <strong>Quality</strong>: 100/100 score optimization</li>
-                        <li>• <strong>Tags</strong>: AI-generated relevant keywords</li>
-                      </ul>
-                    </div>
+                  <div>
+                    <h4 className="font-semibold mb-2">🧠 Embedding Technology</h4>
+                    <ul className="space-y-1 text-xs">
+                      <li>• <strong>Model</strong>: text-embedding-ada-002 (OpenAI)</li>
+                      <li>• <strong>Dimensions</strong>: 1536-dimensional vectors</li>
+                      <li>• <strong>Total Chunks</strong>: 1,059 processed chunks</li>
+                      <li>• <strong>Strategy</strong>: Overlapping chunks for context</li>
+                      <li>• <strong>Quality</strong>: High-quality semantic search</li>
+                      <li>• <strong>Tags</strong>: AI-generated relevant keywords</li>
+                    </ul>
+                  </div>
                     <div>
                       <h4 className="font-semibold mb-2">🤖 Multi-Agent Support</h4>
                       <ul className="space-y-1 text-xs">

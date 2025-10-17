@@ -1,7 +1,7 @@
 # White Paper v2.0
 *Enterprise-Grade Solutions for Homelessness - Stability Through Technology*
 
-**Authors**: Joel Yaffe (CTO, Founder) & Doug Kukura (CFO, Strategic Partnerships)  
+**Authors**: Joel Yaffe (CTO, Founder)
 **Location**: Montreal, Canada  
 **Version**: 2.0.0  
 **Date**: September 26, 2025  

@@ -170,8 +170,8 @@ export default function DocsPage() {
       audience: "AI Engineers • Developers • System Architects • Technical Teams",
       topics: ["Multi-Agent System", "MCP Integration", "Workflow Automation", "RAG Integration", "Role-Based Routing"],
       link: "/docs/chatbot-architecture",
-      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/04-development/CHATBOT-AGENT-ARCHITECTURE.md",
-      lastUpdated: "September 22, 2025"
+      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/04-development/SHELTR-AGENT-ARCHITECTURE.md",
+      lastUpdated: "October 16, 2025"
     },
     {
       title: "MCP Integrations",

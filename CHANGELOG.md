@@ -7,6 +7,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.53.2] - 2025-10-16 (AGENT ARCHITECTURE DOCUMENTATION)
+
+### 📚 Documentation
+- **✅ NEW COMPREHENSIVE GUIDE**: Created `SHELTR-AGENT-ARCHITECTURE.md` (932 lines)
+- **✅ COMPLETE SYSTEM DOCS**: Public chatbot, authenticated chat, dashboard agents
+- **✅ 5 AGENT PROFILES**: Detailed personalities, capabilities, and use cases
+- **✅ INTEGRATION GUIDES**: FAQ, RAG, MCP tools, knowledge base
+- **✅ FIXED BROKEN LINKS**: Updated GitHub links in docs pages
+
+### 📝 What's Documented
+- **Public Chatbot System** - FAQ-first strategy, intent classification, role detection
+- **Authenticated Chat** - Enhanced RAG, MCP tools, role-based responses
+- **Dashboard Agents** - 5 specialized agents with color coding
+  - 🔵 General Assistant
+  - 🟢 SHELTR Support
+  - 🟣 Technical Expert
+  - 🟠 Business Analyst
+  - 🩷 Creative Writer
+- **Knowledge Base** - 105 documents, ~500-1000 chunks, sync process
+- **RAG & FAQ** - Two-tier response strategy, performance metrics
+- **MCP Integration** - Tool execution, permissions, intent detection
+
+### 🔗 Links Fixed
+- `/docs` page → Updated GitHub link to new file
+- `/docs/chatbot-architecture` → Updated GitHub link to new file
+- Last updated date → October 16, 2025
+
+---
+
 ## [2.53.1] - 2025-10-15 (CLEAR KB ACCESS CONTROL)
 
 ### 🔒 Security Enhancement

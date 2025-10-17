@@ -21,7 +21,7 @@ passlib[bcrypt]==1.7.4
 python-multipart==0.0.20
 
 # AI and ML
-openai==1.99.9
+openai==2.4.0
 langchain==0.3.27
 anthropic==0.67.0
 textblob==0.19.0

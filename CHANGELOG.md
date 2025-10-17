@@ -7,6 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.53.3] - 2025-10-16 (KNOWLEDGE BASE GUIDE UPDATE & DOC CLEANUP)
+
+### 📊 Knowledge Base Statistics
+- **✅ LIVE STATS INTEGRATION**: Updated Knowledge Base Guide with real-time statistics
+- **✅ VISUAL STAT CARDS**: 107 documents, 1,059 chunks, 209,212 words, 10 categories
+- **✅ ACCURATE METRICS**: Replaced "Session 15" references with current production data
+- **✅ ENHANCED DETAILS**: Updated embedding model info (text-embedding-ada-002, 1536 dims)
+
+### 🗂️ Documentation Organization
+- **✅ ARCHIVED 28 FILES**: Moved completed session/debug docs to `development_archive/`
+  - Chatbot debug & testing docs
+  - Agent selection & color coding
+  - FAQ expansion & testing
+  - Donation flow fixes
+  - RAG troubleshooting & production fixes
+  - Knowledge base sync sessions
+- **✅ REORGANIZED**: Moved `design-system.md` from `10-resources` to `07-reference`
+- **✅ CLEANED UP**: Deleted obsolete test scripts, CSV files, and templates
+
+### 📝 Updated Content
+- Knowledge Base Guide now shows accurate document count (107 vs 61)
+- All 10 categories listed with proper descriptions
+- Embedding technology section updated with correct model and chunk count
+- Removed outdated "Session 15+ Revolution" language
+
+---
+
 ## [2.53.2] - 2025-10-16 (AGENT ARCHITECTURE DOCUMENTATION)
 
 ### 📚 Documentation

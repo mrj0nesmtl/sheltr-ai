@@ -31,21 +31,7 @@ interface SharedConversation {
   };
 }
 
-const AGENT_COLORS = {
-  general: 'border-gray-500 text-gray-500',
-  'technical-expert': 'border-blue-500 text-blue-500',
-  'business-analyst': 'border-green-500 text-green-500',
-  'donor-relations': 'border-purple-500 text-purple-500',
-  'participant-support': 'border-orange-500 text-orange-500'
-};
-
-const AGENT_LABELS = {
-  general: 'General Assistant',
-  'technical-expert': 'Technical Expert',
-  'business-analyst': 'Business Analyst',
-  'donor-relations': 'Donor Relations',
-  'participant-support': 'Participant Support'
-};
+// Agent colors and labels removed - not displayed in shared view
 
 function SharedConversationContent() {
   const router = useRouter();
@@ -136,10 +122,6 @@ function SharedConversationContent() {
     );
   }
 
-  const agentType = conversation.session.agent_type || 'general';
-  const agentColor = AGENT_COLORS[agentType as keyof typeof AGENT_COLORS] || AGENT_COLORS.general;
-  const agentLabel = AGENT_LABELS[agentType as keyof typeof AGENT_LABELS] || 'General Assistant';
-
   return (
     <div className="min-h-screen bg-black">
       {/* Header */}
@@ -162,14 +144,9 @@ function SharedConversationContent() {
           </div>
 
           <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <h1 className="text-2xl font-bold text-white">
-                {conversation.session.title}
-              </h1>
-              <Badge variant="outline" className={`${agentColor}`}>
-                {agentLabel}
-              </Badge>
-            </div>
+            <h1 className="text-2xl font-bold text-white">
+              {conversation.session.title}
+            </h1>
 
             <div className="flex flex-wrap items-center gap-4 text-sm text-white/50">
               <div className="flex items-center gap-1">

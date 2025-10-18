@@ -500,28 +500,11 @@ IMPORTANT: Always provide complete, well-structured responses. Finish your thoug
             session_data = session.to_dict()
             messages = await self.get_chat_messages(session_id)
             
-            # Debug logging - check ALL possible agent field names
-            logger.info(f"🔍 DEBUG: Session {session_id} for share {share_id}")
-            logger.info(f"🔍 DEBUG: session_data.get('agent_type') = {session_data.get('agent_type')}")
-            logger.info(f"🔍 DEBUG: session_data.get('agent') = {session_data.get('agent')}")
-            logger.info(f"🔍 DEBUG: session_data.get('agentType') = {session_data.get('agentType')}")
-            logger.info(f"🔍 DEBUG: Full session_data = {session_data}")
-            
-            # Try multiple possible field names for agent
-            agent_type = (
-                session_data.get('agent_type') or 
-                session_data.get('agent') or 
-                session_data.get('agentType') or 
-                'general'
-            )
-            
-            logger.info(f"🔍 DEBUG: Final agent_type = {agent_type}")
-            
             # Format response to match frontend expectations
             return {
                 'session': {
                     'title': session_data.get('title', 'Shared Conversation'),
-                    'agent_type': agent_type,
+                    'agent_type': session_data.get('agent_type', 'general'),
                     'model': session_data.get('model', 'gpt-4o-mini'),
                     'created_at': session_data.get('created_at').isoformat() if session_data.get('created_at') else datetime.now(timezone.utc).isoformat()
                 },

@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -869,7 +871,41 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
                               : 'bg-muted'
                           }`}
                         >
-                          <p className="text-sm">{message.content}</p>
+                          <div className="text-sm prose prose-sm dark:prose-invert max-w-none">
+                            <ReactMarkdown
+                              remarkPlugins={[remarkGfm]}
+                              components={{
+                                // Style headers
+                                h1: ({node, ...props}) => <h1 className="text-xl font-bold mt-4 mb-2" {...props} />,
+                                h2: ({node, ...props}) => <h2 className="text-lg font-bold mt-3 mb-2" {...props} />,
+                                h3: ({node, ...props}) => <h3 className="text-base font-bold mt-2 mb-1" {...props} />,
+                                h4: ({node, ...props}) => <h4 className="text-sm font-bold mt-2 mb-1" {...props} />,
+                                // Style paragraphs
+                                p: ({node, ...props}) => <p className="mb-2 last:mb-0" {...props} />,
+                                // Style lists
+                                ul: ({node, ...props}) => <ul className="list-disc list-inside mb-2 space-y-1" {...props} />,
+                                ol: ({node, ...props}) => <ol className="list-decimal list-inside mb-2 space-y-1" {...props} />,
+                                li: ({node, ...props}) => <li className="ml-2" {...props} />,
+                                // Style code
+                                code: ({node, inline, ...props}: any) => 
+                                  inline ? (
+                                    <code className="bg-black/10 dark:bg-white/10 px-1 py-0.5 rounded text-xs" {...props} />
+                                  ) : (
+                                    <code className="block bg-black/10 dark:bg-white/10 p-2 rounded text-xs overflow-x-auto" {...props} />
+                                  ),
+                                // Style links
+                                a: ({node, ...props}) => <a className="text-blue-500 hover:underline" {...props} />,
+                                // Style blockquotes
+                                blockquote: ({node, ...props}) => <blockquote className="border-l-4 border-gray-300 pl-4 italic my-2" {...props} />,
+                                // Style strong/bold
+                                strong: ({node, ...props}) => <strong className="font-bold" {...props} />,
+                                // Style emphasis/italic
+                                em: ({node, ...props}) => <em className="italic" {...props} />,
+                              }}
+                            >
+                              {message.content}
+                            </ReactMarkdown>
+                          </div>
                           <div className="flex items-center gap-2 mt-2 text-xs opacity-70">
                             <span>{formatTimestamp(message.timestamp)}</span>
                             {message.metadata && (

@@ -542,6 +542,37 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
     }
   };
 
+  const handleShareSession = async (session: ChatSession) => {
+    try {
+      const result = await chatbotDashboardService.generateShareLink(session.id);
+      
+      if (result.success) {
+        const shareUrl = `${window.location.origin}${result.data.share_url}`;
+        await navigator.clipboard.writeText(shareUrl);
+        alert(`✅ Share link copied to clipboard!\n\n${shareUrl}\n\nAnyone with this link can view this conversation.`);
+      }
+    } catch (error) {
+      console.error('Failed to generate share link:', error);
+      alert('Failed to generate share link. Please try again.');
+    }
+  };
+
+  const handleExportToKB = async (session: ChatSession) => {
+    try {
+      const confirmExport = confirm(`Export "${session.title}" to Knowledge Base?\n\nThis will create a new knowledge base document.`);
+      if (!confirmExport) return;
+      
+      const result = await chatbotDashboardService.exportToKnowledgeBase(session.id, session.title, 'chat-exports');
+      
+      if (result.success) {
+        alert(`✅ Successfully exported to Knowledge Base!\n\nDocument ID: ${result.data.document_id}\nWords: ${result.data.word_count}`);
+      }
+    } catch (error) {
+      console.error('Failed to export to knowledge base:', error);
+      alert('Failed to export to knowledge base. Please try again.');
+    }
+  };
+
   const handleDeleteSession = async (session: ChatSession) => {
     if (!confirm(`Are you sure you want to delete "${session.title}"?`)) return;
 
@@ -777,7 +808,7 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
                                 <MoreHorizontal className="h-3 w-3" />
                               </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" className="w-40">
+                            <DropdownMenuContent align="end" className="w-48">
                               <DropdownMenuItem
                                 onClick={(e) => {
                                   e.stopPropagation();
@@ -786,6 +817,24 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
                               >
                                 <Edit className="h-4 w-4 mr-2" />
                                 Rename
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleShareSession(session);
+                                }}
+                              >
+                                <Share2 className="h-4 w-4 mr-2" />
+                                Share
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleExportToKB(session);
+                                }}
+                              >
+                                <BookOpen className="h-4 w-4 mr-2" />
+                                Export to KB
                               </DropdownMenuItem>
                               <DropdownMenuItem
                                 onClick={(e) => {

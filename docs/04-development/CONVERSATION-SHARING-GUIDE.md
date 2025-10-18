@@ -40,7 +40,7 @@ Creates a **read-only, shareable link** to a conversation snapshot. Perfect for:
 
 **Step 4: Share the Link**
 ```
-https://sheltr-ai.web.app/dashboard/chatbots/shared/abc-123-def-456
+https://sheltr-ai.web.app/shared?id=abc-123-def-456
 ```
 
 Anyone with this link can view the conversation!
@@ -96,19 +96,19 @@ Anyone with this link can view the conversation!
 ```
 "Hey team, here's the donor engagement strategy I 
 worked out with Claude yesterday:"
-https://sheltr-ai.web.app/dashboard/chatbots/shared/xyz-789
+https://sheltr-ai.web.app/shared?id=xyz-789
 ```
 
 **External Stakeholder:**
 ```
 "Board members: Check out this POD cost analysis:"
-https://sheltr-ai.web.app/dashboard/chatbots/shared/abc-456
+https://sheltr-ai.web.app/shared?id=abc-456
 ```
 
 **Documentation:**
 ```
 "FAQ: How we calculated deployment timelines:"
-https://sheltr-ai.web.app/dashboard/chatbots/shared/def-123
+https://sheltr-ai.web.app/shared?id=def-123
 ```
 
 ---
@@ -285,7 +285,7 @@ Response:
   "success": true,
   "data": {
     "share_id": "abc-123-def-456",
-    "share_url": "https://sheltr-ai.web.app/dashboard/chatbots/shared/abc-123-def-456",
+    "share_url": "/shared?id=abc-123-def-456",
     "created_at": "2025-10-18T14:30:00Z"
   }
 }

@@ -430,3 +430,157 @@ IMPORTANT: Always provide complete, well-structured responses. Finish your thoug
             except Exception as fallback_error:
                 logger.error(f"❌ OpenAI fallback also failed: {str(fallback_error)}")
                 raise Exception("Both Anthropic and OpenAI services failed")
+    
+    async def generate_share_link(self, session_id: str, user_id: str) -> Dict[str, Any]:
+        """Generate a shareable link for a conversation"""
+        try:
+            # Verify session belongs to user
+            session_ref = self.db.collection('chat_sessions').document(session_id)
+            session = session_ref.get()
+            
+            if not session.exists:
+                raise Exception("Session not found")
+            
+            session_data = session.to_dict()
+            if session_data.get('user_id') != user_id:
+                raise Exception("Unauthorized access to session")
+            
+            # Generate unique share ID
+            share_id = str(uuid.uuid4())
+            
+            # Create shared conversation document
+            share_data = {
+                'share_id': share_id,
+                'session_id': session_id,
+                'user_id': user_id,
+                'created_at': datetime.now(timezone.utc),
+                'title': session_data.get('title', 'Shared Conversation'),
+                'agent_type': session_data.get('agent_type', 'general'),
+                'model': session_data.get('model', 'gpt-4o-mini'),
+                'view_count': 0
+            }
+            
+            self.db.collection('shared_conversations').document(share_id).set(share_data)
+            
+            logger.info(f"✅ Generated share link for session {session_id}: {share_id}")
+            
+            return {
+                'share_id': share_id,
+                'share_url': f'/dashboard/chatbots/shared/{share_id}',
+                'created_at': share_data['created_at'].isoformat()
+            }
+            
+        except Exception as e:
+            logger.error(f"Failed to generate share link: {str(e)}")
+            raise Exception(f"Failed to generate share link: {str(e)}")
+    
+    async def get_shared_conversation(self, share_id: str) -> Dict[str, Any]:
+        """Get a shared conversation by share ID"""
+        try:
+            # Get share data
+            share_ref = self.db.collection('shared_conversations').document(share_id)
+            share = share_ref.get()
+            
+            if not share.exists:
+                raise Exception("Shared conversation not found")
+            
+            share_data = share.to_dict()
+            session_id = share_data['session_id']
+            
+            # Increment view count
+            share_ref.update({'view_count': firestore.Increment(1)})
+            
+            # Get session and messages
+            session_ref = self.db.collection('chat_sessions').document(session_id)
+            session = session_ref.get()
+            
+            if not session.exists:
+                raise Exception("Original session not found")
+            
+            session_data = session.to_dict()
+            messages = await self.get_chat_messages(session_id)
+            
+            return {
+                'title': session_data.get('title', 'Shared Conversation'),
+                'agent_type': session_data.get('agent_type'),
+                'model': session_data.get('model'),
+                'created_at': session_data.get('created_at').isoformat() if session_data.get('created_at') else None,
+                'shared_by': share_data.get('user_id'),
+                'messages': messages,
+                'view_count': share_data.get('view_count', 0) + 1
+            }
+            
+        except Exception as e:
+            logger.error(f"Failed to get shared conversation: {str(e)}")
+            raise Exception(f"Failed to get shared conversation: {str(e)}")
+    
+    async def export_to_knowledge_base(
+        self,
+        session_id: str,
+        user_id: str,
+        title: str = None,
+        category: str = "platform-info"
+    ) -> Dict[str, Any]:
+        """Export conversation to knowledge base"""
+        try:
+            # Get session and messages
+            session_ref = self.db.collection('chat_sessions').document(session_id)
+            session = session_ref.get()
+            
+            if not session.exists:
+                raise Exception("Session not found")
+            
+            session_data = session.to_dict()
+            if session_data.get('user_id') != user_id:
+                raise Exception("Unauthorized access to session")
+            
+            messages = await self.get_chat_messages(session_id)
+            
+            # Generate title if not provided
+            if not title:
+                title = session_data.get('title', 'Exported Conversation')
+            
+            # Format conversation as markdown
+            markdown_content = f"# {title}\n\n"
+            markdown_content += f"**Agent:** {session_data.get('agent_type', 'general')}\n"
+            markdown_content += f"**Model:** {session_data.get('model', 'gpt-4o-mini')}\n"
+            markdown_content += f"**Date:** {session_data.get('created_at').strftime('%Y-%m-%d') if session_data.get('created_at') else 'Unknown'}\n\n"
+            markdown_content += "---\n\n"
+            
+            for msg in messages:
+                role_label = "**User:**" if msg['role'] == 'user' else "**Assistant:**"
+                markdown_content += f"{role_label}\n\n{msg['content']}\n\n"
+            
+            markdown_content += f"\n---\n\n*Exported from chat session {session_id} by {user_id}*\n"
+            
+            # Create knowledge document
+            doc_id = f"chat-export-{session_id}"
+            kb_doc = {
+                'id': doc_id,
+                'title': title,
+                'content': markdown_content,
+                'category': category,
+                'source': 'chat-export',
+                'source_session_id': session_id,
+                'created_by': user_id,
+                'created_at': datetime.now(timezone.utc),
+                'updated_at': datetime.now(timezone.utc),
+                'word_count': len(markdown_content.split()),
+                'status': 'active'
+            }
+            
+            self.db.collection('knowledge_documents').document(doc_id).set(kb_doc)
+            
+            logger.info(f"✅ Exported session {session_id} to knowledge base as {doc_id}")
+            
+            return {
+                'document_id': doc_id,
+                'title': title,
+                'category': category,
+                'word_count': kb_doc['word_count'],
+                'created_at': kb_doc['created_at'].isoformat()
+            }
+            
+        except Exception as e:
+            logger.error(f"Failed to export to knowledge base: {str(e)}")
+            raise Exception(f"Failed to export to knowledge base: {str(e)}")

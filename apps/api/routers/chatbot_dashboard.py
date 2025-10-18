@@ -231,3 +231,68 @@ async def get_chat_analytics(
     except Exception as e:
         logger.error(f"Failed to get chat analytics: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to retrieve chat analytics")
+
+@router.post("/sessions/{session_id}/share")
+async def generate_share_link(
+    session_id: str,
+    current_user: Dict[str, Any] = Depends(get_current_user)
+):
+    """Generate a shareable link for a conversation"""
+    
+    try:
+        chatbot_service = ChatbotDashboardService()
+        share_data = await chatbot_service.generate_share_link(session_id, current_user['uid'])
+        
+        return {
+            "success": True,
+            "data": share_data
+        }
+        
+    except Exception as e:
+        logger.error(f"Failed to generate share link: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to generate share link: {str(e)}")
+
+@router.get("/shared/{share_id}")
+async def get_shared_conversation(share_id: str):
+    """Get a shared conversation (public access, no auth required)"""
+    
+    try:
+        chatbot_service = ChatbotDashboardService()
+        conversation = await chatbot_service.get_shared_conversation(share_id)
+        
+        return {
+            "success": True,
+            "data": conversation
+        }
+        
+    except Exception as e:
+        logger.error(f"Failed to get shared conversation: {str(e)}")
+        raise HTTPException(status_code=404, detail="Shared conversation not found")
+
+@router.post("/sessions/{session_id}/export-to-kb")
+async def export_to_knowledge_base(
+    session_id: str,
+    title: str = Form(None),
+    category: str = Form("platform-info"),
+    current_user: Dict[str, Any] = Depends(get_current_user)
+):
+    """Export conversation to knowledge base"""
+    
+    try:
+        chatbot_service = ChatbotDashboardService()
+        kb_doc = await chatbot_service.export_to_knowledge_base(
+            session_id=session_id,
+            user_id=current_user['uid'],
+            title=title,
+            category=category
+        )
+        
+        return {
+            "success": True,
+            "data": kb_doc,
+            "message": "Conversation exported to knowledge base successfully"
+        }
+        
+    except Exception as e:
+        logger.error(f"Failed to export to knowledge base: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to export: {str(e)}")

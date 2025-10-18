@@ -334,6 +334,77 @@ class ChatbotDashboardService {
       throw error;
     }
   }
+
+  /**
+   * Generate shareable link for conversation
+   */
+  async generateShareLink(sessionId: string): Promise<{ success: boolean; data: { share_id: string; share_url: string; created_at: string } }> {
+    try {
+      const token = await this.getAuthToken();
+      const response = await fetch(`${this.baseUrl}/api/v1/chatbot-dashboard/sessions/${sessionId}/share`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to generate share link: ${response.statusText}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error generating share link:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get shared conversation (no auth required)
+   */
+  async getSharedConversation(shareId: string): Promise<{ success: boolean; data: any }> {
+    try {
+      const response = await fetch(`${this.baseUrl}/api/v1/chatbot-dashboard/shared/${shareId}`);
+
+      if (!response.ok) {
+        throw new Error(`Failed to get shared conversation: ${response.statusText}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error getting shared conversation:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Export conversation to knowledge base
+   */
+  async exportToKnowledgeBase(sessionId: string, title?: string, category?: string): Promise<{ success: boolean; data: any; message: string }> {
+    try {
+      const formData = new FormData();
+      if (title) formData.append('title', title);
+      if (category) formData.append('category', category);
+
+      const token = await this.getAuthToken();
+      const response = await fetch(`${this.baseUrl}/api/v1/chatbot-dashboard/sessions/${sessionId}/export-to-kb`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to export to knowledge base: ${response.statusText}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error exporting to knowledge base:', error);
+      throw error;
+    }
+  }
 }
 
 // Export singleton instance

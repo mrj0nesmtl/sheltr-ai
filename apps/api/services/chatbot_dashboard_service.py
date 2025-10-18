@@ -500,6 +500,10 @@ IMPORTANT: Always provide complete, well-structured responses. Finish your thoug
             session_data = session.to_dict()
             messages = await self.get_chat_messages(session_id)
             
+            # Debug logging
+            logger.info(f"🔍 Session data for share {share_id}: agent_type={session_data.get('agent_type')}, title={session_data.get('title')}")
+            logger.info(f"🔍 Full session data keys: {list(session_data.keys())}")
+            
             # Format response to match frontend expectations
             return {
                 'session': {

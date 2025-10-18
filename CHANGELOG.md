@@ -7,6 +7,105 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.55.0] - 2025-10-18 (CONVERSATION SHARING & EXPORT)
+
+### 🔗 Conversation Sharing
+- **✅ SHAREABLE LINKS**: Generate unique read-only links for conversations
+- **✅ SNAPSHOT SHARING**: Share conversation state at moment of creation
+- **✅ VIEW TRACKING**: Monitor how many times shared links are accessed
+- **✅ NO AUTH REQUIRED**: Anyone with link can view (public sharing)
+
+### 📚 Knowledge Base Export
+- **✅ EXPORT TO KB**: Convert conversations to markdown documents
+- **✅ SEARCHABLE**: Exported conversations available to all AI agents
+- **✅ PERMANENT ARCHIVE**: Store valuable conversations for future reference
+- **✅ FORMATTED OUTPUT**: Clean markdown with metadata and attribution
+
+### 🎯 Features Added
+**Share Conversation:**
+- Backend route: `POST /chatbot-dashboard/sessions/{id}/share`
+- Frontend UI: Share button in session dropdown menu
+- Automatic clipboard copy of share URL
+- View counter increments on each access
+- Shared view displays full conversation with metadata
+
+**Export to Knowledge Base:**
+- Backend route: `POST /chatbot-dashboard/sessions/{id}/export-to-kb`
+- Frontend UI: Export button in session dropdown menu
+- Saves to `knowledge_documents` Firestore collection
+- Category: `platform-info` or custom
+- Includes agent, model, date metadata
+- Word count tracking
+
+### 📖 Service Layer Updates
+- `apps/api/services/chatbot_dashboard_service.py`:
+  - `generate_share_link()` - Creates unique shareable UUID
+  - `get_shared_conversation()` - Retrieves shared content with view tracking
+  - `export_to_knowledge_base()` - Formats and saves to KB
+- `apps/web/src/services/chatbotDashboardService.ts`:
+  - `generateShareLink()` - Frontend share service
+  - `getSharedConversation()` - Public access (no auth)
+  - `exportToKnowledgeBase()` - KB export service
+
+### 🗄️ Database Schema
+**New Collection: `shared_conversations`**
+```javascript
+{
+  id: "uuid",
+  session_id: "original-session-id",
+  created_by: "user-uid",
+  created_at: Timestamp,
+  view_count: number,
+  last_viewed_at: Timestamp
+}
+```
+
+**Updated Collection: `knowledge_documents`**
+- New source type: `chat-export`
+- Links to original session via `source_session_id`
+- Markdown formatted content
+- Word count tracking
+
+### 📝 Documentation
+- `docs/04-development/CONVERSATION-SHARING-GUIDE.md` - Complete usage guide
+- `docs/04-development/CONVERSATION-SHARING-ROADMAP.md` - Phase 2 & 3 plans
+- Phase 2: Fork conversations, live updates
+- Phase 3: Collaborative chat rooms, threading
+
+### 🎨 UI/UX Improvements
+- Share and Export options in session menu (•••)
+- Copy-to-clipboard notification
+- Export confirmation dialog
+- Success/error toast messages
+- Clean, intuitive workflow
+
+### 🔒 Security Considerations
+- Share links use non-guessable UUIDs
+- Export requires authentication and ownership
+- View-only access (no message posting)
+- Audit trail via `created_by` tracking
+- Firebase security rules enforced
+
+### 💡 Use Cases
+**Share Links:**
+- Team collaboration and feedback
+- Stakeholder reporting
+- Training material distribution
+- Reference documentation
+
+**KB Export:**
+- Build institutional knowledge
+- Train AI agents on past conversations
+- Document important decisions
+- Create searchable archives
+
+### 🚀 Future Enhancements (Planned)
+- **Phase 2**: Fork/copy conversations, live updates, expiring links
+- **Phase 3**: Real-time collaboration, threading, reactions
+- See roadmap for detailed feature planning
+
+---
+
 ## [2.54.0] - 2025-10-17 (CLAUDE AI INTEGRATION)
 
 ### 🤖 Anthropic Claude Integration

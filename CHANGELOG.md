@@ -7,6 +7,65 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.54.0] - 2025-10-17 (CLAUDE AI INTEGRATION)
+
+### 🤖 Anthropic Claude Integration
+- **✅ MULTI-PROVIDER LLM**: Added Anthropic Claude as premium AI option for admins
+- **✅ AUTOMATIC PROVIDER SELECTION**: System detects provider from model name
+- **✅ INTELLIGENT FALLBACK**: Auto-fallback to OpenAI if Claude unavailable
+- **✅ PRODUCTION READY**: Configured for Google Secret Manager deployment
+
+### 🎯 Features Added
+**Claude Models Available:**
+- `claude-3-5-sonnet-20241022` - Advanced reasoning, 200K context window
+- `claude-3-5-haiku-20241022` - Fast responses, 200K context window
+
+**Service Layer:**
+- `apps/api/services/anthropic_service.py` - New Claude service
+- Async client with streaming support
+- Message format conversion (OpenAI → Anthropic)
+- Comprehensive error handling
+
+**Dashboard Integration:**
+- Updated `chatbot_dashboard_service.py` for dual-provider support
+- Provider detection logic: `_get_provider_from_model()`
+- Fallback mechanism: `_generate_anthropic_response()`
+- Metadata tracking includes `provider` field
+
+### 🔧 Configuration
+**Environment Variables:**
+- Added `ANTHROPIC_API_KEY` to `.env` template
+- Updated `deploy.sh` for Secret Manager integration
+- Already in `requirements.txt` (anthropic==0.67.0)
+
+**Deployment:**
+- Google Secret Manager secret: `anthropic-api-key`
+- Cloud Run service account access configured
+- Production deployment ready
+
+### 📚 Documentation
+- **NEW**: `docs/04-development/CLAUDE-INTEGRATION.md`
+  - Complete integration guide
+  - Architecture diagrams
+  - Model comparison & pricing
+  - Testing procedures
+  - Troubleshooting guide
+  - Production deployment steps
+
+### 🎨 Benefits
+- **Admin Power**: Claude's advanced reasoning for complex queries
+- **Cost Flexibility**: Choose optimal model per use case
+- **Reliability**: Automatic fallback ensures zero downtime
+- **Future-Ready**: Easy to add more LLM providers
+
+### 🔒 Security
+- API keys in Google Secret Manager (production)
+- Admin-only access to Claude models
+- Public chatbot remains OpenAI-only
+- Role-based access controls maintained
+
+---
+
 ## [2.53.5] - 2025-10-17 (DATABASE SCHEMA MCP VERIFICATION)
 
 ### 🔍 Firebase MCP Database Verification

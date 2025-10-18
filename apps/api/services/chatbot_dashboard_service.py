@@ -11,6 +11,7 @@ from typing import List, Dict, Optional, Any
 from firebase_admin import firestore
 import logging
 from services.openai_service import OpenAIService
+from services.anthropic_service import anthropic_service
 from services.chatbot.rag_orchestrator import RAGOrchestrator
 
 logger = logging.getLogger(__name__)
@@ -21,6 +22,7 @@ class ChatbotDashboardService:
     def __init__(self):
         self.db = firestore.client()
         self.openai_service = OpenAIService()
+        self.anthropic_service = anthropic_service
         self.rag_orchestrator = RAGOrchestrator()
     
     async def get_chat_sessions(self, user_id: str) -> List[Dict[str, Any]]:
@@ -222,17 +224,31 @@ Relevant context: {relevant_context[:1000] if relevant_context else 'No specific
 
 IMPORTANT: Always provide complete, well-structured responses. Finish your thoughts completely rather than cutting off mid-sentence. Aim for comprehensive yet concise answers that fully address the user's question."""
             
-            # Generate AI response
-            response = await self.openai_service.generate_response(
-                message=user_message,
-                context={'conversation_history': conversation_history},
-                system_prompt=system_message
-            )
+            # Get model from agent config
+            model = agent_config.get('model', 'gpt-4o-mini')
+            provider = self._get_provider_from_model(model)
+            
+            logger.info(f"🤖 Using {provider} provider with model: {model}")
+            
+            # Generate AI response based on provider
+            if provider == "anthropic":
+                response = await self._generate_anthropic_response(
+                    conversation_history=conversation_history,
+                    system_prompt=system_message,
+                    model=model
+                )
+            else:  # Default to OpenAI
+                response = await self.openai_service.generate_response(
+                    message=user_message,
+                    context={'conversation_history': conversation_history},
+                    system_prompt=system_message
+                )
             
             # Add assistant message to database
             metadata = {
-                'model': agent_config.get('model', 'gpt-4o-mini'),
-                'tokens_used': 0,  # OpenAI service returns string, not usage dict
+                'model': model,
+                'provider': provider,
+                'tokens_used': 0,  # Token tracking can be added later
                 'context_used': bool(relevant_context)
             }
             
@@ -365,3 +381,52 @@ IMPORTANT: Always provide complete, well-structured responses. Finish your thoug
                 'agent_stats': {},
                 'last_activity': None
             }
+    
+    def _get_provider_from_model(self, model: str) -> str:
+        """Determine LLM provider from model name"""
+        if model.startswith("claude"):
+            return "anthropic"
+        else:
+            return "openai"
+    
+    async def _generate_anthropic_response(
+        self,
+        conversation_history: List[Dict[str, str]],
+        system_prompt: str,
+        model: str
+    ) -> str:
+        """Generate response using Anthropic Claude with fallback to OpenAI"""
+        try:
+            if not self.anthropic_service.is_available():
+                logger.warning("⚠️ Anthropic service not available, falling back to OpenAI")
+                return await self.openai_service.generate_response(
+                    message=conversation_history[-1]['content'] if conversation_history else "",
+                    context={'conversation_history': conversation_history[:-1]},
+                    system_prompt=system_prompt
+                )
+            
+            response = await self.anthropic_service.generate_chat_completion(
+                messages=conversation_history,
+                model=model,
+                max_tokens=2000,
+                temperature=0.7,
+                system_prompt=system_prompt
+            )
+            
+            logger.info(f"✅ Claude response generated successfully")
+            return response
+            
+        except Exception as e:
+            logger.error(f"❌ Anthropic generation failed: {str(e)}")
+            logger.info("⚠️ Falling back to OpenAI due to Anthropic error")
+            
+            # Fallback to OpenAI
+            try:
+                return await self.openai_service.generate_response(
+                    message=conversation_history[-1]['content'] if conversation_history else "",
+                    context={'conversation_history': conversation_history[:-1]},
+                    system_prompt=system_prompt
+                )
+            except Exception as fallback_error:
+                logger.error(f"❌ OpenAI fallback also failed: {str(fallback_error)}")
+                raise Exception("Both Anthropic and OpenAI services failed")

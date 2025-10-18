@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -48,19 +48,19 @@ const AGENT_LABELS = {
 };
 
 export default function SharedConversationPage() {
-  const params = useParams();
   const router = useRouter();
-  const shareId = params.shareId as string;
+  const searchParams = useSearchParams();
+  const shareId = searchParams.get('id');
 
   const [conversation, setConversation] = useState<SharedConversation | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const loadSharedConversation = async () => {
+  const loadSharedConversation = async (id: string) => {
     try {
       setLoading(true);
       setError(null);
-      const response = await chatbotDashboardService.getSharedConversation(shareId);
+      const response = await chatbotDashboardService.getSharedConversation(id);
       
       if (response.success) {
         setConversation(response.data);
@@ -76,7 +76,12 @@ export default function SharedConversationPage() {
   };
 
   useEffect(() => {
-    loadSharedConversation();
+    if (shareId) {
+      loadSharedConversation(shareId);
+    } else {
+      setError('No share ID provided');
+      setLoading(false);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [shareId]);
 
@@ -119,11 +124,11 @@ export default function SharedConversationPage() {
           <CardContent>
             <Button
               variant="outline"
-              onClick={() => router.push('/dashboard/chatbots')}
+              onClick={() => router.push('/')}
               className="w-full"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Dashboard
+              Back to Home
             </Button>
           </CardContent>
         </Card>
@@ -144,7 +149,7 @@ export default function SharedConversationPage() {
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => router.push('/dashboard/chatbots')}
+              onClick={() => router.push('/')}
               className="text-white/70 hover:text-white"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />

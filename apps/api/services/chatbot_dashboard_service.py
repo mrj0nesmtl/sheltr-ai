@@ -466,7 +466,7 @@ IMPORTANT: Always provide complete, well-structured responses. Finish your thoug
             
             return {
                 'share_id': share_id,
-                'share_url': f'/dashboard/chatbots/shared/{share_id}',
+                'share_url': f'/shared?id={share_id}',
                 'created_at': share_data['created_at'].isoformat()
             }
             

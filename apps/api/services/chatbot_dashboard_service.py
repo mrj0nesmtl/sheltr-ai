@@ -500,14 +500,20 @@ IMPORTANT: Always provide complete, well-structured responses. Finish your thoug
             session_data = session.to_dict()
             messages = await self.get_chat_messages(session_id)
             
+            # Format response to match frontend expectations
             return {
-                'title': session_data.get('title', 'Shared Conversation'),
-                'agent_type': session_data.get('agent_type'),
-                'model': session_data.get('model'),
-                'created_at': session_data.get('created_at').isoformat() if session_data.get('created_at') else None,
-                'shared_by': share_data.get('user_id'),
+                'session': {
+                    'title': session_data.get('title', 'Shared Conversation'),
+                    'agent_type': session_data.get('agent_type', 'general'),
+                    'model': session_data.get('model', 'gpt-4o-mini'),
+                    'created_at': session_data.get('created_at').isoformat() if session_data.get('created_at') else datetime.now(timezone.utc).isoformat()
+                },
                 'messages': messages,
-                'view_count': share_data.get('view_count', 0) + 1
+                'share_info': {
+                    'created_by': share_data.get('user_id', 'Unknown'),
+                    'created_at': share_data.get('created_at').isoformat() if share_data.get('created_at') else datetime.now(timezone.utc).isoformat(),
+                    'view_count': share_data.get('view_count', 0) + 1
+                }
             }
             
         except Exception as e:

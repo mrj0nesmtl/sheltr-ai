@@ -395,16 +395,23 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
         const sessionAgentType = currentSession.agent_type || selectedAgent || 'general';
         
         // Find the agent configuration for this session
-        const selectedAgentConfig = agents.find(agent => agent.id === sessionAgentType) || {
+        const baseAgentConfig = agents.find(agent => agent.id === sessionAgentType) || {
           id: 'general',
           name: 'General Assistant',
           description: 'A helpful general purpose assistant',
           instructions: 'You are a helpful AI assistant for SHELTR platform users.',
-          model: selectedModel,
+          model: 'gpt-4o-mini',
           knowledge_bases: [],
           temperature: 0.7,
           max_tokens: 1000,
           status: 'active' as const
+        };
+        
+        // IMPORTANT: Override the model with the session's model
+        // This ensures the correct model (including Claude) is used
+        const selectedAgentConfig = {
+          ...baseAgentConfig,
+          model: currentSession.model || baseAgentConfig.model
         };
         
         // Use the chatbot dashboard service to send message and save to session
@@ -665,7 +672,8 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
                 <SelectContent>
                   <SelectItem value="gpt-4o">GPT-4o</SelectItem>
                   <SelectItem value="gpt-4o-mini">GPT-4o Mini</SelectItem>
-                  <SelectItem value="claude-3-5-sonnet">Claude 3.5 Sonnet</SelectItem>
+                  <SelectItem value="claude-3-5-sonnet-20241022">Claude 3.5 Sonnet</SelectItem>
+                  <SelectItem value="claude-3-5-haiku-20241022">Claude 3.5 Haiku</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -1047,9 +1055,10 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
                 <CardContent>
                   <div className="grid gap-3">
                     {[
-                      { id: 'gpt-4o', name: 'GPT-4o', description: 'Most capable model', status: 'Available' },
+                      { id: 'gpt-4o', name: 'GPT-4o', description: 'Most capable OpenAI model', status: 'Available' },
                       { id: 'gpt-4o-mini', name: 'GPT-4o Mini', description: 'Fast and efficient', status: 'Available' },
-                      { id: 'claude-3-5-sonnet', name: 'Claude 3.5 Sonnet', description: 'Anthropic\'s latest', status: 'Available' }
+                      { id: 'claude-3-5-sonnet-20241022', name: 'Claude 3.5 Sonnet', description: 'Advanced reasoning, 200K context', status: 'Available' },
+                      { id: 'claude-3-5-haiku-20241022', name: 'Claude 3.5 Haiku', description: 'Fast responses, 200K context', status: 'Available' }
                     ].map((model) => (
                       <div key={model.id} className="flex items-center justify-between p-3 border rounded-lg">
                         <div>
@@ -1080,7 +1089,8 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
                         <SelectContent>
                           <SelectItem value="gpt-4o">GPT-4o</SelectItem>
                           <SelectItem value="gpt-4o-mini">GPT-4o Mini</SelectItem>
-                          <SelectItem value="claude-3-5-sonnet">Claude 3.5 Sonnet</SelectItem>
+                          <SelectItem value="claude-3-5-sonnet-20241022">Claude 3.5 Sonnet</SelectItem>
+                          <SelectItem value="claude-3-5-haiku-20241022">Claude 3.5 Haiku</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>

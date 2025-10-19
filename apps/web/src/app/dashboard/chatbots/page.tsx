@@ -622,15 +622,17 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
 
   return (
     <div className={`h-screen flex flex-col ${isFullScreen ? 'fixed inset-0 z-50 bg-background' : ''}`}>
-      {/* Header */}
+      {/* Header - Mobile Optimized */}
       <div className="border-b bg-card/50 backdrop-blur-sm flex-shrink-0">
-        <div className="flex items-center justify-between px-4 py-4">
-          {/* Left side - Title and stats */}
-          <div className="flex items-center gap-3">
-            <MessageSquare className="h-6 w-6 text-primary" />
-            <div>
-              <h1 className="text-xl font-semibold">Chatbot Control</h1>
-              <div className="flex items-center gap-2 mt-1">
+        {/* Top Row - Title and Actions */}
+        <div className="flex items-center justify-between px-3 sm:px-4 py-3 sm:py-4">
+          {/* Left side - Title and icon */}
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+            <MessageSquare className="h-5 w-5 sm:h-6 sm:w-6 text-primary flex-shrink-0" />
+            <div className="min-w-0">
+              <h1 className="text-base sm:text-xl font-semibold truncate">Chatbot Control</h1>
+              {/* Stats - Hidden on mobile, shown on tablet+ */}
+              <div className="hidden md:flex items-center gap-2 mt-1">
                 <Badge variant="outline" className="text-xs">
                   {sessions.length} sessions
                 </Badge>
@@ -644,51 +646,66 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
             </div>
           </div>
           
-          {/* Right side - Actions */}
-          <div className="flex items-center gap-2">
+          {/* Right side - Actions (Compact on mobile) */}
+          <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
             <Button
               variant="ghost"
               size="sm"
               onClick={() => setLayoutMode(layoutMode === 'modern' ? 'compact' : 'modern')}
-              className="h-9 w-9 p-0"
+              className="h-8 w-8 sm:h-9 sm:w-9 p-0"
             >
-              {layoutMode === 'modern' ? <List className="h-4 w-4" /> : <Grid3X3 className="h-4 w-4" />}
+              {layoutMode === 'modern' ? <List className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> : <Grid3X3 className="h-3.5 w-3.5 sm:h-4 sm:w-4" />}
             </Button>
             
             <Button
               variant="ghost"
               size="sm"
               onClick={() => setShowAgentConfig(true)}
-              className="h-9 px-3"
+              className="h-8 sm:h-9 px-2 sm:px-3"
             >
-              <Settings className="h-4 w-4 mr-2" />
+              <Settings className="h-3.5 w-3.5 sm:h-4 sm:w-4 sm:mr-2" />
               <span className="hidden sm:inline">Agents</span>
             </Button>
             
-            <Button onClick={createNewSession} className="h-9">
-              <Plus className="h-4 w-4 mr-2" />
+            <Button onClick={createNewSession} className="h-8 sm:h-9 px-2 sm:px-4">
+              <Plus className="h-3.5 w-3.5 sm:h-4 sm:w-4 sm:mr-2" />
               <span className="hidden sm:inline">New Chat</span>
-              <span className="sm:hidden">New</span>
+              <span className="sm:hidden text-xs">New</span>
             </Button>
           </div>
         </div>
 
+        {/* Mobile Stats Row - Only shown on mobile */}
+        <div className="md:hidden px-3 pb-2">
+          <div className="flex items-center gap-2">
+            <Badge variant="outline" className="text-xs">
+              {sessions.length} sessions
+            </Badge>
+            <Badge variant="outline" className="text-xs">
+              {agents.length} agents
+            </Badge>
+            <Badge variant="secondary" className="text-xs">
+              {agents.filter(a => a.status === 'active').length} active
+            </Badge>
+          </div>
+        </div>
+
         {/* Search and filters */}
-        <div className="px-4 pb-4">
-          <div className="flex flex-col sm:flex-row gap-3">
+        <div className="px-3 sm:px-4 pb-3 sm:pb-4">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
             <div className="flex-1 relative">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+              <Search className="absolute left-3 top-2.5 sm:top-3 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Search sessions..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
+                className="pl-10 h-9 sm:h-10 text-sm"
               />
             </div>
             
             <div className="flex gap-2">
               <Select value={sessionFilter} onValueChange={setSessionFilter}>
-                <SelectTrigger className="w-full sm:w-32">
+                <SelectTrigger className="w-full sm:w-32 h-9 sm:h-10 text-sm">
                   <SelectValue placeholder="All Sessions" />
                 </SelectTrigger>
                 <SelectContent>
@@ -699,7 +716,7 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
               </Select>
 
               <Select value={selectedModel} onValueChange={setSelectedModel}>
-                <SelectTrigger className="w-full sm:w-32">
+                <SelectTrigger className="w-full sm:w-32 h-9 sm:h-10 text-sm">
                   <SelectValue placeholder="Model" />
                 </SelectTrigger>
                 <SelectContent>
@@ -717,7 +734,7 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
       {/* Main Content */}
       <div className="flex-1 flex flex-col lg:flex-row overflow-hidden min-h-0">
         {/* Left Sidebar - Sessions (Hidden on mobile when chat is active) */}
-        <div className={`${currentSession ? 'hidden lg:flex' : 'flex'} w-full lg:w-80 border-r bg-muted/30 flex-col flex-shrink-0`}>
+        <div className={`${currentSession ? 'hidden lg:flex' : 'flex'} w-full lg:w-80 border-r bg-muted/30 flex-col flex-shrink-0 h-full overflow-hidden`}>
           {/* Sessions Header */}
           <div className="p-3 lg:p-4 border-b flex-shrink-0">
             <div className="flex items-center justify-between mb-3">
@@ -753,8 +770,8 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
             </div>
           </div>
 
-          {/* Sessions List */}
-          <div className="flex-1 overflow-y-auto p-2 min-h-0">
+          {/* Sessions List - Fixed scrolling */}
+          <div className="flex-1 overflow-y-auto p-2 min-h-0" style={{ WebkitOverflowScrolling: 'touch' }}>
             {filteredSessions.length === 0 ? (
               <div className="text-center py-8">
                 <MessageSquare className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />

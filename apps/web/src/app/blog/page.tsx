@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Search, Calendar, Clock, User, Tag, Filter } from 'lucide-react';
 import { blogService, BlogPost, BlogCategory, BlogTag } from '@/services/blogService';
 import Footer from '@/components/Footer';
+import { PublicChatbot } from '@/components/PublicChatbot';
 import PublicNavigation from '@/components/PublicNavigation';
 import { useHeroImage } from '@/hooks/useHeroImage';
 import { StandardHero } from '@/components/StandardHero';
@@ -247,6 +248,9 @@ export default function BlogPage() {
           )}
         </div>
       </section>
+
+      {/* Public Chatbot */}
+      <PublicChatbot />
 
       <Footer />
     </div>

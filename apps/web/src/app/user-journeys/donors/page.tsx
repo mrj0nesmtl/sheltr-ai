@@ -6,6 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { useHeroImage } from '@/hooks/useHeroImage';
+import { StandardHero } from '@/components/StandardHero';
 import { 
   Heart, 
   Search, 
@@ -50,6 +52,9 @@ import {
 } from 'lucide-react';
 
 export default function DonorUserJourney() {
+  // Fetch hero image from gallery (or use fallback)
+  const { heroImage } = useHeroImage('/user-journeys/donors', '/backgrounds/hero-bg.jpg');
+  
   const [activePhase, setActivePhase] = useState(1);
   const [activeStep, setActiveStep] = useState(1);
 
@@ -307,6 +312,20 @@ export default function DonorUserJourney() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-red-50 to-pink-100 dark:from-gray-900 dark:to-gray-800">
+      {/* Hero Section - Standardized */}
+      <StandardHero
+        imageUrl={heroImage.url}
+        badgeText="User Journey"
+        badgeVariant="secondary"
+        badgeClassName="bg-white/20 text-white border-white/30 backdrop-blur-sm"
+        title={
+          <>
+            Donor <span className="text-red-400">Journey</span>
+          </>
+        }
+        subtitle="Your complete guide to making a difference through transparent, impactful giving"
+      />
+
       {/* Breadcrumb Navigation */}
       <div className="bg-white dark:bg-gray-900 border-b">
         <div className="container mx-auto px-4 py-4">

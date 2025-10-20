@@ -11,8 +11,12 @@ import { Search, Calendar, Clock, User, Tag, Filter } from 'lucide-react';
 import { blogService, BlogPost, BlogCategory, BlogTag } from '@/services/blogService';
 import Footer from '@/components/Footer';
 import PublicNavigation from '@/components/PublicNavigation';
+import { useHeroImage } from '@/hooks/useHeroImage';
+import { StandardHero } from '@/components/StandardHero';
 
 export default function BlogPage() {
+  // Fetch hero image from gallery (or use fallback)
+  const { heroImage } = useHeroImage('/blog', '/backgrounds/hero-bg.jpg');
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [categories, setCategories] = useState<BlogCategory[]>([]);
   const [tags, setTags] = useState<BlogTag[]>([]);
@@ -95,20 +99,14 @@ export default function BlogPage() {
       {/* Navigation */}
       <PublicNavigation />
 
-      {/* Hero Section */}
-      <section className="relative py-16 bg-cover bg-center bg-no-repeat" style={{backgroundImage: 'url(/backgrounds/hero-bg.jpg)'}}>
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-background dark:from-black/80 dark:via-black/70 dark:to-background" />
-        <div className="relative max-w-4xl mx-auto px-4 text-center">
-          <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6 text-white drop-shadow-lg">
-              SHELTR Blog
-            </h1>
-            <p className="text-xl text-white/90 mb-8 drop-shadow-md">
-              Insights, updates, and stories from the SHELTR community
-            </p>
-            
-            {/* Search and Filters */}
-            <div className="flex flex-col md:flex-row gap-4 max-w-2xl mx-auto">
+      {/* Hero Section - Standardized */}
+      <StandardHero
+        imageUrl={heroImage.url}
+        title="SHELTR Blog"
+        subtitle="Insights, updates, and stories from the SHELTR community"
+      >
+        {/* Search and Filters */}
+        <div className="flex flex-col md:flex-row gap-4 max-w-2xl mx-auto mt-8">
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input
@@ -146,10 +144,8 @@ export default function BlogPage() {
                   ))}
                 </SelectContent>
               </Select>
-            </div>
-          </div>
         </div>
-      </section>
+      </StandardHero>
 
       {/* Blog Posts Grid */}
       <section className="py-16">

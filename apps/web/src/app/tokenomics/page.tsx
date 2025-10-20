@@ -8,8 +8,12 @@ import { Badge } from '@/components/ui/badge';
 import Footer from '@/components/Footer';
 import { PublicChatbot } from '@/components/PublicChatbot';
 import PublicNavigation from '@/components/PublicNavigation';
+import { useHeroImage } from '@/hooks/useHeroImage';
+import { StandardHero } from '@/components/StandardHero';
 
 export default function TokenomicsPage() {
+  // Fetch hero image from gallery (or use fallback)
+  const { heroImage } = useHeroImage('/tokenomics', '/backgrounds/hero-bg.jpg');
   
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
@@ -65,21 +69,19 @@ export default function TokenomicsPage() {
         </div>
       </section>
 
-      {/* Hero Section */}
-      <section className="relative py-24 bg-cover bg-center bg-no-repeat" style={{backgroundImage: 'url(/backgrounds/hero-bg.jpg)'}}>
-        <div className="absolute inset-0 bg-black/50" />
-        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <Badge variant="secondary" className="mb-6 bg-white/20 text-white border-white/30 backdrop-blur-sm">
-            TOKENOMICS v2.0
-          </Badge>
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 text-white">
+      {/* Hero Section - Standardized */}
+      <StandardHero
+        imageUrl={heroImage.url}
+        badgeText="TOKENOMICS v2.0"
+        badgeVariant="secondary"
+        badgeClassName="bg-white/20 text-white border-white/30 backdrop-blur-sm"
+        title={
+          <>
             SHELTR <span className="text-emerald-400">SmartFund™</span>
-          </h1>
-          <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto">
-             Enterprise-grade token architecture combining <strong>virtual cards</strong>, <strong> institutional staking</strong>, and <strong> utility tracking</strong> for transparency stability and growth.
-          </p>
-        </div>
-      </section>
+          </>
+        }
+        subtitle="Enterprise-grade token architecture combining virtual cards, institutional staking, and utility tracking for transparency stability and growth."
+      />
 
       {/* Theory of Change Integration */}
       <section className="py-20 bg-gradient-to-r from-green-500/5 to-emerald-500/5">

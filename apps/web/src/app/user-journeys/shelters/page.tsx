@@ -6,6 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { useHeroImage } from '@/hooks/useHeroImage';
+import { StandardHero } from '@/components/StandardHero';
 import { 
   Building2, 
   Users, 
@@ -36,6 +38,7 @@ import {
 } from 'lucide-react';
 
 export default function ShelterUserJourney() {
+  const { heroImage } = useHeroImage('/user-journeys/shelters', '/backgrounds/hero-bg.jpg');
   const [activePhase, setActivePhase] = useState(1);
   const [activeStep, setActiveStep] = useState(1);
 
@@ -185,6 +188,14 @@ export default function ShelterUserJourney() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
+      <StandardHero
+        imageUrl={heroImage.url}
+        badgeText="User Journey"
+        badgeVariant="secondary"
+        badgeClassName="bg-white/20 text-white border-white/30 backdrop-blur-sm"
+        title={<>Shelter <span className="text-blue-400">Journey</span></>}
+        subtitle="Streamline operations and maximize impact with SHELTR's integrated platform"
+      />
       {/* Breadcrumb Navigation */}
       <div className="bg-white dark:bg-gray-900 border-b">
         <div className="container mx-auto px-4 py-4">

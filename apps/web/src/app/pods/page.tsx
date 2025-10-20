@@ -70,45 +70,32 @@ export default function PodsPage() {
       {/* Navigation - Now using unified PublicNavigation component */}
       <PublicNavigation />
 
-      {/* Hero Section */}
-      <section className="relative py-24 overflow-hidden">
-        {/* Background Image */}
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-105" 
-          style={{backgroundImage: `url(${heroImage.url})`}}
-        />
-        {/* Dark Overlay */}
-        <div className="absolute inset-0 bg-black/60" />
-        
-        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 text-white">
-            PODS
-          </h1>
-          
-          <p className="text-xl text-gray-200 mb-8 max-w-3xl mx-auto">
-            Secure, Mobile, Functional.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+      {/* Hero Section - Standardized */}
+      <StandardHero
+        imageUrl={heroImage.url}
+        title="PODS"
+        subtitle="Secure, Mobile, Functional."
+      >
+        <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
+          <Button 
+            size="lg" 
+            variant="outline"
+            className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-black transition-all duration-300"
+            onClick={() => document.getElementById('pod-models')?.scrollIntoView({ behavior: 'smooth' })}
+          >
+            Explore Models
+          </Button>
+          <Link href="/pods/buildout">
             <Button 
               size="lg" 
-              variant="outline"
-              className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-black transition-all duration-300"
-              onClick={() => document.getElementById('pod-models')?.scrollIntoView({ behavior: 'smooth' })}
+              className="bg-blue-500 hover:bg-blue-600 text-white transition-all duration-300"
             >
-              Explore Models
+              <Wrench className="h-4 w-4 mr-2" />
+              Technical Specs
             </Button>
-            <Button 
-              size="lg" 
-              variant="outline" 
-              className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-black transition-all duration-300"
-              asChild
-            >
-              <Link href="/pods/buildout">Technical Specs</Link>
-            </Button>
-          </div>
+          </Link>
         </div>
-      </section>
+      </StandardHero>
 
       {/* Overview Section */}
       <section className="py-20 px-4 max-w-7xl mx-auto">

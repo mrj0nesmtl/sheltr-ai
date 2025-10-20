@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import Footer from '@/components/Footer';
 import { PublicTeamService, type PublicTeamMember } from '@/services/publicTeamService';
 import PublicNavigation from '@/components/PublicNavigation';
+import { useHeroImage } from '@/hooks/useHeroImage';
 
 export default function TeamPage() {
   const [teamMembers, setTeamMembers] = useState<PublicTeamMember[]>([]);
@@ -20,6 +21,9 @@ export default function TeamPage() {
     averageExperience: 0
   });
   const [loading, setLoading] = useState(true);
+  
+  // Fetch hero image from gallery (or use fallback)
+  const { heroImage } = useHeroImage('/team', '/images/sheltr_units/hero-pods.png');
 
   // Load team data from Platform Admin profiles
   useEffect(() => {
@@ -171,7 +175,7 @@ export default function TeamPage() {
       <section className="relative py-20 overflow-hidden">
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-10" 
-          style={{backgroundImage: 'url(/images/sheltr_units/hero-pods.png)'}}
+          style={{backgroundImage: `url(${heroImage.url})`}}
         />
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl font-bold mb-6">Meet Our Team</h1>

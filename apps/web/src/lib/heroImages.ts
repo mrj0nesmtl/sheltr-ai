@@ -20,8 +20,8 @@ export interface HeroImageData {
  */
 export async function getHeroImageForPage(pagePath: string): Promise<HeroImageData | null> {
   try {
-    // Query gallery_media collection for images with this page in heroPages array
-    const galleryRef = collection(db, 'gallery_media');
+    // Query gallery_images collection for images with this page in heroPages array
+    const galleryRef = collection(db, 'gallery_images');
     const q = query(
       galleryRef,
       where('heroPages', 'array-contains', pagePath),

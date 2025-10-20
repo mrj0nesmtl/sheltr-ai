@@ -1,69 +1,46 @@
 import { Metadata } from 'next';
+import { getHeroImageWithFallback } from '@/lib/heroImages';
 
-export const metadata: Metadata = {
-  title: 'Donate - Make a Direct Impact | SHELTR',
-  description: 'Your donation goes directly to those who need it most. Choose to support specific individuals or contribute to the community fund. 100% transparent, blockchain-verified, and fully trackable.',
-  keywords: [
-    'donate to SHELTR',
-    'homeless donations',
-    'direct donations',
-    'blockchain donations',
-    'transparent giving',
-    'donate now',
-    'support homeless',
-    'charitable donations',
-    'direct impact',
-    'donation platform',
-    'give directly',
-    'homeless support'
-  ],
-  authors: [{ name: 'SHELTR Team' }],
-  creator: 'SHELTR',
-  publisher: 'SHELTR',
-  formatDetection: {
-    email: false,
-    address: false,
-    telephone: false,
-  },
-  openGraph: {
-    title: 'Donate - Make a Direct Impact | SHELTR',
-    description: 'Your donation goes directly to those who need it most. 100% transparent, blockchain-verified, and fully trackable.',
-    url: 'https://sheltr-ai.web.app/donate',
-    siteName: 'SHELTR',
-    images: [
-      {
-        url: '/images/og-donate.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'Donate to SHELTR - Make a Direct Impact',
-        type: 'image/jpeg',
-      }
+export async function generateMetadata(): Promise<Metadata> {
+  // Fetch hero image from gallery (or fallback to default)
+  const heroImage = await getHeroImageWithFallback('/donate');
+
+  return {
+    title: 'Donate to SHELTR - Empowering Direct Impact',
+    description: 'Support SHELTR\'s mission to provide secure housing and essential services to individuals experiencing homelessness. Your donation makes a direct, transparent impact.',
+    keywords: [
+      'donate to SHELTR',
+      'homeless charity',
+      'support homelessness',
+      'direct impact donation',
+      'secure housing charity',
+      'blockchain donations',
+      'social good'
     ],
-    locale: 'en_US',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Donate - Make a Direct Impact',
-    description: 'Your donation goes directly to those who need it most. 100% transparent and trackable.',
-    images: ['/images/og-donate.jpg'],
-    creator: '@sheltr_ai',
-    site: '@sheltr_ai',
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+    openGraph: {
+      title: 'Donate to SHELTR - Make a Direct, Transparent Impact',
+      description: 'Join SHELTR in empowering individuals experiencing homelessness with secure housing and vital resources. Your contribution drives real change.',
+      url: 'https://sheltr-ai.web.app/donate',
+      siteName: 'SHELTR',
+      images: [
+        {
+          url: heroImage.url,
+          width: heroImage.width,
+          height: heroImage.height,
+          alt: heroImage.alt,
+        }
+      ],
+      locale: 'en_US',
+      type: 'website',
     },
-  },
-  category: 'Donations',
-  classification: 'Donations, Direct Giving, Social Impact',
-};
+    twitter: {
+      card: 'summary_large_image',
+      title: 'Donate to SHELTR - Empowering Direct Impact',
+      description: 'Support SHELTR\'s mission to provide secure housing and essential services to individuals experiencing homelessness.',
+      images: [heroImage.url],
+    },
+  };
+}
 
 export default function DonateLayout({
   children,
@@ -72,4 +49,3 @@ export default function DonateLayout({
 }) {
   return children;
 }
-

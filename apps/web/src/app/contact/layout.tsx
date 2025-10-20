@@ -1,69 +1,45 @@
 import { Metadata } from 'next';
+import { getHeroImageWithFallback } from '@/lib/heroImages';
 
-export const metadata: Metadata = {
-  title: 'Contact Us - Get in Touch | SHELTR',
-  description: 'Have questions about SHELTR? Want to partner with us? Need support? Reach out to our team. We\'re here to help donors, participants, organizations, and anyone interested in ending homelessness.',
-  keywords: [
-    'contact SHELTR',
-    'SHELTR support',
-    'get in touch',
-    'SHELTR team',
-    'partnership inquiries',
-    'donor support',
-    'participant support',
-    'organization support',
-    'contact form',
-    'SHELTR contact',
-    'reach out',
-    'help center'
-  ],
-  authors: [{ name: 'SHELTR Team' }],
-  creator: 'SHELTR',
-  publisher: 'SHELTR',
-  formatDetection: {
-    email: false,
-    address: false,
-    telephone: false,
-  },
-  openGraph: {
-    title: 'Contact Us - Get in Touch | SHELTR',
-    description: 'Have questions about SHELTR? Want to partner with us? Reach out to our team. We\'re here to help.',
-    url: 'https://sheltr-ai.web.app/contact',
-    siteName: 'SHELTR',
-    images: [
-      {
-        url: '/images/og-contact.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'Contact SHELTR - Get in Touch',
-        type: 'image/jpeg',
-      }
+export async function generateMetadata(): Promise<Metadata> {
+  // Fetch hero image from gallery (or fallback to default)
+  const heroImage = await getHeroImageWithFallback('/contact');
+
+  return {
+    title: 'Contact SHELTR - Get In Touch',
+    description: 'Reach out to the SHELTR team for inquiries, partnerships, support, or to learn more about our mission to combat homelessness.',
+    keywords: [
+      'contact SHELTR',
+      'SHELTR support',
+      'partnership inquiries',
+      'homelessness contact',
+      'get in touch',
+      'SHELTR team contact'
     ],
-    locale: 'en_US',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Contact Us - Get in Touch',
-    description: 'Have questions about SHELTR? Want to partner with us? Reach out to our team.',
-    images: ['/images/og-contact.jpg'],
-    creator: '@sheltr_ai',
-    site: '@sheltr_ai',
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+    openGraph: {
+      title: 'Contact SHELTR - We\'re Here to Help',
+      description: 'Connect with the SHELTR team for any questions, collaboration opportunities, or support regarding our mission.',
+      url: 'https://sheltr-ai.web.app/contact',
+      siteName: 'SHELTR',
+      images: [
+        {
+          url: heroImage.url,
+          width: heroImage.width,
+          height: heroImage.height,
+          alt: heroImage.alt,
+        }
+      ],
+      locale: 'en_US',
+      type: 'website',
     },
-  },
-  category: 'Contact',
-  classification: 'Contact, Support, Communication',
-};
+    twitter: {
+      card: 'summary_large_image',
+      title: 'Contact SHELTR - Get In Touch',
+      description: 'Reach out to the SHELTR team for inquiries, partnerships, support, or to learn more about our mission.',
+      images: [heroImage.url],
+    },
+  };
+}
 
 export default function ContactLayout({
   children,
@@ -72,4 +48,3 @@ export default function ContactLayout({
 }) {
   return children;
 }
-

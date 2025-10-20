@@ -8,26 +8,30 @@ import { Badge } from '@/components/ui/badge';
 import Footer from '@/components/Footer';
 import { PublicChatbot } from '@/components/PublicChatbot';
 import PublicNavigation from '@/components/PublicNavigation';
+import { useHeroImage } from '@/hooks/useHeroImage';
+import { StandardHero } from '@/components/StandardHero';
 
 export default function SolutionsPage() {
+  // Fetch hero image from gallery (or use fallback)
+  const { heroImage } = useHeroImage('/solutions', '/backgrounds/solutions-bg.jpg');
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
       {/* Navigation - Now using unified PublicNavigation component */}
       <PublicNavigation />
 
-      {/* Hero Section */}
-      <section className="relative py-24 bg-cover bg-center bg-no-repeat" style={{backgroundImage: 'url(/backgrounds/solutions-bg.jpg)'}}>
-        <div className="absolute inset-0 bg-black/60" />
-        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <Badge variant="secondary" className="mb-4">Better-to-Solve</Badge>
-          <h1 className="text-5xl font-bold mb-6 text-white">
+      {/* Hero Section - Standardized */}
+      <StandardHero
+        imageUrl={heroImage.url}
+        badgeText="Better-to-Solve"
+        badgeVariant="secondary"
+        title={
+          <>
             One Platform, <span className="text-blue-400">Every</span> Stakeholder
-          </h1>
-          <p className="text-xl text-gray-200 mb-8 max-w-3xl mx-auto">
-            A unified open-source platform that ensures transparency, dignity, and maximum impact.
-          </p>
-        </div>
-      </section>
+          </>
+        }
+        subtitle="A unified open-source platform that ensures transparency, dignity, and maximum impact."
+      />
 
       {/* Solutions Grid */}
       <section className="py-20">

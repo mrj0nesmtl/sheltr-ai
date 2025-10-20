@@ -146,11 +146,11 @@ export default function PodsPage() {
       <section id="pod-models" className="py-20 bg-muted/30">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-6">Pod Models</h2>
-            <p className="text-xl text-muted-foreground">Choose the right size for your needs</p>
+            <h2 className="text-4xl font-bold mb-6">2026 Models</h2>
+            <p className="text-xl text-muted-foreground">All models are guaranteed to help you get your shit together.</p>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-12">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Model A - One Person */}
             <Card className="border-2 overflow-hidden">
               <div 
@@ -223,6 +223,79 @@ export default function PodsPage() {
                     </li>
                   </ul>
                 </div>
+              </CardContent>
+            </Card>
+
+            {/* MOBI - Electric Bike */}
+            <Card className="border-2 overflow-hidden">
+              <div className="relative h-64 bg-muted/20 group">
+                <Image
+                  src="/images/sheltr_units/bike-1.jpeg"
+                  alt="SHELTR MOBI Electric Bike"
+                  fill
+                  className="object-cover transition-transform group-hover:scale-105"
+                />
+                <div className="absolute top-4 left-4">
+                  <Badge className="bg-green-600 text-white">MOBI</Badge>
+                </div>
+              </div>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Bike className="h-6 w-6" />
+                  MOBI Cycle
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <strong>Type:</strong><br />
+                    Electric Mountain Bike
+                  </div>
+                  <div>
+                    <strong>Range:</strong><br />
+                    50+ miles
+                  </div>
+                  <div>
+                    <strong>Cargo:</strong><br />
+                    Integrated storage
+                  </div>
+                  <div>
+                    <strong>Terrain:</strong><br />
+                    All-terrain capable
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <h4 className="font-semibold">Features:</h4>
+                  <ul className="text-sm space-y-1">
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      Pod transport hitch
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      Mountain bike design
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      Weather resistant
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      Built for daily use
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      Cargo capacity
+                    </li>
+                  </ul>
+                </div>
+                
+                <Link href="/pods/mobi">
+                  <Button className="w-full mt-4" variant="outline">
+                    Learn More About MOBI
+                  </Button>
+                </Link>
               </CardContent>
             </Card>
 

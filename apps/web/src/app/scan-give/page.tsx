@@ -13,6 +13,8 @@ import { PublicChatbot } from '@/components/PublicChatbot';
 import { UnifiedInquiryService } from '@/services/unifiedInquiryService';
 import { getDonationMetrics } from '@/services/donationMetricsService';
 import PublicNavigation from '@/components/PublicNavigation';
+import { useHeroImage } from '@/hooks/useHeroImage';
+import { StandardHero } from '@/components/StandardHero';
 
 export default function ScanGivePage() {
   const { user, hasRole } = useAuth();
@@ -20,6 +22,9 @@ export default function ScanGivePage() {
   const [demoParticipant, setDemoParticipant] = useState<object | null>(null);
   const [qrCodeUrl, setQrCodeUrl] = useState('');
   const [loading, setLoading] = useState(false);
+  
+  // Fetch hero image from gallery (or use fallback)
+  const { heroImage } = useHeroImage('/scan-give', '/backgrounds/hero-bg.jpg');
   const [email, setEmail] = useState('');
   const [emailSubmitting, setEmailSubmitting] = useState(false);
   const [emailSubmitted, setEmailSubmitted] = useState(false);
@@ -137,37 +142,30 @@ export default function ScanGivePage() {
       {/* Navigation - Now using unified PublicNavigation component */}
       <PublicNavigation />
 
-      {/* Hero Section */}
-      <section 
-        className="py-24 relative"
-        style={{
-          backgroundImage: "url('/backgrounds/hero-bg.jpg')",
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat'
-        }}
-      >
-        <div className="absolute inset-0 bg-black/50"></div>
-        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <Badge variant="secondary" className="mb-4 bg-white/20 text-white border-white/30 backdrop-blur-sm">Instant Impact</Badge>
-          <h1 className="text-4xl font-bold mb-6 text-white">
+      {/* Hero Section - Standardized */}
+      <StandardHero
+        imageUrl={heroImage.url}
+        badgeText="Instant Impact"
+        badgeVariant="secondary"
+        badgeClassName="bg-white/20 text-white border-white/30 backdrop-blur-sm"
+        title={
+          <>
             Scan & Give in <span className="text-blue-400">Seconds</span>
-          </h1>
-          <p className="text-xl text-gray-200 mb-8 max-w-3xl mx-auto">
-            Put money directly into the hands of those who need it most.
-          </p>
-          <Button 
-            size="lg" 
-            onClick={handleTryDemo}
-            disabled={loading}
-            variant="outline"
-            className="bg-transparent border-2 border-blue-400 text-white hover:bg-blue-400 hover:text-black transition-all duration-300"
-          >
-            <QrCode className="h-4 w-4 mr-2" />
-            {loading ? 'Generating...' : 'Try Demo QR Code'}
-          </Button>
-        </div>
-      </section>
+          </>
+        }
+        subtitle="Put money directly into the hands of those who need it most."
+      >
+        <Button 
+          size="lg" 
+          onClick={handleTryDemo}
+          disabled={loading}
+          variant="outline"
+          className="bg-transparent border-2 border-blue-400 text-white hover:bg-blue-400 hover:text-black transition-all duration-300 mt-8"
+        >
+          <QrCode className="h-4 w-4 mr-2" />
+          {loading ? 'Generating...' : 'Try Demo QR Code'}
+        </Button>
+      </StandardHero>
 
       {/* How It Works */}
       <section className="py-16">

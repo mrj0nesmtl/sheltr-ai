@@ -9,38 +9,30 @@ import { Progress } from '@/components/ui/progress';
 import Footer from '@/components/Footer';
 import { PublicChatbot } from '@/components/PublicChatbot';
 import PublicNavigation from '@/components/PublicNavigation';
+import { useHeroImage } from '@/hooks/useHeroImage';
+import { StandardHero } from '@/components/StandardHero';
 
 export default function ImpactPage() {
+  // Fetch hero image from gallery (or use fallback)
+  const { heroImage } = useHeroImage('/impact', '/backgrounds/impact-bg.jpg');
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
       {/* Navigation - Now using unified PublicNavigation component */}
       <PublicNavigation />
 
-      {/* Hero Section - Redesigned to be forward-looking */}
-      <section 
-        className="py-24 relative"
-        style={{
-          backgroundImage: "url('/backgrounds/impact-bg.jpg')",
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat'
-        }}
+      {/* Hero Section - Standardized */}
+      <StandardHero
+        imageUrl={heroImage.url}
+        badgeText="Impact Vision"
+        badgeVariant="secondary"
+        badgeClassName="bg-white/20 text-white border-white/30 backdrop-blur-sm"
+        title="Tech-for-Good"
+        subtitle="Upgrading Lives Through Technology."
       >
-        <div className="absolute inset-0 bg-black/50"></div>
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <Badge variant="secondary" className="mb-4 bg-white/20 text-white border-white/30 backdrop-blur-sm">Impact Vision</Badge>
-            <h1 className="text-4xl font-bold mb-6 text-white">
-              Tech-for-Good
-            </h1>
-            <p className="text-xl text-gray-200 mb-12 max-w-4xl mx-auto">
-            Upgrading Lives Through Technology.
-            </p>
-          </div>
-
-          {/* Future Impact Projections */}
-          <div className="grid md:grid-cols-4 gap-6 mb-16">
-            <Card className="text-center border-2 hover:shadow-lg transition-shadow">
+        {/* Future Impact Projections */}
+        <div className="grid md:grid-cols-4 gap-6 mt-12">
+          <Card className="text-center border-2 hover:shadow-lg transition-shadow">
               <CardContent className="p-6">
                 <div className="w-12 h-12 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Users className="h-6 w-6 text-blue-600 dark:text-blue-400" />
@@ -83,9 +75,8 @@ export default function ImpactPage() {
                 <p className="text-xs text-orange-600 dark:text-orange-400 mt-1">Target outcome</p>
               </CardContent>
             </Card>
-          </div>
         </div>
-      </section>
+      </StandardHero>
 
       {/* SmartFund™ Distribution Transparency */}
       <section className="py-16">

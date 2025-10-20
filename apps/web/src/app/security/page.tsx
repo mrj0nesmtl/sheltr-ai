@@ -25,54 +25,42 @@ import {
 } from 'lucide-react';
 import Footer from '@/components/Footer';
 import PublicNavigation from '@/components/PublicNavigation';
+import { useHeroImage } from '@/hooks/useHeroImage';
+import { StandardHero } from '@/components/StandardHero';
 
 export default function SecurityPage() {
+  // Fetch hero image from gallery (or use fallback)
+  const { heroImage } = useHeroImage('/security', '/images/sheltr_units/security.jpeg');
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
       {/* Navigation */}
       <PublicNavigation />
 
-      {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="/images/sheltr_units/security.jpeg"
-            alt="SHELTR Advanced Security System"
-            fill
-            className="object-cover"
-            priority
-          />
-          <div className="absolute inset-0 bg-black/60" />
+      {/* Hero Section - Standardized */}
+      <StandardHero
+        imageUrl={heroImage.url}
+        badgeText="Security & Privacy"
+        badgeVariant="secondary"
+        badgeClassName="bg-blue-500/20 text-blue-300 border-blue-500/30"
+        title="Advanced Security System"
+        subtitle="Multi-layer protection with biometric authentication, smart locks, and remote control. Your safety, privacy, and dignity protected at every level."
+      >
+        <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
+          <Link href="#security-features">
+            <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white">
+              <Shield className="h-4 w-4 mr-2" />
+              Explore Security Features
+            </Button>
+          </Link>
+          <Link href="/pods">
+            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-black">
+              <Eye className="h-4 w-4 mr-2" />
+              View PODS
+            </Button>
+          </Link>
         </div>
-        
-        <div className="relative z-10 text-center text-white px-4 max-w-5xl mx-auto">
-          <Badge variant="secondary" className="mb-6 bg-blue-500/20 text-blue-300 border-blue-500/30">
-            Security & Privacy
-          </Badge>
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight">
-            Advanced Security System
-          </h1>
-          <p className="text-xl md:text-2xl font-light mb-8 max-w-4xl mx-auto">
-            Multi-layer protection with biometric authentication, smart locks, and remote control. 
-            Your safety, privacy, and dignity protected at every level.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="#security-features">
-              <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white">
-                <Shield className="h-4 w-4 mr-2" />
-                Explore Security Features
-              </Button>
-            </Link>
-            <Link href="/pods">
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-black">
-                <Eye className="h-4 w-4 mr-2" />
-                View PODS
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
+      </StandardHero>
 
       {/* Security Features Overview */}
       <section id="security-features" className="py-20">

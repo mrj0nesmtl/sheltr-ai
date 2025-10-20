@@ -10,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ImageViewer } from '@/components/ui/image-viewer';
 import Footer from '@/components/Footer';
 import PublicNavigation from '@/components/PublicNavigation';
+import { useHeroImage } from '@/hooks/useHeroImage';
 import { 
   Shield, 
   Battery, 
@@ -32,6 +33,9 @@ import {
 export default function PodsPage() {
   const [imageViewerOpen, setImageViewerOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  
+  // Fetch hero image from gallery (or use fallback)
+  const { heroImage } = useHeroImage('/pods', '/images/sheltr_units/hero-pods.png');
 
   // Pod Model Images Data
   const podImages = [
@@ -70,7 +74,7 @@ export default function PodsPage() {
         {/* Background Image */}
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-105" 
-          style={{backgroundImage: 'url(/images/sheltr_units/hero-pods.png)'}}
+          style={{backgroundImage: `url(${heroImage.url})`}}
         />
         {/* Dark Overlay */}
         <div className="absolute inset-0 bg-black/60" />

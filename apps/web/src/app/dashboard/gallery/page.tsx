@@ -98,6 +98,8 @@ const PUBLIC_PAGES = [
   { id: 'donors', label: 'For Donors', path: '/solutions/donors', icon: '❤️' },
   { id: 'participants', label: 'For Participants', path: '/solutions/participants', icon: '🤝' },
   { id: 'organizations', label: 'For Organizations', path: '/solutions/organizations', icon: '🏢' },
+  { id: 'hmis-guide', label: 'HMIS Guide', path: '/solutions/organizations/hmis-guide', icon: '📚' },
+  { id: 'case-study', label: 'Case Study', path: '/solutions/organizations/case-study', icon: '📊' },
   { id: 'government', label: 'For Government', path: '/solutions/government', icon: '🏛️' },
   { id: 'policy-brief', label: 'Policy Brief', path: '/solutions/government/policy-brief', icon: '📋' },
   

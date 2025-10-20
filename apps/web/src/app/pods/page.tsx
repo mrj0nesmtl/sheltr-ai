@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ImageViewer } from '@/components/ui/image-viewer';
 import Footer from '@/components/Footer';
+import { PublicChatbot } from '@/components/PublicChatbot';
 import PublicNavigation from '@/components/PublicNavigation';
 import { useHeroImage } from '@/hooks/useHeroImage';
 import { usePodModelImages } from '@/hooks/usePodModelImages';
@@ -589,7 +590,7 @@ export default function PodsPage() {
             <Link href="/security">
               <Button size="lg" variant="outline">
                 <Shield className="h-4 w-4 mr-2" />
-                Learn About Security
+                Explore Security
               </Button>
             </Link>
           </div>
@@ -981,6 +982,9 @@ export default function PodsPage() {
           </div>
         </div>
       </section>
+
+      {/* Public Chatbot */}
+      <PublicChatbot />
 
       {/* Footer */}
       <Footer />

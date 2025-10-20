@@ -11,6 +11,7 @@ import { ImageViewer } from '@/components/ui/image-viewer';
 import Footer from '@/components/Footer';
 import PublicNavigation from '@/components/PublicNavigation';
 import { useHeroImage } from '@/hooks/useHeroImage';
+import { usePodModelImages } from '@/hooks/usePodModelImages';
 import { StandardHero } from '@/components/StandardHero';
 import { 
   Shield, 
@@ -37,6 +38,9 @@ export default function PodsPage() {
   
   // Fetch hero image from gallery (or use fallback)
   const { heroImage } = useHeroImage('/pods', '/images/sheltr_units/hero-pods.png');
+  
+  // Fetch pod model images from gallery (or use fallbacks)
+  const podModelImages = usePodModelImages();
 
   // Pod Model Images Data
   const podImages = [
@@ -158,8 +162,8 @@ export default function PodsPage() {
                 onClick={() => openImageViewer(0)}
               >
                 <Image
-                  src="/images/sheltr_units/sleeper-1.jpeg"
-                  alt="SHELTR One-Person Unit"
+                  src={podModelImages.modelA.url}
+                  alt={podModelImages.modelA.alt}
                   fill
                   className="object-contain transition-transform group-hover:scale-105"
                 />
@@ -230,8 +234,8 @@ export default function PodsPage() {
             <Card className="border-2 overflow-hidden">
               <div className="relative h-64 bg-muted/20 group">
                 <Image
-                  src="/images/sheltr_units/bike-1.jpeg"
-                  alt="SHELTR MOBI Electric Bike"
+                  src={podModelImages.mobi.url}
+                  alt={podModelImages.mobi.alt}
                   fill
                   className="object-cover transition-transform group-hover:scale-105"
                 />
@@ -306,8 +310,8 @@ export default function PodsPage() {
                 onClick={() => openImageViewer(1)}
               >
                 <Image
-                  src="/images/sheltr_units/sleeper-2.jpeg"
-                  alt="SHELTR Two-Person Unit"
+                  src={podModelImages.modelB.url}
+                  alt={podModelImages.modelB.alt}
                   fill
                   className="object-contain transition-transform group-hover:scale-105"
                 />

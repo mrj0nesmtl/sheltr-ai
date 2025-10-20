@@ -11,6 +11,7 @@ import { ImageViewer } from '@/components/ui/image-viewer';
 import Footer from '@/components/Footer';
 import PublicNavigation from '@/components/PublicNavigation';
 import { useHeroImage } from '@/hooks/useHeroImage';
+import { StandardHero } from '@/components/StandardHero';
 import { 
   Shield, 
   Battery, 

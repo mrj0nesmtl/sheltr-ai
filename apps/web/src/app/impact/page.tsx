@@ -31,10 +31,10 @@ export default function ImpactPage() {
           <div className="text-center mb-16">
             <Badge variant="secondary" className="mb-4 bg-white/20 text-white border-white/30 backdrop-blur-sm">Impact Vision</Badge>
             <h1 className="text-4xl font-bold mb-6 text-white">
-              Upgrading Lives Through Technology
+              Tech-for-Good
             </h1>
             <p className="text-xl text-gray-200 mb-12 max-w-4xl mx-auto">
-              Tech for Good - Create solutions that amplify every act of kindness to create measurable impact.
+            Upgrading Lives Through Technology.
             </p>
           </div>
 

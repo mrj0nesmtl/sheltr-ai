@@ -65,6 +65,7 @@ interface GalleryMedia {
   isLandingHero: boolean; // Hero image for landing page
   isFoundersGallery: boolean; // Show in founders portal gallery
   heroPages?: string[]; // Array of page paths where this is a hero image
+  podModel?: 'model-a' | 'model-b' | 'mobi' | null; // Pod model card image
   order: number;
   uploadedBy: string;
   createdAt: Date;
@@ -84,21 +85,45 @@ const categories = ['pods', 'mobi', 'drones', 'technology', 'fabrication', 'conc
 
 // Public pages that can have hero images
 const PUBLIC_PAGES = [
+  // Main Pages
   { id: 'landing', label: 'Landing Page', path: '/', icon: '🏠' },
   { id: 'about', label: 'About', path: '/about', icon: '📖' },
   { id: 'team', label: 'Team', path: '/team', icon: '👥' },
   { id: 'gallery', label: 'Gallery', path: '/gallery', icon: '🖼️' },
+  { id: 'angels', label: 'Angels', path: '/angels', icon: '😇' },
+  { id: 'blog', label: 'Blog', path: '/blog', icon: '✍️' },
+  
+  // Solutions Pages
   { id: 'solutions', label: 'Solutions', path: '/solutions', icon: '💡' },
   { id: 'donors', label: 'For Donors', path: '/solutions/donors', icon: '❤️' },
   { id: 'participants', label: 'For Participants', path: '/solutions/participants', icon: '🤝' },
   { id: 'organizations', label: 'For Organizations', path: '/solutions/organizations', icon: '🏢' },
+  { id: 'government', label: 'For Government', path: '/solutions/government', icon: '🏛️' },
+  { id: 'policy-brief', label: 'Policy Brief', path: '/solutions/government/policy-brief', icon: '📋' },
+  
+  // PODS & Technology
   { id: 'pods', label: 'PODS', path: '/pods', icon: '🏘️' },
   { id: 'mobi', label: 'MOBI Bikes', path: '/pods/mobi', icon: '🚲' },
+  { id: 'buildout', label: 'PODS Specs', path: '/pods/buildout', icon: '🔧' },
   { id: 'drones', label: 'Drones', path: '/drones', icon: '🚁' },
+  { id: 'security', label: 'Security', path: '/security', icon: '🔒' },
+  
+  // User Journeys
+  { id: 'journey-donors', label: 'Journey: Donors', path: '/user-journeys/donors', icon: '💰' },
+  { id: 'journey-participants', label: 'Journey: Participants', path: '/user-journeys/participants', icon: '🚶' },
+  { id: 'journey-shelters', label: 'Journey: Shelters', path: '/user-journeys/shelters', icon: '🏠' },
+  { id: 'journey-government', label: 'Journey: Government', path: '/user-journeys/government', icon: '🏛️' },
+  
+  // Action Pages
   { id: 'impact', label: 'Impact Stories', path: '/impact', icon: '⭐' },
   { id: 'scan-give', label: 'Scan & Give', path: '/scan-give', icon: '📱' },
   { id: 'donate', label: 'Donate', path: '/donate', icon: '💝' },
   { id: 'contact', label: 'Contact', path: '/contact', icon: '📧' },
+  
+  // Legal & Info
+  { id: 'tokenomics', label: 'Tokenomics', path: '/tokenomics', icon: '🪙' },
+  { id: 'privacy', label: 'Privacy Policy', path: '/privacy', icon: '🔐' },
+  { id: 'terms', label: 'Terms of Service', path: '/terms', icon: '📜' },
 ];
 
 // Helper function to extract image metadata
@@ -330,6 +355,11 @@ function SortableMediaCard({ image, index, onEdit, onDelete, onViewImage }: Sort
               HERO ({image.heroPages.length})
             </Badge>
           )}
+          {image.podModel && (
+            <Badge variant="default" className="text-xs bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600">
+              {image.podModel === 'model-a' ? 'MODEL A' : image.podModel === 'model-b' ? 'MODEL B' : 'MOBI'}
+            </Badge>
+          )}
         </div>
         {/* Drag Handle */}
         <div 
@@ -432,7 +462,8 @@ export default function GalleryManagementPage() {
     isHero: false,
     isLandingHero: false,
     isFoundersGallery: false,
-    heroPages: [] as string[]
+    heroPages: [] as string[],
+    podModel: null as 'model-a' | 'model-b' | 'mobi' | null
   });
 
   // File selection state
@@ -1592,6 +1623,116 @@ export default function GalleryManagementPage() {
                       Clear All
                     </Button>
                   </div>
+                </div>
+
+                {/* Pod Model Selector */}
+                <div className="space-y-3 pt-4 border-t">
+                  <div className="flex items-center justify-between">
+                    <label className="text-sm font-semibold">Set as Pod Model Image</label>
+                    {editingImage.podModel && (
+                      <Badge variant="secondary" className="text-xs">
+                        {editingImage.podModel === 'model-a' ? 'Model A' : editingImage.podModel === 'model-b' ? 'Model B' : 'MOBI'}
+                      </Badge>
+                    )}
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    Select which pod model card should use this image on the /pods page
+                  </p>
+                  
+                  {/* Pod Model Options */}
+                  <div className="grid grid-cols-3 gap-3">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setEditingImage(prev => prev ? { 
+                          ...prev, 
+                          podModel: prev.podModel === 'model-a' ? null : 'model-a' 
+                        } : null);
+                      }}
+                      className={`
+                        relative flex flex-col items-center gap-2 p-4 rounded-lg border-2 transition-all
+                        ${editingImage.podModel === 'model-a'
+                          ? 'border-blue-500 bg-blue-500/10 shadow-sm' 
+                          : 'border-border hover:border-blue-500/50 hover:bg-accent'
+                        }
+                      `}
+                    >
+                      <span className="text-3xl">🏠</span>
+                      <span className="text-sm font-medium text-center">Model A</span>
+                      <span className="text-xs text-muted-foreground text-center">One-Person</span>
+                      {editingImage.podModel === 'model-a' && (
+                        <div className="absolute top-2 right-2 w-4 h-4 rounded-full bg-blue-500 flex items-center justify-center">
+                          <Check className="h-3 w-3 text-white" />
+                        </div>
+                      )}
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setEditingImage(prev => prev ? { 
+                          ...prev, 
+                          podModel: prev.podModel === 'model-b' ? null : 'model-b' 
+                        } : null);
+                      }}
+                      className={`
+                        relative flex flex-col items-center gap-2 p-4 rounded-lg border-2 transition-all
+                        ${editingImage.podModel === 'model-b'
+                          ? 'border-purple-500 bg-purple-500/10 shadow-sm' 
+                          : 'border-border hover:border-purple-500/50 hover:bg-accent'
+                        }
+                      `}
+                    >
+                      <span className="text-3xl">🏘️</span>
+                      <span className="text-sm font-medium text-center">Model B</span>
+                      <span className="text-xs text-muted-foreground text-center">Two-Person</span>
+                      {editingImage.podModel === 'model-b' && (
+                        <div className="absolute top-2 right-2 w-4 h-4 rounded-full bg-purple-500 flex items-center justify-center">
+                          <Check className="h-3 w-3 text-white" />
+                        </div>
+                      )}
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setEditingImage(prev => prev ? { 
+                          ...prev, 
+                          podModel: prev.podModel === 'mobi' ? null : 'mobi' 
+                        } : null);
+                      }}
+                      className={`
+                        relative flex flex-col items-center gap-2 p-4 rounded-lg border-2 transition-all
+                        ${editingImage.podModel === 'mobi'
+                          ? 'border-green-500 bg-green-500/10 shadow-sm' 
+                          : 'border-border hover:border-green-500/50 hover:bg-accent'
+                        }
+                      `}
+                    >
+                      <span className="text-3xl">🚲</span>
+                      <span className="text-sm font-medium text-center">MOBI</span>
+                      <span className="text-xs text-muted-foreground text-center">Electric Bike</span>
+                      {editingImage.podModel === 'mobi' && (
+                        <div className="absolute top-2 right-2 w-4 h-4 rounded-full bg-green-500 flex items-center justify-center">
+                          <Check className="h-3 w-3 text-white" />
+                        </div>
+                      )}
+                    </button>
+                  </div>
+
+                  {editingImage.podModel && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        setEditingImage(prev => prev ? { ...prev, podModel: null } : null);
+                      }}
+                      className="w-full text-xs"
+                    >
+                      Clear Selection
+                    </Button>
+                  )}
                 </div>
               </div>
               <div className="flex gap-2 pt-4">

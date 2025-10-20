@@ -14,6 +14,8 @@ import {
 } from '@/components/ui/carousel';
 import Footer from '@/components/Footer';
 import PublicNavigation from '@/components/PublicNavigation';
+import { useHeroImage } from '@/hooks/useHeroImage';
+import { StandardHero } from '@/components/StandardHero';
 
 // TikTok video data for carousel - using clickable preview cards
 const tiktokVideos = [
@@ -128,21 +130,22 @@ const tiktokVideos = [
 ];
 
 export default function AngelsPage() {
+  // Fetch hero image from gallery (or use fallback)
+  const { heroImage } = useHeroImage('/angels', '/backgrounds/hero-bg.jpg');
+
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation - Now using unified PublicNavigation component */}
       <PublicNavigation />
 
-      {/* Hero Section */}
-      <section className="relative py-16 bg-cover bg-center bg-no-repeat" style={{backgroundImage: 'url(/backgrounds/hero-bg.jpg)'}}>
-        <div className="absolute inset-0 bg-black/40" />
-        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <Badge variant="secondary" className="mb-4">Internet Angels</Badge>
-            <h1 className="text-4xl font-bold mb-6">Angels Amongst Us</h1>
-          </div>
-        </div>
-      </section>
+      {/* Hero Section - Standardized */}
+      <StandardHero
+        imageUrl={heroImage.url}
+        badgeText="Internet Angels"
+        badgeVariant="secondary"
+        title="Angels Amongst Us"
+        subtitle=""
+      />
 
       {/* Stats Section */}
       <section className="py-12 bg-muted/50">

@@ -676,7 +676,7 @@ service cloud.firestore {
     }
     
     // =================================================================
-    // GALLERY IMAGES COLLECTION - Public gallery management
+    // GALLERY IMAGES COLLECTION - Public gallery management (legacy)
     // =================================================================
     match /gallery_images/{imageId} {
       // Read: Anyone can read public images, admins can read all
@@ -691,6 +691,7 @@ service cloud.firestore {
       // Delete: Super Admin and Platform Admin can delete images
       allow delete: if isSuperAdmin() || isPlatformAdmin();
     }
+    
     
     // =================================================================
     // NDA AGREEMENTS COLLECTION - Digital signature agreements for Platform Administrators

@@ -34,10 +34,14 @@ import Footer from '@/components/Footer';
 import ThemeLogo from '@/components/ThemeLogo';
 import { useAuth } from '@/contexts/AuthContext';
 import { PublicChatbot } from '@/components/PublicChatbot';
+import { useHeroImage } from '@/hooks/useHeroImage';
 
 export default function DronesPage() {
   const { user, hasRole } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  
+  // Fetch hero image from gallery (or use fallback)
+  const { heroImage } = useHeroImage('/drones', '/images/sheltr_units/drone-delivery.jpeg');
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
@@ -145,7 +149,7 @@ export default function DronesPage() {
         {/* Background Image */}
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-105" 
-          style={{backgroundImage: 'url(/images/sheltr_units/drone-delivery.jpeg)'}}
+          style={{backgroundImage: `url(${heroImage.url})`}}
         />
         {/* Dark Overlay */}
         <div className="absolute inset-0 bg-black/50" />

@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Footer from '@/components/Footer';
 import PublicNavigation from '@/components/PublicNavigation';
+import { PublicChatbot } from '@/components/PublicChatbot';
 import { useHeroImage } from '@/hooks/useHeroImage';
 import { StandardHero } from '@/components/StandardHero';
 import { 
@@ -33,6 +34,18 @@ import {
 export default function MobiPage() {
   // Fetch hero image from gallery (or use fallback)
   const { heroImage } = useHeroImage('/pods/mobi', '/images/sheltr_units/sheltr-mobility.jpg');
+  const [isChatOpen, setIsChatOpen] = useState(false);
+
+  const handleChatOpen = () => {
+    setIsChatOpen(true);
+    // Scroll to chatbot
+    setTimeout(() => {
+      const chatbot = document.querySelector('[data-chatbot]');
+      if (chatbot) {
+        chatbot.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 100);
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -42,8 +55,8 @@ export default function MobiPage() {
       {/* Hero Section - Standardized */}
       <StandardHero
         imageUrl={heroImage.url}
-        title="MOBI Cycle"
-        subtitle="Ultimate mobility and pod transport solution for any terrain. Electric mountain bike designed for urban logistics and scenarios."
+        title="MOBI"
+        subtitle="Ultimate mobility and pod transport solution for urban scenarios."
       >
         <div className="mb-6">
           <Link href="/pods">
@@ -518,15 +531,24 @@ export default function MobiPage() {
             pricing information, and delivery options.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90">
-              Schedule Test Ride
+            <Button 
+              size="lg" 
+              className="bg-primary text-primary-foreground hover:bg-primary/90"
+              onClick={handleChatOpen}
+            >
+              Chat with Us
             </Button>
-            <Button size="lg" variant="outline">
-              Get Pricing Info
-            </Button>
+            <Link href="/contact">
+              <Button size="lg" variant="outline">
+                Get Pricing Info
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
+
+      {/* Public Chatbot */}
+      <PublicChatbot />
 
       {/* Footer */}
       <Footer />

@@ -17,7 +17,8 @@ import {
   Eye,
   ChevronLeft,
   ChevronRight,
-  X
+  X,
+  Check
 } from 'lucide-react';
 import {
   DndContext,
@@ -63,6 +64,7 @@ interface GalleryMedia {
   isHero: boolean; // Hero image for gallery page
   isLandingHero: boolean; // Hero image for landing page
   isFoundersGallery: boolean; // Show in founders portal gallery
+  heroPages?: string[]; // Array of page paths where this is a hero image
   order: number;
   uploadedBy: string;
   createdAt: Date;
@@ -79,6 +81,25 @@ interface GalleryMedia {
 }
 
 const categories = ['pods', 'mobi', 'drones', 'technology', 'fabrication', 'concepts'];
+
+// Public pages that can have hero images
+const PUBLIC_PAGES = [
+  { id: 'landing', label: 'Landing Page', path: '/', icon: '🏠' },
+  { id: 'about', label: 'About', path: '/about', icon: '📖' },
+  { id: 'team', label: 'Team', path: '/team', icon: '👥' },
+  { id: 'gallery', label: 'Gallery', path: '/gallery', icon: '🖼️' },
+  { id: 'solutions', label: 'Solutions', path: '/solutions', icon: '💡' },
+  { id: 'donors', label: 'For Donors', path: '/solutions/donors', icon: '❤️' },
+  { id: 'participants', label: 'For Participants', path: '/solutions/participants', icon: '🤝' },
+  { id: 'organizations', label: 'For Organizations', path: '/solutions/organizations', icon: '🏢' },
+  { id: 'pods', label: 'PODS', path: '/pods', icon: '🏘️' },
+  { id: 'mobi', label: 'MOBI Bikes', path: '/pods/mobi', icon: '🚲' },
+  { id: 'drones', label: 'Drones', path: '/drones', icon: '🚁' },
+  { id: 'impact', label: 'Impact Stories', path: '/impact', icon: '⭐' },
+  { id: 'scan-give', label: 'Scan & Give', path: '/scan-give', icon: '📱' },
+  { id: 'donate', label: 'Donate', path: '/donate', icon: '💝' },
+  { id: 'contact', label: 'Contact', path: '/contact', icon: '📧' },
+];
 
 // Helper function to extract image metadata
 const extractImageMetadata = (file: File): Promise<{ width: number; height: number; aspectRatio: string }> => {
@@ -304,14 +325,9 @@ function SortableMediaCard({ image, index, onEdit, onDelete, onViewImage }: Sort
           <Badge variant="outline" className="text-xs">
             {image.category}
           </Badge>
-          {image.isHero && (
-            <Badge variant="default" className="text-xs bg-yellow-500 hover:bg-yellow-600">
-              GALLERY HERO
-            </Badge>
-          )}
-          {image.isLandingHero && (
-            <Badge variant="default" className="text-xs bg-orange-500 hover:bg-orange-600">
-              LANDING HERO
+          {image.heroPages && image.heroPages.length > 0 && (
+            <Badge variant="default" className="text-xs bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600">
+              HERO ({image.heroPages.length})
             </Badge>
           )}
         </div>
@@ -415,7 +431,8 @@ export default function GalleryManagementPage() {
     isPrivate: false,
     isHero: false,
     isLandingHero: false,
-    isFoundersGallery: false
+    isFoundersGallery: false,
+    heroPages: [] as string[]
   });
 
   // File selection state
@@ -1466,51 +1483,115 @@ export default function GalleryManagementPage() {
                 </div>
               )}
               
-              <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    id="editIsPublic"
-                    checked={editingImage.isPublic}
-                    onChange={(e) => setEditingImage(prev => prev ? { ...prev, isPublic: e.target.checked } : null)}
-                  />
-                  <label htmlFor="editIsPublic" className="text-sm">Make public</label>
+              <div className="space-y-4">
+                {/* Basic Options */}
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      id="editIsPublic"
+                      checked={editingImage.isPublic}
+                      onChange={(e) => setEditingImage(prev => prev ? { ...prev, isPublic: e.target.checked } : null)}
+                    />
+                    <label htmlFor="editIsPublic" className="text-sm font-medium">Make public</label>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      id="editIsPrivate"
+                      checked={editingImage.isPrivate || false}
+                      onChange={(e) => setEditingImage(prev => prev ? { ...prev, isPrivate: e.target.checked } : null)}
+                    />
+                    <label htmlFor="editIsPrivate" className="text-sm font-medium">Hide from public gallery</label>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      id="editIsFoundersGallery"
+                      checked={editingImage.isFoundersGallery || false}
+                      onChange={(e) => setEditingImage(prev => prev ? { ...prev, isFoundersGallery: e.target.checked } : null)}
+                    />
+                    <label htmlFor="editIsFoundersGallery" className="text-sm font-medium">Share to Founders Portal</label>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    id="editIsHero"
-                    checked={editingImage.isHero || false}
-                    onChange={(e) => setEditingImage(prev => prev ? { ...prev, isHero: e.target.checked } : null)}
-                  />
-                  <label htmlFor="editIsHero" className="text-sm">Set as hero image for gallery</label>
-                </div>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    id="editIsLandingHero"
-                    checked={editingImage.isLandingHero || false}
-                    onChange={(e) => setEditingImage(prev => prev ? { ...prev, isLandingHero: e.target.checked } : null)}
-                  />
-                  <label htmlFor="editIsLandingHero" className="text-sm">Set as hero image for landing page</label>
-                </div>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    id="editIsPrivate"
-                    checked={editingImage.isPrivate || false}
-                    onChange={(e) => setEditingImage(prev => prev ? { ...prev, isPrivate: e.target.checked } : null)}
-                  />
-                  <label htmlFor="editIsPrivate" className="text-sm">Hide from public gallery</label>
-                </div>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    id="editIsFoundersGallery"
-                    checked={editingImage.isFoundersGallery || false}
-                    onChange={(e) => setEditingImage(prev => prev ? { ...prev, isFoundersGallery: e.target.checked } : null)}
-                  />
-                  <label htmlFor="editIsFoundersGallery" className="text-sm">Share to Founders Portal</label>
+
+                {/* Hero Image Pages Selector */}
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <label className="text-sm font-semibold">Set as Hero Image for Pages</label>
+                    <Badge variant="secondary" className="text-xs">
+                      {(editingImage.heroPages?.length || 0)} selected
+                    </Badge>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    Select which pages should use this image as their hero/OG image
+                  </p>
+                  
+                  {/* Grid of page options */}
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-[300px] overflow-y-auto p-1 border rounded-lg">
+                    {PUBLIC_PAGES.map((page) => {
+                      const isSelected = editingImage.heroPages?.includes(page.path) || false;
+                      return (
+                        <button
+                          key={page.id}
+                          type="button"
+                          onClick={() => {
+                            setEditingImage(prev => {
+                              if (!prev) return null;
+                              const currentPages = prev.heroPages || [];
+                              const newPages = isSelected
+                                ? currentPages.filter(p => p !== page.path)
+                                : [...currentPages, page.path];
+                              return { ...prev, heroPages: newPages };
+                            });
+                          }}
+                          className={`
+                            relative flex flex-col items-center gap-1.5 p-3 rounded-lg border-2 transition-all
+                            ${isSelected 
+                              ? 'border-primary bg-primary/10 shadow-sm' 
+                              : 'border-border hover:border-primary/50 hover:bg-accent'
+                            }
+                          `}
+                        >
+                          <span className="text-2xl">{page.icon}</span>
+                          <span className="text-xs font-medium text-center leading-tight">
+                            {page.label}
+                          </span>
+                          {isSelected && (
+                            <div className="absolute top-1 right-1 w-4 h-4 rounded-full bg-primary flex items-center justify-center">
+                              <Check className="h-3 w-3 text-primary-foreground" />
+                            </div>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  
+                  {/* Quick actions */}
+                  <div className="flex gap-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        setEditingImage(prev => prev ? { ...prev, heroPages: PUBLIC_PAGES.map(p => p.path) } : null);
+                      }}
+                      className="flex-1 text-xs"
+                    >
+                      Select All
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        setEditingImage(prev => prev ? { ...prev, heroPages: [] } : null);
+                      }}
+                      className="flex-1 text-xs"
+                    >
+                      Clear All
+                    </Button>
+                  </div>
                 </div>
               </div>
               <div className="flex gap-2 pt-4">

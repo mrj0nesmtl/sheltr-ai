@@ -13,65 +13,32 @@ import {
 } from '@/components/ui/accordion';
 import Footer from '@/components/Footer';
 import PublicNavigation from '@/components/PublicNavigation';
+import { useHeroImage } from '@/hooks/useHeroImage';
+import { StandardHero } from '@/components/StandardHero';
 
 export default function TermsPage() {
+  // Fetch hero image from gallery (or use fallback)
+  const { heroImage } = useHeroImage('/terms', '/backgrounds/sheltr-bg-3.jpg');
+
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
       <PublicNavigation />
 
-      {/* Header */}
-      <section className="relative py-12 sm:py-16 overflow-hidden">
-        {/* Background Image */}
-        <div 
-          className="absolute inset-0 z-0"
-          style={{
-            backgroundImage: 'url(/backgrounds/sheltr-bg-3.jpg)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
-        />
-        {/* Gradient Overlay */}
-        <div className="absolute inset-0 z-10 bg-gradient-to-b from-blue-900/90 via-purple-900/85 to-background dark:from-blue-950/95 dark:via-purple-950/90 dark:to-background" />
-        <div className="container mx-auto px-4 relative z-20">
-          <div className="max-w-4xl mx-auto">
-            {/* Mobile Layout */}
-            <div className="block sm:hidden text-center space-y-4">
-              <Scale className="h-16 w-16 text-blue-400 mx-auto drop-shadow-lg" />
-              <div>
-                <Badge variant="outline" className="border-blue-400 text-blue-400 bg-blue-950/30 backdrop-blur-sm mb-3">Legal</Badge>
-                <h1 className="text-3xl font-bold mb-3 text-white drop-shadow-lg">Terms of Service</h1>
-                <p className="text-base text-white/90 mb-3 drop-shadow-md">
-                  SHELTR Platform Terms and Conditions
-                </p>
-                <div className="text-xs text-white/80 space-y-1">
-                  <div>Effective: July 31, 2025</div>
-                  <div>Last Updated: October 9, 2025</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Desktop Layout */}
-            <div className="hidden sm:flex items-start gap-6">
-              <Scale className="h-16 w-16 text-blue-400 flex-shrink-0 mt-2 drop-shadow-lg" />
-              <div className="flex-1">
-                <div className="flex items-center gap-3 mb-3">
-                  <h1 className="text-4xl lg:text-5xl font-bold text-white drop-shadow-lg">Terms of Service</h1>
-                  <Badge variant="outline" className="border-blue-400 text-blue-400 bg-blue-950/30 backdrop-blur-sm">Legal</Badge>
-                </div>
-                <p className="text-lg text-white/90 mb-3 drop-shadow-md">
-                  SHELTR Platform Terms and Conditions
-                </p>
-                <div className="flex items-center gap-4 text-sm text-white/80">
-                  <span>Effective: July 31, 2025</span>
-                  <span>•</span>
-                  <span>Last Updated: October 9, 2025</span>
-                </div>
-              </div>
-            </div>
-          </div>
+      {/* Header - Standardized */}
+      <StandardHero
+        imageUrl={heroImage.url}
+        badgeText="Legal"
+        badgeVariant="outline"
+        badgeClassName="border-blue-400 text-blue-400 bg-blue-950/30 backdrop-blur-sm"
+        title="Terms of Service"
+        subtitle="SHELTR Platform Terms and Conditions"
+      >
+        <div className="text-sm text-white/80 space-y-1 mt-4">
+          <div>Effective: July 31, 2025</div>
+          <div>Last Updated: October 9, 2025</div>
         </div>
-      </section>
+      </StandardHero>
 
       {/* Content */}
       <section className="py-16">

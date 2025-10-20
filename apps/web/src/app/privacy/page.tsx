@@ -13,65 +13,32 @@ import {
 } from '@/components/ui/accordion';
 import Footer from '@/components/Footer';
 import PublicNavigation from '@/components/PublicNavigation';
+import { useHeroImage } from '@/hooks/useHeroImage';
+import { StandardHero } from '@/components/StandardHero';
 
 export default function PrivacyPage() {
+  // Fetch hero image from gallery (or use fallback)
+  const { heroImage } = useHeroImage('/privacy', '/backgrounds/sheltr-bg-2.jpg');
+
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
       <PublicNavigation />
 
-      {/* Header */}
-      <section className="relative py-12 sm:py-16 overflow-hidden">
-        {/* Background Image */}
-        <div 
-          className="absolute inset-0 z-0"
-          style={{
-            backgroundImage: 'url(/backgrounds/sheltr-bg-2.jpg)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
-        />
-        {/* Gradient Overlay */}
-        <div className="absolute inset-0 z-10 bg-gradient-to-b from-green-900/90 via-blue-900/85 to-background dark:from-green-950/95 dark:via-blue-950/90 dark:to-background" />
-        <div className="container mx-auto px-4 relative z-20">
-          <div className="max-w-4xl mx-auto">
-            {/* Mobile Layout */}
-            <div className="block sm:hidden text-center space-y-4">
-              <Eye className="h-16 w-16 text-green-400 mx-auto drop-shadow-lg" />
-              <div>
-                <Badge variant="outline" className="border-green-400 text-green-400 bg-green-950/30 backdrop-blur-sm mb-3">Privacy</Badge>
-                <h1 className="text-3xl font-bold mb-3 text-white drop-shadow-lg">Privacy Policy</h1>
-                <p className="text-base text-white/90 mb-3 drop-shadow-md">
-                  How SHELTR Protects Your Data and Privacy
-                </p>
-                <div className="text-xs text-white/80 space-y-1">
-                  <div>Effective: January 25, 2025</div>
-                  <div>Last Updated: October 9, 2025</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Desktop Layout */}
-            <div className="hidden sm:flex items-start gap-6">
-              <Eye className="h-16 w-16 text-green-400 flex-shrink-0 mt-2 drop-shadow-lg" />
-              <div className="flex-1">
-                <div className="flex items-center gap-3 mb-3">
-                  <h1 className="text-4xl lg:text-5xl font-bold text-white drop-shadow-lg">Privacy Policy</h1>
-                  <Badge variant="outline" className="border-green-400 text-green-400 bg-green-950/30 backdrop-blur-sm">Privacy</Badge>
-                </div>
-                <p className="text-lg text-white/90 mb-3 drop-shadow-md">
-                  How SHELTR Protects Your Data and Privacy
-                </p>
-                <div className="flex items-center gap-4 text-sm text-white/80">
-                  <span>Effective: January 25, 2025</span>
-                  <span>•</span>
-                  <span>Last Updated: October 9, 2025</span>
-                </div>
-              </div>
-            </div>
-          </div>
+      {/* Header - Standardized */}
+      <StandardHero
+        imageUrl={heroImage.url}
+        badgeText="Privacy"
+        badgeVariant="outline"
+        badgeClassName="border-green-400 text-green-400 bg-green-950/30 backdrop-blur-sm"
+        title="Privacy Policy"
+        subtitle="How SHELTR Protects Your Data and Privacy"
+      >
+        <div className="text-sm text-white/80 space-y-1 mt-4">
+          <div>Effective: January 25, 2025</div>
+          <div>Last Updated: October 9, 2025</div>
         </div>
-      </section>
+      </StandardHero>
 
       {/* Content */}
       <section className="py-16">

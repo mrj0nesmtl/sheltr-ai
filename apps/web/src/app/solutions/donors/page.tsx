@@ -8,8 +8,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import Footer from '@/components/Footer';
 import PublicNavigation from '@/components/PublicNavigation';
+import { useHeroImage } from '@/hooks/useHeroImage';
+import { StandardHero } from '@/components/StandardHero';
 
 export default function DonorsPage() {
+  // Fetch hero image from gallery (or use fallback)
+  const { heroImage } = useHeroImage('/solutions/donors', '/images/sheltr_units/closeup-wheels.jpeg');
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
       {/* Navigation */}
@@ -27,46 +32,28 @@ export default function DonorsPage() {
         </div>
       </div>
 
-      {/* Hero Section */}
-      <section className="relative py-24 flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="/images/sheltr_units/closeup-wheels.jpeg"
-            alt="SHELTR MOBI wheels - mobility and freedom in motion"
-            fill
-            className="object-cover"
-            priority
-          />
-          <div className="absolute inset-0 bg-black/70" />
-        </div>
-        
-        <div className="relative z-10 text-center text-white px-4 max-w-5xl mx-auto">
-          <Badge variant="secondary" className="mb-6 bg-orange-500/20 text-orange-300 border-orange-500/30">
-            For Donors
-          </Badge>
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight">
-            Every Dollar Turns the Wheel
-          </h1>
-          <p className="text-xl md:text-2xl font-light mb-8 max-w-4xl mx-auto">
-            Experience the most transparent charitable giving platform ever created. Watch your donations 
-            flow directly to those in need, fund MOBI bikes and PODS, sponsor participant journeys, 
-            and track real-time impact through blockchain technology.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/scan-give">
-              <Button size="lg" variant="outline" className="border-2 border-orange-400 text-orange-400 hover:bg-orange-500/10 backdrop-blur-sm bg-black/20">
-                <QrCode className="h-4 w-4 mr-2" />
-                Start Giving Today
-              </Button>
-            </Link>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-black">
-              <Eye className="h-4 w-4 mr-2" />
-              Track Your Impact
+      {/* Hero Section - Standardized */}
+      <StandardHero
+        imageUrl={heroImage.url}
+        badgeText="For Donors"
+        badgeVariant="secondary"
+        badgeClassName="bg-orange-500/20 text-orange-300 border-orange-500/30"
+        title="Every Dollar Turns the Wheel"
+        subtitle="Experience the most transparent charitable giving platform ever created. Watch your donations flow directly to those in need, fund MOBI bikes and PODS, sponsor participant journeys, and track real-time impact through blockchain technology."
+      >
+        <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
+          <Link href="/scan-give">
+            <Button size="lg" variant="outline" className="border-2 border-orange-400 text-orange-400 hover:bg-orange-500/10 backdrop-blur-sm bg-black/20">
+              <QrCode className="h-4 w-4 mr-2" />
+              Start Giving Today
             </Button>
-          </div>
+          </Link>
+          <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-black">
+            <Eye className="h-4 w-4 mr-2" />
+            Track Your Impact
+          </Button>
         </div>
-      </section>
+      </StandardHero>
 
       {/* Core Value Props */}
       <section className="py-16 bg-orange-500/5">

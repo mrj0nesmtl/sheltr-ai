@@ -35,6 +35,7 @@ import ThemeLogo from '@/components/ThemeLogo';
 import { useAuth } from '@/contexts/AuthContext';
 import { PublicChatbot } from '@/components/PublicChatbot';
 import { useHeroImage } from '@/hooks/useHeroImage';
+import { StandardHero } from '@/components/StandardHero';
 
 export default function DronesPage() {
   const { user, hasRole } = useAuth();
@@ -144,53 +145,40 @@ export default function DronesPage() {
         )}
       </nav>
 
-      {/* Hero Section */}
-      <section className="relative py-24 overflow-hidden">
-        {/* Background Image */}
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-105" 
-          style={{backgroundImage: `url(${heroImage.url})`}}
-        />
-        {/* Dark Overlay */}
-        <div className="absolute inset-0 bg-black/50" />
-        
-        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <Badge variant="outline" className="mb-6 border-2 border-blue-400 text-blue-400 px-4 py-2">
-            <Star className="h-4 w-4 mr-2" />
-            Future Release
-          </Badge>
-          
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 text-white">
+      {/* Hero Section - Standardized */}
+      <StandardHero
+        imageUrl={heroImage.url}
+        badgeText="Future Release"
+        badgeVariant="outline"
+        badgeClassName="border-2 border-blue-400 text-blue-400 px-4 py-2"
+        title={
+          <>
             Supply <span className="text-blue-400">Drones</span>
-          </h1>
-          
-          <p className="text-xl text-gray-200 mb-8 max-w-3xl mx-auto">
-            Rapid drone delivery of essential supplies directly to PODS using GPS precision. 
-            Donors can fund emergency packages that reach participants within hours.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button 
-              variant="outline" 
-              className="bg-transparent border-2 border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white transition-all duration-300" 
-              size="lg"
-              onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
-            >
-              <Package className="h-4 w-4 mr-2" />
-              How It Works
-            </Button>
-            <Button 
-              variant="outline" 
-              className="bg-transparent border-2 border-green-400 text-green-400 hover:bg-green-400 hover:text-white transition-all duration-300" 
-              size="lg"
-              onClick={() => document.getElementById('emergency-supply-packages')?.scrollIntoView({ behavior: 'smooth' })}
-            >
-              <Heart className="h-4 w-4 mr-2" />
-              Fund Emergency Supplies
-            </Button>
-          </div>
+          </>
+        }
+        subtitle="Rapid drone delivery of essential supplies directly to PODS using GPS precision. Donors can fund emergency packages that reach participants within hours."
+      >
+        <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
+          <Button 
+            variant="outline" 
+            className="bg-transparent border-2 border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white transition-all duration-300" 
+            size="lg"
+            onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
+          >
+            <Package className="h-4 w-4 mr-2" />
+            How It Works
+          </Button>
+          <Button 
+            variant="outline" 
+            className="bg-transparent border-2 border-green-400 text-green-400 hover:bg-green-400 hover:text-white transition-all duration-300" 
+            size="lg"
+            onClick={() => document.getElementById('emergency-supply-packages')?.scrollIntoView({ behavior: 'smooth' })}
+          >
+            <Heart className="h-4 w-4 mr-2" />
+            Fund Emergency Supplies
+          </Button>
         </div>
-      </section>
+      </StandardHero>
 
       {/* How It Works */}
       <section id="how-it-works" className="py-20">

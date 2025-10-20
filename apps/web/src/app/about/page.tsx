@@ -10,6 +10,7 @@ import { PublicChatbot } from '@/components/PublicChatbot';
 import NewsletterSignup from '@/components/NewsletterSignup';
 import PublicNavigation from '@/components/PublicNavigation';
 import { useHeroImage } from '@/hooks/useHeroImage';
+import { StandardHero } from '@/components/StandardHero';
 
 export default function AboutPage() {
   // Fetch hero image from gallery (or use fallback)
@@ -20,31 +21,17 @@ export default function AboutPage() {
       {/* Navigation - Now using unified PublicNavigation component */}
       <PublicNavigation />
 
-      {/* Hero Section - Redesigned with cleaner aesthetic */}
-      <section 
-        className="relative py-24 min-h-[80vh] flex items-center"
-        style={{
-          backgroundImage: `url(${heroImage.url})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat'
-        }}
-      >
-        <div className="absolute inset-0 bg-black/60"></div>
-        <div className="relative z-10 container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <Badge variant="secondary" className="mb-6 bg-white/20 text-white border-white/30 backdrop-blur-sm">
-              BLOCKCHAIN SECURED
-            </Badge>
-            <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
-              Transforming Donations into <span className="text-blue-400">Impact</span>
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-4xl mx-auto">
-              Transparency for all. Impact for all.
-            </p>
-          </div>
-        </div>
-      </section>
+      {/* Hero Section - Standardized */}
+      <StandardHero
+        imageUrl={heroImage.url}
+        badgeText="BLOCKCHAIN SECURED"
+        title={
+          <>
+            Transforming Donations into <span className="text-blue-400">Impact</span>
+          </>
+        }
+        subtitle="Transparency for all. Impact for all."
+      />
 
       {/* SHELTR Product Introduction - New Enhanced Section */}
       <section className="py-20 bg-background">

@@ -9,67 +9,51 @@ import { Progress } from '@/components/ui/progress';
 import Footer from '@/components/Footer';
 import ThemeLogo from '@/components/ThemeLogo';
 import PublicNavigation from '@/components/PublicNavigation';
+import { useHeroImage } from '@/hooks/useHeroImage';
+import { StandardHero } from '@/components/StandardHero';
 
 export default function OrganizationsCaseStudyPage() {
+  const { heroImage } = useHeroImage('/solutions/organizations/case-study', '/backgrounds/solutions-bg.jpg');
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
       <PublicNavigation />
 
-      {/* Document Header */}
-      <section className="relative py-12 overflow-hidden">
-        {/* Background Image */}
-        <div className="absolute inset-0">
-          <img 
-            src="/backgrounds/solutions-bg.jpg" 
-            alt="Background" 
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-black/60 dark:bg-black/70" />
+      {/* Document Header - Standardized */}
+      <StandardHero
+        imageUrl={heroImage.url}
+        badgeText="Case Study"
+        badgeVariant="secondary"
+        badgeClassName="bg-white text-black"
+        title="SHELTR for Shelters"
+        subtitle="Rethinking Fundraising for the Unhoused"
+      >
+        <div className="flex items-center gap-4 mt-4 text-sm text-white/80">
+          <span>TECH4GOOD</span>
+          <span>•</span>
+          <span>June 2025</span>
+          <span>•</span>
+          <span>15 min read</span>
+          <span>•</span>
+          <Badge variant="outline" className="text-green-300 border-green-300">Implementation Studied</Badge>
         </div>
-        <div className="relative container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="flex items-center gap-4 mb-6">
-              <Building2 className="h-12 w-12 text-white" />
-              <div>
-                <div className="flex items-center gap-2 mb-2">
-                  <h1 className="text-4xl font-bold text-white">SHELTR for Shelters</h1>
-                  <Badge className="bg-white text-black">Case Study</Badge>
-                </div>
-                <p className="text-lg text-gray-200">
-                  Rethinking Fundraising for the Unhoused
-                </p>
-                <div className="flex items-center gap-4 mt-2 text-sm text-gray-300">
-                  <span>TECH4GOOD</span>
-                  <span>•</span>
-                  <span>June 2025</span>
-                  <span>•</span>
-                  <span>15 min read</span>
-                  <span>•</span>
-                  <Badge variant="outline" className="text-green-300 border-green-300">Implementation Studied</Badge>
-                </div>
-              </div>
-            </div>
-            
-            <div className="text-center">
-              <p className="text-gray-300 mb-4">
-                This case study demonstrates the transformative potential of the SHELTR HMIS platform.
-              </p>
-              <p className="text-sm text-gray-400">
-                For detailed documentation and implementation guides, visit our{' '}
-                <a 
-                  href="https://github.com/mrjones/sheltr-ai" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-blue-300 hover:text-blue-200 underline"
-                >
-                  GitHub Repo
-                </a>
-              </p>
-            </div>
-          </div>
+        <div className="text-center mt-6">
+          <p className="text-gray-200 mb-4">
+            This case study demonstrates the transformative potential of the SHELTR HMIS platform.
+          </p>
+          <p className="text-sm text-gray-300">
+            For detailed documentation and implementation guides, visit our{' '}
+            <a 
+              href="https://github.com/mrjones/sheltr-ai" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-blue-300 hover:text-blue-200 underline"
+            >
+              GitHub Repo
+            </a>
+          </p>
         </div>
-      </section>
+      </StandardHero>
 
       {/* Opening Statement */}
       <section className="py-16 bg-gradient-to-r from-gray-50 to-blue-50 dark:from-gray-900/50 dark:to-blue-900/20">

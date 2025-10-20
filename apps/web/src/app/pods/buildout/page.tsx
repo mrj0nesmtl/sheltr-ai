@@ -8,6 +8,8 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Footer from '@/components/Footer';
 import PublicNavigation from '@/components/PublicNavigation';
+import { useHeroImage } from '@/hooks/useHeroImage';
+import { StandardHero } from '@/components/StandardHero';
 import { 
   ArrowLeft,
   Battery,
@@ -40,41 +42,29 @@ import {
 } from 'lucide-react';
 
 export default function PodsBuildoutPage() {
+  // Fetch hero image from gallery (or use fallback)
+  const { heroImage } = useHeroImage('/pods/buildout', '/images/sheltr_units/pods-2.jpeg');
+
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
       <PublicNavigation />
 
-      {/* Hero Section */}
-      <section className="relative py-24 overflow-hidden">
-        {/* Background Image */}
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat blur-[2px] scale-105" 
-          style={{backgroundImage: 'url(/images/sheltr_units/pods-2.jpeg)'}}
-        />
-        {/* Dark Overlay */}
-        <div className="absolute inset-0 bg-black/70" />
-        
-        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="mb-8">
-            <Link href="/pods">
-              <Button variant="ghost" size="sm" className="text-white hover:bg-white/20 mb-4">
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to PODS
-              </Button>
-            </Link>
-          </div>
-          
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 text-white">
-            SPECS
-          </h1>
-          
-          <p className="text-xl text-gray-200 mb-8 max-w-3xl mx-auto">
-            Complete technical specifications and buildout guide for SHELTR mobile micro-housing units. 
-            Professional fabrication documentation for manufacturers and partners.
-          </p>
+      {/* Hero Section - Standardized */}
+      <StandardHero
+        imageUrl={heroImage.url}
+        title="SPECS"
+        subtitle="Complete technical specifications and buildout guide for SHELTR mobile micro-housing units. Professional fabrication documentation for manufacturers and partners."
+      >
+        <div className="mb-6">
+          <Link href="/pods">
+            <Button variant="ghost" size="sm" className="text-white hover:bg-white/20">
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back to PODS
+            </Button>
+          </Link>
         </div>
-      </section>
+      </StandardHero>
 
       {/* Canadian Winter Rating Banner */}
       <section className="py-8 bg-blue-600 dark:bg-blue-700">

@@ -24,6 +24,8 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { sanitizeForAttribute, sanitizeForDisplay, sanitizeTags, sanitizeUrl, sanitizeCategory, sanitizeDate } from '@/utils/sanitize';
 import PublicNavigation from '@/components/PublicNavigation';
+import Footer from '@/components/Footer';
+import { PublicChatbot } from '@/components/PublicChatbot';
 
 // Gallery media interface
 interface GalleryMedia {
@@ -437,6 +439,12 @@ export default function GalleryPage() {
         <div>Press <kbd className="px-1 py-0.5 bg-muted rounded text-xs">I</kbd> for info</div>
         <div>Use <kbd className="px-1 py-0.5 bg-muted rounded text-xs">←</kbd> <kbd className="px-1 py-0.5 bg-muted rounded text-xs">→</kbd> to navigate</div>
       </div>
+
+      {/* Public Chatbot */}
+      <PublicChatbot />
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 }

@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import Footer from '@/components/Footer';
+import { PublicChatbot } from '@/components/PublicChatbot';
 import { PublicTeamService, type PublicTeamMember } from '@/services/publicTeamService';
 import PublicNavigation from '@/components/PublicNavigation';
 import { useHeroImage } from '@/hooks/useHeroImage';
@@ -403,6 +404,9 @@ export default function TeamPage() {
           </div>
         </div>
       </section>
+
+      {/* Public Chatbot */}
+      <PublicChatbot />
 
       <Footer />
     </div>

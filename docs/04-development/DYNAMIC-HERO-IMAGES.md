@@ -129,7 +129,7 @@ export default function YourPage() {
 
 ## Firestore Query
 
-The system queries `gallery_media` collection:
+The system queries `gallery_images` collection:
 
 ```javascript
 const q = query(
@@ -140,6 +140,21 @@ const q = query(
   limit(1)
 );
 ```
+
+### Required Firestore Index
+
+This query requires a composite index in Firestore:
+
+**Collection:** `gallery_images`  
+**Fields indexed:**
+- `heroPages` (Array)
+- `isPublic` (Ascending)
+- `order` (Ascending)
+- `__name__` (Ascending)
+
+**Query scope:** Collection
+
+Firebase will automatically create this index when the query is first executed. The index typically takes 1-3 minutes to build.
 
 ## Benefits
 

@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import Footer from '@/components/Footer';
+import { PublicChatbot } from '@/components/PublicChatbot';
 import ThemeLogo from '@/components/ThemeLogo';
 import PublicNavigation from '@/components/PublicNavigation';
 import { useHeroImage } from '@/hooks/useHeroImage';
@@ -295,6 +296,9 @@ export default function GovernmentPage() {
           </div>
         </div>
       </section>
+
+      {/* Public Chatbot */}
+      <PublicChatbot />
 
       <Footer />
     </div>

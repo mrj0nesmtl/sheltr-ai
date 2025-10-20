@@ -12,6 +12,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import Footer from '@/components/Footer';
+import { PublicChatbot } from '@/components/PublicChatbot';
 import PublicNavigation from '@/components/PublicNavigation';
 import { useHeroImage } from '@/hooks/useHeroImage';
 import { StandardHero } from '@/components/StandardHero';
@@ -426,6 +427,9 @@ export default function TermsPage() {
           </div>
         </div>
       </section>
+
+      {/* Public Chatbot */}
+      <PublicChatbot />
 
       <Footer />
     </div>

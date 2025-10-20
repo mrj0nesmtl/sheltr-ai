@@ -8,8 +8,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import Footer from '@/components/Footer';
 import PublicNavigation from '@/components/PublicNavigation';
+import { useHeroImage } from '@/hooks/useHeroImage';
+import { StandardHero } from '@/components/StandardHero';
 
 export default function ParticipantsPage() {
+  // Fetch hero image from gallery (or use fallback)
+  const { heroImage } = useHeroImage('/solutions/participants', '/images/sheltr_units/pods-2.jpeg');
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
       {/* Navigation */}
@@ -27,40 +32,24 @@ export default function ParticipantsPage() {
         </div>
       </div>
 
-      {/* Hero Section */}
-      <section className="relative py-24 flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="/images/sheltr_units/pods-2.jpeg"
-            alt="SHELTR PODS - Mobile emergency housing units in urban setting"
-            fill
-            className="object-cover"
-            priority
-          />
-          <div className="absolute inset-0 bg-black/60" />
+      {/* Hero Section - Standardized */}
+      <StandardHero
+        imageUrl={heroImage.url}
+        badgeText="For Participants"
+        badgeVariant="secondary"
+        badgeClassName="bg-green-500/20 text-green-300 border-green-500/30"
+        title="Make a Move"
+        subtitle="Your journey respected, your privacy protected."
+      >
+        <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
+          <Link href="/register">
+            <Button size="lg" variant="outline" className="border-2 border-green-400 text-green-400 hover:bg-green-500/10 backdrop-blur-sm bg-black/20">
+              <Users className="h-4 w-4 mr-2" />
+              Get Started Today
+            </Button>
+          </Link>
         </div>
-        
-        <div className="relative z-10 text-center text-white px-4 max-w-4xl mx-auto">
-          <Badge variant="secondary" className="mb-6 bg-green-500/20 text-green-300 border-green-500/30">
-            For Participants
-          </Badge>
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight">
-            Make a Move
-          </h1>
-          <p className="text-xl md:text-2xl font-light mb-8 max-w-3xl mx-auto">
-          Your journey respected, your privacy protected.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/register">
-              <Button size="lg" variant="outline" className="border-2 border-green-400 text-green-400 hover:bg-green-500/10 backdrop-blur-sm bg-black/20">
-                <Users className="h-4 w-4 mr-2" />
-                Get Started Today
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
+      </StandardHero>
 
       {/* Core Benefits */}
       <section className="py-16 bg-green-500/5">

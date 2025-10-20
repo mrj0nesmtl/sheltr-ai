@@ -8,8 +8,13 @@ import { Badge } from '@/components/ui/badge';
 import Footer from '@/components/Footer';
 import { PublicChatbot } from '@/components/PublicChatbot';
 import PublicNavigation from '@/components/PublicNavigation';
+import { useHeroImage } from '@/hooks/useHeroImage';
+import { StandardHero } from '@/components/StandardHero';
 
 export default function OrganizationsPage() {
+  // Fetch hero image from gallery (or use fallback)
+  const { heroImage } = useHeroImage('/solutions/organizations', '/backgrounds/solutions-bg.jpg');
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
       {/* Navigation */}
@@ -27,48 +32,27 @@ export default function OrganizationsPage() {
         </div>
       </div>
 
-      {/* Hero Section */}
-      <section className="relative py-24 overflow-hidden">
-        {/* Background Image */}
-        <div className="absolute inset-0">
-          <img 
-            src="/backgrounds/solutions-bg.jpg" 
-            alt="Background" 
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-black/50 dark:bg-black/70" />
-        </div>
-        
-        
-        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            
-            <div className="flex justify-center mb-6">
-              <Badge variant="outline" className="border-2 border-white text-white px-4 py-2">
-                <Star className="h-4 w-4 mr-2" />
-                Launching Soon
-              </Badge>
-            </div>
-            
-            <h1 className="text-5xl md:text-6xl font-bold mb-8 text-white">
-              Your Impact <span className="text-blue-400">Amplified</span>
-            </h1>
-            
-            <p className="text-2xl font-medium text-gray-200 mb-4">
-              Next-Generation HMIS + Overflow Relief Ecosystem
-            </p>
-            
-            <p className="text-lg text-gray-300 mb-10 max-w-4xl mx-auto leading-relaxed">
-              <span className="font-semibold text-blue-300">AI-powered analytics</span>, 
-              <span className="font-semibold text-purple-300"> blockchain transparency</span>, 
-              <span className="font-semibold text-green-300"> overflow assistance</span>, and 
-              <span className="font-semibold text-yellow-300"> community investment returns</span>. 
-              We're not competing—we're <strong className="text-white"> amplifying your impact</strong>.
-            </p>
-            
-            </div>
-        </div>
-      </section>
+      {/* Hero Section - Standardized */}
+      <StandardHero
+        imageUrl={heroImage.url}
+        badgeText="Launching Soon"
+        badgeVariant="outline"
+        badgeClassName="border-2 border-white text-white px-4 py-2"
+        title={
+          <>
+            Your Impact <span className="text-blue-400">Amplified</span>
+          </>
+        }
+        subtitle="Next-Generation HMIS + Overflow Relief Ecosystem"
+      >
+        <p className="text-lg text-gray-300 mb-6 max-w-4xl mx-auto leading-relaxed">
+          <span className="font-semibold text-blue-300">AI-powered analytics</span>, 
+          <span className="font-semibold text-purple-300"> blockchain transparency</span>, 
+          <span className="font-semibold text-green-300"> overflow assistance</span>, and 
+          <span className="font-semibold text-yellow-300"> community investment returns</span>. 
+          We're not competing—we're <strong className="text-white"> amplifying your impact</strong>.
+        </p>
+      </StandardHero>
 
       {/* Opening Statement */}
       <section className="py-20 bg-gradient-to-r from-gray-50 to-blue-50 dark:from-gray-900/50 dark:to-blue-900/20">

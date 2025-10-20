@@ -22,6 +22,8 @@ import {
 import Link from 'next/link';
 import { PublicChatbot } from '@/components/PublicChatbot';
 import PublicNavigation from '@/components/PublicNavigation';
+import { useHeroImage } from '@/hooks/useHeroImage';
+import { StandardHero } from '@/components/StandardHero';
 
 const HomelessnessTypeCard = ({ 
   icon: Icon, 
@@ -87,6 +89,8 @@ const ComparisonRow = ({
 );
 
 export default function HMISGuidePage() {
+  const { heroImage } = useHeroImage('/solutions/organizations/hmis-guide', '/backgrounds/hero-bg.jpg');
+  
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
@@ -108,28 +112,24 @@ export default function HMISGuidePage() {
         </div>
       </div>
 
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-gray-900 via-black to-gray-800 text-white py-20 dark:from-gray-800 dark:via-gray-900 dark:to-black">
-        <div className="container mx-auto px-4 max-w-4xl text-center">
-          <Badge className="bg-gray-800 text-white mb-4 border border-gray-600">
-            HMIS Education
-          </Badge>
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">
-            Understanding HMIS: Why SHELTR is the Future of Homeless Services Technology
-          </h1>
-          <p className="text-xl text-gray-200 mb-8 max-w-3xl mx-auto">
-            A comprehensive guide to Homeless Management Information Systems and how SHELTR revolutionizes the approach
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-gray-800 text-white hover:bg-gray-700 border border-gray-600">
-              Get Started Today
-            </Button>
-            <Button size="lg" variant="outline" className="border-gray-600 text-white hover:bg-gray-800 hover:text-white">
-              Schedule a Demo
-            </Button>
-          </div>
+      {/* Hero Section - Standardized */}
+      <StandardHero
+        imageUrl={heroImage.url}
+        badgeText="HMIS Education"
+        badgeVariant="secondary"
+        badgeClassName="bg-gray-800 text-white border border-gray-600"
+        title="Understanding HMIS: Why SHELTR is the Future of Homeless Services Technology"
+        subtitle="A comprehensive guide to Homeless Management Information Systems and how SHELTR revolutionizes the approach"
+      >
+        <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
+          <Button size="lg" className="bg-gray-800 text-white hover:bg-gray-700 border border-gray-600">
+            Get Started Today
+          </Button>
+          <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-black">
+            Schedule a Demo
+          </Button>
         </div>
-      </section>
+      </StandardHero>
 
       {/* Reality of Homelessness */}
       <section className="py-16 bg-muted/30">

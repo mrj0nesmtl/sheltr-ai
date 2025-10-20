@@ -11,67 +11,47 @@ import { useAuth } from '@/contexts/AuthContext';
 import { GalleryService, GalleryImage } from '@/services/galleryService';
 import NewsletterSignup from '@/components/NewsletterSignup';
 import PublicNavigation from '@/components/PublicNavigation';
+import { useHeroImage } from '@/hooks/useHeroImage';
+import { StandardHero } from '@/components/StandardHero';
 
 export default function HomePage() {
   const { user, hasRole } = useAuth();
-  const [landingHeroImage, setLandingHeroImage] = useState<GalleryImage | null>(null);
-
-  // Load landing hero image
-  useEffect(() => {
-    const loadLandingHero = async () => {
-      try {
-        const heroImage = await GalleryService.getLandingHeroImage();
-        setLandingHeroImage(heroImage);
-      } catch (error) {
-        console.error('Error loading landing hero image:', error);
-      }
-    };
-    
-    loadLandingHero();
-  }, []);
+  
+  // Fetch hero image from gallery (or use fallback)
+  const { heroImage } = useHeroImage('/', '/backgrounds/hero-bg.jpg');
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* Navigation - Now using unified PublicNavigation component */}
       <PublicNavigation />
 
-        {/* Hero Section - Transform Donations into Impact */}
-        <section 
-          className="relative py-24 min-h-[80vh] flex items-center bg-gradient-to-r from-slate-900 to-slate-800"
-          style={{
-            backgroundImage: landingHeroImage 
-              ? `url('${landingHeroImage.src}')` 
-              : "url('/backgrounds/hero-bg.jpg')",
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat'
-          }}
+        {/* Hero Section - Standardized */}
+        <StandardHero
+          imageUrl={heroImage.url}
+          badgeText="TECH-4-GOOD"
+          badgeVariant="secondary"
+          badgeClassName="bg-white/20 text-white border-white/30 backdrop-blur-sm"
+          title={
+            <>
+              Better to <span className="text-blue-400">Solve</span> than Manage
+            </>
+          }
+          subtitle=""
         >
-          <div className="absolute inset-0 bg-black/60"></div>
-          <div className="relative z-10 container mx-auto px-4">
-            <div className="max-w-4xl mx-auto text-center">
-              <Badge variant="secondary" className="mb-6 bg-white/20 text-white border-white/30 backdrop-blur-sm">
-                TECH-4-GOOD
-              </Badge>
-              <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
-                Better to <span className="text-blue-400">Solve</span> than Manage
-              </h1>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link href="/scan-give">
-                  <Button variant="outline" size="lg" className="w-full sm:w-auto text-lg px-8 py-4 bg-transparent border-2 border-green-400 text-green-400 hover:bg-green-500 hover:text-white hover:border-green-500 backdrop-blur-sm transition-all">
-                    Scan & Give
-                  </Button>
-                </Link>
-                <Link href="/about">
-                  <Button variant="outline" size="lg" className="w-full sm:w-auto text-lg px-8 py-4 bg-transparent border-2 border-white/60 text-white hover:bg-white hover:text-black hover:border-white backdrop-blur-sm transition-all">
-                    <ArrowRight className="h-5 w-5 mr-2" />
-                    Learn More
-                  </Button>
-                </Link>
-              </div>
-            </div>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
+            <Link href="/scan-give">
+              <Button variant="outline" size="lg" className="w-full sm:w-auto text-lg px-8 py-4 bg-transparent border-2 border-green-400 text-green-400 hover:bg-green-500 hover:text-white hover:border-green-500 backdrop-blur-sm transition-all">
+                Scan & Give
+              </Button>
+            </Link>
+            <Link href="/about">
+              <Button variant="outline" size="lg" className="w-full sm:w-auto text-lg px-8 py-4 bg-transparent border-2 border-white/60 text-white hover:bg-white hover:text-black hover:border-white backdrop-blur-sm transition-all">
+                <ArrowRight className="h-5 w-5 mr-2" />
+                Learn More
+              </Button>
+            </Link>
           </div>
-        </section>
+        </StandardHero>
 
         {/* Feature Cards Section - 6 Cards in 2x3 Grid */}
         <section className="py-20 bg-background">

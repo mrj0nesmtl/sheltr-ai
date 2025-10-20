@@ -12,6 +12,7 @@ import { isSecureDomain } from '@/lib/urlSecurity';
 import { getDonationMetrics } from '@/services/donationMetricsService';
 import { tenantService } from '@/services/tenantService';
 import PublicNavigation from '@/components/PublicNavigation';
+import { PublicChatbot } from '@/components/PublicChatbot';
 
 // Demo donation amounts
 const DEMO_AMOUNTS = [25, 50, 100, 200];
@@ -964,6 +965,9 @@ function DonatePageContent() {
           </div>
         </div>
       </div>
+
+      {/* Public Chatbot */}
+      <PublicChatbot />
     </div>
   );
 }

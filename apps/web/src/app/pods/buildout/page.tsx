@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Footer from '@/components/Footer';
+import { PublicChatbot } from '@/components/PublicChatbot';
 import PublicNavigation from '@/components/PublicNavigation';
 import { useHeroImage } from '@/hooks/useHeroImage';
 import { StandardHero } from '@/components/StandardHero';
@@ -1449,6 +1450,9 @@ export default function PodsBuildoutPage() {
           </div>
         </div>
       </section>
+
+      {/* Public Chatbot */}
+      <PublicChatbot />
 
       {/* Footer */}
       <Footer />

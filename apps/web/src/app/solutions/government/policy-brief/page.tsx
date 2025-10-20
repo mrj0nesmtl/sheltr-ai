@@ -9,8 +9,11 @@ import { Progress } from '@/components/ui/progress';
 import { ThemeToggle } from '@/components/theme-toggle';
 import Footer from '@/components/Footer';
 import ThemeLogo from '@/components/ThemeLogo';
+import { useHeroImage } from '@/hooks/useHeroImage';
+import { StandardHero } from '@/components/StandardHero';
 
 export default function GovernmentPolicyBriefPage() {
+  const { heroImage } = useHeroImage('/solutions/government/policy-brief', '/backgrounds/hero-bg.jpg');
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
@@ -33,45 +36,35 @@ export default function GovernmentPolicyBriefPage() {
         </div>
       </nav>
 
-      {/* Document Header */}
-      <section className="py-12 bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="flex items-center gap-4 mb-6">
-              <MapPin className="h-12 w-12 text-purple-600" />
-              <div>
-                <div className="flex items-center gap-2 mb-2">
-                  <h1 className="text-4xl font-bold">SHELTR Policy Brief</h1>
-                  <Badge className="bg-purple-500 text-white">Government</Badge>
-                </div>
-                <p className="text-lg text-muted-foreground">
-                  Evidence-Based Homelessness Policy Through Blockchain Technology
-                </p>
-                <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
-                  <span>Policy Brief</span>
-                  <span>•</span>
-                  <span>January 2025</span>
-                  <span>•</span>
-                  <span>20 min read</span>
-                  <span>•</span>
-                  <Badge variant="outline" className="text-green-600 border-green-600">Implementation Ready</Badge>
-                </div>
-              </div>
-            </div>
-            
-            <div className="flex gap-4">
-              <Button className="bg-purple-600 hover:bg-purple-700">
-                <Download className="h-4 w-4 mr-2" />
-                Download PDF
-              </Button>
-              <Button variant="outline">
-                <Calendar className="h-4 w-4 mr-2" />
-                Schedule Government Demo
-              </Button>
-            </div>
-          </div>
+      {/* Document Header - Standardized */}
+      <StandardHero
+        imageUrl={heroImage.url}
+        badgeText="Government Policy Brief"
+        badgeVariant="secondary"
+        badgeClassName="bg-purple-500 text-white"
+        title="SHELTR Policy Brief"
+        subtitle="Evidence-Based Homelessness Policy Through Blockchain Technology"
+      >
+        <div className="flex items-center gap-4 mt-4 text-sm text-white/80">
+          <span>Policy Brief</span>
+          <span>•</span>
+          <span>January 2025</span>
+          <span>•</span>
+          <span>20 min read</span>
+          <span>•</span>
+          <Badge variant="outline" className="text-green-400 border-green-400">Implementation Ready</Badge>
         </div>
-      </section>
+        <div className="flex gap-4 mt-8">
+          <Button className="bg-purple-600 hover:bg-purple-700">
+            <Download className="h-4 w-4 mr-2" />
+            Download PDF
+          </Button>
+          <Button variant="outline" className="border-white text-white hover:bg-white hover:text-black">
+            <Calendar className="h-4 w-4 mr-2" />
+            Schedule Government Demo
+          </Button>
+        </div>
+      </StandardHero>
 
       {/* Executive Summary */}
       <section className="py-16">

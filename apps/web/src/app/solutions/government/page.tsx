@@ -8,8 +8,11 @@ import { Badge } from '@/components/ui/badge';
 import Footer from '@/components/Footer';
 import ThemeLogo from '@/components/ThemeLogo';
 import PublicNavigation from '@/components/PublicNavigation';
+import { useHeroImage } from '@/hooks/useHeroImage';
+import { StandardHero } from '@/components/StandardHero';
 
 export default function GovernmentPage() {
+  const { heroImage } = useHeroImage('/solutions/government', '/backgrounds/hero-bg.jpg');
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
       {/* Navigation */}
@@ -27,37 +30,30 @@ export default function GovernmentPage() {
         </div>
       </div>
 
-      {/* Hero Section */}
-      <section className="py-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="w-20 h-20 bg-purple-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
-            <MapPin className="h-10 w-10 text-purple-600 dark:text-purple-400" />
-          </div>
-          <Badge variant="secondary" className="mb-4 bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20">Policy Brief</Badge>
-          <h1 className="text-4xl font-bold mb-6">
-            Data-Driven Policy Making, Transparent Budget Allocation
-          </h1>
-          <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
-            Our comprehensive policy brief demonstrates how SHELTR enables evidence-based homelessness policy 
-            and transparent public fund tracking. Review detailed implementation strategies and projected outcomes 
-            for your jurisdiction.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/register">
-              <Button size="lg" variant="outline" className="border-2 border-purple-400 text-purple-400 hover:bg-purple-500/10 backdrop-blur-sm bg-black/20">
-                <MapPin className="h-4 w-4 mr-2" />
-                Partner With SHELTR
-              </Button>
-            </Link>
-            <Link href="/solutions/government/policy-brief">
-              <Button variant="outline" size="lg">
-                <FileText className="h-4 w-4 mr-2" />
-                View Policy Brief
-              </Button>
-            </Link>
-          </div>
+      {/* Hero Section - Standardized */}
+      <StandardHero
+        imageUrl={heroImage.url}
+        badgeText="Policy Brief"
+        badgeVariant="secondary"
+        badgeClassName="bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20"
+        title="Data-Driven Policy Making, Transparent Budget Allocation"
+        subtitle="Our comprehensive policy brief demonstrates how SHELTR enables evidence-based homelessness policy and transparent public fund tracking. Review detailed implementation strategies and projected outcomes for your jurisdiction."
+      >
+        <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
+          <Link href="/register">
+            <Button size="lg" variant="outline" className="border-2 border-purple-400 text-purple-400 hover:bg-purple-500/10 backdrop-blur-sm bg-black/20">
+              <MapPin className="h-4 w-4 mr-2" />
+              Partner With SHELTR
+            </Button>
+          </Link>
+          <Link href="/solutions/government/policy-brief">
+            <Button variant="outline" size="lg">
+              <FileText className="h-4 w-4 mr-2" />
+              View Policy Brief
+            </Button>
+          </Link>
         </div>
-      </section>
+      </StandardHero>
 
       {/* Key Value Props */}
       <section className="py-16 bg-purple-500/5">

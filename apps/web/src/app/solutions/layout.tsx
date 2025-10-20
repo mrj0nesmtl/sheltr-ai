@@ -1,67 +1,46 @@
 import { Metadata } from 'next';
+import { getHeroImageWithFallback } from '@/lib/heroImages';
 
-export const metadata: Metadata = {
-  title: 'Solutions - SHELTR Platform for Everyone',
-  description: 'Discover how SHELTR serves donors, participants, and organizations. Our comprehensive platform provides tailored solutions for direct giving, participant empowerment, and shelter management.',
-  keywords: [
-    'SHELTR solutions',
-    'donor solutions',
-    'participant solutions',
-    'organization solutions',
-    'shelter management',
-    'direct giving platform',
-    'homeless solutions',
-    'social impact platform',
-    'donation platform',
-    'participant empowerment'
-  ],
-  authors: [{ name: 'SHELTR Team' }],
-  creator: 'SHELTR',
-  publisher: 'SHELTR',
-  formatDetection: {
-    email: false,
-    address: false,
-    telephone: false,
-  },
-  openGraph: {
-    title: 'Solutions - SHELTR Platform for Everyone',
-    description: 'Comprehensive platform serving donors, participants, and organizations with tailored solutions for direct giving and empowerment.',
-    url: 'https://sheltr-ai.web.app/solutions',
-    siteName: 'SHELTR',
-    images: [
-      {
-        url: '/images/og-solutions.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'SHELTR Solutions - Platform for Everyone',
-        type: 'image/jpeg',
-      }
+export async function generateMetadata(): Promise<Metadata> {
+  // Fetch hero image from gallery (or fallback to default)
+  const heroImage = await getHeroImageWithFallback('/solutions');
+
+  return {
+    title: 'SHELTR Solutions - Empowering Every Stakeholder',
+    description: 'Explore SHELTR\'s comprehensive solutions designed for donors, participants, and organizations to create a lasting impact on homelessness.',
+    keywords: [
+      'SHELTR solutions',
+      'homelessness solutions',
+      'donor solutions',
+      'participant empowerment',
+      'organization tools',
+      'social impact platform',
+      'integrated solutions'
     ],
-    locale: 'en_US',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Solutions - SHELTR Platform',
-    description: 'Comprehensive platform serving donors, participants, and organizations.',
-    images: ['/images/og-solutions.jpg'],
-    creator: '@sheltr_ai',
-    site: '@sheltr_ai',
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+    openGraph: {
+      title: 'SHELTR Solutions - Impact for Donors, Participants & Organizations',
+      description: 'Discover SHELTR\'s tailored solutions to empower every stakeholder in the fight against homelessness.',
+      url: 'https://sheltr-ai.web.app/solutions',
+      siteName: 'SHELTR',
+      images: [
+        {
+          url: heroImage.url,
+          width: heroImage.width,
+          height: heroImage.height,
+          alt: heroImage.alt,
+        }
+      ],
+      locale: 'en_US',
+      type: 'website',
     },
-  },
-  category: 'Solutions',
-  classification: 'Platform Solutions, Social Impact, Technology',
-};
+    twitter: {
+      card: 'summary_large_image',
+      title: 'SHELTR Solutions - Empowering All Stakeholders',
+      description: 'Comprehensive solutions for donors, participants, and organizations to make a real impact.',
+      images: [heroImage.url],
+    },
+  };
+}
 
 export default function SolutionsLayout({
   children,
@@ -70,4 +49,3 @@ export default function SolutionsLayout({
 }) {
   return children;
 }
-

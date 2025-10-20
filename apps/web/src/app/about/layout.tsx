@@ -1,6 +1,11 @@
 import { Metadata } from 'next';
+import { getHeroImageWithFallback } from '@/lib/heroImages';
 
-export const metadata: Metadata = {
+export async function generateMetadata(): Promise<Metadata> {
+  // Fetch hero image from gallery (or fallback to default)
+  const heroImage = await getHeroImageWithFallback('/about');
+
+  return {
   title: 'About SHELTR - Our Mission to End Homelessness',
   description: 'Learn about SHELTR\'s revolutionary approach to ending homelessness through technology, dignity, and direct empowerment. Discover our story, mission, and vision for a world where everyone has access to safe, secure housing.',
   keywords: [
@@ -32,11 +37,10 @@ export const metadata: Metadata = {
     siteName: 'SHELTR',
     images: [
       {
-        url: '/images/og-about.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'About SHELTR - Our Mission and Vision',
-        type: 'image/jpeg',
+        url: heroImage.url,
+        width: heroImage.width,
+        height: heroImage.height,
+        alt: heroImage.alt,
       }
     ],
     locale: 'en_US',
@@ -46,7 +50,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'About SHELTR - Our Mission',
     description: 'Revolutionary approach to ending homelessness through technology, dignity, and direct empowerment.',
-    images: ['/images/og-about.jpg'],
+    images: [heroImage.url],
     creator: '@sheltr_ai',
     site: '@sheltr_ai',
   },
@@ -63,7 +67,8 @@ export const metadata: Metadata = {
   },
   category: 'About',
   classification: 'Social Impact, Company Information, Mission',
-};
+  };
+}
 
 export default function AboutLayout({
   children,

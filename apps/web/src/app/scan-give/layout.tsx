@@ -1,69 +1,46 @@
 import { Metadata } from 'next';
+import { getHeroImageWithFallback } from '@/lib/heroImages';
 
-export const metadata: Metadata = {
-  title: 'Scan & Give - Direct QR Code Donations | SHELTR',
-  description: 'Experience the future of direct giving. Scan a QR code and instantly support individuals experiencing homelessness. Watch your donation make an immediate impact with full transparency and blockchain verification.',
-  keywords: [
-    'QR code donations',
-    'direct giving',
-    'SHELTR donations',
-    'scan and give',
-    'instant donations',
-    'blockchain donations',
-    'transparent giving',
-    'homeless support',
-    'mobile donations',
-    'contactless giving',
-    'digital donations',
-    'direct impact'
-  ],
-  authors: [{ name: 'SHELTR Team' }],
-  creator: 'SHELTR',
-  publisher: 'SHELTR',
-  formatDetection: {
-    email: false,
-    address: false,
-    telephone: false,
-  },
-  openGraph: {
+export async function generateMetadata(): Promise<Metadata> {
+  // Fetch hero image from gallery (or fallback to default)
+  const heroImage = await getHeroImageWithFallback('/scan-give');
+
+  return {
     title: 'Scan & Give - Direct QR Code Donations | SHELTR',
-    description: 'Scan a QR code and instantly support individuals experiencing homelessness. Watch your donation make an immediate impact with full transparency.',
-    url: 'https://sheltr-ai.web.app/scan-give',
-    siteName: 'SHELTR',
-    images: [
-      {
-        url: '/images/og-scan-give.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'SHELTR Scan & Give - QR Code Direct Donations',
-        type: 'image/jpeg',
-      }
+    description: 'Scan a SHELTR QR code to instantly and transparently donate directly to individuals experiencing homelessness, tracking your impact in real-time.',
+    keywords: [
+      'scan and give',
+      'QR code donation',
+      'direct giving',
+      'transparent charity',
+      'SHELTR donations',
+      'instant support',
+      'homeless aid'
     ],
-    locale: 'en_US',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Scan & Give - Direct QR Code Donations',
-    description: 'Scan a QR code and instantly support individuals experiencing homelessness with full transparency.',
-    images: ['/images/og-scan-give.jpg'],
-    creator: '@sheltr_ai',
-    site: '@sheltr_ai',
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+    openGraph: {
+      title: 'Scan & Give - Direct QR Code Donations | SHELTR',
+      description: 'Scan a QR code and instantly support individuals experiencing homelessness with transparent, direct donations.',
+      url: 'https://sheltr-ai.web.app/scan-give',
+      siteName: 'SHELTR',
+      images: [
+        {
+          url: heroImage.url,
+          width: heroImage.width,
+          height: heroImage.height,
+          alt: heroImage.alt,
+        }
+      ],
+      locale: 'en_US',
+      type: 'website',
     },
-  },
-  category: 'Donations',
-  classification: 'Direct Giving, Blockchain Donations, Social Impact',
-};
+    twitter: {
+      card: 'summary_large_image',
+      title: 'Scan & Give - Direct QR Code Donations | SHELTR',
+      description: 'Instantly support individuals experiencing homelessness by scanning a SHELTR QR code.',
+      images: [heroImage.url],
+    },
+  };
+}
 
 export default function ScanGiveLayout({
   children,
@@ -72,4 +49,3 @@ export default function ScanGiveLayout({
 }) {
   return children;
 }
-

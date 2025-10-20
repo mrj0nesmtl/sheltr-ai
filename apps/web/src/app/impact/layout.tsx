@@ -1,69 +1,46 @@
 import { Metadata } from 'next';
+import { getHeroImageWithFallback } from '@/lib/heroImages';
 
-export const metadata: Metadata = {
-  title: 'Impact Stories - Real Change, Real People | SHELTR',
-  description: 'Discover the transformative impact of SHELTR. Read real stories of individuals finding stability, dignity, and hope through our platform. See the difference direct support makes.',
-  keywords: [
-    'SHELTR impact',
-    'impact stories',
-    'success stories',
-    'homeless success',
-    'participant stories',
-    'real impact',
-    'transformation stories',
-    'SHELTR results',
-    'social impact',
-    'community impact',
-    'life changes',
-    'participant testimonials'
-  ],
-  authors: [{ name: 'SHELTR Team' }],
-  creator: 'SHELTR',
-  publisher: 'SHELTR',
-  formatDetection: {
-    email: false,
-    address: false,
-    telephone: false,
-  },
-  openGraph: {
-    title: 'Impact Stories - Real Change, Real People | SHELTR',
-    description: 'Discover the transformative impact of SHELTR. Read real stories of individuals finding stability, dignity, and hope.',
-    url: 'https://sheltr-ai.web.app/impact',
-    siteName: 'SHELTR',
-    images: [
-      {
-        url: '/images/og-impact.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'SHELTR Impact Stories - Real Change, Real People',
-        type: 'image/jpeg',
-      }
+export async function generateMetadata(): Promise<Metadata> {
+  // Fetch hero image from gallery (or fallback to default)
+  const heroImage = await getHeroImageWithFallback('/impact');
+
+  return {
+    title: 'SHELTR Impact - Stories of Transformation',
+    description: 'Read inspiring stories of how SHELTR is making a real difference in the lives of individuals and communities affected by homelessness.',
+    keywords: [
+      'SHELTR impact',
+      'homeless success stories',
+      'transformation stories',
+      'community impact',
+      'social change',
+      'real difference',
+      'SHELTR testimonials'
     ],
-    locale: 'en_US',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Impact Stories - Real Change',
-    description: 'Discover the transformative impact of SHELTR. Real stories of stability, dignity, and hope.',
-    images: ['/images/og-impact.jpg'],
-    creator: '@sheltr_ai',
-    site: '@sheltr_ai',
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+    openGraph: {
+      title: 'SHELTR Impact - Real Stories, Real Change',
+      description: 'Explore the profound impact SHELTR is having on individuals and communities, fostering hope and creating lasting change.',
+      url: 'https://sheltr-ai.web.app/impact',
+      siteName: 'SHELTR',
+      images: [
+        {
+          url: heroImage.url,
+          width: heroImage.width,
+          height: heroImage.height,
+          alt: heroImage.alt,
+        }
+      ],
+      locale: 'en_US',
+      type: 'website',
     },
-  },
-  category: 'Impact',
-  classification: 'Impact Stories, Social Impact, Success Stories',
-};
+    twitter: {
+      card: 'summary_large_image',
+      title: 'SHELTR Impact - Stories of Transformation',
+      description: 'Read inspiring stories of how SHELTR is making a real difference in the lives of individuals and communities.',
+      images: [heroImage.url],
+    },
+  };
+}
 
 export default function ImpactLayout({
   children,
@@ -72,4 +49,3 @@ export default function ImpactLayout({
 }) {
   return children;
 }
-

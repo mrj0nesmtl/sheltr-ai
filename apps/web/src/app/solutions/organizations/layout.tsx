@@ -1,69 +1,46 @@
 import { Metadata } from 'next';
+import { getHeroImageWithFallback } from '@/lib/heroImages';
 
-export const metadata: Metadata = {
-  title: 'For Organizations - Shelter Management Platform | SHELTR',
-  description: 'Comprehensive shelter management platform with real-time analytics, participant tracking, resource allocation, and seamless integration with existing systems. Streamline operations and maximize impact.',
-  keywords: [
-    'shelter management',
-    'SHELTR organizations',
-    'shelter software',
-    'participant tracking',
-    'resource management',
-    'shelter analytics',
-    'HMIS integration',
-    'shelter operations',
-    'organization solutions',
-    'shelter platform',
-    'homeless services management',
-    'shelter administration'
-  ],
-  authors: [{ name: 'SHELTR Team' }],
-  creator: 'SHELTR',
-  publisher: 'SHELTR',
-  formatDetection: {
-    email: false,
-    address: false,
-    telephone: false,
-  },
-  openGraph: {
-    title: 'For Organizations - Shelter Management Platform | SHELTR',
-    description: 'Comprehensive shelter management with real-time analytics, participant tracking, and resource allocation. Streamline operations and maximize impact.',
-    url: 'https://sheltr-ai.web.app/solutions/organizations',
-    siteName: 'SHELTR',
-    images: [
-      {
-        url: '/images/og-organizations.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'SHELTR for Organizations - Shelter Management Platform',
-        type: 'image/jpeg',
-      }
+export async function generateMetadata(): Promise<Metadata> {
+  // Fetch hero image from gallery (or fallback to default)
+  const heroImage = await getHeroImageWithFallback('/solutions/organizations');
+
+  return {
+    title: 'SHELTR for Organizations - Streamlined Shelter Management',
+    description: 'Optimize your operations with SHELTR\'s platform for shelter management, resource allocation, participant tracking, and enhanced reporting for non-profits and government agencies.',
+    keywords: [
+      'SHELTR organizations',
+      'shelter management software',
+      'non-profit solutions',
+      'resource allocation',
+      'participant tracking',
+      'reporting tools',
+      'government agency solutions'
     ],
-    locale: 'en_US',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'For Organizations - Shelter Management',
-    description: 'Comprehensive shelter management with real-time analytics and participant tracking.',
-    images: ['/images/og-organizations.jpg'],
-    creator: '@sheltr_ai',
-    site: '@sheltr_ai',
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+    openGraph: {
+      title: 'SHELTR for Organizations - Optimize Shelter Operations',
+      description: 'Streamline management, allocate resources efficiently, track participants, and generate comprehensive reports with SHELTR\'s powerful platform.',
+      url: 'https://sheltr-ai.web.app/solutions/organizations',
+      siteName: 'SHELTR',
+      images: [
+        {
+          url: heroImage.url,
+          width: heroImage.width,
+          height: heroImage.height,
+          alt: heroImage.alt,
+        }
+      ],
+      locale: 'en_US',
+      type: 'website',
     },
-  },
-  category: 'Organizations',
-  classification: 'Shelter Management, Software, Operations',
-};
+    twitter: {
+      card: 'summary_large_image',
+      title: 'SHELTR for Organizations - Streamlined Management',
+      description: 'Optimize operations, resource allocation, and reporting for non-profits and government agencies.',
+      images: [heroImage.url],
+    },
+  };
+}
 
 export default function OrganizationsLayout({
   children,
@@ -72,4 +49,3 @@ export default function OrganizationsLayout({
 }) {
   return children;
 }
-

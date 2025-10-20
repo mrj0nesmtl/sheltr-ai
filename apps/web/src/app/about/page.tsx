@@ -9,8 +9,11 @@ import Footer from '@/components/Footer';
 import { PublicChatbot } from '@/components/PublicChatbot';
 import NewsletterSignup from '@/components/NewsletterSignup';
 import PublicNavigation from '@/components/PublicNavigation';
+import { useHeroImage } from '@/hooks/useHeroImage';
 
 export default function AboutPage() {
+  // Fetch hero image from gallery (or use fallback)
+  const { heroImage } = useHeroImage('/about', '/backgrounds/about-bg.jpg');
 
   return (
     <div className="min-h-screen bg-background">
@@ -21,7 +24,7 @@ export default function AboutPage() {
       <section 
         className="relative py-24 min-h-[80vh] flex items-center"
         style={{
-          backgroundImage: "url('/backgrounds/about-bg.jpg')",
+          backgroundImage: `url(${heroImage.url})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat'

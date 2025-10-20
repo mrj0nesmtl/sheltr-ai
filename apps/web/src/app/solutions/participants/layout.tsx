@@ -1,69 +1,46 @@
 import { Metadata } from 'next';
+import { getHeroImageWithFallback } from '@/lib/heroImages';
 
-export const metadata: Metadata = {
-  title: 'For Participants - Empowerment & Dignity | SHELTR',
-  description: 'Access secure housing (PODS), electric transportation (MOBI), emergency supplies, and direct support. Manage your journey with dignity, privacy, and full control through your personal dashboard.',
-  keywords: [
-    'SHELTR participants',
-    'participant empowerment',
-    'homeless services',
-    'participant dashboard',
-    'SHELTR PODS',
-    'MOBI bikes',
-    'emergency supplies',
-    'dignified housing',
-    'participant support',
-    'housing services',
-    'participant solutions',
-    'direct support'
-  ],
-  authors: [{ name: 'SHELTR Team' }],
-  creator: 'SHELTR',
-  publisher: 'SHELTR',
-  formatDetection: {
-    email: false,
-    address: false,
-    telephone: false,
-  },
-  openGraph: {
-    title: 'For Participants - Empowerment & Dignity | SHELTR',
-    description: 'Access secure housing, electric transportation, emergency supplies, and direct support. Manage your journey with dignity and full control.',
-    url: 'https://sheltr-ai.web.app/solutions/participants',
-    siteName: 'SHELTR',
-    images: [
-      {
-        url: '/images/og-participants.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'SHELTR for Participants - Empowerment & Dignity',
-        type: 'image/jpeg',
-      }
+export async function generateMetadata(): Promise<Metadata> {
+  // Fetch hero image from gallery (or fallback to default)
+  const heroImage = await getHeroImageWithFallback('/solutions/participants');
+
+  return {
+    title: 'SHELTR for Participants - Dignity & Empowerment',
+    description: 'Discover how SHELTR provides secure housing, essential resources, and personalized support to empower individuals experiencing homelessness on their journey to stability.',
+    keywords: [
+      'SHELTR participants',
+      'homeless empowerment',
+      'secure housing',
+      'essential resources',
+      'personalized support',
+      'journey to stability',
+      'dignified living'
     ],
-    locale: 'en_US',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'For Participants - Empowerment & Dignity',
-    description: 'Access secure housing, transportation, and support. Manage your journey with dignity.',
-    images: ['/images/og-participants.jpg'],
-    creator: '@sheltr_ai',
-    site: '@sheltr_ai',
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+    openGraph: {
+      title: 'SHELTR for Participants - Your Path to Stability',
+      description: 'Access secure housing, vital resources, and personalized support designed to empower you on your journey out of homelessness.',
+      url: 'https://sheltr-ai.web.app/solutions/participants',
+      siteName: 'SHELTR',
+      images: [
+        {
+          url: heroImage.url,
+          width: heroImage.width,
+          height: heroImage.height,
+          alt: heroImage.alt,
+        }
+      ],
+      locale: 'en_US',
+      type: 'website',
     },
-  },
-  category: 'Participants',
-  classification: 'Participant Services, Housing, Empowerment',
-};
+    twitter: {
+      card: 'summary_large_image',
+      title: 'SHELTR for Participants - Dignity & Empowerment',
+      description: 'Secure housing, essential resources, and personalized support for individuals experiencing homelessness.',
+      images: [heroImage.url],
+    },
+  };
+}
 
 export default function ParticipantsLayout({
   children,
@@ -72,4 +49,3 @@ export default function ParticipantsLayout({
 }) {
   return children;
 }
-

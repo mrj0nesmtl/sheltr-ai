@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import Footer from '@/components/Footer';
+import { PublicChatbot } from '@/components/PublicChatbot';
 import PublicNavigation from '@/components/PublicNavigation';
 import { useHeroImage } from '@/hooks/useHeroImage';
 import { StandardHero } from '@/components/StandardHero';
@@ -388,6 +389,10 @@ export default function DonorsPage() {
       </section>
 
       {/* Getting Started */}
+
+      {/* Public Chatbot */}
+      <PublicChatbot />
+
       <Footer />
     </div>
   );

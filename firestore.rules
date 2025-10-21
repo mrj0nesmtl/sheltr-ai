@@ -996,9 +996,6 @@ service cloud.firestore {
         isAdmin()
       );
       
-      // Create: Allow authenticated users to create notifications (for donation flow)
-      allow create: if isAuthenticated();
-      
       // Update: Participants can mark their own notifications as read
       allow update: if isParticipant() && resource.data.userId == request.auth.uid;
       
@@ -1010,6 +1007,57 @@ service cloud.firestore {
       
       // List/Query: Participants can query their own, admins can query all
       allow list: if isAuthenticated() && (isParticipant() || isSuperAdmin() || isPlatformAdmin() || isAdmin());
+    }
+    
+    // =================================================================
+    // SHELTER NOTIFICATIONS COLLECTION - Shelter-specific notifications for Shelter Admins
+    // =================================================================
+    match /shelter_notifications/{notificationId} {
+      // Read: Shelter Admins can read notifications for their shelter, Super/Platform Admins can read all
+      allow read: if isAuthenticated() && (
+        isSuperAdmin() ||
+        isPlatformAdmin() ||
+        (isAdmin() && resource.data.recipient_id == request.auth.uid)
+      );
+      
+      // Update: Shelter Admins can mark their own notifications as read
+      allow update: if isAuthenticated() && (
+        isSuperAdmin() ||
+        isPlatformAdmin() ||
+        (isAdmin() && resource.data.recipient_id == request.auth.uid)
+      );
+      
+      // Create: System creates notifications (admins can create for testing)
+      allow create: if isAuthenticated() && (isSuperAdmin() || isPlatformAdmin() || isAdmin());
+      
+      // Delete: Super Admin only
+      allow delete: if isSuperAdmin();
+      
+      // List/Query: Shelter Admins can query their own shelter's notifications, Super/Platform Admins can query all
+      allow list: if isAuthenticated() && (isSuperAdmin() || isPlatformAdmin() || isAdmin());
+    }
+    
+    // =================================================================
+    // SHARED CONVERSATIONS COLLECTION - Shared chatbot conversations
+    // =================================================================
+    match /shared_conversations/{shareId} {
+      // Read: Anyone can read shared conversations (public links)
+      allow read: if true;
+      
+      // Create: Authenticated users can create shared conversations
+      allow create: if isAuthenticated();
+      
+      // Update: Original creator or Super Admin can update (increment view count, etc.)
+      allow update: if isAuthenticated() && (
+        resource.data.user_id == request.auth.uid ||
+        isSuperAdmin()
+      );
+      
+      // Delete: Original creator or Super Admin can delete
+      allow delete: if isAuthenticated() && (
+        resource.data.user_id == request.auth.uid ||
+        isSuperAdmin()
+      );
     }
     
     // =================================================================

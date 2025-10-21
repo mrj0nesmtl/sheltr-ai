@@ -45,6 +45,7 @@ import { UserStatusSelector } from '@/components/UserStatusSelector';
 import { NDAModal } from '@/components/auth/NDAModal';
 import { NDAService } from '@/services/ndaService';
 import { getNotificationCounts, NotificationCounts } from '@/services/notificationService';
+import { useNotifications } from '@/hooks/useNotifications';
 import { useState, useEffect } from 'react';
 
 // Helper function to get user display name using real-time Firestore data
@@ -530,7 +531,9 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const [isMobile, setIsMobile] = useState(false);
   const [showNDAModal, setShowNDAModal] = useState(false);
   const [ndaCheckComplete, setNdaCheckComplete] = useState(false);
-  const [notificationCounts, setNotificationCounts] = useState<NotificationCounts | null>(null);
+  
+  // 🔔 NEW: Use the unified notification hook for real-time updates
+  const { notifications, unreadCount } = useNotifications();
 
   // Debug user information (development only)
   if (process.env.NODE_ENV === 'development') {
@@ -538,53 +541,21 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       userEmail: user?.email,
       userRole: user?.role,
       userDisplayName: user?.displayName,
-      userName: getUserDisplayName(user)
+      userName: getUserDisplayName(user),
+      unreadNotifications: unreadCount
     });
   }
 
+  // Pass unreadCount as both message and notification counts
+  // (The old system separated these, but the new system unifies them)
   const navigationItems = getNavigationItems(
     user?.role || '', 
-    notificationCounts?.unreadMessages, 
-    notificationCounts?.unreadNotifications
+    0, // messageCount - deprecated, keeping for compatibility
+    unreadCount // notificationCount - now using real-time unified count
   );
 
-  // Fetch notification counts
-  useEffect(() => {
-    const fetchNotificationCounts = async () => {
-      if (!user) return;
-
-      try {
-        // Admin roles get full notification counts
-        if (['super_admin', 'platform_admin', 'admin'].includes(user.role || '')) {
-          const counts = await getNotificationCounts(user.uid);
-          setNotificationCounts(counts);
-          console.log('📊 Fetched admin notification counts:', counts);
-        } 
-        // Donor and Participant get their specific notification counts
-        else if (['donor', 'participant'].includes(user.role || '')) {
-          if (user.role === 'donor') {
-            const { getDonorNotificationCounts } = await import('@/services/donorNotificationService');
-            const counts = await getDonorNotificationCounts(user.uid);
-            setNotificationCounts({ unreadNotifications: counts.unread, unreadMessages: 0 });
-            console.log('📊 Fetched donor notification counts:', counts);
-          } else {
-            const { getParticipantNotificationCounts } = await import('@/services/participantNotificationService');
-            const counts = await getParticipantNotificationCounts(user.uid);
-            setNotificationCounts({ unreadNotifications: counts.unread, unreadMessages: 0 });
-            console.log('📊 Fetched participant notification counts:', counts);
-          }
-        }
-      } catch (error) {
-        console.error('❌ Error fetching notification counts:', error);
-      }
-    };
-
-    fetchNotificationCounts();
-    
-    // Refresh notification counts every 30 seconds
-    const interval = setInterval(fetchNotificationCounts, 30000);
-    return () => clearInterval(interval);
-  }, [user]);
+  // ✅ OLD CODE REMOVED: useNotifications hook provides real-time counts
+  // No need for manual polling or useEffect - the hook handles everything!
 
   // Check NDA status for Platform Administrators and send login notifications
   useEffect(() => {

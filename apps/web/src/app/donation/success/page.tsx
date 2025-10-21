@@ -141,7 +141,14 @@ function SuccessPageContent() {
           
           // ✅ NEW: Create notifications for BOTH donor and participant
           try {
+            console.log('🔔 Starting notification creation...');
+            console.log('   Donor ID:', user.uid);
+            console.log('   Participant ID:', participantUserId);
+            console.log('   Amount:', totalAmount);
+            
             const { notifyDonationComplete } = await import('@/services/donationNotificationService');
+            console.log('✅ notifyDonationComplete function imported');
+            
             const notificationResult = await notifyDonationComplete({
               donationId: docRef.id,
               donorId: user.uid,
@@ -156,6 +163,10 @@ function SuccessPageContent() {
             console.log('✅ Created donor & participant notifications:', notificationResult);
           } catch (error) {
             console.error('❌ Error creating donation notifications:', error);
+            console.error('❌ Error details:', {
+              message: error instanceof Error ? error.message : 'Unknown error',
+              stack: error instanceof Error ? error.stack : undefined
+            });
           }
           
           // Update Old Brewery Mission shelter operations

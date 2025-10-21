@@ -2,17 +2,23 @@
  * SHELTR Donation Notification Service
  * 
  * Centralized service for creating donation-related notifications
- * for both donors and participants
+ * for donors, participants, AND shelter admins
  * 
- * Version: 2.57.1
+ * Version: 2.57.2
  * Date: October 21, 2025
  */
 
-import { createDonorNotification, createParticipantNotification } from './unifiedNotificationService';
+import { 
+  createDonorNotification, 
+  createParticipantNotification,
+  createShelterNotification 
+} from './unifiedNotificationService';
+import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 
 /**
  * Create notifications for a completed donation
- * Creates notifications for BOTH donor and participant
+ * Creates notifications for donor, participant, AND shelter admins
  */
 export async function notifyDonationComplete(data: {
   donationId: string;
@@ -24,7 +30,7 @@ export async function notifyDonationComplete(data: {
   directAmount: number;
   housingAmount: number;
   shelterAmount: number;
-}): Promise<{ donorNotificationId: string; participantNotificationId: string }> {
+}): Promise<{ donorNotificationId: string; participantNotificationId: string; shelterNotificationIds?: string[] }> {
   console.log('🔔 Creating donation notifications:', {
     donor: data.donorName,
     participant: data.participantName,
@@ -71,9 +77,61 @@ export async function notifyDonationComplete(data: {
 
     console.log('✅ Participant notification created:', participantNotificationId);
 
+    // Get participant's shelter_id to notify shelter admins
+    let shelterNotificationIds: string[] = [];
+    try {
+      const participantDoc = await getDoc(doc(db, 'users', data.participantId));
+      const participantData = participantDoc.data();
+      const shelterId = participantData?.shelter_id;
+
+      if (shelterId) {
+        console.log(`🏠 Found shelter_id for participant: ${shelterId}`);
+        
+        // Find all admins for this shelter
+        const adminsQuery = query(
+          collection(db, 'users'),
+          where('shelter_id', '==', shelterId),
+          where('role', '==', 'admin')
+        );
+        
+        const adminsSnapshot = await getDocs(adminsQuery);
+        console.log(`👥 Found ${adminsSnapshot.size} shelter admin(s) for shelter: ${shelterId}`);
+
+        // Create notification for each shelter admin
+        for (const adminDoc of adminsSnapshot.docs) {
+          const adminId = adminDoc.id;
+          const shelterNotificationId = await createShelterNotification({
+            recipient_id: adminId,
+            type: 'donation_alert',
+            title: 'New Donation to Your Shelter! 💰',
+            message: `${data.participantName} received a $${data.totalAmount.toFixed(2)} donation. Your shelter receives $${data.shelterAmount.toFixed(2)} in operations support.`,
+            priority: 'high',
+            category: 'donation',
+            data: {
+              donation_id: data.donationId,
+              donor_name: data.donorName,
+              participant_id: data.participantId,
+              participant_name: data.participantName,
+              total_amount: data.totalAmount,
+              shelter_amount: data.shelterAmount
+            }
+          });
+          
+          shelterNotificationIds.push(shelterNotificationId);
+          console.log(`✅ Shelter admin notification created for ${adminId}:`, shelterNotificationId);
+        }
+      } else {
+        console.warn(`⚠️ No shelter_id found for participant: ${data.participantId}`);
+      }
+    } catch (shelterError) {
+      console.error('❌ Error creating shelter admin notifications (non-blocking):', shelterError);
+      // Don't fail the entire function if shelter notifications fail
+    }
+
     return {
       donorNotificationId,
-      participantNotificationId
+      participantNotificationId,
+      shelterNotificationIds: shelterNotificationIds.length > 0 ? shelterNotificationIds : undefined
     };
   } catch (error) {
     console.error('❌ Error creating donation notifications:', error);

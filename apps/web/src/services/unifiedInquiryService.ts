@@ -1,6 +1,6 @@
 import { collection, addDoc, serverTimestamp, query, where, getDocs, orderBy, limit } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import { createContactInquiryNotification } from './notificationService';
+import { createAdminNotification } from './unifiedNotificationService';
 
 export interface NewsletterSignup {
   email: string;
@@ -43,16 +43,26 @@ export interface UnifiedInquiry {
  */
 const createInquiryNotification = async (inquiryId: string, inquiry: UnifiedInquiry): Promise<void> => {
   try {
-    await createContactInquiryNotification({
-      email: inquiry.email,
-      name: inquiry.name || 'Unknown',
-      subject: inquiry.subject || `${inquiry.inquiry_type} from ${inquiry.source}`,
-      message: inquiry.message || `New ${inquiry.inquiry_type} inquiry (ID: ${inquiryId})`,
-      source: inquiry.source
+    await createAdminNotification({
+      category: inquiry.inquiry_type === 'newsletter_signup' ? 'newsletter' : 'contact',
+      title: inquiry.inquiry_type === 'newsletter_signup' 
+        ? 'New Newsletter Signup' 
+        : `New Contact: ${inquiry.subject || 'Contact Form'}`,
+      message: inquiry.inquiry_type === 'newsletter_signup'
+        ? `${inquiry.email} subscribed from ${inquiry.source}`
+        : `${inquiry.name || 'Unknown'} (${inquiry.email}) - ${inquiry.message || 'No message'}`,
+      priority: inquiry.priority === 'high' ? 'high' : 'normal',
+      metadata: {
+        inquiry_id: inquiryId,
+        email: inquiry.email,
+        name: inquiry.name,
+        source: inquiry.source,
+        inquiry_type: inquiry.inquiry_type
+      }
     });
+    console.log('✅ Admin notification created for inquiry:', inquiryId);
   } catch (error) {
     console.error('❌ Failed to create notification (non-blocking):', error);
-    console.error('❌ Notification error details:', error);
     // Don't throw - notification failure shouldn't block inquiry creation
   }
 };

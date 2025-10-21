@@ -32,6 +32,7 @@ import {
   Loader2
 } from 'lucide-react';
 import { useNotificationPreferences } from '@/hooks/useNotificationPreferences';
+import { toast } from 'sonner';
 
 const NOTIFICATION_CATEGORIES = [
   { id: 'contact', label: 'Contact Inquiries', description: 'Form submissions and messages' },
@@ -51,7 +52,6 @@ const NOTIFICATION_CATEGORIES = [
 
 export function NotificationPreferences() {
   const { preferences, loading, updatePreferences, toggleCategory } = useNotificationPreferences();
-  const { toast } = useToast();
   const [saving, setSaving] = useState(false);
 
   if (loading) {
@@ -77,15 +77,12 @@ export function NotificationPreferences() {
   const handleSave = async () => {
     setSaving(true);
     try {
-      toast({
-        title: 'Preferences saved',
-        description: 'Your notification preferences have been updated.',
+      toast.success('Preferences saved!', {
+        description: 'Your notification preferences have been updated.'
       });
     } catch (error) {
-      toast({
-        title: 'Error',
-        description: 'Failed to save preferences. Please try again.',
-        variant: 'destructive'
+      toast.error('Failed to save preferences', {
+        description: 'Please try again.'
       });
     } finally {
       setSaving(false);

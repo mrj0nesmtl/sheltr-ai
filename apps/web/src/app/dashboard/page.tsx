@@ -9,6 +9,7 @@ import { db } from '@/lib/firebase';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { toast } from 'sonner';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -119,7 +120,9 @@ export default function DashboardPage() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const fixAllPlatformAdminClaims = async () => {
     if (!user || user.role !== 'super_admin') {
-      alert('This function is only for Super Administrators');
+      toast.error('Access Denied', {
+        description: 'This function is only for Super Administrators'
+      });
       return;
     }
     
@@ -157,12 +160,9 @@ export default function DashboardPage() {
       console.log('✅ Bulk fix result:', result);
       
       if (result.success) {
-        alert(`SUCCESS! Fixed custom claims for ${result.data.total_fixed} Platform Administrators.
-        
-Fixed users: ${result.data.fixed_users.map((u: {email: string}) => u.email).join(', ')}
-${result.data.errors.length > 0 ? `\nErrors: ${result.data.errors.join(', ')}` : ''}
-
-All Platform Admins should now be able to see their dashboard metrics!`);
+        toast.success(`Fixed claims for ${result.data.total_fixed} Platform Administrators!`, {
+          description: `Fixed users: ${result.data.fixed_users.map((u: {email: string}) => u.email).join(', ')}${result.data.errors.length > 0 ? `. Errors: ${result.data.errors.join(', ')}` : ''}`
+        });
       } else {
         throw new Error(result.message || 'Unknown error');
       }
@@ -170,7 +170,9 @@ All Platform Admins should now be able to see their dashboard metrics!`);
     } catch (error: unknown) {
       console.error('❌ Bulk fix failed:', error);
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      alert(`Error fixing Platform Admin claims: ${errorMessage}`);
+      toast.error('Error fixing Platform Admin claims', {
+        description: errorMessage
+      });
     }
   };
   
@@ -180,7 +182,9 @@ All Platform Admins should now be able to see their dashboard metrics!`);
   const fixPlatformAdminClaims = async () => {
     if (!user || user.role !== 'platform_admin') {
       console.log('❌ Not a platform admin or user not found');
-      alert('This function is only for Platform Administrators');
+      toast.error('Access Denied', {
+        description: 'This function is only for Platform Administrators'
+      });
       return;
     }
     
@@ -231,7 +235,9 @@ Next Steps:
 
 This will resolve the "Missing or insufficient permissions" error.`;
         
-        alert(message);
+        toast.error('Custom Claims Missing', {
+          description: 'Contact Super Admin (Joel Yaffe) to run the custom claims fix. User info copied to clipboard.'
+        });
         
         // Copy user info to clipboard for easy sharing
         const userInfo = `Platform Admin Claims Fix Needed:
@@ -253,22 +259,24 @@ Token Role: ${tokenRole || 'MISSING'}`;
         
         // Force token refresh and reload page
         await firebaseUser.getIdToken(true);
-        alert('Token refreshed! Reloading page...');
-        window.location.reload();
+        toast.success('Token refreshed!', {
+          description: 'Reloading page...'
+        });
+        setTimeout(() => window.location.reload(), 1000);
         
       } else {
         console.log('✅ Custom claims look correct, checking other issues...');
-        alert(`Claims look correct:
-Token Role: ${tokenRole}
-Firestore Role: ${firestoreRole}
-
-The permissions issue might be elsewhere. Check console for other errors.`);
+        toast.info('Claims look correct', {
+          description: `Token Role: ${tokenRole}, Firestore Role: ${firestoreRole}. The permissions issue might be elsewhere. Check console.`
+        });
       }
       
     } catch (error: unknown) {
       console.error('❌ Error diagnosing custom claims:', error);
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      alert(`Error during diagnosis: ${errorMessage}`);
+      toast.error('Error during diagnosis', {
+        description: errorMessage
+      });
     }
   };
   

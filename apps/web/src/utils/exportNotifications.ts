@@ -6,6 +6,7 @@
 
 import type { UnifiedNotification } from '@/types/notifications';
 import { Timestamp } from 'firebase/firestore';
+import { toast } from 'sonner';
 
 /**
  * Format date as YYYY-MM-DD
@@ -45,7 +46,7 @@ export function exportNotificationsToCSV(
   filename: string = `notifications-${new Date().toISOString().split('T')[0]}.csv`
 ): void {
   if (notifications.length === 0) {
-    alert('No notifications to export');
+    toast.info('No notifications to export');
     return;
   }
 

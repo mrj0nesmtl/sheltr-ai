@@ -71,8 +71,8 @@ export async function createAdminNotification(data: {
       category: data.category || getCategoryFromType(data.type),
       isRead: false,
       created_at: serverTimestamp() as Timestamp,
-      data: data.data,
-      expires_at: data.expires_at
+      ...(data.data && { data: data.data }),
+      ...(data.expires_at && { expires_at: data.expires_at })
     };
 
     const docRef = await addDoc(collection(db, 'admin_notifications'), notification);
@@ -110,7 +110,7 @@ export async function createShelterNotification(data: {
       category: data.category || 'shelter',
       isRead: false,
       created_at: serverTimestamp() as Timestamp,
-      data: data.data
+      ...(data.data && { data: data.data })
     };
 
     const docRef = await addDoc(collection(db, 'shelter_notifications'), notification);
@@ -144,7 +144,7 @@ export async function createParticipantNotification(data: {
       category: data.category || 'donation',
       isRead: false,
       created_at: serverTimestamp() as Timestamp,
-      metadata: data.metadata
+      ...(data.metadata && { metadata: data.metadata })
     };
 
     const docRef = await addDoc(collection(db, 'participant_notifications'), notification);
@@ -178,7 +178,7 @@ export async function createDonorNotification(data: {
       category: data.category || 'transaction',
       isRead: false,
       created_at: serverTimestamp() as Timestamp,
-      metadata: data.metadata
+      ...(data.metadata && { metadata: data.metadata })
     };
 
     const docRef = await addDoc(collection(db, 'donor_notifications'), notification);

@@ -23,7 +23,8 @@ import {
   Shield,
   TrendingUp,
   Activity,
-  Clock
+  Clock,
+  Bell
 } from 'lucide-react';
 import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
@@ -497,6 +498,51 @@ export default function ShelterViewClient() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Shelter Notifications */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Bell className="h-5 w-5" />
+            Recent Notifications
+          </CardTitle>
+          <CardDescription>
+            Email signups, contact inquiries, and administrative alerts for this shelter
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3">
+            {notificationCount === 0 ? (
+              <div className="text-center py-8 text-muted-foreground">
+                <Bell className="h-12 w-12 mx-auto mb-4 opacity-20" />
+                <p>No notifications yet</p>
+                <p className="text-sm mt-1">
+                  Email signups and inquiries will appear here
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
+                  <div className="flex items-center gap-3">
+                    <Mail className="h-4 w-4 text-blue-500" />
+                    <div>
+                      <p className="text-sm font-medium">Email Signups</p>
+                      <p className="text-xs text-muted-foreground">From public shelter page</p>
+                    </div>
+                  </div>
+                  <Badge variant="outline">{notificationCount} total</Badge>
+                </div>
+                <Link href={`/dashboard/shelters/${shelterId}/notifications`}>
+                  <Button variant="outline" className="w-full mt-4">
+                    <Bell className="h-4 w-4 mr-2" />
+                    View All Notifications
+                  </Button>
+                </Link>
+              </div>
+            )}
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Timeline & Dates */}
       <Card>

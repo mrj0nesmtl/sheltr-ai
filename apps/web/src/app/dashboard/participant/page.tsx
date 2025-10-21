@@ -10,8 +10,8 @@ import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import Link from 'next/link';
 import { generateProfileQRCodeUrl, getParticipantProfileUrl } from '@/utils/profileUrls';
-import ParticipantNotifications from '@/components/ParticipantNotifications';
-import { 
+import { useNotifications } from '@/hooks/useNotifications';
+import {
   User, 
   Calendar, 
   Heart, 
@@ -35,7 +35,8 @@ import {
   Eye,
   Loader2,
   AlertCircle,
-  Building
+  Building,
+  Bell
 } from 'lucide-react';
 
 const upcomingServices = [
@@ -145,6 +146,7 @@ interface ParticipantData {
 
 export default function ParticipantDashboard() {
   const { user, hasRole } = useAuth();
+  const { notifications, unreadCount } = useNotifications();
   const [shelterInfo, setShelterInfo] = useState<ShelterMetrics | null>(null);
   const [participantData, setParticipantData] = useState<ParticipantData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -394,10 +396,78 @@ export default function ParticipantDashboard() {
         </Card>
       </div>
 
-      {/* Notifications Section */}
-      {user?.uid && (
-        <ParticipantNotifications userId={user.uid} />
-      )}
+      {/* Notifications Quick Stats */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="flex items-center gap-2">
+                <Bell className="h-5 w-5" />
+                Notifications
+                {unreadCount > 0 && (
+                  <Badge variant="destructive" className="ml-2">
+                    {unreadCount} unread
+                  </Badge>
+                )}
+              </CardTitle>
+              <CardDescription>
+                Recent donations, services, and updates
+              </CardDescription>
+            </div>
+            <Link href="/dashboard/participant/notifications">
+              <Button variant="outline" size="sm">
+                View All
+              </Button>
+            </Link>
+          </div>
+        </CardHeader>
+        <CardContent>
+          {notifications.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">
+              <Bell className="h-12 w-12 mx-auto mb-4 opacity-20" />
+              <p>No notifications yet</p>
+              <p className="text-sm mt-1">
+                You'll see donations, appointments, and updates here
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {notifications.slice(0, 3).map((notification) => (
+                <div
+                  key={notification.id}
+                  className={`p-3 rounded-lg border transition-colors ${
+                    notification.isRead
+                      ? 'bg-muted/30 border-border'
+                      : 'bg-primary/5 border-primary/20'
+                  }`}
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex-1 min-w-0">
+                      <h4 className="font-semibold text-sm mb-1">{notification.title}</h4>
+                      <p className="text-sm text-muted-foreground line-clamp-2">
+                        {notification.message}
+                      </p>
+                    </div>
+                    <Badge variant="outline" className="text-xs flex-shrink-0">
+                      {notification.category}
+                    </Badge>
+                  </div>
+                </div>
+              ))}
+              
+              {notifications.length > 3 && (
+                <div className="text-center pt-2">
+                  <Link href="/dashboard/participant/notifications">
+                    <Button variant="ghost" size="sm" className="w-full">
+                      View {notifications.length - 3} more notifications
+                    </Button>
+                  </Link>
+                </div>
+              )}
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
       {/* Wallet & QR Code Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

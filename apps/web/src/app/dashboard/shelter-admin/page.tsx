@@ -2,8 +2,11 @@
 
 import { useAuth } from '@/contexts/AuthContext';
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { useNotifications } from '@/hooks/useNotifications';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { getShelterMetrics, ShelterMetrics } from '@/services/platformMetrics';
 import { 
   Users, 
@@ -18,11 +21,13 @@ import {
   CheckCircle,
   AlertCircle,
   Clock,
-  Loader2
+  Loader2,
+  Bell
 } from 'lucide-react';
 
 export default function ShelterAdminDashboard() {
   const { user, hasRole } = useAuth();
+  const { notifications, unreadCount } = useNotifications();
   const [shelterMetrics, setShelterMetrics] = useState<ShelterMetrics | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -359,6 +364,79 @@ export default function ShelterAdminDashboard() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Notifications Quick Stats */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="flex items-center gap-2">
+                <Bell className="h-5 w-5" />
+                Notifications
+                {unreadCount > 0 && (
+                  <Badge variant="destructive" className="ml-2">
+                    {unreadCount} unread
+                  </Badge>
+                )}
+              </CardTitle>
+              <CardDescription>
+                Participant inquiries, shelter page visitors, and donations
+              </CardDescription>
+            </div>
+            <Link href="/dashboard/shelter-admin/notifications">
+              <Button variant="outline" size="sm">
+                View All
+              </Button>
+            </Link>
+          </div>
+        </CardHeader>
+        <CardContent>
+          {notifications.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">
+              <Bell className="h-12 w-12 mx-auto mb-4 opacity-20" />
+              <p>No notifications yet</p>
+              <p className="text-sm mt-1">
+                You'll see participant inquiries and shelter updates here
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {notifications.slice(0, 3).map((notification) => (
+                <div
+                  key={notification.id}
+                  className={`p-3 rounded-lg border transition-colors ${
+                    notification.isRead
+                      ? 'bg-muted/30 border-border'
+                      : 'bg-primary/5 border-primary/20'
+                  }`}
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex-1 min-w-0">
+                      <h4 className="font-semibold text-sm mb-1">{notification.title}</h4>
+                      <p className="text-sm text-muted-foreground line-clamp-2">
+                        {notification.message}
+                      </p>
+                    </div>
+                    <Badge variant="outline" className="text-xs flex-shrink-0">
+                      {notification.category}
+                    </Badge>
+                  </div>
+                </div>
+              ))}
+              
+              {notifications.length > 3 && (
+                <div className="text-center pt-2">
+                  <Link href="/dashboard/shelter-admin/notifications">
+                    <Button variant="ghost" size="sm" className="w-full">
+                      View {notifications.length - 3} more notifications
+                    </Button>
+                  </Link>
+                </div>
+              )}
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 } 

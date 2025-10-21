@@ -32,7 +32,6 @@ import {
   Loader2
 } from 'lucide-react';
 import { useNotificationPreferences } from '@/hooks/useNotificationPreferences';
-import { useToast } from '@/hooks/use-toast';
 
 const NOTIFICATION_CATEGORIES = [
   { id: 'contact', label: 'Contact Inquiries', description: 'Form submissions and messages' },

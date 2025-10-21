@@ -206,6 +206,27 @@ export function MakeNewDonationModal({ isOpen, onClose }: MakeNewDonationModalPr
       const donationRef = await addDoc(collection(db, 'demo_donations'), donationData);
       console.log('✅ Donation created with ID:', donationRef.id);
       
+      // ✅ NEW: Create notifications for donor and participant
+      if (participantId) {
+        try {
+          const { notifyDonationComplete } = await import('@/services/donationNotificationService');
+          await notifyDonationComplete({
+            donationId: donationRef.id,
+            donorId: user.uid,
+            donorName: user.displayName || user.email || 'Anonymous Donor',
+            participantId: participantId,
+            participantName: participantName || 'Participant',
+            totalAmount: donationAmount,
+            directAmount: directAmount,
+            housingAmount: housingAmount,
+            shelterAmount: shelterAmount
+          });
+          console.log('✅ Created donation notifications');
+        } catch (error) {
+          console.warn('Could not create notifications:', error);
+        }
+      }
+      
       // Update shelter stats if applicable
       if (shelterId) {
         try {

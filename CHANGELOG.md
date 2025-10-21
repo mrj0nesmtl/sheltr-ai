@@ -7,6 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.57.2] - 2025-10-21 (SHELTER ADMIN NOTIFICATIONS & SHELTER STATS FIX) 🏠
+
+### ✨ Added
+- **Shelter Admin Donation Notifications**: Shelter admins now receive notifications when participants in their shelter receive donations
+- **Donor Count Calculation**: Shelter network cards now dynamically calculate unique donor counts from donations
+- **Notifications Component on Shelter Detail Page**: Added "Recent Notifications" card to shelter detail view
+
+### 🔧 Fixed
+- **Shelter Notification Counts**: Updated to query `shelter_notifications` collection instead of `shelter_email_signups`
+- **Shelter Donor Stats**: Fixed donor counts showing 0 by calculating from actual donation data
+- **Donation Notification Flow**: Enhanced to create notifications for donors, participants, AND shelter admins
+
+### 📝 Changed
+- Updated `donationNotificationService.ts` to query participant's shelter and notify all shelter admins
+- Updated `calculateShelterDonorStats()` in shelter network page to map donations to shelters
+- Added Michael Rodriguez custom claims (`role: participant`, `tenant: sheltr-platform`)
+
+### 🔍 Technical Details
+- Shelter admin notifications include donation amount and shelter's 5% revenue share
+- Non-blocking error handling: Shelter notifications won't fail donor/participant notifications
+- Real-time notification updates via Firebase snapshot listeners
+- Proper Firestore indexes added for `shelter_notifications` queries
+
+---
+
 ## [2.57.0] - 2025-10-21 (NOTIFICATION SYSTEM OVERHAUL & ENHANCEMENTS) 🔔
 
 ### 🎉 Major Achievement: Complete Notification System Redesign

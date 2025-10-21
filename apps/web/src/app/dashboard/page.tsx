@@ -17,8 +17,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { ChatbotWidget } from '@/components/ChatbotWidget';
 import { getPlatformMetricsFromTenants, PlatformMetrics } from '@/services/platformMetrics';
-import { getNotificationDashboardCounts, getRecentEmailSignups, NotificationDashboardCounts, EmailSignup, formatRelativeTime } from '@/services/notificationService';
 import { analyticsService } from '@/services/analyticsService';
+import { useNotifications } from '@/hooks/useNotifications';
 import { VisitorAreaChart } from '@/components/charts/VisitorAreaChart';
 import { 
   Users, 
@@ -50,12 +50,10 @@ import {
 
 export default function DashboardPage() {
   const { user } = useAuth();
+  const { notifications, unreadCount } = useNotifications();
   const [platformMetrics, setPlatformMetrics] = useState<PlatformMetrics | null>(null);
   const [metricsLoading, setMetricsLoading] = useState(false);
   const [refreshingActivity, setRefreshingActivity] = useState(false);
-  const [notificationCounts, setNotificationCounts] = useState<NotificationDashboardCounts | null>(null);
-  const [recentEmailSignups, setRecentEmailSignups] = useState<EmailSignup[]>([]);
-  const [notificationsLoading, setNotificationsLoading] = useState(false);
   
   // Role simulation for Super Admin testing
   const [simulatedRole, setSimulatedRole] = useState<string | null>(null);
@@ -297,10 +295,8 @@ The permissions issue might be elsewhere. Check console for other errors.`);
   useEffect(() => {
     if (user?.role === 'super_admin') {
       loadPlatformMetrics();
-      loadNotifications();
     } else if (user?.role === 'platform_admin') {
       loadSimplePlatformMetrics(); // Use simple approach for Platform Admins
-      loadNotifications();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.role]);
@@ -718,50 +714,6 @@ The permissions issue might be elsewhere. Check console for other errors.`);
     }
   };
 
-  const loadNotifications = async () => {
-    if (!user?.uid || !user?.role) return;
-    
-    setNotificationsLoading(true);
-    try {
-      console.log('🔔 Loading notifications...');
-      
-      // Load notification counts and recent email signups in parallel
-      const [counts, emailSignups] = await Promise.all([
-        getNotificationDashboardCounts(user.uid, user.role),
-        getRecentEmailSignups(5) // Get last 5 signups
-      ]);
-      
-      setNotificationCounts(counts);
-      setRecentEmailSignups(emailSignups);
-      console.log('✅ Notifications loaded:', { counts, emailSignups });
-      
-    } catch (error) {
-      console.error('❌ Failed to load notifications:', error);
-      // Set fallback data
-      setNotificationCounts({
-        totalNotifications: 0,
-        unreadMessages: 0,
-        unreadNotifications: 0,
-        totalEmailSignups: 0,
-        recentEmailSignups: 0,
-        contactInquiries: 0,
-        recentContactInquiries: 0,
-        repliedContactInquiries: 0,
-        unrepliedContactInquiries: 0,
-        totalAdminNotifications: 0,
-        unreadAdminNotifications: 0,
-        securityAlerts: 0,
-        fraudAlerts: 0,
-        pendingShelterapplications: 0,
-        activeUsers: 0,
-        totalParticipants: 0,
-        recentParticipants: 0
-      });
-      setRecentEmailSignups([]);
-    } finally {
-      setNotificationsLoading(false);
-    }
-  };
 
   const refreshActivity = async () => {
     setRefreshingActivity(true);
@@ -924,14 +876,14 @@ The permissions issue might be elsewhere. Check console for other errors.`);
           </div>
           <div className="flex items-center justify-between sm:justify-end space-x-3">
             {/* Notification Badge */}
-            {notificationCounts && notificationCounts.totalNotifications > 0 && (
+            {unreadCount > 0 && (
               <div className="relative">
                 <Link href="/dashboard/notifications">
                   <Button variant="outline" size="sm" className="relative">
                     <Bell className="w-4 h-4 sm:mr-2" />
                     <span className="hidden sm:inline">Notifications</span>
                     <Badge className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full min-w-[20px] h-[20px] flex items-center justify-center">
-                      {notificationCounts.totalNotifications}
+                      {unreadCount}
                     </Badge>
                   </Button>
                 </Link>
@@ -1107,9 +1059,9 @@ The permissions issue might be elsewhere. Check console for other errors.`);
                 <Mail className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{notificationCounts?.totalEmailSignups || '-'}</div>
+                <div className="text-2xl font-bold">{notifications.filter(n => n.category === 'newsletter').length}</div>
                 <p className="text-xs text-muted-foreground">
-                  {notificationCounts?.recentEmailSignups || 0} new this week
+                  Newsletter subscribers
                 </p>
               </CardContent>
             </Card>
@@ -1122,7 +1074,7 @@ The permissions issue might be elsewhere. Check console for other errors.`);
                 <Building className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{notificationCounts?.pendingShelterapplications || '-'}</div>
+                <div className="text-2xl font-bold">{notifications.filter(n => n.category === 'application').length}</div>
                 <p className="text-xs text-muted-foreground">Shelter admin requests</p>
               </CardContent>
             </Card>
@@ -1191,62 +1143,54 @@ The permissions issue might be elsewhere. Check console for other errors.`);
             </CardContent>
           </Card>
 
-          {/* Recent Email Signups */}
+          {/* Recent Notifications */}
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center">
-                <Mail className="w-5 h-5 mr-2" />
-                Recent Email Signups
-                {notificationCounts && notificationCounts.recentEmailSignups > 0 && (
-                  <Badge className="ml-2 bg-green-500 text-white">
-                    {notificationCounts.recentEmailSignups} new
-                  </Badge>
-                )}
+              <CardTitle className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <Bell className="w-5 h-5 mr-2" />
+                  Recent Notifications
+                  {unreadCount > 0 && (
+                    <Badge className="ml-2 bg-red-500 text-white">
+                      {unreadCount} unread
+                    </Badge>
+                  )}
+                </div>
+                <Link href="/dashboard/notifications">
+                  <Button variant="outline" size="sm">
+                    View All
+                  </Button>
+                </Link>
               </CardTitle>
-              <CardDescription>Latest newsletter subscribers from mobile app teaser</CardDescription>
+              <CardDescription>Latest platform activity and updates</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {notificationsLoading ? (
-                  <div className="flex items-center justify-center py-4">
-                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                    <span className="text-sm text-gray-500">Loading signups...</span>
-                  </div>
-                ) : recentEmailSignups.length > 0 ? (
-                  recentEmailSignups.map((signup) => (
-                    <div key={signup.id} className="flex items-start space-x-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                      <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                {notifications.length > 0 ? (
+                  notifications.slice(0, 5).map((notification) => (
+                    <div key={notification.id} className={`flex items-start space-x-3 p-3 rounded-lg ${
+                      notification.isRead ? 'bg-muted/30' : 'bg-primary/5 border-l-4 border-primary'
+                    }`}>
+                      <div className={`w-2 h-2 rounded-full mt-2 ${notification.isRead ? 'bg-gray-400' : 'bg-primary'}`}></div>
                       <div className="flex-1 min-w-0">
-                        <p className="font-medium text-sm truncate">{signup.email}</p>
-                        <p className="text-xs text-gray-500">
-                          Source: {signup.source} • Page: {signup.page}
-                        </p>
-                        <p className="text-xs text-gray-400">
-                          {signup.signup_date?.toDate ? formatRelativeTime(signup.signup_date.toDate()) : 'Recently'}
+                        <p className="font-medium text-sm">{notification.title}</p>
+                        <p className="text-xs text-muted-foreground line-clamp-2 mt-1">
+                          {notification.message}
                         </p>
                       </div>
-                      <Badge variant="outline" className="text-xs">
-                        {signup.status}
+                      <Badge variant="outline" className="text-xs flex-shrink-0">
+                        {notification.category}
                       </Badge>
                     </div>
                   ))
                 ) : (
                   <div className="text-center py-6">
-                    <Mail className="h-8 w-8 text-gray-400 mx-auto mb-2" />
-                    <p className="text-gray-500 text-sm">No email signups yet</p>
-                    <p className="text-xs text-gray-400">New signups will appear here</p>
+                    <Bell className="h-8 w-8 text-gray-400 mx-auto mb-2" />
+                    <p className="text-gray-500 text-sm">No notifications yet</p>
+                    <p className="text-xs text-gray-400">Activity will appear here</p>
                   </div>
                 )}
               </div>
-              {recentEmailSignups.length > 0 && (
-                <div className="mt-4 pt-4 border-t">
-                  <Link href="/dashboard/notifications">
-                    <Button variant="outline" size="sm" className="w-full">
-                      View All Email Signups
-                    </Button>
-                  </Link>
-                </div>
-              )}
             </CardContent>
           </Card>
         </div>
@@ -1307,14 +1251,14 @@ The permissions issue might be elsewhere. Check console for other errors.`);
           </div>
           <div className="flex items-center justify-between sm:justify-end space-x-3">
             {/* Notification Badge */}
-            {notificationCounts && notificationCounts.totalNotifications > 0 && (
+            {unreadCount > 0 && (
               <div className="relative">
                 <Link href="/dashboard/notifications">
                   <Button variant="outline" size="sm" className="relative">
                     <Bell className="w-4 h-4 sm:mr-2" />
                     <span className="hidden sm:inline">Notifications</span>
                     <Badge className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full min-w-[20px] h-[20px] flex items-center justify-center">
-                      {notificationCounts.totalNotifications}
+                      {unreadCount}
                     </Badge>
                   </Button>
                 </Link>
@@ -1440,9 +1384,9 @@ The permissions issue might be elsewhere. Check console for other errors.`);
                 <Mail className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{notificationCounts?.totalEmailSignups || '-'}</div>
+                <div className="text-2xl font-bold">{notifications.filter(n => n.category === 'newsletter').length}</div>
                 <p className="text-xs text-muted-foreground">
-                  {notificationCounts?.recentEmailSignups || 0} new this week
+                  Newsletter subscribers
                 </p>
               </CardContent>
             </Card>
@@ -1455,7 +1399,7 @@ The permissions issue might be elsewhere. Check console for other errors.`);
                 <Building className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{notificationCounts?.pendingShelterapplications || '-'}</div>
+                <div className="text-2xl font-bold">{notifications.filter(n => n.category === 'application').length}</div>
                 <p className="text-xs text-muted-foreground">Shelter admin requests</p>
               </CardContent>
             </Card>
@@ -1524,62 +1468,54 @@ The permissions issue might be elsewhere. Check console for other errors.`);
             </CardContent>
           </Card>
 
-          {/* Recent Email Signups */}
+          {/* Recent Notifications */}
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center">
-                <Mail className="w-5 h-5 mr-2" />
-                Recent Email Signups
-                {notificationCounts && notificationCounts.recentEmailSignups > 0 && (
-                  <Badge className="ml-2 bg-green-500 text-white">
-                    {notificationCounts.recentEmailSignups} new
-                  </Badge>
-                )}
+              <CardTitle className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <Bell className="w-5 h-5 mr-2" />
+                  Recent Notifications
+                  {unreadCount > 0 && (
+                    <Badge className="ml-2 bg-red-500 text-white">
+                      {unreadCount} unread
+                    </Badge>
+                  )}
+                </div>
+                <Link href="/dashboard/notifications">
+                  <Button variant="outline" size="sm">
+                    View All
+                  </Button>
+                </Link>
               </CardTitle>
-              <CardDescription>Latest newsletter subscribers from mobile app teaser</CardDescription>
+              <CardDescription>Latest platform activity and updates</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {notificationsLoading ? (
-                  <div className="flex items-center justify-center py-4">
-                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                    <span className="text-sm text-gray-500">Loading signups...</span>
-                  </div>
-                ) : recentEmailSignups.length > 0 ? (
-                  recentEmailSignups.map((signup) => (
-                    <div key={signup.id} className="flex items-start space-x-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                      <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                {notifications.length > 0 ? (
+                  notifications.slice(0, 5).map((notification) => (
+                    <div key={notification.id} className={`flex items-start space-x-3 p-3 rounded-lg ${
+                      notification.isRead ? 'bg-muted/30' : 'bg-primary/5 border-l-4 border-primary'
+                    }`}>
+                      <div className={`w-2 h-2 rounded-full mt-2 ${notification.isRead ? 'bg-gray-400' : 'bg-primary'}`}></div>
                       <div className="flex-1 min-w-0">
-                        <p className="font-medium text-sm truncate">{signup.email}</p>
-                        <p className="text-xs text-gray-500">
-                          Source: {signup.source} • Page: {signup.page}
-                        </p>
-                        <p className="text-xs text-gray-400">
-                          {signup.signup_date?.toDate ? formatRelativeTime(signup.signup_date.toDate()) : 'Recently'}
+                        <p className="font-medium text-sm">{notification.title}</p>
+                        <p className="text-xs text-muted-foreground line-clamp-2 mt-1">
+                          {notification.message}
                         </p>
                       </div>
-                      <Badge variant="outline" className="text-xs">
-                        {signup.status}
+                      <Badge variant="outline" className="text-xs flex-shrink-0">
+                        {notification.category}
                       </Badge>
                     </div>
                   ))
                 ) : (
                   <div className="text-center py-6">
-                    <Mail className="h-8 w-8 text-gray-400 mx-auto mb-2" />
-                    <p className="text-gray-500 text-sm">No email signups yet</p>
-                    <p className="text-xs text-gray-400">New signups will appear here</p>
+                    <Bell className="h-8 w-8 text-gray-400 mx-auto mb-2" />
+                    <p className="text-gray-500 text-sm">No notifications yet</p>
+                    <p className="text-xs text-gray-400">Activity will appear here</p>
                   </div>
                 )}
               </div>
-              {recentEmailSignups.length > 0 && (
-                <div className="mt-4 pt-4 border-t">
-                  <Link href="/dashboard/notifications">
-                    <Button variant="outline" size="sm" className="w-full">
-                      View All Email Signups
-                    </Button>
-                  </Link>
-                </div>
-              )}
             </CardContent>
           </Card>
         </div>

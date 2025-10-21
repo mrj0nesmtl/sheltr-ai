@@ -24,13 +24,15 @@ import {
   CheckCheck, 
   Search, 
   Filter,
-  AlertCircle 
+  AlertCircle,
+  Download 
 } from 'lucide-react';
 import type { 
   UnifiedNotification, 
   NotificationCategory 
 } from '@/types/notifications';
 import { cn } from '@/lib/utils';
+import { exportNotificationsToCSV } from '@/utils/exportNotifications';
 
 interface NotificationListProps {
   notifications: UnifiedNotification[];
@@ -100,17 +102,33 @@ export function NotificationList({
           )}
         </div>
 
-        {unreadCount > 0 && onMarkAllAsRead && (
-          <Button 
-            variant="outline" 
-            size="sm"
-            onClick={onMarkAllAsRead}
-            className="gap-2"
-          >
-            <CheckCheck className="h-4 w-4" />
-            Mark all read
-          </Button>
-        )}
+        <div className="flex items-center gap-2">
+          {/* Export Button */}
+          {notifications.length > 0 && (
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={() => exportNotificationsToCSV(notifications)}
+              className="gap-2"
+            >
+              <Download className="h-4 w-4" />
+              Export CSV
+            </Button>
+          )}
+          
+          {/* Mark All Read Button */}
+          {unreadCount > 0 && onMarkAllAsRead && (
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={onMarkAllAsRead}
+              className="gap-2"
+            >
+              <CheckCheck className="h-4 w-4" />
+              Mark all read
+            </Button>
+          )}
+        </div>
       </div>
 
       {/* Filters */}

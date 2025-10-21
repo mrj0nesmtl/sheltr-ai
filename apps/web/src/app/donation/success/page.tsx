@@ -139,29 +139,23 @@ function SuccessPageContent() {
             console.error('❌ Error updating participant stats:', error);
           }
           
-          // Create notification for participant
+          // ✅ NEW: Create notifications for BOTH donor and participant
           try {
-            const notificationData = {
-              userId: participantUserId,
-              type: 'donation_received',
-              title: 'New Donation Received!',
-              message: `You received a $${totalAmount} donation from ${user.displayName || 'a supporter'}. $${directAmount} added to your virtual debit account.`,
-              priority: 'high',
-              isRead: false,
-              metadata: {
-                donation_id: docRef.id,
-                donor_name: user.displayName || user.email || 'Anonymous',
-                amount: totalAmount,
-                direct_amount: directAmount,
-                housing_amount: housingAmount
-              },
-              created_at: serverTimestamp()
-            };
-            
-            await addDoc(collection(db, 'participant_notifications'), notificationData);
-            console.log('✅ Created participant notification');
+            const { notifyDonationComplete } = await import('@/services/donationNotificationService');
+            const notificationResult = await notifyDonationComplete({
+              donationId: docRef.id,
+              donorId: user.uid,
+              donorName: user.displayName || user.email || 'Anonymous Donor',
+              participantId: participantUserId,
+              participantName: participantName,
+              totalAmount: totalAmount,
+              directAmount: directAmount,
+              housingAmount: housingAmount,
+              shelterAmount: operationsAmount
+            });
+            console.log('✅ Created donor & participant notifications:', notificationResult);
           } catch (error) {
-            console.error('❌ Error creating participant notification:', error);
+            console.error('❌ Error creating donation notifications:', error);
           }
           
           // Update Old Brewery Mission shelter operations

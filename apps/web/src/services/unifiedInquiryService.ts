@@ -1,6 +1,7 @@
 import { collection, addDoc, serverTimestamp, query, where, getDocs, orderBy, limit } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { createAdminNotification } from './unifiedNotificationService';
+import type { AdminNotificationType } from '@/types/notifications';
 
 export interface NewsletterSignup {
   email: string;
@@ -39,30 +40,74 @@ export interface UnifiedInquiry {
 }
 
 /**
+ * Helper function to get all platform admins (Super Admin + Platform Admin)
+ */
+const getAllPlatformAdmins = async (): Promise<Array<{ uid: string, role: 'super_admin' | 'platform_admin' }>> => {
+  try {
+    const usersRef = collection(db, 'users');
+    const q = query(
+      usersRef,
+      where('role', 'in', ['super_admin', 'platform_admin'])
+    );
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({
+      uid: doc.id,
+      role: doc.data().role as 'super_admin' | 'platform_admin'
+    }));
+  } catch (error) {
+    console.error('❌ Error fetching platform admins:', error);
+    return [];
+  }
+};
+
+/**
  * Helper function to create admin notifications for inquiries
+ * Creates a notification for ALL platform admins (super_admin + platform_admin)
  */
 const createInquiryNotification = async (inquiryId: string, inquiry: UnifiedInquiry): Promise<void> => {
   try {
-    await createAdminNotification({
-      category: inquiry.inquiry_type === 'newsletter_signup' ? 'newsletter' : 'contact',
-      title: inquiry.inquiry_type === 'newsletter_signup' 
-        ? 'New Newsletter Signup' 
-        : `New Contact: ${inquiry.subject || 'Contact Form'}`,
-      message: inquiry.inquiry_type === 'newsletter_signup'
-        ? `${inquiry.email} subscribed from ${inquiry.source}`
-        : `${inquiry.name || 'Unknown'} (${inquiry.email}) - ${inquiry.message || 'No message'}`,
-      priority: inquiry.priority === 'high' ? 'high' : 'normal',
-      metadata: {
-        inquiry_id: inquiryId,
-        email: inquiry.email,
-        name: inquiry.name,
-        source: inquiry.source,
-        inquiry_type: inquiry.inquiry_type
-      }
-    });
-    console.log('✅ Admin notification created for inquiry:', inquiryId);
+    // Get all platform admins
+    const admins = await getAllPlatformAdmins();
+    
+    if (admins.length === 0) {
+      console.warn('⚠️ No platform admins found to notify');
+      return;
+    }
+
+    // Determine notification type and details
+    const isNewsletter = inquiry.inquiry_type === 'newsletter_signup';
+    const notificationType: AdminNotificationType = isNewsletter ? 'newsletter_signup' : 'contact_inquiry';
+    const title = isNewsletter 
+      ? 'New Newsletter Signup' 
+      : `New Contact: ${inquiry.subject || 'Contact Form'}`;
+    const message = isNewsletter
+      ? `${inquiry.email} subscribed from ${inquiry.source}`
+      : `${inquiry.name || 'Unknown'} (${inquiry.email}) - ${inquiry.message || 'No message'}`;
+
+    // Create a notification for each platform admin
+    const notificationPromises = admins.map(admin => 
+      createAdminNotification({
+        recipient_id: admin.uid,
+        recipient_role: admin.role,
+        type: notificationType,
+        title,
+        message,
+        priority: inquiry.priority === 'high' ? 'high' : 'normal',
+        category: isNewsletter ? 'newsletter' : 'contact',
+        data: {
+          inquiry_id: inquiryId,
+          email: inquiry.email,
+          name: inquiry.name,
+          source: inquiry.source,
+          inquiry_type: inquiry.inquiry_type
+        }
+      })
+    );
+
+    await Promise.all(notificationPromises);
+    console.log(`✅ Created ${admins.length} admin notifications for inquiry: ${inquiryId}`);
   } catch (error) {
-    console.error('❌ Failed to create notification (non-blocking):', error);
+    console.error('❌ Failed to create notifications (non-blocking):', error);
     // Don't throw - notification failure shouldn't block inquiry creation
   }
 };

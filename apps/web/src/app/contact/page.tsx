@@ -15,6 +15,7 @@ import Footer from '@/components/Footer';
 import Head from 'next/head';
 import { PublicChatbot } from '@/components/PublicChatbot';
 import PublicNavigation from '@/components/PublicNavigation';
+import { toast } from 'sonner';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -70,6 +71,10 @@ export default function ContactPage() {
       
       setSubmitted(true);
       
+      toast.success('Message sent successfully!', {
+        description: 'We\'ll get back to you within 24 hours.'
+      });
+      
       // Reset form
       setFormData({
         name: '',
@@ -93,8 +98,9 @@ export default function ContactPage() {
         });
       }
       
-      // You could show an error message here
-      alert(`There was an error submitting your message: ${errorMessage}. Please try again or email us directly at joel@arcanaconcept.com`);
+      toast.error('Failed to send message', {
+        description: `${errorMessage}. Please try again or email us directly at joel@arcanaconcept.com`
+      });
     } finally {
       setIsSubmitting(false);
     }

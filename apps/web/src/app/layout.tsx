@@ -5,6 +5,7 @@ import { ThemeProvider } from '@/components/theme-provider'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { MockWalletProvider } from '@/components/blockchain/MockWalletProvider'
 import ConsoleFilter from '@/components/ConsoleFilter'
+import { Toaster } from 'sonner'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -76,6 +77,12 @@ export default function RootLayout({
             <MockWalletProvider>
               <ConsoleFilter />
               {children}
+              <Toaster 
+                position="top-right" 
+                expand={true}
+                richColors
+                closeButton
+              />
             </MockWalletProvider>
           </AuthProvider>
         </ThemeProvider>

@@ -99,7 +99,7 @@ export default function ContactPage() {
       }
       
       toast.error('Failed to send message', {
-        description: `${errorMessage}. Please try again or email us directly at joel@arcanaconcept.com`
+        description: `${errorMessage}. Please try again or email us directly at admin@arcanaconcept.com`
       });
     } finally {
       setIsSubmitting(false);
@@ -193,8 +193,8 @@ export default function ContactPage() {
                         <p className="text-muted-foreground mb-3">
                           General inquiries, partnerships, and technical support
                         </p>
-                        <Link href="mailto:joel@arcanaconcept.com" className="text-blue-600 hover:underline font-medium">
-                          joel@arcanaconcept.com
+                        <Link href="mailto:admin@arcanaconcept.com" className="text-blue-600 hover:underline font-medium">
+                          admin@arcanaconcept.com
                         </Link>
                       </div>
                     </CardContent>
@@ -212,24 +212,6 @@ export default function ContactPage() {
                         </p>
                         <p className="text-sm text-muted-foreground">
                           Use the chat widget in the bottom-right corner →
-                        </p>
-                      </div>
-                    </CardContent>
-                  </Card>
-
-                  <Card className="hover:shadow-lg transition-shadow">
-                    <CardContent className="flex items-start space-x-4 p-6">
-                      <div className="w-12 h-12 bg-green-600/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <MapPin className="h-6 w-6 text-green-600" />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold text-lg mb-2">Headquarters</h3>
-                        <p className="text-muted-foreground mb-3">
-                          Visit us in Montreal, Quebec
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                          Montreal, QC, Canada<br />
-                          (Specific address provided upon partnership)
                         </p>
                       </div>
                     </CardContent>

@@ -12,7 +12,7 @@ The next generation platform for transparent charitable giving and homelessness 
 [![GitHub Stars](https://img.shields.io/github/stars/mrj0nesmtl/sheltr-ai?style=for-the-badge)](https://github.com/mrj0nesmtl/sheltr-ai)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg?style=for-the-badge)](https://www.python.org/downloads/)
-[![Last Updated](https://img.shields.io/badge/Last%20Updated-October%209%2C%202025-brightgreen?style=for-the-badge)](https://github.com/mrj0nesmtl/sheltr-ai)
+[![Last Updated](https://img.shields.io/badge/Last%20Updated-October%2021%2C%202025-brightgreen?style=for-the-badge)](https://github.com/mrj0nesmtl/sheltr-ai)
 
 ---
 
@@ -22,6 +22,7 @@ The next generation platform for transparent charitable giving and homelessness 
 - **🌐 Production Website**: [sheltr-ai.web.app](https://sheltr-ai.web.app) - **FULLY OPERATIONAL**
 - **🤖 AI Chatbot System**: **LIVE** with role-aware MCP integration
 - **📊 Multi-Tenant Dashboards**: **5-ROLE RBAC** system operational
+- **🔔 Notification System**: **REDESIGNED** - Unified real-time notifications with CSV export & preferences 🆕
 - **🔐 Enterprise Security**: **ALL VULNERABILITIES RESOLVED** (GitHub CodeQL)
 - **💰 Dual Donation System**: **100% COMPLETE** - Participant (80-15-5) + Shelter (95-5) flows
 - **🏠 Public Pages**: **REDESIGNED** - Modern shelter + participant pages with email capture
@@ -68,6 +69,19 @@ The next generation platform for transparent charitable giving and homelessness 
 - **✅ Clean URL Structure** - Fixed shelter public page URLs (no /shelter/ prefix)
 - **✅ Mobile Optimized** - Perfect responsive design across all devices
 - **✅ QR Code Integration** - Easy donation access via QR codes on public pages
+
+### 🔔 **Enterprise Notification System** 🆕 **OCT 21**
+- **✅ Complete Overhaul** - Unified notification system with 60% code reduction
+- **✅ Real-Time Updates** - Firebase snapshot listeners for instant notifications
+- **✅ 5-Role Dashboards** - Dedicated notification centers for all user roles
+- **✅ CSV Export** - One-click export with Excel compatibility
+- **✅ User Preferences** - 13 customizable categories with quiet hours
+- **✅ Priority Filtering** - Filter by Low, Normal, High, Urgent
+- **✅ Email Digests** - Daily/Weekly summaries (framework ready)
+- **✅ Mobile Optimized** - Fully responsive notification interface
+- **✅ Search & Filter** - Find notifications by category, status, or keyword
+- **✅ Bulk Operations** - Mark all as read with one click
+- **📊 Impact**: 1,476 spam notifications cleaned, 823 lines simplified
 
 ### 🤖 **Advanced AI Agent System** 🆕
 - **✅ Role-Aware Chatbots** - Dynamic behavior based on user authentication

@@ -1061,6 +1061,27 @@ service cloud.firestore {
     }
     
     // =================================================================
+    // NOTIFICATION PREFERENCES COLLECTION
+    // =================================================================
+    // Each user can read and write their own notification preferences
+    match /notification_preferences/{userId} {
+      // Read: User can read their own preferences
+      allow read: if isAuthenticated() && request.auth.uid == userId;
+      
+      // Create: User can create their own preferences
+      allow create: if isAuthenticated() && request.auth.uid == userId;
+      
+      // Update: User can update their own preferences
+      allow update: if isAuthenticated() && request.auth.uid == userId;
+      
+      // Delete: User can delete their own preferences (or Super Admin)
+      allow delete: if isAuthenticated() && (
+        request.auth.uid == userId ||
+        isSuperAdmin()
+      );
+    }
+    
+    // =================================================================
     // FALLBACK RULE - Deny all other access
     // =================================================================
     match /{document=**} {

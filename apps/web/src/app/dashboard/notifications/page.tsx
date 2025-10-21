@@ -12,7 +12,9 @@ import { NotificationList } from '@/components/notifications/NotificationList';
 import { useNotifications } from '@/hooks/useNotifications';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Bell, Shield, Users, Mail, MessageSquare, AlertCircle } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Bell, Shield, Users, Mail, MessageSquare, AlertCircle, Settings } from 'lucide-react';
+import Link from 'next/link';
 
 export default function AdminNotificationsPage() {
   const { user } = useAuth();
@@ -53,11 +55,19 @@ export default function AdminNotificationsPage() {
   return (
     <div className="container mx-auto p-6 max-w-6xl">
       {/* Page Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight mb-2">Notifications Center</h1>
-        <p className="text-muted-foreground">
-          Manage platform notifications and user communications
-        </p>
+      <div className="mb-8 flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight mb-2">Notifications Center</h1>
+          <p className="text-muted-foreground">
+            Manage platform notifications and user communications
+          </p>
+        </div>
+        <Link href="/dashboard/notification-settings">
+          <Button variant="outline" className="gap-2">
+            <Settings className="h-4 w-4" />
+            Settings
+          </Button>
+        </Link>
       </div>
 
       {/* Quick Stats Cards */}
@@ -75,69 +85,69 @@ export default function AdminNotificationsPage() {
             {unreadCount > 0 && (
               <Badge variant="secondary" className="mt-2">
                 {unreadCount} unread
-              </Badge>
-            )}
+                    </Badge>
+                  )}
           </CardContent>
         </Card>
 
-        {/* Contact Inquiries */}
-        <Card>
+            {/* Contact Inquiries */}
+            <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <MessageSquare className="h-4 w-4 text-blue-500" />
               Contact
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
             <div className="text-2xl font-bold">{contactInquiries}</div>
             <p className="text-xs text-muted-foreground mt-2">Form submissions</p>
-          </CardContent>
-        </Card>
+              </CardContent>
+            </Card>
 
         {/* Newsletter Signups */}
-        <Card>
+            <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <Mail className="h-4 w-4 text-green-500" />
               Newsletter
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
             <div className="text-2xl font-bold">{newsletterSignups}</div>
             <p className="text-xs text-muted-foreground mt-2">Subscribers</p>
-          </CardContent>
-        </Card>
+              </CardContent>
+            </Card>
 
         {/* Security Alerts */}
-        <Card>
+            <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <Shield className="h-4 w-4 text-red-500" />
               Security
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
             <div className="text-2xl font-bold">{securityAlerts}</div>
             {securityAlerts > 0 ? (
               <Badge variant="destructive" className="mt-2">
                 {securityAlerts} alerts
-              </Badge>
+                  </Badge>
             ) : (
               <p className="text-xs text-muted-foreground mt-2">All secure</p>
-            )}
-          </CardContent>
-        </Card>
-      </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
 
       {/* Main Notification List */}
-      <Card>
+          <Card>
         <CardContent className="pt-6">
           {error ? (
             <div className="text-center py-12 text-destructive">
               <AlertCircle className="h-12 w-12 mx-auto mb-4 opacity-50" />
               <p className="text-lg font-medium">{error}</p>
-            </div>
-          ) : (
+                </div>
+              ) : (
             <NotificationList
               notifications={notifications}
               onMarkAsRead={markAsRead}
@@ -145,17 +155,17 @@ export default function AdminNotificationsPage() {
               loading={loading}
               emptyMessage="No notifications yet. You'll see updates about contact forms, newsletter signups, and platform activity here."
             />
-          )}
-        </CardContent>
-      </Card>
+              )}
+            </CardContent>
+          </Card>
 
       {/* Help Text */}
       <div className="mt-4 text-center text-sm text-muted-foreground">
         <p>
           Notifications are updated in real-time. You'll receive alerts about contact forms, 
           newsletter signups, participant registrations, and security events.
-        </p>
-      </div>
+                  </p>
+                </div>
     </div>
   );
 }

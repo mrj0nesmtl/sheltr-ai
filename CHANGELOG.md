@@ -7,6 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.57.5] - 2025-10-21 (SHELTER DETAIL PAGE 404 FIX & DEBUG LOGGING) 🔧
+
+### 🔧 Fixed
+- **404 Error on Shelter Detail Pages**: Fixed `generateStaticParams()` with actual shelter IDs
+  - **Before**: Only had placeholder, caused 404 for all shelter detail pages
+  - **After**: Pre-generates pages for old-brewery-mission, welcome-hall-mission, mission-bon-accueil
+  - **Impact**: Shelter detail pages now load correctly in production
+
+### 🔍 Enhanced
+- **Participant Count Debug Logging**: Added comprehensive logging to diagnose "0 participants" issue
+  - Logs shelter ID being queried
+  - Logs query success/failure
+  - Logs participant count found
+  - **Next Step**: Check browser console to diagnose remaining issue
+
+### 📝 Technical Details
+- Updated `apps/web/src/app/dashboard/shelters/[shelterId]/view/page.tsx`
+- Enhanced `apps/web/src/app/donate/page.tsx` with debug logging
+- Verified Firestore index exists for `users` (role + shelter_id)
+- Confirmed Michael Rodriguez has correct `shelter_id: old-brewery-mission`
+
+### 🧪 Testing Required
+- **Test 1**: Visit shelter detail page (should not 404)
+- **Test 2**: Check console logs on donate page for participant count query
+- **Test 3**: Verify shelter card stats after deployment
+
+---
+
 ## [2.57.4] - 2025-10-21 (CRITICAL BUG FIX: Shelter Donation Split Display) 🐛
 
 ### 🔴 Critical Bug Fixed

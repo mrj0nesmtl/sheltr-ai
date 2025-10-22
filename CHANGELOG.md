@@ -7,6 +7,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.57.4] - 2025-10-21 (CRITICAL BUG FIX: Shelter Donation Split Display) 🐛
+
+### 🔴 Critical Bug Fixed
+- **Shelter Donation Split Display**: Fixed critical bug where direct shelter donations showed incorrect split
+  - **Before**: Displayed 80% to participant, 15% housing, 5% operations (WRONG!)
+  - **After**: Correctly displays 95% to shelter, 5% platform (CORRECT!)
+  - **Impact**: Donors were confused, questioned platform integrity
+  - **Backend**: Was always correct, only frontend display was wrong
+
+### 🔧 Fixed
+- Success page now detects donation type (shelter vs participant) from URL parameters
+- Conditional breakdown calculation based on donation type:
+  - **Shelter donations**: 95% to shelter, 5% platform
+  - **Participant donations**: 80% direct, 15% housing, 5% operations
+- Conditional display rendering for thank you message and impact summary
+- Updated all display sections to show accurate information
+
+### 📝 Technical Details
+- Added donation type detection: `hasParticipant` based on URL params
+- Conditional breakdown object with proper TypeScript types
+- Removed hardcoded 80-15-5 split assumption
+- Fixed linting errors (apostrophes, `any` type, unused imports)
+
+### 🧪 Testing Required
+- **Test 1**: Direct shelter donation ($1000) should show 95% ($950) to shelter
+- **Test 2**: Participant donation ($100) should show 80% ($80) to participant
+- **Test 3**: Scan & Give should continue working with participant split
+
+---
+
 ## [2.57.3] - 2025-10-21 (PUBLIC CHATBOT MARKDOWN ENHANCEMENT) 🎨
 
 ### ✨ Added

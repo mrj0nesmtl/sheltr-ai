@@ -59,33 +59,47 @@ function SuccessPageContent() {
         donationCreatedRef.current = true; // Mark as created immediately
         
         try {
-          console.log('🎯 Automatically creating demo donation with SmartFund distribution...');
+          console.log(`🎯 Automatically creating ${donationType} demo donation...`);
           const { addDoc, collection, serverTimestamp, doc, updateDoc, increment } = await import('firebase/firestore');
           const { db } = await import('@/lib/firebase');
           
-          // Calculate SmartFund distribution
+          // Calculate amounts based on donation type
           const totalAmount = parseFloat(amount);
-          const directAmount = Math.round(totalAmount * 0.80 * 100) / 100;
-          const housingAmount = Math.round(totalAmount * 0.15 * 100) / 100;
-          const operationsAmount = Math.round(totalAmount * 0.05 * 100) / 100;
+          let directAmount, housingAmount, operationsAmount, shelterAmount;
+          
+          if (donationType === 'shelter') {
+            // 🏠 DIRECT SHELTER DONATION: 95% to shelter, 5% platform
+            shelterAmount = Math.round(totalAmount * 0.95 * 100) / 100;
+            operationsAmount = Math.round(totalAmount * 0.05 * 100) / 100;
+            console.log(`💚 Shelter donation: $${shelterAmount} to shelter, $${operationsAmount} platform fee`);
+          } else {
+            // 🧑 PARTICIPANT DONATION: 80-15-5 SmartFund
+            directAmount = Math.round(totalAmount * 0.80 * 100) / 100;
+            housingAmount = Math.round(totalAmount * 0.15 * 100) / 100;
+            operationsAmount = Math.round(totalAmount * 0.05 * 100) / 100;
+            console.log(`💙 Participant donation: $${directAmount} direct, $${housingAmount} housing, $${operationsAmount} operations`);
+          }
           
           // Get Michael's actual Firebase UID (not the slug)
           const participantUserId = 'dFJNlIh2g4R8vAvxvIvWZtwu8zw1'; // Michael's Firebase UID
           
-          const donationData = {
-            participant_id: participantUserId, // Use Firebase UID instead of slug
-            participant_slug: 'michael-rodriguez', // Keep slug for reference
-            participant_name: participantName,
+          const donationData: Record<string, unknown> = {
+            donation_type: donationType,
             shelter_id: 'old-brewery-mission',
             shelter_name: 'Old Brewery Mission',
             amount: { 
               total: totalAmount, 
               currency: 'USD',
-              breakdown: {
-                direct: directAmount,
-                housing: housingAmount,
-                operations: operationsAmount
-              }
+              breakdown: donationType === 'shelter' 
+                ? {
+                    shelter: shelterAmount,
+                    platform: operationsAmount
+                  }
+                : {
+                    direct: directAmount,
+                    housing: housingAmount,
+                    operations: operationsAmount
+                  }
             },
             donor_id: user.uid,
             donor_info: { 
@@ -95,31 +109,50 @@ function SuccessPageContent() {
             },
             status: 'completed',
             type: 'one-time',
-            purpose: 'Demo donation from scan-give',
+            purpose: donationType === 'shelter' ? 'Demo direct shelter donation' : 'Demo donation from scan-give',
             payment_data: { 
               adyen_reference: reference, 
               status: 'completed' 
             },
-            smartfund_distribution: {
-              total: totalAmount,
-              direct: directAmount,
-              housing: housingAmount,
-              shelter_operations: operationsAmount,
-              currency: 'USD',
-              recipient_type: 'shelter',
-              shelter_id: 'old-brewery-mission',
-              shelter_name: 'Old Brewery Mission',
-              processed_at: new Date().toISOString(),
-              status: 'completed'
-            },
+            smartfund_distribution: donationType === 'shelter'
+              ? {
+                  total: totalAmount,
+                  shelter: shelterAmount,
+                  platform: operationsAmount,
+                  currency: 'USD',
+                  recipient_type: 'shelter',
+                  shelter_id: 'old-brewery-mission',
+                  shelter_name: 'Old Brewery Mission',
+                  processed_at: new Date().toISOString(),
+                  status: 'completed'
+                }
+              : {
+                  total: totalAmount,
+                  direct: directAmount,
+                  housing: housingAmount,
+                  shelter_operations: operationsAmount,
+                  currency: 'USD',
+                  recipient_type: 'participant',
+                  shelter_id: 'old-brewery-mission',
+                  shelter_name: 'Old Brewery Mission',
+                  processed_at: new Date().toISOString(),
+                  status: 'completed'
+                },
             created_at: serverTimestamp(),
             updated_at: serverTimestamp(),
             completed_at: serverTimestamp(),
             demo: true,
-            source: 'scan-give-logged-in',
+            source: donationType === 'shelter' ? 'direct-shelter-donation' : 'scan-give-logged-in',
             anonymous: false,
             public: true
           };
+          
+          // Add participant fields only for participant donations
+          if (donationType === 'participant') {
+            donationData.participant_id = participantUserId;
+            donationData.participant_slug = 'michael-rodriguez';
+            donationData.participant_name = participantName;
+          }
           
           console.log('📝 Creating demo donation with SmartFund:', donationData);
           // TODO: Switch to tenant-specific collection when payment rails are ready
@@ -127,73 +160,92 @@ function SuccessPageContent() {
           const docRef = await addDoc(collection(db, 'demo_donations'), donationData);
           console.log('✅ Demo donation created with ID:', docRef.id);
           
-          // Update Michael's participant stats via backend API (bypasses security rules)
-          try {
-            const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
-            const response = await fetch(`${apiBaseUrl}/api/v1/demo/donations/update-participant-stats`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                participant_id: participantUserId,
-                direct_amount: directAmount,
-                housing_amount: housingAmount
-              })
-            });
-            
-            if (response.ok) {
-              console.log('✅ Updated participant stats via API:', { 
-                participantId: participantUserId,
-                direct: directAmount,
-                housing: housingAmount 
+          // Update participant stats ONLY for participant donations
+          if (donationType === 'participant') {
+            try {
+              const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
+              const response = await fetch(`${apiBaseUrl}/api/v1/demo/donations/update-participant-stats`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  participant_id: participantUserId,
+                  direct_amount: directAmount,
+                  housing_amount: housingAmount
+                })
               });
-            } else {
-              console.error('❌ API error updating participant stats:', await response.text());
+              
+              if (response.ok) {
+                console.log('✅ Updated participant stats via API:', { 
+                  participantId: participantUserId,
+                  direct: directAmount,
+                  housing: housingAmount 
+                });
+              } else {
+                console.error('❌ API error updating participant stats:', await response.text());
+              }
+            } catch (error) {
+              console.error('❌ Error updating participant stats:', error);
             }
-          } catch (error) {
-            console.error('❌ Error updating participant stats:', error);
-          }
-          
-          // ✅ NEW: Create notifications for BOTH donor and participant
-          try {
-            console.log('🔔 Starting notification creation...');
-            console.log('   Donor ID:', user.uid);
-            console.log('   Participant ID:', participantUserId);
-            console.log('   Amount:', totalAmount);
             
-            const { notifyDonationComplete } = await import('@/services/donationNotificationService');
-            console.log('✅ notifyDonationComplete function imported');
+            // Create notifications for BOTH donor and participant
+            try {
+              console.log('🔔 Starting notification creation...');
+              console.log('   Donor ID:', user.uid);
+              console.log('   Participant ID:', participantUserId);
+              console.log('   Amount:', totalAmount);
+              
+              const { notifyDonationComplete } = await import('@/services/donationNotificationService');
+              console.log('✅ notifyDonationComplete function imported');
+              
+              const notificationResult = await notifyDonationComplete({
+                donationId: docRef.id,
+                donorId: user.uid,
+                donorName: user.displayName || user.email || 'Anonymous Donor',
+                participantId: participantUserId,
+                participantName: participantName,
+                totalAmount: totalAmount,
+                directAmount: directAmount!,
+                housingAmount: housingAmount!,
+                shelterAmount: operationsAmount
+              });
+              console.log('✅ Created donor & participant notifications:', notificationResult);
+            } catch (error) {
+              console.error('❌ Error creating donation notifications:', error);
+              console.error('❌ Error details:', {
+                message: error instanceof Error ? error.message : 'Unknown error',
+                stack: error instanceof Error ? error.stack : undefined
+              });
+            }
             
-            const notificationResult = await notifyDonationComplete({
-              donationId: docRef.id,
-              donorId: user.uid,
-              donorName: user.displayName || user.email || 'Anonymous Donor',
-              participantId: participantUserId,
-              participantName: participantName,
-              totalAmount: totalAmount,
-              directAmount: directAmount,
-              housingAmount: housingAmount,
-              shelterAmount: operationsAmount
-            });
-            console.log('✅ Created donor & participant notifications:', notificationResult);
-          } catch (error) {
-            console.error('❌ Error creating donation notifications:', error);
-            console.error('❌ Error details:', {
-              message: error instanceof Error ? error.message : 'Unknown error',
-              stack: error instanceof Error ? error.stack : undefined
-            });
-          }
-          
-          // Update Old Brewery Mission shelter operations
-          try {
-            const shelterRef = doc(db, 'shelters', 'old-brewery-mission');
-            await updateDoc(shelterRef, {
-              operations_revenue: increment(operationsAmount),
-              total_donations_received: increment(totalAmount),
-              updated_at: serverTimestamp()
-            });
-            console.log('✅ Updated Old Brewery Mission operations:', { operations: operationsAmount });
-          } catch (error) {
-            console.error('❌ Error updating shelter operations:', error);
+            // Update shelter operations for participant donations (5%)
+            try {
+              const shelterRef = doc(db, 'shelters', 'old-brewery-mission');
+              await updateDoc(shelterRef, {
+                operations_revenue: increment(operationsAmount),
+                total_donations_received: increment(operationsAmount), // 🔧 FIX: Only count 5%, not full amount
+                updated_at: serverTimestamp()
+              });
+              console.log('✅ Updated shelter operations (5%):', { operations: operationsAmount });
+            } catch (error) {
+              console.error('❌ Error updating shelter operations:', error);
+            }
+          } else {
+            // 🏠 DIRECT SHELTER DONATION - Update shelter with 95%
+            try {
+              const shelterRef = doc(db, 'shelters', 'old-brewery-mission');
+              await updateDoc(shelterRef, {
+                operations_revenue: increment(shelterAmount!), // 95% to shelter
+                total_donations_received: increment(shelterAmount!), // Count 95% towards total
+                direct_donation_count: increment(1),
+                updated_at: serverTimestamp()
+              });
+              console.log('✅ Updated shelter direct donation (95%):', { shelter: shelterAmount });
+            } catch (error) {
+              console.error('❌ Error updating shelter:', error);
+            }
+            
+            // TODO: Create notifications for direct shelter donations
+            console.log('🔔 Shelter donation notifications not yet implemented');
           }
           
           // Update donor (Jane's) stats
@@ -262,7 +314,7 @@ function SuccessPageContent() {
     }, 500);
 
     return () => clearTimeout(timer);
-  }, [isDemo, amount, participantName, reference, user]);
+  }, [isDemo, amount, participantName, reference, user, donationType]);
 
   const handleShare = async () => {
     const shareData = {

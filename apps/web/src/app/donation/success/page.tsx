@@ -492,12 +492,21 @@ function SuccessPageContent() {
                   Share Your Impact
                 </Button>
                 
-                <Link href={`/participant/${participantSlug}`}>
-                  <Button variant="outline" className="w-full h-11 border-green-500 text-green-600 hover:bg-green-50 dark:hover:bg-green-950/30">
-                    <User className="h-4 w-4 mr-2" />
-                    View {participantName}&apos;s Profile
-                  </Button>
-                </Link>
+                {donationType === 'participant' ? (
+                  <Link href={`/participant/${participantSlug}`}>
+                    <Button variant="outline" className="w-full h-11 border-green-500 text-green-600 hover:bg-green-50 dark:hover:bg-green-950/30">
+                      <User className="h-4 w-4 mr-2" />
+                      View {participantName}&apos;s Profile
+                    </Button>
+                  </Link>
+                ) : (
+                  <Link href={`/${shelterSlug}`}>
+                    <Button variant="outline" className="w-full h-11 border-green-500 text-green-600 hover:bg-green-50 dark:hover:bg-green-950/30">
+                      <Home className="h-4 w-4 mr-2" />
+                      View {shelterName}&apos;s Page
+                    </Button>
+                  </Link>
+                )}
               </div>
               
               <div className="text-center pt-2">

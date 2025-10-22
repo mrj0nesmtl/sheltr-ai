@@ -656,8 +656,19 @@ function getCategoryFromType(type: string): NotificationCategory {
 /**
  * Format timestamp to relative time
  */
-export function formatRelativeTime(timestamp: Timestamp | Date): string {
+export function formatRelativeTime(timestamp: Timestamp | Date | undefined | null): string {
+  // Handle undefined/null timestamps
+  if (!timestamp) {
+    return 'Recently';
+  }
+  
   const date = timestamp instanceof Timestamp ? timestamp.toDate() : timestamp;
+  
+  // Validate date is valid
+  if (!date || isNaN(date.getTime())) {
+    return 'Recently';
+  }
+  
   const now = new Date();
   const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
 

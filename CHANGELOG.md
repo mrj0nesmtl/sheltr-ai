@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.57.7] - 2025-10-22 (NOTIFICATION TIMESTAMP FIX) 🐛
+
+### 🔧 Fixed
+- **Undefined Timestamp Error**: Fixed `Cannot read properties of undefined (reading 'getTime')` error
+  - **Problem**: `formatRelativeTime()` didn't handle `undefined` or `null` timestamps
+  - **Solution**: Added guards to check for undefined/null/invalid timestamps
+  - **Fallback**: Returns "Recently" for invalid timestamps instead of crashing
+  - **Result**: Notifications page no longer crashes when timestamps are missing
+
+### 📝 Technical Details
+- Updated `formatRelativeTime()` signature to accept `undefined | null`
+- Added validation: `if (!timestamp)` and `if (isNaN(date.getTime()))`
+- Graceful fallback prevents runtime errors
+
+### 🧪 Testing
+- Notifications page should load without console errors
+- Missing timestamps display as "Recently"
+
+---
+
 ## [2.57.6] - 2025-10-21 (SHELTER CARD STATS FIX) 📊
 
 ### 🔧 Fixed

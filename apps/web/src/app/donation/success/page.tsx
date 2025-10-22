@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { CheckCircle, Heart, Home, Share2, Mail, ArrowRight, Sparkles, User } from 'lucide-react';
+import { CheckCircle, Heart, Home, Share2, ArrowRight, Sparkles, User } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -22,18 +22,32 @@ function SuccessPageContent() {
   const shelterName = searchParams.get('shelter') || 'Old Brewery Mission';
   const reference = searchParams.get('ref') || searchParams.get('reference') || 'DEMO-' + Date.now();
   
+  // 🆕 Detect donation type
+  // If 'participant' param exists, it's a participant donation
+  // If only 'shelter' param exists, it's a direct shelter donation
+  const hasParticipant = !!searchParams.get('participant');
+  const donationType = hasParticipant ? 'participant' : 'shelter';
+  
   // Generate profile links
   const participantSlug = 'michael-rodriguez'; // Could be derived from participantName
   const shelterSlug = 'old-brewery-mission'; // Could be derived from shelterName
 
-  // Calculate SmartFund™ breakdown
+  // Calculate SmartFund™ breakdown based on donation type
   const donationAmount = parseFloat(amount);
-  const breakdown = {
-    total: donationAmount,
-    direct: Math.round(donationAmount * 0.80 * 100) / 100,
-    housing: Math.round(donationAmount * 0.15 * 100) / 100,
-    operations: Math.round(donationAmount * 0.05 * 100) / 100,
-  };
+  const breakdown = donationType === 'shelter' 
+    ? {
+        // 🏠 DIRECT SHELTER DONATION: 95% to shelter, 5% platform
+        total: donationAmount,
+        shelter: Math.round(donationAmount * 0.95 * 100) / 100,
+        platform: Math.round(donationAmount * 0.05 * 100) / 100,
+      }
+    : {
+        // 🧑 PARTICIPANT DONATION: 80-15-5 SmartFund model
+        total: donationAmount,
+        direct: Math.round(donationAmount * 0.80 * 100) / 100,
+        housing: Math.round(donationAmount * 0.15 * 100) / 100,
+        operations: Math.round(donationAmount * 0.05 * 100) / 100,
+      };
 
   useEffect(() => {
     // Trigger celebration animation and create donation automatically
@@ -207,7 +221,7 @@ function SuccessPageContent() {
           origin: { y: 0.7 }
         };
 
-        function fire(particleRatio: number, opts: any) {
+        function fire(particleRatio: number, opts: Record<string, unknown>) {
           confetti({
             ...defaults,
             ...opts,
@@ -287,9 +301,15 @@ function SuccessPageContent() {
             
             <p className="text-lg text-muted-foreground">
               Thank you for supporting{' '}
-              <Link href={`/participant/${participantSlug}`} className="text-primary hover:underline font-medium">
-                {participantName}
-              </Link>
+              {donationType === 'participant' ? (
+                <Link href={`/participant/${participantSlug}`} className="text-primary hover:underline font-medium">
+                  {participantName}
+                </Link>
+              ) : (
+                <Link href={`/${shelterSlug}`} className="text-primary hover:underline font-medium">
+                  {shelterName}
+                </Link>
+              )}
               {' '}through SHELTR
             </p>
 
@@ -316,40 +336,73 @@ function SuccessPageContent() {
                 </div>
                 
                 <div className="border-t pt-4 space-y-3">
-                  <div className="flex justify-between">
-                    <div>
-                      <div className="font-medium">
-                        Direct to{' '}
-                        <Link href={`/participant/${participantSlug}`} className="text-primary hover:underline">
-                          {participantName}
-                        </Link>
+                  {donationType === 'shelter' ? (
+                    // 🏠 SHELTER DONATION BREAKDOWN
+                    <>
+                      <div className="flex justify-between">
+                        <div>
+                          <div className="font-medium">
+                            Direct support for{' '}
+                            <Link href={`/${shelterSlug}`} className="text-primary hover:underline">
+                              {shelterName}
+                            </Link>
+                          </div>
+                          <div className="text-sm text-muted-foreground">Operations & participant services</div>
+                        </div>
+                        <div className="text-right">
+                          <div className="font-bold text-green-600">95% • ${breakdown.shelter}</div>
+                        </div>
                       </div>
-                      <div className="text-sm text-muted-foreground">Immediate support</div>
-                    </div>
-                    <div className="text-right">
-                      <div className="font-bold text-primary">80% • ${breakdown.direct}</div>
-                    </div>
-                  </div>
-                  
-                  <div className="flex justify-between">
-                    <div>
-                      <div className="font-medium">Housing Fund</div>
-                      <div className="text-sm text-muted-foreground">Long-term solutions</div>
-                    </div>
-                    <div className="text-right">
-                      <div className="font-bold text-green-600">15% • ${breakdown.housing}</div>
-                    </div>
-                  </div>
-                  
-                  <div className="flex justify-between">
-                    <div>
-                      <div className="font-medium">Platform Operations</div>
-                      <div className="text-sm text-muted-foreground">Secure & transparent</div>
-                    </div>
-                    <div className="text-right">
-                      <div className="font-bold text-blue-600">5% • ${breakdown.operations}</div>
-                    </div>
-                  </div>
+                      
+                      <div className="flex justify-between">
+                        <div>
+                          <div className="font-medium">Platform Operations</div>
+                          <div className="text-sm text-muted-foreground">Secure & transparent</div>
+                        </div>
+                        <div className="text-right">
+                          <div className="font-bold text-blue-600">5% • ${breakdown.platform}</div>
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    // 🧑 PARTICIPANT DONATION BREAKDOWN
+                    <>
+                      <div className="flex justify-between">
+                        <div>
+                          <div className="font-medium">
+                            Direct to{' '}
+                            <Link href={`/participant/${participantSlug}`} className="text-primary hover:underline">
+                              {participantName}
+                            </Link>
+                          </div>
+                          <div className="text-sm text-muted-foreground">Immediate support</div>
+                        </div>
+                        <div className="text-right">
+                          <div className="font-bold text-primary">80% • ${breakdown.direct}</div>
+                        </div>
+                      </div>
+                      
+                      <div className="flex justify-between">
+                        <div>
+                          <div className="font-medium">Housing Fund</div>
+                          <div className="text-sm text-muted-foreground">Long-term solutions</div>
+                        </div>
+                        <div className="text-right">
+                          <div className="font-bold text-green-600">15% • ${breakdown.housing}</div>
+                        </div>
+                      </div>
+                      
+                      <div className="flex justify-between">
+                        <div>
+                          <div className="font-medium">Platform Operations</div>
+                          <div className="text-sm text-muted-foreground">Secure & transparent</div>
+                        </div>
+                        <div className="text-right">
+                          <div className="font-bold text-blue-600">5% • ${breakdown.operations}</div>
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
 
                 <div className="bg-muted/50 rounded-lg p-3 mt-4">
@@ -375,29 +428,51 @@ function SuccessPageContent() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-                <div className="p-4 bg-primary/5 rounded-lg">
-                  <div className="text-2xl font-bold text-primary">${breakdown.direct}</div>
-                  <div className="text-sm text-muted-foreground">
-                    Available immediately to{' '}
-                    <Link href={`/participant/${participantSlug}`} className="text-primary hover:underline font-medium">
-                      {participantName}
-                    </Link>
+              {donationType === 'shelter' ? (
+                // 🏠 SHELTER DONATION IMPACT
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-center">
+                  <div className="p-4 bg-green-500/10 rounded-lg">
+                    <div className="text-2xl font-bold text-green-600">${breakdown.shelter}</div>
+                    <div className="text-sm text-muted-foreground">
+                      Supporting operations at{' '}
+                      <Link href={`/${shelterSlug}`} className="text-primary hover:underline font-medium">
+                        {shelterName}
+                      </Link>
+                    </div>
+                  </div>
+                  <div className="p-4 bg-blue-500/10 rounded-lg">
+                    <div className="text-2xl font-bold text-blue-600">100%</div>
+                    <div className="text-sm text-muted-foreground">
+                      Blockchain verified
+                    </div>
                   </div>
                 </div>
-                <div className="p-4 bg-green-50 dark:bg-green-950/30 rounded-lg">
-                  <div className="text-2xl font-bold text-green-600">Instant</div>
-                  <div className="text-sm text-muted-foreground">
-                    Transfer to digital wallet
+              ) : (
+                // 🧑 PARTICIPANT DONATION IMPACT
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                  <div className="p-4 bg-primary/5 rounded-lg">
+                    <div className="text-2xl font-bold text-primary">${breakdown.direct}</div>
+                    <div className="text-sm text-muted-foreground">
+                      Available immediately to{' '}
+                      <Link href={`/participant/${participantSlug}`} className="text-primary hover:underline font-medium">
+                        {participantName}
+                      </Link>
+                    </div>
+                  </div>
+                  <div className="p-4 bg-green-50 dark:bg-green-950/30 rounded-lg">
+                    <div className="text-2xl font-bold text-green-600">Instant</div>
+                    <div className="text-sm text-muted-foreground">
+                      Transfer to digital wallet
+                    </div>
+                  </div>
+                  <div className="p-4 bg-blue-50 dark:bg-blue-950/30 rounded-lg">
+                    <div className="text-2xl font-bold text-blue-600">100%</div>
+                    <div className="text-sm text-muted-foreground">
+                      Blockchain verified
+                    </div>
                   </div>
                 </div>
-                <div className="p-4 bg-blue-50 dark:bg-blue-950/30 rounded-lg">
-                  <div className="text-2xl font-bold text-blue-600">100%</div>
-                  <div className="text-sm text-muted-foreground">
-                    Blockchain verified
-                  </div>
-                </div>
-              </div>
+              )}
             </CardContent>
           </Card>
 
@@ -480,7 +555,7 @@ function SuccessPageContent() {
                     🎭 Demo Experience Complete!
                   </h3>
                   <p className="text-sm text-yellow-700 dark:text-yellow-300 mb-4">
-                    You've experienced SHELTR's complete donation flow with Adyen payment processing. 
+                    You&apos;ve experienced SHELTR&apos;s complete donation flow with Adyen payment processing. 
                     In production, this would process real payments and create actual blockchain transactions.
                   </p>
                   <div className="space-y-2 text-xs text-yellow-600 dark:text-yellow-400">

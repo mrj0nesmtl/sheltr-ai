@@ -624,21 +624,24 @@ export default function ShelterNetwork() {
         }
       });
       
-      // Update shelters with calculated stats
-      const updatedShelters = shelters.map(shelter => ({
-        ...shelter,
-        totalDonors: shelterDonorCounts[shelter.id]?.size || 0,
-        totalDonations: shelterDonationTotals[shelter.id] || 0
-      }));
-      
-      setShelters(updatedShelters);
-      console.log('✅ Updated shelter donor and donation stats');
-      console.log('📊 Donor counts by shelter:', 
-        Object.fromEntries(
-          Object.entries(shelterDonorCounts).map(([id, donors]) => [id, donors.size])
-        )
-      );
-      console.log('💰 Donation totals by shelter:', shelterDonationTotals);
+      // Update shelters with calculated stats using functional state update
+      setShelters(currentShelters => {
+        const updatedShelters = currentShelters.map(shelter => ({
+          ...shelter,
+          totalDonors: shelterDonorCounts[shelter.id]?.size || 0,
+          totalDonations: shelterDonationTotals[shelter.id] || 0
+        }));
+        
+        console.log('✅ Updated shelter donor and donation stats');
+        console.log('📊 Donor counts by shelter:', 
+          Object.fromEntries(
+            Object.entries(shelterDonorCounts).map(([id, donors]) => [id, donors.size])
+          )
+        );
+        console.log('💰 Donation totals by shelter:', shelterDonationTotals);
+        
+        return updatedShelters;
+      });
     } catch (error) {
       console.error('❌ Error calculating shelter donor stats:', error);
     }
@@ -653,9 +656,22 @@ export default function ShelterNetwork() {
   // Calculate donor stats after shelters are loaded
   useEffect(() => {
     if (shelters.length > 0) {
+      console.log('🔄 Running calculateShelterDonorStats because shelters changed');
       calculateShelterDonorStats();
     }
-  }, [shelters.length]); // Only run when shelters are loaded
+  }, [shelters.length]); // Only run when shelters count changes
+  
+  // Log shelters state whenever it updates for debugging
+  useEffect(() => {
+    if (shelters.length > 0) {
+      console.log('🏠 Current shelters state:', shelters.map(s => ({
+        id: s.id,
+        name: s.name,
+        totalDonors: s.totalDonors,
+        totalDonations: s.totalDonations
+      })));
+    }
+  }, [shelters]);
 
   // Calculate INDUSTRY-STANDARD shelter management KPIs (SESSION 13)
   const totalCapacity = filteredShelters.reduce((acc, s) => acc + s.capacity, 0);

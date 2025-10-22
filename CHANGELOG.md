@@ -7,6 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.57.6] - 2025-10-21 (SHELTER CARD STATS FIX) 📊
+
+### 🔧 Fixed
+- **Shelter Card Donor & Donation Stats Showing "0"**: Fixed calculation and display of donor/donation statistics
+  - **Problem 1**: Amount extraction - was getting entire object `{total: X}` instead of numeric value
+  - **Problem 2**: Donor display - was using calculation `Math.floor(donations / 50)` instead of actual `totalDonors`
+  - **Solution**: Proper amount parsing and using actual `totalDonors` field
+  - **Result**: Shelter cards now show correct donor counts and donation totals
+
+### 🔍 Enhanced
+- **Detailed Stats Logging**: Added comprehensive logging to diagnose shelter statistics
+  - Logs donor counts by shelter ID
+  - Logs donation totals by shelter ID
+  - Helps verify calculations are working correctly
+
+### 📝 Technical Details
+- Fixed amount extraction to handle both `{total: X}` object and direct number formats
+- Updated card display to use `shelter.totalDonors` instead of calculated value
+- Added validation: only count donations with `amount > 0`
+- Enhanced logging for better debugging
+
+### 🧪 Testing
+- **Reload dashboard**: Shelter cards should now show actual donor and donation stats
+- **Check console**: Should see detailed breakdown by shelter ID
+
+---
+
 ## [2.57.5] - 2025-10-21 (SHELTER DETAIL PAGE 404 FIX & DEBUG LOGGING) 🔧
 
 ### 🔧 Fixed

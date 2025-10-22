@@ -84,6 +84,7 @@ function DonatePageContent() {
           // Get participant count for this shelter
           let participantCount = 0;
           try {
+            console.log('🔍 Querying participants for shelter:', matchingShelter.id);
             const { collection, query, where, getDocs } = await import('firebase/firestore');
             const { db } = await import('@/lib/firebase');
             const participantsQuery = query(
@@ -93,8 +94,10 @@ function DonatePageContent() {
             );
             const participantsSnapshot = await getDocs(participantsQuery);
             participantCount = participantsSnapshot.size;
+            console.log('✅ Found participants:', participantCount);
           } catch (error) {
-            console.error('Error fetching participant count:', error);
+            console.error('❌ Error fetching participant count:', error);
+            console.error('   Shelter ID:', matchingShelter.id);
           }
           
           setShelter({

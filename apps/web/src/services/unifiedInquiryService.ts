@@ -50,9 +50,9 @@ const getAllPlatformAdmins = async (): Promise<Array<{ uid: string, role: 'super
       where('role', 'in', ['super_admin', 'platform_admin'])
     );
     const snapshot = await getDocs(q);
-    return snapshot.docs.map(doc => ({
+    return snapshot.docs.map((doc: DocumentSnapshot) => ({
       uid: doc.id,
-      role: doc.data().role as 'super_admin' | 'platform_admin'
+      role: doc.data()?.role as 'super_admin' | 'platform_admin'
     }));
   } catch (error) {
     console.error('❌ Error fetching platform admins:', error);
@@ -404,7 +404,7 @@ export class UnifiedInquiryService {
       const querySnapshot = await getDocs(q);
       const signups: NewsletterSignup[] = [];
       
-      querySnapshot.forEach((doc) => {
+      querySnapshot.forEach((doc: DocumentSnapshot) => {
         const data = doc.data();
         signups.push({
           email: data.email,

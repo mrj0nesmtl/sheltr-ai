@@ -598,12 +598,21 @@ export default function ShelterNetwork() {
         const donation = doc.data();
         const participantId = donation.participant_id || donation.participantId;
         const donorId = donation.donor_id || donation.donorId;
-        const amount = donation.amount || 0;
+        
+        // Extract amount - handle both {total: X} and direct number formats
+        let amount = 0;
+        if (donation.amount) {
+          if (typeof donation.amount === 'object' && donation.amount.total) {
+            amount = donation.amount.total;
+          } else if (typeof donation.amount === 'number') {
+            amount = donation.amount;
+          }
+        }
         
         // Get shelter_id from participant
         const shelterId = participantId ? participantToShelter[participantId] : null;
         
-        if (shelterId && donorId) {
+        if (shelterId && donorId && amount > 0) {
           // Track unique donors
           if (!shelterDonorCounts[shelterId]) {
             shelterDonorCounts[shelterId] = new Set();
@@ -624,6 +633,12 @@ export default function ShelterNetwork() {
       
       setShelters(updatedShelters);
       console.log('✅ Updated shelter donor and donation stats');
+      console.log('📊 Donor counts by shelter:', 
+        Object.fromEntries(
+          Object.entries(shelterDonorCounts).map(([id, donors]) => [id, donors.size])
+        )
+      );
+      console.log('💰 Donation totals by shelter:', shelterDonationTotals);
     } catch (error) {
       console.error('❌ Error calculating shelter donor stats:', error);
     }
@@ -1047,9 +1062,9 @@ export default function ShelterNetwork() {
                           </div>
                           <div className="bg-blue-50 dark:bg-blue-950/30 rounded-xl p-3 text-center">
                             <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                              {Math.floor((shelter.totalDonations || 0) / 50) || 0}
+                              {shelter.totalDonors || 0}
                             </div>
-                            <div className="text-xs font-medium text-blue-700 dark:text-blue-300 uppercase tracking-wide">Total Donors</div>
+                            <div className="text-xs font-medium text-blue-700 dark:text-blue-300 uppercase tracking-wide">Donors</div>
                           </div>
                           <div className="bg-green-50 dark:bg-green-950/30 rounded-xl p-3 text-center">
                             <div className="text-xl font-bold text-green-600 dark:text-green-400">

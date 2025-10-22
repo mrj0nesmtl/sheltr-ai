@@ -152,8 +152,8 @@ export function NotificationList({
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All categories</SelectItem>
-            {categories.map(category => (
-              <SelectItem key={category} value={category}>
+            {categories.map((category, index) => (
+              <SelectItem key={`${category}-${index}`} value={category}>
                 {category}
               </SelectItem>
             ))}

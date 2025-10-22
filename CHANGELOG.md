@@ -7,6 +7,42 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.57.9] - 2025-10-22 (CRITICAL: DONATION ACCOUNTING FIX) 🚨
+
+### 🐛 Critical Bug Fixed
+- **Donation Accounting Error**: Fixed incorrect shelter revenue calculations
+  - **Problem 1**: Participant donations ($1,000) were crediting full amount to shelter instead of only 5% ($50)
+  - **Problem 2**: Direct shelter donations were only crediting 5% ($50) instead of 95% ($950)
+  - **Root Cause**: Success page had only one code path for all donations
+  - **Solution**: Separated participant and shelter donation flows with correct calculations
+
+### 📊 Correct Calculations Now:
+- **Participant Donation** ($1,000):
+  - Participant: $800 (80%)
+  - Housing Fund: $150 (15%)
+  - **Shelter Operations**: $50 (5%) ✅
+  - Platform: $50 (5%)
+  
+- **Direct Shelter Donation** ($1,000):
+  - **Shelter**: $950 (95%) ✅
+  - Platform: $50 (5%)
+
+### 🔧 Technical Changes
+- Added `donationType` detection (`'participant'` vs `'shelter'`)
+- Conditional amount calculation based on donation type
+- Conditional donation data structure (participant fields only for participant donations)
+- Separate shelter update logic:
+  - Participant: `operations_revenue += 5%`, `total_donations_received += 5%`
+  - Shelter: `operations_revenue += 95%`, `total_donations_received += 95%`
+- Added `direct_donation_count` field for shelter donations
+
+### ⚠️ Impact
+- **Previous donations were incorrectly recorded**
+- Recommend clearing donation data and re-testing
+- Future donations will be calculated correctly
+
+---
+
 ## [2.57.8] - 2025-10-22 (DONATION SUCCESS PAGE FIX) 🎯
 
 ### 🔧 Fixed

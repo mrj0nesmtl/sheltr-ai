@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.57.8] - 2025-10-22 (DONATION SUCCESS PAGE FIX) 🎯
+
+### 🔧 Fixed
+- **Donation Success Page Button**: Fixed "Continue Your SHELTR Journey" button to show correct profile link
+  - **Participant Donations**: Shows "View [Participant]'s Profile" → `/participant/[slug]`
+  - **Direct Shelter Donations**: Shows "View [Shelter]'s Page" → `/[shelter-slug]`
+  - **Icon Update**: Uses Home icon for shelter, User icon for participant
+  - **Result**: Users are directed to the correct page based on donation type
+
+### 📝 Technical Details
+- Conditionally renders button based on `donationType` ('participant' vs 'shelter')
+- Uses existing `donationType` detection from URL parameters
+- Maintains consistent green styling for both button variants
+
+---
+
 ## [2.57.7] - 2025-10-22 (NOTIFICATION TIMESTAMP FIX) 🐛
 
 ### 🔧 Fixed

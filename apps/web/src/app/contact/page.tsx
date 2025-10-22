@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { UnifiedInquiryService } from '@/services/unifiedInquiryService';
-import { Mail, Phone, MapPin, MessageCircle, Send, ExternalLink, Github, FileText, Sparkles, Users, Heart } from 'lucide-react';
+import { Mail, MessageCircle, Send, ExternalLink, Github, FileText, Sparkles, Users, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -10,7 +10,6 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Link from 'next/link';
-import Image from 'next/image';
 import Footer from '@/components/Footer';
 import Head from 'next/head';
 import { PublicChatbot } from '@/components/PublicChatbot';

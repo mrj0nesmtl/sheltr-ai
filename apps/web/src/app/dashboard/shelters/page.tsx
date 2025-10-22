@@ -572,9 +572,10 @@ export default function ShelterNetwork() {
     try {
       console.log('🔄 Calculating shelter donor stats from donations...');
       
-      // Get all donations
-      const donationsRef = collection(db, 'donations');
+      // Get all donations from demo_donations collection (where donations are actually stored)
+      const donationsRef = collection(db, 'demo_donations');
       const donationsSnapshot = await getDocs(donationsRef);
+      console.log(`📊 Found ${donationsSnapshot.size} donations in demo_donations`);
       
       // Track unique donors and donation totals per shelter
       const shelterDonorCounts: Record<string, Set<string>> = {};

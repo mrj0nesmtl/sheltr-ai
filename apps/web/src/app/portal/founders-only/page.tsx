@@ -495,7 +495,7 @@ export default function FoundersOnlyPage() {
   const loadGalleryItems = async () => {
     try {
       const galleryQuery = query(
-        collection(db, 'gallery'),
+        collection(db, 'gallery_images'),
         where('isFoundersGallery', '==', true)
       );
       const snapshot = await getDocs(galleryQuery);
@@ -506,11 +506,11 @@ export default function FoundersOnlyPage() {
           id: doc.id,
           title: data.title || 'Untitled',
           description: data.description || '',
-          type: data.type || 'video',
-          thumbnail: data.thumbnail || data.url || '',
-          url: data.url,
+          type: data.mediaType || 'video',
+          thumbnail: data.thumbnailUrl || data.src || '',
+          url: data.src,
           tags: data.tags || [],
-          date: data.uploadedAt?.toDate?.()?.toLocaleDateString() || new Date().toLocaleDateString(),
+          date: data.createdAt?.toDate?.()?.toLocaleDateString() || new Date().toLocaleDateString(),
           duration: data.duration,
         };
       });

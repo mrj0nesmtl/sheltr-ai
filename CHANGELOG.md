@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.58.1] - 2025-10-23 (COVENANT HOUSE ENHANCED & FOUNDERS PORTAL) 🏢
+
+### ✨ New Features
+- **Founders Portal Integration**: Added Covenant House proposal card and dedicated review page
+  - New pink card in founders-only portal for partnership proposal
+  - Full dedicated page at `/portal/founders-only/covenant-house-outreach`
+  - Markdown-rendered content with quick actions, contacts, timeline
+  - Key stats dashboard (200 youth, $60K revenue, 300% ROI)
+  - Primary contacts for Toronto (Mark Aston) and Vancouver (Deb Lester)
+  - 3-stage engagement timeline visualization
+  - Download and external link actions
+
+### 📄 Documentation Enhanced
+- **Unified Ecosystem Content**: Added "How SHELTR Works" section to Covenant House proposal
+  - **"Venmo for the Unhoused"** positioning - dignified tech-for-good platform
+  - **"Anything is better than a tent"** mission statement
+  - Overflow management and emergency temporary housing focus
+  - Stakeholder benefits breakdown (Participants, Donors, Shelters)
+  - SmartFund™ 80-15-5 distribution model explained
+  - Self-reinforcing cycle of immediate relief → systemic change
+  - Tech-for-good promise and capacity amplification messaging
+
+---
+
 ## [2.58.0] - 2025-10-23 (SHADCN MCP & COVENANT HOUSE OUTREACH) 🤝
 
 ### ✨ New Features

@@ -7,6 +7,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.58.0] - 2025-10-23 (SHADCN MCP & COVENANT HOUSE OUTREACH) 🤝
+
+### ✨ New Features
+- **shadcn MCP Server Integration**: Configured shadcn MCP server in Cursor for AI-assisted component browsing and installation
+  - Added to `.cursor/mcp.json` configuration
+  - Enables natural language component installation and discovery
+  - Access to shadcn/ui registry, blocks, and examples
+  - Streamlines development workflow with AI-powered component management
+
+### 📄 Documentation
+- **Covenant House Canada Partnership Proposal** (`docs/06-user-guides/covenant-house-canada-outreach.md`)
+  - Comprehensive executive outreach document for Covenant House Toronto & Vancouver
+  - Detailed pilot proposal for 2026-2027 partnership
+  - Financial model and ROI projections (100 youth per site)
+  - Youth-centered impact metrics and evaluation framework
+  - Integration of "Million Dollar Murray" thesis and "Hacking Homelessness" ethos
+  - Live platform links and documentation hub references
+  - Key leadership contacts at Toronto, Vancouver, and Innovation Center
+  - 3-stage engagement process (Discovery → Presentation → Launch)
+
+### 🧹 Code Cleanup
+- Removed unused imports in `apps/web/src/app/contact/page.tsx` (Phone, MapPin, Image)
+- Fixed implicit `any` type annotations in `apps/web/src/services/unifiedInquiryService.ts`
+- Addressed TypeScript linting warnings (reduced from 30 to 24 cosmetic type issues)
+
+### 📚 References Added
+- Malcolm Gladwell's "Million Dollar Murray" essay link
+- Covenant House organizational background and innovation initiatives
+- IT Career Pathways programs and strategic alignment
+- Live production URLs for all solution pages
+
+---
+
 ## [2.57.9] - 2025-10-22 (CRITICAL: DONATION ACCOUNTING FIX) 🚨
 
 ### 🐛 Critical Bug Fixed

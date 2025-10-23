@@ -25,7 +25,7 @@ export default function OrganizationsCaseStudyPage() {
         badgeText="Case Study"
         badgeVariant="secondary"
         badgeClassName="bg-white text-black"
-        title="Breaking the 90-Day Crisis Threshold"
+        title="Breaking the Cycle"
       >
         <div className="flex flex-col items-center gap-3 mt-4">
           <div className="flex items-center gap-4 text-sm text-white/80">
@@ -39,7 +39,6 @@ export default function OrganizationsCaseStudyPage() {
         </div>
         <div className="text-center mt-6">
           <p className="text-gray-200 mb-4 text-xl font-semibold">
-            Anything is Better Than a Tent.
           </p>
           <p className="text-gray-300 mb-4">
             Academic research proves that after 90 days of homelessness, the chance of recovery drops dramatically. 
@@ -61,7 +60,7 @@ export default function OrganizationsCaseStudyPage() {
       </StandardHero>
 
       {/* The 90-Day Crisis Threshold */}
-      <section className="py-16 bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/20">
+      <section className="py-16 bg-background dark:bg-black">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
@@ -97,7 +96,7 @@ export default function OrganizationsCaseStudyPage() {
               </div>
             </div>
 
-            <div className="bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 rounded-xl p-8 shadow-lg">
+            <div className="bg-muted/50 dark:bg-gray-900/50 rounded-xl p-8 shadow-lg">
               <h3 className="text-2xl font-bold mb-4 text-green-700 dark:text-green-300">SHELTR's Two-Pronged Solution</h3>
               <p className="text-lg text-muted-foreground mb-6">
                 We attack the homelessness epidemic from <strong>both sides</strong> with distinct but complementary solutions:
@@ -182,7 +181,7 @@ export default function OrganizationsCaseStudyPage() {
                 <strong> First, </strong> empower those living in tents and parks with direct community funding to secure <strong>mobile PODS and emergency housing</strong>—because anything is better than a tent. 
                 <strong> Second,</strong> provide shelters with next-generation HMIS systems for free to maximize their impact and efficiency.
               </p>
-              <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 p-6 rounded-lg mt-8">
+              <div className="bg-muted/50 dark:bg-gray-900/50 p-6 rounded-lg mt-8">
                 <p className="text-center text-lg font-semibold mb-4">
                   🎯 <strong>Core Innovation:</strong> Direct-to-participant housing funding + shelter operational excellence
                 </p>
@@ -269,7 +268,7 @@ export default function OrganizationsCaseStudyPage() {
       </section>
 
       {/* Implementation Story */}
-      <section className="py-16 bg-gradient-to-r from-slate-50 to-gray-50 dark:from-slate-900/20 dark:to-gray-900/20">
+      <section className="py-16 bg-background dark:bg-black">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
@@ -561,7 +560,7 @@ export default function OrganizationsCaseStudyPage() {
       </section>
 
       {/* Three Pillars Foundation */}
-      <section className="py-16 bg-gradient-to-r from-slate-50 to-gray-50 dark:from-slate-900/50 dark:to-gray-900/50">
+      <section className="py-16 bg-background dark:bg-black">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
@@ -598,7 +597,7 @@ export default function OrganizationsCaseStudyPage() {
       </section>
 
       {/* 100 Participants Financial Scenario */}
-      <section className="py-16 bg-gradient-to-br from-green-50 via-blue-50 to-purple-50 dark:from-green-900/20 dark:via-blue-900/20 dark:to-purple-900/20">
+      <section className="py-16 bg-background dark:bg-black">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
@@ -790,7 +789,7 @@ export default function OrganizationsCaseStudyPage() {
             </div>
 
             {/* Donor Journey Visualization */}
-            <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-xl p-8">
+            <div className="bg-muted/50 dark:bg-gray-900/50 rounded-xl p-8">
               <h3 className="text-2xl font-bold text-center mb-8">Typical Donor Journey</h3>
               <div className="grid md:grid-cols-4 gap-6">
                 <div className="text-center">
@@ -828,7 +827,7 @@ export default function OrganizationsCaseStudyPage() {
       </section>
 
       {/* Revenue Generation Timeline */}
-      <section className="py-16 bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20">
+      <section className="py-16 bg-background dark:bg-black">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
@@ -1213,14 +1212,13 @@ export default function OrganizationsCaseStudyPage() {
       </section>
 
       {/* Financial Call to Action */}
-      <section className="py-16 bg-gradient-to-r from-green-600 to-blue-600 text-white">
+      <section className="py-16 bg-black text-white">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold mb-6">Your Financial Revolution Starts Now</h2>
+              <h2 className="text-4xl font-bold mb-6">The Disruption Starts Now</h2>
               <p className="text-xl mb-8 opacity-90">
-                Stop leaving money on the table. Transform your participants into revenue-generating assets 
-                while providing them unprecedented support and dignity.
+                Transform your revenue model while providing unprecedented support.
               </p>
             </div>
 
@@ -1228,7 +1226,7 @@ export default function OrganizationsCaseStudyPage() {
             <div className="grid lg:grid-cols-3 gap-8 mb-12">
               <div className="text-center bg-white/10 backdrop-blur-sm rounded-xl p-6">
                 <div className="text-4xl font-bold mb-2">$30,000</div>
-                <div className="text-lg mb-2">Annual Revenue Potential</div>
+                <div className="text-lg mb-2">Annual Impact Potential</div>
                 <div className="text-sm opacity-80">Conservative 100-participant estimate</div>
               </div>
               <div className="text-center bg-white/10 backdrop-blur-sm rounded-xl p-6">

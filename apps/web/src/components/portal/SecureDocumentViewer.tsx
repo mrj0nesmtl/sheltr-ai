@@ -52,7 +52,7 @@ export default function SecureDocumentViewer({
         setIsLoading(true);
         setError(null);
 
-        // Query Firestore for the document
+        // First, try to get document by ID directly
         const docRef = doc(db, 'founder_documents', documentSlug);
         const docSnap = await getDoc(docRef);
 
@@ -60,7 +60,20 @@ export default function SecureDocumentViewer({
           const data = docSnap.data() as DocumentData;
           setDocument(data);
         } else {
-          setError('Document not found');
+          // If not found by ID, try querying by slug field
+          const { collection: firestoreCollection, query: firestoreQuery, where, getDocs } = await import('firebase/firestore');
+          const q = firestoreQuery(
+            firestoreCollection(db, 'founder_documents'),
+            where('slug', '==', documentSlug)
+          );
+          const querySnapshot = await getDocs(q);
+          
+          if (!querySnapshot.empty) {
+            const data = querySnapshot.docs[0].data() as DocumentData;
+            setDocument(data);
+          } else {
+            setError('Document not found');
+          }
         }
       } catch (err) {
         console.error('Error loading document:', err);

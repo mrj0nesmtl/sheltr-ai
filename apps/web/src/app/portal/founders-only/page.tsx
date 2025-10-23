@@ -163,7 +163,12 @@ export default function FoundersOnlyPage() {
   const initialCards: QuickAccessCard[] = [
     {
       id: 'investor-relations',
-      icon: <TrendingUp className="h-6 w-6 text-blue-600" />,
+      icon: (
+        <div className="relative">
+          <TrendingUp className="h-6 w-6 text-blue-600" />
+          <Lock className="h-3 w-3 text-blue-600 absolute -top-1 -right-1 bg-white dark:bg-slate-900 rounded-full" />
+        </div>
+      ),
       badgeText: 'Pre-Seed',
       badgeClass: 'bg-blue-600 text-white',
       title: 'Investor Relations',
@@ -177,7 +182,12 @@ export default function FoundersOnlyPage() {
     },
     {
       id: 'business-plan',
-      icon: <FileText className="h-6 w-6 text-red-600" />,
+      icon: (
+        <div className="relative">
+          <FileText className="h-6 w-6 text-red-600" />
+          <Lock className="h-3 w-3 text-red-600 absolute -top-1 -right-1 bg-white dark:bg-slate-900 rounded-full" />
+        </div>
+      ),
       badgeText: 'Secure',
       badgeClass: 'bg-red-600 text-white',
       title: 'Business Plan',
@@ -205,7 +215,12 @@ export default function FoundersOnlyPage() {
     },
     {
       id: 'msb-registration',
-      icon: <Shield className="h-6 w-6 text-red-600" />,
+      icon: (
+        <div className="relative">
+          <Shield className="h-6 w-6 text-red-600" />
+          <Lock className="h-3 w-3 text-red-600 absolute -top-1 -right-1 bg-white dark:bg-slate-900 rounded-full" />
+        </div>
+      ),
       badgeText: 'Legal',
       badgeClass: 'bg-red-600 text-white',
       title: 'MSB Registration Guide',
@@ -227,7 +242,7 @@ export default function FoundersOnlyPage() {
       description: 'Complete operational guide for Platform Administrators - user management, security monitoring, and strategic oversight',
       buttonText: 'View Admin Guide',
       buttonClass: 'border-2 border-purple-600 text-purple-600 hover:bg-purple-50',
-      href: '/docs/platform-admin-guide',
+      href: '/dashboard/platform-guide',
       borderClass: 'border-purple-200',
       category: 'public',
     },
@@ -289,7 +304,12 @@ export default function FoundersOnlyPage() {
     },
     {
       id: 'shelter-research',
-      icon: <BarChart3 className="h-6 w-6 text-blue-600" />,
+      icon: (
+        <div className="relative">
+          <BarChart3 className="h-6 w-6 text-blue-600" />
+          <Lock className="h-3 w-3 text-blue-600 absolute -top-1 -right-1 bg-white dark:bg-slate-900 rounded-full" />
+        </div>
+      ),
       badgeText: 'Research',
       badgeClass: 'bg-blue-600 text-white',
       title: 'Shelter Research Hub',
@@ -331,7 +351,12 @@ export default function FoundersOnlyPage() {
     },
     {
       id: 'brand-design-guide',
-      icon: <Palette className="h-6 w-6 text-red-600" />,
+      icon: (
+        <div className="relative">
+          <Palette className="h-6 w-6 text-red-600" />
+          <Lock className="h-3 w-3 text-red-600 absolute -top-1 -right-1 bg-white dark:bg-slate-900 rounded-full" />
+        </div>
+      ),
       badgeText: 'Secure',
       badgeClass: 'bg-red-600 text-white',
       title: 'Brand & Design Guide',

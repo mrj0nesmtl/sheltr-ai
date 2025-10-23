@@ -143,7 +143,7 @@ function SortableCard({ card }: { card: QuickAccessCard }) {
 
 export default function FoundersOnlyPage() {
   const router = useRouter();
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [cards, setCards] = useState<QuickAccessCard[]>([]);
@@ -429,10 +429,20 @@ export default function FoundersOnlyPage() {
   // Check authorization
   useEffect(() => {
     const checkAuth = async () => {
+      // Wait for auth to finish loading
+      if (authLoading) {
+        console.log('🔄 Founders Portal: Waiting for auth to load...');
+        return;
+      }
+
+      // If auth is loaded and no user, redirect to login
       if (!user) {
+        console.log('❌ Founders Portal: No user found, redirecting to /portal');
         router.push('/portal');
         return;
       }
+
+      console.log('✅ Founders Portal: User authenticated:', user.email);
 
       try {
         const userDoc = await getDoc(doc(db, 'users', user.uid));
@@ -440,18 +450,23 @@ export default function FoundersOnlyPage() {
           const userData = userDoc.data();
           const role = userData.role;
           
+          console.log('👤 Founders Portal: User role:', role);
+          
           if (role === 'super_admin' || role === 'platform_admin') {
+            console.log('✅ Founders Portal: User authorized!');
             setIsAuthorized(true);
             await loadCardOrder();
             await loadGalleryItems();
           } else {
+            console.log('⚠️  Founders Portal: User not authorized, redirecting to /dashboard');
             router.push('/dashboard');
           }
         } else {
+          console.log('❌ Founders Portal: User document not found, redirecting to /portal');
           router.push('/portal');
         }
       } catch (error) {
-        console.error('Authorization error:', error);
+        console.error('❌ Founders Portal: Authorization error:', error);
         router.push('/portal');
       } finally {
         setIsLoading(false);
@@ -460,7 +475,7 @@ export default function FoundersOnlyPage() {
 
     checkAuth();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, router]);
+  }, [user, authLoading, router]);
 
   // Load saved card order
   const loadCardOrder = async () => {

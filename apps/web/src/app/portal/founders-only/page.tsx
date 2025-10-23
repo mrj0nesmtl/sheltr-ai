@@ -496,7 +496,7 @@ export default function FoundersOnlyPage() {
     try {
       const galleryQuery = query(
         collection(db, 'gallery'),
-        where('showInFoundersGallery', '==', true)
+        where('isFoundersGallery', '==', true)
       );
       const snapshot = await getDocs(galleryQuery);
       
@@ -516,6 +516,7 @@ export default function FoundersOnlyPage() {
       });
       
       setGalleryItems(items);
+      console.log(`✅ Loaded ${items.length} gallery items for Founders Portal`);
     } catch (error) {
       console.error('Error loading gallery items:', error);
     }

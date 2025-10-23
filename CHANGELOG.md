@@ -7,6 +7,46 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.58.2] - 2025-10-23 (CASE STUDY RETOOLED: TWO-PLATFORM STRATEGY) 🎯
+
+### 🚨 Major Strategic Repositioning
+- **Case Study Completely Retooled**: Clear separation of two distinct platform offerings
+  - **Title Changed**: "Two Platforms, One Mission: Breaking the 90-Day Crisis Threshold"
+  - **"Anything is Better Than a Tent"** tagline added to hero
+  - Academic research integrated: 90-day homelessness = dramatically reduced recovery chance
+
+### 📊 Platform 1: Mobile PODS & Emergency Housing
+**For those living on streets/in tents:**
+- Direct community fundraising via QR codes
+- 80% of donations → participant for PODS/housing
+- Bypass the shelter trap entirely
+- Go straight to independent living
+- Beat the <90-day crisis threshold
+- **Core Message**: "The sooner we give them their own place, the sooner they can get back into life"
+
+### 🏢 Platform 2: Next-Gen HMIS for Shelters
+**For shelter operators:**
+- Upgrade/enhance existing HMIS systems
+- Overflow management: connect to PODS when full
+- 75% admin time savings (automation, AI analytics)
+- 5% automated operations revenue from participant donations
+- Digital intake, compliance automation, fundraising tools
+- **Core Message**: "Not replacing shelters—amplifying their capacity"
+
+### 🔴 The Shelter Trap Messaging
+- **Nobody gets a job or back on their feet living in a shelter**
+- Shelters = temporary beds, not stability
+- Apartments take years to acquire traditionally
+- Living in tents/parks while waiting is not a solution
+- Traditional shelter systems trap people in cycles they may never escape
+- After 90 days homeless, recovery chance drops to "slim to none"
+
+### 📈 Updated Impact Metrics
+- **Platform 1**: 100% bypass shelter trap, 80% to participant, <90 day recovery window
+- **Platform 2**: 75% time savings, seamless overflow, 5% operations revenue
+
+---
+
 ## [2.58.1] - 2025-10-23 (COVENANT HOUSE ENHANCED & FOUNDERS PORTAL) 🏢
 
 ### ✨ New Features

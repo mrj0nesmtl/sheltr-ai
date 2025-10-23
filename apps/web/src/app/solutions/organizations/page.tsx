@@ -55,7 +55,7 @@ export default function OrganizationsPage() {
       </StandardHero>
 
       {/* Reality Check Section - NEW */}
-      <section className="py-20 bg-gradient-to-r from-red-50 via-orange-50 to-yellow-50 dark:from-red-900/20 dark:via-orange-900/20 dark:to-yellow-900/20">
+      <section className="py-20 bg-background dark:bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">

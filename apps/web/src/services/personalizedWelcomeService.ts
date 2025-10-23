@@ -1,7 +1,11 @@
 /**
  * Personalized Welcome Letter Service
  * Serves personalized welcome letters based on user email and role
+ * Letters are stored securely in Firestore (not in public codebase)
  */
+
+import { db } from '@/lib/firebase';
+import { doc, getDoc } from 'firebase/firestore';
 
 export interface PersonalizedWelcomeData {
   exists: boolean;
@@ -14,51 +18,56 @@ export interface PersonalizedWelcomeData {
 export class PersonalizedWelcomeService {
   /**
    * Get personalized welcome letter content for a user
+   * Fetches from secure Firestore collection
    */
   static async getPersonalizedWelcome(userEmail: string): Promise<PersonalizedWelcomeData> {
     try {
       console.log(`🎯 Loading personalized welcome letter for: ${userEmail}`);
       
-      // Map email to first name for privacy-safe file names
-      const firstName = this.getFirstNameFromEmail(userEmail);
+      // Convert email to Firestore document ID (replace @ and . with _)
+      const docId = userEmail.replace(/[@.]/g, '_');
       
-      // Try to load the personalized letter first
-      const personalizedPath = `/docs/platform-admin/welcome-letters/${firstName}.md`;
-      
+      // Try to load the personalized letter from Firestore
       try {
-        const response = await fetch(personalizedPath);
+        const docRef = doc(db, 'platform_admin_welcome_letters', docId);
+        const docSnap = await getDoc(docRef);
         
-        if (response.ok) {
-          const content = await response.text();
-          console.log(`✅ Found personalized welcome letter for ${userEmail} (${firstName})`);
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          console.log(`✅ Found personalized welcome letter for ${userEmail}`);
           
           return {
             exists: true,
-            content,
+            content: data.content,
             userEmail,
             fallbackUsed: false
           };
         }
-      } catch {
-        console.log(`⚠️ Personalized letter not found for ${userEmail} (${firstName}), trying fallback`);
+      } catch (error) {
+        console.log(`⚠️ Personalized letter not found for ${userEmail}, trying default`);
       }
       
       // Fallback to default welcome letter
-      const defaultResponse = await fetch('/docs/platform-admin/welcome-letter.md');
-      
-      if (defaultResponse.ok) {
-        const content = await defaultResponse.text();
-        console.log(`📄 Using default welcome letter for ${userEmail}`);
+      try {
+        const defaultDocRef = doc(db, 'platform_admin_welcome_letters', 'default');
+        const defaultDocSnap = await getDoc(defaultDocRef);
         
-        return {
-          exists: false,
-          content,
-          userEmail,
-          fallbackUsed: true
-        };
+        if (defaultDocSnap.exists()) {
+          const data = defaultDocSnap.data();
+          console.log(`📄 Using default welcome letter for ${userEmail}`);
+          
+          return {
+            exists: false,
+            content: data.content,
+            userEmail,
+            fallbackUsed: true
+          };
+        }
+      } catch (error) {
+        console.log(`⚠️ Default letter not found, using emergency fallback`);
       }
       
-      throw new Error('Neither personalized nor default welcome letter found');
+      throw new Error('Neither personalized nor default welcome letter found in Firestore');
       
     } catch (error) {
       console.error(`❌ Error loading welcome letter for ${userEmail}:`, error);

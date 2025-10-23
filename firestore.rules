@@ -914,6 +914,26 @@ service cloud.firestore {
       allow delete: if isSuperAdmin();
     }
     
+    // =================================================================
+    // PLATFORM ADMIN WELCOME LETTERS - Secure personalized onboarding
+    // =================================================================
+    match /platform_admin_welcome_letters/{letterId} {
+      // Read: Platform Admins can read their own letter or the default
+      // Super Admins can read all letters
+      allow read: if isSuperAdmin() || 
+                     isPlatformAdmin() ||
+                     (isAuthenticated() && letterId == 'default');
+      
+      // Write: Super Admin only can update welcome letters
+      allow write: if isSuperAdmin();
+      
+      // Create: Super Admin only can create welcome letters
+      allow create: if isSuperAdmin();
+      
+      // Delete: Super Admin only can delete welcome letters
+      allow delete: if isSuperAdmin();
+    }
+    
     // Public Team Members - World-readable collection for team page
     match /team_members/{memberId} {
       // Read: Anyone can read (public team page)

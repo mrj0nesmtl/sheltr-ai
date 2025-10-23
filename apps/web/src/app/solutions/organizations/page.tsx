@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowLeft, Building2, Users, BarChart3, Shield, UserCheck, Clock, DollarSign, CheckCircle, Smartphone, FileText, Bell, Settings, Brain, Zap, Target, Award, TrendingUp, Star, Rocket, Globe, Heart } from 'lucide-react';
+import { ArrowLeft, Building2, Users, BarChart3, Shield, UserCheck, Clock, DollarSign, CheckCircle, Smartphone, FileText, Bell, Settings, Brain, Zap, Target, Award, TrendingUp, Star, Rocket, Globe, Heart, AlertTriangle, TrendingDown, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -54,17 +54,121 @@ export default function OrganizationsPage() {
         </p>
       </StandardHero>
 
-      {/* Opening Statement */}
+      {/* Reality Check Section - NEW */}
+      <section className="py-20 bg-gradient-to-r from-red-50 via-orange-50 to-yellow-50 dark:from-red-900/20 dark:via-orange-900/20 dark:to-yellow-900/20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-12">
+              <Badge className="bg-red-600 text-white mb-4">
+                <AlertTriangle className="h-4 w-4 mr-2" />
+                The Hard Truth
+              </Badge>
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
+                After Decades of Effort, The Crisis Is Growing
+              </h2>
+              <p className="text-xl text-muted-foreground leading-relaxed">
+                We deeply respect the tireless work of shelter operators everywhere. You've saved countless lives. 
+                But the numbers don't lie—and we can't ignore them anymore.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-8 mb-12">
+              <Card className="border-2 border-red-500/30 bg-white dark:bg-gray-800">
+                <CardHeader>
+                  <div className="flex items-center gap-3 mb-2">
+                    <TrendingDown className="h-8 w-8 text-red-600" />
+                    <CardTitle className="text-red-700 dark:text-red-300">The Overflow Crisis</CardTitle>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground mb-4">
+                    <strong>Shelters across North America are at capacity.</strong> Every night, thousands are turned away. 
+                    Parks, tents, and encampments become the only "option" for people in crisis.
+                  </p>
+                  <ul className="space-y-2 text-sm">
+                    <li className="flex items-start gap-2">
+                      <span className="text-red-600 font-bold mt-0.5">•</span>
+                      <span>Toronto's shelter system operating at 98% capacity (2024)</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-red-600 font-bold mt-0.5">•</span>
+                      <span>Vancouver reports 400+ people denied shelter nightly</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-red-600 font-bold mt-0.5">•</span>
+                      <span>Encampments growing 40% year-over-year in major cities</span>
+                    </li>
+                  </ul>
+                </CardContent>
+              </Card>
+
+              <Card className="border-2 border-orange-500/30 bg-white dark:bg-gray-800">
+                <CardHeader>
+                  <div className="flex items-center gap-3 mb-2">
+                    <Clock className="h-8 w-8 text-orange-600" />
+                    <CardTitle className="text-orange-700 dark:text-orange-300">The 90-Day Threshold</CardTitle>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground mb-4">
+                    <strong>Academic research proves:</strong> After 90 days of homelessness, the chance of recovery 
+                    drops dramatically. Traditional shelter-to-housing pipelines take too long.
+                  </p>
+                  <ul className="space-y-2 text-sm">
+                    <li className="flex items-start gap-2">
+                      <span className="text-orange-600 font-bold mt-0.5">•</span>
+                      <span>Average wait time for subsidized housing: 18-36 months</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-orange-600 font-bold mt-0.5">•</span>
+                      <span>Shelter stays don't provide the stability needed for job hunting</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-orange-600 font-bold mt-0.5">•</span>
+                      <span>Nobody recovers their life while living in a tent</span>
+                    </li>
+                  </ul>
+                </CardContent>
+              </Card>
+            </div>
+
+            <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-xl p-8 shadow-lg border-l-4 border-blue-500">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Home className="h-6 w-6 text-blue-600" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold mb-4 text-foreground">
+                    We Need Technology. We Need Innovation. We Need It Now.
+                  </h3>
+                  <p className="text-lg text-muted-foreground mb-4">
+                    <strong>This isn't a criticism of your work—it's a call to action.</strong> No civilized society 
+                    should accept overflow homelessness as inevitable. The current infrastructure was built for a 
+                    different era. The tools available haven't kept pace with the crisis.
+                  </p>
+                  <p className="text-lg text-muted-foreground">
+                    <strong className="text-blue-600 dark:text-blue-400">Anything is better than a tent.</strong> SHELTR 
+                    provides the technological bridge: immediate overflow relief through mobile PODS, community-funded 
+                    emergency housing, and next-generation HMIS tools to maximize your existing operations.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Partnership Statement */}
       <section className="py-20 bg-gradient-to-r from-gray-50 to-blue-50 dark:from-gray-900/50 dark:to-blue-900/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-5xl mx-auto text-center">
             <div className="mb-8">
               <Badge className="bg-green-100 text-green-800 border-green-200 mb-4">
                 <Heart className="h-4 w-4 mr-2" />
-                Tech-for-Good
+                Tech-for-Good Partnership
               </Badge>
               <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
-                Partnership-Driven
+                We're Not Competing. We're Amplifying Your Impact.
               </h2>
             </div>
             
@@ -127,11 +231,12 @@ export default function OrganizationsPage() {
           <div className="text-center mb-16">
             <Badge className="mb-4 bg-green-100 text-green-800 border-green-200">
               <Target className="h-4 w-4 mr-2" />
-              Future Impact
+              Immediate Impact
             </Badge>
-            <h2 className="text-4xl font-bold mb-6">Why Organizations Will Choose SHELTR</h2>
+            <h2 className="text-4xl font-bold mb-6">Why Organizations Must Act Now</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Open source, purpose-built for the unique challenges of emergency services.
+              <strong>The overflow crisis demands immediate action.</strong> Open source, purpose-built for the unique 
+              challenges of emergency services, and ready to deploy. Stop turning people away—start connecting them to solutions.
             </p>
           </div>
 
@@ -368,12 +473,13 @@ export default function OrganizationsPage() {
           <div className="text-center mb-16">
             <Badge className="mb-4 bg-purple-100 text-purple-800 border-purple-200">
               <Zap className="h-4 w-4 mr-2" />
-              Tech Leadership
+              Breaking the Mold
             </Badge>
-            <h2 className="text-4xl font-bold mb-6">Unicorn Technology Stack</h2>
+            <h2 className="text-4xl font-bold mb-6">Why Traditional HMIS Systems Can't Keep Up</h2>
             <p className="text-xl text-muted-foreground max-w-4xl mx-auto">
-              We've built what others only dream of: the first integrated HMIS-donation-investment platform. 
-              Our technology doesn't just manage data—it creates sustainable revenue streams and solves overflow challenges.
+              <strong>Legacy systems were built for data management, not crisis response.</strong> We've built what others only dream of: 
+              the first integrated HMIS-donation-investment platform that doesn't just manage data—it creates sustainable revenue 
+              streams, solves overflow challenges, and provides immediate emergency housing alternatives.
             </p>
           </div>
 
@@ -581,19 +687,37 @@ export default function OrganizationsPage() {
             </div>
           </div>
           {/* Final CTA */}
-          <div className="text-center bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg">
-            <h3 className="text-2xl font-bold mb-4">Ready for some Disruption?</h3>
-            <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Join the growing number of organizations looking at SHELTR for their overflow relief.
+          <div className="text-center bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-2xl p-12 shadow-lg border-2 border-blue-500/20">
+            <Badge className="bg-blue-600 text-white mb-4">
+              <Zap className="h-4 w-4 mr-2" />
+              The Time Is Now
+            </Badge>
+            <h3 className="text-3xl font-bold mb-6">The Overflow Won't Wait. Neither Should You.</h3>
+            <p className="text-xl text-muted-foreground mb-4 max-w-3xl mx-auto">
+              <strong>Every night you're at capacity, someone is turned away.</strong> Every day the 90-day threshold passes, 
+              someone's chances of recovery diminish. The technology exists. The solution is here.
             </p>
-            <div className="flex justify-center">
+            <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+              Join forward-thinking shelter organizations exploring SHELTR's dual-platform approach: 
+              <strong> mobile PODS for overflow relief</strong> + <strong>next-gen HMIS for operational excellence</strong>.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/contact">
-                <Button size="lg" variant="outline" className="border-2 border-green-400 text-green-400 hover:bg-green-500/10 backdrop-blur-sm dark:text-green-300 dark:border-green-300 px-8">
+                <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg">
                   <Rocket className="h-5 w-5 mr-2" />
-                  Connect with Us
+                  Schedule a Partnership Call
+                </Button>
+              </Link>
+              <Link href="/solutions/organizations/case-study">
+                <Button size="lg" variant="outline" className="border-2 border-purple-400 text-purple-600 hover:bg-purple-50 dark:text-purple-300 dark:border-purple-300 dark:hover:bg-purple-900/20 px-8 py-6 text-lg">
+                  <FileText className="h-5 w-5 mr-2" />
+                  Read the Full Case Study
                 </Button>
               </Link>
             </div>
+            <p className="text-sm text-muted-foreground mt-6">
+              Open-source. Community-supported. Built for the frontlines.
+            </p>
           </div>
         </div>
       </section>

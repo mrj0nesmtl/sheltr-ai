@@ -25,16 +25,16 @@ export default function OrganizationsCaseStudyPage() {
         badgeText="Case Study"
         badgeVariant="secondary"
         badgeClassName="bg-white text-black"
-        title="Two Platforms, One Mission"
-        subtitle="Breaking the 90-Day Crisis Threshold"
+        title="Breaking the 90-Day Crisis Threshold"
       >
-        <div className="flex items-center gap-4 mt-4 text-sm text-white/80">
-          <span>TECH4GOOD</span>
-          <span>•</span>
-          <span>June 2025</span>
-          <span>•</span>
-          <span>15 min read</span>
-          <span>•</span>
+        <div className="flex flex-col items-center gap-3 mt-4">
+          <div className="flex items-center gap-4 text-sm text-white/80">
+            <span>TECH4GOOD</span>
+            <span>•</span>
+            <span>June 2025</span>
+            <span>•</span>
+            <span>15 min read</span>
+          </div>
           <Badge variant="outline" className="text-green-300 border-green-300">Implementation Studied</Badge>
         </div>
         <div className="text-center mt-6">
@@ -43,7 +43,7 @@ export default function OrganizationsCaseStudyPage() {
           </p>
           <p className="text-gray-300 mb-4">
             Academic research proves that after 90 days of homelessness, the chance of recovery drops dramatically. 
-            SHELTR offers two distinct platforms to attack this crisis from both sides: <strong>immediate mobile housing</strong> for those on the streets, 
+            SHELTR offers a new platform to attack this crisis from both sides: <strong>Crowd funded emergency mobile housing</strong> for those on the streets, 
             and <strong>next-gen HMIS tools</strong> for shelters to maximize efficiency and fundraising.
           </p>
           <p className="text-sm text-gray-300">
@@ -100,7 +100,7 @@ export default function OrganizationsCaseStudyPage() {
             <div className="bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 rounded-xl p-8 shadow-lg">
               <h3 className="text-2xl font-bold mb-4 text-green-700 dark:text-green-300">SHELTR's Two-Pronged Solution</h3>
               <p className="text-lg text-muted-foreground mb-6">
-                We attack the homelessness epidemic from <strong>both sides</strong> with two distinct but complementary platforms:
+                We attack the homelessness epidemic from <strong>both sides</strong> with distinct but complementary solutions:
               </p>
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="bg-white dark:bg-gray-800 rounded-lg p-6 border-2 border-blue-500">
@@ -109,8 +109,7 @@ export default function OrganizationsCaseStudyPage() {
                       <Home className="h-6 w-6 text-blue-600" />
                     </div>
                     <div>
-                      <h4 className="font-bold text-blue-600">Platform 1:</h4>
-                      <p className="text-lg font-semibold">Mobile PODS & Emergency Housing</p>
+                      <h4 className="font-bold text-blue-600">Fundraising Technology:</h4>
                     </div>
                   </div>
                   <p className="text-muted-foreground mb-3">
@@ -142,8 +141,7 @@ export default function OrganizationsCaseStudyPage() {
                       <Building2 className="h-6 w-6 text-purple-600" />
                     </div>
                     <div>
-                      <h4 className="font-bold text-purple-600">Platform 2:</h4>
-                      <p className="text-lg font-semibold">Next-Gen HMIS for Shelters</p>
+                      <h4 className="font-bold text-purple-600">Next-Gen HMIS:</h4>
                     </div>
                   </div>
                   <p className="text-muted-foreground mb-3">
@@ -179,11 +177,10 @@ export default function OrganizationsCaseStudyPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="prose prose-lg max-w-none dark:prose-invert mb-12">
-              <h2 className="text-center">Executive Summary: Two Platforms, One Mission</h2>
               <p className="text-center text-xl">
-                SHELTR attacks the homelessness crisis with a dual-platform strategy designed to break the 90-day crisis threshold. 
-                <strong>Platform 1</strong> empowers those living in tents and parks with direct community funding to secure <strong>mobile PODS and emergency housing</strong>—because anything is better than a tent. 
-                <strong>Platform 2</strong> provides shelters with next-generation HMIS tools, overflow management, and automated fundraising to maximize their impact and efficiency.
+                SHELTR attacks the homelessness crisis with a dual-purpose platform designed to break the 90-day crisis threshold. 
+                <strong> First, </strong> empower those living in tents and parks with direct community funding to secure <strong>mobile PODS and emergency housing</strong>—because anything is better than a tent. 
+                <strong> Second,</strong> provide shelters with next-generation HMIS systems for free to maximize their impact and efficiency.
               </p>
               <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 p-6 rounded-lg mt-8">
                 <p className="text-center text-lg font-semibold mb-4">
@@ -204,7 +201,7 @@ export default function OrganizationsCaseStudyPage() {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-blue-600">
                     <Home className="h-6 w-6" />
-                    Platform 1: Mobile PODS Impact
+                    Mobile PODS Impact
                   </CardTitle>
                   <CardDescription>Direct-to-participant emergency housing</CardDescription>
                 </CardHeader>
@@ -238,7 +235,7 @@ export default function OrganizationsCaseStudyPage() {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-purple-600">
                     <Building2 className="h-6 w-6" />
-                    Platform 2: Shelter HMIS Enhancement
+                    HMIS Enhancement
                   </CardTitle>
                   <CardDescription>Next-gen tools for shelter operators</CardDescription>
                 </CardHeader>

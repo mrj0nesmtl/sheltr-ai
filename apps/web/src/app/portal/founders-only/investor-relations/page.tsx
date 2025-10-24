@@ -1727,15 +1727,19 @@ export default function InvestorRelationsPage() {
       {/* Header */}
       <header className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b sticky top-0 z-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <Link href="/" className="flex items-center space-x-2">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center py-3 sm:py-0 sm:h-16 gap-2 sm:gap-4">
+            <Link href="/" className="flex items-center gap-2 flex-shrink-0">
               <ThemeLogo />
-              <Badge variant="secondary" className="text-xs">INVESTOR RELATIONS</Badge>
+              <Badge variant="secondary" className="text-xs whitespace-nowrap">
+                INVESTOR RELATIONS
+              </Badge>
             </Link>
             
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center gap-2 flex-shrink-0">
               <Lock className="h-4 w-4 text-amber-600" />
-              <span className="text-sm text-muted-foreground">Private & Confidential</span>
+              <span className="text-sm text-muted-foreground whitespace-nowrap">
+                Private & Confidential
+              </span>
             </div>
           </div>
         </div>
@@ -1744,8 +1748,8 @@ export default function InvestorRelationsPage() {
       {/* Breadcrumb Navigation */}
       <div className="bg-white/50 dark:bg-slate-900/50 border-b">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div className="flex items-center flex-wrap gap-1 sm:gap-2 text-sm text-muted-foreground">
               <Button 
                 variant="ghost" 
                 size="sm" 
@@ -1754,26 +1758,26 @@ export default function InvestorRelationsPage() {
               >
                 <Home className="h-4 w-4" />
               </Button>
-              <ChevronRight className="h-4 w-4" />
+              <ChevronRight className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
               <Button 
                 variant="ghost" 
                 size="sm" 
                 onClick={() => window.location.href = '/portal'}
-                className="hover:bg-muted px-2 py-1 h-auto"
+                className="hover:bg-muted px-2 py-1 h-auto text-xs sm:text-sm"
               >
                 Portal
               </Button>
-              <ChevronRight className="h-4 w-4" />
+              <ChevronRight className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
               <Button 
                 variant="ghost" 
                 size="sm" 
                 onClick={() => window.location.href = '/portal/founders-only'}
-                className="hover:bg-muted px-2 py-1 h-auto"
+                className="hover:bg-muted px-2 py-1 h-auto text-xs sm:text-sm"
               >
                 Founders Only
               </Button>
-              <ChevronRight className="h-4 w-4" />
-              <span className="font-medium text-foreground">
+              <ChevronRight className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
+              <span className="font-medium text-foreground text-xs sm:text-sm">
                 Investor Relations
               </span>
             </div>
@@ -1782,10 +1786,11 @@ export default function InvestorRelationsPage() {
               variant="outline" 
               size="sm" 
               onClick={() => window.location.href = '/portal/founders-only'}
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 flex-shrink-0"
             >
               <ArrowLeft className="h-4 w-4" />
-              Back to Portal
+              <span className="hidden sm:inline">Back to Portal</span>
+              <span className="sm:hidden">Back</span>
             </Button>
           </div>
         </div>

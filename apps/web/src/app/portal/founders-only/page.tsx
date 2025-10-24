@@ -596,22 +596,31 @@ export default function FoundersOnlyPage() {
       {/* Header */}
       <header className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b sticky top-0 z-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center gap-4">
-              <Link href="/dashboard" className="text-2xl font-bold">
-                SHELTR
-              </Link>
-              <Badge className="bg-purple-600 text-white">
-                <Lock className="h-3 w-3 mr-1" />
+          <div className="flex items-center justify-between h-16 gap-4">
+            {/* Left: Logo */}
+            <Link href="/dashboard" className="text-2xl font-bold hover:opacity-80 transition-opacity">
+              SHELTR
+            </Link>
+            
+            {/* Center: Badge */}
+            <div className="flex-1 flex justify-center">
+              <Badge className="bg-purple-600 text-white px-4 py-1.5">
+                <Lock className="h-4 w-4 mr-2" />
                 Restricted Access
               </Badge>
             </div>
             
+            {/* Right: Welcome message and button */}
             <div className="flex items-center gap-4">
-              <span className="text-sm text-muted-foreground">
-                Welcome, {user?.displayName || user?.email}
+              <span className="text-sm text-muted-foreground hidden md:block">
+                Welcome, <span className="font-medium text-foreground">{user?.displayName || user?.email?.split('@')[0]}</span>
               </span>
-              <Button variant="outline" onClick={() => router.push('/dashboard')}>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => router.push('/dashboard')}
+                className="whitespace-nowrap"
+              >
                 Back to Dashboard
               </Button>
             </div>

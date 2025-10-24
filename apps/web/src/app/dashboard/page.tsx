@@ -1088,16 +1088,16 @@ Token Role: ${tokenRole || 'MISSING'}`;
             </Card>
           </Link>
 
-          <Link href="/investor-access">
+          <Link href="/portal/founders-only/investor-relations">
             <Card className="cursor-pointer hover:shadow-md transition-shadow">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Investor Access</CardTitle>
+                <CardTitle className="text-sm font-medium">Investor Relations</CardTitle>
                 <Shield className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{platformMetrics.investorAccessLogins || '-'}</div>
                 <p className="text-xs text-muted-foreground">
-                  {platformMetrics.investorAccessAttempts || 0} total attempts
+                  Founders Portal Access
                 </p>
               </CardContent>
             </Card>
@@ -1413,16 +1413,16 @@ Token Role: ${tokenRole || 'MISSING'}`;
             </Card>
           </Link>
 
-          <Link href="/investor-access">
+          <Link href="/portal/founders-only/investor-relations">
             <Card className="cursor-pointer hover:shadow-md transition-shadow">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Investor Access</CardTitle>
+                <CardTitle className="text-sm font-medium">Investor Relations</CardTitle>
                 <Shield className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{platformMetrics.investorAccessLogins || '-'}</div>
                 <p className="text-xs text-muted-foreground">
-                  {platformMetrics.investorAccessAttempts || 0} total attempts
+                  Founders Portal Access
                 </p>
               </CardContent>
             </Card>

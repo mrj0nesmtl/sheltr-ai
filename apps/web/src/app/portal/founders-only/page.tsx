@@ -610,19 +610,11 @@ export default function FoundersOnlyPage() {
               </Badge>
             </div>
             
-            {/* Right: Welcome message and button */}
-            <div className="flex items-center gap-4">
-              <span className="text-sm text-muted-foreground hidden md:block">
+            {/* Right: Welcome message */}
+            <div className="flex items-center">
+              <span className="text-sm text-muted-foreground">
                 Welcome, <span className="font-medium text-foreground">{user?.displayName || user?.email?.split('@')[0]}</span>
               </span>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={() => router.push('/dashboard')}
-                className="whitespace-nowrap"
-              >
-                Back to Dashboard
-              </Button>
             </div>
           </div>
         </div>

@@ -200,6 +200,25 @@ export default function FoundersOnlyPage() {
       category: 'secure',
     },
     {
+      id: 'covenant-house-outreach',
+      icon: (
+        <div className="relative">
+          <Rocket className="h-6 w-6 text-pink-600" />
+          <Lock className="h-3 w-3 text-pink-600 absolute -top-1 -right-1 bg-white dark:bg-slate-900 rounded-full" />
+        </div>
+      ),
+      badgeText: 'Partnership',
+      badgeClass: 'bg-pink-600 text-white',
+      title: 'Covenant House Proposal',
+      titleColor: 'text-pink-600',
+      description: 'Executive partnership proposal for Covenant House Canada 2026-2027 youth homelessness innovation pilot',
+      buttonText: 'View Proposal',
+      buttonClass: 'border-2 border-pink-600 text-pink-600 hover:bg-pink-50',
+      href: '/portal/founders-only/covenant-house-outreach',
+      borderClass: 'border-pink-200',
+      category: 'secure',
+    },
+    {
       id: 'payment-rails',
       icon: <CreditCard className="h-6 w-6 text-green-600" />,
       badgeText: 'Enterprise',

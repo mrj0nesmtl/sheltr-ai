@@ -7,6 +7,81 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.59.0] - 2025-10-24 (ADYEN INTEGRATION STRATEGY + CLEANUP) 🚀
+
+### 🎯 Major Strategic Documentation
+**File**: `docs/02-architecture/payment-rails/ADYEN-INTEGRATION-STRATEGIC-ANALYSIS.md`
+
+#### Comprehensive Adyen Integration Analysis
+- **Analyzed three Adyen models**: Standard Merchant, Marketplaces, Platforms (Balanced)
+- **Recommended Adyen for Platforms (Balanced Model)** as optimal fit for SHELTR
+- **Why Balanced Model**: Native multi-party splits (80-15-5), integrated card issuing, automated transfers
+- **Complete architecture**: Balance accounts, legal entities, payment flows, smart contracts
+- **16-week implementation roadmap**: Foundation → Participant Onboarding → Shelter Integration → Housing Fund → Smart Contracts
+- **Cost analysis**: ~4.25% all-in platform cost (competitive with alternatives)
+- **Security & compliance framework**: PCI DSS, KYC/AML, SOC 2 Type II
+- **Success metrics**: Payment success >99.5%, card activation >90%, housing fund $1M+ Year 1
+
+#### Key Technical Specifications
+```typescript
+// SmartFund™ 80-15-5 Split Implementation
+- 80% to Participant Balance Account → Adyen Issuing Virtual Card
+- 15% to Housing Fund Balance Account → Automated sweep to Coinbase
+- 5% to Shelter Balance Account → Direct payouts to shelter bank accounts
+```
+
+#### Payment Flow Architecture
+1. **Donation Capture**: Credit card → Adyen Gateway → Platform Main Account
+2. **Smart Contract Trigger**: Automated 3-way split via Transfers API
+3. **Participant Card**: Adyen Issuing virtual debit card with spending controls
+4. **Housing Fund**: Automated daily sweep to Coinbase for USDT purchase
+5. **Shelter Payout**: Direct transfer to shelter bank accounts
+6. **Blockchain Recording**: All transactions recorded on Base for transparency
+
+#### Integration Components
+- **Legal Entity Management**: Platform, participants, shelters onboarded as Adyen entities
+- **Balance Accounts**: Separate accounts for each entity with automated transfers
+- **Adyen Issuing**: Virtual card creation with merchant restrictions and spending limits
+- **Transfers API**: Programmatic fund distribution with $0.10/transfer cost
+- **Webhooks**: Real-time notifications for payments, transfers, card transactions
+- **Smart Contracts**: On-chain recording of all donations and distributions
+
+#### Next Steps
+- [ ] Schedule Adyen partnership call
+- [ ] Begin Adyen for Platforms application
+- [ ] Set up test environment
+- [ ] Create detailed technical specifications
+- [ ] Design database schema for Adyen integration
+- [ ] Build API service layer architecture
+
+### 🧹 Code Cleanup
+**Files**: `apps/web/src/app/investor-access/page.tsx`, `apps/web/src/app/investor-relations/page.tsx`
+
+#### Removed Old Investor Pages
+- **Deleted**: Old standalone investor-access page (deprecated)
+- **Deleted**: Old standalone investor-relations page (3,000+ lines, deprecated)
+- **Updated**: Dashboard links now point to secure Founders Portal (`/portal/founders-only/investor-relations`)
+- **Result**: 3,441 lines of redundant code removed
+- **Benefit**: All investor content now centralized in secure Founders Portal
+
+### 🎨 UI Refinement
+**File**: `apps/web/src/app/pods/page.tsx`
+
+#### Removed Redundant SHELTR MOBI Section
+- **Removed**: Duplicate "SHELTR MOBI" section between models and security
+- **Reason**: Section was redundant as MOBI already has dedicated card in models grid
+- **Removed**: Duplicate "Learn More About MOBI" button
+- **Result**: 71 lines removed, streamlined page flow
+- **Benefit**: Cleaner page hierarchy, reduced visual clutter
+
+### 📊 Summary
+- **Strategic Planning**: Comprehensive Adyen integration roadmap ready for implementation
+- **Code Quality**: Removed 3,512 lines of redundant/deprecated code
+- **Documentation**: Added 630 lines of strategic architecture documentation
+- **Next Phase**: Ready to begin Adyen partnership discussions and technical implementation
+
+---
+
 ## [2.58.3] - 2025-10-23 (ORGANIZATIONS PAGE: "THE HARD TRUTH") 🚨
 
 ### 🔥 Major Enhancement: Organizations/Shelters Solutions Page Revamp

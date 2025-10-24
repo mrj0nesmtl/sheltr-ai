@@ -219,6 +219,44 @@ export default function FoundersOnlyPage() {
       category: 'secure',
     },
     {
+      id: 'adyen-integration',
+      icon: (
+        <div className="relative">
+          <CreditCard className="h-6 w-6 text-blue-500" />
+          <Lock className="h-3 w-3 text-blue-500 absolute -top-1 -right-1 bg-white dark:bg-slate-900 rounded-full" />
+        </div>
+      ),
+      badgeText: 'Strategic',
+      badgeClass: 'bg-blue-500 text-white',
+      title: 'Adyen Integration Strategy',
+      titleColor: 'text-blue-500',
+      description: 'Comprehensive analysis of Adyen for Platforms (Balanced Model) with 16-week implementation roadmap for SmartFund™ 80-15-5 distribution',
+      buttonText: 'View Strategy',
+      buttonClass: 'border-2 border-blue-500 text-blue-500 hover:bg-blue-50',
+      href: '/portal/founders-only/adyen-integration',
+      borderClass: 'border-blue-200',
+      category: 'secure',
+    },
+    {
+      id: 'implementation-readiness',
+      icon: (
+        <div className="relative">
+          <Rocket className="h-6 w-6 text-green-500" />
+          <Lock className="h-3 w-3 text-green-500 absolute -top-1 -right-1 bg-white dark:bg-slate-900 rounded-full" />
+        </div>
+      ),
+      badgeText: 'Ready',
+      badgeClass: 'bg-green-500 text-white',
+      title: 'Implementation Readiness',
+      titleColor: 'text-green-500',
+      description: 'Executive summary of payment architecture readiness with complete flow, financial model, timeline, and next steps for Adyen partnership',
+      buttonText: 'View Summary',
+      buttonClass: 'border-2 border-green-500 text-green-500 hover:bg-green-50',
+      href: '/portal/founders-only/implementation-readiness',
+      borderClass: 'border-green-200',
+      category: 'secure',
+    },
+    {
       id: 'payment-rails',
       icon: <CreditCard className="h-6 w-6 text-green-600" />,
       badgeText: 'Enterprise',

@@ -471,21 +471,22 @@ service cloud.firestore {
     // BLOG COLLECTIONS - Blog post management
     // =================================================================
     
-    // Blog posts - Super Admin can manage, all authenticated users can read published posts
+    // Blog posts - Public can read published posts, Super Admin can manage all
     match /blog_posts/{postId} {
-      allow read: if isAuthenticated() && (resource.data.status == 'published' || isSuperAdmin());
+      // Public read access for published posts (needed for static site generation and public blog)
+      allow read: if resource.data.status == 'published' || isSuperAdmin();
       allow write: if isSuperAdmin();
     }
     
-    // Blog categories - Super Admin can manage, all authenticated users can read
+    // Blog categories - Public read access (needed for blog filtering)
     match /blog_categories/{categoryId} {
-      allow read: if isAuthenticated();
+      allow read: if true;  // Public read for blog categories
       allow write: if isSuperAdmin();
     }
     
-    // Blog tags - Super Admin can manage, all authenticated users can read
+    // Blog tags - Public read access (needed for blog filtering)
     match /blog_tags/{tagId} {
-      allow read: if isAuthenticated();
+      allow read: if true;  // Public read for blog tags
       allow write: if isSuperAdmin();
     }
     

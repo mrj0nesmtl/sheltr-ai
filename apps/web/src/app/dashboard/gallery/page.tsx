@@ -122,7 +122,8 @@ const PUBLIC_PAGES = [
   { id: 'donate', label: 'Donate', path: '/donate', icon: '💝' },
   { id: 'contact', label: 'Contact', path: '/contact', icon: '📧' },
   
-  // Legal & Info
+  // Documentation & Info
+  { id: 'docs', label: 'Documentation Hub', path: '/docs', icon: '📚' },
   { id: 'tokenomics', label: 'Tokenomics', path: '/tokenomics', icon: '🪙' },
   { id: 'privacy', label: 'Privacy Policy', path: '/privacy', icon: '🔐' },
   { id: 'terms', label: 'Terms of Service', path: '/terms', icon: '📜' },

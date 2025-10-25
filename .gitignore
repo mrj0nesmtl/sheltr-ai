@@ -178,6 +178,10 @@ sync-mac*.sh
 # SENSITIVE DOCUMENT SECURITY - Prevent accidental commits
 # =================================================================
 
+# Local secure documents workspace (NEVER COMMIT TO GITHUB)
+.local-secure-docs/
+**/.local-secure-docs/
+
 # Founders-only sensitive documents (moved to secure Firestore)
 apps/web/public/docs/founders/
 **/docs/founders/

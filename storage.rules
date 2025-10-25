@@ -126,6 +126,20 @@ service firebase.storage {
                       (request.auth != null && getUserData().role == 'platform_admin');
     }
 
+    // =================================================================
+    // BLOG IMAGES - Public blog post featured images
+    // Publicly readable, admin-writable
+    // =================================================================
+    match /blog-images/{document=**} {
+      // Read access: Anyone (public blog images)
+      allow read: if true;
+      
+      // Write access: Super Admin and Platform Admin only (with size validation)
+      allow write: if (isSuperAdmin() || 
+                       (request.auth != null && getUserData().role == 'platform_admin')) &&
+                      request.resource.size < 5 * 1024 * 1024; // 5MB limit
+    }
+
     // Default deny all other paths
     match /{allPaths=**} {
       allow read, write: if false;

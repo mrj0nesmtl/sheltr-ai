@@ -101,14 +101,15 @@ class BlogService:
                 post_data['published_at'] = firestore.SERVER_TIMESTAMP
             
             # Create the post
-            doc_ref = self.db.collection('blog_posts').add(post_data)
+            timestamp, doc_ref = self.db.collection('blog_posts').add(post_data)
+            post_id = doc_ref.id
             
             # Update tag usage counts
             if tags:
                 await self._update_tag_usage_counts(tags, increment=True)
             
-            logger.info(f"Blog post created: {doc_ref[1].id}")
-            return doc_ref[1].id
+            logger.info(f"Blog post created: {post_id}")
+            return post_id
             
         except Exception as e:
             logger.error(f"Failed to create blog post: {str(e)}")

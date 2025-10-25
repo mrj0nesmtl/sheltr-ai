@@ -33,11 +33,15 @@ import Footer from '@/components/Footer';
 import { useState } from 'react';
 import { UnifiedInquiryService } from '@/services/unifiedInquiryService';
 import PublicNavigation from '@/components/PublicNavigation';
+import { useHeroImage } from '@/hooks/useHeroImage';
 
 export default function DocsPage() {
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
+  
+  // Fetch hero image from gallery (or use fallback)
+  const { heroImage } = useHeroImage('/docs', '/backgrounds/hero-bg.jpg');
 
   const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -291,7 +295,7 @@ export default function DocsPage() {
       <section 
         className="py-20 relative"
         style={{
-          backgroundImage: "url('/backgrounds/hero-bg.jpg')",
+          backgroundImage: `url('${heroImage.url}')`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat'

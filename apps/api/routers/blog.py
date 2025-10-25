@@ -202,7 +202,7 @@ async def create_blog_post(
     featured_image: Optional[UploadFile] = File(None),
     featured_image_url: Optional[str] = Form(None),
     ingest_to_knowledge_base: Optional[str] = Form(None),
-    current_user: Dict[str, Any] = Depends(require_super_admin)
+    current_user: Dict[str, Any] = Depends(require_super_admin())
 ):
     """Create a new blog post (Super Admin only)"""
     
@@ -263,7 +263,7 @@ async def update_blog_post(
     seo_title: Optional[str] = Form(None),
     seo_description: Optional[str] = Form(None),
     seo_keywords: Optional[str] = Form(None),
-    current_user: Dict[str, Any] = Depends(require_super_admin)
+    current_user: Dict[str, Any] = Depends(require_super_admin())
 ):
     """Update an existing blog post (Super Admin only)"""
     
@@ -316,7 +316,7 @@ async def update_blog_post(
 @router.delete("/posts/{post_id}")
 async def delete_blog_post(
     post_id: str,
-    current_user: Dict[str, Any] = Depends(require_super_admin)
+    current_user: Dict[str, Any] = Depends(require_super_admin())
 ):
     """Delete a blog post (Super Admin only)"""
     
@@ -364,7 +364,7 @@ async def create_category(
     name: str = Form(...),
     description: str = Form(...),
     color: str = Form("#3B82F6"),
-    current_user: Dict[str, Any] = Depends(require_super_admin)
+    current_user: Dict[str, Any] = Depends(require_super_admin())
 ):
     """Create a new blog category (Super Admin only)"""
     
@@ -410,7 +410,7 @@ async def get_tags():
 @router.post("/import-markdown")
 async def import_markdown_file(
     file_content: str = Form(...),
-    current_user: Dict[str, Any] = Depends(require_super_admin)
+    current_user: Dict[str, Any] = Depends(require_super_admin())
 ):
     """Import blog post from markdown file content (Super Admin only)"""
     

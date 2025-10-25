@@ -101,8 +101,8 @@ class BlogService:
                 post_data['published_at'] = firestore.SERVER_TIMESTAMP
             
             # Create the post
-            timestamp, doc_ref = self.db.collection('blog_posts').add(post_data)
-            post_id = doc_ref.id
+            doc_ref = self.db.collection('blog_posts').add(post_data)
+            post_id = doc_ref[1].id
             
             # Update tag usage counts
             if tags:

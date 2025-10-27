@@ -2,7 +2,8 @@ import * as functions from "firebase-functions";
 import { google } from "googleapis";
 import * as admin from "firebase-admin";
 import { readFileSync } from "fs";
-import { join } from "path";
+import { join, dirname } from "path";
+import { fileURLToPath } from "url";
 
 interface MeetingRequest {
   investorEmail: string;
@@ -44,6 +45,9 @@ export const createInvestorMeeting = functions.https.onCall(async (request) => {
 
   try {
     // Load service account credentials from file
+    // Get current file's directory in ES modules
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = dirname(__filename);
     const credentialsPath = join(__dirname, "..", "google-calendar-credentials.json");
     const credentialsContent = readFileSync(credentialsPath, "utf8");
     const serviceAccountKey = JSON.parse(credentialsContent);

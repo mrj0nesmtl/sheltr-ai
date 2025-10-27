@@ -7,6 +7,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
 import {
   DndContext,
   closestCenter,
@@ -67,6 +69,7 @@ interface QuickAccessCard {
   href: string;
   borderClass: string;
   category: 'public' | 'secure' | 'platform';
+  isInvestorDataRoom?: boolean; // New field for investor data room sharing
 }
 
 // Gallery Item Type
@@ -83,7 +86,13 @@ interface GalleryItem {
 }
 
 // Sortable Card Component
-function SortableCard({ card }: { card: QuickAccessCard }) {
+function SortableCard({ 
+  card, 
+  onToggleInvestorDataRoom 
+}: { 
+  card: QuickAccessCard;
+  onToggleInvestorDataRoom: (cardId: string, value: boolean) => void;
+}) {
   const {
     attributes,
     listeners,
@@ -105,7 +114,7 @@ function SortableCard({ card }: { card: QuickAccessCard }) {
         {/* Drag Handle */}
         <div
           {...listeners}
-          className="absolute top-2 right-2 cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 transition-opacity"
+          className="absolute top-2 right-2 cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 transition-opacity z-10"
         >
           <GripVertical className="h-5 w-5 text-muted-foreground" />
         </div>
@@ -128,7 +137,24 @@ function SortableCard({ card }: { card: QuickAccessCard }) {
             {card.description}
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-4">
+          {/* Investor Data Room Toggle - Only show for secure documents */}
+          {card.category === 'secure' && (
+            <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg border-2 border-border/40">
+              <div className="flex items-center gap-2">
+                <Shield className="h-4 w-4 text-red-600" />
+                <Label htmlFor={`investor-toggle-${card.id}`} className="text-sm font-medium cursor-pointer">
+                  Share to Investor Data Room
+                </Label>
+              </div>
+              <Switch
+                id={`investor-toggle-${card.id}`}
+                checked={card.isInvestorDataRoom || false}
+                onCheckedChange={(checked) => onToggleInvestorDataRoom(card.id, checked)}
+              />
+            </div>
+          )}
+          
           <Link href={card.href}>
             <Button variant="outline" className={`w-full ${card.buttonClass}`}>
               {card.buttonText}
@@ -609,6 +635,32 @@ export default function FoundersOnlyPage() {
     }
   };
 
+  // Toggle Investor Data Room visibility
+  const handleToggleInvestorDataRoom = async (cardId: string, value: boolean) => {
+    try {
+      // Update local state immediately for responsive UI
+      setCards((prevCards) =>
+        prevCards.map((card) =>
+          card.id === cardId ? { ...card, isInvestorDataRoom: value } : card
+        )
+      );
+
+      // Update Firestore secure_documents collection
+      const docRef = doc(db, 'secure_documents', cardId);
+      await setDoc(docRef, { isInvestorDataRoom: value }, { merge: true });
+
+      console.log(`✅ Updated ${cardId}: isInvestorDataRoom = ${value}`);
+    } catch (error) {
+      console.error('Error updating investor data room status:', error);
+      // Revert local state on error
+      setCards((prevCards) =>
+        prevCards.map((card) =>
+          card.id === cardId ? { ...card, isInvestorDataRoom: !value } : card
+        )
+      );
+    }
+  };
+
   // Save card order as global default
   const saveAsGlobalDefault = async () => {
     try {
@@ -761,7 +813,11 @@ export default function FoundersOnlyPage() {
             >
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {cards.map((card) => (
-                  <SortableCard key={card.id} card={card} />
+                  <SortableCard 
+                    key={card.id} 
+                    card={card} 
+                    onToggleInvestorDataRoom={handleToggleInvestorDataRoom}
+                  />
                 ))}
               </div>
             </SortableContext>
@@ -886,10 +942,10 @@ export default function FoundersOnlyPage() {
               </Card>
 
               {/* Demo Investor */}
-              <Card className="border-2 border-amber-500">
+              <Card className="border-2 border-red-500">
                 <CardHeader>
                   <CardTitle className="text-lg flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-amber-500"></div>
+                    <div className="w-2 h-2 rounded-full bg-red-500"></div>
                     Demo Investor
                   </CardTitle>
                   <CardDescription>Investor Data Room</CardDescription>
@@ -914,7 +970,7 @@ export default function FoundersOnlyPage() {
                   <div>
                     <p className="text-xs text-muted-foreground mb-1">Portal</p>
                     <Link href="/ir" target="_blank">
-                      <Badge className="bg-amber-600 text-white hover:bg-amber-700 cursor-pointer">
+                      <Badge className="bg-red-600 text-white hover:bg-red-700 cursor-pointer">
                         /ir (Data Room)
                       </Badge>
                     </Link>

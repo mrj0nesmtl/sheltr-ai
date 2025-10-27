@@ -90,6 +90,12 @@ export function NotificationItem({
   onDelete,
   onClick 
 }: NotificationItemProps) {
+  // Defensive check: Don't render if missing critical fields
+  if (!notification || !notification.title || !notification.message) {
+    console.error('❌ NotificationItem received invalid notification:', notification);
+    return null;
+  }
+
   const Icon = ICON_MAP[notification.category] || Settings;
   const badgeColor = BADGE_COLORS[notification.category] || BADGE_COLORS.system;
   const priorityColor = PRIORITY_COLORS[notification.priority] || PRIORITY_COLORS.normal;

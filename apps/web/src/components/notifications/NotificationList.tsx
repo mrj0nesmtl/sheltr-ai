@@ -59,6 +59,12 @@ export function NotificationList({
 
   // Filter notifications
   const filteredNotifications = notifications.filter(notification => {
+    // Filter out malformed notifications (missing required fields)
+    if (!notification.title || !notification.message || !notification.category) {
+      console.warn('⚠️ Skipping malformed notification:', notification);
+      return false;
+    }
+
     // Search filter
     if (searchQuery) {
       const query = searchQuery.toLowerCase();

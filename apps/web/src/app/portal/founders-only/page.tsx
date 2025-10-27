@@ -636,16 +636,36 @@ export default function FoundersOnlyPage() {
   // Toggle Investor Data Room visibility
   const handleToggleInvestorDataRoom = async (cardId: string, value: boolean) => {
     try {
+      // Find the card to get all its data
+      const card = cards.find(c => c.id === cardId);
+      if (!card) return;
+
       // Update local state immediately for responsive UI
       setCards((prevCards) =>
-        prevCards.map((card) =>
-          card.id === cardId ? { ...card, isInvestorDataRoom: value } : card
+        prevCards.map((c) =>
+          c.id === cardId ? { ...c, isInvestorDataRoom: value } : c
         )
       );
 
-      // Update Firestore secure_documents collection
+      // Store complete card data in Firestore (excluding React components)
       const docRef = doc(db, 'secure_documents', cardId);
-      await setDoc(docRef, { isInvestorDataRoom: value }, { merge: true });
+      const cardData = {
+        id: card.id,
+        title: card.title,
+        description: card.description,
+        badgeText: card.badgeText,
+        badgeClass: card.badgeClass,
+        titleColor: card.titleColor,
+        buttonText: card.buttonText,
+        buttonClass: card.buttonClass,
+        href: card.href,
+        borderClass: card.borderClass,
+        category: card.category,
+        isInvestorDataRoom: value,
+        updatedAt: new Date().toISOString(),
+      };
+
+      await setDoc(docRef, cardData, { merge: true });
 
       console.log(`✅ Updated ${cardId}: isInvestorDataRoom = ${value}`);
     } catch (error) {

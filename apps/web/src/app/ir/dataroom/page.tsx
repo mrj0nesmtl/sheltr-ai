@@ -98,22 +98,36 @@ export default function InvestorDataRoomPage() {
         );
         const docsSnapshot = await getDocs(docsQuery);
         
-        // Map Firestore documents to cards
+        // Map Firestore documents to cards with proper formatting
         const loadedCards: QuickAccessCard[] = docsSnapshot.docs.map(doc => {
           const data = doc.data();
+          
+          // Determine icon based on category or use FileText as default
+          let icon = <FileText className="h-6 w-6 text-blue-600" />;
+          
+          // If it's a secure document, add lock icon overlay
+          if (data.category === 'secure') {
+            icon = (
+              <div className="relative">
+                <FileText className="h-6 w-6 text-blue-600" />
+                <Lock className="h-3 w-3 text-blue-600 absolute -top-1 -right-1 bg-white dark:bg-slate-900 rounded-full" />
+              </div>
+            );
+          }
+          
           return {
             id: doc.id,
-            icon: <FileText className="h-6 w-6 text-blue-600" />,
-            badgeText: data.badgeText || 'Secure',
+            icon: icon,
+            badgeText: data.badgeText || 'Document',
             badgeClass: data.badgeClass || 'bg-blue-600 text-white',
             title: data.title || 'Untitled Document',
             titleColor: data.titleColor || 'text-blue-600',
-            description: data.description || '',
-            buttonText: 'View Document',
-            buttonClass: 'border-2 border-blue-600 text-blue-600 hover:bg-blue-50',
+            description: data.description || 'No description available',
+            buttonText: data.buttonText || 'View Document',
+            buttonClass: data.buttonClass || 'border-2 border-blue-600 text-blue-600 hover:bg-blue-50',
             href: `/ir/dataroom/${doc.id}`,
-            borderClass: 'border-blue-200',
-            category: 'secure',
+            borderClass: data.borderClass || 'border-blue-200',
+            category: (data.category as 'public' | 'secure' | 'platform') || 'secure',
             isInvestorDataRoom: true,
           };
         });

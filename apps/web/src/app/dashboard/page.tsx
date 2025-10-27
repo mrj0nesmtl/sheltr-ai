@@ -966,7 +966,7 @@ Token Role: ${tokenRole || 'MISSING'}`;
         {/* Platform Statistics */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <Link href="/dashboard/shelters">
-            <Card className="cursor-pointer hover:shadow-md transition-shadow">
+            <Card className="cursor-pointer border-2 border-border/60 bg-card hover:border-border hover:shadow-lg hover:scale-[1.02] transition-all duration-200">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Total Organizations</CardTitle>
                 <Building className="h-4 w-4 text-muted-foreground" />
@@ -979,7 +979,7 @@ Token Role: ${tokenRole || 'MISSING'}`;
           </Link>
 
           <Link href="/dashboard/users">
-            <Card className="cursor-pointer hover:shadow-md transition-shadow">
+            <Card className="cursor-pointer border-2 border-border/60 bg-card hover:border-border hover:shadow-lg hover:scale-[1.02] transition-all duration-200">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Platform Users</CardTitle>
                 <Users className="h-4 w-4 text-muted-foreground" />
@@ -992,7 +992,7 @@ Token Role: ${tokenRole || 'MISSING'}`;
           </Link>
 
           <Link href="/dashboard/users">
-            <Card className="cursor-pointer hover:shadow-md transition-shadow">
+            <Card className="cursor-pointer border-2 border-border/60 bg-card hover:border-border hover:shadow-lg hover:scale-[1.02] transition-all duration-200">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Active Participants</CardTitle>
                 <Activity className="h-4 w-4 text-muted-foreground" />
@@ -1004,7 +1004,7 @@ Token Role: ${tokenRole || 'MISSING'}`;
             </Card>
           </Link>
 
-          <Card className="cursor-pointer hover:shadow-md transition-shadow">
+          <Card className="cursor-pointer border-2 border-border/60 bg-card hover:border-border hover:shadow-lg hover:scale-[1.02] transition-all duration-200">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Active Donors</CardTitle>
               <Heart className="h-4 w-4 text-muted-foreground" />
@@ -1016,7 +1016,7 @@ Token Role: ${tokenRole || 'MISSING'}`;
           </Card>
 
           <Link href="/dashboard/users">
-            <Card className="cursor-pointer hover:shadow-md transition-shadow">
+            <Card className="cursor-pointer border-2 border-border/60 bg-card hover:border-border hover:shadow-lg hover:scale-[1.02] transition-all duration-200">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Platform Administrators</CardTitle>
                 <Star className="h-4 w-4 text-muted-foreground" />
@@ -1029,7 +1029,7 @@ Token Role: ${tokenRole || 'MISSING'}`;
           </Link>
 
           <Link href="/dashboard/financial">
-            <Card className="cursor-pointer hover:shadow-md transition-shadow">
+            <Card className="cursor-pointer border-2 border-border/60 bg-card hover:border-border hover:shadow-lg hover:scale-[1.02] transition-all duration-200">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Total Donations</CardTitle>
                 <TrendingUp className="h-4 w-4 text-muted-foreground" />
@@ -1042,7 +1042,7 @@ Token Role: ${tokenRole || 'MISSING'}`;
           </Link>
 
           <Link href="/dashboard/platform">
-            <Card className="cursor-pointer hover:shadow-md transition-shadow">
+            <Card className="cursor-pointer border-2 border-border/60 bg-card hover:border-border hover:shadow-lg hover:scale-[1.02] transition-all duration-200">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Platform Uptime</CardTitle>
                 <BarChart3 className="h-4 w-4 text-muted-foreground" />
@@ -1055,7 +1055,7 @@ Token Role: ${tokenRole || 'MISSING'}`;
           </Link>
 
           <Link href="/dashboard/notifications">
-            <Card className="cursor-pointer hover:shadow-md transition-shadow">
+            <Card className="cursor-pointer border-2 border-border/60 bg-card hover:border-border hover:shadow-lg hover:scale-[1.02] transition-all duration-200">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Open Issues</CardTitle>
                 <AlertTriangle className="h-4 w-4 text-muted-foreground" />
@@ -1068,7 +1068,7 @@ Token Role: ${tokenRole || 'MISSING'}`;
           </Link>
 
           <Link href="/dashboard/notifications">
-            <Card className="cursor-pointer hover:shadow-md transition-shadow">
+            <Card className="cursor-pointer border-2 border-border/60 bg-card hover:border-border hover:shadow-lg hover:scale-[1.02] transition-all duration-200">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Email Signups</CardTitle>
                 <Mail className="h-4 w-4 text-muted-foreground" />
@@ -1083,7 +1083,7 @@ Token Role: ${tokenRole || 'MISSING'}`;
           </Link>
 
           <Link href="/dashboard/platform">
-            <Card className="cursor-pointer hover:shadow-md transition-shadow">
+            <Card className="cursor-pointer border-2 border-border/60 bg-card hover:border-border hover:shadow-lg hover:scale-[1.02] transition-all duration-200">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Pending Applications</CardTitle>
                 <Building className="h-4 w-4 text-muted-foreground" />
@@ -1096,7 +1096,7 @@ Token Role: ${tokenRole || 'MISSING'}`;
           </Link>
 
           <Link href="/portal/founders-only/investor-relations">
-            <Card className="cursor-pointer hover:shadow-md transition-shadow">
+            <Card className="cursor-pointer border-2 border-border/60 bg-card hover:border-border hover:shadow-lg hover:scale-[1.02] transition-all duration-200">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Investor Meetings</CardTitle>
                 <Calendar className="h-4 w-4 text-purple-500" />
@@ -1119,7 +1119,7 @@ Token Role: ${tokenRole || 'MISSING'}`;
         {/* Activity and Notifications Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           {/* Recent Activity */}
-          <Card>
+          <Card className="border-2 border-border/60 bg-card hover:border-border hover:shadow-lg transition-all duration-200">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
@@ -1142,11 +1142,11 @@ Token Role: ${tokenRole || 'MISSING'}`;
               <div className="space-y-4">
                 {platformMetrics.recentActivity?.length > 0 ? (
                   platformMetrics.recentActivity.map((activity, index) => (
-                    <div key={index} className="flex items-start space-x-3 pb-3 border-b last:border-b-0">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                    <div key={index} className="flex items-start space-x-3 pb-3 border-b-2 last:border-b-0 border-border/40 hover:bg-accent/20 p-2 rounded transition-colors">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
                       <div className="flex-1">
                         <p className="font-medium">{activity.action}</p>
-                        <p className="text-sm text-gray-600">{activity.details}</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-300">{activity.details}</p>
                         <p className="text-xs text-gray-400 mt-1">{activity.time}</p>
                       </div>
                     </div>
@@ -1159,7 +1159,7 @@ Token Role: ${tokenRole || 'MISSING'}`;
           </Card>
 
           {/* Recent Notifications */}
-          <Card>
+          <Card className="border-2 border-border/60 bg-card hover:border-border hover:shadow-lg transition-all duration-200">
             <CardHeader>
               <CardTitle className="flex items-center justify-between">
                 <div className="flex items-center">
@@ -1183,10 +1183,10 @@ Token Role: ${tokenRole || 'MISSING'}`;
               <div className="space-y-3">
                 {notifications.length > 0 ? (
                   notifications.slice(0, 5).map((notification) => (
-                    <div key={notification.id} className={`flex items-start space-x-3 p-3 rounded-lg ${
-                      notification.isRead ? 'bg-muted/30' : 'bg-primary/5 border-l-4 border-primary'
+                    <div key={notification.id} className={`flex items-start space-x-3 p-3 rounded-lg border-2 transition-all hover:shadow-md ${
+                      notification.isRead ? 'bg-muted/30 border-border/40 hover:border-border' : 'bg-primary/5 border-l-4 border-primary border-t-2 border-r-2 border-b-2 hover:bg-primary/10'
                     }`}>
-                      <div className={`w-2 h-2 rounded-full mt-2 ${notification.isRead ? 'bg-gray-400' : 'bg-primary'}`}></div>
+                      <div className={`w-2 h-2 rounded-full mt-2 flex-shrink-0 ${notification.isRead ? 'bg-gray-400' : 'bg-primary'}`}></div>
                       <div className="flex-1 min-w-0">
                         <p className="font-medium text-sm">{notification.title}</p>
                         <p className="text-xs text-muted-foreground line-clamp-2 mt-1">
@@ -1304,7 +1304,7 @@ Token Role: ${tokenRole || 'MISSING'}`;
         {/* Platform Statistics - Same as Super Admin but without Platform Administrators metric */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <Link href="/dashboard/shelters">
-            <Card className="cursor-pointer hover:shadow-md transition-shadow">
+            <Card className="cursor-pointer border-2 border-border/60 bg-card hover:border-border hover:shadow-lg hover:scale-[1.02] transition-all duration-200">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Total Organizations</CardTitle>
                 <Building className="h-4 w-4 text-muted-foreground" />
@@ -1317,7 +1317,7 @@ Token Role: ${tokenRole || 'MISSING'}`;
           </Link>
 
           <Link href="/dashboard/users">
-            <Card className="cursor-pointer hover:shadow-md transition-shadow">
+            <Card className="cursor-pointer border-2 border-border/60 bg-card hover:border-border hover:shadow-lg hover:scale-[1.02] transition-all duration-200">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Platform Users</CardTitle>
                 <Users className="h-4 w-4 text-muted-foreground" />
@@ -1330,7 +1330,7 @@ Token Role: ${tokenRole || 'MISSING'}`;
           </Link>
 
           <Link href="/dashboard/users">
-            <Card className="cursor-pointer hover:shadow-md transition-shadow">
+            <Card className="cursor-pointer border-2 border-border/60 bg-card hover:border-border hover:shadow-lg hover:scale-[1.02] transition-all duration-200">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Active Participants</CardTitle>
                 <Activity className="h-4 w-4 text-muted-foreground" />
@@ -1354,7 +1354,7 @@ Token Role: ${tokenRole || 'MISSING'}`;
           </Card>
 
           <Link href="/dashboard/financial">
-            <Card className="cursor-pointer hover:shadow-md transition-shadow">
+            <Card className="cursor-pointer border-2 border-border/60 bg-card hover:border-border hover:shadow-lg hover:scale-[1.02] transition-all duration-200">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Total Donations</CardTitle>
                 <TrendingUp className="h-4 w-4 text-muted-foreground" />
@@ -1367,7 +1367,7 @@ Token Role: ${tokenRole || 'MISSING'}`;
           </Link>
 
           <Link href="/dashboard/platform">
-            <Card className="cursor-pointer hover:shadow-md transition-shadow">
+            <Card className="cursor-pointer border-2 border-border/60 bg-card hover:border-border hover:shadow-lg hover:scale-[1.02] transition-all duration-200">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Platform Uptime</CardTitle>
                 <BarChart3 className="h-4 w-4 text-muted-foreground" />
@@ -1380,7 +1380,7 @@ Token Role: ${tokenRole || 'MISSING'}`;
           </Link>
 
           <Link href="/dashboard/notifications">
-            <Card className="cursor-pointer hover:shadow-md transition-shadow">
+            <Card className="cursor-pointer border-2 border-border/60 bg-card hover:border-border hover:shadow-lg hover:scale-[1.02] transition-all duration-200">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Open Issues</CardTitle>
                 <AlertTriangle className="h-4 w-4 text-muted-foreground" />
@@ -1393,7 +1393,7 @@ Token Role: ${tokenRole || 'MISSING'}`;
           </Link>
 
           <Link href="/dashboard/notifications">
-            <Card className="cursor-pointer hover:shadow-md transition-shadow">
+            <Card className="cursor-pointer border-2 border-border/60 bg-card hover:border-border hover:shadow-lg hover:scale-[1.02] transition-all duration-200">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Email Signups</CardTitle>
                 <Mail className="h-4 w-4 text-muted-foreground" />
@@ -1408,7 +1408,7 @@ Token Role: ${tokenRole || 'MISSING'}`;
           </Link>
 
           <Link href="/dashboard/platform">
-            <Card className="cursor-pointer hover:shadow-md transition-shadow">
+            <Card className="cursor-pointer border-2 border-border/60 bg-card hover:border-border hover:shadow-lg hover:scale-[1.02] transition-all duration-200">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Pending Applications</CardTitle>
                 <Building className="h-4 w-4 text-muted-foreground" />
@@ -1421,7 +1421,7 @@ Token Role: ${tokenRole || 'MISSING'}`;
           </Link>
 
           <Link href="/portal/founders-only/investor-relations">
-            <Card className="cursor-pointer hover:shadow-md transition-shadow">
+            <Card className="cursor-pointer border-2 border-border/60 bg-card hover:border-border hover:shadow-lg hover:scale-[1.02] transition-all duration-200">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Investor Meetings</CardTitle>
                 <Calendar className="h-4 w-4 text-purple-500" />

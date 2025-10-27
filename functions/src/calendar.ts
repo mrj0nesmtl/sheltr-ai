@@ -44,6 +44,10 @@ export const createInvestorMeeting = functions.https.onCall(async (request) => {
   }
 
   try {
+    // For now, we'll create the event without sending invites via Google Calendar API
+    // Instead, we'll send email notifications separately
+    // This avoids the Domain-Wide Delegation requirement
+    
     // Load service account credentials from file
     // Get current file's directory in ES modules
     const __filename = fileURLToPath(import.meta.url);
@@ -97,12 +101,10 @@ Visit our investor portal: https://sheltr-ai.web.app/portal/founders-only/invest
         dateTime: endTime.toISOString(),
         timeZone: "America/New_York",
       },
-      attendees: [
-        { email: investorEmail, displayName: investorName },
-        { email: "joel.yaffe@gmail.com", displayName: "Joel Yaffe - SHELTR Founder" },
-        { email: "alexander@arcanaconcept.com", displayName: "Alexander Kline, Arcana Founder" },  
-        // Add other team members here as needed
-      ],
+      // Note: attendees removed to avoid Domain-Wide Delegation requirement
+      // Calendar event will be created in service account's calendar
+      // Attendees will be notified via separate email system
+      attendees: [],
       conferenceData: {
         createRequest: {
           requestId: `sheltr-${Date.now()}`,
@@ -118,7 +120,16 @@ Visit our investor portal: https://sheltr-ai.web.app/portal/founders-only/invest
       },
     };
 
-    functions.logger.info("Creating calendar event", { investorEmail, investorName, selectedDateTime });
+    functions.logger.info("Creating calendar event", { 
+      investorEmail, 
+      investorName, 
+      selectedDateTime,
+      attendeesForNotification: [
+        investorEmail,
+        "joel.yaffe@gmail.com",
+        "alexander@arcanaconcept.com"
+      ]
+    });
 
     // Insert event into calendar
     const response = await calendar.events.insert({
@@ -126,7 +137,7 @@ Visit our investor portal: https://sheltr-ai.web.app/portal/founders-only/invest
       calendarId: "primary", // or use specific calendar ID
       requestBody: event,
       conferenceDataVersion: 1,
-      sendUpdates: "all", // Send email invites to all attendees
+      sendUpdates: "none", // Don't send invites (no attendees to avoid Domain-Wide Delegation)
     });
 
     functions.logger.info("Calendar event created successfully", { 
@@ -147,6 +158,12 @@ Visit our investor portal: https://sheltr-ai.web.app/portal/founders-only/invest
       status: "scheduled",
       additionalNotes: additionalNotes || null,
       createdAt: admin.firestore.FieldValue.serverTimestamp(),
+      attendees: [
+        investorEmail,
+        "joel.yaffe@gmail.com",
+        "alexander@arcanaconcept.com"
+      ],
+      emailNotificationsSent: false, // To track if email notifications were sent
     };
 
     const docRef = await admin.firestore()

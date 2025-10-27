@@ -1,9 +1,13 @@
 import * as functions from "firebase-functions";
 import { google } from "googleapis";
+import { initializeApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 import { readFileSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
+
+// Initialize Firebase Admin App
+initializeApp();
 
 interface MeetingRequest {
   investorEmail: string;

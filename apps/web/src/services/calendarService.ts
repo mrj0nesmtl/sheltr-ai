@@ -96,29 +96,34 @@ Visit our investor portal: https://sheltr-ai.web.app/investor-relations
   }
 
   private async createCalendarEvent(event: CalendarEvent): Promise<string> {
-    // For now, we'll simulate the MCP call
-    // In production, this would call the actual MCP server
+    // TODO: Implement actual Google Calendar API integration
+    // For now, we'll simulate a successful calendar event creation
     
-    if (typeof window !== 'undefined') {
-      // Client-side implementation
-      const response = await fetch('/api/calendar/create-event', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(event),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to create calendar event');
-      }
-
-      const result = await response.json();
-      return result.meetingLink;
-    }
-
-    // Fallback for development - return a mock meeting link
-    return 'https://meet.google.com/mock-meeting-link';
+    console.log('📅 Mock Calendar Event Creation:', {
+      summary: event.summary,
+      start: event.start.dateTime,
+      attendees: event.attendees.map(a => a.email),
+    });
+    
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    // Generate a mock meeting link with a unique ID
+    const meetingId = Math.random().toString(36).substring(2, 15);
+    const mockMeetingLink = `https://meet.google.com/mock-${meetingId}`;
+    
+    console.log('✅ Mock meeting created:', mockMeetingLink);
+    
+    // In production, this would be replaced with actual API call:
+    // const response = await fetch('/api/calendar/create-event', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify(event),
+    // });
+    // const result = await response.json();
+    // return result.meetingLink;
+    
+    return mockMeetingLink;
   }
 
   private async sendConfirmationEmail(eventDetails: CalendarEvent, meetingLink: string): Promise<void> {
@@ -194,20 +199,22 @@ Visit our investor portal: https://sheltr-ai.web.app/investor-relations
       `
     };
 
-    // For now, we'll simulate sending the email
-    // In production, this would use the Gmail API via MCP
-    console.log('Confirmation email would be sent:', emailContent);
+    // TODO: Implement actual email sending
+    // For now, we'll log the email content for testing
+    console.log('📧 Mock Confirmation Email:', {
+      to: emailContent.to,
+      subject: emailContent.subject,
+      meetingLink: meetingLink,
+    });
     
-    // You could also integrate with other email services like SendGrid, Mailgun, etc.
-    if (typeof window !== 'undefined') {
-      await fetch('/api/email/send-confirmation', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(emailContent),
-      });
-    }
+    console.log('✅ Mock confirmation email "sent" successfully');
+    
+    // In production, this would use SendGrid/Gmail API:
+    // await fetch('/api/email/send-confirmation', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify(emailContent),
+    // });
   }
 
   async getAvailableTimeSlots(date: Date): Promise<string[]> {

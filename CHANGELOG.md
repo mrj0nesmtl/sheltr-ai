@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - ✅ **New Calendar ID**: `c_5678f9f5e708852d32e378ba9b4bbbc30a22a1038a5beb4465cc4b598f8ae7b1@group.calendar.google.com`
 - ✅ **Updated Attendees**: Changed from `joel.yaffe@gmail.com` to `joel@arcanaconcept.com`
 - ✅ **Shared with Service Account**: `sheltr-ai@appspot.gserviceaccount.com`
+- ✅ **Dashboard Link**: "Investor Meetings" card now opens Google Calendar in new window
 
 ### 🔧 Technical Changes
 

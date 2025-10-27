@@ -1676,7 +1676,9 @@ export default function InvestorRelationsPage() {
         meetingForm.email,
         meetingForm.name,
         dateTime.toISOString(),
-        meetingForm.additionalNotes
+        meetingForm.additionalNotes,
+        meetingForm.company,
+        meetingForm.investmentRange
       );
 
       setSchedulingResult(result);

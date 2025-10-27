@@ -1103,6 +1103,19 @@ service cloud.firestore {
     }
     
     // =================================================================
+    // INVESTOR MEETINGS - Calendar bookings for investor relations
+    // =================================================================
+    match /investor_meetings/{meetingId} {
+      // Read: Super Admin and Platform Admin only
+      allow read: if isSuperAdmin() || isPlatformAdmin();
+      
+      // Create: Anyone (public booking form) - Firebase Functions will create these
+      // Update/Delete: Super Admin only
+      allow create: if true; // Allow Firebase Functions to create
+      allow update, delete: if isSuperAdmin();
+    }
+    
+    // =================================================================
     // FALLBACK RULE - Deny all other access
     // =================================================================
     match /{document=**} {

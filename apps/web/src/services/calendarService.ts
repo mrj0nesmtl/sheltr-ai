@@ -30,7 +30,9 @@ export class CalendarService {
     investorEmail: string,
     investorName: string,
     selectedDateTime: string,
-    additionalNotes?: string
+    additionalNotes?: string,
+    company?: string,
+    investmentRange?: string
   ): Promise<SchedulingResult> {
     try {
       const eventDetails: CalendarEvent = {
@@ -75,17 +77,33 @@ Visit our investor portal: https://sheltr-ai.web.app/investor-relations
         location: 'Google Meet (link will be provided)',
       };
 
-      // Create calendar event via MCP
-      const meetingLink = await this.createCalendarEvent(eventDetails);
+      // Call Firebase Function to create real calendar event
+      const { getFunctions, httpsCallable } = await import('firebase/functions');
+      const { functions } = await import('@/lib/firebase');
       
-      // Send confirmation notification
-      await this.sendConfirmationEmail(eventDetails, meetingLink);
+      const createMeeting = httpsCallable(functions, 'createInvestorMeeting');
       
-      return {
-        success: true,
-        meetingLink,
-        message: 'Meeting scheduled successfully! Confirmation sent to your email.',
-      };
+      const result = await createMeeting({
+        investorEmail,
+        investorName,
+        company,
+        investmentRange,
+        selectedDateTime,
+        additionalNotes,
+      });
+      
+      const data = result.data as any;
+      
+      if (data.success) {
+        return {
+          success: true,
+          meetingLink: data.meetingLink,
+          eventId: data.eventId,
+          message: data.message || 'Meeting scheduled successfully! Confirmation sent to your email.',
+        };
+      } else {
+        throw new Error(data.message || 'Failed to schedule meeting');
+      }
     } catch (error) {
       console.error('❌ CalendarService.createInvestorMeeting error:', error);
       return {

@@ -29,7 +29,9 @@ import {
   Download,
   Trash2,
   MailOpen,
-  MailX
+  MailX,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 import type { 
   UnifiedNotification, 
@@ -70,6 +72,9 @@ export function NotificationList({
   // Bulk selection state
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [isProcessing, setIsProcessing] = useState(false);
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(25);
 
   // Filter notifications
   const filteredNotifications = notifications.filter(notification => {
@@ -107,6 +112,18 @@ export function NotificationList({
   const categories = Array.from(
     new Set(notifications.map(n => n.category).filter(Boolean))
   );
+
+  // Pagination calculations
+  const totalPages = Math.ceil(filteredNotifications.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedNotifications = filteredNotifications.slice(startIndex, endIndex);
+
+  // Reset to page 1 when filters change
+  const handleFilterChange = () => {
+    setCurrentPage(1);
+    setSelectedIds(new Set());
+  };
 
   // Bulk selection handlers
   const handleSelectAll = (checked: boolean) => {
@@ -228,7 +245,7 @@ export function NotificationList({
         </div>
 
         {/* Category Filter */}
-        <Select value={categoryFilter} onValueChange={(value) => setCategoryFilter(value as NotificationCategory | 'all')}>
+        <Select value={categoryFilter} onValueChange={(value) => { setCategoryFilter(value as NotificationCategory | 'all'); handleFilterChange(); }}>
           <SelectTrigger className="w-full sm:w-[180px]">
             <Filter className="h-4 w-4 mr-2" />
             <SelectValue placeholder="All categories" />
@@ -247,17 +264,30 @@ export function NotificationList({
         <Button
           variant={showUnreadOnly ? 'default' : 'outline'}
           size="sm"
-          onClick={() => setShowUnreadOnly(!showUnreadOnly)}
+          onClick={() => { setShowUnreadOnly(!showUnreadOnly); handleFilterChange(); }}
           className="gap-2"
         >
           <Bell className="h-4 w-4" />
           {showUnreadOnly ? 'Show All' : 'Unread Only'}
         </Button>
+
+        {/* Items Per Page Selector */}
+        <Select value={itemsPerPage.toString()} onValueChange={(value) => { setItemsPerPage(Number(value)); handleFilterChange(); }}>
+          <SelectTrigger className="w-full sm:w-[120px]">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="10">10 / page</SelectItem>
+            <SelectItem value="25">25 / page</SelectItem>
+            <SelectItem value="50">50 / page</SelectItem>
+            <SelectItem value="100">100 / page</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       {/* Bulk Selection & Actions Toolbar */}
       {filteredNotifications.length > 0 && (
-        <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg border">
+        <div className="flex items-center justify-between p-3 bg-card/80 rounded-lg border-2 border-border/60 shadow-sm">
           <div className="flex items-center gap-3">
             <Checkbox
               checked={isAllSelected}
@@ -334,7 +364,7 @@ export function NotificationList({
           </div>
         ) : (
           <>
-            {filteredNotifications.map((notification) => (
+            {paginatedNotifications.map((notification) => (
               <NotificationItem
                 key={notification.id}
                 notification={notification}
@@ -347,11 +377,77 @@ export function NotificationList({
               />
             ))}
             
-            {/* Show count */}
-            <div className="text-center py-4 text-sm text-muted-foreground border-t">
-              Showing {filteredNotifications.length} of {notifications.length} notifications
-              {selectedIds.size > 0 && ` (${selectedIds.size} selected)`}
-            </div>
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+              <div className="flex items-center justify-between py-4 px-4 border-t border-2 border-primary/20 bg-background/80 rounded-lg">
+                <div className="text-sm text-muted-foreground">
+                  Showing <span className="font-semibold text-foreground">{startIndex + 1}</span> to <span className="font-semibold text-foreground">{Math.min(endIndex, filteredNotifications.length)}</span> of <span className="font-semibold text-foreground">{filteredNotifications.length}</span> notifications
+                  {selectedIds.size > 0 && (
+                    <span className="ml-2 text-primary font-medium">
+                      ({selectedIds.size} selected)
+                    </span>
+                  )}
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                    disabled={currentPage === 1}
+                    className="gap-1"
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                    Previous
+                  </Button>
+                  
+                  <div className="flex items-center gap-1">
+                    {Array.from({ length: totalPages }, (_, i) => i + 1)
+                      .filter(page => {
+                        // Show first, last, current, and adjacent pages
+                        return page === 1 || 
+                               page === totalPages || 
+                               Math.abs(page - currentPage) <= 1;
+                      })
+                      .map((page, index, array) => {
+                        // Add ellipsis between non-consecutive pages
+                        const prevPage = array[index - 1];
+                        const showEllipsis = prevPage && page - prevPage > 1;
+                        
+                        return (
+                          <div key={page} className="flex items-center">
+                            {showEllipsis && (
+                              <span className="px-2 text-muted-foreground">...</span>
+                            )}
+                            <Button
+                              variant={currentPage === page ? 'default' : 'outline'}
+                              size="sm"
+                              onClick={() => setCurrentPage(page)}
+                              className={cn(
+                                'w-9 h-9',
+                                currentPage === page && 'font-bold'
+                              )}
+                            >
+                              {page}
+                            </Button>
+                          </div>
+                        );
+                      })}
+                  </div>
+
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                    disabled={currentPage === totalPages}
+                    className="gap-1"
+                  >
+                    Next
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            )}
           </>
         )}
       </div>

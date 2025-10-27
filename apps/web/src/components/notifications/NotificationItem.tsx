@@ -110,11 +110,12 @@ export function NotificationItem({
   return (
     <div
       className={cn(
-        'group relative flex items-start gap-4 p-4 border-l-4 rounded-lg transition-all',
-        'hover:bg-muted/50',
+        'group relative flex items-start gap-4 p-4 border-l-4 rounded-lg transition-all duration-200',
+        'border border-border/40 bg-card/50',
+        'hover:bg-accent/30 hover:border-border hover:shadow-md hover:scale-[1.01]',
         priorityColor,
-        !notification.isRead && 'bg-muted/30 border-2 border-primary/20',
-        isSelected && 'bg-primary/10 ring-2 ring-primary'
+        !notification.isRead && 'bg-muted/40 border-2 border-primary/30 shadow-sm',
+        isSelected && 'bg-primary/10 ring-2 ring-primary border-primary/50'
       )}
     >
       {/* Left: Icon */}

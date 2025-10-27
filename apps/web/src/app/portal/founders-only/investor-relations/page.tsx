@@ -47,6 +47,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { CalendarService, SchedulingResult } from '@/services/calendarService';
 import { checkFounderAccess } from '@/services/founderAccessService';
+import { useHeroImage } from '@/hooks/useHeroImage';
 
 // Investment Deck Slides Data
 const investmentSlides = [
@@ -1593,6 +1594,9 @@ export default function InvestorRelationsPage() {
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
+  
+  // Fetch hero image from gallery (client-side for authenticated page)
+  const { heroImage } = useHeroImage('/portal/founders-only/investor-relations', '/backgrounds/hero-bg.jpg');
 
   // Check founder access on component mount
   useEffect(() => {
@@ -1802,7 +1806,7 @@ export default function InvestorRelationsPage() {
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: 'url(/backgrounds/hero-bg.jpg)',
+            backgroundImage: `url('${heroImage.url}')`,
           }}
         />
         {/* Overlay */}

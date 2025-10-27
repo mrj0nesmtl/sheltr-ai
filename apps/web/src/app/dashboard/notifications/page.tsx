@@ -13,8 +13,11 @@ import { useNotifications } from '@/hooks/useNotifications';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Bell, Shield, Users, Mail, MessageSquare, AlertCircle, Settings } from 'lucide-react';
+import { Bell, Shield, Users, Mail, MessageSquare, AlertCircle, Settings, Trash2 } from 'lucide-react';
 import Link from 'next/link';
+import { clearAllNotificationsSystemWide } from '@/services/unifiedNotificationService';
+import { toast } from 'sonner';
+import { useState } from 'react';
 
 export default function AdminNotificationsPage() {
   const { user } = useAuth();
@@ -26,6 +29,38 @@ export default function AdminNotificationsPage() {
     markAsRead,
     markAllAsRead 
   } = useNotifications();
+  
+  const [isClearing, setIsClearing] = useState(false);
+  
+  // Clear all notifications system-wide (Super Admin only)
+  const handleClearAll = async () => {
+    if (!user || user.role !== 'super_admin') {
+      toast.error('Only Super Admins can clear all notifications');
+      return;
+    }
+    
+    if (!confirm('⚠️ Are you sure you want to delete ALL notifications system-wide? This cannot be undone!')) {
+      return;
+    }
+    
+    setIsClearing(true);
+    try {
+      const result = await clearAllNotificationsSystemWide();
+      
+      if (result.success) {
+        toast.success(`🧹 Cleared ${result.deletedCount} notifications from ${result.collections.length} collections!`);
+        // Reload the page to refresh the notification list
+        window.location.reload();
+      } else {
+        toast.error(`Failed to clear notifications: ${result.error}`);
+      }
+    } catch (error) {
+      console.error('Error clearing notifications:', error);
+      toast.error('An unexpected error occurred while clearing notifications');
+    } finally {
+      setIsClearing(false);
+    }
+  };
 
   // Redirect if not admin
   if (!user || (!user.role.includes('admin') && user.role !== 'super_admin')) {
@@ -62,12 +97,25 @@ export default function AdminNotificationsPage() {
             Manage platform notifications and user communications
           </p>
         </div>
-        <Link href="/dashboard/notification-settings">
-          <Button variant="outline" className="gap-2">
-            <Settings className="h-4 w-4" />
-            Settings
-          </Button>
-        </Link>
+        <div className="flex gap-2">
+          {user?.role === 'super_admin' && (
+            <Button 
+              variant="destructive" 
+              className="gap-2"
+              onClick={handleClearAll}
+              disabled={isClearing || notifications.length === 0}
+            >
+              <Trash2 className="h-4 w-4" />
+              {isClearing ? 'Clearing...' : 'Clear All System-Wide'}
+            </Button>
+          )}
+          <Link href="/dashboard/notification-settings">
+            <Button variant="outline" className="gap-2">
+              <Settings className="h-4 w-4" />
+              Settings
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {/* Quick Stats Cards */}

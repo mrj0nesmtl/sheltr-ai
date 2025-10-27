@@ -23,7 +23,8 @@ import {
   getDoc,
   onSnapshot,
   QuerySnapshot,
-  DocumentData
+  DocumentData,
+  deleteDoc
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import type {
@@ -479,6 +480,57 @@ export async function markAllNotificationsAsRead(
   } catch (error) {
     console.error('❌ Error marking all notifications as read:', error);
     return 0;
+  }
+}
+
+/**
+ * Clear ALL notifications system-wide (Super Admin only)
+ * This will delete all notifications from all collections
+ */
+export async function clearAllNotificationsSystemWide(): Promise<{
+  success: boolean;
+  deletedCount: number;
+  collections: string[];
+  error?: string;
+}> {
+  try {
+    const collections = [
+      'admin_notifications',
+      'shelter_notifications',
+      'participant_notifications',
+      'donor_notifications',
+      'message_notifications'
+    ];
+
+    let totalDeleted = 0;
+    
+    for (const collectionName of collections) {
+      const snapshot = await getDocs(collection(db, collectionName));
+      
+      // Delete in batches to avoid hitting Firestore limits
+      const deletePromises = snapshot.docs.map(docSnapshot => 
+        deleteDoc(doc(db, collectionName, docSnapshot.id))
+      );
+      
+      await Promise.all(deletePromises);
+      totalDeleted += snapshot.docs.length;
+      console.log(`✅ Cleared ${snapshot.docs.length} notifications from ${collectionName}`);
+    }
+
+    console.log(`🧹 Total notifications cleared: ${totalDeleted}`);
+    return {
+      success: true,
+      deletedCount: totalDeleted,
+      collections
+    };
+  } catch (error) {
+    console.error('❌ Error clearing all notifications:', error);
+    return {
+      success: false,
+      deletedCount: 0,
+      collections: [],
+      error: error instanceof Error ? error.message : 'Unknown error'
+    };
   }
 }
 

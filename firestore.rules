@@ -614,9 +614,12 @@ service cloud.firestore {
          (isAdmin() && resource.data.recipient_id == request.auth.uid));
       
       // Write: Admins can update their own notifications (mark as read)
-      allow write: if isAuthenticated() && 
+      allow update: if isAuthenticated() && 
         (isSuperAdmin() || isPlatformAdmin() || 
          (isAdmin() && resource.data.recipient_id == request.auth.uid));
+      
+      // Delete: Only Super Admin can delete notifications (for system-wide clear)
+      allow delete: if isSuperAdmin();
       
       // Create: Any authenticated admin can create notifications
       allow create: if isAuthenticated() && (isSuperAdmin() || isPlatformAdmin() || isAdmin());
@@ -865,9 +868,12 @@ service cloud.firestore {
       allow read: if isAuthenticated() && 
         (resource == null || resource.data.userId == request.auth.uid || isSuperAdmin());
       
-      // Write: Users can update their own notifications (mark as read)
-      allow write: if isAuthenticated() && 
+      // Update: Users can update their own notifications (mark as read)
+      allow update: if isAuthenticated() && 
         (resource == null || resource.data.userId == request.auth.uid);
+      
+      // Delete: Only Super Admin can delete notifications (for system-wide clear)
+      allow delete: if isSuperAdmin();
       
       // Create: System can create notifications for admin users
       allow create: if isAuthenticated() && (isSuperAdmin() || isPlatformAdmin() || isAdmin());
@@ -992,8 +998,11 @@ service cloud.firestore {
         isAdmin()
       );
       
-      // Write: Donors can mark their own notifications as read
+      // Update: Donors can mark their own notifications as read
       allow update: if isDonor() && resource.data.userId == request.auth.uid;
+      
+      // Delete: Only Super Admin can delete notifications (for system-wide clear)
+      allow delete: if isSuperAdmin();
       
       // Create: System creates notifications (admins can create for testing)
       allow create: if isSuperAdmin() || isPlatformAdmin() || isAdmin();
@@ -1019,6 +1028,9 @@ service cloud.firestore {
       
       // Update: Participants can mark their own notifications as read
       allow update: if isParticipant() && resource.data.userId == request.auth.uid;
+      
+      // Delete: Only Super Admin can delete notifications (for system-wide clear)
+      allow delete: if isSuperAdmin();
       
       // Create: System creates notifications (admins can create for testing)
       allow create: if isSuperAdmin() || isPlatformAdmin() || isAdmin();
@@ -1048,11 +1060,11 @@ service cloud.firestore {
         (isAdmin() && resource.data.recipient_id == request.auth.uid)
       );
       
+      // Delete: Only Super Admin can delete notifications (for system-wide clear)
+      allow delete: if isSuperAdmin();
+      
       // Create: System creates notifications (admins can create for testing)
       allow create: if isAuthenticated() && (isSuperAdmin() || isPlatformAdmin() || isAdmin());
-      
-      // Delete: Super Admin only
-      allow delete: if isSuperAdmin();
       
       // List/Query: Shelter Admins can query their own shelter's notifications, Super/Platform Admins can query all
       allow list: if isAuthenticated() && (isSuperAdmin() || isPlatformAdmin() || isAdmin());

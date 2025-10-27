@@ -4,7 +4,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { DashboardRouter } from '@/components/auth/DashboardRouter';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, collection, query, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -55,6 +55,7 @@ export default function DashboardPage() {
   const [platformMetrics, setPlatformMetrics] = useState<PlatformMetrics | null>(null);
   const [metricsLoading, setMetricsLoading] = useState(false);
   const [refreshingActivity, setRefreshingActivity] = useState(false);
+  const [investorMeetingsCount, setInvestorMeetingsCount] = useState<number>(0);
   
   // Role simulation for Super Admin testing
   const [simulatedRole, setSimulatedRole] = useState<string | null>(null);
@@ -642,6 +643,12 @@ Token Role: ${tokenRole || 'MISSING'}`;
       }, 0);
       console.log(`💰 [SUPER ADMIN] Queried demo_donations: ${donationsSnapshot.size} donations, total: $${totalDonationsFromFirestore}`);
       
+      // Fetch investor meetings count
+      const investorMeetingsSnapshot = await getDocs(collection(db, 'investor_meetings'));
+      const meetingsCount = investorMeetingsSnapshot.size;
+      setInvestorMeetingsCount(meetingsCount);
+      console.log(`📅 [INVESTOR MEETINGS] Found ${meetingsCount} scheduled meetings`);
+      
       const [metrics, investorMetrics, realPlatformAdmins] = await Promise.all([
         getPlatformMetricsFromTenants().then(result => {
           console.log('🔍 [DEEP DEBUG] getPlatformMetricsFromTenants returned platformAdmins:', result.platformAdmins);
@@ -1091,13 +1098,13 @@ Token Role: ${tokenRole || 'MISSING'}`;
           <Link href="/portal/founders-only/investor-relations">
             <Card className="cursor-pointer hover:shadow-md transition-shadow">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Investor Relations</CardTitle>
-                <Shield className="h-4 w-4 text-muted-foreground" />
+                <CardTitle className="text-sm font-medium">Investor Meetings</CardTitle>
+                <Calendar className="h-4 w-4 text-purple-500" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{platformMetrics.investorAccessLogins || '-'}</div>
+                <div className="text-2xl font-bold">{investorMeetingsCount}</div>
                 <p className="text-xs text-muted-foreground">
-                  Founders Portal Access
+                  On the books! 📅
                 </p>
               </CardContent>
             </Card>
@@ -1416,13 +1423,13 @@ Token Role: ${tokenRole || 'MISSING'}`;
           <Link href="/portal/founders-only/investor-relations">
             <Card className="cursor-pointer hover:shadow-md transition-shadow">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Investor Relations</CardTitle>
-                <Shield className="h-4 w-4 text-muted-foreground" />
+                <CardTitle className="text-sm font-medium">Investor Meetings</CardTitle>
+                <Calendar className="h-4 w-4 text-purple-500" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{platformMetrics.investorAccessLogins || '-'}</div>
+                <div className="text-2xl font-bold">{investorMeetingsCount}</div>
                 <p className="text-xs text-muted-foreground">
-                  Founders Portal Access
+                  On the books! 📅
                 </p>
               </CardContent>
             </Card>

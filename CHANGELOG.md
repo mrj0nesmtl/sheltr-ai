@@ -7,6 +7,53 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.65.0] - 2025-10-27 (NOTIFICATION PAGINATION & UX POLISH) 🎨
+
+### 🎉 Major Features
+
+**Pagination System**
+- ✅ **Previous/Next Navigation**: Navigate through notification pages
+- ✅ **Smart Page Numbers**: Shows first, last, current, and adjacent pages with ellipsis
+- ✅ **Items Per Page Selector**: Choose 10, 25, 50, or 100 notifications per page
+- ✅ **Auto-Reset**: Pagination resets to page 1 when filters change
+- ✅ **Status Display**: Shows "Showing X to Y of Z notifications" with selected count
+
+### ✨ Visual Enhancements
+
+**Enhanced Contrast & Hover Effects**
+- ✅ **Clear Card Borders**: Every notification card has visible borders
+- ✅ **Smooth Hover Animation**: Cards elevate with shadow and subtle scale (200ms transition)
+- ✅ **Better Background Colors**: Card/50 backgrounds for subtle depth
+- ✅ **Unread Emphasis**: Stronger borders and shadows for unread items
+- ✅ **Selection Highlight**: Blue ring and enhanced border for selected items
+
+**Improved Component Separation**
+- ✅ **Bulk Toolbar**: Enhanced border (border-2) with shadow for better definition
+- ✅ **Pagination Bar**: Strong primary border with semi-transparent background
+- ✅ **Checkbox Position**: Moved to right side of cards for better UX
+
+### 🔧 Technical Implementation
+- Pagination calculations with `slice(startIndex, endIndex)`
+- Smart page filtering (first, last, current ± 1)
+- Enhanced Tailwind classes for borders, shadows, and hover states
+- Performance optimization: Only renders visible page of notifications
+
+### 📊 User Experience Improvements
+- Default 25 items per page (optimal for most use cases)
+- Can view up to 100 notifications at once if needed
+- Better visual hierarchy makes scanning easier
+- Hover effects provide clear feedback on desktop
+- Selection state clearly visible with enhanced styling
+
+### 🎨 UI Polish
+- Pagination controls adapt to total pages
+- Disabled states for first/last page navigation
+- Bold current page indicator
+- Responsive layout for mobile/tablet/desktop
+- Consistent spacing and alignment
+
+---
+
 ## [2.64.0] - 2025-10-27 (NOTIFICATION SYSTEM COMPLETE OVERHAUL) 📬
 
 ### 🎉 Major Features

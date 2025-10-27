@@ -1,6 +1,8 @@
 import * as functions from "firebase-functions";
 import { google } from "googleapis";
 import * as admin from "firebase-admin";
+import { readFileSync } from "fs";
+import { join } from "path";
 
 interface MeetingRequest {
   investorEmail: string;
@@ -41,9 +43,10 @@ export const createInvestorMeeting = functions.https.onCall(async (request) => {
   }
 
   try {
-    // Load service account credentials
-    // eslint-disable-next-line
-    const serviceAccountKey = require("../google-calendar-credentials.json");
+    // Load service account credentials from file
+    const credentialsPath = join(__dirname, "..", "google-calendar-credentials.json");
+    const credentialsContent = readFileSync(credentialsPath, "utf8");
+    const serviceAccountKey = JSON.parse(credentialsContent);
 
     // Create auth client
     const auth = new google.auth.JWT({

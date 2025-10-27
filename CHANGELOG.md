@@ -7,6 +7,45 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.62.0] - 2025-10-27 (GOOGLE CALENDAR INTEGRATION - COMPLETE ✅) 📅
+
+### 🎉 Major Achievement
+- **Successfully deployed full Google Calendar integration for investor meeting booking!**
+- Real-time calendar event creation to shared "SHELTR Investor Meetings" calendar
+- Complete meeting details, agenda, and investor information automatically populated
+- Firestore record-keeping for all scheduled meetings
+- Professional booking flow from website to calendar
+
+### 🔧 Technical Fixes (ES Module Migration)
+- Migrated Firebase Functions from CommonJS to ES modules (Node.js 22)
+- Replaced `require()` with `readFileSync` and `import.meta.url` for credentials
+- Fixed `__dirname` with `fileURLToPath` for ES module compatibility
+- Updated Firebase Admin initialization for modular imports
+- Removed Domain-Wide Delegation requirements (service account-only flow)
+- Fixed `FieldValue.serverTimestamp()` to use `Date.toISOString()`
+
+### 🎨 Investor Relations Page Polish
+- Investment range dropdown refined: $1K-$10K, $10K-$50K, $100K-$250K, $250K+
+- Darkened hero overlay by 20% for better text contrast
+- Removed gradient from title for cleaner design
+- Dynamic hero image integration from gallery management
+- Added company and investment range fields to booking form
+
+### 🔐 Security & Infrastructure
+- Added CSP rules for Firebase Functions domains
+- Firestore security rules for `investor_meetings` collection
+- Service account credentials properly secured in `.gitignore`
+- Firebase Storage rules updated for blog images
+
+### 📚 Documentation
+- Created `docs/04-development/GOOGLE-CALENDAR-INTEGRATION-SETUP.md`
+- Created `docs/04-development/INVESTOR-MEETING-SCHEDULER-GUIDE.md`
+- Created `CALENDAR-SETUP-CHECKLIST.md`
+
+**Status**: ✅ **PRODUCTION READY** - Calendar integration fully functional!
+
+---
+
 ## [2.61.0] - 2025-10-27 (GOOGLE CALENDAR INTEGRATION - INVESTOR BOOKING) 📅
 
 ### 🎉 New Features

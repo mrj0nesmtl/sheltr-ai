@@ -90,9 +90,9 @@ export function NotificationList({
 
   const unreadCount = notifications.filter(n => !n.isRead).length;
 
-  // Get unique categories from notifications
+  // Get unique categories from notifications (filter out undefined/null)
   const categories = Array.from(
-    new Set(notifications.map(n => n.category))
+    new Set(notifications.map(n => n.category).filter(Boolean))
   );
 
   return (
@@ -161,7 +161,7 @@ export function NotificationList({
             <SelectItem value="all">All categories</SelectItem>
             {categories.map((category, index) => (
               <SelectItem key={`${category}-${index}`} value={category}>
-                {category}
+                {category.charAt(0).toUpperCase() + category.slice(1)}
               </SelectItem>
             ))}
           </SelectContent>

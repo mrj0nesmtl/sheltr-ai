@@ -168,6 +168,49 @@ Visit our investor portal: https://sheltr-ai.web.app/portal/founders-only/invest
 
     functions.logger.info("Meeting record saved to Firestore", { docId: docRef.id });
 
+    // Create notifications for Super Admins and Platform Admins
+    try {
+      // Get all super admins and platform admins
+      const usersSnapshot = await db.collection("users")
+        .where("role", "in", ["super_admin", "platform_admin"])
+        .get();
+
+      functions.logger.info(`Creating notifications for ${usersSnapshot.size} admins`);
+
+      // Create a notification for each admin
+      const notificationPromises = usersSnapshot.docs.map(async (userDoc) => {
+        const userData = userDoc.data();
+        const notification = {
+          recipient_id: userDoc.id,
+          recipient_role: userData.role,
+          type: "investor_meeting_scheduled",
+          title: "New Investor Meeting Scheduled",
+          message: `${investorName} (${company || "N/A"}) scheduled a meeting for ${startTime.toLocaleDateString()} at ${startTime.toLocaleTimeString()}. Investment range: ${investmentRange}`,
+          priority: "high",
+          category: "application",
+          isRead: false,
+          created_at: new Date().toISOString(),
+          data: {
+            meetingId: docRef.id,
+            investorEmail,
+            investorName,
+            company,
+            investmentRange,
+            meetingDateTime: startTime.toISOString(),
+            eventId: response.data.id
+          }
+        };
+
+        return db.collection("admin_notifications").add(notification);
+      });
+
+      await Promise.all(notificationPromises);
+      functions.logger.info(`✅ Created ${usersSnapshot.size} admin notifications`);
+    } catch (notificationError) {
+      functions.logger.error("Failed to create admin notifications", notificationError);
+      // Don't fail the entire function if notifications fail
+    }
+
     return {
       success: true,
       meetingLink,

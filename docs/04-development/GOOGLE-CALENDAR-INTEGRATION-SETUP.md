@@ -85,10 +85,16 @@ functions/google-calendar-credentials.json
 5. **Get Calendar ID (if using custom calendar):**
    - In calendar settings, scroll to **"Integrate calendar"**
    - Copy the **Calendar ID** (looks like an email address)
-   - Update `functions/src/calendar.ts` line 107:
+   - Update `functions/src/calendar.ts` line 132:
      ```typescript
-     calendarId: 'your-calendar-id@group.calendar.google.com', // Replace 'primary'
+     calendarId: 'c_5678f9f5e708852d32e378ba9b4bbbc30a22a1038a5beb4465cc4b598f8ae7b1@group.calendar.google.com',
      ```
+   
+   **Current Configuration:**
+   - Calendar: **SHELTR Investor Meetings** (admin@arcanaconcept.com)
+   - Calendar ID: `c_5678f9f5e708852d32e378ba9b4bbbc30a22a1038a5beb4465cc4b598f8ae7b1@group.calendar.google.com`
+   - Shared with: `sheltr-ai@appspot.gserviceaccount.com`
+   - Attendees: `joel@arcanaconcept.com`, `alexander@arcanaconcept.com`
 
 ---
 

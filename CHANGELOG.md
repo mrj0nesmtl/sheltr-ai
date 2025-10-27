@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [2.67.0] - 2025-10-27 (NOTIFICATION METRICS SYNC FIX) 🔧
+## [2.67.0] - 2025-10-27 (NOTIFICATION METRICS SYNC FIX + CALENDAR UPDATE) 🔧
 
 ### 🐛 Bug Fixes
 
@@ -16,6 +16,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - ✅ **Dual Real-Time Listeners**: Implemented simultaneous listeners for both role-specific and message notifications
 - ✅ **Real-Time Updates**: All metrics (Total, Contact, Newsletter, Security) update immediately on delete/mark actions
 - ✅ **Eliminated Stale Data**: Removed race condition where initial fetch data persisted after real-time updates
+
+**Google Calendar Integration Update**
+- ✅ **Updated Calendar ID**: Changed from `joel.yaffe@gmail.com` calendar to `admin@arcanaconcept.com` calendar
+- ✅ **New Calendar ID**: `c_5678f9f5e708852d32e378ba9b4bbbc30a22a1038a5beb4465cc4b598f8ae7b1@group.calendar.google.com`
+- ✅ **Updated Attendees**: Changed from `joel.yaffe@gmail.com` to `joel@arcanaconcept.com`
+- ✅ **Shared with Service Account**: `sheltr-ai@appspot.gserviceaccount.com`
 
 ### 🔧 Technical Changes
 

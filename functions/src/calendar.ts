@@ -17,13 +17,13 @@ interface MeetingRequest {
 export const createInvestorMeeting = functions.https.onCall(async (request) => {
   const data = request.data as MeetingRequest;
   
-  // Initialize Firebase Admin if needed
+  // Initialize Firebase Admin if not already initialized
+  let db;
   try {
-    if (!admin.apps || admin.apps.length === 0) {
-      admin.initializeApp();
-    }
-  } catch (error) {
-    // Already initialized
+    db = admin.firestore();
+  } catch {
+    admin.initializeApp();
+    db = admin.firestore();
   }
 
   const { 
@@ -165,9 +165,7 @@ Visit our investor portal: https://sheltr-ai.web.app/portal/founders-only/invest
       emailNotificationsSent: false, // To track if email notifications were sent
     };
 
-    const docRef = await admin.firestore()
-      .collection("investor_meetings")
-      .add(meetingRecord);
+    const docRef = await db.collection("investor_meetings").add(meetingRecord);
 
     functions.logger.info("Meeting record saved to Firestore", { docId: docRef.id });
 

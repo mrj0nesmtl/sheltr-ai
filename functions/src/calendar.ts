@@ -2,24 +2,6 @@ import * as functions from "firebase-functions";
 import { google } from "googleapis";
 import * as admin from "firebase-admin";
 
-const calendar = google.calendar("v3");
-
-// Initialize Firebase Admin if not already initialized
-if (!admin.apps.length) {
-  admin.initializeApp();
-}
-
-// Load service account credentials
-// Place google-calendar-credentials.json in functions folder
-// eslint-disable-next-line
-const serviceAccountKey = require("../google-calendar-credentials.json");
-
-const auth = new google.auth.JWT({
-  email: serviceAccountKey.client_email,
-  key: serviceAccountKey.private_key,
-  scopes: ["https://www.googleapis.com/auth/calendar"],
-});
-
 interface MeetingRequest {
   investorEmail: string;
   investorName: string;
@@ -31,10 +13,11 @@ interface MeetingRequest {
 
 export const createInvestorMeeting = functions.https.onCall(async (request) => {
   const data = request.data as MeetingRequest;
-  // Verify authentication (optional - remove if you want public booking)
-  // if (!context.auth) {
-  //   throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
-  // }
+  
+  // Initialize Firebase Admin if needed
+  if (admin.apps.length === 0) {
+    admin.initializeApp();
+  }
 
   const { 
     investorEmail, 
@@ -54,6 +37,19 @@ export const createInvestorMeeting = functions.https.onCall(async (request) => {
   }
 
   try {
+    // Load service account credentials
+    // eslint-disable-next-line
+    const serviceAccountKey = require("../google-calendar-credentials.json");
+
+    // Create auth client
+    const auth = new google.auth.JWT({
+      email: serviceAccountKey.client_email,
+      key: serviceAccountKey.private_key,
+      scopes: ["https://www.googleapis.com/auth/calendar"],
+    });
+
+    const calendar = google.calendar("v3");
+
     // Calculate end time (45 minutes after start)
     const startTime = new Date(selectedDateTime);
     const endTime = new Date(startTime.getTime() + 45 * 60000); // 45 minutes
@@ -165,4 +161,3 @@ Visit our investor portal: https://sheltr-ai.web.app/portal/founders-only/invest
     );
   }
 });
-

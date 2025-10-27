@@ -66,9 +66,9 @@ export default [
   },
   {
     ignores: [
-      "/lib/**/*", // Ignore built files.
-      "/generated/**/*", // Ignore generated files.
-      "/node_modules/**/*", // Ignore node_modules.
+      "lib/**/*", // Ignore built files.
+      "generated/**/*", // Ignore generated files.
+      "node_modules/**/*", // Ignore node_modules.
     ],
   },
 ];

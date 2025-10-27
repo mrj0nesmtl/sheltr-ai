@@ -120,16 +120,16 @@ Visit our investor portal: https://sheltr-ai.web.app/portal/founders-only/invest
       selectedDateTime,
       attendeesForNotification: [
         investorEmail,
-        "joel.yaffe@gmail.com",
+        "joel@arcanaconcept.com",
         "alexander@arcanaconcept.com"
       ]
     });
 
     // Insert event into calendar
-    // Using the shared "SHELTR Investor Meetings" calendar
+    // Using the shared "SHELTR Investor Meetings" calendar (admin@arcanaconcept.com)
     const response = await calendar.events.insert({
       auth,
-      calendarId: "d257b50132689ff7d20d6117dafe4293e2d39558a55058fb52d3f16e85baabe4@group.calendar.google.com",
+      calendarId: "c_5678f9f5e708852d32e378ba9b4bbbc30a22a1038a5beb4465cc4b598f8ae7b1@group.calendar.google.com",
       requestBody: event,
       sendUpdates: "none", // Don't send invites (no attendees to avoid Domain-Wide Delegation)
     });
@@ -158,7 +158,7 @@ Visit our investor portal: https://sheltr-ai.web.app/portal/founders-only/invest
       createdAt: new Date().toISOString(),
       attendees: [
         investorEmail,
-        "joel.yaffe@gmail.com",
+        "joel@arcanaconcept.com",
         "alexander@arcanaconcept.com"
       ],
       emailNotificationsSent: false, // To track if email notifications were sent

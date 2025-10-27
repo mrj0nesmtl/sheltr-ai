@@ -1925,10 +1925,10 @@ export default function InvestorRelationsPage() {
                             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                           >
                             <option value="">Select range</option>
-                            <option value="$1K-$5K">$1,000 - $5,000</option>
-                            <option value="$5K-$25K">$5,000 - $25,000</option>
-                            <option value="$25K-$50K">$25,000 - $50,000</option>
-                            <option value="$50K+">$50,000+</option>
+                            <option value="$1K-$10K">$1,000 - $10,000</option>
+                            <option value="$10K-$50K">$10,000 - $50,000</option>
+                            <option value="$100K-$250K">$100,000 - $250,000</option>
+                            <option value="$250K+">$250,000+</option>
                           </select>
                         </div>
                       </div>
@@ -2804,15 +2804,15 @@ export default function InvestorRelationsPage() {
                       <h4 className="font-semibold text-emerald-700 dark:text-emerald-300 mb-2">Expected Milestones</h4>
                       <div className="grid grid-cols-3 gap-4 text-center">
                         <div>
-                          <div className="font-bold text-lg">Q1 2026</div>
+                          <div className="font-bold text-lg">Q2 2026</div>
                           <div className="text-sm">Platform Launch</div>
                         </div>
                         <div>
-                          <div className="font-bold text-lg">Q2 2026</div>
+                          <div className="font-bold text-lg">Q3 2026</div>
                           <div className="text-sm">Enterprise Integration</div>
                         </div>
                         <div>
-                          <div className="font-bold text-lg">Q4 2026</div>
+                          <div className="font-bold text-lg">Q1 2027</div>
                           <div className="text-sm">Scale to 50+ Shelters</div>
                         </div>
                       </div>
@@ -2832,19 +2832,19 @@ export default function InvestorRelationsPage() {
                       <div className="space-y-2 text-sm">
                         <div className="flex justify-between">
                           <span>Shelter Basic Plan:</span>
-                          <span className="font-mono">$299/month</span>
+                          <span className="font-mono">Free</span>
                         </div>
                         <div className="flex justify-between">
                           <span>Enterprise Plan:</span>
-                          <span className="font-mono">$999/month</span>
+                          <span className="font-mono">$199/month</span>
                         </div>
                         <div className="flex justify-between">
                           <span>Government Contracts:</span>
-                          <span className="font-mono">$5,000/month</span>
+                          <span className="font-mono">TBD/month</span>
                         </div>
                       </div>
                       <div className="p-2 bg-blue-50 dark:bg-blue-900/20 rounded text-xs">
-                        <strong>Year 5 Target:</strong> $8M ARR from subscriptions
+                        <strong>Year 5 Target:</strong> $5M ARR from subscriptions
                       </div>
                     </div>
                     

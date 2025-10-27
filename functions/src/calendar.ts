@@ -1,6 +1,6 @@
 import * as functions from "firebase-functions";
 import { google } from "googleapis";
-import * as admin from "firebase-admin";
+import { getFirestore } from "firebase-admin/firestore";
 import { readFileSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
@@ -17,14 +17,8 @@ interface MeetingRequest {
 export const createInvestorMeeting = functions.https.onCall(async (request) => {
   const data = request.data as MeetingRequest;
   
-  // Initialize Firebase Admin if not already initialized
-  let db;
-  try {
-    db = admin.firestore();
-  } catch {
-    admin.initializeApp();
-    db = admin.firestore();
-  }
+  // Get Firestore instance
+  const db = getFirestore();
 
   const { 
     investorEmail, 

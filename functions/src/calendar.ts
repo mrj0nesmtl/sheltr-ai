@@ -1,8 +1,8 @@
-import * as functions from 'firebase-functions';
-import { google } from 'googleapis';
-import * as admin from 'firebase-admin';
+import * as functions from "firebase-functions";
+import { google } from "googleapis";
+import * as admin from "firebase-admin";
 
-const calendar = google.calendar('v3');
+const calendar = google.calendar("v3");
 
 // Initialize Firebase Admin if not already initialized
 if (!admin.apps.length) {
@@ -11,12 +11,13 @@ if (!admin.apps.length) {
 
 // Load service account credentials
 // Place google-calendar-credentials.json in functions folder
-const serviceAccountKey = require('../google-calendar-credentials.json');
+// eslint-disable-next-line
+const serviceAccountKey = require("../google-calendar-credentials.json");
 
 const auth = new google.auth.JWT({
   email: serviceAccountKey.client_email,
   key: serviceAccountKey.private_key,
-  scopes: ['https://www.googleapis.com/auth/calendar'],
+  scopes: ["https://www.googleapis.com/auth/calendar"],
 });
 
 interface MeetingRequest {
@@ -28,7 +29,8 @@ interface MeetingRequest {
   additionalNotes?: string;
 }
 
-export const createInvestorMeeting = functions.https.onCall(async (data: MeetingRequest, context) => {
+export const createInvestorMeeting = functions.https.onCall(async (request) => {
+  const data = request.data as MeetingRequest;
   // Verify authentication (optional - remove if you want public booking)
   // if (!context.auth) {
   //   throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
@@ -46,8 +48,8 @@ export const createInvestorMeeting = functions.https.onCall(async (data: Meeting
   // Validate required fields
   if (!investorEmail || !investorName || !selectedDateTime) {
     throw new functions.https.HttpsError(
-      'invalid-argument',
-      'Missing required fields: investorEmail, investorName, or selectedDateTime'
+      "invalid-argument",
+      "Missing required fields: investorEmail, investorName, or selectedDateTime"
     );
   }
 
@@ -58,12 +60,12 @@ export const createInvestorMeeting = functions.https.onCall(async (data: Meeting
 
     // Create calendar event
     const event = {
-      summary: 'SHELTR-AI Investor Relations Meeting',
+      summary: "SHELTR-AI Investor Relations Meeting",
       description: `
 Investment Opportunity Discussion
 
 Investor: ${investorName} (${investorEmail})
-${company ? `Company: ${company}` : ''}
+${company ? `Company: ${company}` : ""}
 Investment Range: ${investmentRange}
 
 Agenda:
@@ -74,7 +76,7 @@ Agenda:
 • Technical Deep Dive
 • Q&A Session
 
-${additionalNotes ? `Additional Notes:\n${additionalNotes}` : ''}
+${additionalNotes ? `Additional Notes:\n${additionalNotes}` : ""}
 
 This meeting will cover SHELTR's revolutionary approach to homelessness support through blockchain technology and our current investment opportunity.
 
@@ -82,45 +84,45 @@ Visit our investor portal: https://sheltr-ai.web.app/portal/founders-only/invest
       `.trim(),
       start: {
         dateTime: startTime.toISOString(),
-        timeZone: 'America/New_York',
+        timeZone: "America/New_York",
       },
       end: {
         dateTime: endTime.toISOString(),
-        timeZone: 'America/New_York',
+        timeZone: "America/New_York",
       },
       attendees: [
         { email: investorEmail, displayName: investorName },
-        { email: 'investors@sheltr-ai.com', displayName: 'SHELTR-AI Investment Team' },
+        { email: "investors@sheltr-ai.com", displayName: "SHELTR-AI Investment Team" },
         // Add other team members here
         // { email: 'joel.yaffe@gmail.com', displayName: 'Joel Yaffe' },
       ],
       conferenceData: {
         createRequest: {
           requestId: `sheltr-${Date.now()}`,
-          conferenceSolutionKey: { type: 'hangoutsMeet' },
+          conferenceSolutionKey: { type: "hangoutsMeet" },
         },
       },
       reminders: {
         useDefault: false,
         overrides: [
-          { method: 'email', minutes: 24 * 60 }, // 1 day before
-          { method: 'email', minutes: 60 },      // 1 hour before
+          { method: "email", minutes: 24 * 60 }, // 1 day before
+          { method: "email", minutes: 60 },      // 1 hour before
         ],
       },
     };
 
-    functions.logger.info('Creating calendar event', { investorEmail, investorName, selectedDateTime });
+    functions.logger.info("Creating calendar event", { investorEmail, investorName, selectedDateTime });
 
     // Insert event into calendar
     const response = await calendar.events.insert({
       auth,
-      calendarId: 'primary', // or use specific calendar ID
-      resource: event,
+      calendarId: "primary", // or use specific calendar ID
+      requestBody: event,
       conferenceDataVersion: 1,
-      sendUpdates: 'all', // Send email invites to all attendees
+      sendUpdates: "all", // Send email invites to all attendees
     });
 
-    functions.logger.info('Calendar event created successfully', { 
+    functions.logger.info("Calendar event created successfully", { 
       eventId: response.data.id,
       meetingLink: response.data.hangoutLink 
     });
@@ -134,31 +136,31 @@ Visit our investor portal: https://sheltr-ai.web.app/portal/founders-only/invest
       investmentRange,
       scheduledAt: admin.firestore.FieldValue.serverTimestamp(),
       meetingDateTime: startTime,
-      meetingLink: response.data.hangoutLink || 'https://meet.google.com',
-      status: 'scheduled',
+      meetingLink: response.data.hangoutLink || "https://meet.google.com",
+      status: "scheduled",
       additionalNotes: additionalNotes || null,
       createdAt: admin.firestore.FieldValue.serverTimestamp(),
     };
 
     const docRef = await admin.firestore()
-      .collection('investor_meetings')
+      .collection("investor_meetings")
       .add(meetingRecord);
 
-    functions.logger.info('Meeting record saved to Firestore', { docId: docRef.id });
+    functions.logger.info("Meeting record saved to Firestore", { docId: docRef.id });
 
     return {
       success: true,
-      meetingLink: response.data.hangoutLink || 'https://meet.google.com',
+      meetingLink: response.data.hangoutLink || "https://meet.google.com",
       eventId: response.data.id,
-      message: 'Meeting scheduled successfully! Confirmation sent to your email.',
+      message: "Meeting scheduled successfully! Confirmation sent to your email.",
     };
 
   } catch (error) {
-    functions.logger.error('Failed to create calendar event', error);
+    functions.logger.error("Failed to create calendar event", error);
     
     throw new functions.https.HttpsError(
-      'internal',
-      `Failed to schedule meeting: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      "internal",
+      `Failed to schedule meeting: ${error instanceof Error ? error.message : "Unknown error"}`,
       error
     );
   }

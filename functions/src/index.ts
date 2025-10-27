@@ -12,7 +12,7 @@ import {onRequest} from "firebase-functions/https";
 import * as logger from "firebase-functions/logger";
 
 // Import calendar functions
-export * from "./calendar";
+export * from "./calendar.js";
 
 // Start writing functions
 // https://firebase.google.com/docs/functions/typescript

@@ -138,22 +138,20 @@ function SortableCard({
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          {/* Investor Data Room Toggle - Only show for secure documents */}
-          {card.category === 'secure' && (
-            <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg border-2 border-border/40">
-              <div className="flex items-center gap-2">
-                <Shield className="h-4 w-4 text-red-600" />
-                <Label htmlFor={`investor-toggle-${card.id}`} className="text-sm font-medium cursor-pointer">
-                  Share to Investor Data Room
-                </Label>
-              </div>
-              <Switch
-                id={`investor-toggle-${card.id}`}
-                checked={card.isInvestorDataRoom || false}
-                onCheckedChange={(checked) => onToggleInvestorDataRoom(card.id, checked)}
-              />
+          {/* Investor Data Room Toggle - Show for ALL cards */}
+          <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg border-2 border-border/40">
+            <div className="flex items-center gap-2">
+              <Shield className="h-4 w-4 text-red-600" />
+              <Label htmlFor={`investor-toggle-${card.id}`} className="text-sm font-medium cursor-pointer">
+                Share to Investor Data Room
+              </Label>
             </div>
-          )}
+            <Switch
+              id={`investor-toggle-${card.id}`}
+              checked={card.isInvestorDataRoom || false}
+              onCheckedChange={(checked) => onToggleInvestorDataRoom(card.id, checked)}
+            />
+          </div>
           
           <Link href={card.href}>
             <Button variant="outline" className={`w-full ${card.buttonClass}`}>

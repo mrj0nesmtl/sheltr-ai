@@ -65,16 +65,16 @@ ${company ? `Company: ${company}` : ""}
 Investment Range: ${investmentRange}
 
 Agenda:
-• SHELTR-AI Platform Overview
-• Dual-Token Architecture (SHELTR-S & SHELTR)
+• SHELTR Platform Overview
+• System Architecture
 • Pre-Seed Funding Round ($250K)
 • Financial Projections & ROI Analysis
-• Technical Deep Dive
+• Deep Dive
 • Q&A Session
 
 ${additionalNotes ? `Additional Notes:\n${additionalNotes}` : ""}
 
-This meeting will cover SHELTR's revolutionary approach to homelessness support through blockchain technology and our current investment opportunity.
+This meeting will cover SHELTR's disruptive approach to homelessness support through technology and our current investment opportunity.
 
 Visit our investor portal: https://sheltr-ai.web.app/portal/founders-only/investor-relations
       `.trim(),
@@ -88,9 +88,9 @@ Visit our investor portal: https://sheltr-ai.web.app/portal/founders-only/invest
       },
       attendees: [
         { email: investorEmail, displayName: investorName },
-        { email: "investors@sheltr-ai.com", displayName: "SHELTR-AI Investment Team" },
-        // Add other team members here
-        // { email: 'joel.yaffe@gmail.com', displayName: 'Joel Yaffe' },
+        { email: "joel.yaffe@gmail.com", displayName: "Joel Yaffe - SHELTR Founder" },
+        { email: "alexander@arcanaconcept.com", displayName: "Alexander Kline, Arcana Founder" },  
+        // Add other team members here as needed
       ],
       conferenceData: {
         createRequest: {

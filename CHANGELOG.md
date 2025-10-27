@@ -7,6 +7,60 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.64.0] - 2025-10-27 (NOTIFICATION SYSTEM COMPLETE OVERHAUL) 📬
+
+### 🎉 Major Features
+
+**Industry-Standard Notification Management**
+- ✅ **Individual Checkboxes**: Select specific notifications for bulk actions
+- ✅ **Select All**: Checkbox to select/deselect all visible notifications
+- ✅ **Bulk Actions Toolbar**: Mark Read, Mark Unread, Delete selected items
+- ✅ **Better Empty States**: Friendly messages when all caught up
+- ✅ **Capitalized Categories**: "Contact", "Newsletter", "Security" display correctly
+- ✅ **Investor Meeting Notifications**: Admins notified when meetings are scheduled
+
+### ✨ User Experience Improvements
+- Default view shows **only unread** notifications
+- "Show All" toggle to view notification history
+- Selected items highlighted with blue ring
+- Real-time count updates as you select items
+- Confirmation dialogs for destructive actions
+- Toast notifications for all actions
+- Smooth animations and transitions
+
+### 🔧 Technical Implementation
+- `bulkMarkNotificationsAsRead()` - Batch mark as read
+- `bulkMarkNotificationsAsUnread()` - Batch mark as unread  
+- `bulkDeleteNotifications()` - Batch delete
+- Proper Firestore security rules for bulk operations
+- Real-time listener updates UI automatically
+- State persistence across page refreshes
+
+### 📊 Fixed Issues
+- ✅ Notifications marked as read now **persist** after page refresh
+- ✅ Badge counts synchronized between sidebar and notification center
+- ✅ Total count reflects actual notifications (read + unread)
+- ✅ "Unread Only" filter works perfectly
+- ✅ No more undefined category errors
+
+### 🎨 UI Polish
+- Bulk actions toolbar appears when items selected
+- Selected count displayed prominently
+- Disabled states during processing
+- Better spacing and alignment
+- Mobile-responsive design
+
+**Files Modified:**
+- `apps/web/src/components/notifications/NotificationItem.tsx` - Added checkbox support
+- `apps/web/src/components/notifications/NotificationList.tsx` - Bulk selection & actions
+- `apps/web/src/services/unifiedNotificationService.tsx` - Bulk operation functions
+- `apps/web/src/app/dashboard/notifications/page.tsx` - Wired up bulk handlers
+- `functions/src/calendar.ts` - Auto-create notifications for investor meetings
+
+**Status**: ✅ **PRODUCTION READY** - Gmail/Slack-level notification management!
+
+---
+
 ## [2.63.0] - 2025-10-27 (DASHBOARD ENHANCEMENTS & NOTIFICATION SYSTEM FIX) 🎯
 
 ### 🎉 New Features

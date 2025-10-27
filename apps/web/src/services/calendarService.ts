@@ -87,10 +87,10 @@ Visit our investor portal: https://sheltr-ai.web.app/investor-relations
         message: 'Meeting scheduled successfully! Confirmation sent to your email.',
       };
     } catch (error) {
-      console.error('Failed to create investor meeting:', error);
+      console.error('❌ CalendarService.createInvestorMeeting error:', error);
       return {
         success: false,
-        message: 'Failed to schedule meeting. Please try again or contact us directly.',
+        message: `Failed to schedule meeting: ${error instanceof Error ? error.message : 'Unknown error'}. Please contact us at investors@sheltr-ai.com`,
       };
     }
   }

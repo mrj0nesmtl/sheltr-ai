@@ -1695,9 +1695,10 @@ export default function InvestorRelationsPage() {
         });
       }
     } catch (error) {
+      console.error('❌ Meeting scheduling error:', error);
       setSchedulingResult({
         success: false,
-        message: 'An unexpected error occurred. Please try again.',
+        message: `Failed to schedule meeting: ${error instanceof Error ? error.message : 'An unexpected error occurred'}. Please try again or contact us directly at investors@sheltr-ai.com`,
       });
     } finally {
       setIsScheduling(false);
@@ -1809,15 +1810,14 @@ export default function InvestorRelationsPage() {
             backgroundImage: `url('${heroImage.url}')`,
           }}
         />
-        {/* Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-900/80 via-purple-900/80 to-indigo-900/80" />
+        {/* Overlay - Darkened by 20% (from 80% to 95% opacity) */}
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-900/95 via-purple-900/95 to-indigo-900/95" />
         {/* Content */}
         <div className="relative z-10 container mx-auto px-4 text-center">
           <div className="max-w-4xl mx-auto">
             <Badge className="mb-4 bg-amber-600 text-black">PRE-SEED FUNDING ROUND</Badge>
-            <h1 className="text-5xl font-bold mb-6">
-              Invest in the Future of 
-              <span className="bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent"> HMIS Technology</span>
+            <h1 className="text-5xl font-bold mb-6 text-white">
+              Invest in the Future of HMIS Technology
             </h1>
             <p className="text-xl mb-8 text-blue-100">
               The homeless services industry is ripe for technological disruption. Our thesis is simple: 

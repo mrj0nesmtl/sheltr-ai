@@ -12,6 +12,7 @@ import { Label } from '@/components/ui/label';
 import { AlertCircle, Lock, Mail, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function InvestorLoginPage() {
   const router = useRouter();
@@ -74,17 +75,17 @@ export default function InvestorLoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-muted p-4">
       <Card className="w-full max-w-md border-2 shadow-2xl">
         <CardHeader className="space-y-4 text-center">
-          {/* SHELTR Logo */}
+          {/* SHELTR Logo - Clickable to Homepage */}
           <div className="flex justify-center mb-4">
-            <div className="relative w-32 h-32">
+            <Link href="/" className="relative w-32 h-32 hover:opacity-80 transition-opacity cursor-pointer">
               <Image
                 src="/logo-sheltr-white.png"
-                alt="SHELTR Logo"
+                alt="SHELTR Logo - Return to Homepage"
                 fill
                 className="object-contain"
                 priority
               />
-            </div>
+            </Link>
           </div>
           
           <div>

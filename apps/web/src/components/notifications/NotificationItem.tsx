@@ -117,17 +117,6 @@ export function NotificationItem({
         isSelected && 'bg-primary/10 ring-2 ring-primary'
       )}
     >
-      {/* Checkbox for bulk selection */}
-      {showCheckbox && (
-        <div className="flex items-center pt-1">
-          <Checkbox
-            checked={isSelected}
-            onCheckedChange={(checked) => onSelect?.(notification.id, checked as boolean)}
-            onClick={(e) => e.stopPropagation()}
-          />
-        </div>
-      )}
-
       {/* Left: Icon */}
       <div 
         className={cn(
@@ -182,12 +171,12 @@ export function NotificationItem({
       </div>
 
       {/* Right: Actions (Show on hover) */}
-      <div className="flex-shrink-0 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+      <div className="flex-shrink-0 flex items-center gap-2">
         {!notification.isRead && onMarkAsRead && (
           <Button
             variant="ghost"
             size="sm"
-            className="h-7 w-7 p-0"
+            className="h-7 w-7 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
             onClick={(e) => {
               e.stopPropagation();
               notification.id && onMarkAsRead(notification.id);
@@ -201,7 +190,7 @@ export function NotificationItem({
           <Button
             variant="ghost"
             size="sm"
-            className="h-7 w-7 p-0 text-destructive hover:text-destructive"
+            className="h-7 w-7 p-0 text-destructive hover:text-destructive opacity-0 group-hover:opacity-100 transition-opacity"
             onClick={(e) => {
               e.stopPropagation();
               notification.id && onDelete(notification.id);
@@ -211,10 +200,21 @@ export function NotificationItem({
             <X className="h-3.5 w-3.5" />
           </Button>
         )}
+        
+        {/* Checkbox for bulk selection - Always visible on the right */}
+        {showCheckbox && (
+          <div className="flex items-center">
+            <Checkbox
+              checked={isSelected}
+              onCheckedChange={(checked) => onSelect?.(notification.id, checked as boolean)}
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>
+        )}
       </div>
 
-      {/* Unread indicator dot */}
-      {!notification.isRead && (
+      {/* Unread indicator dot (only show when no checkbox) */}
+      {!notification.isRead && !showCheckbox && (
         <div className="absolute top-4 right-4 w-2 h-2 bg-primary rounded-full" />
       )}
     </div>

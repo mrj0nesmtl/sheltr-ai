@@ -701,20 +701,67 @@ export function subscribeToNotifications(
   const collectionName = getCollectionNameForRole(userRole);
   const userField = getUserFieldForCollection(collectionName);
 
-  const q = query(
+  // Store notifications from both sources
+  let roleNotifications: UnifiedNotification[] = [];
+  let messageNotifications: UnifiedNotification[] = [];
+
+  // Subscribe to role-specific notifications
+  const q1 = query(
     collection(db, collectionName),
     where(userField, '==', userId),
     orderBy('created_at', 'desc'),
     firestoreLimit(50)
   );
 
-  return onSnapshot(q, (snapshot: QuerySnapshot<DocumentData>) => {
-    const notifications = snapshot.docs.map(doc => ({
+  const unsubscribe1 = onSnapshot(q1, (snapshot: QuerySnapshot<DocumentData>) => {
+    roleNotifications = snapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data()
     } as UnifiedNotification));
-    callback(notifications);
+    
+    // Merge and sort all notifications
+    const allNotifications = [...roleNotifications, ...messageNotifications];
+    allNotifications.sort((a, b) => {
+      const aTime = a.created_at || (a as any).createdAt;
+      const bTime = b.created_at || (b as any).createdAt;
+      if (!aTime || !bTime) return 0;
+      return bTime.toMillis() - aTime.toMillis();
+    });
+    
+    callback(allNotifications);
   });
+
+  // Subscribe to message notifications
+  const q2 = query(
+    collection(db, 'message_notifications'),
+    where('userId', '==', userId),
+    orderBy('created_at', 'desc'),
+    firestoreLimit(50)
+  );
+
+  const unsubscribe2 = onSnapshot(q2, (snapshot: QuerySnapshot<DocumentData>) => {
+    messageNotifications = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    } as UnifiedNotification));
+    
+    // Merge and sort all notifications
+    const allNotifications = [...roleNotifications, ...messageNotifications];
+    allNotifications.sort((a, b) => {
+      const aTime = a.created_at || (a as any).createdAt;
+      const bTime = b.created_at || (b as any).createdAt;
+      if (!aTime || !bTime) return 0;
+      return bTime.toMillis() - aTime.toMillis();
+    });
+    
+    callback(allNotifications);
+  });
+
+  // Return unsubscribe function that cleans up both listeners
+  return () => {
+    unsubscribe1();
+    unsubscribe2();
+  };
 }
 
 // ============================================================================

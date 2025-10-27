@@ -1095,7 +1095,11 @@ Token Role: ${tokenRole || 'MISSING'}`;
             </Card>
           </Link>
 
-          <Link href="/portal/founders-only/investor-relations">
+          <a 
+            href="https://calendar.google.com/calendar/embed?src=c_5678f9f5e708852d32e378ba9b4bbbc30a22a1038a5beb4465cc4b598f8ae7b1%40group.calendar.google.com&ctz=America%2FNew_York" 
+            target="_blank" 
+            rel="noopener noreferrer"
+          >
             <Card className="cursor-pointer border-2 border-border/60 bg-card hover:border-border hover:shadow-lg hover:scale-[1.02] transition-all duration-200">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Investor Meetings</CardTitle>
@@ -1108,7 +1112,7 @@ Token Role: ${tokenRole || 'MISSING'}`;
                 </p>
               </CardContent>
             </Card>
-          </Link>
+          </a>
         </div>
 
         {/* Visitor Analytics Chart */}
@@ -1420,7 +1424,11 @@ Token Role: ${tokenRole || 'MISSING'}`;
             </Card>
           </Link>
 
-          <Link href="/portal/founders-only/investor-relations">
+          <a 
+            href="https://calendar.google.com/calendar/embed?src=c_5678f9f5e708852d32e378ba9b4bbbc30a22a1038a5beb4465cc4b598f8ae7b1%40group.calendar.google.com&ctz=America%2FNew_York" 
+            target="_blank" 
+            rel="noopener noreferrer"
+          >
             <Card className="cursor-pointer border-2 border-border/60 bg-card hover:border-border hover:shadow-lg hover:scale-[1.02] transition-all duration-200">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Investor Meetings</CardTitle>
@@ -1433,7 +1441,7 @@ Token Role: ${tokenRole || 'MISSING'}`;
                 </p>
               </CardContent>
             </Card>
-          </Link>
+          </a>
         </div>
 
         {/* Visitor Analytics Chart */}

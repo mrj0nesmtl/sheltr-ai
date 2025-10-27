@@ -7,6 +7,47 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.66.0] - 2025-10-27 (DASHBOARD VISUAL CONTRAST ENHANCEMENT) ✨
+
+### 🎨 Visual Improvements
+
+**Enhanced Card Contrast (Light & Dark Mode)**
+- ✅ **Strong Borders**: All dashboard cards now have `border-2 border-border/60` for better visibility
+- ✅ **Improved Hover Effects**: Cards elevate with shadow and subtle scale (`hover:scale-[1.02]`)
+- ✅ **Better Separation**: Clear visual boundaries between all components
+- ✅ **Smooth Transitions**: 200ms duration for professional animations
+- ✅ **Background Enhancement**: Semi-transparent `bg-card` for depth
+
+**Activity Feed Enhancements**
+- ✅ **Hover States**: Activity items highlight with `hover:bg-accent/20` on hover
+- ✅ **Better Borders**: Activity separators use `border-b-2 border-border/40`
+- ✅ **Enhanced Notifications**: Individual notification items have borders and hover shadows
+- ✅ **Color Support**: Added `dark:text-gray-300` for better dark mode readability
+
+### 📊 Affected Dashboards
+- Super Admin Dashboard - All 11 metric cards + activity/notification sections
+- Platform Admin Dashboard - All 10 metric cards + activity/notification sections
+
+### 🎯 User Experience
+**Before:**
+- ❌ Cards blended together in light mode
+- ❌ Hard to distinguish component boundaries
+- ❌ Low contrast made scanning difficult
+
+**After:**
+- ✅ Clear visual hierarchy with distinct borders
+- ✅ Easy to identify individual cards and sections
+- ✅ Hover feedback provides clear interactivity cues
+- ✅ Professional, polished appearance
+
+### 🔧 Technical Details
+- Applied consistent styling across all `<Card>` components
+- Enhanced link-wrapped cards maintain pointer cursor
+- Hover effects include `shadow-lg` for depth
+- All transitions use 200ms for consistency with notification system
+
+---
+
 ## [2.65.0] - 2025-10-27 (NOTIFICATION PAGINATION & UX POLISH) 🎨
 
 ### 🎉 Major Features

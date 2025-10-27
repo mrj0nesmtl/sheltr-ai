@@ -7,6 +7,44 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.67.0] - 2025-10-27 (NOTIFICATION METRICS SYNC FIX) 🔧
+
+### 🐛 Bug Fixes
+
+**Notification Metrics Synchronization**
+- ✅ **Fixed Metric Sync Issue**: Total notification count now accurately reflects visible items
+- ✅ **Dual Real-Time Listeners**: Implemented simultaneous listeners for both role-specific and message notifications
+- ✅ **Real-Time Updates**: All metrics (Total, Contact, Newsletter, Security) update immediately on delete/mark actions
+- ✅ **Eliminated Stale Data**: Removed race condition where initial fetch data persisted after real-time updates
+
+### 🔧 Technical Changes
+
+**`apps/web/src/services/unifiedNotificationService.ts`**
+- ✅ Updated `subscribeToNotifications()` to listen to both collections:
+  - Role-specific notifications (`admin_notifications`, `shelter_notifications`, etc.)
+  - Message notifications (`message_notifications`)
+- ✅ Implemented merge and sort logic on every real-time update
+- ✅ Added proper cleanup for both listeners to prevent memory leaks
+- ✅ Fixed timestamp handling for both `created_at` and `createdAt` fields
+
+### 📊 Impact
+
+**Before Fix:**
+- ❌ Total count: 8 (stale from initial fetch)
+- ❌ Visible items: 4 (real-time updates)
+- ❌ Metrics out of sync
+
+**After Fix:**
+- ✅ Total count: 4 (real-time updates)
+- ✅ Visible items: 4 (real-time updates)
+- ✅ Metrics perfectly synchronized
+
+### 📝 Documentation
+
+- ✅ Created `docs/04-development/NOTIFICATION-METRICS-SYNC-FIX.md`
+
+---
+
 ## [2.66.0] - 2025-10-27 (COMPLETE DASHBOARD VISUAL CONTRAST OVERHAUL) ✨
 
 ### 🎨 Visual Improvements - ALL USER ROLES

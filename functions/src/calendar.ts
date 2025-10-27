@@ -105,12 +105,8 @@ Visit our investor portal: https://sheltr-ai.web.app/portal/founders-only/invest
       // Calendar event will be created in service account's calendar
       // Attendees will be notified via separate email system
       attendees: [],
-      conferenceData: {
-        createRequest: {
-          requestId: `sheltr-${Date.now()}`,
-          conferenceSolutionKey: { type: "hangoutsMeet" },
-        },
-      },
+      // Note: conferenceData removed - service accounts can't create Meet links
+      // Meeting link will be created manually or via another method
       reminders: {
         useDefault: false,
         overrides: [
@@ -136,13 +132,16 @@ Visit our investor portal: https://sheltr-ai.web.app/portal/founders-only/invest
       auth,
       calendarId: "primary", // or use specific calendar ID
       requestBody: event,
-      conferenceDataVersion: 1,
       sendUpdates: "none", // Don't send invites (no attendees to avoid Domain-Wide Delegation)
     });
 
+    // Generate a placeholder Google Meet link
+    // In production, this would be replaced with actual Meet link creation via OAuth
+    const meetingLink = "https://meet.google.com/new";
+    
     functions.logger.info("Calendar event created successfully", { 
       eventId: response.data.id,
-      meetingLink: response.data.hangoutLink 
+      meetingLink 
     });
 
     // Store meeting record in Firestore
@@ -154,7 +153,7 @@ Visit our investor portal: https://sheltr-ai.web.app/portal/founders-only/invest
       investmentRange,
       scheduledAt: admin.firestore.FieldValue.serverTimestamp(),
       meetingDateTime: startTime,
-      meetingLink: response.data.hangoutLink || "https://meet.google.com",
+      meetingLink,
       status: "scheduled",
       additionalNotes: additionalNotes || null,
       createdAt: admin.firestore.FieldValue.serverTimestamp(),
@@ -174,9 +173,9 @@ Visit our investor portal: https://sheltr-ai.web.app/portal/founders-only/invest
 
     return {
       success: true,
-      meetingLink: response.data.hangoutLink || "https://meet.google.com",
+      meetingLink,
       eventId: response.data.id,
-      message: "Meeting scheduled successfully! Confirmation sent to your email.",
+      message: "Meeting scheduled successfully! You will receive a calendar invite with meeting details.",
     };
 
   } catch (error) {

@@ -127,6 +127,9 @@ const PUBLIC_PAGES = [
   { id: 'tokenomics', label: 'Tokenomics', path: '/tokenomics', icon: '🪙' },
   { id: 'privacy', label: 'Privacy Policy', path: '/privacy', icon: '🔐' },
   { id: 'terms', label: 'Terms of Service', path: '/terms', icon: '📜' },
+  
+  // Founders Portal
+  { id: 'investor-relations', label: 'Investor Relations', path: '/portal/founders-only/investor-relations', icon: '💼' },
 ];
 
 // Helper function to extract image metadata

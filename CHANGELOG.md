@@ -7,6 +7,52 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.63.0] - 2025-10-27 (DASHBOARD ENHANCEMENTS & NOTIFICATION SYSTEM FIX) 🎯
+
+### 🎉 New Features
+
+**Investor Meetings Dashboard Card**
+- Replaced "Investor Relations" card with "Investor Meetings" counter
+- Real-time count of scheduled meetings from Firestore `investor_meetings` collection
+- Updated icon to Calendar (purple) with "On the books! 📅" subtitle
+- Provides clear visibility of investor pipeline for Super Admins
+
+**Notification System Clear Functionality**
+- Added "Clear All System-Wide" button for Super Admins in Notification Center
+- New `clearAllNotificationsSystemWide()` function in unified notification service
+- Deletes notifications from all 5 collections: admin, shelter, participant, donor, message
+- Confirmation dialog to prevent accidental deletion
+- Success toast shows total notifications cleared
+
+### 🔐 Security Updates
+
+**Firestore Rules Enhancement**
+- Added `allow delete: if isSuperAdmin()` to all 5 notification collections
+- Only Super Admins can perform system-wide notification clearing
+- Maintains existing read/update permissions for all user roles
+- Properly separated update and delete permissions
+
+### 🔧 Technical Improvements
+- Imported `deleteDoc` from Firebase Firestore for notification deletion
+- Added state management (`isClearing`) for clear button loading state
+- Imported `Trash2` icon from Lucide for clear button UI
+- Disabled clear button when no notifications exist or while clearing
+
+### 📊 Dashboard Improvements
+- Super Admin dashboard now tracks real investor meeting bookings
+- More accurate representation of investor engagement vs login counts
+- Better alignment with calendar integration for end-to-end workflow visibility
+
+**Files Modified:**
+- `apps/web/src/app/dashboard/page.tsx` - Added investor meetings counter
+- `apps/web/src/app/dashboard/notifications/page.tsx` - Added clear all button
+- `apps/web/src/services/unifiedNotificationService.ts` - Added clear function
+- `firestore.rules` - Updated notification deletion permissions
+
+**Status**: ✅ **READY FOR TESTING** - Super Admins can now manage notifications effectively!
+
+---
+
 ## [2.62.0] - 2025-10-27 (GOOGLE CALENDAR INTEGRATION - COMPLETE ✅) 📅
 
 ### 🎉 Major Achievement

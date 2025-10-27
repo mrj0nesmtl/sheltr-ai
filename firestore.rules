@@ -48,6 +48,10 @@ service cloud.firestore {
       return isAuthenticated() && getUserRole() == 'participant';
     }
     
+    function isInvestor() {
+      return isAuthenticated() && getUserRole() == 'investor';
+    }
+    
     function isDonor() {
       return isAuthenticated() && getUserRole() == 'donor';
     }
@@ -683,8 +687,11 @@ service cloud.firestore {
     // GALLERY IMAGES COLLECTION - Public gallery management (legacy)
     // =================================================================
     match /gallery_images/{imageId} {
-      // Read: Anyone can read public images, admins can read all
-      allow read: if resource.data.isPublic == true || isSuperAdmin() || isPlatformAdmin();
+      // Read: Anyone can read public images, admins can read all, investors can read investor data room images
+      allow read: if resource.data.isPublic == true || 
+                     isSuperAdmin() || 
+                     isPlatformAdmin() ||
+                     (isInvestor() && resource.data.isInvestorDataRoom == true);
       
       // Write: Super Admin and Platform Admin can manage gallery
       allow write: if isSuperAdmin() || isPlatformAdmin();
@@ -938,6 +945,26 @@ service cloud.firestore {
       allow create: if isSuperAdmin();
       
       // Delete: Super Admin only can delete welcome letters
+      allow delete: if isSuperAdmin();
+    }
+    
+    // =================================================================
+    // SECURE DOCUMENTS (Founders Portal & Investor Data Room)
+    // =================================================================
+    
+    match /secure_documents/{documentId} {
+      // Read: Super Admins, Platform Admins, and Investors (if marked for investor data room)
+      allow read: if isSuperAdmin() || 
+                     isPlatformAdmin() ||
+                     (isInvestor() && resource.data.isInvestorDataRoom == true);
+      
+      // Write: Super Admin and Platform Admin only
+      allow write: if isSuperAdmin() || isPlatformAdmin();
+      
+      // Create: Super Admin and Platform Admin only
+      allow create: if isSuperAdmin() || isPlatformAdmin();
+      
+      // Delete: Super Admin only
       allow delete: if isSuperAdmin();
     }
     

@@ -126,9 +126,10 @@ Visit our investor portal: https://sheltr-ai.web.app/portal/founders-only/invest
     });
 
     // Insert event into calendar
+    // Using the shared "SHELTR Investor Meetings" calendar
     const response = await calendar.events.insert({
       auth,
-      calendarId: "primary", // or use specific calendar ID
+      calendarId: "d257b50132689ff7d20d6117dafe4293e2d39558a55058fb52d3f16e85baabe4@group.calendar.google.com",
       requestBody: event,
       sendUpdates: "none", // Don't send invites (no attendees to avoid Domain-Wide Delegation)
     });

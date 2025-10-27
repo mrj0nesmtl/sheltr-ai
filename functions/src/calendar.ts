@@ -15,8 +15,12 @@ export const createInvestorMeeting = functions.https.onCall(async (request) => {
   const data = request.data as MeetingRequest;
   
   // Initialize Firebase Admin if needed
-  if (admin.apps.length === 0) {
-    admin.initializeApp();
+  try {
+    if (!admin.apps || admin.apps.length === 0) {
+      admin.initializeApp();
+    }
+  } catch (error) {
+    // Already initialized
   }
 
   const { 

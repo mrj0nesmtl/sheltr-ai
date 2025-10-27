@@ -12,6 +12,7 @@ import { NotificationItem } from './NotificationItem';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Select,
   SelectContent,
@@ -25,7 +26,10 @@ import {
   Search, 
   Filter,
   AlertCircle,
-  Download 
+  Download,
+  Trash2,
+  MailOpen,
+  MailX
 } from 'lucide-react';
 import type { 
   UnifiedNotification, 
@@ -39,6 +43,9 @@ interface NotificationListProps {
   onMarkAsRead?: (id: string) => void;
   onMarkAllAsRead?: () => void;
   onDelete?: (id: string) => void;
+  onBulkMarkAsRead?: (ids: string[]) => Promise<void>;
+  onBulkMarkAsUnread?: (ids: string[]) => Promise<void>;
+  onBulkDelete?: (ids: string[]) => Promise<void>;
   onNotificationClick?: (notification: UnifiedNotification) => void;
   loading?: boolean;
   emptyMessage?: string;
@@ -49,6 +56,9 @@ export function NotificationList({
   onMarkAsRead,
   onMarkAllAsRead,
   onDelete,
+  onBulkMarkAsRead,
+  onBulkMarkAsUnread,
+  onBulkDelete,
   onNotificationClick,
   loading = false,
   emptyMessage = 'No notifications yet'
@@ -57,6 +67,9 @@ export function NotificationList({
   const [categoryFilter, setCategoryFilter] = useState<NotificationCategory | 'all'>('all');
   // Default to showing ONLY unread notifications
   const [showUnreadOnly, setShowUnreadOnly] = useState(true);
+  // Bulk selection state
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [isProcessing, setIsProcessing] = useState(false);
 
   // Filter notifications
   const filteredNotifications = notifications.filter(notification => {
@@ -94,6 +107,69 @@ export function NotificationList({
   const categories = Array.from(
     new Set(notifications.map(n => n.category).filter(Boolean))
   );
+
+  // Bulk selection handlers
+  const handleSelectAll = (checked: boolean) => {
+    if (checked) {
+      setSelectedIds(new Set(filteredNotifications.map(n => n.id)));
+    } else {
+      setSelectedIds(new Set());
+    }
+  };
+
+  const handleSelectOne = (id: string, checked: boolean) => {
+    const newSelected = new Set(selectedIds);
+    if (checked) {
+      newSelected.add(id);
+    } else {
+      newSelected.delete(id);
+    }
+    setSelectedIds(newSelected);
+  };
+
+  const isAllSelected = filteredNotifications.length > 0 && 
+    filteredNotifications.every(n => selectedIds.has(n.id));
+
+  // Bulk actions
+  const handleBulkMarkAsRead = async () => {
+    if (!onBulkMarkAsRead || selectedIds.size === 0) return;
+    setIsProcessing(true);
+    try {
+      await onBulkMarkAsRead(Array.from(selectedIds));
+      setSelectedIds(new Set());
+    } catch (error) {
+      console.error('Failed to mark as read:', error);
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const handleBulkMarkAsUnread = async () => {
+    if (!onBulkMarkAsUnread || selectedIds.size === 0) return;
+    setIsProcessing(true);
+    try {
+      await onBulkMarkAsUnread(Array.from(selectedIds));
+      setSelectedIds(new Set());
+    } catch (error) {
+      console.error('Failed to mark as unread:', error);
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    if (!onBulkDelete || selectedIds.size === 0) return;
+    if (!confirm(`Delete ${selectedIds.size} notifications? This cannot be undone.`)) return;
+    setIsProcessing(true);
+    try {
+      await onBulkDelete(Array.from(selectedIds));
+      setSelectedIds(new Set());
+    } catch (error) {
+      console.error('Failed to delete:', error);
+    } finally {
+      setIsProcessing(false);
+    }
+  };
 
   return (
     <div className="space-y-4">
@@ -179,6 +255,61 @@ export function NotificationList({
         </Button>
       </div>
 
+      {/* Bulk Selection & Actions Toolbar */}
+      {filteredNotifications.length > 0 && (
+        <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg border">
+          <div className="flex items-center gap-3">
+            <Checkbox
+              checked={isAllSelected}
+              onCheckedChange={handleSelectAll}
+            />
+            <span className="text-sm font-medium">
+              {selectedIds.size > 0 ? (
+                `${selectedIds.size} selected`
+              ) : (
+                'Select all'
+              )}
+            </span>
+          </div>
+
+          {/* Bulk Actions */}
+          {selectedIds.size > 0 && (
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleBulkMarkAsRead}
+                disabled={isProcessing}
+                className="gap-2"
+              >
+                <MailOpen className="h-4 w-4" />
+                Mark Read
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleBulkMarkAsUnread}
+                disabled={isProcessing}
+                className="gap-2"
+              >
+                <MailX className="h-4 w-4" />
+                Mark Unread
+              </Button>
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={handleBulkDelete}
+                disabled={isProcessing}
+                className="gap-2"
+              >
+                <Trash2 className="h-4 w-4" />
+                Delete
+              </Button>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Notification List */}
       <div className="space-y-2">
         {loading ? (
@@ -210,12 +341,16 @@ export function NotificationList({
                 onMarkAsRead={onMarkAsRead}
                 onDelete={onDelete}
                 onClick={() => onNotificationClick?.(notification)}
+                showCheckbox={true}
+                isSelected={selectedIds.has(notification.id)}
+                onSelect={handleSelectOne}
               />
             ))}
             
             {/* Show count */}
             <div className="text-center py-4 text-sm text-muted-foreground border-t">
               Showing {filteredNotifications.length} of {notifications.length} notifications
+              {selectedIds.size > 0 && ` (${selectedIds.size} selected)`}
             </div>
           </>
         )}

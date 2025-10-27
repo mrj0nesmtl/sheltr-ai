@@ -9,6 +9,7 @@
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import { 
   MessageSquare, 
   Mail, 
@@ -40,6 +41,9 @@ interface NotificationItemProps {
   onMarkAsRead?: (id: string) => void;
   onDelete?: (id: string) => void;
   onClick?: () => void;
+  isSelected?: boolean;
+  onSelect?: (id: string, checked: boolean) => void;
+  showCheckbox?: boolean;
 }
 
 // Icon mapping
@@ -88,7 +92,10 @@ export function NotificationItem({
   notification, 
   onMarkAsRead, 
   onDelete,
-  onClick 
+  onClick,
+  isSelected = false,
+  onSelect,
+  showCheckbox = false
 }: NotificationItemProps) {
   // Defensive check: Don't render if missing critical fields
   if (!notification || !notification.title || !notification.message) {
@@ -104,17 +111,31 @@ export function NotificationItem({
     <div
       className={cn(
         'group relative flex items-start gap-4 p-4 border-l-4 rounded-lg transition-all',
-        'hover:bg-muted/50 cursor-pointer',
+        'hover:bg-muted/50',
         priorityColor,
-        !notification.isRead && 'bg-muted/30 border-2 border-primary/20'
+        !notification.isRead && 'bg-muted/30 border-2 border-primary/20',
+        isSelected && 'bg-primary/10 ring-2 ring-primary'
       )}
-      onClick={onClick}
     >
+      {/* Checkbox for bulk selection */}
+      {showCheckbox && (
+        <div className="flex items-center pt-1">
+          <Checkbox
+            checked={isSelected}
+            onCheckedChange={(checked) => onSelect?.(notification.id, checked as boolean)}
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
+
       {/* Left: Icon */}
-      <div className={cn(
-        'flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center',
-        badgeColor
-      )}>
+      <div 
+        className={cn(
+          'flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center cursor-pointer',
+          badgeColor
+        )}
+        onClick={onClick}
+      >
         <Icon className="h-5 w-5" />
       </div>
 

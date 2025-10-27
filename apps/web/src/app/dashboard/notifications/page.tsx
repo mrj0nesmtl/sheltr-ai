@@ -15,9 +15,14 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Bell, Shield, Users, Mail, MessageSquare, AlertCircle, Settings, Trash2 } from 'lucide-react';
 import Link from 'next/link';
-import { clearAllNotificationsSystemWide } from '@/services/unifiedNotificationService';
+import { 
+  clearAllNotificationsSystemWide,
+  bulkMarkNotificationsAsRead,
+  bulkMarkNotificationsAsUnread,
+  bulkDeleteNotifications
+} from '@/services/unifiedNotificationService';
 import { toast } from 'sonner';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 
 export default function AdminNotificationsPage() {
   const { user } = useAuth();
@@ -31,6 +36,44 @@ export default function AdminNotificationsPage() {
   } = useNotifications();
   
   const [isClearing, setIsClearing] = useState(false);
+  
+  // Get collection name based on user role
+  const getCollectionName = useCallback(() => {
+    if (!user?.role) return 'admin_notifications';
+    
+    switch (user.role) {
+      case 'super_admin':
+      case 'platform_admin':
+        return 'admin_notifications';
+      case 'admin':
+        return 'shelter_notifications';
+      case 'participant':
+        return 'participant_notifications';
+      case 'donor':
+        return 'donor_notifications';
+      default:
+        return 'admin_notifications';
+    }
+  }, [user?.role]);
+
+  // Bulk action handlers
+  const handleBulkMarkAsRead = useCallback(async (ids: string[]) => {
+    const collectionName = getCollectionName();
+    await bulkMarkNotificationsAsRead(ids, collectionName);
+    toast.success(`Marked ${ids.length} notifications as read`);
+  }, [getCollectionName]);
+
+  const handleBulkMarkAsUnread = useCallback(async (ids: string[]) => {
+    const collectionName = getCollectionName();
+    await bulkMarkNotificationsAsUnread(ids, collectionName);
+    toast.success(`Marked ${ids.length} notifications as unread`);
+  }, [getCollectionName]);
+
+  const handleBulkDelete = useCallback(async (ids: string[]) => {
+    const collectionName = getCollectionName();
+    await bulkDeleteNotifications(ids, collectionName);
+    toast.success(`Deleted ${ids.length} notifications`);
+  }, [getCollectionName]);
   
   // Clear all notifications system-wide (Super Admin only)
   const handleClearAll = async () => {
@@ -200,8 +243,11 @@ export default function AdminNotificationsPage() {
               notifications={notifications}
               onMarkAsRead={markAsRead}
               onMarkAllAsRead={markAllAsRead}
+              onBulkMarkAsRead={handleBulkMarkAsRead}
+              onBulkMarkAsUnread={handleBulkMarkAsUnread}
+              onBulkDelete={handleBulkDelete}
               loading={loading}
-              emptyMessage="No notifications yet. You'll see updates about contact forms, newsletter signups, and platform activity here."
+              emptyMessage="🎉 All caught up! You have no unread notifications. Click 'Show All' to view your notification history."
             />
               )}
             </CardContent>

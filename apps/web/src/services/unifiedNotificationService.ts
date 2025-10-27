@@ -484,6 +484,75 @@ export async function markAllNotificationsAsRead(
 }
 
 /**
+ * Bulk mark notifications as read
+ */
+export async function bulkMarkNotificationsAsRead(
+  notificationIds: string[],
+  collectionName: string
+): Promise<number> {
+  try {
+    const updatePromises = notificationIds.map(id => 
+      updateDoc(doc(db, collectionName, id), {
+        isRead: true,
+        readAt: serverTimestamp()
+      })
+    );
+    
+    await Promise.all(updatePromises);
+    console.log(`✅ Bulk marked ${notificationIds.length} notifications as read`);
+    return notificationIds.length;
+  } catch (error) {
+    console.error('❌ Error bulk marking notifications as read:', error);
+    return 0;
+  }
+}
+
+/**
+ * Bulk mark notifications as unread
+ */
+export async function bulkMarkNotificationsAsUnread(
+  notificationIds: string[],
+  collectionName: string
+): Promise<number> {
+  try {
+    const updatePromises = notificationIds.map(id => 
+      updateDoc(doc(db, collectionName, id), {
+        isRead: false,
+        readAt: null
+      })
+    );
+    
+    await Promise.all(updatePromises);
+    console.log(`✅ Bulk marked ${notificationIds.length} notifications as unread`);
+    return notificationIds.length;
+  } catch (error) {
+    console.error('❌ Error bulk marking notifications as unread:', error);
+    return 0;
+  }
+}
+
+/**
+ * Bulk delete notifications
+ */
+export async function bulkDeleteNotifications(
+  notificationIds: string[],
+  collectionName: string
+): Promise<number> {
+  try {
+    const deletePromises = notificationIds.map(id => 
+      deleteDoc(doc(db, collectionName, id))
+    );
+    
+    await Promise.all(deletePromises);
+    console.log(`✅ Bulk deleted ${notificationIds.length} notifications`);
+    return notificationIds.length;
+  } catch (error) {
+    console.error('❌ Error bulk deleting notifications:', error);
+    return 0;
+  }
+}
+
+/**
  * Clear ALL notifications system-wide (Super Admin only)
  * This will delete all notifications from all collections
  */

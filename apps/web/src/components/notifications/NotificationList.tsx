@@ -55,7 +55,8 @@ export function NotificationList({
 }: NotificationListProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState<NotificationCategory | 'all'>('all');
-  const [showUnreadOnly, setShowUnreadOnly] = useState(false);
+  // Default to showing ONLY unread notifications
+  const [showUnreadOnly, setShowUnreadOnly] = useState(true);
 
   // Filter notifications
   const filteredNotifications = notifications.filter(notification => {
@@ -174,7 +175,7 @@ export function NotificationList({
           className="gap-2"
         >
           <Bell className="h-4 w-4" />
-          Unread only
+          {showUnreadOnly ? 'Show All' : 'Unread Only'}
         </Button>
       </div>
 

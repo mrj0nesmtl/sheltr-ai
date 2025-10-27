@@ -789,7 +789,7 @@ export default function FoundersOnlyPage() {
               </AlertDescription>
             </Alert>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {/* Demo Donor */}
               <Card className="border-2 border-blue-500">
                 <CardHeader>
@@ -881,6 +881,43 @@ export default function FoundersOnlyPage() {
                   <div>
                     <p className="text-xs text-muted-foreground mb-1">Organization</p>
                     <Badge className="bg-purple-600 text-white">Old Brewery Mission</Badge>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Demo Investor */}
+              <Card className="border-2 border-amber-500">
+                <CardHeader>
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-amber-500"></div>
+                    Demo Investor
+                  </CardTitle>
+                  <CardDescription>Investor Data Room</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">Email</p>
+                    <code className="text-sm bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">
+                      investor@sheltr-demo.com
+                    </code>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">Password</p>
+                    <code className="text-sm bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">
+                      Investor2025!
+                    </code>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">Role</p>
+                    <Badge variant="outline">investor</Badge>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">Portal</p>
+                    <Link href="/ir" target="_blank">
+                      <Badge className="bg-amber-600 text-white hover:bg-amber-700 cursor-pointer">
+                        /ir (Data Room)
+                      </Badge>
+                    </Link>
                   </div>
                 </CardContent>
               </Card>

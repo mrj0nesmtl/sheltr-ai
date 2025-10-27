@@ -1577,7 +1577,7 @@ Token Role: ${tokenRole || 'MISSING'}`;
 
         {/* Key Metrics Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <Card>
+          <Card className="border-2 border-border/60 bg-card hover:border-border hover:shadow-lg hover:scale-[1.02] transition-all duration-200">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Bed Occupancy</CardTitle>
               <Bed className="h-4 w-4 text-muted-foreground" />
@@ -1590,7 +1590,7 @@ Token Role: ${tokenRole || 'MISSING'}`;
             </CardContent>
           </Card>
           
-          <Card>
+          <Card className="border-2 border-border/60 bg-card hover:border-border hover:shadow-lg hover:scale-[1.02] transition-all duration-200">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Active Participants</CardTitle>
               <Users className="h-4 w-4 text-muted-foreground" />
@@ -1603,7 +1603,7 @@ Token Role: ${tokenRole || 'MISSING'}`;
             </CardContent>
           </Card>
           
-          <Card>
+          <Card className="border-2 border-border/60 bg-card hover:border-border hover:shadow-lg hover:scale-[1.02] transition-all duration-200">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Monthly Donations</CardTitle>
               <DollarSign className="h-4 w-4 text-muted-foreground" />
@@ -1616,7 +1616,7 @@ Token Role: ${tokenRole || 'MISSING'}`;
             </CardContent>
           </Card>
           
-          <Card>
+          <Card className="border-2 border-border/60 bg-card hover:border-border hover:shadow-lg hover:scale-[1.02] transition-all duration-200">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Services Today</CardTitle>
               <Calendar className="h-4 w-4 text-muted-foreground" />
@@ -1633,26 +1633,26 @@ Token Role: ${tokenRole || 'MISSING'}`;
         {/* Quick Actions & Recent Activity */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           {/* Quick Actions */}
-          <Card>
+          <Card className="border-2 border-border/60 bg-card hover:border-border hover:shadow-lg transition-all duration-200">
             <CardHeader>
               <CardTitle>Quick Actions</CardTitle>
               <CardDescription>Common shelter management tasks</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 gap-4">
-                <Button variant="outline" className="h-16 flex-col">
+                <Button variant="outline" className="h-16 flex-col border-2 hover:border-border hover:shadow-md transition-all">
                   <UserPlus className="h-6 w-6 mb-2" />
                   New Resident
                 </Button>
-                <Button variant="outline" className="h-16 flex-col">
+                <Button variant="outline" className="h-16 flex-col border-2 hover:border-border hover:shadow-md transition-all">
                   <Calendar className="h-6 w-6 mb-2" />
                   Schedule Service
                 </Button>
-                <Button variant="outline" className="h-16 flex-col">
+                <Button variant="outline" className="h-16 flex-col border-2 hover:border-border hover:shadow-md transition-all">
                   <Utensils className="h-6 w-6 mb-2" />
                   Meal Planning
                 </Button>
-                <Button variant="outline" className="h-16 flex-col">
+                <Button variant="outline" className="h-16 flex-col border-2 hover:border-border hover:shadow-md transition-all">
                   <Activity className="h-6 w-6 mb-2" />
                   Daily Report
                 </Button>
@@ -1661,34 +1661,34 @@ Token Role: ${tokenRole || 'MISSING'}`;
           </Card>
 
           {/* Recent Activity */}
-          <Card>
+          <Card className="border-2 border-border/60 bg-card hover:border-border hover:shadow-lg transition-all duration-200">
             <CardHeader>
               <CardTitle>Recent Activity</CardTitle>
               <CardDescription>Latest shelter events and updates</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <div className="flex items-start space-x-3 pb-3 border-b last:border-b-0">
-                  <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                <div className="flex items-start space-x-3 pb-3 border-b-2 last:border-b-0 border-border/40 hover:bg-accent/20 p-2 rounded transition-colors">
+                  <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
                   <div className="flex-1">
                     <p className="font-medium">New resident checked in</p>
-                    <p className="text-sm text-gray-600">John D. assigned to Bed 23</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">John D. assigned to Bed 23</p>
                     <p className="text-xs text-gray-400 mt-1">2 hours ago</p>
                   </div>
                 </div>
-                <div className="flex items-start space-x-3 pb-3 border-b last:border-b-0">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                <div className="flex items-start space-x-3 pb-3 border-b-2 last:border-b-0 border-border/40 hover:bg-accent/20 p-2 rounded transition-colors">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
                   <div className="flex-1">
                     <p className="font-medium">Medical appointment completed</p>
-                    <p className="text-sm text-gray-600">Maria S. - General checkup</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">Maria S. - General checkup</p>
                     <p className="text-xs text-gray-400 mt-1">4 hours ago</p>
                   </div>
                 </div>
-                <div className="flex items-start space-x-3 pb-3 border-b last:border-b-0">
-                  <div className="w-2 h-2 bg-purple-500 rounded-full mt-2"></div>
+                <div className="flex items-start space-x-3 pb-3 border-b-2 last:border-b-0 border-border/40 hover:bg-accent/20 p-2 rounded transition-colors">
+                  <div className="w-2 h-2 bg-purple-500 rounded-full mt-2 flex-shrink-0"></div>
                   <div className="flex-1">
                     <p className="font-medium">Donation received</p>
-                    <p className="text-sm text-gray-600">$150 from anonymous donor</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">$150 from anonymous donor</p>
                     <p className="text-xs text-gray-400 mt-1">6 hours ago</p>
                   </div>
                 </div>
@@ -1739,7 +1739,7 @@ Token Role: ${tokenRole || 'MISSING'}`;
 
         {/* Key Metrics Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <Card>
+          <Card className="border-2 border-border/60 bg-card hover:border-border hover:shadow-lg hover:scale-[1.02] transition-all duration-200">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Donations Received</CardTitle>
               <Heart className="h-4 w-4 text-muted-foreground" />
@@ -1752,7 +1752,7 @@ Token Role: ${tokenRole || 'MISSING'}`;
             </CardContent>
           </Card>
           
-          <Card>
+          <Card className="border-2 border-border/60 bg-card hover:border-border hover:shadow-lg hover:scale-[1.02] transition-all duration-200">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Services Booked</CardTitle>
               <Calendar className="h-4 w-4 text-muted-foreground" />
@@ -1765,7 +1765,7 @@ Token Role: ${tokenRole || 'MISSING'}`;
             </CardContent>
           </Card>
           
-          <Card>
+          <Card className="border-2 border-border/60 bg-card hover:border-border hover:shadow-lg hover:scale-[1.02] transition-all duration-200">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Goals Progress</CardTitle>
               <Target className="h-4 w-4 text-muted-foreground" />
@@ -1778,7 +1778,7 @@ Token Role: ${tokenRole || 'MISSING'}`;
             </CardContent>
           </Card>
           
-          <Card>
+          <Card className="border-2 border-border/60 bg-card hover:border-border hover:shadow-lg hover:scale-[1.02] transition-all duration-200">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Profile Views</CardTitle>
               <User className="h-4 w-4 text-muted-foreground" />
@@ -1795,26 +1795,26 @@ Token Role: ${tokenRole || 'MISSING'}`;
         {/* Quick Actions & Upcoming Services */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           {/* Quick Actions */}
-          <Card>
+          <Card className="border-2 border-border/60 bg-card hover:border-border hover:shadow-lg transition-all duration-200">
             <CardHeader>
               <CardTitle>Quick Actions</CardTitle>
               <CardDescription>Manage your SHELTR experience</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 gap-4">
-                <Button variant="outline" className="h-16 flex-col">
+                <Button variant="outline" className="h-16 flex-col border-2 hover:border-border hover:shadow-md transition-all">
                   <QrCode className="h-6 w-6 mb-2" />
                   Share Profile
                 </Button>
-                <Button variant="outline" className="h-16 flex-col">
+                <Button variant="outline" className="h-16 flex-col border-2 hover:border-border hover:shadow-md transition-all">
                   <Calendar className="h-6 w-6 mb-2" />
                   Book Service
                 </Button>
-                <Button variant="outline" className="h-16 flex-col">
+                <Button variant="outline" className="h-16 flex-col border-2 hover:border-border hover:shadow-md transition-all">
                   <Target className="h-6 w-6 mb-2" />
                   Update Goals
                 </Button>
-                <Button variant="outline" className="h-16 flex-col">
+                <Button variant="outline" className="h-16 flex-col border-2 hover:border-border hover:shadow-md transition-all">
                   <Wallet className="h-6 w-6 mb-2" />
                   View Wallet
                 </Button>
@@ -1823,35 +1823,35 @@ Token Role: ${tokenRole || 'MISSING'}`;
           </Card>
 
           {/* Upcoming Services */}
-          <Card>
+          <Card className="border-2 border-border/60 bg-card hover:border-border hover:shadow-lg transition-all duration-200">
             <CardHeader>
               <CardTitle>Upcoming Services</CardTitle>
               <CardDescription>Your scheduled appointments</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <div className="flex items-start space-x-3 pb-3 border-b last:border-b-0">
-                  <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                <div className="flex items-start space-x-3 pb-3 border-b-2 last:border-b-0 border-border/40 hover:bg-accent/20 p-2 rounded transition-colors">
+                  <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
                   <div className="flex-1">
                     <p className="font-medium">General Health Checkup</p>
-                    <p className="text-sm text-gray-600">Tomorrow, 10:00 AM • Dr. Martinez</p>
-                    <Badge variant="outline" className="text-xs mt-1">Confirmed</Badge>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">Tomorrow, 10:00 AM • Dr. Martinez</p>
+                    <Badge variant="outline" className="text-xs mt-1 border-2">Confirmed</Badge>
                   </div>
                 </div>
-                <div className="flex items-start space-x-3 pb-3 border-b last:border-b-0">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                <div className="flex items-start space-x-3 pb-3 border-b-2 last:border-b-0 border-border/40 hover:bg-accent/20 p-2 rounded transition-colors">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
                   <div className="flex-1">
                     <p className="font-medium">Job Interview Skills Workshop</p>
-                    <p className="text-sm text-gray-600">Friday, 2:00 PM • Career Center</p>
-                    <Badge variant="outline" className="text-xs mt-1">Pending</Badge>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">Friday, 2:00 PM • Career Center</p>
+                    <Badge variant="outline" className="text-xs mt-1 border-2">Pending</Badge>
                   </div>
                 </div>
-                <div className="flex items-start space-x-3 pb-3 border-b last:border-b-0">
-                  <div className="w-2 h-2 bg-purple-500 rounded-full mt-2"></div>
+                <div className="flex items-start space-x-3 pb-3 border-b-2 last:border-b-0 border-border/40 hover:bg-accent/20 p-2 rounded transition-colors">
+                  <div className="w-2 h-2 bg-purple-500 rounded-full mt-2 flex-shrink-0"></div>
                   <div className="flex-1">
                     <p className="font-medium">Counseling Session</p>
-                    <p className="text-sm text-gray-600">Monday, 11:00 AM • Lisa Chen, LCSW</p>
-                    <Badge variant="outline" className="text-xs mt-1">Confirmed</Badge>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">Monday, 11:00 AM • Lisa Chen, LCSW</p>
+                    <Badge variant="outline" className="text-xs mt-1 border-2">Confirmed</Badge>
                   </div>
                 </div>
               </div>
@@ -1894,7 +1894,7 @@ Token Role: ${tokenRole || 'MISSING'}`;
 
         {/* Key Metrics Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <Card>
+          <Card className="border-2 border-border/60 bg-card hover:border-border hover:shadow-lg hover:scale-[1.02] transition-all duration-200">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Donated</CardTitle>
               <DollarSign className="h-4 w-4 text-muted-foreground" />
@@ -1907,7 +1907,7 @@ Token Role: ${tokenRole || 'MISSING'}`;
             </CardContent>
           </Card>
           
-          <Card>
+          <Card className="border-2 border-border/60 bg-card hover:border-border hover:shadow-lg hover:scale-[1.02] transition-all duration-200">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Donations</CardTitle>
               <Heart className="h-4 w-4 text-muted-foreground" />
@@ -1920,7 +1920,7 @@ Token Role: ${tokenRole || 'MISSING'}`;
             </CardContent>
           </Card>
           
-          <Card>
+          <Card className="border-2 border-border/60 bg-card hover:border-border hover:shadow-lg hover:scale-[1.02] transition-all duration-200">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">People Helped</CardTitle>
               <Users className="h-4 w-4 text-muted-foreground" />
@@ -1933,7 +1933,7 @@ Token Role: ${tokenRole || 'MISSING'}`;
             </CardContent>
           </Card>
           
-          <Card>
+          <Card className="border-2 border-border/60 bg-card hover:border-border hover:shadow-lg hover:scale-[1.02] transition-all duration-200">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Impact Score</CardTitle>
               <Award className="h-4 w-4 text-muted-foreground" />
@@ -1950,40 +1950,40 @@ Token Role: ${tokenRole || 'MISSING'}`;
         {/* Recent Donations & Quick Actions */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           {/* Recent Donations */}
-          <Card>
+          <Card className="border-2 border-border/60 bg-card hover:border-border hover:shadow-lg transition-all duration-200">
             <CardHeader>
               <CardTitle>Recent Donations</CardTitle>
               <CardDescription>Your latest contributions</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <div className="flex items-start space-x-3 pb-3 border-b last:border-b-0">
-                  <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                <div className="flex items-start space-x-3 pb-3 border-b-2 last:border-b-0 border-border/40 hover:bg-accent/20 p-2 rounded transition-colors">
+                  <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
                   <div className="flex-1">
                     <p className="font-medium">$120 to Michael Rodriguez</p>
-                    <p className="text-sm text-gray-600">Old Brewery Mission • January 15, 2025</p>
-                    <Badge variant="outline" className="text-xs mt-1">Completed</Badge>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">Old Brewery Mission • January 15, 2025</p>
+                    <Badge variant="outline" className="text-xs mt-1 border-2">Completed</Badge>
                   </div>
                 </div>
-                <div className="flex items-start space-x-3 pb-3 border-b last:border-b-0">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                <div className="flex items-start space-x-3 pb-3 border-b-2 last:border-b-0 border-border/40 hover:bg-accent/20 p-2 rounded transition-colors">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
                   <div className="flex-1">
                     <p className="font-medium">$200 to Michael Rodriguez</p>
-                    <p className="text-sm text-gray-600">Old Brewery Mission • December 20, 2024</p>
-                    <Badge variant="outline" className="text-xs mt-1">Completed</Badge>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">Old Brewery Mission • December 20, 2024</p>
+                    <Badge variant="outline" className="text-xs mt-1 border-2">Completed</Badge>
                   </div>
                 </div>
-                <div className="flex items-start space-x-3 pb-3 border-b last:border-b-0">
-                  <div className="w-2 h-2 bg-purple-500 rounded-full mt-2"></div>
+                <div className="flex items-start space-x-3 pb-3 border-b-2 last:border-b-0 border-border/40 hover:bg-accent/20 p-2 rounded transition-colors">
+                  <div className="w-2 h-2 bg-purple-500 rounded-full mt-2 flex-shrink-0"></div>
                   <div className="flex-1">
                     <p className="font-medium">$180 to Michael Rodriguez</p>
-                    <p className="text-sm text-gray-600">Old Brewery Mission • November 28, 2024</p>
-                    <Badge variant="outline" className="text-xs mt-1">Completed</Badge>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">Old Brewery Mission • November 28, 2024</p>
+                    <Badge variant="outline" className="text-xs mt-1 border-2">Completed</Badge>
                   </div>
                 </div>
               </div>
-              <div className="mt-4 pt-4 border-t">
-                <Button variant="outline" className="w-full">
+              <div className="mt-4 pt-4 border-t-2 border-border/40">
+                <Button variant="outline" className="w-full border-2 hover:border-border hover:shadow-md transition-all">
                   View All Donations
                 </Button>
               </div>
@@ -1991,32 +1991,32 @@ Token Role: ${tokenRole || 'MISSING'}`;
           </Card>
 
           {/* Quick Actions */}
-          <Card>
+          <Card className="border-2 border-border/60 bg-card hover:border-border hover:shadow-lg transition-all duration-200">
             <CardHeader>
               <CardTitle>Quick Actions</CardTitle>
               <CardDescription>Manage your giving</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 gap-4">
-                <Button variant="outline" className="h-16 flex-col">
+                <Button variant="outline" className="h-16 flex-col border-2 hover:border-border hover:shadow-md transition-all">
                   <Heart className="h-6 w-6 mb-2" />
                   Quick Donate
                 </Button>
-                <Button variant="outline" className="h-16 flex-col">
+                <Button variant="outline" className="h-16 flex-col border-2 hover:border-border hover:shadow-md transition-all">
                   <TrendingUp className="h-6 w-6 mb-2" />
                   View Impact
                 </Button>
-                <Button variant="outline" className="h-16 flex-col">
+                <Button variant="outline" className="h-16 flex-col border-2 hover:border-border hover:shadow-md transition-all">
                   <FileText className="h-6 w-6 mb-2" />
                   Tax Receipts
                 </Button>
-                <Button variant="outline" className="h-16 flex-col">
+                <Button variant="outline" className="h-16 flex-col border-2 hover:border-border hover:shadow-md transition-all">
                   <Users className="h-6 w-6 mb-2" />
                   Find Recipients
                 </Button>
               </div>
               <div className="mt-4">
-                <Button className="w-full">
+                <Button className="w-full hover:shadow-md transition-all">
                   <Heart className="h-4 w-4 mr-2" />
                   Donate to Michael Rodriguez
                 </Button>

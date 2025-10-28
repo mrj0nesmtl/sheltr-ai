@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, ExternalLink, Download, CreditCard, Shield, TrendingUp, Building2, CheckCircle, Github } from 'lucide-react';
@@ -11,7 +11,8 @@ import { ThemeToggle } from '@/components/theme-toggle';
 import Footer from '@/components/Footer';
 import ThemeLogo from '@/components/ThemeLogo';
 
-export default function PaymentRailsPage() {
+// Component that uses useSearchParams (wrapped in Suspense)
+function PaymentRailsContent() {
   const searchParams = useSearchParams();
   const [isEmbedded, setIsEmbedded] = useState(false);
   
@@ -420,5 +421,21 @@ export default function PaymentRailsPage() {
       {/* Footer - Hide when embedded */}
       {!isEmbedded && <Footer />}
     </div>
+  );
+}
+
+// Main page component with Suspense boundary
+export default function PaymentRailsPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    }>
+      <PaymentRailsContent />
+    </Suspense>
   );
 }

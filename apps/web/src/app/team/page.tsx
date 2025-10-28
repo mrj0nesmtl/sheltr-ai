@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Mail, Linkedin, Globe, Heart, Users, Award, Building2, Calendar, Twitter, Loader2, Share2, Rss, ExternalLink } from 'lucide-react';
@@ -13,7 +13,8 @@ import { PublicTeamService, type PublicTeamMember } from '@/services/publicTeamS
 import PublicNavigation from '@/components/PublicNavigation';
 import { useHeroImage } from '@/hooks/useHeroImage';
 
-export default function TeamPage() {
+// Component that uses useSearchParams (wrapped in Suspense)
+function TeamContent() {
   const searchParams = useSearchParams();
   const [isEmbedded, setIsEmbedded] = useState(false);
   const [teamMembers, setTeamMembers] = useState<PublicTeamMember[]>([]);
@@ -419,5 +420,21 @@ export default function TeamPage() {
       {/* Footer - Hide when embedded */}
       {!isEmbedded && <Footer />}
     </div>
+  );
+}
+
+// Main page component with Suspense boundary
+export default function TeamPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading team...</p>
+        </div>
+      </div>
+    }>
+      <TeamContent />
+    </Suspense>
   );
 }

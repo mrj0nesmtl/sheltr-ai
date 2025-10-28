@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { CreditCard, TrendingUp, Shield, Building2, Users, CheckCircle, Eye, FileText, BookOpen, Zap, AlertTriangle } from 'lucide-react';
@@ -13,7 +13,8 @@ import PublicNavigation from '@/components/PublicNavigation';
 import { useHeroImage } from '@/hooks/useHeroImage';
 import { StandardHero } from '@/components/StandardHero';
 
-export default function TokenomicsPage() {
+// Component that uses useSearchParams (wrapped in Suspense)
+function TokenomicsContent() {
   const searchParams = useSearchParams();
   const [isEmbedded, setIsEmbedded] = useState(false);
   
@@ -543,5 +544,21 @@ export default function TokenomicsPage() {
       {!isEmbedded && <Footer />}
       {!isEmbedded && <PublicChatbot />}
     </div>
+  );
+}
+
+// Main page component with Suspense boundary
+export default function TokenomicsPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    }>
+      <TokenomicsContent />
+    </Suspense>
   );
 }

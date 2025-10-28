@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { 
@@ -28,7 +28,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Footer from '@/components/Footer';
 import ThemeLogo from '@/components/ThemeLogo';
 
-export default function SystemDesignPage() {
+// Component that uses useSearchParams (wrapped in Suspense)
+function SystemDesignContent() {
   const searchParams = useSearchParams();
   const [isEmbedded, setIsEmbedded] = useState(false);
   
@@ -847,5 +848,21 @@ contract SHELTRStablecoin is ERC20, AccessControl, ReentrancyGuard {
       {/* Footer - Hide when embedded */}
       {!isEmbedded && <Footer />}
     </div>
+  );
+}
+
+// Main page component with Suspense boundary
+export default function SystemDesignPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    }>
+      <SystemDesignContent />
+    </Suspense>
   );
 }

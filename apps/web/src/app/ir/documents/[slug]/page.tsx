@@ -27,8 +27,8 @@ export default function InvestorDocumentPage() {
     if (!authLoading) {
       if (!user) {
         router.push('/ir');
-      } else if (user.role !== 'investor') {
-        toast.error('Access denied: Investor credentials required');
+      } else if (user.role !== 'investor' && user.role !== 'super_admin' && user.role !== 'platform_admin') {
+        toast.error('Access denied: Investor or Admin credentials required');
         router.push('/dashboard');
       } else {
         setIsAuthorized(true);

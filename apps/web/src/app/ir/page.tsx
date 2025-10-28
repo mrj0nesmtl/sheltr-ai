@@ -41,6 +41,15 @@ export default function InvestorLoginPage() {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       
+      // Set investor access session storage (for accessing founder portal pages)
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem('investor-access', 'granted');
+        sessionStorage.setItem('investor-info', JSON.stringify({
+          email: userCredential.user.email,
+          uid: userCredential.user.uid
+        }));
+      }
+      
       // The useEffect above will handle the redirect after user state updates
       toast.success('Welcome to the SHELTR Investor Data Room');
     } catch (err: any) {

@@ -69,7 +69,37 @@ export default function InvestorDocumentPage() {
         setIsLoading(true);
         setError(null);
 
-        // Try to get document by ID from secure_documents
+        console.log('🔍 Loading document:', documentSlug);
+
+        // Check if this document is shared to investor data room
+        const checkDoc = doc(db, 'secure_documents', documentSlug);
+        const checkSnap = await getDoc(checkDoc);
+        
+        if (!checkSnap.exists() || !checkSnap.data().isInvestorDataRoom) {
+          setError('This document is not available in the investor data room');
+          return;
+        }
+
+        // For pages that exist as React components, redirect to them
+        // Investors now have session access to view these pages
+        const reactPages = [
+          'investor-relations',
+          'business-plan',
+          'covenant-house-outreach',
+          'design-guide',
+          'msb-registration',
+          'adyen-integration',
+          'implementation-readiness',
+          'platform-admin-guide'
+        ];
+
+        if (reactPages.includes(documentSlug)) {
+          console.log('📄 Redirecting to React page:', documentSlug);
+          router.push(`/portal/founders-only/${documentSlug}`);
+          return;
+        }
+
+        // For other documents, try to load from Firestore
         let docRef = doc(db, 'secure_documents', documentSlug);
         let docSnap = await getDoc(docRef);
 
@@ -82,7 +112,21 @@ export default function InvestorDocumentPage() {
             return;
           }
           
-          setDocument(data);
+          // Check if it has content
+          if (!data.content) {
+            console.log('⚠️  Document has no content, trying founder_documents...');
+            // Try founder_documents as fallback
+            const founderDocRef = doc(db, 'founder_documents', documentSlug);
+            const founderDocSnap = await getDoc(founderDocRef);
+            
+            if (founderDocSnap.exists()) {
+              setDocument({ ...data, content: founderDocSnap.data().content });
+            } else {
+              setError('Document content not found');
+            }
+          } else {
+            setDocument(data);
+          }
         } else {
           // Try founder_documents collection as fallback
           docRef = doc(db, 'founder_documents', documentSlug);
@@ -118,7 +162,7 @@ export default function InvestorDocumentPage() {
     };
 
     loadDocument();
-  }, [documentSlug, isAuthorized]);
+  }, [documentSlug, isAuthorized, router]);
 
   if (authLoading || isLoading) {
     return (

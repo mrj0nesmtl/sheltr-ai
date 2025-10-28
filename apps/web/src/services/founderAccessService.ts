@@ -136,15 +136,18 @@ export async function logFounderAccessAttempt(attempt: Omit<FounderAccessAttempt
 }
 
 /**
- * Check if user has active founder access session
+ * Check if user has active founder access session OR investor access
  */
 export function checkFounderAccess(): boolean {
   if (typeof window === 'undefined') return false;
   
-  // Check for session storage
+  // Check for session storage (founders)
   const sessionAccess = sessionStorage.getItem('founders-portal-access');
   
-  return sessionAccess === 'granted';
+  // Check for investor access (from IR login)
+  const investorAccess = sessionStorage.getItem('investor-access');
+  
+  return sessionAccess === 'granted' || investorAccess === 'granted';
 }
 
 /**

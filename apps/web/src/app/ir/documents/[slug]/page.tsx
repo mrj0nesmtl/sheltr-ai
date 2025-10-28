@@ -83,35 +83,43 @@ export default function InvestorDocumentPage() {
     );
   }
 
-  // Map document slugs to their Founders Portal URLs
+  // Check if this is an external link that should open in new tab
+  const isExternalLink = documentSlug === 'github-repository';
+  
+  // Handle external links differently
+  useEffect(() => {
+    if (isExternalLink && isAuthorized) {
+      // Redirect to external URL in new tab
+      window.open('https://github.com/mrj0nesmtl/sheltr-ai', '_blank');
+      // Redirect back to data room
+      setTimeout(() => {
+        router.push('/ir/dataroom');
+      }, 500);
+    }
+  }, [isExternalLink, isAuthorized, router]);
+
+  // Map document slugs to their URLs
   const getFoundersPortalUrl = (slug: string): string => {
     const urlMap: Record<string, string> = {
       // Public pages (no auth needed)
       'blockchain-architecture': '/tokenomics',
-      'github-repository': 'https://github.com/mrj0nesmtl/sheltr-ai',
       'proposed-payment-rails': '/docs/payment-rails',
-      'shelter-research': '/secure-docs/shelter-research',
-      'technical-whitepaper': '/whitepaper',
-      'leadership-team': '/team', // Public team page
+      'shelter-research': '/portal/founders-only/shelter-research',
+      'technical-whitepaper': '/docs/whitepaper',
+      'leadership-team': '/team',
+      'system-design': '/docs/system-design',
       
       // Founders Portal pages with SecureDocumentViewer
       'adyen-integration': '/portal/founders-only/adyen-integration',
       'business-plan': '/portal/founders-only/business-plan',
       'covenant-house-outreach': '/portal/founders-only/covenant-house-outreach',
-      'development-roadmap': '/tokenomics', // Use tokenomics page (has roadmap content)
+      'development-roadmap': '/tokenomics',
       'investor-relations': '/portal/founders-only/investor-relations',
       'msb-registration': '/portal/founders-only/msb-registration',
-      'platform-admin-guide': '/docs', // Use docs hub as fallback
-      'system-design': '/portal/founders-only/system-design',
+      'platform-admin-guide': '/docs',
     };
 
-    // If it's in the map, use that URL
-    if (urlMap[slug]) {
-      return urlMap[slug];
-    }
-
-    // Fallback: assume it's a founders-only page
-    return `/portal/founders-only/${slug}`;
+    return urlMap[slug] || `/portal/founders-only/${slug}`;
   };
 
   const iframeUrl = `${getFoundersPortalUrl(documentSlug)}?embed=true`;

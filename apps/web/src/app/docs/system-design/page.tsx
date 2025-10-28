@@ -1,5 +1,7 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { 
   ArrowRight, 
@@ -27,9 +29,18 @@ import Footer from '@/components/Footer';
 import ThemeLogo from '@/components/ThemeLogo';
 
 export default function SystemDesignPage() {
+  const searchParams = useSearchParams();
+  const [isEmbedded, setIsEmbedded] = useState(false);
+  
+  // Check if embedded in iframe
+  useEffect(() => {
+    setIsEmbedded(searchParams.get('embed') === 'true');
+  }, [searchParams]);
+  
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
-      {/* Header */}
+      {/* Header - Hide when embedded */}
+      {!isEmbedded && (
       <header className="border-b bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
@@ -51,6 +62,7 @@ export default function SystemDesignPage() {
           </div>
         </div>
       </header>
+      )}
 
       {/* Hero Section */}
       <section className="py-16 px-4">
@@ -832,7 +844,8 @@ contract SHELTRStablecoin is ERC20, AccessControl, ReentrancyGuard {
         </div>
       </section>
 
-      <Footer />
+      {/* Footer - Hide when embedded */}
+      {!isEmbedded && <Footer />}
     </div>
   );
 }

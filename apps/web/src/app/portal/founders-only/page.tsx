@@ -558,16 +558,19 @@ export default function FoundersOnlyPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, authLoading, router]);
 
-  // Load saved card order
+  // Load saved card order and toggle states
   const loadCardOrder = async () => {
     try {
+      // Load card order
       const orderDoc = await getDoc(doc(db, 'portal_settings', 'founders_card_order'));
+      let orderedCards = [...initialCards];
+      
       if (orderDoc.exists()) {
         const savedOrder = orderDoc.data().order as string[];
         setDefaultCardOrder(savedOrder);
         
         // Reorder cards based on saved order
-        const orderedCards = savedOrder
+        orderedCards = savedOrder
           .map(id => initialCards.find(card => card.id === id))
           .filter(Boolean) as QuickAccessCard[];
         
@@ -576,11 +579,30 @@ export default function FoundersOnlyPage() {
           card => !savedOrder.includes(card.id)
         );
         
-        setCards([...orderedCards, ...newCards]);
-      } else {
-        setCards(initialCards);
-        setDefaultCardOrder(initialCards.map(c => c.id));
+        orderedCards = [...orderedCards, ...newCards];
       }
+
+      // Load toggle states from Firestore
+      const toggleStates = await Promise.all(
+        orderedCards.map(async (card) => {
+          try {
+            const docRef = doc(db, 'secure_documents', card.id);
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+              return {
+                ...card,
+                isInvestorDataRoom: docSnap.data().isInvestorDataRoom || false
+              };
+            }
+            return card;
+          } catch (error) {
+            console.error(`Error loading toggle state for ${card.id}:`, error);
+            return card;
+          }
+        })
+      );
+
+      setCards(toggleStates);
     } catch (error) {
       console.error('Error loading card order:', error);
       setCards(initialCards);

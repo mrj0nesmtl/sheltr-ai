@@ -29,8 +29,21 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
+// Document type definition
+interface InvestorDocument {
+  id: string;
+  title: string;
+  description: string;
+  badge: string;
+  badgeColor: string;
+  textColor: string;
+  borderColor: string;
+  isExternal?: boolean;
+  externalUrl?: string;
+}
+
 // Simple hardcoded list of documents available to investors
-const INVESTOR_DOCUMENTS = [
+const INVESTOR_DOCUMENTS: InvestorDocument[] = [
   {
     id: 'adyen-integration',
     title: 'Adyen Integration Strategy',
@@ -85,6 +98,7 @@ const INVESTOR_DOCUMENTS = [
     textColor: 'text-purple-600',
     borderColor: 'border-purple-200',
     isExternal: true,
+    externalUrl: 'https://github.com/mrj0nesmtl/sheltr-ai',
   },
   {
     id: 'investor-relations',
@@ -162,7 +176,7 @@ const INVESTOR_DOCUMENTS = [
 
 // Sortable Card Component
 interface SortableCardProps {
-  doc: typeof INVESTOR_DOCUMENTS[0];
+  doc: InvestorDocument;
   isSuperAdmin: boolean;
 }
 
@@ -180,6 +194,14 @@ function SortableCard({ doc, isSuperAdmin }: SortableCardProps) {
     transform: CSS.Transform.toString(transform),
     transition,
     opacity: isDragging ? 0.5 : 1,
+  };
+
+  // Handle external links (like GitHub)
+  const handleClick = (e: React.MouseEvent) => {
+    if (doc.isExternal && doc.externalUrl) {
+      e.preventDefault();
+      window.open(doc.externalUrl, '_blank', 'noopener,noreferrer');
+    }
   };
 
   return (
@@ -218,15 +240,26 @@ function SortableCard({ doc, isSuperAdmin }: SortableCardProps) {
             {doc.description}
           </p>
 
-          <Link href={`/ir/documents/${doc.id}`}>
+          {doc.isExternal && doc.externalUrl ? (
             <Button
               variant="outline"
               className={`w-full border-2 ${doc.textColor} hover:bg-opacity-10`}
+              onClick={handleClick}
             >
-              View Document
+              View Repository
               <ExternalLink className="ml-2 h-4 w-4" />
             </Button>
-          </Link>
+          ) : (
+            <Link href={`/ir/documents/${doc.id}`}>
+              <Button
+                variant="outline"
+                className={`w-full border-2 ${doc.textColor} hover:bg-opacity-10`}
+              >
+                View Document
+                <ExternalLink className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
+          )}
         </CardContent>
       </Card>
     </div>

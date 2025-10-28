@@ -45,6 +45,15 @@ export default function SecureDocumentViewer({
   const [document, setDocument] = useState<DocumentData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isEmbedded, setIsEmbedded] = useState(false);
+
+  // Check if embedded in iframe (from investor data room)
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      setIsEmbedded(urlParams.get('embed') === 'true');
+    }
+  }, []);
 
   useEffect(() => {
     const loadDocument = async () => {
@@ -130,30 +139,32 @@ export default function SecureDocumentViewer({
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
-      {/* Header */}
-      <header className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b sticky top-0 z-50">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center py-3 sm:py-0 sm:h-16 gap-2 sm:gap-4">
-            <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
-              <Link href="/" className="text-xl sm:text-2xl font-bold">
-                SHELTR
+      {/* Header - Hidden when embedded */}
+      {!isEmbedded && (
+        <header className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b sticky top-0 z-50">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center py-3 sm:py-0 sm:h-16 gap-2 sm:gap-4">
+              <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
+                <Link href="/" className="text-xl sm:text-2xl font-bold">
+                  SHELTR
+                </Link>
+                <Badge className="bg-red-600 text-white text-xs whitespace-nowrap">
+                  <Lock className="h-3 w-3 mr-1" />
+                  {confidentialityLevel === 'founder' ? 'Founders Only' : 'Confidential'}
+                </Badge>
+              </div>
+              
+              <Link href={backLink} className="flex-shrink-0">
+                <Button variant="outline" size="sm">
+                  <ArrowLeft className="h-4 w-4 mr-2" />
+                  <span className="hidden sm:inline">Back to Portal</span>
+                  <span className="sm:hidden">Back</span>
+                </Button>
               </Link>
-              <Badge className="bg-red-600 text-white text-xs whitespace-nowrap">
-                <Lock className="h-3 w-3 mr-1" />
-                {confidentialityLevel === 'founder' ? 'Founders Only' : 'Confidential'}
-              </Badge>
             </div>
-            
-            <Link href={backLink} className="flex-shrink-0">
-              <Button variant="outline" size="sm">
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                <span className="hidden sm:inline">Back to Portal</span>
-                <span className="sm:hidden">Back</span>
-              </Button>
-            </Link>
           </div>
-        </div>
-      </header>
+        </header>
+      )}
 
       {/* Main Content */}
       <div className="container mx-auto px-4 py-8 max-w-5xl">

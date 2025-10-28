@@ -2072,11 +2072,11 @@ export default function InvestorRelationsPage() {
 
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="grid w-full grid-cols-5">
-              <TabsTrigger value="overview">Executive Summary</TabsTrigger>
-              <TabsTrigger value="product">Product & Technology</TabsTrigger>
+              <TabsTrigger value="overview">Summary</TabsTrigger>
+              <TabsTrigger value="product">Product & Tech</TabsTrigger>
               <TabsTrigger value="tokenomics">Business Model</TabsTrigger>
-              <TabsTrigger value="projections">Financial Projections</TabsTrigger>
-              <TabsTrigger value="investment">Investment Terms</TabsTrigger>
+              <TabsTrigger value="projections">Projections</TabsTrigger>
+              <TabsTrigger value="investment">Terms</TabsTrigger>
             </TabsList>
 
             {/* Executive Summary */}

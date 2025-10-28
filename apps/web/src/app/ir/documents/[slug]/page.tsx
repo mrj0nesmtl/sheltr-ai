@@ -86,12 +86,23 @@ export default function InvestorDocumentPage() {
   // Map document slugs to their Founders Portal URLs
   const getFoundersPortalUrl = (slug: string): string => {
     const urlMap: Record<string, string> = {
+      // Public pages (no auth needed)
       'blockchain-architecture': '/tokenomics',
       'github-repository': 'https://github.com/mrj0nesmtl/sheltr-ai',
       'proposed-payment-rails': '/docs/payment-rails',
       'shelter-research': '/secure-docs/shelter-research',
       'technical-whitepaper': '/whitepaper',
+      
+      // Founders Portal pages with SecureDocumentViewer
+      'adyen-integration': '/portal/founders-only/adyen-integration',
+      'business-plan': '/portal/founders-only/business-plan',
+      'covenant-house-outreach': '/portal/founders-only/covenant-house-outreach',
+      'development-roadmap': '/portal/founders-only/development-roadmap',
+      'investor-relations': '/portal/founders-only/investor-relations',
       'leadership-team': '/portal/founders-only/leadership-team',
+      'msb-registration': '/portal/founders-only/msb-registration',
+      'platform-admin-guide': '/portal/founders-only/platform-admin-guide',
+      'system-design': '/portal/founders-only/system-design',
     };
 
     // If it's in the map, use that URL
@@ -99,7 +110,7 @@ export default function InvestorDocumentPage() {
       return urlMap[slug];
     }
 
-    // Otherwise, assume it's a founders-only page
+    // Fallback: assume it's a founders-only page
     return `/portal/founders-only/${slug}`;
   };
 

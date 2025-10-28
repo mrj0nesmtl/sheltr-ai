@@ -214,7 +214,7 @@ export default function InvestorDataRoomPage() {
             description: data.description || 'No description available',
             buttonText: data.buttonText || 'View Document',
             buttonClass: data.buttonClass || 'border-2 border-blue-600 text-blue-600 hover:bg-blue-50',
-            href: `/ir/dataroom/${doc.id}`,
+            href: `/ir/documents/${doc.id}`, // Investor-specific document viewer
             borderClass: data.borderClass || 'border-blue-200',
             category: (data.category as 'public' | 'secure' | 'platform') || 'secure',
             isInvestorDataRoom: true,
@@ -307,10 +307,16 @@ export default function InvestorDataRoomPage() {
 
   // Save user's custom card order
   const saveCardOrder = async () => {
-    if (!user?.uid) return;
+    if (!user?.uid) {
+      toast.error('User not authenticated');
+      return;
+    }
 
     try {
       const newOrder = cards.map(card => card.id);
+      console.log('💾 Saving card order for user:', user.uid);
+      console.log('📋 Order:', newOrder);
+      
       await setDoc(doc(db, 'investor_card_orders', user.uid), {
         order: newOrder,
         updatedAt: new Date().toISOString(),
@@ -320,9 +326,12 @@ export default function InvestorDataRoomPage() {
       setDefaultCardOrder(newOrder);
       setHasUnsavedChanges(false);
       toast.success('Card order saved!');
-    } catch (error) {
-      console.error('Error saving card order:', error);
-      toast.error('Failed to save card order');
+      console.log('✅ Card order saved successfully');
+    } catch (error: any) {
+      console.error('❌ Error saving card order:', error);
+      console.error('Error code:', error.code);
+      console.error('Error message:', error.message);
+      toast.error(`Failed to save: ${error.message || 'Permission denied'}`);
     }
   };
 

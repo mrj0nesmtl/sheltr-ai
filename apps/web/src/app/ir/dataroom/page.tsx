@@ -408,17 +408,10 @@ export default function InvestorDataRoomPage() {
                 <p className="text-xs text-muted-foreground">Secure Investment Materials</p>
               </div>
             </div>
-            <div className="flex items-center gap-4">
-              <Badge className="bg-blue-600 text-white">
-                <Shield className="h-3 w-3 mr-1" />
-                Investor Access
-              </Badge>
-              <Link href="/dashboard">
-                <Button variant="outline" size="sm">
-                  Dashboard
-                </Button>
-              </Link>
-            </div>
+            <Badge className="bg-blue-600 text-white">
+              <Shield className="h-3 w-3 mr-1" />
+              Investor Access
+            </Badge>
           </div>
         </div>
       </header>

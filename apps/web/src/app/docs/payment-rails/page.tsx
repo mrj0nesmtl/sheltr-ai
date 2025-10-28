@@ -1,5 +1,7 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, ExternalLink, Download, CreditCard, Shield, TrendingUp, Building2, CheckCircle, Github } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -10,46 +12,58 @@ import Footer from '@/components/Footer';
 import ThemeLogo from '@/components/ThemeLogo';
 
 export default function PaymentRailsPage() {
+  const searchParams = useSearchParams();
+  const [isEmbedded, setIsEmbedded] = useState(false);
+  
+  // Check if embedded in iframe
+  useEffect(() => {
+    setIsEmbedded(searchParams.get('embed') === 'true');
+  }, [searchParams]);
+  
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
-      {/* Navigation */}
-      <nav className="bg-background/95 backdrop-blur-sm sticky top-0 z-50 border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <Link href="/" className="flex items-center">
-              <ThemeLogo />
-            </Link>
-            <div className="hidden md:flex space-x-8">
-              <Link href="/" className="text-muted-foreground hover:text-primary transition-colors">Home</Link>
-              <Link href="/about" className="text-muted-foreground hover:text-primary transition-colors">About</Link>
-              <Link href="/solutions" className="text-muted-foreground hover:text-primary transition-colors">Solutions</Link>
-              <Link href="/scan-give" className="text-muted-foreground hover:text-primary transition-colors">Scan & Give</Link>
-              <Link href="/impact" className="text-muted-foreground hover:text-primary transition-colors">Impact</Link>
-              <Link href="/docs" className="text-foreground hover:text-primary transition-colors">Docs</Link>
-            </div>
-            <div className="flex items-center space-x-4">
-              <ThemeToggle />
-              <Link href="/docs">
-                <Button variant="ghost" size="sm">
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Back to Docs
-                </Button>
+      {/* Navigation - Hide when embedded */}
+      {!isEmbedded && (
+        <nav className="bg-background/95 backdrop-blur-sm sticky top-0 z-50 border-b">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-center h-16">
+              <Link href="/" className="flex items-center">
+                <ThemeLogo />
               </Link>
+              <div className="hidden md:flex space-x-8">
+                <Link href="/" className="text-muted-foreground hover:text-primary transition-colors">Home</Link>
+                <Link href="/about" className="text-muted-foreground hover:text-primary transition-colors">About</Link>
+                <Link href="/solutions" className="text-muted-foreground hover:text-primary transition-colors">Solutions</Link>
+                <Link href="/scan-give" className="text-muted-foreground hover:text-primary transition-colors">Scan & Give</Link>
+                <Link href="/impact" className="text-muted-foreground hover:text-primary transition-colors">Impact</Link>
+                <Link href="/docs" className="text-foreground hover:text-primary transition-colors">Docs</Link>
+              </div>
+              <div className="flex items-center space-x-4">
+                <ThemeToggle />
+                <Link href="/docs">
+                  <Button variant="ghost" size="sm">
+                    <ArrowLeft className="h-4 w-4 mr-2" />
+                    Back to Docs
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </nav>
+      )}
+
+      {/* Breadcrumb - Hide when embedded */}
+      {!isEmbedded && (
+        <div className="bg-muted/30 py-4">
+          <div className="container mx-auto px-4">
+            <div className="flex items-center text-sm text-muted-foreground">
+              <Link href="/docs" className="hover:text-primary transition-colors">Documentation</Link>
+              <span className="mx-2">/</span>
+              <span className="text-foreground">Payment Rail Architecture</span>
             </div>
           </div>
         </div>
-      </nav>
-
-      {/* Breadcrumb */}
-      <div className="bg-muted/30 py-4">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center text-sm text-muted-foreground">
-            <Link href="/docs" className="hover:text-primary transition-colors">Documentation</Link>
-            <span className="mx-2">/</span>
-            <span className="text-foreground">Payment Rail Architecture</span>
-          </div>
-        </div>
-      </div>
+      )}
 
       {/* Header */}
       <section className="py-16">
@@ -403,7 +417,8 @@ export default function PaymentRailsPage() {
         </div>
       </section>
 
-      <Footer />
+      {/* Footer - Hide when embedded */}
+      {!isEmbedded && <Footer />}
     </div>
   );
 }

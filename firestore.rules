@@ -915,8 +915,8 @@ service cloud.firestore {
     
     // Founder documents - Business plans, strategic documents, confidential materials, design guides
     match /founder_documents/{documentId} {
-      // Read: Super Admin and Platform Admin (all Founders Portal users) can read
-      allow read: if hasFoundersPortalAccess();
+      // Read: Super Admin, Platform Admin (all Founders Portal users), AND Investors can read
+      allow read: if hasFoundersPortalAccess() || isInvestor();
       
       // Write: Super Admin and Platform Admin can update founder documents
       allow write: if hasFoundersPortalAccess();

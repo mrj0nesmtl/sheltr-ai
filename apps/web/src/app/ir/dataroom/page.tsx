@@ -6,9 +6,28 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { FileText, Lock, Shield, ExternalLink } from 'lucide-react';
+import { FileText, Lock, Shield, ExternalLink, GripVertical, Save, RotateCcw } from 'lucide-react';
 import Link from 'next/link';
 import { toast } from 'sonner';
+import { db } from '@/lib/firebase';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 // Simple hardcoded list of documents available to investors
 const INVESTOR_DOCUMENTS = [
@@ -141,18 +160,104 @@ const INVESTOR_DOCUMENTS = [
   },
 ];
 
+// Sortable Card Component
+interface SortableCardProps {
+  doc: typeof INVESTOR_DOCUMENTS[0];
+  isSuperAdmin: boolean;
+}
+
+function SortableCard({ doc, isSuperAdmin }: SortableCardProps) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: doc.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  return (
+    <div ref={setNodeRef} style={style} className="relative">
+      <Card
+        className={`group hover:shadow-lg transition-all duration-200 border-2 ${doc.borderColor} ${
+          isDragging ? 'ring-2 ring-blue-500' : ''
+        }`}
+      >
+        <CardContent className="p-6">
+          {/* Drag Handle - Only visible for Super Admins */}
+          {isSuperAdmin && (
+            <div
+              {...attributes}
+              {...listeners}
+              className="absolute top-2 right-2 cursor-grab active:cursor-grabbing p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded"
+            >
+              <GripVertical className="h-5 w-5 text-muted-foreground" />
+            </div>
+          )}
+
+          <div className="flex items-start gap-3 mb-4">
+            <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900">
+              <FileText className={`h-5 w-5 ${doc.textColor}`} />
+            </div>
+            <Badge className={`${doc.badgeColor} text-white`}>
+              {doc.badge}
+            </Badge>
+          </div>
+
+          <h4 className={`text-lg font-bold mb-2 ${doc.textColor}`}>
+            {doc.title}
+          </h4>
+
+          <p className="text-sm text-muted-foreground mb-4 line-clamp-3">
+            {doc.description}
+          </p>
+
+          <Link href={`/ir/documents/${doc.id}`}>
+            <Button
+              variant="outline"
+              className={`w-full border-2 ${doc.textColor} hover:bg-opacity-10`}
+            >
+              View Document
+              <ExternalLink className="ml-2 h-4 w-4" />
+            </Button>
+          </Link>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
 export default function InvestorDataRoomPage() {
   const router = useRouter();
   const { user, loading: authLoading } = useAuth();
   const [isAuthorized, setIsAuthorized] = useState(false);
+  const [documents, setDocuments] = useState(INVESTOR_DOCUMENTS);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
-  // Authorization check
+  const isSuperAdmin = user?.role === 'super_admin';
+
+  // Drag and drop sensors
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  // Authorization check - Allow both investors AND super admins
   useEffect(() => {
     if (!authLoading) {
       if (!user) {
         router.push('/ir');
-      } else if (user.role !== 'investor') {
-        toast.error('Access denied: Investor credentials required');
+      } else if (user.role !== 'investor' && user.role !== 'super_admin') {
+        toast.error('Access denied: Investor or Super Admin credentials required');
         router.push('/dashboard');
       } else {
         setIsAuthorized(true);
@@ -161,6 +266,86 @@ export default function InvestorDataRoomPage() {
       }
     }
   }, [user, authLoading, router]);
+
+  // Load saved card order from Firestore
+  useEffect(() => {
+    if (!isAuthorized) return;
+
+    const loadCardOrder = async () => {
+      try {
+        const orderDoc = await getDoc(doc(db, 'investor_dataroom_config', 'card_order'));
+        
+        if (orderDoc.exists()) {
+          const savedOrder = orderDoc.data().order as string[];
+          
+          // Reorder documents based on saved order
+          const orderedDocs = savedOrder
+            .map(id => INVESTOR_DOCUMENTS.find(doc => doc.id === id))
+            .filter(Boolean) as typeof INVESTOR_DOCUMENTS;
+          
+          // Add any new documents that aren't in the saved order
+          const newDocs = INVESTOR_DOCUMENTS.filter(
+            doc => !savedOrder.includes(doc.id)
+          );
+          
+          setDocuments([...orderedDocs, ...newDocs]);
+        }
+      } catch (error) {
+        console.error('Error loading card order:', error);
+        // Silently fail - use default order
+      }
+    };
+
+    loadCardOrder();
+  }, [isAuthorized]);
+
+  // Handle drag end
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      setDocuments((items) => {
+        const oldIndex = items.findIndex((item) => item.id === active.id);
+        const newIndex = items.findIndex((item) => item.id === over.id);
+        
+        return arrayMove(items, oldIndex, newIndex);
+      });
+      setHasUnsavedChanges(true);
+    }
+  };
+
+  // Save card order to Firestore (Super Admin only)
+  const saveCardOrder = async () => {
+    if (!isSuperAdmin) {
+      toast.error('Only Super Admins can save the default card order');
+      return;
+    }
+
+    setIsSaving(true);
+    try {
+      const order = documents.map(doc => doc.id);
+      
+      await setDoc(doc(db, 'investor_dataroom_config', 'card_order'), {
+        order,
+        updatedBy: user?.email || 'unknown',
+        updatedAt: new Date().toISOString(),
+      });
+
+      toast.success('Card order saved as global default for all investors');
+      setHasUnsavedChanges(false);
+    } catch (error) {
+      console.error('Error saving card order:', error);
+      toast.error('Failed to save card order');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  // Reset to default order
+  const resetToDefault = () => {
+    setDocuments(INVESTOR_DOCUMENTS);
+    setHasUnsavedChanges(true);
+  };
 
   if (authLoading) {
     return (
@@ -226,48 +411,57 @@ export default function InvestorDataRoomPage() {
       {/* Investment Documents */}
       <section className="py-12">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-8">
-            <h3 className="text-2xl font-bold mb-2">Investment Documents</h3>
-            <p className="text-muted-foreground">Confidential materials for authorized investors</p>
+          <div className="mb-8 flex items-center justify-between">
+            <div>
+              <h3 className="text-2xl font-bold mb-2">Investment Documents</h3>
+              <p className="text-muted-foreground">
+                {isSuperAdmin 
+                  ? 'Drag cards to reorder. Changes apply to all investors.' 
+                  : 'Confidential materials for authorized investors'}
+              </p>
+            </div>
+            
+            {/* Save/Reset Buttons - Only for Super Admin */}
+            {isSuperAdmin && hasUnsavedChanges && (
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={resetToDefault}
+                  disabled={isSaving}
+                >
+                  <RotateCcw className="h-4 w-4 mr-2" />
+                  Reset
+                </Button>
+                <Button
+                  size="sm"
+                  onClick={saveCardOrder}
+                  disabled={isSaving}
+                  className="bg-blue-600 hover:bg-blue-700"
+                >
+                  <Save className="h-4 w-4 mr-2" />
+                  {isSaving ? 'Saving...' : 'Save Global Order'}
+                </Button>
+              </div>
+            )}
           </div>
 
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {INVESTOR_DOCUMENTS.map((doc) => (
-              <Card
-                key={doc.id}
-                className={`group hover:shadow-lg transition-all duration-200 border-2 ${doc.borderColor} cursor-pointer`}
-              >
-                <CardContent className="p-6">
-                  <div className="flex items-start gap-3 mb-4">
-                    <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900">
-                      <FileText className={`h-5 w-5 ${doc.textColor}`} />
-                    </div>
-                    <Badge className={`${doc.badgeColor} text-white`}>
-                      {doc.badge}
-                    </Badge>
-                  </div>
-
-                  <h4 className={`text-lg font-bold mb-2 ${doc.textColor}`}>
-                    {doc.title}
-                  </h4>
-
-                  <p className="text-sm text-muted-foreground mb-4 line-clamp-3">
-                    {doc.description}
-                  </p>
-
-                  <Link href={`/ir/documents/${doc.id}`}>
-                    <Button
-                      variant="outline"
-                      className={`w-full border-2 ${doc.textColor} hover:bg-opacity-10`}
-                    >
-                      View Document
-                      <ExternalLink className="ml-2 h-4 w-4" />
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+          >
+            <SortableContext
+              items={documents.map(doc => doc.id)}
+              strategy={verticalListSortingStrategy}
+            >
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {documents.map((doc) => (
+                  <SortableCard key={doc.id} doc={doc} isSuperAdmin={isSuperAdmin} />
+                ))}
+              </div>
+            </SortableContext>
+          </DndContext>
         </div>
       </section>
 

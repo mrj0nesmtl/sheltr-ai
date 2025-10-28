@@ -1166,6 +1166,23 @@ service cloud.firestore {
     }
     
     // =================================================================
+    // INVESTOR DATA ROOM CONFIG - Global default card order
+    // =================================================================
+    match /investor_dataroom_config/{configId} {
+      // Read: All investors and Super Admins can read the global config
+      allow read: if isInvestor() || isSuperAdmin();
+      
+      // Write: Only Super Admins can set the global default order
+      allow write: if isSuperAdmin();
+      
+      // Create: Only Super Admins can create config
+      allow create: if isSuperAdmin();
+      
+      // Delete: Only Super Admins can delete config
+      allow delete: if isSuperAdmin();
+    }
+    
+    // =================================================================
     // FALLBACK RULE - Deny all other access
     // =================================================================
     match /{document=**} {

@@ -23,14 +23,34 @@ import {
   Image as ImageIcon,
   Loader2,
   LogOut,
+  GripVertical,
+  RotateCcw,
+  Play,
 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { db } from '@/lib/firebase';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs, doc, getDoc, setDoc } from 'firebase/firestore';
 import { signOut } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { toast } from 'sonner';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  rectSortingStrategy,
+  useSortable,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 // Quick Access Card Type
 interface QuickAccessCard {
@@ -63,6 +83,65 @@ interface GalleryItem {
   isInvestorDataRoom?: boolean; // New field
 }
 
+// Sortable Card Component for Drag & Drop
+function SortableCard({ card }: { card: QuickAccessCard }) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: card.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  return (
+    <div ref={setNodeRef} style={style} {...attributes}>
+      <Card className={`relative group hover:shadow-lg transition-all ${card.borderClass}`}>
+        {/* Drag Handle */}
+        <div
+          {...listeners}
+          className="absolute top-2 right-2 cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 transition-opacity z-10"
+        >
+          <GripVertical className="h-5 w-5 text-muted-foreground" />
+        </div>
+
+        <CardHeader>
+          <div className="flex items-start justify-between">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-muted">
+                {card.icon}
+              </div>
+              <div>
+                <Badge className={card.badgeClass}>{card.badgeText}</Badge>
+              </div>
+            </div>
+          </div>
+          <CardTitle className={`text-lg ${card.titleColor}`}>
+            {card.title}
+          </CardTitle>
+          <CardDescription className="text-sm">
+            {card.description}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Link href={card.href}>
+            <Button variant="outline" className={`w-full ${card.buttonClass}`}>
+              {card.buttonText}
+              <ExternalLink className="ml-2 h-4 w-4" />
+            </Button>
+          </Link>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
 export default function InvestorDataRoomPage() {
   const router = useRouter();
   const { user, loading: authLoading } = useAuth();
@@ -70,6 +149,16 @@ export default function InvestorDataRoomPage() {
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [cards, setCards] = useState<QuickAccessCard[]>([]);
   const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
+  const [defaultCardOrder, setDefaultCardOrder] = useState<string[]>([]);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+
+  // DnD Sensors
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
 
   // Authorization check
   useEffect(() => {
@@ -132,7 +221,36 @@ export default function InvestorDataRoomPage() {
           };
         });
 
-        setCards(loadedCards);
+        // Load user-specific card order (if exists)
+        if (user?.uid) {
+          try {
+            const orderDoc = await getDoc(doc(db, 'investor_card_orders', user.uid));
+            if (orderDoc.exists()) {
+              const savedOrder = orderDoc.data().order as string[];
+              setDefaultCardOrder(savedOrder);
+              
+              // Reorder cards based on saved order
+              const orderedCards = savedOrder
+                .map(id => loadedCards.find(card => card.id === id))
+                .filter(Boolean) as QuickAccessCard[];
+              
+              // Add any new cards that weren't in the saved order
+              const newCards = loadedCards.filter(
+                card => !savedOrder.includes(card.id)
+              );
+              
+              setCards([...orderedCards, ...newCards]);
+            } else {
+              setCards(loadedCards);
+              setDefaultCardOrder(loadedCards.map(c => c.id));
+            }
+          } catch (error) {
+            console.error('Error loading card order:', error);
+            setCards(loadedCards);
+          }
+        } else {
+          setCards(loadedCards);
+        }
 
         // Load gallery items shared to investor data room
         const galleryQuery = query(
@@ -165,7 +283,59 @@ export default function InvestorDataRoomPage() {
     };
 
     loadInvestorContent();
-  }, [isAuthorized]);
+  }, [isAuthorized, user]);
+
+  // Handle drag end event
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      setCards((items) => {
+        const oldIndex = items.findIndex((item) => item.id === active.id);
+        const newIndex = items.findIndex((item) => item.id === over.id);
+        const newOrder = arrayMove(items, oldIndex, newIndex);
+        
+        // Check if order changed from default
+        const currentOrder = newOrder.map(c => c.id);
+        const hasChanged = JSON.stringify(currentOrder) !== JSON.stringify(defaultCardOrder);
+        setHasUnsavedChanges(hasChanged);
+        
+        return newOrder;
+      });
+    }
+  };
+
+  // Save user's custom card order
+  const saveCardOrder = async () => {
+    if (!user?.uid) return;
+
+    try {
+      const newOrder = cards.map(card => card.id);
+      await setDoc(doc(db, 'investor_card_orders', user.uid), {
+        order: newOrder,
+        updatedAt: new Date().toISOString(),
+        userId: user.uid,
+      });
+
+      setDefaultCardOrder(newOrder);
+      setHasUnsavedChanges(false);
+      toast.success('Card order saved!');
+    } catch (error) {
+      console.error('Error saving card order:', error);
+      toast.error('Failed to save card order');
+    }
+  };
+
+  // Reset to default order
+  const resetToDefault = () => {
+    const defaultCards = defaultCardOrder
+      .map(id => cards.find(card => card.id === id))
+      .filter(Boolean) as QuickAccessCard[];
+    
+    setCards(defaultCards);
+    setHasUnsavedChanges(false);
+    toast.success('Reset to default order');
+  };
 
   const handleLogout = async () => {
     try {
@@ -248,45 +418,58 @@ export default function InvestorDataRoomPage() {
         {/* Quick Access Cards */}
         {cards.length > 0 && (
           <section className="mb-12">
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold tracking-tight mb-2">Investment Documents</h2>
-              <p className="text-muted-foreground">
-                Confidential materials for authorized investors
-              </p>
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-2xl font-bold tracking-tight mb-2">Investment Documents</h2>
+                <p className="text-muted-foreground">
+                  Confidential materials for authorized investors
+                </p>
+              </div>
+              {hasUnsavedChanges && (
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={resetToDefault}
+                  >
+                    <RotateCcw className="h-4 w-4 mr-2" />
+                    Reset
+                  </Button>
+                  <Button
+                    variant="default"
+                    size="sm"
+                    onClick={saveCardOrder}
+                    className="bg-blue-600 hover:bg-blue-700"
+                  >
+                    <Star className="h-4 w-4 mr-2" />
+                    Save My Layout
+                  </Button>
+                </div>
+              )}
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {cards.map((card) => (
-                <Card key={card.id} className={`hover:shadow-lg transition-all ${card.borderClass}`}>
-                  <CardHeader>
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="p-2 rounded-lg bg-muted">
-                          {card.icon}
-                        </div>
-                        <div>
-                          <Badge className={card.badgeClass}>{card.badgeText}</Badge>
-                        </div>
-                      </div>
-                    </div>
-                    <CardTitle className={`text-lg ${card.titleColor}`}>
-                      {card.title}
-                    </CardTitle>
-                    <CardDescription className="text-sm">
-                      {card.description}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <Link href={card.href}>
-                      <Button variant="outline" className={`w-full ${card.buttonClass}`}>
-                        {card.buttonText}
-                        <ExternalLink className="ml-2 h-4 w-4" />
-                      </Button>
-                    </Link>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+            <p className="text-sm text-muted-foreground mb-4 flex items-center gap-2">
+              <GripVertical className="h-4 w-4 text-primary" />
+              Drag cards to customize your layout. Your preferences are saved automatically.
+            </p>
+
+            {/* Drag and Drop Grid */}
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={handleDragEnd}
+            >
+              <SortableContext
+                items={cards.map(c => c.id)}
+                strategy={rectSortingStrategy}
+              >
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {cards.map((card) => (
+                    <SortableCard key={card.id} card={card} />
+                  ))}
+                </div>
+              </SortableContext>
+            </DndContext>
           </section>
         )}
 

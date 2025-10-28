@@ -1155,6 +1155,17 @@ service cloud.firestore {
     }
     
     // =================================================================
+    // INVESTOR CARD ORDERS - User-specific card layout preferences
+    // =================================================================
+    match /investor_card_orders/{userId} {
+      // Read/Write: Only the investor who owns this layout
+      allow read, write: if isOwner(userId) && isInvestor();
+      
+      // Super admins can read all layouts (for debugging)
+      allow read: if isSuperAdmin();
+    }
+    
+    // =================================================================
     // FALLBACK RULE - Deny all other access
     // =================================================================
     match /{document=**} {

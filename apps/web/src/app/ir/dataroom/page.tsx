@@ -3,162 +3,148 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import {
-  TrendingUp,
-  FileText,
-  CreditCard,
-  BookOpen,
-  Users,
-  Rocket,
-  BarChart3,
-  Database,
-  Lock,
-  ExternalLink,
-  Star,
-  Shield,
-  Image as ImageIcon,
-  Loader2,
-  LogOut,
-  GripVertical,
-  RotateCcw,
-  Play,
-} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { FileText, Lock, Shield, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
-import Image from 'next/image';
-import { db } from '@/lib/firebase';
-import { collection, query, where, getDocs, doc, getDoc, setDoc } from 'firebase/firestore';
-import { signOut } from 'firebase/auth';
-import { auth } from '@/lib/firebase';
 import { toast } from 'sonner';
-import {
-  DndContext,
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  DragEndEvent,
-} from '@dnd-kit/core';
-import {
-  arrayMove,
-  SortableContext,
-  sortableKeyboardCoordinates,
-  rectSortingStrategy,
-  useSortable,
-} from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
 
-// Quick Access Card Type
-interface QuickAccessCard {
-  id: string;
-  icon: React.ReactNode;
-  badgeText: string;
-  badgeClass: string;
-  title: string;
-  titleColor: string;
-  description: string;
-  buttonText: string;
-  buttonClass: string;
-  href: string;
-  borderClass: string;
-  category: 'public' | 'secure' | 'platform';
-  isInvestorDataRoom?: boolean; // New field
-}
-
-// Gallery Item Type
-interface GalleryItem {
-  id: string;
-  title: string;
-  description: string;
-  type: 'video' | 'image';
-  thumbnail: string;
-  url?: string;
-  tags: string[];
-  date: string;
-  duration?: string;
-  isInvestorDataRoom?: boolean; // New field
-}
-
-// Sortable Card Component for Drag & Drop
-function SortableCard({ card }: { card: QuickAccessCard }) {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id: card.id });
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-    opacity: isDragging ? 0.5 : 1,
-  };
-
-  return (
-    <div ref={setNodeRef} style={style} {...attributes}>
-      <Card className={`relative group hover:shadow-lg transition-all ${card.borderClass}`}>
-        {/* Drag Handle */}
-        <div
-          {...listeners}
-          className="absolute top-2 right-2 cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 transition-opacity z-10"
-        >
-          <GripVertical className="h-5 w-5 text-muted-foreground" />
-        </div>
-
-        <CardHeader>
-          <div className="flex items-start justify-between">
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-muted">
-                {card.icon}
-              </div>
-              <div>
-                <Badge className={card.badgeClass}>{card.badgeText}</Badge>
-              </div>
-            </div>
-          </div>
-          <CardTitle className={`text-lg ${card.titleColor}`}>
-            {card.title}
-          </CardTitle>
-          <CardDescription className="text-sm">
-            {card.description}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Link href={card.href}>
-            <Button variant="outline" className={`w-full ${card.buttonClass}`}>
-              {card.buttonText}
-              <ExternalLink className="ml-2 h-4 w-4" />
-            </Button>
-          </Link>
-        </CardContent>
-      </Card>
-    </div>
-  );
-}
+// Simple hardcoded list of documents available to investors
+const INVESTOR_DOCUMENTS = [
+  {
+    id: 'adyen-integration',
+    title: 'Adyen Integration Strategy',
+    description: 'Comprehensive analysis of Adyen for Platforms (Balanced Model) with 16-week implementation roadmap for SmartFund™ 80-15-5 distribution',
+    badge: 'Strategic',
+    badgeColor: 'bg-blue-500',
+    textColor: 'text-blue-500',
+    borderColor: 'border-blue-200',
+  },
+  {
+    id: 'blockchain-architecture',
+    title: 'Blockchain Architecture',
+    description: 'Single-token stable fund ecosystem with enterprise payment infrastructure and guaranteed returns',
+    badge: 'SmartFund™',
+    badgeColor: 'bg-orange-600',
+    textColor: 'text-orange-600',
+    borderColor: 'border-orange-200',
+  },
+  {
+    id: 'business-plan',
+    title: 'Business Plan',
+    description: 'Professional VC-worthy business plan with market analysis, financial projections, and exit strategy',
+    badge: 'Secure',
+    badgeColor: 'bg-red-600',
+    textColor: 'text-red-600',
+    borderColor: 'border-red-200',
+  },
+  {
+    id: 'covenant-house-outreach',
+    title: 'Covenant House Proposal',
+    description: 'Executive partnership proposal for Covenant House Canada 2026-2027 youth homelessness innovation pilot',
+    badge: 'Partnership',
+    badgeColor: 'bg-pink-600',
+    textColor: 'text-pink-600',
+    borderColor: 'border-pink-200',
+  },
+  {
+    id: 'development-roadmap',
+    title: 'Development Roadmap',
+    description: '60-day public launch timeline with client onboarding strategy and AI achievements',
+    badge: 'Launch Plan',
+    badgeColor: 'bg-orange-500',
+    textColor: 'text-orange-500',
+    borderColor: 'border-orange-200',
+  },
+  {
+    id: 'github-repository',
+    title: 'GitHub Repository',
+    description: 'Complete source code, smart contracts, and development history',
+    badge: 'Source Code',
+    badgeColor: 'bg-purple-600',
+    textColor: 'text-purple-600',
+    borderColor: 'border-purple-200',
+    isExternal: true,
+  },
+  {
+    id: 'investor-relations',
+    title: 'Investor Relations',
+    description: 'Pre-seed funding information, financial projections, and investment terms',
+    badge: 'Pre-Seed',
+    badgeColor: 'bg-blue-600',
+    textColor: 'text-blue-600',
+    borderColor: 'border-blue-200',
+  },
+  {
+    id: 'leadership-team',
+    title: 'Leadership Team',
+    description: 'Meet the SHELTR leadership team, founders, and key contributors driving our mission',
+    badge: 'Team',
+    badgeColor: 'bg-indigo-600',
+    textColor: 'text-indigo-600',
+    borderColor: 'border-indigo-200',
+  },
+  {
+    id: 'msb-registration',
+    title: 'MSB Registration Guide',
+    description: 'Canadian regulatory compliance guide for crypto-enabled donation platforms - FINTRAC MSB requirements and incorporation',
+    badge: 'Legal',
+    badgeColor: 'bg-red-600',
+    textColor: 'text-red-600',
+    borderColor: 'border-red-200',
+  },
+  {
+    id: 'proposed-payment-rails',
+    title: 'Proposed Payment Rails',
+    description: 'Adyen + Coinbase integration architecture with single-token stable fund model',
+    badge: 'Enterprise',
+    badgeColor: 'bg-green-600',
+    textColor: 'text-green-600',
+    borderColor: 'border-green-200',
+  },
+  {
+    id: 'platform-admin-guide',
+    title: 'Platform Administrator Guide',
+    description: 'Complete operational guide for Platform Administrators - user management, security monitoring, and strategic oversight',
+    badge: 'Essential',
+    badgeColor: 'bg-purple-600',
+    textColor: 'text-purple-600',
+    borderColor: 'border-purple-200',
+  },
+  {
+    id: 'shelter-research',
+    title: 'Shelter Research Hub',
+    description: 'Comprehensive research on homeless shelters, HMIS systems, state-by-state analysis, and innovative programs across North America',
+    badge: 'Research',
+    badgeColor: 'bg-teal-600',
+    textColor: 'text-teal-600',
+    borderColor: 'border-teal-200',
+  },
+  {
+    id: 'system-design',
+    title: 'System Design Architecture',
+    description: 'Multi-tenant SaaS architecture with enterprise payment infrastructure, visual flow diagrams, and comprehensive system integration blueprints',
+    badge: 'Architecture',
+    badgeColor: 'bg-slate-600',
+    textColor: 'text-slate-600',
+    borderColor: 'border-slate-200',
+  },
+  {
+    id: 'technical-whitepaper',
+    title: 'Technical White Paper',
+    description: 'Revolutionary enterprise-grade platform with single-token architecture and blockchain transparency',
+    badge: 'v2.0',
+    badgeColor: 'bg-emerald-600',
+    textColor: 'text-emerald-600',
+    borderColor: 'border-emerald-200',
+  },
+];
 
 export default function InvestorDataRoomPage() {
   const router = useRouter();
   const { user, loading: authLoading } = useAuth();
-  const [isLoading, setIsLoading] = useState(true);
   const [isAuthorized, setIsAuthorized] = useState(false);
-  const [cards, setCards] = useState<QuickAccessCard[]>([]);
-  const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
-  const [defaultCardOrder, setDefaultCardOrder] = useState<string[]>([]);
-  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
-
-  // DnD Sensors
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
-  );
 
   // Authorization check
   useEffect(() => {
@@ -166,201 +152,23 @@ export default function InvestorDataRoomPage() {
       if (!user) {
         router.push('/ir');
       } else if (user.role !== 'investor') {
+        toast.error('Access denied: Investor credentials required');
         router.push('/dashboard');
       } else {
         setIsAuthorized(true);
-        setIsLoading(false);
+        // Grant session access for embedded pages
+        sessionStorage.setItem('investor-access', 'granted');
       }
     }
   }, [user, authLoading, router]);
 
-  // Load cards and gallery items shared to investor data room
-  useEffect(() => {
-    const loadInvestorContent = async () => {
-      if (!isAuthorized) return;
-
-      try {
-        // Load cards from Firestore (secure_documents with isInvestorDataRoom = true)
-        const docsQuery = query(
-          collection(db, 'secure_documents'),
-          where('isInvestorDataRoom', '==', true)
-        );
-        const docsSnapshot = await getDocs(docsQuery);
-        
-        // Map Firestore documents to cards with proper formatting
-        const loadedCards: QuickAccessCard[] = docsSnapshot.docs.map(doc => {
-          const data = doc.data();
-          
-          // Determine icon based on category or use FileText as default
-          let icon = <FileText className="h-6 w-6 text-blue-600" />;
-          
-          // If it's a secure document, add lock icon overlay
-          if (data.category === 'secure') {
-            icon = (
-              <div className="relative">
-                <FileText className="h-6 w-6 text-blue-600" />
-                <Lock className="h-3 w-3 text-blue-600 absolute -top-1 -right-1 bg-white dark:bg-slate-900 rounded-full" />
-              </div>
-            );
-          }
-          
-          return {
-            id: doc.id,
-            icon: icon,
-            badgeText: data.badgeText || 'Document',
-            badgeClass: data.badgeClass || 'bg-blue-600 text-white',
-            title: data.title || 'Untitled Document',
-            titleColor: data.titleColor || 'text-blue-600',
-            description: data.description || 'No description available',
-            buttonText: data.buttonText || 'View Document',
-            buttonClass: data.buttonClass || 'border-2 border-blue-600 text-blue-600 hover:bg-blue-50',
-            href: `/ir/documents/${doc.id}`, // Investor-specific document viewer
-            borderClass: data.borderClass || 'border-blue-200',
-            category: (data.category as 'public' | 'secure' | 'platform') || 'secure',
-            isInvestorDataRoom: true,
-          };
-        });
-
-        // Load user-specific card order (if exists)
-        if (user?.uid) {
-          try {
-            const orderDoc = await getDoc(doc(db, 'investor_card_orders', user.uid));
-            if (orderDoc.exists()) {
-              const savedOrder = orderDoc.data().order as string[];
-              setDefaultCardOrder(savedOrder);
-              
-              // Reorder cards based on saved order
-              const orderedCards = savedOrder
-                .map(id => loadedCards.find(card => card.id === id))
-                .filter(Boolean) as QuickAccessCard[];
-              
-              // Add any new cards that weren't in the saved order
-              const newCards = loadedCards.filter(
-                card => !savedOrder.includes(card.id)
-              );
-              
-              setCards([...orderedCards, ...newCards]);
-            } else {
-              setCards(loadedCards);
-              setDefaultCardOrder(loadedCards.map(c => c.id));
-            }
-          } catch (error) {
-            console.error('Error loading card order:', error);
-            setCards(loadedCards);
-          }
-        } else {
-          setCards(loadedCards);
-        }
-
-        // Load gallery items shared to investor data room
-        const galleryQuery = query(
-          collection(db, 'gallery_images'),
-          where('isInvestorDataRoom', '==', true)
-        );
-        const gallerySnapshot = await getDocs(galleryQuery);
-        
-        const loadedGallery: GalleryItem[] = gallerySnapshot.docs.map(doc => {
-          const data = doc.data();
-          return {
-            id: doc.id,
-            title: data.title || '',
-            description: data.description || '',
-            type: data.type || 'image',
-            thumbnail: data.url || '',
-            url: data.url || '',
-            tags: data.tags || [],
-            date: data.uploadedAt?.toDate().toLocaleDateString() || '',
-            duration: data.duration || undefined,
-            isInvestorDataRoom: true,
-          };
-        });
-
-        setGalleryItems(loadedGallery);
-      } catch (error) {
-        console.error('Error loading investor content:', error);
-        toast.error('Failed to load data room content');
-      }
-    };
-
-    loadInvestorContent();
-  }, [isAuthorized, user]);
-
-  // Handle drag end event
-  const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
-
-    if (over && active.id !== over.id) {
-      setCards((items) => {
-        const oldIndex = items.findIndex((item) => item.id === active.id);
-        const newIndex = items.findIndex((item) => item.id === over.id);
-        const newOrder = arrayMove(items, oldIndex, newIndex);
-        
-        // Check if order changed from default
-        const currentOrder = newOrder.map(c => c.id);
-        const hasChanged = JSON.stringify(currentOrder) !== JSON.stringify(defaultCardOrder);
-        setHasUnsavedChanges(hasChanged);
-        
-        return newOrder;
-      });
-    }
-  };
-
-  // Save user's custom card order
-  const saveCardOrder = async () => {
-    if (!user?.uid) {
-      toast.error('User not authenticated');
-      return;
-    }
-
-    try {
-      const newOrder = cards.map(card => card.id);
-      console.log('💾 Saving card order for user:', user.uid);
-      console.log('📋 Order:', newOrder);
-      
-      await setDoc(doc(db, 'investor_card_orders', user.uid), {
-        order: newOrder,
-        updatedAt: new Date().toISOString(),
-        userId: user.uid,
-      });
-
-      setDefaultCardOrder(newOrder);
-      setHasUnsavedChanges(false);
-      toast.success('Card order saved!');
-      console.log('✅ Card order saved successfully');
-    } catch (error: any) {
-      console.error('❌ Error saving card order:', error);
-      console.error('Error code:', error.code);
-      console.error('Error message:', error.message);
-      toast.error(`Failed to save: ${error.message || 'Permission denied'}`);
-    }
-  };
-
-  // Reset to default order
-  const resetToDefault = () => {
-    const defaultCards = defaultCardOrder
-      .map(id => cards.find(card => card.id === id))
-      .filter(Boolean) as QuickAccessCard[];
-    
-    setCards(defaultCards);
-    setHasUnsavedChanges(false);
-    toast.success('Reset to default order');
-  };
-
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-      toast.success('Logged out successfully');
-      router.push('/ir');
-    } catch (error) {
-      console.error('Logout error:', error);
-      toast.error('Failed to log out');
-    }
-  };
-
-  if (authLoading || isLoading) {
+  if (authLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
       </div>
     );
   }
@@ -370,190 +178,108 @@ export default function InvestorDataRoomPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
       {/* Header */}
-      <header className="border-b bg-card/50 backdrop-blur supports-[backdrop-filter]:bg-card/50 sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4">
-            <div className="flex items-center gap-4 flex-shrink-0">
-              <div className="relative w-12 h-12">
-                <Image
-                  src="/logo-sheltr-white.png"
-                  alt="SHELTR Logo"
-                  fill
-                  className="object-contain"
-                  priority
-                />
-              </div>
+      <header className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b sticky top-0 z-50">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center gap-4">
+              <Shield className="h-8 w-8 text-blue-600" />
               <div>
-                <h1 className="text-2xl font-bold tracking-tight whitespace-nowrap">
-                  Investor Data Room
-                </h1>
-                <p className="text-sm text-muted-foreground">
-                  Secure Investment Materials
-                </p>
+                <h1 className="text-xl font-bold">Investor Data Room</h1>
+                <p className="text-xs text-muted-foreground">Secure Investment Materials</p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <Badge variant="outline" className="flex items-center gap-1">
-                <Shield className="h-3 w-3" />
+            <div className="flex items-center gap-4">
+              <Badge className="bg-blue-600 text-white">
+                <Shield className="h-3 w-3 mr-1" />
                 Investor Access
               </Badge>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleLogout}
-                className="gap-2"
-              >
-                <LogOut className="h-4 w-4" />
-                Logout
-              </Button>
+              <Link href="/dashboard">
+                <Button variant="outline" size="sm">
+                  Dashboard
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8">
-        {/* Welcome Section */}
-        <div className="mb-8">
-          <Alert className="border-2 border-primary/20 bg-primary/5">
-            <Star className="h-5 w-5 text-primary" />
-            <AlertDescription className="ml-2">
-              <strong>Welcome to the SHELTR Investor Data Room.</strong> This secure portal contains confidential investment materials, financial projections, and strategic documents. All content is proprietary and confidential.
-            </AlertDescription>
-          </Alert>
-        </div>
-
-        {/* Quick Access Cards */}
-        {cards.length > 0 && (
-          <section className="mb-12">
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h2 className="text-2xl font-bold tracking-tight mb-2">Investment Documents</h2>
-                <p className="text-muted-foreground">
-                  Confidential materials for authorized investors
-                </p>
-              </div>
-              {hasUnsavedChanges && (
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={resetToDefault}
-                  >
-                    <RotateCcw className="h-4 w-4 mr-2" />
-                    Reset
-                  </Button>
-                  <Button
-                    variant="default"
-                    size="sm"
-                    onClick={saveCardOrder}
-                    className="bg-blue-600 hover:bg-blue-700"
-                  >
-                    <Star className="h-4 w-4 mr-2" />
-                    Save My Layout
-                  </Button>
-                </div>
-              )}
+      {/* Welcome Banner */}
+      <section className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-8">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+              <Lock className="h-6 w-6" />
             </div>
-
-            <p className="text-sm text-muted-foreground mb-4 flex items-center gap-2">
-              <GripVertical className="h-4 w-4 text-primary" />
-              Drag cards to customize your layout. Your preferences are saved automatically.
-            </p>
-
-            {/* Drag and Drop Grid */}
-            <DndContext
-              sensors={sensors}
-              collisionDetection={closestCenter}
-              onDragEnd={handleDragEnd}
-            >
-              <SortableContext
-                items={cards.map(c => c.id)}
-                strategy={rectSortingStrategy}
-              >
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {cards.map((card) => (
-                    <SortableCard key={card.id} card={card} />
-                  ))}
-                </div>
-              </SortableContext>
-            </DndContext>
-          </section>
-        )}
-
-        {/* Gallery Section */}
-        {galleryItems.length > 0 && (
-          <section>
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold tracking-tight mb-2">Media Gallery</h2>
-              <p className="text-muted-foreground">
-                Visual presentations and demonstrations
+            <div>
+              <h2 className="text-2xl font-bold mb-1">Welcome to the SHELTR Investor Data Room.</h2>
+              <p className="text-blue-100">
+                This secure portal contains confidential investment materials, financial projections, and strategic documents. 
+                All materials are proprietary and subject to NDA.
               </p>
             </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {galleryItems.map((item) => (
-                <Card key={item.id} className="overflow-hidden hover:shadow-lg transition-all">
-                  <div className="relative aspect-video bg-muted">
-                    <Image
-                      src={item.thumbnail}
-                      alt={item.title}
-                      fill
-                      className="object-cover"
-                    />
-                    {item.type === 'video' && item.duration && (
-                      <Badge className="absolute bottom-2 right-2 bg-black/70 text-white">
-                        {item.duration}
-                      </Badge>
-                    )}
-                  </div>
-                  <CardHeader>
-                    <CardTitle className="text-base">{item.title}</CardTitle>
-                    <CardDescription className="text-sm line-clamp-2">
-                      {item.description}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex items-center justify-between text-xs text-muted-foreground">
-                      <span>{item.date}</span>
-                      <Badge variant="outline">{item.type}</Badge>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {/* Empty State */}
-        {cards.length === 0 && galleryItems.length === 0 && (
-          <div className="text-center py-12">
-            <FileText className="h-16 w-16 text-muted-foreground mx-auto mb-4 opacity-50" />
-            <h3 className="text-xl font-semibold mb-2">No Content Available</h3>
-            <p className="text-muted-foreground">
-              No documents or media have been shared to the investor data room yet.
-              <br />
-              Please check back later or contact{' '}
-              <a href="mailto:joel@arcanaconcept.com" className="text-primary hover:underline">
-                joel@arcanaconcept.com
-              </a>
-            </p>
           </div>
-        )}
+        </div>
+      </section>
 
-        {/* Footer */}
-        <footer className="mt-16 pt-8 border-t text-center text-sm text-muted-foreground">
-          <p>
-            <strong>Confidential & Proprietary</strong>
-            <br />
-            This data room and all its contents are confidential and intended solely for authorized investors.
-            <br />
-            © {new Date().getFullYear()} SHELTR. All rights reserved.
+      {/* Investment Documents */}
+      <section className="py-12">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-8">
+            <h3 className="text-2xl font-bold mb-2">Investment Documents</h3>
+            <p className="text-muted-foreground">Confidential materials for authorized investors</p>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {INVESTOR_DOCUMENTS.map((doc) => (
+              <Card
+                key={doc.id}
+                className={`group hover:shadow-lg transition-all duration-200 border-2 ${doc.borderColor} cursor-pointer`}
+              >
+                <CardContent className="p-6">
+                  <div className="flex items-start gap-3 mb-4">
+                    <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900">
+                      <FileText className={`h-5 w-5 ${doc.textColor}`} />
+                    </div>
+                    <Badge className={`${doc.badgeColor} text-white`}>
+                      {doc.badge}
+                    </Badge>
+                  </div>
+
+                  <h4 className={`text-lg font-bold mb-2 ${doc.textColor}`}>
+                    {doc.title}
+                  </h4>
+
+                  <p className="text-sm text-muted-foreground mb-4 line-clamp-3">
+                    {doc.description}
+                  </p>
+
+                  <Link href={`/ir/documents/${doc.id}`}>
+                    <Button
+                      variant="outline"
+                      className={`w-full border-2 ${doc.textColor} hover:bg-opacity-10`}
+                    >
+                      View Document
+                      <ExternalLink className="ml-2 h-4 w-4" />
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Footer Note */}
+      <section className="py-8 border-t bg-white/50 dark:bg-slate-900/50">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <p className="text-sm text-muted-foreground">
+            <Lock className="inline h-4 w-4 mr-1" />
+            All documents are confidential and protected. Unauthorized sharing or distribution is strictly prohibited.
           </p>
-        </footer>
-      </main>
+        </div>
+      </section>
     </div>
   );
 }
-

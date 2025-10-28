@@ -1,5 +1,7 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { CreditCard, TrendingUp, Shield, Building2, Users, CheckCircle, Eye, FileText, BookOpen, Zap, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -12,22 +14,32 @@ import { useHeroImage } from '@/hooks/useHeroImage';
 import { StandardHero } from '@/components/StandardHero';
 
 export default function TokenomicsPage() {
+  const searchParams = useSearchParams();
+  const [isEmbedded, setIsEmbedded] = useState(false);
+  
   // Fetch hero image from gallery (or use fallback)
   const { heroImage } = useHeroImage('/tokenomics', '/backgrounds/hero-bg.jpg');
   
+  // Check if embedded in iframe
+  useEffect(() => {
+    setIsEmbedded(searchParams.get('embed') === 'true');
+  }, [searchParams]);
+  
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
-      {/* Navigation - Now using unified PublicNavigation component */}
-      <PublicNavigation />
+      {/* Navigation - Hide when embedded */}
+      {!isEmbedded && <PublicNavigation />}
 
-      {/* Breadcrumb */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-          <Link href="/" className="hover:text-primary">Home</Link>
-          <span>/</span>
-          <span className="text-foreground">Enterprise Tokenomics</span>
+      {/* Breadcrumb - Hide when embedded */}
+      {!isEmbedded && (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+            <Link href="/" className="hover:text-primary">Home</Link>
+            <span>/</span>
+            <span className="text-foreground">Enterprise Tokenomics</span>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Strategic Pivot Alert */}
       <section className="py-12 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border-y border-amber-200 dark:border-amber-800">
@@ -527,8 +539,9 @@ export default function TokenomicsPage() {
         </div>
       </section>
 
-      <Footer />
-      <PublicChatbot />
+      {/* Footer - Hide when embedded */}
+      {!isEmbedded && <Footer />}
+      {!isEmbedded && <PublicChatbot />}
     </div>
   );
 }

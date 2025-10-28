@@ -38,36 +38,18 @@ export default function InvestorDocumentPage() {
     }
   }, [user, authLoading, router]);
 
-  // Load document metadata
+  // Set document title from slug
   useEffect(() => {
-    const loadDocumentMetadata = async () => {
-      if (!isAuthorized) return;
-
-      try {
-        setIsLoading(true);
-        setError(null);
-
-        // Check if this document is shared to investor data room
-        const checkDoc = doc(db, 'secure_documents', documentSlug);
-        const checkSnap = await getDoc(checkDoc);
-        
-        if (!checkSnap.exists() || !checkSnap.data().isInvestorDataRoom) {
-          setError('This document is not available in the investor data room');
-          setIsLoading(false);
-          return;
-        }
-
-        // Get the title for the header
-        setDocumentTitle(checkSnap.data().title || 'Document');
-        setIsLoading(false);
-      } catch (err) {
-        console.error('Error loading document:', err);
-        setError('Failed to load document. Please check your permissions.');
-        setIsLoading(false);
-      }
-    };
-
-    loadDocumentMetadata();
+    if (!isAuthorized) return;
+    
+    // Convert slug to title (e.g., "adyen-integration" -> "Adyen Integration")
+    const title = documentSlug
+      .split('-')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+    
+    setDocumentTitle(title);
+    setIsLoading(false);
   }, [documentSlug, isAuthorized]);
 
   if (authLoading || isLoading) {

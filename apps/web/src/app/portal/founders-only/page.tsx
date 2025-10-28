@@ -687,6 +687,31 @@ export default function FoundersOnlyPage() {
         updatedAt: new Date().toISOString(),
       };
 
+      // If toggling ON, also copy document content from founder_documents if it exists
+      if (value) {
+        try {
+          const founderDocRef = doc(db, 'founder_documents', cardId);
+          const founderDocSnap = await getDoc(founderDocRef);
+          
+          if (founderDocSnap.exists()) {
+            const founderData = founderDocSnap.data();
+            // Merge the founder document content with card metadata
+            Object.assign(cardData, {
+              content: founderData.content,
+              slug: founderData.slug || cardId,
+              type: founderData.type || 'secure',
+              tags: founderData.tags || [],
+              metadata: founderData.metadata || {},
+              version: founderData.version,
+              author: founderData.author,
+            });
+            console.log(`📄 Copied document content from founder_documents for ${cardId}`);
+          }
+        } catch (err) {
+          console.warn(`⚠️  Could not copy content from founder_documents for ${cardId}:`, err);
+        }
+      }
+
       await setDoc(docRef, cardData, { merge: true });
 
       console.log(`✅ Updated ${cardId}: isInvestorDataRoom = ${value}`);

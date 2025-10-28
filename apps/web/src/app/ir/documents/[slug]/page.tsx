@@ -92,16 +92,16 @@ export default function InvestorDocumentPage() {
       'proposed-payment-rails': '/docs/payment-rails',
       'shelter-research': '/secure-docs/shelter-research',
       'technical-whitepaper': '/whitepaper',
+      'leadership-team': '/team', // Public team page
       
       // Founders Portal pages with SecureDocumentViewer
       'adyen-integration': '/portal/founders-only/adyen-integration',
       'business-plan': '/portal/founders-only/business-plan',
       'covenant-house-outreach': '/portal/founders-only/covenant-house-outreach',
-      'development-roadmap': '/portal/founders-only/development-roadmap',
+      'development-roadmap': '/tokenomics', // Use tokenomics page (has roadmap content)
       'investor-relations': '/portal/founders-only/investor-relations',
-      'leadership-team': '/portal/founders-only/leadership-team',
       'msb-registration': '/portal/founders-only/msb-registration',
-      'platform-admin-guide': '/portal/founders-only/platform-admin-guide',
+      'platform-admin-guide': '/docs', // Use docs hub as fallback
       'system-design': '/portal/founders-only/system-design',
     };
 

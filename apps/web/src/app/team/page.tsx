@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Mail, Linkedin, Globe, Heart, Users, Award, Building2, Calendar, Twitter, Loader2, Share2, Rss, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -13,6 +14,8 @@ import PublicNavigation from '@/components/PublicNavigation';
 import { useHeroImage } from '@/hooks/useHeroImage';
 
 export default function TeamPage() {
+  const searchParams = useSearchParams();
+  const [isEmbedded, setIsEmbedded] = useState(false);
   const [teamMembers, setTeamMembers] = useState<PublicTeamMember[]>([]);
   const [teamStats, setTeamStats] = useState({
     totalMembers: 0,
@@ -25,6 +28,11 @@ export default function TeamPage() {
   
   // Fetch hero image from gallery (or use fallback)
   const { heroImage } = useHeroImage('/team', '/images/sheltr_units/hero-pods.png');
+  
+  // Check if embedded in iframe
+  useEffect(() => {
+    setIsEmbedded(searchParams.get('embed') === 'true');
+  }, [searchParams]);
 
   // Load team data from Platform Admin profiles
   useEffect(() => {
@@ -169,8 +177,8 @@ export default function TeamPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Navigation - Now using unified PublicNavigation component */}
-      <PublicNavigation />
+      {/* Navigation - Hide when embedded */}
+      {!isEmbedded && <PublicNavigation />}
 
       {/* Hero Section */}
       <section className="relative py-20 overflow-hidden">
@@ -405,10 +413,11 @@ export default function TeamPage() {
         </div>
       </section>
 
-      {/* Public Chatbot */}
-      <PublicChatbot />
+      {/* Public Chatbot - Hide when embedded */}
+      {!isEmbedded && <PublicChatbot />}
 
-      <Footer />
+      {/* Footer - Hide when embedded */}
+      {!isEmbedded && <Footer />}
     </div>
   );
 }

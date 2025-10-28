@@ -684,14 +684,18 @@ service cloud.firestore {
     }
     
     // =================================================================
-    // GALLERY IMAGES COLLECTION - Public gallery management (legacy)
+    // GALLERY IMAGES COLLECTION - Public gallery management
     // =================================================================
     match /gallery_images/{imageId} {
-      // Read: Anyone can read public images, admins can read all, investors can read investor data room images
+      // Read: Public images, admins, founders portal users, and investors (for investor data room)
       allow read: if resource.data.isPublic == true || 
                      isSuperAdmin() || 
                      isPlatformAdmin() ||
+                     (hasFoundersPortalAccess() && resource.data.isFoundersGallery == true) ||
                      (isInvestor() && resource.data.isInvestorDataRoom == true);
+      
+      // List/Query: Allow authenticated users to query gallery
+      allow list: if isAuthenticated();
       
       // Write: Super Admin and Platform Admin can manage gallery
       allow write: if isSuperAdmin() || isPlatformAdmin();

@@ -98,7 +98,16 @@ export function useNotifications(): UseNotificationsReturn {
         const aTime = a.created_at || a.createdAt;
         const bTime = b.created_at || b.createdAt;
         if (!aTime || !bTime) return 0;
-        return bTime.toMillis() - aTime.toMillis();
+        
+        // Convert to milliseconds, handling different timestamp formats
+        const aMillis = typeof aTime === 'string' 
+          ? new Date(aTime).getTime() 
+          : aTime.toMillis ? aTime.toMillis() : aTime.getTime();
+        const bMillis = typeof bTime === 'string' 
+          ? new Date(bTime).getTime() 
+          : bTime.toMillis ? bTime.toMillis() : bTime.getTime();
+        
+        return bMillis - aMillis;
       });
 
       setNotifications(notifs);

@@ -6,10 +6,11 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { FileText, Lock, Shield, ExternalLink, GripVertical, Save, RotateCcw } from 'lucide-react';
+import { FileText, Lock, Shield, ExternalLink, GripVertical, Save, RotateCcw, LogOut } from 'lucide-react';
 import Link from 'next/link';
 import { toast } from 'sonner';
-import { db } from '@/lib/firebase';
+import { db, auth } from '@/lib/firebase';
+import { signOut } from 'firebase/auth';
 import { doc, getDoc, setDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import Image from 'next/image';
 import {
@@ -455,16 +456,50 @@ export default function InvestorDataRoomPage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-4">
-              <Shield className="h-8 w-8 text-blue-600" />
+              {/* SHELTR Icon */}
+              <div className="relative w-10 h-10">
+                <Image
+                  src="/icon.svg"
+                  alt="SHELTR"
+                  fill
+                  className="object-contain"
+                  priority
+                />
+              </div>
               <div>
                 <h1 className="text-xl font-bold">Investor Data Room</h1>
                 <p className="text-xs text-muted-foreground">Secure Investment Materials</p>
               </div>
             </div>
-            <Badge className="bg-blue-600 text-white">
-              <Shield className="h-3 w-3 mr-1" />
-              Investor Access
-            </Badge>
+            
+            <div className="flex items-center gap-3">
+              <Badge className="bg-blue-600 text-white">
+                <Shield className="h-3 w-3 mr-1" />
+                Investor Access
+              </Badge>
+              
+              {/* Logout Button */}
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={async () => {
+                  try {
+                    await signOut(auth);
+                    sessionStorage.removeItem('investor-access');
+                    sessionStorage.removeItem('investor-info');
+                    toast.success('Logged out successfully');
+                    router.push('/ir');
+                  } catch (error) {
+                    console.error('Logout error:', error);
+                    toast.error('Failed to logout');
+                  }
+                }}
+                className="border-2"
+              >
+                <LogOut className="h-4 w-4 mr-2" />
+                Logout
+              </Button>
+            </div>
           </div>
         </div>
       </header>

@@ -83,20 +83,15 @@ export default function InvestorDocumentPage() {
     );
   }
 
-  // Check if this is an external link that should open in new tab
-  const isExternalLink = documentSlug === 'github-repository';
-  
-  // Handle external links differently
+  // Handle external links (GitHub)
   useEffect(() => {
-    if (isExternalLink && isAuthorized) {
-      // Redirect to external URL in new tab
+    if (documentSlug === 'github-repository' && isAuthorized) {
+      // Open GitHub in new tab
       window.open('https://github.com/mrj0nesmtl/sheltr-ai', '_blank');
       // Redirect back to data room
-      setTimeout(() => {
-        router.push('/ir/dataroom');
-      }, 500);
+      router.push('/ir/dataroom');
     }
-  }, [isExternalLink, isAuthorized, router]);
+  }, [documentSlug, isAuthorized, router]);
 
   // Map document slugs to their URLs
   const getFoundersPortalUrl = (slug: string): string => {
@@ -123,6 +118,18 @@ export default function InvestorDocumentPage() {
   };
 
   const iframeUrl = `${getFoundersPortalUrl(documentSlug)}?embed=true`;
+
+  // Don't render anything for external links (handled by useEffect)
+  if (documentSlug === 'github-repository') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Opening GitHub repository...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">

@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -25,27 +25,48 @@ interface ResearchDocument {
   tags: string[];
 }
 
-export default function ShelterResearchHubPage() {
+// Component that uses useSearchParams (wrapped in Suspense)
+function ShelterResearchHubContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthorized, setIsAuthorized] = useState(false);
+  const [isEmbedded, setIsEmbedded] = useState(false);
   const [documents, setDocuments] = useState<ResearchDocument[]>([]);
+
+  // Check if embedded in iframe
+  useEffect(() => {
+    setIsEmbedded(searchParams.get('embed') === 'true');
+  }, [searchParams]);
 
   useEffect(() => {
     const checkAuthAndLoadDocs = async () => {
-      if (!user) {
+      // Check for investor session access (set when investor logs in)
+      const hasInvestorAccess = typeof window !== 'undefined' && 
+                                sessionStorage.getItem('investor-access') === 'granted';
+
+      if (!user && !hasInvestorAccess) {
         router.push('/portal');
         return;
       }
 
       try {
+        // If investor access is granted via session, allow access
+        if (hasInvestorAccess) {
+          setIsAuthorized(true);
+          await loadResearchDocuments();
+          setIsLoading(false);
+          return;
+        }
+
+        // Otherwise, check user role
         const userDoc = await getDoc(doc(db, 'users', user.uid));
         if (userDoc.exists()) {
           const userData = userDoc.data();
           const role = userData.role;
           
-          if (role === 'super_admin' || role === 'platform_admin') {
+          if (role === 'super_admin' || role === 'platform_admin' || role === 'investor') {
             setIsAuthorized(true);
             await loadResearchDocuments();
           } else {
@@ -110,29 +131,31 @@ export default function ShelterResearchHubPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
-      {/* Header */}
-      <header className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b sticky top-0 z-50">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center gap-4">
-              <Link href="/" className="text-2xl font-bold">
-                SHELTR
+      {/* Header - Hide when embedded */}
+      {!isEmbedded && (
+        <header className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b sticky top-0 z-50">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-center h-16">
+              <div className="flex items-center gap-4">
+                <Link href="/" className="text-2xl font-bold">
+                  SHELTR
+                </Link>
+                <Badge className="bg-blue-600 text-white">
+                  <Lock className="h-3 w-3 mr-1" />
+                  Research Hub
+                </Badge>
+              </div>
+              
+              <Link href="/portal/founders-only">
+                <Button variant="outline">
+                  <ArrowLeft className="h-4 w-4 mr-2" />
+                  Back to Portal
+                </Button>
               </Link>
-              <Badge className="bg-blue-600 text-white">
-                <Lock className="h-3 w-3 mr-1" />
-                Research Hub
-              </Badge>
             </div>
-            
-            <Link href="/portal/founders-only">
-              <Button variant="outline">
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to Portal
-              </Button>
-            </Link>
           </div>
-        </div>
-      </header>
+        </header>
+      )}
 
       {/* Main Content */}
       <div className="container mx-auto px-4 py-8 max-w-6xl">
@@ -228,6 +251,22 @@ export default function ShelterResearchHubPage() {
         </Card>
       </div>
     </div>
+  );
+}
+
+// Main page component with Suspense boundary
+export default function ShelterResearchHubPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading research hub...</p>
+        </div>
+      </div>
+    }>
+      <ShelterResearchHubContent />
+    </Suspense>
   );
 }
 

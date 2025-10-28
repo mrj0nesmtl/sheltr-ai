@@ -358,14 +358,17 @@ export default function InvestorDataRoomPage() {
         );
         
         const snapshot = await getDocs(galleryQuery);
-        const items: GalleryItem[] = snapshot.docs.map(doc => ({
-          id: doc.id,
-          url: doc.data().url,
-          title: doc.data().title || 'Untitled',
-          description: doc.data().description,
-          type: doc.data().type || 'image',
-          createdAt: doc.data().createdAt || new Date().toISOString(),
-        }));
+        const items: GalleryItem[] = snapshot.docs.map(doc => {
+          const data = doc.data();
+          return {
+            id: doc.id,
+            url: data.src || data.url || '', // Try 'src' first, then 'url'
+            title: data.title || 'Untitled',
+            description: data.description || '',
+            type: data.mediaType || data.type || 'image',
+            createdAt: data.createdAt?.toDate?.()?.toISOString() || data.createdAt || new Date().toISOString(),
+          };
+        });
 
         // Sort by creation date (newest first)
         items.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());

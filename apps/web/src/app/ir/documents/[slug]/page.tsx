@@ -52,6 +52,19 @@ export default function InvestorDocumentPage() {
     setIsLoading(false);
   }, [documentSlug, isAuthorized]);
 
+  // Handle external links (GitHub) - MUST BE BEFORE ANY RETURNS
+  useEffect(() => {
+    if (documentSlug === 'github-repository' && isAuthorized) {
+      // Open GitHub in new tab
+      window.open('https://github.com/mrj0nesmtl/sheltr-ai', '_blank');
+      // Redirect back to data room
+      router.push('/ir/dataroom');
+    }
+  }, [documentSlug, isAuthorized, router]);
+
+  // ALL HOOKS MUST BE ABOVE THIS LINE
+  // =====================================
+
   if (authLoading || isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
@@ -82,16 +95,6 @@ export default function InvestorDocumentPage() {
       </div>
     );
   }
-
-  // Handle external links (GitHub)
-  useEffect(() => {
-    if (documentSlug === 'github-repository' && isAuthorized) {
-      // Open GitHub in new tab
-      window.open('https://github.com/mrj0nesmtl/sheltr-ai', '_blank');
-      // Redirect back to data room
-      router.push('/ir/dataroom');
-    }
-  }, [documentSlug, isAuthorized, router]);
 
   // Map document slugs to their URLs
   const getFoundersPortalUrl = (slug: string): string => {

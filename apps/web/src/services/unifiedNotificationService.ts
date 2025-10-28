@@ -842,13 +842,23 @@ function getCategoryFromType(type: string): NotificationCategory {
 /**
  * Format timestamp to relative time
  */
-export function formatRelativeTime(timestamp: Timestamp | Date | undefined | null): string {
+export function formatRelativeTime(timestamp: Timestamp | Date | string | undefined | null): string {
   // Handle undefined/null timestamps
   if (!timestamp) {
     return 'Recently';
   }
   
-  const date = timestamp instanceof Timestamp ? timestamp.toDate() : timestamp;
+  // Convert to Date object, handling multiple formats
+  let date: Date;
+  if (timestamp instanceof Timestamp) {
+    date = timestamp.toDate();
+  } else if (typeof timestamp === 'string') {
+    date = new Date(timestamp);
+  } else if (timestamp instanceof Date) {
+    date = timestamp;
+  } else {
+    return 'Recently';
+  }
   
   // Validate date is valid
   if (!date || isNaN(date.getTime())) {

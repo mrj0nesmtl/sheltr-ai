@@ -90,7 +90,8 @@ export default function InvestorDocumentPage() {
           'msb-registration',
           'adyen-integration',
           'implementation-readiness',
-          'platform-admin-guide'
+          'platform-admin-guide',
+          'development-roadmap'
         ];
 
         if (reactPages.includes(documentSlug)) {
@@ -106,7 +107,7 @@ export default function InvestorDocumentPage() {
             metadata: {
               displayTitle: checkSnap.data().title,
               description: checkSnap.data().description,
-              iframeSrc: `/portal/founders-only/${documentSlug}`
+              iframeSrc: `/portal/founders-only/${documentSlug}?embed=true` // Add embed parameter
             },
             isInvestorDataRoom: true
           });

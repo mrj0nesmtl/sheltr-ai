@@ -1595,6 +1595,16 @@ export default function InvestorRelationsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
   
+  // Check if embedded in iframe (from investor data room)
+  const [isEmbedded, setIsEmbedded] = useState(false);
+  
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      setIsEmbedded(urlParams.get('embed') === 'true');
+    }
+  }, []);
+  
   // Fetch hero image from gallery (client-side for authenticated page)
   const { heroImage } = useHeroImage('/portal/founders-only/investor-relations', '/backgrounds/hero-bg.jpg');
 
@@ -1731,29 +1741,31 @@ export default function InvestorRelationsPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
-      {/* Header */}
-      <header className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b sticky top-0 z-50">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center py-3 sm:py-0 sm:h-16 gap-2 sm:gap-4">
-            <Link href="/" className="flex items-center gap-2 flex-shrink-0">
-              <ThemeLogo />
-              <Badge variant="secondary" className="text-xs whitespace-nowrap">
-                INVESTOR RELATIONS
-              </Badge>
-            </Link>
-            
-            <div className="flex items-center gap-2 flex-shrink-0">
-              <Lock className="h-4 w-4 text-amber-600" />
-              <span className="text-sm text-muted-foreground whitespace-nowrap">
-                Private & Confidential
-              </span>
+      {/* Header - Hidden when embedded */}
+      {!isEmbedded && (
+        <>
+          <header className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b sticky top-0 z-50">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center py-3 sm:py-0 sm:h-16 gap-2 sm:gap-4">
+                <Link href="/" className="flex items-center gap-2 flex-shrink-0">
+                  <ThemeLogo />
+                  <Badge variant="secondary" className="text-xs whitespace-nowrap">
+                    INVESTOR RELATIONS
+                  </Badge>
+                </Link>
+                
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  <Lock className="h-4 w-4 text-amber-600" />
+                  <span className="text-sm text-muted-foreground whitespace-nowrap">
+                    Private & Confidential
+                  </span>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      </header>
+          </header>
 
-      {/* Breadcrumb Navigation */}
-      <div className="bg-white/50 dark:bg-slate-900/50 border-b">
+          {/* Breadcrumb Navigation */}
+          <div className="bg-white/50 dark:bg-slate-900/50 border-b">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
             <div className="flex items-center flex-wrap gap-1 sm:gap-2 text-sm text-muted-foreground">
@@ -1802,6 +1814,8 @@ export default function InvestorRelationsPage() {
           </div>
         </div>
       </div>
+        </>
+      )}
 
       {/* Hero Section */}
       <section className="relative py-20 text-white overflow-hidden">

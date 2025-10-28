@@ -47,7 +47,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { collection, addDoc, updateDoc, deleteDoc, doc, getDocs, query } from 'firebase/firestore';
+import { collection, addDoc, updateDoc, deleteDoc, doc, getDocs, query, where } from 'firebase/firestore';
 import { ref, uploadBytes, deleteObject } from 'firebase/storage';
 import { db, storage } from '@/lib/firebase';
 
@@ -64,6 +64,7 @@ interface GalleryMedia {
   isHero: boolean; // Hero image for gallery page
   isLandingHero: boolean; // Hero image for landing page
   isFoundersGallery: boolean; // Show in founders portal gallery
+  isInvestorDataRoom?: boolean; // Show in investor data room gallery
   heroPages?: string[]; // Array of page paths where this is a hero image
   podModel?: 'model-a' | 'model-b' | 'mobi' | null; // Pod model card image
   order: number;
@@ -750,6 +751,45 @@ export default function GalleryManagementPage() {
   };
 
   // Handle media update
+  // Send notification to all Super Admins and Platform Admins
+  const sendInvestorDataRoomNotification = async (mediaId: string, mediaTitle: string) => {
+    try {
+      // Get all Super Admins and Platform Admins
+      const usersQuery = query(
+        collection(db, 'users'),
+        where('role', 'in', ['super_admin', 'platform_admin'])
+      );
+      
+      const usersSnapshot = await getDocs(usersQuery);
+      
+      // Create notification for each admin
+      const notificationPromises = usersSnapshot.docs.map(async (userDoc) => {
+        return addDoc(collection(db, 'admin_notifications'), {
+          recipient_id: userDoc.id,
+          type: 'investor_dataroom_media',
+          category: 'investor_relations',
+          title: '🔒 Media Shared to Investor Data Room',
+          message: `"${mediaTitle}" has been shared to the Investor Data Room by ${user?.email || 'an administrator'}.`,
+          metadata: {
+            mediaId,
+            mediaTitle,
+            sharedBy: user?.email || 'unknown',
+            sharedById: user?.uid || 'unknown',
+          },
+          isRead: false,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        });
+      });
+      
+      await Promise.all(notificationPromises);
+      console.log(`✅ Sent ${notificationPromises.length} notifications to admins`);
+    } catch (error) {
+      console.error('Error sending notifications:', error);
+      // Don't throw - notification failure shouldn't block the update
+    }
+  };
+
   const handleUpdateImage = async (imageId: string, updates: Partial<GalleryMedia>) => {
     try {
       const updatedData: Partial<GalleryMedia> = { ...updates };
@@ -781,6 +821,11 @@ export default function GalleryManagementPage() {
         ...updatedData,
         updatedAt: new Date()
       });
+      
+      // Send notification if isInvestorDataRoom was toggled ON
+      if (updatedData.isInvestorDataRoom && !editingImage?.isInvestorDataRoom) {
+        await sendInvestorDataRoomNotification(imageId, updatedData.title || 'Untitled Media');
+      }
       
       showAlert('success', 'Media updated successfully!');
       setEditingImage(null);
@@ -1549,6 +1594,45 @@ export default function GalleryManagementPage() {
                       onChange={(e) => setEditingImage(prev => prev ? { ...prev, isFoundersGallery: e.target.checked } : null)}
                     />
                     <label htmlFor="editIsFoundersGallery" className="text-sm font-medium">Share to Founders Portal</label>
+                  </div>
+                  <div className="flex items-center gap-2 bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg border-2 border-blue-200 dark:border-blue-800">
+                    <input
+                      type="checkbox"
+                      id="editIsInvestorDataRoom"
+                      checked={(editingImage as any).isInvestorDataRoom || false}
+                      onChange={(e) => {
+                        const isChecked = e.target.checked;
+                        setEditingImage(prev => prev ? { ...prev, isInvestorDataRoom: isChecked } as any : null);
+                        
+                        // Show confirmation dialog when toggling ON
+                        if (isChecked) {
+                          const confirmed = window.confirm(
+                            `⚠️ INVESTOR DATA ROOM ACCESS\n\n` +
+                            `You are about to share "${editingImage.title}" with investors.\n\n` +
+                            `This will:\n` +
+                            `• Make this media visible in the Investor Data Room\n` +
+                            `• Notify all Super Admins and Platform Admins\n` +
+                            `• Create an audit trail\n\n` +
+                            `Do you want to continue?`
+                          );
+                          
+                          if (!confirmed) {
+                            // Revert the checkbox
+                            e.target.checked = false;
+                            setEditingImage(prev => prev ? { ...prev, isInvestorDataRoom: false } as any : null);
+                          }
+                        }
+                      }}
+                      className="h-4 w-4"
+                    />
+                    <div className="flex-1">
+                      <label htmlFor="editIsInvestorDataRoom" className="text-sm font-semibold text-blue-900 dark:text-blue-100 cursor-pointer">
+                        🔒 Share to Investor Data Room
+                      </label>
+                      <p className="text-xs text-blue-600 dark:text-blue-400 mt-0.5">
+                        Admins will be notified when enabled
+                      </p>
+                    </div>
                   </div>
                 </div>
 

@@ -10,7 +10,8 @@ import { FileText, Lock, Shield, ExternalLink, GripVertical, Save, RotateCcw } f
 import Link from 'next/link';
 import { toast } from 'sonner';
 import { db } from '@/lib/firebase';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, collection, query, where, getDocs } from 'firebase/firestore';
+import Image from 'next/image';
 import {
   DndContext,
   closestCenter,
@@ -266,6 +267,15 @@ function SortableCard({ doc, isSuperAdmin }: SortableCardProps) {
   );
 }
 
+interface GalleryItem {
+  id: string;
+  url: string;
+  title: string;
+  description?: string;
+  type: 'image' | 'video';
+  createdAt: string;
+}
+
 export default function InvestorDataRoomPage() {
   const router = useRouter();
   const { user, loading: authLoading } = useAuth();
@@ -273,6 +283,9 @@ export default function InvestorDataRoomPage() {
   const [documents, setDocuments] = useState(INVESTOR_DOCUMENTS);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
+  const [galleryLoading, setGalleryLoading] = useState(true);
+  const [selectedImage, setSelectedImage] = useState<GalleryItem | null>(null);
 
   const isSuperAdmin = user?.role === 'super_admin';
 
@@ -330,6 +343,43 @@ export default function InvestorDataRoomPage() {
     };
 
     loadCardOrder();
+  }, [isAuthorized]);
+
+  // Load gallery items from Firestore
+  useEffect(() => {
+    if (!isAuthorized) return;
+
+    const loadGalleryItems = async () => {
+      setGalleryLoading(true);
+      try {
+        const galleryQuery = query(
+          collection(db, 'gallery_images'),
+          where('isInvestorDataRoom', '==', true)
+        );
+        
+        const snapshot = await getDocs(galleryQuery);
+        const items: GalleryItem[] = snapshot.docs.map(doc => ({
+          id: doc.id,
+          url: doc.data().url,
+          title: doc.data().title || 'Untitled',
+          description: doc.data().description,
+          type: doc.data().type || 'image',
+          createdAt: doc.data().createdAt || new Date().toISOString(),
+        }));
+
+        // Sort by creation date (newest first)
+        items.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        
+        setGalleryItems(items);
+      } catch (error) {
+        console.error('Error loading gallery items:', error);
+        toast.error('Failed to load gallery items');
+      } finally {
+        setGalleryLoading(false);
+      }
+    };
+
+    loadGalleryItems();
   }, [isAuthorized]);
 
   // Handle drag end
@@ -490,6 +540,106 @@ export default function InvestorDataRoomPage() {
           </DndContext>
         </div>
       </section>
+
+      {/* Media Gallery Section */}
+      {galleryItems.length > 0 && (
+        <section className="py-12 bg-slate-50 dark:bg-slate-900/50">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="mb-8">
+              <h3 className="text-2xl font-bold mb-2">Media Gallery</h3>
+              <p className="text-muted-foreground">
+                Visual insights and updates from the SHELTR team
+              </p>
+            </div>
+
+            {galleryLoading ? (
+              <div className="flex items-center justify-center py-12">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+              </div>
+            ) : (
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {galleryItems.map((item) => (
+                  <Card
+                    key={item.id}
+                    className="group cursor-pointer hover:shadow-lg transition-all duration-200 overflow-hidden"
+                    onClick={() => setSelectedImage(item)}
+                  >
+                    <div className="relative aspect-video bg-slate-200 dark:bg-slate-800">
+                      {item.type === 'image' ? (
+                        <Image
+                          src={item.url}
+                          alt={item.title}
+                          fill
+                          className="object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      ) : (
+                        <video
+                          src={item.url}
+                          className="w-full h-full object-cover"
+                          controls={false}
+                        />
+                      )}
+                    </div>
+                    <CardContent className="p-4">
+                      <h4 className="font-semibold text-sm mb-1 line-clamp-1">
+                        {item.title}
+                      </h4>
+                      {item.description && (
+                        <p className="text-xs text-muted-foreground line-clamp-2">
+                          {item.description}
+                        </p>
+                      )}
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+      )}
+
+      {/* Image Lightbox Modal */}
+      {selectedImage && (
+        <div
+          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4"
+          onClick={() => setSelectedImage(null)}
+        >
+          <div className="relative max-w-7xl max-h-[90vh] w-full">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="absolute top-4 right-4 bg-white/10 hover:bg-white/20 text-white"
+              onClick={() => setSelectedImage(null)}
+            >
+              ✕ Close
+            </Button>
+            <div className="relative w-full h-full">
+              {selectedImage.type === 'image' ? (
+                <Image
+                  src={selectedImage.url}
+                  alt={selectedImage.title}
+                  width={1920}
+                  height={1080}
+                  className="w-full h-auto max-h-[80vh] object-contain"
+                />
+              ) : (
+                <video
+                  src={selectedImage.url}
+                  className="w-full h-auto max-h-[80vh]"
+                  controls
+                  autoPlay
+                />
+              )}
+            </div>
+            <div className="mt-4 text-white text-center">
+              <h3 className="text-xl font-bold mb-2">{selectedImage.title}</h3>
+              {selectedImage.description && (
+                <p className="text-sm text-gray-300">{selectedImage.description}</p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Footer Note */}
       <section className="py-8 border-t bg-white/50 dark:bg-slate-900/50">

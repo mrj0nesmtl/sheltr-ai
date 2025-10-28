@@ -80,8 +80,8 @@ export default function InvestorDocumentPage() {
           return;
         }
 
-        // For pages that exist as React components, redirect to them
-        // Investors now have session access to view these pages
+        // For pages that exist as React components, we'll embed them in an iframe
+        // to keep the /ir/documents/ URL structure
         const reactPages = [
           'investor-relations',
           'business-plan',
@@ -94,8 +94,23 @@ export default function InvestorDocumentPage() {
         ];
 
         if (reactPages.includes(documentSlug)) {
-          console.log('📄 Redirecting to React page:', documentSlug);
-          router.push(`/portal/founders-only/${documentSlug}`);
+          console.log('📄 Loading React page in iframe:', documentSlug);
+          // Set a special flag to render iframe
+          setDocument({
+            title: checkSnap.data().title || 'Document',
+            slug: documentSlug,
+            content: '', // Will use iframe instead
+            category: checkSnap.data().category || 'Investment Document',
+            type: 'iframe',
+            tags: checkSnap.data().tags || [],
+            metadata: {
+              displayTitle: checkSnap.data().title,
+              description: checkSnap.data().description,
+              iframeSrc: `/portal/founders-only/${documentSlug}`
+            },
+            isInvestorDataRoom: true
+          });
+          setIsLoading(false);
           return;
         }
 
@@ -305,13 +320,27 @@ export default function InvestorDocumentPage() {
         </Alert>
 
         {/* Document Content */}
-        <Card>
-          <CardContent className="prose prose-slate dark:prose-invert max-w-none pt-6">
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-              {document.content}
-            </ReactMarkdown>
-          </CardContent>
-        </Card>
+        {document.type === 'iframe' && document.metadata?.iframeSrc ? (
+          <Card className="overflow-hidden">
+            <CardContent className="p-0">
+              <iframe
+                src={document.metadata.iframeSrc}
+                className="w-full border-0"
+                style={{ minHeight: '800px', height: '100vh' }}
+                title={document.title}
+                sandbox="allow-same-origin allow-scripts allow-forms allow-popups"
+              />
+            </CardContent>
+          </Card>
+        ) : (
+          <Card>
+            <CardContent className="prose prose-slate dark:prose-invert max-w-none pt-6">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {document.content}
+              </ReactMarkdown>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Footer */}
         <div className="mt-8 flex justify-between items-center">

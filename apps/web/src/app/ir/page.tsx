@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -13,6 +13,7 @@ import { AlertCircle, Lock, Mail, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import Image from 'next/image';
 import Link from 'next/link';
+import { FcGoogle } from 'react-icons/fc';
 
 export default function InvestorLoginPage() {
   const router = useRouter();
@@ -22,13 +23,13 @@ export default function InvestorLoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // Redirect if already logged in as investor
+  // Redirect if already logged in as investor, super_admin, or platform_admin
   useEffect(() => {
     if (!authLoading && user) {
-      if (user.role === 'investor') {
+      if (user.role === 'investor' || user.role === 'super_admin' || user.role === 'platform_admin') {
         router.push('/ir/dataroom');
       } else {
-        setError('Access denied. This portal is for investors only.');
+        setError('Access denied. This portal is for investors and administrators only.');
       }
     }
   }, [user, authLoading, router]);
@@ -66,6 +67,44 @@ export default function InvestorLoginPage() {
       }
       
       toast.error('Login failed');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    setLoading(true);
+    setError('');
+
+    try {
+      const provider = new GoogleAuthProvider();
+      const userCredential = await signInWithPopup(auth, provider);
+      
+      // Set access session storage
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem('investor-access', 'granted');
+        sessionStorage.setItem('investor-info', JSON.stringify({
+          email: userCredential.user.email,
+          uid: userCredential.user.uid
+        }));
+      }
+      
+      toast.success('Welcome to the SHELTR Investor Data Room');
+    } catch (err: any) {
+      console.error('Google login error:', err);
+      
+      if (err.code === 'auth/popup-closed-by-user') {
+        setError('Sign-in popup was closed. Please try again.');
+      } else if (err.code === 'auth/unauthorized-domain') {
+        setError('This domain is not authorized for Google sign-in.');
+      } else if (err.code === 'auth/cancelled-popup-request') {
+        // User cancelled, don't show error
+        return;
+      } else {
+        setError('An error occurred during Google sign-in. Please try again.');
+      }
+      
+      toast.error('Google sign-in failed');
     } finally {
       setLoading(false);
     }
@@ -173,6 +212,47 @@ export default function InvestorLoginPage() {
               )}
             </Button>
           </form>
+
+          {/* Divider */}
+          <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-card px-2 text-muted-foreground">
+                Or continue with
+              </span>
+            </div>
+          </div>
+
+          {/* Google Sign-In Button */}
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full border-2"
+            onClick={handleGoogleLogin}
+            disabled={loading}
+            size="lg"
+          >
+            {loading ? (
+              <>
+                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                Signing in...
+              </>
+            ) : (
+              <>
+                <FcGoogle className="mr-2 h-5 w-5" />
+                Sign in with Google
+              </>
+            )}
+          </Button>
+
+          {/* Info Text */}
+          <p className="text-xs text-center text-muted-foreground mt-4">
+            <strong>Super Admins & Platform Admins:</strong> Use Google Sign-In
+            <br />
+            <strong>Investors:</strong> Use email/password credentials
+          </p>
 
           {/* Footer */}
           <div className="mt-6 pt-6 border-t text-center">

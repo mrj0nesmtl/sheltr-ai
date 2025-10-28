@@ -7,6 +7,117 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.68.0] - 2025-10-28 (INVESTOR DATA ROOM GALLERY LAUNCH) 🎨🔒
+
+### 🎉 Major Features
+
+**Investor Data Room Media Gallery**
+- ✅ **New Gallery Section**: Dedicated media gallery for investor data room with lightbox viewing
+- ✅ **Admin Toggle Control**: Super Admins and Platform Admins can share media to investors via dashboard
+- ✅ **Confirmation Safeguards**: Confirmation dialog when sharing media to investor data room
+- ✅ **Automated Notifications**: All admins notified when media is shared to investor data room
+- ✅ **Firestore Security**: Updated rules to allow investors to view only `isInvestorDataRoom: true` media
+- ✅ **Responsive Grid Layout**: Beautiful grid display with hover effects and click-to-expand lightbox
+- ✅ **Field Mapping Fix**: Corrected `src` vs `url` field mapping for proper image display
+
+**Google OAuth for Admin Access**
+- ✅ **Google Sign-In**: Super Admins and Platform Admins can now access investor data room via Google OAuth
+- ✅ **Dual Authentication**: Investors use email/password, admins use Google OAuth
+- ✅ **Streamlined Access**: Simplified admin workflow for investor data room management
+
+**Investor Data Room Enhancements**
+- ✅ **Drag-and-Drop Ordering**: Super Admins can set global default card order for all investors
+- ✅ **Clean Header**: Removed "Dashboard" button from investor data room for cleaner UX
+- ✅ **GitHub Direct Link**: GitHub Repository card now opens directly in new tab instead of iframe
+- ✅ **React Hooks Fix**: Resolved hooks order violation for stable rendering
+
+### 🐛 Bug Fixes
+
+**Gallery Image Display**
+- ✅ Fixed field mapping: `src` vs `url` in Firestore documents
+- ✅ Fixed `mediaType` vs `type` field inconsistency
+- ✅ Fixed `createdAt` Firestore Timestamp conversion to ISO string
+- ✅ Fallback handling for missing fields
+
+**Investor Document Access**
+- ✅ Fixed React hooks order violation in `InvestorDocumentPage`
+- ✅ All hooks now called unconditionally at top level
+- ✅ Resolved "Rendered more hooks than during the previous render" error
+
+### 🔧 Technical Changes
+
+**`apps/web/src/app/ir/dataroom/page.tsx`**
+- ✅ Added Media Gallery section with Firestore query for `isInvestorDataRoom: true`
+- ✅ Implemented lightbox modal for full-size image/video viewing
+- ✅ Fixed field mapping: `data.src || data.url` for image URLs
+- ✅ Fixed field mapping: `data.mediaType || data.type` for media types
+- ✅ Added proper date conversion for Firestore Timestamps
+
+**`apps/web/src/app/dashboard/gallery/page.tsx`**
+- ✅ Added "🔒 Share to Investor Data Room" toggle in Edit Media dialog
+- ✅ Implemented confirmation dialog with warning message
+- ✅ Added `sendInvestorDataRoomNotification()` function
+- ✅ Sends notifications to all Super Admins and Platform Admins
+- ✅ Updated `GalleryMedia` interface with `isInvestorDataRoom?: boolean`
+
+**`firestore.rules`**
+- ✅ Updated `gallery_images` rules to allow investors to read `isInvestorDataRoom: true` media
+- ✅ Maintained security: Only admins can write/create/delete gallery items
+- ✅ Added proper role-based access control for investor data room
+
+**`apps/web/src/app/ir/page.tsx`**
+- ✅ Integrated Google OAuth with `GoogleAuthProvider`
+- ✅ Added `FcGoogle` icon from `react-icons` package
+- ✅ Dual authentication flow: Email/password for investors, Google OAuth for admins
+- ✅ Updated redirect logic to support all three roles
+
+**`apps/web/src/app/ir/documents/[slug]/page.tsx`**
+- ✅ Fixed React hooks order: All `useState` and `useEffect` at top level
+- ✅ Moved conditional returns after all hook declarations
+- ✅ Resolved hooks violation error
+
+**`package.json`**
+- ✅ Added `react-icons` dependency for Google OAuth button
+
+### 📊 Impact
+
+**Investor Experience:**
+- ✅ Beautiful media gallery with professional presentation
+- ✅ Lightbox viewing for full-size images and videos
+- ✅ Organized, curated content from SHELTR team
+- ✅ Seamless Google OAuth access for admin users
+
+**Admin Workflow:**
+- ✅ Simple toggle to share media with investors
+- ✅ Confirmation safeguards prevent accidental sharing
+- ✅ Automated notifications for audit trail
+- ✅ Centralized control from Gallery Management Dashboard
+
+**Security:**
+- ✅ Firestore rules enforce investor-specific media visibility
+- ✅ Only `isInvestorDataRoom: true` media visible to investors
+- ✅ All admin actions logged and notified
+- ✅ Proper role-based access control
+
+### 📝 Documentation
+
+**Archived Documentation** (moved to `docs/04-development/development_archive/`)
+- ✅ `INVESTOR-GALLERY-IMPLEMENTATION.md` - Complete 4-phase implementation guide
+- ✅ `INVESTOR-DATA-ROOM-SETUP.md` - Initial data room setup
+- ✅ `GOOGLE-CALENDAR-INTEGRATION-SETUP.md` - Calendar integration guide
+- ✅ `NOTIFICATION-*` files - Notification system documentation
+- ✅ Legacy migration files archived
+
+### 🎯 Next Steps
+
+**Potential Enhancements:**
+- Video thumbnail generation for gallery
+- Bulk media sharing to investor data room
+- Media categories/tags for better organization
+- Download tracking for investor engagement metrics
+
+---
+
 ## [2.67.0] - 2025-10-27 (NOTIFICATION METRICS SYNC FIX + CALENDAR UPDATE) 🔧
 
 ### 🐛 Bug Fixes

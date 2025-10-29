@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState } from 'react';
 import { 
   Zap, 
   MapPin, 
@@ -13,10 +12,6 @@ import {
   Users, 
   CheckCircle, 
   Star,
-  Menu,
-  X,
-  LogIn,
-  BarChart3,
   Plane,
   Navigation,
   Battery,
@@ -29,121 +24,21 @@ import {
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ThemeToggle } from '@/components/theme-toggle';
 import Footer from '@/components/Footer';
-import ThemeLogo from '@/components/ThemeLogo';
-import { useAuth } from '@/contexts/AuthContext';
 import { PublicChatbot } from '@/components/PublicChatbot';
 import { useHeroImage } from '@/hooks/useHeroImage';
 import { StandardHero } from '@/components/StandardHero';
+import { VideoShowcase } from '@/components/VideoShowcase';
+import PublicNavigation from '@/components/PublicNavigation';
 
 export default function DronesPage() {
-  const { user, hasRole } = useAuth();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  
   // Fetch hero image from gallery (or use fallback)
   const { heroImage } = useHeroImage('/drones', '/images/sheltr_units/drone-delivery.jpeg');
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
       {/* Navigation */}
-      <nav className="bg-background/95 backdrop-blur-sm sticky top-0 z-50 border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <Link href="/" className="flex items-center">
-              <ThemeLogo />
-            </Link>
-            <div className="hidden md:flex space-x-8">
-              <Link href="/about" className="text-muted-foreground hover:text-primary transition-colors">About</Link>
-              <Link href="/solutions" className="text-muted-foreground hover:text-primary transition-colors">Solutions</Link>
-              <Link href="/scan-give" className="text-muted-foreground hover:text-primary transition-colors">Scan & Give</Link>
-              <Link href="/impact" className="text-muted-foreground hover:text-primary transition-colors">Impact</Link>
-              <Link href="/drones" className="text-foreground hover:text-primary transition-colors">Drones</Link>
-            </div>
-            <div className="flex items-center space-x-4">
-              <ThemeToggle />
-              <div className="hidden md:flex items-center space-x-4">
-                {user ? (
-                  <>
-                    <span className="text-sm text-muted-foreground">
-                      Welcome, {user.displayName || user.email}
-                    </span>
-                    <Link href={hasRole('donor') ? '/dashboard/donor' : hasRole('super_admin') ? '/dashboard' : hasRole('platform_admin') ? '/dashboard' : hasRole('participant') ? '/dashboard/participant' : '/dashboard'}>
-                      <Button variant="ghost" size="sm">
-                        <BarChart3 className="h-4 w-4 mr-2" />
-                        Dashboard
-                      </Button>
-                    </Link>
-                  </>
-                ) : (
-                  <>
-                    <Link href="/login">
-                      <Button variant="ghost" size="sm">
-                        <LogIn className="h-4 w-4 mr-2" />
-                        Sign In
-                      </Button>
-                    </Link>
-                    <Link href="/register">
-                      <Button>
-                        Get Started
-                      </Button>
-                    </Link>
-                  </>
-                )}
-              </div>
-              <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden p-2 text-muted-foreground hover:text-foreground"
-              >
-                {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-              </button>
-            </div>
-          </div>
-        </div>
-        
-        {/* Mobile Menu */}
-        {mobileMenuOpen && (
-          <div className="md:hidden bg-background border-b">
-            <div className="px-4 py-4 space-y-3">
-              <Link href="/" className="block text-muted-foreground hover:text-primary transition-colors py-2">Home</Link>
-              <Link href="/about" className="block text-muted-foreground hover:text-primary transition-colors py-2">About</Link>
-              <Link href="/solutions" className="block text-muted-foreground hover:text-primary transition-colors py-2">Solutions</Link>
-              <Link href="/scan-give" className="block text-muted-foreground hover:text-primary transition-colors py-2">Scan & Give</Link>
-              <Link href="/impact" className="block text-muted-foreground hover:text-primary transition-colors py-2">Impact</Link>
-              <Link href="/drones" className="block text-foreground hover:text-primary transition-colors py-2">Drones</Link>
-              <div className="border-t pt-4 space-y-3">
-                {user ? (
-                  <>
-                    <div className="text-sm text-muted-foreground px-3 py-2">
-                      Welcome, {user.displayName || user.email}
-                    </div>
-                    <Link href={hasRole('donor') ? '/dashboard/donor' : hasRole('super_admin') ? '/dashboard' : hasRole('platform_admin') ? '/dashboard' : hasRole('participant') ? '/dashboard/participant' : '/dashboard'} className="block">
-                      <Button variant="ghost" className="w-full justify-start">
-                        <BarChart3 className="h-4 w-4 mr-2" />
-                        Dashboard
-                      </Button>
-                    </Link>
-                  </>
-                ) : (
-                  <>
-                    <Link href="/login" className="block">
-                      <Button variant="ghost" className="w-full justify-start">
-                        <LogIn className="h-4 w-4 mr-2" />
-                        Sign In
-                      </Button>
-                    </Link>
-                    <Link href="/register" className="block">
-                      <Button className="w-full">
-                        Get Started
-                      </Button>
-                    </Link>
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
-      </nav>
+      <PublicNavigation />
 
       {/* Hero Section - Standardized */}
       <StandardHero
@@ -239,6 +134,18 @@ export default function DronesPage() {
               </CardHeader>
             </Card>
           </div>
+        </div>
+      </section>
+
+      {/* Video Showcase */}
+      <section className="py-20 bg-background">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <VideoShowcase 
+            videoTitle="DDS - Drone Delivery System Video"
+            title="See the Drone Delivery System in Action"
+            description="Watch how SHELTR's autonomous drone network delivers essential supplies directly to participants in need"
+            className="border-2 hover:border-primary/50 transition-all"
+          />
         </div>
       </section>
 

@@ -176,6 +176,7 @@ export default function FoundersOnlyPage() {
   const [defaultCardOrder, setDefaultCardOrder] = useState<string[]>([]);
   const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const [showFinancialInIR, setShowFinancialInIR] = useState(false);
 
   // DnD Sensors
   const sensors = useSensors(
@@ -605,6 +606,16 @@ export default function FoundersOnlyPage() {
       );
 
       setCards(toggleStates);
+      
+      // Load Financial Overview toggle state
+      try {
+        const financialDoc = await getDoc(doc(db, 'secure_documents', 'financial-overview'));
+        if (financialDoc.exists()) {
+          setShowFinancialInIR(financialDoc.data().isInvestorDataRoom || false);
+        }
+      } catch (error) {
+        console.error('Error loading financial overview toggle:', error);
+      }
     } catch (error) {
       console.error('Error loading card order:', error);
       setCards(initialCards);
@@ -654,6 +665,35 @@ export default function FoundersOnlyPage() {
         setHasUnsavedChanges(true);
         return newOrder;
       });
+    }
+  };
+
+  // Toggle Financial Overview in Investor Data Room
+  const handleToggleFinancialOverview = async (value: boolean) => {
+    try {
+      // Update local state immediately
+      setShowFinancialInIR(value);
+
+      // Store in Firestore
+      const docRef = doc(db, 'secure_documents', 'financial-overview');
+      await setDoc(docRef, {
+        id: 'financial-overview',
+        title: 'Seed Budget 2025-26',
+        description: 'Projected financial planning & runway analysis',
+        category: 'Financial',
+        isInvestorDataRoom: value,
+        updatedAt: new Date().toISOString(),
+      }, { merge: true });
+
+      toast.success(value 
+        ? 'Financial Overview enabled in Investor Data Room' 
+        : 'Financial Overview disabled in Investor Data Room'
+      );
+    } catch (error) {
+      console.error('Error toggling financial overview:', error);
+      toast.error('Failed to update Investor Data Room settings');
+      // Revert on error
+      setShowFinancialInIR(!value);
     }
   };
 
@@ -912,6 +952,22 @@ export default function FoundersOnlyPage() {
           <p className="text-muted-foreground mb-6 text-lg">
             Seed round budget projection and burn rate analysis for 2025-2026
           </p>
+          
+          {/* Investor Data Room Toggle */}
+          <div className="flex items-center justify-between p-4 mb-6 bg-muted/50 rounded-lg border-2 border-border/40">
+            <div className="flex items-center gap-2">
+              <Shield className="h-5 w-5 text-red-600" />
+              <Label htmlFor="financial-toggle" className="text-base font-medium cursor-pointer">
+                Share to Investor Data Room
+              </Label>
+            </div>
+            <Switch
+              id="financial-toggle"
+              checked={showFinancialInIR}
+              onCheckedChange={handleToggleFinancialOverview}
+            />
+          </div>
+          
           <BudgetCard />
         </div>
 

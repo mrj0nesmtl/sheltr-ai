@@ -6,13 +6,14 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { FileText, Lock, Shield, ExternalLink, GripVertical, Save, RotateCcw, LogOut } from 'lucide-react';
+import { FileText, Lock, Shield, ExternalLink, GripVertical, Save, RotateCcw, LogOut, DollarSign } from 'lucide-react';
 import Link from 'next/link';
 import { toast } from 'sonner';
 import { db, auth } from '@/lib/firebase';
 import { signOut } from 'firebase/auth';
 import { doc, getDoc, setDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import Image from 'next/image';
+import { BudgetCard } from '@/components/dashboard/BudgetCard';
 import {
   DndContext,
   closestCenter,
@@ -287,6 +288,7 @@ export default function InvestorDataRoomPage() {
   const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
   const [galleryLoading, setGalleryLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState<GalleryItem | null>(null);
+  const [showFinancialOverview, setShowFinancialOverview] = useState(false);
 
   const isSuperAdmin = user?.role === 'super_admin';
 
@@ -344,6 +346,24 @@ export default function InvestorDataRoomPage() {
     };
 
     loadCardOrder();
+  }, [isAuthorized]);
+
+  // Load financial overview toggle state
+  useEffect(() => {
+    if (!isAuthorized) return;
+
+    const loadFinancialToggle = async () => {
+      try {
+        const financialDoc = await getDoc(doc(db, 'secure_documents', 'financial-overview'));
+        if (financialDoc.exists()) {
+          setShowFinancialOverview(financialDoc.data().isInvestorDataRoom || false);
+        }
+      } catch (error) {
+        console.error('Error loading financial overview toggle:', error);
+      }
+    };
+
+    loadFinancialToggle();
   }, [isAuthorized]);
 
   // Load gallery items from Firestore
@@ -521,6 +541,24 @@ export default function InvestorDataRoomPage() {
           </div>
         </div>
       </section>
+
+      {/* Financial Overview Section - Conditional */}
+      {showFinancialOverview && (
+        <section className="py-12 bg-slate-50 dark:bg-slate-900/50">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="mb-8">
+              <div className="flex items-center gap-3 mb-4">
+                <DollarSign className="h-7 w-7 text-green-600" />
+                <h3 className="text-2xl font-bold">Financial Overview</h3>
+              </div>
+              <p className="text-muted-foreground">
+                Seed round budget projection and burn rate analysis for 2025-2026
+              </p>
+            </div>
+            <BudgetCard linkPath="/ir/budget" />
+          </div>
+        </section>
+      )}
 
       {/* Investment Documents */}
       <section className="py-12">

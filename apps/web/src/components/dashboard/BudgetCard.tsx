@@ -6,7 +6,11 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { DollarSign, TrendingDown, Calendar, ArrowRight, Lock } from 'lucide-react';
 
-export function BudgetCard() {
+interface BudgetCardProps {
+  linkPath?: string;
+}
+
+export function BudgetCard({ linkPath = '/portal/founders-only/budget' }: BudgetCardProps) {
   const seedRound = 250000;
   const projectedBurn = 227926;
   const avgMonthlyBurn = 18670;
@@ -102,7 +106,7 @@ export function BudgetCard() {
         </div>
 
         {/* CTA Button */}
-        <Link href="/portal/founders-only/budget">
+        <Link href={linkPath}>
           <Button className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-all">
             View Full Budget
             <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />

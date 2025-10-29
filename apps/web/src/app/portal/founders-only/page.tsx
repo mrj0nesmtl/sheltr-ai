@@ -54,6 +54,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { db } from '@/lib/firebase';
 import { collection, query, where, getDocs, doc, getDoc, setDoc } from 'firebase/firestore';
+import { BudgetCard } from '@/components/dashboard/BudgetCard';
 
 // Quick Access Card Type
 interface QuickAccessCard {
@@ -1064,6 +1065,15 @@ export default function FoundersOnlyPage() {
             toward our public launch timeline.
           </AlertDescription>
         </Alert>
+
+        {/* Seed Budget Overview */}
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold mb-4">Financial Overview</h2>
+          <p className="text-muted-foreground mb-6">
+            Seed round budget projection and burn rate analysis for 2025-2026
+          </p>
+          <BudgetCard />
+        </div>
 
         {/* Founders Gallery */}
         {galleryItems.length > 0 && (

@@ -81,7 +81,7 @@ export default function BlogManagementPage() {
 
     const frontmatterText = match[1];
     const content = match[2];
-    const frontmatter: Record<string, any> = {};
+    const frontmatter: Record<string, string | string[]> = {};
 
     // Parse YAML-like frontmatter
     frontmatterText.split('\n').forEach(line => {
@@ -106,16 +106,16 @@ export default function BlogManagementPage() {
     const { frontmatter, content } = parseMarkdown(markdownText);
     
     setFormData({
-      title: frontmatter.title || '',
-      slug: frontmatter.slug || generateSlug(frontmatter.title || ''),
+      title: typeof frontmatter.title === 'string' ? frontmatter.title : '',
+      slug: typeof frontmatter.slug === 'string' ? frontmatter.slug : generateSlug(typeof frontmatter.title === 'string' ? frontmatter.title : ''),
       content: content.trim(),
-      excerpt: frontmatter.excerpt || '',
-      category: frontmatter.category || '',
-      tags: frontmatter.tags || [],
-      status: frontmatter.status || 'draft',
-      seo_title: frontmatter.seo_title || '',
-      seo_description: frontmatter.seo_description || '',
-      seo_keywords: frontmatter.seo_keywords || [],
+      excerpt: typeof frontmatter.excerpt === 'string' ? frontmatter.excerpt : '',
+      category: typeof frontmatter.category === 'string' ? frontmatter.category : '',
+      tags: Array.isArray(frontmatter.tags) ? frontmatter.tags : [],
+      status: typeof frontmatter.status === 'string' ? frontmatter.status : 'draft',
+      seo_title: typeof frontmatter.seo_title === 'string' ? frontmatter.seo_title : '',
+      seo_description: typeof frontmatter.seo_description === 'string' ? frontmatter.seo_description : '',
+      seo_keywords: Array.isArray(frontmatter.seo_keywords) ? frontmatter.seo_keywords : [],
       featured_image: '',
     });
     
@@ -232,7 +232,7 @@ export default function BlogManagementPage() {
       status: post.status,
       seo_title: post.seo_title || '',
       seo_description: post.seo_description || '',
-      seo_keywords: post.seo_keywords || '',
+      seo_keywords: Array.isArray(post.seo_keywords) ? post.seo_keywords : (post.seo_keywords ? [post.seo_keywords] : []),
       featured_image: post.featured_image || '',
     });
     setShowCreateDialog(true);
@@ -595,11 +595,11 @@ export default function BlogManagementPage() {
                         className="w-full h-64 object-cover rounded-lg mb-4"
                       />
                     )}
-                    <ReactMarkdown 
-                      className="prose-headings:font-bold prose-h1:text-4xl prose-h2:text-3xl prose-h3:text-2xl prose-p:my-4 prose-ul:my-4 prose-ol:my-4 prose-li:my-2"
-                    >
-                      {formData.content || '*No content yet...*'}
-                    </ReactMarkdown>
+                    <div className="prose-headings:font-bold prose-h1:text-4xl prose-h2:text-3xl prose-h3:text-2xl prose-p:my-4 prose-ul:my-4 prose-ol:my-4 prose-li:my-2">
+                      <ReactMarkdown>
+                        {formData.content || '*No content yet...*'}
+                      </ReactMarkdown>
+                    </div>
                   </div>
                 </div>
               )}

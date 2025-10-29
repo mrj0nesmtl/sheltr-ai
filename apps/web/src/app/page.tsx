@@ -57,10 +57,21 @@ export default function HomePage() {
         <section className="py-20 bg-background">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <p className="text-xl md:text-2xl text-muted-foreground max-w-4xl mx-auto">
+              <p className="text-xl md:text-2xl text-muted-foreground max-w-4xl mx-auto mb-8">
                 Let&apos;s create a world where every act of kindness is amplified 
-                and ensures lasting, measurable impact for everyone in the ecosystem. 
+                and ensures lasting, measurable impact for everyone. 
               </p>
+              <div className="max-w-5xl mx-auto">
+                <div className="bg-gradient-to-br from-muted/50 via-background to-muted/30 rounded-xl p-8 border-2 border-primary/10">
+                  <p className="text-base md:text-lg text-foreground/90 leading-relaxed">
+                    <strong className="text-primary">SHELTR was born out of necessity—not ambition.</strong> Built by technologists 
+                    guided by field experts, we apply a <em>tech-for-good</em> ethos to <strong>amplify existing infrastructure, 
+                    not compete with it.</strong> Our singular focus: <strong>housing the unhoused as quickly as possible.</strong> Because 
+                    anything—<em>anything</em>—is better than a tent on the side of the road. This is serious work, grounded in 
+                    reality, driven by optimism, and built to deliver measurable outcomes.
+                  </p>
+                </div>
+              </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               
@@ -137,9 +148,9 @@ export default function HomePage() {
         <section className="py-12 bg-muted/30">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold mb-4">Why Choose SHELTR?</h2>
+              <h2 className="text-4xl font-bold mb-4">Why SHELTR?</h2>
               <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                SHELTR combines cutting-edge technology with proven social impact methodologies 
+                It's cutting-edge technology with proven  impact methodologies 
                 to create the most transparent and effective charitable giving platform ever built.
               </p>
             </div>
@@ -153,7 +164,7 @@ export default function HomePage() {
                 </div>
                 <h3 className="text-xl font-bold mb-2">100% Transparent</h3>
                 <p className="text-muted-foreground">
-                  Blockchain technology ensures every transaction is visible and verified
+                  Blockchain tech ensures every transaction is visible and verified
                 </p>
               </div>
               
@@ -165,7 +176,7 @@ export default function HomePage() {
                 </div>
                 <h3 className="text-xl font-bold mb-2">Data-Driven</h3>
                 <p className="text-muted-foreground">
-                  Real-time analytics help optimize resource allocation and impact
+                  It helps optimize resource allocation and impact
                 </p>
               </div>
               
@@ -177,7 +188,7 @@ export default function HomePage() {
                 </div>
                 <h3 className="text-xl font-bold mb-2">Human-Centered</h3>
                 <p className="text-muted-foreground">
-                  Built with dignity and respect for all participants in the system
+                  Built with care and respect for all in dispair.
                 </p>
               </div>
             </div>
@@ -202,8 +213,7 @@ export default function HomePage() {
                How We Address the Unhoused, Needs to Change
               </h4>
               <p className="text-xl mb-8 text-white/95 drop-shadow-md">
-                Every scan creates transparency, 
-                every donation builds housing, every participant finds dignity.
+                
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/register">

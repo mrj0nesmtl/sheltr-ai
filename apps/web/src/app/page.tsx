@@ -145,7 +145,7 @@ export default function HomePage() {
                   <div className="mb-4 p-4 rounded-full bg-purple-500/10 w-fit">
                     <Building2 className="h-10 w-10 text-purple-500" />
                   </div>
-                  <CardTitle className="text-2xl">Build Housing</CardTitle>
+                  <CardTitle className="text-2xl">Deploy Micro-Housing</CardTitle>
                   <CardDescription>Long-term solutions</CardDescription>
                 </CardHeader>
                 <CardContent>

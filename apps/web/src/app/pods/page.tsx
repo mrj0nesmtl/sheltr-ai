@@ -30,7 +30,8 @@ import {
   Snowflake,
   CheckCircle,
   Eye,
-  Wrench
+  Wrench,
+  Paintbrush
 } from 'lucide-react';
 
 export default function PodsPage() {
@@ -616,54 +617,63 @@ export default function PodsPage() {
       </section>
 
       {/* Customization Options Section */}
-      <section className="py-20 bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 dark:from-purple-950 dark:via-pink-950 dark:to-orange-950">
-        <div className="max-w-7xl mx-auto px-4">
+      <section 
+        className="py-20 relative"
+        style={{
+          backgroundImage: "url('/images/sheltr_units/interior-1.jpeg')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      >
+        <div className="absolute inset-0 bg-black/75"></div>
+        <div className="relative z-10 max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-6">Customization Options</h2>
-            <p className="text-xl text-muted-foreground">Personalize your POD with premium upgrades and accessories</p>
+            <h2 className="text-4xl font-bold mb-6 text-white">Customization Options</h2>
+            <p className="text-xl text-gray-200">Personalize your POD with premium upgrades and accessories</p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-            <Card className="border-2 hover:border-purple-400 transition-colors">
+            <Card className="border-2 hover:border-purple-400 transition-colors bg-black/40 backdrop-blur-sm">
               <CardContent className="p-6 text-center">
-                <div className="mb-4 text-4xl">🎨</div>
-                <h3 className="font-semibold mb-2">Custom Paint</h3>
-                <p className="text-sm text-muted-foreground">Professional automotive-grade finishes</p>
-                <Badge variant="outline" className="mt-3">From $800</Badge>
+                <Paintbrush className="h-10 w-10 mx-auto mb-4 text-purple-400" />
+                <h3 className="font-semibold mb-2 text-white">Custom Paint</h3>
+                <p className="text-sm text-gray-300">Professional automotive-grade finishes</p>
+                <Badge variant="outline" className="mt-3 border-purple-400 text-purple-300">From $800</Badge>
               </CardContent>
             </Card>
 
-            <Card className="border-2 hover:border-blue-400 transition-colors">
+            <Card className="border-2 hover:border-blue-400 transition-colors bg-black/40 backdrop-blur-sm">
               <CardContent className="p-6 text-center">
-                <Sun className="h-10 w-10 mx-auto mb-4 text-blue-500" />
-                <h3 className="font-semibold mb-2">Skylight Window</h3>
-                <p className="text-sm text-muted-foreground">Natural light with ventilation</p>
-                <Badge variant="outline" className="mt-3">From $600</Badge>
+                <Sun className="h-10 w-10 mx-auto mb-4 text-blue-400" />
+                <h3 className="font-semibold mb-2 text-white">Skylight Window</h3>
+                <p className="text-sm text-gray-300">Natural light with ventilation</p>
+                <Badge variant="outline" className="mt-3 border-blue-400 text-blue-300">From $600</Badge>
               </CardContent>
             </Card>
 
-            <Card className="border-2 hover:border-green-400 transition-colors">
+            <Card className="border-2 hover:border-green-400 transition-colors bg-black/40 backdrop-blur-sm">
               <CardContent className="p-6 text-center">
-                <Home className="h-10 w-10 mx-auto mb-4 text-green-500" />
-                <h3 className="font-semibold mb-2">Bunk Bed System</h3>
-                <p className="text-sm text-muted-foreground">Space-saving sleep configuration</p>
-                <Badge variant="outline" className="mt-3">From $1,200</Badge>
+                <Home className="h-10 w-10 mx-auto mb-4 text-green-400" />
+                <h3 className="font-semibold mb-2 text-white">Bunk Bed System</h3>
+                <p className="text-sm text-gray-300">Space-saving sleep configuration</p>
+                <Badge variant="outline" className="mt-3 border-green-400 text-green-300">From $1,200</Badge>
               </CardContent>
             </Card>
 
-            <Card className="border-2 hover:border-yellow-400 transition-colors">
+            <Card className="border-2 hover:border-yellow-400 transition-colors bg-black/40 backdrop-blur-sm">
               <CardContent className="p-6 text-center">
-                <Zap className="h-10 w-10 mx-auto mb-4 text-yellow-500" />
-                <h3 className="font-semibold mb-2">Premium Lighting</h3>
-                <p className="text-sm text-muted-foreground">Smart RGB+CCT LED system</p>
-                <Badge variant="outline" className="mt-3">From $400</Badge>
+                <Zap className="h-10 w-10 mx-auto mb-4 text-yellow-400" />
+                <h3 className="font-semibold mb-2 text-white">Premium Lighting</h3>
+                <p className="text-sm text-gray-300">Smart RGB+CCT LED system</p>
+                <Badge variant="outline" className="mt-3 border-yellow-400 text-yellow-300">From $400</Badge>
               </CardContent>
             </Card>
           </div>
 
           <div className="text-center">
             <Link href="/pods/buildout#accessories">
-              <Button size="lg" className="bg-purple-600 hover:bg-purple-700 text-white">
+              <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-black transition-all">
                 View All Customization Options
               </Button>
             </Link>

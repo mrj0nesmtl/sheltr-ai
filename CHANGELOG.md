@@ -7,6 +7,119 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.69.0] - 2025-10-29 (CONTENT & UX ENHANCEMENTS) ✨🎨
+
+### 🎉 Major Features
+
+**About Page - Complete Technology Ecosystem Showcase**
+- ✅ **8-Card Technology Grid**: Expanded from 4 to 8 cards showcasing complete platform architecture
+- ✅ **"From QR Code to Housing"**: New comprehensive title explaining the full donation-to-housing journey
+- ✅ **SmartFund™ Explanation**: Detailed cards explaining 80-15-5 distribution model
+- ✅ **AI Agent Orchestra**: Highlighted MCP tools and multi-agent system capabilities
+- ✅ **Enterprise HMIS**: Showcased HUD-compliant case management platform
+- ✅ **Virtual Cards & DeFi**: Explained participant spending and institutional staking
+- ✅ **Micro-Housing Fund**: Detailed how 15% compounds towards emergency housing
+- ✅ **Color-Coded Cards**: Each card has unique color scheme with hover effects and shadows
+
+**About Page - Enhanced "What is SHELTR?" Section**
+- ✅ **Expanded Mission Statement**: Added focus on shelter operations, overflow management, emergency housing, and micro-housing
+- ✅ **Dignity & Purpose Ethos**: Emphasized ecosystem built on dignity, purpose, and sustainable pathways
+- ✅ **Four Stakeholder Solutions**: New 4-card grid showcasing solutions for Participants, Donors, Shelters, and Governments
+- ✅ **Detailed Feature Lists**: Each stakeholder card includes 4 specific benefits/features
+- ✅ **Enhanced CTA**: Added background image with gradient overlay to "Building an Ecosystem" call-to-action
+- ✅ **Housing Solutions Card**: Replaced "Community Angels" with housing-focused messaging
+
+**Landing Page - Origin Story & Mission**
+- ✅ **Necessity-Driven Narrative**: Added powerful statement: "SHELTR was born out of necessity—not ambition"
+- ✅ **Tech-for-Good Ethos**: Emphasized technologists guided by field experts
+- ✅ **Infrastructure Amplification**: Highlighted approach to amplify existing infrastructure, not compete
+- ✅ **Realistic Optimism**: "Anything is better than a tent on the side of the road"
+- ✅ **Styled Message Box**: Beautiful gradient box with border highlighting the mission statement
+
+**Pods Page - Customization Options Redesign**
+- ✅ **Interior Background Image**: Replaced purple/red gradient with `interior-1.jpeg` background
+- ✅ **75% Dark Overlay**: Added `bg-black/75` overlay for perfect readability
+- ✅ **Outline Button Style**: Changed "View All Customization Options" to outline style (no fill)
+- ✅ **Paintbrush Icon**: Replaced paint emoji 🎨 with proper Lucide `Paintbrush` icon
+- ✅ **Semi-Transparent Cards**: Cards now have `bg-black/40 backdrop-blur-sm` for glass effect
+- ✅ **Light Text Colors**: Updated all text to white/light colors for contrast against dark background
+
+### 🐛 Bug Fixes
+
+**Spotify Embed Issues**
+- ✅ **Removed Podcast Section**: Eliminated problematic Spotify iframe from About page
+- ✅ **Footer Fallback**: Podcast still accessible via footer Spotify link
+- ✅ **Upstream Timeout Fix**: Resolved "upstream connect error or disconnect/reset before headers" issue
+
+**Notification System Timestamp Handling**
+- ✅ **Multiple Format Support**: Fixed `TypeError: bTime.toMillis is not a function`
+- ✅ **Firestore Timestamp Handling**: Added support for Firestore Timestamp objects
+- ✅ **JavaScript Date Support**: Added support for JavaScript Date objects
+- ✅ **ISO String Support**: Added support for ISO date strings
+- ✅ **Null/Undefined Safety**: Added proper null/undefined checks
+- ✅ **Updated Services**: Fixed both `unifiedNotificationService.ts` and `useNotifications.ts`
+
+### 🎨 Design Improvements
+
+**Visual Cohesiveness**
+- ✅ **Background Gradients**: Changed Technology Ecosystem section from pure black to subtle gradient
+- ✅ **Section Transitions**: Improved visual flow between sections with varied backgrounds
+- ✅ **Technology Partners Badge**: Added "TECHNOLOGY PARTNERS" badge for better hierarchy
+- ✅ **Increased Spacing**: Added more breathing room between major sections
+
+**Color & Styling**
+- ✅ **Consistent Hover Effects**: All cards now have colored shadows on hover
+- ✅ **Icon Scale Animations**: Icons scale up on hover for better interactivity
+- ✅ **Outline Badge Consistency**: All badges use outline style with colored borders
+- ✅ **White CTA Buttons**: Call-to-action buttons use white background with colored text
+
+### 🔧 Technical Changes
+
+**`apps/web/src/app/about/page.tsx`**
+- ✅ Expanded technology ecosystem section from 4 to 8 cards
+- ✅ Added comprehensive descriptions for each technology component
+- ✅ Removed problematic Spotify podcast embed section
+- ✅ Enhanced "What is SHELTR?" section with 4 stakeholder solutions
+- ✅ Added background image to ecosystem CTA box
+- ✅ Updated section backgrounds for better visual flow
+
+**`apps/web/src/app/page.tsx`**
+- ✅ Added origin story message box below hero subtitle
+- ✅ Styled with gradient background and border
+- ✅ Emphasized necessity-driven mission and tech-for-good ethos
+
+**`apps/web/src/app/pods/page.tsx`**
+- ✅ Replaced gradient background with interior image
+- ✅ Added Paintbrush icon import from lucide-react
+- ✅ Changed all customization cards to semi-transparent with backdrop blur
+- ✅ Updated button to outline style
+- ✅ Adjusted text colors for dark background
+
+**`apps/web/src/services/unifiedNotificationService.ts`**
+- ✅ Added comprehensive timestamp format handling
+- ✅ Updated sort function to handle Timestamp, Date, and string formats
+- ✅ Enhanced `formatRelativeTime` with type guards
+
+**`apps/web/src/hooks/useNotifications.ts`**
+- ✅ Applied same timestamp handling fixes as notification service
+- ✅ Ensured consistent sorting across all notification displays
+
+**`firebase.json`**
+- ✅ Changed `X-Frame-Options` from `DENY` to `SAMEORIGIN`
+- ✅ Allows iframe embedding for investor data room functionality
+
+### 📦 Assets Updated
+- ✅ **Pod Unit Images**: Refreshed 14 pod-related images in `apps/images/sheltr_units/`
+- ✅ **Public Assets**: Updated corresponding images in `apps/web/public/images/sheltr_units/`
+- ✅ **Image Consistency**: Maintained same filenames for seamless integration
+
+### 🚀 Deployment
+- ✅ All changes tested locally
+- ✅ Production build successful
+- ✅ Firebase Hosting deployed
+
+---
+
 ## [2.68.0] - 2025-10-28 (INVESTOR DATA ROOM GALLERY LAUNCH) 🎨🔒
 
 ### 🎉 Major Features

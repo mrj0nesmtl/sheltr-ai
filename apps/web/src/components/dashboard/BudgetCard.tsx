@@ -8,10 +8,9 @@ import { DollarSign, TrendingDown, Calendar, ArrowRight, Lock } from 'lucide-rea
 
 export function BudgetCard() {
   const seedRound = 250000;
-  const totalBurn = 227926;
-  const remainingFunds = seedRound - totalBurn;
-  const burnRate = 18670;
-  const runway = Math.floor(remainingFunds / burnRate);
+  const projectedBurn = 227926;
+  const avgMonthlyBurn = 18670;
+  const projectedRunway = 12; // 12 months from raise to full deployment
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -32,7 +31,7 @@ export function BudgetCard() {
               Seed Budget 2025-26
             </CardTitle>
             <CardDescription>
-              Financial planning & runway analysis
+              Projected financial planning & runway analysis
             </CardDescription>
           </div>
           <Badge variant="secondary" className="bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-300">
@@ -45,27 +44,27 @@ export function BudgetCard() {
         {/* Key Metrics Grid */}
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-1">
-            <p className="text-xs text-muted-foreground">Seed Round</p>
+            <p className="text-xs text-muted-foreground">Target Raise</p>
             <p className="text-2xl font-bold text-green-600 dark:text-green-400">
               {formatCurrency(seedRound)}
             </p>
           </div>
           <div className="space-y-1">
-            <p className="text-xs text-muted-foreground">Total Burn</p>
-            <p className="text-2xl font-bold text-red-600 dark:text-red-400">
-              {formatCurrency(totalBurn)}
-            </p>
-          </div>
-          <div className="space-y-1">
-            <p className="text-xs text-muted-foreground">Remaining</p>
+            <p className="text-xs text-muted-foreground">Projected Allocation</p>
             <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-              {formatCurrency(remainingFunds)}
+              {formatCurrency(projectedBurn)}
             </p>
           </div>
           <div className="space-y-1">
-            <p className="text-xs text-muted-foreground">Runway</p>
+            <p className="text-xs text-muted-foreground">Reserve Buffer</p>
             <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">
-              {runway} mo
+              {formatCurrency(seedRound - projectedBurn)}
+            </p>
+          </div>
+          <div className="space-y-1">
+            <p className="text-xs text-muted-foreground">Projected Runway</p>
+            <p className="text-2xl font-bold text-cyan-600 dark:text-cyan-400">
+              {projectedRunway} mo
             </p>
           </div>
         </div>
@@ -73,13 +72,13 @@ export function BudgetCard() {
         {/* Progress Bar */}
         <div className="space-y-2">
           <div className="flex items-center justify-between text-sm">
-            <span className="text-muted-foreground">Budget Utilization</span>
-            <span className="font-medium">{((totalBurn / seedRound) * 100).toFixed(1)}%</span>
+            <span className="text-muted-foreground">Planned Allocation</span>
+            <span className="font-medium">{((projectedBurn / seedRound) * 100).toFixed(1)}%</span>
           </div>
           <div className="h-3 bg-muted rounded-full overflow-hidden">
             <div 
-              className="h-full bg-gradient-to-r from-green-500 via-yellow-500 to-red-500 transition-all"
-              style={{ width: `${(totalBurn / seedRound) * 100}%` }}
+              className="h-full bg-gradient-to-r from-green-500 via-blue-500 to-purple-500 transition-all"
+              style={{ width: `${(projectedBurn / seedRound) * 100}%` }}
             />
           </div>
         </div>
@@ -87,14 +86,14 @@ export function BudgetCard() {
         {/* Quick Stats */}
         <div className="grid grid-cols-2 gap-3 pt-2">
           <div className="flex items-center gap-2 text-sm">
-            <TrendingDown className="h-4 w-4 text-orange-500" />
+            <TrendingDown className="h-4 w-4 text-blue-500" />
             <div>
-              <p className="text-xs text-muted-foreground">Monthly Burn</p>
-              <p className="font-semibold">{formatCurrency(burnRate)}</p>
+              <p className="text-xs text-muted-foreground">Avg Monthly Burn</p>
+              <p className="font-semibold">{formatCurrency(avgMonthlyBurn)}</p>
             </div>
           </div>
           <div className="flex items-center gap-2 text-sm">
-            <Calendar className="h-4 w-4 text-blue-500" />
+            <Calendar className="h-4 w-4 text-green-500" />
             <div>
               <p className="text-xs text-muted-foreground">Timeline</p>
               <p className="font-semibold">Sep 25 - Aug 26</p>

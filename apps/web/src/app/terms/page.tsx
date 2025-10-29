@@ -105,7 +105,7 @@ export default function TermsPage() {
                   prose-li:leading-relaxed prose-li:text-muted-foreground
                   prose-strong:text-foreground prose-strong:font-semibold"
                 >
-              <h2>1. Acceptance of Terms</h2>
+              <h2 className="!mt-0">1. Acceptance of Terms</h2>
               <p>
                 By accessing or using the SHELTR platform ("Platform"), including the website, mobile applications, 
                 smart contracts, and related services provided by SHELTR Technologies Inc. ("Company", "we", "us", or "our"), 
@@ -116,7 +116,7 @@ export default function TermsPage() {
                 These Terms constitute a legally binding agreement between you and the Company.
               </p>
 
-              <h2>2. Platform Description</h2>
+              <h2 className="!mt-16">2. Platform Description</h2>
               <p>
                 SHELTR is a blockchain-based charitable giving platform that facilitates:
               </p>
@@ -129,7 +129,7 @@ export default function TermsPage() {
                 <li>E-commerce marketplace for homeless services ("Homeless Depot")</li>
               </ul>
 
-              <h2>3. User Eligibility</h2>
+              <h2 className="!mt-16">3. User Eligibility</h2>
               <p>
                 To use the Platform, you must:
               </p>
@@ -141,7 +141,7 @@ export default function TermsPage() {
                 <li>Not be located in a jurisdiction where the Platform is prohibited</li>
               </ul>
 
-              <h2>4. User Accounts and Verification</h2>
+              <h2 className="!mt-16">4. User Accounts and Verification</h2>
               <h3>4.1 Account Creation</h3>
               <p>
                 Users may create accounts as Donors, Participants, Shelter Administrators, or Super Administrators. 
@@ -166,7 +166,7 @@ export default function TermsPage() {
                 resulting from your failure to secure your account.
               </p>
 
-              <h2>5. Token Economics and Risks</h2>
+              <h2 className="!mt-16">5. Token Economics and Risks</h2>
               <h3>5.1 SHELTR-S Stable Token</h3>
               <p>
                 SHELTR-S is designed as a stable utility token pegged to USD value. However:
@@ -203,7 +203,7 @@ export default function TermsPage() {
                 <li><strong>Market Risk:</strong> Cryptocurrency markets are highly speculative</li>
               </ul>
 
-              <h2>6. Artificial Intelligence and Automated Systems</h2>
+              <h2 className="!mt-16">6. Artificial Intelligence and Automated Systems</h2>
               <h3>6.1 AI Scope and Limitations</h3>
               <p>
                 The Platform uses AI for:
@@ -229,7 +229,7 @@ export default function TermsPage() {
                 <li>AI training data may contain historical biases</li>
               </ul>
 
-              <h2>7. Platform Services and Limitations</h2>
+              <h2 className="!mt-16">7. Platform Services and Limitations</h2>
               <h3>7.1 Service Availability</h3>
               <p>
                 The Platform is provided "as is" without guarantees of:
@@ -253,7 +253,7 @@ export default function TermsPage() {
                 <li>Control network fees or gas costs</li>
               </ul>
 
-              <h2>8. Prohibited Activities</h2>
+              <h2 className="!mt-16">8. Prohibited Activities</h2>
               <p>
                 Users may not:
               </p>
@@ -269,14 +269,14 @@ export default function TermsPage() {
                 <li>Engage in money laundering or terrorist financing</li>
               </ul>
 
-              <h2>9. Privacy and Data Protection</h2>
+              <h2 className="!mt-16">9. Privacy and Data Protection</h2>
               <p>
                 Your privacy is important to us. Please review our Privacy Policy, which describes 
                 how we collect, use, and protect your information. By using the Platform, 
                 you consent to our data practices as described in the Privacy Policy.
               </p>
 
-              <h2>10. Intellectual Property</h2>
+              <h2 className="!mt-16">10. Intellectual Property</h2>
               <p>
                 The Platform and its content are protected by intellectual property laws. 
                 The Company retains all rights to:
@@ -289,7 +289,7 @@ export default function TermsPage() {
                 <li>Smart contract implementations</li>
               </ul>
 
-              <h2>11. Disclaimer of Warranties</h2>
+              <h2 className="!mt-16">11. Disclaimer of Warranties</h2>
               <p>
                 THE PLATFORM IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND. 
                 THE COMPANY DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING:
@@ -302,7 +302,7 @@ export default function TermsPage() {
                 <li>SECURITY OF DATA OR TRANSACTIONS</li>
               </ul>
 
-              <h2>12. Limitation of Liability</h2>
+              <h2 className="!mt-16">12. Limitation of Liability</h2>
               <p>
                 TO THE MAXIMUM EXTENT PERMITTED BY LAW, THE COMPANY SHALL NOT BE LIABLE FOR:
               </p>
@@ -319,7 +319,7 @@ export default function TermsPage() {
                 WHICHEVER IS GREATER.
               </p>
 
-              <h2>13. Indemnification</h2>
+              <h2 className="!mt-16">13. Indemnification</h2>
               <p>
                 You agree to indemnify and hold harmless the Company from any claims, damages, 
                 or expenses arising from:
@@ -332,7 +332,7 @@ export default function TermsPage() {
                 <li>Regulatory violations</li>
               </ul>
 
-              <h2>14. Termination</h2>
+              <h2 className="!mt-16">14. Termination</h2>
               <p>
                 The Company may terminate or suspend your access to the Platform at any time, 
                 with or without cause, including for:
@@ -344,7 +344,7 @@ export default function TermsPage() {
                 <li>Platform discontinuation</li>
               </ul>
 
-              <h2>15. Dispute Resolution</h2>
+              <h2 className="!mt-16">15. Dispute Resolution</h2>
               <h3>15.1 Governing Law</h3>
               <p>
                 These Terms are governed by the laws of British Columbia, Canada, without regard to conflict of law principles.
@@ -356,7 +356,7 @@ export default function TermsPage() {
                 Arbitration Act of British Columbia. Class action lawsuits are not permitted.
               </p>
 
-              <h2>16. Changes to Terms</h2>
+              <h2 className="!mt-16">16. Changes to Terms</h2>
               <p>
                 The Company reserves the right to modify these Terms at any time. 
                 Material changes will be communicated through:
@@ -370,7 +370,7 @@ export default function TermsPage() {
                 Continued use of the Platform after changes constitutes acceptance of modified Terms.
               </p>
 
-              <h2>17. Contact Information</h2>
+              <h2 className="!mt-16">17. Contact Information</h2>
               <p>
                 For questions about these Terms, contact us at:
               </p>
@@ -380,13 +380,13 @@ export default function TermsPage() {
                 <li>Website: https://sheltr-ai.web.app</li>
               </ul>
 
-              <h2>18. Severability</h2>
+              <h2 className="!mt-16">18. Severability</h2>
               <p>
                 If any provision of these Terms is found to be unenforceable, 
                 the remaining provisions shall remain in full force and effect.
               </p>
 
-              <h2>19. Entire Agreement</h2>
+              <h2 className="!mt-16">19. Entire Agreement</h2>
               <p>
                 These Terms, together with the Privacy Policy, constitute the entire agreement 
                 between you and the Company regarding the Platform.

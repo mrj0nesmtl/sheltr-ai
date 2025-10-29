@@ -111,7 +111,7 @@ export default function PrivacyPage() {
                   prose-li:leading-relaxed prose-li:text-muted-foreground
                   prose-strong:text-foreground prose-strong:font-semibold"
                 >
-              <h2>1. Introduction</h2>
+              <h2 className="!mt-0">1. Introduction</h2>
               <p>
                 SHELTR-AI Technologies Inc. ("Company", "we", "us", or "our") is committed to protecting your privacy. 
                 This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you 
@@ -122,7 +122,7 @@ export default function PrivacyPage() {
                 If you do not agree with our data practices, please do not use the Platform.
               </p>
 
-              <h2>2. Information We Collect</h2>
+              <h2 className="!mt-16">2. Information We Collect</h2>
               
               <h3>2.1 Personal Information</h3>
               <p>We may collect the following personal information:</p>
@@ -159,7 +159,7 @@ export default function PrivacyPage() {
                 <li><strong>Training Data:</strong> Anonymized data used to improve AI models</li>
               </ul>
 
-              <h2>3. How We Use Your Information</h2>
+              <h2 className="!mt-16">3. How We Use Your Information</h2>
 
               <h3>3.1 Platform Operations</h3>
               <ul>
@@ -187,7 +187,7 @@ export default function PrivacyPage() {
                 <li>Enforce Terms of Service and platform policies</li>
               </ul>
 
-              <h2>4. AI System Data Practices</h2>
+              <h2 className="!mt-16">4. AI System Data Practices</h2>
 
               <h3>4.1 AI Decision Making</h3>
               <p>Our AI systems make decisions regarding:</p>
@@ -215,7 +215,7 @@ export default function PrivacyPage() {
                 <li>Access information about AI model logic (where technically feasible)</li>
               </ul>
 
-              <h2>5. Blockchain and Transparency</h2>
+              <h2 className="!mt-16">5. Blockchain and Transparency</h2>
 
               <h3>5.1 On-Chain Data</h3>
               <p>
@@ -236,7 +236,7 @@ export default function PrivacyPage() {
                 <li><strong>Encrypted Storage:</strong> Sensitive off-chain data is encrypted at rest and in transit</li>
               </ul>
 
-              <h2>6. Information Sharing and Disclosure</h2>
+              <h2 className="!mt-16">6. Information Sharing and Disclosure</h2>
 
               <h3>6.1 Service Providers</h3>
               <p>We share information with trusted third-party service providers:</p>
@@ -262,7 +262,7 @@ export default function PrivacyPage() {
                 transferred as part of the business transaction, subject to the same privacy protections.
               </p>
 
-              <h2>7. Data Security</h2>
+              <h2 className="!mt-16">7. Data Security</h2>
 
               <h3>7.1 Technical Safeguards</h3>
               <ul>
@@ -281,7 +281,7 @@ export default function PrivacyPage() {
                 <li>Vendor security assessments and contracts</li>
               </ul>
 
-              <h2>8. Your Privacy Rights</h2>
+              <h2 className="!mt-16">8. Your Privacy Rights</h2>
 
               <h3>8.1 Access and Control</h3>
               <p>You have the right to:</p>
@@ -306,7 +306,7 @@ export default function PrivacyPage() {
                 We will respond within 30 days and may require identity verification.
               </p>
 
-              <h2>9. International Data Transfers</h2>
+              <h2 className="!mt-16">9. International Data Transfers</h2>
               <p>
                 The Platform operates globally, and your information may be transferred to and 
                 processed in countries other than your residence. We ensure adequate protection through:
@@ -318,7 +318,7 @@ export default function PrivacyPage() {
                 <li>Binding Corporate Rules for internal transfers</li>
               </ul>
 
-              <h2>10. Data Retention</h2>
+              <h2 className="!mt-16">10. Data Retention</h2>
               <p>
                 We retain personal information for as long as necessary to:
               </p>
@@ -338,14 +338,14 @@ export default function PrivacyPage() {
                 <li><strong>Analytics Data:</strong> 2 years in anonymized form</li>
               </ul>
 
-              <h2>11. Children's Privacy</h2>
+              <h2 className="!mt-16">11. Children's Privacy</h2>
               <p>
                 The Platform is not intended for users under 18. We do not knowingly collect 
                 personal information from children. If we become aware of such collection, 
                 we will take steps to delete the information.
               </p>
 
-              <h2>12. Cookies and Tracking</h2>
+              <h2 className="!mt-16">12. Cookies and Tracking</h2>
               <p>
                 We use cookies and similar technologies for:
               </p>
@@ -360,7 +360,7 @@ export default function PrivacyPage() {
                 cookies may affect platform functionality.
               </p>
 
-              <h2>13. Privacy by Design</h2>
+              <h2 className="!mt-16">13. Privacy by Design</h2>
               <p>
                 SHELTR is built with privacy-by-design principles:
               </p>
@@ -372,7 +372,7 @@ export default function PrivacyPage() {
                 <li><strong>User Control:</strong> Meaningful choices and consent mechanisms</li>
               </ul>
 
-              <h2>14. Updates to This Policy</h2>
+              <h2 className="!mt-16">14. Updates to This Policy</h2>
               <p>
                 We may update this Privacy Policy to reflect changes in our practices or applicable laws. 
                 Material changes will be communicated through:
@@ -386,7 +386,7 @@ export default function PrivacyPage() {
                 The "Last Updated" date at the top of this policy indicates when changes were made.
               </p>
 
-              <h2>15. Contact Information</h2>
+              <h2 className="!mt-16">15. Contact Information</h2>
               <p>
                 For privacy-related questions, concerns, or requests, contact us:
               </p>
@@ -397,7 +397,7 @@ export default function PrivacyPage() {
                 <li><strong>Address:</strong> SHELTR-AI Technologies Inc., Toronto, Ontario, Canada</li>
               </ul>
 
-              <h2>16. Regulatory Compliance</h2>
+              <h2 className="!mt-16">16. Regulatory Compliance</h2>
               <p>
                 This Privacy Policy is designed to comply with:
               </p>

@@ -1,8 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowRight, Heart, QrCode, Shield, BarChart3, Home, Wallet } from 'lucide-react';
+import { ArrowRight, Heart, QrCode, Shield, Users, Building2, Target, CheckCircle, TrendingUp, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import Footer from '@/components/Footer';
 import { PublicChatbot } from '@/components/PublicChatbot';
 import NewsletterSignup from '@/components/NewsletterSignup';
@@ -50,188 +52,316 @@ export default function HomePage() {
           </div>
         </StandardHero>
 
-        {/* Feature Cards Section - 6 Cards in 2x3 Grid */}
-        <section className="py-20 bg-background">
+        {/* Mission Statement - Above the Fold */}
+        <section className="py-16 bg-background">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <p className="text-xl md:text-2xl text-muted-foreground max-w-4xl mx-auto mb-8">
-                Let&apos;s create a world where every act of kindness is amplified 
-                and ensures lasting, measurable impact for everyone. 
-              </p>
-              <div className="max-w-5xl mx-auto">
-                <div className="bg-gradient-to-br from-muted/50 via-background to-muted/30 rounded-xl p-8 border-2 border-primary/10">
-                  <p className="text-base md:text-lg text-foreground/90 leading-relaxed">
-                    <strong className="text-primary">SHELTR was born out of necessity—not ambition.</strong> Built by technologists 
-                    guided by field experts, we apply a <em>tech-for-good</em> ethos to <strong>amplify existing infrastructure, 
-                    not compete with it.</strong> Our singular focus: <strong>housing the unhoused as quickly as possible.</strong> Because 
-                    anything—<em>anything</em>—is better than a tent on the side of the road. This is serious work, grounded in 
-                    reality, driven by optimism, and built to deliver measurable outcomes.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              
-              {/* Direct Impact */}
-              <div className="bg-card rounded-lg border-2 border-gray-200 dark:border-gray-800 hover:border-purple-300 dark:hover:border-purple-700 transition-colors p-6 text-center">
-                <div className="flex items-center justify-center mx-auto mb-4">
-                  <Heart className="w-8 h-8 text-purple-400" />
-                </div>
-                <h3 className="text-xl font-bold mb-3">Direct Impact</h3>
-                <p className="text-muted-foreground">
-                  Your donations directly support individuals in need through secure, transparent transactions.
+            <div className="max-w-5xl mx-auto">
+              <div className="bg-gradient-to-br from-muted/50 via-background to-muted/30 rounded-2xl p-10 border-2 border-primary/10 text-center">
+                <p className="text-lg md:text-xl text-foreground/90 leading-relaxed mb-6">
+                  <strong className="text-primary text-2xl">SHELTR was born out of necessity—not ambition.</strong>
                 </p>
-              </div>
-
-              {/* Smart Allocation */}
-              <div className="bg-card rounded-lg border-2 border-gray-200 dark:border-gray-800 hover:border-purple-300 dark:hover:border-purple-700 transition-colors p-6 text-center">
-                <div className="flex items-center justify-center mx-auto mb-4">
-                  <Wallet className="w-8 h-8 text-purple-400" />
-                </div>
-                <h3 className="text-xl font-bold mb-3">SmartFund™ Allocation</h3>
-                <p className="text-muted-foreground">
-                  Donated funds are automatically distributed: 80% for immediate needs, 15% for housing, and 5% for shelter operations.
-                </p>
-              </div>
-
-              {/* Housing Focus */}
-              <div className="bg-card rounded-lg border-2 border-gray-200 dark:border-gray-800 hover:border-blue-300 dark:hover:border-blue-700 transition-colors p-6 text-center">
-                <div className="flex items-center justify-center mx-auto mb-4">
-                  <Home className="w-8 h-8 text-blue-400" />
-                </div>
-                <h3 className="text-xl font-bold mb-3">Housing Focus</h3>
-                <p className="text-muted-foreground">
-                  Every donation contributes to a dedicated POD housing fund, helping to facilitate real world change.
-                </p>
-              </div>
-
-              {/* QR Technology */}
-              <div className="bg-card rounded-lg border-2 border-gray-200 dark:border-gray-800 hover:border-green-300 dark:hover:border-green-700 transition-colors p-6 text-center">
-                <div className="flex items-center justify-center mx-auto mb-4">
-                  <QrCode className="w-8 h-8 text-green-400" />
-                </div>
-                <h3 className="text-xl font-bold mb-3">QR Technology</h3>
-                <p className="text-muted-foreground">
-                  Scan QR codes to make instant, secure donations to specific individuals in need.
-                </p>
-              </div>
-
-              {/* Blockchain Security */}
-              <div className="bg-card rounded-lg border-2 border-gray-200 dark:border-gray-800 hover:border-red-300 dark:hover:border-red-700 transition-colors p-6 text-center">
-                <div className="flex items-center justify-center mx-auto mb-4">
-                  <Shield className="w-8 h-8 text-red-400" />
-                </div>
-                <h3 className="text-xl font-bold mb-3">Blockchain Security</h3>
-                <p className="text-muted-foreground">
-                  Every transaction is secured and verified through blockchain technology, ensuring complete transparency.
-                </p>
-              </div>
-
-              {/* Impact Tracking */}
-              <div className="bg-card rounded-lg border-2 border-gray-200 dark:border-gray-800 hover:border-yellow-300 dark:hover:border-yellow-700 transition-colors p-6 text-center">
-                <div className="flex items-center justify-center mx-auto mb-4">
-                  <BarChart3 className="w-8 h-8 text-yellow-400" />
-                </div>
-                <h3 className="text-xl font-bold mb-3">Impact Tracking</h3>
-                <p className="text-muted-foreground">
-                  See the real impact of your donations in real-time.
+                <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
+                  Built by technologists guided by field experts, we apply a <em>tech-for-good</em> ethos to <strong>amplify existing infrastructure, 
+                  not compete with it.</strong> Our singular focus: <strong className="text-foreground">housing the unhoused as quickly as possible.</strong> Because 
+                  anything—<em>anything</em>—is better than a tent on the side of the road.
                 </p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Why Choose SHELTR Section */}
-        <section className="py-12 bg-muted/30">
+        {/* How It Works - 3 Simple Steps */}
+        <section className="py-20 bg-muted/20">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <Badge className="mb-4" variant="outline">HOW IT WORKS</Badge>
+              <h2 className="text-3xl md:text-5xl font-bold mb-6">
+                Three Steps to <span className="text-blue-400">Real Impact</span>
+              </h2>
+              <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+                From scan to shelter—transparent, automated, and built for dignity
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-8 mb-12">
+              {/* Step 1 */}
+              <Card className="border-2 hover:border-blue-400/50 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20 group relative overflow-hidden">
+                <div className="absolute top-4 right-4 w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center">
+                  <span className="text-2xl font-bold text-blue-500">1</span>
+                </div>
+                <CardHeader>
+                  <div className="mb-4 p-4 rounded-full bg-blue-500/10 w-fit">
+                    <QrCode className="h-10 w-10 text-blue-500" />
+                  </div>
+                  <CardTitle className="text-2xl">Scan & Give</CardTitle>
+                  <CardDescription>Instant, direct donations</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground leading-relaxed">
+                    Participants receive unique QR codes. Donors scan and give instantly—funds flow directly through secure blockchain transactions.
+                  </p>
+                </CardContent>
+              </Card>
+
+              {/* Step 2 */}
+              <Card className="border-2 hover:border-green-400/50 transition-all duration-300 hover:shadow-lg hover:shadow-green-500/20 group relative overflow-hidden">
+                <div className="absolute top-4 right-4 w-12 h-12 rounded-full bg-green-500/10 flex items-center justify-center">
+                  <span className="text-2xl font-bold text-green-500">2</span>
+                </div>
+                <CardHeader>
+                  <div className="mb-4 p-4 rounded-full bg-green-500/10 w-fit">
+                    <Zap className="h-10 w-10 text-green-500" />
+                  </div>
+                  <CardTitle className="text-2xl">SmartFund™ Split</CardTitle>
+                  <CardDescription>Automated distribution</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground leading-relaxed mb-4">
+                    Smart contracts automatically distribute every donation:
+                  </p>
+                  <ul className="space-y-2 text-sm">
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      <span><strong>80%</strong> immediate access</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      <span><strong>15%</strong> housing fund (staked)</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      <span><strong>5%</strong> shelter operations</span>
+                    </li>
+                  </ul>
+                </CardContent>
+              </Card>
+
+              {/* Step 3 */}
+              <Card className="border-2 hover:border-purple-400/50 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/20 group relative overflow-hidden">
+                <div className="absolute top-4 right-4 w-12 h-12 rounded-full bg-purple-500/10 flex items-center justify-center">
+                  <span className="text-2xl font-bold text-purple-500">3</span>
+                </div>
+                <CardHeader>
+                  <div className="mb-4 p-4 rounded-full bg-purple-500/10 w-fit">
+                    <Building2 className="h-10 w-10 text-purple-500" />
+                  </div>
+                  <CardTitle className="text-2xl">Build Housing</CardTitle>
+                  <CardDescription>Long-term solutions</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground leading-relaxed">
+                    The 15% housing allocation compounds through institutional staking, building towards micro-housing units and permanent shelter solutions.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Primary CTA - Above the Fold */}
+            <div className="text-center">
+              <Link href="/scan-give">
+                <Button size="lg" className="text-xl px-12 py-6 bg-blue-600 hover:bg-blue-700 text-white shadow-xl">
+                  <QrCode className="h-6 w-6 mr-3" />
+                  Start Giving Now
+                  <ArrowRight className="h-6 w-6 ml-3" />
+                </Button>
+              </Link>
+              <p className="text-sm text-muted-foreground mt-4">No signup required • Instant impact • 100% transparent</p>
+            </div>
+          </div>
+        </section>
+
+        {/* Social Proof - Trust Indicators */}
+        <section className="py-16 bg-background">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold mb-4">Why SHELTR?</h2>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">Why SHELTR?</h2>
               <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                It&apos;s cutting-edge technology with proven  impact methodologies 
-                to create the most transparent and effective charitable giving platform ever built.
+                Cutting-edge technology meets proven impact methodologies
               </p>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="text-center p-6 bg-card rounded-lg border-2 border-gray-200 dark:border-gray-800 hover:border-primary/50 transition-colors">
-                <div className="flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-bold mb-2">100% Transparent</h3>
-                <p className="text-muted-foreground">
-                  Blockchain tech ensures every transaction is visible and verified
-                </p>
-              </div>
+              <Card className="text-center border-2 hover:border-primary/50 transition-all">
+                <CardHeader>
+                  <div className="mx-auto mb-4 p-4 rounded-full bg-primary/10 w-fit">
+                    <Shield className="h-10 w-10 text-primary" />
+                  </div>
+                  <CardTitle className="text-2xl">100% Transparent</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">
+                    Every transaction tracked on blockchain. No hidden fees, complete visibility from donation to impact.
+                  </p>
+                </CardContent>
+              </Card>
               
-              <div className="text-center p-6 bg-card rounded-lg border-2 border-gray-200 dark:border-gray-800 hover:border-primary/50 transition-colors">
-                <div className="flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-bold mb-2">Data-Driven</h3>
-                <p className="text-muted-foreground">
-                  It helps optimize resource allocation and impact
-                </p>
-              </div>
+              <Card className="text-center border-2 hover:border-primary/50 transition-all">
+                <CardHeader>
+                  <div className="mx-auto mb-4 p-4 rounded-full bg-primary/10 w-fit">
+                    <TrendingUp className="h-10 w-10 text-primary" />
+                  </div>
+                  <CardTitle className="text-2xl">Data-Driven</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">
+                    Real-time analytics optimize resource allocation and maximize impact for every dollar donated.
+                  </p>
+                </CardContent>
+              </Card>
               
-              <div className="text-center p-6 bg-card rounded-lg border-2 border-gray-200 dark:border-gray-800 hover:border-primary/50 transition-colors">
-                <div className="flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-bold mb-2">Human-Centered</h3>
-                <p className="text-muted-foreground">
-                  Built with care and respect for all in dispair.
-                </p>
-              </div>
+              <Card className="text-center border-2 hover:border-primary/50 transition-all">
+                <CardHeader>
+                  <div className="mx-auto mb-4 p-4 rounded-full bg-primary/10 w-fit">
+                    <Heart className="h-10 w-10 text-primary" />
+                  </div>
+                  <CardTitle className="text-2xl">Human-Centered</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">
+                    Built with dignity and purpose. Technology that amplifies compassion, not replaces it.
+                  </p>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </section>
 
-        {/* CTA Section - With Background Image and Overlay */}
-        <section className="relative py-20 overflow-hidden">
-          {/* Background Image */}
+        {/* Who We Serve - 4 Stakeholders */}
+        <section className="py-20 bg-gradient-to-b from-muted/30 to-background">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <Badge className="mb-4" variant="outline">AN ECOSYSTEM FOR ALL</Badge>
+              <h2 className="text-3xl md:text-5xl font-bold mb-6">
+                Solutions for Every Stakeholder
+              </h2>
+              <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+                Participants, donors, shelters, and governments—everyone has a role
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <Card className="border-2 hover:border-blue-400/50 transition-all hover:shadow-lg">
+                <CardHeader className="text-center">
+                  <div className="mx-auto mb-4 p-4 rounded-full bg-blue-500/10 w-fit">
+                    <Users className="h-8 w-8 text-blue-500" />
+                  </div>
+                  <CardTitle>For Participants</CardTitle>
+                  <CardDescription>Dignity & Direct Support</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-2 text-sm text-muted-foreground">
+                    <li>• Personal QR codes</li>
+                    <li>• Virtual debit cards</li>
+                    <li>• Housing fund building</li>
+                    <li>• AI case management</li>
+                  </ul>
+                </CardContent>
+              </Card>
+
+              <Card className="border-2 hover:border-green-400/50 transition-all hover:shadow-lg">
+                <CardHeader className="text-center">
+                  <div className="mx-auto mb-4 p-4 rounded-full bg-green-500/10 w-fit">
+                    <Heart className="h-8 w-8 text-green-500" />
+                  </div>
+                  <CardTitle>For Donors</CardTitle>
+                  <CardDescription>Transparent Impact</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-2 text-sm text-muted-foreground">
+                    <li>• Instant QR giving</li>
+                    <li>• Blockchain tracking</li>
+                    <li>• Real-time impact</li>
+                    <li>• Tax receipts</li>
+                  </ul>
+                </CardContent>
+              </Card>
+
+              <Card className="border-2 hover:border-orange-400/50 transition-all hover:shadow-lg">
+                <CardHeader className="text-center">
+                  <div className="mx-auto mb-4 p-4 rounded-full bg-orange-500/10 w-fit">
+                    <Building2 className="h-8 w-8 text-orange-500" />
+                  </div>
+                  <CardTitle>For Shelters</CardTitle>
+                  <CardDescription>Operations & Management</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-2 text-sm text-muted-foreground">
+                    <li>• Enterprise HMIS</li>
+                    <li>• Overflow management</li>
+                    <li>• Automated reporting</li>
+                    <li>• 5% funding stream</li>
+                  </ul>
+                </CardContent>
+              </Card>
+
+              <Card className="border-2 hover:border-purple-400/50 transition-all hover:shadow-lg">
+                <CardHeader className="text-center">
+                  <div className="mx-auto mb-4 p-4 rounded-full bg-purple-500/10 w-fit">
+                    <Target className="h-8 w-8 text-purple-500" />
+                  </div>
+                  <CardTitle>For Governments</CardTitle>
+                  <CardDescription>Data & Accountability</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-2 text-sm text-muted-foreground">
+                    <li>• Real-time population data</li>
+                    <li>• HUD compliance</li>
+                    <li>• Coordinated entry</li>
+                    <li>• ROI metrics</li>
+                  </ul>
+                </CardContent>
+              </Card>
+            </div>
+
+            <div className="text-center mt-12">
+              <Link href="/solutions">
+                <Button size="lg" variant="outline" className="text-lg px-8 py-4">
+                  Explore All Solutions
+                  <ArrowRight className="h-5 w-5 ml-2" />
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* Final CTA - With Background Image */}
+        <section className="relative py-24 overflow-hidden">
           <div 
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
             style={{ backgroundImage: 'url(/backgrounds/impact-bg.jpg)' }}
           />
+          <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-blue-900/60 to-purple-900/60" />
           
-          {/* Dark Overlay for Better Text Readability */}
-          <div className="absolute inset-0 bg-black/60 dark:bg-black/70" />
-          
-          {/* Content */}
-          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div className="max-w-3xl mx-auto">
-              <h4 className="text-4xl md:text-5xl font-bold mb-6 text-white drop-shadow-lg">
-               How We Address the Unhoused, Needs to Change
-              </h4>
-              <p className="text-xl mb-8 text-white/95 drop-shadow-md">
-                
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link href="/register">
-                  <Button 
-                    size="lg" 
-                    className="text-lg px-8 py-4 bg-white text-black hover:bg-gray-100 dark:bg-white dark:text-black dark:hover:bg-gray-100 font-semibold shadow-lg"
-                  >
-                    Get Started Today
-                  </Button>
-                </Link>
-                <Link href="/solutions">
-                  <Button 
-                    size="lg" 
-                    variant="outline" 
-                    className="text-lg px-8 py-4 border-2 border-white text-white bg-transparent hover:bg-white hover:text-black font-semibold shadow-lg transition-all duration-200"
-                  >
-                    Learn More
-                  </Button>
-                </Link>
-              </div>
+          <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 className="text-4xl md:text-6xl font-bold mb-6 text-white drop-shadow-lg">
+              Ready to Make a Difference?
+            </h2>
+            <p className="text-xl md:text-2xl mb-10 text-gray-200 drop-shadow-md">
+              Join us in creating sustainable pathways out of homelessness
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link href="/register">
+                <Button 
+                  size="lg" 
+                  className="text-xl px-10 py-6 bg-white text-blue-600 hover:bg-gray-100 font-bold shadow-2xl"
+                >
+                  Get Started Today
+                </Button>
+              </Link>
+              <Link href="/about">
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  className="text-xl px-10 py-6 border-2 border-white text-white hover:bg-white hover:text-black font-bold shadow-2xl"
+                >
+                  Learn More
+                </Button>
+              </Link>
             </div>
+            <p className="text-sm text-gray-300 mt-6">
+              <CheckCircle className="h-4 w-4 inline mr-2" />
+              Free to start • No credit card required • Instant impact
+            </p>
           </div>
         </section>
 

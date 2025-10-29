@@ -890,19 +890,55 @@ export default function FoundersOnlyPage() {
           </DndContext>
         </div>
 
+        {/* Section Divider */}
+        <div className="relative my-12">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t-2 border-slate-200 dark:border-slate-700"></div>
+          </div>
+          <div className="relative flex justify-center">
+            <span className="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 px-6 py-2 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+              Financial & Operations
+            </span>
+          </div>
+        </div>
+
+        {/* Seed Budget Overview */}
+        <div className="mb-12">
+          <div className="flex items-center gap-3 mb-4">
+            <DollarSign className="h-7 w-7 text-green-600" />
+            <h2 className="text-3xl font-bold">Financial Overview</h2>
+          </div>
+          <p className="text-muted-foreground mb-6 text-lg">
+            Seed round budget projection and burn rate analysis for 2025-2026
+          </p>
+          <BudgetCard />
+        </div>
+
+        {/* Section Divider */}
+        <div className="relative my-12">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t-2 border-slate-200 dark:border-slate-700"></div>
+          </div>
+          <div className="relative flex justify-center">
+            <span className="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 px-6 py-2 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+              Testing & Quality Assurance
+            </span>
+          </div>
+        </div>
+
         {/* Quality Assurance & Testing Environment */}
-        <Card className="mb-8 bg-slate-50 dark:bg-slate-900">
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <CheckCircle className="h-5 w-5 text-green-600" />
-              <CardTitle>QA Testing Demo Accounts</CardTitle>
-            </div>
-            <CardDescription>
-              Connected test accounts for comprehensive system validation
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Alert className="mb-4 bg-green-50 dark:bg-green-900/20 border-green-500">
+        <div className="mb-12">
+          <div className="flex items-center gap-3 mb-4">
+            <CheckCircle className="h-7 w-7 text-green-600" />
+            <h2 className="text-3xl font-bold">QA Testing Demo Accounts</h2>
+          </div>
+          <p className="text-muted-foreground mb-6 text-lg">
+            Connected test accounts for comprehensive system validation
+          </p>
+          
+          <Card className="bg-slate-50 dark:bg-slate-900 border-2">
+            <CardContent className="pt-6">
+              <Alert className="mb-4 bg-green-50 dark:bg-green-900/20 border-green-500">
               <AlertDescription className="text-sm text-green-700 dark:text-green-300">
                 These three interconnected demo accounts simulate the complete SHELTR ecosystem for testing purposes. The <strong>Participant</strong>
                 {' '}and <strong>Shelter Admin</strong> are connected to <strong>Old Brewery Mission</strong> for realistic data flow testing. The Scan & Give system is currently
@@ -1053,12 +1089,13 @@ export default function FoundersOnlyPage() {
                 integration. However, the data streaming and user interface are fully functional for testing purposes. All donation flows will
                 be simulated until payment processing is activated.
               </AlertDescription>
-            </Alert>
-          </CardContent>
-        </Card>
+              </Alert>
+            </CardContent>
+          </Card>
+        </div>
 
         {/* Coming Soon Notice */}
-        <Alert className="mb-8 bg-blue-50 dark:bg-blue-900/20 border-blue-500">
+        <Alert className="mb-12 bg-blue-50 dark:bg-blue-900/20 border-blue-500">
           <AlertDescription className="text-sm text-blue-700 dark:text-blue-300 flex items-center gap-2">
             <Rocket className="h-4 w-4" />
             <strong>Coming Soon to This Portal:</strong> Business plans, detailed financial reports, and strategic documentation will be progressively published in this founders portal as we advance
@@ -1066,20 +1103,26 @@ export default function FoundersOnlyPage() {
           </AlertDescription>
         </Alert>
 
-        {/* Seed Budget Overview */}
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold mb-4">Financial Overview</h2>
-          <p className="text-muted-foreground mb-6">
-            Seed round budget projection and burn rate analysis for 2025-2026
-          </p>
-          <BudgetCard />
+        {/* Section Divider */}
+        <div className="relative my-12">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t-2 border-slate-200 dark:border-slate-700"></div>
+          </div>
+          <div className="relative flex justify-center">
+            <span className="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 px-6 py-2 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+              Media & Content
+            </span>
+          </div>
         </div>
 
         {/* Founders Gallery */}
         {galleryItems.length > 0 && (
-          <div className="mb-8">
-            <h2 className="text-2xl font-bold mb-4">Founders Gallery</h2>
-            <p className="text-muted-foreground mb-6">
+          <div className="mb-12">
+            <div className="flex items-center gap-3 mb-4">
+              <ImageIcon className="h-7 w-7 text-pink-600" />
+              <h2 className="text-3xl font-bold">Founders Gallery</h2>
+            </div>
+            <p className="text-muted-foreground mb-6 text-lg">
               Curated media content shared exclusively with SHELTR co-founders
             </p>
 

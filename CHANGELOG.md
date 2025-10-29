@@ -7,6 +7,109 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.72.0] - 2025-10-29 (VIDEO SHOWCASE & BUDGET PORTAL ENHANCEMENTS) 🎥💰
+
+### 🎉 Major Features
+
+**Video Showcase Component**
+- ✅ **Reusable VideoShowcase Component**: New component for embedding gallery videos on any page
+- ✅ **Firestore Integration**: Fetches videos by title from `gallery_images` collection
+- ✅ **Rich Video Player**: HTML5 video with controls, autoplay, loop, and muted options
+- ✅ **Loading States**: Spinner during fetch, error messages for missing videos
+- ✅ **Metadata Display**: Shows video title, description, and tags in Card layout
+- ✅ **Drones Page Integration**: Added DDS (Drone Delivery System) video showcase
+- ✅ **Easy Implementation**: Just provide video title, component handles the rest
+
+**Founders Portal & Budget Management**
+- ✅ **Seed Budget Page**: Comprehensive `/portal/founders-only/budget` page
+- ✅ **CSV Data Integration**: Parsed 12-month budget projection from CSV
+- ✅ **Interactive Charts**: Category breakdown and monthly burn visualization using Recharts
+- ✅ **Key Metrics Dashboard**: Target Raise, Projected Allocation, Reserve Buffer, Projected Runway
+- ✅ **Sensitive Data Toggle**: Show/hide detailed financial information
+- ✅ **Budget Notes Section**: Key insights and timeline explanation
+- ✅ **BudgetCard Component**: Summary card for founders portal main page
+- ✅ **Breadcrumb Navigation**: Consistent navigation pattern across portal pages
+- ✅ **Secure Access**: Behind authentication, only accessible to founders
+- ✅ **Investor-Ready**: Clear presentation of projected allocation plan
+
+**Portal Organization**
+- ✅ **Visual Separators**: Clear section dividers (Financial & Operations, Testing & QA, Media & Content)
+- ✅ **Enhanced Headings**: Larger fonts, bold text, relevant icons for each section
+- ✅ **Logical Flow**: Financial Overview → QA Testing → Founders Gallery
+- ✅ **Budget Card Placement**: Positioned above QA section for prominence
+
+### 🎨 Design Improvements
+
+**VideoShowcase Component**
+- ✅ **Card-Based Layout**: Clean Card wrapper with header and content sections
+- ✅ **Aspect Ratio Control**: 16:9 video player with `aspect-video` class
+- ✅ **Poster Image Support**: Thumbnail display before video loads
+- ✅ **Hover Effects**: Border transitions on hover
+- ✅ **Responsive Design**: Adapts to mobile and desktop layouts
+
+**Budget Page Design**
+- ✅ **Color-Coded Categories**: Team (blue), Infrastructure (purple), Marketing (pink), Operations (orange)
+- ✅ **Progress Visualization**: Green/blue/purple gradient for allocation progress
+- ✅ **Interactive Table**: Expandable detailed budget with monthly breakdowns
+- ✅ **Running Total Display**: Cumulative spending visualization
+- ✅ **Confidential Badge**: Security indicator for sensitive data
+- ✅ **Professional Charts**: Clean, modern data visualization
+
+### 🐛 Bug Fixes
+
+**Navigation Updates**
+- ✅ **Drones Page Navigation**: Updated to use centralized `PublicNavigation` component
+- ✅ **Menu Consistency**: Now shows Ecosystem instead of Pods across all pages
+- ✅ **Removed Unused Imports**: Cleaned up `useState`, `Menu`, `X`, `LogIn`, `BarChart3`, etc.
+
+**Budget Page Fixes**
+- ✅ **Table Component**: Created missing `@/components/ui/table` Shadcn component
+- ✅ **Path Correction**: Moved budget from `/dashboard/founders/budget` to `/portal/founders-only/budget`
+- ✅ **Variable Naming**: Fixed `totalBurn` → `projectedAllocation` references
+- ✅ **DollarSign Import**: Added missing icon to founders portal imports
+
+**Budget Presentation**
+- ✅ **Reframed as Projection**: Changed language from "burn" to "allocation" for accuracy
+- ✅ **Investor Clarity**: Explicitly stated this is a projected plan for unraised funds
+- ✅ **Timeline Accuracy**: Updated to reflect 12-month runway from today
+- ✅ **Reserve Buffer**: Changed "Remaining Funds" to "Reserve Buffer" for clarity
+
+### 📚 Documentation
+
+**Component Documentation**
+- ✅ **VideoShowcase Usage**: How to upload videos and reference them by title
+- ✅ **Budget Page Guide**: Comprehensive explanation of budget structure and calculations
+- ✅ **Portal Organization**: Documentation of founders portal layout and sections
+
+### 🔧 Technical Improvements
+
+**Component Architecture**
+- ✅ **Reusable Video Component**: Can be added to any page with single import
+- ✅ **Type Safety**: Proper TypeScript interfaces for video and budget data
+- ✅ **Error Handling**: Graceful degradation for missing videos or data
+- ✅ **Performance**: Efficient Firestore queries with specific field filters
+
+**Code Quality**
+- ✅ **Clean Imports**: Removed unused dependencies across multiple files
+- ✅ **Consistent Styling**: Unified Tailwind classes and color schemes
+- ✅ **Proper Hooks**: Correct use of `useEffect`, `useState`, `useRouter`
+- ✅ **No Linter Errors**: All files pass ESLint validation
+
+### 🚀 Deployment Ready
+
+**Investor Relations**
+- ✅ **Professional Budget Presentation**: Clear, accurate financial projections
+- ✅ **Secure Access**: Proper authentication and authorization
+- ✅ **Complete Data Room**: All investor-facing materials up-to-date
+- ✅ **Founders Portal**: Comprehensive management dashboard
+
+**Media Capabilities**
+- ✅ **Video Integration**: Easy to add demo videos to any page
+- ✅ **Gallery Management**: Upload and manage all media from one place
+- ✅ **Professional Presentation**: Clean, modern video player design
+
+---
+
 ## [2.71.0] - 2025-10-29 (ECOSYSTEM PAGE & NAVIGATION UPDATES) 🌐✨
 
 ### 🎉 Major Features

@@ -43,7 +43,7 @@ export default function SolutionsPage() {
               </p>
                <div className="bg-muted/30 rounded-lg p-6 max-w-4xl mx-auto">
                  <p className="text-base text-muted-foreground">
-                   Every donation is strategically distributed: <strong>80% directly empowers participants</strong> for immediate needs, <strong>15% funds housing solutions</strong> through the <Link href="/pods" className="text-blue-600 hover:text-blue-800 font-semibold underline">PODS</Link> deployment, and <strong>5% sustains platform operations</strong>. This creates a self-reinforcing cycle where immediate relief generates lasting systemic change, transforming charity into measurable investment with compound returns for the entire community.
+                   Every donation is strategically distributed: <strong>80% directly empowers participants</strong> for immediate needs, <strong>15% is allocated to their housing SmartFund</strong> through a <Link href="/pods" className="text-blue-600 hover:text-blue-800 font-semibold underline">micro-pod</Link> deployment, and <strong>5% sustains platform operations</strong>. This creates a self-reinforcing cycle where immediate relief generates lasting systemic change, transforming charity into measurable investment with compound returns for the entire community.
                  </p>
                </div>
             </div>

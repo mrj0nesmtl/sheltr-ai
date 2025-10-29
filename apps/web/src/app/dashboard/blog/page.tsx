@@ -315,6 +315,45 @@ export default function BlogManagementPage() {
                   <FileText className="h-5 w-5 text-blue-600" />
                   <h3 className="text-lg font-semibold text-blue-800 dark:text-blue-200">Import Markdown Content</h3>
                 </div>
+                
+                {/* File Upload Option */}
+                <div className="space-y-3">
+                  <label className="block">
+                    <div className="flex items-center justify-center w-full h-32 px-4 transition bg-white border-2 border-blue-300 border-dashed rounded-lg appearance-none cursor-pointer hover:border-blue-400 focus:outline-none dark:bg-gray-800 dark:border-blue-600">
+                      <div className="flex flex-col items-center space-y-2">
+                        <Upload className="h-8 w-8 text-blue-500" />
+                        <span className="font-medium text-blue-600 dark:text-blue-400">
+                          Click to upload a .md file
+                        </span>
+                        <span className="text-xs text-gray-500">or drag and drop</span>
+                      </div>
+                    </div>
+                    <input
+                      type="file"
+                      className="hidden"
+                      accept=".md,.markdown"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          const reader = new FileReader();
+                          reader.onload = (event) => {
+                            const content = event.target?.result as string;
+                            setMarkdownContent(content);
+                          };
+                          reader.readAsText(file);
+                        }
+                      }}
+                    />
+                  </label>
+                  
+                  {/* Divider */}
+                  <div className="flex items-center gap-2">
+                    <Separator className="flex-1" />
+                    <span className="text-sm text-gray-500">or paste directly</span>
+                    <Separator className="flex-1" />
+                  </div>
+                </div>
+
                 <Textarea
                   value={markdownContent}
                   onChange={(e) => setMarkdownContent(e.target.value)}

@@ -11,6 +11,8 @@ export interface HeroImageData {
   alt: string;
   width?: number;
   height?: number;
+  mediaType?: 'image' | 'video';
+  type?: string; // Full MIME type (e.g., 'video/mp4', 'image/jpeg')
 }
 
 /**
@@ -52,25 +54,32 @@ export function useHeroImage(pagePath: string, fallbackUrl: string = '/og-image.
           const doc = snapshot.docs[0];
           const data = doc.data();
 
+          // Determine if this is a video or image
+          const mediaType = data.mediaType || data.type?.startsWith('video') ? 'video' : 'image';
+
           setHeroImage({
             url: data.src || data.url || fallbackUrl,
-            alt: data.title || `SHELTR ${pagePath.replace('/', '')} hero image`,
-            width: data.width || 1200,
-            height: data.height || 630,
+            alt: data.title || `SHELTR ${pagePath.replace('/', '')} hero ${mediaType}`,
+            width: data.width || 1920,
+            height: data.height || 1080,
+            mediaType: mediaType,
+            type: data.type || (mediaType === 'video' ? 'video/mp4' : 'image/jpeg'),
           });
         } else {
-          console.log(`No hero image found for page: ${pagePath}, using fallback`);
+          console.log(`No hero media found for page: ${pagePath}, using fallback`);
           setHeroImage({
             url: fallbackUrl,
             alt: `SHELTR ${pagePath.replace('/', '')} hero image`,
+            mediaType: 'image',
           });
         }
       } catch (err) {
-        console.error(`Error fetching hero image for ${pagePath}:`, err);
+        console.error(`Error fetching hero media for ${pagePath}:`, err);
         setError(err as Error);
         setHeroImage({
           url: fallbackUrl,
           alt: `SHELTR ${pagePath.replace('/', '')} hero image`,
+          mediaType: 'image',
         });
       } finally {
         setLoading(false);

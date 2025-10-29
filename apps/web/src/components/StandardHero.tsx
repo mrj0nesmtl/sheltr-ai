@@ -5,7 +5,8 @@
  * - Consistent height (80vh min)
  * - Beautiful gradient overlay for readability
  * - Smooth fade-out effect at bottom
- * - Dynamic hero image from gallery
+ * - Dynamic hero image OR video from gallery
+ * - Video autoplay, loop, and muted for background
  * - Responsive design
  */
 
@@ -15,6 +16,10 @@ import { Badge } from '@/components/ui/badge';
 interface StandardHeroProps {
   /** Hero image URL from useHeroImage hook */
   imageUrl: string;
+  /** Media type: 'image' or 'video' */
+  mediaType?: 'image' | 'video';
+  /** Video MIME type (e.g., 'video/mp4') */
+  videoType?: string;
   /** Optional badge text (e.g., "BLOCKCHAIN SECURED", "Future Release") */
   badgeText?: string;
   /** Badge variant */
@@ -33,6 +38,8 @@ interface StandardHeroProps {
 
 export function StandardHero({
   imageUrl,
+  mediaType = 'image',
+  videoType = 'video/mp4',
   badgeText,
   badgeVariant = 'secondary',
   badgeClassName = 'bg-white/20 text-white border-white/30 backdrop-blur-sm',
@@ -45,20 +52,48 @@ export function StandardHero({
   const defaultGradient = 'linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0.3) 80%, rgba(0,0,0,0) 100%)';
   
   return (
-    <section 
-      className="relative min-h-[80vh] flex items-center py-24"
-      style={{
-        backgroundImage: `url(${imageUrl})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat'
-      }}
-    >
+    <section className="relative min-h-[80vh] flex items-center py-24 overflow-hidden">
+      {/* Background Media - Video or Image */}
+      {mediaType === 'video' ? (
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ zIndex: 0 }}
+        >
+          <source src={imageUrl} type={videoType} />
+          {/* Fallback to image if video fails */}
+          <div
+            className="absolute inset-0 w-full h-full"
+            style={{
+              backgroundImage: `url(${imageUrl})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat'
+            }}
+          />
+        </video>
+      ) : (
+        <div
+          className="absolute inset-0 w-full h-full"
+          style={{
+            backgroundImage: `url(${imageUrl})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            zIndex: 0
+          }}
+        />
+      )}
+      
       {/* Gradient Overlay with smooth fade-out */}
       <div 
         className="absolute inset-0"
         style={{
-          background: gradientOverlay || defaultGradient
+          background: gradientOverlay || defaultGradient,
+          zIndex: 1
         }}
       />
       

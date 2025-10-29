@@ -1,21 +1,16 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowRight, Heart, QrCode, Shield, BarChart3, Home, Wallet } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import Footer from '@/components/Footer';
 import { PublicChatbot } from '@/components/PublicChatbot';
-import { useAuth } from '@/contexts/AuthContext';
-import { GalleryService, GalleryImage } from '@/services/galleryService';
 import NewsletterSignup from '@/components/NewsletterSignup';
 import PublicNavigation from '@/components/PublicNavigation';
 import { useHeroImage } from '@/hooks/useHeroImage';
 import { StandardHero } from '@/components/StandardHero';
 
 export default function HomePage() {
-  const { user, hasRole } = useAuth();
   
   // Fetch hero image from gallery (or use fallback)
   const { heroImage } = useHeroImage('/', '/backgrounds/hero-bg.jpg');
@@ -25,9 +20,11 @@ export default function HomePage() {
       {/* Navigation - Now using unified PublicNavigation component */}
       <PublicNavigation />
 
-        {/* Hero Section - Standardized */}
+        {/* Hero Section - Standardized with Video Support */}
         <StandardHero
           imageUrl={heroImage.url}
+          mediaType={heroImage.mediaType}
+          videoType={heroImage.type}
           badgeText="TECH-4-GOOD"
           badgeVariant="secondary"
           badgeClassName="bg-white/20 text-white border-white/30 backdrop-blur-sm"
@@ -150,7 +147,7 @@ export default function HomePage() {
             <div className="text-center mb-12">
               <h2 className="text-4xl font-bold mb-4">Why SHELTR?</h2>
               <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                It's cutting-edge technology with proven  impact methodologies 
+                It&apos;s cutting-edge technology with proven  impact methodologies 
                 to create the most transparent and effective charitable giving platform ever built.
               </p>
             </div>

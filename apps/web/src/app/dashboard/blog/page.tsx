@@ -14,6 +14,7 @@ import { Plus, Edit, Trash2, Eye, Calendar, User, Search, Upload, FileText } fro
 import { blogService, BlogPost, BlogCategory, BlogTag } from '@/services/blogService';
 import { useAuth } from '@/contexts/AuthContext';
 import BlogImageUpload from '@/components/BlogImageUpload';
+import ReactMarkdown from 'react-markdown';
 
 export default function BlogManagementPage() {
   const { } = useAuth();
@@ -319,7 +320,30 @@ export default function BlogManagementPage() {
                 {/* File Upload Option */}
                 <div className="space-y-3">
                   <label className="block">
-                    <div className="flex items-center justify-center w-full h-32 px-4 transition bg-white border-2 border-blue-300 border-dashed rounded-lg appearance-none cursor-pointer hover:border-blue-400 focus:outline-none dark:bg-gray-800 dark:border-blue-600">
+                    <div 
+                      className="flex items-center justify-center w-full h-32 px-4 transition bg-white border-2 border-blue-300 border-dashed rounded-lg appearance-none cursor-pointer hover:border-blue-400 focus:outline-none dark:bg-gray-800 dark:border-blue-600"
+                      onDragOver={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }}
+                      onDragEnter={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }}
+                      onDrop={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        const file = e.dataTransfer.files?.[0];
+                        if (file && (file.name.endsWith('.md') || file.name.endsWith('.markdown'))) {
+                          const reader = new FileReader();
+                          reader.onload = (event) => {
+                            const content = event.target?.result as string;
+                            setMarkdownContent(content);
+                          };
+                          reader.readAsText(file);
+                        }
+                      }}
+                    >
                       <div className="flex flex-col items-center space-y-2">
                         <Upload className="h-8 w-8 text-blue-500" />
                         <span className="font-medium text-blue-600 dark:text-blue-400">
@@ -571,14 +595,11 @@ export default function BlogManagementPage() {
                         className="w-full h-64 object-cover rounded-lg mb-4"
                       />
                     )}
-                    <div className="whitespace-pre-wrap">
-                      {formData.content.split('\n').map((line, index) => (
-                        <span key={index}>
-                          {line}
-                          {index < formData.content.split('\n').length - 1 && <br />}
-                        </span>
-                      ))}
-                    </div>
+                    <ReactMarkdown 
+                      className="prose-headings:font-bold prose-h1:text-4xl prose-h2:text-3xl prose-h3:text-2xl prose-p:my-4 prose-ul:my-4 prose-ol:my-4 prose-li:my-2"
+                    >
+                      {formData.content || '*No content yet...*'}
+                    </ReactMarkdown>
                   </div>
                 </div>
               )}

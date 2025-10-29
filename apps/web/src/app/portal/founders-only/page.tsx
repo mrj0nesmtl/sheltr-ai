@@ -48,6 +48,7 @@ import {
   Play,
   CheckCircle,
   Clock,
+  DollarSign,
   Image as ImageIcon,
 } from 'lucide-react';
 import Link from 'next/link';

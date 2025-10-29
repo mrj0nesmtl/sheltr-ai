@@ -103,7 +103,7 @@ export function BudgetCard() {
         </div>
 
         {/* CTA Button */}
-        <Link href="/dashboard/founders/budget">
+        <Link href="/portal/founders-only/budget">
           <Button className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-all">
             View Full Budget
             <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />

@@ -73,8 +73,15 @@ export default function BlogManagementPage() {
     const match = markdown.match(frontmatterRegex);
     
     if (!match) {
+      // No frontmatter found - try to extract title from first heading
+      const titleMatch = markdown.match(/^#\s+(.+)$/m);
+      const excerptMatch = markdown.match(/^##\s+(.+)$/m);
+      
       return {
-        frontmatter: {},
+        frontmatter: {
+          title: titleMatch ? titleMatch[1] : '',
+          excerpt: excerptMatch ? excerptMatch[1] : ''
+        },
         content: markdown
       };
     }
@@ -88,10 +95,20 @@ export default function BlogManagementPage() {
       const colonIndex = line.indexOf(':');
       if (colonIndex > 0) {
         const key = line.substring(0, colonIndex).trim();
-        const value = line.substring(colonIndex + 1).trim().replace(/^["']|["']$/g, '');
+        let value = line.substring(colonIndex + 1).trim();
+        
+        // Remove quotes and brackets
+        value = value.replace(/^["'\[]|["'\]]$/g, '');
         
         if (key === 'tags' || key === 'seo_keywords') {
-          frontmatter[key] = value.split(',').map((tag: string) => tag.trim());
+          // Handle both comma-separated and array formats
+          if (value.includes(',')) {
+            frontmatter[key] = value.split(',').map((tag: string) => tag.trim().replace(/^["']|["']$/g, ''));
+          } else if (value) {
+            frontmatter[key] = [value];
+          } else {
+            frontmatter[key] = [];
+          }
         } else {
           frontmatter[key] = value;
         }
@@ -104,6 +121,10 @@ export default function BlogManagementPage() {
   // Handle markdown import and populate form
   const handleMarkdownImport = (markdownText: string) => {
     const { frontmatter, content } = parseMarkdown(markdownText);
+    
+    // Debug: Log what was parsed
+    console.log('Parsed Frontmatter:', frontmatter);
+    console.log('Parsed Content length:', content.length);
     
     setFormData({
       title: typeof frontmatter.title === 'string' ? frontmatter.title : '',

@@ -7,7 +7,6 @@ import {
   ExternalLink, 
   Users, 
   Shield, 
-  Coins, 
   Book,
   Code,
   Building,
@@ -23,7 +22,10 @@ import {
   Eye,
   Github,
   CreditCard,
-  TreePine
+  TreePine,
+  Search,
+  X,
+  Filter
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -39,6 +41,10 @@ export default function DocsPage() {
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
+  
+  // Category and Search State
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [searchQuery, setSearchQuery] = useState('');
   
   // Fetch hero image from gallery (or use fallback)
   const { heroImage } = useHeroImage('/docs', '/backgrounds/hero-bg.jpg');
@@ -75,6 +81,7 @@ export default function DocsPage() {
       icon: Users,
       badge: "Strategic Vision",
       badgeColor: "border-purple-400 text-purple-400",
+      category: "platform",
       audience: "Executives • Impact Investors • AI Engineers • Tech-for-Good Partners",
       topics: ["AI & Tech-for-Good Revolution", "Single-Token Stable Architecture", "Zero Risk Protection", "Enterprise Infrastructure", "Intelligent Resource Allocation"],
       link: "/docs/hacking-homelessness",
@@ -87,6 +94,7 @@ export default function DocsPage() {
       icon: Building,
       badge: "Architecture",
       badgeColor: "border-blue-400 text-blue-400",
+      category: "architecture",
       audience: "QA Engineers • Developers • Project Managers • Technical Teams",
       topics: ["Site Architecture", "Role-Based Access", "Mobile Testing", "Authentication Flow", "Business Logic QA"],
       link: "/docs/website-architecture",
@@ -99,6 +107,7 @@ export default function DocsPage() {
       icon: FileText,
       badge: "Published",
       badgeColor: "border-emerald-400 text-emerald-400",
+      category: "platform",
       audience: "CFOs • Payment Architects • Enterprise Partners • Investment Teams",
       topics: ["Single-Token Stable Architecture", "Enterprise Payment Infrastructure", "Zero Risk Protection", "Guaranteed Returns", "Strategic Implementation"],
       link: "/docs/whitepaper",
@@ -111,6 +120,7 @@ export default function DocsPage() {
       icon: Shield,
       badge: "Implementation",
       badgeColor: "border-emerald-400 text-emerald-400",
+      category: "architecture",
       audience: "Developers • Blockchain Engineers • Enterprise Partners • Security Auditors",
       topics: ["Single-Token Architecture", "Smart Contracts", "Base Network", "Enterprise Security", "Coinbase Integration", "Zero Risk Design"],
       link: "/docs/blockchain",
@@ -123,6 +133,7 @@ export default function DocsPage() {
       icon: Code,
       badge: "Technical",
       badgeColor: "border-orange-400 text-orange-400",
+      category: "technical",
       audience: "Developers • System Integrators • Technical Partners",
       topics: ["REST API Endpoints", "Authentication", "Rate Limiting", "Error Handling", "SDK Integration"],
       link: "/docs/api",
@@ -135,6 +146,7 @@ export default function DocsPage() {
       icon: CreditCard,
       badge: "Enterprise",
       badgeColor: "border-emerald-400 text-emerald-400",
+      category: "architecture",
       audience: "CFOs • Payment Architects • Enterprise Partners • Financial Teams",
       topics: ["Adyen Integration", "Coinbase Staking", "Single-Token Model", "Enterprise Infrastructure", "Guaranteed Returns"],
       link: "/docs/payment-rails",
@@ -147,6 +159,7 @@ export default function DocsPage() {
       icon: Building2,
       badge: "Architecture",
       badgeColor: "border-blue-400 text-blue-400",
+      category: "architecture",
       audience: "System Architects • DevOps Engineers • Technical Leaders • Enterprise Partners",
       topics: ["Multi-Tenant Architecture", "Enterprise Payment Flow", "Base Network Integration", "Visual System Diagrams", "Scalability Design"],
       link: "/docs/system-design",
@@ -159,6 +172,7 @@ export default function DocsPage() {
       icon: Rocket,
       badge: "Launch Plan",
       badgeColor: "border-orange-400 text-orange-400",
+      category: "development",
       audience: "Project Managers • Investors • Technical Teams • Business Partners",
       topics: ["60-Day Launch Timeline", "Client Onboarding Strategy", "AI Hyper Chatbot", "Enterprise Payment Integration", "Success Metrics"],
       link: "/docs/roadmap",
@@ -171,6 +185,7 @@ export default function DocsPage() {
       icon: MessageSquare,
       badge: "AI System",
       badgeColor: "border-amber-400 text-amber-400",
+      category: "features",
       audience: "AI Engineers • Developers • System Architects • Technical Teams",
       topics: ["Multi-Agent System", "MCP Integration", "Workflow Automation", "RAG Integration", "Role-Based Routing"],
       link: "/docs/chatbot-architecture",
@@ -183,6 +198,7 @@ export default function DocsPage() {
       icon: Rocket,
       badge: "MCP System",
       badgeColor: "border-purple-400 text-purple-400",
+      category: "features",
       audience: "AI Engineers • Full-Stack Developers • System Architects • DevOps Engineers",
       topics: ["Model Context Protocol", "Workflow Automation", "Tool Integration", "FastAPI Backend", "React Frontend"],
       link: "/docs/mcp-integration",
@@ -195,6 +211,7 @@ export default function DocsPage() {
       icon: CheckSquare,
       badge: "QA Framework",
       badgeColor: "border-teal-400 text-teal-400",
+      category: "technical",
       audience: "QA Engineers • Developers • Project Managers • Technical Teams",
       topics: ["Testing Matrix", "Business Logic", "User Workflows", "Data Validation", "Platform Status"],
       link: "/docs/functionality-matrix",
@@ -207,6 +224,7 @@ export default function DocsPage() {
       icon: BookOpen,
       badge: "AI System",
       badgeColor: "border-amber-400 text-amber-400",
+      category: "features",
       audience: "Developers • System Administrators • Content Managers • Technical Teams",
       topics: ["Document Updates", "Embedding Regeneration", "RAG System", "Firebase Storage", "Chatbot Integration"],
       link: "/docs/knowledge-base-guide",
@@ -219,6 +237,7 @@ export default function DocsPage() {
       icon: Building2,
       badge: "Admin Guide",
       badgeColor: "border-blue-400 text-blue-400",
+      category: "guides",
       audience: "Shelter Administrators • Operations Managers • Staff",
       topics: ["Dashboard Management", "Participant Registration", "Service Coordination", "Resource Management", "Analytics & Reporting"],
       link: "/docs/shelter-admin-guide",
@@ -231,6 +250,7 @@ export default function DocsPage() {
       icon: Heart,
       badge: "Donor Guide",
       badgeColor: "border-red-400 text-red-400",
+      category: "guides",
       audience: "Donors • Community Supporters • Corporate Partners",
       topics: ["QR Code Giving", "SmartFund™ Model", "Impact Tracking", "Payment Security", "Community Building"],
       link: "/docs/donor-guide",
@@ -243,6 +263,7 @@ export default function DocsPage() {
       icon: Users,
       badge: "User Guide",
       badgeColor: "border-teal-400 text-teal-400",
+      category: "guides",
       audience: "Participants • Support Staff • Shelter Administrators",
       topics: ["Platform Onboarding", "QR Code Usage", "Wallet Management", "Service Access", "Support Resources"],
       link: "/docs/participant-guide",
@@ -250,6 +271,27 @@ export default function DocsPage() {
       lastUpdated: "September 21, 2025"
     }
   ];
+
+  // Define categories with icons and colors
+  const categories = [
+    { id: 'all', name: 'All Documents', icon: Book, count: coreDocuments.length, color: 'border-gray-400 text-gray-400' },
+    { id: 'platform', name: 'Platform & Vision', icon: Users, count: coreDocuments.filter(d => d.category === 'platform').length, color: 'border-purple-400 text-purple-400' },
+    { id: 'architecture', name: 'Architecture', icon: Building, count: coreDocuments.filter(d => d.category === 'architecture').length, color: 'border-blue-400 text-blue-400' },
+    { id: 'features', name: 'Features & AI', icon: Rocket, count: coreDocuments.filter(d => d.category === 'features').length, color: 'border-amber-400 text-amber-400' },
+    { id: 'technical', name: 'Technical', icon: Code, count: coreDocuments.filter(d => d.category === 'technical').length, color: 'border-orange-400 text-orange-400' },
+    { id: 'development', name: 'Development', icon: TreePine, count: coreDocuments.filter(d => d.category === 'development').length, color: 'border-emerald-400 text-emerald-400' },
+    { id: 'guides', name: 'User Guides', icon: BookOpen, count: coreDocuments.filter(d => d.category === 'guides').length, color: 'border-teal-400 text-teal-400' }
+  ];
+
+  // Filter documents based on category and search
+  const filteredDocuments = coreDocuments.filter(doc => {
+    const matchesCategory = selectedCategory === 'all' || doc.category === selectedCategory;
+    const matchesSearch = searchQuery === '' || 
+      doc.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      doc.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      doc.topics.some(topic => topic.toLowerCase().includes(searchQuery.toLowerCase()));
+    return matchesCategory && matchesSearch;
+  });
 
   const additionalResources = [
     {
@@ -361,19 +403,104 @@ export default function DocsPage() {
         </div>
       </section>
 
+      {/* Search and Category Filter Section */}
+      <section className="py-8 bg-background/50 border-y">
+        <div className="container mx-auto px-4">
+          {/* Search Bar */}
+          <div className="max-w-2xl mx-auto mb-6">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <Input
+                type="text"
+                placeholder="Search documentation by title, description, or topic..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10 pr-10 h-12 text-base border-2"
+              />
+              {searchQuery && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="absolute right-1 top-1/2 transform -translate-y-1/2 h-9 w-9 p-0"
+                  onClick={() => setSearchQuery('')}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              )}
+            </div>
+          </div>
+
+          {/* Category Tabs */}
+          <div className="flex flex-wrap justify-center gap-2 mb-4">
+            {categories.map((category) => (
+              <Button
+                key={category.id}
+                variant={selectedCategory === category.id ? 'default' : 'outline'}
+                className={`h-10 transition-all ${
+                  selectedCategory === category.id 
+                    ? 'bg-primary text-primary-foreground' 
+                    : `${category.color} hover:bg-primary/10`
+                }`}
+                onClick={() => setSelectedCategory(category.id)}
+              >
+                <category.icon className="h-4 w-4 mr-2" />
+                <span className="hidden sm:inline">{category.name}</span>
+                <span className="sm:hidden">{category.name.split(' ')[0]}</span>
+                <Badge 
+                  variant="secondary" 
+                  className="ml-2 h-5 min-w-[1.5rem] px-1.5"
+                >
+                  {category.count}
+                </Badge>
+              </Button>
+            ))}
+          </div>
+
+          {/* Results Count */}
+          <div className="text-center text-sm text-muted-foreground">
+            {searchQuery && (
+              <span>
+                Found {filteredDocuments.length} document{filteredDocuments.length !== 1 ? 's' : ''} matching &quot;{searchQuery}&quot;
+              </span>
+            )}
+            {!searchQuery && selectedCategory !== 'all' && (
+              <span>
+                Showing {filteredDocuments.length} document{filteredDocuments.length !== 1 ? 's' : ''} in {categories.find(c => c.id === selectedCategory)?.name}
+              </span>
+            )}
+          </div>
+        </div>
+      </section>
+
       {/* Core Documents */}
       <section className="py-16">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Core Project Documentation</h2>
+            <h2 className="text-3xl font-bold mb-4">
+              {selectedCategory === 'all' ? 'Core Project Documentation' : categories.find(c => c.id === selectedCategory)?.name}
+            </h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              Covering technical architecture, market analysis, 
-              and implementation strategy for SHELTR&rsquo;s unique approach to charitable technology.
+              {selectedCategory === 'all' 
+                ? 'Covering technical architecture, market analysis, and implementation strategy for SHELTR\'s unique approach to charitable technology.'
+                : `Explore our ${categories.find(c => c.id === selectedCategory)?.name.toLowerCase()} documentation`
+              }
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-1 gap-6 max-w-5xl mx-auto">
-            {coreDocuments.map((doc, index) => (
+          {filteredDocuments.length === 0 ? (
+            <div className="text-center py-16">
+              <Filter className="h-16 w-16 mx-auto mb-4 text-muted-foreground/50" />
+              <h3 className="text-xl font-semibold mb-2">No documents found</h3>
+              <p className="text-muted-foreground mb-6">
+                Try adjusting your search or filter criteria
+              </p>
+              <Button onClick={() => { setSearchQuery(''); setSelectedCategory('all'); }}>
+                Clear Filters
+              </Button>
+            </div>
+          ) : (
+            <div className="grid lg:grid-cols-1 gap-6 max-w-5xl mx-auto">
+              {filteredDocuments.map((doc, index) => (
               <Card key={index} className="border-2 border-gray-400 dark:border-gray-600 hover:border-primary/80 dark:hover:border-primary/90 hover:shadow-2xl transition-all duration-300 bg-gradient-to-r from-slate-50 to-gray-50 dark:from-slate-900 dark:to-gray-900 shadow-md">
                 <CardHeader className="pb-4">
                   {/* Mobile Layout */}
@@ -500,8 +627,9 @@ export default function DocsPage() {
                   </div>
                 </CardContent>
               </Card>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

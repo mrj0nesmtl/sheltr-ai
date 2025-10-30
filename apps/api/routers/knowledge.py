@@ -12,6 +12,14 @@ import logging
 
 from services.knowledge_service import knowledge_service
 from middleware.auth_middleware import get_current_user, require_admin_or_super
+from models.permissions import (
+    DocumentPermission,
+    UserRole,
+    DocumentPermissionConfig,
+    check_document_permission,
+    determine_permission_from_path,
+    get_permission_display_info
+)
 
 logger = logging.getLogger(__name__)
 
@@ -474,4 +482,137 @@ async def knowledge_health():
             data={'status': 'error', 'error': str(e)},
             message="Health check failed",
             timestamp=datetime.now().isoformat()
+        )
+
+# Permission Management Endpoints
+
+@router.get(
+    "/permissions/levels",
+    response_model=KnowledgeResponse,
+    summary="Get all permission levels",
+    description="Retrieve all available permission levels with display information"
+)
+async def get_permission_levels(
+    current_user: Dict[str, Any] = Depends(get_current_user)
+):
+    """Get all available permission levels"""
+    try:
+        permission_levels = []
+        
+        for permission in DocumentPermission:
+            display_info = get_permission_display_info(permission)
+            permission_levels.append({
+                'value': permission.value,
+                'label': display_info['label'],
+                'description': display_info['description'],
+                'color': display_info['color'],
+                'icon': display_info['icon']
+            })
+        
+        return KnowledgeResponse(
+            success=True,
+            data={
+                'permission_levels': permission_levels,
+                'total': len(permission_levels)
+            },
+            message="Permission levels retrieved successfully",
+            timestamp=datetime.now().isoformat()
+        )
+        
+    except Exception as e:
+        logger.error(f"Failed to get permission levels: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to get permission levels: {str(e)}"
+        )
+
+@router.post(
+    "/permissions/check",
+    response_model=KnowledgeResponse,
+    summary="Check document permission",
+    description="Check if a user has permission to access a specific document"
+)
+async def check_permission(
+    document_permission: str,
+    document_created_by: Optional[str] = None,
+    allowed_roles: Optional[List[str]] = None,
+    is_private: bool = False,
+    current_user: Dict[str, Any] = Depends(get_current_user)
+):
+    """Check if current user has permission for a document"""
+    try:
+        user_role = current_user.get('role', 'participant')
+        user_id = current_user.get('uid')
+        
+        # Convert string to DocumentPermission enum
+        try:
+            doc_permission = DocumentPermission(document_permission)
+        except ValueError:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Invalid permission level: {document_permission}"
+            )
+        
+        # Check permission
+        has_permission = check_document_permission(
+            document_permission=doc_permission,
+            user_role=user_role,
+            user_id=user_id,
+            document_created_by=document_created_by,
+            allowed_roles=allowed_roles or [],
+            is_private=is_private
+        )
+        
+        return KnowledgeResponse(
+            success=True,
+            data={
+                'has_permission': has_permission,
+                'user_role': user_role,
+                'document_permission': document_permission,
+                'is_private': is_private
+            },
+            message="Permission check completed",
+            timestamp=datetime.now().isoformat()
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Permission check failed: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Permission check failed: {str(e)}"
+        )
+
+@router.post(
+    "/permissions/determine",
+    response_model=KnowledgeResponse,
+    summary="Determine permission from path",
+    description="Automatically determine appropriate permission level based on file path"
+)
+async def determine_permission(
+    file_path: str,
+    current_user: Dict[str, Any] = Depends(require_admin_or_super())
+):
+    """Determine appropriate permission level based on file path"""
+    try:
+        permission = determine_permission_from_path(file_path)
+        display_info = get_permission_display_info(permission)
+        
+        return KnowledgeResponse(
+            success=True,
+            data={
+                'file_path': file_path,
+                'recommended_permission': permission.value,
+                'display_info': display_info
+            },
+            message="Permission determined successfully",
+            timestamp=datetime.now().isoformat()
+        )
+        
+    except Exception as e:
+        logger.error(f"Failed to determine permission: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to determine permission: {str(e)}"
         )

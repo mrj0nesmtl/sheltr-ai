@@ -343,27 +343,27 @@ async def batch_ingest_sheltr_documents(
 ):
     """Batch ingest all SHELTR documents from the predefined list"""
     try:
-        # Predefined document paths
+        # Predefined document paths - Updated for new folder structure (Oct 30, 2025)
         document_paths = [
             '/Users/mrjones/Github/Projects/sheltr-ai/README.md',
-            '/Users/mrjones/Github/Projects/sheltr-ai/docs/01-overview/A MillionDollarMurray.pdf',
-            '/Users/mrjones/Github/Projects/sheltr-ai/docs/01-overview/hacking_homelessness.md',
-            '/Users/mrjones/Github/Projects/sheltr-ai/docs/01-overview/README.md',
+            '/Users/mrjones/Github/Projects/sheltr-ai/docs/overview/A MillionDollarMurray.pdf',
+            '/Users/mrjones/Github/Projects/sheltr-ai/docs/overview/hacking_homelessness.md',
+            '/Users/mrjones/Github/Projects/sheltr-ai/docs/overview/README.md',
             '/Users/mrjones/Github/Projects/sheltr-ai/SECURITY.md',
-            '/Users/mrjones/Github/Projects/sheltr-ai/docs/04-development/dev-roadmap.md',
-            '/Users/mrjones/Github/Projects/sheltr-ai/docs/02-architecture/website-architecture.md',
-            '/Users/mrjones/Github/Projects/sheltr-ai/docs/02-architecture/system-design.md',
-            '/Users/mrjones/Github/Projects/sheltr-ai/docs/03-api/database-schema.md',
-            '/Users/mrjones/Github/Projects/sheltr-ai/docs/03-api/firestore-setup.md',
-            '/Users/mrjones/Github/Projects/sheltr-ai/docs/03-api/README.md',
-            '/Users/mrjones/Github/Projects/sheltr-ai/docs/02-architecture/payment-rails/adyen-integration.md',
+            '/Users/mrjones/Github/Projects/sheltr-ai/docs/development/dev-roadmap.md',
+            '/Users/mrjones/Github/Projects/sheltr-ai/docs/architecture/technical/website-architecture.md',
+            '/Users/mrjones/Github/Projects/sheltr-ai/docs/architecture/technical/system-design.md',
+            '/Users/mrjones/Github/Projects/sheltr-ai/docs/api/database-schema.md',
+            '/Users/mrjones/Github/Projects/sheltr-ai/docs/api/firestore-setup.md',
+            '/Users/mrjones/Github/Projects/sheltr-ai/docs/api/README.md',
+            '/Users/mrjones/Github/Projects/sheltr-ai/docs/architecture/payment-rails/adyen-integration.md',
             '/Users/mrjones/Github/Projects/sheltr-ai/sheltr-tokens/README.md',
-            '/Users/mrjones/Github/Projects/sheltr-ai/docs/02-architecture/whitepaper_final.md',
-            '/Users/mrjones/Github/Projects/sheltr-ai/docs/02-architecture/tokenomics/sheltr-tokenomics.md',
-            '/Users/mrjones/Github/Projects/sheltr-ai/docs/02-architecture/technical/blockchain.md',
-            '/Users/mrjones/Github/Projects/sheltr-ai/docs/06-user-guides/shelter-admin-guide.md',
-            '/Users/mrjones/Github/Projects/sheltr-ai/docs/06-user-guides/participant-guide.md',
-            '/Users/mrjones/Github/Projects/sheltr-ai/docs/06-user-guides/donor-guide.md'
+            '/Users/mrjones/Github/Projects/sheltr-ai/docs/architecture/technical/tokenomics/whitepaper_final.md',
+            '/Users/mrjones/Github/Projects/sheltr-ai/docs/architecture/technical/tokenomics/sheltr-tokenomics.md',
+            '/Users/mrjones/Github/Projects/sheltr-ai/docs/architecture/technical/tokenomics/blockchain.md',
+            '/Users/mrjones/Github/Projects/sheltr-ai/docs/user-guides/shelter-admin-guide.md',
+            '/Users/mrjones/Github/Projects/sheltr-ai/docs/user-guides/participant-guide.md',
+            '/Users/mrjones/Github/Projects/sheltr-ai/docs/user-guides/donor-guide.md'
         ]
         
         logger.info(f"Starting batch ingestion of {len(document_paths)} SHELTR documents")

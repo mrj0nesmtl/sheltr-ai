@@ -33,49 +33,49 @@ export default function WebsiteArchitecturePage() {
       description: "Visual mapping of all 50+ pages including public and authenticated routes",
       icon: Globe,
       topics: ["Public Pages", "Dashboard System", "Authentication Routes", "Role-Based Navigation"],
-      url: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/website-architecture.md#-complete-site-tree"
+      url: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/architecture/technical/website-architecture.md#-complete-site-tree"
     },
     {
       title: "5-Role Access Matrix",
       description: "Comprehensive permissions table for Super Admin, Platform Admin, Shelter Admin, Participant, and Donor roles",
       icon: Shield,
       topics: ["Access Control", "Permission Levels", "Security Boundaries", "Role Inheritance"],
-      url: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/website-architecture.md#-role-based-access-matrix"
+      url: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/architecture/technical/website-architecture.md#-role-based-access-matrix"
     },
     {
       title: "Mobile Responsiveness Guide",
       description: "Apple Liquid Glass design standards and mobile optimization framework",
       icon: Smartphone,
       topics: ["Breakpoints", "Touch Targets", "Typography Scale", "Navigation Patterns"],
-      url: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/website-architecture.md#-mobile-responsiveness-guide"
+      url: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/architecture/technical/website-architecture.md#-mobile-responsiveness-guide"
     },
     {
       title: "Feature Testing Checklist",
       description: "100+ test cases covering authentication, navigation, business logic, and mobile features",
       icon: CheckCircle,
       topics: ["Critical Tests", "High Priority", "Medium Priority", "Low Priority"],
-      url: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/website-architecture.md#-feature-testing-checklist"
+      url: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/architecture/technical/website-architecture.md#-feature-testing-checklist"
     },
     {
       title: "Authentication Flow Testing",
       description: "Complete testing scenarios for login, registration, and role-based routing",
       icon: Users,
       topics: ["Test User Accounts", "Role Validation", "Session Management", "Access Control"],
-      url: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/website-architecture.md#-authentication-flow-testing"
+      url: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/architecture/technical/website-architecture.md#-authentication-flow-testing"
     },
     {
       title: "Business Logic Testing",
       description: "Service booking system, form persistence, and core functionality validation",
       icon: Settings,
       topics: ["API Endpoints", "Data Models", "Error Handling", "Real-time Updates"],
-      url: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/website-architecture.md#-business-logic-testing"
+      url: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/architecture/technical/website-architecture.md#-business-logic-testing"
     },
     {
       title: "Performance & Deployment",
       description: "KPIs, metrics, and production readiness checklist",
       icon: BarChart3,
       topics: ["Performance Targets", "User Experience Metrics", "Security Testing", "Deployment Checklist"],
-      url: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/website-architecture.md#-current-implementation-status"
+      url: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/architecture/technical/website-architecture.md#-current-implementation-status"
     }
   ];
 
@@ -197,7 +197,7 @@ export default function WebsiteArchitecturePage() {
 
           <div className="flex flex-wrap gap-4">
             <Button asChild className="bg-indigo-600 hover:bg-indigo-700">
-              <Link href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/website-architecture.md">
+              <Link href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/architecture/technical/website-architecture.md">
                 <ExternalLink className="w-4 h-4 mr-2" />
                 View on GitHub
               </Link>
@@ -342,7 +342,7 @@ export default function WebsiteArchitecturePage() {
               <CardContent>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Button asChild className="bg-indigo-600 hover:bg-indigo-700">
-                    <Link href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/website-architecture.md">
+                    <Link href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/architecture/technical/website-architecture.md">
                       <ExternalLink className="w-4 h-4 mr-2" />
                       View on GitHub
                     </Link>

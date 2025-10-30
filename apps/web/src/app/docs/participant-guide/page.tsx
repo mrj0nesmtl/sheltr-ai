@@ -68,7 +68,7 @@ export default function ParticipantGuidePage() {
                       View Online
                     </Button>
                   </Link>
-                  <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/06-user-guides/participant-guide.md" target="_blank" rel="noopener noreferrer">
+                  <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/user-guides/participant-guide.md" target="_blank" rel="noopener noreferrer">
                     <Button variant="outline">
                       <Download className="h-4 w-4 mr-2" />
                       View on GitHub

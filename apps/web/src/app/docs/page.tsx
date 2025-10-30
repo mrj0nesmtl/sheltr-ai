@@ -78,7 +78,7 @@ export default function DocsPage() {
       audience: "Executives • Impact Investors • AI Engineers • Tech-for-Good Partners",
       topics: ["AI & Tech-for-Good Revolution", "Single-Token Stable Architecture", "Zero Risk Protection", "Enterprise Infrastructure", "Intelligent Resource Allocation"],
       link: "/docs/hacking-homelessness",
-      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/01-overview/hacking_homelessness.md",
+      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/overview/hacking_homelessness.md",
       lastUpdated: "September 26, 2025"
     },
     {
@@ -90,7 +90,7 @@ export default function DocsPage() {
       audience: "QA Engineers • Developers • Project Managers • Technical Teams",
       topics: ["Site Architecture", "Role-Based Access", "Mobile Testing", "Authentication Flow", "Business Logic QA"],
       link: "/docs/website-architecture",
-      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/website-architecture.md",
+      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/architecture/technical/website-architecture.md",
       lastUpdated: "September 21, 2025"
     },
     {
@@ -102,7 +102,7 @@ export default function DocsPage() {
       audience: "CFOs • Payment Architects • Enterprise Partners • Investment Teams",
       topics: ["Single-Token Stable Architecture", "Enterprise Payment Infrastructure", "Zero Risk Protection", "Guaranteed Returns", "Strategic Implementation"],
       link: "/docs/whitepaper",
-      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/whitepaper_final.md",
+      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/architecture/technical/tokenomics/whitepaper_final.md",
       lastUpdated: "September 26, 2025"
     },
     {
@@ -114,7 +114,7 @@ export default function DocsPage() {
       audience: "Developers • Blockchain Engineers • Enterprise Partners • Security Auditors",
       topics: ["Single-Token Architecture", "Smart Contracts", "Base Network", "Enterprise Security", "Coinbase Integration", "Zero Risk Design"],
       link: "/docs/blockchain",
-      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/technical/blockchain.md",
+      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/architecture/technical/blockchain.md",
       lastUpdated: "September 26, 2025"
     },
     {
@@ -126,7 +126,7 @@ export default function DocsPage() {
       audience: "Developers • System Integrators • Technical Partners",
       topics: ["REST API Endpoints", "Authentication", "Rate Limiting", "Error Handling", "SDK Integration"],
       link: "/docs/api",
-      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/03-api/README.md",
+      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/api/README.md",
       lastUpdated: "September 21, 2025"
     },
     {
@@ -138,7 +138,7 @@ export default function DocsPage() {
       audience: "CFOs • Payment Architects • Enterprise Partners • Financial Teams",
       topics: ["Adyen Integration", "Coinbase Staking", "Single-Token Model", "Enterprise Infrastructure", "Guaranteed Returns"],
       link: "/docs/payment-rails",
-      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/payment-rails/sheltr-unified-payment-architecture.md",
+      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/architecture/payment-rails/sheltr-unified-payment-architecture.md",
       lastUpdated: "September 26, 2025"
     },
     {
@@ -150,7 +150,7 @@ export default function DocsPage() {
       audience: "System Architects • DevOps Engineers • Technical Leaders • Enterprise Partners",
       topics: ["Multi-Tenant Architecture", "Enterprise Payment Flow", "Base Network Integration", "Visual System Diagrams", "Scalability Design"],
       link: "/docs/system-design",
-      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/system-design.md",
+      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/architecture/technical/system-design.md",
       lastUpdated: "September 28, 2025"
     },
     {
@@ -162,7 +162,7 @@ export default function DocsPage() {
       audience: "Project Managers • Investors • Technical Teams • Business Partners",
       topics: ["60-Day Launch Timeline", "Client Onboarding Strategy", "AI Hyper Chatbot", "Enterprise Payment Integration", "Success Metrics"],
       link: "/docs/roadmap",
-      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/04-development/dev-roadmap.md",
+      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/development/dev-roadmap.md",
       lastUpdated: "September 27, 2025"
     },
     {
@@ -174,7 +174,7 @@ export default function DocsPage() {
       audience: "AI Engineers • Developers • System Architects • Technical Teams",
       topics: ["Multi-Agent System", "MCP Integration", "Workflow Automation", "RAG Integration", "Role-Based Routing"],
       link: "/docs/chatbot-architecture",
-      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/04-development/SHELTR-AGENT-ARCHITECTURE.md",
+      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/features/chatbot/SHELTR-AGENT-ARCHITECTURE.md",
       lastUpdated: "October 16, 2025"
     },
     {
@@ -186,7 +186,7 @@ export default function DocsPage() {
       audience: "AI Engineers • Full-Stack Developers • System Architects • DevOps Engineers",
       topics: ["Model Context Protocol", "Workflow Automation", "Tool Integration", "FastAPI Backend", "React Frontend"],
       link: "/docs/mcp-integration",
-      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/04-development/MCP-INTEGRATION-GUIDE.md",
+      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/features/chatbot/MCP-INTEGRATION-GUIDE.md",
       lastUpdated: "September 22, 2025"
     },
     {
@@ -198,7 +198,7 @@ export default function DocsPage() {
       audience: "QA Engineers • Developers • Project Managers • Technical Teams",
       topics: ["Testing Matrix", "Business Logic", "User Workflows", "Data Validation", "Platform Status"],
       link: "/docs/functionality-matrix",
-      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/04-development/COMPLETE-FUNCTIONALITY-MATRIX-UPDATED.md",
+      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/guides/legacy-development/COMPLETE-FUNCTIONALITY-MATRIX-UPDATED.md",
       lastUpdated: "September 21, 2025"
     },
     {
@@ -210,7 +210,7 @@ export default function DocsPage() {
       audience: "Developers • System Administrators • Content Managers • Technical Teams",
       topics: ["Document Updates", "Embedding Regeneration", "RAG System", "Firebase Storage", "Chatbot Integration"],
       link: "/docs/knowledge-base-guide",
-      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/04-development/KNOWLEDGE-BASE-UPDATE-GUIDE.md",
+      downloadLink: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/features/knowledge-base/KNOWLEDGE-BASE-UPDATE-GUIDE.md",
       lastUpdated: "September 21, 2025"
     },
     {
@@ -256,7 +256,7 @@ export default function DocsPage() {
       title: "Project Tree",
       description: "Comprehensive project structure reference for developers and contributors",
       icon: TreePine,
-      link: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/PROJECT-TREE.md",
+      link: "https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/reference/PROJECT-TREE.md",
       isInternal: false,
       badge: "Reference"
     },

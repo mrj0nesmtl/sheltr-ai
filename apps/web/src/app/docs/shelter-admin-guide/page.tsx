@@ -102,7 +102,7 @@ export default function ShelterAdminGuidePage() {
                 </div>
                 
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                  <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/06-user-guides/shelter-admin-guide.md" target="_blank" rel="noopener noreferrer">
+                  <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/user-guides/shelter-admin-guide.md" target="_blank" rel="noopener noreferrer">
                     <Button variant="outline">
                       <Github className="h-4 w-4 mr-2" />
                       View on GitHub

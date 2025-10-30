@@ -68,7 +68,7 @@ export default function DonorGuidePage() {
       description: 'Secure payment methods, privacy protection, and financial safety',
       status: 'Security',
       color: 'bg-purple-50 text-purple-700',
-      link: 'https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/06-user-guides/donor-guide.md',
+      link: 'https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/user-guides/donor-guide.md',
       external: true
     },
     {
@@ -115,7 +115,7 @@ export default function DonorGuidePage() {
       description: 'Every donation tracked with complete transparency',
       icon: BarChart3,
       status: 'Verified',
-      link: 'https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/tokenomics/blockchain.md',
+      link: 'https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/architecture/technical/tokenomics/blockchain.md',
       external: true
     },
     {
@@ -139,7 +139,7 @@ export default function DonorGuidePage() {
       description: 'Bank-level security with multiple payment options',
       icon: Shield,
       status: 'Protected',
-      link: 'https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/technical/security.md',
+      link: 'https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/architecture/technical/security.md',
       external: true
     }
   ];

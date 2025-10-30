@@ -77,13 +77,13 @@ export default function BlockchainPage() {
                 </div>
                 
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                  <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/technical/blockchain.md" target="_blank" rel="noopener noreferrer">
+                  <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/architecture/technical/blockchain.md" target="_blank" rel="noopener noreferrer">
                     <Button className="bg-emerald-600 hover:bg-emerald-700">
                       <Download className="h-4 w-4 mr-2" />
                       View Full Technical Spec
                     </Button>
                   </a>
-                  <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/technical/blockchain.md" target="_blank" rel="noopener noreferrer">
+                  <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/architecture/technical/blockchain.md" target="_blank" rel="noopener noreferrer">
                     <Button variant="outline">
                       <Code className="h-4 w-4 mr-2" />
                       View on GitHub
@@ -129,7 +129,7 @@ export default function BlockchainPage() {
                   eliminating participant cryptocurrency exposure while maintaining complete donation transparency.
                 </p>
                 <div className="mt-6">
-                  <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/technical/blockchain.md" target="_blank" rel="noopener noreferrer">
+                  <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/architecture/technical/blockchain.md" target="_blank" rel="noopener noreferrer">
                     <Button className="bg-emerald-600 hover:bg-emerald-700">
                       <Code className="h-4 w-4 mr-2" />
                       Read Full Technical Specification

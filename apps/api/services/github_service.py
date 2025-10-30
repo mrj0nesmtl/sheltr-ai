@@ -382,13 +382,29 @@ class GitHubService:
         return filename.replace('.md', '').replace('-', ' ').replace('_', ' ').title()
     
     def _determine_category_from_path(self, file_path: str) -> str:
-        """Determine category based on file path"""
+        """Determine category based on file path - supports both old and new folder structures"""
         path_parts = file_path.split('/')
         
         if len(path_parts) > 1:
             folder = path_parts[0]
             
             category_mapping = {
+                # New structure (no numbered prefixes) - Primary mappings
+                'overview': 'Platform',
+                'architecture': 'Architecture',
+                'ecosystem': 'Products',
+                'tokenomics': 'Tokenomics',
+                'api': 'API',
+                'integrations': 'Integrations',
+                'guides': 'Guides',
+                'features': 'Features',
+                'operations': 'Operations',
+                'reference': 'Reference',
+                'resources': 'Resources',
+                'archive': 'Archive',
+                
+                # Legacy structure (numbered prefixes) - Backward compatibility
+                # TODO: Remove after migration complete and verified (December 2025)
                 '01-overview': 'Platform',
                 '02-architecture': 'Architecture',
                 '03-api': 'API',

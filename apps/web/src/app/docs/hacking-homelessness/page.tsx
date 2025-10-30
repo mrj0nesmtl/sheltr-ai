@@ -79,7 +79,7 @@ export default function HackingHomelessnessPage() {
                 
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                   
-                  <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/01-overview/hacking_homelessness.md" target="_blank" rel="noopener noreferrer">
+                  <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/overview/hacking_homelessness.md" target="_blank" rel="noopener noreferrer">
                     <Button variant="outline">
                       <Brain className="h-4 w-4 mr-2" />
                       View on GitHub
@@ -706,7 +706,7 @@ export default function HackingHomelessnessPage() {
                   </div>
                 </div>
                 <div className="flex justify-center">
-                  <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/01-overview/hacking_homelessness.md" target="_blank" rel="noopener noreferrer">
+                  <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/overview/hacking_homelessness.md" target="_blank" rel="noopener noreferrer">
                     <Button className="bg-white text-purple-600 hover:bg-purple-50">
                       <Brain className="h-4 w-4 mr-2" />
                       View Complete AI Thesis on GitHub

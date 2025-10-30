@@ -1,6 +1,7 @@
 """
 GitHub Service for Knowledge Base Sync
 Handles GitHub API integration for scanning and syncing documentation files.
+Includes automatic permission assignment based on file paths.
 """
 
 import os
@@ -11,6 +12,7 @@ from typing import Dict, List, Optional, Any
 from datetime import datetime
 import base64
 import hashlib
+from models.permissions import determine_permission_from_path, DocumentPermission
 
 logger = logging.getLogger(__name__)
 
@@ -270,6 +272,10 @@ class GitHubService:
                     # Determine category from path
                     category = self._determine_category_from_path(file_path)
                     
+                    # AUTO-ASSIGN PERMISSION BASED ON PATH
+                    auto_permission = determine_permission_from_path(file_path)
+                    logger.info(f"Auto-assigned permission '{auto_permission.value}' for {file_path}")
+                    
                     # Check if document already exists
                     kb_documents = await kb_service.get_knowledge_documents()
                     existing_doc = None
@@ -291,29 +297,40 @@ class GitHubService:
                                 'category': category,
                                 'file_size': len(content.encode('utf-8')),
                                 'updated_at': datetime.utcnow(),
-                                'embedding_status': 'pending'
+                                'embedding_status': 'pending',
+                                # Update permission level with auto-detected value
+                                'permission_level': auto_permission.value,
+                                'synced_from_github': True,
+                                'github_path': file_path
                             }
                         )
                     else:
-                        # Create new document
+                        # Create new document with auto-assigned permissions
                         document_data = {
                             'title': title,
                             'content': content,
                             'category': category,
                             'file_path': f'knowledge-base/public/{file_path}',
                             'file_size': len(content.encode('utf-8')),
-                            'access_level': 'public',
+                            'access_level': 'public',  # Legacy field
+                            'permission_level': auto_permission.value,  # New permission system
+                            'is_private': auto_permission in [DocumentPermission.FOUNDERS, DocumentPermission.SUPER_ADMIN],
+                            'synced_from_github': True,
+                            'github_path': file_path,
                             'tags': self._extract_tags_from_path(file_path),
                             'embedding_status': 'pending'
                         }
                         document_id = await kb_service.create_knowledge_document(document_data)
                     
-                    # Generate embeddings with enhanced metadata
+                    # Generate embeddings with enhanced metadata including permissions
                     metadata = {
                         'document_id': document_id,
                         'title': title,
                         'category': category,
-                        'access_level': 'public',
+                        'access_level': 'public',  # Legacy field
+                        'permission_level': auto_permission.value,  # New permission system
+                        'synced_from_github': True,
+                        'github_path': file_path,
                         'tags': self._extract_tags_from_path(file_path)  # Initial tags from path
                     }
                     

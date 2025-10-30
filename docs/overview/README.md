@@ -1,6 +1,9 @@
-# 🌟 Overview
+# 🌟 Platform Overview
 
-**Revolutionizing charitable giving through technology-driven transparency and direct impact**
+> **Revolutionizing charitable giving through technology-driven transparency and direct impact**  
+> Understanding SHELTR's mission, vision, and revolutionary approach to solving homelessness.
+
+[![Mission Driven](https://img.shields.io/badge/mission-tech%20for%20good-brightgreen.svg)]()
 
 ---
 

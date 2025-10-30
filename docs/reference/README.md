@@ -1,32 +1,65 @@
-# 📚 Technical Reference
+# 📚 Reference Documentation
 
-This section contains detailed technical reference materials for the SHELTR-AI platform.
+> **Technical reference materials and specifications**  
+> Quick lookup for APIs, schemas, and technical details.
 
-## 📋 Contents
+[![Reference](https://img.shields.io/badge/reference-comprehensive-blue.svg)]()
 
-### 🗄️ Data & API Reference
-- **[Database Schema](./database-schema.md)**: Complete Firestore collections, document structure, and security rules
-- **[API Reference](./api-reference.md)**: Comprehensive REST API endpoint documentation with examples
-- **[Error Codes](./error-codes.md)**: Complete error code reference and troubleshooting guide
-- **[Configuration Reference](./configuration.md)**: Environment variables and system configuration
+---
 
-### 🎨 Frontend Reference
-- **[Component Library](./component-library.md)**: UI component documentation with Shadcn/UI examples
-- **[Theme System](./theme-system.md)**: Design tokens, colors, and styling guidelines
-- **[Icons & Assets](./icons-assets.md)**: Icon library and asset management reference
+## 🎯 Overview
 
-### ⛓️ Blockchain Reference
-- **[Smart Contract Reference](./smart-contracts.md)**: SHELTR token and contract documentation
-- **[Web3 Integration](./web3-integration.md)**: Blockchain integration patterns and examples
-- **[Token Economics](./tokenomics-reference.md)**: Detailed tokenomics implementation reference
+Technical reference documentation including API specifications, database schemas, design systems, and quick reference guides.
 
-### 📖 Documentation
-- **[Glossary](./glossary.md)**: Technical terms, acronyms, and definitions
-- **[FAQ](./faq.md)**: Frequently asked questions and troubleshooting
-- **[Changelog](./changelog.md)**: Version history and breaking changes
+---
 
-## 🔗 Related Documentation
+## 📂 Reference Materials
 
-- [API Documentation](../03-api/README.md)
-- [Architecture](../02-architecture/README.md)
-- [User Guides](../06-user-guides/README.md)
+### 🔌 [API Reference](api-reference.md)
+**Complete API endpoint documentation**
+- All endpoints
+- Request/response formats
+- Authentication
+- Error codes
+- Rate limits
+
+### 🗄️ [Database Schema](database-schema.md)
+**Firestore collections and structure**
+- Collection specifications
+- Document fields
+- Relationships
+- Indexes
+- Validation rules
+
+### 🎨 [Design System](design-system.md)
+**UI/UX guidelines and components**
+- Color palette
+- Typography
+- Component library
+- Spacing and layout
+- Accessibility standards
+
+---
+
+## 🚀 Quick Reference
+
+### HTTP Status Codes
+- `200` - Success
+- `201` - Created
+- `400` - Bad Request
+- `401` - Unauthorized
+- `403` - Forbidden
+- `404` - Not Found
+- `500` - Server Error
+
+### User Roles
+- `donor` - Can make donations
+- `participant` - Service recipient
+- `shelter_admin` - Shelter management
+- `platform_admin` - Platform management
+- `super_admin` - System administration
+
+---
+
+**Last Updated**: October 30, 2025  
+**Status**: ✅ Active Reference

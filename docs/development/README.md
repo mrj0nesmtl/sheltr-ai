@@ -1,218 +1,425 @@
 # 💻 Development Documentation
 
-**Current Status:** Production-ready platform with advanced AI systems and comprehensive knowledge base  
-**Last Updated:** October 16, 2025  
-**Version:** 2.53.3
+> **Complete development guides, workflows, and best practices for SHELTR platform**  
+> Everything developers need to build, test, and deploy the platform.
+
+[![Status](https://img.shields.io/badge/status-active%20development-blue.svg)](https://github.com/mrj0nesmtl/sheltr-ai)
+[![Framework](https://img.shields.io/badge/Next.js-14+-black.svg)](https://nextjs.org)
+[![API](https://img.shields.io/badge/FastAPI-0.104+-green.svg)](https://fastapi.tiangolo.com/)
 
 ---
 
-## 📋 **Current Active Documents**
+## 🎯 Overview
 
-All documents in this directory (`docs/04-development/`) are **current and actively maintained**. Historical session documents have been archived to `development_archive/`.
-
----
-
-## 🤖 **AI & Chatbot Systems**
-
-### **Agent Architecture**
-- **[SHELTR-AGENT-ARCHITECTURE.md](SHELTR-AGENT-ARCHITECTURE.md)** - Comprehensive guide to SHELTR's multi-agent chatbot system
-  - Public chatbot with FAQ-first strategy
-  - Authenticated chat with enhanced RAG
-  - Dashboard with 5 specialized agents
-  - 107 documents, 1,059 chunks, 209,212 words
-
-### **Chatbot Features & Roadmap**
-- **[CHATBOT-FEATURES-ROADMAP.md](CHATBOT-FEATURES-ROADMAP.md)** - Future enhancements and planned features
-  - Voice input integration
-  - Image upload with Vision API
-  - Web search capabilities
-  - Multi-language support
-
-### **MCP Integration**
-- **[MCP-INTEGRATION-GUIDE.md](MCP-INTEGRATION-GUIDE.md)** - Model Context Protocol implementation
-  - Tool execution for authenticated users
-  - Analytics generation
-  - Platform data queries
-  - User management tools
+This directory contains all development-related documentation including setup guides, testing frameworks, development roadmaps, and best practices for building on the SHELTR platform.
 
 ---
 
-## 📚 **Knowledge Base Management**
+## 📂 Documentation Files
 
-### **Knowledge Base Guides**
-- **[KNOWLEDGE-BASE-UPDATE-GUIDE.md](KNOWLEDGE-BASE-UPDATE-GUIDE.md)** - How to update and sync knowledge base documents
-  - GitHub sync process
-  - Embedding regeneration
-  - Quality scoring system
-  - Best practices
+### 🗺️ [Development Roadmap](dev-roadmap.md)
+**60-day public launch timeline and strategy**
 
-- **[KNOWLEDGE-BASE-EDIT-DELETE-FLOW.md](KNOWLEDGE-BASE-EDIT-DELETE-FLOW.md)** - ⚠️ **CRITICAL** - Understanding UI edits vs GitHub sync
-  - What happens when you edit in UI
-  - What happens when you delete in UI
-  - Sync conflicts and solutions
-  - Recommended workflows
+**Contents**:
+- Q4 2025 launch timeline
+- Client onboarding strategy  
+- AI hyper chatbot achievements
+- Enterprise payment integration
+- Success metrics and KPIs
 
----
-
-## 🔔 **Notification System**
-
-### **Notification Debugging & Metrics**
-- **[NOTIFICATION_SYSTEM_DEBUG_PROMPT.md](NOTIFICATION_SYSTEM_DEBUG_PROMPT.md)** - Session 23 notification system debug kickoff
-  - Quista metrics issues
-  - Notification delivery problems
-  - Forensic analysis approach
-
-- **[NOTIFICATION-METRICS-GUIDE.md](NOTIFICATION-METRICS-GUIDE.md)** - Notification system metrics and monitoring
-  - Metric types and tracking
-  - Performance monitoring
-  - Troubleshooting guide
+**Status**: ✅ **Active** - Following 60-day timeline  
+**Target**: Public launch Q1 2026
 
 ---
 
-## 📊 **Platform Features & Testing**
+### 💻 [MacBook Setup Guide](MACBOOK-SETUP-GUIDE.md)
+**Complete local development environment setup**
 
-### **Functionality Matrix**
-- **[COMPLETE-FUNCTIONALITY-MATRIX-UPDATED.md](COMPLETE-FUNCTIONALITY-MATRIX-UPDATED.md)** - Comprehensive feature coverage matrix
-  - All platform features documented
-  - Implementation status
-  - Testing coverage
+**Contents**:
+- Prerequisites and dependencies
+- Firebase configuration
+- Environment variables
+- Running development servers
+- Troubleshooting common issues
 
-### **Development Roadmap**
-- **[dev-roadmap.md](dev-roadmap.md)** - Development timeline and technical milestones
-  - Feature priorities
-  - Release schedule
-  - Technical debt tracking
-
----
-
-## 📅 **Recent Session Documentation**
-
-### **Session 23: Chatbot Overhaul & Knowledge Base Sync**
-- **[SESSION-23-KICKOFF-NOTIFICATION-DEBUG.md](SESSION-23-KICKOFF-NOTIFICATION-DEBUG.md)** - Session 23 kickoff prompt
-  - Notification system debugging
-  - Chatbot testing with new FAQs
-  - Deep dive forensic analysis
-
-- **[SESSION-23-FINAL-STATUS.md](SESSION-23-FINAL-STATUS.md)** - Session 23 completion summary
-  - Chatbot implementation complete
-  - Knowledge base sync operational
-  - Production deployment successful
+**Who Needs This**: All new developers  
+**Time to Complete**: 30-60 minutes
 
 ---
 
-## 📁 **Directory Structure**
+### 🧪 [Dashboard Testing Guide](DASHBOARD-TESTING-GUIDE.md)
+**Comprehensive QA testing procedures**
 
+**Contents**:
+- Role-based dashboard testing
+- Feature verification checklist
+- Business logic validation
+- UI/UX testing procedures
+- Bug reporting workflow
+
+**Who Needs This**: QA engineers, developers  
+**Coverage**: All user roles and dashboards
+
+---
+
+### 📊 [Business Logic Testing](BUSINESS-LOGIC-TESTING.md)
+**Core platform business logic testing framework**
+
+**Contents**:
+- Test scenarios and cases
+- Data validation rules
+- Workflow testing
+- Edge case handling
+- Performance benchmarks
+
+**Who Needs This**: Backend developers, QA  
+**Status**: ✅ Comprehensive framework
+
+---
+
+### ⚡ [Quick MacBook Sync](QUICK-MACBOOK-SYNC.md)
+**Fast setup guide for existing projects**
+
+**Contents**:
+- Quick start commands
+- Essential environment setup
+- Sync from existing installation
+- Common shortcuts
+
+**Who Needs This**: Developers with experience  
+**Time to Complete**: 10-15 minutes
+
+---
+
+## 🚀 Getting Started
+
+### For New Developers
+
+**Step 1**: Environment Setup
+```bash
+# Clone repository
+git clone https://github.com/mrj0nesmtl/sheltr-ai.git
+cd sheltr-ai
+
+# Follow complete setup
+# See: MACBOOK-SETUP-GUIDE.md
 ```
-docs/04-development/
-├── README.md                                    # This file - Development overview
-│
-├── 🤖 AI & Chatbot Systems
-│   ├── SHELTR-AGENT-ARCHITECTURE.md           # Multi-agent system guide (932 lines)
-│   ├── CHATBOT-FEATURES-ROADMAP.md            # Future features roadmap
-│   └── MCP-INTEGRATION-GUIDE.md               # MCP tool integration
-│
-├── 📚 Knowledge Base Management
-│   ├── KNOWLEDGE-BASE-UPDATE-GUIDE.md         # Update & sync procedures
-│   └── KNOWLEDGE-BASE-EDIT-DELETE-FLOW.md     # ⚠️ Critical UI vs GitHub guide
-│
-├── 🔔 Notification System
-│   ├── NOTIFICATION_SYSTEM_DEBUG_PROMPT.md    # Debug session kickoff
-│   └── NOTIFICATION-METRICS-GUIDE.md          # Metrics & monitoring
-│
-├── 📊 Platform Features
-│   ├── COMPLETE-FUNCTIONALITY-MATRIX-UPDATED.md  # Feature coverage
-│   └── dev-roadmap.md                         # Development timeline
-│
-├── 📅 Recent Sessions
-│   ├── SESSION-23-KICKOFF-NOTIFICATION-DEBUG.md  # Session 23 kickoff
-│   └── SESSION-23-FINAL-STATUS.md             # Session 23 summary
-│
-└── 🗄️ development_archive/                    # Historical sessions (28+ files)
-    ├── Chatbot debug & testing docs
-    ├── Agent selection & color coding
-    ├── FAQ expansion & testing
-    ├── Donation flow fixes
-    ├── RAG troubleshooting & production fixes
-    └── Knowledge base sync sessions
+
+**Step 2**: Understand the Architecture
+- Read [System Design](../architecture/technical/system-design.md)
+- Review [API Documentation](../api/README.md)
+- Check [Development Roadmap](dev-roadmap.md)
+
+**Step 3**: Start Development
+```bash
+# Start development servers
+cd apps/web && npm run dev       # Frontend (port 3000)
+cd apps/api && uvicorn main:app  # Backend (port 8000)
+```
+
+**Step 4**: Run Tests
+```bash
+# Frontend tests
+cd apps/web && npm test
+
+# Backend tests
+cd apps/api && pytest
 ```
 
 ---
 
-## 🎯 **Current Platform Status**
+## 🛠️ Development Workflow
 
-### **AI Systems** ✅ Production Ready
-- **107 Documents** in knowledge base
-- **1,059 Chunks** for semantic search
-- **209,212 Words** indexed
-- **10 Categories** organized
-- **5 Specialized Agents** operational
-- **86 FAQs** for instant responses
+### Daily Development
 
-### **Chatbot Implementation** ✅ Complete
-- **Public Chatbot**: FAQ-first strategy (<1s response)
-- **Authenticated Chat**: Enhanced RAG with MCP tools
-- **Dashboard Agents**: 5 specialized personalities
-- **Knowledge Base**: Real-time GitHub sync
-- **Production**: Deployed and operational
+1. **Pull Latest Changes**
+   ```bash
+   git pull origin main
+   npm install  # Update dependencies if needed
+   ```
 
-### **Recent Achievements** (v2.53.x)
-- ✅ Comprehensive Agent Architecture documentation
-- ✅ Live knowledge base statistics integration
-- ✅ 28 session docs archived for organization
-- ✅ Knowledge base edit/delete flow documented
-- ✅ Clear KB access restricted to Super Admin
-- ✅ Production knowledge base sync operational
+2. **Create Feature Branch**
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
 
----
+3. **Develop & Test**
+   - Write code
+   - Add tests
+   - Run linter
+   - Test locally
 
-## 🔗 **Related Documentation**
+4. **Commit Changes**
+   ```bash
+   git add .
+   git commit -m "feat: your feature description"
+   ```
 
-- [API Documentation](../03-api/README.md) - Backend API reference
-- [Architecture](../02-architecture/README.md) - System design & tokenomics
-- [Deployment](../05-deployment/README.md) - Deployment guides
-- [User Guides](../06-user-guides/README.md) - Role-specific guides
+5. **Push & Create PR**
+   ```bash
+   git push origin feature/your-feature-name
+   # Create PR on GitHub
+   ```
 
----
+### Testing Workflow
 
-## 📚 **Documentation Archive**
+**Local Testing**:
+```bash
+# Run all tests
+npm test
 
-Historical development sessions and milestone documentation have been moved to:
+# Run specific test file
+npm test __tests__/specific-test.tsx
 
-**[development_archive/](development_archive/)** - 28+ archived documents including:
-- Chatbot debug sessions (Sessions 15-23)
-- Agent testing and selection
-- FAQ expansion and testing
-- Donation flow fixes
-- RAG troubleshooting
-- Knowledge base sync sessions
-- Production fixes and deployments
+# Run with coverage
+npm test -- --coverage
+```
 
----
-
-## 🚀 **Quick Reference**
-
-### **For Developers:**
-- Start with [SHELTR-AGENT-ARCHITECTURE.md](SHELTR-AGENT-ARCHITECTURE.md) for AI system overview
-- Review [MCP-INTEGRATION-GUIDE.md](MCP-INTEGRATION-GUIDE.md) for tool integration
-- Check [dev-roadmap.md](dev-roadmap.md) for upcoming features
-
-### **For Content Managers:**
-- Read [KNOWLEDGE-BASE-UPDATE-GUIDE.md](KNOWLEDGE-BASE-UPDATE-GUIDE.md) for sync procedures
-- ⚠️ **MUST READ**: [KNOWLEDGE-BASE-EDIT-DELETE-FLOW.md](KNOWLEDGE-BASE-EDIT-DELETE-FLOW.md) before editing docs
-
-### **For Platform Admins:**
-- Review [NOTIFICATION-METRICS-GUIDE.md](NOTIFICATION-METRICS-GUIDE.md) for monitoring
-- Check [COMPLETE-FUNCTIONALITY-MATRIX-UPDATED.md](COMPLETE-FUNCTIONALITY-MATRIX-UPDATED.md) for feature status
+**QA Testing**:
+- Follow [Dashboard Testing Guide](DASHBOARD-TESTING-GUIDE.md)
+- Test all user roles
+- Verify business logic
+- Check mobile responsiveness
 
 ---
 
-**Total Active Documents**: 12 current guides  
-**Archived Documents**: 28+ historical sessions  
-**Current Focus**: AI systems, knowledge base management, and notification debugging  
-**Platform Status**: Production-ready with 107 documents and 5 specialized agents
+## 📚 Code Standards
+
+### TypeScript/React
+
+```typescript
+// Use TypeScript strict mode
+// Always define interfaces
+interface UserProfile {
+  id: string;
+  name: string;
+  role: UserRole;
+}
+
+// Use functional components with hooks
+export const Component: React.FC<Props> = ({ prop }) => {
+  const [state, setState] = useState<Type>(initial);
+  
+  useEffect(() => {
+    // Side effects
+  }, [dependencies]);
+  
+  return <div>{content}</div>;
+};
+```
+
+### Python/FastAPI
+
+```python
+# Use type hints
+from typing import Optional
+from pydantic import BaseModel
+
+class User(BaseModel):
+    id: str
+    name: str
+    role: str
+
+# Async endpoints
+@router.get("/users/{user_id}")
+async def get_user(user_id: str) -> User:
+    """Get user by ID"""
+    return await db.get_user(user_id)
+```
+
+### Commit Messages
+
+Follow [Conventional Commits](https://www.conventionalcommits.org/):
+
+```
+feat: add new feature
+fix: bug fix
+docs: documentation update
+style: formatting changes
+refactor: code refactoring
+test: add tests
+chore: maintenance tasks
+```
 
 ---
 
-**Last Updated:** October 16, 2025  
-**Version:** 2.53.3  
-**Status:** ✅ Production Ready
+## 🔧 Development Tools
+
+### Required Tools
+
+- **Node.js**: v18+ (LTS)
+- **Python**: 3.9+
+- **Firebase CLI**: Latest
+- **Git**: 2.x+
+- **VS Code**: Recommended IDE
+
+### VS Code Extensions
+
+```json
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "ms-python.python",
+    "bradlc.vscode-tailwindcss",
+    "prisma.prisma",
+    "firebase.vscode-firebase"
+  ]
+}
+```
+
+### Environment Variables
+
+```env
+# .env.local (Frontend)
+NEXT_PUBLIC_API_URL=http://localhost:8000
+NEXT_PUBLIC_FIREBASE_API_KEY=...
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=sheltr-ai
+
+# .env (Backend)
+FIREBASE_PROJECT_ID=sheltr-ai
+OPENAI_API_KEY=...
+ENVIRONMENT=development
+```
+
+---
+
+## 🧪 Testing Strategy
+
+### Test Coverage Goals
+
+| Component | Target | Current |
+|-----------|--------|---------|
+| Frontend Components | 80% | 75% |
+| API Endpoints | 90% | 88% |
+| Business Logic | 95% | 92% |
+| Integration Tests | 70% | 65% |
+
+### Testing Best Practices
+
+1. **Unit Tests**: Test individual functions/components
+2. **Integration Tests**: Test feature workflows
+3. **E2E Tests**: Test complete user journeys
+4. **Performance Tests**: Monitor response times
+5. **Security Tests**: Validate auth and permissions
+
+---
+
+## 📊 Development Metrics
+
+### Current Sprint (Q4 2025)
+
+- **Features Completed**: 8/10
+- **Bugs Fixed**: 23
+- **Tests Added**: 145
+- **Code Coverage**: 82%
+- **Build Time**: < 3 min
+- **Deploy Time**: < 5 min
+
+### Velocity
+
+- **Story Points/Week**: 40-50
+- **Features/Month**: 15-20
+- **Bug Fix Time**: < 24 hours (critical)
+- **PR Review Time**: < 4 hours
+
+---
+
+## 🔗 Related Documentation
+
+### Essential Reading
+
+- [System Architecture](../architecture/technical/system-design.md) - Overall system design
+- [API Documentation](../api/README.md) - Backend API reference
+- [Database Schema](../api/database-schema.md) - Data structure
+- [Features](../features/) - Feature documentation
+
+### User Documentation
+
+- [User Guides](../user-guides/) - End-user documentation
+- [Operations](../operations/) - Deployment guides
+- [Integrations](../integrations/) - Third-party integrations
+
+---
+
+## 🔥 Hot Topics
+
+### Current Focus Areas
+
+1. **Payment Rails Integration** (High Priority)
+   - Adyen integration
+   - Donation flow completion
+   - Transaction tracking
+
+2. **Chatbot Enhancements** (Medium Priority)
+   - Agent specialization
+   - Response optimization
+   - Context improvements
+
+3. **Mobile Optimization** (Medium Priority)
+   - Responsive design
+   - Touch interactions
+   - Performance tuning
+
+---
+
+## 📞 Developer Support
+
+**Need help?**
+
+- 📧 **Email**: joel@arcanaconcept.com
+- 💬 **Chat**: SHELTR AI (internal chatbot)
+- 📖 **Docs**: Check relevant documentation first
+- 🐛 **Issues**: [GitHub Issues](https://github.com/mrj0nesmtl/sheltr-ai/issues)
+
+### Office Hours
+
+- **Daily Standups**: 9:00 AM EST (async on Slack)
+- **Code Reviews**: Throughout the day
+- **Tech Discussions**: Friday 2:00 PM EST
+
+---
+
+## 🎯 Development Roadmap
+
+### Q4 2025 (Current)
+- ✅ Chatbot multi-agent system
+- ✅ Knowledge base GitHub sync
+- ✅ Notification system overhaul
+- ✅ Blog system launch
+- 🔄 Payment rails integration
+- 📋 Mobile optimization
+
+### Q1 2026 (Next)
+- 📋 Tokenomics implementation
+- 📋 Advanced analytics
+- 📋 Performance optimization
+- 📋 Enterprise features
+
+See [Development Roadmap](dev-roadmap.md) for complete timeline.
+
+---
+
+## 🏆 Contributing
+
+We welcome contributions! Here's how:
+
+1. **Find an Issue**: Check GitHub Issues
+2. **Ask Questions**: Don't hesitate to ask
+3. **Submit PR**: Follow code standards
+4. **Review Process**: Code review required
+5. **Testing**: All tests must pass
+
+---
+
+**Last Updated**: October 30, 2025  
+**Team Size**: 5 developers  
+**Sprint**: Q4 2025  
+**Status**: ✅ Active Development
+
+---
+
+<p align="center">
+  <strong>Building the future of social impact</strong><br>
+  <em>One commit at a time</em>
+</p>

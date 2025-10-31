@@ -7,6 +7,121 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.81.0] - 2025-10-31 (DUAL REPOSITORY SIDEBAR & COLLAPSED FOLDERS) 📂🔥
+
+### 🎯 Feature: Dual Repository Tree & Improved UX
+
+Major sidebar enhancement with dual repository structure (GitHub + Firebase), collapsed folders by default, and visual differentiation between public and secure documents.
+
+#### ✨ Added
+
+**Dual Repository Structure** (`apps/web/src/components/knowledge/FolderTree.tsx`):
+- New `buildDualRepositoryTree()` function for dual-source organization
+- Repository-level nodes: "🐙 GitHub Repository" and "🔥 Firebase Secure Docs"
+- Clear visual separation between GitHub (public) and Firebase (secure) documents
+- Repository type support in FolderNode interface
+- Auto-grouping of documents by source (synced_from_github vs source_directory)
+- Firebase docs organized by secure categories (Founders, Payment Rails, Platform Admin, Shelter Research)
+- Security badges on secure documents with Lock icons
+- Source-aware folder coloring (blue for GitHub, orange for Firebase)
+
+**Visual Enhancements**:
+- Repository headers with colored left borders (green for GitHub, orange for Firebase)
+- Github/Shield icons for repository identification
+- Lock icons on secure documents
+- Document count badges on repositories
+- Distinct folder colors by source
+
+**UX Improvements**:
+- All folders collapsed by default (less overwhelming)
+- Users can expand only what they need
+- Cleaner initial view
+- Better organization and navigation
+
+#### 🎨 Changed
+
+**Folder Tree Component**:
+- Updated `FolderNode` interface with new fields:
+  - `type`: Added 'repository' option
+  - `source`: 'github' | 'firebase'
+  - `securityLevel`: Security classification
+  - `icon`, `badge`: Custom visuals
+- Enhanced rendering logic for repository nodes
+- Special styling for repository headers
+- Color-coded expand/collapse behavior
+
+**Knowledge Base Page** (`apps/web/src/app/dashboard/knowledge/page.tsx`):
+- Switched from `buildFolderTree()` to `buildDualRepositoryTree()`
+- Updated console logging for dual repository structure
+- Improved document source detection
+
+#### 📊 Repository Structure
+
+```
+📂 Folders
+├── 🐙 GitHub Repository (X documents)
+│   ├── 📋 Platform (3)
+│   ├── 🏗️ Architecture (18)
+│   ├── ✨ Features (15)
+│   ├── ⚙️ Operations (6)
+│   ├── 📖 Guides (4)
+│   ├── 📚 Reference (5)
+│   └── ... more categories
+└── 🔥 Firebase Secure Docs (Y documents)
+    ├── 💼 Founders (7)
+    ├── 💳 Payment Rails (3)
+    ├── ⚙️ Platform Admin (15)
+    └── 🏢 Shelter Research (X)
+```
+
+#### 🔧 Technical Details
+
+**Document Source Detection**:
+- GitHub: `synced_from_github === true` OR no source fields
+- Firebase: `source_directory` is defined
+
+**Security Indicators**:
+- Public docs: Standard file icon
+- Secure docs: File icon + Lock icon
+- Category-specific emoji icons for Firebase folders
+
+**Color Coding**:
+- GitHub: Green borders/icons
+- Firebase: Orange borders/icons
+- Public folders: Blue
+- Secure folders: Orange
+
+#### 🎯 Benefits
+
+1. **Clear Organization**: Immediate distinction between public and secure docs
+2. **Better UX**: Collapsed by default reduces cognitive load
+3. **Visual Hierarchy**: Repository → Category → Document structure
+4. **Security Awareness**: Lock icons and badges make security clear
+5. **Scalability**: Easy to add more repositories or categories
+6. **Intuitive Navigation**: Source-based grouping matches mental models
+
+#### 📝 Documentation
+
+Created `docs/features/DUAL-REPOSITORY-SIDEBAR-PLAN.md`:
+- Complete implementation plan
+- Architecture design
+- Visual design specifications
+- Security considerations
+- Testing checklist
+
+#### 🧪 Testing Notes
+
+- Folder tree starts fully collapsed
+- Expanding GitHub repo shows standard categories
+- Expanding Firebase repo shows secure categories
+- Lock icons appear on secure documents
+- Repository headers have colored borders
+- Document counts are accurate
+- Source detection works correctly
+- No documents are duplicated
+
+---
+
 ## [2.80.0] - 2025-10-31 (UI POLISH & WELCOME LETTERS EXCLUSION) 🎨🚫
 
 ### 🎯 Feature: Badge Updates, Stats Enhancement & Welcome Letters Exclusion

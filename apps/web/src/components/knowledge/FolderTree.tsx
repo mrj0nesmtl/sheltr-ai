@@ -7,7 +7,10 @@ import {
   Folder, 
   FolderOpen, 
   FileText,
-  Hash
+  Hash,
+  Github,
+  Shield,
+  Lock
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -18,10 +21,14 @@ export interface FolderNode {
   id: string;
   name: string;
   path: string;
-  type: 'folder' | 'document';
+  type: 'folder' | 'document' | 'repository';
+  source?: 'github' | 'firebase';
   children?: FolderNode[];
   documentCount?: number;
   isExpanded?: boolean;
+  icon?: string;
+  badge?: string;
+  securityLevel?: string;
 }
 
 interface FolderTreeProps {
@@ -39,8 +46,9 @@ export function FolderTree({
   onDocumentSelect,
   className 
 }: FolderTreeProps) {
+  // Start with all folders collapsed by default for cleaner UI
   const [expandedFolders, setExpandedFolders] = useState<Set<string>>(
-    new Set(['platform', 'architecture', 'api', 'features', 'development', 'operations', 'user-guides', 'guides', 'reference', 'integrations', 'products', 'resources'])
+    new Set([])
   );
 
   const toggleFolder = (path: string) => {
@@ -57,6 +65,7 @@ export function FolderTree({
     const isExpanded = expandedFolders.has(node.path);
     const isSelected = selectedPath === node.path;
     const hasChildren = node.children && node.children.length > 0;
+    const isRepository = node.type === 'repository';
 
     return (
       <div key={node.id} className="select-none">
@@ -64,11 +73,14 @@ export function FolderTree({
           className={cn(
             "flex items-center gap-2 py-1.5 px-2 rounded-md cursor-pointer hover:bg-muted/50 transition-colors",
             isSelected && "bg-primary/10 border border-primary/20",
-            level > 0 && "ml-4"
+            level > 0 && "ml-4",
+            isRepository && "font-semibold bg-muted/30 border-l-4",
+            isRepository && node.source === 'github' && "border-l-green-500",
+            isRepository && node.source === 'firebase' && "border-l-orange-500"
           )}
           style={{ paddingLeft: `${level * 16 + 8}px` }}
           onClick={() => {
-            if (node.type === 'folder') {
+            if (node.type === 'folder' || node.type === 'repository') {
               if (hasChildren) {
                 toggleFolder(node.path);
               }
@@ -79,7 +91,7 @@ export function FolderTree({
           }}
         >
           {/* Expand/Collapse Icon */}
-          {node.type === 'folder' && hasChildren && (
+          {(node.type === 'folder' || node.type === 'repository') && hasChildren && (
             <Button
               variant="ghost"
               size="sm"
@@ -97,16 +109,33 @@ export function FolderTree({
             </Button>
           )}
 
-          {/* Folder/Document Icon */}
+          {/* Folder/Document/Repository Icon */}
           <div className="flex items-center gap-1.5 flex-1 min-w-0">
-            {node.type === 'folder' ? (
-              isExpanded ? (
-                <FolderOpen className="h-4 w-4 text-blue-500 flex-shrink-0" />
+            {node.type === 'repository' ? (
+              node.source === 'github' ? (
+                <Github className="h-4 w-4 text-green-500 flex-shrink-0" />
               ) : (
-                <Folder className="h-4 w-4 text-blue-500 flex-shrink-0" />
+                <Shield className="h-4 w-4 text-orange-500 flex-shrink-0" />
+              )
+            ) : node.type === 'folder' ? (
+              isExpanded ? (
+                <FolderOpen className={cn(
+                  "h-4 w-4 flex-shrink-0",
+                  node.source === 'firebase' ? "text-orange-500" : "text-blue-500"
+                )} />
+              ) : (
+                <Folder className={cn(
+                  "h-4 w-4 flex-shrink-0",
+                  node.source === 'firebase' ? "text-orange-500" : "text-blue-500"
+                )} />
               )
             ) : (
-              <FileText className="h-4 w-4 text-gray-500 flex-shrink-0" />
+              <div className="flex items-center gap-1">
+                <FileText className="h-4 w-4 text-gray-500 flex-shrink-0" />
+                {node.securityLevel && node.securityLevel !== 'public' && (
+                  <Lock className="h-3 w-3 text-orange-400 flex-shrink-0" />
+                )}
+              </div>
             )}
 
             {/* Name */}
@@ -128,7 +157,7 @@ export function FolderTree({
         </div>
 
         {/* Children */}
-        {node.type === 'folder' && hasChildren && isExpanded && (
+        {(node.type === 'folder' || node.type === 'repository') && hasChildren && isExpanded && (
           <div className="ml-2">
             {node.children!.map(child => renderNode(child, level + 1))}
           </div>
@@ -230,4 +259,116 @@ export function buildFolderTree(documents: KnowledgeDocument[]): FolderNode[] {
   });
 
   return rootFolders;
+}
+
+/**
+ * Build dual repository tree structure (GitHub + Firebase)
+ * Groups documents by source and creates repository-level nodes
+ */
+export function buildDualRepositoryTree(documents: KnowledgeDocument[]): FolderNode[] {
+  // Separate documents by source
+  const githubDocs = documents.filter(d => 
+    d.synced_from_github === true || 
+    (!d.synced_from_github && !d.source_directory)
+  );
+  
+  const firebaseDocs = documents.filter(d => 
+    d.source_directory !== undefined && d.source_directory !== null
+  );
+
+  const repositories: FolderNode[] = [];
+
+  // Build GitHub repository node
+  if (githubDocs.length > 0) {
+    const githubTree = buildFolderTree(githubDocs);
+    
+    // Add source to all GitHub nodes
+    const addGithubSource = (node: FolderNode): FolderNode => ({
+      ...node,
+      source: 'github',
+      children: node.children?.map(addGithubSource)
+    });
+
+    repositories.push({
+      id: 'github-repository',
+      name: '🐙 GitHub Repository',
+      path: 'github',
+      type: 'repository',
+      source: 'github',
+      children: githubTree.map(addGithubSource),
+      documentCount: githubDocs.length,
+      badge: 'Public Docs'
+    });
+  }
+
+  // Build Firebase repository node with secure categories
+  if (firebaseDocs.length > 0) {
+    const secureCategories = new Map<string, FolderNode>();
+    
+    // Define secure category metadata
+    const secureCategoryMetadata: Record<string, { icon: string; description: string; order: number }> = {
+      'founders': { icon: '💼', description: 'Founders Portal documents', order: 1 },
+      'payment-rails': { icon: '💳', description: 'Payment system documentation', order: 2 },
+      'platform-admin': { icon: '⚙️', description: 'Platform admin documents', order: 3 },
+      'shelter-research': { icon: '🏢', description: 'Shelter research documents', order: 4 }
+    };
+
+    // Group Firebase docs by source_directory
+    firebaseDocs.forEach(doc => {
+      const dir = doc.source_directory || 'other';
+      
+      if (!secureCategories.has(dir)) {
+        const metadata = secureCategoryMetadata[dir] || { icon: '🔒', description: 'Secure documents', order: 99 };
+        secureCategories.set(dir, {
+          id: `firebase-${dir}`,
+          name: `${metadata.icon} ${dir.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}`,
+          path: `firebase/${dir}`,
+          type: 'folder',
+          source: 'firebase',
+          children: [],
+          documentCount: 0
+        });
+      }
+
+      const category = secureCategories.get(dir)!;
+      category.children!.push({
+        id: doc.id,
+        name: doc.title || 'Untitled',
+        path: doc.file_path || `firebase/${dir}/${doc.id}`,
+        type: 'document',
+        source: 'firebase',
+        securityLevel: doc.permission_level || 'secure'
+      });
+      category.documentCount = (category.documentCount || 0) + 1;
+    });
+
+    // Sort categories and their documents
+    const sortedCategories = Array.from(secureCategories.values())
+      .sort((a, b) => {
+        const aDir = a.path.split('/')[1];
+        const bDir = b.path.split('/')[1];
+        const aOrder = secureCategoryMetadata[aDir]?.order || 99;
+        const bOrder = secureCategoryMetadata[bDir]?.order || 99;
+        return aOrder - bOrder;
+      });
+
+    sortedCategories.forEach(cat => {
+      if (cat.children) {
+        cat.children.sort((a, b) => a.name.localeCompare(b.name));
+      }
+    });
+
+    repositories.push({
+      id: 'firebase-repository',
+      name: '🔥 Firebase Secure Docs',
+      path: 'firebase',
+      type: 'repository',
+      source: 'firebase',
+      children: sortedCategories,
+      documentCount: firebaseDocs.length,
+      badge: 'Secure'
+    });
+  }
+
+  return repositories;
 }

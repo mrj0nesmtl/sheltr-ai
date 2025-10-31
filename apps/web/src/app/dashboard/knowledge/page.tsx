@@ -46,7 +46,7 @@ import {
 } from 'lucide-react';
 import { knowledgeDashboardService, KnowledgeDocument, KnowledgeStats } from '@/services/knowledgeDashboardService';
 
-import { FolderTree, buildFolderTree, FolderNode } from '@/components/knowledge/FolderTree';
+import { FolderTree, buildFolderTree, buildDualRepositoryTree, FolderNode } from '@/components/knowledge/FolderTree';
 import { Breadcrumb, buildBreadcrumb } from '@/components/knowledge/Breadcrumb';
 import { GitHubSyncPanel } from '@/components/knowledge/GitHubSyncPanel';
 import { SecureDocumentSync } from '@/components/knowledge/SecureDocumentSync';
@@ -202,9 +202,9 @@ export default function KnowledgeDashboard() {
       setDocuments(documentsResponse.data.documents);
       setStats(statsResponse.data);
       
-      // Build folder tree from documents
-      const tree = buildFolderTree(documentsResponse.data.documents);
-      console.log('🌳 Folder tree built:', tree.map(f => `${f.name}: ${f.documentCount} docs`));
+      // Build dual repository tree (GitHub + Firebase) from documents
+      const tree = buildDualRepositoryTree(documentsResponse.data.documents);
+      console.log('🌳 Dual repository tree built:', tree.map(f => `${f.name}: ${f.documentCount} docs`));
       setFolderTree(tree);
 
     } catch (error) {

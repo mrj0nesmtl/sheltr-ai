@@ -38,8 +38,21 @@ export interface KnowledgeDocument {
   source_directory?: string;
   local_file_path?: string;
   // Permission system
-  permission_level?: 'public' | 'authenticated' | 'role_based' | 'private';
+  permission_level?: 'public' | 'authenticated' | 'donor' | 'participant' | 'shelter_admin' | 'platform_admin' | 'founders' | 'super_admin';
   visibility_scope?: 'global' | 'shelter' | 'organization';
+  is_private?: boolean;
+  // GitHub sync
+  synced_from_github?: boolean;
+  github_path?: string;
+  // Docs Hub publishing
+  hub_category?: string;
+  hub_badge?: string;
+  hub_order?: number;
+  hub_slug?: string;
+  hub_description?: string;
+  hub_audience?: string;
+  hub_topics?: string[];
+  hub_icon?: string;
 }
 
 export interface KnowledgeStats {
@@ -264,7 +277,7 @@ class KnowledgeDashboardService {
     // NEW permission fields
     permission_level: string;
     is_private: boolean;
-    visibility_scope: string;
+    visibility_scope: string | null;
     // Secure publishing fields
     published_to_founders: boolean;
     published_to_ir: boolean;

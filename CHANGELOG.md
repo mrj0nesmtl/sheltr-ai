@@ -7,6 +7,95 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.80.0] - 2025-10-31 (UI POLISH & WELCOME LETTERS EXCLUSION) 🎨🚫
+
+### 🎯 Feature: Badge Updates, Stats Enhancement & Welcome Letters Exclusion
+
+Polish update to sync component badges, enhanced Total Documents metric with public/secure split, and implemented welcome letters exclusion from knowledge base sync.
+
+#### ✨ Added
+
+**Stats Enhancement** (`apps/web/src/app/dashboard/knowledge/page.tsx`):
+- Public/secure document split under "Total Documents" metric
+- Dynamic count display with Globe and Lock icons
+- Shows breakdown: "X public • X secure"
+- Robust detection logic for multiple permission field formats
+- Handles legacy documents without explicit permission fields
+
+**Welcome Letters Exclusion** (`scripts/sync-secure-documents.js`):
+- Automatic exclusion of welcome letters from knowledge base sync
+- Pattern matching: `*welcome*.md`, `*welcome-letter*.md`, `[role]-welcome.md`
+- Welcome letters remain in Firebase secure storage
+- Dashboard sidebar can still access welcome letters
+- Prevents unnecessary embeddings and chat system access
+- Console logging for skipped files
+- Updated documentation header with exclusion notes
+
+**Documentation** (`docs/features/UI-UPDATES-OCT-31.md`):
+- Complete guide to UI badge updates
+- Welcome letters exclusion system documentation
+- Testing checklist
+- Technical notes on storage locations
+- Migration guide notes
+
+#### 🎨 Changed
+
+**GitHub Documentation Sync** (`apps/web/src/components/knowledge/GitHubSyncPanel.tsx`):
+- Badge: "Beta" (Red) → "Online" (Green)
+- Border color: Red → Green (`border-green-500`)
+- Icon color: Red → Green (`text-green-500`)
+- Button hover: Red → Green (`hover:border-green-500`)
+- Sync button: Red → Green (`bg-green-600 hover:bg-green-700`)
+- Status: Now marked as live/operational
+
+**Secure Document Sync** (`apps/web/src/components/knowledge/SecureDocumentSync.tsx`):
+- Highlight color: Purple → Orange
+- Card background: Purple gradient → Orange gradient
+- Icon background: Purple → Orange (`bg-orange-100`)
+- Icon color: Purple → Orange (`text-orange-600`)
+- Badge color: Purple → Orange (`border-orange-400 text-orange-600`)
+- Founders category border: Purple → Orange
+- Status: Remains "Beta" during testing phase
+
+#### 🔧 Fixed
+
+**Public/Secure Document Detection**:
+- Fixed incorrect document counts (was showing 0 public, 101 secure)
+- Added robust multi-field detection logic:
+  - Checks `permission_level === 'public'`
+  - Checks `is_private === false` or undefined
+  - Checks `sharing_level === 'public'`
+  - Defaults to public if no permission fields set
+- Handles legacy document structures gracefully
+- Now correctly identifies public vs secure documents
+
+#### 📊 Summary
+
+| Component | Before | After | Status |
+|-----------|--------|-------|--------|
+| GitHub Sync Badge | Beta (Red) | Online (Green) | ✅ Live |
+| Secure Sync Highlight | Purple | Orange | 🟠 Beta |
+| Total Documents Metric | Simple count | Split (public/secure) | ✅ Enhanced |
+| Welcome Letters | Synced to KB | Excluded from KB | 🚫 Excluded |
+
+#### 🧪 Testing Notes
+
+- Total Documents metric now shows accurate public/secure split
+- GitHub Sync appears with green "Online" badge
+- Secure Sync appears with orange "Beta" badge
+- Sync script excludes welcome letters but keeps them in secure storage
+- Dashboard sidebar still has access to welcome letters
+- Knowledge base only contains relevant documentation
+
+#### 🎯 Quick Summary
+
+**UI Updates**: Sync components now have clearer status indicators (green = live, orange = beta)  
+**Stats Enhancement**: Total Documents shows public/secure breakdown with icons  
+**Welcome Letters**: 14 welcome letters excluded from knowledge base, remain in secure storage for dashboards  
+**Permission Detection**: Robust logic handles both new and legacy document structures
+
+---
+
 ## [2.79.0] - 2025-10-31 (PHASE 2: FRONTEND UI COMPLETE) ✅🎨
 
 ### 🎯 Feature: Secure Publishing Frontend UI - FULLY FUNCTIONAL

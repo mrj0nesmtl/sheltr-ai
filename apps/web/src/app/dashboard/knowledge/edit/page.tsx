@@ -15,15 +15,10 @@ import {
   FileText,
   Shield,
   AlertTriangle,
-  CheckCircle,
   XCircle,
-  Clock,
   BookOpen,
   Globe,
-  Lock,
-  Users,
-  Target,
-  Brain
+  Lock
 } from 'lucide-react';
 import { knowledgeDashboardService, KnowledgeDocument } from '@/services/knowledgeDashboardService';
 import { docsHubService } from '@/services/docsHubService';
@@ -119,6 +114,7 @@ export default function EditKnowledgeDocumentPage() {
     }
     
     loadDocument();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [documentId]);
 
   const loadDocument = async () => {
@@ -139,50 +135,50 @@ export default function EditKnowledgeDocumentPage() {
         content: doc.content || '',
         category: doc.category || '',
         tags: doc.tags || [],
-        status: (doc.status as any) || 'active',
-        sharing_level: (doc.sharing_level as any) || 'public',
+        status: doc.status || 'active',
+        sharing_level: doc.sharing_level || 'public',
         shared_with: doc.shared_with || [],
         access_roles: doc.access_roles || [],
         is_live: doc.is_live || false,
-        confidentiality_level: (doc.confidentiality_level as any) || 'public',
-        permission_level: ((doc as any).permission_level as PermissionLevel) || 'public',
-        is_private: (doc as any).is_private || false
+        confidentiality_level: doc.confidentiality_level || 'public',
+        permission_level: (doc.permission_level as PermissionLevel) || 'public',
+        is_private: doc.is_private || false
       };
       
       // Update permission settings
       setPermissionSettings({
-        permission_level: ((doc as any).permission_level as PermissionLevel) || 'public',
-        is_private: (doc as any).is_private || false,
-        visibility_scope: (doc as any).visibility_scope || 'global',
-        synced_from_github: (doc as any).synced_from_github,
-        github_path: (doc as any).github_path
+        permission_level: (doc.permission_level as PermissionLevel) || 'public',
+        is_private: doc.is_private || false,
+        visibility_scope: doc.visibility_scope || 'global',
+        synced_from_github: doc.synced_from_github,
+        github_path: doc.github_path
       });
 
       // Update docs hub settings
       setDocsHubSettings({
-        published_to_hub: (doc as any).published_to_hub || false,
-        hub_category: (doc as any).hub_category || 'core',
-        hub_badge: (doc as any).hub_badge || 'Technical',
-        hub_order: (doc as any).hub_order || 999,
-        hub_slug: (doc as any).hub_slug || '',
-        hub_description: (doc as any).hub_description,
-        hub_audience: (doc as any).hub_audience,
-        hub_topics: (doc as any).hub_topics,
-        hub_icon: (doc as any).hub_icon
+        published_to_hub: doc.published_to_hub || false,
+        hub_category: doc.hub_category || 'core',
+        hub_badge: doc.hub_badge || 'Technical',
+        hub_order: doc.hub_order || 999,
+        hub_slug: doc.hub_slug || '',
+        hub_description: doc.hub_description,
+        hub_audience: Array.isArray(doc.hub_audience) ? doc.hub_audience : undefined,
+        hub_topics: Array.isArray(doc.hub_topics) ? doc.hub_topics : undefined,
+        hub_icon: doc.hub_icon
       });
 
       // Update secure publishing settings
       setSecurePublishingSettings({
-        published_to_founders: (doc as any).published_to_founders || false,
-        published_to_ir: (doc as any).published_to_ir || false,
-        secure_slug: (doc as any).secure_slug || securePublishingService.generateSlug(doc.title),
-        secure_badge: (doc as any).secure_badge || 'Confidential',
-        secure_badge_color: (doc as any).secure_badge_color || 'blue',
-        secure_icon: (doc as any).secure_icon || 'shield',
-        founders_description: (doc as any).founders_description || '',
-        ir_description: (doc as any).ir_description || '',
-        source_directory: (doc as any).source_directory || '',
-        local_file_path: (doc as any).local_file_path || ''
+        published_to_founders: doc.published_to_founders || false,
+        published_to_ir: doc.published_to_ir || false,
+        secure_slug: doc.secure_slug || securePublishingService.generateSlug(doc.title),
+        secure_badge: doc.secure_badge || 'Confidential',
+        secure_badge_color: doc.secure_badge_color || 'blue',
+        secure_icon: doc.secure_icon || 'shield',
+        founders_description: doc.founders_description || '',
+        ir_description: doc.ir_description || '',
+        source_directory: doc.source_directory || '',
+        local_file_path: doc.local_file_path || ''
       });
       
       setFormData(newFormData);
@@ -239,7 +235,7 @@ export default function EditKnowledgeDocumentPage() {
           else if (changes.includes('is_live') || changes.includes('status')) changeType = 'publishing';
           else if (changes.includes('sharing_level') || changes.includes('confidentiality_level')) changeType = 'sharing';
 
-          await trackChange(changes, changeType);
+          await trackChange(changeType, changes.map(field => ({ field, old_value: null, new_value: null })));
         }
       }
 
@@ -547,7 +543,10 @@ export default function EditKnowledgeDocumentPage() {
                   });
                   
                   // Track the change
-                  await trackChange(['permission_level', 'is_private'], 'sharing');
+                  await trackChange('sharing', [
+                    { field: 'permission_level', old_value: null, new_value: settings.permission_level },
+                    { field: 'is_private', old_value: null, new_value: settings.is_private }
+                  ]);
                 }
               }}
               showGitHubInfo={permissionSettings.synced_from_github}
@@ -571,7 +570,9 @@ export default function EditKnowledgeDocumentPage() {
                   setDocsHubSettings(settings);
                   
                   // Track the change
-                  await trackChange(['published_to_hub'], 'publishing');
+                  await trackChange('publishing', [
+                    { field: 'published_to_hub', old_value: null, new_value: settings.published_to_hub }
+                  ]);
                 }
               } catch (error) {
                 console.error('Failed to publish document:', error);
@@ -611,7 +612,10 @@ export default function EditKnowledgeDocumentPage() {
                     });
                     
                     // Track the change
-                    await trackChange(['published_to_founders', 'published_to_ir'], 'secure_publishing');
+                    await trackChange('publishing', [
+                      { field: 'published_to_founders', old_value: null, new_value: settings.published_to_founders },
+                      { field: 'published_to_ir', old_value: null, new_value: settings.published_to_ir }
+                    ]);
                   }
                 } catch (error) {
                   console.error('Failed to save secure publishing settings:', error);
@@ -684,8 +688,10 @@ export default function EditKnowledgeDocumentPage() {
                     <Button
                       variant="outline"
                       onClick={() => {
-                        const permissionsSection = document.getElementById('permissions-section');
-                        permissionsSection?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        if (typeof window !== 'undefined') {
+                          const permissionsSection = window.document.getElementById('permissions-section');
+                          permissionsSection?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
                       }}
                       className="flex items-center gap-2 border-amber-300 hover:bg-amber-100 dark:border-amber-700 dark:hover:bg-amber-900/40"
                     >
@@ -768,7 +774,11 @@ export default function EditKnowledgeDocumentPage() {
           </Card>
 
           {/* Change Tracker */}
-          <ChangeTracker />
+          <ChangeTracker 
+            documentId={documentId || ''}
+            documentTitle={document?.title || 'Unknown Document'}
+            documentPath={document?.file_path}
+          />
         </div>
       </div>
     </div>

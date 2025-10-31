@@ -9,5 +9,6 @@ export { PermissionToggle, VisibilityScopeToggle } from './PermissionToggle';
 export { PermissionManager, type PermissionSettings } from './PermissionManager';
 export { DocsHubPublisher, type DocsHubSettings } from './DocsHubPublisher';
 export { SecureDocumentPublisher } from './SecureDocumentPublisher';
+export { SecureDocumentSync } from './SecureDocumentSync';
 export type { SecurePublishingSettings } from '@/services/securePublishingService';
 

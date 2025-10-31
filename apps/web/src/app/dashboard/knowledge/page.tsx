@@ -49,6 +49,7 @@ import { knowledgeDashboardService, KnowledgeDocument, KnowledgeStats } from '@/
 import { FolderTree, buildFolderTree, FolderNode } from '@/components/knowledge/FolderTree';
 import { Breadcrumb, buildBreadcrumb } from '@/components/knowledge/Breadcrumb';
 import { GitHubSyncPanel } from '@/components/knowledge/GitHubSyncPanel';
+import { SecureDocumentSync } from '@/components/knowledge/SecureDocumentSync';
 import { PermissionBadge, type PermissionLevel } from '@/components/knowledge';
 
 export default function KnowledgeDashboard() {
@@ -429,6 +430,13 @@ export default function KnowledgeDashboard() {
         <GitHubSyncPanel onSyncComplete={loadKnowledgeData} userRole={userRole} />
       </div>
 
+      {/* Secure Document Sync Panel - NEW! */}
+      {(userRole === 'super_admin' || userRole === 'platform_admin') && (
+        <div className="mb-6">
+          <SecureDocumentSync />
+        </div>
+      )}
+
       {/* AI Knowledge Helper Component */}
       <Card className="mb-6 bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 border-purple-200 dark:border-purple-800">
         <CardContent className="p-4">
@@ -498,6 +506,37 @@ export default function KnowledgeDashboard() {
               <Database className="h-8 w-8 text-blue-500 mb-2" />
               <p className="text-xs font-medium text-muted-foreground mb-1">Total Documents</p>
               <p className="text-2xl font-bold text-blue-600">{stats.total_documents}</p>
+              <div className="flex items-center gap-2 mt-1 text-xs text-muted-foreground">
+                <span className="flex items-center gap-1">
+                  <Globe className="h-3 w-3" />
+                  {documents.filter(d => {
+                    // A document is public if:
+                    // 1. permission_level is explicitly 'public'
+                    // 2. is_private is false or undefined
+                    // 3. sharing_level is 'public'
+                    // 4. No permission fields set (defaults to public)
+                    const hasPublicPermission = d.permission_level === 'public';
+                    const notPrivate = d.is_private === false || d.is_private === undefined;
+                    const isPublicSharing = d.sharing_level === 'public';
+                    const noPermissionSet = !d.permission_level && !d.is_private && !d.sharing_level;
+                    
+                    return hasPublicPermission || (notPrivate && (isPublicSharing || noPermissionSet));
+                  }).length} public
+                </span>
+                <span>•</span>
+                <span className="flex items-center gap-1">
+                  <Lock className="h-3 w-3" />
+                  {documents.filter(d => {
+                    // A document is secure if it's explicitly marked as private
+                    // OR has a non-public permission level
+                    const isPrivate = d.is_private === true;
+                    const hasSecurePermission = d.permission_level && d.permission_level !== 'public';
+                    const hasSecureSharing = d.sharing_level && d.sharing_level !== 'public';
+                    
+                    return isPrivate || hasSecurePermission || hasSecureSharing;
+                  }).length} secure
+                </span>
+              </div>
             </div>
           </CardContent>
         </Card>

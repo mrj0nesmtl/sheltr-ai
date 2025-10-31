@@ -276,13 +276,13 @@ export const GitHubSyncPanel: React.FC<GitHubSyncPanelProps> = ({ onSyncComplete
   const totalChanges = changes ? changes.new.length + changes.modified.length : 0;
 
   return (
-    <Card className="mb-6 border-2 border-dashed border-red-500 bg-white dark:bg-gray-900">
+    <Card className="mb-6 border-2 border-dashed border-green-500 bg-white dark:bg-gray-900">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-foreground">
-          <Github className="h-5 w-5 text-red-500" />
+          <Github className="h-5 w-5 text-green-500" />
           GitHub Documentation Sync
-          <Badge variant="outline" className="ml-auto border-red-500 text-red-600">
-            Beta
+          <Badge variant="outline" className="ml-auto border-green-500 text-green-600">
+            Online
           </Badge>
         </CardTitle>
       </CardHeader>
@@ -307,7 +307,7 @@ export const GitHubSyncPanel: React.FC<GitHubSyncPanelProps> = ({ onSyncComplete
             onClick={scanForChanges} 
             disabled={isScanning || isSyncing || isClearing}
             variant="outline"
-            className="flex-1 min-w-[140px] border-gray-300 hover:border-red-500 hover:text-red-600"
+            className="flex-1 min-w-[140px] border-gray-300 hover:border-green-500 hover:text-green-600"
           >
             <RefreshCw className={`h-4 w-4 mr-2 ${isScanning ? 'animate-spin' : ''}`} />
             {isScanning ? 'Scanning...' : 'Scan for Changes'}
@@ -317,7 +317,7 @@ export const GitHubSyncPanel: React.FC<GitHubSyncPanelProps> = ({ onSyncComplete
             <Button 
               onClick={syncAllFiles}
               disabled={isSyncing || isClearing}
-              className="flex-1 min-w-[140px] bg-red-600 hover:bg-red-700 text-white border-red-600"
+              className="flex-1 min-w-[140px] bg-green-600 hover:bg-green-700 text-white border-green-600"
             >
               <Download className={`h-4 w-4 mr-2 ${isSyncing ? 'animate-bounce' : ''}`} />
               {isSyncing ? 'Syncing...' : `Sync ${totalChanges} Files`}

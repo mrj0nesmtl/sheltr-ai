@@ -70,7 +70,18 @@ class KnowledgeDashboardService:
                     'created_by': doc_data.get('created_by', doc_data.get('uploaded_by', 'System')),
                     'view_count': doc_data.get('view_count', 0),
                     'chunk_count': chunk_count,
-                    'word_count': doc_data.get('word_count', len(content.split()) if content else 0)
+                    'word_count': doc_data.get('word_count', len(content.split()) if content else 0),
+                    
+                    # Secure document fields
+                    'source_directory': doc_data.get('source_directory'),
+                    'permission_level': doc_data.get('permission_level'),
+                    'is_private': doc_data.get('is_private', False),
+                    'synced_from_github': doc_data.get('synced_from_github', False),
+                    
+                    # Secure publishing fields
+                    'published_to_founders': doc_data.get('published_to_founders', False),
+                    'published_to_ir': doc_data.get('published_to_ir', False),
+                    'published_to_hub': doc_data.get('published_to_hub', False)
                 }
                 
                 documents.append(transformed_doc)

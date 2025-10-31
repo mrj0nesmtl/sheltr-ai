@@ -561,12 +561,109 @@ export default function FoundersOnlyPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, authLoading, router]);
 
+  // Protected cards that should NEVER be replaced by dynamic documents
+  const PROTECTED_CARDS = new Set([
+    'investor-relations',      // Custom IR page
+    'shelter-research',        // Hub for 4 secure docs
+    'leadership-team',         // Team page
+    'gallery-management',      // Dashboard link
+    // Public docs with custom beautiful pages
+    'documentation-hub',
+    'system-design',
+    'development-roadmap',
+    'technical-whitepaper',
+    'blockchain-architecture',
+    'platform-admin-guide',
+    'payment-rails',
+    'sheltr-platform',
+    'github-repository',
+    'openai-mcp-demo',
+    'brand-design-guide',
+  ]);
+
+  // Load dynamic documents from Knowledge Base (published_to_founders)
+  const loadDynamicDocuments = async (): Promise<QuickAccessCard[]> => {
+    try {
+      console.log('🔥 Loading dynamic documents from Firestore...');
+      
+      const docsQuery = query(
+        collection(db, 'knowledge_documents'),
+        where('published_to_founders', '==', true)
+      );
+      
+      const snapshot = await getDocs(docsQuery);
+      console.log(`📚 Found ${snapshot.size} published documents`);
+      
+      const dynamicCards: QuickAccessCard[] = snapshot.docs.map(doc => {
+        const data = doc.data();
+        const slug = data.secure_slug || doc.id;
+        
+        console.log(`📄 Dynamic doc: ${data.title} (${slug})`);
+        
+        return {
+          id: slug,
+          icon: (
+            <div className="relative">
+              <FileText className="h-6 w-6 text-red-600" />
+              <Lock className="h-3 w-3 text-red-600 absolute -top-1 -right-1 bg-white dark:bg-slate-900 rounded-full" />
+            </div>
+          ),
+          badgeText: data.secure_badge || 'Secure',
+          badgeClass: `bg-${data.secure_badge_color || 'red'}-600 text-white`,
+          title: data.title || 'Untitled',
+          titleColor: `text-${data.secure_badge_color || 'red'}-600`,
+          description: data.founders_description || data.description || '',
+          buttonText: 'View Document',
+          buttonClass: `border-2 border-${data.secure_badge_color || 'red'}-600 text-${data.secure_badge_color || 'red'}-600 hover:bg-${data.secure_badge_color || 'red'}-50`,
+          href: `/portal/founders-only/${slug}`,
+          borderClass: `border-${data.secure_badge_color || 'red'}-200`,
+          category: 'secure',
+          isInvestorDataRoom: data.published_to_ir || false,
+        };
+      });
+      
+      return dynamicCards;
+    } catch (error) {
+      console.error('❌ Error loading dynamic documents:', error);
+      return [];
+    }
+  };
+
   // Load saved card order and toggle states
   const loadCardOrder = async () => {
     try {
-      // Load card order
+      // Step 1: Load dynamic documents from Knowledge Base
+      const dynamicCards = await loadDynamicDocuments();
+      
+      // Step 2: Merge with hardcoded cards (dynamic overrides non-protected)
+      let mergedCards = [...initialCards];
+      
+      dynamicCards.forEach(dynamicCard => {
+        // Check if this card is protected
+        if (PROTECTED_CARDS.has(dynamicCard.id)) {
+          console.log(`🛡️  Protected card, keeping hardcoded: ${dynamicCard.id}`);
+          return; // Skip, keep hardcoded version
+        }
+        
+        // Find if a hardcoded card exists with this ID
+        const existingIndex = mergedCards.findIndex(c => c.id === dynamicCard.id);
+        
+        if (existingIndex >= 0) {
+          // Replace hardcoded card with dynamic version
+          console.log(`🔄 Replacing hardcoded card: ${dynamicCard.id}`);
+          mergedCards[existingIndex] = dynamicCard;
+        } else {
+          // Add new dynamic card
+          console.log(`✨ Adding new dynamic card: ${dynamicCard.id}`);
+          mergedCards.push(dynamicCard);
+        }
+      });
+      
+      console.log(`📊 Final card count: ${mergedCards.length} (${dynamicCards.length} dynamic, ${initialCards.length} hardcoded)`);
+      
+      // Step 3: Load card order
       const orderDoc = await getDoc(doc(db, 'portal_settings', 'founders_card_order'));
-      let orderedCards = [...initialCards];
+      let orderedCards = mergedCards;
       
       if (orderDoc.exists()) {
         const savedOrder = orderDoc.data().order as string[];
@@ -574,11 +671,11 @@ export default function FoundersOnlyPage() {
         
         // Reorder cards based on saved order
         orderedCards = savedOrder
-          .map(id => initialCards.find(card => card.id === id))
+          .map(id => mergedCards.find(card => card.id === id))
           .filter(Boolean) as QuickAccessCard[];
         
         // Add any new cards that weren't in the saved order
-        const newCards = initialCards.filter(
+        const newCards = mergedCards.filter(
           card => !savedOrder.includes(card.id)
         );
         

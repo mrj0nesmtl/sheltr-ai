@@ -10,6 +10,7 @@ import subprocess
 import os
 import logging
 from pathlib import Path
+from firebase_admin import firestore
 
 from middleware.auth_middleware import get_current_user, require_super_admin
 
@@ -214,5 +215,108 @@ async def list_secure_directories(
         raise HTTPException(
             status_code=500,
             detail=f"Failed to list directories: {str(e)}"
+        )
+
+@router.post("/secure-docs/generate-embeddings")
+async def generate_embeddings_for_pending(
+    current_user: dict = Depends(require_super_admin())
+):
+    """Generate embeddings for all documents with pending embedding status"""
+    try:
+        from services.knowledge_dashboard_service import KnowledgeDashboardService
+        from services.embeddings_service import EmbeddingsService
+        
+        logger.info(f"🧠 Embedding generation triggered by {current_user.get('email', 'unknown')}")
+        
+        kb_service = KnowledgeDashboardService()
+        embeddings_service = EmbeddingsService()
+        
+        # Query documents with pending embeddings
+        pending_docs = kb_service.db.collection('knowledge_documents')\
+            .where('embedding_status', '==', 'pending')\
+            .stream()
+        
+        pending_list = list(pending_docs)
+        
+        if not pending_list:
+            logger.info("✅ No documents with pending embeddings")
+            return {
+                "success": True,
+                "processed": 0,
+                "failed": 0,
+                "message": "No documents with pending embeddings"
+            }
+        
+        logger.info(f"📝 Found {len(pending_list)} documents with pending embeddings")
+        
+        processed = 0
+        failed = 0
+        
+        # Process each pending document
+        for doc in pending_list:
+            doc_data = doc.to_dict()
+            doc_id = doc.id
+            
+            try:
+                title = doc_data.get('title', 'Untitled')
+                content = doc_data.get('content', '')
+                
+                if not content:
+                    logger.warning(f"⚠️  Skipping {doc_id} - no content")
+                    continue
+                
+                logger.info(f"🔄 Processing embeddings for: {title}")
+                
+                # Generate embeddings
+                metadata = {
+                    'document_id': doc_id,
+                    'title': title,
+                    'category': doc_data.get('category', 'Platform'),
+                    'permission_level': doc_data.get('permission_level', 'public'),
+                    'source_directory': doc_data.get('source_directory', 'unknown')
+                }
+                
+                chunk_ids = await embeddings_service.process_document_embeddings(
+                    document_id=doc_id,
+                    content=content,
+                    metadata=metadata
+                )
+                
+                # Update document with embedding status
+                doc.reference.update({
+                    'embedding_status': 'completed',
+                    'embedding_count': len(chunk_ids),
+                    'processed': True,
+                    'last_embedding_update': firestore.SERVER_TIMESTAMP
+                })
+                
+                processed += 1
+                logger.info(f"✅ Generated {len(chunk_ids)} embeddings for: {title}")
+                
+            except Exception as e:
+                failed += 1
+                logger.error(f"❌ Failed to process {doc_id}: {str(e)}")
+                
+                # Mark as failed
+                doc.reference.update({
+                    'embedding_status': 'failed',
+                    'embedding_error': str(e)
+                })
+        
+        logger.info(f"🎉 Embedding generation complete: {processed} processed, {failed} failed")
+        
+        return {
+            "success": True,
+            "processed": processed,
+            "failed": failed,
+            "total": len(pending_list),
+            "message": f"Generated embeddings for {processed} documents"
+        }
+        
+    except Exception as e:
+        logger.error(f"❌ Error generating embeddings: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to generate embeddings: {str(e)}"
         )
 

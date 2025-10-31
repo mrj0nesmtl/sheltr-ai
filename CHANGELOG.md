@@ -7,6 +7,195 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.83.0] - 2025-10-31 (FOUNDERS PORTAL DYNAMIC INTEGRATION) 🚀💼
+
+### 🎯 Feature: Hybrid Dynamic/Static Document System for Founders Portal
+
+The Founders Portal now intelligently merges dynamic documents from the Knowledge Base with protected custom-built pages, preserving all beautiful documentation while enabling real-time updates for secure documents.
+
+#### ✨ Added
+
+**Dynamic Document Loading** (`apps/web/src/app/portal/founders-only/page.tsx`):
+- New `loadDynamicDocuments()` function queries Firestore for `published_to_founders: true`
+- Smart merge system replaces non-protected hardcoded cards with dynamic versions
+- Protected cards whitelist preserves 15+ custom-designed pages
+- Console logging for debugging (`🔥 Loading dynamic documents...`, `🔄 Replacing...`, `🛡️ Protected...`)
+- Real-time content updates from Knowledge Base
+- Automatic card generation with metadata from Firestore
+
+**Dynamic Document Viewer** (`apps/web/src/app/portal/founders-only/[slug]/page.tsx`):
+- NEW catch-all route for dynamic documents
+- Queries Firestore by `secure_slug` field
+- Beautiful markdown rendering with custom styling
+- Metadata display (updated date, author, tags, permission level)
+- Confidentiality warning banner
+- Responsive design matching portal aesthetic
+- Back navigation to portal
+
+**Protected Pages System:**
+- Whitelist of 15+ critical custom pages that never get replaced:
+  - `investor-relations` - Custom IR page
+  - `shelter-research` - Hub for 4 research documents
+  - `leadership-team` - Team page
+  - All beautiful public documentation pages (system-design, roadmap, whitepaper, etc.)
+- Protected pages continue to use hardcoded Next.js pages with custom React components
+- Dynamic documents only replace explicitly managed secure content
+
+**Publishing Integration:**
+- Fixed "View in Founders Portal" button URL (`/portal/founders-only`)
+- Fixed "View in IR" button URL (`/portal/investor-relations`)
+- Publishing workflow creates cards automatically
+- No manual page creation needed for new documents
+
+#### 🔧 Modified
+
+**Backend API** (`apps/api/routers/knowledge_secure_publishing.py`):
+- Fixed permission validation to accept ANY secure level (not just `'private'`)
+- Now accepts: `founders`, `platform_admin`, `super_admin`, etc.
+- Removed restrictive `permission_level === 'private'` check
+- Updated error messages to be more informative
+
+**Backend Service** (`apps/api/services/knowledge_dashboard_service.py`):
+- Added `source_directory` field to document response
+- Added `permission_level`, `is_private`, `synced_from_github` fields
+- Added `published_to_founders`, `published_to_ir`, `published_to_hub` fields
+- Ensures all secure document metadata is available to frontend
+
+**Frontend Components:**
+- Updated SecureDocumentPublisher button URLs
+- Fixed portal link redirects
+
+#### 📊 Impact
+
+**Before:**
+- Hardcoded cards with outdated content (last updated Oct 23)
+- Manual page creation required for each document
+- No way to update content from Knowledge Base
+- Risk of breaking custom pages when adding dynamic features
+
+**After:**
+- ✅ Real-time content from Knowledge Base
+- ✅ Automatic card generation
+- ✅ One-click publishing workflow
+- ✅ Protected custom pages preserved
+- ✅ MSB Registration showing current content
+- ✅ Best of both worlds (dynamic + custom)
+
+#### 🎨 User Experience
+
+**Publishing Workflow:**
+1. Edit document in Knowledge Base
+2. Set permission level (founders, platform_admin, etc.)
+3. Toggle "Publish to Founders Portal"
+4. Configure slug, badge, description
+5. Save settings
+6. Card appears automatically on portal!
+
+**Viewing Experience:**
+- Protected documents: Beautiful custom pages with diagrams, layouts
+- Dynamic documents: Clean markdown with live content from KB
+- All documents: Consistent branding and security badges
+
+#### 📁 Files Modified
+
+- `apps/web/src/app/portal/founders-only/page.tsx` (+120 lines) - Dynamic loading
+- `apps/web/src/app/portal/founders-only/[slug]/page.tsx` (+340 lines) - NEW dynamic viewer
+- `apps/web/src/components/knowledge/SecureDocumentPublisher.tsx` (URL fixes)
+- `apps/api/routers/knowledge_secure_publishing.py` (permission fix)
+- `apps/api/services/knowledge_dashboard_service.py` (field additions)
+- `docs/features/FOUNDERS-PORTAL-DYNAMIC-INTEGRATION.md` - Comprehensive documentation
+
+#### 🧪 Testing
+
+**Test Case 1: View MSB Registration**
+1. Visit `/portal/founders-only`
+2. Locate "MSB Registration" card
+3. Click "View Document"
+4. **Expected:** Shows current content from Knowledge Base (not Oct 23 version)
+
+**Test Case 2: Publish New Document**
+1. Create new doc in KB with `permission_level: founders`
+2. Enable "Publish to Founders Portal"
+3. Set slug: `test-secure-document`
+4. Refresh portal
+5. **Expected:** New card appears automatically
+
+**Test Case 3: Protected Pages**
+1. Visit `/portal/founders-only/investor-relations`
+2. **Expected:** Custom IR page loads (not dynamic viewer)
+3. All custom design elements preserved
+
+#### 📝 Next Steps
+
+**⏳ Pending:**
+- [ ] Update GitHub links on custom documentation pages (after docs restructuring)
+- [ ] Migrate business-plan and covenant-house-outreach to fully dynamic
+- [ ] Add rich media support (images, videos) to dynamic viewer
+- [ ] Implement document version history
+
+---
+
+## [2.82.0] - 2025-10-31 (AUTO-EMBEDDING GENERATION) 🧠✨
+
+### 🎯 Feature: Automatic Embedding Generation for Secure Documents
+
+Secure documents now automatically generate AI embeddings after syncing, eliminating manual steps and making documents instantly available to the chatbot.
+
+#### ✨ Added
+
+**Backend API** (`apps/api/routers/secure_sync.py`):
+- New endpoint: `POST /api/v1/secure-docs/generate-embeddings`
+- Automatic embedding generation for all documents with `embedding_status: 'pending'`
+- Batch processing with progress tracking
+- Error handling with `embedding_status: 'failed'` marking
+- Returns processed/failed counts and summary statistics
+
+**Frontend Enhancement** (`apps/web/src/components/knowledge/SecureDocumentSync.tsx`):
+- Auto-trigger embedding generation after successful document sync
+- Two-phase progress indicators:
+  - Phase 1: "Syncing Documents..." (Firestore sync)
+  - Phase 2: "Generating Embeddings..." (AI processing)
+- Embedding result display panel with processed/failed counts
+- Purple-themed embedding status section
+- Smooth workflow: single button triggers both sync and embedding generation
+
+**User Experience**:
+- Single-click workflow (no manual embedding trigger needed)
+- Real-time progress for both sync and embedding phases
+- Clear visual feedback with color-coded results
+- Disabled state during processing to prevent duplicate operations
+
+#### 📊 Impact
+
+**Before:**
+- Documents synced but embeddings pending
+- Manual intervention required
+- Pending Embeddings: 13 🔴
+
+**After:**
+- Fully automatic workflow
+- Documents immediately available to AI chatbot
+- Pending Embeddings: 0 ✅
+- Quality scores improved automatically
+
+#### 📁 Files Modified
+
+- `apps/api/routers/secure_sync.py` - Added auto-embedding endpoint (+108 lines)
+- `apps/web/src/components/knowledge/SecureDocumentSync.tsx` - Auto-trigger logic & UI (+57 lines)
+- `docs/features/SECURE-DOCS-EMBEDDING-AUTO-GENERATION.md` - Comprehensive documentation
+
+#### 🧪 Testing
+
+**Workflow:**
+1. Click "🔥 Sync Secure Documents"
+2. Watch Phase 1: Document sync (13 documents)
+3. Watch Phase 2: Embedding generation (13 embeddings)
+4. View results: Synced: 13 | Processed: 13 | Failed: 0
+
+**Result:** All 13 secure documents now have embeddings and are available to the AI chatbot!
+
+---
+
 ## [2.81.0] - 2025-10-31 (DUAL REPOSITORY SIDEBAR & COLLAPSED FOLDERS) 📂🔥
 
 ### 🎯 Feature: Dual Repository Tree & Improved UX

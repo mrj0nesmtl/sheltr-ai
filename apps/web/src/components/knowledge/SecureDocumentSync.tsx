@@ -43,7 +43,9 @@ interface SyncResult {
 
 export const SecureDocumentSync: React.FC = () => {
   const [syncing, setSyncing] = useState(false);
+  const [generatingEmbeddings, setGeneratingEmbeddings] = useState(false);
   const [syncResult, setSyncResult] = useState<SyncResult | null>(null);
+  const [embeddingResult, setEmbeddingResult] = useState<{processed: number; failed: number} | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const getAuthToken = async (): Promise<string> => {
@@ -57,15 +59,51 @@ export const SecureDocumentSync: React.FC = () => {
     return await user.getIdToken();
   };
 
+  const generateEmbeddings = async () => {
+    try {
+      setGeneratingEmbeddings(true);
+      const token = await getAuthToken();
+      const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
+      
+      const response = await fetch(`${apiUrl}/api/v1/secure-docs/generate-embeddings`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.detail || 'Failed to generate embeddings');
+      }
+
+      const data = await response.json();
+      setEmbeddingResult({
+        processed: data.processed,
+        failed: data.failed
+      });
+      
+      return data;
+    } catch (err) {
+      console.error('Embedding generation error:', err);
+      throw err;
+    } finally {
+      setGeneratingEmbeddings(false);
+    }
+  };
+
   const handleSync = async () => {
     try {
       setSyncing(true);
       setError(null);
       setSyncResult(null);
+      setEmbeddingResult(null);
 
       const token = await getAuthToken();
       const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
       
+      // Step 1: Sync documents
       const response = await fetch(`${apiUrl}/api/v1/secure-docs/sync`, {
         method: 'POST',
         headers: {
@@ -81,6 +119,12 @@ export const SecureDocumentSync: React.FC = () => {
 
       const data: SyncResult = await response.json();
       setSyncResult(data);
+
+      // Step 2: Auto-trigger embedding generation if documents were synced
+      if (data.success && data.stats.total > 0) {
+        console.log('🧠 Auto-triggering embedding generation...');
+        await generateEmbeddings();
+      }
 
     } catch (err) {
       console.error('Sync error:', err);
@@ -172,13 +216,18 @@ export const SecureDocumentSync: React.FC = () => {
         {/* Sync Button */}
         <Button
           onClick={handleSync}
-          disabled={syncing}
+          disabled={syncing || generatingEmbeddings}
           className="w-full bg-purple-600 hover:bg-purple-700 text-white"
         >
           {syncing ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Syncing Secure Documents...
+              Syncing Documents...
+            </>
+          ) : generatingEmbeddings ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Generating Embeddings...
             </>
           ) : (
             <>
@@ -201,7 +250,7 @@ export const SecureDocumentSync: React.FC = () => {
                 <div className="grid grid-cols-4 gap-2 text-xs">
                   <div className="p-2 bg-white dark:bg-slate-800 rounded border border-green-200">
                     <div className="font-bold text-lg text-green-600">{syncResult.stats.total}</div>
-                    <div className="text-muted-foreground">Total</div>
+                    <div className="text-muted-foreground">Synced</div>
                   </div>
                   <div className="p-2 bg-white dark:bg-slate-800 rounded border border-green-200">
                     <div className="font-bold text-lg text-blue-600">{syncResult.stats.created}</div>
@@ -216,6 +265,28 @@ export const SecureDocumentSync: React.FC = () => {
                     <div className="text-muted-foreground">Errors</div>
                   </div>
                 </div>
+
+                {/* Embedding Generation Status */}
+                {embeddingResult && (
+                  <div className="mt-3 p-3 bg-purple-50 dark:bg-purple-900/20 rounded border border-purple-200 dark:border-purple-800">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Loader2 className="h-4 w-4 text-purple-600" />
+                      <span className="text-sm font-medium text-purple-900 dark:text-purple-100">
+                        🧠 Embedding Generation Complete
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 text-xs">
+                      <div className="p-2 bg-white dark:bg-slate-800 rounded border border-purple-200">
+                        <div className="font-bold text-lg text-purple-600">{embeddingResult.processed}</div>
+                        <div className="text-muted-foreground">Processed</div>
+                      </div>
+                      <div className="p-2 bg-white dark:bg-slate-800 rounded border border-purple-200">
+                        <div className="font-bold text-lg text-red-600">{embeddingResult.failed}</div>
+                        <div className="text-muted-foreground">Failed</div>
+                      </div>
+                    </div>
+                  </div>
+                )}
 
                 {syncResult.details && syncResult.details.length > 0 && (
                   <div className="mt-2 space-y-1">

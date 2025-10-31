@@ -267,14 +267,19 @@ export function buildFolderTree(documents: KnowledgeDocument[]): FolderNode[] {
  */
 export function buildDualRepositoryTree(documents: KnowledgeDocument[]): FolderNode[] {
   // Separate documents by source
-  const githubDocs = documents.filter(d => 
-    d.synced_from_github === true || 
-    (!d.synced_from_github && !d.source_directory)
+  // Firebase docs are identified by having a source_directory field
+  const firebaseDocs = documents.filter(d => 
+    d.source_directory !== undefined && d.source_directory !== null && d.source_directory !== ''
   );
   
-  const firebaseDocs = documents.filter(d => 
-    d.source_directory !== undefined && d.source_directory !== null
+  // GitHub docs are everything else (synced from GitHub OR no source_directory)
+  const githubDocs = documents.filter(d => 
+    !d.source_directory || d.source_directory === ''
   );
+
+  console.log('🔍 Document separation:');
+  console.log(`  Firebase docs: ${firebaseDocs.length}`, firebaseDocs.map(d => ({ title: d.title, source_dir: d.source_directory })));
+  console.log(`  GitHub docs: ${githubDocs.length}`);
 
   const repositories: FolderNode[] = [];
 

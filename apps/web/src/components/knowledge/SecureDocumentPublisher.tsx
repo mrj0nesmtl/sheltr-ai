@@ -453,7 +453,7 @@ export const SecureDocumentPublisher: React.FC<SecureDocumentPublisherProps> = (
                 type="button"
                 variant="outline"
                 size="sm"
-                onClick={() => window.open('/secure-docs/founders', '_blank')}
+                onClick={() => window.open('/portal/founders-only', '_blank')}
               >
                 <Briefcase className="h-4 w-4 mr-1" />
                 View in Founders Portal
@@ -465,7 +465,7 @@ export const SecureDocumentPublisher: React.FC<SecureDocumentPublisherProps> = (
                 type="button"
                 variant="outline"
                 size="sm"
-                onClick={() => window.open('/secure-docs/investor-relations', '_blank')}
+                onClick={() => window.open('/portal/investor-relations', '_blank')}
               >
                 <TrendingUp className="h-4 w-4 mr-1" />
                 View in IR

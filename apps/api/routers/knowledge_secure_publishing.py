@@ -73,7 +73,7 @@ async def get_founders_portal_documents(
         
         # Query knowledge_documents where published_to_founders = true
         docs_ref = db.collection('knowledge_documents')
-        query = docs_ref.where('published_to_founders', '==', True).where('permission_level', '==', 'private')
+        query = docs_ref.where('published_to_founders', '==', True)
         
         docs = query.stream()
         documents = []
@@ -126,11 +126,12 @@ async def publish_to_founders(
         
         doc_data = doc.to_dict()
         
-        # Verify document is private
-        if doc_data.get('permission_level') != 'private':
+        # Verify document is not public (secure documents only)
+        permission = doc_data.get('permission_level', 'public')
+        if permission == 'public':
             raise HTTPException(
                 status_code=400,
-                detail="Only private documents can be published to Founders Portal. Please set permission_level to 'private' first."
+                detail="Public documents cannot be published to Founders Portal. Please set a secure permission level (founders, platform_admin, super_admin, etc.) first."
             )
         
         # Build update data
@@ -195,7 +196,7 @@ async def get_ir_documents(
         
         # Query knowledge_documents where published_to_ir = true
         docs_ref = db.collection('knowledge_documents')
-        query = docs_ref.where('published_to_ir', '==', True).where('permission_level', '==', 'private')
+        query = docs_ref.where('published_to_ir', '==', True)
         
         docs = query.stream()
         documents = []
@@ -248,11 +249,12 @@ async def publish_to_ir(
         
         doc_data = doc.to_dict()
         
-        # Verify document is private
-        if doc_data.get('permission_level') != 'private':
+        # Verify document is not public (secure documents only)
+        permission = doc_data.get('permission_level', 'public')
+        if permission == 'public':
             raise HTTPException(
                 status_code=400,
-                detail="Only private documents can be published to Investor Relations. Please set permission_level to 'private' first."
+                detail="Public documents cannot be published to Investor Relations. Please set a secure permission level (founders, platform_admin, super_admin, etc.) first."
             )
         
         # Build update data

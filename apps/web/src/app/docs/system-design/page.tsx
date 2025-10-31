@@ -825,7 +825,7 @@ contract SHELTRStablecoin is ERC20, AccessControl, ReentrancyGuard {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button asChild size="lg" variant="secondary">
               <a 
-                href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/02-architecture/system-design.md" 
+                href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/architecture/technical/system-design.md" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="flex items-center gap-2"

@@ -17,16 +17,21 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/knowledge-dashboard", tags=["knowledge-dashboard"])
 
 class UpdateDocumentRequest(BaseModel):
-    title: str
-    content: str
-    category: str
-    tags: List[str] = []
-    status: str = "active"
-    sharing_level: Optional[str] = "public"
-    shared_with: Optional[List[str]] = []
-    access_roles: Optional[List[str]] = []
-    is_live: Optional[bool] = False
-    confidentiality_level: Optional[str] = "public"
+    """Flexible update model - all fields optional for partial updates"""
+    title: Optional[str] = None
+    content: Optional[str] = None
+    category: Optional[str] = None
+    tags: Optional[List[str]] = None
+    status: Optional[str] = None
+    sharing_level: Optional[str] = None
+    shared_with: Optional[List[str]] = None
+    access_roles: Optional[List[str]] = None
+    is_live: Optional[bool] = None
+    confidentiality_level: Optional[str] = None
+    # Permission fields
+    permission_level: Optional[str] = None
+    is_private: Optional[bool] = None
+    visibility_scope: Optional[str] = None
 
 @router.get("/documents")
 async def get_knowledge_documents(
@@ -144,18 +149,34 @@ async def update_knowledge_document(
     try:
         knowledge_service = KnowledgeDashboardService()
         
-        updates = {
-            'title': request.title,
-            'content': request.content,
-            'category': request.category,
-            'tags': request.tags,
-            'status': request.status,
-            'sharing_level': request.sharing_level,
-            'shared_with': request.shared_with,
-            'access_roles': request.access_roles,
-            'is_live': request.is_live,
-            'confidentiality_level': request.confidentiality_level
-        }
+        # Only include fields that are not None (partial updates support)
+        updates = {}
+        if request.title is not None:
+            updates['title'] = request.title
+        if request.content is not None:
+            updates['content'] = request.content
+        if request.category is not None:
+            updates['category'] = request.category
+        if request.tags is not None:
+            updates['tags'] = request.tags
+        if request.status is not None:
+            updates['status'] = request.status
+        if request.sharing_level is not None:
+            updates['sharing_level'] = request.sharing_level
+        if request.shared_with is not None:
+            updates['shared_with'] = request.shared_with
+        if request.access_roles is not None:
+            updates['access_roles'] = request.access_roles
+        if request.is_live is not None:
+            updates['is_live'] = request.is_live
+        if request.confidentiality_level is not None:
+            updates['confidentiality_level'] = request.confidentiality_level
+        if request.permission_level is not None:
+            updates['permission_level'] = request.permission_level
+        if request.is_private is not None:
+            updates['is_private'] = request.is_private
+        if request.visibility_scope is not None:
+            updates['visibility_scope'] = request.visibility_scope
         
         success = await knowledge_service.update_knowledge_document(document_id, updates)
         

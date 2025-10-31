@@ -29,6 +29,9 @@ import {
   Star,
   Zap,
   BookOpen,
+  Book,
+  Briefcase,
+  TrendingUp,
   Target,
   FileText as FileTextIcon,
   Copy,
@@ -46,6 +49,7 @@ import { knowledgeDashboardService, KnowledgeDocument, KnowledgeStats } from '@/
 import { FolderTree, buildFolderTree, FolderNode } from '@/components/knowledge/FolderTree';
 import { Breadcrumb, buildBreadcrumb } from '@/components/knowledge/Breadcrumb';
 import { GitHubSyncPanel } from '@/components/knowledge/GitHubSyncPanel';
+import { PermissionBadge, type PermissionLevel } from '@/components/knowledge';
 
 export default function KnowledgeDashboard() {
   const { user } = useAuth(); // Get user for access control
@@ -311,7 +315,9 @@ export default function KnowledgeDashboard() {
     const matchesSearch = doc.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          doc.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          doc.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
-    const matchesCategory = categoryFilter === 'all' || doc.category === categoryFilter;
+    // Case-insensitive category matching to handle API vs Api vs api variations
+    const matchesCategory = categoryFilter === 'all' || 
+                           doc.category.toLowerCase() === categoryFilter.toLowerCase();
     const matchesStatus = statusFilter === 'all' || doc.status === statusFilter;
     
     // Folder filtering
@@ -595,10 +601,18 @@ export default function KnowledgeDashboard() {
                   <SelectItem value="Platform">📋 Platform</SelectItem>
                   <SelectItem value="Architecture">🏗️ Architecture</SelectItem>
                   <SelectItem value="API">🔌 API</SelectItem>
+                  <SelectItem value="Features">✨ Features</SelectItem>
                   <SelectItem value="Development">💻 Development</SelectItem>
                   <SelectItem value="Deployment">🚀 Deployment</SelectItem>
+                  <SelectItem value="Operations">⚙️ Operations</SelectItem>
                   <SelectItem value="User Guides">👥 User Guides</SelectItem>
+                  <SelectItem value="Guides">📖 Guides</SelectItem>
                   <SelectItem value="Reference">📚 Reference</SelectItem>
+                  <SelectItem value="Integrations">🔗 Integrations</SelectItem>
+                  <SelectItem value="Products">🌐 Products</SelectItem>
+                  <SelectItem value="Resources">🎯 Resources</SelectItem>
+                  <SelectItem value="Archive">📦 Archive</SelectItem>
+                  <SelectItem value="Documentation">📄 Documentation</SelectItem>
                 </SelectContent>
               </Select>
 
@@ -707,10 +721,41 @@ export default function KnowledgeDashboard() {
                         {getEmbeddingStatusIcon(doc.embedding_status)}
                         <span className="ml-1 truncate">{doc.embedding_status}</span>
                       </Badge>
-                      <Badge className={`${confidentialityBadge.color} text-xs px-2 py-0.5`}>
-                        <ConfidentialityIcon className="h-3 w-3 mr-1 flex-shrink-0" />
-                        <span className="truncate">{confidentialityBadge.text}</span>
-                      </Badge>
+                      {/* Permission Badge - Shows permission level */}
+                      {(doc as any).permission_level ? (
+                        <PermissionBadge 
+                          permission={(doc as any).permission_level as PermissionLevel} 
+                          size="sm"
+                        />
+                      ) : (
+                        /* Fallback to old confidentiality badge if no permission_level */
+                        <Badge className={`${confidentialityBadge.color} text-xs px-2 py-0.5`}>
+                          <ConfidentialityIcon className="h-3 w-3 mr-1 flex-shrink-0" />
+                          <span className="truncate">{confidentialityBadge.text}</span>
+                        </Badge>
+                      )}
+                    </div>
+
+                    {/* Publishing Badges - Shows where document is published */}
+                    <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                      {(doc as any).published_to_hub && (
+                        <Badge variant="outline" className="text-xs px-2 py-0.5 border-blue-400 text-blue-600">
+                          <Book className="h-3 w-3 mr-1 flex-shrink-0" />
+                          <span className="truncate">Docs Hub</span>
+                        </Badge>
+                      )}
+                      {(doc as any).published_to_founders && (
+                        <Badge variant="outline" className="text-xs px-2 py-0.5 border-purple-400 text-purple-600">
+                          <Briefcase className="h-3 w-3 mr-1 flex-shrink-0" />
+                          <span className="truncate">Founders</span>
+                        </Badge>
+                      )}
+                      {(doc as any).published_to_ir && (
+                        <Badge variant="outline" className="text-xs px-2 py-0.5 border-green-400 text-green-600">
+                          <TrendingUp className="h-3 w-3 mr-1 flex-shrink-0" />
+                          <span className="truncate">IR</span>
+                        </Badge>
+                      )}
                     </div>
                   </div>
                 </CardHeader>
@@ -871,6 +916,28 @@ export default function KnowledgeDashboard() {
                             <span className="truncate">{confidentialityBadge.text}</span>
                           </Badge>
                         </div>
+
+                        {/* Publishing Badges - Shows where document is published */}
+                        <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                          {(doc as any).published_to_hub && (
+                            <Badge variant="outline" className="text-xs px-2 py-0.5 border-blue-400 text-blue-600">
+                              <Book className="h-3 w-3 mr-1 flex-shrink-0" />
+                              <span className="truncate">Docs Hub</span>
+                            </Badge>
+                          )}
+                          {(doc as any).published_to_founders && (
+                            <Badge variant="outline" className="text-xs px-2 py-0.5 border-purple-400 text-purple-600">
+                              <Briefcase className="h-3 w-3 mr-1 flex-shrink-0" />
+                              <span className="truncate">Founders</span>
+                            </Badge>
+                          )}
+                          {(doc as any).published_to_ir && (
+                            <Badge variant="outline" className="text-xs px-2 py-0.5 border-green-400 text-green-600">
+                              <TrendingUp className="h-3 w-3 mr-1 flex-shrink-0" />
+                              <span className="truncate">IR</span>
+                            </Badge>
+                          )}
+                        </div>
                       </div>
                       
                       {/* Quality score - improved mobile layout */}
@@ -1020,10 +1087,21 @@ export default function KnowledgeDashboard() {
                     <SelectValue placeholder="Select category" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Platform">Platform</SelectItem>
-                    <SelectItem value="Technology">Technology</SelectItem>
-                    <SelectItem value="AI">AI</SelectItem>
-                    <SelectItem value="Documentation">Documentation</SelectItem>
+                    <SelectItem value="Platform">📋 Platform</SelectItem>
+                    <SelectItem value="Architecture">🏗️ Architecture</SelectItem>
+                    <SelectItem value="API">🔌 API</SelectItem>
+                    <SelectItem value="Features">✨ Features</SelectItem>
+                    <SelectItem value="Development">📱 Development</SelectItem>
+                    <SelectItem value="Deployment">🚀 Deployment</SelectItem>
+                    <SelectItem value="Operations">⚙️ Operations</SelectItem>
+                    <SelectItem value="User Guides">👥 User Guides</SelectItem>
+                    <SelectItem value="Guides">📖 Guides</SelectItem>
+                    <SelectItem value="Reference">📚 Reference</SelectItem>
+                    <SelectItem value="Integrations">🔗 Integrations</SelectItem>
+                    <SelectItem value="Products">🌐 Products</SelectItem>
+                    <SelectItem value="Resources">🎯 Resources</SelectItem>
+                    <SelectItem value="Archive">📦 Archive</SelectItem>
+                    <SelectItem value="Documentation">📄 Documentation</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -1469,10 +1547,21 @@ export default function KnowledgeDashboard() {
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Platform">Platform</SelectItem>
-                  <SelectItem value="Technology">Technology</SelectItem>
-                  <SelectItem value="AI">AI</SelectItem>
-                  <SelectItem value="Documentation">Documentation</SelectItem>
+                  <SelectItem value="Platform">📋 Platform</SelectItem>
+                  <SelectItem value="Architecture">🏗️ Architecture</SelectItem>
+                  <SelectItem value="API">🔌 API</SelectItem>
+                  <SelectItem value="Features">✨ Features</SelectItem>
+                  <SelectItem value="Development">📱 Development</SelectItem>
+                  <SelectItem value="Deployment">🚀 Deployment</SelectItem>
+                  <SelectItem value="Operations">⚙️ Operations</SelectItem>
+                  <SelectItem value="User Guides">👥 User Guides</SelectItem>
+                  <SelectItem value="Guides">📖 Guides</SelectItem>
+                  <SelectItem value="Reference">📚 Reference</SelectItem>
+                  <SelectItem value="Integrations">🔗 Integrations</SelectItem>
+                  <SelectItem value="Products">🌐 Products</SelectItem>
+                  <SelectItem value="Resources">🎯 Resources</SelectItem>
+                  <SelectItem value="Archive">📦 Archive</SelectItem>
+                  <SelectItem value="Documentation">📄 Documentation</SelectItem>
                 </SelectContent>
               </Select>
             </div>

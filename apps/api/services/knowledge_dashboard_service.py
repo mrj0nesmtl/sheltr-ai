@@ -24,7 +24,23 @@ class KnowledgeDashboardService:
         try:
             documents = []
             
+            # PERFORMANCE OPTIMIZATION: Get all chunk counts in ONE query
+            # Instead of N queries (one per document), we make 1 query total
+            logger.info("📊 Fetching all chunks to calculate counts (optimized query)...")
+            all_chunks = self.db.collection('knowledge_chunks').stream()
+            
+            # Build a dictionary: document_id -> chunk_count
+            chunk_counts = {}
+            for chunk in all_chunks:
+                chunk_data = chunk.to_dict()
+                doc_id = chunk_data.get('document_id')
+                if doc_id:
+                    chunk_counts[doc_id] = chunk_counts.get(doc_id, 0) + 1
+            
+            logger.info(f"✅ Loaded chunk counts for {len(chunk_counts)} documents")
+            
             # Get documents from Firestore knowledge_documents collection
+            logger.info("📄 Fetching knowledge documents...")
             firestore_docs = self.db.collection('knowledge_documents').stream()
             
             for doc in firestore_docs:
@@ -34,10 +50,8 @@ class KnowledgeDashboardService:
                 # Get actual content for proper calculations
                 content = doc_data.get('content', doc_data.get('description', ''))
                 
-                # Calculate chunk count from knowledge_chunks collection
-                chunks_query = self.db.collection('knowledge_chunks').where('document_id', '==', doc.id)
-                chunks = list(chunks_query.stream())
-                chunk_count = len(chunks)
+                # Look up chunk count from our pre-built dictionary (O(1) operation!)
+                chunk_count = chunk_counts.get(doc.id, 0)
                 
                 # Transform Firestore data to match frontend expectations
                 transformed_doc = {
@@ -61,6 +75,7 @@ class KnowledgeDashboardService:
                 
                 documents.append(transformed_doc)
             
+            logger.info(f"✅ Successfully loaded {len(documents)} documents")
             return documents
             
         except Exception as e:

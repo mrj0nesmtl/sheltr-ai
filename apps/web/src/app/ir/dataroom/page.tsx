@@ -473,11 +473,11 @@ export default function InvestorDataRoomPage() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
       {/* Header */}
       <header className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b sticky top-0 z-50">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="container mx-auto px-3 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 sm:gap-4 min-w-0">
               {/* SHELTR Icon */}
-              <div className="relative w-10 h-10">
+              <div className="relative w-8 h-8 sm:w-10 sm:h-10 flex-shrink-0">
                 <Image
                   src="/icon.svg"
                   alt="SHELTR"
@@ -486,16 +486,21 @@ export default function InvestorDataRoomPage() {
                   priority
                 />
               </div>
-              <div>
-                <h1 className="text-xl font-bold">Investor Data Room</h1>
-                <p className="text-xs text-muted-foreground">Secure Investment Materials</p>
+              <div className="min-w-0">
+                <h1 className="text-sm sm:text-base lg:text-xl font-bold truncate">
+                  <span className="hidden sm:inline">Investor </span>Data Room
+                </h1>
+                <p className="text-xs text-muted-foreground hidden sm:block">Secure Investment Materials</p>
               </div>
             </div>
             
-            <div className="flex items-center gap-3">
-              <Badge className="bg-blue-600 text-white">
+            <div className="flex items-center gap-1 sm:gap-3 flex-shrink-0">
+              <Badge className="bg-blue-600 text-white hidden sm:flex">
                 <Shield className="h-3 w-3 mr-1" />
                 Investor Access
+              </Badge>
+              <Badge className="bg-blue-600 text-white sm:hidden p-2">
+                <Shield className="h-3 w-3" />
               </Badge>
               
               {/* Logout Button */}
@@ -516,8 +521,8 @@ export default function InvestorDataRoomPage() {
                 }}
                 className="border-2"
               >
-                <LogOut className="h-4 w-4 mr-2" />
-                Logout
+                <LogOut className="h-4 w-4 sm:mr-2" />
+                <span className="hidden sm:inline">Logout</span>
               </Button>
             </div>
           </div>

@@ -7,4 +7,7 @@ export { PermissionBadge, type PermissionLevel } from './PermissionBadge';
 export { PermissionSelector } from './PermissionSelector';
 export { PermissionToggle, VisibilityScopeToggle } from './PermissionToggle';
 export { PermissionManager, type PermissionSettings } from './PermissionManager';
+export { DocsHubPublisher, type DocsHubSettings } from './DocsHubPublisher';
+export { SecureDocumentPublisher } from './SecureDocumentPublisher';
+export type { SecurePublishingSettings } from '@/services/securePublishingService';
 

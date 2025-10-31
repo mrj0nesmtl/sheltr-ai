@@ -26,8 +26,20 @@ import {
   Brain
 } from 'lucide-react';
 import { knowledgeDashboardService, KnowledgeDocument } from '@/services/knowledgeDashboardService';
+import { docsHubService } from '@/services/docsHubService';
+import { securePublishingService } from '@/services/securePublishingService';
 import { useAuth } from '@/contexts/AuthContext';
 import { ChangeTracker, useChangeTracker } from '@/components/knowledge/ChangeTracker';
+import { 
+  PermissionManager, 
+  type PermissionSettings, 
+  type PermissionLevel, 
+  PermissionBadge, 
+  DocsHubPublisher, 
+  type DocsHubSettings,
+  SecureDocumentPublisher,
+  type SecurePublishingSettings
+} from '@/components/knowledge';
 
 export default function EditKnowledgeDocumentPage() {
   const router = useRouter();
@@ -60,7 +72,43 @@ export default function EditKnowledgeDocumentPage() {
     shared_with: [] as string[],
     access_roles: [] as string[],
     is_live: false,
-    confidentiality_level: 'public' as 'public' | 'internal' | 'confidential' | 'restricted'
+    confidentiality_level: 'public' as 'public' | 'internal' | 'confidential' | 'restricted',
+    permission_level: 'public' as PermissionLevel,
+    is_private: false
+  });
+
+  // Permission settings state
+  const [permissionSettings, setPermissionSettings] = useState<PermissionSettings>({
+    permission_level: 'public',
+    is_private: false,
+    visibility_scope: 'global'
+  });
+
+  // Docs Hub settings state
+  const [docsHubSettings, setDocsHubSettings] = useState<DocsHubSettings>({
+    published_to_hub: false,
+    hub_category: 'core',
+    hub_badge: 'Technical',
+    hub_order: 999,
+    hub_slug: '',
+    hub_description: undefined,
+    hub_audience: undefined,
+    hub_topics: undefined,
+    hub_icon: undefined
+  });
+
+  // Secure Publishing settings state
+  const [securePublishingSettings, setSecurePublishingSettings] = useState<SecurePublishingSettings>({
+    published_to_founders: false,
+    published_to_ir: false,
+    secure_slug: '',
+    secure_badge: 'Confidential',
+    secure_badge_color: 'blue',
+    secure_icon: 'shield',
+    founders_description: '',
+    ir_description: '',
+    source_directory: '',
+    local_file_path: ''
   });
 
   useEffect(() => {
@@ -96,8 +144,46 @@ export default function EditKnowledgeDocumentPage() {
         shared_with: doc.shared_with || [],
         access_roles: doc.access_roles || [],
         is_live: doc.is_live || false,
-        confidentiality_level: (doc.confidentiality_level as any) || 'public'
+        confidentiality_level: (doc.confidentiality_level as any) || 'public',
+        permission_level: ((doc as any).permission_level as PermissionLevel) || 'public',
+        is_private: (doc as any).is_private || false
       };
+      
+      // Update permission settings
+      setPermissionSettings({
+        permission_level: ((doc as any).permission_level as PermissionLevel) || 'public',
+        is_private: (doc as any).is_private || false,
+        visibility_scope: (doc as any).visibility_scope || 'global',
+        synced_from_github: (doc as any).synced_from_github,
+        github_path: (doc as any).github_path
+      });
+
+      // Update docs hub settings
+      setDocsHubSettings({
+        published_to_hub: (doc as any).published_to_hub || false,
+        hub_category: (doc as any).hub_category || 'core',
+        hub_badge: (doc as any).hub_badge || 'Technical',
+        hub_order: (doc as any).hub_order || 999,
+        hub_slug: (doc as any).hub_slug || '',
+        hub_description: (doc as any).hub_description,
+        hub_audience: (doc as any).hub_audience,
+        hub_topics: (doc as any).hub_topics,
+        hub_icon: (doc as any).hub_icon
+      });
+
+      // Update secure publishing settings
+      setSecurePublishingSettings({
+        published_to_founders: (doc as any).published_to_founders || false,
+        published_to_ir: (doc as any).published_to_ir || false,
+        secure_slug: (doc as any).secure_slug || securePublishingService.generateSlug(doc.title),
+        secure_badge: (doc as any).secure_badge || 'Confidential',
+        secure_badge_color: (doc as any).secure_badge_color || 'blue',
+        secure_icon: (doc as any).secure_icon || 'shield',
+        founders_description: (doc as any).founders_description || '',
+        ir_description: (doc as any).ir_description || '',
+        source_directory: (doc as any).source_directory || '',
+        local_file_path: (doc as any).local_file_path || ''
+      });
       
       setFormData(newFormData);
       setOriginalFormData(newFormData);
@@ -125,7 +211,13 @@ export default function EditKnowledgeDocumentPage() {
       setSaving(true);
       setError(null);
 
-      await knowledgeDashboardService.updateKnowledgeDocument(documentId, formData);
+      // Merge formData with permissionSettings to save everything together
+      const dataToSave = {
+        ...formData,
+        ...permissionSettings  // Include permission fields!
+      };
+
+      await knowledgeDashboardService.updateKnowledgeDocument(documentId, dataToSave);
 
       // Track changes if there are any
       if (originalFormData) {
@@ -287,10 +379,58 @@ export default function EditKnowledgeDocumentPage() {
           {/* Basic Information */}
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <FileText className="h-5 w-5" />
-                Basic Information
-              </CardTitle>
+              <div className="space-y-3">
+                <CardTitle className="flex items-center gap-2">
+                  <FileText className="h-5 w-5" />
+                  Basic Information
+                </CardTitle>
+                
+                {/* Document Status Badges */}
+                <div className="flex flex-wrap items-center gap-2">
+                  {/* Category Badge */}
+                  <Badge variant="outline" className="border-blue-400 text-blue-600 dark:text-blue-400">
+                    <BookOpen className="h-3 w-3 mr-1" />
+                    {formData.category || 'No Category'}
+                  </Badge>
+                  
+                  {/* Status Badge */}
+                  <Badge className={
+                    formData.status === 'active' ? 'bg-green-600' :
+                    formData.status === 'draft' ? 'bg-yellow-600' :
+                    formData.status === 'archived' ? 'bg-gray-600' :
+                    'bg-orange-600'
+                  }>
+                    {formData.status === 'active' && '✅'}
+                    {formData.status === 'draft' && '📝'}
+                    {formData.status === 'archived' && '📦'}
+                    {formData.status === 'processing' && '⏳'}
+                    {' '}
+                    {formData.status.charAt(0).toUpperCase() + formData.status.slice(1)}
+                  </Badge>
+                  
+                  {/* Permission Badge */}
+                  <PermissionBadge 
+                    permission={permissionSettings.permission_level as PermissionLevel}
+                    size="sm"
+                  />
+                  
+                  {/* Private Indicator */}
+                  {permissionSettings.is_private && (
+                    <Badge variant="outline" className="border-red-500 text-red-600 dark:text-red-400">
+                      <Lock className="h-3 w-3 mr-1" />
+                      Private
+                    </Badge>
+                  )}
+                  
+                  {/* GitHub Sync Indicator */}
+                  {permissionSettings.synced_from_github && (
+                    <Badge variant="outline" className="border-purple-500 text-purple-600 dark:text-purple-400">
+                      <Globe className="h-3 w-3 mr-1" />
+                      GitHub
+                    </Badge>
+                  )}
+                </div>
+              </div>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -310,16 +450,45 @@ export default function EditKnowledgeDocumentPage() {
                     onValueChange={(value) => setFormData({...formData, category: value})}
                   >
                     <SelectTrigger className="mt-1">
-                      <SelectValue />
+                      <SelectValue placeholder="Select category">
+                        {formData.category && (
+                          <span className="flex items-center gap-2">
+                            {formData.category === 'Platform' && '📋'}
+                            {formData.category === 'Architecture' && '🏗️'}
+                            {formData.category === 'API' && '🔌'}
+                            {formData.category === 'Features' && '✨'}
+                            {formData.category === 'Development' && '📱'}
+                            {formData.category === 'Deployment' && '🚀'}
+                            {formData.category === 'Operations' && '⚙️'}
+                            {formData.category === 'User Guides' && '👥'}
+                            {formData.category === 'Guides' && '📖'}
+                            {formData.category === 'Reference' && '📚'}
+                            {formData.category === 'Integrations' && '🔗'}
+                            {formData.category === 'Products' && '🌐'}
+                            {formData.category === 'Resources' && '🎯'}
+                            {formData.category === 'Archive' && '📦'}
+                            {formData.category === 'Documentation' && '📄'}
+                            {' '}{formData.category}
+                          </span>
+                        )}
+                      </SelectValue>
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="Development">Development</SelectItem>
-                      <SelectItem value="Architecture">Architecture</SelectItem>
-                      <SelectItem value="API">API</SelectItem>
-                      <SelectItem value="User Guide">User Guide</SelectItem>
-                      <SelectItem value="Reference">Reference</SelectItem>
-                      <SelectItem value="Integration">Integration</SelectItem>
-                      <SelectItem value="Deployment">Deployment</SelectItem>
+                      <SelectItem value="Platform">📋 Platform</SelectItem>
+                      <SelectItem value="Architecture">🏗️ Architecture</SelectItem>
+                      <SelectItem value="API">🔌 API</SelectItem>
+                      <SelectItem value="Features">✨ Features</SelectItem>
+                      <SelectItem value="Development">📱 Development</SelectItem>
+                      <SelectItem value="Deployment">🚀 Deployment</SelectItem>
+                      <SelectItem value="Operations">⚙️ Operations</SelectItem>
+                      <SelectItem value="User Guides">👥 User Guides</SelectItem>
+                      <SelectItem value="Guides">📖 Guides</SelectItem>
+                      <SelectItem value="Reference">📚 Reference</SelectItem>
+                      <SelectItem value="Integrations">🔗 Integrations</SelectItem>
+                      <SelectItem value="Products">🌐 Products</SelectItem>
+                      <SelectItem value="Resources">🎯 Resources</SelectItem>
+                      <SelectItem value="Archive">📦 Archive</SelectItem>
+                      <SelectItem value="Documentation">📄 Documentation</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -356,6 +525,102 @@ export default function EditKnowledgeDocumentPage() {
             </CardContent>
           </Card>
 
+          {/* Permission Manager - MOVED TO TOP! */}
+          <div id="permissions-section">
+            <PermissionManager
+              documentId={documentId || undefined}
+              currentSettings={permissionSettings}
+              onSave={async (settings) => {
+                setPermissionSettings(settings);
+                setFormData({
+                  ...formData,
+                  permission_level: settings.permission_level,
+                  is_private: settings.is_private
+                });
+                
+                // Save to backend immediately
+                if (documentId) {
+                  await knowledgeDashboardService.updateKnowledgeDocument(documentId, {
+                    permission_level: settings.permission_level,
+                    is_private: settings.is_private,
+                    visibility_scope: settings.visibility_scope
+                  });
+                  
+                  // Track the change
+                  await trackChange(['permission_level', 'is_private'], 'sharing');
+                }
+              }}
+              showGitHubInfo={permissionSettings.synced_from_github}
+              isLoading={loading || saving}
+            />
+          </div>
+
+          {/* Docs Hub Publisher - NEW FEATURE! */}
+          <DocsHubPublisher
+            documentId={documentId || undefined}
+            documentTitle={formData.title}
+            currentSettings={docsHubSettings}
+            permissionLevel={permissionSettings.permission_level}
+            onSave={async (settings) => {
+              try {
+                // Save via API
+                if (documentId) {
+                  await docsHubService.publishDocument(documentId, settings);
+                  
+                  // Update local state
+                  setDocsHubSettings(settings);
+                  
+                  // Track the change
+                  await trackChange(['published_to_hub'], 'publishing');
+                }
+              } catch (error) {
+                console.error('Failed to publish document:', error);
+                throw error;
+              }
+            }}
+            isLoading={loading || saving}
+          />
+
+          {/* Secure Document Publisher - For Founders Portal & Investor Relations */}
+          {(permissionSettings.permission_level !== 'public' && 
+            permissionSettings.permission_level !== 'authenticated' ||
+            securePublishingSettings.published_to_founders ||
+            securePublishingSettings.published_to_ir) && (
+            <SecureDocumentPublisher
+              documentId={documentId || ''}
+              documentTitle={formData.title}
+              initialSettings={securePublishingSettings}
+              onSave={async (settings) => {
+                try {
+                  // Update local state
+                  setSecurePublishingSettings(settings);
+                  
+                  // Save to backend (the component handles the publishing API calls)
+                  if (documentId) {
+                    await knowledgeDashboardService.updateKnowledgeDocument(documentId, {
+                      published_to_founders: settings.published_to_founders,
+                      published_to_ir: settings.published_to_ir,
+                      secure_slug: settings.secure_slug,
+                      secure_badge: settings.secure_badge,
+                      secure_badge_color: settings.secure_badge_color,
+                      secure_icon: settings.secure_icon,
+                      founders_description: settings.founders_description,
+                      ir_description: settings.ir_description,
+                      source_directory: settings.source_directory,
+                      local_file_path: settings.local_file_path
+                    });
+                    
+                    // Track the change
+                    await trackChange(['published_to_founders', 'published_to_ir'], 'secure_publishing');
+                  }
+                } catch (error) {
+                  console.error('Failed to save secure publishing settings:', error);
+                  throw error;
+                }
+              }}
+            />
+          )}
+
           {/* Content */}
           <Card>
             <CardHeader>
@@ -368,6 +633,86 @@ export default function EditKnowledgeDocumentPage() {
                 placeholder="Enter document content (Markdown supported)"
                 className="min-h-[400px] font-mono text-sm"
               />
+            </CardContent>
+          </Card>
+
+          {/* Permission Warning & Actions - BOTTOM */}
+          <Card className="border-amber-300 bg-amber-50 dark:border-amber-700 dark:bg-amber-900/20">
+            <CardContent className="p-6">
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0">
+                  <Shield className="h-8 w-8 text-amber-600 dark:text-amber-400" />
+                </div>
+                <div className="flex-1 space-y-4">
+                  <div>
+                    <h3 className="text-lg font-semibold text-amber-900 dark:text-amber-100 flex items-center gap-2">
+                      <AlertTriangle className="h-5 w-5" />
+                      Security Check Required
+                    </h3>
+                    <p className="text-amber-800 dark:text-amber-200 mt-2">
+                      Before saving, please verify your document permissions are correct. 
+                      This controls who can access and view this document.
+                    </p>
+                  </div>
+                  
+                  <div className="flex items-center gap-2 p-3 bg-white dark:bg-slate-800 rounded-lg border border-amber-200 dark:border-amber-800">
+                    <span className="text-sm font-medium">Current Permission:</span>
+                    <Badge className={
+                      permissionSettings.permission_level === 'public' ? 'bg-green-600' :
+                      permissionSettings.permission_level === 'founders' ? 'bg-amber-600' :
+                      permissionSettings.permission_level === 'super_admin' ? 'bg-gray-600' :
+                      'bg-blue-600'
+                    }>
+                      {permissionSettings.permission_level === 'public' && '🌐 Public'}
+                      {permissionSettings.permission_level === 'authenticated' && '👥 Authenticated'}
+                      {permissionSettings.permission_level === 'donor' && '❤️ Donors'}
+                      {permissionSettings.permission_level === 'participant' && '👤 Participants'}
+                      {permissionSettings.permission_level === 'shelter_admin' && '🏢 Shelter Admin'}
+                      {permissionSettings.permission_level === 'platform_admin' && '🛡️ Platform Admin'}
+                      {permissionSettings.permission_level === 'founders' && '👑 Founders'}
+                      {permissionSettings.permission_level === 'super_admin' && '🔒 Super Admin'}
+                    </Badge>
+                    {permissionSettings.is_private && (
+                      <Badge variant="outline" className="border-red-500 text-red-600">
+                        <Lock className="h-3 w-3 mr-1" />
+                        Private
+                      </Badge>
+                    )}
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        const permissionsSection = document.getElementById('permissions-section');
+                        permissionsSection?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      }}
+                      className="flex items-center gap-2 border-amber-300 hover:bg-amber-100 dark:border-amber-700 dark:hover:bg-amber-900/40"
+                    >
+                      <Shield className="h-4 w-4" />
+                      Review Permissions
+                    </Button>
+                    
+                    <Button 
+                      onClick={handleSave}
+                      disabled={saving}
+                      className="flex-1 flex items-center justify-center gap-2"
+                    >
+                      {saving ? (
+                        <>
+                          <RefreshCw className="h-4 w-4 animate-spin" />
+                          Saving...
+                        </>
+                      ) : (
+                        <>
+                          <Save className="h-4 w-4" />
+                          Save & Regenerate
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </div>
+              </div>
             </CardContent>
           </Card>
         </div>

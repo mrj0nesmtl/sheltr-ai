@@ -20,6 +20,16 @@ from models.permissions import (
     determine_permission_from_path,
     get_permission_display_info
 )
+from models.docs_hub import (
+    DocsHubCard,
+    DocsHubDocument,
+    PublishToHubRequest,
+    generate_slug,
+    extract_description,
+    extract_audience_from_content,
+    extract_topics_from_content,
+    get_category_icon
+)
 
 logger = logging.getLogger(__name__)
 
@@ -616,3 +626,17 @@ async def determine_permission(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to determine permission: {str(e)}"
         )
+
+
+# ============================================================================
+# DOCS HUB ENDPOINTS
+# Public documentation hub publishing and management
+# ============================================================================
+
+# Include docs hub sub-router
+from routers.knowledge_docs_hub import router as docs_hub_router
+router.include_router(docs_hub_router)
+
+# Include secure publishing sub-router (Founders Portal & Investor Relations)
+from routers.knowledge_secure_publishing import router as secure_publishing_router
+router.include_router(secure_publishing_router)

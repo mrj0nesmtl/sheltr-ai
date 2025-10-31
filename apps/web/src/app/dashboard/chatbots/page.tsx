@@ -1129,7 +1129,11 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
                           <Badge variant={agent.status === 'active' ? 'default' : 'secondary'}>
                             {agent.status}
                           </Badge>
-                          <Button variant="ghost" size="sm">
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            onClick={() => setEditingAgent(agent)}
+                          >
                             <Edit className="h-4 w-4" />
                           </Button>
                         </div>

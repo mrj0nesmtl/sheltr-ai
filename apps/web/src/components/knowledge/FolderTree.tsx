@@ -40,7 +40,7 @@ export function FolderTree({
   className 
 }: FolderTreeProps) {
   const [expandedFolders, setExpandedFolders] = useState<Set<string>>(
-    new Set(['01-overview', '02-architecture', '03-api', '04-development', '05-deployment', '06-user-guides', '07-reference', '08-integrations', '10-resources'])
+    new Set(['platform', 'architecture', 'api', 'features', 'development', 'operations', 'user-guides', 'guides', 'reference', 'integrations', 'products', 'resources'])
   );
 
   const toggleFolder = (path: string) => {
@@ -147,129 +147,78 @@ export function FolderTree({
 // Helper function to build folder tree from documents
 export function buildFolderTree(documents: KnowledgeDocument[]): FolderNode[] {
   const folderMap = new Map<string, FolderNode>();
+  
+  // Define category display metadata (icons and descriptions)
+  const categoryMetadata: Record<string, { icon: string; description: string; order: number }> = {
+    'Platform': { icon: '📋', description: 'Project introduction and goals', order: 1 },
+    'Architecture': { icon: '🏗️', description: 'Technical system design', order: 2 },
+    'API': { icon: '🔌', description: 'API documentation', order: 3 },
+    'Features': { icon: '✨', description: 'Feature documentation', order: 4 },
+    'Development': { icon: '💻', description: 'Development guides', order: 5 },
+    'Deployment': { icon: '🚀', description: 'Deployment guides', order: 6 },
+    'Operations': { icon: '⚙️', description: 'Operations and maintenance', order: 7 },
+    'User Guides': { icon: '👥', description: 'User documentation', order: 8 },
+    'Guides': { icon: '📖', description: 'How-to guides', order: 9 },
+    'Reference': { icon: '📚', description: 'Technical reference', order: 10 },
+    'Integrations': { icon: '🔗', description: 'Third-party integrations', order: 11 },
+    'Products': { icon: '🌐', description: 'Ecosystem and products', order: 12 },
+    'Resources': { icon: '🎯', description: 'Templates and resources', order: 13 },
+    'Archive': { icon: '📦', description: 'Archived documents', order: 99 },
+    'Documentation': { icon: '📄', description: 'General documentation', order: 100 }
+  };
+
+  // First pass: Dynamically discover all categories from documents
+  const categoriesInUse = new Set<string>();
+  documents.forEach(doc => {
+    if (doc.category) {
+      categoriesInUse.add(doc.category);
+    }
+  });
+
+  // Create folder nodes for each category that has documents
   const rootFolders: FolderNode[] = [];
-
-  // Initialize folder structure (matches GitHub docs/ structure, excludes migration/archive folders)
-  const folderStructure = [
-    { path: '01-overview', name: '📋 Overview', description: 'Project introduction and goals' },
-    { path: '02-architecture', name: '🏗️ Architecture', description: 'Technical system design' },
-    { path: '03-api', name: '🔌 API', description: 'API documentation' },
-    { path: '04-development', name: '💻 Development', description: 'Development guides' },
-    { path: '05-deployment', name: '🚀 Deployment', description: 'Deployment guides' },
-    { path: '06-user-guides', name: '👥 User Guides', description: 'User documentation' },
-    { path: '07-reference', name: '📚 Reference', description: 'Technical reference' },
-    { path: '08-integrations', name: '🔗 Integrations', description: 'Third-party integrations' },
-    { path: '10-resources', name: '🎯 Resources', description: 'Templates and resources' }
-    // Note: 09-migration and platform-admin are intentionally excluded from sync
-  ];
-
-  // Create folder nodes
-  folderStructure.forEach(folder => {
+  categoriesInUse.forEach(category => {
+    const metadata = categoryMetadata[category] || { icon: '📁', description: category, order: 50 };
     const node: FolderNode = {
-      id: folder.path,
-      name: folder.name,
-      path: folder.path,
+      id: category.toLowerCase().replace(/\s+/g, '-'),
+      name: `${metadata.icon} ${category}`,
+      path: category.toLowerCase().replace(/\s+/g, '-'),
       type: 'folder',
       children: [],
       documentCount: 0
     };
-    folderMap.set(folder.path, node);
+    folderMap.set(category, node);
     rootFolders.push(node);
   });
 
-  // Add documents to appropriate folders
+  // Sort folders by order
+  rootFolders.sort((a, b) => {
+    const aCategory = a.name.replace(/^[^\s]+\s/, ''); // Remove emoji
+    const bCategory = b.name.replace(/^[^\s]+\s/, '');
+    const aOrder = categoryMetadata[aCategory]?.order || 50;
+    const bOrder = categoryMetadata[bCategory]?.order || 50;
+    return aOrder - bOrder;
+  });
+
+  // Add documents to appropriate folders based on their category
   documents.forEach(doc => {
-    if (doc.file_path) {
-      // Extract folder from file_path 
-      // Handle both formats: "knowledge-base/01-overview/README.md" and "knowledge-base/public/01-overview/README.md"
-      const pathParts = doc.file_path.split('/');
-      let folderPath = '';
-      
-      if (pathParts.length >= 3 && pathParts[1] === 'public') {
-        // New format: "knowledge-base/public/01-overview/README.md" -> "01-overview"
-        folderPath = pathParts[2];
-      } else if (pathParts.length >= 2) {
-        // Old format: "knowledge-base/01-overview/README.md" -> "01-overview"
-        folderPath = pathParts[1];
-      }
-      
-      // Handle emoji-prefixed files that don't have folder structure
-      // e.g., "knowledge-base/public/🔌-api-reference.md" should go to "07-reference"
-      if (!folderPath || !folderMap.get(folderPath)) {
-        const fileName = pathParts[pathParts.length - 1];
-        
-        // Map emoji/keyword patterns to folders
-        const fileToFolderMap: { [key: string]: string } = {
-          '🔌': '03-api', // API reference and documentation
-          '📚': '07-reference', // Technical reference  
-          '🗄️': '03-api', // Database schema (API related)
-          '🔥': '08-integrations', // Firebase integration
-          '🔗': '08-integrations', // Third-party integrations
-          '🚀': '05-deployment', // Deployment guides
-          '☁️': '05-deployment', // Cloud deployment
-          '📊': '05-deployment', // Monitoring
-          '🔒': '05-deployment', // Security
-          '👥': '06-user-guides', // User guides
-          '👤': '06-user-guides', // Participant guide
-          '💝': '06-user-guides', // Donor guide
-          '🏢': '06-user-guides', // Shelter admin guide
-          '🎨': '10-resources', // Design system
-          '📖': '10-resources', // Resources
-          '📝': '10-resources', // Templates
-          '✨': '10-resources', // Feature request
-          '🐛': '10-resources', // Bug report
-          '🌟': '01-overview', // Overview
-          '📋': '01-overview', // Documentation plan
-          '🎯': '01-overview', // Implementation plan
-          '🏗️': '02-architecture', // Architecture
-          '🌐': '02-architecture', // Platform architecture
-          '⛓️': '02-architecture', // Blockchain
-          '🪙': '02-architecture', // Tokenomics
-        };
-        
-        // Find matching emoji/keyword
-        for (const [emoji, targetFolder] of Object.entries(fileToFolderMap)) {
-          if (fileName.startsWith(emoji)) {
-            folderPath = targetFolder;
-            break;
-          }
-        }
-        
-        // Fallback: try to match keywords in filename
-        if (!folderPath || !folderMap.get(folderPath)) {
-          if (fileName.includes('api') || fileName.includes('database')) {
-            folderPath = '03-api';
-          } else if (fileName.includes('reference')) {
-            folderPath = '07-reference';
-          } else if (fileName.includes('firebase') || fileName.includes('integration')) {
-            folderPath = '08-integrations';
-          } else if (fileName.includes('deployment') || fileName.includes('hosting') || fileName.includes('security') || fileName.includes('monitoring')) {
-            folderPath = '05-deployment';
-          } else if (fileName.includes('guide') || fileName.includes('user') || fileName.includes('donor') || fileName.includes('participant') || fileName.includes('admin')) {
-            folderPath = '06-user-guides';
-          } else if (fileName.includes('template') || fileName.includes('design') || fileName.includes('resource') || fileName.includes('bug') || fileName.includes('feature')) {
-            folderPath = '10-resources';
-          } else if (fileName.includes('overview') || fileName.includes('plan') || fileName.includes('documentation')) {
-            folderPath = '01-overview';
-          } else if (fileName.includes('architecture') || fileName.includes('system') || fileName.includes('blockchain') || fileName.includes('tokenomics')) {
-            folderPath = '02-architecture';
-          }
-        }
-      }
-      
-      const folder = folderMap.get(folderPath);
-      
-      if (folder) {
-        const docNode: FolderNode = {
-          id: doc.id,
-          name: doc.title || 'Untitled',
-          path: doc.file_path,
-          type: 'document'
-        };
-        
-        folder.children!.push(docNode);
-        folder.documentCount = (folder.documentCount || 0) + 1;
-      }
+    // Use the document's category field to assign it to the correct folder
+    const category = doc.category || 'Documentation';
+    const folder = folderMap.get(category);
+    
+    if (folder) {
+      // Create document node
+      const docNode: FolderNode = {
+        id: doc.id,
+        name: doc.title || 'Untitled',
+        path: doc.file_path || `${folder.path}/${doc.id}`,
+        type: 'document'
+      };
+      folder.children!.push(docNode);
+      folder.documentCount = (folder.documentCount || 0) + 1;
+    } else {
+      // Category not found - this shouldn't happen if sync is working correctly
+      console.warn(`Document "${doc.title}" has unknown category "${category}"`);
     }
   });
 

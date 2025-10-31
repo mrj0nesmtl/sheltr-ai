@@ -24,6 +24,22 @@ export interface KnowledgeDocument {
   access_roles?: string[]; // Array of roles that can access
   is_live?: boolean; // Whether document is live/public
   confidentiality_level: 'public' | 'internal' | 'confidential' | 'restricted';
+  // Publishing destinations
+  published_to_hub?: boolean; // Published to public docs hub
+  published_to_founders?: boolean; // Published to founders portal
+  published_to_ir?: boolean; // Published to investor relations
+  // Secure publishing settings
+  secure_slug?: string;
+  secure_badge?: string;
+  secure_badge_color?: string;
+  secure_icon?: string;
+  founders_description?: string;
+  ir_description?: string;
+  source_directory?: string;
+  local_file_path?: string;
+  // Permission system
+  permission_level?: 'public' | 'authenticated' | 'role_based' | 'private';
+  visibility_scope?: 'global' | 'shelter' | 'organization';
 }
 
 export interface KnowledgeStats {
@@ -192,47 +208,6 @@ class KnowledgeDashboardService {
   }
 
   /**
-   * Update an existing knowledge document
-   */
-  async updateKnowledgeDocument(
-    documentId: string,
-    updates: {
-      title: string;
-      content: string;
-      category: string;
-      tags: string[];
-      status: string;
-    }
-  ): Promise<{ success: boolean; data: { message: string } }> {
-    try {
-      const formData = new FormData();
-      formData.append('title', updates.title);
-      formData.append('content', updates.content);
-      formData.append('category', updates.category);
-      formData.append('tags', updates.tags.join(', '));
-      formData.append('status', updates.status);
-
-      const token = await this.getAuthToken();
-      const response = await fetch(`${this.baseUrl}/api/v1/knowledge-dashboard/documents/${documentId}`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error(`Failed to update knowledge document: ${response.statusText}`);
-      }
-
-      return await response.json();
-    } catch (error) {
-      console.error('Error updating knowledge document:', error);
-      throw error;
-    }
-  }
-
-  /**
    * Update knowledge document from file upload (with embedding regeneration)
    */
   async updateKnowledgeDocumentFromFile(
@@ -273,20 +248,35 @@ class KnowledgeDashboardService {
   }
 
   /**
-   * Update a knowledge document
+   * Update a knowledge document (with ALL fields including permissions)
    */
-  async updateKnowledgeDocument(documentId: string, documentData: {
+  async updateKnowledgeDocument(documentId: string, documentData: Partial<{
     title: string;
     content: string;
     category: string;
     tags: string[];
     status: string;
-    sharing_level?: string;
-    shared_with?: string[];
-    access_roles?: string[];
-    is_live?: boolean;
-    confidentiality_level?: string;
-  }): Promise<{ success: boolean; data: { message: string } }> {
+    sharing_level: string;
+    shared_with: string[];
+    access_roles: string[];
+    is_live: boolean;
+    confidentiality_level: string;
+    // NEW permission fields
+    permission_level: string;
+    is_private: boolean;
+    visibility_scope: string;
+    // Secure publishing fields
+    published_to_founders: boolean;
+    published_to_ir: boolean;
+    secure_slug: string;
+    secure_badge: string;
+    secure_badge_color: string;
+    secure_icon: string;
+    founders_description: string;
+    ir_description: string;
+    source_directory: string;
+    local_file_path: string;
+  }>): Promise<{ success: boolean; data: { message: string } }> {
     try {
       const apiUrl = `${this.baseUrl}/api/v1/knowledge-dashboard/documents/${documentId}`;
       console.log('📝 Updating knowledge document at:', apiUrl);

@@ -38,14 +38,14 @@ class SyncStatus(BaseModel):
 
 @router.post("/secure-docs/sync", response_model=SyncSecureDocsResponse)
 async def sync_secure_documents(
-    current_user: dict = Depends(require_super_admin)
+    current_user: dict = Depends(require_super_admin())
 ):
     """
     Trigger sync of secure documents from .local-secure-docs to Firestore.
     Only accessible to Super Admins.
     """
     try:
-        logger.info(f"🔒 Secure docs sync triggered by {current_user.get('email')}")
+        logger.info(f"🔒 Secure docs sync triggered by {current_user.get('email', 'unknown')}")
         
         # Check if .local-secure-docs directory exists
         if not SECURE_DOCS_PATH.exists():
@@ -176,7 +176,7 @@ async def get_secure_sync_status(
 
 @router.get("/secure-docs/directories")
 async def list_secure_directories(
-    current_user: dict = Depends(require_super_admin)
+    current_user: dict = Depends(require_super_admin())
 ):
     """
     List secure document directories and their file counts.

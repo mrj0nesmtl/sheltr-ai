@@ -610,7 +610,7 @@ export default function PlatformOverviewPage() {
 
             <div className="mt-8 text-center">
               <div className="inline-flex flex-col sm:flex-row gap-3">
-                <Link href="/">
+                <Link href="/login">
                   <Button size="lg" className="bg-red-600 hover:bg-red-700">
                     <Globe className="h-5 w-5 mr-2" />
                     Visit Platform

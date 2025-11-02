@@ -132,10 +132,11 @@ class GitHubService:
                 # If directory exists, get files recursively
                 await self._get_files_recursive(session, url, files)
                 
-                # Filter for markdown files only
+                # Filter for markdown files only, excluding README files and setup guides
                 markdown_files = [
                     f for f in files 
                     if f['name'].endswith(('.md', '.markdown'))
+                    and not self._should_skip_file(f['name'], f['path'])
                 ]
                 
                 logger.info(f"Found {len(markdown_files)} markdown files in repository")
@@ -214,6 +215,29 @@ class GitHubService:
         for pattern in skip_patterns:
             if pattern in full_path_lower:
                 return True
+        
+        return False
+    
+    def _should_skip_file(self, filename: str, file_path: str) -> bool:
+        """
+        Check if a file should be skipped during sync
+        
+        Excludes:
+        - README.md files (navigation/summary only, pollute knowledge base)
+        - MacBook setup guides (local development only)
+        """
+        filename_upper = filename.upper()
+        filename_lower = filename.lower()
+        
+        # Skip README files (they're just directory summaries with links)
+        if filename_upper == 'README.MD' or filename_upper == 'README.MARKDOWN':
+            logger.debug(f"Skipping README file: {file_path}")
+            return True
+        
+        # Skip MacBook setup guides (local development only)
+        if 'macbook-setup' in filename_lower or 'quick-macbook-sync' in filename_lower:
+            logger.debug(f"Skipping setup guide: {file_path}")
+            return True
         
         return False
     

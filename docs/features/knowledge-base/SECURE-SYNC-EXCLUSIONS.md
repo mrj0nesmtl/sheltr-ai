@@ -50,6 +50,49 @@ The secure document sync script automatically excludes certain files from being 
 
 ---
 
+### **4. README Files** (Navigation/Summary Only) 🆕
+**Why:** Directory summaries with hyperlinks, pollute knowledge base with shallow content
+
+**Patterns:**
+- `README.md` (all directories)
+- `README.markdown`
+
+**Excluded Files:**
+- `docs/README.md`
+- `docs/api/README.md`
+- `docs/architecture/README.md`
+- `docs/architecture/payment-rails/README.md`
+- `docs/development/README.md`
+- `docs/ecosystem/README.md`
+- `docs/integrations/README.md`
+- `docs/operations/README.md`
+- `docs/overview/README.md`
+- `docs/reference/README.md`
+- `docs/resources/README.md`
+- `docs/user-guides/README.md`
+- `sheltr-tokens/docs/README.md`
+- `.local-secure-docs/README.md`
+- `.local-secure-docs/payment-rails/README.md`
+
+**Count:** 15+ files
+
+---
+
+### **5. Setup Guides** (Local Development Only) 🆕
+**Why:** MacBook-specific development setup, not relevant for knowledge base
+
+**Patterns:**
+- `*macbook-setup*.md`
+- `*quick-macbook-sync*.md`
+
+**Excluded Files:**
+- `docs/development/MACBOOK-SETUP-GUIDE.md`
+- `docs/development/QUICK-MACBOOK-SYNC.md`
+
+**Count:** 2 files
+
+---
+
 ## ✅ **What WILL Be Synced**
 
 ### **📁 founders/** (4 files)
@@ -69,9 +112,9 @@ The secure document sync script automatically excludes certain files from being 
 ### **📁 payment-rails/** (3 files)
 ✅ `ADYEN-INTEGRATION-STRATEGIC-ANALYSIS.md`  
 ✅ `IMPLEMENTATION-READINESS-SUMMARY.md`  
-✅ `README.md`  
+❌ `README.md` (summary/navigation only - excluded)  
 
-**Total: 3 documents synced**
+**Total: 2 documents synced** (1 README excluded)
 
 ---
 
@@ -102,10 +145,10 @@ The secure document sync script automatically excludes certain files from being 
 | Directory | Total Files | Synced | Excluded | Reason |
 |-----------|------------|--------|----------|--------|
 | **founders/** | 8 | 4 | 4 | 3 drafts, 1 CSV |
-| **payment-rails/** | 3 | 3 | 0 | - |
+| **payment-rails/** | 4 | 2 | 2 | 1 README, 1 duplicate |
 | **platform-admin/** | 15+ | 2 | 13+ | 1 credentials, 12+ welcome letters |
 | **shelter-research/** | 4 | 4 | 0 | - |
-| **TOTAL** | 30+ | **13** | 17+ | Safety first! |
+| **TOTAL** | 31+ | **12** | 19+ | Clean & focused! |
 
 ---
 
@@ -113,17 +156,16 @@ The secure document sync script automatically excludes certain files from being 
 
 ### **You Should See in Knowledge Base:**
 
-**🔥 Firebase Secure Docs (13 documents)**
+**🔥 Firebase Secure Docs (12 documents)**
 - 💼 **Founders** (4)
   - Business Plan
   - Covenant House Outreach
   - MSB Registration Guide
   - Royaltri Design Guide
   
-- 💳 **Payment Rails** (3)
+- 💳 **Payment Rails** (2)
   - Adyen Integration Analysis
   - Implementation Readiness
-  - README
   
 - ⚙️ **Platform Admin** (2)
   - Intro to SHELTR
@@ -149,6 +191,8 @@ The secure document sync script automatically excludes certain files from being 
 - 14+ welcome letters (dashboard sidebar use)
 - 1 credentials file (too sensitive)
 - 3 blog post drafts (not ready)
+- 15+ README files (navigation/summary only)
+- 2 setup guides (local development only)
 
 ---
 
@@ -193,7 +237,8 @@ The secure document sync script automatically excludes certain files from being 
 
 ---
 
-**Updated:** October 31, 2025  
+**Updated:** November 2, 2025  
 **Status:** ✅ Ready for Sync  
-**Expected Files:** 13 documents across 4 categories
+**Expected Files:** 12 documents across 4 categories  
+**Excluded:** 35+ files (README files, welcome letters, credentials, drafts, setup guides)
 

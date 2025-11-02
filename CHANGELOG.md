@@ -7,6 +7,134 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.86.0] - 2025-11-02 (KNOWLEDGE BASE SYNC EXCLUSIONS - README & SETUP GUIDES) 📋🧹
+
+### 🎯 Feature: Enhanced Sync Filters for Cleaner Knowledge Base
+
+**Problem**: README files and MacBook setup guides were polluting the Knowledge Base with:
+- Navigation/summary content (README files are just directory overviews with links)
+- Local development-only content (MacBook setup guides not relevant for general documentation)
+
+**Solution**: Enhanced both GitHub sync service and secure document sync script to automatically exclude these files.
+
+#### ✨ Added Exclusions
+
+**1. README Files** (15+ files excluded)
+- **Why**: Directory summaries with hyperlinks, not substantive documentation
+- **Pattern**: `README.md`, `README.markdown` (case-insensitive)
+- **Excluded From**:
+  - `docs/README.md`
+  - `docs/api/README.md`
+  - `docs/architecture/README.md`
+  - `docs/architecture/payment-rails/README.md`
+  - `docs/development/README.md`
+  - `docs/ecosystem/README.md`
+  - `docs/integrations/README.md`
+  - `docs/operations/README.md`
+  - `docs/overview/README.md`
+  - `docs/reference/README.md`
+  - `docs/resources/README.md`
+  - `docs/user-guides/README.md`
+  - `sheltr-tokens/docs/README.md`
+  - `.local-secure-docs/README.md`
+  - `.local-secure-docs/payment-rails/README.md`
+
+**2. MacBook Setup Guides** (2 files excluded)
+- **Why**: Local development setup only, not relevant for knowledge base
+- **Pattern**: `*macbook-setup*.md`, `*quick-macbook-sync*.md`
+- **Excluded From**:
+  - `docs/development/MACBOOK-SETUP-GUIDE.md`
+  - `docs/development/QUICK-MACBOOK-SYNC.md`
+
+#### 🔧 Modified Files
+
+**Backend - GitHub Sync Service**:
+- **File**: `apps/api/services/github_service.py`
+- **Changes**:
+  - Added `_should_skip_file()` method to filter unwanted files
+  - Checks for README files (case-insensitive)
+  - Checks for MacBook setup guides
+  - Integrated into `_get_repository_files()` filter chain
+- **Impact**: 15+ fewer files synced from docs/ to knowledge base
+
+**Scripts - Secure Document Sync**:
+- **File**: `scripts/sync-secure-documents.js`
+- **Changes**:
+  - Updated file exclusion logic in `syncDirectory()` function
+  - Added README detection (case-insensitive)
+  - Added setup guide detection
+  - Enhanced logging to show excluded file types
+- **Impact**: 1 fewer file synced from .local-secure-docs/ (payment-rails/README.md)
+
+**Documentation**:
+- **File**: `docs/features/knowledge-base/SECURE-SYNC-EXCLUSIONS.md`
+- **Changes**:
+  - Added section 4: README Files (Navigation/Summary Only)
+  - Added section 5: Setup Guides (Local Development Only)
+  - Updated sync summary table (12 documents expected, down from 13)
+  - Updated file counts and exclusion reasons
+
+#### 📊 Updated Sync Counts
+
+**Before** (Oct 31):
+- Expected sync: 13 documents
+- Total excluded: ~18 files
+
+**After** (Nov 2):
+- Expected sync: **12 documents** (1 README removed)
+- Total excluded: **35+ files** (17 additional README/setup files)
+
+**Breakdown**:
+- 14+ welcome letters
+- 1 credentials file
+- 3 draft documents
+- 15+ README files 🆕
+- 2 setup guides 🆕
+
+#### 🎯 Benefits
+
+1. **Cleaner Knowledge Base**
+   - Only substantive documentation synced
+   - No shallow navigation files
+   - No development-specific setup guides
+
+2. **Better Search Results**
+   - RAG queries return actual documentation, not README links
+   - Embeddings focus on real content, not summaries
+
+3. **Reduced Noise**
+   - Chatbot doesn't return "see the README" as answers
+   - Knowledge dashboard shows meaningful documents only
+
+4. **Lower Costs** (Marginal)
+   - 17 fewer files = fewer embeddings to generate
+   - Smaller knowledge base = slightly lower Firestore storage
+
+#### 🔄 Existing Exclusions (Unchanged)
+
+These exclusion patterns remain from previous versions:
+1. ✅ Welcome letters (`*welcome*.md`) - Dashboard use only
+2. ✅ Credentials files (`*credentials*.md`) - Too sensitive
+3. ✅ Draft documents (`*draft*.md`, `*blog-post*.md`) - Work in progress
+
+#### 🚀 Deployment
+
+**Changes are effective immediately** for:
+- New GitHub syncs (next time "Scan for Changes" is run)
+- New secure document syncs (next time sync button is clicked)
+
+**Existing README files in knowledge base**:
+- Will remain until manually deleted
+- Will not be re-synced on future updates
+- Can be cleaned up using Knowledge Base dashboard
+
+#### 📚 Related Documentation
+
+- [Sync Exclusions Guide](./docs/features/knowledge-base/SECURE-SYNC-EXCLUSIONS.md)
+- [Knowledge Base Sync System](./docs/features/knowledge-base/KNOWLEDGE-BASE-SYNC-SYSTEM.md)
+
+---
+
 ## [2.85.0] - 2025-11-02 (FIRESTORE CACHING IMPLEMENTATION - PHASE 1) 🚀💾
 
 ### 🎯 Feature: In-Memory Cache + HTTP Cache Headers for Cost Reduction

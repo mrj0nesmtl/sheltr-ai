@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { 
   ArrowLeft, 
   Star, 
-  Target, 
   Heart, 
   Brain, 
   Zap, 

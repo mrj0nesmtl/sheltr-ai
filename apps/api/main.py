@@ -179,6 +179,31 @@ async def add_process_time_header(request: Request, call_next):
     
     return response
 
+# HTTP Cache Headers Middleware - Cost Optimization (Nov 2025)
+@app.middleware("http")
+async def add_cache_headers(request: Request, call_next):
+    """
+    Add HTTP cache headers to reduce Firestore data transfer costs
+    Browsers will cache responses for 1 hour, reducing backend API calls
+    Expected savings: -$10-15/month in bandwidth costs
+    """
+    response = await call_next(request)
+    
+    # Cache Knowledge Base API responses for 1 hour (3600 seconds)
+    if "/api/v1/knowledge-dashboard" in str(request.url):
+        response.headers["Cache-Control"] = "public, max-age=3600"  # 1 hour cache
+        response.headers["Vary"] = "Accept-Encoding"  # Vary by encoding for gzip
+        response.headers["ETag"] = f"W/\"{int(time.time())}\"" # Weak ETag for cache validation
+        logger.debug(f"✅ Cache headers added for: {request.url}")
+    
+    # Cache static content endpoints longer (4 hours)
+    elif "/api/v1/knowledge/public" in str(request.url):
+        response.headers["Cache-Control"] = "public, max-age=14400"  # 4 hours
+        response.headers["Vary"] = "Accept-Encoding"
+        logger.debug(f"✅ Cache headers added (4h) for: {request.url}")
+    
+    return response
+
 # Global exception handler
 @app.exception_handler(HTTPException)
 async def http_exception_handler(request: Request, exc: HTTPException):

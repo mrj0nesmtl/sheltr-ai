@@ -319,7 +319,18 @@ export default function KnowledgeDashboard() {
     // Case-insensitive category matching to handle API vs Api vs api variations
     const matchesCategory = categoryFilter === 'all' || 
                            doc.category.toLowerCase() === categoryFilter.toLowerCase();
-    const matchesStatus = statusFilter === 'all' || doc.status === statusFilter;
+    
+    // Status filter - now includes Doc Hub filter
+    let matchesStatus = true;
+    if (statusFilter === 'dochub') {
+      // Show only documents published to Doc Hub with public visibility
+      matchesStatus = (doc as any).published_to_hub === true && 
+                     ((doc as any).permission_level === 'public' || 
+                      (doc as any).sharing_level === 'public' ||
+                      (!doc.is_private && !(doc as any).permission_level));
+    } else if (statusFilter !== 'all') {
+      matchesStatus = doc.status === statusFilter;
+    }
     
     // Folder filtering
     const matchesFolder = !selectedFolder || 
@@ -664,6 +675,7 @@ export default function KnowledgeDashboard() {
                   <SelectItem value="active">✅ Active</SelectItem>
                   <SelectItem value="archived">📦 Archived</SelectItem>
                   <SelectItem value="processing">⏳ Processing</SelectItem>
+                  <SelectItem value="dochub">📘 Doc Hub</SelectItem>
                 </SelectContent>
               </Select>
               

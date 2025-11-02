@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { 
   RefreshCw, 
   GitBranch, 
@@ -18,7 +19,9 @@ import {
   Database,
   Brain,
   ArrowDown,
-  Cog
+  Cog,
+  Trash2,
+  Shield
 } from 'lucide-react';
 
 interface SyncChanges {
@@ -48,6 +51,7 @@ interface GitHubSyncPanelProps {
 export const GitHubSyncPanel: React.FC<GitHubSyncPanelProps> = ({ onSyncComplete, userRole }) => {
   const [isScanning, setIsScanning] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
+  const [showClearDialog, setShowClearDialog] = useState(false);
   const [isClearing, setIsClearing] = useState(false);
   const [changes, setChanges] = useState<SyncChanges | null>(null);
   
@@ -230,19 +234,16 @@ export const GitHubSyncPanel: React.FC<GitHubSyncPanelProps> = ({ onSyncComplete
     }
   };
 
-  const clearKnowledgeBase = async () => {
-    if (!confirm('⚠️ WARNING: This will delete ALL documents from the knowledge base. Are you sure you want to continue?')) {
-      return;
-    }
-
+  const clearKnowledgeBase = async (clearType: 'all' | 'github_only' | 'secure_only') => {
     setIsClearing(true);
     setError(null);
+    setShowClearDialog(false);
 
     try {
       const token = await getAuthToken();
       const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
 
-      const response = await fetch(`${baseUrl}/api/v1/knowledge-dashboard/clear-knowledge-base`, {
+      const response = await fetch(`${baseUrl}/api/v1/knowledge-dashboard/clear-knowledge-base?clear_type=${clearType}`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -255,7 +256,12 @@ export const GitHubSyncPanel: React.FC<GitHubSyncPanelProps> = ({ onSyncComplete
       }
 
       const data = await response.json();
-      alert(`✅ Knowledge base cleared successfully!\n\nStorage files deleted: ${data.storage_files_deleted}\nFirestore docs deleted: ${data.firestore_docs_deleted}\n\nYou can now scan GitHub to sync fresh documentation.`);
+      
+      const clearTypeLabel = clearType === 'all' ? 'ALL documents' : 
+                             clearType === 'github_only' ? 'GitHub-synced documents' : 
+                             'Secure documents';
+      
+      alert(`✅ Knowledge base cleared successfully!\n\nCleared: ${clearTypeLabel}\nStorage files deleted: ${data.storage_files_deleted}\nFirestore docs deleted: ${data.firestore_docs_deleted}\nChunks deleted: ${data.chunks_deleted}\n\nYou can now scan GitHub to sync fresh documentation.`);
       
       // Reset changes state
       setChanges(null);
@@ -327,11 +333,11 @@ export const GitHubSyncPanel: React.FC<GitHubSyncPanelProps> = ({ onSyncComplete
           {/* Clear KB button - Super Admin only */}
           {userRole === 'super_admin' && (
             <Button 
-              onClick={clearKnowledgeBase} 
+              onClick={() => setShowClearDialog(true)} 
               disabled={isScanning || isSyncing || isClearing}
               variant="destructive"
               className="flex-shrink-0 bg-orange-600 hover:bg-orange-700"
-              title="Clear all documents from Knowledge Base (Super Admin only)"
+              title="Clear documents from Knowledge Base (Super Admin only)"
             >
               <Database className={`h-4 w-4 mr-2 ${isClearing ? 'animate-pulse' : ''}`} />
               {isClearing ? 'Clearing...' : 'Clear KB'}
@@ -479,6 +485,80 @@ export const GitHubSyncPanel: React.FC<GitHubSyncPanelProps> = ({ onSyncComplete
           </p>
         </div>
       </CardContent>
+
+      {/* Clear Knowledge Base Dialog */}
+      <Dialog open={showClearDialog} onOpenChange={setShowClearDialog}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Trash2 className="h-5 w-5 text-orange-600" />
+              Clear Knowledge Base
+            </DialogTitle>
+            <DialogDescription>
+              Choose what type of documents you want to remove from the Knowledge Base.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4 py-4">
+            {/* Option 1: Clear GitHub Only */}
+            <div className="p-4 border-2 border-blue-200 dark:border-blue-800 rounded-lg hover:border-blue-400 dark:hover:border-blue-600 transition-colors">
+              <Button
+                onClick={() => clearKnowledgeBase('github_only')}
+                disabled={isClearing}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+              >
+                <Github className="h-4 w-4 mr-2" />
+                Clear GitHub Docs Only
+              </Button>
+              <p className="text-xs text-muted-foreground mt-2">
+                Removes all documents synced from GitHub. Your 16 secure documents will be preserved.
+              </p>
+            </div>
+
+            {/* Option 2: Clear Secure Only */}
+            <div className="p-4 border-2 border-red-200 dark:border-red-800 rounded-lg hover:border-red-400 dark:hover:border-red-600 transition-colors">
+              <Button
+                onClick={() => clearKnowledgeBase('secure_only')}
+                disabled={isClearing}
+                variant="destructive"
+                className="w-full bg-red-600 hover:bg-red-700"
+              >
+                <Shield className="h-4 w-4 mr-2" />
+                Clear Secure Docs Only
+              </Button>
+              <p className="text-xs text-muted-foreground mt-2">
+                Removes only secure documents from .local-secure-docs. GitHub docs will be preserved.
+              </p>
+            </div>
+
+            {/* Option 3: Clear Everything */}
+            <div className="p-4 border-2 border-orange-200 dark:border-orange-800 rounded-lg hover:border-orange-400 dark:hover:border-orange-600 transition-colors">
+              <Button
+                onClick={() => clearKnowledgeBase('all')}
+                disabled={isClearing}
+                variant="destructive"
+                className="w-full bg-orange-600 hover:bg-orange-700"
+              >
+                <Database className="h-4 w-4 mr-2" />
+                Clear Everything (Nuclear)
+              </Button>
+              <p className="text-xs text-muted-foreground mt-2">
+                ⚠️ Removes ALL documents (GitHub + Secure). Use this to start completely fresh.
+              </p>
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setShowClearDialog(false)}
+              disabled={isClearing}
+            >
+              Cancel
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </Card>
   );
 };

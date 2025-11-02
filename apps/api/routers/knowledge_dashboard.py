@@ -386,29 +386,50 @@ async def sync_github_files(
 
 @router.post("/clear-knowledge-base")
 async def clear_knowledge_base(
+    clear_type: str = "all",  # Options: "all", "github_only", "secure_only"
     current_user: Dict = Depends(get_current_user)
 ):
-    """Clear all documents from the knowledge base (Super Admin only)"""
+    """
+    Clear documents from the knowledge base (Super Admin only)
+    
+    Args:
+        clear_type: Type of documents to clear
+            - "all": Clear everything (GitHub + Secure docs)
+            - "github_only": Clear only GitHub-synced docs
+            - "secure_only": Clear only secure documents
+    """
     try:
         # Verify super admin access
         if current_user.get('role') != 'super_admin':
             raise HTTPException(status_code=403, detail="Super admin access required")
         
-        logger.info(f"Clearing knowledge base - requested by {current_user.get('email')}")
+        logger.info(f"Clearing knowledge base (type: {clear_type}) - requested by {current_user.get('email')}")
         
         # Get knowledge service
         from services.knowledge_dashboard_service import KnowledgeDashboardService
         kb_service = KnowledgeDashboardService()
         
         # Get all documents
-        documents = await kb_service.get_knowledge_documents()
-        logger.info(f"Found {len(documents)} documents to clear")
+        all_documents = await kb_service.get_knowledge_documents()
+        
+        # Filter documents based on clear_type
+        if clear_type == "github_only":
+            documents = [doc for doc in all_documents if doc.get('synced_from_github') == True]
+            logger.info(f"Found {len(documents)} GitHub-synced documents to clear (out of {len(all_documents)} total)")
+        elif clear_type == "secure_only":
+            documents = [doc for doc in all_documents if doc.get('source_directory') == '.local-secure-docs']
+            logger.info(f"Found {len(documents)} secure documents to clear (out of {len(all_documents)} total)")
+        else:  # "all"
+            documents = all_documents
+            logger.info(f"Found {len(documents)} documents to clear (ALL)")
         
         deleted_count = 0
+        doc_ids_to_delete = []
         
         # Delete from Firebase Storage
         for doc in documents:
             try:
+                doc_ids_to_delete.append(doc.get('id'))
                 file_path = doc.get('file_path', '')
                 if file_path:
                     blob = kb_service.bucket.blob(file_path)
@@ -419,25 +440,32 @@ async def clear_knowledge_base(
             except Exception as e:
                 logger.warning(f"Error deleting storage file {file_path}: {str(e)}")
         
-        # Delete from Firestore - knowledge_documents
-        docs = kb_service.db.collection('knowledge_documents').stream()
+        # Delete from Firestore - knowledge_documents (only selected docs)
         firestore_deleted = 0
-        for doc in docs:
-            doc.reference.delete()
-            firestore_deleted += 1
+        for doc_id in doc_ids_to_delete:
+            try:
+                kb_service.db.collection('knowledge_documents').document(doc_id).delete()
+                firestore_deleted += 1
+            except Exception as e:
+                logger.warning(f"Error deleting Firestore doc {doc_id}: {str(e)}")
         
-        # Delete from Firestore - knowledge_chunks (embeddings)
-        chunks = kb_service.db.collection('knowledge_chunks').stream()
+        # Delete from Firestore - knowledge_chunks (only chunks for deleted docs)
         chunks_deleted = 0
-        for chunk in chunks:
-            chunk.reference.delete()
-            chunks_deleted += 1
+        for doc_id in doc_ids_to_delete:
+            try:
+                chunks = kb_service.db.collection('knowledge_chunks').where('document_id', '==', doc_id).stream()
+                for chunk in chunks:
+                    chunk.reference.delete()
+                    chunks_deleted += 1
+            except Exception as e:
+                logger.warning(f"Error deleting chunks for doc {doc_id}: {str(e)}")
         
-        logger.info(f"Knowledge base cleared - {deleted_count} storage files, {firestore_deleted} Firestore docs, {chunks_deleted} chunks")
+        logger.info(f"Knowledge base cleared ({clear_type}) - {deleted_count} storage files, {firestore_deleted} Firestore docs, {chunks_deleted} chunks")
         
         return {
             "success": True,
-            "message": "Knowledge base cleared successfully",
+            "message": f"Knowledge base cleared successfully ({clear_type})",
+            "clear_type": clear_type,
             "storage_files_deleted": deleted_count,
             "firestore_docs_deleted": firestore_deleted,
             "chunks_deleted": chunks_deleted

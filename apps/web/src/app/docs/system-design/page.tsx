@@ -19,7 +19,9 @@ import {
   Coins,
   TrendingUp,
   Lock,
-  Globe
+  Globe,
+  Home,
+  ChevronRight
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -49,7 +51,7 @@ function SystemDesignContent() {
               <ThemeLogo />
               <div>
                 <h1 className="text-xl font-bold">System Design Architecture</h1>
-                <p className="text-sm text-muted-foreground">Enterprise Payment Infrastructure</p>
+                <p className="text-sm text-muted-foreground">Enterprise Donation Infrastructure</p>
               </div>
             </Link>
             <div className="flex items-center space-x-4">
@@ -65,6 +67,39 @@ function SystemDesignContent() {
       </header>
       )}
 
+      {/* Breadcrumb Navigation */}
+      <div className="bg-white/50 dark:bg-slate-900/50 border-b">
+        <div className="container mx-auto px-4 py-3">
+          <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              asChild
+              className="hover:bg-muted p-1 h-auto"
+            >
+              <Link href="/">
+                <Home className="h-4 w-4" />
+              </Link>
+            </Button>
+            <ChevronRight className="h-4 w-4" />
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              asChild
+              className="hover:bg-muted px-2 py-1 h-auto"
+            >
+              <Link href="/docs">
+                Documentation
+              </Link>
+            </Button>
+            <ChevronRight className="h-4 w-4" />
+            <span className="font-medium text-foreground">
+              System Design Architecture
+            </span>
+          </div>
+        </div>
+      </div>
+
       {/* Hero Section */}
       <section className="py-16 px-4">
         <div className="container mx-auto max-w-6xl">
@@ -74,10 +109,10 @@ function SystemDesignContent() {
               <Badge className="bg-blue-600 text-white px-4 py-1">SYSTEM ARCHITECTURE</Badge>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Multi-Tenant SaaS Architecture
+              Multi-Tenant Cloud Architecture
             </h1>
             <p className="text-xl text-muted-foreground mb-8 max-w-4xl mx-auto">
-              Enterprise payment infrastructure with single-token stable fund architecture, 
+              Enterprise donation and housing fund infrastructure with single-token stable fund architecture, 
               zero cryptocurrency exposure for participants, and guaranteed institutional returns
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">

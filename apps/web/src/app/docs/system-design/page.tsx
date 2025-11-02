@@ -54,10 +54,10 @@ function SystemDesignContent() {
             </Link>
             <div className="flex items-center space-x-4">
               <Badge className="bg-blue-600 hover:bg-blue-700 text-white">
-                v2.0 - Enterprise Edition
+                v2.86.0 - Complete RAG System
               </Badge>
               <Badge variant="outline" className="text-xs">
-                Updated: September 28, 2025
+                Updated: November 2, 2025
               </Badge>
             </div>
           </div>
@@ -165,8 +165,9 @@ function SystemDesignContent() {
               <div className="text-center mb-8">
                 <h2 className="text-3xl font-bold mb-4">Enterprise System Overview</h2>
                 <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-                  SHELTR combines Next.js 15 frontend with Firebase backend, enterprise payment processing (Adyen), 
-                  and Base network blockchain integration for housing fund transparency.
+                  SHELTR combines Next.js 15 frontend with Firebase backend, complete RAG Knowledge Base with AI embeddings, 
+                  enterprise payment processing (Adyen), and Base network blockchain integration for housing fund transparency. 
+                  Now with 56% cost optimization and hybrid secure portal architecture.
                 </p>
               </div>
 
@@ -696,39 +697,51 @@ contract SHELTRStablecoin is ERC20, AccessControl, ReentrancyGuard {
                 </CardHeader>
                 <CardContent>
                   <div className="grid md:grid-cols-2 gap-6">
-                    <div>
-                      <h4 className="font-semibold mb-3 text-green-600">✅ Implemented & Live</h4>
-                      <ul className="space-y-2 text-sm">
-                        <li className="flex items-center gap-2">
-                          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                          <span>Complete website with stakeholder pages</span>
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                          <span>Firebase authentication & RBAC</span>
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                          <span>Role-based dashboards</span>
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                          <span>Donation system with QR codes</span>
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                          <span>Blog & knowledge management</span>
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                          <span>AI chatbot system</span>
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                          <span>Gallery management system</span>
-                        </li>
-                      </ul>
-                    </div>
+                  <div>
+                    <h4 className="font-semibold mb-3 text-green-600">✅ Implemented & Live</h4>
+                    <ul className="space-y-2 text-sm">
+                      <li className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                        <span>Complete website with stakeholder pages</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                        <span>Firebase authentication & RBAC</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                        <span>Role-based dashboards</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                        <span>Complete RAG Knowledge Base (62+ GitHub docs, 13 secure docs)</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                        <span>Founders Portal with hybrid dynamic/static system</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                        <span>Public Documentation Hub with GitHub sync</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                        <span>GCP Cost Optimization (56% reduction, $54/mo savings)</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                        <span>Donation system with QR codes</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                        <span>Blog & gallery management systems</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                        <span>AI chatbot with RAG integration</span>
+                      </li>
+                    </ul>
+                  </div>
                     <div>
                       <h4 className="font-semibold mb-3 text-blue-600">🔵 Planned Integrations</h4>
                       <ul className="space-y-2 text-sm">
@@ -766,15 +779,15 @@ contract SHELTRStablecoin is ERC20, AccessControl, ReentrancyGuard {
               <div className="grid md:grid-cols-3 gap-6">
                 <Card className="border-green-200 dark:border-green-800">
                   <CardHeader>
-                    <CardTitle className="text-green-600">Q4 2025</CardTitle>
-                    <CardDescription>Smart Contract Deployment</CardDescription>
+                    <CardTitle className="text-green-600">Q4 2025 ✅</CardTitle>
+                    <CardDescription>RAG & Cost Optimization - COMPLETE</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <ul className="space-y-2 text-sm">
-                      <li>• Deploy SHELTR Stablecoin on Base</li>
-                      <li>• Set up Coinbase Prime custody</li>
-                      <li>• Implement payment distribution</li>
-                      <li>• Connect to live smart contracts</li>
+                      <li>✅ Complete RAG Knowledge Base</li>
+                      <li>✅ Founders Portal (hybrid system)</li>
+                      <li>✅ Public Documentation Hub</li>
+                      <li>✅ 56% GCP cost reduction</li>
                     </ul>
                   </CardContent>
                 </Card>
@@ -782,14 +795,14 @@ contract SHELTRStablecoin is ERC20, AccessControl, ReentrancyGuard {
                 <Card className="border-blue-200 dark:border-blue-800">
                   <CardHeader>
                     <CardTitle className="text-blue-600">Q1 2026</CardTitle>
-                    <CardDescription>Enterprise Integration</CardDescription>
+                    <CardDescription>Blockchain & Payment Rails</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <ul className="space-y-2 text-sm">
+                      <li>• Deploy SHELTR Stablecoin on Base</li>
+                      <li>• Set up Coinbase Prime custody</li>
                       <li>• Adyen payment processing</li>
                       <li>• Virtual debit card system</li>
-                      <li>• Real QR code generation</li>
-                      <li>• Custom domain deployment</li>
                     </ul>
                   </CardContent>
                 </Card>

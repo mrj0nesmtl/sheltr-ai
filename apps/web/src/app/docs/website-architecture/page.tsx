@@ -85,6 +85,9 @@ export default function WebsiteArchitecturePage() {
     "🌳 Visual site tree mapping 50+ public and authenticated pages", 
     "✅ 100+ comprehensive test cases prioritized by criticality",
     "🎯 Role-based access matrix ensuring proper security boundaries",
+    "🤖 Complete RAG Knowledge Base with AI embeddings (75+ documents)",
+    "🔒 Founders Portal with hybrid dynamic/static secure system",
+    "💰 GCP Cost Optimization achieving 56% reduction ($54/mo savings)",
     "⚙️ Business logic testing for service booking and form persistence",
     "🏠 Complete ecosystem testing (Gallery, Blog, Knowledge Base, Financial)",
     "📊 Performance KPIs and deployment readiness metrics",
@@ -173,12 +176,12 @@ export default function WebsiteArchitecturePage() {
               <Building className="w-8 h-8 text-white" />
             </div>
             <div>
-              <Badge className="bg-indigo-500 hover:bg-indigo-600 mb-2">Platform Framework</Badge>
+              <Badge className="bg-indigo-500 hover:bg-indigo-600 mb-2">Platform Framework v2.86.0</Badge>
               <h1 className="text-4xl font-bold text-foreground mb-2">
                 Platform Architecture & QA Framework
               </h1>
               <p className="text-xl text-muted-foreground">
-                Complete site structure, 5-role access matrix, and enterprise-grade quality assurance testing framework
+                Complete site structure, 5-role access matrix, RAG Knowledge Base, Founders Portal, and enterprise-grade quality assurance testing framework
               </p>
             </div>
           </div>
@@ -191,7 +194,7 @@ export default function WebsiteArchitecturePage() {
             </div>
             <div className="flex items-center text-sm text-muted-foreground">
               <CheckCircle className="w-4 h-4 mr-2" />
-              Updated September 21, 2025
+              Updated November 2, 2025
             </div>
           </div>
 
@@ -270,16 +273,16 @@ export default function WebsiteArchitecturePage() {
                   <Globe className="w-12 h-12 mx-auto mb-4 text-indigo-600" />
                   <CardTitle>50+ Pages Mapped</CardTitle>
                   <CardDescription>
-                    Complete site architecture including all public and authenticated routes
+                    Complete site architecture including public, authenticated, and secure portal routes
                   </CardDescription>
                 </CardHeader>
               </Card>
               <Card className="text-center">
                 <CardHeader>
                   <CheckCircle className="w-12 h-12 mx-auto mb-4 text-green-600" />
-                  <CardTitle>100+ Test Cases</CardTitle>
+                  <CardTitle>75+ RAG Documents</CardTitle>
                   <CardDescription>
-                    Comprehensive testing checklist covering all critical functionality
+                    Complete Knowledge Base with GitHub sync, secure docs, and AI embeddings
                   </CardDescription>
                 </CardHeader>
               </Card>
@@ -288,7 +291,7 @@ export default function WebsiteArchitecturePage() {
                   <Shield className="w-12 h-12 mx-auto mb-4 text-purple-600" />
                   <CardTitle>5-Role RBAC System</CardTitle>
                   <CardDescription>
-                    Complete access control matrix including Platform Administrator role
+                    Complete access control with hybrid secure portal architecture
                   </CardDescription>
                 </CardHeader>
               </Card>

@@ -42,7 +42,7 @@ export default function BlockchainPage() {
               </div>
               <div>
                 <h3 className="text-lg font-bold mb-2 text-amber-900 dark:text-amber-100">
-                  Blockchain Architecture v2.0 Transformation
+                  Blockchain Architecture v2.0
                 </h3>
                 <p className="text-amber-800 dark:text-amber-200 text-sm leading-relaxed">
                   Our blockchain implementation has evolved from dual-token complexity to a <strong>single-token stable fund ecosystem</strong> 
@@ -63,7 +63,7 @@ export default function BlockchainPage() {
               <div className="flex-1">
                 <div className="mb-3">
                   <h1 className="text-3xl sm:text-4xl font-bold mb-2 leading-tight">SHELTR Blockchain Architecture v2.0</h1>
-                  <Badge className="bg-emerald-500 text-white text-sm">STRATEGIC IMPLEMENTATION</Badge>
+                  <Badge className="bg-emerald-500 text-white text-sm">TESTNET ARCHITECTURE</Badge>
                 </div>
                 <p className="text-lg text-muted-foreground mb-3">
                   Single-token stable fund ecosystem with enterprise payment infrastructure and guaranteed institutional returns
@@ -73,7 +73,7 @@ export default function BlockchainPage() {
                   <span>•</span>
                   <span>September 26, 2025</span>
                   <span>•</span>
-                  <Badge className="bg-blue-500 text-white text-xs">ENTERPRISE-GRADE ARCHITECTURE</Badge>
+                  <Badge className="bg-blue-500 text-white text-xs">ENTERPRISE-GRADE</Badge>
                 </div>
                 
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">

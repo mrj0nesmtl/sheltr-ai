@@ -1,4 +1,4 @@
-# 💳 Payment Rails - Public Documentation
+# 💳 Payment Rails - Documentation
 
 **Public payment architecture and integration guides**
 

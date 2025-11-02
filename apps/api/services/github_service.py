@@ -300,14 +300,22 @@ class GitHubService:
                     auto_permission = determine_permission_from_path(file_path)
                     logger.info(f"Auto-assigned permission '{auto_permission.value}' for {file_path}")
                     
-                    # Check if document already exists
+                    # Check if document already exists - IMPROVED DUPLICATE DETECTION
                     kb_documents = await kb_service.get_knowledge_documents()
                     existing_doc = None
                     
                     for doc in kb_documents:
+                        # PRIMARY: Check github_path field (most reliable)
+                        if doc.get('github_path') == file_path:
+                            existing_doc = doc
+                            logger.info(f"✅ Found existing document by github_path: {file_path}")
+                            break
+                        
+                        # FALLBACK: Check file_path with prefix stripping (for older documents)
                         doc_path = doc.get('file_path', '').replace('knowledge-base/public/', '')
                         if doc_path == file_path:
                             existing_doc = doc
+                            logger.info(f"✅ Found existing document by file_path: {file_path}")
                             break
                     
                     if existing_doc:

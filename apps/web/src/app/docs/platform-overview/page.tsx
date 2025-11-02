@@ -67,11 +67,11 @@ export default function PlatformOverviewPage() {
                   Comprehensive guides, API references, and technical documentation for the SHELTR platform
                 </p>
                 <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground mb-4">
-                  <span>Version 2.0 - Published</span>
+                  <span>Version 2.86.0 - Published</span>
                   <span>•</span>
-                  <span>October 30, 2025</span>
+                  <span>November 2, 2025</span>
                   <span>•</span>
-                  <Badge variant="outline" className="text-xs">18 views</Badge>
+                  <Badge variant="outline" className="text-xs">Complete RAG System</Badge>
                 </div>
                 
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
@@ -271,16 +271,16 @@ export default function PlatformOverviewPage() {
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <div className="flex items-center justify-between p-3 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg">
-                    <span className="text-2xl font-bold text-emerald-600">85%</span>
-                    <span className="text-sm text-muted-foreground">Direct to participant</span>
+                    <span className="text-2xl font-bold text-emerald-600">80%</span>
+                    <span className="text-sm text-muted-foreground">Virtual debit cards</span>
                   </div>
                   <div className="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                    <span className="text-2xl font-bold text-blue-600">10%</span>
-                    <span className="text-sm text-muted-foreground">Housing fund</span>
+                    <span className="text-2xl font-bold text-blue-600">15%</span>
+                    <span className="text-sm text-muted-foreground">Housing fund (4-6% APY)</span>
                   </div>
                   <div className="flex items-center justify-between p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
                     <span className="text-2xl font-bold text-purple-600">5%</span>
-                    <span className="text-sm text-muted-foreground">Shelter operations</span>
+                    <span className="text-sm text-muted-foreground">Platform operations</span>
                   </div>
                 </CardContent>
               </Card>
@@ -526,8 +526,8 @@ export default function PlatformOverviewPage() {
               <Card className="text-center">
                 <CardContent className="pt-6">
                   <Brain className="h-8 w-8 text-orange-600 mx-auto mb-2" />
-                  <div className="text-3xl font-bold text-orange-600 mb-1">60+</div>
-                  <div className="text-sm text-muted-foreground">Knowledge Docs</div>
+                  <div className="text-3xl font-bold text-orange-600 mb-1">75+</div>
+                  <div className="text-sm text-muted-foreground">RAG Documents</div>
                 </CardContent>
               </Card>
             </div>
@@ -536,10 +536,11 @@ export default function PlatformOverviewPage() {
               <div className="flex items-start gap-3">
                 <CheckCircle className="h-6 w-6 text-emerald-600 mt-1 flex-shrink-0" />
                 <div>
-                  <h3 className="font-semibold mb-2">Platform Status: ✅ Production Ready</h3>
+                  <h3 className="font-semibold mb-2">Platform Status: ✅ Production Ready (v2.86.0)</h3>
                   <p className="text-sm text-muted-foreground">
-                    As of October 2025, SHELTR is fully operational with advanced AI agents, comprehensive security, 
-                    and complete multi-tenant architecture serving active shelters in Montreal.
+                    As of November 2025, SHELTR is fully operational with complete RAG Knowledge Base (75+ docs), 
+                    Founders Portal hybrid system, advanced AI agents, 56% GCP cost optimization, and comprehensive 
+                    multi-tenant architecture serving active shelters in Montreal.
                   </p>
                 </div>
               </div>

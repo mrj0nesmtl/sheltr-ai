@@ -1,4 +1,4 @@
-# 🌟 Platform Overview
+# Platform Overview
 
 **Revolutionizing charitable giving through technology-driven transparency and direct impact**
 
@@ -43,13 +43,13 @@ Unlike traditional donation platforms, SHELTR recognizes four distinct user type
 - **Participant**: Individuals receiving donations (the heart of our platform)
 - **Donor**: Contributors making a difference
 
-#### 💰 SmartFund™ Distribution
+#### 💰 SmartFund™ Distribution (80/15/5)
 
-Every donation automatically distributes through blockchain smart contracts:
+Every donation automatically distributes through enterprise payment infrastructure:
 
-**85%** → Direct to participant's digital wallet  
-**10%** → Sustainable housing fund for long-term solutions  
-**5%** → Participant's registered shelter operations support
+**80%** → Virtual debit cards (zero crypto exposure for participants)  
+**15%** → Housing fund with 4-6% guaranteed APY (SHELTR Stablecoin on Base)  
+**5%** → Platform operations for sustainable revenue
 
 #### 📱 QR-Powered Direct Giving
 
@@ -153,11 +153,15 @@ SHELTR transforms the traditional charitable giving model by removing intermedia
 
 🏢 **Enterprise Scalability**: Multi-tenant architecture supports unlimited growth
 
-🤖 **Advanced AI**: Predictive analytics, chatbots, and automated insights
+🤖 **Complete RAG System**: 75+ documents with AI embeddings and semantic search
+
+📚 **Founders Portal**: Hybrid dynamic/static system for secure document publishing
+
+💰 **Cost Optimization**: 56% GCP reduction via Firestore caching + HTTP cache headers
 
 📱 **Mobile-First**: Native iOS/Android apps with offline capabilities
 
-⛓️ **Blockchain Native**: Full token system with automated smart contracts
+⛓️ **Single-Token Architecture**: Enterprise payment rails with zero crypto exposure
 
 ---
 
@@ -166,7 +170,7 @@ SHELTR transforms the traditional charitable giving model by removing intermedia
 ### Modern Technology Stack
 
 **Frontend:**
-- Next.js 14 with App Router
+- Next.js 15.4.3 with App Router
 - React 18 with TypeScript
 - Tailwind CSS + Shadcn/UI
 - Real-time Firebase sync
@@ -185,9 +189,11 @@ SHELTR transforms the traditional charitable giving model by removing intermedia
 
 **AI & Automation:**
 - OpenAI GPT-4 for chatbots
-- RAG (Retrieval-Augmented Generation)
-- 96 FAQ instant responses
-- Knowledge base embeddings
+- Complete RAG system with 75+ documents
+- Vector embeddings for semantic search
+- GitHub sync with smart exclusions
+- Founders Portal hybrid architecture
+- Multi-agent system with MCP integration
 
 ---
 
@@ -195,13 +201,15 @@ SHELTR transforms the traditional charitable giving model by removing intermedia
 
 ### Platform Statistics
 
-**As of October 2025:**
+**As of November 2, 2025 (v2.86.0):**
 
 💰 **$1,534** in total donations processed  
 👥 **10+ active shelters** in Montreal  
 🏆 **100% uptime** since production launch  
 ⚡ **<1s response time** for FAQ queries  
-📊 **60+ knowledge documents** powering AI
+📊 **75+ RAG documents** (62 GitHub + 13 secure) powering AI  
+🎯 **Founders Portal** with hybrid dynamic/static system  
+💸 **56% GCP cost reduction** ($54/mo savings via caching)
 
 ### Success Stories
 
@@ -288,7 +296,7 @@ SHELTR transforms the traditional charitable giving model by removing intermedia
 
 ---
 
-**Last Updated**: October 31, 2025  
-**Version**: 2.0  
+**Last Updated**: November 2, 2025  
+**Version**: 2.86.0 - Complete RAG System & Cost Optimization  
 **Status**: ✅ Production Ready
 

@@ -57,6 +57,8 @@ import {
   DollarSign,
   Image as ImageIcon,
   ChevronDown,
+  Home,
+  ChevronRight,
 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -932,43 +934,91 @@ export default function FoundersOnlyPage() {
         </div>
       </header>
 
-      {/* Main Content */}
-      <div className="container mx-auto px-4 py-8">
-        {/* Portal Header */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-purple-500 to-blue-600 rounded-full mb-4">
-            <Lock className="h-10 w-10 text-white" />
+      {/* Breadcrumb Navigation */}
+      <div className="bg-white/50 dark:bg-slate-900/50 border-b">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-3">
+          <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+            <Link href="/" className="hover:text-foreground transition-colors">
+              <Home className="h-4 w-4" />
+            </Link>
+            <ChevronRight className="h-4 w-4" />
+            <Link href="/dashboard" className="hover:text-foreground transition-colors">
+              Dashboard
+            </Link>
+            <ChevronRight className="h-4 w-4" />
+            <span className="font-medium text-foreground">
+              Founders Portal
+            </span>
           </div>
-          <h1 className="text-4xl font-bold mb-2">Portal</h1>
-          <p className="text-muted-foreground text-lg">
-            Confidential access for strategic leadership
-          </p>
+        </div>
+      </div>
+
+      {/* Hero Section */}
+      <section className="relative bg-gradient-to-r from-purple-600 via-purple-700 to-indigo-800 text-white py-16 overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0" style={{
+            backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
+            backgroundSize: '32px 32px'
+          }}></div>
+        </div>
+        
+        {/* Hero Image Placeholder */}
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute inset-0 flex items-center justify-center">
+            <ImageIcon className="h-32 w-32 text-white/30" />
+          </div>
         </div>
 
-        {/* Welcome Message */}
-        <Card className="mb-8 border-blue-200 dark:border-blue-800">
-          <CardHeader>
-            <CardTitle>Welcome to SHELTR&apos;s Executive Command Center</CardTitle>
-            <CardDescription>
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="max-w-4xl">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
+                <Lock className="h-7 w-7" />
+              </div>
+              <Badge className="bg-white/20 text-white border-white/30 backdrop-blur-sm">
+                <Shield className="h-3 w-3 mr-1" />
+                Co-Founders Only
+              </Badge>
+            </div>
+            
+            <h1 className="text-4xl sm:text-5xl font-bold mb-6">
+              Welcome to SHELTR&apos;s Executive Command Center
+            </h1>
+            
+            <p className="text-xl text-purple-50 mb-6 leading-relaxed">
               Your Google email addresses provide you with comprehensive access to the SHELTR platform, including full Platform
               Administrator privileges and executive dashboard capabilities. As co-founders, you have unrestricted access to all
-              system functions, financial oversight, user management, and strategic analytics. Upon logging into the main
-              platform, you will be presented with a Non-Disclosure Agreement (NDA) and a personalized welcome letter tailored
-              to your specific expertise and leadership role within SHELTR. This portal serves as your gateway to confidential
-              business plans, financial reports, and strategic documentation that will be progressively published here as we
-              advance toward our public launch.
-            </CardDescription>
-          </CardHeader>
-        </Card>
+              system functions, financial oversight, user management, and strategic analytics.
+            </p>
+            
+            <p className="text-purple-100 mb-8">
+              Upon logging into the main platform, you will be presented with a Non-Disclosure Agreement (NDA) and a personalized 
+              welcome letter tailored to your specific expertise and leadership role within SHELTR. This portal serves as your gateway 
+              to confidential business plans, financial reports, and strategic documentation that will be progressively published here 
+              as we advance toward our public launch.
+            </p>
 
-        {/* Security Advisory */}
-        <Alert className="mb-8 border-orange-500 bg-orange-50 dark:bg-orange-900/20">
-          <AlertTriangle className="h-4 w-4 text-orange-500" />
-          <AlertDescription className="text-orange-700 dark:text-orange-300">
-            <strong>Security Advisory:</strong> For security purposes, please ensure you log out of the founders portal after each session. All access is monitored and logged
-            for confidentiality and security compliance.
-          </AlertDescription>
-        </Alert>
+            {/* Security Advisory */}
+            <div className="bg-orange-500/20 border-2 border-orange-400/50 rounded-lg p-4 backdrop-blur-sm">
+              <div className="flex items-start gap-3">
+                <AlertTriangle className="h-5 w-5 text-orange-300 flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="font-semibold text-orange-100 mb-1">Security Advisory</p>
+                  <p className="text-sm text-orange-50">
+                    For security purposes, please ensure you log out of the founders portal after each session. All access is 
+                    monitored and logged for confidentiality and security compliance. Your session will automatically expire after 
+                    2 hours of inactivity.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Main Content */}
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
         {/* Main Accordion Sections */}
         <Accordion type="single" collapsible defaultValue="quick-access" className="space-y-4 mb-8">

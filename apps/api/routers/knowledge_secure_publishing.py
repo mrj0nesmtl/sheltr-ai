@@ -126,13 +126,9 @@ async def publish_to_founders(
         
         doc_data = doc.to_dict()
         
-        # Verify document is not public (secure documents only)
-        permission = doc_data.get('permission_level', 'public')
-        if permission == 'public':
-            raise HTTPException(
-                status_code=400,
-                detail="Public documents cannot be published to Founders Portal. Please set a secure permission level (founders, platform_admin, super_admin, etc.) first."
-            )
+        # Note: We allow public documents to be published to Founders Portal
+        # This enables flexibility - a public doc can appear in both Docs Hub AND Founders Portal
+        # The Founders Portal has its own authentication, so public docs are still secure there
         
         # Build update data
         updates = {
@@ -249,13 +245,9 @@ async def publish_to_ir(
         
         doc_data = doc.to_dict()
         
-        # Verify document is not public (secure documents only)
-        permission = doc_data.get('permission_level', 'public')
-        if permission == 'public':
-            raise HTTPException(
-                status_code=400,
-                detail="Public documents cannot be published to Investor Relations. Please set a secure permission level (founders, platform_admin, super_admin, etc.) first."
-            )
+        # Note: We allow public documents to be published to Investor Relations
+        # This enables flexibility - a public doc can appear in Docs Hub AND IR Data Room
+        # The IR Data Room has its own authentication, so public docs are still secure there
         
         # Build update data
         updates = {

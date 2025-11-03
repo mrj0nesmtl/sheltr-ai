@@ -96,6 +96,13 @@ interface GalleryItem {
   duration?: string;
 }
 
+// Hero Image Type
+interface HeroImage {
+  url: string;
+  alt: string;
+  mediaType: 'image' | 'video';
+}
+
 // Sortable Card Component
 function SortableCard({ 
   card, 
@@ -186,6 +193,7 @@ export default function FoundersOnlyPage() {
   const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [showFinancialInIR, setShowFinancialInIR] = useState(false);
+  const [heroImage, setHeroImage] = useState<HeroImage | null>(null);
 
   // DnD Sensors
   const sensors = useSensors(
@@ -549,6 +557,7 @@ export default function FoundersOnlyPage() {
             console.log('✅ Founders Portal: User authorized!');
             setIsAuthorized(true);
             await loadCardOrder();
+            await loadHeroImage();
             await loadGalleryItems();
           } else {
             console.log('⚠️  Founders Portal: User not authorized, redirecting to /dashboard');
@@ -733,6 +742,36 @@ export default function FoundersOnlyPage() {
   };
 
   // Load gallery items
+  // Load hero image for this page
+  const loadHeroImage = async () => {
+    try {
+      const galleryRef = collection(db, 'gallery_images');
+      const heroQuery = query(
+        galleryRef,
+        where('heroPages', 'array-contains', '/portal/founders-only')
+      );
+
+      const snapshot = await getDocs(heroQuery);
+
+      if (!snapshot.empty) {
+        const doc = snapshot.docs[0];
+        const data = doc.data();
+        const mediaType = data.mediaType || (data.type?.startsWith('video') ? 'video' : 'image');
+
+        setHeroImage({
+          url: data.src || data.url || '',
+          alt: data.title || 'SHELTR Founders Portal',
+          mediaType: mediaType,
+        });
+        console.log(`✅ Loaded hero image for Founders Portal: ${data.title}`);
+      } else {
+        console.log('ℹ️  No hero image found for Founders Portal');
+      }
+    } catch (error) {
+      console.error('Error loading hero image:', error);
+    }
+  };
+
   const loadGalleryItems = async () => {
     try {
       const galleryQuery = query(
@@ -955,20 +994,48 @@ export default function FoundersOnlyPage() {
 
       {/* Hero Section */}
       <section className="relative bg-gradient-to-r from-purple-600 via-purple-700 to-indigo-800 text-white py-16 overflow-hidden">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" style={{
-            backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
-            backgroundSize: '32px 32px'
-          }}></div>
-        </div>
-        
-        {/* Hero Image Placeholder */}
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute inset-0 flex items-center justify-center">
-            <ImageIcon className="h-32 w-32 text-white/30" />
+        {/* Hero Image/Video Background */}
+        {heroImage ? (
+          <div className="absolute inset-0">
+            {heroImage.mediaType === 'video' ? (
+              <video
+                src={heroImage.url}
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-full object-cover opacity-40"
+              />
+            ) : (
+              <Image
+                src={heroImage.url}
+                alt={heroImage.alt}
+                fill
+                className="object-cover opacity-40"
+                priority
+              />
+            )}
+            {/* Gradient Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-r from-purple-900/80 via-purple-800/70 to-indigo-900/80"></div>
           </div>
-        </div>
+        ) : (
+          <>
+            {/* Background Pattern - Only shown when no hero image */}
+            <div className="absolute inset-0 opacity-10">
+              <div className="absolute inset-0" style={{
+                backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
+                backgroundSize: '32px 32px'
+              }}></div>
+            </div>
+            
+            {/* Hero Image Placeholder - Only shown when no hero image */}
+            <div className="absolute inset-0 opacity-20">
+              <div className="absolute inset-0 flex items-center justify-center">
+                <ImageIcon className="h-32 w-32 text-white/30" />
+              </div>
+            </div>
+          </>
+        )}
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-4xl">
@@ -987,8 +1054,8 @@ export default function FoundersOnlyPage() {
             </h1>
             
             <p className="text-xl text-purple-50 mb-6 leading-relaxed">
-              Your Google email addresses provide you with comprehensive access to the SHELTR platform, including full Platform
-              Administrator privileges and executive dashboard capabilities. As co-founders, you have unrestricted access to all
+              Your account credentials provide you with comprehensive access to the SHELTR platform, including full Platform
+              Administrator privileges and executive dashboard capabilities. As Administrators, you have unrestricted access to all
               system functions, financial oversight, user management, and strategic analytics.
             </p>
             

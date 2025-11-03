@@ -634,28 +634,35 @@ export default function FoundersOnlyPage() {
       
       const dynamicCards: QuickAccessCard[] = snapshot.docs.map(doc => {
         const data = doc.data();
-        const slug = data.secure_slug || doc.id;
+        const isPublic = data.permission_level === 'public';
+        const slug = isPublic ? (data.hub_slug || data.secure_slug || doc.id) : (data.secure_slug || doc.id);
         
-        console.log(`📄 Dynamic doc: ${data.title} (${slug})`);
+        // For public documents, link to public Docs Hub URL
+        // For secure documents, link to secure Founders Portal URL
+        const href = isPublic ? `/docs/${slug}` : `/portal/founders-only/${slug}`;
+        
+        console.log(`📄 Dynamic doc: ${data.title} (${slug}) | Public: ${isPublic} | URL: ${href}`);
         
         return {
           id: slug,
           icon: (
             <div className="relative">
               <FileText className="h-6 w-6 text-red-600" />
-              <Lock className="h-3 w-3 text-red-600 absolute -top-1 -right-1 bg-white dark:bg-slate-900 rounded-full" />
+              {!isPublic && (
+                <Lock className="h-3 w-3 text-red-600 absolute -top-1 -right-1 bg-white dark:bg-slate-900 rounded-full" />
+              )}
             </div>
           ),
-          badgeText: data.secure_badge || 'Secure',
+          badgeText: data.secure_badge || (isPublic ? 'Public' : 'Secure'),
           badgeClass: `bg-${data.secure_badge_color || 'red'}-600 text-white`,
           title: data.title || 'Untitled',
           titleColor: `text-${data.secure_badge_color || 'red'}-600`,
           description: data.founders_description || data.description || '',
           buttonText: 'View Document',
           buttonClass: `border-2 border-${data.secure_badge_color || 'red'}-600 text-${data.secure_badge_color || 'red'}-600 hover:bg-${data.secure_badge_color || 'red'}-50`,
-          href: `/portal/founders-only/${slug}`,
+          href: href,
           borderClass: `border-${data.secure_badge_color || 'red'}-200`,
-          category: 'secure',
+          category: isPublic ? 'public' : 'secure',
           isInvestorDataRoom: data.published_to_ir || false,
         };
       });

@@ -7,6 +7,201 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.88.0] - 2025-11-03 (PUBLIC DOCUMENTS IN SECURE PORTALS) 🔓🏢
+
+### 🎯 Feature: Allow Public Documents in Founders Portal & IR Data Room
+
+**Breaking Change**: Removed permission level restriction from secure portal publishing.
+
+#### The Problem
+Users needed to choose between:
+- Publishing a document as **public** (visible in Docs Hub for marketing)
+- OR publishing as **private** (visible in Founders Portal/IR Data Room)
+
+**Example Scenario**:
+- "Platform Overview" document should be public for marketing purposes
+- BUT it's also a useful reference for founders
+- Previously: Had to pick ONE destination
+- Now: Can appear in BOTH places
+
+#### The Solution
+
+**Backend Changes** (`apps/api/routers/knowledge_secure_publishing.py`):
+```python
+# REMOVED this restriction:
+if permission == 'public':
+    raise HTTPException(
+        status_code=400,
+        detail="Public documents cannot be published to Founders Portal..."
+    )
+
+# NEW behavior:
+# Permission level and publishing destinations are now independent
+# A document can be public AND appear in secure portals
+```
+
+#### ✨ Benefits
+
+1. **Maximum Flexibility**
+   - Public documents can appear in Docs Hub + Founders Portal + IR Data Room
+   - Permission level and destinations are independent
+   - No content duplication needed
+
+2. **Security Maintained**
+   - Founders Portal requires authentication (super_admin, platform_admin)
+   - IR Data Room requires authentication (investor, super_admin, platform_admin)
+   - Public docs are still protected by portal access control
+
+3. **Single Source of Truth**
+   - Update once, reflects everywhere
+   - Consistent content across all portals
+   - Easy content management
+
+#### 📚 Documentation Updated
+
+**Updated Files**:
+- `docs/features/IR-SHARING-SYSTEM-GUIDE.md` → v2.88.0
+  - Added FAQ: "Can I share PUBLIC documents to secure portals?"
+  - Explained independence of permission levels and destinations
+  - Provided use case examples
+
+#### 🎯 How to Use
+
+**Example Workflow**:
+1. Set document to "Public" permission level
+2. Toggle "Publish to Docs Hub" → ON (appears at `/docs`)
+3. Toggle "Publish to Founders Portal" → ON (appears at `/portal/founders-only`)
+4. Result: Document visible in both places!
+
+**Another Example**:
+1. Public marketing document
+2. Publish to: Docs Hub + Founders Portal + IR Data Room
+3. Everyone can read it on the website
+4. Founders/investors have easy access in their secure portals
+
+#### 🔧 Modified Files
+
+- ✅ `apps/api/routers/knowledge_secure_publishing.py` - Removed permission checks
+- ✅ `docs/features/IR-SHARING-SYSTEM-GUIDE.md` - Updated FAQ section
+
+---
+
+## [2.87.0] - 2025-11-03 (IR DATA ROOM MANAGEMENT PANEL) 🎛️📊
+
+### 🎯 Feature: Bulk Management Tools for Investor Data Room
+
+#### The Problem
+- User had 14 hardcoded documents in IR Data Room
+- New toggle system wasn't detecting them
+- Toggles always showed OFF even though docs were in IR
+- No way to:
+  - Remove all documents at once
+  - Re-sync toggle states
+  - See at-a-glance statistics
+
+#### The Solution
+
+**Added IR Data Room Management Panel** (`apps/web/src/app/portal/founders-only/page.tsx`):
+
+**Features**:
+1. **Real-Time Statistics Dashboard**
+   - Shows count of documents shared to IR
+   - Shows count of documents not shared
+   - Shows total documents in Founders Portal
+
+2. **Re-Sync Toggles Button**
+   - Reloads card order from database
+   - Updates all toggle states to match reality
+   - Fixes mismatches between toggles and actual IR state
+   - Toast feedback for confirmation
+
+3. **Clear All from IR Button**
+   - Removes ALL documents from IR Data Room at once
+   - Confirmation dialog with clear warnings
+   - Batch updates both `knowledge_documents` and `secure_documents`
+   - Sets all toggles to OFF
+   - Success toast with count of cleared documents
+   - Error handling for each document
+
+4. **Collapsible Panel**
+   - "Show Tools" / "Hide Tools" toggle
+   - Keeps interface clean when not needed
+   - Yellow border for visibility
+
+#### 🎨 Visual Design
+
+**Management Panel Header**:
+- Shield icon + "IR Data Room Management" title
+- Live count: "X documents currently shared"
+- Yellow border (border-yellow-200)
+- Collapsible with show/hide button
+
+**Statistics Grid** (when expanded):
+- 3 columns: Shared to IR | Not Shared | Total Documents
+- Color-coded: Blue (shared) | Gray (not shared) | Purple (total)
+- Large numbers with labels
+
+**Action Buttons**:
+- Re-Sync Toggles: Outline button with refresh icon
+- Clear All from IR: Red-themed button with warning icon
+- Disabled when no documents are shared
+
+**Help Text**:
+- Alert box explaining each button's function
+- Clear warnings about irreversible actions
+
+#### 📋 Use Cases
+
+**Use Case 1: Initial Setup**
+```
+Problem: Migrated from hardcoded cards to dynamic system
+Solution: Click "Re-Sync Toggles" to match toggles to reality
+Result: All toggles now accurately reflect IR Data Room contents
+```
+
+**Use Case 2: Fresh Start**
+```
+Problem: Want to rebuild IR Data Room from scratch
+Solution: Click "Clear All from IR" → Confirm
+Result: All documents removed, start fresh with full control
+```
+
+**Use Case 3: Audit**
+```
+Problem: Need to see what's currently shared
+Solution: Expand management panel
+Result: See exact counts and use Re-Sync if needed
+```
+
+#### 🔧 Technical Implementation
+
+**New State Variables**:
+```typescript
+const [isClearing, setIsClearing] = useState(false);
+const [showManagementPanel, setShowManagementPanel] = useState(false);
+```
+
+**Clear All Function**:
+- Confirmation dialog with multi-line warnings
+- Iterates through all cards
+- Checks `knowledge_documents` first, then `secure_documents`
+- Updates `published_to_ir` or `isInvestorDataRoom` to false
+- Updates local state to reflect changes
+- Toast notifications for success/errors
+
+**Re-Sync Function**:
+- Calls existing `loadCardOrder()` function
+- Fetches fresh data from Firestore
+- Updates toggle states based on database values
+- Toast notifications for feedback
+
+#### 🔧 Modified Files
+
+- ✅ `apps/web/src/app/portal/founders-only/page.tsx` - Added management panel, clear all, re-sync functions
+- ✅ `docs/features/IR-SHARING-SYSTEM-GUIDE.md` - Updated with v2.87.0 references
+
+---
+
 ## [2.86.0] - 2025-11-02 (KNOWLEDGE BASE SYNC EXCLUSIONS - README & SETUP GUIDES) 📋🧹
 
 ### 🎯 Feature: Enhanced Sync Filters for Cleaner Knowledge Base

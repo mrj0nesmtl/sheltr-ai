@@ -1,8 +1,8 @@
 # Investor Relations Sharing System - Complete Guide
 
-**Version:** 2.87.0  
+**Version:** 2.88.0  
 **Last Updated:** November 3, 2025  
-**Status:** ✅ Fully Functional
+**Status:** ✅ Fully Functional with Public Document Support
 
 ---
 
@@ -248,6 +248,26 @@ handleToggleInvestorDataRoom(cardId, value)
 - The card will disappear from Founders Portal
 - It will automatically be removed from IR Data Room
 - No orphaned data remains
+
+### **Q: Can I share PUBLIC documents to the Founders Portal or IR Data Room?**
+**A:** YES! As of v2.87.0, you can now publish public documents to secure portals.
+
+**Use Case Example:**
+- You have a "Platform Overview" document that's public for marketing
+- You also want it in the Founders Portal as a reference
+- Solution: Set permission level to "Public" + Publish to Docs Hub + Publish to Founders Portal
+
+**How It Works:**
+- Permission level and publishing destinations are **independent**
+- A document can be public in Docs Hub AND appear in secure portals
+- The Founders Portal and IR Data Room have their own authentication
+- Public docs are still protected by portal access control
+
+**Benefits:**
+- Maximum flexibility for document distribution
+- No need to duplicate content
+- Single source of truth across multiple portals
+- Easy content management
 
 ---
 

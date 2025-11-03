@@ -3092,10 +3092,12 @@ export default function InvestorRelationsPage() {
                       <p className="text-sm text-muted-foreground">
                         Access detailed financial projections, technical documentation, legal frameworks, and enterprise partnership agreements.
                       </p>
-                      <Button variant="outline" size="sm">
-                        <Download className="h-4 w-4 mr-2" />
-                        Data Room
-                      </Button>
+                      <Link href="/ir/dataroom">
+                        <Button variant="outline" size="sm">
+                          <Download className="h-4 w-4 mr-2" />
+                          Data Room
+                        </Button>
+                      </Link>
                     </div>
 
                     <div className="text-center space-y-4">
@@ -3106,10 +3108,12 @@ export default function InvestorRelationsPage() {
                       <p className="text-sm text-muted-foreground">
                         Complete accredited investor verification, execute stock purchase agreements, and join the SHELTR investor community.
                       </p>
-                      <Button variant="outline" size="sm">
-                        <Handshake className="h-4 w-4 mr-2" />
-                        Invest Now
-                      </Button>
+                      <Link href="/contact">
+                        <Button variant="outline" size="sm">
+                          <Handshake className="h-4 w-4 mr-2" />
+                          Invest Now
+                        </Button>
+                      </Link>
                     </div>
                   </div>
                   

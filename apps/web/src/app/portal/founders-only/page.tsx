@@ -56,7 +56,6 @@ import {
   Clock,
   DollarSign,
   Image as ImageIcon,
-  ChevronDown,
   Home,
   ChevronRight,
 } from 'lucide-react';
@@ -65,6 +64,7 @@ import Image from 'next/image';
 import { db } from '@/lib/firebase';
 import { collection, query, where, getDocs, doc, getDoc, setDoc } from 'firebase/firestore';
 import { BudgetCard } from '@/components/dashboard/BudgetCard';
+import { toast } from 'sonner';
 
 // Quick Access Card Type
 interface QuickAccessCard {
@@ -143,8 +143,15 @@ function SortableCard({
               <div className="p-2 rounded-lg bg-muted">
                 {card.icon}
               </div>
-              <div>
+              <div className="flex flex-col gap-2">
                 <Badge className={card.badgeClass}>{card.badgeText}</Badge>
+                {/* IR Sharing Status Indicator */}
+                {card.isInvestorDataRoom && (
+                  <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-300 dark:bg-blue-900/20 dark:text-blue-300 dark:border-blue-700">
+                    <Shield className="h-3 w-3 mr-1" />
+                    Shared to IR
+                  </Badge>
+                )}
               </div>
             </div>
           </div>
@@ -157,12 +164,23 @@ function SortableCard({
         </CardHeader>
         <CardContent className="space-y-4">
           {/* Investor Data Room Toggle - Show for ALL cards */}
-          <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg border-2 border-border/40">
-            <div className="flex items-center gap-2">
-              <Shield className="h-4 w-4 text-red-600" />
-              <Label htmlFor={`investor-toggle-${card.id}`} className="text-sm font-medium cursor-pointer">
-                Share to Investor Data Room
-              </Label>
+          <div className={`flex items-center justify-between p-3 rounded-lg border-2 transition-colors ${
+            card.isInvestorDataRoom 
+              ? 'bg-blue-50 border-blue-300 dark:bg-blue-900/20 dark:border-blue-700' 
+              : 'bg-muted/50 border-border/40'
+          }`}>
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center gap-2">
+                <Shield className={`h-4 w-4 ${card.isInvestorDataRoom ? 'text-blue-600' : 'text-red-600'}`} />
+                <Label htmlFor={`investor-toggle-${card.id}`} className="text-sm font-medium cursor-pointer">
+                  {card.isInvestorDataRoom ? 'Shared with Investors' : 'Share to Investor Data Room'}
+                </Label>
+              </div>
+              <p className="text-xs text-muted-foreground ml-6">
+                {card.isInvestorDataRoom 
+                  ? 'Toggle OFF to remove from Data Room' 
+                  : 'Toggle ON to make visible to investors'}
+              </p>
             </div>
             <Switch
               id={`investor-toggle-${card.id}`}
@@ -654,7 +672,7 @@ export default function FoundersOnlyPage() {
       const dynamicCards = await loadDynamicDocuments();
       
       // Step 2: Merge with hardcoded cards (dynamic overrides non-protected)
-      let mergedCards = [...initialCards];
+      const mergedCards = [...initialCards];
       
       dynamicCards.forEach(dynamicCard => {
         // Check if this card is protected
@@ -700,25 +718,44 @@ export default function FoundersOnlyPage() {
         orderedCards = [...orderedCards, ...newCards];
       }
 
-      // Load toggle states from knowledge_documents (published_to_ir field)
-      // This is the SINGLE SOURCE OF TRUTH for IR sharing status
+      // Load toggle states - Check BOTH knowledge_documents AND secure_documents
+      // Priority: knowledge_documents.published_to_ir > secure_documents.isInvestorDataRoom
       const toggleStates = await Promise.all(
         orderedCards.map(async (card) => {
           try {
-            // Check if this is a dynamic card (from knowledge_documents)
+            // First, check knowledge_documents (for dynamic documents)
             const kbDocRef = doc(db, 'knowledge_documents', card.id);
             const kbDocSnap = await getDoc(kbDocRef);
+            
             if (kbDocSnap.exists()) {
               const kbData = kbDocSnap.data();
-              console.log(`📊 Card ${card.id}: published_to_ir = ${kbData.published_to_ir}`);
+              const isShared = kbData.published_to_ir || false;
+              console.log(`✅ KB Doc ${card.id}: published_to_ir = ${isShared}`);
               return {
                 ...card,
-                isInvestorDataRoom: kbData.published_to_ir || false
+                isInvestorDataRoom: isShared
               };
             }
+            
+            // Fallback: check secure_documents (for hardcoded cards)
+            const secureDocRef = doc(db, 'secure_documents', card.id);
+            const secureDocSnap = await getDoc(secureDocRef);
+            
+            if (secureDocSnap.exists()) {
+              const secureData = secureDocSnap.data();
+              const isShared = secureData.isInvestorDataRoom || false;
+              console.log(`📁 Secure Doc ${card.id}: isInvestorDataRoom = ${isShared}`);
+              return {
+                ...card,
+                isInvestorDataRoom: isShared
+              };
+            }
+            
+            // No data found, default to false
+            console.log(`ℹ️  Card ${card.id}: No sharing data found, defaulting to OFF`);
             return card;
           } catch (error) {
-            console.error(`Error loading toggle state for ${card.id}:`, error);
+            console.error(`❌ Error loading toggle state for ${card.id}:`, error);
             return card;
           }
         })
@@ -872,6 +909,19 @@ export default function FoundersOnlyPage() {
         }, { merge: true });
         
         console.log(`✅ Updated knowledge_documents/${cardId}: published_to_ir = ${value}`);
+        
+        // Success feedback
+        if (value) {
+          toast.success(`✅ Added to IR Data Room`, {
+            description: `"${card.title}" is now visible to investors. The document card and full content will appear in the Investor Data Room.`,
+            duration: 5000,
+          });
+        } else {
+          toast.success(`🗑️ Removed from IR Data Room`, {
+            description: `"${card.title}" is no longer visible to investors and has been removed from the Data Room.`,
+            duration: 5000,
+          });
+        }
       } else {
         // Hardcoded card - store in secure_documents for backward compatibility
         const docRef = doc(db, 'secure_documents', cardId);
@@ -893,9 +943,25 @@ export default function FoundersOnlyPage() {
 
         await setDoc(docRef, cardData, { merge: true });
         console.log(`✅ Updated secure_documents/${cardId}: isInvestorDataRoom = ${value} (hardcoded card)`);
+        
+        // Success feedback
+        if (value) {
+          toast.success(`✅ Added to IR Data Room`, {
+            description: `"${card.title}" is now visible to investors. The document card will appear in the Investor Data Room.`,
+            duration: 5000,
+          });
+        } else {
+          toast.success(`🗑️ Removed from IR Data Room`, {
+            description: `"${card.title}" is no longer visible to investors and has been removed from the Data Room.`,
+            duration: 5000,
+          });
+        }
       }
     } catch (error) {
       console.error('Error updating investor data room status:', error);
+      toast.error('Failed to update Investor Data Room', {
+        description: 'Please try again or contact support if the issue persists.',
+      });
       // Revert local state on error
       setCards((prevCards) =>
         prevCards.map((card) =>
@@ -1045,12 +1111,12 @@ export default function FoundersOnlyPage() {
               </div>
               <Badge className="bg-white/20 text-white border-white/30 backdrop-blur-sm">
                 <Shield className="h-3 w-3 mr-1" />
-                Co-Founders Only
+                Leadership
               </Badge>
             </div>
             
             <h1 className="text-4xl sm:text-5xl font-bold mb-6">
-              Welcome to SHELTR&apos;s Executive Command Center
+              Welcome to SHELTR&apos;s Leadership Command Center
             </h1>
             
             <p className="text-xl text-purple-50 mb-6 leading-relaxed">

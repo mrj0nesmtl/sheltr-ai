@@ -9,6 +9,12 @@ import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
+import { 
+  Accordion, 
+  AccordionContent, 
+  AccordionItem, 
+  AccordionTrigger 
+} from '@/components/ui/accordion';
 import {
   DndContext,
   closestCenter,
@@ -50,6 +56,7 @@ import {
   Clock,
   DollarSign,
   Image as ImageIcon,
+  ChevronDown,
 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -682,16 +689,20 @@ export default function FoundersOnlyPage() {
         orderedCards = [...orderedCards, ...newCards];
       }
 
-      // Load toggle states from Firestore
+      // Load toggle states from knowledge_documents (published_to_ir field)
+      // This is the SINGLE SOURCE OF TRUTH for IR sharing status
       const toggleStates = await Promise.all(
         orderedCards.map(async (card) => {
           try {
-            const docRef = doc(db, 'secure_documents', card.id);
-            const docSnap = await getDoc(docRef);
-            if (docSnap.exists()) {
+            // Check if this is a dynamic card (from knowledge_documents)
+            const kbDocRef = doc(db, 'knowledge_documents', card.id);
+            const kbDocSnap = await getDoc(kbDocRef);
+            if (kbDocSnap.exists()) {
+              const kbData = kbDocSnap.data();
+              console.log(`📊 Card ${card.id}: published_to_ir = ${kbData.published_to_ir}`);
               return {
                 ...card,
-                isInvestorDataRoom: docSnap.data().isInvestorDataRoom || false
+                isInvestorDataRoom: kbData.published_to_ir || false
               };
             }
             return card;
@@ -808,52 +819,40 @@ export default function FoundersOnlyPage() {
         )
       );
 
-      // Store complete card data in Firestore (excluding React components)
-      const docRef = doc(db, 'secure_documents', cardId);
-      const cardData = {
-        id: card.id,
-        title: card.title,
-        description: card.description,
-        badgeText: card.badgeText,
-        badgeClass: card.badgeClass,
-        titleColor: card.titleColor,
-        buttonText: card.buttonText,
-        buttonClass: card.buttonClass,
-        href: card.href,
-        borderClass: card.borderClass,
-        category: card.category,
-        isInvestorDataRoom: value,
-        updatedAt: new Date().toISOString(),
-      };
+      // Update knowledge_documents collection (SINGLE SOURCE OF TRUTH)
+      const kbDocRef = doc(db, 'knowledge_documents', cardId);
+      const kbDocSnap = await getDoc(kbDocRef);
+      
+      if (kbDocSnap.exists()) {
+        // Document exists in knowledge_documents - update published_to_ir field
+        await setDoc(kbDocRef, {
+          published_to_ir: value,
+          updated_at: new Date()
+        }, { merge: true });
+        
+        console.log(`✅ Updated knowledge_documents/${cardId}: published_to_ir = ${value}`);
+      } else {
+        // Hardcoded card - store in secure_documents for backward compatibility
+        const docRef = doc(db, 'secure_documents', cardId);
+        const cardData = {
+          id: card.id,
+          title: card.title,
+          description: card.description,
+          badgeText: card.badgeText,
+          badgeClass: card.badgeClass,
+          titleColor: card.titleColor,
+          buttonText: card.buttonText,
+          buttonClass: card.buttonClass,
+          href: card.href,
+          borderClass: card.borderClass,
+          category: card.category,
+          isInvestorDataRoom: value,
+          updatedAt: new Date().toISOString(),
+        };
 
-      // If toggling ON, also copy document content from founder_documents if it exists
-      if (value) {
-        try {
-          const founderDocRef = doc(db, 'founder_documents', cardId);
-          const founderDocSnap = await getDoc(founderDocRef);
-          
-          if (founderDocSnap.exists()) {
-            const founderData = founderDocSnap.data();
-            // Merge the founder document content with card metadata
-            Object.assign(cardData, {
-              content: founderData.content,
-              slug: founderData.slug || cardId,
-              type: founderData.type || 'secure',
-              tags: founderData.tags || [],
-              metadata: founderData.metadata || {},
-              version: founderData.version,
-              author: founderData.author,
-            });
-            console.log(`📄 Copied document content from founder_documents for ${cardId}`);
-          }
-        } catch (err) {
-          console.warn(`⚠️  Could not copy content from founder_documents for ${cardId}:`, err);
-        }
+        await setDoc(docRef, cardData, { merge: true });
+        console.log(`✅ Updated secure_documents/${cardId}: isInvestorDataRoom = ${value} (hardcoded card)`);
       }
-
-      await setDoc(docRef, cardData, { merge: true });
-
-      console.log(`✅ Updated ${cardId}: isInvestorDataRoom = ${value}`);
     } catch (error) {
       console.error('Error updating investor data room status:', error);
       // Revert local state on error
@@ -971,13 +970,29 @@ export default function FoundersOnlyPage() {
           </AlertDescription>
         </Alert>
 
-        {/* Quick Access Links */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold">Quick Access Links</h2>
-            <div className="flex items-center gap-2">
+        {/* Main Accordion Sections */}
+        <Accordion type="single" collapsible defaultValue="quick-access" className="space-y-4 mb-8">
+          
+          {/* Quick Access Links Accordion */}
+          <AccordionItem value="quick-access" className="border-2 border-purple-200 dark:border-purple-800 rounded-lg bg-white dark:bg-slate-900 overflow-hidden">
+            <AccordionTrigger className="px-6 py-4 hover:no-underline hover:bg-purple-50 dark:hover:bg-purple-900/20">
+              <div className="flex items-center gap-4 w-full">
+                <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center">
+                  <BookOpen className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+                </div>
+                <div className="text-left flex-1">
+                  <h3 className="text-2xl font-bold">Quick Access Links</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Strategic documents, secure portals, and platform resources
+                  </p>
+                </div>
+                <Badge className="bg-purple-600 text-white">{cards.length} Cards</Badge>
+              </div>
+            </AccordionTrigger>
+            <AccordionContent className="px-6 py-6">
+              {/* Save/Reset Buttons - Only for Super Admin */}
               {hasUnsavedChanges && (
-                <>
+                <div className="flex gap-2 mb-6 justify-end">
                   <Button
                     variant="outline"
                     size="sm"
@@ -995,102 +1010,92 @@ export default function FoundersOnlyPage() {
                     <Star className="h-4 w-4 mr-2" />
                     Set as Global Default
                   </Button>
-                </>
+                </div>
               )}
-            </div>
-          </div>
 
-          <p className="text-sm text-muted-foreground mb-4 flex items-center gap-2">
-            <Star className="h-4 w-4 text-yellow-500" />
-            <strong>Super Admin:</strong> Your card order can be set as the global default for all Platform Admins
-          </p>
+              <p className="text-sm text-muted-foreground mb-4 flex items-center gap-2">
+                <Star className="h-4 w-4 text-yellow-500" />
+                <strong>Super Admin:</strong> Your card order can be set as the global default for all Platform Admins
+              </p>
 
-          {/* Drag and Drop Grid */}
-          <DndContext
-            sensors={sensors}
-            collisionDetection={closestCenter}
-            onDragEnd={handleDragEnd}
-          >
-            <SortableContext
-              items={cards.map(c => c.id)}
-              strategy={rectSortingStrategy}
-            >
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {cards.map((card) => (
-                  <SortableCard 
-                    key={card.id} 
-                    card={card} 
-                    onToggleInvestorDataRoom={handleToggleInvestorDataRoom}
-                  />
-                ))}
+              {/* Drag and Drop Grid */}
+              <DndContext
+                sensors={sensors}
+                collisionDetection={closestCenter}
+                onDragEnd={handleDragEnd}
+              >
+                <SortableContext
+                  items={cards.map(c => c.id)}
+                  strategy={rectSortingStrategy}
+                >
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {cards.map((card) => (
+                      <SortableCard 
+                        key={card.id} 
+                        card={card} 
+                        onToggleInvestorDataRoom={handleToggleInvestorDataRoom}
+                      />
+                    ))}
+                  </div>
+                </SortableContext>
+              </DndContext>
+            </AccordionContent>
+          </AccordionItem>
+
+          {/* Financial Overview Accordion */}
+          <AccordionItem value="financial-overview" className="border-2 border-green-200 dark:border-green-800 rounded-lg bg-white dark:bg-slate-900 overflow-hidden">
+            <AccordionTrigger className="px-6 py-4 hover:no-underline hover:bg-green-50 dark:hover:bg-green-900/20">
+              <div className="flex items-center gap-4 w-full">
+                <div className="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
+                  <DollarSign className="h-6 w-6 text-green-600 dark:text-green-400" />
+                </div>
+                <div className="text-left flex-1">
+                  <h3 className="text-2xl font-bold">Financial Overview</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Seed round budget projection and burn rate analysis for 2025-2026
+                  </p>
+                </div>
+                <Badge className="bg-green-600 text-white">Confidential</Badge>
               </div>
-            </SortableContext>
-          </DndContext>
-        </div>
+            </AccordionTrigger>
+            <AccordionContent className="px-6 py-6">
+              {/* Investor Data Room Toggle */}
+              <div className="flex items-center justify-between p-4 mb-6 bg-muted/50 rounded-lg border-2 border-border/40">
+                <div className="flex items-center gap-2">
+                  <Shield className="h-5 w-5 text-red-600" />
+                  <Label htmlFor="financial-toggle" className="text-base font-medium cursor-pointer">
+                    Share to Investor Data Room
+                  </Label>
+                </div>
+                <Switch
+                  id="financial-toggle"
+                  checked={showFinancialInIR}
+                  onCheckedChange={handleToggleFinancialOverview}
+                />
+              </div>
+              
+              <BudgetCard />
+            </AccordionContent>
+          </AccordionItem>
 
-        {/* Section Divider */}
-        <div className="relative my-12">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t-2 border-slate-200 dark:border-slate-700"></div>
-          </div>
-          <div className="relative flex justify-center">
-            <span className="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 px-6 py-2 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
-              Financial & Operations
-            </span>
-          </div>
-        </div>
-
-        {/* Seed Budget Overview */}
-        <div className="mb-12">
-          <div className="flex items-center gap-3 mb-4">
-            <DollarSign className="h-7 w-7 text-green-600" />
-            <h2 className="text-3xl font-bold">Financial Overview</h2>
-          </div>
-          <p className="text-muted-foreground mb-6 text-lg">
-            Seed round budget projection and burn rate analysis for 2025-2026
-          </p>
-          
-          {/* Investor Data Room Toggle */}
-          <div className="flex items-center justify-between p-4 mb-6 bg-muted/50 rounded-lg border-2 border-border/40">
-            <div className="flex items-center gap-2">
-              <Shield className="h-5 w-5 text-red-600" />
-              <Label htmlFor="financial-toggle" className="text-base font-medium cursor-pointer">
-                Share to Investor Data Room
-              </Label>
-            </div>
-            <Switch
-              id="financial-toggle"
-              checked={showFinancialInIR}
-              onCheckedChange={handleToggleFinancialOverview}
-            />
-          </div>
-          
-          <BudgetCard />
-        </div>
-
-        {/* Section Divider */}
-        <div className="relative my-12">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t-2 border-slate-200 dark:border-slate-700"></div>
-          </div>
-          <div className="relative flex justify-center">
-            <span className="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 px-6 py-2 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
-              Testing & Quality Assurance
-            </span>
-          </div>
-        </div>
-
-        {/* Quality Assurance & Testing Environment */}
-        <div className="mb-12">
-          <div className="flex items-center gap-3 mb-4">
-            <CheckCircle className="h-7 w-7 text-green-600" />
-            <h2 className="text-3xl font-bold">QA Testing Demo Accounts</h2>
-          </div>
-          <p className="text-muted-foreground mb-6 text-lg">
-            Connected test accounts for comprehensive system validation
-          </p>
-          
-          <Card className="bg-slate-50 dark:bg-slate-900 border-2">
+          {/* QA Testing Accordion */}
+          <AccordionItem value="qa-testing" className="border-2 border-blue-200 dark:border-blue-800 rounded-lg bg-white dark:bg-slate-900 overflow-hidden">
+            <AccordionTrigger className="px-6 py-4 hover:no-underline hover:bg-blue-50 dark:hover:bg-blue-900/20">
+              <div className="flex items-center gap-4 w-full">
+                <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
+                  <CheckCircle className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                </div>
+                <div className="text-left flex-1">
+                  <h3 className="text-2xl font-bold">QA Testing Demo Accounts</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Connected test accounts for comprehensive system validation
+                  </p>
+                </div>
+                <Badge className="bg-blue-600 text-white">4 Accounts</Badge>
+              </div>
+            </AccordionTrigger>
+            <AccordionContent className="px-6 py-6">
+              <Card className="bg-slate-50 dark:bg-slate-900 border-2">
             <CardContent className="pt-6">
               <Alert className="mb-4 bg-green-50 dark:bg-green-900/20 border-green-500">
               <AlertDescription className="text-sm text-green-700 dark:text-green-300">
@@ -1244,43 +1249,29 @@ export default function FoundersOnlyPage() {
                 be simulated until payment processing is activated.
               </AlertDescription>
               </Alert>
-            </CardContent>
-          </Card>
-        </div>
+              </Card>
+            </AccordionContent>
+          </AccordionItem>
 
-        {/* Coming Soon Notice */}
-        <Alert className="mb-12 bg-blue-50 dark:bg-blue-900/20 border-blue-500">
-          <AlertDescription className="text-sm text-blue-700 dark:text-blue-300 flex items-center gap-2">
-            <Rocket className="h-4 w-4" />
-            <strong>Coming Soon to This Portal:</strong> Business plans, detailed financial reports, and strategic documentation will be progressively published in this founders portal as we advance
-            toward our public launch timeline.
-          </AlertDescription>
-        </Alert>
-
-        {/* Section Divider */}
-        <div className="relative my-12">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t-2 border-slate-200 dark:border-slate-700"></div>
-          </div>
-          <div className="relative flex justify-center">
-            <span className="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 px-6 py-2 text-sm font-semibold text-muted-foreground uppercase tracking-wider">
-              Media & Content
-            </span>
-          </div>
-        </div>
-
-        {/* Founders Gallery */}
-        {galleryItems.length > 0 && (
-          <div className="mb-12">
-            <div className="flex items-center gap-3 mb-4">
-              <ImageIcon className="h-7 w-7 text-pink-600" />
-              <h2 className="text-3xl font-bold">Founders Gallery</h2>
-            </div>
-            <p className="text-muted-foreground mb-6 text-lg">
-              Curated media content shared exclusively with SHELTR co-founders
-            </p>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Founders Gallery Accordion */}
+          {galleryItems.length > 0 && (
+            <AccordionItem value="founders-gallery" className="border-2 border-pink-200 dark:border-pink-800 rounded-lg bg-white dark:bg-slate-900 overflow-hidden">
+              <AccordionTrigger className="px-6 py-4 hover:no-underline hover:bg-pink-50 dark:hover:bg-pink-900/20">
+                <div className="flex items-center gap-4 w-full">
+                  <div className="w-12 h-12 bg-pink-100 dark:bg-pink-900 rounded-full flex items-center justify-center">
+                    <ImageIcon className="h-6 w-6 text-pink-600 dark:text-pink-400" />
+                  </div>
+                  <div className="text-left flex-1">
+                    <h3 className="text-2xl font-bold">Founders Gallery</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Curated media content shared exclusively with SHELTR co-founders
+                    </p>
+                  </div>
+                  <Badge className="bg-pink-600 text-white">{galleryItems.length} Items</Badge>
+                </div>
+              </AccordionTrigger>
+              <AccordionContent className="px-6 py-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {galleryItems.map((item) => (
                 <Card key={item.id} className="overflow-hidden group hover:shadow-lg transition-all">
                   <div className="relative aspect-video bg-slate-100 dark:bg-slate-800">
@@ -1328,9 +1319,21 @@ export default function FoundersOnlyPage() {
                   </CardContent>
                 </Card>
               ))}
-            </div>
-          </div>
-        )}
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          )}
+
+        </Accordion>
+
+        {/* Coming Soon Notice */}
+        <Alert className="mb-12 bg-blue-50 dark:bg-blue-900/20 border-blue-500">
+          <AlertDescription className="text-sm text-blue-700 dark:text-blue-300 flex items-center gap-2">
+            <Rocket className="h-4 w-4" />
+            <strong>Coming Soon to This Portal:</strong> Business plans, detailed financial reports, and strategic documentation will be progressively published in this founders portal as we advance
+            toward our public launch timeline.
+          </AlertDescription>
+        </Alert>
 
         {/* Confidential Information Footer */}
         <Card className="bg-slate-900 text-white border-slate-700">

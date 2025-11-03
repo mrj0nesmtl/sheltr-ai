@@ -212,6 +212,8 @@ export default function FoundersOnlyPage() {
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [showFinancialInIR, setShowFinancialInIR] = useState(false);
   const [heroImage, setHeroImage] = useState<HeroImage | null>(null);
+  const [isClearing, setIsClearing] = useState(false);
+  const [showManagementPanel, setShowManagementPanel] = useState(false);
 
   // DnD Sensors
   const sensors = useSensors(
@@ -971,6 +973,76 @@ export default function FoundersOnlyPage() {
     }
   };
 
+  // Clear ALL documents from IR Data Room
+  const handleClearAllFromIR = async () => {
+    if (!confirm('⚠️ Remove ALL documents from Investor Data Room?\n\nThis will:\n• Remove all document cards from IR Data Room\n• Set all toggles to OFF\n• Cannot be undone\n\nContinue?')) {
+      return;
+    }
+
+    setIsClearing(true);
+    try {
+      let clearedCount = 0;
+      let errorCount = 0;
+
+      // Clear all cards
+      for (const card of cards) {
+        try {
+          // Update knowledge_documents
+          const kbDocRef = doc(db, 'knowledge_documents', card.id);
+          const kbDocSnap = await getDoc(kbDocRef);
+          
+          if (kbDocSnap.exists()) {
+            await setDoc(kbDocRef, {
+              published_to_ir: false,
+              updated_at: new Date()
+            }, { merge: true });
+            clearedCount++;
+          } else {
+            // Update secure_documents
+            const secureDocRef = doc(db, 'secure_documents', card.id);
+            await setDoc(secureDocRef, {
+              isInvestorDataRoom: false,
+              updatedAt: new Date().toISOString(),
+            }, { merge: true });
+            clearedCount++;
+          }
+        } catch (error) {
+          console.error(`Error clearing ${card.id}:`, error);
+          errorCount++;
+        }
+      }
+
+      // Update local state
+      setCards(prevCards => prevCards.map(card => ({ ...card, isInvestorDataRoom: false })));
+
+      toast.success(`✅ Cleared ${clearedCount} documents from IR Data Room`, {
+        description: errorCount > 0 ? `${errorCount} errors occurred` : 'All documents removed successfully',
+        duration: 6000,
+      });
+    } catch (error) {
+      console.error('Error clearing IR Data Room:', error);
+      toast.error('Failed to clear IR Data Room');
+    } finally {
+      setIsClearing(false);
+    }
+  };
+
+  // Re-sync toggles from database (fixes mismatches)
+  const handleReSyncToggles = async () => {
+    toast.info('🔄 Re-syncing toggles from database...', { duration: 2000 });
+    
+    try {
+      await loadCardOrder();
+      toast.success('✅ Toggles re-synced successfully', {
+        description: 'All toggle states now match the database',
+        duration: 4000,
+      });
+    } catch (error) {
+      console.error('Error re-syncing toggles:', error);
+      toast.error('Failed to re-sync toggles');
+    }
+  };
+
   // Save card order as global default
   const saveAsGlobalDefault = async () => {
     try {
@@ -1152,6 +1224,89 @@ export default function FoundersOnlyPage() {
 
       {/* Main Content */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        {/* IR Data Room Management Panel */}
+        <Card className="mb-6 border-2 border-yellow-200 dark:border-yellow-800 bg-yellow-50 dark:bg-yellow-900/10">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Shield className="h-6 w-6 text-yellow-600" />
+                <div>
+                  <CardTitle className="text-lg">IR Data Room Management</CardTitle>
+                  <CardDescription className="text-sm">
+                    Control what investors see • {cards.filter(c => c.isInvestorDataRoom).length} documents currently shared
+                  </CardDescription>
+                </div>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowManagementPanel(!showManagementPanel)}
+              >
+                {showManagementPanel ? 'Hide Tools' : 'Show Tools'}
+              </Button>
+            </div>
+          </CardHeader>
+          
+          {showManagementPanel && (
+            <CardContent className="space-y-4">
+              {/* Statistics */}
+              <div className="grid grid-cols-3 gap-4 p-4 bg-white dark:bg-slate-900 rounded-lg border">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-blue-600">{cards.filter(c => c.isInvestorDataRoom).length}</div>
+                  <div className="text-xs text-muted-foreground">Shared to IR</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-gray-600">{cards.filter(c => !c.isInvestorDataRoom).length}</div>
+                  <div className="text-xs text-muted-foreground">Not Shared</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-purple-600">{cards.length}</div>
+                  <div className="text-xs text-muted-foreground">Total Documents</div>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Button
+                  variant="outline"
+                  onClick={handleReSyncToggles}
+                  className="flex-1"
+                >
+                  <RotateCcw className="h-4 w-4 mr-2" />
+                  Re-Sync Toggles
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={handleClearAllFromIR}
+                  disabled={isClearing || cards.filter(c => c.isInvestorDataRoom).length === 0}
+                  className="flex-1 border-red-300 text-red-600 hover:bg-red-50 dark:border-red-700 dark:text-red-400"
+                >
+                  {isClearing ? (
+                    <>
+                      <Clock className="h-4 w-4 mr-2 animate-spin" />
+                      Clearing...
+                    </>
+                  ) : (
+                    <>
+                      <AlertTriangle className="h-4 w-4 mr-2" />
+                      Clear All from IR
+                    </>
+                  )}
+                </Button>
+              </div>
+
+              {/* Help Text */}
+              <Alert>
+                <AlertTriangle className="h-4 w-4" />
+                <AlertDescription className="text-xs">
+                  <strong>Re-Sync Toggles:</strong> Fixes toggle states if they don&apos;t match the actual IR Data Room contents.<br />
+                  <strong>Clear All:</strong> Removes ALL documents from IR Data Room. Cannot be undone.
+                </AlertDescription>
+              </Alert>
+            </CardContent>
+          )}
+        </Card>
 
         {/* Main Accordion Sections */}
         <Accordion type="single" collapsible defaultValue="quick-access" className="space-y-4 mb-8">

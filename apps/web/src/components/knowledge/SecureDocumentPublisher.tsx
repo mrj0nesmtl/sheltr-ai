@@ -437,10 +437,13 @@ export const SecureDocumentPublisher: React.FC<SecureDocumentPublisherProps> = (
 
         {/* Success Message */}
         {saveSuccess && (
-          <div className="p-3 bg-green-500/10 border border-green-500/20 rounded-lg">
+          <div className="p-3 bg-green-500/10 border border-green-500/20 rounded-lg space-y-2">
             <p className="text-sm text-green-600 flex items-center gap-2">
               <CheckCircle2 className="h-4 w-4" />
               Publishing settings saved successfully!
+            </p>
+            <p className="text-xs text-green-600/80">
+              💡 Tip: Click &quot;View in Founders Portal&quot; button below to see your document, or refresh any existing portal tabs.
             </p>
           </div>
         )}
@@ -453,7 +456,11 @@ export const SecureDocumentPublisher: React.FC<SecureDocumentPublisherProps> = (
                 type="button"
                 variant="outline"
                 size="sm"
-                onClick={() => window.open('/portal/founders-only', '_blank')}
+                onClick={() => {
+                  // Add cache-busting timestamp to force fresh load
+                  const url = `/portal/founders-only?refresh=${Date.now()}`;
+                  window.open(url, '_blank');
+                }}
               >
                 <Briefcase className="h-4 w-4 mr-1" />
                 View in Founders Portal
@@ -465,7 +472,11 @@ export const SecureDocumentPublisher: React.FC<SecureDocumentPublisherProps> = (
                 type="button"
                 variant="outline"
                 size="sm"
-                onClick={() => window.open('/portal/investor-relations', '_blank')}
+                onClick={() => {
+                  // Add cache-busting timestamp to force fresh load
+                  const url = `/portal/investor-relations?refresh=${Date.now()}`;
+                  window.open(url, '_blank');
+                }}
               >
                 <TrendingUp className="h-4 w-4 mr-1" />
                 View in IR

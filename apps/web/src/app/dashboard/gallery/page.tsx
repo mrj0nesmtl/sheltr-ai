@@ -129,8 +129,10 @@ const PUBLIC_PAGES = [
   { id: 'privacy', label: 'Privacy Policy', path: '/privacy', icon: '🔐' },
   { id: 'terms', label: 'Terms of Service', path: '/terms', icon: '📜' },
   
-  // Founders Portal
-  { id: 'investor-relations', label: 'Investor Relations', path: '/portal/founders-only/investor-relations', icon: '💼' },
+  // Founders Portal & Investor Relations
+  { id: 'founders-portal', label: 'Founders Portal', path: '/portal/founders-only', icon: '👨‍💼' },
+  { id: 'investor-relations', label: 'Investor Relations (Private)', path: '/portal/founders-only/investor-relations', icon: '💼' },
+  { id: 'ir-dataroom', label: 'IR Data Room', path: '/ir/dataroom', icon: '📂' },
 ];
 
 // Helper function to extract image metadata

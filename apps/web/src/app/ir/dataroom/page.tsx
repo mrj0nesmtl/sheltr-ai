@@ -6,7 +6,8 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { FileText, Lock, Shield, ExternalLink, GripVertical, Save, RotateCcw, LogOut, DollarSign } from 'lucide-react';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { FileText, Lock, Shield, ExternalLink, GripVertical, Save, RotateCcw, LogOut, DollarSign, Home, ChevronRight, AlertTriangle, Image as ImageIcon } from 'lucide-react';
 import Link from 'next/link';
 import { toast } from 'sonner';
 import { db, auth } from '@/lib/firebase';
@@ -529,155 +530,242 @@ export default function InvestorDataRoomPage() {
         </div>
       </header>
 
-      {/* Welcome Banner */}
-      <section className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-8">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
-              <Lock className="h-6 w-6" />
-            </div>
-            <div>
-              <h2 className="text-2xl font-bold mb-1">Welcome to the SHELTR Investor Data Room.</h2>
-              <p className="text-blue-100">
-                This secure portal contains confidential investment materials, financial projections, and strategic documents. 
-                All materials are proprietary and subject to NDA.
-              </p>
-            </div>
+      {/* Breadcrumb Navigation */}
+      <div className="bg-white/50 dark:bg-slate-900/50 border-b">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-3">
+          <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+            <Link href="/" className="hover:text-foreground transition-colors">
+              <Home className="h-4 w-4" />
+            </Link>
+            <ChevronRight className="h-4 w-4" />
+            <Link href="/ir" className="hover:text-foreground transition-colors">
+              Investor Relations
+            </Link>
+            <ChevronRight className="h-4 w-4" />
+            <span className="font-medium text-foreground">
+              Data Room
+            </span>
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* Financial Overview Section - Conditional */}
-      {showFinancialOverview && (
-        <section className="py-12 bg-slate-50 dark:bg-slate-900/50">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="mb-8">
-              <div className="flex items-center gap-3 mb-4">
-                <DollarSign className="h-7 w-7 text-green-600" />
-                <h3 className="text-2xl font-bold">Financial Overview</h3>
-              </div>
-              <p className="text-muted-foreground">
-                Seed round budget projection and burn rate analysis for 2025-2026
-              </p>
-            </div>
-            <BudgetCard linkPath="/ir/budget" />
+      {/* Hero Section */}
+      <section className="relative bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-800 text-white py-16 overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0" style={{
+            backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
+            backgroundSize: '32px 32px'
+          }}></div>
+        </div>
+        
+        {/* Hero Image Placeholder */}
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute inset-0 flex items-center justify-center">
+            <ImageIcon className="h-32 w-32 text-white/30" />
           </div>
-        </section>
-      )}
+        </div>
 
-      {/* Investment Documents */}
-      <section className="py-12">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-8 flex items-center justify-between">
-            <div>
-              <h3 className="text-2xl font-bold mb-2">Investment Documents</h3>
-              <p className="text-muted-foreground">
-                {isSuperAdmin 
-                  ? 'Drag cards to reorder. Changes apply to all investors.' 
-                  : 'Confidential materials for authorized investors'}
-              </p>
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="max-w-4xl">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
+                <Lock className="h-7 w-7" />
+              </div>
+              <Badge className="bg-white/20 text-white border-white/30 backdrop-blur-sm">
+                <Shield className="h-3 w-3 mr-1" />
+                Confidential
+              </Badge>
             </div>
             
-            {/* Save/Reset Buttons - Only for Super Admin */}
-            {isSuperAdmin && hasUnsavedChanges && (
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={resetToDefault}
-                  disabled={isSaving}
-                >
-                  <RotateCcw className="h-4 w-4 mr-2" />
-                  Reset
-                </Button>
-                <Button
-                  size="sm"
-                  onClick={saveCardOrder}
-                  disabled={isSaving}
-                  className="bg-blue-600 hover:bg-blue-700"
-                >
-                  <Save className="h-4 w-4 mr-2" />
-                  {isSaving ? 'Saving...' : 'Save Global Order'}
-                </Button>
-              </div>
-            )}
-          </div>
+            <h1 className="text-4xl sm:text-5xl font-bold mb-6">
+              Welcome to the SHELTR Investor Data Room
+            </h1>
+            
+            <p className="text-xl text-blue-50 mb-6 leading-relaxed">
+              Thank you for your interest in SHELTR. As a valued partner in our mission to end homelessness through innovative technology, 
+              your support and expertise are crucial to our success. We're excited to share our progress, vision, and strategic roadmap with you.
+            </p>
+            
+            <p className="text-blue-100 mb-8">
+              This secure portal contains confidential investment materials, financial projections, technical documentation, and strategic plans. 
+              All materials are proprietary and subject to NDA agreements. We appreciate your commitment to maintaining the confidentiality of these materials.
+            </p>
 
-          <DndContext
-            sensors={sensors}
-            collisionDetection={closestCenter}
-            onDragEnd={handleDragEnd}
-          >
-            <SortableContext
-              items={documents.map(doc => doc.id)}
-              strategy={verticalListSortingStrategy}
-            >
-              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {documents.map((doc) => (
-                  <SortableCard key={doc.id} doc={doc} isSuperAdmin={isSuperAdmin} />
-                ))}
+            {/* Security Advisory */}
+            <div className="bg-yellow-500/20 border-2 border-yellow-400/50 rounded-lg p-4 backdrop-blur-sm">
+              <div className="flex items-start gap-3">
+                <AlertTriangle className="h-5 w-5 text-yellow-300 flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="font-semibold text-yellow-100 mb-1">Security Advisory</p>
+                  <p className="text-sm text-yellow-50">
+                    Please log out when you finish reviewing materials, especially when accessing from shared or public devices. 
+                    Your session will automatically expire after 2 hours of inactivity.
+                  </p>
+                </div>
               </div>
-            </SortableContext>
-          </DndContext>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Media Gallery Section */}
-      {galleryItems.length > 0 && (
-        <section className="py-12 bg-slate-50 dark:bg-slate-900/50">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="mb-8">
-              <h3 className="text-2xl font-bold mb-2">Media Gallery</h3>
-              <p className="text-muted-foreground">
-                Visual insights and updates from the SHELTR team
-              </p>
-            </div>
+      {/* Accordion Sections */}
+      <section className="py-12">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <Accordion type="single" collapsible defaultValue="investment-documents" className="space-y-4">
+            
+            {/* Investment Documents Accordion */}
+            <AccordionItem value="investment-documents" className="border-2 border-blue-200 dark:border-blue-800 rounded-lg bg-white dark:bg-slate-900 overflow-hidden">
+              <AccordionTrigger className="px-6 py-4 hover:no-underline hover:bg-blue-50 dark:hover:bg-blue-900/20">
+                <div className="flex items-center gap-4 w-full">
+                  <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
+                    <FileText className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                  </div>
+                  <div className="text-left flex-1">
+                    <h3 className="text-2xl font-bold">Investment Documents</h3>
+                    <p className="text-sm text-muted-foreground">
+                      {isSuperAdmin 
+                        ? 'Drag cards to reorder. Changes apply to all investors.' 
+                        : 'Confidential materials for authorized investors'}
+                    </p>
+                  </div>
+                  <Badge className="bg-blue-600 text-white">{documents.length} Docs</Badge>
+                </div>
+              </AccordionTrigger>
+              <AccordionContent className="px-6 py-6">
+                {/* Save/Reset Buttons - Only for Super Admin */}
+                {isSuperAdmin && hasUnsavedChanges && (
+                  <div className="flex gap-2 mb-6 justify-end">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={resetToDefault}
+                      disabled={isSaving}
+                    >
+                      <RotateCcw className="h-4 w-4 mr-2" />
+                      Reset
+                    </Button>
+                    <Button
+                      size="sm"
+                      onClick={saveCardOrder}
+                      disabled={isSaving}
+                      className="bg-blue-600 hover:bg-blue-700"
+                    >
+                      <Save className="h-4 w-4 mr-2" />
+                      {isSaving ? 'Saving...' : 'Save Global Order'}
+                    </Button>
+                  </div>
+                )}
 
-            {galleryLoading ? (
-              <div className="flex items-center justify-center py-12">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-              </div>
-            ) : (
-              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                {galleryItems.map((item) => (
-                  <Card
-                    key={item.id}
-                    className="group cursor-pointer hover:shadow-lg transition-all duration-200 overflow-hidden"
-                    onClick={() => setSelectedImage(item)}
+                <DndContext
+                  sensors={sensors}
+                  collisionDetection={closestCenter}
+                  onDragEnd={handleDragEnd}
+                >
+                  <SortableContext
+                    items={documents.map(doc => doc.id)}
+                    strategy={verticalListSortingStrategy}
                   >
-                    <div className="relative aspect-video bg-slate-200 dark:bg-slate-800">
-                      {item.type === 'image' ? (
-                        <Image
-                          src={item.url}
-                          alt={item.title}
-                          fill
-                          className="object-cover group-hover:scale-105 transition-transform duration-300"
-                        />
-                      ) : (
-                        <video
-                          src={item.url}
-                          className="w-full h-full object-cover"
-                          controls={false}
-                        />
-                      )}
+                    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                      {documents.map((doc) => (
+                        <SortableCard key={doc.id} doc={doc} isSuperAdmin={isSuperAdmin} />
+                      ))}
                     </div>
-                    <CardContent className="p-4">
-                      <h4 className="font-semibold text-sm mb-1 line-clamp-1">
-                        {item.title}
-                      </h4>
-                      {item.description && (
-                        <p className="text-xs text-muted-foreground line-clamp-2">
-                          {item.description}
-                        </p>
-                      )}
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
+                  </SortableContext>
+                </DndContext>
+              </AccordionContent>
+            </AccordionItem>
+
+            {/* Financial Overview Accordion */}
+            {showFinancialOverview && (
+              <AccordionItem value="financial-overview" className="border-2 border-green-200 dark:border-green-800 rounded-lg bg-white dark:bg-slate-900 overflow-hidden">
+                <AccordionTrigger className="px-6 py-4 hover:no-underline hover:bg-green-50 dark:hover:bg-green-900/20">
+                  <div className="flex items-center gap-4 w-full">
+                    <div className="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
+                      <DollarSign className="h-6 w-6 text-green-600 dark:text-green-400" />
+                    </div>
+                    <div className="text-left flex-1">
+                      <h3 className="text-2xl font-bold">Financial Overview</h3>
+                      <p className="text-sm text-muted-foreground">
+                        Seed round budget projection and burn rate analysis for 2025-2026
+                      </p>
+                    </div>
+                    <Badge className="bg-green-600 text-white">Confidential</Badge>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className="px-6 py-6">
+                  <BudgetCard linkPath="/ir/budget" />
+                </AccordionContent>
+              </AccordionItem>
             )}
-          </div>
-        </section>
-      )}
+
+            {/* Media Gallery Accordion */}
+            {galleryItems.length > 0 && (
+              <AccordionItem value="media-gallery" className="border-2 border-purple-200 dark:border-purple-800 rounded-lg bg-white dark:bg-slate-900 overflow-hidden">
+                <AccordionTrigger className="px-6 py-4 hover:no-underline hover:bg-purple-50 dark:hover:bg-purple-900/20">
+                  <div className="flex items-center gap-4 w-full">
+                    <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center">
+                      <ImageIcon className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+                    </div>
+                    <div className="text-left flex-1">
+                      <h3 className="text-2xl font-bold">Media Gallery</h3>
+                      <p className="text-sm text-muted-foreground">
+                        Visual insights and updates from the SHELTR team
+                      </p>
+                    </div>
+                    <Badge className="bg-purple-600 text-white">{galleryItems.length} Items</Badge>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className="px-6 py-6">
+                  {galleryLoading ? (
+                    <div className="flex items-center justify-center py-12">
+                      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+                    </div>
+                  ) : (
+                    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                      {galleryItems.map((item) => (
+                        <Card
+                          key={item.id}
+                          className="group cursor-pointer hover:shadow-lg transition-all duration-200 overflow-hidden"
+                          onClick={() => setSelectedImage(item)}
+                        >
+                          <div className="relative aspect-video bg-slate-200 dark:bg-slate-800">
+                            {item.type === 'image' ? (
+                              <Image
+                                src={item.url}
+                                alt={item.title}
+                                fill
+                                className="object-cover group-hover:scale-105 transition-transform duration-300"
+                              />
+                            ) : (
+                              <video
+                                src={item.url}
+                                className="w-full h-full object-cover"
+                                controls={false}
+                              />
+                            )}
+                          </div>
+                          <CardContent className="p-4">
+                            <h4 className="font-semibold text-sm mb-1 line-clamp-1">
+                              {item.title}
+                            </h4>
+                            {item.description && (
+                              <p className="text-xs text-muted-foreground line-clamp-2">
+                                {item.description}
+                              </p>
+                            )}
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  )}
+                </AccordionContent>
+              </AccordionItem>
+            )}
+
+          </Accordion>
+        </div>
+      </section>
 
       {/* Image Lightbox Modal */}
       {selectedImage && (
@@ -722,15 +810,103 @@ export default function InvestorDataRoomPage() {
         </div>
       )}
 
-      {/* Footer Note */}
-      <section className="py-8 border-t bg-white/50 dark:bg-slate-900/50">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-sm text-muted-foreground">
-            <Lock className="inline h-4 w-4 mr-1" />
-            All documents are confidential and protected. Unauthorized sharing or distribution is strictly prohibited.
-          </p>
+      {/* Footer */}
+      <footer className="border-t bg-white dark:bg-slate-900 mt-auto">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+            {/* About Section */}
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <div className="relative w-8 h-8">
+                  <Image
+                    src="/icon.svg"
+                    alt="SHELTR"
+                    fill
+                    className="object-contain"
+                  />
+                </div>
+                <h3 className="font-bold text-lg">SHELTR</h3>
+              </div>
+              <p className="text-sm text-muted-foreground mb-4">
+                Revolutionary platform ending homelessness through technology-driven transparency and direct support.
+              </p>
+              <Badge className="bg-blue-600 text-white">
+                <Shield className="h-3 w-3 mr-1" />
+                Investor Portal
+              </Badge>
+            </div>
+
+            {/* Quick Links */}
+            <div>
+              <h4 className="font-semibold mb-4">Quick Links</h4>
+              <ul className="space-y-2 text-sm">
+                <li>
+                  <Link href="/ir" className="text-muted-foreground hover:text-foreground transition-colors">
+                    Investor Relations Home
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/ir/budget" className="text-muted-foreground hover:text-foreground transition-colors">
+                    Budget & Projections
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/docs" className="text-muted-foreground hover:text-foreground transition-colors">
+                    Public Documentation
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/" className="text-muted-foreground hover:text-foreground transition-colors">
+                    Return to Homepage
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            {/* Security & Support */}
+            <div>
+              <h4 className="font-semibold mb-4">Security & Support</h4>
+              <div className="space-y-3">
+                <div className="flex items-start gap-2 text-sm">
+                  <Lock className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                  <p className="text-muted-foreground">
+                    All materials are encrypted and protected
+                  </p>
+                </div>
+                <div className="flex items-start gap-2 text-sm">
+                  <Shield className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                  <p className="text-muted-foreground">
+                    NDA-protected confidential information
+                  </p>
+                </div>
+                <div className="flex items-start gap-2 text-sm">
+                  <AlertTriangle className="h-4 w-4 text-yellow-600 mt-0.5 flex-shrink-0" />
+                  <p className="text-muted-foreground">
+                    Remember to log out after your session
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom Bar */}
+          <div className="pt-8 border-t">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+              <p className="text-sm text-muted-foreground text-center md:text-left">
+                © {new Date().getFullYear()} SHELTR. All rights reserved. Confidential and proprietary.
+              </p>
+              <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                <span className="flex items-center gap-1">
+                  <Lock className="h-3 w-3" />
+                  Secure Session
+                </span>
+                <span>•</span>
+                <span>Investor Portal v2.0</span>
+              </div>
+            </div>
+          </div>
         </div>
-      </section>
+      </footer>
     </div>
   );
 }

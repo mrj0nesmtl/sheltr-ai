@@ -224,12 +224,12 @@ function ShelterResearchHubContent() {
           })}
         </div>
 
-        {/* Back Button */}
+        {/* Back Button - Dynamic based on context */}
         <div className="flex justify-center">
-          <Link href="/portal/founders-only">
+          <Link href={isEmbedded ? "/ir/dataroom" : "/portal/founders-only"}>
             <Button variant="outline" size="lg">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Founders Portal
+              {isEmbedded ? "Back to Data Room" : "Back to Founders Portal"}
             </Button>
           </Link>
         </div>

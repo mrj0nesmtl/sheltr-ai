@@ -16,6 +16,7 @@ interface SecureDocumentViewerProps {
   documentSlug: string;
   category?: string;
   backLink?: string;
+  backLinkText?: string;
 }
 
 interface DocumentData {
@@ -40,7 +41,8 @@ interface DocumentData {
 export default function SecureDocumentViewer({ 
   documentSlug, 
   category,
-  backLink = '/portal/founders-only' 
+  backLink = '/portal/founders-only',
+  backLinkText
 }: SecureDocumentViewerProps) {
   const [document, setDocument] = useState<DocumentData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -54,6 +56,12 @@ export default function SecureDocumentViewer({
       setIsEmbedded(urlParams.get('embed') === 'true');
     }
   }, []);
+
+  // Determine back link text based on context
+  const getBackLinkText = () => {
+    if (backLinkText) return backLinkText;
+    return isEmbedded ? 'Back to Research Hub' : 'Back to Portal';
+  };
 
   useEffect(() => {
     const loadDocument = async () => {
@@ -123,7 +131,7 @@ export default function SecureDocumentViewer({
             <Link href={backLink}>
               <Button variant="outline" className="w-full">
                 <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to Portal
+                {getBackLinkText()}
               </Button>
             </Link>
           </CardContent>
@@ -157,7 +165,7 @@ export default function SecureDocumentViewer({
               <Link href={backLink} className="flex-shrink-0">
                 <Button variant="outline" size="sm">
                   <ArrowLeft className="h-4 w-4 mr-2" />
-                  <span className="hidden sm:inline">Back to Portal</span>
+                  <span className="hidden sm:inline">{getBackLinkText()}</span>
                   <span className="sm:hidden">Back</span>
                 </Button>
               </Link>
@@ -269,7 +277,7 @@ export default function SecureDocumentViewer({
           <Link href={backLink}>
             <Button variant="outline">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Portal
+              {getBackLinkText()}
             </Button>
           </Link>
           

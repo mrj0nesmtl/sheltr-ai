@@ -583,47 +583,44 @@ export default function EditKnowledgeDocumentPage() {
           />
 
           {/* Secure Document Publisher - For Founders Portal & Investor Relations */}
-          {(permissionSettings.permission_level !== 'public' && 
-            permissionSettings.permission_level !== 'authenticated' ||
-            securePublishingSettings.published_to_founders ||
-            securePublishingSettings.published_to_ir) && (
-            <SecureDocumentPublisher
-              documentId={documentId || ''}
-              documentTitle={formData.title}
-              initialSettings={securePublishingSettings}
-              onSave={async (settings) => {
-                try {
-                  // Update local state
-                  setSecurePublishingSettings(settings);
+          {/* Note: Always show this panel regardless of permission level (v2.88.0) */}
+          {/* Public documents can now be published to secure portals - portals have their own auth */}
+          <SecureDocumentPublisher
+            documentId={documentId || ''}
+            documentTitle={formData.title}
+            initialSettings={securePublishingSettings}
+            onSave={async (settings) => {
+              try {
+                // Update local state
+                setSecurePublishingSettings(settings);
+                
+                // Save to backend (the component handles the publishing API calls)
+                if (documentId) {
+                  await knowledgeDashboardService.updateKnowledgeDocument(documentId, {
+                    published_to_founders: settings.published_to_founders,
+                    published_to_ir: settings.published_to_ir,
+                    secure_slug: settings.secure_slug,
+                    secure_badge: settings.secure_badge,
+                    secure_badge_color: settings.secure_badge_color,
+                    secure_icon: settings.secure_icon,
+                    founders_description: settings.founders_description,
+                    ir_description: settings.ir_description,
+                    source_directory: settings.source_directory,
+                    local_file_path: settings.local_file_path
+                  });
                   
-                  // Save to backend (the component handles the publishing API calls)
-                  if (documentId) {
-                    await knowledgeDashboardService.updateKnowledgeDocument(documentId, {
-                      published_to_founders: settings.published_to_founders,
-                      published_to_ir: settings.published_to_ir,
-                      secure_slug: settings.secure_slug,
-                      secure_badge: settings.secure_badge,
-                      secure_badge_color: settings.secure_badge_color,
-                      secure_icon: settings.secure_icon,
-                      founders_description: settings.founders_description,
-                      ir_description: settings.ir_description,
-                      source_directory: settings.source_directory,
-                      local_file_path: settings.local_file_path
-                    });
-                    
-                    // Track the change
-                    await trackChange('publishing', [
-                      { field: 'published_to_founders', old_value: null, new_value: settings.published_to_founders },
-                      { field: 'published_to_ir', old_value: null, new_value: settings.published_to_ir }
-                    ]);
-                  }
-                } catch (error) {
-                  console.error('Failed to save secure publishing settings:', error);
-                  throw error;
+                  // Track the change
+                  await trackChange('publishing', [
+                    { field: 'published_to_founders', old_value: null, new_value: settings.published_to_founders },
+                    { field: 'published_to_ir', old_value: null, new_value: settings.published_to_ir }
+                  ]);
                 }
-              }}
-            />
-          )}
+              } catch (error) {
+                console.error('Failed to save secure publishing settings:', error);
+                throw error;
+              }
+            }}
+          />
 
           {/* Content */}
           <Card>

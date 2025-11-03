@@ -1588,6 +1588,92 @@ function InvestmentDeckSlideshow({ isOpen, onClose }: { isOpen: boolean; onClose
   );
 }
 
+// Reusable CTA Component for All Tabs
+const NextStepsCTA = () => (
+  <Card>
+    <CardHeader>
+      <CardTitle>Next Steps for Interested Investors</CardTitle>
+    </CardHeader>
+    <CardContent>
+      <div className="grid md:grid-cols-3 gap-6">
+        <div className="text-center space-y-4">
+          <div className="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto">
+            <span className="text-white font-bold text-xl">1</span>
+          </div>
+          <h4 className="font-semibold">Initial Contact</h4>
+          <p className="text-sm text-muted-foreground">
+            Schedule a confidential call to discuss the investment opportunity, SmartFund™ model, and answer questions.
+          </p>
+          <Link href="/contact">
+            <Button variant="outline" size="sm">
+              <Calendar className="h-4 w-4 mr-2" />
+              Book Call
+            </Button>
+          </Link>
+        </div>
+
+        <div className="text-center space-y-4">
+          <div className="w-16 h-16 bg-emerald-500 rounded-full flex items-center justify-center mx-auto">
+            <span className="text-white font-bold text-xl">2</span>
+          </div>
+          <h4 className="font-semibold">Due Diligence</h4>
+          <p className="text-sm text-muted-foreground">
+            Access detailed financial projections, technical documentation, legal frameworks, and enterprise partnership agreements.
+          </p>
+          <Link href="/ir/dataroom">
+            <Button variant="outline" size="sm">
+              <Download className="h-4 w-4 mr-2" />
+              Data Room
+            </Button>
+          </Link>
+        </div>
+
+        <div className="text-center space-y-4">
+          <div className="w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center mx-auto">
+            <span className="text-white font-bold text-xl">3</span>
+          </div>
+          <h4 className="font-semibold">Investment Execution</h4>
+          <p className="text-sm text-muted-foreground">
+            Complete accredited investor verification, execute stock purchase agreements, and join the SHELTR investor community.
+          </p>
+          <Link href="/contact">
+            <Button variant="outline" size="sm">
+              <Handshake className="h-4 w-4 mr-2" />
+              Invest Now
+            </Button>
+          </Link>
+        </div>
+      </div>
+      
+      <div className="mt-8 p-6 bg-gradient-to-r from-blue-50 to-emerald-50 dark:from-blue-900/20 dark:to-emerald-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+        <h4 className="font-semibold mb-3 text-center">Investment Timeline & Milestones</h4>
+        <div className="grid md:grid-cols-4 gap-4 text-center">
+          <div>
+            <div className="font-bold text-lg text-blue-600">Q1 2026</div>
+            <div className="text-sm text-muted-foreground">Platform Launch</div>
+            <div className="text-xs text-blue-600">First shelter partnerships</div>
+          </div>
+          <div>
+            <div className="font-bold text-lg text-emerald-600">Q2 2026</div>
+            <div className="text-sm text-muted-foreground">Enterprise Integration</div>
+            <div className="text-xs text-emerald-600">Adyen + Coinbase live</div>
+          </div>
+          <div>
+            <div className="font-bold text-lg text-purple-600">Q4 2026</div>
+            <div className="text-sm text-muted-foreground">Scale Phase</div>
+            <div className="text-xs text-purple-600">50+ shelter network</div>
+          </div>
+          <div>
+            <div className="font-bold text-lg text-orange-600">Q1 2027</div>
+            <div className="text-sm text-muted-foreground">Series A</div>
+            <div className="text-xs text-orange-600">$2M+ round</div>
+          </div>
+        </div>
+      </div>
+    </CardContent>
+  </Card>
+);
+
 export default function InvestorRelationsPage() {
   const [activeTab, setActiveTab] = useState('overview');
   const [deckOpen, setDeckOpen] = useState(false);
@@ -2347,6 +2433,9 @@ export default function InvestorRelationsPage() {
                   </div>
                 </CardContent>
               </Card>
+
+              {/* Next Steps CTA */}
+              <NextStepsCTA />
             </TabsContent>
 
             {/* Product & Technology */}
@@ -2559,6 +2648,9 @@ export default function InvestorRelationsPage() {
                   </div>
                 </CardContent>
               </Card>
+
+              {/* Next Steps CTA */}
+              <NextStepsCTA />
             </TabsContent>
 
             {/* Business Model */}
@@ -2720,6 +2812,9 @@ export default function InvestorRelationsPage() {
                   </div>
                 </CardContent>
               </Card>
+
+              {/* Next Steps CTA */}
+              <NextStepsCTA />
             </TabsContent>
 
             {/* Financial Projections */}
@@ -2935,6 +3030,9 @@ export default function InvestorRelationsPage() {
                   </div>
                 </CardContent>
               </Card>
+
+              {/* Next Steps CTA */}
+              <NextStepsCTA />
             </TabsContent>
 
             {/* Investment Terms */}
@@ -3065,88 +3163,8 @@ export default function InvestorRelationsPage() {
                 </Card>
               </div>
 
-              <Card>
-                <CardHeader>
-                  <CardTitle>Next Steps for Interested Investors</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid md:grid-cols-3 gap-6">
-                    <div className="text-center space-y-4">
-                      <div className="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto">
-                        <span className="text-white font-bold text-xl">1</span>
-                      </div>
-                      <h4 className="font-semibold">Initial Contact</h4>
-                      <p className="text-sm text-muted-foreground">
-                        Schedule a confidential call to discuss the investment opportunity, SmartFund™ model, and answer questions.
-                      </p>
-                      <Link href="/contact">
-                        <Button variant="outline" size="sm">
-                          <Calendar className="h-4 w-4 mr-2" />
-                          Book Call
-                        </Button>
-                      </Link>
-                    </div>
-
-                    <div className="text-center space-y-4">
-                      <div className="w-16 h-16 bg-emerald-500 rounded-full flex items-center justify-center mx-auto">
-                        <span className="text-white font-bold text-xl">2</span>
-                      </div>
-                      <h4 className="font-semibold">Due Diligence</h4>
-                      <p className="text-sm text-muted-foreground">
-                        Access detailed financial projections, technical documentation, legal frameworks, and enterprise partnership agreements.
-                      </p>
-                      <Link href="/ir/dataroom">
-                        <Button variant="outline" size="sm">
-                          <Download className="h-4 w-4 mr-2" />
-                          Data Room
-                        </Button>
-                      </Link>
-                    </div>
-
-                    <div className="text-center space-y-4">
-                      <div className="w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center mx-auto">
-                        <span className="text-white font-bold text-xl">3</span>
-                      </div>
-                      <h4 className="font-semibold">Investment Execution</h4>
-                      <p className="text-sm text-muted-foreground">
-                        Complete accredited investor verification, execute stock purchase agreements, and join the SHELTR investor community.
-                      </p>
-                      <Link href="/contact">
-                        <Button variant="outline" size="sm">
-                          <Handshake className="h-4 w-4 mr-2" />
-                          Invest Now
-                        </Button>
-                      </Link>
-                    </div>
-                  </div>
-                  
-                  <div className="mt-8 p-6 bg-gradient-to-r from-blue-50 to-emerald-50 dark:from-blue-900/20 dark:to-emerald-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-                    <h4 className="font-semibold mb-3 text-center">Investment Timeline & Milestones</h4>
-                    <div className="grid md:grid-cols-4 gap-4 text-center">
-                      <div>
-                        <div className="font-bold text-lg text-blue-600">Q1 2026</div>
-                        <div className="text-sm text-muted-foreground">Platform Launch</div>
-                        <div className="text-xs text-blue-600">First shelter partnerships</div>
-                      </div>
-                      <div>
-                        <div className="font-bold text-lg text-emerald-600">Q2 2026</div>
-                        <div className="text-sm text-muted-foreground">Enterprise Integration</div>
-                        <div className="text-xs text-emerald-600">Adyen + Coinbase live</div>
-                      </div>
-                      <div>
-                        <div className="font-bold text-lg text-purple-600">Q4 2026</div>
-                        <div className="text-sm text-muted-foreground">Scale Phase</div>
-                        <div className="text-xs text-purple-600">50+ shelter network</div>
-                      </div>
-                      <div>
-                        <div className="font-bold text-lg text-orange-600">Q1 2027</div>
-                        <div className="text-sm text-muted-foreground">Series A</div>
-                        <div className="text-xs text-orange-600">$2M+ round</div>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+              {/* Next Steps CTA */}
+              <NextStepsCTA />
             </TabsContent>
           </Tabs>
         </div>

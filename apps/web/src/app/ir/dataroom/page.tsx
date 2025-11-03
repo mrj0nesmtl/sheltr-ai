@@ -279,6 +279,12 @@ interface GalleryItem {
   createdAt: string;
 }
 
+interface HeroImage {
+  url: string;
+  alt: string;
+  mediaType: 'image' | 'video';
+}
+
 export default function InvestorDataRoomPage() {
   const router = useRouter();
   const { user, loading: authLoading } = useAuth();
@@ -290,6 +296,7 @@ export default function InvestorDataRoomPage() {
   const [galleryLoading, setGalleryLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState<GalleryItem | null>(null);
   const [showFinancialOverview, setShowFinancialOverview] = useState(false);
+  const [heroImage, setHeroImage] = useState<HeroImage | null>(null);
 
   const isSuperAdmin = user?.role === 'super_admin';
 
@@ -365,6 +372,39 @@ export default function InvestorDataRoomPage() {
     };
 
     loadFinancialToggle();
+  }, [isAuthorized]);
+
+  // Load hero image for this page
+  useEffect(() => {
+    if (!isAuthorized) return;
+
+    const loadHeroImage = async () => {
+      try {
+        const galleryRef = collection(db, 'gallery_images');
+        const heroQuery = query(
+          galleryRef,
+          where('heroPages', 'array-contains', '/ir/dataroom')
+        );
+
+        const snapshot = await getDocs(heroQuery);
+
+        if (!snapshot.empty) {
+          const doc = snapshot.docs[0];
+          const data = doc.data();
+          const mediaType = data.mediaType || (data.type?.startsWith('video') ? 'video' : 'image');
+
+          setHeroImage({
+            url: data.src || data.url || '',
+            alt: data.title || 'SHELTR Investor Data Room',
+            mediaType: mediaType,
+          });
+        }
+      } catch (error) {
+        console.error('Error loading hero image:', error);
+      }
+    };
+
+    loadHeroImage();
   }, [isAuthorized]);
 
   // Load gallery items from Firestore
@@ -551,20 +591,48 @@ export default function InvestorDataRoomPage() {
 
       {/* Hero Section */}
       <section className="relative bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-800 text-white py-16 overflow-hidden">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" style={{
-            backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
-            backgroundSize: '32px 32px'
-          }}></div>
-        </div>
-        
-        {/* Hero Image Placeholder */}
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute inset-0 flex items-center justify-center">
-            <ImageIcon className="h-32 w-32 text-white/30" />
+        {/* Hero Image/Video Background */}
+        {heroImage ? (
+          <div className="absolute inset-0">
+            {heroImage.mediaType === 'video' ? (
+              <video
+                src={heroImage.url}
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-full object-cover opacity-40"
+              />
+            ) : (
+              <Image
+                src={heroImage.url}
+                alt={heroImage.alt}
+                fill
+                className="object-cover opacity-40"
+                priority
+              />
+            )}
+            {/* Gradient Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-900/80 via-blue-800/70 to-indigo-900/80"></div>
           </div>
-        </div>
+        ) : (
+          <>
+            {/* Background Pattern - Only shown when no hero image */}
+            <div className="absolute inset-0 opacity-10">
+              <div className="absolute inset-0" style={{
+                backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
+                backgroundSize: '32px 32px'
+              }}></div>
+            </div>
+            
+            {/* Hero Image Placeholder - Only shown when no hero image */}
+            <div className="absolute inset-0 opacity-20">
+              <div className="absolute inset-0 flex items-center justify-center">
+                <ImageIcon className="h-32 w-32 text-white/30" />
+              </div>
+            </div>
+          </>
+        )}
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-4xl">

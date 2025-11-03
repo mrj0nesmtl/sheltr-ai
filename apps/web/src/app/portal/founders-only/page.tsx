@@ -1248,7 +1248,8 @@ export default function FoundersOnlyPage() {
                 integration. However, the data streaming and user interface are fully functional for testing purposes. All donation flows will
                 be simulated until payment processing is activated.
               </AlertDescription>
-              </Alert>
+            </Alert>
+            </CardContent>
               </Card>
             </AccordionContent>
           </AccordionItem>

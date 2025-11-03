@@ -706,25 +706,34 @@ export default function FoundersOnlyPage() {
       
       console.log(`📊 Final card count: ${mergedCards.length} (${dynamicCards.length} dynamic, ${initialCards.length} hardcoded)`);
       
-      // Step 3: Load card order
-      const orderDoc = await getDoc(doc(db, 'portal_settings', 'founders_card_order'));
+      // Step 3: Load card order (with error handling for permission issues)
       let orderedCards = mergedCards;
       
-      if (orderDoc.exists()) {
-        const savedOrder = orderDoc.data().order as string[];
-        setDefaultCardOrder(savedOrder);
+      try {
+        const orderDoc = await getDoc(doc(db, 'portal_settings', 'founders_card_order'));
         
-        // Reorder cards based on saved order
-        orderedCards = savedOrder
-          .map(id => mergedCards.find(card => card.id === id))
-          .filter(Boolean) as QuickAccessCard[];
-        
-        // Add any new cards that weren't in the saved order
-        const newCards = mergedCards.filter(
-          card => !savedOrder.includes(card.id)
-        );
-        
-        orderedCards = [...orderedCards, ...newCards];
+        if (orderDoc.exists()) {
+          const savedOrder = orderDoc.data().order as string[];
+          setDefaultCardOrder(savedOrder);
+          
+          // Reorder cards based on saved order
+          orderedCards = savedOrder
+            .map(id => mergedCards.find(card => card.id === id))
+            .filter(Boolean) as QuickAccessCard[];
+          
+          // Add any new cards that weren't in the saved order
+          const newCards = mergedCards.filter(
+            card => !savedOrder.includes(card.id)
+          );
+          
+          orderedCards = [...orderedCards, ...newCards];
+          console.log('✅ Applied saved card order');
+        } else {
+          console.log('ℹ️  No saved card order, using default order');
+        }
+      } catch (orderError) {
+        console.warn('⚠️  Could not load saved card order (using default order):', orderError);
+        // Continue with mergedCards as orderedCards (already set above)
       }
 
       // Load toggle states - Check BOTH knowledge_documents AND secure_documents

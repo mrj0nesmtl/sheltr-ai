@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -58,6 +58,10 @@ import {
   Image as ImageIcon,
   Home,
   ChevronRight,
+  X,
+  ChevronLeft,
+  Info,
+  Eye,
 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -214,6 +218,10 @@ export default function FoundersOnlyPage() {
   const [heroImage, setHeroImage] = useState<HeroImage | null>(null);
   const [isClearing, setIsClearing] = useState(false);
   const [showManagementPanel, setShowManagementPanel] = useState(false);
+  
+  // Gallery Lightbox State
+  const [selectedGalleryImage, setSelectedGalleryImage] = useState<number | null>(null);
+  const [showImageInfo, setShowImageInfo] = useState(false);
 
   // DnD Sensors
   const sensors = useSensors(
@@ -900,6 +908,44 @@ export default function FoundersOnlyPage() {
       setShowFinancialInIR(!value);
     }
   };
+
+  // Gallery Lightbox Functions
+  const openGalleryLightbox = (index: number) => {
+    setSelectedGalleryImage(index);
+  };
+
+  const closeGalleryLightbox = useCallback(() => {
+    setSelectedGalleryImage(null);
+    setShowImageInfo(false);
+  }, []);
+
+  const nextGalleryImage = useCallback(() => {
+    setSelectedGalleryImage(prev => (prev === null ? 0 : prev + 1) % galleryItems.length);
+  }, [galleryItems.length]);
+
+  const prevGalleryImage = useCallback(() => {
+    setSelectedGalleryImage(prev => prev === 0 ? galleryItems.length - 1 : (prev || 1) - 1);
+  }, [galleryItems.length]);
+
+  // Gallery Lightbox Keyboard Navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (selectedGalleryImage !== null) {
+        if (e.key === 'Escape') {
+          closeGalleryLightbox();
+        } else if (e.key === 'ArrowLeft') {
+          prevGalleryImage();
+        } else if (e.key === 'ArrowRight') {
+          nextGalleryImage();
+        } else if (e.key === 'i' || e.key === 'I') {
+          setShowImageInfo(prev => !prev);
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedGalleryImage, closeGalleryLightbox, prevGalleryImage, nextGalleryImage]);
 
   // Toggle Investor Data Room visibility
   const handleToggleInvestorDataRoom = async (cardId: string, value: boolean) => {
@@ -1627,8 +1673,12 @@ export default function FoundersOnlyPage() {
               </AccordionTrigger>
               <AccordionContent className="px-6 py-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {galleryItems.map((item) => (
-                <Card key={item.id} className="overflow-hidden group hover:shadow-lg transition-all">
+              {galleryItems.map((item, index) => (
+                <Card 
+                  key={item.id} 
+                  className="overflow-hidden group hover:shadow-lg transition-all cursor-pointer"
+                  onClick={() => openGalleryLightbox(index)}
+                >
                   <div className="relative aspect-video bg-slate-100 dark:bg-slate-800">
                     {item.type === 'video' && (
                       <Badge className="absolute top-2 left-2 bg-red-600 text-white">
@@ -1646,10 +1696,17 @@ export default function FoundersOnlyPage() {
                       fill
                       className="object-cover group-hover:scale-105 transition-transform"
                     />
+                    {/* Clickable Overlay with Eye Icon */}
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors" />
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="bg-white/90 rounded-full p-3">
+                        <Eye className="h-6 w-6 text-gray-800" />
+                      </div>
+                    </div>
                     {item.type === 'video' && item.url && (
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                          <Play className="h-8 w-8 text-black ml-1" />
+                      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+                        <div className="w-12 h-12 bg-white/80 rounded-full flex items-center justify-center">
+                          <Play className="h-6 w-6 text-black ml-0.5" />
                         </div>
                       </div>
                     )}
@@ -1714,6 +1771,99 @@ export default function FoundersOnlyPage() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Gallery Lightbox Modal */}
+      {selectedGalleryImage !== null && galleryItems[selectedGalleryImage] && (
+        <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center">
+          <div className="relative w-full h-full flex items-center justify-center p-4">
+            {/* Close Button */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={closeGalleryLightbox}
+              className="absolute top-4 right-4 z-10 text-white hover:bg-white/20"
+            >
+              <X className="h-6 w-6" />
+            </Button>
+
+            {/* Info Toggle */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setShowImageInfo(!showImageInfo)}
+              className="absolute top-4 left-4 z-10 text-white hover:bg-white/20"
+            >
+              <Info className="h-6 w-6" />
+            </Button>
+
+            {/* Navigation Buttons */}
+            {galleryItems.length > 1 && (
+              <>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={prevGalleryImage}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 z-10 text-white hover:bg-white/20"
+                >
+                  <ChevronLeft className="h-8 w-8" />
+                </Button>
+
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={nextGalleryImage}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 z-10 text-white hover:bg-white/20"
+                >
+                  <ChevronRight className="h-8 w-8" />
+                </Button>
+              </>
+            )}
+
+            {/* Main Media */}
+            <div className="relative max-w-5xl max-h-[80vh] w-full h-full">
+              {galleryItems[selectedGalleryImage]?.type === 'video' && galleryItems[selectedGalleryImage]?.url ? (
+                <video
+                  key={galleryItems[selectedGalleryImage]?.url}
+                  src={galleryItems[selectedGalleryImage].url}
+                  controls
+                  autoPlay
+                  playsInline
+                  className="max-w-full max-h-full object-contain rounded-lg mx-auto"
+                  style={{ maxHeight: 'calc(80vh - 60px)' }}
+                >
+                  Your browser does not support the video tag.
+                </video>
+              ) : (
+                <Image
+                  src={galleryItems[selectedGalleryImage].thumbnail}
+                  alt={galleryItems[selectedGalleryImage].title}
+                  fill
+                  className="object-contain"
+                  sizes="100vw"
+                  priority
+                />
+              )}
+            </div>
+
+            {/* Image Info Panel */}
+            {showImageInfo && (
+              <div className="absolute bottom-4 left-4 right-4 bg-black/80 text-white rounded-lg p-4 max-w-2xl mx-auto">
+                <h3 className="font-semibold text-lg mb-2">{galleryItems[selectedGalleryImage].title}</h3>
+                <p className="text-sm text-gray-300 mb-3">{galleryItems[selectedGalleryImage].description}</p>
+                <div className="flex flex-wrap gap-2 mb-2">
+                  {galleryItems[selectedGalleryImage].tags.map((tag, index) => (
+                    <Badge key={index} variant="secondary" className="text-xs">
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
+                <p className="text-xs text-gray-400">{galleryItems[selectedGalleryImage].date}</p>
+                <p className="text-xs text-gray-500 mt-2">Press ESC to close • Arrow keys to navigate • I for info</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

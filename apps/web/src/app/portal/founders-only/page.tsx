@@ -1820,7 +1820,7 @@ export default function FoundersOnlyPage() {
             )}
 
             {/* Main Media */}
-            <div className="relative max-w-5xl max-h-[80vh] w-full h-full">
+            <div className="relative max-w-5xl max-h-[70vh] w-full h-full">
               {galleryItems[selectedGalleryImage]?.type === 'video' && galleryItems[selectedGalleryImage]?.url ? (
                 <video
                   key={galleryItems[selectedGalleryImage]?.url}
@@ -1829,7 +1829,7 @@ export default function FoundersOnlyPage() {
                   autoPlay
                   playsInline
                   className="max-w-full max-h-full object-contain rounded-lg mx-auto"
-                  style={{ maxHeight: 'calc(80vh - 60px)' }}
+                  style={{ maxHeight: 'calc(70vh - 60px)' }}
                 >
                   Your browser does not support the video tag.
                 </video>
@@ -1845,20 +1845,154 @@ export default function FoundersOnlyPage() {
               )}
             </div>
 
-            {/* Image Info Panel */}
-            {showImageInfo && (
-              <div className="absolute bottom-4 left-4 right-4 bg-black/80 text-white rounded-lg p-4 max-w-2xl mx-auto">
-                <h3 className="font-semibold text-lg mb-2">{galleryItems[selectedGalleryImage].title}</h3>
-                <p className="text-sm text-gray-300 mb-3">{galleryItems[selectedGalleryImage].description}</p>
+            {/* Always Visible Metadata Bar */}
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/95 to-transparent">
+              <div className="max-w-5xl mx-auto px-6 py-4">
+                {/* Title and Type Badge */}
+                <div className="flex items-start justify-between mb-2">
+                  <h3 className="font-semibold text-xl text-white flex-1 mr-4">
+                    {galleryItems[selectedGalleryImage].title}
+                  </h3>
+                  {galleryItems[selectedGalleryImage]?.type === 'video' && (
+                    <Badge className="bg-red-600 text-white">Video</Badge>
+                  )}
+                </div>
+
+                {/* Description */}
+                <p className="text-sm text-gray-300 mb-3 line-clamp-2">
+                  {galleryItems[selectedGalleryImage].description}
+                </p>
+
+                {/* Metadata Row */}
+                <div className="flex flex-wrap items-center gap-4 text-xs text-gray-400 mb-3">
+                  {/* Upload Date */}
+                  <div className="flex items-center gap-1.5">
+                    <Clock className="h-3.5 w-3.5" />
+                    <span>{galleryItems[selectedGalleryImage].date}</span>
+                  </div>
+
+                  {/* Media Type */}
+                  <div className="flex items-center gap-1.5">
+                    <ImageIcon className="h-3.5 w-3.5" />
+                    <span className="capitalize">{galleryItems[selectedGalleryImage]?.type || 'image'}</span>
+                  </div>
+
+                  {/* Duration for videos */}
+                  {galleryItems[selectedGalleryImage]?.duration && (
+                    <div className="flex items-center gap-1.5">
+                      <Play className="h-3.5 w-3.5" />
+                      <span>{galleryItems[selectedGalleryImage].duration}</span>
+                    </div>
+                  )}
+
+                  {/* Item count */}
+                  <div className="flex items-center gap-1.5">
+                    <Eye className="h-3.5 w-3.5" />
+                    <span>{selectedGalleryImage + 1} of {galleryItems.length}</span>
+                  </div>
+                </div>
+
+                {/* Tags */}
                 <div className="flex flex-wrap gap-2 mb-2">
-                  {galleryItems[selectedGalleryImage].tags.map((tag, index) => (
-                    <Badge key={index} variant="secondary" className="text-xs">
+                  {galleryItems[selectedGalleryImage].tags.slice(0, 5).map((tag, index) => (
+                    <Badge key={index} variant="secondary" className="text-xs bg-white/10 hover:bg-white/20 text-white border-white/20">
                       {tag}
                     </Badge>
                   ))}
+                  {galleryItems[selectedGalleryImage].tags.length > 5 && (
+                    <Badge variant="secondary" className="text-xs bg-white/10 text-white border-white/20">
+                      +{galleryItems[selectedGalleryImage].tags.length - 5} more
+                    </Badge>
+                  )}
                 </div>
-                <p className="text-xs text-gray-400">{galleryItems[selectedGalleryImage].date}</p>
-                <p className="text-xs text-gray-500 mt-2">Press ESC to close • Arrow keys to navigate • I for info</p>
+
+                {/* Keyboard Hints */}
+                <div className="flex items-center justify-between pt-2 border-t border-white/10">
+                  <p className="text-xs text-gray-500">
+                    Press <kbd className="px-1.5 py-0.5 bg-white/10 rounded text-white">ESC</kbd> to close • 
+                    <kbd className="px-1.5 py-0.5 bg-white/10 rounded text-white ml-1">←</kbd> 
+                    <kbd className="px-1.5 py-0.5 bg-white/10 rounded text-white ml-1">→</kbd> to navigate
+                    {showImageInfo && (
+                      <span className="ml-2">• <kbd className="px-1.5 py-0.5 bg-white/10 rounded text-white">I</kbd> to hide details</span>
+                    )}
+                  </p>
+                  {!showImageInfo && galleryItems[selectedGalleryImage].tags.length > 5 && (
+                    <button 
+                      onClick={() => setShowImageInfo(true)}
+                      className="text-xs text-blue-400 hover:text-blue-300 transition-colors"
+                    >
+                      View all tags →
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Extended Info Panel (Toggle with I key) */}
+            {showImageInfo && (
+              <div className="absolute inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-8 z-10">
+                <div className="bg-slate-900 text-white rounded-lg p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto border border-white/10">
+                  {/* Close Extended Info */}
+                  <div className="flex items-start justify-between mb-4">
+                    <h3 className="font-bold text-2xl">{galleryItems[selectedGalleryImage].title}</h3>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setShowImageInfo(false)}
+                      className="text-white hover:bg-white/10"
+                    >
+                      <X className="h-5 w-5" />
+                    </Button>
+                  </div>
+                  
+                  {/* Full Description */}
+                  <div className="mb-4">
+                    <h4 className="text-sm font-semibold text-gray-400 mb-2">Description</h4>
+                    <p className="text-base text-gray-200">{galleryItems[selectedGalleryImage].description}</p>
+                  </div>
+
+                  {/* All Tags */}
+                  <div className="mb-4">
+                    <h4 className="text-sm font-semibold text-gray-400 mb-2">Tags</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {galleryItems[selectedGalleryImage].tags.map((tag, index) => (
+                        <Badge key={index} variant="outline" className="text-sm bg-blue-500/10 border-blue-500/30 text-blue-300">
+                          {tag}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Metadata Details */}
+                  <div className="space-y-2 text-sm">
+                    <div className="flex items-center gap-2 text-gray-300">
+                      <Clock className="h-4 w-4 text-gray-400" />
+                      <span className="font-semibold">Upload Date:</span>
+                      <span>{galleryItems[selectedGalleryImage].date}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-gray-300">
+                      <ImageIcon className="h-4 w-4 text-gray-400" />
+                      <span className="font-semibold">Type:</span>
+                      <span className="capitalize">{galleryItems[selectedGalleryImage]?.type || 'image'}</span>
+                    </div>
+                    {galleryItems[selectedGalleryImage]?.duration && (
+                      <div className="flex items-center gap-2 text-gray-300">
+                        <Play className="h-4 w-4 text-gray-400" />
+                        <span className="font-semibold">Duration:</span>
+                        <span>{galleryItems[selectedGalleryImage].duration}</span>
+                      </div>
+                    )}
+                    <div className="flex items-center gap-2 text-gray-300">
+                      <Eye className="h-4 w-4 text-gray-400" />
+                      <span className="font-semibold">Position:</span>
+                      <span>{selectedGalleryImage + 1} of {galleryItems.length}</span>
+                    </div>
+                  </div>
+
+                  <div className="mt-6 pt-4 border-t border-white/10 text-xs text-gray-500">
+                    Press <kbd className="px-1.5 py-0.5 bg-white/10 rounded text-white">I</kbd> or click × to close details
+                  </div>
+                </div>
               </div>
             )}
           </div>

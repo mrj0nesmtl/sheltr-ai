@@ -15,7 +15,10 @@ import {
   Info,
   Camera,
   Calendar,
-  Tag
+  Tag,
+  Clock,
+  Play,
+  Image as ImageIcon
 } from 'lucide-react';
 import { GalleryService } from '@/services/galleryService';
 import { Button } from '@/components/ui/button';
@@ -363,7 +366,7 @@ export default function GalleryPage() {
             </Button>
 
             {/* Main Media */}
-            <div className="relative max-w-5xl max-h-[80vh] w-full h-full">
+            <div className="relative max-w-5xl max-h-[70vh] w-full h-full">
               {filteredImages[selectedImage]?.mediaType === 'video' ? (
                 <video
                   key={filteredImages[selectedImage]?.src}
@@ -373,8 +376,8 @@ export default function GalleryPage() {
                   playsInline
                   muted
                   preload="auto"
-                  className="max-w-full max-h-full object-contain rounded-lg"
-                  style={{ maxHeight: 'calc(80vh - 60px)' }}
+                  className="max-w-full max-h-full object-contain rounded-lg mx-auto"
+                  style={{ maxHeight: 'calc(70vh - 60px)' }}
                   onError={(e) => {
                     console.error('❌ Video load error:', e);
                     console.error('Video src:', filteredImages[selectedImage]?.src);
@@ -396,39 +399,167 @@ export default function GalleryPage() {
               )}
             </div>
 
-            {/* Image Info Panel */}
-            {showImageInfo && (
-              <div className="absolute bottom-4 left-4 right-4 bg-black/80 backdrop-blur-sm rounded-lg p-6 text-white">
-                <div className="max-w-2xl">
-                  <h2 className="text-2xl font-bold mb-2">{sanitizeForDisplay(filteredImages[selectedImage].title)}</h2>
-                  <p className="text-gray-300 mb-4">{sanitizeForDisplay(filteredImages[selectedImage].description)}</p>
-                  
-                  <div className="flex items-center gap-4 text-sm text-gray-400 mb-4">
-                    <div className="flex items-center gap-1">
-                      <Tag className="h-4 w-4" />
-                      <span className="capitalize">{sanitizeCategory(filteredImages[selectedImage].category)}</span>
+            {/* Always Visible Metadata Bar */}
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/95 to-transparent">
+              <div className="max-w-5xl mx-auto px-6 py-4">
+                {/* Title and Type Badge */}
+                <div className="flex items-start justify-between mb-2">
+                  <h3 className="font-semibold text-xl text-white flex-1 mr-4">
+                    {sanitizeForDisplay(filteredImages[selectedImage].title)}
+                  </h3>
+                  {filteredImages[selectedImage]?.mediaType === 'video' && (
+                    <Badge className="bg-red-600 text-white">Video</Badge>
+                  )}
+                </div>
+
+                {/* Description */}
+                <p className="text-sm text-gray-300 mb-3 line-clamp-2">
+                  {sanitizeForDisplay(filteredImages[selectedImage].description)}
+                </p>
+
+                {/* Metadata Row */}
+                <div className="flex flex-wrap items-center gap-4 text-xs text-gray-400 mb-3">
+                  {/* Upload Date */}
+                  <div className="flex items-center gap-1.5">
+                    <Clock className="h-3.5 w-3.5" />
+                    <span>{sanitizeDate(filteredImages[selectedImage].date)}</span>
+                  </div>
+
+                  {/* Category */}
+                  <div className="flex items-center gap-1.5">
+                    <Tag className="h-3.5 w-3.5" />
+                    <span className="capitalize">{sanitizeCategory(filteredImages[selectedImage].category)}</span>
+                  </div>
+
+                  {/* Media Type */}
+                  <div className="flex items-center gap-1.5">
+                    <ImageIcon className="h-3.5 w-3.5" />
+                    <span className="capitalize">{filteredImages[selectedImage]?.mediaType || 'image'}</span>
+                  </div>
+
+                  {/* Duration for videos */}
+                  {filteredImages[selectedImage]?.duration && (
+                    <div className="flex items-center gap-1.5">
+                      <Play className="h-3.5 w-3.5" />
+                      <span>{Math.floor(filteredImages[selectedImage].duration / 60)}:{(filteredImages[selectedImage].duration % 60).toFixed(0).padStart(2, '0')}</span>
                     </div>
-                    <div className="flex items-center gap-1">
-                      <Calendar className="h-4 w-4" />
-                      <span>{sanitizeDate(filteredImages[selectedImage].date)}</span>
+                  )}
+
+                  {/* Item count */}
+                  <div className="flex items-center gap-1.5">
+                    <Eye className="h-3.5 w-3.5" />
+                    <span>{selectedImage + 1} of {filteredImages.length}</span>
+                  </div>
+                </div>
+
+                {/* Tags */}
+                <div className="flex flex-wrap gap-2 mb-2">
+                  {sanitizeTags(filteredImages[selectedImage].tags).slice(0, 5).map((tag, tagIndex) => (
+                    <Badge key={tagIndex} variant="secondary" className="text-xs bg-white/10 hover:bg-white/20 text-white border-white/20">
+                      {sanitizeForDisplay(tag)}
+                    </Badge>
+                  ))}
+                  {sanitizeTags(filteredImages[selectedImage].tags).length > 5 && (
+                    <Badge variant="secondary" className="text-xs bg-white/10 text-white border-white/20">
+                      +{sanitizeTags(filteredImages[selectedImage].tags).length - 5} more
+                    </Badge>
+                  )}
+                </div>
+
+                {/* Keyboard Hints */}
+                <div className="flex items-center justify-between pt-2 border-t border-white/10">
+                  <p className="text-xs text-gray-500">
+                    Press <kbd className="px-1.5 py-0.5 bg-white/10 rounded text-white">ESC</kbd> to close • 
+                    <kbd className="px-1.5 py-0.5 bg-white/10 rounded text-white ml-1">←</kbd> 
+                    <kbd className="px-1.5 py-0.5 bg-white/10 rounded text-white ml-1">→</kbd> to navigate
+                    {showImageInfo && (
+                      <span className="ml-2">• <kbd className="px-1.5 py-0.5 bg-white/10 rounded text-white">I</kbd> to hide details</span>
+                    )}
+                  </p>
+                  {!showImageInfo && sanitizeTags(filteredImages[selectedImage].tags).length > 5 && (
+                    <button 
+                      onClick={() => setShowImageInfo(true)}
+                      className="text-xs text-blue-400 hover:text-blue-300 transition-colors"
+                    >
+                      View all tags →
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Extended Info Panel (Toggle with I key) */}
+            {showImageInfo && (
+              <div className="absolute inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-8 z-10">
+                <div className="bg-slate-900 text-white rounded-lg p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto border border-white/10">
+                  {/* Close Extended Info */}
+                  <div className="flex items-start justify-between mb-4">
+                    <h3 className="font-bold text-2xl">{sanitizeForDisplay(filteredImages[selectedImage].title)}</h3>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setShowImageInfo(false)}
+                      className="text-white hover:bg-white/10"
+                    >
+                      <X className="h-5 w-5" />
+                    </Button>
+                  </div>
+                  
+                  {/* Full Description */}
+                  <div className="mb-4">
+                    <h4 className="text-sm font-semibold text-gray-400 mb-2">Description</h4>
+                    <p className="text-base text-gray-200">{sanitizeForDisplay(filteredImages[selectedImage].description)}</p>
+                  </div>
+
+                  {/* All Tags */}
+                  <div className="mb-4">
+                    <h4 className="text-sm font-semibold text-gray-400 mb-2">Tags</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {sanitizeTags(filteredImages[selectedImage].tags).map((tag, tagIndex) => (
+                        <Badge key={tagIndex} variant="outline" className="text-sm bg-blue-500/10 border-blue-500/30 text-blue-300">
+                          {sanitizeForDisplay(tag)}
+                        </Badge>
+                      ))}
                     </div>
                   </div>
 
-                  <div className="flex flex-wrap gap-2">
-                    {sanitizeTags(filteredImages[selectedImage].tags).map((tag, tagIndex) => (
-                      <Badge key={tagIndex} variant="secondary" className="text-xs">
-                        {sanitizeForDisplay(tag)}
-                      </Badge>
-                    ))}
+                  {/* Metadata Details */}
+                  <div className="space-y-2 text-sm">
+                    <div className="flex items-center gap-2 text-gray-300">
+                      <Clock className="h-4 w-4 text-gray-400" />
+                      <span className="font-semibold">Upload Date:</span>
+                      <span>{sanitizeDate(filteredImages[selectedImage].date)}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-gray-300">
+                      <Tag className="h-4 w-4 text-gray-400" />
+                      <span className="font-semibold">Category:</span>
+                      <span className="capitalize">{sanitizeCategory(filteredImages[selectedImage].category)}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-gray-300">
+                      <ImageIcon className="h-4 w-4 text-gray-400" />
+                      <span className="font-semibold">Type:</span>
+                      <span className="capitalize">{filteredImages[selectedImage]?.mediaType || 'image'}</span>
+                    </div>
+                    {filteredImages[selectedImage]?.duration && (
+                      <div className="flex items-center gap-2 text-gray-300">
+                        <Play className="h-4 w-4 text-gray-400" />
+                        <span className="font-semibold">Duration:</span>
+                        <span>{Math.floor(filteredImages[selectedImage].duration / 60)}:{(filteredImages[selectedImage].duration % 60).toFixed(0).padStart(2, '0')}</span>
+                      </div>
+                    )}
+                    <div className="flex items-center gap-2 text-gray-300">
+                      <Eye className="h-4 w-4 text-gray-400" />
+                      <span className="font-semibold">Position:</span>
+                      <span>{selectedImage + 1} of {filteredImages.length}</span>
+                    </div>
+                  </div>
+
+                  <div className="mt-6 pt-4 border-t border-white/10 text-xs text-gray-500">
+                    Press <kbd className="px-1.5 py-0.5 bg-white/10 rounded text-white">I</kbd> or click × to close details
                   </div>
                 </div>
               </div>
             )}
-
-            {/* Image Counter */}
-            <div className="absolute bottom-4 right-4 bg-black/60 backdrop-blur-sm rounded-lg px-3 py-2 text-white text-sm">
-              {selectedImage + 1} / {filteredImages.length}
-            </div>
           </div>
         </div>
       )}

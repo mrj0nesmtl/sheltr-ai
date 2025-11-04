@@ -74,8 +74,9 @@ function TeamContent() {
 
   // Generate fallback profile picture URL from Firebase Storage
   const getFallbackProfilePicture = (name: string, extension: string = 'jpg'): string => {
-    // Extract initials (e.g., "Joel Yaffe" -> "JY")
-    const initials = name.split(' ').map(n => n[0]).join('').toUpperCase();
+    // Extract initials (e.g., "Joel Yaffe" -> "jy")
+    // Files are stored in lowercase at gs://sheltr-ai.firebasestorage.app/profiles/leadership
+    const initials = name.split(' ').map(n => n[0]).join('').toLowerCase();
     
     // Firebase Storage URL for leadership profile fallbacks
     // User provided path: gs://sheltr-ai.firebasestorage.app/profiles/leadership

@@ -73,14 +73,17 @@ function TeamContent() {
   ];
 
   // Generate fallback profile picture URL from Firebase Storage
-  const getFallbackProfilePicture = (name: string): string => {
+  const getFallbackProfilePicture = (name: string, extension: string = 'jpg'): string => {
     // Extract initials (e.g., "Joel Yaffe" -> "JY")
     const initials = name.split(' ').map(n => n[0]).join('').toUpperCase();
     
     // Firebase Storage URL for leadership profile fallbacks
-    // Format: profiles/leadership/{INITIALS}.jpg
-    const storageUrl = `https://firebasestorage.googleapis.com/v0/b/sheltr-ai.firebasestorage.app/o/profiles%2Fleadership%2F${initials}.jpg?alt=media`;
+    // User provided path: gs://sheltr-ai.firebasestorage.app/profiles/leadership
+    // Format: https://firebasestorage.googleapis.com/v0/b/{bucket}/o/{encoded-path}?alt=media
+    const filePath = `profiles%2Fleadership%2F${initials}.${extension}`;
+    const storageUrl = `https://firebasestorage.googleapis.com/v0/b/sheltr-ai.firebasestorage.app/o/${filePath}?alt=media`;
     
+    console.log(`🖼️ Attempting fallback image for ${name} (${initials}.${extension}):`, storageUrl);
     return storageUrl;
   };
 
@@ -100,11 +103,22 @@ function TeamContent() {
                 alt={member.name}
                 className="h-full w-full object-cover"
                 onError={(e) => {
-                  // If fallback image also fails, show initials
                   const target = e.target as HTMLImageElement;
+                  const currentSrc = target.src;
+                  
+                  console.error(`❌ Failed to load image for ${member.name}:`, currentSrc);
+                  
+                  // Try PNG if JPG failed (and we haven't tried PNG yet)
+                  if (currentSrc.includes('.jpg') && !currentSrc.includes('_tried_png')) {
+                    console.log(`🔄 Retrying with PNG for ${member.name}`);
+                    target.src = getFallbackProfilePicture(member.name, 'png') + '_tried_png';
+                    return;
+                  }
+                  
+                  // If both extensions failed, show initials
                   target.style.display = 'none';
                   const parent = target.parentElement;
-                  if (parent) {
+                  if (parent && !parent.querySelector('span')) {
                     const initialsSpan = document.createElement('span');
                     initialsSpan.className = 'text-lg font-semibold text-white';
                     initialsSpan.textContent = member.name.split(' ').map(n => n[0]).join('').toUpperCase();

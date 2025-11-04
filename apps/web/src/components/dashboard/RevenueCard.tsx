@@ -11,11 +11,11 @@ interface RevenueCardProps {
 }
 
 export function RevenueCard({ linkPath = '/portal/founders-only/revenue' }: RevenueCardProps) {
-  const totalRevenue24Months = 385338;
-  const year1ARR = 500000; // Projected Year 1 ARR
-  const year2ARR = 2000000; // Approaching Year 2 ARR
-  const profitabilityMonth = 12; // Month 12 = August 2025
-  const avgMonthlyRevenueY2 = 27712; // Final month revenue
+  const totalRevenue24Months = 220097;
+  const year1Revenue = 39888; // Year 1 actual revenue
+  const year2Revenue = 180209; // Year 2 actual revenue  
+  const profitabilityMonth = 17; // Month 17 = January 2027
+  const finalMRR = 32154; // Final month revenue (Aug 2027)
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -36,7 +36,7 @@ export function RevenueCard({ linkPath = '/portal/founders-only/revenue' }: Reve
               2-Year Revenue Projections
             </CardTitle>
             <CardDescription>
-              Pre-revenue to scale financial forecasting (24 months)
+              Sep 2025 - Aug 2027 • Revenue launch Q2 2026 (24 months)
             </CardDescription>
           </div>
           <Badge variant="secondary" className="bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300">
@@ -55,35 +55,35 @@ export function RevenueCard({ linkPath = '/portal/founders-only/revenue' }: Reve
             </p>
           </div>
           <div className="space-y-1">
-            <p className="text-xs text-muted-foreground">Year 1 ARR Target</p>
+            <p className="text-xs text-muted-foreground">Year 1 Revenue</p>
             <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-              {formatCurrency(year1ARR)}
+              {formatCurrency(year1Revenue)}
             </p>
           </div>
           <div className="space-y-1">
-            <p className="text-xs text-muted-foreground">Year 2 ARR Path</p>
+            <p className="text-xs text-muted-foreground">Year 2 Revenue</p>
             <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">
-              {formatCurrency(year2ARR)}
+              {formatCurrency(year2Revenue)}
             </p>
           </div>
           <div className="space-y-1">
             <p className="text-xs text-muted-foreground">Final MRR</p>
             <p className="text-2xl font-bold text-cyan-600 dark:text-cyan-400">
-              {formatCurrency(avgMonthlyRevenueY2)}
+              {formatCurrency(finalMRR)}
             </p>
           </div>
         </div>
 
-        {/* Progress Bar - Path to Profitability */}
+        {/* Progress Bar */}
         <div className="space-y-2">
           <div className="flex items-center justify-between text-sm">
-            <span className="text-muted-foreground">Path to $500K ARR</span>
-            <span className="font-medium">{((totalRevenue24Months / year1ARR) * 100).toFixed(1)}%</span>
+            <span className="text-muted-foreground">Revenue Growth</span>
+            <span className="font-medium">{((year2Revenue / totalRevenue24Months) * 100).toFixed(1)}% in Year 2</span>
           </div>
           <div className="h-3 bg-muted rounded-full overflow-hidden">
             <div 
               className="h-full bg-gradient-to-r from-blue-500 via-green-500 to-purple-500 transition-all"
-              style={{ width: `${(totalRevenue24Months / year1ARR) * 100}%` }}
+              style={{ width: `${(year2Revenue / totalRevenue24Months) * 100}%` }}
             />
           </div>
         </div>
@@ -101,19 +101,9 @@ export function RevenueCard({ linkPath = '/portal/founders-only/revenue' }: Reve
             <Calendar className="h-4 w-4 text-blue-500" />
             <div>
               <p className="text-xs text-muted-foreground">Timeline</p>
-              <p className="font-semibold">Sep 24 - Aug 26</p>
+              <p className="font-semibold">Sep 25 - Aug 27</p>
             </div>
           </div>
-        </div>
-
-        {/* Revenue Streams Badge */}
-        <div className="flex flex-wrap gap-2 pt-2 border-t">
-          <Badge variant="outline" className="text-xs">Transaction Fees</Badge>
-          <Badge variant="outline" className="text-xs">SaaS Subscriptions</Badge>
-          <Badge variant="outline" className="text-xs">Sponsorships</Badge>
-          <Badge variant="outline" className="text-xs">White Label</Badge>
-          <Badge variant="outline" className="text-xs">Grants</Badge>
-          <Badge variant="outline" className="text-xs">+3 more</Badge>
         </div>
 
         {/* CTA Button */}

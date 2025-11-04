@@ -33,29 +33,30 @@ import {
 } from '@/components/ui/table';
 
 // Revenue data structure based on the CSV projections
+// Timeline: Sep 2025 - Aug 2027 | Revenue starts Q2 2026 (Apr 2026)
 const revenueData = {
-  months: ['Sep-24', 'Oct-24', 'Nov-24', 'Dec-24', 'Jan-25', 'Feb-25', 'Mar-25', 'Apr-25', 'May-25', 'Jun-25', 'Jul-25', 'Aug-25', 'Sep-25', 'Oct-25', 'Nov-25', 'Dec-25', 'Jan-26', 'Feb-26', 'Mar-26', 'Apr-26', 'May-26', 'Jun-26', 'Jul-26', 'Aug-26'],
+  months: ['Sep-25', 'Oct-25', 'Nov-25', 'Dec-25', 'Jan-26', 'Feb-26', 'Mar-26', 'Apr-26', 'May-26', 'Jun-26', 'Jul-26', 'Aug-26', 'Sep-26', 'Oct-26', 'Nov-26', 'Dec-26', 'Jan-27', 'Feb-27', 'Mar-27', 'Apr-27', 'May-27', 'Jun-27', 'Jul-27', 'Aug-27'],
   
   streams: {
-    transactionFees: [0, 0, 63, 172, 338, 525, 813, 1097, 1531, 1925, 2531, 3047, 3850, 4500, 5525, 6322, 7594, 8550, 10094, 11222, 13063, 14375, 16538, 18047],
-    saasSubs: [0, 0, 0, 200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800, 4000, 4200],
-    sponsorships: [0, 0, 0, 0, 0, 2500, 0, 0, 5000, 0, 0, 7500, 0, 0, 10000, 0, 0, 15000, 0, 0, 20000, 0, 0, 25000],
-    whiteLabel: [0, 0, 0, 0, 0, 0, 5000, 0, 0, 8000, 0, 0, 10000, 0, 0, 12000, 0, 0, 15000, 0, 0, 18000, 0, 0],
-    grants: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10000, 0, 0, 0, 15000, 0, 0, 0, 0, 0, 20000, 0, 0],
-    tokenYields: [0, 0, 0, 0, 0, 0, 0, 0, 0, 231, 462, 693, 924, 1155, 1386, 1617, 1848, 2079, 2310, 2541, 2772, 3003, 3234, 3465],
-    apiFees: [0, 0, 0, 0, 0, 0, 0, 0, 100, 100, 200, 200, 300, 300, 400, 400, 500, 500, 600, 600, 700, 700, 800, 800],
-    analytics: [0, 0, 0, 0, 0, 0, 0, 0, 0, 150, 150, 300, 300, 450, 450, 600, 600, 750, 750, 900, 900, 1050, 1050, 1200],
+    transactionFees: [0, 0, 0, 0, 0, 0, 0, 63, 172, 338, 525, 813, 1097, 1531, 1925, 2531, 3047, 3850, 4500, 5525, 6322, 7594, 8550, 10094],
+    saasSubs: [0, 0, 0, 0, 0, 0, 0, 200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400],
+    sponsorships: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2500, 0, 0, 5000, 0, 0, 7500, 0, 0, 10000, 0, 0, 15000, 0],
+    whiteLabel: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5000, 0, 0, 8000, 0, 0, 10000, 0, 0, 12000, 0, 0, 15000],
+    grants: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10000, 0, 0, 0, 15000, 0, 0, 0],
+    tokenYields: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 231, 462, 693, 924, 1155, 1386, 1617, 1848, 2079, 2310],
+    apiFees: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 100, 200, 200, 300, 300, 400, 400, 500, 500, 600],
+    analytics: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 150, 150, 300, 300, 450, 450, 600, 600, 750, 750],
   },
   
-  monthlyTotal: [0, 0, 63, 372, 738, 3625, 6613, 2097, 7831, 11806, 4943, 23540, 17374, 8605, 20161, 38539, 13342, 29879, 31954, 18663, 40435, 60928, 25622, 52712],
+  monthlyTotal: [0, 0, 0, 0, 0, 0, 0, 263, 572, 938, 3825, 6813, 2297, 8031, 12006, 5143, 23440, 17574, 8805, 20361, 38739, 13542, 30079, 32154],
   
-  cumulativeTotal: [0, 0, 63, 435, 1173, 4798, 11411, 13508, 21339, 33145, 38088, 61628, 79002, 87607, 107768, 146307, 159649, 189528, 221482, 240145, 280580, 341508, 367130, 419842],
+  cumulativeTotal: [0, 0, 0, 0, 0, 0, 0, 263, 835, 1773, 5598, 12411, 14708, 22739, 34745, 39888, 63328, 80902, 89707, 110068, 148807, 162349, 192428, 224582],
   
   growth: {
-    activeShelters: [0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
-    activeParticipants: [0, 0, 50, 125, 225, 350, 500, 675, 875, 1100, 1350, 1625, 1925, 2250, 2600, 2975, 3375, 3800, 4250, 4725, 5225, 5750, 6300, 6875],
-    avgDonationPerParticipant: [0, 0, 50, 55, 60, 60, 65, 65, 70, 70, 75, 75, 80, 80, 85, 85, 90, 90, 95, 95, 100, 100, 105, 105],
-    monthlyTransactionVolume: [0, 0, 2500, 6875, 13500, 21000, 32500, 43875, 61250, 77000, 101250, 121875, 154000, 180000, 221000, 252875, 303750, 342000, 403750, 448875, 522500, 575000, 661500, 721875],
+    activeShelters: [0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
+    activeParticipants: [0, 0, 0, 0, 0, 0, 0, 50, 125, 225, 350, 500, 675, 875, 1100, 1350, 1625, 1925, 2250, 2600, 2975, 3375, 3800, 4250],
+    avgDonationPerParticipant: [0, 0, 0, 0, 0, 0, 0, 50, 55, 60, 60, 65, 65, 70, 70, 75, 75, 80, 80, 85, 85, 90, 90, 95],
+    monthlyTransactionVolume: [0, 0, 0, 0, 0, 0, 0, 2500, 6875, 13500, 21000, 32500, 43875, 61250, 77000, 101250, 121875, 154000, 180000, 221000, 252875, 303750, 342000, 403750],
   },
 };
 
@@ -138,13 +139,16 @@ export default function RevenuePage() {
             </Button>
             <div>
               <h1 className="text-4xl font-bold mb-2">2-Year Revenue Projections</h1>
-              <p className="text-muted-foreground">Pre-Revenue to Scale • Sep 2024 - Aug 2026 • 8 Revenue Streams</p>
+              <p className="text-muted-foreground">Pre-Revenue to Scale • Sep 2025 - Aug 2027 • 8 Revenue Streams</p>
               <div className="flex gap-2 mt-2">
+                <Badge className="bg-orange-100 text-orange-700 dark:bg-orange-950 dark:text-orange-300">
+                  Currently: Nov 2025
+                </Badge>
                 <Badge className="bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-300">
-                  1 Shelter/Month Growth Model
+                  Revenue Launch: Q2 2026
                 </Badge>
                 <Badge className="bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300">
-                  Path to $500K ARR
+                  1 Shelter/Month Model
                 </Badge>
               </div>
             </div>
@@ -184,7 +188,7 @@ export default function RevenuePage() {
               <div className="text-3xl font-bold text-green-600 dark:text-green-400">
                 {formatCurrency(totalRevenue)}
               </div>
-              <p className="text-xs text-muted-foreground mt-1">Sep 2024 - Aug 2026</p>
+              <p className="text-xs text-muted-foreground mt-1">Sep 2025 - Aug 2027</p>
             </CardContent>
           </Card>
 
@@ -218,18 +222,46 @@ export default function RevenuePage() {
 
           <Card className="border-2 border-cyan-200 dark:border-cyan-900">
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Final MRR (Aug 26)</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">Final MRR (Aug 27)</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold text-cyan-600 dark:text-cyan-400">
                 {formatCurrency(revenueData.monthlyTotal[revenueData.monthlyTotal.length - 1])}
               </div>
               <p className="text-xs text-muted-foreground mt-1">
-                22 shelters, 6,875 participants
+                17 shelters, 4,250 participants
               </p>
             </CardContent>
           </Card>
         </div>
+
+        {/* Key Insights - Moved up from bottom */}
+        <Card className="border-2 border-blue-200 dark:border-blue-900 bg-blue-50/50 dark:bg-blue-950/20">
+          <CardHeader>
+            <CardTitle className="text-blue-800 dark:text-blue-200">Revenue Projection Notes</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3 text-sm">
+            <p className="font-semibold text-blue-900 dark:text-blue-100">
+              📈 This is a <strong>conservative 24-month revenue forecast</strong> starting Q2 2026 with 1 shelter onboarded per month
+            </p>
+            <div className="border-l-4 border-blue-400 pl-4 space-y-2">
+              <p>• <strong>Current Status:</strong> November 2025 - 5 months into hardcore development, pre-revenue phase</p>
+              <p>• <strong>Revenue Launch:</strong> Q2 2026 (April 2026) - 4-6 months from today</p>
+              <p>• <strong>Growth Model:</strong> 1 shelter/month starting Q2 2026, with 50-75 participants each, growing to 4,250 participants by Aug 2027</p>
+              <p>• <strong>8 Revenue Streams:</strong> Transaction fees, SaaS subscriptions, sponsorships, white label, grants, token yields, API fees, analytics</p>
+              <p>• <strong>First Profitable Month:</strong> January 2027 (Month 17) - Break-even achievement</p>
+              <p>• <strong>Sustained Profitability:</strong> May 2027 (Month 21) onwards</p>
+              <p>• <strong>Year 1 Revenue:</strong> {formatCurrency(year1Revenue)} (12 months from Sep 2025)</p>
+              <p>• <strong>Year 2 Revenue:</strong> {formatCurrency(year2Revenue)} (next 12 months)</p>
+              <p>• <strong>Platform Fee:</strong> Conservative 2.5% on all transactions (mid-range of 2-3%)</p>
+              <p>• <strong>Final MRR:</strong> {formatCurrency(revenueData.monthlyTotal[23])} (August 2027) with 17 shelters</p>
+              <p>• <strong>Pre-Seed Required:</strong> $350K to cover extended pre-revenue runway + path to profitability</p>
+            </div>
+            <p className="text-xs text-muted-foreground italic mt-4">
+              Note: This is a pre-revenue forecast model reflecting actual development timeline. Actual performance will be tracked against these projections as operations scale.
+            </p>
+          </CardContent>
+        </Card>
 
         {/* Revenue Streams Breakdown */}
         <Card>
@@ -322,8 +354,8 @@ export default function RevenuePage() {
                   <span className="font-bold">0 shelters</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm">Month 24 (Aug 2026)</span>
-                  <span className="font-bold text-blue-600 dark:text-blue-400">22 shelters</span>
+                  <span className="text-sm">Month 24 (Aug 2027)</span>
+                  <span className="font-bold text-blue-600 dark:text-blue-400">17 shelters</span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-sm">Growth Rate</span>
@@ -354,12 +386,12 @@ export default function RevenuePage() {
                   <span className="font-bold">0 participants</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm">Month 24 (Aug 2026)</span>
-                  <span className="font-bold text-green-600 dark:text-green-400">6,875 participants</span>
+                  <span className="text-sm">Month 24 (Aug 2027)</span>
+                  <span className="font-bold text-green-600 dark:text-green-400">4,250 participants</span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-sm">Avg per Shelter</span>
-                  <span className="font-bold text-purple-600 dark:text-purple-400">~312</span>
+                  <span className="font-bold text-purple-600 dark:text-purple-400">~250</span>
                 </div>
                 <div className="h-3 bg-muted rounded-full overflow-hidden mt-4">
                   <div 
@@ -376,7 +408,7 @@ export default function RevenuePage() {
         <Card>
           <CardHeader>
             <CardTitle>Monthly Revenue Growth</CardTitle>
-            <CardDescription>Revenue progression Sep 2024 - Aug 2026</CardDescription>
+            <CardDescription>Revenue progression Sep 2025 - Aug 2027</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
@@ -390,9 +422,14 @@ export default function RevenuePage() {
                     <div className="flex items-center justify-between text-sm">
                       <div className="flex items-center gap-2">
                         <span className="font-medium w-16">{month}</span>
-                        {index === 11 && (
+                        {index === 7 && (
+                          <Badge className="text-xs bg-orange-100 text-orange-700 dark:bg-orange-950 dark:text-orange-300">
+                            Revenue Launch
+                          </Badge>
+                        )}
+                        {index === 16 && (
                           <Badge className="text-xs bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-300">
-                            Break-even
+                            First Profit
                           </Badge>
                         )}
                         {index === 20 && (
@@ -604,31 +641,6 @@ export default function RevenuePage() {
             </CardContent>
           </Card>
         )}
-
-        {/* Key Insights */}
-        <Card className="border-2 border-blue-200 dark:border-blue-900 bg-blue-50/50 dark:bg-blue-950/20">
-          <CardHeader>
-            <CardTitle className="text-blue-800 dark:text-blue-200">Revenue Projection Notes</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3 text-sm">
-            <p className="font-semibold text-blue-900 dark:text-blue-100">
-              📈 This is a <strong>conservative 24-month revenue forecast</strong> based on 1 shelter onboarded per month
-            </p>
-            <div className="border-l-4 border-blue-400 pl-4 space-y-2">
-              <p>• <strong>Growth Model:</strong> 1 shelter/month with 50-75 participants each, growing to 6,875 participants by Aug 2026</p>
-              <p>• <strong>8 Revenue Streams:</strong> Transaction fees, SaaS subscriptions, sponsorships, white label, grants, token yields, API fees, analytics</p>
-              <p>• <strong>Break-even Achievement:</strong> Month 12 (August 2025) - First profitable month</p>
-              <p>• <strong>Sustained Profitability:</strong> Month 21-22 (May-June 2026) onwards</p>
-              <p>• <strong>Year 1 Target:</strong> {formatCurrency(year1Revenue)} revenue (on path to $500K ARR)</p>
-              <p>• <strong>Year 2 Trajectory:</strong> {formatCurrency(year2Revenue)} revenue (approaching $2M ARR path)</p>
-              <p>• <strong>Platform Fee:</strong> Conservative 2.5% on all transactions (mid-range of 2-3%)</p>
-              <p>• <strong>Final MRR:</strong> {formatCurrency(revenueData.monthlyTotal[23])} (August 2026)</p>
-            </div>
-            <p className="text-xs text-muted-foreground italic mt-4">
-              Note: This is a pre-revenue forecast model. Actual performance will be tracked against these projections as operations scale.
-            </p>
-          </CardContent>
-        </Card>
       </div>
     </div>
   );

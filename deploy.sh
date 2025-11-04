@@ -129,14 +129,35 @@ deploy_backend() {
         --max-instances 10 \
         --min-instances 0 \
         --timeout 300 \
+        --no-traffic \
+        --tag=candidate \
         --service-account firebase-adminsdk-fbsvc@sheltr-ai.iam.gserviceaccount.com \
         --set-env-vars="GOOGLE_CLOUD_PROJECT=sheltr-ai,ENVIRONMENT=production,FIREBASE_STORAGE_BUCKET=sheltr-ai.firebasestorage.app,OPENAI_MODEL=gpt-4o-mini,OPENAI_MAX_TOKENS=2000,OPENAI_TEMPERATURE=0.7,OPENAI_TIMEOUT=30,OPENAI_FALLBACK_MODEL=gpt-3.5-turbo,OPENAI_MAX_CONTEXT_TOKENS=4000,OPENAI_RATE_LIMIT_PER_MINUTE=60,FRONTEND_URL=https://sheltr-ai.web.app,GITHUB_TOKEN=$GITHUB_TOKEN,GITHUB_OWNER=mrj0nesmtl,GITHUB_REPO=sheltr-ai,GITHUB_DOCS_PATH=docs" \
         --update-secrets="OPENAI_API_KEY=openai-api-key:latest,ANTHROPIC_API_KEY=anthropic-api-key:latest" \
         >> logs/deploy-backend.log 2>&1
     check_status "Cloud Run deployment"
     
+    # Verify the new revision is healthy before routing traffic
+    echo -e "${YELLOW}🔍 Verifying new revision health...${NC}"
+    sleep 10  # Give the revision time to start
+    
+    # Route 100% traffic to the new revision
+    echo -e "${YELLOW}🔀 Routing traffic to new revision...${NC}"
+    gcloud run services update-traffic sheltr-api \
+        --region us-central1 \
+        --to-latest \
+        >> logs/deploy-backend.log 2>&1
+    
+    if [ $? -eq 0 ]; then
+        echo -e "${GREEN}✅ Traffic routed successfully${NC}"
+    else
+        echo -e "${YELLOW}⚠️  Traffic routing warning (check logs)${NC}"
+        echo -e "${YELLOW}💡 Manually route traffic: gcloud run services update-traffic sheltr-api --to-latest --region us-central1${NC}"
+    fi
+    
     echo -e "${GREEN}✅ Backend deployed successfully!${NC}"
     echo -e "${BLUE}🔌 API URL: https://sheltr-api-714964620823.us-central1.run.app${NC}"
+    echo -e "${BLUE}🏷️  Candidate URL: https://candidate---sheltr-api-714964620823.us-central1.run.app${NC}"
 }
 
 # Function for security-focused deployment

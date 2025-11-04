@@ -44,6 +44,7 @@ export interface PublicTeamMember {
   profileComplete: boolean;
   isFoundingMember: boolean;
   displayOrder?: number;
+  showOnTeamPage?: boolean; // Control visibility on public team page (defaults to true)
 }
 
 export class PublicTeamService {
@@ -57,10 +58,12 @@ export class PublicTeamService {
       const teamMembersRef = collection(db, 'team_members');
       const snapshot = await getDocs(teamMembersRef);
       
-      const members: PublicTeamMember[] = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      } as PublicTeamMember));
+      const members: PublicTeamMember[] = snapshot.docs
+        .map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        } as PublicTeamMember))
+        .filter(member => member.showOnTeamPage !== false); // Only show members where showOnTeamPage is not explicitly false
       
       // Sort: Super Admin first, then by role hierarchy, then alphabetically
       members.sort((a, b) => {

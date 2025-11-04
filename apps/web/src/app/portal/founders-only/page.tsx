@@ -68,6 +68,7 @@ import Image from 'next/image';
 import { db } from '@/lib/firebase';
 import { collection, query, where, getDocs, doc, getDoc, setDoc } from 'firebase/firestore';
 import { BudgetCard } from '@/components/dashboard/BudgetCard';
+import { RevenueCard } from '@/components/dashboard/RevenueCard';
 import { toast } from 'sonner';
 
 // Quick Access Card Type
@@ -1452,7 +1453,7 @@ export default function FoundersOnlyPage() {
                 <div className="text-left flex-1">
                   <h3 className="text-2xl font-bold">Financial Overview</h3>
                   <p className="text-sm text-muted-foreground">
-                    Seed round budget projection and burn rate analysis for 2025-2026
+                    Seed budget projections & 2-year revenue forecasting • 8 revenue streams • Path to profitability
                   </p>
                 </div>
                 <Badge className="bg-green-600 text-white">Confidential</Badge>
@@ -1474,7 +1475,11 @@ export default function FoundersOnlyPage() {
                 />
               </div>
               
-              <BudgetCard />
+              {/* Financial Cards Grid */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <BudgetCard />
+                <RevenueCard />
+              </div>
             </AccordionContent>
           </AccordionItem>
 

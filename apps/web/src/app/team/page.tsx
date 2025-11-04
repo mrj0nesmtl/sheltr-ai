@@ -72,25 +72,48 @@ function TeamContent() {
     { name: 'Jim Anastassiou', role: 'Community Builder', description: 'Connected hearts and minds to our mission' },
   ];
 
+  // Generate fallback profile picture URL from Firebase Storage
+  const getFallbackProfilePicture = (name: string): string => {
+    // Extract initials (e.g., "Joel Yaffe" -> "JY")
+    const initials = name.split(' ').map(n => n[0]).join('').toUpperCase();
+    
+    // Firebase Storage URL for leadership profile fallbacks
+    // Format: profiles/leadership/{INITIALS}.jpg
+    const storageUrl = `https://firebasestorage.googleapis.com/v0/b/sheltr-ai.firebasestorage.app/o/profiles%2Fleadership%2F${initials}.jpg?alt=media`;
+    
+    return storageUrl;
+  };
+
   // Render team member card
-  const renderTeamMemberCard = (member: PublicTeamMember) => (
-    <Card key={member.id} className="group hover:shadow-lg transition-all duration-300 border-0 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm">
-      <CardHeader className="text-center pb-4">
-        <div className="relative mx-auto w-fit">
-          <div className="h-24 w-24 mx-auto ring-2 ring-blue-200 dark:ring-blue-800 rounded-full overflow-hidden bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
-            {member.profilePicture ? (
+  const renderTeamMemberCard = (member: PublicTeamMember) => {
+    // Use profile picture from user account, or fallback to Firebase Storage leadership image
+    const profileImageUrl = member.profilePicture || getFallbackProfilePicture(member.name);
+    const hasProfilePicture = !!member.profilePicture; // Track if user has uploaded their own
+    
+    return (
+      <Card key={member.id} className="group hover:shadow-lg transition-all duration-300 border-0 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm">
+        <CardHeader className="text-center pb-4">
+          <div className="relative mx-auto w-fit">
+            <div className="h-24 w-24 mx-auto ring-2 ring-blue-200 dark:ring-blue-800 rounded-full overflow-hidden bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
               <img 
-                src={member.profilePicture} 
+                src={profileImageUrl} 
                 alt={member.name}
                 className="h-full w-full object-cover"
+                onError={(e) => {
+                  // If fallback image also fails, show initials
+                  const target = e.target as HTMLImageElement;
+                  target.style.display = 'none';
+                  const parent = target.parentElement;
+                  if (parent) {
+                    const initialsSpan = document.createElement('span');
+                    initialsSpan.className = 'text-lg font-semibold text-white';
+                    initialsSpan.textContent = member.name.split(' ').map(n => n[0]).join('').toUpperCase();
+                    parent.appendChild(initialsSpan);
+                  }
+                }}
               />
-            ) : (
-              <span className="text-lg font-semibold text-white">
-                {member.name.split(' ').map(n => n[0]).join('').toUpperCase()}
-              </span>
-            )}
+            </div>
           </div>
-        </div>
         <div className="space-y-1">
           <CardTitle className="text-lg">{member.displayName}</CardTitle>
           {/* Display specialization as the primary job title for more exciting descriptions */}
@@ -174,7 +197,8 @@ function TeamContent() {
         </div>
       </CardContent>
     </Card>
-  );
+    );
+  };
 
   return (
     <div className="min-h-screen bg-background">

@@ -42,10 +42,10 @@ export const metadata: Metadata = {
     siteName: 'SHELTR',
     images: [
       {
-        url: '/og-image.jpg',
+        url: '/images/sheltr_units/sheltr-fab.jpeg',
         width: 1200,
         height: 630,
-        alt: 'SHELTR Logo',
+        alt: 'SHELTR Manufacturing Facility - Micro-housing units and bicycles in production',
       },
     ],
     locale: 'en_US',
@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'SHELTR',
     description: 'Blockchain-powered platform for direct participant empowerment',
-    images: ['/og-image.jpg'],
+    images: ['/images/sheltr_units/sheltr-fab.jpeg'],
   },
 }
 

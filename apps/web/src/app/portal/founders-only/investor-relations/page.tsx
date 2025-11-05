@@ -1903,27 +1903,39 @@ export default function InvestorRelationsPage() {
         </>
       )}
 
-      {/* Hero Section */}
-      <section className="relative py-20 text-white overflow-hidden">
+      {/* Hero Section - Matching /solutions page style */}
+      <section className="relative min-h-[80vh] flex items-center py-24 overflow-hidden">
         {/* Background Image */}
         <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          className="absolute inset-0 w-full h-full"
           style={{
             backgroundImage: `url('${heroImage.url}')`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            zIndex: 0
           }}
         />
-        {/* Overlay - Darkened by 20% (from 80% to 95% opacity) */}
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-900/95 via-purple-900/95 to-indigo-900/95" />
+        {/* Gradient Overlay - Clean dark-to-transparent fade (no blue) */}
+        <div 
+          className="absolute inset-0"
+          style={{
+            background: 'linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0.3) 80%, rgba(0,0,0,0) 100%)',
+            zIndex: 1
+          }}
+        />
         {/* Content */}
-        <div className="relative z-10 container mx-auto px-4 text-center">
-          <div className="max-w-4xl mx-auto">
-            <Badge className="mb-4 bg-amber-600 text-black">PRE-SEED FUNDING ROUND</Badge>
-            <h1 className="text-5xl font-bold mb-6 text-white">
+        <div className="relative z-10 container mx-auto px-4 w-full">
+          <div className="max-w-4xl mx-auto text-center">
+            <Badge variant="secondary" className="mb-6 bg-white/20 text-white border-white/30 backdrop-blur-sm">
+              PRE-SEED FUNDING ROUND
+            </Badge>
+            <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
               Invest in the Future of HMIS Technology
             </h1>
-            <p className="text-xl mb-8 text-blue-100">
+            <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto">
               The homeless services industry is ripe for technological disruption. Our thesis is simple: 
-              <strong>it's better to solve than to manage</strong>. We're leveraging cutting-edge HMIS technology 
+              <strong className="text-white"> it's better to solve than to manage</strong>. We're leveraging cutting-edge HMIS technology 
               and blockchain innovation to transform how communities address homelessness at its root.
             </p>
             <div className="flex justify-center">
@@ -2114,7 +2126,7 @@ export default function InvestorRelationsPage() {
       <section id="investment-overview" className="py-16">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <Badge variant="outline" className="mb-4 bg-blue-50 text-blue-700 border-blue-200">
+            <Badge variant="outline" className="mb-4">
               Investment Opportunity
             </Badge>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">

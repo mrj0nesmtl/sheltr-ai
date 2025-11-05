@@ -89,7 +89,9 @@ export default function EditKnowledgeDocumentPage() {
     hub_description: undefined,
     hub_audience: undefined,
     hub_topics: undefined,
-    hub_icon: undefined
+    hub_icon: undefined,
+    external_link: undefined,
+    use_external_link: false
   });
 
   // Secure Publishing settings state
@@ -164,7 +166,9 @@ export default function EditKnowledgeDocumentPage() {
         hub_description: doc.hub_description,
         hub_audience: Array.isArray(doc.hub_audience) ? doc.hub_audience : undefined,
         hub_topics: Array.isArray(doc.hub_topics) ? doc.hub_topics : undefined,
-        hub_icon: doc.hub_icon
+        hub_icon: doc.hub_icon,
+        external_link: doc.external_link,
+        use_external_link: doc.use_external_link || false
       });
 
       // Update secure publishing settings

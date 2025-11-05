@@ -416,13 +416,23 @@ export default function DocsPage() {
 
                         {/* Actions */}
                         <div className="flex gap-2 pt-2 border-t border-white/10">
-                          <Button asChild className="flex-1 bg-red-600 hover:bg-red-700">
-                            <Link href={doc.link}>
-                              <Eye className="mr-2 h-4 w-4" />
-                              View Online
-                            </Link>
-                          </Button>
-                          {doc.github_link && (
+                          {/* Use external link if configured, otherwise use internal link */}
+                          {doc.use_external_link && doc.external_link ? (
+                            <Button asChild className="flex-1 bg-red-600 hover:bg-red-700">
+                              <a href={doc.external_link} target="_blank" rel="noopener noreferrer">
+                                <ExternalLink className="mr-2 h-4 w-4" />
+                                View on GitHub
+                              </a>
+                            </Button>
+                          ) : (
+                            <Button asChild className="flex-1 bg-red-600 hover:bg-red-700">
+                              <Link href={doc.link}>
+                                <Eye className="mr-2 h-4 w-4" />
+                                View Online
+                              </Link>
+                            </Button>
+                          )}
+                          {doc.github_link && !doc.use_external_link && (
                             <Button asChild variant="outline" className="border-white/20 hover:bg-white/10" size="icon">
                               <a href={doc.github_link} target="_blank" rel="noopener noreferrer">
                                 <Github className="h-4 w-4" />
@@ -471,13 +481,23 @@ export default function DocsPage() {
                       </CardHeader>
                       <CardContent>
                         <div className="flex gap-2">
-                          <Button asChild size="sm" variant="outline" className="flex-1 border-white/20 hover:bg-white/10">
-                            <Link href={doc.link}>
-                              <Eye className="mr-2 h-3 w-3" />
-                              View
-                            </Link>
-                          </Button>
-                          {doc.github_link && (
+                          {/* Use external link if configured, otherwise use internal link */}
+                          {doc.use_external_link && doc.external_link ? (
+                            <Button asChild size="sm" variant="outline" className="flex-1 border-white/20 hover:bg-white/10">
+                              <a href={doc.external_link} target="_blank" rel="noopener noreferrer">
+                                <ExternalLink className="mr-2 h-3 w-3" />
+                                View on GitHub
+                              </a>
+                            </Button>
+                          ) : (
+                            <Button asChild size="sm" variant="outline" className="flex-1 border-white/20 hover:bg-white/10">
+                              <Link href={doc.link}>
+                                <Eye className="mr-2 h-3 w-3" />
+                                View
+                              </Link>
+                            </Button>
+                          )}
+                          {doc.github_link && !doc.use_external_link && (
                             <Button asChild size="sm" variant="ghost" className="hover:bg-white/10">
                               <a href={doc.github_link} target="_blank" rel="noopener noreferrer">
                                 <Github className="h-4 w-4" />

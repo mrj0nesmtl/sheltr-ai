@@ -29,6 +29,8 @@ export interface DocsHubSettings {
   hub_audience?: string[];
   hub_topics?: string[];
   hub_icon?: string;
+  external_link?: string; // GitHub or external URL instead of rendering the page
+  use_external_link?: boolean; // Toggle to use external link
 }
 
 interface DocsHubPublisherProps {
@@ -321,6 +323,49 @@ export function DocsHubPublisher({
               <p className="text-xs text-muted-foreground">
                 If left empty, a description will be automatically extracted from the document content
               </p>
+            </div>
+
+            {/* External Link Option */}
+            <div className="space-y-4 pt-4 border-t border-orange-200 dark:border-orange-800">
+              <div className="flex items-center justify-between p-4 bg-orange-50 dark:bg-orange-950/20 rounded-lg border border-orange-200 dark:border-orange-800">
+                <div className="space-y-0.5 flex-1">
+                  <Label htmlFor="external-link-toggle" className="text-base font-medium flex items-center gap-2">
+                    <ExternalLink className="h-4 w-4 text-orange-600" />
+                    Link to External Source (GitHub)
+                  </Label>
+                  <p className="text-sm text-muted-foreground">
+                    Instead of rendering the document, open an external link (e.g., GitHub changelog)
+                  </p>
+                </div>
+                <Switch
+                  id="external-link-toggle"
+                  checked={settings.use_external_link || false}
+                  onCheckedChange={(checked) => setSettings(prev => ({ ...prev, use_external_link: checked }))}
+                />
+              </div>
+
+              {/* External URL Input */}
+              {settings.use_external_link && (
+                <div className="space-y-2">
+                  <Label htmlFor="external-url">
+                    External URL *
+                  </Label>
+                  <Input
+                    id="external-url"
+                    value={settings.external_link || ''}
+                    onChange={(e) => setSettings(prev => ({ ...prev, external_link: e.target.value }))}
+                    placeholder="https://github.com/username/repo/blob/main/CHANGELOG.md"
+                    className="font-mono text-sm"
+                  />
+                  <Alert className="bg-orange-50 dark:bg-orange-950/20 border-orange-200 dark:border-orange-800">
+                    <Info className="h-4 w-4 text-orange-600" />
+                    <AlertDescription className="text-sm text-muted-foreground">
+                      When enabled, clicking this document in the docs hub will open the external URL in a new tab instead of displaying the content on your platform.
+                      Perfect for long documents like changelogs that you want to keep in GitHub.
+                    </AlertDescription>
+                  </Alert>
+                </div>
+              )}
             </div>
           </div>
         )}

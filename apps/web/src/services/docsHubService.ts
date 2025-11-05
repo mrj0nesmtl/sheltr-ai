@@ -13,6 +13,8 @@ export interface DocsHubSettings {
   hub_audience?: string[];
   hub_topics?: string[];
   hub_icon?: string;
+  external_link?: string;
+  use_external_link?: boolean;
 }
 
 export interface DocsHubCard {
@@ -28,6 +30,8 @@ export interface DocsHubCard {
   topics: string[];
   icon?: string;
   order: number;
+  external_link?: string;
+  use_external_link?: boolean;
 }
 
 export interface DocsHubDocument {

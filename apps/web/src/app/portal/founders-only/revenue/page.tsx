@@ -6,21 +6,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { 
-  TrendingUp,
   DollarSign,
   Users,
   Building,
   Handshake,
-  Award,
   Download,
   Eye,
   EyeOff,
   Home,
   ChevronRight,
   ArrowLeft,
-  Target,
-  LineChart,
-  BarChart3,
   Zap
 } from 'lucide-react';
 import {
@@ -482,8 +477,8 @@ export default function RevenuePage() {
                     {/* Core Platform */}
                     {(selectedStream === 'all' || selectedStream === 'core') && (
                       <>
-                        <TableRow className="bg-blue-50 dark:bg-blue-950">
-                          <TableCell colSpan={14} className="font-bold">
+                        <TableRow className="bg-green-50 dark:bg-green-950">
+                        <TableCell colSpan={14} className="font-bold text-green-800 dark:text-green-200">
                             <DollarSign className="h-4 w-4 inline mr-2" />
                             Core Platform Revenue
                           </TableCell>
@@ -518,8 +513,8 @@ export default function RevenuePage() {
                     {/* Enterprise */}
                     {(selectedStream === 'all' || selectedStream === 'enterprise') && (
                       <>
-                        <TableRow className="bg-purple-50 dark:bg-purple-950">
-                          <TableCell colSpan={14} className="font-bold">
+                        <TableRow className="bg-green-50 dark:bg-green-950">
+                        <TableCell colSpan={14} className="font-bold text-green-800 dark:text-green-200">
                             <Handshake className="h-4 w-4 inline mr-2" />
                             Enterprise Revenue
                           </TableCell>
@@ -567,7 +562,7 @@ export default function RevenuePage() {
                     {(selectedStream === 'all' || selectedStream === 'defi') && (
                       <>
                         <TableRow className="bg-green-50 dark:bg-green-950">
-                          <TableCell colSpan={14} className="font-bold">
+                          <TableCell colSpan={14} className="font-bold text-green-800 dark:text-green-200">
                             <Zap className="h-4 w-4 inline mr-2" />
                             DeFi & Services Revenue
                           </TableCell>

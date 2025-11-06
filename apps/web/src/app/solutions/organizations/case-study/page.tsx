@@ -1,19 +1,84 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Building2, Users, Clock, TrendingUp, CheckCircle, BarChart3, FileText, Download, Shield, DollarSign, Calendar, Target, Coins, Zap, Heart, Gamepad2, Smartphone, QrCode, Globe, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import Footer from '@/components/Footer';
 import ThemeLogo from '@/components/ThemeLogo';
 import PublicNavigation from '@/components/PublicNavigation';
 import { useHeroImage } from '@/hooks/useHeroImage';
 import { StandardHero } from '@/components/StandardHero';
+import { shelterPartnershipService, type ShelterPartnershipBooking, type SchedulingResult } from '@/services/shelterPartnershipService';
+import { toast } from 'sonner';
 
 export default function OrganizationsCaseStudyPage() {
   const { heroImage } = useHeroImage('/solutions/organizations/case-study', '/backgrounds/solutions-bg.jpg');
+  
+  // Booking modal state
+  const [showBookingForm, setShowBookingForm] = useState(false);
+  const [isScheduling, setIsScheduling] = useState(false);
+  const [schedulingResult, setSchedulingResult] = useState<SchedulingResult | null>(null);
+  const [formData, setFormData] = useState<ShelterPartnershipBooking>({
+    shelterName: '',
+    contactName: '',
+    contactEmail: '',
+    contactPhone: '',
+    shelterLocation: '',
+    currentCapacity: '',
+    selectedDateTime: '',
+    additionalNotes: '',
+  });
+
+  const handleScheduleClick = () => {
+    setShowBookingForm(true);
+    setSchedulingResult(null);
+  };
+
+  const handleSubmitBooking = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!formData.shelterName || !formData.contactName || !formData.contactEmail || !formData.selectedDateTime) {
+      toast.error('Please fill in all required fields');
+      return;
+    }
+
+    setIsScheduling(true);
+
+    try {
+      const result = await shelterPartnershipService.createPartnershipMeeting(formData);
+      
+      setSchedulingResult(result);
+      
+      if (result.success) {
+        toast.success('Demo scheduled successfully!');
+        // Reset form
+        setFormData({
+          shelterName: '',
+          contactName: '',
+          contactEmail: '',
+          contactPhone: '',
+          shelterLocation: '',
+          currentCapacity: '',
+          selectedDateTime: '',
+          additionalNotes: '',
+        });
+      } else {
+        toast.error(result.message || 'Failed to schedule demo');
+      }
+    } catch (error) {
+      console.error('❌ Demo booking error:', error);
+      toast.error('An unexpected error occurred. Please try again.');
+    } finally {
+      setIsScheduling(false);
+    }
+  };
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
@@ -1283,17 +1348,14 @@ export default function OrganizationsCaseStudyPage() {
             
             <div className="text-center">
               <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
-                <Button size="lg" className="bg-white text-green-600 hover:bg-gray-100">
+                <Button 
+                  variant="outline" 
+                  size="lg" 
+                  className="border-white text-white hover:bg-white/10"
+                  onClick={handleScheduleClick}
+                >
                   <Calendar className="h-5 w-5 mr-2" />
-                  Schedule Revenue Demo
-                </Button>
-                <Button variant="outline" size="lg" className="border-white text-white hover:bg-white/10">
-                  <FileText className="h-5 w-5 mr-2" />
-                  Download Financial Model
-                </Button>
-                <Button variant="outline" size="lg" className="border-white text-white hover:bg-white/10">
-                  <DollarSign className="h-5 w-5 mr-2" />
-                  Calculate Your ROI
+                  Schedule a Demo
                 </Button>
               </div>
               <p className="text-sm opacity-80">
@@ -1303,6 +1365,184 @@ export default function OrganizationsCaseStudyPage() {
           </div>
         </div>
       </section>
+
+      {/* Demo Booking Modal */}
+      {showBookingForm && (
+        <section className="py-16 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20">
+          <div className="container mx-auto px-4">
+            <div className="max-w-2xl mx-auto">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Calendar className="h-5 w-5 text-blue-600" />
+                    Schedule a Demo
+                  </CardTitle>
+                  <CardDescription>
+                    Book a demo to see how SHELTR can transform your organization
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <form onSubmit={handleSubmitBooking} className="space-y-6">
+                    {/* Organization Information */}
+                    <div className="space-y-4">
+                      <h3 className="font-semibold text-lg">Organization Information</h3>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="shelterName">
+                          Shelter/Organization Name <span className="text-red-500">*</span>
+                        </Label>
+                        <Input
+                          id="shelterName"
+                          value={formData.shelterName}
+                          onChange={(e) => setFormData({ ...formData, shelterName: e.target.value })}
+                          placeholder="e.g., Hope Shelter"
+                          required
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="shelterLocation">
+                          Location <span className="text-red-500">*</span>
+                        </Label>
+                        <Input
+                          id="shelterLocation"
+                          value={formData.shelterLocation}
+                          onChange={(e) => setFormData({ ...formData, shelterLocation: e.target.value })}
+                          placeholder="e.g., Toronto, ON"
+                          required
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="currentCapacity">Current Bed Capacity (Optional)</Label>
+                        <Input
+                          id="currentCapacity"
+                          value={formData.currentCapacity}
+                          onChange={(e) => setFormData({ ...formData, currentCapacity: e.target.value })}
+                          placeholder="e.g., 50 beds"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Contact Information */}
+                    <div className="space-y-4">
+                      <h3 className="font-semibold text-lg">Contact Information</h3>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="contactName">
+                          Your Name <span className="text-red-500">*</span>
+                        </Label>
+                        <Input
+                          id="contactName"
+                          value={formData.contactName}
+                          onChange={(e) => setFormData({ ...formData, contactName: e.target.value })}
+                          placeholder="John Smith"
+                          required
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="contactEmail">
+                          Email Address <span className="text-red-500">*</span>
+                        </Label>
+                        <Input
+                          id="contactEmail"
+                          type="email"
+                          value={formData.contactEmail}
+                          onChange={(e) => setFormData({ ...formData, contactEmail: e.target.value })}
+                          placeholder="john@shelter.org"
+                          required
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="contactPhone">Phone Number (Optional)</Label>
+                        <Input
+                          id="contactPhone"
+                          type="tel"
+                          value={formData.contactPhone}
+                          onChange={(e) => setFormData({ ...formData, contactPhone: e.target.value })}
+                          placeholder="+1 (555) 123-4567"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Meeting Details */}
+                    <div className="space-y-4">
+                      <h3 className="font-semibold text-lg">Meeting Details</h3>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="selectedDateTime">
+                          Preferred Date & Time <span className="text-red-500">*</span>
+                        </Label>
+                        <Input
+                          id="selectedDateTime"
+                          type="datetime-local"
+                          value={formData.selectedDateTime}
+                          onChange={(e) => setFormData({ ...formData, selectedDateTime: e.target.value })}
+                          required
+                          min={new Date().toISOString().slice(0, 16)}
+                        />
+                        <p className="text-xs text-muted-foreground">
+                          Times are in Eastern Time (ET). We&apos;ll confirm availability.
+                        </p>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="additionalNotes">Additional Notes (Optional)</Label>
+                        <Textarea
+                          id="additionalNotes"
+                          value={formData.additionalNotes}
+                          onChange={(e) => setFormData({ ...formData, additionalNotes: e.target.value })}
+                          placeholder="Any specific topics you'd like to discuss or questions you have..."
+                          rows={4}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Result Message */}
+                    {schedulingResult && (
+                      <div className={`p-4 rounded-lg ${schedulingResult.success ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800' : 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800'}`}>
+                        <p className={schedulingResult.success ? 'text-green-800 dark:text-green-200' : 'text-red-800 dark:text-red-200'}>
+                          {schedulingResult.message}
+                        </p>
+                      </div>
+                    )}
+
+                    {/* Actions */}
+                    <div className="flex gap-3">
+                      <Button
+                        type="submit"
+                        disabled={isScheduling}
+                        className="flex-1"
+                      >
+                        {isScheduling ? (
+                          <>
+                            <Clock className="h-4 w-4 mr-2 animate-spin" />
+                            Scheduling...
+                          </>
+                        ) : (
+                          <>
+                            <Calendar className="h-4 w-4 mr-2" />
+                            Schedule Demo
+                          </>
+                        )}
+                      </Button>
+                      <Button 
+                        type="button" 
+                        variant="outline"
+                        onClick={() => setShowBookingForm(false)}
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </form>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </section>
+      )}
 
       <Footer />
     </div>

@@ -537,6 +537,13 @@ export default function InvestorDataRoomPage() {
             </div>
             
             <div className="flex items-center gap-1 sm:gap-3 flex-shrink-0">
+              {/* Personalized Welcome Message */}
+              <div className="hidden lg:flex items-center mr-2">
+                <span className="text-sm text-muted-foreground">
+                  Welcome, <span className="font-medium text-foreground">{user?.displayName || user?.email?.split('@')[0] || 'Investor'}</span>
+                </span>
+              </div>
+
               <Badge className="bg-blue-600 text-white hidden sm:flex">
                 <Shield className="h-3 w-3 mr-1" />
                 Investor Access
@@ -648,7 +655,7 @@ export default function InvestorDataRoomPage() {
             </div>
             
             <h1 className="text-4xl sm:text-5xl font-bold mb-6">
-              Welcome to the SHELTR Investor Data Room
+              Welcome{user?.displayName ? `, ${user.displayName}` : user?.email ? `, ${user.email.split('@')[0]}` : ''} to the SHELTR Investor Data Room
             </h1>
             
             <p className="text-xl text-blue-50 mb-6 leading-relaxed">

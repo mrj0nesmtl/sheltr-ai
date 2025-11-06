@@ -90,7 +90,7 @@ interface User {
     is_founder: boolean;
     elevated_from: 'platform_admin' | 'direct_create';
     elevation_date: Timestamp;
-    mcp_access_granted: boolean;
+    mcp_access_granted: boolean; // Always true for Leadership (automatic)
   };
   
   // Platform Admin specific (EXISTING)
@@ -103,12 +103,28 @@ interface User {
   
   // Qualified Investor specific (NEW)
   investor_metadata?: {
+    // Contact Information
+    email: string;
+    phone?: string;
+    website?: string;
+    linkedin?: string;
+    
+    // Investment Details
     company?: string;
-    investment_range?: string; // e.g., "$10K-$50K"
+    investment_range?: string; // e.g., "$1M-$5M"
+    check_size?: string; // e.g., "$1M - $5M"
     accreditation_status?: 'verified' | 'pending' | 'not_verified';
-    notes?: string;
+    
+    // Location & Context
+    location?: string; // e.g., "Irvine, CA to Los Angeles, CA"
+    source?: 'linkedin' | 'referral' | 'direct' | 'event' | 'other';
+    referral_source?: string; // e.g., "Alexander Kline"
+    
+    // Access & Notes
     access_granted_date: Timestamp;
     dataroom_access_level?: 'full' | 'limited';
+    notes?: string;
+    initial_contact_date?: Timestamp;
   };
 }
 ```
@@ -164,8 +180,8 @@ Add after "Financial Oversight" in sidebar:
 POST /api/v1/admin/leadership/elevate
 Body: {
   uid: string,  # Platform Admin UID to elevate
-  is_founder: boolean,
-  mcp_access: boolean
+  is_founder: boolean
+  # mcp_access: ALWAYS TRUE (automatic)
 }
 
 # Create New Leadership User (Direct)
@@ -173,9 +189,9 @@ POST /api/v1/admin/leadership
 Body: {
   email: string,
   displayName: string,
-  password: string,
-  is_founder: boolean,
-  mcp_access: boolean
+  password: string,  # Auto-generated
+  is_founder: boolean
+  # mcp_access: ALWAYS TRUE (automatic)
 }
 
 # List Leadership Users
@@ -279,9 +295,10 @@ DELETE /api/v1/admin/qualified-investors/{uid}
 // Form fields:
 - Display current user info (Name, Email, Current Role)
 - ☐ Is Founder
-- ☐ Grant MCP Access
-- Confirmation warning: "This user will have full system access equivalent to Super Admin"
+- ℹ️ MCP Access: AUTOMATIC (always granted for Leadership)
+- Confirmation warning: "This user will have full system access equivalent to Super Admin, including automatic MCP access"
 - Elevate button
+- Cancel button
 ```
 
 #### 4. **PlatformAdminRegistration.tsx** (EXISTING)
@@ -325,27 +342,54 @@ DELETE /api/v1/admin/qualified-investors/{uid}
 #### 2. **QualifiedInvestorRegistration.tsx**
 ```typescript
 // Form fields:
+// === Basic Information ===
 - Display Name *
 - Email Address *
-- Password *
-- Confirm Password *
+- Phone Number
+- LinkedIn Profile URL
+- Personal/Company Website
+
+// === Investment Details ===
 - Company/Organization
 - Investment Range (dropdown):
   - $1K - $10K
   - $10K - $50K
   - $50K - $100K
   - $100K - $250K
-  - $250K+
+  - $250K - $1M
+  - $1M - $5M
+  - $5M+
+- Check Size (e.g., "$1M - $5M")
+- Location (e.g., "Irvine, CA to Los Angeles, CA")
+
+// === Source & Context ===
+- Source (dropdown):
+  - LinkedIn
+  - Referral
+  - Direct Contact
+  - Event
+  - Other
+- Referral Source (if applicable)
+- Initial Contact Date *
 - Accreditation Status (dropdown):
   - Verified
   - Pending
   - Not Verified
+
+// === Access Configuration ===
 - Dataroom Access Level:
-  - ○ Full Access
-  - ○ Limited Access
-- Notes (textarea)
-- Send invitation email? ☐
-- Submit button
+  - ○ Full Access (all documents)
+  - ○ Limited Access (selected documents)
+- Notes (textarea) - For internal use
+
+// === Password (Auto-generated) ===
+- Password will be auto-generated and displayed on screen
+- Admin must manually record the password
+- ⚠️ Password shown only once - copy before closing
+
+// === Actions ===
+- Generate & Create Investor button
+- Cancel button
 ```
 
 ---
@@ -446,21 +490,74 @@ const canElevateToleadership = canManageLeadership;
 
 ---
 
-## 📧 Phase 6: User Experience Features
+## 📧 Phase 6: Password Management & Credentials
 
-### Email Notifications
-1. **Welcome Email** - Sent when new user is created
-   - Login credentials
-   - Access instructions
-   - Support contact
+### 🔑 Password Generation Strategy
 
-2. **Password Reset** - Allow users to reset passwords
-   - Forgot password link on login pages
+**Current Approach** (No Email Server Yet):
+1. **Auto-generate secure password** when creating user
+2. **Display password on screen ONCE** after creation
+3. **Admin manually records** in local secure document
+4. **Password NOT stored** in Firebase (only hash)
+5. **Password NOT emailed** (no email server configured)
 
-### User Invitation Flow (Optional Future Enhancement)
-1. Admin sends invitation (no password required)
-2. User receives email with magic link
-3. User clicks link → sets own password → gains access
+### Password Display Component
+```typescript
+// After successful user creation
+<Alert className="bg-green-50 border-green-200">
+  <CheckCircle className="h-4 w-4 text-green-600" />
+  <AlertTitle>Investor Account Created!</AlertTitle>
+  <AlertDescription>
+    <div className="mt-4 p-4 bg-white border-2 border-green-500 rounded">
+      <p className="font-semibold mb-2">⚠️ IMPORTANT: Save these credentials</p>
+      <div className="space-y-2">
+        <div>
+          <span className="text-xs text-muted-foreground">Email:</span>
+          <p className="font-mono">{email}</p>
+        </div>
+        <div>
+          <span className="text-xs text-muted-foreground">Temporary Password:</span>
+          <div className="flex gap-2 items-center">
+            <p className="font-mono font-bold text-lg">{generatedPassword}</p>
+            <Button size="sm" onClick={() => copyToClipboard(generatedPassword)}>
+              <Copy className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      </div>
+      <p className="text-xs text-red-600 mt-3">
+        🔴 This password will NOT be shown again. Copy it now!
+      </p>
+    </div>
+  </AlertDescription>
+</Alert>
+```
+
+### 📝 Local Credential Storage
+**File**: `.local-secure-docs/platform-admin/platform-admin-credentials.md`
+- **Status**: NOT synced to Firebase (security)
+- **Purpose**: Manual record keeping by Super Admin
+- **Location**: Local filesystem only
+- **Git**: Excluded via `.gitignore`
+
+### Password Requirements
+```typescript
+function generateSecurePassword(): string {
+  // 12 characters
+  // Mix of uppercase, lowercase, numbers, special chars
+  // Example: "47DfYcXDTemp!"
+  return randomBytes(12).toString('base64')
+    .replace(/[+/=]/g, '') // Remove problematic chars
+    .substring(0, 10) + 'Temp!'; // Add suffix
+}
+```
+
+### 🔮 Future Enhancement (Phase 2)
+When email server is configured:
+1. **Welcome Email** - Send credentials automatically
+2. **Password Reset** - Self-service password reset
+3. **Email Verification** - Require email confirmation
+4. **Magic Link Login** - Passwordless authentication option
 
 ---
 
@@ -695,13 +792,58 @@ apps/web/src/contexts/AuthContext.tsx (handle Leadership role)
 
 ---
 
-## 📌 Questions for Clarification
+## 📌 Questions ANSWERED ✅
 
-1. **Password Management**: Should we send temporary passwords via email, or should admins set passwords manually?
-2. **Email Service**: Do we have an email service configured (SendGrid, AWS SES, etc.)?
-3. **Investor Metadata**: What additional fields do we need for Qualified Investors?
-4. **Access Levels**: Should there be different "tiers" of dataroom access (e.g., some investors see more than others)?
-5. **Approval Workflow**: Do new investors need approval before getting access, or is admin creation = instant access?
+1. ✅ **Password Management**: Auto-generate passwords, display on screen once, admin records manually
+2. ✅ **Email Service**: NOT configured yet - no email notifications for now
+3. ✅ **Investor Metadata**: Email, phone, website, LinkedIn, company, check size, location, source, referral
+4. ❓ **Access Levels**: Full vs Limited dataroom access - need clarification on document restrictions
+5. ❓ **Approval Workflow**: Admin creation = instant access? Or require approval step?
+
+## 🎯 First Qualified Investor - Test Case
+
+**Armando Ceron** - Potential $1M-$5M Investment
+
+```typescript
+{
+  // User Account
+  displayName: "Armando Ceron",
+  email: "visionaryforces@gmail.com",
+  role: "qualified_investor",
+  status: "active",
+  
+  // Investor Metadata
+  investor_metadata: {
+    // Contact Information
+    email: "visionaryforces@gmail.com",
+    phone: null, // To be obtained
+    website: "mandomade.co",
+    linkedin: "linkedin.com/in/armando8ceron",
+    
+    // Investment Details
+    company: "Mando Startups",
+    investment_range: "$1M - $5M",
+    check_size: "$1M - $5M",
+    accreditation_status: "pending",
+    
+    // Location & Context
+    location: "Irvine, CA to Los Angeles, CA",
+    source: "linkedin",
+    referral_source: "Alexander Kline",
+    
+    // Access & Notes
+    access_granted_date: "2025-11-05",
+    dataroom_access_level: "full",
+    initial_contact_date: "2025-11-05",
+    notes: "Connected via LinkedIn. Referred by Alexander Kline. Looking to fund early-stage startup by mid-Nov. Portfolio: tiny.cc/d2gjxz. Company: mandostartups.com/home/"
+  }
+}
+```
+
+**Additional Websites**:
+- Personal: mandomade.co
+- Portfolio: tiny.cc/d2gjxz
+- Company: mandostartups.com/home/
 
 ---
 

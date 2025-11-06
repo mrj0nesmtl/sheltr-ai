@@ -35,7 +35,8 @@ import {
   Camera,
   Sparkles,
   MessageCircle,
-  Zap
+  Zap,
+  Database
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/theme-toggle';
@@ -198,6 +199,14 @@ const getNavigationItems = (userRole: string, messageCount?: number, notificatio
         description: 'Create and manage blog posts'
       },
       {
+        title: 'IR Dataroom',
+        href: '/dashboard/ir-dataroom',
+        icon: Database,
+        description: 'Manage qualified investor access',
+        badge: 'New',
+        badgeColor: 'bg-blue-100 text-blue-800 border-blue-300'
+      },
+      {
         title: 'My Profile',
         href: '/dashboard/super-admin/profile',
         icon: User,
@@ -338,6 +347,14 @@ const getNavigationItems = (userRole: string, messageCount?: number, notificatio
         href: '/dashboard/blog',
         icon: FileText,
         description: 'Create and manage blog posts'
+      },
+      {
+        title: 'IR Dataroom',
+        href: '/dashboard/ir-dataroom',
+        icon: Database,
+        description: 'View qualified investor access',
+        badge: 'New',
+        badgeColor: 'bg-blue-100 text-blue-800 border-blue-300'
       },
       {
         title: 'System Settings',

@@ -36,6 +36,7 @@ from routers.mcp import router as mcp_router
 from routers.migration import router as migration_router
 from routers.donations import router as donations_router
 from routers.secure_sync import router as secure_sync_router
+from routers.admin import router as admin_router
 
 # Import Firebase service for initialization
 from services.firebase_service import FirebaseService
@@ -249,6 +250,7 @@ app.include_router(authenticated_chatbot_router, prefix="/api/v1")
 app.include_router(migration_router, prefix="/api/v1")
 app.include_router(donations_router, prefix="/api/v1")
 app.include_router(secure_sync_router, prefix="/api/v1")
+app.include_router(admin_router, prefix="/api/v1")
 
 # Health check endpoints
 @app.get("/", tags=["Health"])

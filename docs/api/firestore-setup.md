@@ -3,14 +3,25 @@
 ## Overview
 This guide provides step-by-step instructions for the **current production-ready Firestore implementation** as of August 29, 2025, including operational collections, real data metrics, and multi-tenant architecture.
 
-**🎯 Last Updated**: August 29, 2025  
-**📊 Current Status**: Production-ready multi-tenant platform with real data connectivity  
+**🎯 Last Updated**: November 6, 2025  
+**📊 Current Status**: Production-ready multi-tenant platform with real data connectivity + Investor Relations  
 **🔗 Data Integration**: Fully operational with comprehensive dashboard integration  
-**✅ Platform Status**: Multi-tenant architecture complete, ready for beta launch  
+**✅ Platform Status**: Multi-tenant architecture complete with investor access management, ready for beta launch  
 
-## 🎉 Recent Major Achievements (Sessions 13.1-13.2)
+## 🎉 Recent Major Achievements
 
-### **🏗️ MULTI-TENANT PLATFORM TRANSFORMATION COMPLETE**
+### **💼 INVESTOR RELATIONS DATAROOM COMPLETE (Session 22 - November 2025)**
+- **✅ Qualified Investor Role**: New `qualified_investor` role with IR Dataroom access
+- **✅ Leadership Role**: New `leadership` role with founder-level permissions
+- **✅ IR Dataroom Dashboard**: `/dashboard/ir-dataroom` for managing investor access
+- **✅ Investor Registration**: Complete form with auto-generated passwords and metadata
+- **✅ Backend API**: FastAPI endpoints for investor management (create, list, update, deactivate)
+- **✅ User Profiles Collection**: Enhanced `user_profiles` with investor metadata fields
+- **✅ Access Control**: Role-based authorization for IR Dataroom and Founders Portal
+- **✅ Password Management**: Auto-generated credentials with one-time display
+- **✅ Preview Dataroom**: Button for admins to preview IR Dataroom experience
+
+### **🏗️ MULTI-TENANT PLATFORM TRANSFORMATION COMPLETE (Sessions 13.1-13.2)**
 - **✅ Multi-Tenant Architecture**: Successfully migrated from single-tenant to true multi-tenant platform with 10 shelter tenants
 - **✅ Real Data Connectivity Revolution**: Transformed all Super Admin dashboards from mock data to live multi-tenant Firestore integration
 - **✅ Financial Oversight with Interactive Charts**: Beautiful SmartFund analytics with transaction volume & frequency visualization
@@ -67,7 +78,7 @@ interface Shelter {
 ```
 
 #### 2. **Users** (`users/{user-id}`)
-**Status**: ✅ **OPERATIONAL** - Multi-tenant user management
+**Status**: ✅ **OPERATIONAL** - Multi-tenant user management with investor access
 
 ```typescript
 interface User {
@@ -75,7 +86,7 @@ interface User {
   email: string;                // "participant@example.com"
   firstName: string;            // "Michael"
   lastName: string;             // "Rodriguez"
-  role: 'super_admin' | 'admin' | 'participant' | 'donor';
+  role: 'super_admin' | 'leadership' | 'platform_admin' | 'admin' | 'participant' | 'donor' | 'qualified_investor';
   
   // Shelter Association
   shelter_id?: string;          // "old-brewery-mission"
@@ -86,6 +97,45 @@ interface User {
   last_active?: Timestamp;
   
   // Metadata
+  created_at: Timestamp;
+  updated_at: Timestamp;
+}
+```
+
+#### 2a. **User Profiles** (`user_profiles/{user-id}`)
+**Status**: ✅ **OPERATIONAL** - Extended user profiles with investor metadata
+
+```typescript
+interface UserProfile {
+  uid: string;                          // Firebase Auth UID
+  email: string;
+  displayName: string;
+  role: string;
+  
+  // Investor Metadata (for qualified_investor role)
+  investor_metadata?: {
+    email: string;
+    phone?: string;
+    website?: string;
+    linkedin?: string;
+    company?: string;
+    check_size?: string;                // "$1M - $5M"
+    location?: string;                  // "Irvine, CA to Los Angeles, CA"
+    source?: string;                    // "LinkedIn", "Referral", "Cold Outreach"
+    referral_source?: string;           // "Alexander Kline"
+    initial_contact_date?: Date;
+    notes?: string;
+  };
+  
+  // Leadership Metadata (for leadership role)
+  leadership_metadata?: {
+    mcp_access_granted: boolean;        // Always true for leadership
+    founder_level_access: boolean;
+    title?: string;
+  };
+  
+  // Status
+  status: 'active' | 'inactive' | 'pending';
   created_at: Timestamp;
   updated_at: Timestamp;
 }

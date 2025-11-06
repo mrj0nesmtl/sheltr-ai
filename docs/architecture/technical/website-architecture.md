@@ -2,9 +2,9 @@
 
 **Complete Site Structure, Role-Based Features, and Quality Assurance Framework**
 
-*Date: November 2, 2025*  
-*Status: Session 20+ Complete - Knowledge Base RAG System + GCP Cost Optimization + Founders Portal*  
-*Version: 2.86.0*
+*Date: November 6, 2025*  
+*Status: Session 22 Complete - Knowledge Base RAG System + GCP Cost Optimization + Founders Portal + IR Dataroom*  
+*Version: 2.87.0*
 
 ---
 
@@ -170,11 +170,27 @@ SHELTR Platformn/Website (https://sheltr-ai.web.app)
 │
 ├── 💰 /investor-access
 ├── 📊 /investor-relations
+├── 💼 /ir (Investor Relations Hub)
+│   ├── /ir/dataroom (IR Dataroom Login) ✅ NEW
+│   │   ├── Investor authentication
+│   │   ├── Secure document access
+│   │   ├── Financial reports
+│   │   └── Role-based content filtering
+│   └── /dataroom (Authenticated Dataroom) ✅ NEW
+│       ├── Protected investment materials
+│       ├── Dynamic document viewer
+│       ├── Financial projections
+│       └── Secure file downloads
 ├── ⚖️ /terms (Terms of Service)
 ├── 🔒 /privacy (Privacy Policy)
 └── 🤖 /api (Backend Endpoints)
     ├── /calendar/create-event
-    └── /email/send-confirmation
+    ├── /email/send-confirmation
+    └── /admin/qualified-investors ✅ NEW
+        ├── POST /create (Register new investor)
+        ├── GET /list (List all investors)
+        ├── PATCH /{uid} (Update investor)
+        └── DELETE /{uid} (Deactivate investor)
 ```
 
 ### **Authenticated Pages (Role-Based Dashboards)**
@@ -205,6 +221,12 @@ SHELTR Platformn/Website (https://sheltr-ai.web.app)
 │   │   └── RAG System with Knowledge Base Integration ✅ LIVE
 │   ├── /dashboard/blog (Blog Management System) ✅ OPERATIONAL
 │   ├── /dashboard/gallery (Gallery Management System) ✅ OPERATIONAL
+│   ├── /dashboard/ir-dataroom (IR Dataroom Management) ✅ OPERATIONAL (NEW)
+│   │   ├── Qualified Investor Directory ✅ LIVE
+│   │   ├── Investor Registration Form ✅ FUNCTIONAL
+│   │   ├── Quick Stats Dashboard ✅ IMPLEMENTED
+│   │   ├── Preview Dataroom Button ✅ OPERATIONAL
+│   │   └── Access Management ✅ COMPLETE
 │   ├── /dashboard/platform (Tenant Management)
 │   ├── /dashboard/users (User Management)
 │   ├── /dashboard/financial (Financial Oversight)

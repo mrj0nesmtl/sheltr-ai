@@ -1,8 +1,8 @@
 # API Database Schema - Production Implementation
 
-**Version:** 2.53.4  
-**Last Updated:** October 17, 2025  
-**Status:** ✅ Production Ready with AI Systems
+**Version:** 2.54.0  
+**Last Updated:** November 6, 2025  
+**Status:** ✅ Production Ready with AI Systems + Investor Relations
 
 ---
 
@@ -19,9 +19,20 @@ This document outlines the **current production database structure** as verified
 
 ---
 
-## 🎉 **Recent Major Achievements (v2.53.x)**
+## 🎉 **Recent Major Achievements**
 
-### **🤖 AI AGENT SYSTEM COMPLETE**
+### **💼 INVESTOR RELATIONS DATAROOM COMPLETE (v2.54.0 - November 2025)**
+- **✅ Qualified Investor Role**: New `qualified_investor` custom claim with IR Dataroom access
+- **✅ Leadership Role**: New `leadership` role mirroring super_admin dashboard access
+- **✅ User Profiles Collection**: Extended `user_profiles` with investor metadata (phone, website, LinkedIn, company, check size, location, source, referral, initial contact date)
+- **✅ Backend API Endpoints**: FastAPI routes for investor management (create, list, update, deactivate)
+- **✅ IR Dataroom Dashboard**: `/dashboard/ir-dataroom` for Super Admin + Leadership management
+- **✅ Investor Registration Form**: Complete form with auto-generated passwords and metadata
+- **✅ Access Control**: Role-based authorization for `/ir/dataroom` and `/portal/founders-only`
+- **✅ Password Management**: Auto-generated credentials with one-time display modal
+- **✅ Test Investor**: Armando Ceron successfully registered and verified
+
+### **🤖 AI AGENT SYSTEM COMPLETE (v2.53.x)**
 - **✅ 5 Specialized Agents**: General, SHELTR Support, Technical Expert, Business Analyst, Creative Writer
 - **✅ Knowledge Base**: 107 documents, 1,059 chunks, 209,212 words indexed
 - **✅ RAG Integration**: Semantic search with OpenAI embeddings (1536 dims)
@@ -57,7 +68,7 @@ interface User {
   firstName: string;                // "Joel"
   lastName: string;                 // "Yaffe"
   displayName: string;              // "Joel Yaffe"
-  role: 'super_admin' | 'platform_admin' | 'admin' | 'participant' | 'donor';
+  role: 'super_admin' | 'leadership' | 'platform_admin' | 'admin' | 'participant' | 'donor' | 'qualified_investor';
   
   // Tenant Association
   tenantId: string;                 // "platform" or "shelter-{id}"

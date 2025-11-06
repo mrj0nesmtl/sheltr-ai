@@ -1589,7 +1589,7 @@ function InvestmentDeckSlideshow({ isOpen, onClose }: { isOpen: boolean; onClose
 }
 
 // Reusable CTA Component for All Tabs
-const NextStepsCTA = () => (
+const NextStepsCTA = ({ onScheduleClick }: { onScheduleClick: () => void }) => (
   <Card>
     <CardHeader>
       <CardTitle>Next Steps for Interested Investors</CardTitle>
@@ -1607,7 +1607,7 @@ const NextStepsCTA = () => (
           <Button 
             variant="outline" 
             size="sm"
-            onClick={handleScheduleButtonClick}
+            onClick={onScheduleClick}
           >
             <Calendar className="h-4 w-4 mr-2" />
             Book Call
@@ -2448,7 +2448,7 @@ export default function InvestorRelationsPage() {
               </Card>
 
               {/* Next Steps CTA */}
-              <NextStepsCTA />
+              <NextStepsCTA onScheduleClick={handleScheduleButtonClick} />
             </TabsContent>
 
             {/* Product & Technology */}
@@ -2663,7 +2663,7 @@ export default function InvestorRelationsPage() {
               </Card>
 
               {/* Next Steps CTA */}
-              <NextStepsCTA />
+              <NextStepsCTA onScheduleClick={handleScheduleButtonClick} />
             </TabsContent>
 
             {/* Business Model */}
@@ -2827,7 +2827,7 @@ export default function InvestorRelationsPage() {
               </Card>
 
               {/* Next Steps CTA */}
-              <NextStepsCTA />
+              <NextStepsCTA onScheduleClick={handleScheduleButtonClick} />
             </TabsContent>
 
             {/* Financial Projections */}
@@ -3045,7 +3045,7 @@ export default function InvestorRelationsPage() {
               </Card>
 
               {/* Next Steps CTA */}
-              <NextStepsCTA />
+              <NextStepsCTA onScheduleClick={handleScheduleButtonClick} />
             </TabsContent>
 
             {/* Investment Terms */}
@@ -3177,7 +3177,7 @@ export default function InvestorRelationsPage() {
               </div>
 
               {/* Next Steps CTA */}
-              <NextStepsCTA />
+              <NextStepsCTA onScheduleClick={handleScheduleButtonClick} />
             </TabsContent>
           </Tabs>
         </div>

@@ -15,6 +15,7 @@ import { signOut } from 'firebase/auth';
 import { doc, getDoc, setDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import Image from 'next/image';
 import { BudgetCard } from '@/components/dashboard/BudgetCard';
+import { RevenueCard } from '@/components/dashboard/RevenueCard';
 import {
   DndContext,
   closestCenter,
@@ -755,14 +756,18 @@ export default function InvestorDataRoomPage() {
                     <div className="text-left flex-1">
                       <h3 className="text-2xl font-bold">Financial Overview</h3>
                       <p className="text-sm text-muted-foreground">
-                        Seed round budget projection and burn rate analysis for 2025-2026
+                        Seed budget projections & 2-year revenue forecasting • 8 revenue streams • Path to profitability
                       </p>
                     </div>
                     <Badge className="bg-green-600 text-white">Confidential</Badge>
                   </div>
                 </AccordionTrigger>
                 <AccordionContent className="px-6 py-6">
-                  <BudgetCard linkPath="/ir/budget" />
+                  {/* Financial Cards Grid */}
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <BudgetCard linkPath="/ir/budget" />
+                    <RevenueCard linkPath="/ir/revenue" />
+                  </div>
                 </AccordionContent>
               </AccordionItem>
             )}

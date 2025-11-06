@@ -308,13 +308,13 @@ export default function InvestorDataRoomPage() {
     })
   );
 
-  // Authorization check - Allow both investors AND super admins
+  // Authorization check - Allow qualified investors, investors, AND super admins
   useEffect(() => {
     if (!authLoading) {
       if (!user) {
         router.push('/ir');
-      } else if (user.role !== 'investor' && user.role !== 'super_admin') {
-        toast.error('Access denied: Investor or Super Admin credentials required');
+      } else if (user.role !== 'investor' && user.role !== 'super_admin' && user.role !== 'qualified_investor') {
+        toast.error('Access denied: Investor credentials required');
         router.push('/dashboard');
       } else {
         setIsAuthorized(true);

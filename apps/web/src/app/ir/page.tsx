@@ -23,10 +23,10 @@ export default function InvestorLoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // Redirect if already logged in as investor, super_admin, or platform_admin
+  // Redirect if already logged in as qualified investor, investor, super_admin, or platform_admin
   useEffect(() => {
     if (!authLoading && user) {
-      if (user.role === 'investor' || user.role === 'super_admin' || user.role === 'platform_admin') {
+      if (user.role === 'qualified_investor' || user.role === 'investor' || user.role === 'super_admin' || user.role === 'platform_admin') {
         router.push('/ir/dataroom');
       } else {
         setError('Access denied. This portal is for investors and administrators only.');

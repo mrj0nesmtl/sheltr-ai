@@ -1604,12 +1604,14 @@ const NextStepsCTA = () => (
           <p className="text-sm text-muted-foreground">
             Schedule a confidential call to discuss the investment opportunity, SmartFund™ model, and answer questions.
           </p>
-          <Link href="/contact">
-            <Button variant="outline" size="sm">
-              <Calendar className="h-4 w-4 mr-2" />
-              Book Call
-            </Button>
-          </Link>
+          <Button 
+            variant="outline" 
+            size="sm"
+            onClick={handleScheduleButtonClick}
+          >
+            <Calendar className="h-4 w-4 mr-2" />
+            Book Call
+          </Button>
         </div>
 
         <div className="text-center space-y-4">
@@ -1939,16 +1941,15 @@ export default function InvestorRelationsPage() {
               and blockchain innovation to transform how communities address homelessness at its root.
             </p>
             <div className="flex justify-center">
-              <Link href="/contact">
-                <Button 
-                  size="lg" 
-                  variant="outline" 
-                  className="border-white text-white hover:bg-white hover:text-black"
-                >
-                  <Calendar className="h-5 w-5 mr-2" />
-                  Schedule Meeting
-                </Button>
-              </Link>
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="border-white text-white hover:bg-white hover:text-black"
+                onClick={handleScheduleButtonClick}
+              >
+                <Calendar className="h-5 w-5 mr-2" />
+                Schedule Meeting
+              </Button>
             </div>
           </div>
         </div>

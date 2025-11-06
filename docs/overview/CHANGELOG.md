@@ -7,6 +7,249 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.90.0] - 2025-11-06 (QUALIFIED INVESTOR ACCESS MANAGEMENT) 💼🔐
+
+### 🎯 Major Feature: Complete Investor Relations Dataroom Management System
+
+#### New Roles & Access Control
+
+**Leadership Role (NEW)**:
+- Founder-level access mirroring super_admin permissions
+- Automatic MCP (Model Context Protocol) access
+- Full dashboard and portal access
+- System settings configuration rights
+
+**Qualified Investor Role (NEW)**:
+- Dedicated access to IR Dataroom (`/ir/dataroom`)
+- View-only access to investment materials
+- Secure authentication flow
+- Profile metadata tracking (company, check size, source, etc.)
+
+#### Platform Admin Access Updates:
+- View-only access to `/dashboard/settings`
+- All configuration inputs/toggles greyed out
+- Can access Team Portal and IR Dataroom dashboards
+- Cannot modify system settings
+
+### ✨ Features Added
+
+#### 1. **Qualified Investor Management** (`/dashboard/ir-dataroom`)
+- **Registration Form**: Create new qualified investors with full metadata
+  - Contact info: email, phone, website, LinkedIn
+  - Investment details: company, check size, location
+  - Tracking: source, referral, initial contact date
+- **Auto-generated Passwords**: Secure 12-character passwords displayed once
+- **Investor Directory**: View all registered investors with status tracking
+- **Quick Stats Dashboard**: Total investors, active count, pending review, dataroom access
+- **Preview Dataroom Button**: Opens `/ir/dataroom` in new tab for testing
+
+#### 2. **Backend API Endpoints** (`/api/v1/admin/qualified-investors`)
+- `POST /qualified-investors` - Register new investor (auto-generates password)
+- `GET /qualified-investors` - List all investors with metadata
+- `PATCH /qualified-investors/{uid}` - Update investor details
+- `DELETE /qualified-investors/{uid}` - Deactivate investor access
+
+#### 3. **IR Dataroom Enhancements**
+- **Personalized Welcome**: Header displays "Welcome, [Investor Name]"
+- **Hero Section Personalization**: "Welcome, [Name] to the SHELTR Investor Data Room"
+- **2-Year Revenue Projections**: Added to Financial Overview section
+- **Dedicated Revenue Page**: `/ir/revenue` with detailed projections and charts
+- **Role-Based Access**: Supports `qualified_investor`, `investor`, and `super_admin` roles
+
+#### 4. **Profile Management Fixes**
+- **Removed Hardcoded Fallbacks**: Profile sync no longer forces default bio/expertise
+- **Respects Empty Values**: Cleared profile fields now stay empty
+- **Clean Team Cards**: Super Admin profile matches other team members' format
+
+### 🔧 Technical Changes
+
+**New Files**:
+- `apps/api/routers/admin.py` - Admin API endpoints for investor management
+- `apps/web/src/services/qualifiedInvestorService.ts` - Frontend investor service
+- `apps/web/src/components/admin/QualifiedInvestorDirectory.tsx` - Investor list view
+- `apps/web/src/components/admin/QualifiedInvestorRegistration.tsx` - Registration form
+- `apps/web/src/app/dashboard/ir-dataroom/page.tsx` - IR management dashboard
+- `apps/web/src/app/ir/revenue/page.tsx` - Revenue projections for investors
+
+**Modified Files**:
+- `apps/web/src/app/ir/dataroom/page.tsx` - Added personalized welcome, revenue card
+- `apps/web/src/app/ir/page.tsx` - Updated authentication to include `qualified_investor`
+- `apps/web/src/services/profileSyncService.ts` - Removed hardcoded fallback values
+- `apps/web/src/app/dashboard/layout.tsx` - Added IR Dataroom menu item
+- `apps/api/main.py` - Registered admin router
+
+### 📚 Documentation Updates
+
+**Major Documentation Overhaul**:
+- `docs/api/firestore-setup.md` - Updated with investor roles and user_profiles collection
+- `docs/api/database-schema.md` - Added v2.54.0 accomplishments
+- `docs/api/README.md` - Documented new qualified investor API endpoints
+- `docs/architecture/technical/website-architecture.md` - Added IR Dataroom routes
+- `docs/architecture/technical/system-design.md` - Updated implementation summary
+- `docs/architecture/README.md` - Updated to v2.1
+- `docs/implementation/ACCESS-MANAGEMENT-PLAN.md` - Complete access control specification
+
+### 🎨 UI/UX Improvements
+
+1. **Personalization**:
+   - Investor name displayed in header and hero section
+   - Welcome message adapts to authenticated user
+   - Consistent with Founders Portal styling
+
+2. **Dashboard Integration**:
+   - New "IR Dataroom" sidebar menu item with "New" badge
+   - Quick stats cards with real-time data
+   - Tabbed interface for directory and registration
+
+3. **Security**:
+   - Password displayed only once after generation
+   - Copy-to-clipboard functionality
+   - Clear security warnings for manual credential storage
+
+### 🧪 Testing
+
+**First Qualified Investor Test Case**:
+- Name: Armando Ceron
+- Source: LinkedIn
+- Company: mandostartups.com
+- Check Size: $1M - $5M
+- Location: Irvine, CA to Los Angeles, CA
+- Successfully registered and authenticated ✅
+
+### 🔐 Security Notes
+
+**⚠️ Removed Security Issue**:
+- Deleted exposed `docs/google-credentials.json` (already in .gitignore)
+- File contained OAuth client secret but was never committed to git
+- Confirmed proper .gitignore coverage for credential files
+
+### 📊 Database Schema Updates
+
+**New Collections**:
+- `user_profiles` - Extended user data with investor metadata
+
+**New Custom Claims**:
+- `qualified_investor` - IR Dataroom access
+- `leadership` - Founder-level access
+
+**New Fields in Users Collection**:
+- `investor_metadata` - Company, check size, location, source, referral, contact date
+- `leadership_metadata` - MCP access flag
+
+### 🎯 Migration Impact
+
+- **Backward Compatible**: Existing investor accounts unaffected
+- **Firestore Rules**: Updated to support new roles
+- **Authentication Flow**: Enhanced to recognize qualified_investor role
+- **API Versioning**: New `/api/v1/admin` namespace
+
+---
+
+## [2.89.0] - 2025-11-05 (EXTERNAL DOCS LINKING & UI POLISH) 🔗✨
+
+### 🎯 Feature: External Link Support for Docs Hub
+
+#### The Problem
+- Long documents like CHANGELOG.md better hosted on GitHub
+- Users want to link directly to GitHub instead of rendering in-platform
+- Need flexibility for external documentation sources
+
+#### The Solution
+
+**New External Link Option**:
+- Toggle "Link to External Source (GitHub)" in Docs Hub Publisher
+- Provide external URL (e.g., GitHub changelog)
+- Document card displays "View on GitHub" button instead of "View"
+- Opens in new tab, maintains platform navigation
+
+**Modified Files**:
+- `apps/web/src/components/knowledge/DocsHubPublisher.tsx` - Added external link toggle/input
+- `apps/web/src/services/docsHubService.ts` - Added `external_link` and `use_external_link` fields
+- `apps/web/src/app/docs/page.tsx` - Conditional rendering for external vs. internal links
+
+### 🎨 UI/UX Improvements
+
+#### 1. **Social Sharing Image Update**
+- Updated homepage og:image to `sheltr-fab.jpeg`
+- Better represents SHELTR manufacturing facility
+- Improved social media previews while keeping video hero
+
+**Modified Files**:
+- `apps/web/src/app/layout.tsx` - Updated OpenGraph and Twitter image metadata
+
+#### 2. **Investor Relations Hero Section Redesign**
+- Removed blue gradient overlay (user feedback: "not blue")
+- Applied clean dark-to-transparent gradient matching `/solutions` page
+- Changed "Investment Opportunity" badge to outline style
+- Improved text readability with proper overlay
+- Standardized hero height and styling
+
+**Modified Files**:
+- `apps/web/src/app/portal/founders-only/investor-relations/page.tsx` - Hero section refactor
+
+### 🐛 Bug Fixes
+
+**Portal Page Issues** (ace0e0be):
+- Fixed rendering issues on portal page
+- Updated project tree navigation
+- Resolved component display bugs
+
+**Social Image & IR Hero** (99803053):
+- Corrected social sharing image path
+- Fixed IR hero section styling inconsistencies
+
+### 🔧 Technical Details
+
+**External Link Implementation**:
+```typescript
+interface DocsHubSettings {
+  // ... existing fields
+  external_link?: string;
+  use_external_link?: boolean;
+}
+```
+
+**Conditional Button Rendering**:
+```typescript
+{doc.use_external_link && doc.external_link ? (
+  <Button asChild>
+    <a href={doc.external_link} target="_blank">
+      <ExternalLink className="mr-2 h-3 w-3" />
+      View on GitHub
+    </a>
+  </Button>
+) : (
+  <Button asChild>
+    <Link href={doc.link}>View</Link>
+  </Button>
+)}
+```
+
+### 📚 Files Changed (Nov 5-6)
+
+**November 6**:
+- `apps/api/routers/admin.py` - NEW
+- `apps/api/main.py` - Modified
+- `apps/web/src/services/qualifiedInvestorService.ts` - NEW
+- `apps/web/src/components/admin/QualifiedInvestorDirectory.tsx` - NEW
+- `apps/web/src/components/admin/QualifiedInvestorRegistration.tsx` - NEW
+- `apps/web/src/app/dashboard/ir-dataroom/page.tsx` - NEW
+- `apps/web/src/app/ir/revenue/page.tsx` - NEW
+- `apps/web/src/app/ir/dataroom/page.tsx` - Modified
+- `apps/web/src/app/ir/page.tsx` - Modified
+- `apps/web/src/services/profileSyncService.ts` - Modified
+- `apps/web/src/app/dashboard/layout.tsx` - Modified
+- 6 documentation files updated
+
+**November 5**:
+- `apps/web/src/app/layout.tsx` - Modified (social image)
+- `apps/web/src/app/portal/founders-only/investor-relations/page.tsx` - Modified (hero)
+- `apps/web/src/components/knowledge/DocsHubPublisher.tsx` - Modified (external links)
+- `apps/web/src/services/docsHubService.ts` - Modified (external links)
+- `apps/web/src/app/docs/page.tsx` - Modified (external links)
+
+---
+
 ## [2.88.0] - 2025-11-03 (PUBLIC DOCUMENTS IN SECURE PORTALS) 🔓🏢
 
 ### 🎯 Feature: Allow Public Documents in Founders Portal & IR Data Room

@@ -405,9 +405,9 @@ Key architectural decisions documented:
 
 ---
 
-**Last Updated**: October 30, 2025  
-**Architecture Version**: 2.0  
-**Status**: ✅ Production & Evolving
+**Last Updated**: November 6, 2025  
+**Architecture Version**: 2.1  
+**Status**: ✅ Production & Evolving with IR Dataroom
 
 ---
 

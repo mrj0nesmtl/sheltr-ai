@@ -141,6 +141,12 @@ print(f"Hello, {user_data['name']}!")
 - `GET /api/knowledge/search` - Search documents
 - `DELETE /api/knowledge/documents/{id}` - Delete document (admin)
 
+### Qualified Investors (Admin)
+- `POST /api/v1/admin/qualified-investors` - Register new investor
+- `GET /api/v1/admin/qualified-investors` - List all investors
+- `PATCH /api/v1/admin/qualified-investors/{uid}` - Update investor
+- `DELETE /api/v1/admin/qualified-investors/{uid}` - Deactivate investor
+
 See [API Reference](../reference/api-reference.md) for complete endpoint documentation.
 
 ---
@@ -154,6 +160,8 @@ See [API Reference](../reference/api-reference.md) for complete endpoint documen
 - `participant` - Can access services, view profile
 - `shelter_admin` - Manage shelter operations
 - `platform_admin` - Full platform management
+- `leadership` - Founder-level access (mirrors super_admin with MCP access)
+- `qualified_investor` - Access to IR Dataroom and investment materials
 - `super_admin` - System administration
 
 **Permission Levels**:

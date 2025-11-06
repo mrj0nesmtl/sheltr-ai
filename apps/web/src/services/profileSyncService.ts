@@ -110,13 +110,13 @@ export class ProfileSyncService {
         displayName: `${superAdminProfile.firstName} ${superAdminProfile.lastName}`.trim(),
         email: superAdminProfile.email,
         phone: superAdminProfile.phone || '',
-        jobTitle: superAdminProfile.jobTitle || 'Chief Executive Officer & Founder',
-        company: superAdminProfile.company || 'SHELTR-AI Technologies Inc.',
-        department: superAdminProfile.department || 'Leadership',
-        specialization: superAdminProfile.specialization || 'Strategic Leadership & Technology Innovation',
-        location: superAdminProfile.location || 'Montreal, QC',
-        bio: superAdminProfile.bio || 'Founder and CEO of SHELTR-AI, pioneering innovative solutions to revolutionize homelessness services through cutting-edge technology and compassionate action.',
-        yearsOfExperience: superAdminProfile.yearsOfExperience || 25,
+        jobTitle: superAdminProfile.jobTitle || '',
+        company: superAdminProfile.company || '',
+        department: superAdminProfile.department || '',
+        specialization: superAdminProfile.specialization || '',
+        location: superAdminProfile.location || '',
+        bio: superAdminProfile.bio || '', // Respect empty bio - no hardcoded fallback
+        yearsOfExperience: superAdminProfile.yearsOfExperience || 0,
         
         // Sync privacy settings from Super Admin profile
         profileVisibility: superAdminProfile.profileVisibility || 'public',
@@ -124,10 +124,8 @@ export class ProfileSyncService {
         showExperience: superAdminProfile.showExperience ?? true,
         displayOrder: -1, // Always first
         
-        // Sync expertise from Super Admin profile (or use defaults)
-        expertise: superAdminProfile.expertise && superAdminProfile.expertise.length > 0 
-          ? superAdminProfile.expertise 
-          : ['Strategic Leadership', 'Technology Innovation', 'Social Impact', 'Blockchain', 'AI/ML'],
+        // Sync expertise from Super Admin profile (respect empty arrays)
+        expertise: superAdminProfile.expertise || [],
         certifications: [],
         education: [],
         

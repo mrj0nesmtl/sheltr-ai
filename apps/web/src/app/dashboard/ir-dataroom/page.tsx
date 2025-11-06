@@ -7,6 +7,7 @@ import QualifiedInvestorRegistration from '@/components/admin/QualifiedInvestorR
 import QualifiedInvestorDirectory from '@/components/admin/QualifiedInvestorDirectory';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   Shield,
@@ -15,7 +16,8 @@ import {
   Database,
   Lock,
   FileText,
-  TrendingUp
+  TrendingUp,
+  ExternalLink
 } from 'lucide-react';
 
 export default function IRDataroomDashboard() {
@@ -57,16 +59,30 @@ export default function IRDataroomDashboard() {
     <div className="container mx-auto px-4 py-8 max-w-7xl">
       {/* Header */}
       <div className="mb-8">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="p-2 bg-blue-100 dark:bg-blue-950 rounded-lg">
-            <Database className="h-6 w-6 text-blue-600" />
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-blue-100 dark:bg-blue-950 rounded-lg">
+              <Database className="h-6 w-6 text-blue-600" />
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold">IR Dataroom Management</h1>
+              <p className="text-muted-foreground">
+                Manage qualified investor access to the investor relations dataroom
+              </p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-3xl font-bold">IR Dataroom Management</h1>
-            <p className="text-muted-foreground">
-              Manage qualified investor access to the investor relations dataroom
-            </p>
-          </div>
+
+          {/* Preview Dataroom Button */}
+          <Button
+            variant="outline"
+            asChild
+            className="border-blue-200 hover:bg-blue-50 dark:border-blue-800 dark:hover:bg-blue-950/20"
+          >
+            <a href="/ir/dataroom" target="_blank" rel="noopener noreferrer">
+              <ExternalLink className="h-4 w-4 mr-2" />
+              Preview Dataroom
+            </a>
+          </Button>
         </div>
 
         {/* Role Badge */}

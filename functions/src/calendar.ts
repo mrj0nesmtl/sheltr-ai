@@ -228,3 +228,189 @@ Visit our investor portal: https://sheltr-ai.web.app/portal/founders-only/invest
     );
   }
 });
+
+// Shelter Partnership Meeting Request Interface
+interface ShelterPartnershipRequest {
+  shelterName: string;
+  contactName: string;
+  contactEmail: string;
+  contactPhone?: string;
+  shelterLocation: string;
+  currentCapacity?: string;
+  selectedDateTime: string;
+  additionalNotes?: string;
+}
+
+export const createShelterPartnershipMeeting = functions.https.onCall(async (request) => {
+  const data = request.data as ShelterPartnershipRequest;
+  
+  // Get Firestore instance
+  const db = getFirestore();
+
+  const { 
+    shelterName,
+    contactName, 
+    contactEmail, 
+    contactPhone,
+    shelterLocation,
+    currentCapacity,
+    selectedDateTime, 
+    additionalNotes 
+  } = data;
+
+  // Validate required fields
+  if (!shelterName || !contactName || !contactEmail || !selectedDateTime) {
+    throw new functions.https.HttpsError(
+      "invalid-argument",
+      "Missing required fields: shelterName, contactName, contactEmail, or selectedDateTime"
+    );
+  }
+
+  try {
+    // Load service account credentials from file
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = dirname(__filename);
+    const credentialsPath = join(__dirname, "..", "google-calendar-credentials.json");
+    const credentialsContent = readFileSync(credentialsPath, "utf8");
+    const serviceAccountKey = JSON.parse(credentialsContent);
+
+    // Create auth client
+    const auth = new google.auth.JWT({
+      email: serviceAccountKey.client_email,
+      key: serviceAccountKey.private_key,
+      scopes: ["https://www.googleapis.com/auth/calendar"],
+    });
+
+    const calendar = google.calendar("v3");
+
+    // Calculate end time (60 minutes for partnership calls)
+    const startTime = new Date(selectedDateTime);
+    const endTime = new Date(startTime.getTime() + 60 * 60000); // 60 minutes
+
+    // Create calendar event
+    const event = {
+      summary: `SHELTR Partnership Call - ${shelterName}`,
+      description: `
+Shelter Partnership Discussion
+
+Organization: ${shelterName}
+Contact: ${contactName} (${contactEmail})
+${contactPhone ? `Phone: ${contactPhone}` : ""}
+Location: ${shelterLocation}
+${currentCapacity ? `Current Capacity: ${currentCapacity}` : ""}
+
+Agenda:
+• Introduction to SHELTR's Dual-Platform Approach
+• Mobile PODS for Overflow Relief
+• Next-Generation HMIS Solution
+• Partnership Structure & Implementation
+• Pricing & Timeline Discussion
+• Technical Requirements Review
+• Q&A Session
+
+${additionalNotes ? `Additional Notes:\n${additionalNotes}` : ""}
+
+This meeting will explore how SHELTR can support ${shelterName} with innovative solutions for capacity management and operational excellence.
+
+Visit our solutions page: https://sheltr-ai.web.app/solutions/organizations
+      `.trim(),
+      start: {
+        dateTime: startTime.toISOString(),
+        timeZone: "America/New_York",
+      },
+      end: {
+        dateTime: endTime.toISOString(),
+        timeZone: "America/New_York",
+      },
+      location: "Google Meet (link will be provided)",
+      colorId: "9", // Blue color for shelter partnerships
+    };
+
+    // Insert event into Shelter Inquiries calendar
+    const response = await calendar.events.insert({
+      auth,
+      calendarId: "c_fd2371c84487cb8877a64151719edde2d7c2ff05fd4d695b6bd4ef8b444d6638@group.calendar.google.com",
+      requestBody: event,
+      sendUpdates: "none",
+    });
+
+    // Generate a placeholder Google Meet link
+    const meetingLink = "https://meet.google.com/new";
+    
+    functions.logger.info("Shelter partnership calendar event created successfully", { 
+      eventId: response.data.id,
+      meetingLink 
+    });
+
+    // Store meeting record in Firestore
+    const meetingRecord = {
+      eventId: response.data.id,
+      shelterName,
+      contactName,
+      contactEmail,
+      contactPhone: contactPhone || null,
+      shelterLocation,
+      currentCapacity: currentCapacity || null,
+      scheduledAt: new Date().toISOString(),
+      meetingDateTime: startTime.toISOString(),
+      meetingLink,
+      status: "scheduled",
+      additionalNotes: additionalNotes || null,
+      attendees: [
+        contactEmail,
+        "joel@arcanaconcept.com",
+        "alexander@arcanaconcept.com"
+      ],
+      emailNotificationsSent: false,
+      createdAt: new Date().toISOString(),
+    };
+
+    const docRef = await db.collection("shelter_partnership_meetings").add(meetingRecord);
+
+    functions.logger.info("Shelter partnership meeting record saved to Firestore", { docId: docRef.id });
+
+    // Create notifications for Super Admins and Platform Admins
+    const usersSnapshot = await db.collection("users")
+      .where("role", "in", ["super_admin", "platform_admin"])
+      .get();
+
+    const notificationPromises = usersSnapshot.docs.map(async (doc) => {
+      const notification = {
+        userId: doc.id,
+        type: "shelter_partnership",
+        title: `New Partnership Call: ${shelterName}`,
+        message: `${contactName} from ${shelterName} has scheduled a partnership call for ${startTime.toLocaleDateString()} at ${startTime.toLocaleTimeString()}`,
+        meetingId: docRef.id,
+        read: false,
+        createdAt: new Date().toISOString(),
+        data: {
+          shelterName,
+          contactName,
+          contactEmail,
+          meetingDateTime: startTime.toISOString(),
+          meetingLink
+        }
+      };
+
+      return db.collection("notifications").add(notification);
+    });
+
+    await Promise.all(notificationPromises);
+
+    return {
+      success: true,
+      eventId: response.data.id,
+      meetingLink,
+      message: "Partnership call scheduled successfully. You will receive a confirmation email shortly."
+    };
+
+  } catch (error) {
+    functions.logger.error("Failed to create shelter partnership calendar event", error);
+    
+    throw new functions.https.HttpsError(
+      "internal",
+      `Failed to schedule partnership call: ${error instanceof Error ? error.message : "Unknown error"}`,
+      error
+    );
+  }
+});

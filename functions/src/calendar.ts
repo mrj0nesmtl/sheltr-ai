@@ -267,10 +267,10 @@ export const createShelterPartnershipMeeting = functions.https.onCall(async (req
   }
 
   try {
-    // Load service account credentials from file
+    // Load SHELTER-SPECIFIC service account credentials from file
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = dirname(__filename);
-    const credentialsPath = join(__dirname, "..", "google-calendar-credentials.json");
+    const credentialsPath = join(__dirname, "..", "shelter-calendar-service.json");
     const credentialsContent = readFileSync(credentialsPath, "utf8");
     const serviceAccountKey = JSON.parse(credentialsContent);
 

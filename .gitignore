@@ -149,6 +149,7 @@ apps/api/.venv/
 **/firebase-adminsdk-*.json
 **/google-calendar-credentials.json
 functions/google-calendar-credentials.json
+functions/shelter-calendar-service.json
 
 # Documentation files with credentials
 QUICK-MACBOOK-SYNC.md

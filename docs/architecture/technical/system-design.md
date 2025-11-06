@@ -3,8 +3,8 @@
 **Multi-Tenant SaaS Architecture with Single-Token Stable Fund Enterprise Payment Infrastructure**
 
 *Based on: Next.js 15 + Firebase + Adyen + Coinbase Base Integration*  
-*Date: November 2, 2025*  
-*Status: Production Beta Online with Complete RAG System & Cost Optimization* ✅
+*Date: November 6, 2025*  
+*Status: Production Beta Online with Complete RAG System + Cost Optimization + IR Dataroom* ✅
 
 ---
 
@@ -196,11 +196,13 @@ export class TenantService {
 ```typescript
 // Custom claims structure for multi-tenant RBAC
 interface SheltrUserClaims {
-  role: 'super_admin' | 'admin' | 'participant' | 'donor';
+  role: 'super_admin' | 'leadership' | 'platform_admin' | 'admin' | 'participant' | 'donor' | 'qualified_investor';
   tenant_id: string;
   permissions: string[];
   shelter_id?: string;  // For shelter-specific users
   verified: boolean;
+  investor_access?: boolean;  // For qualified_investor role
+  mcp_access?: boolean;  // For leadership role
 }
 
 // JWT token validation middleware
@@ -287,10 +289,17 @@ SHELTR Platform Website
 ├── /docs                          # ✅ Public Documentation Hub - NEW
 │   ├── /[slug]                    # ✅ Dynamic document viewer with GitHub sync
 │   └── /roadmap                   # ✅ Product development timeline (custom page)
-└── /portal                        # ✅ Secure Portals System - NEW
-    ├── /founders-only             # ✅ Founders Portal with hybrid dynamic/static system
-    │   └── /[slug]                # ✅ Dynamic secure document viewer
-    └── /investor-relations        # 🔵 IR Portal (planned)
+├── /portal                        # ✅ Secure Portals System - NEW
+│   ├── /founders-only             # ✅ Founders Portal with hybrid dynamic/static system
+│   │   └── /[slug]                # ✅ Dynamic secure document viewer
+│   └── /investor-relations        # 🔵 IR Portal (planned)
+├── /ir                            # ✅ Investor Relations Hub - NEW (Session 22)
+│   └── /dataroom                  # ✅ IR Dataroom (Login + Authenticated Content)
+└── /dashboard/ir-dataroom         # ✅ IR Dataroom Management - NEW (Session 22)
+    ├── Qualified Investor Directory ✅
+    ├── Investor Registration Form ✅
+    ├── Quick Stats Dashboard ✅
+    └── Preview Dataroom Button ✅
 ```
 
 ### Design System
@@ -1549,6 +1558,9 @@ production:
 | **GCP Cost Optimization** | ✅ DEPLOYED | 56% reduction ($54/month savings), two-layer caching |
 | **Gallery System** | ✅ OPERATIONAL | Public gallery with Firebase-backed admin management |
 | **AI Chatbot** | ✅ ACTIVE | Multi-agent system with RAG integration and emergency detection |
+| **IR Dataroom** | ✅ OPERATIONAL | Qualified investor access with management dashboard |
+| **Investor Management** | ✅ COMPLETE | Backend API + Frontend forms + Auto-generated passwords |
+| **Leadership Role** | ✅ IMPLEMENTED | Founder-level access mirroring super_admin permissions |
 | **Smart Contracts** | 🔵 DESIGNED | Ready for Base network deployment |
 | **Token Integration** | 🔵 PLANNED | SHELTR-S and SHELTR implementation |
 | **Mobile App** | 🔵 FUTURE | React Native with same design system |
@@ -1575,11 +1587,26 @@ production:
 
 ---
 
-## 🎉 Implementation Summary (November 2, 2025) - SESSIONS 17-20 COMPLETE
+## 🎉 Implementation Summary (November 6, 2025) - SESSIONS 17-22 COMPLETE
 
-### Latest Major Accomplishments (Sessions 17-20: October-November 2025)
+### Latest Major Accomplishments
 
-📚 **Complete RAG Knowledge Base System**:
+💼 **Investor Relations Dataroom Complete (Session 22: November 2025)**:
+- ✅ New `qualified_investor` role with custom claims
+- ✅ New `leadership` role mirroring super_admin dashboard access
+- ✅ IR Dataroom Login Page (`/ir/dataroom`) with authentication
+- ✅ Authenticated IR Dataroom content viewer
+- ✅ IR Dataroom Management Dashboard (`/dashboard/ir-dataroom`)
+- ✅ Qualified Investor Directory with full CRUD operations
+- ✅ Investor Registration Form with auto-generated passwords
+- ✅ Extended `user_profiles` collection with investor metadata
+- ✅ Backend API endpoints (`/api/v1/admin/qualified-investors`)
+- ✅ Password one-time display modal with manual recording
+- ✅ Quick Stats Dashboard (Total, Active, Pending, Access counts)
+- ✅ Preview Dataroom button for admin testing
+- ✅ 1st successfully registered and verified
+
+📚 **Complete RAG Knowledge Base System (Sessions 17-20: October-November 2025)**:
 - ✅ Dual repository architecture (GitHub + Firebase)
 - ✅ 62+ GitHub documents synced with change detection
 - ✅ 13 secure documents auto-synced from `.local-secure-docs/`
@@ -1742,10 +1769,10 @@ The SHELTR platform now has:
 - **Product showcase pages** for PODS, MOBI, and Drone systems
 - **Enhanced documentation** with enterprise payment specifications and 73-file reorganization
 
-### Ready for Next Phase: Smart Contract Integration & IR Portal (Sessions 21+)
+### Ready for Next Phase: Smart Contract Integration & Mobile App (Sessions 23+)
 
-With Sessions 17-20's complete RAG implementation and cost optimization, SHELTR is positioned to:
-1. **Complete Investor Relations Portal** - Similar hybrid architecture to Founders Portal
+With Sessions 17-22's complete RAG implementation, cost optimization, and IR Dataroom, SHELTR is positioned to:
+1. ✅ **Complete Investor Relations Dataroom** - DONE! Qualified investors can now access secure materials
 2. **Deploy smart contracts** - Base network SHELTR-S stablecoin integration
 3. **Implement wallet connectivity** - Coinbase Connect and MetaMask integration
 4. **Develop mobile application** - React Native app with QR scanning
@@ -1756,6 +1783,6 @@ With Sessions 17-20's complete RAG implementation and cost optimization, SHELTR 
 
 ---
 
-**This system design now reflects a mature, production-ready platform with complete RAG capabilities, 56% cost optimization, and enterprise-grade documentation management. SHELTR combines innovative AI technology with compassionate purpose, working to hack homelessness through the perfect balance of stability for participants and growth for the community.** 🏠❤️💰
+**This system design now reflects a mature, production-ready platform with complete RAG capabilities, 56% cost optimization, enterprise-grade documentation management, and investor relations dataroom. SHELTR combines innovative AI technology with compassionate purpose, working to hack homelessness through the perfect balance of stability for participants and growth for the community.** 🏠❤️💰
 
-**Latest Update: November 2, 2025 - Complete Knowledge Base RAG System, Founders Portal, and GCP Cost Optimization**
+**Latest Update: November 6, 2025 - Complete IR Dataroom, Qualified Investor Management, and Leadership Role Implementation (Session 22)**

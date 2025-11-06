@@ -1159,6 +1159,19 @@ service cloud.firestore {
     }
     
     // =================================================================
+    // SHELTER PARTNERSHIP MEETINGS - Calendar bookings for shelter partnerships
+    // =================================================================
+    match /shelter_partnership_meetings/{meetingId} {
+      // Read: Super Admin and Platform Admin only
+      allow read: if isSuperAdmin() || isPlatformAdmin();
+      
+      // Create: Anyone (public booking form) - Firebase Functions will create these
+      // Update/Delete: Super Admin only
+      allow create: if true; // Allow Firebase Functions to create
+      allow update, delete: if isSuperAdmin();
+    }
+    
+    // =================================================================
     // INVESTOR CARD ORDERS - User-specific card layout preferences
     // =================================================================
     match /investor_card_orders/{userId} {

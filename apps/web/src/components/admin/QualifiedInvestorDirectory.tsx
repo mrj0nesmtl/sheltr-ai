@@ -21,20 +21,17 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
 } from '@/components/ui/dialog';
 import { 
   Building2, 
   Mail, 
-  MapPin, 
   Calendar, 
   UserCheck, 
   UserX,
@@ -61,9 +58,10 @@ export default function QualifiedInvestorDirectory({ onRefresh }: QualifiedInves
     try {
       const data = await listQualifiedInvestors();
       setInvestors(data);
-    } catch (err: any) {
-      console.error('Failed to load investors:', err);
-      setError(err.message || 'Failed to load qualified investors');
+    } catch (err) {
+      const error = err as Error;
+      console.error('Failed to load investors:', error);
+      setError(error.message || 'Failed to load qualified investors');
     } finally {
       setLoading(false);
     }
@@ -74,7 +72,7 @@ export default function QualifiedInvestorDirectory({ onRefresh }: QualifiedInves
   }, []);
 
   // Handle deactivation
-  const handleDeactivate = async (uid: string, email: string) => {
+  const handleDeactivate = async (uid: string) => {
     setDeactivating(uid);
     
     try {
@@ -87,9 +85,10 @@ export default function QualifiedInvestorDirectory({ onRefresh }: QualifiedInves
       if (onRefresh) {
         onRefresh();
       }
-    } catch (err: any) {
-      console.error('Failed to deactivate investor:', err);
-      alert(`Failed to deactivate investor: ${err.message}`);
+    } catch (err) {
+      const error = err as Error;
+      console.error('Failed to deactivate investor:', error);
+      alert(`Failed to deactivate investor: ${error.message}`);
     } finally {
       setDeactivating(null);
     }
@@ -240,8 +239,8 @@ export default function QualifiedInvestorDirectory({ onRefresh }: QualifiedInves
                     {/* Actions */}
                     <TableCell className="text-right">
                       {investor.status === 'active' && (
-                        <AlertDialog>
-                          <AlertDialogTrigger asChild>
+                        <Dialog>
+                          <DialogTrigger asChild>
                             <Button
                               variant="ghost"
                               size="sm"
@@ -254,28 +253,28 @@ export default function QualifiedInvestorDirectory({ onRefresh }: QualifiedInves
                                 'Deactivate'
                               )}
                             </Button>
-                          </AlertDialogTrigger>
-                          <AlertDialogContent>
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>Deactivate Investor Access?</AlertDialogTitle>
-                              <AlertDialogDescription>
+                          </DialogTrigger>
+                          <DialogContent>
+                            <DialogHeader>
+                              <DialogTitle>Deactivate Investor Access?</DialogTitle>
+                              <DialogDescription>
                                 This will revoke <strong>{investor.display_name}&apos;s</strong> access to the IR Dataroom.
                                 Their account will be disabled, and they will no longer be able to log in.
                                 <br /><br />
                                 This action can be reversed by a Super Admin if needed.
-                              </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel>Cancel</AlertDialogCancel>
-                              <AlertDialogAction
-                                onClick={() => handleDeactivate(investor.uid, investor.email)}
-                                className="bg-red-600 hover:bg-red-700"
+                              </DialogDescription>
+                            </DialogHeader>
+                            <DialogFooter>
+                              <Button variant="outline">Cancel</Button>
+                              <Button
+                                onClick={() => handleDeactivate(investor.uid)}
+                                className="bg-red-600 hover:bg-red-700 text-white"
                               >
                                 Deactivate Access
-                              </AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
+                              </Button>
+                            </DialogFooter>
+                          </DialogContent>
+                        </Dialog>
                       )}
                       {investor.status === 'inactive' && (
                         <Badge variant="outline" className="text-xs text-muted-foreground">

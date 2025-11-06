@@ -20,12 +20,12 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import {
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
 } from '@/components/ui/dialog';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { 
@@ -418,14 +418,14 @@ export default function QualifiedInvestorRegistration({ onSuccess }: QualifiedIn
       </Card>
 
       {/* Password Display Modal */}
-      <AlertDialog open={showPasswordModal} onOpenChange={setShowPasswordModal}>
-        <AlertDialogContent className="max-w-lg">
-          <AlertDialogHeader>
-            <AlertDialogTitle className="flex items-center gap-2">
+      <Dialog open={showPasswordModal} onOpenChange={setShowPasswordModal}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
               <CheckCircle2 className="h-5 w-5 text-green-600" />
               Investor Account Created!
-            </AlertDialogTitle>
-            <AlertDialogDescription className="space-y-4">
+            </DialogTitle>
+            <DialogDescription className="space-y-4">
               <div className="text-sm">
                 <strong>{createdInvestor?.display_name}</strong> has been successfully registered as a qualified investor.
               </div>
@@ -476,15 +476,15 @@ export default function QualifiedInvestorRegistration({ onSuccess }: QualifiedIn
                 <div><strong>UID:</strong> <code className="text-xs bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded">{createdInvestor?.uid}</code></div>
                 <div><strong>Dataroom Access:</strong> {createdInvestor?.metadata.dataroom_access_level}</div>
               </div>
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
             <Button onClick={() => setShowPasswordModal(false)}>
               I&apos;ve Recorded the Password
             </Button>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

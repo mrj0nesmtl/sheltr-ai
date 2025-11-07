@@ -715,8 +715,39 @@ export default function FoundersOnlyPage() {
       
       console.log(`📊 Final card count: ${mergedCards.length} (${dynamicCards.length} dynamic, ${initialCards.length} hardcoded)`);
       
+      // Step 2.5: Filter cards based on published_to_founders toggle (even for protected cards)
+      const filteredCards = await Promise.all(
+        mergedCards.map(async (card) => {
+          try {
+            // Check if document exists in knowledge_documents
+            const kbDocRef = doc(db, 'knowledge_documents', card.id);
+            const kbDocSnap = await getDoc(kbDocRef);
+            
+            if (kbDocSnap.exists()) {
+              const kbData = kbDocSnap.data();
+              // Only include cards where published_to_founders is true
+              if (kbData.published_to_founders === false) {
+                console.log(`🚫 Filtering out card (published_to_founders=false): ${card.id}`);
+                return null; // Card should be hidden
+              }
+            }
+            
+            // If no knowledge_documents entry or published_to_founders is true, include the card
+            return card;
+          } catch (error) {
+            console.warn(`⚠️  Error checking published_to_founders for ${card.id}:`, error);
+            // On error, include the card (fail-open for better UX)
+            return card;
+          }
+        })
+      );
+      
+      // Remove null entries (filtered out cards)
+      const visibleCards = filteredCards.filter((card): card is QuickAccessCard => card !== null);
+      console.log(`👁️  Visible cards after filtering: ${visibleCards.length}/${mergedCards.length}`);
+      
       // Step 3: Load card order (with error handling for permission issues)
-      let orderedCards = mergedCards;
+      let orderedCards = visibleCards;
       
       try {
         const orderDoc = await getDoc(doc(db, 'portal_settings', 'founders_card_order'));
@@ -727,11 +758,11 @@ export default function FoundersOnlyPage() {
           
           // Reorder cards based on saved order
           orderedCards = savedOrder
-            .map(id => mergedCards.find(card => card.id === id))
+            .map(id => visibleCards.find(card => card.id === id))
             .filter(Boolean) as QuickAccessCard[];
           
           // Add any new cards that weren't in the saved order
-          const newCards = mergedCards.filter(
+          const newCards = visibleCards.filter(
             card => !savedOrder.includes(card.id)
           );
           

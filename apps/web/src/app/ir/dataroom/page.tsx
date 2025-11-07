@@ -45,10 +45,33 @@ interface InvestorDocument {
   borderColor: string;
   isExternal?: boolean;
   externalUrl?: string;
+  secureSlug?: string; // Custom slug from knowledge base config
 }
 
-// Simple hardcoded list of documents available to investors
-const INVESTOR_DOCUMENTS: InvestorDocument[] = [
+// Badge color mapping based on document category/type
+const getBadgeColors = (badge: string): { badgeColor: string; textColor: string; borderColor: string } => {
+  const colorMap: Record<string, { badgeColor: string; textColor: string; borderColor: string }> = {
+    'Strategic': { badgeColor: 'bg-blue-500', textColor: 'text-blue-500', borderColor: 'border-blue-200' },
+    'SmartFund™': { badgeColor: 'bg-orange-600', textColor: 'text-orange-600', borderColor: 'border-orange-200' },
+    'Secure': { badgeColor: 'bg-red-600', textColor: 'text-red-600', borderColor: 'border-red-200' },
+    'Partnership': { badgeColor: 'bg-pink-600', textColor: 'text-pink-600', borderColor: 'border-pink-200' },
+    'Launch Plan': { badgeColor: 'bg-orange-500', textColor: 'text-orange-500', borderColor: 'border-orange-200' },
+    'Source Code': { badgeColor: 'bg-purple-600', textColor: 'text-purple-600', borderColor: 'border-purple-200' },
+    'Pre-Seed': { badgeColor: 'bg-blue-600', textColor: 'text-blue-600', borderColor: 'border-blue-200' },
+    'Team': { badgeColor: 'bg-indigo-600', textColor: 'text-indigo-600', borderColor: 'border-indigo-200' },
+    'Legal': { badgeColor: 'bg-red-600', textColor: 'text-red-600', borderColor: 'border-red-200' },
+    'Enterprise': { badgeColor: 'bg-green-600', textColor: 'text-green-600', borderColor: 'border-green-200' },
+    'Essential': { badgeColor: 'bg-purple-600', textColor: 'text-purple-600', borderColor: 'border-purple-200' },
+    'Research': { badgeColor: 'bg-teal-600', textColor: 'text-teal-600', borderColor: 'border-teal-200' },
+    'Architecture': { badgeColor: 'bg-slate-600', textColor: 'text-slate-600', borderColor: 'border-slate-200' },
+    'v2.0': { badgeColor: 'bg-emerald-600', textColor: 'text-emerald-600', borderColor: 'border-emerald-200' },
+  };
+  
+  return colorMap[badge] || { badgeColor: 'bg-gray-500', textColor: 'text-gray-500', borderColor: 'border-gray-200' };
+};
+
+// Fallback hardcoded documents (only used if Firestore query fails)
+const FALLBACK_INVESTOR_DOCUMENTS: InvestorDocument[] = [
   {
     id: 'adyen-integration',
     title: 'Adyen Integration Strategy',
@@ -255,7 +278,7 @@ function SortableCard({ doc, isSuperAdmin }: SortableCardProps) {
               <ExternalLink className="ml-2 h-4 w-4" />
             </Button>
           ) : (
-            <Link href={`/ir/documents/${doc.id}`}>
+            <Link href={doc.secureSlug || `/ir/documents/${doc.id}`}>
               <Button
                 variant="outline"
                 className={`w-full border-2 ${doc.textColor} hover:bg-opacity-10`}
@@ -290,7 +313,8 @@ export default function InvestorDataRoomPage() {
   const router = useRouter();
   const { user, loading: authLoading } = useAuth();
   const [isAuthorized, setIsAuthorized] = useState(false);
-  const [documents, setDocuments] = useState(INVESTOR_DOCUMENTS);
+  const [documents, setDocuments] = useState<InvestorDocument[]>([]);
+  const [documentsLoading, setDocumentsLoading] = useState(true);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
@@ -314,20 +338,81 @@ export default function InvestorDataRoomPage() {
     if (!authLoading) {
       if (!user) {
         router.push('/ir');
-      } else if (user.role !== 'investor' && user.role !== 'super_admin' && user.role !== 'qualified_investor') {
-        toast.error('Access denied: Investor credentials required');
-        router.push('/dashboard');
       } else {
-        setIsAuthorized(true);
-        // Grant session access for embedded pages
-        sessionStorage.setItem('investor-access', 'granted');
+        // Allow super_admin and check for custom investor claims
+        const userWithClaims = user as { role?: string; investor?: boolean; qualified_investor?: boolean };
+        const hasInvestorAccess = 
+          user.role === 'super_admin' || 
+          userWithClaims.qualified_investor === true ||
+          userWithClaims.investor === true;
+        
+        if (!hasInvestorAccess) {
+          toast.error('Access denied: Investor credentials required');
+          router.push('/dashboard');
+        } else {
+          setIsAuthorized(true);
+          // Grant session access for embedded pages
+          sessionStorage.setItem('investor-access', 'granted');
+        }
       }
     }
   }, [user, authLoading, router]);
 
-  // Load saved card order from Firestore
+  // Load IR documents from Firestore (where published_to_ir is true)
   useEffect(() => {
     if (!isAuthorized) return;
+
+    const loadIRDocuments = async () => {
+      setDocumentsLoading(true);
+      try {
+        // Query knowledge_documents where published_to_ir is true
+        const docsQuery = query(
+          collection(db, 'knowledge_documents'),
+          where('published_to_ir', '==', true),
+          where('status', '==', 'active')
+        );
+        
+        const snapshot = await getDocs(docsQuery);
+        
+        if (snapshot.empty) {
+          console.log('No IR documents found, using fallback');
+          setDocuments(FALLBACK_INVESTOR_DOCUMENTS);
+        } else {
+          const irDocs: InvestorDocument[] = snapshot.docs.map(doc => {
+            const data = doc.data();
+            const colors = getBadgeColors(data.secure_badge || data.badge || 'Default');
+            
+            return {
+              id: doc.id,
+              title: data.title || 'Untitled',
+              description: data.ir_description || data.description || '',
+              badge: data.secure_badge || data.badge || 'Document',
+              ...colors,
+              isExternal: data.external_link && data.use_external_link,
+              externalUrl: data.use_external_link ? data.external_link : undefined,
+              secureSlug: data.secure_slug || undefined,
+            };
+          });
+          
+          console.log(`✅ Loaded ${irDocs.length} IR documents from Firestore`);
+          setDocuments(irDocs);
+        }
+      } catch (error) {
+        console.error('Error loading IR documents:', error);
+        toast.error('Failed to load documents');
+        // Fallback to hardcoded documents on error
+        setDocuments(FALLBACK_INVESTOR_DOCUMENTS);
+      } finally {
+        setDocumentsLoading(false);
+      }
+    };
+
+    loadIRDocuments();
+  }, [isAuthorized]);
+
+  // Load saved card order from Firestore and apply to loaded documents
+  useEffect(() => {
+    if (!isAuthorized || documentsLoading || documents.length === 0) return;
 
     const loadCardOrder = async () => {
       try {
@@ -336,14 +421,14 @@ export default function InvestorDataRoomPage() {
         if (orderDoc.exists()) {
           const savedOrder = orderDoc.data().order as string[];
           
-          // Reorder documents based on saved order
+          // Reorder current documents based on saved order
           const orderedDocs = savedOrder
-            .map(id => INVESTOR_DOCUMENTS.find(doc => doc.id === id))
-            .filter(Boolean) as typeof INVESTOR_DOCUMENTS;
+            .map((id: string) => documents.find((d: InvestorDocument) => d.id === id))
+            .filter((d): d is InvestorDocument => d !== undefined);
           
           // Add any new documents that aren't in the saved order
-          const newDocs = INVESTOR_DOCUMENTS.filter(
-            doc => !savedOrder.includes(doc.id)
+          const newDocs = documents.filter(
+            (d: InvestorDocument) => !savedOrder.includes(d.id)
           );
           
           setDocuments([...orderedDocs, ...newDocs]);
@@ -355,7 +440,8 @@ export default function InvestorDataRoomPage() {
     };
 
     loadCardOrder();
-  }, [isAuthorized]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuthorized, documents.length, documentsLoading]);
 
   // Load financial overview toggle state
   useEffect(() => {
@@ -490,10 +576,48 @@ export default function InvestorDataRoomPage() {
     }
   };
 
-  // Reset to default order
-  const resetToDefault = () => {
-    setDocuments(INVESTOR_DOCUMENTS);
-    setHasUnsavedChanges(true);
+  // Reset to default order (reload from Firestore)
+  const resetToDefault = async () => {
+    setDocumentsLoading(true);
+    try {
+      // Reload from Firestore
+      const docsQuery = query(
+        collection(db, 'knowledge_documents'),
+        where('published_to_ir', '==', true),
+        where('status', '==', 'active')
+      );
+      
+      const snapshot = await getDocs(docsQuery);
+      
+      if (snapshot.empty) {
+        setDocuments(FALLBACK_INVESTOR_DOCUMENTS);
+      } else {
+        const irDocs: InvestorDocument[] = snapshot.docs.map(doc => {
+          const data = doc.data();
+          const colors = getBadgeColors(data.secure_badge || data.badge || 'Default');
+          
+          return {
+            id: doc.id,
+            title: data.title || 'Untitled',
+            description: data.ir_description || data.description || '',
+            badge: data.secure_badge || data.badge || 'Document',
+            ...colors,
+            isExternal: data.external_link && data.use_external_link,
+            externalUrl: data.use_external_link ? data.external_link : undefined,
+            secureSlug: data.secure_slug || undefined,
+          };
+        });
+        
+        setDocuments(irDocs);
+      }
+      setHasUnsavedChanges(false);
+      toast.success('Documents reloaded from database');
+    } catch (error) {
+      console.error('Error reloading documents:', error);
+      toast.error('Failed to reload documents');
+    } finally {
+      setDocumentsLoading(false);
+    }
   };
 
   if (authLoading) {
@@ -660,7 +784,7 @@ export default function InvestorDataRoomPage() {
             
             <p className="text-xl text-blue-50 mb-6 leading-relaxed">
               Thank you for your interest in SHELTR. As a valued partner in our mission to end homelessness through innovative technology, 
-              your support and expertise are crucial to our success. We're excited to share our progress, vision, and strategic roadmap with you.
+              your support and expertise are crucial to our success. We&apos;re excited to share our progress, vision, and strategic roadmap with you.
             </p>
             
             <p className="text-blue-100 mb-8">
@@ -733,22 +857,38 @@ export default function InvestorDataRoomPage() {
                   </div>
                 )}
 
-                <DndContext
-                  sensors={sensors}
-                  collisionDetection={closestCenter}
-                  onDragEnd={handleDragEnd}
-                >
-                  <SortableContext
-                    items={documents.map(doc => doc.id)}
-                    strategy={verticalListSortingStrategy}
-                  >
-                    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                      {documents.map((doc) => (
-                        <SortableCard key={doc.id} doc={doc} isSuperAdmin={isSuperAdmin} />
-                      ))}
+                {documentsLoading ? (
+                  <div className="flex items-center justify-center py-12">
+                    <div className="text-center">
+                      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                      <p className="text-muted-foreground">Loading documents...</p>
                     </div>
-                  </SortableContext>
-                </DndContext>
+                  </div>
+                ) : documents.length === 0 ? (
+                  <div className="flex items-center justify-center py-12">
+                    <div className="text-center">
+                      <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                      <p className="text-muted-foreground">No documents available for investors at this time.</p>
+                    </div>
+                  </div>
+                ) : (
+                  <DndContext
+                    sensors={sensors}
+                    collisionDetection={closestCenter}
+                    onDragEnd={handleDragEnd}
+                  >
+                    <SortableContext
+                      items={documents.map(doc => doc.id)}
+                      strategy={verticalListSortingStrategy}
+                    >
+                      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                        {documents.map((doc) => (
+                          <SortableCard key={doc.id} doc={doc} isSuperAdmin={isSuperAdmin} />
+                        ))}
+                      </div>
+                    </SortableContext>
+                  </DndContext>
+                )}
               </AccordionContent>
             </AccordionItem>
 

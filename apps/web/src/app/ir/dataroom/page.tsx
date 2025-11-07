@@ -540,7 +540,7 @@ export default function InvestorDataRoomPage() {
               {/* Personalized Welcome Message */}
               <div className="hidden lg:flex items-center mr-2">
                 <span className="text-sm text-muted-foreground">
-                  Welcome, <span className="font-medium text-foreground">{user?.displayName || user?.email?.split('@')[0] || 'Investor'}</span>
+                  Welcome <span className="font-medium text-foreground">{user?.displayName || user?.email?.split('@')[0] || 'Investor'}</span>
                 </span>
               </div>
 

@@ -716,34 +716,62 @@ export default function FoundersOnlyPage() {
       console.log(`📊 Final card count: ${mergedCards.length} (${dynamicCards.length} dynamic, ${initialCards.length} hardcoded)`);
       
       // Step 2.5: Filter cards based on published_to_founders toggle (even for protected cards)
-      const filteredCards = await Promise.all(
-        mergedCards.map(async (card) => {
-          try {
-            // Check if document exists in knowledge_documents
-            const kbDocRef = doc(db, 'knowledge_documents', card.id);
-            const kbDocSnap = await getDoc(kbDocRef);
-            
-            if (kbDocSnap.exists()) {
-              const kbData = kbDocSnap.data();
-              // Only include cards where published_to_founders is true
-              if (kbData.published_to_founders === false) {
-                console.log(`🚫 Filtering out card (published_to_founders=false): ${card.id}`);
-                return null; // Card should be hidden
-              }
-            }
-            
-            // If no knowledge_documents entry or published_to_founders is true, include the card
-            return card;
-          } catch (error) {
-            console.warn(`⚠️  Error checking published_to_founders for ${card.id}:`, error);
-            // On error, include the card (fail-open for better UX)
-            return card;
-          }
-        })
-      );
+      // First, load ALL knowledge documents to create a mapping
+      const kbSnapshot = await getDocs(collection(db, 'knowledge_documents'));
+      const kbDocsByTitle = new Map<string, any>();
+      const kbDocsBySlug = new Map<string, any>();
       
-      // Remove null entries (filtered out cards)
-      const visibleCards = filteredCards.filter((card): card is QuickAccessCard => card !== null);
+      kbSnapshot.docs.forEach(docSnap => {
+        const data = docSnap.data();
+        if (data.title) {
+          kbDocsByTitle.set(data.title.toLowerCase(), data);
+        }
+        if (data.secure_slug) {
+          // Store slug without leading slash
+          const slug = data.secure_slug.replace(/^\/+/, '');
+          kbDocsBySlug.set(slug, data);
+        }
+      });
+      
+      console.log(`📚 Loaded ${kbDocsByTitle.size} knowledge docs for filtering`);
+      
+      const filteredCards = mergedCards.filter((card) => {
+        try {
+          // Try to find matching knowledge document by title or slug
+          let kbData = null;
+          
+          // Method 1: Match by title
+          if (card.title) {
+            kbData = kbDocsByTitle.get(card.title.toLowerCase());
+          }
+          
+          // Method 2: Match by slug extracted from href
+          if (!kbData && card.href) {
+            const slug = card.href.replace(/^\/+/, '').replace('/docs/', '').replace('/portal/founders-only/', '');
+            kbData = kbDocsBySlug.get(slug);
+          }
+          
+          if (kbData) {
+            // Check published_to_founders toggle
+            if (kbData.published_to_founders === false) {
+              console.log(`🚫 Filtering out card (published_to_founders=false): ${card.title}`);
+              return false; // Hide this card
+            }
+            console.log(`✅ Card passes filter (published_to_founders=${kbData.published_to_founders}): ${card.title}`);
+          } else {
+            console.log(`ℹ️  No knowledge doc found for card: ${card.title} - keeping by default`);
+          }
+          
+          // If no knowledge doc found or published_to_founders is true, include the card
+          return true;
+        } catch (error) {
+          console.warn(`⚠️  Error checking published_to_founders for ${card.title}:`, error);
+          // On error, include the card (fail-open for better UX)
+          return true;
+        }
+      });
+      
+      const visibleCards = filteredCards;
       console.log(`👁️  Visible cards after filtering: ${visibleCards.length}/${mergedCards.length}`);
       
       // Step 3: Load card order (with error handling for permission issues)

@@ -688,7 +688,7 @@ export default function InvestorDataRoomPage() {
       {/* Accordion Sections */}
       <section className="py-12">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <Accordion type="single" collapsible defaultValue="investment-documents" className="space-y-4">
+          <Accordion type="single" collapsible className="space-y-4">
             
             {/* Investment Documents Accordion */}
             <AccordionItem value="investment-documents" className="border-2 border-blue-200 dark:border-blue-800 rounded-lg bg-white dark:bg-slate-900 overflow-hidden">

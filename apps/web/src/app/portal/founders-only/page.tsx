@@ -716,53 +716,86 @@ export default function FoundersOnlyPage() {
       console.log(`📊 Final card count: ${mergedCards.length} (${dynamicCards.length} dynamic, ${initialCards.length} hardcoded)`);
       
       // Step 2.5: Filter cards based on published_to_founders toggle (even for protected cards)
-      // First, load ALL knowledge documents to create a mapping
+      // Load BOTH knowledge_documents AND secure_documents to create mappings
       const kbSnapshot = await getDocs(collection(db, 'knowledge_documents'));
-      const kbDocsByTitle = new Map<string, any>();
-      const kbDocsBySlug = new Map<string, any>();
+      const secureSnapshot = await getDocs(collection(db, 'secure_documents'));
       
+      const docsByTitle = new Map<string, any>();
+      const docsBySlug = new Map<string, any>();
+      const docsByCardId = new Map<string, any>();
+      
+      // Add knowledge_documents to the maps
       kbSnapshot.docs.forEach(docSnap => {
         const data = docSnap.data();
         if (data.title) {
-          kbDocsByTitle.set(data.title.toLowerCase(), data);
+          docsByTitle.set(data.title.toLowerCase(), data);
         }
         if (data.secure_slug) {
-          // Store slug without leading slash
           const slug = data.secure_slug.replace(/^\/+/, '');
-          kbDocsBySlug.set(slug, data);
+          docsBySlug.set(slug, data);
         }
       });
       
-      console.log(`📚 Loaded ${kbDocsByTitle.size} knowledge docs for filtering`);
+      // Add secure_documents to the maps (using document ID as card ID)
+      secureSnapshot.docs.forEach(docSnap => {
+        const data = docSnap.data();
+        const docId = docSnap.id;
+        
+        // Store by document ID (matches card.id for hardcoded cards)
+        docsByCardId.set(docId, data);
+        
+        // Also store by title if available
+        if (data.title) {
+          docsByTitle.set(data.title.toLowerCase(), data);
+        }
+      });
+      
+      console.log(`📚 Loaded ${kbSnapshot.size} knowledge docs + ${secureSnapshot.size} secure docs for filtering`);
       
       const filteredCards = mergedCards.filter((card) => {
         try {
-          // Try to find matching knowledge document by title or slug
-          let kbData = null;
+          // Try to find matching document by card ID, title, or slug
+          let docData = null;
           
-          // Method 1: Match by title
-          if (card.title) {
-            kbData = kbDocsByTitle.get(card.title.toLowerCase());
+          // Method 1: Match by card ID (for secure_documents)
+          if (card.id) {
+            docData = docsByCardId.get(card.id);
+            if (docData) {
+              console.log(`🔍 Found doc by card ID: ${card.id}`);
+            }
           }
           
-          // Method 2: Match by slug extracted from href
-          if (!kbData && card.href) {
+          // Method 2: Match by title
+          if (!docData && card.title) {
+            docData = docsByTitle.get(card.title.toLowerCase());
+            if (docData) {
+              console.log(`🔍 Found doc by title: ${card.title}`);
+            }
+          }
+          
+          // Method 3: Match by slug extracted from href
+          if (!docData && card.href) {
             const slug = card.href.replace(/^\/+/, '').replace('/docs/', '').replace('/portal/founders-only/', '');
-            kbData = kbDocsBySlug.get(slug);
+            docData = docsBySlug.get(slug);
+            if (docData) {
+              console.log(`🔍 Found doc by slug: ${slug}`);
+            }
           }
           
-          if (kbData) {
-            // Check published_to_founders toggle
-            if (kbData.published_to_founders === false) {
+          if (docData) {
+            // Check published_to_founders toggle (or isFoundersPortal for older docs)
+            const isPublishedToFounders = docData.published_to_founders ?? docData.isFoundersPortal ?? true;
+            
+            if (isPublishedToFounders === false) {
               console.log(`🚫 Filtering out card (published_to_founders=false): ${card.title}`);
               return false; // Hide this card
             }
-            console.log(`✅ Card passes filter (published_to_founders=${kbData.published_to_founders}): ${card.title}`);
+            console.log(`✅ Card passes filter (published_to_founders=${isPublishedToFounders}): ${card.title}`);
           } else {
-            console.log(`ℹ️  No knowledge doc found for card: ${card.title} - keeping by default`);
+            console.log(`ℹ️  No doc found for card: ${card.title} (ID: ${card.id}) - keeping by default`);
           }
           
-          // If no knowledge doc found or published_to_founders is true, include the card
+          // If no doc found or published_to_founders is true, include the card
           return true;
         } catch (error) {
           console.warn(`⚠️  Error checking published_to_founders for ${card.title}:`, error);

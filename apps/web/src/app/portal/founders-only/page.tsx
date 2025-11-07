@@ -219,6 +219,7 @@ export default function FoundersOnlyPage() {
   const [heroImage, setHeroImage] = useState<HeroImage | null>(null);
   const [isClearing, setIsClearing] = useState(false);
   const [showManagementPanel, setShowManagementPanel] = useState(false);
+  const [actualIRCount, setActualIRCount] = useState<number>(0); // Actual count from knowledge_documents
   
   // Gallery Lightbox State
   const [selectedGalleryImage, setSelectedGalleryImage] = useState<number | null>(null);
@@ -607,6 +608,50 @@ export default function FoundersOnlyPage() {
     checkAuth();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, authLoading, router]);
+
+  // Load actual IR count from ALL knowledge_documents (not just those visible in Founders Portal)
+  useEffect(() => {
+    if (!isAuthorized) return;
+
+    const loadActualIRCount = async () => {
+      try {
+        const irQuery = query(
+          collection(db, 'knowledge_documents'),
+          where('published_to_ir', '==', true),
+          where('status', '==', 'active')
+        );
+        
+        const snapshot = await getDocs(irQuery);
+        const count = snapshot.size;
+        
+        console.log(`📊 Actual IR Data Room count: ${count} documents`);
+        setActualIRCount(count);
+      } catch (error) {
+        console.error('Error loading actual IR count:', error);
+      }
+    };
+
+    loadActualIRCount();
+  }, [isAuthorized]);
+
+  // Helper function to reload IR count (used after toggle/clear operations)
+  const reloadActualIRCount = async () => {
+    try {
+      const irQuery = query(
+        collection(db, 'knowledge_documents'),
+        where('published_to_ir', '==', true),
+        where('status', '==', 'active')
+      );
+      
+      const snapshot = await getDocs(irQuery);
+      const count = snapshot.size;
+      
+      console.log(`📊 Reloaded IR Data Room count: ${count} documents`);
+      setActualIRCount(count);
+    } catch (error) {
+      console.error('Error reloading actual IR count:', error);
+    }
+  };
 
   // Protected cards that should NEVER be replaced by dynamic documents
   const PROTECTED_CARDS = new Set([
@@ -1067,6 +1112,9 @@ export default function FoundersOnlyPage() {
         
         console.log(`✅ Updated knowledge_documents/${cardId}: published_to_ir = ${value}`);
         
+        // Reload actual IR count to keep it in sync
+        await reloadActualIRCount();
+        
         // Success feedback
         if (value) {
           toast.success(`✅ Added to IR Data Room`, {
@@ -1100,6 +1148,9 @@ export default function FoundersOnlyPage() {
 
         await setDoc(docRef, cardData, { merge: true });
         console.log(`✅ Updated secure_documents/${cardId}: isInvestorDataRoom = ${value} (hardcoded card)`);
+        
+        // Reload actual IR count to keep it in sync
+        await reloadActualIRCount();
         
         // Success feedback
         if (value) {
@@ -1169,6 +1220,9 @@ export default function FoundersOnlyPage() {
 
       // Update local state
       setCards(prevCards => prevCards.map(card => ({ ...card, isInvestorDataRoom: false })));
+
+      // Reload actual IR count to keep it in sync
+      await reloadActualIRCount();
 
       toast.success(`✅ Cleared ${clearedCount} documents from IR Data Room`, {
         description: errorCount > 0 ? `${errorCount} errors occurred` : 'All documents removed successfully',
@@ -1389,7 +1443,7 @@ export default function FoundersOnlyPage() {
                 <div>
                   <CardTitle className="text-lg">IR Data Room Management</CardTitle>
                   <CardDescription className="text-sm">
-                    Control what investors see • {cards.filter(c => c.isInvestorDataRoom).length} documents currently shared
+                    Control what investors see • {actualIRCount} documents currently shared
                   </CardDescription>
                 </div>
               </div>
@@ -1408,11 +1462,11 @@ export default function FoundersOnlyPage() {
               {/* Statistics */}
               <div className="grid grid-cols-3 gap-4 p-4 bg-white dark:bg-slate-900 rounded-lg border">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-blue-600">{cards.filter(c => c.isInvestorDataRoom).length}</div>
+                  <div className="text-2xl font-bold text-blue-600">{actualIRCount}</div>
                   <div className="text-xs text-muted-foreground">Shared to IR</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-gray-600">{cards.filter(c => !c.isInvestorDataRoom).length}</div>
+                  <div className="text-2xl font-bold text-gray-600">{cards.length - cards.filter(c => c.isInvestorDataRoom).length}</div>
                   <div className="text-xs text-muted-foreground">Not Shared</div>
                 </div>
                 <div className="text-center">

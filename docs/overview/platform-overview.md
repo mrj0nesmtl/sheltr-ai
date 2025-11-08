@@ -337,7 +337,7 @@ graph TD
 
 ## 🌍 Global Impact Vision
 
-### Phase 1: Foundation (2025) ✅
+### Phase 1: Foundation (2026) ✅
 - ✅ Launch production platform
 - ✅ Partner with Montreal shelters
 - ✅ Implement multi-tenant architecture
@@ -345,7 +345,7 @@ graph TD
 - 🔄 Onboard first 100 participants
 - 🔄 Process $10K in donations
 
-### Phase 2: Expansion (2026)
+### Phase 2: Expansion (2027)
 - National coverage across Canada
 - US market entry (major cities)
 - 10,000 participants onboarded

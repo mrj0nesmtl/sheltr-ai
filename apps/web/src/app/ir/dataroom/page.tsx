@@ -375,8 +375,8 @@ export default function InvestorDataRoomPage() {
         const snapshot = await getDocs(docsQuery);
         
         if (snapshot.empty) {
-          console.log('No IR documents found, using fallback');
-          setDocuments(FALLBACK_INVESTOR_DOCUMENTS);
+          console.log('⚠️  No IR documents found - Data Room is empty');
+          setDocuments([]); // Empty array instead of fallback
         } else {
           const irDocs: InvestorDocument[] = snapshot.docs.map(doc => {
             const data = doc.data();
@@ -400,8 +400,8 @@ export default function InvestorDataRoomPage() {
       } catch (error) {
         console.error('Error loading IR documents:', error);
         toast.error('Failed to load documents');
-        // Fallback to hardcoded documents on error
-        setDocuments(FALLBACK_INVESTOR_DOCUMENTS);
+        // Show empty on error (no fallback)
+        setDocuments([]);
       } finally {
         setDocumentsLoading(false);
       }
@@ -590,7 +590,8 @@ export default function InvestorDataRoomPage() {
       const snapshot = await getDocs(docsQuery);
       
       if (snapshot.empty) {
-        setDocuments(FALLBACK_INVESTOR_DOCUMENTS);
+        console.log('⚠️  No IR documents found after reset');
+        setDocuments([]); // Empty array instead of fallback
       } else {
         const irDocs: InvestorDocument[] = snapshot.docs.map(doc => {
           const data = doc.data();

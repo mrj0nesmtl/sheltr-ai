@@ -760,99 +760,44 @@ export default function FoundersOnlyPage() {
       
       console.log(`📊 Final card count: ${mergedCards.length} (${dynamicCards.length} dynamic, ${initialCards.length} hardcoded)`);
       
-      // Step 2.5: Filter cards based on published_to_founders toggle (even for protected cards)
-      // Load BOTH knowledge_documents AND secure_documents to create mappings
-      const kbSnapshot = await getDocs(collection(db, 'knowledge_documents'));
-      const secureSnapshot = await getDocs(collection(db, 'secure_documents'));
-      
-      const docsByTitle = new Map<string, any>();
-      const docsBySlug = new Map<string, any>();
-      const docsByCardId = new Map<string, any>();
-      
-      // Add knowledge_documents to the maps
-      kbSnapshot.docs.forEach(docSnap => {
-        const data = docSnap.data();
-        if (data.title) {
-          docsByTitle.set(data.title.toLowerCase(), data);
-        }
-        if (data.secure_slug) {
-          const slug = data.secure_slug.replace(/^\/+/, '');
-          docsBySlug.set(slug, data);
-        }
-      });
-      
-      // Add secure_documents to the maps (using document ID as card ID)
-      secureSnapshot.docs.forEach(docSnap => {
-        const data = docSnap.data();
-        const docId = docSnap.id;
-        
-        // Store by document ID (matches card.id for hardcoded cards)
-        docsByCardId.set(docId, data);
-        
-        // Also store by title if available
-        if (data.title) {
-          docsByTitle.set(data.title.toLowerCase(), data);
-        }
-      });
-      
-      console.log(`📚 Loaded ${kbSnapshot.size} knowledge docs + ${secureSnapshot.size} secure docs for filtering`);
+      // Step 2.5: Filter cards based on published_to_founders toggle
+      // EXCEPTION: Always show "investor-relations" card (custom portal page)
+      console.log(`📋 Starting card filtering with ${mergedCards.length} merged cards...`);
       
       const filteredCards = mergedCards.filter((card) => {
+        // ALWAYS SHOW: Investor Relations card (custom portal page, not KB-backed)
+        if (card.id === 'investor-relations') {
+          console.log(`✅ KEEPING: investor-relations card (protected portal page)`);
+          return true;
+        }
+        
+        // For all other cards, check if they have a KB document with published_to_founders: true
         try {
-          // Try to find matching document by card ID, title, or slug
-          let docData = null;
+          // Query knowledge_documents for this card
+          const q = query(
+            collection(db, 'knowledge_documents'),
+            where('published_to_founders', '==', true),
+            where('status', '==', 'active')
+          );
           
-          // Method 1: Match by card ID (for secure_documents)
-          if (card.id) {
-            docData = docsByCardId.get(card.id);
-            if (docData) {
-              console.log(`🔍 Found doc by card ID: ${card.id}`);
-            }
-          }
+          // We'll check if any document matches this card by ID, title, or slug
+          // This is done synchronously in the filter, but ideally should be pre-loaded
+          // For now, we'll use a simpler approach: only show dynamic cards from loadDynamicDocuments
           
-          // Method 2: Match by title
-          if (!docData && card.title) {
-            docData = docsByTitle.get(card.title.toLowerCase());
-            if (docData) {
-              console.log(`🔍 Found doc by title: ${card.title}`);
-            }
-          }
+          // If the card was added by loadDynamicDocuments, it already has published_to_founders: true
+          // If it's a hardcoded card from initialCards that wasn't replaced, we need to check
+          const isDynamicCard = dynamicCards.some(dc => dc.id === card.id);
           
-          // Method 3: Match by slug extracted from href
-          if (!docData && card.href) {
-            const slug = card.href.replace(/^\/+/, '').replace('/docs/', '').replace('/portal/founders-only/', '');
-            docData = docsBySlug.get(slug);
-            if (docData) {
-              console.log(`🔍 Found doc by slug: ${slug}`);
-            }
-          }
-          
-          if (docData) {
-            // Check published_to_founders toggle (or isFoundersPortal for older docs)
-            const isPublishedToFounders = docData.published_to_founders ?? docData.isFoundersPortal ?? false; // Changed default to false
-            
-            if (isPublishedToFounders === false) {
-              console.log(`🚫 Filtering out card (published_to_founders=false): ${card.title}`);
-              return false; // Hide this card
-            }
-            console.log(`✅ Card passes filter (published_to_founders=${isPublishedToFounders}): ${card.title}`);
-            return true; // Show card if published_to_founders is true
+          if (isDynamicCard) {
+            console.log(`✅ KEEPING: ${card.title} (dynamic from KB with published_to_founders: true)`);
+            return true;
           } else {
-            // No document found in Firestore
-            // ONLY show the hardcoded "Investor Relations" card (custom portal page)
-            // All other cards require a knowledge_documents entry with published_to_founders: true
-            if (card.id === 'investor-relations') {
-              console.log(`✅ Keeping hardcoded portal page: ${card.title}`);
-              return true;
-            } else {
-              console.log(`🚫 No KB document found for card: ${card.title} (ID: ${card.id}) - filtering out`);
-              return false; // Hide cards without KB documents
-            }
+            console.log(`🚫 FILTERING OUT: ${card.title} (hardcoded, no KB entry with published_to_founders: true)`);
+            return false;
           }
         } catch (error) {
-          console.warn(`⚠️  Error checking published_to_founders for ${card.title}:`, error);
-          // On error, only show the investor-relations card (fail-safe)
-          return card.id === 'investor-relations';
+          console.warn(`⚠️  Error checking ${card.title}:`, error);
+          return false; // On error, hide the card
         }
       });
       

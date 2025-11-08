@@ -350,7 +350,13 @@ class GitHubService:
                             'synced_from_github': True,
                             'github_path': file_path,
                             'tags': self._extract_tags_from_path(file_path),
-                            'embedding_status': 'pending'
+                            'embedding_status': 'pending',
+                            # Publishing toggles - OFF by default (user activates manually)
+                            'published_to_hub': False,  # Docs Hub toggle OFF
+                            'published_to_founders': False,  # Founders Portal toggle OFF
+                            'published_to_ir': False,  # IR Dataroom toggle OFF
+                            'visibility_scope': 'global',  # Global visibility for public docs
+                            'status': 'active'  # Active for chatbot access
                         }
                         document_id = await kb_service.create_knowledge_document(document_data)
                     

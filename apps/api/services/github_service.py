@@ -186,6 +186,18 @@ class GitHubService:
     
     def _should_skip_directory(self, dir_name: str, full_path: str) -> bool:
         """Check if a directory should be skipped during sync"""
+        # Exact path exclusions (highest priority)
+        exact_skip_paths = [
+            'docs/archive',                           # Archive folder
+            'docs/development/completed-work',        # Completed work archive
+        ]
+        
+        # Check exact path matches first
+        for exact_path in exact_skip_paths:
+            if exact_path in full_path:
+                logger.info(f"⏭️  Skipping exact path match: {full_path}")
+                return True
+        
         # List of directory patterns to skip
         skip_patterns = [
             'archive',

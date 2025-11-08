@@ -138,58 +138,72 @@ const db = admin.firestore();
 const SECURE_DOCS_ROOT = path.join(__dirname, '../.local-secure-docs');
 const COLLECTIONS_TO_SYNC = {
   'dataroom': {
-    permission_level: 'qualified_investor',
+    permission_level: 'platform_admin',     // Restricted to platform_admin, leadership, super_admin
     published_to_founders: false,
-    published_to_ir: true,
-    visibility_scope: 'global',
+    published_to_ir: false,                 // Manually activate via UI
+    visibility_scope: 'organization',       // Organization-level (not public/global)
+    is_private: true,                       // Private document
+    chatbot_accessible: false,              // NOT accessible to chatbot/MCP
     secure_badge: 'IR Data Room',
     secure_badge_color: 'emerald'
   },
   'development': {
-    permission_level: 'platform_admin',
+    permission_level: 'platform_admin',     // Restricted to platform_admin, leadership, super_admin
     published_to_founders: false,
     published_to_ir: false,
-    visibility_scope: 'global',
+    visibility_scope: 'organization',       // Organization-level (not public/global)
+    is_private: true,                       // Private document
+    chatbot_accessible: false,              // NOT accessible to chatbot/MCP
     secure_badge: 'Development',
     secure_badge_color: 'blue'
   },
   'fintec': {
-    permission_level: 'platform_admin',
-    published_to_founders: true,
+    permission_level: 'platform_admin',     // Restricted to platform_admin, leadership, super_admin
+    published_to_founders: false,           // Manually activate via UI
     published_to_ir: false,
-    visibility_scope: 'global',
+    visibility_scope: 'organization',       // Organization-level (not public/global)
+    is_private: true,                       // Private document
+    chatbot_accessible: false,              // NOT accessible to chatbot/MCP
     secure_badge: 'FinTec',
     secure_badge_color: 'cyan'
   },
   'founders': {
-    permission_level: 'founders',
-    published_to_founders: true,
+    permission_level: 'founders',           // Founders level (super_admin, leadership, platform_admin have access)
+    published_to_founders: true,            // Auto-publish to Founders Portal
     published_to_ir: false,
-    visibility_scope: 'global',
+    visibility_scope: 'organization',       // Organization-level (not public/global)
+    is_private: true,                       // Private document
+    chatbot_accessible: false,              // NOT accessible to chatbot/MCP
     secure_badge: 'Founders Only',
     secure_badge_color: 'purple'
   },
   'operations': {
-    permission_level: 'platform_admin',
+    permission_level: 'platform_admin',     // Restricted to platform_admin, leadership, super_admin
     published_to_founders: false,
     published_to_ir: false,
-    visibility_scope: 'global',
+    visibility_scope: 'organization',       // Organization-level (not public/global)
+    is_private: true,                       // Private document
+    chatbot_accessible: false,              // NOT accessible to chatbot/MCP
     secure_badge: 'Operations',
     secure_badge_color: 'orange'
   },
   'platform-admin': {
-    permission_level: 'platform_admin',
+    permission_level: 'platform_admin',     // Restricted to platform_admin, leadership, super_admin
     published_to_founders: false,
     published_to_ir: false,
-    visibility_scope: 'global',
+    visibility_scope: 'organization',       // Organization-level (not public/global)
+    is_private: true,                       // Private document
+    chatbot_accessible: false,              // NOT accessible to chatbot/MCP
     secure_badge: 'Admin Only',
     secure_badge_color: 'red'
   },
   'vault': {
-    permission_level: 'super_admin',
+    permission_level: 'super_admin',        // Super Admin only (most restrictive)
     published_to_founders: false,
     published_to_ir: false,
-    visibility_scope: 'global',
+    visibility_scope: 'organization',       // Organization-level (not public/global)
+    is_private: true,                       // Private document
+    chatbot_accessible: false,              // NOT accessible to chatbot/MCP
     secure_badge: 'Vault',
     secure_badge_color: 'slate'
   }

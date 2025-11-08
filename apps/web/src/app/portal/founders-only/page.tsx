@@ -829,23 +829,30 @@ export default function FoundersOnlyPage() {
           
           if (docData) {
             // Check published_to_founders toggle (or isFoundersPortal for older docs)
-            const isPublishedToFounders = docData.published_to_founders ?? docData.isFoundersPortal ?? true;
+            const isPublishedToFounders = docData.published_to_founders ?? docData.isFoundersPortal ?? false; // Changed default to false
             
             if (isPublishedToFounders === false) {
               console.log(`🚫 Filtering out card (published_to_founders=false): ${card.title}`);
               return false; // Hide this card
             }
             console.log(`✅ Card passes filter (published_to_founders=${isPublishedToFounders}): ${card.title}`);
+            return true; // Show card if published_to_founders is true
           } else {
-            console.log(`ℹ️  No doc found for card: ${card.title} (ID: ${card.id}) - keeping by default`);
+            // No document found in Firestore
+            // ONLY show the hardcoded "Investor Relations" card (custom portal page)
+            // All other cards require a knowledge_documents entry with published_to_founders: true
+            if (card.id === 'investor-relations') {
+              console.log(`✅ Keeping hardcoded portal page: ${card.title}`);
+              return true;
+            } else {
+              console.log(`🚫 No KB document found for card: ${card.title} (ID: ${card.id}) - filtering out`);
+              return false; // Hide cards without KB documents
+            }
           }
-          
-          // If no doc found or published_to_founders is true, include the card
-          return true;
         } catch (error) {
           console.warn(`⚠️  Error checking published_to_founders for ${card.title}:`, error);
-          // On error, include the card (fail-open for better UX)
-          return true;
+          // On error, only show the investor-relations card (fail-safe)
+          return card.id === 'investor-relations';
         }
       });
       

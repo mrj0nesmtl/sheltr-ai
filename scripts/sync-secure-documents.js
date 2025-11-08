@@ -136,27 +136,28 @@ const db = admin.firestore();
 
 // Configuration
 const SECURE_DOCS_ROOT = path.join(__dirname, '../.local-secure-docs');
+// MODIFIED: Only sync 3 directories - fintec, operations, platform-admin
 const COLLECTIONS_TO_SYNC = {
-  'dataroom': {
-    permission_level: 'platform_admin',     // Restricted to platform_admin, leadership, super_admin
-    published_to_founders: false,
-    published_to_ir: false,                 // Manually activate via UI
-    visibility_scope: 'organization',       // Organization-level (not public/global)
-    is_private: true,                       // Private document
-    chatbot_accessible: false,              // NOT accessible to chatbot/MCP
-    secure_badge: 'IR Data Room',
-    secure_badge_color: 'emerald'
-  },
-  'development': {
-    permission_level: 'platform_admin',     // Restricted to platform_admin, leadership, super_admin
-    published_to_founders: false,
-    published_to_ir: false,
-    visibility_scope: 'organization',       // Organization-level (not public/global)
-    is_private: true,                       // Private document
-    chatbot_accessible: false,              // NOT accessible to chatbot/MCP
-    secure_badge: 'Development',
-    secure_badge_color: 'blue'
-  },
+  // 'dataroom': {
+  //   permission_level: 'platform_admin',
+  //   published_to_founders: false,
+  //   published_to_ir: false,
+  //   visibility_scope: 'organization',
+  //   is_private: true,
+  //   chatbot_accessible: false,
+  //   secure_badge: 'IR Data Room',
+  //   secure_badge_color: 'emerald'
+  // },
+  // 'development': {
+  //   permission_level: 'platform_admin',
+  //   published_to_founders: false,
+  //   published_to_ir: false,
+  //   visibility_scope: 'organization',
+  //   is_private: true,
+  //   chatbot_accessible: false,
+  //   secure_badge: 'Development',
+  //   secure_badge_color: 'blue'
+  // },
   'fintec': {
     permission_level: 'platform_admin',     // Restricted to platform_admin, leadership, super_admin
     published_to_founders: false,           // Manually activate via UI
@@ -167,16 +168,16 @@ const COLLECTIONS_TO_SYNC = {
     secure_badge: 'FinTec',
     secure_badge_color: 'cyan'
   },
-  'founders': {
-    permission_level: 'founders',           // Founders level (super_admin, leadership, platform_admin have access)
-    published_to_founders: true,            // Auto-publish to Founders Portal
-    published_to_ir: false,
-    visibility_scope: 'organization',       // Organization-level (not public/global)
-    is_private: true,                       // Private document
-    chatbot_accessible: false,              // NOT accessible to chatbot/MCP
-    secure_badge: 'Founders Only',
-    secure_badge_color: 'purple'
-  },
+  // 'founders': {
+  //   permission_level: 'founders',
+  //   published_to_founders: true,
+  //   published_to_ir: false,
+  //   visibility_scope: 'organization',
+  //   is_private: true,
+  //   chatbot_accessible: false,
+  //   secure_badge: 'Founders Only',
+  //   secure_badge_color: 'purple'
+  // },
   'operations': {
     permission_level: 'platform_admin',     // Restricted to platform_admin, leadership, super_admin
     published_to_founders: false,
@@ -197,16 +198,16 @@ const COLLECTIONS_TO_SYNC = {
     secure_badge: 'Admin Only',
     secure_badge_color: 'red'
   },
-  'vault': {
-    permission_level: 'super_admin',        // Super Admin only (most restrictive)
-    published_to_founders: false,
-    published_to_ir: false,
-    visibility_scope: 'organization',       // Organization-level (not public/global)
-    is_private: true,                       // Private document
-    chatbot_accessible: false,              // NOT accessible to chatbot/MCP
-    secure_badge: 'Vault',
-    secure_badge_color: 'slate'
-  }
+  // 'vault': {
+  //   permission_level: 'super_admin',
+  //   published_to_founders: false,
+  //   published_to_ir: false,
+  //   visibility_scope: 'organization',
+  //   is_private: true,
+  //   chatbot_accessible: false,
+  //   secure_badge: 'Vault',
+  //   secure_badge_color: 'slate'
+  // }
 };
 
 /**

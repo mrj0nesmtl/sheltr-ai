@@ -62,16 +62,16 @@ async def sync_secure_documents(
                 detail=f"Sync script not found: {SYNC_SCRIPT_PATH}"
             )
         
-        # Count files to sync from new folder structure
-        dataroom_files = list((SECURE_DOCS_PATH / "dataroom").glob("*.md")) if (SECURE_DOCS_PATH / "dataroom").exists() else []
-        development_files = list((SECURE_DOCS_PATH / "development").glob("*.md")) if (SECURE_DOCS_PATH / "development").exists() else []
+        # Count files to sync - ONLY 3 directories (fintec, operations, platform-admin)
+        # dataroom_files = list((SECURE_DOCS_PATH / "dataroom").glob("*.md")) if (SECURE_DOCS_PATH / "dataroom").exists() else []
+        # development_files = list((SECURE_DOCS_PATH / "development").glob("*.md")) if (SECURE_DOCS_PATH / "development").exists() else []
         fintec_files = list((SECURE_DOCS_PATH / "fintec").glob("*.md")) if (SECURE_DOCS_PATH / "fintec").exists() else []
-        founders_files = list((SECURE_DOCS_PATH / "founders").glob("*.md")) if (SECURE_DOCS_PATH / "founders").exists() else []
+        # founders_files = list((SECURE_DOCS_PATH / "founders").glob("*.md")) if (SECURE_DOCS_PATH / "founders").exists() else []
         operations_files = list((SECURE_DOCS_PATH / "operations").glob("*.md")) if (SECURE_DOCS_PATH / "operations").exists() else []
         admin_files = list((SECURE_DOCS_PATH / "platform-admin").glob("*.md")) if (SECURE_DOCS_PATH / "platform-admin").exists() else []
-        vault_files = list((SECURE_DOCS_PATH / "vault").glob("*.md")) if (SECURE_DOCS_PATH / "vault").exists() else []
+        # vault_files = list((SECURE_DOCS_PATH / "vault").glob("*.md")) if (SECURE_DOCS_PATH / "vault").exists() else []
         
-        total_files = len(dataroom_files) + len(development_files) + len(fintec_files) + len(founders_files) + len(operations_files) + len(admin_files) + len(vault_files)
+        total_files = len(fintec_files) + len(operations_files) + len(admin_files)
         
         if total_files == 0:
             return SyncSecureDocsResponse(
@@ -122,13 +122,10 @@ async def sync_secure_documents(
                 "errors": errors
             },
             details=[
-                {"directory": "dataroom", "file_count": len(dataroom_files)},
-                {"directory": "development", "file_count": len(development_files)},
+                # Only 3 directories being synced
                 {"directory": "fintec", "file_count": len(fintec_files)},
-                {"directory": "founders", "file_count": len(founders_files)},
                 {"directory": "operations", "file_count": len(operations_files)},
-                {"directory": "platform-admin", "file_count": len(admin_files)},
-                {"directory": "vault", "file_count": len(vault_files)}
+                {"directory": "platform-admin", "file_count": len(admin_files)}
             ]
         )
         
@@ -155,10 +152,10 @@ async def get_secure_sync_status(
     Shows file counts and last sync time.
     """
     try:
-        # Count files in .local-secure-docs
+        # Count files in .local-secure-docs - ONLY 3 active directories
         total_files = 0
         if SECURE_DOCS_PATH.exists():
-            for subdir in ["dataroom", "development", "fintec", "founders", "operations", "platform-admin", "vault"]:
+            for subdir in ["fintec", "operations", "platform-admin"]:
                 subdir_path = SECURE_DOCS_PATH / subdir
                 if subdir_path.exists():
                     total_files += len(list(subdir_path.glob("*.md")))
@@ -198,7 +195,8 @@ async def list_secure_directories(
             }
         
         directories = []
-        for subdir in ["dataroom", "development", "fintec", "founders", "operations", "platform-admin", "vault"]:
+        # ONLY 3 active directories being synced
+        for subdir in ["fintec", "operations", "platform-admin"]:
             subdir_path = SECURE_DOCS_PATH / subdir
             if subdir_path.exists():
                 md_files = list(subdir_path.glob("*.md"))

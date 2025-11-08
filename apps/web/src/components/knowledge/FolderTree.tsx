@@ -310,12 +310,11 @@ export function buildDualRepositoryTree(documents: KnowledgeDocument[]): FolderN
   if (firebaseDocs.length > 0) {
     const secureCategories = new Map<string, FolderNode>();
     
-    // Define secure category metadata
+    // Define secure category metadata - ONLY 3 active directories
     const secureCategoryMetadata: Record<string, { icon: string; description: string; order: number }> = {
-      'founders': { icon: '💼', description: 'Founders Portal documents', order: 1 },
-      'payment-rails': { icon: '💳', description: 'Payment system documentation', order: 2 },
-      'platform-admin': { icon: '⚙️', description: 'Platform admin documents', order: 3 },
-      'shelter-research': { icon: '🏢', description: 'Shelter research documents', order: 4 }
+      'fintec': { icon: '💳', description: 'Financial technology & payment rails', order: 1 },
+      'operations': { icon: '⚙️', description: 'Operational procedures & workflows', order: 2 },
+      'platform-admin': { icon: '🔒', description: 'Platform admin system documentation', order: 3 }
     };
 
     // Group Firebase docs by source_directory

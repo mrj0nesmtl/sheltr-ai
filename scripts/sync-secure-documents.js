@@ -6,11 +6,21 @@
  *   node scripts/sync-secure-documents.js
  * 
  * This script:
- *   1. Reads files from .local-secure-docs/founders, payment-rails, platform-admin, shelter-research
+ *   1. Reads files from .local-secure-docs/ subdirectories (dataroom, development, fintec, founders, operations, platform-admin, vault)
  *   2. Uploads them to Firestore knowledge_documents collection
- *   3. Sets appropriate permission levels
- *   4. Auto-publishes to Founders Portal or IR based on directory
- *   5. Generates slugs and metadata
+ *   3. Uploads files to Firebase Storage at /secure-docs/[directory]/ (direct to root, not /secure-docs/founders/)
+ *   4. Sets appropriate permission levels per directory
+ *   5. Auto-publishes to Founders Portal or IR Data Room based on directory
+ *   6. Generates slugs and metadata
+ * 
+ * FOLDER STRUCTURE:
+ *   - dataroom/        → IR Data Room documents (qualified_investor access)
+ *   - development/     → Development session logs (platform_admin access)
+ *   - fintec/          → Financial technology docs (platform_admin, published to founders)
+ *   - founders/        → Founders Portal documents (founders access)
+ *   - operations/      → Operational documents (platform_admin access)
+ *   - platform-admin/  → Platform admin only documents (platform_admin access)
+ *   - vault/           → Super Admin only documents (super_admin access)
  * 
  * IMPORTANT - FILE EXCLUSIONS:
  *   
@@ -30,10 +40,9 @@
  *   - Should be moved to /drafts folder or marked with -draft suffix
  *   - Patterns: *draft*.md, *blog-post*.md, the-sheltr-journey-blog-post*.md
  *   
- *   SHELTER RESEARCH:
- *   - Some shelter research files may duplicate public docs
- *   - Private research versions kept for internal analysis
- *   - Use this directory for non-public research data
+ *   README FILES:
+ *   - Directory navigation/overview files excluded from knowledge base
+ *   - These pollute the KB with summary links, not substantive content
  */
 
 const admin = require('firebase-admin');
@@ -128,6 +137,30 @@ const db = admin.firestore();
 // Configuration
 const SECURE_DOCS_ROOT = path.join(__dirname, '../.local-secure-docs');
 const COLLECTIONS_TO_SYNC = {
+  'dataroom': {
+    permission_level: 'qualified_investor',
+    published_to_founders: false,
+    published_to_ir: true,
+    visibility_scope: 'global',
+    secure_badge: 'IR Data Room',
+    secure_badge_color: 'emerald'
+  },
+  'development': {
+    permission_level: 'platform_admin',
+    published_to_founders: false,
+    published_to_ir: false,
+    visibility_scope: 'global',
+    secure_badge: 'Development',
+    secure_badge_color: 'blue'
+  },
+  'fintec': {
+    permission_level: 'platform_admin',
+    published_to_founders: true,
+    published_to_ir: false,
+    visibility_scope: 'global',
+    secure_badge: 'FinTec',
+    secure_badge_color: 'cyan'
+  },
   'founders': {
     permission_level: 'founders',
     published_to_founders: true,
@@ -136,13 +169,13 @@ const COLLECTIONS_TO_SYNC = {
     secure_badge: 'Founders Only',
     secure_badge_color: 'purple'
   },
-  'payment-rails': {
+  'operations': {
     permission_level: 'platform_admin',
-    published_to_founders: true,
+    published_to_founders: false,
     published_to_ir: false,
     visibility_scope: 'global',
-    secure_badge: 'Platform Admin',
-    secure_badge_color: 'blue'
+    secure_badge: 'Operations',
+    secure_badge_color: 'orange'
   },
   'platform-admin': {
     permission_level: 'platform_admin',
@@ -152,13 +185,13 @@ const COLLECTIONS_TO_SYNC = {
     secure_badge: 'Admin Only',
     secure_badge_color: 'red'
   },
-  'shelter-research': {
-    permission_level: 'shelter_admin',
+  'vault': {
+    permission_level: 'super_admin',
     published_to_founders: false,
     published_to_ir: false,
-    visibility_scope: 'shelter',
-    secure_badge: 'Shelter Research',
-    secure_badge_color: 'green'
+    visibility_scope: 'global',
+    secure_badge: 'Vault',
+    secure_badge_color: 'slate'
   }
 };
 

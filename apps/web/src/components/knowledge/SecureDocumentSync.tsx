@@ -120,11 +120,12 @@ export const SecureDocumentSync: React.FC = () => {
       const data: SyncResult = await response.json();
       setSyncResult(data);
 
-      // Step 2: Auto-trigger embedding generation if documents were synced
-      if (data.success && data.stats.total > 0) {
-        console.log('🧠 Auto-triggering embedding generation...');
-        await generateEmbeddings();
-      }
+      // NOTE: Secure docs have chatbot_accessible: false, so NO embeddings are generated
+      // Documents remain accessible only to Platform Admin, Leadership, Super Admin
+      // if (data.success && data.stats.total > 0) {
+      //   console.log('🧠 Auto-triggering embedding generation...');
+      //   await generateEmbeddings();
+      // }
 
     } catch (err) {
       console.error('Sync error:', err);
@@ -147,7 +148,7 @@ export const SecureDocumentSync: React.FC = () => {
                 Secure Document Sync
               </CardTitle>
               <CardDescription>
-                Sync secure documents from .local-secure-docs to Fire store
+                Sync secure document metadata from .local-secure-docs to Firestore
               </CardDescription>
             </div>
           </div>
@@ -162,53 +163,52 @@ export const SecureDocumentSync: React.FC = () => {
         <Alert className="border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-900/20">
           <FileText className="h-4 w-4 text-blue-600" />
           <AlertDescription className="text-sm text-blue-900 dark:text-blue-100">
-            This syncs local secure documents to Firestore. Automatically generates embeddings for the chatbot.
+            <strong>Platform Admin Access Only</strong> - Syncs metadata to <code className="text-xs">knowledge_documents</code> collection.
             <br />
             <span className="font-mono text-xs text-blue-700 dark:text-blue-300 mt-1 block">
-              📁 Archive, backup, and temporary directories are automatically excluded.
+              ⚠️  Files remain local (NOT uploaded to cloud). No embeddings generated (chatbot cannot access).
             </span>
           </AlertDescription>
         </Alert>
 
-        {/* Sync Categories */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <div className="p-3 bg-white dark:bg-slate-800 rounded-lg border border-orange-200 dark:border-orange-800">
-            <div className="flex items-center gap-2 mb-2">
-              <Briefcase className="h-4 w-4 text-orange-600" />
-              <span className="text-sm font-medium">Founders</span>
+        {/* Sync Categories - Only 3 Active Directories */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div className="p-3 bg-white dark:bg-slate-800 rounded-lg border-2 border-cyan-200 dark:border-cyan-800">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2">
+                <CreditCard className="h-4 w-4 text-cyan-600" />
+                <span className="text-sm font-semibold">FinTec</span>
+              </div>
+              <Badge className="bg-cyan-600 text-white text-xs">Platform Admin</Badge>
             </div>
             <p className="text-xs text-muted-foreground">
-              Founders Portal documents
+              Financial technology & payment rails documentation
             </p>
           </div>
 
-          <div className="p-3 bg-white dark:bg-slate-800 rounded-lg border border-blue-200 dark:border-blue-800">
-            <div className="flex items-center gap-2 mb-2">
-              <CreditCard className="h-4 w-4 text-blue-600" />
-              <span className="text-sm font-medium">Payment Rails</span>
+          <div className="p-3 bg-white dark:bg-slate-800 rounded-lg border-2 border-orange-200 dark:border-orange-800">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2">
+                <Settings className="h-4 w-4 text-orange-600" />
+                <span className="text-sm font-semibold">Operations</span>
+              </div>
+              <Badge className="bg-orange-600 text-white text-xs">Platform Admin</Badge>
             </div>
             <p className="text-xs text-muted-foreground">
-              Payment system docs
+              Operational procedures & workflows
             </p>
           </div>
 
-          <div className="p-3 bg-white dark:bg-slate-800 rounded-lg border border-red-200 dark:border-red-800">
-            <div className="flex items-center gap-2 mb-2">
-              <Settings className="h-4 w-4 text-red-600" />
-              <span className="text-sm font-medium">Platform Admin</span>
+          <div className="p-3 bg-white dark:bg-slate-800 rounded-lg border-2 border-red-200 dark:border-red-800">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2">
+                <Shield className="h-4 w-4 text-red-600" />
+                <span className="text-sm font-semibold">Platform Admin</span>
+              </div>
+              <Badge className="bg-red-600 text-white text-xs">Admin Only</Badge>
             </div>
             <p className="text-xs text-muted-foreground">
-              Admin-only documents
-            </p>
-          </div>
-
-          <div className="p-3 bg-white dark:bg-slate-800 rounded-lg border border-green-200 dark:border-green-800">
-            <div className="flex items-center gap-2 mb-2">
-              <Building className="h-4 w-4 text-green-600" />
-              <span className="text-sm font-medium">Shelter Research</span>
-            </div>
-            <p className="text-xs text-muted-foreground">
-              Shelter admin research
+              Platform admin system documentation
             </p>
           </div>
         </div>
@@ -300,7 +300,7 @@ export const SecureDocumentSync: React.FC = () => {
 
                 <div className="mt-3 pt-3 border-t border-green-200 dark:border-green-800">
                   <p className="text-xs text-green-700 dark:text-green-300">
-                    💡 <strong>Next steps:</strong> New documents will automatically generate embeddings for the AI chatbot.
+                    ✅ <strong>Sync Complete:</strong> Document metadata is now in the Knowledge Base (Platform Admin access only).
                   </p>
                 </div>
               </div>
@@ -328,8 +328,8 @@ export const SecureDocumentSync: React.FC = () => {
           <strong>💡 Tip:</strong> After syncing, new documents will automatically:
           <ul className="ml-4 mt-1 space-y-0.5">
             <li>• Be added to the Knowledge Base</li>
-            <li>• Generate AI embeddings for chat</li>
-            <li>• Appear in Founders Portal (if applicable)</li>
+            <li>• <strong>NOT</strong> generate embeddings (chatbot_accessible: false)</li>
+            <li>• Remain accessible to Platform Admin, Leadership, Super Admin only</li>
             <li>• Respect permission levels automatically</li>
           </ul>
         </div>

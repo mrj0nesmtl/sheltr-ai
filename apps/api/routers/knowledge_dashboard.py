@@ -460,6 +460,12 @@ async def clear_knowledge_base(
             except Exception as e:
                 logger.warning(f"Error deleting chunks for doc {doc_id}: {str(e)}")
         
+        # ✅ INVALIDATE CACHE after clearing documents
+        from services.cache_service import cache
+        cache.invalidate('knowledge_documents_all')
+        cache.invalidate('knowledge_stats')
+        logger.info("🗑️  Cache invalidated after clearing knowledge base")
+        
         logger.info(f"Knowledge base cleared ({clear_type}) - {deleted_count} storage files, {firestore_deleted} Firestore docs, {chunks_deleted} chunks")
         
         return {

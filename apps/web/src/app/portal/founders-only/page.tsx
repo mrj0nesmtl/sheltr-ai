@@ -1080,26 +1080,31 @@ export default function FoundersOnlyPage() {
           });
         }
       } else {
-        // Hardcoded card - store in secure_documents for backward compatibility
-        const docRef = doc(db, 'secure_documents', cardId);
-        const cardData = {
-          id: card.id,
+        // Hardcoded card - create a knowledge_documents entry so IR Dataroom can find it
+        console.log(`⚠️  Card ${cardId} not found in knowledge_documents, creating entry...`);
+        
+        const kbDocRef = doc(db, 'knowledge_documents', cardId);
+        await setDoc(kbDocRef, {
+          id: cardId,
           title: card.title,
           description: card.description,
-          badgeText: card.badgeText,
-          badgeClass: card.badgeClass,
-          titleColor: card.titleColor,
-          buttonText: card.buttonText,
-          buttonClass: card.buttonClass,
-          href: card.href,
-          borderClass: card.borderClass,
-          category: card.category,
-          isInvestorDataRoom: value,
-          updatedAt: new Date().toISOString(),
-        };
-
-        await setDoc(docRef, cardData, { merge: true });
-        console.log(`✅ Updated secure_documents/${cardId}: isInvestorDataRoom = ${value} (hardcoded card)`);
+          secure_badge: card.badgeText,
+          secure_badge_color: card.badgeClass,
+          secure_slug: card.href,
+          permission_level: 'founders',
+          visibility_scope: 'organization',
+          is_private: true,
+          chatbot_accessible: false,
+          published_to_founders: true, // Already visible in Founders Portal
+          published_to_ir: value,      // Toggle IR visibility
+          published_to_hub: false,
+          status: 'active',
+          source: 'hardcoded_portal_card',
+          created_at: new Date(),
+          updated_at: new Date()
+        }, { merge: true });
+        
+        console.log(`✅ Created/Updated knowledge_documents/${cardId}: published_to_ir = ${value}`);
         
         // Reload actual IR count to keep it in sync
         await reloadActualIRCount();

@@ -7,6 +7,197 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.91.0] - 2025-11-08 (KNOWLEDGE BASE ARCHITECTURE OVERHAUL) 📚🏗️
+
+### 🎯 Major Feature: Enterprise Documentation & Knowledge Base Architecture
+
+#### Documentation Restructuring (450+ Files)
+
+**Complete Project Documentation Reorganization**:
+- Restructured entire `/docs` folder into 14 enterprise-grade sections
+- Merged and consolidated legacy documentation files
+- Established clear information architecture with hierarchical organization
+- Created comprehensive navigation system with TABLE_OF_CONTENTS.md
+- Rewrote root `docs/README.md` with role-based quick navigation
+
+**Documentation Sections**:
+1. **Overview** - Platform vision, theory of change, mission
+2. **Architecture** - System design, blockchain, payment rails, tokenomics
+3. **API** - Database schema, Firestore setup, API reference
+4. **Features** - Knowledge base, chatbot, RAG system, portals
+5. **Development** - Roadmap, project flow, active development
+6. **User Guides** - Shelter admin, participant, donor documentation
+7. **Guides** - Legacy development references, archived materials
+8. **Operations** - Deployment, monitoring, maintenance
+9. **Integrations** - Third-party services, MCP, APIs
+10. **Reference** - Technical specifications, project tree, glossary
+11. **Resources** - Templates, geographic data, external links
+12. **Ecosystem** - PODS, MOBI, DRONE systems
+13. **Security** - Policies, compliance, best practices
+14. **Archive** - Historical sessions, completed work, legacy files
+
+**Key Documentation Actions**:
+- Merged `platform-overview.md` and `SHELTR_30000.md` into single comprehensive document
+- Deleted 30+ redundant/archived documentation files
+- Moved completed work to `docs/development/completed-work/`
+- Archived legacy migration files to `docs/archive/`
+- Updated all cross-references and navigation paths
+
+### 🏗️ Knowledge Base Architecture Improvements
+
+#### Secure Document Storage Reconfiguration
+
+**Firebase Storage Architecture**:
+- Removed nested `/secure-docs/founders/` structure
+- Implemented flat directory structure under `/secure-docs/` root
+- Created 7 specialized secure document directories:
+  - `dataroom/` - IR Data Room documents (Platform Admin+ access)
+  - `development/` - Development documentation (Platform Admin+ access)
+  - `fintec/` - Financial technology specs (Platform Admin+ access)
+  - `founders/` - Founders Portal documents (Auto-published to portal)
+  - `operations/` - Operations documentation (Platform Admin+ access)
+  - `platform-admin/` - Admin-only documentation (Platform Admin+ access)
+  - `vault/` - Super Admin exclusive documents (Super Admin only)
+
+**Firestore Collection Cleanup**:
+- Removed legacy `/founder_documents` collection
+- Consolidated all documents to `/knowledge_documents` collection
+- Unified secure and public document management
+- Created `clear-old-secure-docs.js` script for legacy data cleanup
+
+#### Knowledge Base Sync Logic Enhancements
+
+**GitHub Documentation Sync**:
+- Default toggles: `published_to_hub`, `published_to_founders`, `published_to_ir` set to `FALSE`
+- `visibility_scope` set to `global` (accessible to chatbot/MCP)
+- `status` set to `active` for AI assistant integration
+- Manual activation required for core public documentation
+
+**Directory Exclusions**:
+- Added `docs/archive/` to sync exclusions
+- Added `docs/development/completed-work/` to sync exclusions
+- Prevents archived content from cluttering active knowledge base
+
+**Secure Document Permissions**:
+- `dataroom/`, `development/`, `fintec/`, `operations/`, `platform-admin/`: 
+  - Permission Level: `platform_admin` (Platform Admin, Leadership, Super Admin)
+  - Visibility Scope: `organization` (not public/global)
+  - Private: `true`, Chatbot Accessible: `false`
+  - Manual publishing required for IR Dataroom and Founders Portal
+- `founders/`:
+  - Permission Level: `founders`
+  - Auto-published to Founders Portal
+  - Private: `true`, Chatbot Accessible: `false`
+- `vault/`:
+  - Permission Level: `super_admin` (Super Admin only)
+  - Most restrictive access level
+  - Private: `true`, Chatbot Accessible: `false`
+
+### 🐛 Bug Fixes
+
+#### 1. **Founders Portal Document Control** (`/portal/founders-only`)
+- **Issue**: "Development Roadmap" card remained visible even when `published_to_founders` toggle was OFF
+- **Root Cause**: Filtering logic matched hardcoded card IDs instead of Firestore document IDs
+- **Fix**: Refactored filtering to match cards by `title`, `secure_slug`, or extracted slug from `href`
+- **Result**: All cards now properly respect `published_to_founders` toggle, including previously "protected" hardcoded cards
+
+#### 2. **IR Data Room Count Discrepancy**
+- **Issue**: Founders Portal showed "4 documents shared to IR" but actual IR Data Room displayed 6 documents
+- **Root Cause**: Founders Portal counted only docs with BOTH `published_to_founders: true` AND `published_to_ir: true`
+- **Fix**: Added `actualIRCount` state that queries all docs with `published_to_ir: true` regardless of `published_to_founders`
+- **Result**: Accurate real-time count of IR Data Room documents with auto-refresh after toggle changes
+
+#### 3. **Knowledge Base Cache Invalidation**
+- **Issue**: After running "Clear All" from KB Dashboard, Firestore collections were empty but frontend still showed 145 documents
+- **Root Cause**: Backend cache service retained stale data after clearing collections
+- **Fix**: Added cache invalidation to `/api/v1/knowledge-dashboard/clear` endpoint
+  ```python
+  from services.cache_service import cache
+  cache.invalidate('knowledge_documents_all')
+  cache.invalidate('knowledge_stats')
+  ```
+- **Result**: Frontend now immediately reflects cleared state after backend restart
+
+### 🔧 Technical Changes
+
+**New Files**:
+- `docs/features/knowledge-base/KB-CLEAR-SYNC-REVIEW.md` - Comprehensive KB sync analysis
+- `scripts/clear-old-secure-docs.js` - Legacy secure_documents collection cleanup
+- `scripts/sync-ir-toggles.js` - Migration script for IR toggle inconsistencies
+
+**Modified Files**:
+- `docs/README.md` - Complete rewrite for 14-section structure
+- `docs/TABLE_OF_CONTENTS.md` - Comprehensive navigation index
+- `docs/overview/platform-overview.md` - Merged from two legacy documents
+- `scripts/sync-secure-documents.js` - Updated for 7-folder structure
+- `apps/api/routers/secure_sync.py` - New directory structure support
+- `apps/api/services/github_service.py` - Default toggles and exclusions
+- `apps/api/routers/knowledge_dashboard.py` - Cache invalidation on clear
+- `apps/web/src/app/portal/founders-only/page.tsx` - Fixed document filtering
+
+**Deleted Files**:
+- `docs/overview/SHELTR_30000.md` - Merged into platform-overview.md
+- 30+ archived documentation files (moved to `docs/archive/`)
+
+### 📚 Documentation Updates
+
+**New Documentation**:
+- `docs/features/knowledge-base/KB-CLEAR-SYNC-REVIEW.md` - Clear/sync procedures, risks, outcomes
+- `docs/TABLE_OF_CONTENTS.md` - Complete project documentation index
+- `docs/README.md` - Enterprise-grade documentation hub with role-based navigation
+
+**Updated Documentation**:
+- `docs/overview/platform-overview.md` - Consolidated, updated to v2.90.0 status
+- `docs/reference/PROJECT-TREE.md` - Updated to reflect new documentation structure
+
+### 🔐 Security & Compliance
+
+**Secure Document Access Control**:
+- Implemented granular permission levels (super_admin, platform_admin, founders)
+- Restricted chatbot/MCP access to sensitive documents
+- Organization-scoped visibility for internal documents
+- Manual publishing approval workflow for sensitive content
+
+**Knowledge Base Security**:
+- Clear separation between public and secure documents
+- Archive exclusions prevent exposure of sensitive historical data
+- Role-based access control for all document categories
+
+### 🎨 UI/UX Improvements
+
+**Knowledge Base Dashboard**:
+- Accurate real-time document counts after clear operations
+- Improved sync status reporting
+- Better feedback for long-running operations
+
+**Founders Portal**:
+- Consistent document visibility control
+- Real-time IR Data Room document count
+- Proper card filtering based on Firestore toggles
+
+### 📊 Performance Optimizations
+
+**Backend Caching**:
+- Fixed cache invalidation after KB clear operations
+- Prevents stale data from being served after collection deletion
+- Improved cache hit/miss logging
+
+**Frontend State Management**:
+- Eliminated phantom documents after KB clear
+- Proper state updates after toggle changes
+- Real-time count synchronization
+
+### 🚀 Deployment
+
+**Knowledge Base Sync Workflow**:
+1. Clear All (Nuclear Option) - Wipes `knowledge_documents` and `knowledge_chunks`
+2. Clear Old Secure Docs - Wipes legacy `secure_documents` collection
+3. Sync GitHub Files - Ingests public documentation (toggles OFF by default)
+4. Sync Secure Documents - Uploads `.local-secure-docs/` with strict permissions
+5. Manual Activation - Activate core docs via UI toggles
+
+---
+
 ## [2.90.0] - 2025-11-06 (QUALIFIED INVESTOR ACCESS MANAGEMENT) 💼🔐
 
 ### 🎯 Major Feature: Complete Investor Relations Dataroom Management System

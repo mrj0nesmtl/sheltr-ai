@@ -270,38 +270,59 @@ function SortableCard({ doc, isSuperAdmin }: SortableCardProps) {
             {doc.description}
           </p>
 
-          {doc.isExternal && doc.externalUrl ? (
-            <Button
-              variant="outline"
-              className={`w-full border-2 ${doc.textColor} hover:bg-opacity-10`}
-              onClick={handleClick}
-            >
-              View Repository
-              <ExternalLink className="ml-2 h-4 w-4" />
-            </Button>
-          ) : (
-            <Link href={`/ir/${(() => {
-              // Get the slug, preferring hubSlug over secureSlug over id
-              let slug = doc.hubSlug || doc.secureSlug || doc.id;
-              
-              // Clean up any path prefixes (e.g., /portal/founders-only/investor-relations -> investor-relations)
-              if (slug.includes('/')) {
+          {(() => {
+            // Get the slug/URL
+            let slug = doc.hubSlug || doc.secureSlug || doc.id;
+            
+            // Check if it's an external URL (starts with http:// or https://)
+            const isExternalUrl = slug && (slug.startsWith('http://') || slug.startsWith('https://'));
+            
+            if (doc.isExternal && doc.externalUrl) {
+              // Legacy external document (like GitHub repo)
+              return (
+                <Button
+                  variant="outline"
+                  className={`w-full border-2 ${doc.textColor} hover:bg-opacity-10`}
+                  onClick={handleClick}
+                >
+                  View Repository
+                  <ExternalLink className="ml-2 h-4 w-4" />
+                </Button>
+              );
+            } else if (isExternalUrl) {
+              // External URL stored in slug (like Pitch Deck Gamma URL)
+              return (
+                <a href={slug} target="_blank" rel="noopener noreferrer" className="block">
+                  <Button
+                    variant="outline"
+                    className={`w-full border-2 ${doc.textColor} hover:bg-opacity-10`}
+                  >
+                    View Document
+                    <ExternalLink className="ml-2 h-4 w-4" />
+                  </Button>
+                </a>
+              );
+            } else {
+              // Internal document - clean up any path prefixes
+              if (slug.includes('/') && !slug.startsWith('http')) {
                 // If it's a full path, extract just the last segment
                 const segments = slug.split('/').filter(Boolean);
                 slug = segments[segments.length - 1];
               }
               
-              return slug;
-            })()}`}>
-              <Button
-                variant="outline"
-                className={`w-full border-2 ${doc.textColor} hover:bg-opacity-10`}
-              >
-                View Document
-                <ExternalLink className="ml-2 h-4 w-4" />
-              </Button>
-            </Link>
-          )}
+              return (
+                <Link href={`/ir/${slug}`}>
+                  <Button
+                    variant="outline"
+                    className={`w-full border-2 ${doc.textColor} hover:bg-opacity-10`}
+                  >
+                    View Document
+                    <ExternalLink className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
+              );
+            }
+          })()}
         </CardContent>
       </Card>
     </div>

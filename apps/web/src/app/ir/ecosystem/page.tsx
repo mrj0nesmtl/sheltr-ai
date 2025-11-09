@@ -31,6 +31,7 @@ export default function IREcosystemPage() {
             From QR Code to <span className="text-blue-400">Housing</span>
           </>
         }
+        subtitle="Follow the journey: One scan. One donation. One life changed."
       />
 
 
@@ -40,7 +41,7 @@ export default function IREcosystemPage() {
           <div className="max-w-4xl mx-auto text-center">
             <Badge className="mb-6" variant="outline">INSPIRED BY MALCOLM GLADWELL</Badge>
             <h2 className="text-3xl md:text-5xl font-bold mb-6">
-              Better to <span className="text-blue-400">Solve</span> than Manage
+              It's Better to <span className="text-blue-400">Solve</span> than Manage
             </h2>
             <div className="bg-card rounded-2xl p-8 md:p-12 border-2 border-primary/10 shadow-lg">
               <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-6">

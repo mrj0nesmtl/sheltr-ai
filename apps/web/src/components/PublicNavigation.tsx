@@ -279,24 +279,6 @@ export default function PublicNavigation() {
                       Ecosystem
                     </Link>
                   </li>
-                  <li>
-                    <Link
-                      href="/pods"
-                      className="text-xs text-muted-foreground hover:text-primary transition-colors block py-0.5"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      Pods
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/impact"
-                      className="text-xs text-muted-foreground hover:text-primary transition-colors block py-0.5"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      Impact
-                    </Link>
-                  </li>
                 </ul>
               </div>
 
@@ -327,11 +309,11 @@ export default function PublicNavigation() {
                   </li>
                   <li>
                     <Link
-                      href="/docs/whitepaper"
+                      href="/docs"
                       className="text-xs text-muted-foreground hover:text-primary transition-colors block py-0.5"
                       onClick={() => setIsMenuOpen(false)}
                     >
-                      White Paper
+                      Documentation
                     </Link>
                   </li>
                   <li>
@@ -358,15 +340,6 @@ export default function PublicNavigation() {
                 <ul className="space-y-1">
                   <li>
                     <Link
-                      href="/angels"
-                      className="text-xs text-muted-foreground hover:text-primary transition-colors block py-0.5"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      Angels
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
                       href="/blog"
                       className="text-xs text-muted-foreground hover:text-primary transition-colors block py-0.5"
                       onClick={() => setIsMenuOpen(false)}
@@ -375,14 +348,23 @@ export default function PublicNavigation() {
                     </Link>
                   </li>
                   <li>
+                    <Link
+                      href="/impact"
+                      className="text-xs text-muted-foreground hover:text-primary transition-colors block py-0.5"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      Impact
+                    </Link>
+                  </li>
+                  <li>
                     <a
-                      href="https://bsky.app/profile/sheltrops.bsky.social"
+                      href="https://www.arcanaconcept.com"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-xs text-muted-foreground hover:text-primary transition-colors block py-0.5"
                       onClick={() => setIsMenuOpen(false)}
                     >
-                      BlueSky
+                      Arcana
                     </a>
                   </li>
                 </ul>

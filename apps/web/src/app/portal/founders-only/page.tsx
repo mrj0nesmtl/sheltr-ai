@@ -2234,6 +2234,104 @@ export default function FoundersOnlyPage() {
           </div>
         </div>
       )}
+
+      {/* Footer */}
+      <footer className="border-t bg-white dark:bg-slate-900 mt-auto">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+            {/* About Section */}
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <div className="relative w-8 h-8">
+                  <Image
+                    src="/icon.svg"
+                    alt="SHELTR"
+                    fill
+                    className="object-contain"
+                  />
+                </div>
+                <h3 className="font-bold text-lg">SHELTR</h3>
+              </div>
+              <p className="text-sm text-muted-foreground mb-4">
+                Revolutionary platform ending homelessness through technology-driven transparency and direct support.
+              </p>
+              <Badge className="bg-purple-600 text-white">
+                <Shield className="h-3 w-3 mr-1" />
+                Founders Portal
+              </Badge>
+            </div>
+
+            {/* Quick Links */}
+            <div>
+              <h4 className="font-semibold mb-4">Quick Links</h4>
+              <ul className="space-y-2 text-sm">
+                <li>
+                  <Link href="/portal/founders-only/investor-relations" className="text-muted-foreground hover:text-foreground transition-colors">
+                    Investor Relations Home
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/portal/founders-only/budget" className="text-muted-foreground hover:text-foreground transition-colors">
+                    Budget & Projections
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/docs" className="text-muted-foreground hover:text-foreground transition-colors">
+                    Public Documentation
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/" className="text-muted-foreground hover:text-foreground transition-colors">
+                    Return to Homepage
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            {/* Security & Support */}
+            <div>
+              <h4 className="font-semibold mb-4">Security & Support</h4>
+              <div className="space-y-3">
+                <div className="flex items-start gap-2 text-sm">
+                  <Lock className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                  <p className="text-muted-foreground">
+                    All materials are encrypted and protected
+                  </p>
+                </div>
+                <div className="flex items-start gap-2 text-sm">
+                  <Shield className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                  <p className="text-muted-foreground">
+                    NDA-protected confidential information
+                  </p>
+                </div>
+                <div className="flex items-start gap-2 text-sm">
+                  <AlertTriangle className="h-4 w-4 text-yellow-600 mt-0.5 flex-shrink-0" />
+                  <p className="text-muted-foreground">
+                    Remember to log out after your session
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom Bar */}
+          <div className="pt-8 border-t">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+              <p className="text-sm text-muted-foreground text-center md:text-left">
+                © {new Date().getFullYear()} SHELTR. All rights reserved. Confidential and proprietary.
+              </p>
+              <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                <span className="flex items-center gap-1">
+                  <Lock className="h-3 w-3" />
+                  Secure Session
+                </span>
+                <span>•</span>
+                <span>Founders Portal v2.0</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

@@ -7,7 +7,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { FileText, Lock, Shield, ExternalLink, GripVertical, Save, RotateCcw, LogOut, DollarSign, Home, ChevronRight, AlertTriangle, Image as ImageIcon, CheckCircle } from 'lucide-react';
+import { FileText, Lock, Shield, ExternalLink, GripVertical, Save, RotateCcw, LogOut, DollarSign, Home, ChevronRight, AlertTriangle, Image as ImageIcon, CheckCircle, Moon, Sun } from 'lucide-react';
 import Link from 'next/link';
 import { toast } from 'sonner';
 import { db, auth } from '@/lib/firebase';
@@ -324,8 +324,37 @@ export default function InvestorDataRoomPage() {
   const [showQATestingAccounts, setShowQATestingAccounts] = useState(false);
   const [showPitchDeck, setShowPitchDeck] = useState(false);
   const [heroImage, setHeroImage] = useState<HeroImage | null>(null);
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   const isSuperAdmin = user?.role === 'super_admin';
+
+  // Theme toggle functionality
+  useEffect(() => {
+    // Check initial theme from localStorage or system preference
+    const storedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const initialDark = storedTheme === 'dark' || (!storedTheme && prefersDark);
+    
+    setIsDarkMode(initialDark);
+    if (initialDark) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    const newDarkMode = !isDarkMode;
+    setIsDarkMode(newDarkMode);
+    
+    if (newDarkMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  };
 
   // Drag and drop sensors
   const sensors = useSensors(
@@ -684,7 +713,7 @@ export default function InvestorDataRoomPage() {
               </div>
               <div className="min-w-0">
                 <h1 className="text-sm sm:text-base lg:text-xl font-bold truncate">
-                  <span className="hidden sm:inline">Investor </span>Data Room
+                  Data Room
                 </h1>
                 <p className="text-xs text-muted-foreground hidden sm:block">Secure Investment Materials</p>
               </div>
@@ -705,6 +734,21 @@ export default function InvestorDataRoomPage() {
               <Badge className="bg-blue-600 text-white sm:hidden p-2">
                 <Shield className="h-3 w-3" />
               </Badge>
+              
+              {/* Theme Toggle Button */}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={toggleTheme}
+                className="hidden md:flex"
+                aria-label="Toggle theme"
+              >
+                {isDarkMode ? (
+                  <Sun className="h-4 w-4" />
+                ) : (
+                  <Moon className="h-4 w-4" />
+                )}
+              </Button>
               
               {/* Logout Button */}
               <Button
@@ -809,7 +853,7 @@ export default function InvestorDataRoomPage() {
             </div>
             
             <h1 className="text-4xl sm:text-5xl font-bold mb-6">
-              Welcome{user?.displayName ? `, ${user.displayName}` : user?.email ? `, ${user.email.split('@')[0]}` : ''} to the SHELTR Investor Data Room
+              Welcome{user?.displayName ? `, ${user.displayName}` : user?.email ? `, ${user.email.split('@')[0]}` : ''} to the SHELTR Data Room
             </h1>
             
             <p className="text-xl text-blue-50 mb-6 leading-relaxed">

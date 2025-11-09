@@ -280,7 +280,19 @@ function SortableCard({ doc, isSuperAdmin }: SortableCardProps) {
               <ExternalLink className="ml-2 h-4 w-4" />
             </Button>
           ) : (
-            <Link href={`/ir/${doc.hubSlug || doc.secureSlug || doc.id}`}>
+            <Link href={`/ir/${(() => {
+              // Get the slug, preferring hubSlug over secureSlug over id
+              let slug = doc.hubSlug || doc.secureSlug || doc.id;
+              
+              // Clean up any path prefixes (e.g., /portal/founders-only/investor-relations -> investor-relations)
+              if (slug.includes('/')) {
+                // If it's a full path, extract just the last segment
+                const segments = slug.split('/').filter(Boolean);
+                slug = segments[segments.length - 1];
+              }
+              
+              return slug;
+            })()}`}>
               <Button
                 variant="outline"
                 className={`w-full border-2 ${doc.textColor} hover:bg-opacity-10`}

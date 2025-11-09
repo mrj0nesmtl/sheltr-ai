@@ -2177,7 +2177,7 @@ export default function IRInvestorRelationsPage() {
           </div>
 
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-5 gap-1">
+            <TabsList className="grid w-full grid-cols-5 gap-1 mb-8">
               <TabsTrigger value="overview" className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 px-2 sm:px-4">
                 <FileText className="h-4 w-4 flex-shrink-0" />
                 <span className="text-xs sm:text-sm">Summary</span>

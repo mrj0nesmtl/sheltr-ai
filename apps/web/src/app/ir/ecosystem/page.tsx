@@ -398,7 +398,7 @@ export default function IREcosystemPage() {
                         <span>WiFi hotspot & device charging</span>
                       </li>
                     </ul>
-                    <Link href="/mobi">
+                    <Link href="/pods/mobi">
                       <Button variant="outline" className="w-full border-cyan-400 text-cyan-600 hover:bg-cyan-50 dark:hover:bg-cyan-950">
                         Explore Mobi Units
                         <ArrowRight className="h-4 w-4 ml-2" />

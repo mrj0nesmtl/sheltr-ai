@@ -101,13 +101,13 @@ export default function RoadmapPage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button asChild size="lg" className="bg-orange-600 hover:bg-orange-700">
                 <a 
-                  href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/development/dev-roadmap.md" 
+                  href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/development/roadmap.md" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="flex items-center gap-2"
                 >
                   <Github className="h-4 w-4" />
-                  View Full Roadmap Document
+                  View GitHub Document
                   <ExternalLink className="h-4 w-4" />
                 </a>
               </Button>

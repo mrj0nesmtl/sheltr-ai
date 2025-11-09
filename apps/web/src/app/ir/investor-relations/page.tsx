@@ -2177,7 +2177,7 @@ export default function IRInvestorRelationsPage() {
           </div>
 
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-5">
+            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
               <TabsTrigger value="overview">Summary</TabsTrigger>
               <TabsTrigger value="product">Product & Tech</TabsTrigger>
               <TabsTrigger value="tokenomics">Business Model</TabsTrigger>

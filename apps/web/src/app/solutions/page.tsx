@@ -284,16 +284,24 @@ export default function SolutionsPage() {
       </section>
 
       {/* Call to Action */}
-      <section className="py-20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-6">Unhoused in the Age of Abundance</h2>
-          <p className="text-xl text-muted-foreground mb-8">
+      <section className="relative py-20 overflow-hidden">
+        {/* Background Image with Blur */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat blur-sm scale-110" 
+          style={{backgroundImage: 'url(/images/sheltr_units/pods-2.jpeg)'}}
+        />
+        {/* Dark Overlay */}
+        <div className="absolute inset-0 bg-black/75" />
+        
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl font-bold mb-6 text-white">Unhoused in the Age of Abundance</h2>
+          <p className="text-xl text-gray-200 mb-8">
             We need to lean in.
           </p>
           
           <div className="flex justify-center">
-            <Link href="/docs">
-              <Button size="lg" variant="outline" className="border-blue-600 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/30">
+            <Link href="/ecosystem">
+              <Button size="lg" variant="outline" className="border-blue-400 text-blue-400 hover:bg-blue-500 hover:text-white hover:border-blue-500 transition-all duration-300">
                 <BookOpen className="h-4 w-4 mr-2" />
                 Learn More
               </Button>

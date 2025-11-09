@@ -1123,7 +1123,7 @@ export default function InvestorDataRoomPage() {
                         <div>
                           <p className="text-xs text-muted-foreground mb-1">Email</p>
                           <code className="text-sm bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded block">
-                            admin@example.com
+                            sheltradmin@example.com
                           </code>
                         </div>
                         <div>
@@ -1139,27 +1139,25 @@ export default function InvestorDataRoomPage() {
                       </CardContent>
                     </Card>
 
-                    {/* Platform Admin Accounts */}
+                    {/* Platform Admin */}
                     <Card className="border-2 border-orange-500">
                       <CardContent className="pt-6 space-y-3">
                         <div className="flex items-center gap-2 mb-3">
                           <div className="w-2 h-2 rounded-full bg-orange-500"></div>
-                          <h4 className="font-bold">Platform Admins</h4>
+                          <h4 className="font-bold">Platform Admin</h4>
                         </div>
-                        <p className="text-sm text-muted-foreground mb-2">3 Active Accounts</p>
-                        <div className="space-y-2">
-                          <div>
-                            <p className="text-xs font-medium">Doug Kukura</p>
-                            <p className="text-xs text-muted-foreground">doug@example.com</p>
-                          </div>
-                          <div>
-                            <p className="text-xs font-medium">Alexander Kline</p>
-                            <p className="text-xs text-muted-foreground">alexander@example.com</p>
-                          </div>
-                          <div>
-                            <p className="text-xs font-medium">Gunnar Blaze</p>
-                            <p className="text-xs text-muted-foreground">gunnar@example.com</p>
-                          </div>
+                        <p className="text-sm text-muted-foreground mb-2">Gunnar Blaze</p>
+                        <div>
+                          <p className="text-xs text-muted-foreground mb-1">Email</p>
+                          <code className="text-sm bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded block">
+                            gunnar.blaze@gmail.com
+                          </code>
+                        </div>
+                        <div>
+                          <p className="text-xs text-muted-foreground mb-1">Password</p>
+                          <code className="text-sm bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded block">
+                            nPBSYUJXTemp!
+                          </code>
                         </div>
                         <div>
                           <p className="text-xs text-muted-foreground mb-1">Role</p>

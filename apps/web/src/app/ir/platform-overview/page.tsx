@@ -26,7 +26,7 @@ import { ThemeToggle } from '@/components/theme-toggle';
 import Footer from '@/components/Footer';
 import ThemeLogo from '@/components/ThemeLogo';
 
-export default function IRPlatformOverviewPage() {
+export default function IRIRPlatformOverviewPage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
@@ -620,7 +620,7 @@ export default function IRPlatformOverviewPage() {
                     Visit Platform
                   </Button>
                 </Link>
-                <Link href="/docs">
+                <Link href="/ir/dataroom">
                   <Button size="lg" variant="outline">
                     <BarChart3 className="h-5 w-5 mr-2" />
                     Browse Documentation

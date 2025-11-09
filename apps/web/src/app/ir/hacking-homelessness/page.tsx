@@ -9,7 +9,7 @@ import { ThemeToggle } from '@/components/theme-toggle';
 import Footer from '@/components/Footer';
 import ThemeLogo from '@/components/ThemeLogo';
 
-export default function IRHackingHomelessnessPage() {
+export default function IRIRHackingHomelessnessPage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}

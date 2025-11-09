@@ -76,7 +76,7 @@ const budgetData = {
 
 const seedRound = 250000;
 
-export default function BudgetPage() {
+export default function IRBudgetPage() {
   const router = useRouter();
   const [showSensitive, setShowSensitive] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<'all' | 'team' | 'infrastructure' | 'operations' | 'marketing'>('all');

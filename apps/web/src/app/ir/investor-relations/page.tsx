@@ -1676,7 +1676,7 @@ const NextStepsCTA = ({ onScheduleClick }: { onScheduleClick: () => void }) => (
   </Card>
 );
 
-export default function InvestorRelationsPage() {
+export default function IRInvestorRelationsPage() {
   const [activeTab, setActiveTab] = useState('overview');
   const [deckOpen, setDeckOpen] = useState(false);
   const [isAuthorized, setIsAuthorized] = useState(false);

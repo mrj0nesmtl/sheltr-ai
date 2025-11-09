@@ -311,7 +311,7 @@ interface HeroImage {
   mediaType: 'image' | 'video';
 }
 
-export default function InvestorDataRoomPage() {
+export default function IRInvestorDataRoomPage() {
   const router = useRouter();
   const { user, loading: authLoading } = useAuth();
   const [isAuthorized, setIsAuthorized] = useState(false);

@@ -57,7 +57,7 @@ const revenueData = {
   },
 };
 
-export default function RevenuePage() {
+export default function IRRevenuePage() {
   const router = useRouter();
   const [showSensitive, setShowSensitive] = useState(false);
   const [selectedStream, setSelectedStream] = useState<'all' | 'core' | 'enterprise' | 'defi'>('all');

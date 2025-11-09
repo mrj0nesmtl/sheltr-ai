@@ -13,7 +13,7 @@ import { collection, query, where, getDocs } from 'firebase/firestore';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
-export default function IRDocumentPage() {
+export default function IRIRDocumentPage() {
   const router = useRouter();
   const params = useParams();
   const slug = params?.slug as string;

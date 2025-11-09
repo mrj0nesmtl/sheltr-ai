@@ -7,6 +7,174 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.92.0] - 2025-11-09 (INVESTOR RELATIONS POLISH & MOBILE UX) 💼📱
+
+### 🎯 Major Feature: Investor Relations Page Duplication & Routing
+
+#### IR-Specific Document Pages
+**Created polished investor-facing versions of key documentation**:
+- Duplicated 12 beautifully-styled pages from `/docs` to `/ir` directory
+- Ensures investors remain within `/ir/` URL structure (no redirection to public docs)
+- Updated all navigation, breadcrumbs, and branding for investor-centric experience
+- Added "Investor Access" badges and "Back to Data Room" navigation
+
+**Pages Created**:
+1. `/ir/hacking-homelessness` - Mission statement and theory of change
+2. `/ir/platform-overview` - Complete platform architecture
+3. `/ir/system-design` - Technical system design
+4. `/ir/ecosystem` - SHELTR ecosystem overview
+5. `/ir/tokenomics` - Token economics and business model
+6. `/ir/roadmap` - Development roadmap
+7. `/ir/chatbot-architecture` - AI/RAG system architecture
+8. `/ir/knowledge-base-guide` - Knowledge base documentation
+9. `/ir/payment-rails` - Payment rail architecture
+10. `/ir/blockchain` - Blockchain integration
+11. `/ir/whitepaper` - Complete technical whitepaper
+12. `/ir/investor-relations` - Investor Relations hub page
+
+**Dynamic Fallback Route**:
+- Created `/ir/[slug]` dynamic route for additional IR documents
+- Fetches from Firestore `knowledge_documents` where `published_to_ir: true`
+- Renders markdown with investor-specific branding and authorization checks
+- Provides seamless fallback for documents not yet duplicated
+
+### 🎨 UI/UX Enhancements
+
+#### Mobile-First Responsive Design
+**Financial Pages Header Polish** (`/portal/founders-only/budget`, `/portal/founders-only/revenue`, `/ir/budget`, `/ir/revenue`):
+- Implemented mobile-responsive header design across all 4 financial pages
+- Added sticky navigation with backdrop blur and SHELTR logo
+- Breadcrumb navigation with proper hierarchy
+- Stacked button layout on mobile (Show Details / Export CSV)
+- Consistent badge styling (Founders Portal / Investor Access)
+
+**IR Budget Page Carbon Copy**:
+- Copied entire Founders Portal budget page design to IR Dataroom budget
+- Maintains identical layout: orange bars, big metrics, and visual consistency
+- Ensures founders and investors see the same financial information
+- Updated branding: "Total Investment", "Total Allocation", "Financial Notes"
+
+#### Investor Relations Tabs - Icon Enhancement
+**Revolutionary Mobile Tab Design**:
+- Added icons to all 5 tabs for better mobile UX
+- All tabs visible in ONE row (no wrapping required)
+- Icons provide instant visual recognition
+- Shortened labels on mobile to save space
+- Vertical stacking (icon above text) on mobile
+- Horizontal layout (icon + text) on desktop
+
+**Tab Icons**:
+- 📄 **Summary** - FileText icon
+- ⚡ **Product** - Zap icon (shortened from "Product & Tech")
+- 💰 **Model** - Coins icon (shortened from "Business Model")
+- 📊 **Projects** - BarChart3 icon (shortened from "Projections")
+- 🤝 **Terms** - Handshake icon
+
+**Spacing Improvements**:
+- Added `mb-8` spacing between tabs and content
+- Eliminates cramped feeling between toolbar and components
+- Enhanced breathing room for better visual hierarchy
+
+### 🐛 Bug Fixes
+
+#### 1. **IR Document Routing - 404 Errors**
+- **Issue**: All Deep Dive document buttons in IR Dataroom returning 404 errors
+- **Root Cause**: Documents were linking to `/ir/documents/${doc.id}` but pages existed in `/docs` directory
+- **Solution**: 
+  - Extended `InvestorDocument` interface to include `hubSlug` and `permissionLevel`
+  - Updated linking logic to route to `/ir/${slug}` for all Deep Dive documents
+  - Created duplicate polished pages in `/ir` directory
+  - Implemented dynamic `/ir/[slug]` fallback route
+
+#### 2. **Investor Relations Card Routing**
+- **Issue**: "Investor Relations" card linking to incorrect URL (`/ir/portal/founders-only/investor-relations`)
+- **Solution**: 
+  - Updated `handleToggleInvestorDataRoom` to set correct slugs (`investor-relations` not full path)
+  - Created dedicated `/ir/investor-relations` page
+  - Added defensive slug cleaning in IR Dataroom card rendering
+
+#### 3. **Pitch Deck External URL Handling**
+- **Issue**: Pitch Deck card had malformed link (`/ir/2026-business-plan-ogqhgdb.gamma.site`)
+- **Solution**: 
+  - Implemented external URL detection (checks for `http://` or `https://`)
+  - Renders external links as `<a>` tags with `target="_blank" rel="noopener noreferrer"`
+  - Opens Gamma presentation in new tab
+
+#### 4. **Mobile Tab Overlapping**
+- **Issue**: 5 tabs overlapping on mobile screens (both Founders Portal and IR Dataroom)
+- **First Attempt**: Responsive grid layout (wrapped to multiple lines)
+- **User Feedback**: Preferred all tabs visible at once
+- **Final Solution**: Icons + shortened labels, all 5 tabs in one row
+
+#### 5. **Slug Path Prefix Stripping**
+- **Issue**: Some documents had full paths stored in `secureSlug` (e.g., `/portal/founders-only/investor-relations`)
+- **Solution**: 
+  - Added defensive slug cleaning logic
+  - Splits path by `/`, filters empty segments, takes last segment
+  - Ensures clean routing like `/ir/investor-relations` instead of nested paths
+
+### 🏗️ Architecture Improvements
+
+#### IR Dataroom Structure
+**Deep Dive Section Refinement**:
+- Renamed "Investment Documents" to "Deep Dive" (better reflects diverse content)
+- Moved "Pitch Deck" accordion to top of IR Dataroom (before Deep Dive)
+- Converted Pitch Deck to accordion component with white title for consistency
+- Drag-and-drop order cascades from Founders Portal to IR Dataroom
+- All Deep Dive documents now properly route within `/ir/` URL structure
+
+**Theme Toggle Addition**:
+- Added theme toggle to IR Dataroom header (desktop only)
+- Changed page title from "Investor Data Room" to "Data Room"
+- Persists theme preference in localStorage
+- Consistent with site-wide theming
+
+**QA Testing Demo Accounts**:
+- Removed Doug Kukura and Alexander Kline from IR Dataroom
+- Updated Gunnar Blaze email to `gunnar.blaze@gmail.com`, added password `nPBSYUJXTemp!`
+- Corrected Sarah Manager email to `sheltradmin@example.com`, password `sheltr123`
+- Updated Platform Admins description to "Gunnar Blaze"
+
+**Footer Integration**:
+- Copied IR Dataroom's styled footer to Founders Portal
+- Updated badge text from "Investor Portal" to "Founders Portal" (purple color)
+- Adjusted quick links to Founders Portal specific pages
+
+### 📋 Technical Debt
+
+**Maintenance Overhead Acknowledgment**:
+- User acknowledged maintenance overhead of duplicate `/ir` pages
+- Prioritized quality of investor-facing content over DRY principle
+- Most IR documents are stable and won't change frequently
+- Trade-off accepted for premium investor experience
+
+**Known Limitations**:
+- 12 critical documents duplicated (not all `/docs` pages)
+- Dynamic fallback route available for less critical documents
+- Future: Consider component-based approach for truly dynamic needs
+
+### 📊 Session Metrics
+
+- **Commits**: 30 commits
+- **Files Modified**: 15+ files
+- **Pages Created**: 12 new IR document pages
+- **Bug Fixes**: 5 major routing/UX issues resolved
+- **UI Polish**: 4 financial pages, 2 investor relations pages, mobile tabs
+- **Session Duration**: ~5 hours (November 8-9, 2025)
+
+### 🎉 Notable Achievements
+
+1. ✅ All Deep Dive documents now route correctly in IR Dataroom
+2. ✅ Investors remain within `/ir/` URL structure throughout experience
+3. ✅ Mobile tabs display all 5 sections at once with icons
+4. ✅ Financial pages have consistent, polished mobile design
+5. ✅ External links (Pitch Deck) open in new tabs correctly
+6. ✅ Theme toggle available in IR Dataroom
+7. ✅ IR budget page matches Founders Portal budget design exactly
+8. ✅ Responsive design across all investor-facing pages
+
+---
+
 ## [2.91.0] - 2025-11-08 (KNOWLEDGE BASE ARCHITECTURE OVERHAUL) 📚🏗️
 
 ### 🎯 Major Feature: Enterprise Documentation & Knowledge Base Architecture

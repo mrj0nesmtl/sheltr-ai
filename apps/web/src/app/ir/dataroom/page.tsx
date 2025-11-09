@@ -322,6 +322,7 @@ export default function InvestorDataRoomPage() {
   const [selectedImage, setSelectedImage] = useState<GalleryItem | null>(null);
   const [showFinancialOverview, setShowFinancialOverview] = useState(false);
   const [showQATestingAccounts, setShowQATestingAccounts] = useState(false);
+  const [showPitchDeck, setShowPitchDeck] = useState(false);
   const [heroImage, setHeroImage] = useState<HeroImage | null>(null);
 
   const isSuperAdmin = user?.role === 'super_admin';
@@ -470,8 +471,21 @@ export default function InvestorDataRoomPage() {
       }
     };
 
+    const loadPitchDeckToggle = async () => {
+      try {
+        // Check knowledge_documents for pitch-deck (hardcoded cards are stored here)
+        const pitchDeckDoc = await getDoc(doc(db, 'knowledge_documents', 'pitch-deck'));
+        if (pitchDeckDoc.exists()) {
+          setShowPitchDeck(pitchDeckDoc.data().published_to_ir || false);
+        }
+      } catch (error) {
+        console.error('Error loading pitch deck toggle:', error);
+      }
+    };
+
     loadFinancialToggle();
     loadQATestingToggle();
+    loadPitchDeckToggle();
   }, [isAuthorized]);
 
   // Load hero image for this page
@@ -905,6 +919,53 @@ export default function InvestorDataRoomPage() {
                 )}
               </AccordionContent>
             </AccordionItem>
+
+            {/* Pitch Deck - External Link */}
+            {showPitchDeck && (
+              <Card className="border-2 border-purple-200 dark:border-purple-800 bg-white dark:bg-slate-900">
+                <CardContent className="pt-6">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center">
+                      <FileText className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h3 className="text-2xl font-bold text-purple-600">Pitch Deck</h3>
+                        <Badge className="bg-purple-600 text-white">Live Document</Badge>
+                      </div>
+                      <p className="text-sm text-muted-foreground">
+                        2026 business plan and investor presentation hosted on Gamma
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-200 dark:border-purple-800 mb-4">
+                    <p className="text-sm text-purple-700 dark:text-purple-300 mb-3">
+                      <strong>Interactive Presentation:</strong> Our comprehensive pitch deck covers executive summary, market opportunity, 
+                      solution overview, technology stack, business model, financial projections, team, and exit strategy.
+                    </p>
+                    <div className="flex gap-2 text-xs text-purple-600 dark:text-purple-400">
+                      <span>• Executive Summary</span>
+                      <span>• Market Analysis</span>
+                      <span>• Financial Projections</span>
+                      <span>• Team & Leadership</span>
+                    </div>
+                  </div>
+
+                  <a 
+                    href="https://2026-business-plan-ogqhgdb.gamma.site/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="block"
+                  >
+                    <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white">
+                      Open Pitch Deck
+                      <ExternalLink className="ml-2 h-4 w-4" />
+                    </Button>
+                  </a>
+                </CardContent>
+              </Card>
+            )}
 
             {/* Financial Overview Accordion */}
             {showFinancialOverview && (

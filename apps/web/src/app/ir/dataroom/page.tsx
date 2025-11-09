@@ -418,12 +418,13 @@ export default function InvestorDataRoomPage() {
 
     const loadCardOrder = async () => {
       try {
-        const orderDoc = await getDoc(doc(db, 'investor_dataroom_config', 'card_order'));
+        // Load card order from Founders Portal settings (cascades to IR Dataroom)
+        const orderDoc = await getDoc(doc(db, 'portal_settings', 'founders_card_order'));
         
         if (orderDoc.exists()) {
           const savedOrder = orderDoc.data().order as string[];
           
-          // Reorder current documents based on saved order
+          // Reorder current documents based on saved order from Founders Portal
           const orderedDocs = savedOrder
             .map((id: string) => documents.find((d: InvestorDocument) => d.id === id))
             .filter((d): d is InvestorDocument => d !== undefined);
@@ -576,7 +577,7 @@ export default function InvestorDataRoomPage() {
     }
   };
 
-  // Save card order to Firestore (Super Admin only)
+  // Save card order to Firestore (Super Admin only) - saves to same location as Founders Portal
   const saveCardOrder = async () => {
     if (!isSuperAdmin) {
       toast.error('Only Super Admins can save the default card order');
@@ -587,13 +588,14 @@ export default function InvestorDataRoomPage() {
     try {
       const order = documents.map(doc => doc.id);
       
-      await setDoc(doc(db, 'investor_dataroom_config', 'card_order'), {
+      // Save to portal_settings/founders_card_order so it cascades from Founders Portal to IR Dataroom
+      await setDoc(doc(db, 'portal_settings', 'founders_card_order'), {
         order,
         updatedBy: user?.email || 'unknown',
-        updatedAt: new Date().toISOString(),
+        updatedAt: new Date(),
       });
 
-      toast.success('Card order saved as global default for all investors');
+      toast.success('Card order saved as global default for all investors and founders');
       setHasUnsavedChanges(false);
     } catch (error) {
       console.error('Error saving card order:', error);
@@ -842,7 +844,54 @@ export default function InvestorDataRoomPage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <Accordion type="single" collapsible className="space-y-4">
             
-            {/* Investment Documents Accordion */}
+            {/* Pitch Deck - External Link */}
+            {showPitchDeck && (
+              <Card className="border-2 border-purple-200 dark:border-purple-800 bg-white dark:bg-slate-900">
+                <CardContent className="pt-6">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center">
+                      <FileText className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h3 className="text-2xl font-bold text-purple-600">Pitch Deck</h3>
+                        <Badge className="bg-purple-600 text-white">Live Document</Badge>
+                      </div>
+                      <p className="text-sm text-muted-foreground">
+                        2026 business plan and investor presentation hosted on Gamma
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-200 dark:border-purple-800 mb-4">
+                    <p className="text-sm text-purple-700 dark:text-purple-300 mb-3">
+                      <strong>Interactive Presentation:</strong> Our comprehensive pitch deck covers executive summary, market opportunity, 
+                      solution overview, technology stack, business model, financial projections, team, and exit strategy.
+                    </p>
+                    <div className="flex gap-2 text-xs text-purple-600 dark:text-purple-400">
+                      <span>• Executive Summary</span>
+                      <span>• Market Analysis</span>
+                      <span>• Financial Projections</span>
+                      <span>• Team & Leadership</span>
+                    </div>
+                  </div>
+
+                  <a 
+                    href="https://2026-business-plan-ogqhgdb.gamma.site/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="block"
+                  >
+                    <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white">
+                      Open Pitch Deck
+                      <ExternalLink className="ml-2 h-4 w-4" />
+                    </Button>
+                  </a>
+                </CardContent>
+              </Card>
+            )}
+            
+            {/* Deep Dive Documents */}
             <AccordionItem value="investment-documents" className="border-2 border-blue-200 dark:border-blue-800 rounded-lg bg-white dark:bg-slate-900 overflow-hidden">
               <AccordionTrigger className="px-6 py-4 hover:no-underline hover:bg-blue-50 dark:hover:bg-blue-900/20">
                 <div className="flex items-center gap-4 w-full">
@@ -850,11 +899,11 @@ export default function InvestorDataRoomPage() {
                     <FileText className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                   </div>
                   <div className="text-left flex-1">
-                    <h3 className="text-2xl font-bold">Investment Documents</h3>
+                    <h3 className="text-2xl font-bold">Deep Dive</h3>
                     <p className="text-sm text-muted-foreground">
                       {isSuperAdmin 
                         ? 'Drag cards to reorder. Changes apply to all investors.' 
-                        : 'Confidential materials for authorized investors'}
+                        : 'Technical documentation, business plans, and strategic resources'}
                     </p>
                   </div>
                   <Badge className="bg-blue-600 text-white">{documents.length} Docs</Badge>
@@ -919,53 +968,6 @@ export default function InvestorDataRoomPage() {
                 )}
               </AccordionContent>
             </AccordionItem>
-
-            {/* Pitch Deck - External Link */}
-            {showPitchDeck && (
-              <Card className="border-2 border-purple-200 dark:border-purple-800 bg-white dark:bg-slate-900">
-                <CardContent className="pt-6">
-                  <div className="flex items-center gap-4 mb-4">
-                    <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center">
-                      <FileText className="h-6 w-6 text-purple-600 dark:text-purple-400" />
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
-                        <h3 className="text-2xl font-bold text-purple-600">Pitch Deck</h3>
-                        <Badge className="bg-purple-600 text-white">Live Document</Badge>
-                      </div>
-                      <p className="text-sm text-muted-foreground">
-                        2026 business plan and investor presentation hosted on Gamma
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-200 dark:border-purple-800 mb-4">
-                    <p className="text-sm text-purple-700 dark:text-purple-300 mb-3">
-                      <strong>Interactive Presentation:</strong> Our comprehensive pitch deck covers executive summary, market opportunity, 
-                      solution overview, technology stack, business model, financial projections, team, and exit strategy.
-                    </p>
-                    <div className="flex gap-2 text-xs text-purple-600 dark:text-purple-400">
-                      <span>• Executive Summary</span>
-                      <span>• Market Analysis</span>
-                      <span>• Financial Projections</span>
-                      <span>• Team & Leadership</span>
-                    </div>
-                  </div>
-
-                  <a 
-                    href="https://2026-business-plan-ogqhgdb.gamma.site/" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="block"
-                  >
-                    <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white">
-                      Open Pitch Deck
-                      <ExternalLink className="ml-2 h-4 w-4" />
-                    </Button>
-                  </a>
-                </CardContent>
-              </Card>
-            )}
 
             {/* Financial Overview Accordion */}
             {showFinancialOverview && (

@@ -31,31 +31,8 @@ export default function IREcosystemPage() {
             From QR Code to <span className="text-blue-400">Housing</span>
           </>
         }
-        subtitle="Follow the journey: One scan. One donation. One life changed."
-      >
-        <p className="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto mb-8 leading-relaxed">
-          Better to <strong>solve</strong> than manage. Our ecosystem connects every piece—donors, participants, 
-          shelters, and technology—into a seamless pathway from street to stability.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link href="/scan-give">
-            <Button size="lg" className="text-lg px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white shadow-xl">
-              <QrCode className="h-5 w-5 mr-2" />
-              Start the Journey
-            </Button>
-          </Link>
-          <Link href="/about">
-            <Button 
-              size="lg" 
-              variant="outline" 
-              className="text-lg px-8 py-4 border-2 border-white/60 text-white hover:bg-white hover:text-black backdrop-blur-sm"
-            >
-              Learn More
-              <ArrowRight className="h-5 w-5 ml-2" />
-            </Button>
-          </Link>
-        </div>
-      </StandardHero>
+      />
+
 
       {/* Philosophy - Million Dollar Murray */}
       <section className="py-16 bg-gradient-to-br from-muted/50 to-background">

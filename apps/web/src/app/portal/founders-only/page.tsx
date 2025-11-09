@@ -768,10 +768,22 @@ export default function FoundersOnlyPage() {
       const mergedCards = [...initialCards];
       
       dynamicCards.forEach(dynamicCard => {
-        // Check if this card is protected
+        // Check if this card is protected by ID
         if (PROTECTED_CARDS.has(dynamicCard.id)) {
-          console.log(`🛡️  Protected card, keeping hardcoded: ${dynamicCard.id}`);
+          console.log(`🛡️  Protected card by ID, keeping hardcoded: ${dynamicCard.id}`);
           return; // Skip, keep hardcoded version
+        }
+        
+        // Check if a protected card with the same title already exists (prevents duplicates)
+        const protectedTitles = ['Investor Relations', 'Pitch Deck', 'Development Roadmap'];
+        const hasDuplicateTitle = mergedCards.some(existingCard => 
+          protectedTitles.includes(existingCard.title) && 
+          existingCard.title === dynamicCard.title
+        );
+        
+        if (hasDuplicateTitle) {
+          console.log(`🛡️  Protected card by title, skipping duplicate: "${dynamicCard.title}"`);
+          return; // Skip duplicate with protected title
         }
         
         // Find if a hardcoded card exists with this ID

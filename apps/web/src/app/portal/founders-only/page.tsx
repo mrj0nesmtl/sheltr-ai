@@ -194,12 +194,21 @@ function SortableCard({
             />
           </div>
           
-          <Link href={card.href}>
-            <Button variant="outline" className={`w-full ${card.buttonClass}`}>
-              {card.buttonText}
-              <ExternalLink className="ml-2 h-4 w-4" />
-            </Button>
-          </Link>
+          {card.href.startsWith('http') ? (
+            <a href={card.href} target="_blank" rel="noopener noreferrer">
+              <Button variant="outline" className={`w-full ${card.buttonClass}`}>
+                {card.buttonText}
+                <ExternalLink className="ml-2 h-4 w-4" />
+              </Button>
+            </a>
+          ) : (
+            <Link href={card.href}>
+              <Button variant="outline" className={`w-full ${card.buttonClass}`}>
+                {card.buttonText}
+                <ExternalLink className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
+          )}
         </CardContent>
       </Card>
     </div>
@@ -253,6 +262,25 @@ export default function FoundersOnlyPage() {
       buttonClass: 'border-2 border-blue-600 text-blue-600 hover:bg-blue-50',
       href: '/portal/founders-only/investor-relations',
       borderClass: 'border-blue-200',
+      category: 'secure',
+    },
+    {
+      id: 'pitch-deck',
+      icon: (
+        <div className="relative">
+          <FileText className="h-6 w-6 text-purple-600" />
+          <Lock className="h-3 w-3 text-purple-600 absolute -top-1 -right-1 bg-white dark:bg-slate-900 rounded-full" />
+        </div>
+      ),
+      badgeText: 'Live Document',
+      badgeClass: 'bg-purple-600 text-white',
+      title: 'Pitch Deck',
+      titleColor: 'text-purple-600',
+      description: '2026 business plan and investor presentation hosted on Gamma',
+      buttonText: 'Open Pitch Deck',
+      buttonClass: 'border-2 border-purple-600 text-purple-600 hover:bg-purple-50',
+      href: 'https://2026-business-plan-ogqhgdb.gamma.site/',
+      borderClass: 'border-purple-200',
       category: 'secure',
     },
     {
@@ -657,6 +685,7 @@ export default function FoundersOnlyPage() {
   // Protected cards that should NEVER be replaced by dynamic documents
   const PROTECTED_CARDS = new Set([
     'investor-relations',      // Custom IR page
+    'pitch-deck',              // External Gamma presentation
     'shelter-research',        // Hub for 4 secure docs
     'leadership-team',         // Team page
     'gallery-management',      // Dashboard link
@@ -769,6 +798,12 @@ export default function FoundersOnlyPage() {
         // ALWAYS SHOW: Investor Relations card (custom portal page, not KB-backed)
         if (card.id === 'investor-relations') {
           console.log(`✅ KEEPING: investor-relations card (protected portal page)`);
+          return true;
+        }
+        
+        // ALWAYS SHOW: Pitch Deck card (external link, not KB-backed)
+        if (card.id === 'pitch-deck') {
+          console.log(`✅ KEEPING: pitch-deck card (external Gamma link)`);
           return true;
         }
         

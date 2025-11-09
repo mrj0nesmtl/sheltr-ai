@@ -211,9 +211,9 @@ export default function IRBudgetPage() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Page Header */}
         <div className="mb-8">
-          <div className="flex items-start justify-between mb-4">
-            <div>
-              <div className="flex items-center gap-3 mb-2">
+          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
+            <div className="flex-1">
+              <div className="flex flex-wrap items-center gap-3 mb-2">
                 <h1 className="text-3xl font-bold">Seed Budget 2025-26</h1>
                 <Badge variant="secondary" className="bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300">
                   <Lock className="h-3 w-3 mr-1" />
@@ -223,6 +223,29 @@ export default function IRBudgetPage() {
               <p className="text-muted-foreground">
                 Comprehensive 12-month projected budget for $250K seed round
               </p>
+            </div>
+            <div className="flex items-center gap-3">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowSensitive(!showSensitive)}
+              >
+                {showSensitive ? (
+                  <>
+                    <EyeOff className="h-4 w-4 mr-2" />
+                    Hide Details
+                  </>
+                ) : (
+                  <>
+                    <Eye className="h-4 w-4 mr-2" />
+                    Show Details
+                  </>
+                )}
+              </Button>
+              <Button variant="outline" size="sm">
+                <Download className="h-4 w-4 mr-2" />
+                Export CSV
+              </Button>
             </div>
           </div>
         </div>
@@ -294,22 +317,10 @@ export default function IRBudgetPage() {
         {/* Detailed Budget Table */}
         <Card>
           <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle>Detailed Budget</CardTitle>
-                <CardDescription>
-                  Monthly allocation breakdown for {selectedCategory === 'all' ? 'all categories' : selectedCategory}
-                </CardDescription>
-              </div>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setShowSensitive(!showSensitive)}
-              >
-                {showSensitive ? <EyeOff className="h-4 w-4 mr-2" /> : <Eye className="h-4 w-4 mr-2" />}
-                {showSensitive ? 'Hide' : 'Show'} Sensitive Data
-              </Button>
-            </div>
+            <CardTitle>Detailed Budget</CardTitle>
+            <CardDescription>
+              Monthly allocation breakdown for {selectedCategory === 'all' ? 'all categories' : selectedCategory}
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="overflow-x-auto">

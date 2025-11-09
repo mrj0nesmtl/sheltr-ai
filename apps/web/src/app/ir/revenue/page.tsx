@@ -131,15 +131,15 @@ export default function RevenuePage() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Page Header */}
         <div className="mb-8">
-          <div className="flex items-start justify-between mb-4">
-            <div>
-              <div className="flex items-center gap-3 mb-2">
+          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
+            <div className="flex-1">
+              <div className="flex flex-wrap items-center gap-3 mb-2">
                 <h1 className="text-3xl font-bold">2-Year Revenue Projections</h1>
               </div>
               <p className="text-muted-foreground">
                 Pre-Revenue to Scale • Sep 2025 - Aug 2027 • 8 Revenue Streams
               </p>
-              <div className="flex gap-2 mt-2">
+              <div className="flex flex-wrap gap-2 mt-2">
                 <Badge className="bg-orange-100 text-orange-700 dark:bg-orange-950 dark:text-orange-300">
                   Currently: Nov 2025
                 </Badge>

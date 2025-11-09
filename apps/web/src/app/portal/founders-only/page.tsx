@@ -1170,6 +1170,15 @@ export default function FoundersOnlyPage() {
         // Hardcoded card - create a knowledge_documents entry so IR Dataroom can find it
         console.log(`⚠️  Card ${cardId} not found in knowledge_documents, creating entry...`);
         
+        // Extract just the slug from the href for IR routing
+        let slugForIR = cardId;
+        if (cardId === 'investor-relations') {
+          slugForIR = 'investor-relations'; // IR page is at /ir/investor-relations
+        } else if (cardId === 'pitch-deck') {
+          // Pitch deck is external, keep as is
+          slugForIR = card.href;
+        }
+        
         const kbDocRef = doc(db, 'knowledge_documents', cardId);
         await setDoc(kbDocRef, {
           id: cardId,
@@ -1177,7 +1186,8 @@ export default function FoundersOnlyPage() {
           description: card.description,
           secure_badge: card.badgeText,
           secure_badge_color: card.badgeClass,
-          secure_slug: card.href,
+          secure_slug: slugForIR, // Use clean slug for IR routing
+          hub_slug: slugForIR === cardId ? slugForIR : undefined, // Set hubSlug for proper routing
           permission_level: 'founders',
           visibility_scope: 'organization',
           is_private: true,

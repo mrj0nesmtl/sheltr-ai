@@ -518,10 +518,10 @@ function TokenomicsContent() {
       <section className="py-20 bg-gradient-to-r from-emerald-600 to-blue-600">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl font-bold mb-6 text-white">
-            Ready to Transform Charitable Giving?
+            Ready to Disrupt Charitable Giving?
           </h2>
           <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-            Join the enterprise-grade platform that protects participants while delivering guaranteed results.
+            Join the platform that protects participants while delivering guaranteed results through tech-for-good.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/register">

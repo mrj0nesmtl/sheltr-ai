@@ -77,16 +77,10 @@ export default function BlockchainPage() {
                 </div>
                 
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                  <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/architecture/technical/tokenomics/blockchain.md" target="_blank" rel="noopener noreferrer">
+                  <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/architecture/technical/blockchain.md" target="_blank" rel="noopener noreferrer">
                     <Button className="bg-emerald-600 hover:bg-emerald-700">
                       <Download className="h-4 w-4 mr-2" />
                       View Full Technical Spec
-                    </Button>
-                  </a>
-                  <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/architecture/technical/tokenomics/blockchain.md" target="_blank" rel="noopener noreferrer">
-                    <Button variant="outline">
-                      <Code className="h-4 w-4 mr-2" />
-                      View on GitHub
                     </Button>
                   </a>
                 </div>

@@ -40,7 +40,7 @@ export default function IRChatbotArchitecturePage() {
               <MessageSquare className="h-12 w-12 text-purple-600 mt-1" />
               <div className="flex-1">
                 <div className="mb-3">
-                  <h1 className="text-3xl sm:text-4xl font-bold mb-2 leading-tight">Chatbot Agent Architecture</h1>
+                  <h1 className="text-3xl sm:text-4xl font-bold mb-2 leading-tight">Agent Architecture</h1>
                   <Badge className="bg-purple-600 text-white text-sm">AI System</Badge>
                 </div>
               <p className="text-lg text-muted-foreground mb-3">
@@ -57,7 +57,7 @@ export default function IRChatbotArchitecturePage() {
               </div>
                 
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                  <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/features/chatbot/SHELTR-AGENT-ARCHITECTURE.md" target="_blank" rel="noopener noreferrer">
+                  <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/features/chatbot/AGENT-ARCHITECTURE.md" target="_blank" rel="noopener noreferrer">
                     <Button variant="outline">
                       <Download className="h-4 w-4 mr-2" />
                       View on GitHub
@@ -66,7 +66,7 @@ export default function IRChatbotArchitecturePage() {
                   <Link href="/docs/chatbot-user-guide">
                     <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white">
                       <Rocket className="h-4 w-4 mr-2" />
-                      Revolutionary User Guide
+                      User Guide
                     </Button>
                   </Link>
                 </div>

@@ -60,8 +60,7 @@ export default function Footer() {
                   <li><Link href="/" className="hover:text-blue-400 transition-all duration-300 hover:translate-x-1">Home</Link></li>
                   <li><Link href="/about" className="hover:text-blue-400 transition-all duration-300 hover:translate-x-1">About</Link></li>
                   <li><Link href="/solutions" className="hover:text-blue-400 transition-all duration-300 hover:translate-x-1">Solutions</Link></li>
-                  <li><Link href="/pods" className="hover:text-blue-400 transition-all duration-300 hover:translate-x-1">Pods</Link></li>
-                  <li><Link href="/impact" className="hover:text-blue-400 transition-all duration-300 hover:translate-x-1">Impact</Link></li>
+                  <li><Link href="/ecosystem" className="hover:text-blue-400 transition-all duration-300 hover:translate-x-1">Ecosystem</Link></li>
                 </ul>
               </div>
               
@@ -80,9 +79,9 @@ export default function Footer() {
               <div>
                 <h3 className="text-sm font-semibold mb-2">Community</h3>
                 <ul className="space-y-1 text-xs text-muted-foreground">
-                  <li><Link href="/angels" className="hover:text-orange-400 transition-all duration-300 hover:translate-x-1">Angels</Link></li>
                   <li><Link href="/blog" className="hover:text-orange-400 transition-all duration-300 hover:translate-x-1">Blog</Link></li>
-                  <li><a href="https://bsky.app/profile/sheltrops.bsky.social" target="_blank" rel="noopener noreferrer" className="hover:text-orange-400 transition-all duration-300 hover:translate-x-1">BlueSky</a></li>
+                  <li><Link href="/impact" className="hover:text-orange-400 transition-all duration-300 hover:translate-x-1">Impact</Link></li>
+                  <li><a href="https://www.arcanaconcept.com" target="_blank" rel="noopener noreferrer" className="hover:text-orange-400 transition-all duration-300 hover:translate-x-1">Arcana</a></li>
                 </ul>
               </div>
               

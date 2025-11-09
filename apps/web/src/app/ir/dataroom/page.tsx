@@ -844,26 +844,25 @@ export default function InvestorDataRoomPage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <Accordion type="single" collapsible className="space-y-4">
             
-            {/* Pitch Deck - External Link */}
+            {/* Pitch Deck Accordion */}
             {showPitchDeck && (
-              <Card className="border-2 border-purple-200 dark:border-purple-800 bg-white dark:bg-slate-900">
-                <CardContent className="pt-6">
-                  <div className="flex items-center gap-4 mb-4">
+              <AccordionItem value="pitch-deck" className="border-2 border-purple-200 dark:border-purple-800 rounded-lg bg-white dark:bg-slate-900 overflow-hidden">
+                <AccordionTrigger className="px-6 py-4 hover:no-underline hover:bg-purple-50 dark:hover:bg-purple-900/20">
+                  <div className="flex items-center gap-4 w-full">
                     <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center">
                       <FileText className="h-6 w-6 text-purple-600 dark:text-purple-400" />
                     </div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
-                        <h3 className="text-2xl font-bold text-purple-600">Pitch Deck</h3>
-                        <Badge className="bg-purple-600 text-white">Live Document</Badge>
-                      </div>
+                    <div className="text-left flex-1">
+                      <h3 className="text-2xl font-bold">Pitch Deck</h3>
                       <p className="text-sm text-muted-foreground">
                         2026 business plan and investor presentation hosted on Gamma
                       </p>
                     </div>
+                    <Badge className="bg-purple-600 text-white">Live Document</Badge>
                   </div>
-                  
-                  <div className="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-200 dark:border-purple-800 mb-4">
+                </AccordionTrigger>
+                <AccordionContent className="px-6 py-6">
+                  <div className="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-200 dark:border-purple-800 mb-6">
                     <p className="text-sm text-purple-700 dark:text-purple-300 mb-3">
                       <strong>Interactive Presentation:</strong> Our comprehensive pitch deck covers executive summary, market opportunity, 
                       solution overview, technology stack, business model, financial projections, team, and exit strategy.
@@ -887,8 +886,8 @@ export default function InvestorDataRoomPage() {
                       <ExternalLink className="ml-2 h-4 w-4" />
                     </Button>
                   </a>
-                </CardContent>
-              </Card>
+                </AccordionContent>
+              </AccordionItem>
             )}
             
             {/* Deep Dive Documents */}

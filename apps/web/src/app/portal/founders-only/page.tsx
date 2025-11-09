@@ -1475,7 +1475,7 @@ export default function FoundersOnlyPage() {
         </Card>
 
         {/* Main Accordion Sections */}
-        <Accordion type="single" collapsible defaultValue="quick-access" className="space-y-4 mb-8">
+        <Accordion type="single" collapsible className="space-y-4 mb-8">
           
           {/* Quick Access Links Accordion */}
           <AccordionItem value="quick-access" className="border-2 border-purple-200 dark:border-purple-800 rounded-lg bg-white dark:bg-slate-900 overflow-hidden">

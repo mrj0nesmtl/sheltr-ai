@@ -1200,6 +1200,23 @@ service cloud.firestore {
     }
     
     // =================================================================
+    // PORTAL SETTINGS - Founders Portal and shared portal configurations
+    // =================================================================
+    match /portal_settings/{settingId} {
+      // Read: Super Admin, Platform Admin (Founders), and Investors can read
+      allow read: if isSuperAdmin() || isPlatformAdmin() || isInvestor();
+      
+      // Write: Only Super Admin and Platform Admin can set portal settings
+      allow write: if isSuperAdmin() || isPlatformAdmin();
+      
+      // Create: Only Super Admin and Platform Admin can create settings
+      allow create: if isSuperAdmin() || isPlatformAdmin();
+      
+      // Delete: Only Super Admin can delete settings
+      allow delete: if isSuperAdmin();
+    }
+    
+    // =================================================================
     // FALLBACK RULE - Deny all other access
     // =================================================================
     match /{document=**} {

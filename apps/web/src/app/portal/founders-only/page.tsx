@@ -216,6 +216,7 @@ export default function FoundersOnlyPage() {
   const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [showFinancialInIR, setShowFinancialInIR] = useState(false);
+  const [showQATestingInIR, setShowQATestingInIR] = useState(false);
   const [heroImage, setHeroImage] = useState<HeroImage | null>(null);
   const [isClearing, setIsClearing] = useState(false);
   const [showManagementPanel, setShowManagementPanel] = useState(false);
@@ -888,6 +889,16 @@ export default function FoundersOnlyPage() {
       } catch (error) {
         console.error('Error loading financial overview toggle:', error);
       }
+
+      // Load QA Testing toggle state
+      try {
+        const qaTestingDoc = await getDoc(doc(db, 'secure_documents', 'qa-testing-accounts'));
+        if (qaTestingDoc.exists()) {
+          setShowQATestingInIR(qaTestingDoc.data().isInvestorDataRoom || false);
+        }
+      } catch (error) {
+        console.error('Error loading QA testing toggle:', error);
+      }
     } catch (error) {
       console.error('Error loading card order:', error);
       setCards(initialCards);
@@ -996,6 +1007,35 @@ export default function FoundersOnlyPage() {
       toast.error('Failed to update Investor Data Room settings');
       // Revert on error
       setShowFinancialInIR(!value);
+    }
+  };
+
+  // Toggle QA Testing Accounts in Investor Data Room
+  const handleToggleQATestingAccounts = async (value: boolean) => {
+    try {
+      // Update local state immediately
+      setShowQATestingInIR(value);
+
+      // Store in Firestore
+      const docRef = doc(db, 'secure_documents', 'qa-testing-accounts');
+      await setDoc(docRef, {
+        id: 'qa-testing-accounts',
+        title: 'QA Testing Demo Accounts',
+        description: 'Connected test accounts for comprehensive system validation',
+        category: 'Testing',
+        isInvestorDataRoom: value,
+        updatedAt: new Date().toISOString(),
+      }, { merge: true });
+
+      toast.success(value 
+        ? 'QA Testing Accounts enabled in Investor Data Room' 
+        : 'QA Testing Accounts disabled in Investor Data Room'
+      );
+    } catch (error) {
+      console.error('Error toggling QA testing accounts:', error);
+      toast.error('Failed to update Investor Data Room settings');
+      // Revert on error
+      setShowQATestingInIR(!value);
     }
   };
 
@@ -1173,6 +1213,32 @@ export default function FoundersOnlyPage() {
           console.error(`Error clearing ${card.id}:`, error);
           errorCount++;
         }
+      }
+
+      // Clear Financial Overview toggle
+      try {
+        const financialDocRef = doc(db, 'secure_documents', 'financial-overview');
+        await setDoc(financialDocRef, {
+          isInvestorDataRoom: false,
+          updatedAt: new Date().toISOString(),
+        }, { merge: true });
+        setShowFinancialInIR(false);
+      } catch (error) {
+        console.error('Error clearing financial overview:', error);
+        errorCount++;
+      }
+
+      // Clear QA Testing toggle
+      try {
+        const qaTestingDocRef = doc(db, 'secure_documents', 'qa-testing-accounts');
+        await setDoc(qaTestingDocRef, {
+          isInvestorDataRoom: false,
+          updatedAt: new Date().toISOString(),
+        }, { merge: true });
+        setShowQATestingInIR(false);
+      } catch (error) {
+        console.error('Error clearing QA testing accounts:', error);
+        errorCount++;
       }
 
       // Update local state
@@ -1603,6 +1669,21 @@ export default function FoundersOnlyPage() {
               </div>
             </AccordionTrigger>
             <AccordionContent className="px-6 py-6">
+              {/* Investor Data Room Toggle */}
+              <div className="flex items-center justify-between p-4 mb-6 bg-muted/50 rounded-lg border-2 border-border/40">
+                <div className="flex items-center gap-2">
+                  <Shield className="h-5 w-5 text-red-600" />
+                  <Label htmlFor="qa-testing-toggle" className="text-base font-medium cursor-pointer">
+                    Share to Investor Data Room
+                  </Label>
+                </div>
+                <Switch
+                  id="qa-testing-toggle"
+                  checked={showQATestingInIR}
+                  onCheckedChange={handleToggleQATestingAccounts}
+                />
+              </div>
+
               <Card className="bg-slate-50 dark:bg-slate-900 border-2">
             <CardContent className="pt-6">
               <Alert className="mb-4 bg-green-50 dark:bg-green-900/20 border-green-500">

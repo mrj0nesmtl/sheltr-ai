@@ -1,8 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -17,8 +16,10 @@ import {
   Home,
   ChevronRight,
   ArrowLeft,
-  Lock
+  Lock,
+  Shield
 } from 'lucide-react';
+import Link from 'next/link';
 import {
   Table,
   TableBody,
@@ -27,10 +28,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { toast } from 'sonner';
-import { db } from '@/lib/firebase';
-import { doc, getDoc } from 'firebase/firestore';
-import Link from 'next/link';
 
 // Budget data structure
 const budgetData = {
@@ -44,14 +41,14 @@ const budgetData = {
       { name: 'Dominique', role: 'Developer', values: [0, 0, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000] },
     ],
     infrastructure: [
-      { name: 'Cursor', role: 'IDE platform', values: [200, 200, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000] },
+      { name: 'Cursor', role: 'IDE platform', values: [400, 400, 600, 600, 600, 600, 600, 600, 600, 600, 600, 600] },
       { name: 'OpenAI', role: 'API access', values: [50, 50, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200] },
       { name: 'Anthropic', role: 'API access', values: [50, 50, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200] },
       { name: 'Github', role: 'Code base', values: [0, 0, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50] },
-      { name: 'Google Cloud', role: 'Deployment/Hosting/AI/Database', values: [20, 20, 100, 50, 50, 50, 50, 50, 50, 50, 50, 50] },
-      { name: 'Google Workspace', role: 'Internal', values: [0, 0, 25, 50, 50, 50, 50, 50, 50, 50, 50, 50] },
+      { name: 'Google Cloud', role: 'Deployment/Hosting/AI/Database', values: [20, 20, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100] },
+      { name: 'Google Workspace', role: 'Internal', values: [0, 0, 0, 50, 50, 50, 50, 50, 50, 50, 50, 50] },
       { name: 'Cloudflare', role: 'Security', values: [0, 0, 25, 1500, 0, 0, 0, 0, 0, 0, 0, 0] },
-      { name: 'Godaddy', role: 'Domain, Security', values: [38, 38, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+      { name: 'Godaddy', role: 'Domain, Security', values: [38, 38, 0, 0, 0, 7000, 0, 0, 0, 0, 0, 0] },
     ],
     operations: [
       { name: 'Coinbase', role: 'Token Listing', values: [0, 0, 5000, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
@@ -79,41 +76,10 @@ const budgetData = {
 
 const seedRound = 250000;
 
-export default function IRBudgetPage() {
+export default function BudgetPage() {
   const router = useRouter();
-  const { user, loading: authLoading } = useAuth();
-  const [isAuthorized, setIsAuthorized] = useState(false);
   const [showSensitive, setShowSensitive] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<'all' | 'team' | 'infrastructure' | 'operations' | 'marketing'>('all');
-
-  // Authorization check
-  useEffect(() => {
-    if (!authLoading) {
-      if (!user) {
-        router.push('/ir');
-      } else if (user.role !== 'investor' && user.role !== 'super_admin') {
-        toast.error('Access denied: Investor or Super Admin credentials required');
-        router.push('/dashboard');
-      } else {
-        // Check if financial overview is enabled
-        const checkAccess = async () => {
-          try {
-            const financialDoc = await getDoc(doc(db, 'secure_documents', 'financial-overview'));
-            if (financialDoc.exists() && financialDoc.data().isInvestorDataRoom) {
-              setIsAuthorized(true);
-            } else {
-              toast.error('Financial Overview is currently unavailable');
-              router.push('/ir/dataroom');
-            }
-          } catch (error) {
-            console.error('Error checking access:', error);
-            router.push('/ir/dataroom');
-          }
-        };
-        checkAccess();
-      }
-    }
-  }, [user, authLoading, router]);
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -135,36 +101,6 @@ export default function IRBudgetPage() {
     }, 0);
   };
 
-  const getCategoryIcon = (category: string) => {
-    switch (category) {
-      case 'team':
-        return <Users className="h-5 w-5" />;
-      case 'infrastructure':
-        return <Server className="h-5 w-5" />;
-      case 'operations':
-        return <Wrench className="h-5 w-5" />;
-      case 'marketing':
-        return <Megaphone className="h-5 w-5" />;
-      default:
-        return null;
-    }
-  };
-
-  const getFilteredData = () => {
-    if (selectedCategory === 'all') {
-      return Object.entries(budgetData.categories).flatMap(([, items]) => items);
-    }
-    return budgetData.categories[selectedCategory];
-  };
-
-  if (authLoading || !isAuthorized) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
       {/* Header */}
@@ -177,7 +113,7 @@ export default function IRBudgetPage() {
             
             <div className="flex items-center gap-4">
               <Badge className="bg-blue-600 text-white">
-                <Lock className="h-3 w-3 mr-1" />
+                <Shield className="h-3 w-3 mr-1" />
                 Investor Access
               </Badge>
               <Button
@@ -197,8 +133,12 @@ export default function IRBudgetPage() {
       <div className="bg-white/50 dark:bg-slate-900/50 border-b">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Link href="/ir/dataroom" className="hover:text-foreground transition-colors flex items-center gap-1">
+            <Link href="/ir" className="hover:text-foreground transition-colors flex items-center gap-1">
               <Home className="h-4 w-4" />
+              Investor Relations
+            </Link>
+            <ChevronRight className="h-4 w-4" />
+            <Link href="/ir/dataroom" className="hover:text-foreground transition-colors">
               Data Room
             </Link>
             <ChevronRight className="h-4 w-4" />
@@ -214,14 +154,14 @@ export default function IRBudgetPage() {
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
             <div className="flex-1">
               <div className="flex flex-wrap items-center gap-3 mb-2">
-                <h1 className="text-3xl font-bold">Seed Budget 2025-26</h1>
+                <h1 className="text-3xl font-bold">Seed Round Budget</h1>
                 <Badge variant="secondary" className="bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300">
                   <Lock className="h-3 w-3 mr-1" />
                   Projected Allocation Plan
                 </Badge>
               </div>
               <p className="text-muted-foreground">
-                Comprehensive 12-month projected budget for $250K seed round
+                2025-2026 Financial Planning • $250K Seed Investment
               </p>
             </div>
             <div className="flex items-center gap-3">
@@ -250,157 +190,346 @@ export default function IRBudgetPage() {
           </div>
         </div>
 
-        {/* Overview Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <Card>
+        {/* Key Metrics */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <Card className="border-2 border-green-200 dark:border-green-900">
             <CardHeader className="pb-3">
-              <CardDescription>Target Raise</CardDescription>
-              <CardTitle className="text-3xl text-green-600">{formatCurrency(seedRound)}</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">Seed Round</CardTitle>
             </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold text-green-600 dark:text-green-400">
+                {formatCurrency(seedRound)}
+              </div>
+              <p className="text-xs text-muted-foreground mt-1">Target raise amount</p>
+            </CardContent>
           </Card>
-          
-          <Card>
+
+          <Card className="border-2 border-blue-200 dark:border-blue-900">
             <CardHeader className="pb-3">
-              <CardDescription>Projected Allocation</CardDescription>
-              <CardTitle className="text-3xl text-blue-600">{formatCurrency(projectedAllocation)}</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">Projected Allocation</CardTitle>
             </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
+                {formatCurrency(projectedAllocation)}
+              </div>
+              <p className="text-xs text-muted-foreground mt-1">Through August 2026</p>
+            </CardContent>
           </Card>
-          
-          <Card>
+
+          <Card className="border-2 border-purple-200 dark:border-purple-900">
             <CardHeader className="pb-3">
-              <CardDescription>Reserve Buffer</CardDescription>
-              <CardTitle className="text-3xl text-purple-600">{formatCurrency(reserveBuffer)}</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">Reserve Buffer</CardTitle>
             </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold text-purple-600 dark:text-purple-400">
+                {formatCurrency(reserveBuffer)}
+              </div>
+              <p className="text-xs text-muted-foreground mt-1">
+                {((reserveBuffer / seedRound) * 100).toFixed(1)}% remaining
+              </p>
+            </CardContent>
           </Card>
-          
-          <Card>
+
+          <Card className="border-2 border-cyan-200 dark:border-cyan-900">
             <CardHeader className="pb-3">
-              <CardDescription>Projected Runway</CardDescription>
-              <CardTitle className="text-3xl text-cyan-600">{projectedRunway} mo</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">Projected Runway</CardTitle>
             </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold text-cyan-600 dark:text-cyan-400">
+                {projectedRunway} mo
+              </div>
+              <p className="text-xs text-muted-foreground mt-1">
+                At {formatCurrency(avgMonthlyBurn)}/month
+              </p>
+            </CardContent>
           </Card>
         </div>
 
         {/* Category Breakdown */}
-        <Card className="mb-8">
+        <Card>
           <CardHeader>
-            <CardTitle>Category Breakdown</CardTitle>
-            <CardDescription>Filter detailed budget by category</CardDescription>
+            <CardTitle>Budget Allocation by Category</CardTitle>
+            <CardDescription>Total spend across 12 months</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-              <Button
-                variant={selectedCategory === 'all' ? 'default' : 'outline'}
-                onClick={() => setSelectedCategory('all')}
-                className="justify-start"
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div 
+                className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                  selectedCategory === 'team' 
+                    ? 'border-blue-500 bg-blue-50 dark:bg-blue-950' 
+                    : 'border-border hover:border-blue-300'
+                }`}
+                onClick={() => setSelectedCategory(selectedCategory === 'team' ? 'all' : 'team')}
               >
-                All Categories
-              </Button>
-              {Object.keys(budgetData.categories).map((category) => (
-                <Button
-                  key={category}
-                  variant={selectedCategory === category ? 'default' : 'outline'}
-                  onClick={() => setSelectedCategory(category as any)}
-                  className="justify-start"
-                >
-                  <span className="mr-2">{getCategoryIcon(category)}</span>
-                  {category.charAt(0).toUpperCase() + category.slice(1)}
-                  <Badge variant="secondary" className="ml-auto">
-                    {formatCurrency(getCategoryTotal(category as keyof typeof budgetData.categories))}
-                  </Badge>
-                </Button>
-              ))}
+                <div className="flex items-center gap-3 mb-2">
+                  <Users className="h-5 w-5 text-blue-500" />
+                  <span className="font-semibold">Team</span>
+                </div>
+                <div className="text-2xl font-bold">{formatCurrency(getCategoryTotal('team'))}</div>
+                <p className="text-xs text-muted-foreground mt-1">5 team members</p>
+              </div>
+
+              <div 
+                className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                  selectedCategory === 'infrastructure' 
+                    ? 'border-green-500 bg-green-50 dark:bg-green-950' 
+                    : 'border-border hover:border-green-300'
+                }`}
+                onClick={() => setSelectedCategory(selectedCategory === 'infrastructure' ? 'all' : 'infrastructure')}
+              >
+                <div className="flex items-center gap-3 mb-2">
+                  <Server className="h-5 w-5 text-green-500" />
+                  <span className="font-semibold">Infrastructure</span>
+                </div>
+                <div className="text-2xl font-bold">{formatCurrency(getCategoryTotal('infrastructure'))}</div>
+                <p className="text-xs text-muted-foreground mt-1">Tech & hosting</p>
+              </div>
+
+              <div 
+                className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                  selectedCategory === 'operations' 
+                    ? 'border-orange-500 bg-orange-50 dark:bg-orange-950' 
+                    : 'border-border hover:border-orange-300'
+                }`}
+                onClick={() => setSelectedCategory(selectedCategory === 'operations' ? 'all' : 'operations')}
+              >
+                <div className="flex items-center gap-3 mb-2">
+                  <Wrench className="h-5 w-5 text-orange-500" />
+                  <span className="font-semibold">Operations</span>
+                </div>
+                <div className="text-2xl font-bold">{formatCurrency(getCategoryTotal('operations'))}</div>
+                <p className="text-xs text-muted-foreground mt-1">PODs, tokens, travel</p>
+              </div>
+
+              <div 
+                className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                  selectedCategory === 'marketing' 
+                    ? 'border-purple-500 bg-purple-50 dark:bg-purple-950' 
+                    : 'border-border hover:border-purple-300'
+                }`}
+                onClick={() => setSelectedCategory(selectedCategory === 'marketing' ? 'all' : 'marketing')}
+              >
+                <div className="flex items-center gap-3 mb-2">
+                  <Megaphone className="h-5 w-5 text-purple-500" />
+                  <span className="font-semibold">Marketing</span>
+                </div>
+                <div className="text-2xl font-bold">{formatCurrency(getCategoryTotal('marketing'))}</div>
+                <p className="text-xs text-muted-foreground mt-1">Social & creative</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Monthly Burn Chart */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Monthly Burn Rate</CardTitle>
+            <CardDescription>Projected monthly expenses Sep 2025 - Aug 2026</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {budgetData.months.map((month, index) => {
+                const burn = budgetData.monthlyBurn[index];
+                const percentage = (burn / Math.max(...budgetData.monthlyBurn)) * 100;
+                
+                return (
+                  <div key={month} className="space-y-2">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="font-medium">{month}</span>
+                      <span className="text-muted-foreground">{formatCurrency(burn)}</span>
+                    </div>
+                    <div className="h-3 bg-muted rounded-full overflow-hidden">
+                      <div 
+                        className={`h-full transition-all ${
+                          burn > 30000 ? 'bg-red-500' : burn > 15000 ? 'bg-orange-500' : 'bg-green-500'
+                        }`}
+                        style={{ width: `${percentage}%` }}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </CardContent>
         </Card>
 
         {/* Detailed Budget Table */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Detailed Budget</CardTitle>
-            <CardDescription>
-              Monthly allocation breakdown for {selectedCategory === 'all' ? 'all categories' : selectedCategory}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-[200px]">Item</TableHead>
-                    <TableHead className="w-[200px]">Role/Purpose</TableHead>
-                    {budgetData.months.map((month) => (
-                      <TableHead key={month} className="text-right min-w-[100px]">
-                        {month.substring(0, 3)}
-                      </TableHead>
-                    ))}
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {getFilteredData().map((item, idx) => (
-                    <TableRow key={idx}>
-                      <TableCell className="font-medium">{showSensitive ? item.name : '••••••'}</TableCell>
-                      <TableCell className="text-sm text-muted-foreground">{item.role}</TableCell>
-                      {item.values.map((value, monthIdx) => (
-                        <TableCell key={monthIdx} className="text-right">
-                          {value > 0 ? formatCurrency(value) : '-'}
+        {showSensitive && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Detailed Budget Breakdown</CardTitle>
+              <CardDescription>Line-item expenses by month</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="w-[200px]">Account</TableHead>
+                      <TableHead className="w-[200px]">Role/Description</TableHead>
+                      {budgetData.months.map((month) => (
+                        <TableHead key={month} className="text-right">{month.slice(0, 3)}</TableHead>
+                      ))}
+                      <TableHead className="text-right font-bold">Total</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {/* Team Section */}
+                    {(selectedCategory === 'all' || selectedCategory === 'team') && (
+                      <>
+                        <TableRow className="bg-blue-50 dark:bg-blue-950">
+                          <TableCell colSpan={14} className="font-bold">
+                            <Users className="h-4 w-4 inline mr-2" />
+                            Team
+                          </TableCell>
+                        </TableRow>
+                        {budgetData.categories.team.map((item) => (
+                          <TableRow key={item.name}>
+                            <TableCell className="font-medium">{item.name}</TableCell>
+                            <TableCell className="text-sm text-muted-foreground">{item.role}</TableCell>
+                            {item.values.map((value, idx) => (
+                              <TableCell key={idx} className="text-right">
+                                {value > 0 ? formatCurrency(value) : '-'}
+                              </TableCell>
+                            ))}
+                            <TableCell className="text-right font-bold">
+                              {formatCurrency(item.values.reduce((a, b) => a + b, 0))}
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </>
+                    )}
+
+                    {/* Infrastructure Section */}
+                    {(selectedCategory === 'all' || selectedCategory === 'infrastructure') && (
+                      <>
+                        <TableRow className="bg-green-50 dark:bg-green-950">
+                          <TableCell colSpan={14} className="font-bold">
+                            <Server className="h-4 w-4 inline mr-2" />
+                            Infrastructure
+                          </TableCell>
+                        </TableRow>
+                        {budgetData.categories.infrastructure.map((item) => (
+                          <TableRow key={item.name}>
+                            <TableCell className="font-medium">{item.name}</TableCell>
+                            <TableCell className="text-sm text-muted-foreground">{item.role}</TableCell>
+                            {item.values.map((value, idx) => (
+                              <TableCell key={idx} className="text-right">
+                                {value > 0 ? formatCurrency(value) : '-'}
+                              </TableCell>
+                            ))}
+                            <TableCell className="text-right font-bold">
+                              {formatCurrency(item.values.reduce((a, b) => a + b, 0))}
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </>
+                    )}
+
+                    {/* Operations Section */}
+                    {(selectedCategory === 'all' || selectedCategory === 'operations') && (
+                      <>
+                        <TableRow className="bg-orange-50 dark:bg-orange-950">
+                          <TableCell colSpan={14} className="font-bold">
+                            <Wrench className="h-4 w-4 inline mr-2" />
+                            Operations
+                          </TableCell>
+                        </TableRow>
+                        {budgetData.categories.operations.map((item) => (
+                          <TableRow key={item.name}>
+                            <TableCell className="font-medium">{item.name}</TableCell>
+                            <TableCell className="text-sm text-muted-foreground">{item.role}</TableCell>
+                            {item.values.map((value, idx) => (
+                              <TableCell key={idx} className="text-right">
+                                {value > 0 ? formatCurrency(value) : '-'}
+                              </TableCell>
+                            ))}
+                            <TableCell className="text-right font-bold">
+                              {formatCurrency(item.values.reduce((a, b) => a + b, 0))}
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </>
+                    )}
+
+                    {/* Marketing Section */}
+                    {(selectedCategory === 'all' || selectedCategory === 'marketing') && (
+                      <>
+                        <TableRow className="bg-purple-50 dark:bg-purple-950">
+                          <TableCell colSpan={14} className="font-bold">
+                            <Megaphone className="h-4 w-4 inline mr-2" />
+                            Marketing
+                          </TableCell>
+                        </TableRow>
+                        {budgetData.categories.marketing.map((item) => (
+                          <TableRow key={item.name}>
+                            <TableCell className="font-medium">{item.name}</TableCell>
+                            <TableCell className="text-sm text-muted-foreground">{item.role}</TableCell>
+                            {item.values.map((value, idx) => (
+                              <TableCell key={idx} className="text-right">
+                                {value > 0 ? formatCurrency(value) : '-'}
+                              </TableCell>
+                            ))}
+                            <TableCell className="text-right font-bold">
+                              {formatCurrency(item.values.reduce((a, b) => a + b, 0))}
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </>
+                    )}
+
+                    {/* Totals */}
+                    <TableRow className="bg-muted font-bold">
+                      <TableCell colSpan={2}>Monthly Burn</TableCell>
+                      {budgetData.monthlyBurn.map((burn, idx) => (
+                        <TableCell key={idx} className="text-right">
+                          {formatCurrency(burn)}
                         </TableCell>
                       ))}
+                      <TableCell className="text-right">{formatCurrency(projectedAllocation)}</TableCell>
                     </TableRow>
-                  ))}
-                  <TableRow className="font-bold bg-muted/50">
-                    <TableCell colSpan={2}>Monthly Burn</TableCell>
-                    {budgetData.monthlyBurn.map((burn, idx) => (
-                      <TableCell key={idx} className="text-right text-blue-600">
-                        {formatCurrency(burn)}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                  <TableRow className="font-bold bg-muted">
-                    <TableCell colSpan={2}>Running Total</TableCell>
-                    {budgetData.runningTotal.map((total, idx) => (
-                      <TableCell key={idx} className="text-right text-blue-600">
-                        {formatCurrency(total)}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </div>
-          </CardContent>
-        </Card>
 
-        {/* Budget Notes */}
-        <Card className="mt-8 border-blue-200 dark:border-blue-800">
+                    <TableRow className="bg-muted/50 font-bold">
+                      <TableCell colSpan={2}>Running Total</TableCell>
+                      {budgetData.runningTotal.map((total, idx) => (
+                        <TableCell key={idx} className="text-right">
+                          {formatCurrency(total)}
+                        </TableCell>
+                      ))}
+                      <TableCell className="text-right text-blue-600 dark:text-blue-400">
+                        {formatCurrency(projectedAllocation)}
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Notes */}
+        <Card className="border-2 border-blue-200 dark:border-blue-900 bg-blue-50/50 dark:bg-blue-950/20">
           <CardHeader>
-            <CardTitle className="text-blue-700 dark:text-blue-300">Budget Notes</CardTitle>
+            <CardTitle className="text-blue-800 dark:text-blue-200">Budget Notes</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4 text-sm">
-            <div>
-              <h4 className="font-semibold mb-2">Projected Allocation Plan</h4>
-              <p className="text-muted-foreground">
-                This budget represents a <strong>projected allocation plan</strong> for a <strong>$250,000 seed round currently being raised</strong>. 
-                These are not actual expenses - this is a forward-looking financial roadmap that demonstrates how capital will be deployed upon successful fundraising.
-              </p>
+          <CardContent className="space-y-3 text-sm">
+            <p className="font-semibold text-blue-900 dark:text-blue-100">
+              📊 This is a <strong>projected allocation plan</strong> for the $250K seed round we are currently raising
+            </p>
+            <div className="border-l-4 border-blue-400 pl-4 space-y-2">
+              <p>• <strong>Status:</strong> Funds not yet raised - this represents planned spending once capital is secured</p>
+              <p>• <strong>Timeline:</strong> 12-month runway from raise date (September 2025 - August 2026)</p>
+              <p>• <strong>Major expenses in November-December 2025:</strong> Token listing, payment rails setup, initial POD/MOBI materials</p>
+              <p>• <strong>Stabilized monthly burn:</strong> ~$18.7K from January 2026 onwards</p>
+              <p>• <strong>Team ramp-up:</strong> Begins in November 2025 with full team operational by December</p>
+              <p>• <strong>Reserve buffer:</strong> {formatCurrency(reserveBuffer)} ({((reserveBuffer / seedRound) * 100).toFixed(1)}%) held for contingencies and extended runway</p>
             </div>
-            <div>
-              <h4 className="font-semibold mb-2">Timeline & Deployment</h4>
-              <p className="text-muted-foreground">
-                The 12-month runway begins from the date of capital injection (target: Q4 2025/Q1 2026). The first two months reflect current burn rate during 
-                fundraising, followed by full deployment starting month 3 post-raise.
-              </p>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-2">Reserve Buffer</h4>
-              <p className="text-muted-foreground">
-                The ${formatCurrency(reserveBuffer)} reserve buffer (~{((reserveBuffer / seedRound) * 100).toFixed(1)}%) provides strategic flexibility for 
-                unexpected opportunities or market adjustments during the deployment phase.
-              </p>
-            </div>
+            <p className="text-xs text-muted-foreground italic mt-4">
+              Note: This budget does not include revenue projections. Actual spending will be tracked against this plan once funding is secured.
+            </p>
           </CardContent>
         </Card>
       </div>
     </div>
   );
 }
-

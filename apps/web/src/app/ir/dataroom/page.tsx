@@ -857,7 +857,7 @@ export default function InvestorDataRoomPage() {
             </h1>
             
             <p className="text-xl text-blue-50 mb-6 leading-relaxed">
-              Thank you for your interest in SHELTR. As a valued partner in our mission to end homelessness through innovative technology, 
+              Thank you for your interest in SHELTR. As a potential partner in our mission to hack homelessness through tech-for-good, 
               your support and expertise are crucial to our success. We&apos;re excited to share our progress, vision, and strategic roadmap with you.
             </p>
             

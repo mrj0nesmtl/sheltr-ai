@@ -11,8 +11,8 @@ This folder contains **public-facing** payment architecture documentation:
 ### **Integration Guides** (Public)
 - **[adyen-integration.md](adyen-integration.md)** - Adyen payment integration guide
 - **[production-deployment.md](production-deployment.md)** - Production deployment procedures
-- **[sheltr-demo-implementation.md](sheltr-demo-implementation.md)** - Demo implementation guide
-- **[sheltr-unified-payment-architecture.md](sheltr-unified-payment-architecture.md)** - Unified payment architecture
+- **[qr-donation-demo.md](qr-donation-demo.md)
+- **[unified-payment-architecture.md](unified-payment-architecture.md)** - Unified payment architecture
 
 ---
 

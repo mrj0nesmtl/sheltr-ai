@@ -151,9 +151,9 @@ export default function BudgetPage() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Page Header */}
         <div className="mb-8">
-          <div className="flex items-start justify-between mb-4">
-            <div>
-              <div className="flex items-center gap-3 mb-2">
+          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
+            <div className="flex-1">
+              <div className="flex flex-wrap items-center gap-3 mb-2">
                 <h1 className="text-3xl font-bold">Seed Round Budget</h1>
                 <Badge variant="secondary" className="bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300">
                   <Lock className="h-3 w-3 mr-1" />

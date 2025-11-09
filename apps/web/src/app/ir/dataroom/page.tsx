@@ -7,7 +7,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { FileText, Lock, Shield, ExternalLink, GripVertical, Save, RotateCcw, LogOut, DollarSign, Home, ChevronRight, AlertTriangle, Image as ImageIcon } from 'lucide-react';
+import { FileText, Lock, Shield, ExternalLink, GripVertical, Save, RotateCcw, LogOut, DollarSign, Home, ChevronRight, AlertTriangle, Image as ImageIcon, CheckCircle } from 'lucide-react';
 import Link from 'next/link';
 import { toast } from 'sonner';
 import { db, auth } from '@/lib/firebase';
@@ -321,6 +321,7 @@ export default function InvestorDataRoomPage() {
   const [galleryLoading, setGalleryLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState<GalleryItem | null>(null);
   const [showFinancialOverview, setShowFinancialOverview] = useState(false);
+  const [showQATestingAccounts, setShowQATestingAccounts] = useState(false);
   const [heroImage, setHeroImage] = useState<HeroImage | null>(null);
 
   const isSuperAdmin = user?.role === 'super_admin';
@@ -458,7 +459,19 @@ export default function InvestorDataRoomPage() {
       }
     };
 
+    const loadQATestingToggle = async () => {
+      try {
+        const qaTestingDoc = await getDoc(doc(db, 'secure_documents', 'qa-testing-accounts'));
+        if (qaTestingDoc.exists()) {
+          setShowQATestingAccounts(qaTestingDoc.data().isInvestorDataRoom || false);
+        }
+      } catch (error) {
+        console.error('Error loading QA testing toggle:', error);
+      }
+    };
+
     loadFinancialToggle();
+    loadQATestingToggle();
   }, [isAuthorized]);
 
   // Load hero image for this page
@@ -915,6 +928,146 @@ export default function InvestorDataRoomPage() {
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <BudgetCard linkPath="/ir/budget" />
                     <RevenueCard linkPath="/ir/revenue" />
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            )}
+
+            {/* QA Testing Demo Accounts Accordion */}
+            {showQATestingAccounts && (
+              <AccordionItem value="qa-testing" className="border-2 border-blue-200 dark:border-blue-800 rounded-lg bg-white dark:bg-slate-900 overflow-hidden">
+                <AccordionTrigger className="px-6 py-4 hover:no-underline hover:bg-blue-50 dark:hover:bg-blue-900/20">
+                  <div className="flex items-center gap-4 w-full">
+                    <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
+                      <CheckCircle className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                    </div>
+                    <div className="text-left flex-1">
+                      <h3 className="text-2xl font-bold">QA Testing Demo Accounts</h3>
+                      <p className="text-sm text-muted-foreground">
+                        Connected test accounts for comprehensive system validation
+                      </p>
+                    </div>
+                    <Badge className="bg-blue-600 text-white">4 Accounts</Badge>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className="px-6 py-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    {/* Demo Donor */}
+                    <Card className="border-2 border-blue-500">
+                      <CardContent className="pt-6 space-y-3">
+                        <div className="flex items-center gap-2 mb-3">
+                          <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+                          <h4 className="font-bold">Demo Donor</h4>
+                        </div>
+                        <p className="text-sm text-muted-foreground mb-2">Jane Supporter</p>
+                        <div>
+                          <p className="text-xs text-muted-foreground mb-1">Email</p>
+                          <code className="text-sm bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded block">
+                            donor@example.com
+                          </code>
+                        </div>
+                        <div>
+                          <p className="text-xs text-muted-foreground mb-1">Password</p>
+                          <code className="text-sm bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded block">
+                            sheltr123
+                          </code>
+                        </div>
+                        <div>
+                          <p className="text-xs text-muted-foreground mb-1">Role</p>
+                          <Badge variant="outline">donor</Badge>
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    {/* Demo Participant */}
+                    <Card className="border-2 border-green-500">
+                      <CardContent className="pt-6 space-y-3">
+                        <div className="flex items-center gap-2 mb-3">
+                          <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                          <h4 className="font-bold">Demo Participant</h4>
+                        </div>
+                        <p className="text-sm text-muted-foreground mb-2">Michael Rodriguez</p>
+                        <div>
+                          <p className="text-xs text-muted-foreground mb-1">Email</p>
+                          <code className="text-sm bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded block">
+                            participant@example.com
+                          </code>
+                        </div>
+                        <div>
+                          <p className="text-xs text-muted-foreground mb-1">Password</p>
+                          <code className="text-sm bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded block">
+                            sheltr123
+                          </code>
+                        </div>
+                        <div>
+                          <p className="text-xs text-muted-foreground mb-1">Role</p>
+                          <Badge variant="outline">participant</Badge>
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    {/* Demo Shelter Admin */}
+                    <Card className="border-2 border-purple-500">
+                      <CardContent className="pt-6 space-y-3">
+                        <div className="flex items-center gap-2 mb-3">
+                          <div className="w-2 h-2 rounded-full bg-purple-500"></div>
+                          <h4 className="font-bold">Demo Shelter Admin</h4>
+                        </div>
+                        <p className="text-sm text-muted-foreground mb-2">Sarah Manager</p>
+                        <div>
+                          <p className="text-xs text-muted-foreground mb-1">Email</p>
+                          <code className="text-sm bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded block">
+                            admin@example.com
+                          </code>
+                        </div>
+                        <div>
+                          <p className="text-xs text-muted-foreground mb-1">Password</p>
+                          <code className="text-sm bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded block">
+                            sheltr123
+                          </code>
+                        </div>
+                        <div>
+                          <p className="text-xs text-muted-foreground mb-1">Role</p>
+                          <Badge variant="outline">admin</Badge>
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    {/* Platform Admin Accounts */}
+                    <Card className="border-2 border-orange-500">
+                      <CardContent className="pt-6 space-y-3">
+                        <div className="flex items-center gap-2 mb-3">
+                          <div className="w-2 h-2 rounded-full bg-orange-500"></div>
+                          <h4 className="font-bold">Platform Admins</h4>
+                        </div>
+                        <p className="text-sm text-muted-foreground mb-2">3 Active Accounts</p>
+                        <div className="space-y-2">
+                          <div>
+                            <p className="text-xs font-medium">Doug Kukura</p>
+                            <p className="text-xs text-muted-foreground">doug@example.com</p>
+                          </div>
+                          <div>
+                            <p className="text-xs font-medium">Alexander Kline</p>
+                            <p className="text-xs text-muted-foreground">alexander@example.com</p>
+                          </div>
+                          <div>
+                            <p className="text-xs font-medium">Gunnar Blaze</p>
+                            <p className="text-xs text-muted-foreground">gunnar@example.com</p>
+                          </div>
+                        </div>
+                        <div>
+                          <p className="text-xs text-muted-foreground mb-1">Role</p>
+                          <Badge variant="outline">platform_admin</Badge>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+
+                  <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                    <p className="text-sm text-blue-700 dark:text-blue-300">
+                      <strong>System Validation:</strong> These interconnected accounts demonstrate the complete SHELTR ecosystem functionality. 
+                      The Participant and Shelter Admin are connected to Old Brewery Mission for realistic data flow testing.
+                    </p>
                   </div>
                 </AccordionContent>
               </AccordionItem>

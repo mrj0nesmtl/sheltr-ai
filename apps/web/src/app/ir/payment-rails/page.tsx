@@ -88,18 +88,13 @@ function PaymentRailsContent() {
               providing zero-risk participant protection with guaranteed 4-6% APY returns.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/architecture/payment-rails/README.md" target="_blank" rel="noopener noreferrer">
+              <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/architecture/payment-rails/unified-payment-architecture.md" target="_blank" rel="noopener noreferrer">
                 <Button size="lg" className="bg-emerald-600 hover:bg-emerald-700">
                   <Github className="h-5 w-5 mr-2" />
                   View Full Document
                 </Button>
               </a>
-              <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/architecture/payment-rails/README.md" target="_blank" rel="noopener noreferrer">
-                <Button size="lg" variant="outline" className="border-2">
-                  <Download className="h-5 w-5 mr-2" />
-                  Download PDF
-                </Button>
-              </a>
+
             </div>
           </div>
         </div>

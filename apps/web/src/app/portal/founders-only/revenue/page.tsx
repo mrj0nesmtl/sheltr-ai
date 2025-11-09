@@ -16,8 +16,11 @@ import {
   Home,
   ChevronRight,
   ArrowLeft,
-  Zap
+  Zap,
+  Lock,
+  Briefcase
 } from 'lucide-react';
+import Link from 'next/link';
 import {
   Table,
   TableBody,
@@ -84,57 +87,63 @@ export default function RevenuePage() {
   const defiStreamsTotal = getStreamTotal('tokenYields') + getStreamTotal('apiFees') + getStreamTotal('analytics');
 
   return (
-    <div className="min-h-screen bg-background p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
-        {/* Breadcrumb Navigation */}
-        <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            onClick={() => router.push('/')}
-            className="hover:bg-muted p-1 h-auto"
-          >
-            <Home className="h-4 w-4" />
-          </Button>
-          <ChevronRight className="h-4 w-4" />
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            onClick={() => router.push('/portal')}
-            className="hover:bg-muted px-2 py-1 h-auto"
-          >
-            Portal
-          </Button>
-          <ChevronRight className="h-4 w-4" />
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            onClick={() => router.push('/portal/founders-only')}
-            className="hover:bg-muted px-2 py-1 h-auto"
-          >
-            Founders Only
-          </Button>
-          <ChevronRight className="h-4 w-4" />
-          <span className="font-medium text-foreground">
-            Revenue Projections
-          </span>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
+      {/* Header */}
+      <header className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b sticky top-0 z-50">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            <Link href="/portal/founders-only" className="text-2xl font-bold hover:opacity-80 transition-opacity">
+              SHELTR
+            </Link>
+            
+            <div className="flex items-center gap-4">
+              <Badge className="bg-purple-600 text-white">
+                <Briefcase className="h-3 w-3 mr-1" />
+                Founders Portal
+              </Badge>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => router.back()}
+              >
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Back
+              </Button>
+            </div>
+          </div>
         </div>
+      </header>
 
-        {/* Back Button & Header */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={() => router.back()}
-              className="flex items-center gap-2"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Back
-            </Button>
+      {/* Breadcrumbs */}
+      <div className="bg-white/50 dark:bg-slate-900/50 border-b">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-3">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <Link href="/portal" className="hover:text-foreground transition-colors flex items-center gap-1">
+              <Home className="h-4 w-4" />
+              Portal
+            </Link>
+            <ChevronRight className="h-4 w-4" />
+            <Link href="/portal/founders-only" className="hover:text-foreground transition-colors">
+              Founders Only
+            </Link>
+            <ChevronRight className="h-4 w-4" />
+            <span className="text-foreground font-medium">Revenue Projections</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Page Header */}
+        <div className="mb-8">
+          <div className="flex items-start justify-between mb-4">
             <div>
-              <h1 className="text-4xl font-bold mb-2">2-Year Revenue Projections</h1>
-              <p className="text-muted-foreground">Pre-Revenue to Scale • Sep 2025 - Aug 2027 • 8 Revenue Streams</p>
+              <div className="flex items-center gap-3 mb-2">
+                <h1 className="text-3xl font-bold">2-Year Revenue Projections</h1>
+              </div>
+              <p className="text-muted-foreground">
+                Pre-Revenue to Scale • Sep 2025 - Aug 2027 • 8 Revenue Streams
+              </p>
               <div className="flex gap-2 mt-2">
                 <Badge className="bg-orange-100 text-orange-700 dark:bg-orange-950 dark:text-orange-300">
                   Currently: Nov 2025
@@ -142,34 +151,31 @@ export default function RevenuePage() {
                 <Badge className="bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-300">
                   Revenue Launch: Q2 2026
                 </Badge>
-                <Badge className="bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300">
-                  1 Shelter/Month Model
-                </Badge>
               </div>
             </div>
-          </div>
-          <div className="flex items-center gap-3">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowSensitive(!showSensitive)}
-            >
-              {showSensitive ? (
-                <>
-                  <EyeOff className="h-4 w-4 mr-2" />
-                  Hide Details
-                </>
-              ) : (
-                <>
-                  <Eye className="h-4 w-4 mr-2" />
-                  Show Details
-                </>
-              )}
-            </Button>
-            <Button variant="outline" size="sm">
-              <Download className="h-4 w-4 mr-2" />
-              Export CSV
-            </Button>
+            <div className="flex items-center gap-3">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowSensitive(!showSensitive)}
+              >
+                {showSensitive ? (
+                  <>
+                    <EyeOff className="h-4 w-4 mr-2" />
+                    Hide Details
+                  </>
+                ) : (
+                  <>
+                    <Eye className="h-4 w-4 mr-2" />
+                    Show Details
+                  </>
+                )}
+              </Button>
+              <Button variant="outline" size="sm">
+                <Download className="h-4 w-4 mr-2" />
+                Export CSV
+              </Button>
+            </div>
           </div>
         </div>
 

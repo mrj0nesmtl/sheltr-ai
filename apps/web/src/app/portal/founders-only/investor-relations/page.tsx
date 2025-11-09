@@ -2171,12 +2171,30 @@ export default function InvestorRelationsPage() {
           </div>
 
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
-              <TabsTrigger value="overview">Summary</TabsTrigger>
-              <TabsTrigger value="product">Product & Tech</TabsTrigger>
-              <TabsTrigger value="tokenomics">Business Model</TabsTrigger>
-              <TabsTrigger value="projections">Projections</TabsTrigger>
-              <TabsTrigger value="investment">Terms</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-5 gap-1">
+              <TabsTrigger value="overview" className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 px-2 sm:px-4">
+                <FileText className="h-4 w-4 flex-shrink-0" />
+                <span className="text-xs sm:text-sm">Summary</span>
+              </TabsTrigger>
+              <TabsTrigger value="product" className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 px-2 sm:px-4">
+                <Zap className="h-4 w-4 flex-shrink-0" />
+                <span className="text-xs sm:text-sm hidden sm:inline">Product & Tech</span>
+                <span className="text-xs sm:hidden">Product</span>
+              </TabsTrigger>
+              <TabsTrigger value="tokenomics" className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 px-2 sm:px-4">
+                <Coins className="h-4 w-4 flex-shrink-0" />
+                <span className="text-xs sm:text-sm hidden sm:inline">Business Model</span>
+                <span className="text-xs sm:hidden">Model</span>
+              </TabsTrigger>
+              <TabsTrigger value="projections" className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 px-2 sm:px-4">
+                <BarChart3 className="h-4 w-4 flex-shrink-0" />
+                <span className="text-xs sm:text-sm hidden sm:inline">Projections</span>
+                <span className="text-xs sm:hidden">Projects</span>
+              </TabsTrigger>
+              <TabsTrigger value="investment" className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 px-2 sm:px-4">
+                <Handshake className="h-4 w-4 flex-shrink-0" />
+                <span className="text-xs sm:text-sm">Terms</span>
+              </TabsTrigger>
             </TabsList>
 
             {/* Executive Summary */}

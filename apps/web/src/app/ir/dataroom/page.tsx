@@ -46,6 +46,8 @@ interface InvestorDocument {
   isExternal?: boolean;
   externalUrl?: string;
   secureSlug?: string; // Custom slug from knowledge base config
+  hubSlug?: string; // Public docs hub slug
+  permissionLevel?: string; // public vs platform_admin
 }
 
 // Badge color mapping based on document category/type
@@ -278,7 +280,7 @@ function SortableCard({ doc, isSuperAdmin }: SortableCardProps) {
               <ExternalLink className="ml-2 h-4 w-4" />
             </Button>
           ) : (
-            <Link href={doc.secureSlug || `/ir/documents/${doc.id}`}>
+            <Link href={`/ir/${doc.hubSlug || doc.secureSlug || doc.id}`}>
               <Button
                 variant="outline"
                 className={`w-full border-2 ${doc.textColor} hover:bg-opacity-10`}
@@ -422,6 +424,8 @@ export default function InvestorDataRoomPage() {
               isExternal: data.external_link && data.use_external_link,
               externalUrl: data.use_external_link ? data.external_link : undefined,
               secureSlug: data.secure_slug || undefined,
+              hubSlug: data.hub_slug || undefined,
+              permissionLevel: data.permission_level || undefined,
             };
           });
           
@@ -664,6 +668,8 @@ export default function InvestorDataRoomPage() {
             isExternal: data.external_link && data.use_external_link,
             externalUrl: data.use_external_link ? data.external_link : undefined,
             secureSlug: data.secure_slug || undefined,
+            hubSlug: data.hub_slug || undefined,
+            permissionLevel: data.permission_level || undefined,
           };
         });
         

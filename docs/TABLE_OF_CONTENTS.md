@@ -2,10 +2,10 @@
 
 **Comprehensive navigation for all SHELTR platform documentation**
 
-*Last Updated: November 7, 2025 - Documentation Restructured & Optimized*
+*Last Updated: November 10, 2025 - Documentation Links Fixed*
 
 [![Structure](https://img.shields.io/badge/structure-enterprise%20grade-success.svg)]()
-[![Version](https://img.shields.io/badge/version-3.0.0-blue.svg)]()
+[![Version](https://img.shields.io/badge/version-3.0.1-blue.svg)]()
 [![Status](https://img.shields.io/badge/status-production%20ready-brightgreen.svg)]()
 
 ---
@@ -77,7 +77,7 @@ architecture/
 │   ├── unified-payment-architecture.md
 │   ├── adyen-integration.md
 │   ├── production-deployment.md
-│   └── qr-demo-.md
+│   └── qr-donation-demo.md
 └── technical/                    # Blockchain & technical specs
     ├── blockchain.md
     ├── base_stable_coin.md
@@ -202,23 +202,17 @@ features/
 ├── functionality-matrix.md       # Complete feature matrix
 ├── automations/                  # Automation system
 │   └── automation-dashboard-system.md
-├── blog-system/                  # Content management (2 docs)
-│   ├── BLOG-PRODUCTION-STATUS.md
-│   └── BLOG-SYSTEM-COMPLETE.md
+├── blog-system/                  # Content management
+│   └── blog_system.md
 ├── chatbot/                      # AI Agent System (4 docs)
-│   ├── SHELTR-AGENT-ARCHITECTURE.md
+│   ├── AGENT-ARCHITECTURE.md
 │   ├── MCP-INTEGRATION-GUIDE.md
 │   ├── AGENT-QUICK-REFERENCE.md
 │   └── CHATBOT-FEATURES-ROADMAP.md
-├── dochub/                       # Documentation publisher (3 docs)
-│   ├── DOCS-HUB-PUBLISHER.md
-│   ├── DOCUMENT-VISIBILITY-PERMISSIONS-GUIDE.md
-│   └── DUAL-REPOSITORY-SIDEBAR-PLAN.md
-├── knowledge-base/               # RAG & Document Management (14 docs)
-│   ├── README.md                 # Comprehensive KB overview
-│   ├── KNOWLEDGE-BASE-STRATEGY.md
-│   ├── KNOWLEDGE-BASE-SYNC-SYSTEM.md
-│   └── ...
+├── donations/                    # Donation flow
+│   └── DONATION-FLOW.md
+├── knowledge-base/               # RAG & Document Management
+│   └── knowledge-architechture.md
 ├── messaging/                    # Internal messaging (2 docs)
 │   ├── internal-messaging-system.md
 │   └── messaging-automation-implementation.md
@@ -228,15 +222,15 @@ features/
 ```
 
 **Key Documents**:
-- 🧠 **[Knowledge Base README](features/knowledge-base/README.md)** - Comprehensive overview
-  - 75+ documents in RAG system
+- 🧠 **[Knowledge Architecture](features/knowledge-base/knowledge-architechture.md)** - Comprehensive overview
+  - RAG system architecture
   - Automated GitHub sync
   - OpenAI GPT-4 Turbo integration
   - Dual-tier chat (FAQ <1s / RAG 2-4s)
   - MCP integration for developers
   - 56% GCP cost reduction
   
-- 🤖 **[SHELTR Agent Architecture](features/chatbot/SHELTR-AGENT-ARCHITECTURE.md)** - AI system
+- 🤖 **[Agent Architecture](features/chatbot/AGENT-ARCHITECTURE.md)** - AI system
   - Multi-agent system design
   - Context-aware responses
   - Model Context Protocol integration
@@ -246,8 +240,8 @@ features/
   - AI-assisted development
   - Context loading
   
-- 📝 **[Blog System](features/blog-system/BLOG-SYSTEM-COMPLETE.md)** - CMS
-  - Production-ready content management
+- 📝 **[Blog System](features/blog-system/blog_system.md)** - CMS
+  - Content management system
   - SEO optimization
   - Social sharing
   
@@ -285,20 +279,13 @@ ecosystem/
 ---
 
 ### 🔐 [Security](security/) - Security & Compliance
-**Status**: ✅ Current | **Documents**: 8 | **Priority**: 🔴 High
+**Status**: ✅ Current | **Documents**: 1 | **Priority**: 🔴 High
 
 Enterprise security documentation and protocols
 
 ```
 security/
-├── security.md                   # Security best practices
-├── ACCESS-MANAGEMENT-PLAN.md     # RBAC implementation
-├── SECURE-DOCUMENTS-ARCHITECTURE-REPORT.md
-├── SECURE-DOCS-SYNC-WORKFLOW.md
-├── SECURE-SYNC-IMPLEMENTATION-PLAN.md
-├── SECURE-SYNC-SETUP.md
-├── SECURITY-INCIDENT-RESPONSE.md
-└── SESSION-NOV-03-PUBLIC-DOCS-IN-SECURE-PORTALS.md
+└── security.md                   # Security best practices
 ```
 
 **Key Documents**:
@@ -307,18 +294,9 @@ security/
   - PCI DSS Level 1
   - Firebase security rules
   - Encryption standards
-  
-- 🛡️ **[Access Management](security/ACCESS-MANAGEMENT-PLAN.md)** - RBAC
-  - 5-role system
+  - 5-role RBAC system
   - Custom claims
   - Permission matrix
-  
-- 📁 **[Secure Documents](security/SECURE-DOCUMENTS-ARCHITECTURE-REPORT.md)** - Document security
-  - Multi-destination publishing
-  - Role-based access
-  - Audit logging
-  
-- 🚨 **[Incident Response](security/SECURITY-INCIDENT-RESPONSE.md)** - Security incidents
 
 ---
 
@@ -569,7 +547,7 @@ archive/
 1. [Platform Overview](overview/platform-overview.md)
 2. [Development Roadmap](development/roadmap.md)
 3. [Tokenomics](architecture/technical/tokenomics.md)
-4. [Knowledge Base Overview](features/knowledge-base/README.md)
+4. [Knowledge Architecture](features/knowledge-base/knowledge-architechture.md)
 
 ### For End Users
 1. [User Journeys](user-guides/user-journeys.md)
@@ -663,10 +641,10 @@ archive/
 
 ---
 
-**Version**: 3.0.0 - Restructured Documentation  
-**Last Updated**: November 7, 2025  
+**Version**: 3.0.1 - Fixed Documentation Links  
+**Last Updated**: November 10, 2025  
 **Status**: ✅ Production Ready  
-**Next Review**: November 14, 2025
+**Next Review**: November 17, 2025
 
 ---
 

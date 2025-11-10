@@ -8,7 +8,7 @@
 [![Docs](https://img.shields.io/badge/docs-up%20to%20date-brightgreen.svg)]()
 [![Platform](https://img.shields.io/badge/platform-live-success.svg)](https://sheltr-ai.web.app)
 
-**Last Updated**: November 7, 2025
+**Last Updated**: November 10, 2025
 
 ---
 
@@ -58,7 +58,7 @@ Comprehensive technical specifications organized by domain:
   - [Unified Payment Architecture](architecture/payment-rails/unified-payment-architecture.md)
   - [Adyen Integration](architecture/payment-rails/adyen-integration.md)
   - [Production Deployment](architecture/payment-rails/production-deployment.md)
-  - [QR Demo](architecture/payment-rails/qr-demo-.md)
+  - [QR Donation Demo](architecture/payment-rails/qr-donation-demo.md)
 
 #### Blockchain & Economics
 - ⛓️ **[Technical Documentation](architecture/technical/)** - Blockchain specifications
@@ -111,29 +111,36 @@ Essential resources for developers:
 Detailed documentation for each platform feature:
 
 #### AI & Knowledge Management
-- 🧠 **[Knowledge Base](features/knowledge-base/)** - Complete RAG system (14 docs)
-  - [Knowledge Base README](features/knowledge-base/README.md) - Comprehensive overview
+- 🧠 **[Knowledge Base](features/knowledge-base/)** - Complete RAG system
+  - [Knowledge Architecture](features/knowledge-base/knowledge-architechture.md) - Comprehensive overview
   - GitHub sync, embeddings, search, MCP integration
 - 🤖 **[Chatbot System](features/chatbot/)** - AI agent architecture (4 docs)
-  - [SHELTR Agent Architecture](features/chatbot/SHELTR-AGENT-ARCHITECTURE.md)
+  - [Agent Architecture](features/chatbot/AGENT-ARCHITECTURE.md)
   - [MCP Integration Guide](features/chatbot/MCP-INTEGRATION-GUIDE.md)
   - [Agent Quick Reference](features/chatbot/AGENT-QUICK-REFERENCE.md)
   - [Features Roadmap](features/chatbot/CHATBOT-FEATURES-ROADMAP.md)
 
 #### Content & Communication
-- 📝 **[Blog System](features/blog-system/)** - Content management (2 docs)
+- 📝 **[Blog System](features/blog-system/)** - Content management
+  - [Blog System Overview](features/blog-system/blog_system.md)
 - 💬 **[Messaging](features/messaging/)** - Internal messaging (2 docs)
+  - [Internal Messaging System](features/messaging/internal-messaging-system.md)
+  - [Messaging Automation](features/messaging/messaging-automation-implementation.md)
 - 🔔 **[Notifications](features/notifications/)** - Real-time notifications (2 docs)
+  - [Notification Architecture](features/notifications/NOTIFICATION-ARCHITECTURE.md)
+  - [Notification Metrics Guide](features/notifications/NOTIFICATION-METRICS-GUIDE.md)
 
-#### Documentation & Access
-- 📚 **[Docs Hub](features/dochub/)** - Public documentation publisher (3 docs)
+#### Platform Features
 - 🤖 **[Automation](features/automations/)** - Dashboard automation system
+  - [Automation Dashboard](features/automations/automation-dashboard-system.md)
+- 💰 **[Donations](features/donations/)** - Donation flow
+  - [Donation Flow](features/donations/DONATION-FLOW.md)
 
 #### Analytics
 - 📊 **[Functionality Matrix](features/functionality-matrix.md)** - Complete feature matrix
 - 📋 **[Feature Documentation](features/feature-documentation.md)** - Feature overview
 
-**Start here**: [Knowledge Base README](features/knowledge-base/README.md) for AI/RAG system
+**Start here**: [Knowledge Architecture](features/knowledge-base/knowledge-architechture.md) for AI/RAG system
 
 ---
 
@@ -158,13 +165,7 @@ Hardware and infrastructure innovations:
 **Security protocols, compliance, and access management**
 
 Enterprise security documentation:
-- 🔒 **[Security Overview](security/security.md)** - Security best practices
-- 🛡️ **[Access Management Plan](security/ACCESS-MANAGEMENT-PLAN.md)** - RBAC implementation
-- 📁 **[Secure Documents](security/)** - Secure document architecture (6 docs)
-  - Architecture reports
-  - Sync workflows
-  - Implementation plans
-- 🚨 **[Incident Response](security/SECURITY-INCIDENT-RESPONSE.md)** - Security incidents
+- 🔒 **[Security Overview](security/security.md)** - Security best practices, RBAC implementation, and compliance
 
 **Start here**: [Security Overview](security/security.md)
 
@@ -425,10 +426,10 @@ Archived documentation and session logs:
 
 ---
 
-**Version**: 3.0.0 - Restructured Documentation  
-**Last Updated**: November 7, 2025  
+**Version**: 3.0.1 - Fixed Documentation Links  
+**Last Updated**: November 10, 2025  
 **Status**: ✅ Production Ready  
-**Next Update**: November 14, 2025
+**Next Update**: November 17, 2025
 
 ---
 

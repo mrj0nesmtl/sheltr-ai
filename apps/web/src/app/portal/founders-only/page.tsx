@@ -725,27 +725,30 @@ export default function FoundersOnlyPage() {
         // For secure documents, link to secure Founders Portal URL
         const href = isPublic ? `/docs/${slug}` : `/portal/founders-only/${slug}`;
         
-        console.log(`📄 Dynamic doc: ${data.title} (${slug}) | Public: ${isPublic} | URL: ${href}`);
+        // Get color from badge_color field (single color name) or fall back to secure_badge_color
+        const colorName = data.badge_color || data.secure_badge_color || 'red';
+        
+        console.log(`📄 Dynamic doc: ${data.title} (${slug}) | Public: ${isPublic} | URL: ${href} | Color: ${colorName}`);
         
         return {
           id: slug,
           icon: (
             <div className="relative">
-              <FileText className="h-6 w-6 text-red-600" />
+              <FileText className={`h-6 w-6 text-${colorName}-600`} />
               {!isPublic && (
-                <Lock className="h-3 w-3 text-red-600 absolute -top-1 -right-1 bg-white dark:bg-slate-900 rounded-full" />
+                <Lock className={`h-3 w-3 text-${colorName}-600 absolute -top-1 -right-1 bg-white dark:bg-slate-900 rounded-full`} />
               )}
             </div>
           ),
           badgeText: data.secure_badge || (isPublic ? 'Public' : 'Secure'),
-          badgeClass: `bg-${data.secure_badge_color || 'red'}-600 text-white`,
+          badgeClass: `bg-${colorName}-600 text-white`,
           title: data.title || 'Untitled',
-          titleColor: `text-${data.secure_badge_color || 'red'}-600`,
+          titleColor: `text-${colorName}-600`,
           description: data.founders_description || data.description || '',
           buttonText: 'View Document',
-          buttonClass: `border-2 border-${data.secure_badge_color || 'red'}-600 text-${data.secure_badge_color || 'red'}-600 hover:bg-${data.secure_badge_color || 'red'}-50`,
+          buttonClass: `border-2 border-${colorName}-600 text-${colorName}-600 hover:bg-${colorName}-50`,
           href: href,
-          borderClass: `border-${data.secure_badge_color || 'red'}-200`,
+          borderClass: `border-${colorName}-200`,
           category: isPublic ? 'public' : 'secure',
           isInvestorDataRoom: data.published_to_ir || false,
         };
@@ -1179,13 +1182,19 @@ export default function FoundersOnlyPage() {
           slugForIR = card.href;
         }
         
+        // Extract color from badgeClass (e.g., "bg-blue-600 text-white" -> "blue")
+        const colorMatch = card.badgeClass.match(/bg-(\w+)-\d+/);
+        const extractedColor = colorMatch ? colorMatch[1] : 'gray';
+        
         const kbDocRef = doc(db, 'knowledge_documents', cardId);
         await setDoc(kbDocRef, {
           id: cardId,
           title: card.title,
           description: card.description,
           secure_badge: card.badgeText,
-          secure_badge_color: card.badgeClass,
+          badge_color: extractedColor, // Store just the color name (e.g., "blue", "purple", "red")
+          text_color: card.titleColor, // Store the text color class
+          border_color: card.borderClass, // Store the border color class
           secure_slug: slugForIR, // Use clean slug for IR routing
           hub_slug: slugForIR === cardId ? slugForIR : undefined, // Set hubSlug for proper routing
           permission_level: 'founders',

@@ -446,7 +446,23 @@ export default function IRInvestorDataRoomPage() {
         } else {
           const irDocs: InvestorDocument[] = snapshot.docs.map(doc => {
             const data = doc.data();
-            const colors = getBadgeColors(data.secure_badge || data.badge || 'Default');
+            
+            // Try to get colors from stored fields first, then fall back to getBadgeColors
+            let colors;
+            if (data.badge_color && data.text_color && data.border_color) {
+              // Use stored color fields directly from Firestore
+              const colorName = data.badge_color;
+              const colorIntensity = data.text_color?.includes('-600') ? '600' : 
+                                     data.text_color?.includes('-500') ? '500' : '600';
+              colors = {
+                badgeColor: `bg-${colorName}-${colorIntensity}`,
+                textColor: data.text_color,
+                borderColor: data.border_color
+              };
+            } else {
+              // Fallback to getBadgeColors mapping if color fields not present
+              colors = getBadgeColors(data.secure_badge || data.badge || 'Default');
+            }
             
             return {
               id: doc.id,
@@ -690,7 +706,23 @@ export default function IRInvestorDataRoomPage() {
       } else {
         const irDocs: InvestorDocument[] = snapshot.docs.map(doc => {
           const data = doc.data();
-          const colors = getBadgeColors(data.secure_badge || data.badge || 'Default');
+          
+          // Try to get colors from stored fields first, then fall back to getBadgeColors
+          let colors;
+          if (data.badge_color && data.text_color && data.border_color) {
+            // Use stored color fields directly from Firestore
+            const colorName = data.badge_color;
+            const colorIntensity = data.text_color?.includes('-600') ? '600' : 
+                                   data.text_color?.includes('-500') ? '500' : '600';
+            colors = {
+              badgeColor: `bg-${colorName}-${colorIntensity}`,
+              textColor: data.text_color,
+              borderColor: data.border_color
+            };
+          } else {
+            // Fallback to getBadgeColors mapping if color fields not present
+            colors = getBadgeColors(data.secure_badge || data.badge || 'Default');
+          }
           
           return {
             id: doc.id,

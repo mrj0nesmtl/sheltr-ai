@@ -53,20 +53,27 @@ interface InvestorDocument {
 // Badge color mapping based on document category/type
 const getBadgeColors = (badge: string): { badgeColor: string; textColor: string; borderColor: string } => {
   const colorMap: Record<string, { badgeColor: string; textColor: string; borderColor: string }> = {
-    'Strategic': { badgeColor: 'bg-blue-500', textColor: 'text-blue-500', borderColor: 'border-blue-200' },
-    'SmartFund™': { badgeColor: 'bg-orange-600', textColor: 'text-orange-600', borderColor: 'border-orange-200' },
+    // Existing mappings
+    'Pre-Seed': { badgeColor: 'bg-blue-600', textColor: 'text-blue-600', borderColor: 'border-blue-200' },
+    'Live Document': { badgeColor: 'bg-purple-600', textColor: 'text-purple-600', borderColor: 'border-purple-200' },
     'Secure': { badgeColor: 'bg-red-600', textColor: 'text-red-600', borderColor: 'border-red-200' },
     'Partnership': { badgeColor: 'bg-pink-600', textColor: 'text-pink-600', borderColor: 'border-pink-200' },
-    'Launch Plan': { badgeColor: 'bg-orange-500', textColor: 'text-orange-500', borderColor: 'border-orange-200' },
-    'Source Code': { badgeColor: 'bg-purple-600', textColor: 'text-purple-600', borderColor: 'border-purple-200' },
-    'Pre-Seed': { badgeColor: 'bg-blue-600', textColor: 'text-blue-600', borderColor: 'border-blue-200' },
-    'Team': { badgeColor: 'bg-indigo-600', textColor: 'text-indigo-600', borderColor: 'border-indigo-200' },
-    'Legal': { badgeColor: 'bg-red-600', textColor: 'text-red-600', borderColor: 'border-red-200' },
+    'Strategic': { badgeColor: 'bg-blue-500', textColor: 'text-blue-500', borderColor: 'border-blue-200' },
+    'Ready': { badgeColor: 'bg-green-500', textColor: 'text-green-500', borderColor: 'border-green-200' },
     'Enterprise': { badgeColor: 'bg-green-600', textColor: 'text-green-600', borderColor: 'border-green-200' },
+    'Legal': { badgeColor: 'bg-red-600', textColor: 'text-red-600', borderColor: 'border-red-200' },
     'Essential': { badgeColor: 'bg-purple-600', textColor: 'text-purple-600', borderColor: 'border-purple-200' },
-    'Research': { badgeColor: 'bg-teal-600', textColor: 'text-teal-600', borderColor: 'border-teal-200' },
-    'Architecture': { badgeColor: 'bg-slate-600', textColor: 'text-slate-600', borderColor: 'border-slate-200' },
-    'v2.0': { badgeColor: 'bg-emerald-600', textColor: 'text-emerald-600', borderColor: 'border-emerald-200' },
+    'Complete': { badgeColor: 'bg-purple-600', textColor: 'text-purple-600', borderColor: 'border-purple-200' },
+    'Architecture': { badgeColor: 'bg-cyan-600', textColor: 'text-cyan-600', borderColor: 'border-cyan-200' },
+    'Launch Plan': { badgeColor: 'bg-orange-600', textColor: 'text-orange-600', borderColor: 'border-orange-200' },
+    'Team': { badgeColor: 'bg-teal-600', textColor: 'text-teal-600', borderColor: 'border-teal-200' },
+    'Research': { badgeColor: 'bg-blue-600', textColor: 'text-blue-600', borderColor: 'border-blue-200' },
+    'v2.0': { badgeColor: 'bg-green-600', textColor: 'text-green-600', borderColor: 'border-green-200' },
+    'SmartFund™': { badgeColor: 'bg-orange-600', textColor: 'text-orange-600', borderColor: 'border-orange-200' },
+    'Source Code': { badgeColor: 'bg-gray-600', textColor: 'text-gray-600', borderColor: 'border-gray-200' },
+    'Technical': { badgeColor: 'bg-slate-600', textColor: 'text-slate-600', borderColor: 'border-slate-200' },
+    'Operations': { badgeColor: 'bg-amber-600', textColor: 'text-amber-600', borderColor: 'border-amber-200' },
+    'Financial': { badgeColor: 'bg-emerald-600', textColor: 'text-emerald-600', borderColor: 'border-emerald-200' },
   };
   
   return colorMap[badge] || { badgeColor: 'bg-gray-500', textColor: 'text-gray-500', borderColor: 'border-gray-200' };

@@ -110,6 +110,7 @@ export default function InvestorDocumentPage() {
       // Founders Portal pages with SecureDocumentViewer
       'adyen-integration': '/portal/founders-only/adyen-integration',
       'business-plan': '/portal/founders-only/business-plan',
+      'business-plan-secure': '/portal/founders-only/business-plan-secure',
       'covenant-house-outreach': '/portal/founders-only/covenant-house-outreach',
       'development-roadmap': '/tokenomics',
       'investor-relations': '/portal/founders-only/investor-relations',

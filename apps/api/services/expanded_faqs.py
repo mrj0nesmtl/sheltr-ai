@@ -1222,6 +1222,522 @@ EXPANDED_FAQS = {
         ]
     },
     
+    # ==========================================
+    # POD SECURITY SYSTEM (10 FAQs)
+    # ==========================================
+    
+    "pod_biometric_security": {
+        "questions": [
+            "pod biometric security",
+            "fingerprint access pods",
+            "biometric authentication sheltr",
+            "pod fingerprint lock",
+            "how secure are pods"
+        ],
+        "answer": "POD biometric security features 99.9% recognition accuracy with optical & capacitive sensors, AES-256 encrypted storage (data never leaves device), and multi-factor authentication combining PIN + biometric. Enterprise-grade protection that respects participant privacy and maintains dignity.",
+        "category": "ecosystem",
+        "agent_suggestion": "public_information",
+        "keywords": ["biometric", "fingerprint", "security", "authentication", "pod"],
+        "actions": [
+            {"type": "link", "text": "Security Details", "url": "/security"},
+            {"type": "link", "text": "POD Features", "url": "/pods"}
+        ]
+    },
+    
+    "pod_smart_keypad": {
+        "questions": [
+            "pod smart keypad",
+            "pod pin code lock",
+            "smart lock pods",
+            "pod keypad access",
+            "pin code security pods"
+        ],
+        "answer": "Smart keypad features 4-8 digit PIN codes, backlit capacitive touch for night use, weather-resistant IP65-rated design, and backup mechanical key override. Works offline without power. Multi-factor authentication: PIN + biometric for maximum security.",
+        "category": "ecosystem",
+        "agent_suggestion": "public_information",
+        "keywords": ["smart keypad", "pin code", "pod lock", "access"],
+        "actions": [
+            {"type": "link", "text": "Security Features", "url": "/security"},
+            {"type": "link", "text": "POD Specs", "url": "/pods"}
+        ]
+    },
+    
+    "pod_remote_control": {
+        "questions": [
+            "remote control pod lock",
+            "pod web app control",
+            "smartphone pod access",
+            "remote unlock pod",
+            "app control pod lock"
+        ],
+        "answer": "Remote control via web app provides real-time lock/unlock, live status updates, access logs & event history, battery status & alerts, emergency override access (for staff), and optional geofencing. TLS 1.3 encrypted communication ensures security.",
+        "category": "ecosystem",
+        "agent_suggestion": "public_information",
+        "keywords": ["remote control", "web app", "smartphone", "unlock"],
+        "actions": [
+            {"type": "link", "text": "Web App Features", "url": "/security"},
+            {"type": "link", "text": "POD Tech", "url": "/pods"}
+        ]
+    },
+    
+    "pod_power_backup": {
+        "questions": [
+            "pod lock power backup",
+            "pod battery life",
+            "what if pod loses power",
+            "pod backup battery",
+            "pod power failure"
+        ],
+        "answer": "Fail-safe power design: Primary 12V DC (solar/battery system) + 3.7V 5000mAh Li-ion backup battery providing 36-48 hours runtime. Mechanical key override if battery dead. Local PIN/biometric works offline. Tamper alerts to central system. You're never locked out.",
+        "category": "ecosystem",
+        "agent_suggestion": "public_information",
+        "keywords": ["power backup", "battery", "power failure", "offline"],
+        "actions": [
+            {"type": "link", "text": "Power System", "url": "/security"},
+            {"type": "link", "text": "POD Details", "url": "/pods"}
+        ]
+    },
+    
+    "pod_encryption_security": {
+        "questions": [
+            "pod data encryption",
+            "pod security encryption",
+            "how secure is pod data",
+            "pod communication security",
+            "pod encryption standards"
+        ],
+        "answer": "Enterprise-grade encryption: AES-256 local encryption (biometric data never leaves device), TLS 1.3 end-to-end communication, mutual authentication with certificates, and encrypted API endpoints. Your data is bank-level secure.",
+        "category": "ecosystem",
+        "agent_suggestion": "public_information",
+        "keywords": ["encryption", "security", "aes-256", "tls", "data protection"],
+        "actions": [
+            {"type": "link", "text": "Encryption Details", "url": "/security"},
+            {"type": "link", "text": "Privacy Policy", "url": "/privacy"}
+        ]
+    },
+    
+    "pod_privacy_protection": {
+        "questions": [
+            "pod privacy protection",
+            "no surveillance in pods",
+            "pod cameras recording",
+            "participant privacy pods",
+            "pod data privacy"
+        ],
+        "answer": "Privacy-first design: Biometric data stored locally only (never leaves device), no cameras or audio recording inside PODS, minimal data collection with participant consent, encrypted communication (TLS 1.3), and right to delete all personal data anytime. Your dignity and privacy protected.",
+        "category": "ecosystem",
+        "agent_suggestion": "public_information",
+        "keywords": ["privacy", "no surveillance", "no cameras", "data protection"],
+        "actions": [
+            {"type": "link", "text": "Privacy Details", "url": "/security"},
+            {"type": "link", "text": "Participant Rights", "url": "/solutions/participants"}
+        ]
+    },
+    
+    "pod_security_specs": {
+        "questions": [
+            "pod lock specifications",
+            "pod security technical specs",
+            "pod lock hardware",
+            "pod security materials",
+            "what is pod lock made of"
+        ],
+        "answer": "Technical specs: Powder-coated aluminum alloy casing, stainless steel handle (black anodized), IP65-rated weatherproof enclosure, ARM Cortex-M4 120MHz processor, 99.9% biometric recognition accuracy, WiFi + BLE 5.0 + optional LoRa connectivity. Built for durability and security.",
+        "category": "ecosystem",
+        "agent_suggestion": "public_information",
+        "keywords": ["specifications", "technical", "hardware", "materials"],
+        "actions": [
+            {"type": "link", "text": "Full Specifications", "url": "/security"},
+            {"type": "link", "text": "POD Hardware", "url": "/pods"}
+        ]
+    },
+    
+    "pod_access_methods": {
+        "questions": [
+            "pod access methods",
+            "how to unlock pod",
+            "ways to open pod",
+            "pod entry options",
+            "pod access control"
+        ],
+        "answer": "Multiple access methods: Multi-factor (PIN + Biometric) primary, remote app unlock via web app, emergency mechanical override key, and staff override access (with permissions). You control your own access methods and maintain full autonomy.",
+        "category": "ecosystem",
+        "agent_suggestion": "public_information",
+        "keywords": ["access methods", "unlock", "entry", "control"],
+        "actions": [
+            {"type": "link", "text": "Access Options", "url": "/security"},
+            {"type": "link", "text": "POD Features", "url": "/pods"}
+        ]
+    },
+    
+    "pod_security_api": {
+        "questions": [
+            "pod lock api",
+            "pod remote api control",
+            "pod api endpoints",
+            "pod security integration",
+            "pod lock api documentation"
+        ],
+        "answer": "REST API endpoints for integration: POST /api/v1/lock/{device_id}/unlock (remote unlock), POST /api/v1/lock/{device_id}/lock (remote lock), GET /api/v1/lock/{device_id}/status (real-time status & battery). Secure API with mutual authentication and TLS 1.3 encryption.",
+        "category": "platform_info",
+        "agent_suggestion": "public_information",
+        "keywords": ["api", "integration", "endpoints", "remote control"],
+        "actions": [
+            {"type": "link", "text": "API Details", "url": "/security"},
+            {"type": "link", "text": "Developer Docs", "url": "/docs"}
+        ]
+    },
+    
+    "pod_security_dignity": {
+        "questions": [
+            "pod security and dignity",
+            "pod respect privacy",
+            "dignity focused security",
+            "participant control pod",
+            "empowering pod security"
+        ],
+        "answer": "Security meets dignity: You control your own access methods and data, no surveillance (no cameras/audio inside PODS), full control over what you share, right to delete all personal data anytime, and advanced protection that respects your privacy and empowers your independence. Technology that honors humanity.",
+        "category": "participant_support",
+        "agent_suggestion": "public_information",
+        "keywords": ["dignity", "respect", "privacy", "empowerment", "control"],
+        "actions": [
+            {"type": "link", "text": "Privacy & Dignity", "url": "/security"},
+            {"type": "link", "text": "Participant Rights", "url": "/solutions/participants"}
+        ]
+    },
+    
+    # ==========================================
+    # SUSTAINABLE BUSINESS MODEL (10 FAQs)
+    # ==========================================
+    
+    "business_model_overview": {
+        "questions": [
+            "sheltr business model",
+            "how does sheltr make money",
+            "sheltr revenue model",
+            "sustainable business model sheltr",
+            "sheltr funding model"
+        ],
+        "answer": "Sustainable model with diversified revenue: Marketplace transaction fees (2-3% on premium services only), SHELTR token appreciation & staking (8% APY), DeFi yields from 15% housing fund (6-8% APY), and enterprise/government partnerships. Participants pay ZERO fees for essential services.",
+        "category": "platform_info",
+        "agent_suggestion": "public_information",
+        "keywords": ["business model", "revenue", "sustainable", "funding"],
+        "actions": [
+            {"type": "link", "text": "Revenue Model", "url": "/model"},
+            {"type": "link", "text": "SmartFund™", "url": "/tokenomics"}
+        ]
+    },
+    
+    "zero_fees_participants": {
+        "questions": [
+            "participant fees sheltr",
+            "do participants pay fees",
+            "free for participants",
+            "no fees participants",
+            "participant protection fees"
+        ],
+        "answer": "Participants pay ZERO fees for essential services: No fees on SHELTR-S transactions, free donation-to-token conversion, free emergency fund access, free basic marketplace features, and 100 SHELTR-S welcome bonus. Participant protection guarantee: essential services are completely free.",
+        "category": "participant_support",
+        "agent_suggestion": "participant_support",
+        "keywords": ["zero fees", "no fees", "free", "participant protection"],
+        "actions": [
+            {"type": "link", "text": "Fee Structure", "url": "/model"},
+            {"type": "link", "text": "Participant Benefits", "url": "/solutions/participants"}
+        ]
+    },
+    
+    "marketplace_fees": {
+        "questions": [
+            "marketplace transaction fees",
+            "sheltr marketplace fees",
+            "2-3 percent fee",
+            "premium service fees",
+            "marketplace fee structure"
+        ],
+        "answer": "Marketplace fees (2-3% on premium services ONLY): Advanced marketplace features, priority support services, enhanced analytics & reporting, and custom integration services. Essential services remain FREE. Example: $100 purchase = $2.50 fee, participant receives $97.50.",
+        "category": "platform_info",
+        "agent_suggestion": "donor_relations",
+        "keywords": ["marketplace fees", "2-3 percent", "premium", "transaction"],
+        "actions": [
+            {"type": "link", "text": "Fee Details", "url": "/model"},
+            {"type": "link", "text": "Marketplace", "url": "/scan-give"}
+        ]
+    },
+    
+    "defi_housing_fund": {
+        "questions": [
+            "defi housing fund",
+            "housing fund yields",
+            "6-8 apy housing",
+            "how housing fund grows",
+            "defi strategy housing"
+        ],
+        "answer": "DeFi Housing Fund mechanics: 15% of every donation → automated smart contract allocation → deployed to USDC stablecoin staking & liquidity pools → 6-8% APY target growth → funds emergency housing, transitional programs, and permanent solutions. Your donations grow while helping participants.",
+        "category": "platform_info",
+        "agent_suggestion": "public_information",
+        "keywords": ["defi", "housing fund", "6-8 apy", "yields", "growth"],
+        "actions": [
+            {"type": "link", "text": "DeFi Details", "url": "/model"},
+            {"type": "link", "text": "SmartFund™", "url": "/tokenomics"}
+        ]
+    },
+    
+    "housing_fund_timeline": {
+        "questions": [
+            "housing fund timeline",
+            "how long until housing",
+            "participant housing goal",
+            "tiny home timeline",
+            "when do participants get housing"
+        ],
+        "answer": "Housing fund timeline example: Month 1 - Active participant receives $1,000 donations → $150 to housing fund. Months 2-12 - $1,800 grows to $1,944 (8% APY). Month 12+ - $1,944 + $3,056 additional = $5,000 tiny home goal achieved. DeFi yields accelerate the path to permanent housing.",
+        "category": "participant_support",
+        "agent_suggestion": "participant_support",
+        "keywords": ["timeline", "housing goal", "tiny home", "how long"],
+        "actions": [
+            {"type": "link", "text": "Timeline Details", "url": "/model"},
+            {"type": "link", "text": "Housing Pathway", "url": "/solutions/participants"}
+        ]
+    },
+    
+    "sheltr_token_economics": {
+        "questions": [
+            "sheltr token economics",
+            "token appreciation",
+            "staking rewards sheltr",
+            "8 apy staking",
+            "token value growth"
+        ],
+        "answer": "SHELTR token economics: Deflationary tokenomics (2% annual burn), platform fee revenue sharing, growing utility demand, and governance rights value. Staking rewards: 8% APY target from platform fee distribution, DeFi yield sharing, and governance participation. Optional participation for community benefits.",
+        "category": "platform_info",
+        "agent_suggestion": "public_information",
+        "keywords": ["token", "economics", "staking", "8 apy", "appreciation"],
+        "actions": [
+            {"type": "link", "text": "Token Economics", "url": "/model"},
+            {"type": "link", "text": "Tokenomics", "url": "/tokenomics"}
+        ]
+    },
+    
+    "enterprise_partnerships": {
+        "questions": [
+            "enterprise partnerships sheltr",
+            "corporate programs sheltr",
+            "employee giving programs",
+            "csr initiatives sheltr",
+            "business partnerships"
+        ],
+        "answer": "Enterprise solutions: Employee giving programs (payroll deduction, corporate matching, impact reporting), CSR initiatives (donation campaigns, community programs, sustainability reporting), and revenue model (platform licensing, custom integration, analytics tools, dedicated support).",
+        "category": "platform_info",
+        "agent_suggestion": "donor_relations",
+        "keywords": ["enterprise", "corporate", "partnerships", "csr", "business"],
+        "actions": [
+            {"type": "link", "text": "Enterprise Solutions", "url": "/model"},
+            {"type": "link", "text": "Corporate Giving", "url": "/solutions/donors"}
+        ]
+    },
+    
+    "government_partnerships": {
+        "questions": [
+            "government partnerships sheltr",
+            "municipal programs sheltr",
+            "state federal partnerships",
+            "public sector collaboration",
+            "government revenue streams"
+        ],
+        "answer": "Government partnerships: Municipal programs (emergency housing coordination, social service integration, data analytics, policy support), State & Federal (grant administration, compliance tools, cross-agency coordination, impact measurement), and revenue streams (software licensing, implementation services, training programs, data analytics).",
+        "category": "government_services",
+        "agent_suggestion": "public_information",
+        "keywords": ["government", "municipal", "partnerships", "public sector"],
+        "actions": [
+            {"type": "link", "text": "Government Solutions", "url": "/solutions/government"},
+            {"type": "link", "text": "Revenue Model", "url": "/model"}
+        ]
+    },
+    
+    "fee_allocation": {
+        "questions": [
+            "how are fees allocated",
+            "where do fees go",
+            "fee distribution sheltr",
+            "what happens to platform fees",
+            "fee transparency"
+        ],
+        "answer": "Fee allocation (from 2-3% marketplace fees): Platform development (40%), support services (30%), SHELTR token rewards (20%), and emergency reserves (10%). 100% transparent allocation ensuring platform sustainability while maintaining participant protection.",
+        "category": "platform_info",
+        "agent_suggestion": "public_information",
+        "keywords": ["fee allocation", "distribution", "transparency", "where fees go"],
+        "actions": [
+            {"type": "link", "text": "Fee Details", "url": "/model"},
+            {"type": "link", "text": "Transparency", "url": "/tokenomics"}
+        ]
+    },
+    
+    "sustainable_impact_model": {
+        "questions": [
+            "sustainable impact economy",
+            "long term sustainability sheltr",
+            "is sheltr sustainable",
+            "business sustainability model",
+            "impact and profit"
+        ],
+        "answer": "Sustainable impact economy: Diversified income sources (marketplace, DeFi, tokens, partnerships) fuel platform growth while maintaining participant protection. Zero fees for essential services. Multiple revenue streams ensure long-term sustainability and lasting social impact. Tech-for-good that works economically.",
+        "category": "platform_info",
+        "agent_suggestion": "public_information",
+        "keywords": ["sustainable", "impact economy", "long term", "viability"],
+        "actions": [
+            {"type": "link", "text": "Business Model", "url": "/model"},
+            {"type": "link", "text": "Impact", "url": "/impact"}
+        ]
+    },
+    
+    # ==========================================
+    # ECOSYSTEM JOURNEY (8 Additional FAQs)
+    # ==========================================
+    
+    "ecosystem_complete_journey": {
+        "questions": [
+            "complete ecosystem journey",
+            "how does ecosystem work",
+            "qr to housing journey",
+            "full participant journey",
+            "ecosystem flow sheltr"
+        ],
+        "answer": "Complete 6-step journey: (1) QR Scan (donor scans participant QR) → (2) SmartFund™ Split (80% direct, 15% housing, 5% ops) → (3) Immediate Impact (virtual debit card access) → (4) POD Deployment (housing fund threshold reached) → (5) MOBI & Drone Support (delivery & emergency response) → (6) Reintegration (permanent housing & services). One scan. One donation. One life changed.",
+        "category": "ecosystem",
+        "agent_suggestion": "public_information",
+        "keywords": ["ecosystem", "journey", "qr to housing", "complete flow"],
+        "actions": [
+            {"type": "link", "text": "Full Journey", "url": "/ecosystem"},
+            {"type": "link", "text": "Get Started", "url": "/scan-give"}
+        ]
+    },
+    
+    "malcolm_gladwell_philosophy": {
+        "questions": [
+            "malcolm gladwell million dollar murray",
+            "million dollar murray sheltr",
+            "solve vs manage homelessness",
+            "sheltr philosophy",
+            "better to solve than manage"
+        ],
+        "answer": "Inspired by Malcolm Gladwell's 'Million Dollar Murray': It costs society more to manage chronic homelessness than to solve it. SHELTR was built on this principle—we don't just manage the problem, we create sustainable pathways out of homelessness through technology, dignity, and purpose. Every component works together to transform lives, not just track them.",
+        "category": "platform_info",
+        "agent_suggestion": "public_information",
+        "keywords": ["malcolm gladwell", "million dollar murray", "philosophy", "solve not manage"],
+        "actions": [
+            {"type": "link", "text": "Philosophy", "url": "/ecosystem"},
+            {"type": "link", "text": "About Us", "url": "/about"}
+        ]
+    },
+    
+    "scan_to_donation_speed": {
+        "questions": [
+            "how fast is qr donation",
+            "qr scan speed",
+            "donation processing time",
+            "instant donation sheltr",
+            "8 seconds donation"
+        ],
+        "answer": "Average scan-to-donation time: 8 seconds. Donor scans QR code → chooses amount → blockchain transaction initiated instantly → SmartFund™ splits funds automatically (80/15/5) → participant receives funds immediately. No cash, no cards, just instant digital compassion.",
+        "category": "ecosystem",
+        "agent_suggestion": "donor_relations",
+        "keywords": ["scan speed", "8 seconds", "instant", "fast donation"],
+        "actions": [
+            {"type": "link", "text": "QR Donation", "url": "/scan-give"},
+            {"type": "link", "text": "How It Works", "url": "/ecosystem"}
+        ]
+    },
+    
+    "smartfund_automatic_split": {
+        "questions": [
+            "smartfund automatic split",
+            "80 15 5 model",
+            "how donations are split",
+            "automatic distribution",
+            "smart contract allocation"
+        ],
+        "answer": "SmartFund™ automatic split: Smart contracts automatically execute 80-15-5 distribution—80% immediate access (virtual debit card), 15% housing fund (staked & compounding), 5% shelter operations (infrastructure & services). No overhead, no delays, just instant, intelligent, blockchain-verified distribution.",
+        "category": "ecosystem",
+        "agent_suggestion": "public_information",
+        "keywords": ["smartfund", "80 15 5", "automatic split", "smart contract"],
+        "actions": [
+            {"type": "link", "text": "SmartFund™", "url": "/tokenomics"},
+            {"type": "link", "text": "Ecosystem", "url": "/ecosystem"}
+        ]
+    },
+    
+    "housing_fund_staking": {
+        "questions": [
+            "housing fund staking",
+            "how housing fund compounds",
+            "15 percent staking",
+            "coinbase lido staking",
+            "housing fund growth"
+        ],
+        "answer": "Housing fund growth: 15% allocation automatically staked through institutional partners (Coinbase, Lido) earning ~4-6% APY. Funds compound continuously, accelerating the path to permanent housing. While participant uses 80% for immediate needs, housing fund works behind the scenes—growing towards POD deployment goal.",
+        "category": "ecosystem",
+        "agent_suggestion": "public_information",
+        "keywords": ["housing fund", "staking", "compounds", "15 percent", "growth"],
+        "actions": [
+            {"type": "link", "text": "Staking Details", "url": "/ecosystem"},
+            {"type": "link", "text": "SmartFund™", "url": "/tokenomics"}
+        ]
+    },
+    
+    "pod_deployment_threshold": {
+        "questions": [
+            "pod deployment threshold",
+            "when is pod deployed",
+            "housing fund goal amount",
+            "how much for pod",
+            "pod deployment trigger"
+        ],
+        "answer": "POD deployment trigger: When housing fund reaches $5,000-$15,000 threshold (depending on POD model: Standard $5K, Enhanced $7.5K, Luxury $12K), deployment is initiated. MOBI bikes deliver and position POD. 24-48 hour emergency response time from threshold to secure housing.",
+        "category": "ecosystem",
+        "agent_suggestion": "public_information",
+        "keywords": ["pod deployment", "threshold", "trigger", "housing fund goal"],
+        "actions": [
+            {"type": "link", "text": "POD Deployment", "url": "/ecosystem"},
+            {"type": "link", "text": "POD Models", "url": "/pods"}
+        ]
+    },
+    
+    "mobi_drone_support": {
+        "questions": [
+            "mobi and drone support",
+            "emergency delivery drones",
+            "mobi units ecosystem",
+            "rapid response sheltr",
+            "mobile support units"
+        ],
+        "answer": "MOBI & Drone Support: MOBI units are mobile service centers bringing hot meals, emergency supplies, medical care, WiFi hotspot, and case management directly to participants. Drones provide 5-15 minute emergency response for urgent needs—medicine, food, water, blankets—with GPS-tracked delivery to exact location. Complete ecosystem support.",
+        "category": "ecosystem",
+        "agent_suggestion": "public_information",
+        "keywords": ["mobi", "drones", "emergency", "support", "delivery"],
+        "actions": [
+            {"type": "link", "text": "MOBI Units", "url": "/pods/mobi"},
+            {"type": "link", "text": "Drone Network", "url": "/ecosystem"}
+        ]
+    },
+    
+    "reintegration_success_metrics": {
+        "questions": [
+            "reintegration success metrics",
+            "participant success tracking",
+            "housing success rates",
+            "employment outcomes",
+            "permanent housing placement"
+        ],
+        "answer": "Success metrics we track: Employment secured, permanent housing achieved, healthcare access established, and social reconnection completed. With stable foundation (POD), participants work with AI-powered case management, access job training, secure employment, and transition to permanent housing—breaking the cycle for good.",
+        "category": "ecosystem",
+        "agent_suggestion": "public_information",
+        "keywords": ["reintegration", "success", "metrics", "outcomes", "tracking"],
+        "actions": [
+            {"type": "link", "text": "Success Stories", "url": "/impact"},
+            {"type": "link", "text": "Ecosystem Journey", "url": "/ecosystem"}
+        ]
+    },
+    
     "fabrication_pipeline": {
         "questions": [
             "what is the fabrication pipeline",

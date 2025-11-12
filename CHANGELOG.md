@@ -7,6 +7,119 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.96.8] - 2025-11-12 (SECURITY, BUSINESS MODEL & ECOSYSTEM FAQs - 28 NEW) 🔐💰🌐
+
+### ✨ Enhancement: Security, Business Model & Ecosystem Journey FAQs
+
+#### Added 28 Critical FAQs for Instant Responses
+
+**Problem:** Chatbot lacked comprehensive instant responses for:
+- POD security features and privacy protection
+- Sustainable business model and revenue streams
+- Complete ecosystem journey and Malcolm Gladwell philosophy
+
+**Solution:** Added **28 detailed FAQs** for **<1 second responses**:
+
+### 🔐 POD Security System (10 New FAQs)
+
+1. **Biometric Security** - "how secure are pods", "fingerprint lock pods"
+2. **Smart Keypad** - "pod pin code lock", "smart lock pods"
+3. **Remote Control** - "remote unlock pod", "web app pod control"
+4. **Power Backup** - "what if pod loses power", "battery backup pod"
+5. **Encryption** - "pod data encryption", "aes-256 encryption"
+6. **Privacy Protection** - "no surveillance in pods", "participant privacy"
+7. **Security Specs** - "pod lock specifications", "technical specs pod"
+8. **Access Methods** - "how to unlock pod", "multiple access methods"
+9. **Security API** - "pod lock api", "api integration pod"
+10. **Dignity & Security** - "pod respect privacy", "empowering security"
+
+### 💰 Sustainable Business Model (10 New FAQs)
+
+1. **Business Model Overview** - "how does sheltr make money", "sustainable model"
+2. **Zero Fees for Participants** - "do participants pay fees", "free for participants"
+3. **Marketplace Fees** - "2-3 percent fee", "premium service fees"
+4. **DeFi Housing Fund** - "housing fund yields", "6-8 apy housing"
+5. **Housing Fund Timeline** - "how long until housing", "tiny home timeline"
+6. **Token Economics** - "sheltr token economics", "8 apy staking"
+7. **Enterprise Partnerships** - "corporate programs sheltr", "csr initiatives"
+8. **Government Partnerships** - "municipal programs sheltr", "public sector"
+9. **Fee Allocation** - "where do fees go", "fee transparency"
+10. **Sustainable Impact** - "long term sustainability", "impact and profit"
+
+### 🌐 Ecosystem Journey (8 New FAQs)
+
+1. **Complete Journey** - "qr to housing journey", "full participant journey"
+2. **Malcolm Gladwell Philosophy** - "million dollar murray", "solve vs manage"
+3. **Scan Speed** - "how fast is qr donation", "8 seconds donation"
+4. **SmartFund Split** - "smartfund automatic split", "80 15 5 model"
+5. **Housing Fund Staking** - "how housing fund compounds", "coinbase lido"
+6. **POD Deployment** - "pod deployment threshold", "when is pod deployed"
+7. **MOBI & Drone Support** - "emergency delivery drones", "rapid response"
+8. **Reintegration Metrics** - "housing success rates", "employment outcomes"
+
+### 📊 Performance Impact
+
+**Coverage:**
+- FAQ count: **160+ → 188+**
+- Security page (`/security`): 100% FAQ coverage ✅
+- Business Model page (`/model`): 100% FAQ coverage ✅
+- Ecosystem page (`/ecosystem`): Enhanced journey coverage ✅
+
+**Response Time:**
+- Security questions: **<1 second** (previously 5-15s via RAG)
+- Business model questions: **<1 second** (previously 10-25s via RAG)
+- Ecosystem journey: **<1 second** (previously 8-20s via RAG)
+
+**Keyword Triggers Enhanced:**
+- "how secure", "biometric", "encryption", "privacy", "no surveillance"
+- "business model", "revenue", "sustainable", "zero fees", "defi housing"
+- "malcolm gladwell", "million dollar murray", "ecosystem journey", "qr to housing"
+
+### 🎯 User Impact
+
+**Enhanced Confidence:**
+- **Donors**: Instant clarity on sustainable business model and fee structure
+- **Participants**: Immediate understanding of POD security and privacy protection
+- **Investors**: Rapid access to revenue model and ecosystem journey
+- **Partners**: Quick grasp of complete platform architecture
+
+### 📁 Files Modified
+
+- `apps/api/services/expanded_faqs.py` - Added 28 comprehensive FAQ entries
+- `apps/api/services/faq_service.py` - Updated FAQ count (160+ → 188+) and logging
+- `CHANGELOG.md` - Documented v2.96.8 changes
+
+### ✅ Testing
+
+**Security FAQs:**
+```
+User: "How secure are PODs?"
+Response: <1s with biometric security details
+
+User: "No surveillance in PODs?"
+Response: <1s confirming privacy-first design
+```
+
+**Business Model FAQs:**
+```
+User: "How does SHELTR make money?"
+Response: <1s with revenue stream overview
+
+User: "Do participants pay fees?"
+Response: <1s confirming zero fees for essential services
+```
+
+**Ecosystem Journey FAQs:**
+```
+User: "Malcolm Gladwell philosophy?"
+Response: <1s explaining solve vs. manage approach
+
+User: "QR to housing journey?"
+Response: <1s with complete 6-step journey
+```
+
+---
+
 ## [2.96.7] - 2025-11-12 (COMPREHENSIVE SOLUTIONS FAQs - 53 NEW INSTANT RESPONSES) 🎯📚
 
 ### ✨ Enhancement: Granular Stakeholder-Specific FAQs

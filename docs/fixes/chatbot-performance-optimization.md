@@ -352,7 +352,19 @@ except Exception as fallback_error:
 - RAG succeeds: **4-5 seconds**
 - RAG times out → Fallback succeeds: **10-11 seconds**
 - Both timeout: **11 seconds** (returns simple message)
-- **NO MORE 59-second responses!**
+- Master timeout safety: **15 seconds** (absolute maximum)
+- **NO MORE 26-59-second responses!**
+
+### Master Timeout (v2.96.3)
+
+**Problem:** Even with RAG and fallback timeouts, total response time could exceed 26 seconds due to:
+- Network overhead
+- Intent classification delays
+- Knowledge search delays
+- Analytics tracking
+- Other middleware operations
+
+**Solution:** Added master timeout at router level (15 seconds maximum for entire operation)
 
 ---
 

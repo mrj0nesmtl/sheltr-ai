@@ -291,13 +291,29 @@ async def public_chat(message_data: PublicChatMessage, request: Request):
                 rate_limit_remaining=99  # Authenticated users get higher limits
             )
         
-        # Process message through orchestrator
-        response = await chatbot_orchestrator.process_message(
-            message=message_data.message,
-            user_id=message_data.user_id,
-            user_role=actual_user_role,
-            conversation_context=enhanced_context
-        )
+        # Process message through orchestrator with master timeout
+        import asyncio
+        try:
+            response = await asyncio.wait_for(
+                chatbot_orchestrator.process_message(
+                    message=message_data.message,
+                    user_id=message_data.user_id,
+                    user_role=actual_user_role,
+                    conversation_context=enhanced_context
+                ),
+                timeout=15.0  # Master timeout: 15 seconds maximum for entire operation
+            )
+        except asyncio.TimeoutError:
+            logger.error(f"⏱️ Master timeout exceeded (>15s) for public chat")
+            # Return simple fallback response
+            from services.chatbot.orchestrator import ChatResponse
+            response = ChatResponse(
+                message="I'm experiencing high load right now. Please try again in a moment, or rephrase your question to be more specific.",
+                actions=[],
+                agent_used="timeout_fallback",
+                escalation_triggered=False,
+                metadata={'master_timeout': True}
+            )
         
         # Add public-specific actions
         public_actions = []

@@ -94,6 +94,15 @@ function TeamContent() {
     const profileImageUrl = member.profilePicture || getFallbackProfilePicture(member.name);
     const hasProfilePicture = !!member.profilePicture; // Track if user has uploaded their own
     
+    // Debug logging
+    if (member.name === 'Joel Yaffe') {
+      console.log('🖼️ Joel Yaffe profile image:', {
+        hasProfilePicture: !!member.profilePicture,
+        profilePicture: member.profilePicture,
+        finalUrl: profileImageUrl
+      });
+    }
+    
     // Check if member has a slug (bio page available)
     const hasBioPage = !!member.slug;
     const bioUrl = hasBioPage ? `/team/${member.slug}` : null;

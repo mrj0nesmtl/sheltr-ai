@@ -7,6 +7,250 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.95.0] - 2025-11-12 (TEAM BIO SYSTEM - PHASE 1) 👤📖
+
+### 🎯 Major Feature: Individual Team Member Bio Pages
+
+#### Dynamic Bio Page System
+**Implemented comprehensive team member biography pages with professional presentation**:
+- Created dynamic `/team/[slug]` route for individual bio pages (e.g., `/team/joel-yaffe`)
+- Beautiful gradient hero section with profile photo, title, subtitle, tagline, and social links
+- Full markdown bio content with rich formatting and professional layout
+- Career highlights timeline with 6+ major milestones
+- Expertise tags and experience badges
+- Responsive design optimized for mobile and desktop
+- SEO-ready with proper meta structure
+
+**New Components Created**:
+- `BioHero` - Stunning gradient hero with profile image, social links, and department badge
+- `BioContent` - Two-column layout with full bio (left) and expertise sidebar (right)
+- `CareerHighlights` - Vertical timeline with alternating left/right cards for career journey
+
+**Technical Architecture**:
+- Server component wrapper (`page.tsx`) with `generateStaticParams()` for static export
+- Client component (`client.tsx`) with Firestore integration and state management
+- Proper separation follows Next.js 14 app router patterns
+- Prevents build errors with proper component structure
+
+### 🔗 Team Page Integration
+
+#### Enhanced Team Cards with Bio Links
+**Updated team page to link to individual bio pages**:
+- Added "View Full Bio →" button to team member cards (when bio available)
+- Clickable cards navigate to `/team/[slug]`
+- Smooth hover animations with icon transitions
+- Conditional rendering based on `slug` and `bio.showOnTeamPage` fields
+
+**Profile Picture Synchronization**:
+- Unified all profile pictures to use `users` collection as single source of truth
+- Profile Dashboard → Source of truth for all profile photos
+- Team page cards → Pull from `users` collection
+- Bio pages → Pull from `users` collection
+- Eliminates inconsistency between collections
+
+### 📊 Data Structure & Firestore Integration
+
+#### User Bio Fields (added to `users` collection)
+```typescript
+{
+  slug: string,                    // URL-friendly slug (e.g., "joel-yaffe")
+  bio: {
+    title: string,                 // "Lead Developer"
+    subtitle?: string,             // "CTO and Founder"
+    tagline?: string,              // "Hacking Homelessness Through Technology"
+    description: string,           // Full markdown bio
+    expertise: string[],           // ["AI/ML", "Blockchain", ...]
+    experience: string,            // "25+ years"
+    department: string,            // "Leadership"
+    careerHighlights: Array<{
+      id: string,
+      title: string,
+      organization: string,
+      description: string,
+      year: string,
+      logo?: string,
+      link?: string
+    }>,
+    socialLinks: {
+      email?: string,
+      linkedin?: string,
+      github?: string,
+      website?: string,
+      twitter?: string
+    },
+    showOnTeamPage: boolean,
+    teamPageOrder?: number
+  },
+  bioImages: Array<{              // Phase 2 feature
+    id: string,
+    url: string,
+    caption?: string,
+    order: number
+  }>
+}
+```
+
+#### Enhanced PublicTeamService
+**Updated service to fetch comprehensive user data**:
+- Fetches `slug` from `users` collection for bio page links
+- Fetches `profilePicture` from `users` collection (single source of truth)
+- Cross-references `team_members` and `users` collections
+- Filters by `bio.showOnTeamPage` flag
+- Maintains existing sort order and role hierarchy
+
+### 🎨 Joel Yaffe's Bio - First Implementation
+
+#### Comprehensive Biography
+**Initialized Joel Yaffe as first team bio**:
+- Full 16,963-character markdown biography
+- 6 career highlights spanning 25+ years:
+  1. SHELTR Platform (2024)
+  2. Greenstream/BLOK Technologies CTO (2018)
+  3. PotCoin Co-Founder (2014)
+  4. GuestDriven Co-Founder (2010)
+  5. iTechnique Founder (2005)
+  6. Ideas2Market Incubator (1999)
+- 8 expertise tags: Strategic Leadership, AI & Machine Learning, Blockchain, Full-Stack, Product Management, Tech for Good, Startup Incubation, Business Strategy
+- Social links: Email, LinkedIn, GitHub, Arcana website
+- Quick stats: $9M+ raised, 160+ cities, 25+ years experience
+
+**Bio Content Highlights**:
+- Pioneering Montreal's first tech incubator (1999)
+- Co-founding first purpose-driven cryptocurrency (#32 worldwide)
+- Raising $6M+ for GuestDriven (160+ cities)
+- Leading Greenstream to Linux Foundation Silver Member
+- Current tech-for-good mission with SHELTR
+- Professional journey from Apple service provider to social impact platform
+
+### 🛠️ Developer Tools & Scripts
+
+#### Bio Data Management Scripts
+**Created utility scripts for bio management**:
+- `scripts/init-joel-bio.js` - Initialize/update bio data in Firestore
+- `scripts/debug-joel-profile.js` - Debug profile picture synchronization
+- Scripts use Firebase Admin SDK for direct Firestore access
+- Comprehensive logging for verification and troubleshooting
+
+**Script Features**:
+- Reads markdown bio from `docs/team/joel-yaffe-bio.md`
+- Updates `users` collection with complete bio structure
+- Verifies data integrity between `users` and `team_members` collections
+- Provides diagnostic output for profile picture sync issues
+
+### 📁 New Files Created
+
+**Dynamic Route Structure**:
+- `apps/web/src/app/team/[slug]/page.tsx` - Server component wrapper with generateStaticParams
+- `apps/web/src/app/team/[slug]/client.tsx` - Client component with bio page logic
+
+**Bio Components**:
+- `apps/web/src/app/team/components/BioHero.tsx` - Hero section with gradient background
+- `apps/web/src/app/team/components/BioContent.tsx` - Main bio content with sidebar
+- `apps/web/src/app/team/components/CareerHighlights.tsx` - Timeline visualization
+
+**Documentation**:
+- `docs/features/team-bio-system.md` - Complete implementation plan (Phases 1-4)
+- `docs/team/joel-yaffe-bio.md` - Joel's comprehensive markdown biography
+
+**Scripts** (in gitignore):
+- `scripts/init-joel-bio.js` - Bio initialization script
+- `scripts/debug-joel-profile.js` - Profile picture debug script
+
+### 📋 Implementation Plan Documentation
+
+#### Four-Phase Roadmap
+**Created comprehensive implementation plan**:
+
+**Phase 1 (✅ COMPLETED)**: Bio Pages
+- Dynamic route setup
+- Bio components (Hero, Content, Career Highlights)
+- Team card linking
+- Joel's bio initialization
+
+**Phase 2 (PLANNED)**: Image Upload System
+- Profile Dashboard "Images" tab
+- Firebase Storage integration
+- Drag-and-drop reordering
+- Caption management
+
+**Phase 3 (PLANNED)**: Gallery Display
+- Bio page image gallery component
+- Lightbox for full-size viewing
+- Mobile responsive layout
+- Category filtering
+
+**Phase 4 (PLANNED)**: Polish & Features
+- Career highlights timeline enhancements
+- SEO optimization
+- Loading states
+- Preview functionality
+- Rich bio editor
+
+### 🔧 Modified Files
+
+**Core Application**:
+- `apps/web/src/app/team/page.tsx` - Added bio links and "View Full Bio" buttons, debug logging
+- `apps/web/src/services/publicTeamService.ts` - Enhanced to fetch slug and profilePicture from users collection
+
+**Type Definitions**:
+- `PublicTeamMember` interface - Added `slug?: string` field for bio page routing
+
+### 🎯 User Experience Improvements
+
+**Before**: 
+- Team page showed static cards with basic info
+- No way to learn more about team members
+- Profile pictures inconsistent across pages
+
+**After**:
+- Team cards are clickable with "View Full Bio →" button
+- Beautiful full-page bios with rich content
+- Career journey visualization with timeline
+- Social media integration
+- Consistent profile pictures everywhere
+
+**Benefits**:
+- **For Visitors/Investors**: Deep insight into team experience and expertise
+- **For Team Members**: Professional showcase of career achievements
+- **For SHELTR**: Enhanced credibility and transparency
+- **For Recruitment**: Attracts top talent by showcasing culture
+
+### 🔍 Technical Highlights
+
+**Build Optimization**:
+- Proper server/client component separation for static export
+- `generateStaticParams()` for pre-rendered routes
+- No runtime errors with Next.js 14 app router
+
+**Data Architecture**:
+- Single source of truth for profile pictures (`users` collection)
+- Efficient cross-collection queries with Promise.all
+- Graceful fallbacks when data unavailable
+
+**Performance**:
+- Static generation for fast page loads
+- Lazy loading of Firestore data
+- Optimized image loading with Next.js Image
+
+### 🚀 Next Steps
+
+**Immediate** (Phase 2):
+- Build image upload system in Profile Dashboard
+- Implement "Images" tab for bio gallery management
+- Add drag-and-drop reordering for photos
+
+**Short-term**:
+- Extend bio system to all leadership team members
+- Add bio preview functionality
+- Implement rich markdown editor
+
+**Long-term**:
+- Public API for team data
+- Advanced SEO with Open Graph images
+- Analytics for bio page views
+
+---
+
 ## [2.94.0] - 2025-11-11 (INVESTOR RELATIONS ENHANCEMENTS) 🎯🚀
 
 ### 🎯 Major Feature: Ultimate Elevator Pitch & Ecosystem Overview

@@ -48,6 +48,8 @@ import { Label } from '@/components/ui/label';
 import { CalendarService, SchedulingResult } from '@/services/calendarService';
 import { checkFounderAccess } from '@/services/founderAccessService';
 import { useHeroImage } from '@/hooks/useHeroImage';
+import { db } from '@/lib/firebase';
+import { doc, getDoc } from 'firebase/firestore';
 
 // Investment Deck Slides Data
 const investmentSlides = [
@@ -1588,6 +1590,28 @@ function InvestmentDeckSlideshow({ isOpen, onClose }: { isOpen: boolean; onClose
   );
 }
 
+// Tab Navigation Component
+const TabNavigation = ({ 
+  nextTab, 
+  nextTabLabel, 
+  onNavigate 
+}: { 
+  nextTab: string; 
+  nextTabLabel: string;
+  onNavigate: (tab: string) => void;
+}) => (
+  <div className="mt-8 flex justify-end">
+    <Button 
+      onClick={() => onNavigate(nextTab)}
+      size="lg"
+      className="bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-700 hover:to-blue-700 text-white px-8 py-6 text-lg shadow-lg hover:shadow-xl transition-all"
+    >
+      <span className="mr-3">Next: {nextTabLabel}</span>
+      <ArrowRight className="h-5 w-5" />
+    </Button>
+  </div>
+);
+
 // Reusable CTA Component for All Tabs
 const NextStepsCTA = ({ onScheduleClick }: { onScheduleClick: () => void }) => (
   <Card>
@@ -1683,6 +1707,11 @@ export default function InvestorRelationsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
   
+  // Financial data from Firestore
+  const [budgetData, setBudgetData] = useState<any>(null);
+  const [revenueData, setRevenueData] = useState<any>(null);
+  const [financialLoading, setFinancialLoading] = useState(true);
+  
   // Check if embedded in iframe (from investor data room)
   const [isEmbedded, setIsEmbedded] = useState(false);
   
@@ -1709,6 +1738,31 @@ export default function InvestorRelationsPage() {
     setIsAuthorized(true);
     setIsLoading(false);
   }, [router]);
+
+  // Load financial data from Firestore
+  useEffect(() => {
+    const loadFinancialData = async () => {
+      try {
+        const [budgetSnap, revenueSnap] = await Promise.all([
+          getDoc(doc(db, 'financial_budgets', 'seed-budget-2025-2026')),
+          getDoc(doc(db, 'financial_revenues', 'revenue-projections-2025-2027'))
+        ]);
+        
+        if (budgetSnap.exists()) {
+          setBudgetData(budgetSnap.data());
+        }
+        if (revenueSnap.exists()) {
+          setRevenueData(revenueSnap.data());
+        }
+      } catch (error) {
+        console.error('Error loading financial data:', error);
+      } finally {
+        setFinancialLoading(false);
+      }
+    };
+
+    loadFinancialData();
+  }, []);
 
   // Calendar/Meeting state
   const [isScheduling, setIsScheduling] = useState(false);
@@ -2199,6 +2253,78 @@ export default function InvestorRelationsPage() {
 
             {/* Executive Summary */}
             <TabsContent value="overview" className="space-y-8">
+              {/* ULTIMATE ELEVATOR PITCH - The Tech for Good Investment */}
+              <Card className="border-2 border-emerald-500 bg-gradient-to-br from-slate-50 via-emerald-50/30 to-blue-50/30 dark:from-slate-900 dark:via-emerald-900/10 dark:to-blue-900/10 shadow-xl">
+                <CardContent className="pt-8 pb-8">
+                  <div className="max-w-5xl mx-auto space-y-6">
+                    {/* Main Headline */}
+                    <div className="text-center space-y-3">
+                      <Badge className="bg-emerald-600 text-white text-sm px-4 py-1.5">
+                        Tech for Good • The Only Investment That Matters
+                      </Badge>
+                      <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-emerald-600 via-blue-600 to-purple-600 bg-clip-text text-transparent leading-tight">
+                        Disrupting a $45B Industry with Enterprise AI & Blockchain
+                      </h2>
+                    </div>
+
+                    {/* The Killer Pitch */}
+                    <div className="text-center max-w-4xl mx-auto">
+                      <p className="text-lg md:text-xl leading-relaxed text-slate-700 dark:text-slate-200">
+                        <span className="font-semibold text-emerald-600 dark:text-emerald-400">SHELTR</span> is the world's first <span className="font-semibold">AI-powered Homeless Management Information System (HMIS)</span> combining <span className="font-semibold text-blue-600 dark:text-blue-400">institutional-grade payment infrastructure</span>, <span className="font-semibold text-purple-600 dark:text-purple-400">blockchain transparency</span>, and <span className="font-semibold text-orange-600 dark:text-orange-400">zero-risk stablecoin economics</span> into a unified platform serving five critical stakeholders: <span className="font-semibold">Platform Admins</span> who scale the ecosystem, <span className="font-semibold">Shelter Administrators</span> who gain enterprise HMIS tools for free, <span className="font-semibold">Donors</span> who track every dollar with blockchain immutability, <span className="font-semibold">Participants</span> who receive dignified support via virtual debit cards with zero crypto exposure, and <span className="font-semibold">Government & NGOs</span> who access real-time analytics to optimize $45B in annual aid spending—all powered by Adyen payment processing, Coinbase institutional staking delivering guaranteed 4-6% APY, and a proprietary RAG-based AI chatbot that replaces fragmented casework systems with intelligent, 24/7 support.
+                      </p>
+                    </div>
+
+                    {/* Five Stakeholder Pillars */}
+                    <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mt-8">
+                      <div className="text-center p-4 bg-white dark:bg-slate-800 rounded-lg border border-emerald-200 dark:border-emerald-800">
+                        <Shield className="h-8 w-8 mx-auto mb-2 text-emerald-600" />
+                        <div className="font-bold text-sm">Platform Admins</div>
+                        <div className="text-xs text-muted-foreground mt-1">Scale Ecosystem</div>
+                      </div>
+                      <div className="text-center p-4 bg-white dark:bg-slate-800 rounded-lg border border-blue-200 dark:border-blue-800">
+                        <Building className="h-8 w-8 mx-auto mb-2 text-blue-600" />
+                        <div className="font-bold text-sm">Shelters</div>
+                        <div className="text-xs text-muted-foreground mt-1">Free Enterprise HMIS</div>
+                      </div>
+                      <div className="text-center p-4 bg-white dark:bg-slate-800 rounded-lg border border-purple-200 dark:border-purple-800">
+                        <Coins className="h-8 w-8 mx-auto mb-2 text-purple-600" />
+                        <div className="font-bold text-sm">Donors</div>
+                        <div className="text-xs text-muted-foreground mt-1">Blockchain Tracking</div>
+                      </div>
+                      <div className="text-center p-4 bg-white dark:bg-slate-800 rounded-lg border border-orange-200 dark:border-orange-800">
+                        <Users className="h-8 w-8 mx-auto mb-2 text-orange-600" />
+                        <div className="font-bold text-sm">Participants</div>
+                        <div className="text-xs text-muted-foreground mt-1">Dignified Support</div>
+                      </div>
+                      <div className="text-center p-4 bg-white dark:bg-slate-800 rounded-lg border border-cyan-200 dark:border-cyan-800">
+                        <Globe className="h-8 w-8 mx-auto mb-2 text-cyan-600" />
+                        <div className="font-bold text-sm">Gov & NGOs</div>
+                        <div className="text-xs text-muted-foreground mt-1">Real-Time Analytics</div>
+                      </div>
+                    </div>
+
+                    {/* Value Props */}
+                    <div className="grid md:grid-cols-3 gap-4 mt-6">
+                      <div className="text-center p-4 bg-gradient-to-br from-emerald-50 to-emerald-100 dark:from-emerald-900/20 dark:to-emerald-800/20 rounded-lg">
+                        <Rocket className="h-6 w-6 mx-auto mb-2 text-emerald-600" />
+                        <div className="font-bold text-sm text-emerald-700 dark:text-emerald-300">Tech Stack</div>
+                        <div className="text-xs text-muted-foreground mt-1">Adyen + Coinbase Base + RAG AI</div>
+                      </div>
+                      <div className="text-center p-4 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-lg">
+                        <Target className="h-6 w-6 mx-auto mb-2 text-blue-600" />
+                        <div className="font-bold text-sm text-blue-700 dark:text-blue-300">Market</div>
+                        <div className="text-xs text-muted-foreground mt-1">$45B TAM • 1% = $450M ARR</div>
+                      </div>
+                      <div className="text-center p-4 bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 rounded-lg">
+                        <TrendingUp className="h-6 w-6 mx-auto mb-2 text-purple-600" />
+                        <div className="font-bold text-sm text-purple-700 dark:text-purple-300">ROI</div>
+                        <div className="text-xs text-muted-foreground mt-1">10-15x projected 5-year return</div>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
               <div className="grid md:grid-cols-2 gap-8">
                 <Card>
                   <CardHeader>
@@ -2465,6 +2591,13 @@ export default function InvestorRelationsPage() {
                 </CardContent>
               </Card>
 
+              {/* Tab Navigation */}
+              <TabNavigation 
+                nextTab="product"
+                nextTabLabel="Product & Tech"
+                onNavigate={setActiveTab}
+              />
+
               {/* Next Steps CTA */}
               <NextStepsCTA onScheduleClick={handleScheduleButtonClick} />
             </TabsContent>
@@ -2680,12 +2813,149 @@ export default function InvestorRelationsPage() {
                 </CardContent>
               </Card>
 
+              {/* Tab Navigation */}
+              <TabNavigation 
+                nextTab="tokenomics"
+                nextTabLabel="Business Model"
+                onNavigate={setActiveTab}
+              />
+
               {/* Next Steps CTA */}
               <NextStepsCTA onScheduleClick={handleScheduleButtonClick} />
             </TabsContent>
 
             {/* Business Model */}
             <TabsContent value="tokenomics" className="space-y-8">
+              {/* Revenue Ecosystem Overview - NEW SECTION */}
+              <Card className="border-2 border-emerald-500/30 bg-gradient-to-br from-emerald-50/50 to-blue-50/50 dark:from-emerald-900/10 dark:to-blue-900/10">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-2xl">
+                    <Coins className="h-6 w-6 text-emerald-500" />
+                    Revenue Ecosystem Overview
+                  </CardTitle>
+                  <CardDescription className="text-base">
+                    Three primary revenue streams power sustainable growth and impact
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  {/* Three Revenue Pillars */}
+                  <div className="grid md:grid-cols-3 gap-6">
+                    <div className="p-6 bg-white dark:bg-slate-900 rounded-lg border-2 border-blue-200 dark:border-blue-800">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+                          <Zap className="h-6 w-6 text-blue-600" />
+                        </div>
+                        <h3 className="font-bold text-lg">Transaction Fees</h3>
+                      </div>
+                      <div className="space-y-3 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Donation Processing:</span>
+                          <span className="font-mono font-semibold">2.5% + $0.30</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Platform Revenue Share:</span>
+                          <span className="font-mono font-semibold">0.5% of flow</span>
+                        </div>
+                        <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded">
+                          <p className="font-semibold text-blue-700 dark:text-blue-300">Year 2 Target</p>
+                          <p className="text-2xl font-bold text-blue-600">{revenueData ? `$${(revenueData.targets.year_2_target || 180209).toLocaleString()}` : '$180,209'}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="p-6 bg-white dark:bg-slate-900 rounded-lg border-2 border-emerald-200 dark:border-emerald-800">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="p-3 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg">
+                          <Shield className="h-6 w-6 text-emerald-600" />
+                        </div>
+                        <h3 className="font-bold text-lg">SmartFund™</h3>
+                      </div>
+                      <div className="space-y-3 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Housing Fund Returns:</span>
+                          <span className="font-mono font-semibold">4-6% APY</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Staking via Coinbase:</span>
+                          <span className="font-mono font-semibold">Institutional</span>
+                        </div>
+                        <div className="mt-4 p-3 bg-emerald-50 dark:bg-emerald-900/20 rounded">
+                          <p className="font-semibold text-emerald-700 dark:text-emerald-300">Fund Allocation</p>
+                          <p className="text-2xl font-bold text-emerald-600">15% → Housing</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="p-6 bg-white dark:bg-slate-900 rounded-lg border-2 border-purple-200 dark:border-purple-800">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="p-3 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
+                          <Building className="h-6 w-6 text-purple-600" />
+                        </div>
+                        <h3 className="font-bold text-lg">SaaS Revenue</h3>
+                      </div>
+                      <div className="space-y-3 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Enterprise Plan:</span>
+                          <span className="font-mono font-semibold">$199/month</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Government Contracts:</span>
+                          <span className="font-mono font-semibold">Custom</span>
+                        </div>
+                        <div className="mt-4 p-3 bg-purple-50 dark:bg-purple-900/20 rounded">
+                          <p className="font-semibold text-purple-700 dark:text-purple-300">White-Label</p>
+                          <p className="text-2xl font-bold text-purple-600">$50K+ / deal</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Quick Stats from Real Data */}
+                  <div className="grid md:grid-cols-4 gap-4 p-6 bg-gradient-to-r from-emerald-100 to-blue-100 dark:from-emerald-900/30 dark:to-blue-900/30 rounded-lg">
+                    <div className="text-center">
+                      <p className="text-sm text-muted-foreground mb-1">Total 24-Mo Revenue</p>
+                      <p className="text-3xl font-bold text-emerald-600">
+                        {revenueData ? `$${(revenueData.targets.total_24_month || 220097).toLocaleString()}` : '$220,097'}
+                      </p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-sm text-muted-foreground mb-1">Seed Budget</p>
+                      <p className="text-3xl font-bold text-blue-600">
+                        {budgetData ? `$${(budgetData.funding.seed_round || 250000).toLocaleString()}` : '$250,000'}
+                      </p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-sm text-muted-foreground mb-1">12-Mo Runway</p>
+                      <p className="text-3xl font-bold text-purple-600">
+                        {budgetData ? `$${(budgetData.calculated.runway.average_burn || 18670).toLocaleString()}` : '$18,670'}/mo
+                      </p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-sm text-muted-foreground mb-1">Profitability</p>
+                      <p className="text-3xl font-bold text-orange-600">Month 17</p>
+                    </div>
+                  </div>
+
+                  {/* Call-to-Action Buttons to Detailed Pages */}
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <Link href="/portal/founders-only/budget" className="flex-1">
+                      <Button className="w-full h-14 bg-blue-600 hover:bg-blue-700 text-white">
+                        <BarChart3 className="h-5 w-5 mr-2" />
+                        View Detailed Budget
+                        <ArrowRight className="h-4 w-4 ml-2" />
+                      </Button>
+                    </Link>
+                    <Link href="/portal/founders-only/revenue" className="flex-1">
+                      <Button className="w-full h-14 bg-emerald-600 hover:bg-emerald-700 text-white">
+                        <TrendingUp className="h-5 w-5 mr-2" />
+                        View Revenue Projections
+                        <ArrowRight className="h-4 w-4 ml-2" />
+                      </Button>
+                    </Link>
+                  </div>
+                </CardContent>
+              </Card>
+
               <div className="grid md:grid-cols-2 gap-8">
                 <Card>
                   <CardHeader>
@@ -2843,6 +3113,13 @@ export default function InvestorRelationsPage() {
                   </div>
                 </CardContent>
               </Card>
+
+              {/* Tab Navigation */}
+              <TabNavigation 
+                nextTab="projections"
+                nextTabLabel="Financial Projections"
+                onNavigate={setActiveTab}
+              />
 
               {/* Next Steps CTA */}
               <NextStepsCTA onScheduleClick={handleScheduleButtonClick} />
@@ -3061,6 +3338,13 @@ export default function InvestorRelationsPage() {
                   </div>
                 </CardContent>
               </Card>
+
+              {/* Tab Navigation */}
+              <TabNavigation 
+                nextTab="investment"
+                nextTabLabel="Investment Terms"
+                onNavigate={setActiveTab}
+              />
 
               {/* Next Steps CTA */}
               <NextStepsCTA onScheduleClick={handleScheduleButtonClick} />

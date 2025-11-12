@@ -7,6 +7,128 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.94.0] - 2025-11-11 (INVESTOR RELATIONS ENHANCEMENTS) 🎯🚀
+
+### 🎯 Major Feature: Ultimate Elevator Pitch & Ecosystem Overview
+
+#### Killer Pitch Section - Tech for Good Investment
+**Added comprehensive elevator pitch to Summary tab on both Founders Portal and IR pages**:
+- Prominent hero section with gradient emerald border and rich background
+- Complete ecosystem explanation in one powerful paragraph
+- Covers all five stakeholder groups: Platform Admins, Shelters, Donors, Participants, Gov & NGOs
+- Highlights AI + Blockchain + Enterprise Payment Infrastructure
+- Emphasizes $45B TAM and tech-for-good value proposition
+- Visual stakeholder pillars with icons and descriptions
+- Quick stats display: 24-month revenue, seed budget, runway, profitability
+
+**Content Elements**:
+- 🎯 Headline: "Disrupting a $45B Industry with Enterprise AI & Blockchain"
+- ⭐ Badge: "Tech for Good • The Only Investment That Matters"
+- 📖 Comprehensive pitch paragraph covering HMIS disruption, payment rails, SmartFund™, and RAG AI
+- 👥 Five stakeholder cards with color-coded visual identity
+- 🚀 Tech stack showcase (Adyen + Coinbase Base + RAG AI)
+- 💼 Market opportunity ($45B TAM • 1% = $450M ARR)
+- 📈 ROI projection (10-15x projected 5-year return)
+
+### 🎨 Revenue Ecosystem Overview - Business Model Tab
+
+#### Enhanced Business Model Tab
+**Added comprehensive Revenue Ecosystem Overview section**:
+- Three primary revenue pillars with detailed breakdowns
+- Transaction Fees (2.5% + $0.30, 0.5% platform share)
+- SmartFund™ (4-6% APY, 15% housing allocation)
+- SaaS Revenue ($199/month enterprise, $50K+ white-label)
+- Real-time financial metrics from Firestore
+- Direct navigation buttons to detailed Budget and Revenue pages
+
+**Live Data Integration**:
+- Connected to `financial_budgets` Firestore collection
+- Connected to `financial_revenues` Firestore collection
+- Dynamic display of Total 24-Mo Revenue, Seed Budget, 12-Mo Runway, Profitability
+- Automatic updates when financial data changes
+
+**Call-to-Action Buttons**:
+- Large prominent buttons linking to `/portal/founders-only/budget` and `/portal/founders-only/revenue`
+- IR version links to `/ir/budget` and `/ir/revenue`
+- Gradient emerald-to-blue styling for visual consistency
+
+### 🧭 Tab Navigation System
+
+#### Progressive Navigation Flow
+**Implemented guided navigation through investor content**:
+- Beautiful gradient buttons at bottom of each tab panel
+- Logical flow: Summary → Product & Tech → Business Model → Projections → Terms
+- Prominent "Next: [Tab Name]" labels with arrow icons
+- Gradient emerald-to-blue styling with hover effects
+- Large size (px-8 py-6 text-lg) for easy clicking
+- Shadow effects for depth and visual hierarchy
+
+**Navigation Mapping**:
+1. **Summary** → Next: Product & Tech
+2. **Product & Tech** → Next: Business Model
+3. **Business Model** → Next: Financial Projections
+4. **Projections** → Next: Investment Terms
+5. **Terms** → (Final tab, no navigation)
+
+**UX Benefits**:
+- Guides investors through complete journey
+- Reduces cognitive load (no need to remember tab order)
+- Encourages complete content consumption
+- Professional, polished experience
+- Consistent across both Founders Portal and IR versions
+
+### 🔧 Technical Implementation
+
+**Modified Files**:
+- `apps/web/src/app/portal/founders-only/investor-relations/page.tsx` - Added pitch, revenue overview, and navigation
+- `apps/web/src/app/ir/investor-relations/page.tsx` - Added pitch, revenue overview, and navigation
+
+**New Components**:
+- `TabNavigation` - Reusable navigation component with props for nextTab, nextTabLabel, onNavigate
+- Enhanced `Revenue Ecosystem Overview` card in Business Model tab
+- Enhanced `Ultimate Elevator Pitch` card in Summary tab
+
+**Firestore Integration**:
+- Loads budget data from `financial_budgets/seed-budget-2025-2026`
+- Loads revenue data from `financial_revenues/revenue-projections-2025-2027`
+- Real-time updates via `useEffect` hooks
+- Error handling with console logging
+
+### 📊 User Experience Improvements
+
+**Before**: 
+- Tabs had no guidance for navigation flow
+- Business Model lacked clear revenue stream explanation
+- Summary was missing the "big picture" pitch
+- Financial data was static and disconnected
+
+**After**: 
+- Clear progressive navigation through all content
+- Comprehensive revenue ecosystem explanation with live data
+- Powerful elevator pitch that captures the entire vision
+- Dynamic financial metrics throughout investor pages
+- Professional, guided investor journey
+
+**For Investors**:
+- Land on Summary with killer pitch that explains everything
+- Navigate naturally through Product → Business Model → Projections → Terms
+- See real-time financial data connected to detailed pages
+- Understand all stakeholders and revenue streams clearly
+- Experience a polished, professional presentation
+
+### 🎯 Key Achievements
+
+- ✅ Created the "elevator pitch to end all elevator pitches"
+- ✅ Explained complete ecosystem in one powerful paragraph
+- ✅ Integrated all five stakeholder groups visually
+- ✅ Connected live financial data to Business Model tab
+- ✅ Implemented guided navigation flow
+- ✅ Applied changes to both Founders Portal and IR versions
+- ✅ Maintained consistent styling and branding
+- ✅ Zero linter errors
+
+---
+
 ## [2.93.0] - 2025-11-11 (DYNAMIC FINANCIAL DASHBOARD CARDS) 💳📊
 
 ### 🎯 Major Feature: Real-Time Financial Overview Cards

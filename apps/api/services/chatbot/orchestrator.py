@@ -511,8 +511,8 @@ class ChatbotOrchestrator:
                 from services.chatbot.rag_orchestrator import rag_orchestrator
                 import asyncio
                 
-                # Add 5-second timeout for RAG response to prevent slow responses
-                # Reduced from 8s to 5s for faster failover
+                # Add 3-second timeout for RAG response to prevent slow responses
+                # Reduced from 5s to 3s for much faster failover
                 rag_response = await asyncio.wait_for(
                     rag_orchestrator.generate_knowledge_enhanced_response(
                         user_message=current_message,
@@ -521,7 +521,7 @@ class ChatbotOrchestrator:
                         agent_type=agent,
                         intent=intent
                     ),
-                    timeout=5.0  # 5 second timeout (reduced for faster responses)
+                    timeout=3.0  # 3 second timeout (aggressively reduced)
                 )
                 
                 logger.info(f"✅ RAG response generated in time with {rag_response.metadata.get('sources_used', 0)} knowledge sources")
@@ -530,7 +530,7 @@ class ChatbotOrchestrator:
             except (asyncio.TimeoutError, Exception) as error:
                 # Handle both timeout and other RAG failures
                 if isinstance(error, asyncio.TimeoutError):
-                    logger.warning(f"⏱️ RAG response timeout (>5s), falling back to standard AI")
+                    logger.warning(f"⏱️ RAG response timeout (>3s), falling back to standard AI")
                 else:
                     logger.warning(f"❌ RAG response failed, falling back to standard AI: {str(error)}")
                 
@@ -552,14 +552,14 @@ class ChatbotOrchestrator:
                     # Get enhanced system prompt for this agent
                     system_prompt = get_enhanced_prompt(agent, ai_context)
                     
-                    # Generate AI response with timeout (6s max for fallback, reduced from 7s)
+                    # Generate AI response with timeout (4s max for fallback, aggressively reduced)
                     ai_response = await asyncio.wait_for(
                         openai_service.generate_response(
                             message=current_message,
                             context=ai_context,
                             system_prompt=system_prompt
                         ),
-                        timeout=6.0  # 6 second timeout for fallback (reduced from 7s)
+                        timeout=4.0  # 4 second timeout for fallback (reduced from 6s)
                     )
                     
                     # Generate contextual actions based on agent and intent
@@ -583,7 +583,7 @@ class ChatbotOrchestrator:
                     
                 except asyncio.TimeoutError:
                     # Fallback also timed out - return simple message instead of crashing
-                    logger.error(f"⏱️ Fallback AI also timed out (>6s), returning simple response")
+                    logger.error(f"⏱️ Fallback AI also timed out (>4s), returning simple response")
                     return ChatResponse(
                         message="I apologize for the delay. Let me help you with that. Could you please rephrase your question or ask something more specific?",
                         actions=[],

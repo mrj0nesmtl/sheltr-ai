@@ -363,7 +363,7 @@ class RAGOrchestrator:
                 context=enhanced_context,
                 system_prompt=system_prompt
             ),
-            timeout=4.0  # 4 second timeout for OpenAI call (leaves 1s buffer for 5s RAG timeout)
+            timeout=2.5  # 2.5 second timeout for OpenAI call (leaves 0.5s buffer for 3s RAG timeout)
         )
         
         return ai_response

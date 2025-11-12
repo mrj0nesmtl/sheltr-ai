@@ -1,10 +1,18 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
 import { 
   Users,
   Server,
@@ -17,7 +25,8 @@ import {
   ChevronRight,
   ArrowLeft,
   Lock,
-  Shield
+  Shield,
+  AlertTriangle
 } from 'lucide-react';
 import Link from 'next/link';
 import {
@@ -28,60 +37,143 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { db } from '@/lib/firebase';
+import { doc, getDoc } from 'firebase/firestore';
 
-// Budget data structure
-const budgetData = {
-  months: ['September', 'October', 'November', 'December', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August'],
+// Type definitions
+interface BudgetItem {
+  id: string;
+  name: string;
+  role: string;
+  cost_type: string;
+  payment_frequency: string;
+  budget_values: number[];
+  actual_values: (number | null)[];
+  notes?: string;
+  vendor?: string;
+}
+
+interface BudgetCategory {
+  name: string;
+  icon: string;
+  color: string;
+  type: string;
+  items: BudgetItem[];
+}
+
+interface BudgetData {
+  id: string;
+  title: string;
+  type: string;
+  period: {
+    months: string[];
+    month_codes: string[];
+  };
+  funding: {
+    seed_round: number;
+  };
   categories: {
-    team: [
-      { name: 'Joel', role: 'Full-time developer', values: [650, 650, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000] },
-      { name: 'Doug', role: 'Finance and Partnerships', values: [0, 0, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000] },
-      { name: 'Alexander', role: 'Operations and Partnerships', values: [0, 0, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000] },
-      { name: 'Zaffia', role: 'PR, Shelter outreach, onboarding', values: [0, 0, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000] },
-      { name: 'Dominique', role: 'Developer', values: [0, 0, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000] },
-    ],
-    infrastructure: [
-      { name: 'Cursor', role: 'IDE platform', values: [400, 400, 600, 600, 600, 600, 600, 600, 600, 600, 600, 600] },
-      { name: 'OpenAI', role: 'API access', values: [50, 50, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200] },
-      { name: 'Anthropic', role: 'API access', values: [50, 50, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200] },
-      { name: 'Github', role: 'Code base', values: [0, 0, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50] },
-      { name: 'Google Cloud', role: 'Deployment/Hosting/AI/Database', values: [20, 20, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100] },
-      { name: 'Google Workspace', role: 'Internal', values: [0, 0, 0, 50, 50, 50, 50, 50, 50, 50, 50, 50] },
-      { name: 'Cloudflare', role: 'Security', values: [0, 0, 25, 1500, 0, 0, 0, 0, 0, 0, 0, 0] },
-      { name: 'Godaddy', role: 'Domain, Security', values: [38, 38, 0, 0, 0, 7000, 0, 0, 0, 0, 0, 0] },
-    ],
-    operations: [
-      { name: 'Coinbase', role: 'Token Listing', values: [0, 0, 5000, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
-      { name: '$SHELTR', role: 'Token', values: [0, 0, 5000, 5000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000] },
-      { name: 'Adyen', role: 'Payment Rails', values: [0, 0, 5000, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
-      { name: 'Labour', role: 'Technician Under MR', values: [0, 0, 0, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000] },
-      { name: 'PODS Material', role: 'POD Details', values: [0, 0, 0, 5000, 0, 0, 0, 0, 0, 0, 0, 0] },
-      { name: 'MOBY Material', role: 'MOBI Cycle Details', values: [0, 0, 0, 5000, 0, 0, 0, 0, 0, 0, 0, 0] },
-      { name: 'Shop-Fab Materials', role: 'Supplies', values: [0, 0, 0, 5000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000] },
-      { name: 'Rent', role: 'Fab for Pods and Mobi', values: [0, 0, 0, 5000, 0, 0, 0, 0, 0, 0, 0, 0] },
-      { name: 'Onboarding', role: 'Participant Packages', values: [0, 0, 500, 5000, 500, 500, 500, 500, 500, 500, 500, 500] },
-      { name: 'Travel', role: 'ZL/JY/AK', values: [0, 0, 4000, 5000, 4000, 4000, 4000, 4000, 4000, 4000, 4000, 4000] },
-      { name: 'Thinkers One', role: 'Mentorship', values: [0, 0, 0, 0, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000] },
-      { name: 'Slack', role: 'Internal Comms', values: [0, 0, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40] },
-    ],
-    marketing: [
-      { name: 'Marketing', role: 'Social Media', values: [0, 0, 2500, 2500, 2500, 2500, 2500, 2500, 2500, 2500, 2500, 2500] },
-      { name: 'Canva, Sora, Midjourney', role: 'Creative', values: [0, 0, 200, 40, 40, 40, 40, 40, 40, 40, 40, 40] },
-      { name: 'X', role: 'Social', values: [0, 0, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40] },
-    ],
-  },
-  monthlyBurn: [1008, 1008, 28880, 47670, 18670, 18670, 18670, 18670, 18670, 18670, 18670, 18670],
-  runningTotal: [1008, 2016, 30896, 78566, 97236, 115906, 134576, 153246, 171916, 190586, 209256, 227926],
-};
-
-const seedRound = 250000;
+    team: BudgetCategory;
+    infrastructure: BudgetCategory;
+    operations: BudgetCategory;
+    marketing: BudgetCategory;
+  };
+  calculated: {
+    budget_monthly_burn: number[];
+    budget_running_total: number[];
+    runway: {
+      average_burn: number;
+      projected_allocation: number;
+      reserve_buffer: number;
+    };
+  };
+  metadata?: {
+    created_at?: Date | object;
+    updated_at?: Date | object;
+    created_by?: string;
+    created_by_name?: string;
+    last_edited_by?: string;
+    last_edited_by_name?: string;
+  };
+}
 
 export default function IRBudgetPage() {
   const router = useRouter();
+  const { user, loading: authLoading } = useAuth();
   const [showSensitive, setShowSensitive] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<'all' | 'team' | 'infrastructure' | 'operations' | 'marketing'>('all');
+  const [budgetData, setBudgetData] = useState<BudgetData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const formatCurrency = (value: number) => {
+  // Authentication check
+  useEffect(() => {
+    if (!authLoading && !user) {
+      // Redirect to login with return URL
+      router.push('/login?redirect=/ir/budget');
+    }
+  }, [user, authLoading, router]);
+
+  // Load budget data from Firestore
+  useEffect(() => {
+    if (!user) return; // Don't try to load if not authenticated
+    const loadBudgetData = async () => {
+      try {
+        const budgetRef = doc(db, 'financial_budgets', 'seed-budget-2025-2026');
+        const budgetSnap = await getDoc(budgetRef);
+        
+        if (budgetSnap.exists()) {
+          const data = budgetSnap.data() as BudgetData;
+          setBudgetData(data);
+          console.log('✅ Budget data loaded from Firestore for IR');
+        } else {
+          setError('Budget data not found.');
+        }
+      } catch (err) {
+        console.error('Error loading budget:', err);
+        setError('Failed to load budget data');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadBudgetData();
+  }, [user]);
+
+  // Loading state for authentication
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Checking authentication...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Redirect message (shown briefly before redirect)
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 flex items-center justify-center">
+        <div className="max-w-md mx-auto p-8">
+          <Alert className="border-blue-500 bg-blue-950/20">
+            <Lock className="h-4 w-4 text-blue-500" />
+            <AlertDescription className="text-blue-400">
+              <div className="space-y-3">
+                <p className="font-semibold">Authentication Required</p>
+                <p>This page requires investor access. Redirecting to login...</p>
+              </div>
+            </AlertDescription>
+          </Alert>
+        </div>
+      </div>
+    );
+  }
+
+  // Format currency
+  const formatCurrency = (value: number | null) => {
+    if (value === null) return '-';
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
@@ -90,16 +182,61 @@ export default function IRBudgetPage() {
     }).format(value);
   };
 
-  const projectedAllocation = budgetData.runningTotal[budgetData.runningTotal.length - 1];
-  const reserveBuffer = seedRound - projectedAllocation;
-  const avgMonthlyBurn = budgetData.monthlyBurn[budgetData.monthlyBurn.length - 1];
-  const projectedRunway = 12; // 12 months from raise date
-
-  const getCategoryTotal = (category: keyof typeof budgetData.categories) => {
-    return budgetData.categories[category].reduce((sum, item) => {
-      return sum + item.values.reduce((a, b) => a + b, 0);
+  // Get category total
+  const getCategoryTotal = (category: keyof BudgetData['categories']) => {
+    if (!budgetData) return 0;
+    return budgetData.categories[category].items.reduce((sum, item) => {
+      return sum + item.budget_values.reduce((a, b) => a + b, 0);
     }, 0);
   };
+
+  // Get category breakdown for a specific month
+  const getCategoryMonthlyBreakdown = (monthIndex: number) => {
+    if (!budgetData) return { team: 0, infrastructure: 0, operations: 0, marketing: 0 };
+    
+    const categories = ['team', 'infrastructure', 'operations', 'marketing'] as const;
+    const breakdown: Record<string, number> = {};
+    
+    categories.forEach((category) => {
+      breakdown[category] = budgetData.categories[category].items.reduce((sum, item) => {
+        return sum + (item.budget_values[monthIndex] || 0);
+      }, 0);
+    });
+    
+    return breakdown;
+  };
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading budget data...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error || !budgetData) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 p-8">
+        <Alert className="max-w-2xl mx-auto border-red-500 bg-red-950/20">
+          <AlertTriangle className="h-4 w-4 text-red-500" />
+          <AlertDescription className="text-red-400">
+            {error || 'Budget data not found'}
+          </AlertDescription>
+        </Alert>
+      </div>
+    );
+  }
+
+  const projectedAllocation = budgetData.calculated.runway.projected_allocation;
+  const reserveBuffer = budgetData.calculated.runway.reserve_buffer;
+  const avgMonthlyBurn = budgetData.calculated.runway.average_burn;
+  const seedRound = budgetData.funding.seed_round;
+  const projectedRunway = 12; // 12 months from raise date
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
@@ -266,7 +403,7 @@ export default function IRBudgetPage() {
                   <span className="font-semibold">Team</span>
                 </div>
                 <div className="text-2xl font-bold">{formatCurrency(getCategoryTotal('team'))}</div>
-                <p className="text-xs text-muted-foreground mt-1">5 team members</p>
+                <p className="text-xs text-muted-foreground mt-1">{budgetData.categories.team.items.length} team members</p>
               </div>
 
               <div 
@@ -320,38 +457,160 @@ export default function IRBudgetPage() {
           </CardContent>
         </Card>
 
-        {/* Monthly Burn Chart */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Monthly Burn Rate</CardTitle>
-            <CardDescription>Projected monthly expenses Sep 2025 - Aug 2026</CardDescription>
-          </CardHeader>
-          <CardContent>
+        {/* Monthly Burn Chart - Stacked by Category (Collapsible) */}
+        <Accordion type="single" collapsible defaultValue="burn-rate" className="mb-8">
+          <AccordionItem value="burn-rate" className="border rounded-lg px-6 bg-white dark:bg-slate-900">
+            <AccordionTrigger className="hover:no-underline py-6">
+              <div className="flex flex-col items-start text-left">
+                <h3 className="text-2xl font-bold">Monthly Burn Rate by Category</h3>
+                <p className="text-sm text-muted-foreground mt-1">
+                  {selectedCategory === 'all' 
+                    ? 'Projected monthly expenses Sep 2025 - Aug 2026 (Click to expand/collapse)'
+                    : `Filtered to ${selectedCategory.charAt(0).toUpperCase() + selectedCategory.slice(1)} category`
+                  }
+                </p>
+              </div>
+            </AccordionTrigger>
+            <AccordionContent className="pb-6">
             <div className="space-y-4">
-              {budgetData.months.map((month, index) => {
-                const burn = budgetData.monthlyBurn[index];
-                const percentage = (burn / Math.max(...budgetData.monthlyBurn)) * 100;
+              {budgetData.period.months.map((month, index) => {
+                const breakdown = getCategoryMonthlyBreakdown(index);
+                
+                // Determine what to show based on selected category
+                const isFiltered = selectedCategory !== 'all';
+                const categoryValue = isFiltered ? breakdown[selectedCategory] : 0;
+                const totalBurn = budgetData.calculated.budget_monthly_burn[index];
+                
+                // Calculate max for scaling (either category-specific or overall)
+                const maxBurn = isFiltered 
+                  ? Math.max(...budgetData.period.months.map((_, idx) => getCategoryMonthlyBreakdown(idx)[selectedCategory]))
+                  : Math.max(...budgetData.calculated.budget_monthly_burn);
+                
+                // Get color for single-category view
+                const categoryColors = {
+                  team: { bg: 'bg-blue-500', hover: 'hover:bg-blue-600', name: 'Team' },
+                  infrastructure: { bg: 'bg-green-500', hover: 'hover:bg-green-600', name: 'Infrastructure' },
+                  operations: { bg: 'bg-orange-500', hover: 'hover:bg-orange-600', name: 'Operations' },
+                  marketing: { bg: 'bg-purple-500', hover: 'hover:bg-purple-600', name: 'Marketing' }
+                };
+                
+                // Calculate percentages
+                const teamPercent = (breakdown.team / maxBurn) * 100;
+                const infraPercent = (breakdown.infrastructure / maxBurn) * 100;
+                const opsPercent = (breakdown.operations / maxBurn) * 100;
+                const marketingPercent = (breakdown.marketing / maxBurn) * 100;
+                const singleCategoryPercent = isFiltered ? (categoryValue / maxBurn) * 100 : 0;
                 
                 return (
                   <div key={month} className="space-y-2">
                     <div className="flex items-center justify-between text-sm">
                       <span className="font-medium">{month}</span>
-                      <span className="text-muted-foreground">{formatCurrency(burn)}</span>
+                      <span className="text-muted-foreground">
+                        {formatCurrency(isFiltered ? categoryValue : totalBurn)}
+                      </span>
                     </div>
-                    <div className="h-3 bg-muted rounded-full overflow-hidden">
-                      <div 
-                        className={`h-full transition-all ${
-                          burn > 30000 ? 'bg-red-500' : burn > 15000 ? 'bg-orange-500' : 'bg-green-500'
-                        }`}
-                        style={{ width: `${percentage}%` }}
-                      />
+                    
+                    {/* Conditional Bar Chart - Stacked or Single */}
+                    <div className="h-6 bg-muted rounded-lg overflow-hidden flex">
+                      {isFiltered ? (
+                        /* Single Category View */
+                        categoryValue > 0 && (
+                          <div 
+                            className={`${categoryColors[selectedCategory].bg} ${categoryColors[selectedCategory].hover} transition-colors relative group`}
+                            style={{ width: `${singleCategoryPercent}%` }}
+                            title={`${categoryColors[selectedCategory].name}: ${formatCurrency(categoryValue)}`}
+                          >
+                            <div className="absolute hidden group-hover:block bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-black text-white text-xs rounded whitespace-nowrap z-10">
+                              {categoryColors[selectedCategory].name}: {formatCurrency(categoryValue)}
+                            </div>
+                          </div>
+                        )
+                      ) : (
+                        /* Stacked Multi-Category View */
+                        <>
+                          {/* Team - Blue */}
+                          {breakdown.team > 0 && (
+                            <div 
+                              className="bg-blue-500 hover:bg-blue-600 transition-colors relative group"
+                              style={{ width: `${teamPercent}%` }}
+                              title={`Team: ${formatCurrency(breakdown.team)}`}
+                            >
+                              <div className="absolute hidden group-hover:block bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-black text-white text-xs rounded whitespace-nowrap z-10">
+                                Team: {formatCurrency(breakdown.team)}
+                              </div>
+                            </div>
+                          )}
+                          
+                          {/* Infrastructure - Green */}
+                          {breakdown.infrastructure > 0 && (
+                            <div 
+                              className="bg-green-500 hover:bg-green-600 transition-colors relative group"
+                              style={{ width: `${infraPercent}%` }}
+                              title={`Infrastructure: ${formatCurrency(breakdown.infrastructure)}`}
+                            >
+                              <div className="absolute hidden group-hover:block bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-black text-white text-xs rounded whitespace-nowrap z-10">
+                                Infrastructure: {formatCurrency(breakdown.infrastructure)}
+                              </div>
+                            </div>
+                          )}
+                          
+                          {/* Operations - Orange */}
+                          {breakdown.operations > 0 && (
+                            <div 
+                              className="bg-orange-500 hover:bg-orange-600 transition-colors relative group"
+                              style={{ width: `${opsPercent}%` }}
+                              title={`Operations: ${formatCurrency(breakdown.operations)}`}
+                            >
+                              <div className="absolute hidden group-hover:block bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-black text-white text-xs rounded whitespace-nowrap z-10">
+                                Operations: {formatCurrency(breakdown.operations)}
+                              </div>
+                            </div>
+                          )}
+                          
+                          {/* Marketing - Purple */}
+                          {breakdown.marketing > 0 && (
+                            <div 
+                              className="bg-purple-500 hover:bg-purple-600 transition-colors relative group"
+                              style={{ width: `${marketingPercent}%` }}
+                              title={`Marketing: ${formatCurrency(breakdown.marketing)}`}
+                            >
+                              <div className="absolute hidden group-hover:block bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-black text-white text-xs rounded whitespace-nowrap z-10">
+                                Marketing: {formatCurrency(breakdown.marketing)}
+                              </div>
+                            </div>
+                          )}
+                        </>
+                      )}
                     </div>
+                    
+                    {/* Legend - Only show when viewing all categories */}
+                    {!isFiltered && (
+                      <div className="flex flex-wrap gap-3 text-xs text-muted-foreground">
+                        <span className="flex items-center gap-1">
+                          <div className="w-3 h-3 rounded bg-blue-500"></div>
+                          Team: {formatCurrency(breakdown.team)}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <div className="w-3 h-3 rounded bg-green-500"></div>
+                          Infrastructure: {formatCurrency(breakdown.infrastructure)}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <div className="w-3 h-3 rounded bg-orange-500"></div>
+                          Operations: {formatCurrency(breakdown.operations)}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <div className="w-3 h-3 rounded bg-purple-500"></div>
+                          Marketing: {formatCurrency(breakdown.marketing)}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 );
               })}
             </div>
-          </CardContent>
-        </Card>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
 
         {/* Detailed Budget Table */}
         {showSensitive && (
@@ -367,7 +626,7 @@ export default function IRBudgetPage() {
                     <TableRow>
                       <TableHead className="w-[200px]">Account</TableHead>
                       <TableHead className="w-[200px]">Role/Description</TableHead>
-                      {budgetData.months.map((month) => (
+                      {budgetData.period.months.map((month) => (
                         <TableHead key={month} className="text-right">{month.slice(0, 3)}</TableHead>
                       ))}
                       <TableHead className="text-right font-bold">Total</TableHead>
@@ -380,20 +639,20 @@ export default function IRBudgetPage() {
                         <TableRow className="bg-blue-50 dark:bg-blue-950">
                           <TableCell colSpan={14} className="font-bold">
                             <Users className="h-4 w-4 inline mr-2" />
-                            Team
+                            Team & Compensation
                           </TableCell>
                         </TableRow>
-                        {budgetData.categories.team.map((item) => (
-                          <TableRow key={item.name}>
+                        {budgetData.categories.team.items.map((item) => (
+                          <TableRow key={item.id}>
                             <TableCell className="font-medium">{item.name}</TableCell>
                             <TableCell className="text-sm text-muted-foreground">{item.role}</TableCell>
-                            {item.values.map((value, idx) => (
+                            {item.budget_values.map((value, idx) => (
                               <TableCell key={idx} className="text-right">
                                 {value > 0 ? formatCurrency(value) : '-'}
                               </TableCell>
                             ))}
                             <TableCell className="text-right font-bold">
-                              {formatCurrency(item.values.reduce((a, b) => a + b, 0))}
+                              {formatCurrency(item.budget_values.reduce((a, b) => a + b, 0))}
                             </TableCell>
                           </TableRow>
                         ))}
@@ -406,20 +665,20 @@ export default function IRBudgetPage() {
                         <TableRow className="bg-green-50 dark:bg-green-950">
                           <TableCell colSpan={14} className="font-bold">
                             <Server className="h-4 w-4 inline mr-2" />
-                            Infrastructure
+                            Infrastructure & Technology
                           </TableCell>
                         </TableRow>
-                        {budgetData.categories.infrastructure.map((item) => (
-                          <TableRow key={item.name}>
+                        {budgetData.categories.infrastructure.items.map((item) => (
+                          <TableRow key={item.id}>
                             <TableCell className="font-medium">{item.name}</TableCell>
                             <TableCell className="text-sm text-muted-foreground">{item.role}</TableCell>
-                            {item.values.map((value, idx) => (
+                            {item.budget_values.map((value, idx) => (
                               <TableCell key={idx} className="text-right">
                                 {value > 0 ? formatCurrency(value) : '-'}
                               </TableCell>
                             ))}
                             <TableCell className="text-right font-bold">
-                              {formatCurrency(item.values.reduce((a, b) => a + b, 0))}
+                              {formatCurrency(item.budget_values.reduce((a, b) => a + b, 0))}
                             </TableCell>
                           </TableRow>
                         ))}
@@ -435,17 +694,17 @@ export default function IRBudgetPage() {
                             Operations
                           </TableCell>
                         </TableRow>
-                        {budgetData.categories.operations.map((item) => (
-                          <TableRow key={item.name}>
+                        {budgetData.categories.operations.items.map((item) => (
+                          <TableRow key={item.id}>
                             <TableCell className="font-medium">{item.name}</TableCell>
                             <TableCell className="text-sm text-muted-foreground">{item.role}</TableCell>
-                            {item.values.map((value, idx) => (
+                            {item.budget_values.map((value, idx) => (
                               <TableCell key={idx} className="text-right">
                                 {value > 0 ? formatCurrency(value) : '-'}
                               </TableCell>
                             ))}
                             <TableCell className="text-right font-bold">
-                              {formatCurrency(item.values.reduce((a, b) => a + b, 0))}
+                              {formatCurrency(item.budget_values.reduce((a, b) => a + b, 0))}
                             </TableCell>
                           </TableRow>
                         ))}
@@ -461,17 +720,17 @@ export default function IRBudgetPage() {
                             Marketing
                           </TableCell>
                         </TableRow>
-                        {budgetData.categories.marketing.map((item) => (
-                          <TableRow key={item.name}>
+                        {budgetData.categories.marketing.items.map((item) => (
+                          <TableRow key={item.id}>
                             <TableCell className="font-medium">{item.name}</TableCell>
                             <TableCell className="text-sm text-muted-foreground">{item.role}</TableCell>
-                            {item.values.map((value, idx) => (
+                            {item.budget_values.map((value, idx) => (
                               <TableCell key={idx} className="text-right">
                                 {value > 0 ? formatCurrency(value) : '-'}
                               </TableCell>
                             ))}
                             <TableCell className="text-right font-bold">
-                              {formatCurrency(item.values.reduce((a, b) => a + b, 0))}
+                              {formatCurrency(item.budget_values.reduce((a, b) => a + b, 0))}
                             </TableCell>
                           </TableRow>
                         ))}
@@ -481,7 +740,7 @@ export default function IRBudgetPage() {
                     {/* Totals */}
                     <TableRow className="bg-muted font-bold">
                       <TableCell colSpan={2}>Monthly Burn</TableCell>
-                      {budgetData.monthlyBurn.map((burn, idx) => (
+                      {budgetData.calculated.budget_monthly_burn.map((burn, idx) => (
                         <TableCell key={idx} className="text-right">
                           {formatCurrency(burn)}
                         </TableCell>
@@ -491,7 +750,7 @@ export default function IRBudgetPage() {
 
                     <TableRow className="bg-muted/50 font-bold">
                       <TableCell colSpan={2}>Running Total</TableCell>
-                      {budgetData.runningTotal.map((total, idx) => (
+                      {budgetData.calculated.budget_running_total.map((total, idx) => (
                         <TableCell key={idx} className="text-right">
                           {formatCurrency(total)}
                         </TableCell>

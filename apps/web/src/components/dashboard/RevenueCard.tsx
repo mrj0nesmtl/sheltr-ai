@@ -1,21 +1,54 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { TrendingUp, DollarSign, Calendar, ArrowRight, Lock, Target } from 'lucide-react';
+import { TrendingUp, DollarSign, Calendar, ArrowRight, Lock, Target, Loader2 } from 'lucide-react';
+import { db } from '@/lib/firebase';
+import { doc, getDoc } from 'firebase/firestore';
 
 interface RevenueCardProps {
   linkPath?: string;
 }
 
+interface RevenueData {
+  targets: {
+    year_1_target: number;
+    year_2_target: number;
+    total_24_month: number;
+  };
+  calculated: {
+    budget_monthly_revenue: number[];
+  };
+  period: {
+    months: string[];
+  };
+}
+
 export function RevenueCard({ linkPath = '/portal/founders-only/revenue' }: RevenueCardProps) {
-  const totalRevenue24Months = 220097;
-  const year1Revenue = 39888; // Year 1 actual revenue
-  const year2Revenue = 180209; // Year 2 actual revenue  
-  const profitabilityMonth = 17; // Month 17 = January 2027
-  const finalMRR = 32154; // Final month revenue (Aug 2027)
+  const [revenueData, setRevenueData] = useState<RevenueData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadRevenueData = async () => {
+      try {
+        const revenueRef = doc(db, 'financial_revenues', 'revenue-projections-2025-2027');
+        const revenueSnap = await getDoc(revenueRef);
+        
+        if (revenueSnap.exists()) {
+          setRevenueData(revenueSnap.data() as RevenueData);
+        }
+      } catch (error) {
+        console.error('Error loading revenue data for card:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadRevenueData();
+  }, []);
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -25,6 +58,24 @@ export function RevenueCard({ linkPath = '/portal/founders-only/revenue' }: Reve
       maximumFractionDigits: 0,
     }).format(value);
   };
+
+  // Show loading state
+  if (loading) {
+    return (
+      <Card className="border-2">
+        <CardContent className="flex items-center justify-center py-12">
+          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // Use loaded data or fallback to defaults
+  const totalRevenue24Months = revenueData?.targets.total_24_month || 220097;
+  const year1Revenue = revenueData?.targets.year_1_target || 39888;
+  const year2Revenue = revenueData?.targets.year_2_target || 180209;
+  const finalMRR = revenueData?.calculated.budget_monthly_revenue?.[23] || 32154; // Last month (Aug 2027)
+  const profitabilityMonth = 17; // Month 17 = January 2027
 
   return (
     <Card className="border-2 hover:border-primary/50 transition-all hover:shadow-lg group">

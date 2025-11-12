@@ -1217,6 +1217,119 @@ service cloud.firestore {
     }
     
     // =================================================================
+    // FINANCIAL MANAGEMENT COLLECTIONS - Budget and Revenue Tracking
+    // =================================================================
+    
+    // Financial Budgets - Budget planning and tracking
+    match /financial_budgets/{budgetId} {
+      // Read: Super Admin, Platform Admin, and Investors (IR Data Room access)
+      allow read: if isSuperAdmin() || isPlatformAdmin() || isInvestor();
+      
+      // Write: Super Admin only can update budgets
+      allow write: if isSuperAdmin();
+      
+      // Create: Super Admin only can create budgets
+      allow create: if isSuperAdmin();
+      
+      // Delete: Super Admin only can delete budgets
+      allow delete: if isSuperAdmin();
+    }
+    
+    // Financial Budget History - Audit trail for budget changes
+    match /financial_budget_history/{historyId} {
+      // Read: Super Admin and Platform Admin can read audit trail
+      allow read: if isSuperAdmin() || isPlatformAdmin();
+      
+      // Write: Super Admin and Platform Admin can log changes
+      allow write: if isSuperAdmin() || isPlatformAdmin();
+      
+      // Create: Super Admin and Platform Admin can create audit entries
+      allow create: if isSuperAdmin() || isPlatformAdmin();
+      
+      // Delete: Super Admin only can delete audit entries
+      allow delete: if isSuperAdmin();
+    }
+    
+    // Financial Budgets Test - Test collection for development
+    match /financial_budgets_test/{budgetId} {
+      // Read: Super Admin and Platform Admin (Founders Portal access)
+      allow read: if isSuperAdmin() || isPlatformAdmin();
+      
+      // Write: Super Admin only can update test budgets
+      allow write: if isSuperAdmin();
+      
+      // Create: Super Admin only can create test budgets
+      allow create: if isSuperAdmin();
+      
+      // Delete: Super Admin only can delete test budgets
+      allow delete: if isSuperAdmin();
+    }
+    
+    // Financial Actuals - Actual expense tracking
+    match /financial_actuals/{actualId} {
+      // Read: Super Admin and Platform Admin (Founders Portal access)
+      allow read: if isSuperAdmin() || isPlatformAdmin();
+      
+      // Write: Super Admin and Platform Admin can log actual expenses
+      allow write: if isSuperAdmin() || isPlatformAdmin();
+      
+      // Create: Super Admin and Platform Admin can create actual expense entries
+      allow create: if isSuperAdmin() || isPlatformAdmin();
+      
+      // Delete: Super Admin only can delete actual expenses
+      allow delete: if isSuperAdmin();
+    }
+    
+    // =================================================================
+    // REVENUE MANAGEMENT COLLECTIONS - Revenue Tracking and Projections
+    // =================================================================
+    
+    // Financial Revenues - Revenue projections and tracking
+    match /financial_revenues/{revenueId} {
+      // Read: Super Admin, Platform Admin, and Investors (IR Data Room access)
+      allow read: if isSuperAdmin() || isPlatformAdmin() || isInvestor();
+      
+      // Write: Super Admin only can update revenue projections
+      allow write: if isSuperAdmin();
+      
+      // Create: Super Admin only can create revenue projections
+      allow create: if isSuperAdmin();
+      
+      // Delete: Super Admin only can delete revenue projections
+      allow delete: if isSuperAdmin();
+    }
+    
+    // Financial Revenue History - Audit trail for revenue changes
+    match /financial_revenue_history/{historyId} {
+      // Read: Super Admin and Platform Admin can read audit trail
+      allow read: if isSuperAdmin() || isPlatformAdmin();
+      
+      // Write: Super Admin and Platform Admin can log changes
+      allow write: if isSuperAdmin() || isPlatformAdmin();
+      
+      // Create: Super Admin and Platform Admin can create audit entries
+      allow create: if isSuperAdmin() || isPlatformAdmin();
+      
+      // Delete: Super Admin only can delete audit entries
+      allow delete: if isSuperAdmin();
+    }
+    
+    // Financial Revenues Test - Test collection for development
+    match /financial_revenues_test/{revenueId} {
+      // Read: Super Admin and Platform Admin (Founders Portal access)
+      allow read: if isSuperAdmin() || isPlatformAdmin();
+      
+      // Write: Super Admin only can update test revenue projections
+      allow write: if isSuperAdmin();
+      
+      // Create: Super Admin only can create test revenue projections
+      allow create: if isSuperAdmin();
+      
+      // Delete: Super Admin only can delete test revenue projections
+      allow delete: if isSuperAdmin();
+    }
+    
+    // =================================================================
     // FALLBACK RULE - Deny all other access
     // =================================================================
     match /{document=**} {

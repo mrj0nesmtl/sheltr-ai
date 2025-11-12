@@ -7,6 +7,101 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.93.0] - 2025-11-11 (DYNAMIC FINANCIAL DASHBOARD CARDS) 💳📊
+
+### 🎯 Major Feature: Real-Time Financial Overview Cards
+
+#### Dynamic BudgetCard Component
+**Transformed static budget card into live Firestore-connected component**:
+- Added real-time data fetching from `financial_budgets` collection
+- Implemented loading states with spinner animation
+- Pulls seed round, projected burn, average monthly burn, and reserve buffer from Firestore
+- Automatically reflects any budget page updates on dashboard
+- Fallback to default values if Firestore data unavailable
+
+**Key Metrics Displayed**:
+- 💰 Seed Round funding amount
+- 📊 Projected 12-month allocation
+- 📉 Average monthly burn rate
+- 🛡️ Reserve buffer (dynamic calculation)
+- 📅 Projected runway (12 months)
+
+#### Dynamic RevenueCard Component
+**Transformed static revenue card into live Firestore-connected component**:
+- Added real-time data fetching from `financial_revenues` collection
+- Implemented loading states with spinner animation
+- Pulls total 24-month revenue, Year 1/Year 2 targets, and final MRR from Firestore
+- Automatically reflects any revenue page updates on dashboard
+- Fallback to default values if Firestore data unavailable
+
+**Key Metrics Displayed**:
+- 💵 Total 24-Month Revenue
+- 📈 Year 1 Revenue target
+- 🚀 Year 2 Revenue target
+- 📅 Profitability milestone (Month 17)
+- 💼 Final Monthly Recurring Revenue (Aug 2027)
+
+### ✨ Implementation Details
+
+**Dashboard Pages Updated**:
+1. `/portal/founders-only` - Founders Portal dashboard with live financial cards
+2. `/ir/dataroom` - Investor Data Room dashboard with live financial cards
+
+**Technical Features**:
+- `useState` and `useEffect` hooks for data management
+- Firebase Firestore integration with `getDoc()`
+- TypeScript interfaces for type safety (`BudgetData`, `RevenueData`)
+- Error handling with console logging
+- Graceful loading states and fallbacks
+- Component reusability with `linkPath` prop
+
+**Benefits**:
+- ✅ Single source of truth (Firestore)
+- ✅ Real-time updates across all pages
+- ✅ No hardcoded values to maintain
+- ✅ Consistent data between detail pages and dashboard cards
+- ✅ Better UX with loading states
+- ✅ Automatic sync when budget or revenue is edited
+
+### 🔧 Technical Changes
+
+**Modified Files**:
+- `apps/web/src/components/dashboard/BudgetCard.tsx` - Added Firestore integration
+- `apps/web/src/components/dashboard/RevenueCard.tsx` - Added Firestore integration
+
+**Data Flow**:
+```
+Budget/Revenue Pages (Edit Mode)
+    ↓
+Firestore Collections
+    ↓
+Dashboard Cards (Real-time)
+```
+
+### 📊 User Experience Improvements
+
+**Before**: Dashboard cards showed hardcoded values that could drift out of sync with actual budget/revenue data
+
+**After**: Dashboard cards automatically display the latest financial data from the same Firestore source as the detail pages
+
+**For Super Admins**:
+- Edit budget or revenue in Founders Portal
+- Dashboard cards update automatically on refresh
+- No manual synchronization needed
+
+**For Investors**:
+- View real-time financial overview on Data Room dashboard
+- Click through to detailed budget or revenue pages
+- All data guaranteed to be consistent
+
+### 🔒 Security & Permissions
+
+**No changes to Firestore rules** - Cards inherit existing permissions:
+- `financial_budgets` - Readable by super_admin, platform_admin, and investors
+- `financial_revenues` - Readable by super_admin, platform_admin, and investors
+
+---
+
 ## [2.92.0] - 2025-11-09 (INVESTOR RELATIONS POLISH & MOBILE UX) 💼📱
 
 ### 🎯 Major Feature: Investor Relations Page Duplication & Routing

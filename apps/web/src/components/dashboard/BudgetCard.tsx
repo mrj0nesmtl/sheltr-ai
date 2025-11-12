@@ -1,20 +1,58 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { DollarSign, TrendingDown, Calendar, ArrowRight, Lock } from 'lucide-react';
+import { DollarSign, TrendingDown, Calendar, ArrowRight, Lock, Loader2 } from 'lucide-react';
+import { db } from '@/lib/firebase';
+import { doc, getDoc } from 'firebase/firestore';
 
 interface BudgetCardProps {
   linkPath?: string;
 }
 
+interface BudgetData {
+  funding: {
+    seed_round: number;
+  };
+  calculated: {
+    budget_running_total: number[];
+    budget_monthly_burn: number[];
+    runway: {
+      projected_allocation: number;
+      average_burn: number;
+      reserve_buffer: number;
+    };
+  };
+  period: {
+    months: string[];
+  };
+}
+
 export function BudgetCard({ linkPath = '/portal/founders-only/budget' }: BudgetCardProps) {
-  const seedRound = 250000;
-  const projectedBurn = 227926;
-  const avgMonthlyBurn = 18670;
-  const projectedRunway = 12; // 12 months from raise to full deployment
+  const [budgetData, setBudgetData] = useState<BudgetData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadBudgetData = async () => {
+      try {
+        const budgetRef = doc(db, 'financial_budgets', 'seed-budget-2025-2026');
+        const budgetSnap = await getDoc(budgetRef);
+        
+        if (budgetSnap.exists()) {
+          setBudgetData(budgetSnap.data() as BudgetData);
+        }
+      } catch (error) {
+        console.error('Error loading budget data for card:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadBudgetData();
+  }, []);
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -24,6 +62,24 @@ export function BudgetCard({ linkPath = '/portal/founders-only/budget' }: Budget
       maximumFractionDigits: 0,
     }).format(value);
   };
+
+  // Show loading state
+  if (loading) {
+    return (
+      <Card className="border-2">
+        <CardContent className="flex items-center justify-center py-12">
+          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // Use loaded data or fallback to defaults
+  const seedRound = budgetData?.funding.seed_round || 250000;
+  const projectedBurn = budgetData?.calculated.runway.projected_allocation || 227926;
+  const avgMonthlyBurn = budgetData?.calculated.runway.average_burn || 18670;
+  const reserveBuffer = budgetData?.calculated.runway.reserve_buffer || (seedRound - projectedBurn);
+  const projectedRunway = 12; // 12 months from raise to full deployment
 
   return (
     <Card className="border-2 hover:border-primary/50 transition-all hover:shadow-lg group">
@@ -62,7 +118,7 @@ export function BudgetCard({ linkPath = '/portal/founders-only/budget' }: Budget
           <div className="space-y-1">
             <p className="text-xs text-muted-foreground">Reserve Buffer</p>
             <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">
-              {formatCurrency(seedRound - projectedBurn)}
+              {formatCurrency(reserveBuffer)}
             </p>
           </div>
           <div className="space-y-1">

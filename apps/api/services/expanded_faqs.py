@@ -109,7 +109,9 @@ EXPANDED_FAQS = {
             "how do drones work",
             "sheltr drone delivery",
             "drone system",
-            "delivery drones"
+            "delivery drones",
+            "tell me about drones",
+            "drones as part of sheltr ecosystem"
         ],
         "answer": "Our drone network will deliver emergency medications, essential supplies, and critical documents within a 5-mile radius in under 15 minutes. Each drone system costs $8,000 and is funded through the housing fund infrastructure allocation.",
         "category": "ecosystem",
@@ -118,6 +120,135 @@ EXPANDED_FAQS = {
         "actions": [
             {"type": "link", "text": "Drone Network Details", "url": "/solutions"},
             {"type": "link", "text": "Emergency Services", "url": "/contact"}
+        ]
+    },
+    
+    "pod_models_comparison": {
+        "questions": [
+            "what are the different pod models",
+            "pod models",
+            "tell me about pod models",
+            "how many pod models",
+            "different types of pods",
+            "pod variations",
+            "compare pod models",
+            "tell me about the pod and the different models"
+        ],
+        "answer": "SHELTR offers 3 POD models: **Standard POD** ($5,000) - 64 sq ft with basic amenities, solar power, climate control; **Enhanced POD** ($7,500) - 80 sq ft with bathroom, kitchenette, improved insulation; **Luxury POD** ($12,000) - 96 sq ft with modern furnishings, advanced climate control, smart home tech, and eco-friendly materials. All funded through the 15% housing fund allocation.",
+        "category": "ecosystem",
+        "agent_suggestion": "public_information",
+        "keywords": ["pod models", "different pods", "compare", "types", "variations"],
+        "actions": [
+            {"type": "link", "text": "POD Specifications", "url": "/solutions/participants"},
+            {"type": "link", "text": "SmartFund Details", "url": "/tokenomics"}
+        ]
+    },
+    
+    "standard_pod_details": {
+        "questions": [
+            "what is standard pod",
+            "standard pod model",
+            "basic pod",
+            "cheapest pod",
+            "entry level pod"
+        ],
+        "answer": "Standard POD is our base model: 64 sq ft (8x8 ft), solar-powered with battery backup, heating & cooling, smart biometric lock, LED lighting, USB charging ports, and mobility-ready design. Cost: $5,000, funded through housing fund. Perfect for rapid deployment and essential dignity.",
+        "category": "ecosystem",
+        "agent_suggestion": "participant_support",
+        "keywords": ["standard", "basic", "entry", "pod"],
+        "actions": [
+            {"type": "link", "text": "See All Models", "url": "/solutions/participants"},
+            {"type": "link", "text": "Get a POD", "url": "/contact"}
+        ]
+    },
+    
+    "enhanced_pod_details": {
+        "questions": [
+            "what is enhanced pod",
+            "enhanced pod model",
+            "mid tier pod",
+            "pod with bathroom",
+            "pod with kitchen"
+        ],
+        "answer": "Enhanced POD offers more: 80 sq ft (8x10 ft), built-in bathroom with composting toilet, compact kitchenette with sink & storage, superior insulation, enhanced solar system, water storage tank, and improved ventilation. Cost: $7,500, funded through housing fund. Ideal for longer-term transitional housing.",
+        "category": "ecosystem",
+        "agent_suggestion": "participant_support",
+        "keywords": ["enhanced", "bathroom", "kitchen", "mid", "pod"],
+        "actions": [
+            {"type": "link", "text": "Compare Models", "url": "/solutions/participants"},
+            {"type": "link", "text": "Apply Now", "url": "/contact"}
+        ]
+    },
+    
+    "luxury_pod_details": {
+        "questions": [
+            "what is luxury pod",
+            "luxury pod model",
+            "premium pod",
+            "best pod",
+            "high end pod"
+        ],
+        "answer": "Luxury POD is our premium model: 96 sq ft (8x12 ft), modern furnishings & finishes, advanced HVAC system, full smart home integration (voice control, app management), premium insulation & soundproofing, larger solar array, eco-friendly sustainable materials, and enhanced privacy features. Cost: $12,000, funded through housing fund. Built for dignity and comfort.",
+        "category": "ecosystem",
+        "agent_suggestion": "participant_support",
+        "keywords": ["luxury", "premium", "best", "high end", "pod"],
+        "actions": [
+            {"type": "link", "text": "Luxury Features", "url": "/solutions/participants"},
+            {"type": "link", "text": "Contact Us", "url": "/contact"}
+        ]
+    },
+    
+    "pod_funding_smartfund": {
+        "questions": [
+            "how are pods funded",
+            "how do pods get funded",
+            "pod financing",
+            "who pays for pods",
+            "how to fund a pod"
+        ],
+        "answer": "PODs are funded through the 15% housing fund allocation from SmartFund™. Every donation automatically contributes: 80% direct support + 15% housing fund (for PODS, MOBI, drones) + 5% operations. The housing fund is staked with Coinbase earning 4-6% APY, with returns funding POD manufacturing at our fabrication centers.",
+        "category": "ecosystem",
+        "agent_suggestion": "donor_relations",
+        "keywords": ["pod funding", "how funded", "financing", "pay for"],
+        "actions": [
+            {"type": "link", "text": "SmartFund Model", "url": "/tokenomics"},
+            {"type": "link", "text": "Donate Now", "url": "/scan-give"}
+        ]
+    },
+    
+    "mobi_bike_specs": {
+        "questions": [
+            "mobi bike specifications",
+            "mobi specs",
+            "mobi technical details",
+            "mobi bike features",
+            "what can mobi do"
+        ],
+        "answer": "MOBI bike specs: 50+ mile range per charge, 750W motor (28 mph max), 300 lb cargo capacity, all-weather design with fenders & lights, GPS tracking & smart lock, solar charging compatible, puncture-resistant tires, and integrated storage. Cost: $2,500 per unit, funded through housing fund.",
+        "category": "ecosystem",
+        "agent_suggestion": "participant_support",
+        "keywords": ["mobi", "specifications", "features", "details", "specs"],
+        "actions": [
+            {"type": "link", "text": "MOBI Details", "url": "/solutions/participants"},
+            {"type": "link", "text": "Request MOBI", "url": "/contact"}
+        ]
+    },
+    
+    "drone_technical_specs": {
+        "questions": [
+            "drone specifications",
+            "drone specs",
+            "drone technical details",
+            "what can drones deliver",
+            "drone capabilities"
+        ],
+        "answer": "Drone system specs: 5kg (11 lbs) payload capacity, 25km (15.5 mile) flight range, GPS precision (±2 meters), 15-30 minute delivery time, weather-resistant design, autonomous navigation with obstacle avoidance, real-time tracking, and emergency supply packages. Cost: $8,000 per system, funded through housing fund infrastructure allocation.",
+        "category": "ecosystem",
+        "agent_suggestion": "public_information",
+        "keywords": ["drone", "specifications", "technical", "capabilities", "specs"],
+        "actions": [
+            {"type": "link", "text": "Drone System", "url": "/solutions"},
+            {"type": "link", "text": "Learn More", "url": "/docs"}
         ]
     },
     

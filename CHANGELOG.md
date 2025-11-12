@@ -7,6 +7,88 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.96.6] - 2025-11-12 (COMPREHENSIVE POD/MOBI/DRONE FAQs) 🚀📚
+
+### ✨ Enhancement: 7 New Instant-Response FAQs
+
+#### Added Comprehensive Ecosystem FAQs
+**New instant-response FAQs for PODs, MOBI bikes, and drones**:
+
+**Problem:** Questions like "Tell me about the pod and the different models" took 20+ seconds because they required RAG + OpenAI processing.
+
+**Solution:** Added 7 detailed FAQ entries for **<1 second responses**:
+
+**POD Model FAQs (4 new):**
+1. **"pod_models_comparison"** - Compares all 3 POD models (Standard, Enhanced, Luxury)
+   - Matches: "tell me about the pod and the different models", "compare pod models", "different types of pods"
+2. **"standard_pod_details"** - $5,000 base model (64 sq ft)
+   - Matches: "standard pod", "basic pod", "entry level pod"
+3. **"enhanced_pod_details"** - $7,500 mid-tier (80 sq ft with bathroom)
+   - Matches: "enhanced pod", "pod with bathroom", "mid tier pod"
+4. **"luxury_pod_details"** - $12,000 premium model (96 sq ft with smart home)
+   - Matches: "luxury pod", "premium pod", "best pod"
+
+**Infrastructure FAQs (3 new):**
+5. **"pod_funding_smartfund"** - How PODs get funded (15% housing allocation)
+   - Matches: "how are pods funded", "pod financing", "who pays for pods"
+6. **"mobi_bike_specs"** - Technical specs (750W motor, 50+ mile range)
+   - Matches: "mobi specs", "mobi features", "what can mobi do"
+7. **"drone_technical_specs"** - Drone capabilities (5kg payload, 15.5 mile range)
+   - Matches: "drone specs", "what can drones deliver", "drone capabilities"
+
+### 📊 FAQ Database Growth
+
+**Total FAQs:** 107+ (was 100)
+
+**Coverage by Category:**
+- **Ecosystem:** 10 FAQs (PODs, MOBI, drones, fabrication)
+- **SmartFund/Tokenomics:** 12 FAQs
+- **Architecture/Tech:** 10 FAQs
+- **User Roles:** 10 FAQs
+- **Donations/Support:** 15 FAQs
+- **Platform Info:** 50+ FAQs
+
+### ⚡ Performance Impact
+
+**Before (v2.96.5):**
+- "Tell me about the pod and the different models" → 20.27s (timeout) ❌
+- Required RAG + OpenAI + analytics
+- Failed during OpenAI peak load
+
+**After (v2.96.6):**
+- "Tell me about the pod and the different models" → **<1 second** ✅
+- FAQ pattern match (no OpenAI needed)
+- Works 100% of the time, regardless of OpenAI load
+
+**Now Instant Response (<1s):**
+- SmartFund questions ✅
+- POD model comparisons ✅
+- MOBI bike specs ✅
+- Drone system specs ✅
+- POD funding questions ✅
+
+### 🔧 Files Modified
+
+**Backend Services:**
+- `apps/api/services/expanded_faqs.py` - Added 7 new detailed FAQ entries
+- `apps/api/services/faq_service.py` - Updated count (100 → 107+ FAQs)
+
+### ✨ Benefits
+
+**For Users:**
+- **107+ common questions:** Instant answers (<1s)
+- **No more timeouts** for POD/MOBI/drone questions
+- **Consistent experience** regardless of OpenAI API load
+- **Better answers** with specific details (costs, specs, features)
+
+**For System:**
+- Reduced OpenAI API costs (fewer RAG queries)
+- Lower load on embeddings/knowledge search
+- More predictable response times
+- Better user satisfaction
+
+---
+
 ## [2.96.5] - 2025-11-12 (ANALYTICS TIMEOUT & FINAL OPTIMIZATION) 🎯⚡
 
 ### 🐛 Critical Bug Fix

@@ -279,11 +279,11 @@ class FAQService:
             }
         }
         
-        # Merge with expanded FAQs (94 additional FAQs including architecture & user roles)
+        # Merge with expanded FAQs (101 additional FAQs including architecture, user roles, PODs, MOBI, drones)
         expanded_faqs = get_all_expanded_faqs()
         base_faqs.update(expanded_faqs)
         
-        logger.info(f"FAQ database initialized with {len(base_faqs)} FAQs (including ecosystem, blockchain, architecture, user roles)")
+        logger.info(f"FAQ database initialized with {len(base_faqs)} FAQs (including ecosystem, POD models, MOBI bikes, drone specs, blockchain, architecture, user roles)")
         
         return base_faqs
     

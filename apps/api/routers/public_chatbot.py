@@ -301,10 +301,10 @@ async def public_chat(message_data: PublicChatMessage, request: Request):
                     user_role=actual_user_role,
                     conversation_context=enhanced_context
                 ),
-                timeout=10.0  # Master timeout: 10 seconds maximum for entire operation
+                timeout=8.0  # Master timeout: 8 seconds maximum for entire operation
             )
         except asyncio.TimeoutError:
-            logger.error(f"⏱️ Master timeout exceeded (>10s) for public chat")
+            logger.error(f"⏱️ Master timeout exceeded (>8s) for public chat")
             # Return simple fallback response
             from services.chatbot.orchestrator import ChatResponse
             response = ChatResponse(
@@ -338,19 +338,24 @@ async def public_chat(message_data: PublicChatMessage, request: Request):
                     {"type": "link", "text": "SHELTR Tokenomics", "url": "/tokenomics"}
                 )
         
-        # Track analytics (anonymized)
+        # Track analytics (anonymized) with timeout to prevent blocking response
         try:
-            await analytics_service.track_event(
-                event_type="public_chat_interaction",
-                user_id=f"public_{hash(message_data.user_id) % 10000}",  # Anonymized
-                metadata={  # Changed from 'data' to 'metadata' to match function signature
-                    "message_length": len(message_data.message),
-                    "page": enhanced_context.get("page", "/"),
-                    "agent_used": response.agent_used,
-                    "response_length": len(response.message),
-                    "actions_provided": len(public_actions)
-                }
+            await asyncio.wait_for(
+                analytics_service.track_event(
+                    event_type="public_chat_interaction",
+                    user_id=f"public_{hash(message_data.user_id) % 10000}",  # Anonymized
+                    metadata={  # Changed from 'data' to 'metadata' to match function signature
+                        "message_length": len(message_data.message),
+                        "page": enhanced_context.get("page", "/"),
+                        "agent_used": response.agent_used,
+                        "response_length": len(response.message),
+                        "actions_provided": len(public_actions)
+                    }
+                ),
+                timeout=1.0  # 1 second timeout for analytics - don't block response!
             )
+        except asyncio.TimeoutError:
+            logger.warning(f"Analytics tracking timed out (>1s) for public chat")
         except Exception as e:
             logger.warning(f"Analytics tracking failed for public chat: {e}")
         

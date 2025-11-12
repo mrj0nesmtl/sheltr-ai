@@ -7,6 +7,79 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.96.5] - 2025-11-12 (ANALYTICS TIMEOUT & FINAL OPTIMIZATION) 🎯⚡
+
+### 🐛 Critical Bug Fix
+
+####Fixed 20-Second Response Times After Master Timeout
+**Added timeout to analytics tracking to prevent post-timeout delays**:
+
+**Problem:** Even after master timeout triggered at 10s, total request took 20+ seconds due to analytics tracking blocking the response.
+
+**Test Case:**
+```
+Line 1037-1040: SmartFund question → FAQ match → Instant! ✅
+Line 1043-1051: POD question → Master timeout (10s) → Total: 20.27s ❌
+```
+
+**Root Cause:**
+- Master timeout triggered at 10s correctly
+- But analytics_service.track_event() took another 10+ seconds
+- Analytics was called AFTER timeout but BEFORE response returned
+- No timeout on analytics call = blocking response
+
+**Solutions:**
+
+1. **Added 1-second timeout to analytics tracking**
+```python
+# BEFORE
+await analytics_service.track_event(...)
+# No timeout! Could block for 10+ seconds
+
+# AFTER  
+await asyncio.wait_for(
+    analytics_service.track_event(...),
+    timeout=1.0  # Don't block response!
+)
+```
+
+2. **Reduced master timeout: 10s → 8s**
+   - More aggressive to catch slow operations faster
+   - Total: RAG (3s) + Fallback (4s) + overhead (1s) = 8s
+
+### ⏱️ New Response Times
+
+**Absolute Maximum:** **10 seconds** (8s master + 1s analytics + 1s overhead)
+
+| Scenario | Expected | Maximum |
+|----------|----------|---------|
+| **FAQ Match** | <1s | 1s |
+| **RAG Success** | 2-3s | 8s |
+| **RAG + Fallback** | 6-7s | 8s |
+| **Master Timeout** | 8s | 10s |
+
+**NO MORE 20-SECOND DELAYS!** ✅
+
+### 🔧 Files Modified
+
+**Backend Services:**
+- `apps/api/routers/public_chatbot.py` - Added analytics timeout (1s), reduced master timeout to 8s
+
+### ✨ Benefits
+
+**For Users:**
+- **FAQ questions: <1 second** (like SmartFund question)
+- **Simple questions: 2-3 seconds** (when RAG succeeds)
+- **Complex questions: 6-8 seconds** (when fallback needed)
+- **Absolute maximum: 10 seconds** (vs 20s before)
+
+**For System:**
+- Analytics won't block responses
+- Faster failure modes
+- More predictable timing
+
+---
+
 ## [2.96.4] - 2025-11-12 (AGGRESSIVE TIMEOUT OPTIMIZATION) 🚀⚡
 
 ### 🎯 Performance: Ultra-Aggressive Optimization

@@ -94,8 +94,12 @@ function TeamContent() {
     const profileImageUrl = member.profilePicture || getFallbackProfilePicture(member.name);
     const hasProfilePicture = !!member.profilePicture; // Track if user has uploaded their own
     
-    return (
-      <Card key={member.id} className="group hover:shadow-lg transition-all duration-300 border-0 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm">
+    // Check if member has a slug (bio page available)
+    const hasBioPage = !!member.slug;
+    const bioUrl = hasBioPage ? `/team/${member.slug}` : null;
+    
+    const cardContent = (
+      <Card key={member.id} className="group hover:shadow-lg transition-all duration-300 border-0 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm cursor-pointer">
         <CardHeader className="text-center pb-4">
           <div className="relative mx-auto w-fit">
             <div className="h-24 w-24 mx-auto ring-2 ring-blue-200 dark:ring-blue-800 rounded-full overflow-hidden bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
@@ -210,9 +214,32 @@ function TeamContent() {
             </Button>
           )}
         </div>
+        
+        {/* View Bio Link - Show if bio page exists */}
+        {hasBioPage && (
+          <div className="pt-2 border-t">
+            <div className="text-sm text-emerald-600 dark:text-emerald-400 font-medium flex items-center justify-center group-hover:gap-3 gap-2 transition-all">
+              <span>View Full Bio</span>
+              <svg className="h-4 w-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+          </div>
+        )}
       </CardContent>
     </Card>
     );
+    
+    // Wrap in Link if bio page exists
+    if (hasBioPage && bioUrl) {
+      return (
+        <Link key={member.id} href={bioUrl}>
+          {cardContent}
+        </Link>
+      );
+    }
+    
+    return cardContent;
   };
 
   return (
@@ -362,7 +389,7 @@ function TeamContent() {
               </a>
 
               {/* Blog */}
-              <a
+              <Link
                 href="/blog"
                 className="group"
               >
@@ -376,7 +403,7 @@ function TeamContent() {
                     </div>
                   </CardContent>
                 </Card>
-              </a>
+              </Link>
 
               {/* Arcana Concept */}
               <a

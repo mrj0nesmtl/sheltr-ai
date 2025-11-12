@@ -4,7 +4,7 @@
  * No authentication required
  */
 
-import { collection, getDocs, query, orderBy } from 'firebase/firestore';
+import { collection, getDocs, query, orderBy, doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
 export interface PublicTeamMember {
@@ -45,11 +45,13 @@ export interface PublicTeamMember {
   isFoundingMember: boolean;
   displayOrder?: number;
   showOnTeamPage?: boolean; // Control visibility on public team page (defaults to true)
+  slug?: string; // URL slug for bio page (e.g., "joel-yaffe")
 }
 
 export class PublicTeamService {
   /**
    * Get all public team members from the team_members collection
+   * Also fetches slug from users collection for bio page links
    */
   static async getPublicTeamMembers(): Promise<PublicTeamMember[]> {
     try {
@@ -65,8 +67,31 @@ export class PublicTeamService {
         } as PublicTeamMember))
         .filter(member => member.showOnTeamPage !== false); // Only show members where showOnTeamPage is not explicitly false
       
+      // Fetch slug from users collection for each member (for bio page links)
+      const membersWithSlugs = await Promise.all(
+        members.map(async (member) => {
+          try {
+            // Try to get the user document with the same ID
+            const userRef = doc(db, 'users', member.id);
+            const userSnap = await getDoc(userRef);
+            
+            if (userSnap.exists()) {
+              const userData = userSnap.data();
+              // Add slug if it exists and bio is set to show on team page
+              if (userData.slug && userData.bio?.showOnTeamPage) {
+                return { ...member, slug: userData.slug };
+              }
+            }
+          } catch (error) {
+            console.log(`Note: Could not fetch slug for member ${member.name}`);
+          }
+          
+          return member;
+        })
+      );
+      
       // Sort: Super Admin first, then by role hierarchy, then alphabetically
-      members.sort((a, b) => {
+      membersWithSlugs.sort((a, b) => {
         // Super Admin always first
         if (a.role === 'super_admin') return -1;
         if (b.role === 'super_admin') return 1;
@@ -84,8 +109,8 @@ export class PublicTeamService {
         return a.name.localeCompare(b.name);
       });
       
-      console.log(`✅ Loaded ${members.length} public team members`);
-      return members;
+      console.log(`✅ Loaded ${membersWithSlugs.length} public team members (${membersWithSlugs.filter(m => m.slug).length} with bio pages)`);
+      return membersWithSlugs;
       
     } catch (error) {
       console.error('❌ Error loading public team members:', error);

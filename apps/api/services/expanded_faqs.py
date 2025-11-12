@@ -1558,6 +1558,178 @@ EXPANDED_FAQS = {
             {"type": "link", "text": "Get Launch Updates", "url": "/register"}
         ]
     },
+    
+    # ==========================================
+    # SYSTEM ARCHITECTURE & USER ROLES (10 FAQs)
+    # ==========================================
+    
+    "system_architecture": {
+        "questions": [
+            "what is the system architecture",
+            "how is sheltr built",
+            "technical architecture",
+            "platform design",
+            "system design"
+        ],
+        "answer": "SHELTR uses a modern microservices architecture: Next.js frontend (TypeScript/React), Python FastAPI backend, Firebase/Firestore database, Google Cloud infrastructure, Base L2 blockchain for transparency, AI agent orchestration for chatbots, and enterprise payment rails (Adyen). Built for scale, security, and reliability.",
+        "category": "platform_info",
+        "agent_suggestion": "public_information",
+        "keywords": ["architecture", "technical", "design", "built", "infrastructure"],
+        "actions": [
+            {"type": "link", "text": "Technical Docs", "url": "/docs/chatbot-architecture"},
+            {"type": "link", "text": "GitHub", "url": "https://github.com/mrj0nesmtl/sheltr-ai"}
+        ]
+    },
+    
+    "blockchain_architecture": {
+        "questions": [
+            "what blockchain does sheltr use",
+            "blockchain architecture",
+            "which blockchain",
+            "base network",
+            "blockchain technical details"
+        ],
+        "answer": "SHELTR uses Base L2 (Coinbase's Layer 2 on Ethereum) for all blockchain operations: donation tracking, token staking, smart contract execution, and transparency verification. Base provides low fees (~$0.01/transaction), fast confirmation (2-3 seconds), and Ethereum security with institutional-grade custody.",
+        "category": "tokenomics",
+        "agent_suggestion": "public_information",
+        "keywords": ["blockchain", "base", "ethereum", "layer 2", "network"],
+        "actions": [
+            {"type": "link", "text": "Blockchain Details", "url": "/tokenomics"},
+            {"type": "link", "text": "Base Network", "url": "https://base.org"}
+        ]
+    },
+    
+    "payment_architecture": {
+        "questions": [
+            "how do payments work",
+            "payment system architecture",
+            "payment processing",
+            "adyen integration",
+            "payment rails"
+        ],
+        "answer": "SHELTR uses Adyen enterprise payment processing for virtual debit card issuance, donation processing, and global payment acceptance. Adyen provides: instant card provisioning, global acceptance (Visa/Mastercard), PCI DSS compliance, fraud protection, and multi-currency support with 99.99% uptime.",
+        "category": "tokenomics",
+        "agent_suggestion": "public_information",
+        "keywords": ["payment", "adyen", "processing", "card", "rails"],
+        "actions": [
+            {"type": "link", "text": "Payment Details", "url": "/tokenomics"},
+            {"type": "link", "text": "Security", "url": "/docs/security"}
+        ]
+    },
+    
+    "user_roles_explained": {
+        "questions": [
+            "what are the user roles",
+            "different user types",
+            "user roles explained",
+            "who can use sheltr",
+            "account types"
+        ],
+        "answer": "SHELTR has 7 user roles: **Super Admin** (full platform control), **Platform Admin** (system-wide management), **Shelter Admin** (facility management), **Participant** (homeless individuals), **Donor** (financial supporters), **Partner** (organizations), and **Public** (website visitors). Each role has specific permissions and dashboard access.",
+        "category": "platform_info",
+        "agent_suggestion": "public_information",
+        "keywords": ["user roles", "account types", "permissions", "access", "roles"],
+        "actions": [
+            {"type": "link", "text": "Solutions Overview", "url": "/solutions"},
+            {"type": "link", "text": "Register", "url": "/register"}
+        ]
+    },
+    
+    "super_admin_role": {
+        "questions": [
+            "what is super admin",
+            "super admin access",
+            "super admin permissions",
+            "super admin role"
+        ],
+        "answer": "Super Admins have complete platform access: user management, system configuration, knowledge base management, analytics, financial oversight, security settings, and API access. This role is reserved for core platform team members and has unrestricted access to all features and data.",
+        "category": "platform_info",
+        "agent_suggestion": "public_information",
+        "keywords": ["super admin", "admin", "full access", "permissions"],
+        "actions": [
+            {"type": "link", "text": "Admin Portal", "url": "/dashboard"}
+        ]
+    },
+    
+    "platform_admin_role": {
+        "questions": [
+            "what is platform admin",
+            "platform admin access",
+            "platform administrator"
+        ],
+        "answer": "Platform Admins manage system-wide operations: shelter network coordination, regional oversight, compliance monitoring, platform analytics, and partner relationships. They have broad access but cannot modify core system settings (reserved for Super Admins).",
+        "category": "platform_info",
+        "agent_suggestion": "public_information",
+        "keywords": ["platform admin", "administrator", "system management"],
+        "actions": [
+            {"type": "link", "text": "Solutions for Organizations", "url": "/solutions/organizations"}
+        ]
+    },
+    
+    "shelter_admin_role": {
+        "questions": [
+            "what is shelter admin",
+            "shelter administrator",
+            "facility admin role"
+        ],
+        "answer": "Shelter Admins manage their facilities: participant onboarding, service booking, capacity management, reporting, staff coordination, and resource allocation. They access shelter-specific dashboards with participant privacy protection and compliance tools.",
+        "category": "platform_info",
+        "agent_suggestion": "shelter_operations",
+        "keywords": ["shelter admin", "facility", "administrator"],
+        "actions": [
+            {"type": "link", "text": "Shelter Solutions", "url": "/solutions/organizations"},
+            {"type": "link", "text": "Admin Guide", "url": "/docs/shelter-admin-guide"}
+        ]
+    },
+    
+    "participant_role": {
+        "questions": [
+            "what is participant role",
+            "participant access",
+            "participant dashboard"
+        ],
+        "answer": "Participants (homeless individuals) have personal dashboards: QR code management, donation tracking, virtual debit card access, service booking, goal tracking, case manager communication, and housing fund monitoring. Complete privacy with encrypted data.",
+        "category": "platform_info",
+        "agent_suggestion": "participant_support",
+        "keywords": ["participant", "homeless", "dashboard", "access"],
+        "actions": [
+            {"type": "link", "text": "Participant Guide", "url": "/solutions/participants"},
+            {"type": "link", "text": "Get Started", "url": "/register"}
+        ]
+    },
+    
+    "donor_role": {
+        "questions": [
+            "what is donor role",
+            "donor access",
+            "donor dashboard"
+        ],
+        "answer": "Donors get personalized dashboards: donation history, impact tracking, blockchain verification, tax receipts, favorite participants, automated giving options, and community updates. Complete transparency with real-time impact visibility.",
+        "category": "platform_info",
+        "agent_suggestion": "donor_relations",
+        "keywords": ["donor", "donating", "dashboard", "access"],
+        "actions": [
+            {"type": "link", "text": "Donor Solutions", "url": "/solutions/donors"},
+            {"type": "link", "text": "Start Donating", "url": "/scan-give"}
+        ]
+    },
+    
+    "ai_chatbot_system": {
+        "questions": [
+            "how does the ai chatbot work",
+            "chatbot architecture",
+            "ai system",
+            "chatbot agents"
+        ],
+        "answer": "SHELTR uses an advanced AI orchestrator with 7 specialized agents: Emergency Response, Participant Support, Donor Relations, Shelter Operations, Technical Support, Public Information, and Public Support. Each agent has role-based access, RAG knowledge enhancement, and MCP tool integration for real-time data access.",
+        "category": "platform_info",
+        "agent_suggestion": "public_information",
+        "keywords": ["chatbot", "ai", "agents", "orchestrator"],
+        "actions": [
+            {"type": "link", "text": "Chatbot Architecture", "url": "/docs/chatbot-architecture"},
+            {"type": "link", "text": "Technical Docs", "url": "/docs"}
+        ]
+    },
 }
 
 # Helper function to integrate these FAQs

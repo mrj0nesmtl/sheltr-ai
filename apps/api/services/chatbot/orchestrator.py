@@ -241,13 +241,36 @@ class AgentRouter:
             else:
                 return "donor_relations"
         
-        elif user_role in ["admin", "super_admin"]:
-            if intent.category == IntentCategory.ACTION:
-                return "shelter_operations"
-            elif intent.category == IntentCategory.INFORMATION:
-                return "shelter_operations"
+        elif user_role in ["admin", "super_admin", "platform_admin"]:
+            # Super admins and platform admins get comprehensive access to all information
+            if user_role in ["super_admin", "platform_admin"]:
+                # Super/Platform admins can access ALL information types
+                if intent.category == IntentCategory.INFORMATION:
+                    # Check if it's about general platform/ecosystem info (use public_information agent)
+                    public_info_keywords = ['drone', 'pod', 'mobi', 'qr', 'scan', 'give', 'ecosystem', 
+                                           'smartfund', 'tokenomics', 'blockchain', 'architecture', 
+                                           'design', 'solution', 'user role', 'how does', 'what is', 
+                                           'payment', 'transaction', 'donation', 'participant', 'donor']
+                    query_text = (intent.entities.get('query', '') if intent.entities else '').lower()
+                    
+                    # If query matches platform/ecosystem topics, use public_information (has comprehensive docs)
+                    if any(keyword in query_text for keyword in public_info_keywords):
+                        return "public_information"
+                    else:
+                        # Otherwise use shelter_operations for admin-specific queries
+                        return "shelter_operations"
+                elif intent.category == IntentCategory.ACTION:
+                    return "shelter_operations"
+                else:
+                    return "shelter_operations"
             else:
-                return "shelter_operations"
+                # Regular admins default to shelter operations
+                if intent.category == IntentCategory.ACTION:
+                    return "shelter_operations"
+                elif intent.category == IntentCategory.INFORMATION:
+                    return "shelter_operations"
+                else:
+                    return "shelter_operations"
         
         elif user_role == "public":
             # Public users get knowledge-enhanced responses

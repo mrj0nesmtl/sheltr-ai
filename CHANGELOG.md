@@ -7,6 +7,94 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.96.0] - 2025-11-12 (CHATBOT COMPREHENSIVE ADMIN ACCESS & FAQ ENHANCEMENT) 🤖🔓
+
+### 🎯 Major Feature: Full Admin Information Access
+
+#### Smart Agent Routing for Super Admins & Platform Admins
+**Implemented comprehensive information access for administrative roles**:
+- Super admins now have unrestricted access to ALL platform information (ecosystem, architecture, blockchain, solutions)
+- Platform admins receive same comprehensive access as super admins for information queries
+- Smart keyword detection routes ecosystem/platform queries to `public_information` agent (most complete docs)
+- Shelter-specific queries still route to `shelter_operations` agent appropriately
+- Keywords include: drone, pod, mobi, qr, scan, ecosystem, smartfund, tokenomics, blockchain, architecture, design, solution, payment, etc.
+
+#### Enhanced RAG Query Preservation
+**Improved knowledge base search accuracy**:
+- Added ecosystem and architecture keywords to `sheltr_specific_terms` list
+- Prevents query dilution for: drone, drones, pod, pods, mobi, ecosystem, delivery, emergency supply
+- Architecture and design queries preserve original wording for better RAG search results
+- More accurate document retrieval for technical queries
+
+### 📚 FAQ Database Expansion
+
+#### New System Architecture & User Roles FAQs (10 New)
+**Added comprehensive FAQ coverage for**:
+
+**Technical Architecture:**
+1. **System Architecture** - Microservices, Next.js, Python FastAPI, Firebase, Base L2, Google Cloud
+2. **Blockchain Architecture** - Base L2 (Coinbase Layer 2), Ethereum, smart contracts, transaction details
+3. **Payment Architecture** - Adyen enterprise processing, virtual card issuance, PCI DSS compliance
+4. **AI Chatbot System** - 7 specialized agents, RAG enhancement, MCP tool integration
+
+**User Roles & Permissions:**
+5. **User Roles Explained** - All 7 roles overview (Super Admin, Platform Admin, Shelter Admin, Participant, Donor, Partner, Public)
+6. **Super Admin Role** - Complete platform control, user management, system configuration, analytics
+7. **Platform Admin Role** - System-wide operations, shelter network coordination, regional oversight
+8. **Shelter Admin Role** - Facility management, participant onboarding, service booking, capacity management
+9. **Participant Role** - Personal dashboard, QR code management, donation tracking, service booking
+10. **Donor Role** - Donation history, impact tracking, blockchain verification, tax receipts
+
+**Total FAQ Count:** **100+ FAQs** covering:
+- ✅ Ecosystem (PODs, MOBI, drones) - 15 FAQs
+- ✅ SmartFund & Tokenomics (80-15-5 model) - 15 FAQs
+- ✅ Blockchain & Payments - 12 FAQs
+- ✅ Architecture & Design - 10 FAQs
+- ✅ User Roles & Solutions - 10 FAQs
+- ✅ Platform Operations - 20+ FAQs
+- ✅ Emergency Support - 5 FAQs
+- ✅ Impact & Metrics - 10+ FAQs
+
+### 🔧 Files Modified
+
+**Backend Services:**
+- `apps/api/services/chatbot/orchestrator.py` - Enhanced agent router for super/platform admin comprehensive access
+- `apps/api/services/chatbot/rag_orchestrator.py` - Added ecosystem/architecture keywords to preserve queries
+- `apps/api/services/expanded_faqs.py` - Added 10 new FAQs for architecture, blockchain, payments, user roles
+- `apps/api/services/faq_service.py` - Updated FAQ count logging to reflect 100+ total FAQs
+
+**Documentation:**
+- `docs/fixes/chatbot-drone-response-fix.md` - Initial drone response issue documentation
+- `docs/fixes/chatbot-comprehensive-admin-access-fix.md` - Complete fix documentation with testing scenarios
+
+### ✨ Benefits
+
+**For Super Admins:**
+- Full access to ALL platform information (ecosystem, architecture, blockchain, solutions, user roles)
+- Can answer questions about drones, PODs, MOBI with comprehensive technical specs
+- Complete visibility into system design, payment processing, and platform capabilities
+
+**For Platform Admins:**
+- Same comprehensive information access as super admins
+- Better understanding of complete platform for educating partners and stakeholders
+
+**For All Users:**
+- Consistent, accurate responses across all roles
+- 100+ comprehensive FAQs covering entire platform
+- Better chatbot performance with smart agent routing
+- Accurate ecosystem, blockchain, and architecture information
+
+### 🐛 Bug Fixes
+
+#### Chatbot Drone Response Error
+**Fixed incorrect "SHELTR does not have drones" response**:
+- Root cause: Super admins were routed to `shelter_operations` agent (doesn't have ecosystem docs)
+- Solution: Smart keyword detection routes ecosystem queries to `public_information` agent
+- Drone documentation already ingested (11 chunks, 100% quality, 26.18 KB)
+- Now provides accurate, comprehensive drone delivery system information
+
+---
+
 ## [2.95.0] - 2025-11-12 (TEAM BIO SYSTEM - PHASE 1) 👤📖
 
 ### 🎯 Major Feature: Individual Team Member Bio Pages

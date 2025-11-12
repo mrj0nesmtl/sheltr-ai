@@ -238,7 +238,8 @@ class RAGOrchestrator:
             'smartfund', 'smart fund', 'smart-fund', 'tokenomics', 'donation distribution', 
             'blockchain', 'sheltr', '80-15-5', '80/15/5', 'housing fund', 'participant wallet',
             'smart contract', 'token', 'wallet', 'qr code', 'scan', 'give', 'donation',
-            'donate', 'fund', 'distribution', 'allocation'
+            'donate', 'fund', 'distribution', 'allocation',
+            'drone', 'drones', 'pod', 'pods', 'mobi', 'ecosystem', 'delivery', 'emergency supply'
         ]
         
         query_lower = query.lower()

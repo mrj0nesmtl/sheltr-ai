@@ -252,6 +252,976 @@ EXPANDED_FAQS = {
         ]
     },
     
+    # ==========================================
+    # PARTICIPANT SOLUTIONS (12 FAQs)
+    # ==========================================
+    
+    "participant_qr_code_system": {
+        "questions": [
+            "how do i get a qr code",
+            "participant qr code",
+            "qr code for participants",
+            "how to receive donations as participant",
+            "get my qr code"
+        ],
+        "answer": "Visit any SHELTR partner shelter or service center, complete a simple 10-15 minute registration, and receive your unique QR code card immediately. Your QR code works right away—no waiting period. Present it to receive donations, which go 80% directly to you and 15% to your housing fund.",
+        "category": "participant_support",
+        "agent_suggestion": "participant_support",
+        "keywords": ["qr code", "participant", "registration", "get qr", "sign up"],
+        "actions": [
+            {"type": "link", "text": "Participant Solutions", "url": "/solutions/participants"},
+            {"type": "link", "text": "Find Shelter", "url": "/contact"}
+        ]
+    },
+    
+    "participant_direct_support": {
+        "questions": [
+            "how much goes directly to participants",
+            "participant fund allocation",
+            "80 percent direct support",
+            "how are donations split",
+            "participant donation breakdown"
+        ],
+        "answer": "80% of every donation goes directly to you via virtual debit card or prepaid card for immediate needs like food, clothing, transportation, and essential services. 15% builds your housing fund (PODS, MOBI, permanent housing), and 5% supports shelter operations. No strings attached.",
+        "category": "participant_support",
+        "agent_suggestion": "participant_support",
+        "keywords": ["80 percent", "direct support", "allocation", "donation split"],
+        "actions": [
+            {"type": "link", "text": "How It Works", "url": "/solutions/participants"},
+            {"type": "link", "text": "SmartFund Details", "url": "/tokenomics"}
+        ]
+    },
+    
+    "participant_virtual_card": {
+        "questions": [
+            "how do i access my funds",
+            "virtual debit card",
+            "participant prepaid card",
+            "cash access for participants",
+            "withdraw donation money"
+        ],
+        "answer": "Access your funds through virtual or prepaid debit cards for immediate use, direct payments to service providers, cash disbursement at partner locations, or emergency 24/7 fund access. Check your balance and donation history anytime through your participant account.",
+        "category": "participant_support",
+        "agent_suggestion": "participant_support",
+        "keywords": ["virtual card", "access funds", "prepaid", "cash", "debit"],
+        "actions": [
+            {"type": "link", "text": "Participant Guide", "url": "/solutions/participants"},
+            {"type": "link", "text": "Register", "url": "/register"}
+        ]
+    },
+    
+    "participant_housing_pathway": {
+        "questions": [
+            "how does housing fund work for participants",
+            "path to housing",
+            "15 percent housing fund",
+            "how to get housing from sheltr",
+            "housing pathway for participants"
+        ],
+        "answer": "15% of all donations automatically build your housing fund, creating a foundation for urgent stability. This fund provides access to emergency PODS (64-96 sq ft micro-housing), transitional housing, and eventually permanent accommodation. Track your housing fund progress through your participant account.",
+        "category": "participant_support",
+        "agent_suggestion": "participant_support",
+        "keywords": ["housing pathway", "15 percent", "housing fund", "stable housing"],
+        "actions": [
+            {"type": "link", "text": "Housing Options", "url": "/solutions/participants"},
+            {"type": "link", "text": "POD Details", "url": "/pods"}
+        ]
+    },
+    
+    "participant_emergency_pods": {
+        "questions": [
+            "how do participants get pods",
+            "emergency pod access",
+            "pod for participants",
+            "winter housing pods",
+            "secure shelter pods"
+        ],
+        "answer": "Your housing fund (15% of donations) triggers emergency POD deployment when thresholds are met. PODS are winter-rated to -25°C with solar power, smart biometric locks, heating/cooling, and full amenities. MOBI bikes deliver and position your POD. Anything is better than a tent.",
+        "category": "participant_support",
+        "agent_suggestion": "participant_support",
+        "keywords": ["emergency pod", "participant housing", "winter shelter", "pods"],
+        "actions": [
+            {"type": "link", "text": "POD Features", "url": "/solutions/participants"},
+            {"type": "link", "text": "Get Started", "url": "/register"}
+        ]
+    },
+    
+    "participant_mobi_access": {
+        "questions": [
+            "how do participants get mobi bikes",
+            "mobi access for participants",
+            "electric bike for participants",
+            "transportation help",
+            "mobi through my account"
+        ],
+        "answer": "MOBI electric bikes provide 50+ mile range transportation for work, services, and community access. Access granted through your participant account when housing fund reaches eligibility. MOBI bikes feature GPS tracking, smart locks, all-weather design, and 300 lb cargo capacity.",
+        "category": "participant_support",
+        "agent_suggestion": "participant_support",
+        "keywords": ["mobi access", "participant transport", "electric bike", "mobility"],
+        "actions": [
+            {"type": "link", "text": "MOBI Details", "url": "/solutions/participants"},
+            {"type": "link", "text": "Transportation", "url": "/pods/mobi"}
+        ]
+    },
+    
+    "participant_privacy_security": {
+        "questions": [
+            "is participant information private",
+            "participant data security",
+            "privacy for participants",
+            "who sees my information",
+            "participant data control"
+        ],
+        "answer": "Your personal information is secure and private. You control what you share and maintain dignity throughout your journey. Your data is encrypted, HIPAA-compliant, and only accessible to authorized case managers helping you. Your donation history and financial information remain confidential.",
+        "category": "participant_support",
+        "agent_suggestion": "participant_support",
+        "keywords": ["privacy", "security", "participant data", "confidential"],
+        "actions": [
+            {"type": "link", "text": "Privacy Policy", "url": "/privacy"},
+            {"type": "link", "text": "Participant Rights", "url": "/solutions/participants"}
+        ]
+    },
+    
+    "participant_case_management": {
+        "questions": [
+            "what support services for participants",
+            "participant case management",
+            "additional help for participants",
+            "participant services beyond money",
+            "advocacy for participants"
+        ],
+        "answer": "Beyond financial support, access case management and advocacy, healthcare and mental health services, job training and employment assistance, benefits enrollment support, and connections to social services. Your case manager helps coordinate all services through the SHELTR platform.",
+        "category": "participant_support",
+        "agent_suggestion": "participant_support",
+        "keywords": ["case management", "support services", "advocacy", "help"],
+        "actions": [
+            {"type": "link", "text": "Support Services", "url": "/solutions/participants"},
+            {"type": "link", "text": "Find Help", "url": "/contact"}
+        ]
+    },
+    
+    "pods_vs_tents": {
+        "questions": [
+            "pods vs tents",
+            "why pods better than tents",
+            "pods over tents",
+            "emergency housing vs tents",
+            "anything better than tent"
+        ],
+        "answer": "Anything is better than a tent. PODS provide winter-rated shelter (-25°C), solar power, heating/cooling, smart locks for security, dry storage, USB charging, and mobility. Tents offer none of this. PODS cost $5,000-$12,000 funded through the 15% housing allocation—creating dignity, safety, and a real pathway to stability.",
+        "category": "participant_support",
+        "agent_suggestion": "public_information",
+        "keywords": ["pods tents", "better than tent", "emergency housing", "mobile shelter"],
+        "actions": [
+            {"type": "link", "text": "POD Solutions", "url": "/solutions/participants"},
+            {"type": "link", "text": "Ecosystem", "url": "/ecosystem"}
+        ]
+    },
+    
+    "participant_90_day_threshold": {
+        "questions": [
+            "90 day homelessness threshold",
+            "rapid housing placement",
+            "why fast housing matters",
+            "homelessness recovery timeline",
+            "quick housing access"
+        ],
+        "answer": "Academic research shows after 90 days of homelessness, recovery chances drop dramatically. Traditional shelter-to-housing pipelines take 18-36 months. SHELTR's PODS provide immediate stable housing (within weeks) funded by your donation stream, breaking the 90-day threshold and maximizing your recovery chances.",
+        "category": "participant_support",
+        "agent_suggestion": "participant_support",
+        "keywords": ["90 days", "rapid housing", "timeline", "recovery"],
+        "actions": [
+            {"type": "link", "text": "Housing Pathway", "url": "/solutions/participants"},
+            {"type": "link", "text": "Get Help Now", "url": "/register"}
+        ]
+    },
+    
+    "participant_same_day_qr": {
+        "questions": [
+            "same day qr code",
+            "how fast can i get qr code",
+            "immediate qr access",
+            "qr code wait time",
+            "instant participant registration"
+        ],
+        "answer": "Most people get their QR code the same day they visit a partner shelter. Registration takes 10-15 minutes. Your QR code works immediately—no waiting period. Start receiving donations right away. Find partner shelters near you through our location finder.",
+        "category": "participant_support",
+        "agent_suggestion": "participant_support",
+        "keywords": ["same day", "immediate", "fast qr", "instant"],
+        "actions": [
+            {"type": "link", "text": "Find Shelter", "url": "/contact"},
+            {"type": "link", "text": "How It Works", "url": "/solutions/participants"}
+        ]
+    },
+    
+    "participant_donation_tracking": {
+        "questions": [
+            "track my donations as participant",
+            "see who donated to me",
+            "participant donation history",
+            "check my balance",
+            "view donation progress"
+        ],
+        "answer": "Check your donation history and balance anytime through your participant account or at partner locations. See total donations received, housing fund progress, available balance, and recent transactions. All donations are blockchain-verified for transparency and security.",
+        "category": "participant_support",
+        "agent_suggestion": "participant_support",
+        "keywords": ["track donations", "balance", "history", "progress"],
+        "actions": [
+            {"type": "link", "text": "Participant Portal", "url": "/portal"},
+            {"type": "link", "text": "Get Started", "url": "/solutions/participants"}
+        ]
+    },
+    
+    # ==========================================
+    # DONOR SOLUTIONS (15 FAQs)
+    # ==========================================
+    
+    "donor_qr_code_giving": {
+        "questions": [
+            "how to donate with qr code",
+            "qr code donation process",
+            "scan qr to donate",
+            "qr giving for donors",
+            "instant qr donation"
+        ],
+        "answer": "Scan a participant's QR code in-person or from distance (photos, social media), choose your donation amount instantly, and 80% goes directly to the individual with immediate blockchain confirmation. No apps to download, no lengthy forms—just instant impact. Receive real-time confirmation and tax receipt.",
+        "category": "donor_support",
+        "agent_suggestion": "donor_relations",
+        "keywords": ["qr donate", "scan give", "instant donation", "qr code"],
+        "actions": [
+            {"type": "link", "text": "Start Giving", "url": "/scan-give"},
+            {"type": "link", "text": "How It Works", "url": "/solutions/donors"}
+        ]
+    },
+    
+    "donor_distance_scanning": {
+        "questions": [
+            "donate from photos",
+            "distance qr scanning",
+            "scan qr from social media",
+            "remote qr donation",
+            "donate without being there"
+        ],
+        "answer": "Distance QR scanning lets you donate to participants from photos, social media posts, or remote locations—you don't need to be physically present. Scan the QR code from any image, choose your amount, and the donation goes directly to that specific participant. Perfect for sharing stories and building community support.",
+        "category": "donor_support",
+        "agent_suggestion": "donor_relations",
+        "keywords": ["distance scan", "photo donate", "social media", "remote"],
+        "actions": [
+            {"type": "link", "text": "Try It Now", "url": "/scan-give"},
+            {"type": "link", "text": "Donor Features", "url": "/solutions/donors"}
+        ]
+    },
+    
+    "donor_recurring_sponsorships": {
+        "questions": [
+            "recurring donations",
+            "sponsor a participant",
+            "monthly donation setup",
+            "recurring sponsorship",
+            "subscribe to donate"
+        ],
+        "answer": "Set up weekly, monthly, or custom recurring sponsorships for specific participants. Watch your sponsored participant achieve housing milestones, receive personalized progress updates, and track their journey from homelessness to stability. Cancel or adjust anytime. Recurring donors get exclusive impact reports.",
+        "category": "donor_support",
+        "agent_suggestion": "donor_relations",
+        "keywords": ["recurring", "sponsorship", "monthly donate", "subscribe"],
+        "actions": [
+            {"type": "link", "text": "Become a Sponsor", "url": "/scan-give"},
+            {"type": "link", "text": "Impact Tracking", "url": "/solutions/donors"}
+        ]
+    },
+    
+    "donor_blockchain_transparency": {
+        "questions": [
+            "blockchain donation tracking",
+            "transparent donations",
+            "verify my donation",
+            "blockchain transparency sheltr",
+            "where did my donation go"
+        ],
+        "answer": "Every donation is recorded on the blockchain. See exactly where your money goes in real-time: 80% direct support, 15% housing fund, 5% operations. Track fund allocation, participant progress, housing deployments, and outcome verification. 100% transparent, 100% verifiable, 100% impact.",
+        "category": "donor_support",
+        "agent_suggestion": "donor_relations",
+        "keywords": ["blockchain", "transparent", "verify", "track"],
+        "actions": [
+            {"type": "link", "text": "View Transparency", "url": "/impact"},
+            {"type": "link", "text": "How It Works", "url": "/tokenomics"}
+        ]
+    },
+    
+    "donor_gift_mobi_pods": {
+        "questions": [
+            "gift mobi bike",
+            "sponsor a pod",
+            "donate mobi directly",
+            "fund specific pods",
+            "targeted pod donation"
+        ],
+        "answer": "Directly fund MOBI bike access ($2,500) for transportation and work opportunities, or sponsor PODS ($5,000-$12,000) for emergency micro-housing deployment. Choose specific participants to receive MOBI or PODS with blockchain-verified delivery. Watch your gift transform lives with real-time updates.",
+        "category": "donor_support",
+        "agent_suggestion": "donor_relations",
+        "keywords": ["gift mobi", "sponsor pod", "direct funding", "targeted"],
+        "actions": [
+            {"type": "link", "text": "Gift Solutions", "url": "/solutions/donors"},
+            {"type": "link", "text": "Donate Now", "url": "/scan-give"}
+        ]
+    },
+    
+    "donor_impact_dashboard": {
+        "questions": [
+            "track my donor impact",
+            "donor dashboard",
+            "see my donation impact",
+            "impact measurement for donors",
+            "donor analytics"
+        ],
+        "answer": "Your personal impact dashboard shows live donation tracking, participant progress updates, regional impact statistics, housing deployments funded, and stories of lives changed. See exactly how your generosity creates measurable, verifiable impact. Export reports for tax purposes or sharing with your network.",
+        "category": "donor_support",
+        "agent_suggestion": "donor_relations",
+        "keywords": ["impact dashboard", "track impact", "donor analytics", "measure"],
+        "actions": [
+            {"type": "link", "text": "View Impact", "url": "/impact"},
+            {"type": "link", "text": "Create Account", "url": "/register"}
+        ]
+    },
+    
+    "donor_corporate_giving": {
+        "questions": [
+            "corporate partnership sheltr",
+            "employee matching donations",
+            "company giving program",
+            "corporate csr sheltr",
+            "business donation program"
+        ],
+        "answer": "Corporate partnerships include employee matching donation programs, team volunteering and QR code campaigns, impact reporting for CSR initiatives, and branded giving campaigns with tracking. Engage your entire team in measurable social impact with turnkey campaigns and executive dashboards.",
+        "category": "donor_support",
+        "agent_suggestion": "donor_relations",
+        "keywords": ["corporate", "business", "employee matching", "csr"],
+        "actions": [
+            {"type": "link", "text": "Corporate Solutions", "url": "/solutions/donors"},
+            {"type": "link", "text": "Contact Us", "url": "/contact"}
+        ]
+    },
+    
+    "donor_platform_giving": {
+        "questions": [
+            "donate to multiple participants",
+            "regional donations",
+            "platform level giving",
+            "general sheltr donation",
+            "donate to shelters"
+        ],
+        "answer": "Support multiple participants and programs through platform giving: donate to specific shelters or regions, support housing fund initiatives, set up recurring monthly donations, and receive tax-deductible receipts automatically. Donations are intelligently distributed to participants most in need.",
+        "category": "donor_support",
+        "agent_suggestion": "donor_relations",
+        "keywords": ["platform giving", "regional", "general donation", "shelter"],
+        "actions": [
+            {"type": "link", "text": "Donate Now", "url": "/scan-give"},
+            {"type": "link", "text": "Choose Shelter", "url": "/solutions/donors"}
+        ]
+    },
+    
+    "donor_tax_receipts": {
+        "questions": [
+            "tax deductible donation",
+            "donation tax receipt",
+            "tax receipt for giving",
+            "charitable donation receipt",
+            "donor tax benefits"
+        ],
+        "answer": "All SHELTR donations are tax-deductible (charitable status pending). Receive automated digital tax receipts immediately after each donation. Download annual summaries for easy tax filing. Platform giving and recurring donations generate consolidated receipts. Export donation history anytime.",
+        "category": "donor_support",
+        "agent_suggestion": "donor_relations",
+        "keywords": ["tax", "receipt", "deductible", "charitable"],
+        "actions": [
+            {"type": "link", "text": "Donate Now", "url": "/scan-give"},
+            {"type": "link", "text": "Donor FAQ", "url": "/solutions/donors"}
+        ]
+    },
+    
+    "donor_goal_tracking": {
+        "questions": [
+            "track participant goals",
+            "donor goal monitoring",
+            "milestone tracking for donors",
+            "see participant progress",
+            "housing goal updates"
+        ],
+        "answer": "Watch your sponsored participants achieve housing milestones in real-time. Track progress toward POD deployment, MOBI access, transitional housing, and permanent placement. Receive notifications when major milestones are reached. See exactly how your recurring donations create stable pathways out of homelessness.",
+        "category": "donor_support",
+        "agent_suggestion": "donor_relations",
+        "keywords": ["goal tracking", "milestones", "progress", "participant journey"],
+        "actions": [
+            {"type": "link", "text": "Track Impact", "url": "/impact"},
+            {"type": "link", "text": "Sponsor Now", "url": "/scan-give"}
+        ]
+    },
+    
+    "donor_instant_giving": {
+        "questions": [
+            "instant donation",
+            "immediate impact donation",
+            "fast donation process",
+            "quick giving",
+            "no app donation"
+        ],
+        "answer": "Scan a QR code and make an immediate difference. No apps to download, no lengthy forms, no account required—just instant impact. Choose your amount, complete payment, and funds transfer instantly: 80% to participant, 15% to housing, 5% to operations. Blockchain confirmation in seconds.",
+        "category": "donor_support",
+        "agent_suggestion": "donor_relations",
+        "keywords": ["instant", "immediate", "fast", "quick", "no app"],
+        "actions": [
+            {"type": "link", "text": "Give Now", "url": "/scan-give"},
+            {"type": "link", "text": "How It Works", "url": "/solutions/donors"}
+        ]
+    },
+    
+    "donor_measurable_impact": {
+        "questions": [
+            "measure donation impact",
+            "how effective is my donation",
+            "donation outcomes",
+            "verify my impact",
+            "donor roi"
+        ],
+        "answer": "Get regular updates on lives changed, housing secured, and progress made possible by your generosity. See metrics like participants housed, PODS deployed, jobs obtained, and stability milestones reached. Every dollar is tracked and its impact verified through blockchain and real-world outcomes.",
+        "category": "donor_support",
+        "agent_suggestion": "donor_relations",
+        "keywords": ["measure impact", "effective", "outcomes", "verify"],
+        "actions": [
+            {"type": "link", "text": "View Impact", "url": "/impact"},
+            {"type": "link", "text": "Donor Stories", "url": "/blog"}
+        ]
+    },
+    
+    "donor_ecosystem_integration": {
+        "questions": [
+            "complete donation ecosystem",
+            "how donations create housing",
+            "donation to physical assets",
+            "ecosystem flow donors",
+            "end to end donation"
+        ],
+        "answer": "Your donation flows through the complete ecosystem: Scan & Sponsor (distance scanning with recurring support) → Track Goals (watch milestones) → Gift Solutions (fund MOBI/PODS directly) → Measure Impact (real-time blockchain verification). Every step transparent, every dollar accountable, every life transformed.",
+        "category": "donor_support",
+        "agent_suggestion": "donor_relations",
+        "keywords": ["ecosystem", "complete flow", "end to end", "integration"],
+        "actions": [
+            {"type": "link", "text": "See Ecosystem", "url": "/ecosystem"},
+            {"type": "link", "text": "Start Giving", "url": "/scan-give"}
+        ]
+    },
+    
+    "donor_participant_updates": {
+        "questions": [
+            "get participant updates",
+            "donor progress notifications",
+            "participant journey updates",
+            "receive success stories",
+            "donor communication"
+        ],
+        "answer": "Receive personalized updates on your sponsored participants' journeys: housing fund milestones, POD deployment, MOBI access, job placements, and housing stability. Get notifications for major achievements. See before/after stories (with participant consent). Celebrate victories together.",
+        "category": "donor_support",
+        "agent_suggestion": "donor_relations",
+        "keywords": ["updates", "notifications", "progress", "stories"],
+        "actions": [
+            {"type": "link", "text": "Become Sponsor", "url": "/scan-give"},
+            {"type": "link", "text": "Impact Stories", "url": "/impact"}
+        ]
+    },
+    
+    "donor_100_percent_transparency": {
+        "questions": [
+            "100 percent transparent donations",
+            "complete donation transparency",
+            "see every dollar",
+            "full transparency sheltr",
+            "where every dollar goes"
+        ],
+        "answer": "100% transparent: Every donation recorded on blockchain, every allocation tracked in real-time, every outcome verified. See exactly where your money goes—no hidden fees, no admin overhead beyond the disclosed 5%, no mysteries. The most transparent charitable giving platform ever created.",
+        "category": "donor_support",
+        "agent_suggestion": "donor_relations",
+        "keywords": ["100 percent", "complete transparency", "every dollar", "full"],
+        "actions": [
+            {"type": "link", "text": "View Blockchain", "url": "/tokenomics"},
+            {"type": "link", "text": "Donate Now", "url": "/scan-give"}
+        ]
+    },
+    
+    # ==========================================
+    # SHELTER/ORGANIZATION SOLUTIONS (18 FAQs)
+    # ==========================================
+    
+    "shelter_overflow_relief": {
+        "questions": [
+            "overflow relief for shelters",
+            "what to do when shelter full",
+            "shelter overflow crisis",
+            "at capacity shelter solutions",
+            "overflow housing"
+        ],
+        "answer": "When you're at capacity, seamlessly connect participants with PODS emergency housing, transitional apartments, and permanent housing through SHELTR's verified provider network. Stop turning people away—provide immediate alternatives. PODS deploy within days, funded by the 15% housing allocation.",
+        "category": "shelter_operations",
+        "agent_suggestion": "shelter_operations",
+        "keywords": ["overflow", "at capacity", "full", "crisis", "relief"],
+        "actions": [
+            {"type": "link", "text": "Shelter Solutions", "url": "/solutions/organizations"},
+            {"type": "link", "text": "Schedule Call", "url": "/contact"}
+        ]
+    },
+    
+    "shelter_hmis_vs_traditional": {
+        "questions": [
+            "sheltr vs traditional hmis",
+            "sheltr vs wellsky",
+            "sheltr vs planstreet",
+            "hmis comparison",
+            "why sheltr better than current hmis"
+        ],
+        "answer": "SHELTR offers AI-powered analytics, blockchain donations, participant QR codes, mobile-first design, real-time fund tracking, and 1-2 week implementation—all features traditional HMIS systems lack. Plus: overflow relief network, 4-6% investment returns, and PODS/MOBI/drones physical infrastructure. HUD compliant. Free/community supported.",
+        "category": "shelter_operations",
+        "agent_suggestion": "shelter_operations",
+        "keywords": ["vs hmis", "comparison", "better than", "traditional"],
+        "actions": [
+            {"type": "link", "text": "Full Comparison", "url": "/solutions/organizations"},
+            {"type": "link", "text": "Book Demo", "url": "/contact"}
+        ]
+    },
+    
+    "shelter_implementation_time": {
+        "questions": [
+            "how fast sheltr implementation",
+            "shelter onboarding time",
+            "quick implementation hmis",
+            "setup time for shelters",
+            "how long to get started"
+        ],
+        "answer": "Complete setup and training in 1-2 weeks (vs 2-6 months for traditional HMIS). Fast data migration with zero data loss and full historical preservation. Start seeing results immediately with 24/7 support and continuous optimization. Most shelters are fully operational within 14 days.",
+        "category": "shelter_operations",
+        "agent_suggestion": "shelter_operations",
+        "keywords": ["implementation", "setup", "onboarding", "how long", "fast"],
+        "actions": [
+            {"type": "link", "text": "Implementation Guide", "url": "/solutions/organizations"},
+            {"type": "link", "text": "Get Started", "url": "/contact"}
+        ]
+    },
+    
+    "shelter_qr_code_generation": {
+        "questions": [
+            "qr code for shelter participants",
+            "generate participant qr codes",
+            "automatic qr creation",
+            "qr intake system",
+            "digital qr cards"
+        ],
+        "answer": "Automated QR code generation during digital intake. Create unique participant QR codes in seconds during registration. Print cards on-site or send digital copies. QR codes instantly connect participants to donations, track fund allocation, and integrate with case management—all in one platform.",
+        "category": "shelter_operations",
+        "agent_suggestion": "shelter_operations",
+        "keywords": ["qr generation", "create qr", "automatic", "intake"],
+        "actions": [
+            {"type": "link", "text": "QR System", "url": "/solutions/organizations"},
+            {"type": "link", "text": "Demo", "url": "/contact"}
+        ]
+    },
+    
+    "shelter_case_management_tools": {
+        "questions": [
+            "shelter case management tools",
+            "participant tracking sheltr",
+            "case management features",
+            "shelter staff tools",
+            "digital case files"
+        ],
+        "answer": "Comprehensive case management: digital intake and assessment forms, progress tracking and milestone management, document storage and verification, communication logs and notes, real-time notifications, mobile app for field work, and QR code scanning for quick check-ins. Everything in one integrated platform.",
+        "category": "shelter_operations",
+        "agent_suggestion": "shelter_operations",
+        "keywords": ["case management", "tracking", "staff tools", "participant"],
+        "actions": [
+            {"type": "link", "text": "Features", "url": "/solutions/organizations"},
+            {"type": "link", "text": "Schedule Demo", "url": "/contact"}
+        ]
+    },
+    
+    "shelter_analytics_reporting": {
+        "questions": [
+            "shelter analytics platform",
+            "hmis reporting tools",
+            "automated shelter reports",
+            "outcome tracking shelter",
+            "funder reports automated"
+        ],
+        "answer": "Real-time donation tracking and allocation, outcome measurement and success metrics, automated funder reports (HUD, HMIS compatible), performance dashboards and KPI tracking, and custom report builder for stakeholders. Generate compliance reports in minutes, not days. AI-powered insights optimize program effectiveness.",
+        "category": "shelter_operations",
+        "agent_suggestion": "shelter_operations",
+        "keywords": ["analytics", "reporting", "automated", "outcomes", "metrics"],
+        "actions": [
+            {"type": "link", "text": "Analytics Demo", "url": "/solutions/organizations"},
+            {"type": "link", "text": "View Samples", "url": "/contact"}
+        ]
+    },
+    
+    "shelter_mobile_staff_app": {
+        "questions": [
+            "mobile app for shelter staff",
+            "field case management app",
+            "shelter staff mobile tools",
+            "offline shelter app",
+            "mobile hmis"
+        ],
+        "answer": "Mobile-first tools for frontline workers: mobile app for field case management, QR code scanning for quick check-ins, real-time notifications and alerts, offline capability for field work, and secure messaging between staff. Access full participant records anywhere, anytime. iOS and Android native apps.",
+        "category": "shelter_operations",
+        "agent_suggestion": "shelter_operations",
+        "keywords": ["mobile app", "field", "staff tools", "offline"],
+        "actions": [
+            {"type": "link", "text": "Mobile Features", "url": "/solutions/organizations"},
+            {"type": "link", "text": "Download App", "url": "/contact"}
+        ]
+    },
+    
+    "shelter_compliance_security": {
+        "questions": [
+            "sheltr hipaa compliant",
+            "shelter data security",
+            "hmis compliance sheltr",
+            "soc 2 certification",
+            "shelter data protection"
+        ],
+        "answer": "Enterprise-grade security: HIPAA-compliant data handling, SOC 2 Type II certification, role-based access controls, audit trails and data backup, multi-factor authentication, and encrypted data storage. All HUD Continuum of Care reporting standards met. Your participants' data is protected with bank-level security.",
+        "category": "shelter_operations",
+        "agent_suggestion": "shelter_operations",
+        "keywords": ["compliance", "security", "hipaa", "soc 2", "protected"],
+        "actions": [
+            {"type": "link", "text": "Security Details", "url": "/solutions/organizations"},
+            {"type": "link", "text": "Compliance Docs", "url": "/docs"}
+        ]
+    },
+    
+    "shelter_smartfund_returns": {
+        "questions": [
+            "shelter revenue from smartfund",
+            "sheltr investment returns shelters",
+            "4-6 apy for shelters",
+            "shelter funding model",
+            "community investment shelters"
+        ],
+        "answer": "Generate sustainable revenue through SmartFund™: 15% of donations create housing infrastructure with guaranteed 4-6% APY returns through Coinbase institutional staking. Returns fund operations, staff salaries, and program expansion. Create new revenue streams while solving homelessness. Investment vehicle + HMIS in one platform.",
+        "category": "shelter_operations",
+        "agent_suggestion": "shelter_operations",
+        "keywords": ["revenue", "returns", "4-6 apy", "investment", "funding"],
+        "actions": [
+            {"type": "link", "text": "SmartFund Model", "url": "/tokenomics"},
+            {"type": "link", "text": "Financial Details", "url": "/solutions/organizations"}
+        ]
+    },
+    
+    "shelter_increase_funding": {
+        "questions": [
+            "increase shelter funding",
+            "better grant success shelters",
+            "shelter fundraising tools",
+            "funder relationship tools",
+            "shelter grant applications"
+        ],
+        "answer": "Comprehensive impact data and automated compliance reporting strengthen grant applications and funder relationships. Generate compelling reports with real outcomes, measurable metrics, and verified impact. Up to 35% reduction in administrative costs and better grant success rates. Automated HUD reporting saves staff hours.",
+        "category": "shelter_operations",
+        "agent_suggestion": "shelter_operations",
+        "keywords": ["funding", "grants", "fundraising", "funder"],
+        "actions": [
+            {"type": "link", "text": "Funding Tools", "url": "/solutions/organizations"},
+            {"type": "link", "text": "ROI Case Study", "url": "/contact"}
+        ]
+    },
+    
+    "shelter_data_migration": {
+        "questions": [
+            "migrate data to sheltr",
+            "import existing records",
+            "data transfer hmis",
+            "shelter data migration",
+            "switch from current hmis"
+        ],
+        "answer": "Seamless import of existing participant records with zero data loss and full historical preservation. Our team handles the entire migration process in 1-2 weeks. All legacy data, case notes, documents, and histories transfer cleanly. No interruption to operations. Full training provided for staff transition.",
+        "category": "shelter_operations",
+        "agent_suggestion": "shelter_operations",
+        "keywords": ["migration", "import", "transfer", "data", "switch"],
+        "actions": [
+            {"type": "link", "text": "Migration Guide", "url": "/solutions/organizations"},
+            {"type": "link", "text": "Schedule Migration", "url": "/contact"}
+        ]
+    },
+    
+    "shelter_time_savings": {
+        "questions": [
+            "shelter time savings sheltr",
+            "reduce admin time",
+            "staff efficiency gains",
+            "automate shelter tasks",
+            "save staff hours"
+        ],
+        "answer": "Automated reporting, digital intake, and streamlined case management free up staff time for direct participant support. Up to 40% time savings on administrative tasks. Generate reports in minutes instead of days. Spend more time changing lives, less time on paperwork. ROI typically seen within first month.",
+        "category": "shelter_operations",
+        "agent_suggestion": "shelter_operations",
+        "keywords": ["time savings", "efficiency", "automate", "reduce admin"],
+        "actions": [
+            {"type": "link", "text": "Time Analysis", "url": "/solutions/organizations"},
+            {"type": "link", "text": "Calculate ROI", "url": "/contact"}
+        ]
+    },
+    
+    "shelter_ai_powered_features": {
+        "questions": [
+            "ai features for shelters",
+            "predictive analytics shelter",
+            "ai case management",
+            "machine learning hmis",
+            "shelter ai tools"
+        ],
+        "answer": "AI-powered predictive analytics forecast bed demand, identify at-risk participants early, optimize program effectiveness, predict housing outcomes, and provide intelligent case recommendations. Machine learning improves matching participants to services and housing. Get ahead of crises with proactive insights.",
+        "category": "shelter_operations",
+        "agent_suggestion": "shelter_operations",
+        "keywords": ["ai", "predictive", "machine learning", "analytics"],
+        "actions": [
+            {"type": "link", "text": "AI Features", "url": "/solutions/organizations"},
+            {"type": "link", "text": "See Demo", "url": "/contact"}
+        ]
+    },
+    
+    "shelter_90_day_crisis": {
+        "questions": [
+            "90 day threshold shelters",
+            "overflow crisis solutions",
+            "shelter capacity problems",
+            "tent encampments alternative",
+            "emergency housing shelters"
+        ],
+        "answer": "After 90 days of homelessness, recovery chances drop dramatically. Traditional shelters can't provide the stability needed. SHELTR's PODS offer immediate alternatives when you're at capacity—winter-rated, secure, mobile housing deployed within days. Stop the 90-day clock. Stop turning people to tents. Provide dignity.",
+        "category": "shelter_operations",
+        "agent_suggestion": "shelter_operations",
+        "keywords": ["90 days", "overflow", "crisis", "tents", "emergency"],
+        "actions": [
+            {"type": "link", "text": "Overflow Solutions", "url": "/solutions/organizations"},
+            {"type": "link", "text": "Partner with Us", "url": "/contact"}
+        ]
+    },
+    
+    "shelter_open_source": {
+        "questions": [
+            "is sheltr open source",
+            "free hmis for shelters",
+            "community supported shelter",
+            "sheltr pricing model",
+            "cost of sheltr"
+        ],
+        "answer": "Open-source, community-supported, built for the frontlines. Free for qualifying community shelters. Enterprise/white-label pricing for larger organizations. No high setup costs like traditional HMIS ($50K+). Implementation in weeks, not months. Sustainable through SmartFund investment returns and optional enterprise features.",
+        "category": "shelter_operations",
+        "agent_suggestion": "shelter_operations",
+        "keywords": ["open source", "free", "pricing", "cost", "community"],
+        "actions": [
+            {"type": "link", "text": "Pricing Details", "url": "/solutions/organizations"},
+            {"type": "link", "text": "Apply for Free", "url": "/contact"}
+        ]
+    },
+    
+    "shelter_inter_shelter_coordination": {
+        "questions": [
+            "coordinate between shelters",
+            "multi shelter network",
+            "regional shelter coordination",
+            "share participant data shelters",
+            "shelter collaboration tools"
+        ],
+        "answer": "Regional shelter coordination: share participant data (with consent) across shelters, coordinate bed availability and referrals, track cross-shelter participant journeys, unified regional analytics, and collaborative case management. Prevent duplication, reduce gaps, maximize regional impact.",
+        "category": "shelter_operations",
+        "agent_suggestion": "shelter_operations",
+        "keywords": ["coordinate", "network", "regional", "collaboration"],
+        "actions": [
+            {"type": "link", "text": "Network Features", "url": "/solutions/organizations"},
+            {"type": "link", "text": "Join Network", "url": "/contact"}
+        ]
+    },
+    
+    "shelter_improved_outcomes": {
+        "questions": [
+            "improve shelter outcomes",
+            "better participant results",
+            "increase housing placements",
+            "shelter success metrics",
+            "measure shelter effectiveness"
+        ],
+        "answer": "Data-driven insights help optimize programs and track participant progress from intake to permanent housing. Measure housing placement rates, time to stability, program completion, employment outcomes, and long-term success. AI identifies what works and replicates success. Continuous improvement through real data.",
+        "category": "shelter_operations",
+        "agent_suggestion": "shelter_operations",
+        "keywords": ["outcomes", "improve", "results", "success", "effectiveness"],
+        "actions": [
+            {"type": "link", "text": "Outcomes Analysis", "url": "/solutions/organizations"},
+            {"type": "link", "text": "Case Studies", "url": "/contact"}
+        ]
+    },
+    
+    "shelter_participant_empowerment": {
+        "questions": [
+            "participant centric shelter",
+            "empower participants shelter",
+            "participant control data",
+            "participant led approach",
+            "dignity focused shelter"
+        ],
+        "answer": "Unlike traditional HMIS, SHELTR empowers participants with personal QR donation codes, digital wallet access, real-time progress tracking, and control over their data. Participants are partners in their journey, not case numbers. Dignity-first design in every feature. Participants see their housing fund grow in real-time.",
+        "category": "shelter_operations",
+        "agent_suggestion": "shelter_operations",
+        "keywords": ["participant centric", "empowerment", "dignity", "control"],
+        "actions": [
+            {"type": "link", "text": "Participant Features", "url": "/solutions/organizations"},
+            {"type": "link", "text": "Philosophy", "url": "/about"}
+        ]
+    },
+    
+    # ==========================================
+    # GOVERNMENT SOLUTIONS (8 FAQs)
+    # ==========================================
+    
+    "government_policy_analytics": {
+        "questions": [
+            "government homelessness analytics",
+            "policy impact tracking",
+            "regional homelessness data",
+            "government policy tools",
+            "evidence based policy"
+        ],
+        "answer": "Comprehensive dashboard showing homelessness trends, demographics, and service gaps across your jurisdiction. Real-time population flow analysis, geographic hotspot identification, demographic breakdowns, service utilization gaps, and predictive modeling for resource planning. Enable evidence-based policy making.",
+        "category": "government_services",
+        "agent_suggestion": "public_information",
+        "keywords": ["government", "policy", "analytics", "regional", "data"],
+        "actions": [
+            {"type": "link", "text": "Government Solutions", "url": "/solutions/government"},
+            {"type": "link", "text": "Policy Brief", "url": "/solutions/government/policy-brief"}
+        ]
+    },
+    
+    "government_budget_transparency": {
+        "questions": [
+            "transparent public fund tracking",
+            "government budget allocation",
+            "public spending homelessness",
+            "blockchain government funds",
+            "audit trails government"
+        ],
+        "answer": "Track public fund allocation and ROI with blockchain-verified spending records: blockchain-verified fund distribution, real-time ROI measurement, cost-per-outcome analysis by program, public spending transparency dashboard, and audit-ready financial documentation. Full accountability for every taxpayer dollar.",
+        "category": "government_services",
+        "agent_suggestion": "public_information",
+        "keywords": ["budget", "transparency", "public funds", "audit", "spending"],
+        "actions": [
+            {"type": "link", "text": "Budget Tools", "url": "/solutions/government"},
+            {"type": "link", "text": "Transparency Demo", "url": "/contact"}
+        ]
+    },
+    
+    "government_inter_agency": {
+        "questions": [
+            "inter agency coordination homelessness",
+            "multi department coordination",
+            "government agency collaboration",
+            "unified homelessness platform government",
+            "cross agency data sharing"
+        ],
+        "answer": "Unified platform enabling seamless coordination between health, housing, social services, and law enforcement departments. Shared case management across departments, real-time communication and alerts, coordinated resource allocation, joint planning and strategy tools, and performance benchmarking across agencies.",
+        "category": "government_services",
+        "agent_suggestion": "public_information",
+        "keywords": ["inter agency", "coordination", "collaboration", "departments"],
+        "actions": [
+            {"type": "link", "text": "Coordination Tools", "url": "/solutions/government"},
+            {"type": "link", "text": "Agency Demo", "url": "/contact"}
+        ]
+    },
+    
+    "government_hud_compliance": {
+        "questions": [
+            "hud compliance reporting",
+            "government hmis compliance",
+            "continuum of care reporting",
+            "federal reporting requirements",
+            "automated government reports"
+        ],
+        "answer": "Automated federal and state reporting: HUD Continuum of Care reporting, HMIS data integration and validation, annual performance measurement, grant compliance monitoring, and legislative reporting requirements. Generate compliance reports in minutes with verified data. Never miss a deadline.",
+        "category": "government_services",
+        "agent_suggestion": "public_information",
+        "keywords": ["hud", "compliance", "reporting", "federal", "continuum"],
+        "actions": [
+            {"type": "link", "text": "Compliance Features", "url": "/solutions/government"},
+            {"type": "link", "text": "Report Samples", "url": "/contact"}
+        ]
+    },
+    
+    "government_roi_measurement": {
+        "questions": [
+            "government homelessness roi",
+            "cost per outcome government",
+            "program effectiveness measurement",
+            "taxpayer roi homelessness",
+            "government cost savings"
+        ],
+        "answer": "Proven return on investment: 35% reduction in administrative costs, 50% faster policy impact assessment, and 25% improved inter-agency coordination. Cost-per-outcome analysis by program shows exactly what works. Real-time ROI measurement proves taxpayer value. Data-driven budget decisions.",
+        "category": "government_services",
+        "agent_suggestion": "public_information",
+        "keywords": ["roi", "cost", "savings", "effectiveness", "measurement"],
+        "actions": [
+            {"type": "link", "text": "ROI Analysis", "url": "/solutions/government"},
+            {"type": "link", "text": "Case Study", "url": "/contact"}
+        ]
+    },
+    
+    "government_predictive_modeling": {
+        "questions": [
+            "predictive homelessness modeling",
+            "forecast homelessness trends",
+            "government planning tools",
+            "resource allocation planning",
+            "anticipate homelessness crisis"
+        ],
+        "answer": "AI-powered predictive modeling for resource planning: forecast population flows, predict seasonal demand, identify emerging hotspots, optimize service placement, and anticipate crisis points. Get ahead of problems with data-driven forecasting. Plan budgets based on evidence, not guesswork.",
+        "category": "government_services",
+        "agent_suggestion": "public_information",
+        "keywords": ["predictive", "forecast", "planning", "modeling", "anticipate"],
+        "actions": [
+            {"type": "link", "text": "Predictive Tools", "url": "/solutions/government"},
+            {"type": "link", "text": "See Demo", "url": "/contact"}
+        ]
+    },
+    
+    "government_public_dashboard": {
+        "questions": [
+            "public transparency dashboard",
+            "government accountability homelessness",
+            "public spending dashboard",
+            "citizen access homelessness data",
+            "transparent government reporting"
+        ],
+        "answer": "Public spending transparency dashboard shows citizens exactly how their tax dollars are used, what programs are working, and real outcomes achieved. Blockchain-verified transactions, real-time updates, outcome metrics, and impact stories. Build public trust through radical transparency.",
+        "category": "government_services",
+        "agent_suggestion": "public_information",
+        "keywords": ["public dashboard", "transparency", "accountability", "citizen"],
+        "actions": [
+            {"type": "link", "text": "Public Dashboard", "url": "/impact"},
+            {"type": "link", "text": "Transparency Tools", "url": "/solutions/government"}
+        ]
+    },
+    
+    "government_policy_brief": {
+        "questions": [
+            "sheltr policy brief",
+            "government policy documentation",
+            "homelessness policy recommendations",
+            "evidence based policy sheltr",
+            "government implementation guide"
+        ],
+        "answer": "Comprehensive policy brief demonstrates how SHELTR enables evidence-based homelessness policy and transparent public fund tracking. Review detailed implementation strategies, projected outcomes for your jurisdiction, cost-benefit analysis, and regional case studies. Download full policy brief with ROI projections.",
+        "category": "government_services",
+        "agent_suggestion": "public_information",
+        "keywords": ["policy brief", "documentation", "recommendations", "guide"],
+        "actions": [
+            {"type": "link", "text": "Download Brief", "url": "/solutions/government/policy-brief"},
+            {"type": "link", "text": "Contact Us", "url": "/contact"}
+        ]
+    },
+    
     "fabrication_pipeline": {
         "questions": [
             "what is the fabrication pipeline",

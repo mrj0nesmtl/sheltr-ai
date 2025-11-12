@@ -534,50 +534,73 @@ class ChatbotOrchestrator:
                 else:
                     logger.warning(f"❌ RAG response failed, falling back to standard AI: {str(error)}")
                 
-                # Fallback to standard AI response (same for both timeout and error)
-                ai_context = {
-                    "user_role": context.user_role,
-                    "intent_category": intent.category.value,
-                    "intent_subcategory": intent.subcategory,
-                    "conversation_history": context.get_recent_context(2),  # Reduced from 3 to 2 for faster processing
-                    "urgency_level": intent.urgency.value,
-                    "first_time_user": len(context.message_history) == 0,
-                    "escalated": context.escalation_level > 0,
-                    "emergency_detected": intent.category == IntentCategory.EMERGENCY,
-                    "mobile_user": False
-                }
-                
-                # Get enhanced system prompt for this agent
-                system_prompt = get_enhanced_prompt(agent, ai_context)
-                
-                # Generate AI response with timeout (7s max for fallback)
-                ai_response = await asyncio.wait_for(
-                    openai_service.generate_response(
-                        message=current_message,
-                        context=ai_context,
-                        system_prompt=system_prompt
-                    ),
-                    timeout=7.0  # 7 second timeout for fallback
-                )
-                
-                # Generate contextual actions based on agent and intent
-                actions = await self._generate_contextual_actions(intent, context, agent)
-                
-                # Determine if escalation is needed
-                escalation_triggered = (
-                    intent.requires_escalation or 
-                    intent.urgency == UrgencyLevel.CRITICAL or
-                    agent == "emergency"
-                )
-                
-                return ChatResponse(
-                    message=ai_response,
-                    actions=actions,
-                    agent_used=f"{agent}_ai_fallback",
-                    escalation_triggered=escalation_triggered,
-                    follow_up=await self._generate_follow_up(intent, ai_context),
-                    metadata={'rag_failed': True, 'fallback_used': True, 'timeout': isinstance(error, asyncio.TimeoutError)}
-                )
+                # Try fallback with timeout protection
+                try:
+                    # Fallback to standard AI response (same for both timeout and error)
+                    ai_context = {
+                        "user_role": context.user_role,
+                        "intent_category": intent.category.value,
+                        "intent_subcategory": intent.subcategory,
+                        "conversation_history": context.get_recent_context(2),  # Reduced from 3 to 2 for faster processing
+                        "urgency_level": intent.urgency.value,
+                        "first_time_user": len(context.message_history) == 0,
+                        "escalated": context.escalation_level > 0,
+                        "emergency_detected": intent.category == IntentCategory.EMERGENCY,
+                        "mobile_user": False
+                    }
+                    
+                    # Get enhanced system prompt for this agent
+                    system_prompt = get_enhanced_prompt(agent, ai_context)
+                    
+                    # Generate AI response with timeout (6s max for fallback, reduced from 7s)
+                    ai_response = await asyncio.wait_for(
+                        openai_service.generate_response(
+                            message=current_message,
+                            context=ai_context,
+                            system_prompt=system_prompt
+                        ),
+                        timeout=6.0  # 6 second timeout for fallback (reduced from 7s)
+                    )
+                    
+                    # Generate contextual actions based on agent and intent
+                    actions = await self._generate_contextual_actions(intent, context, agent)
+                    
+                    # Determine if escalation is needed
+                    escalation_triggered = (
+                        intent.requires_escalation or 
+                        intent.urgency == UrgencyLevel.CRITICAL or
+                        agent == "emergency"
+                    )
+                    
+                    return ChatResponse(
+                        message=ai_response,
+                        actions=actions,
+                        agent_used=f"{agent}_ai_fallback",
+                        escalation_triggered=escalation_triggered,
+                        follow_up=await self._generate_follow_up(intent, ai_context),
+                        metadata={'rag_failed': True, 'fallback_used': True, 'timeout': isinstance(error, asyncio.TimeoutError)}
+                    )
+                    
+                except asyncio.TimeoutError:
+                    # Fallback also timed out - return simple message instead of crashing
+                    logger.error(f"⏱️ Fallback AI also timed out (>6s), returning simple response")
+                    return ChatResponse(
+                        message="I apologize for the delay. Let me help you with that. Could you please rephrase your question or ask something more specific?",
+                        actions=[],
+                        agent_used=f"{agent}_timeout_fallback",
+                        escalation_triggered=False,
+                        metadata={'rag_timeout': True, 'fallback_timeout': True}
+                    )
+                except Exception as fallback_error:
+                    # Fallback crashed - return simple message instead of retrying
+                    logger.error(f"❌ Fallback AI crashed: {str(fallback_error)}, returning simple response")
+                    return ChatResponse(
+                        message="I'm having trouble processing your request right now. Please try asking in a different way, or contact our support team for assistance.",
+                        actions=[],
+                        agent_used=f"{agent}_error_fallback",
+                        escalation_triggered=False,
+                        metadata={'rag_failed': True, 'fallback_crashed': True, 'error': str(fallback_error)}
+                    )
             
         except Exception as e:
             logger.error(f"AI response generation failed: {str(e)}")

@@ -355,11 +355,15 @@ class RAGOrchestrator:
             'knowledge_available': enhanced_context['knowledge_available']
         })
         
-        # Generate response
-        ai_response = await self.openai_service.generate_response(
-            message=rag_prompt,
-            context=enhanced_context,
-            system_prompt=system_prompt
+        # Generate response with timeout to prevent slow OpenAI calls
+        import asyncio
+        ai_response = await asyncio.wait_for(
+            self.openai_service.generate_response(
+                message=rag_prompt,
+                context=enhanced_context,
+                system_prompt=system_prompt
+            ),
+            timeout=4.0  # 4 second timeout for OpenAI call (leaves 1s buffer for 5s RAG timeout)
         )
         
         return ai_response

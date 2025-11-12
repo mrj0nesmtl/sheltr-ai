@@ -300,12 +300,68 @@ If response quality degrades:
 
 ---
 
+## Additional Fixes (v2.96.2)
+
+### Critical Timeout Issues Fixed:
+
+**Problem:** Even after v2.96.1, responses could take 59+ seconds due to:
+1. RAG orchestrator's OpenAI call had NO timeout (could take 10+ seconds)
+2. Fallback timeout caused crash and full retry (adding another 12+ seconds)
+3. System would retry entire operation on fallback failure
+
+**Solutions:**
+
+1. **Added timeout to RAG OpenAI call:**
+```python
+# BEFORE
+ai_response = await self.openai_service.generate_response(...)
+# No timeout! Could take 10+ seconds
+
+# AFTER
+ai_response = await asyncio.wait_for(
+    self.openai_service.generate_response(...),
+    timeout=4.0  # 4s timeout (leaves 1s buffer for 5s RAG timeout)
+)
+```
+
+2. **Graceful fallback timeout handling:**
+```python
+# BEFORE
+# Fallback timeout caused crash → retry → 59s total
+
+# AFTER
+except asyncio.TimeoutError:
+    # Return simple response instead of crashing
+    return ChatResponse(
+        message="I apologize for the delay. Could you rephrase your question?",
+        ...
+    )
+```
+
+3. **Graceful fallback error handling:**
+```python
+except Exception as fallback_error:
+    # Return simple response instead of retrying
+    return ChatResponse(
+        message="I'm having trouble. Please try a different way.",
+        ...
+    )
+```
+
+**New Maximum Response Times:**
+- RAG succeeds: **4-5 seconds**
+- RAG times out → Fallback succeeds: **10-11 seconds**
+- Both timeout: **11 seconds** (returns simple message)
+- **NO MORE 59-second responses!**
+
+---
+
 ## Next Steps
 
 ### Immediate:
 1. ✅ Deploy changes to production
 2. ✅ Monitor response times
-3. ⏳ Restart API server
+3. ⏳ Restart API server (CRITICAL!)
 
 ### Short-term (This Week):
 - Monitor RAG success rate

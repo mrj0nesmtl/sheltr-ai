@@ -48,9 +48,9 @@ class OpenAIService:
             # Configuration
             self.model = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
             self.fallback_model = os.getenv("OPENAI_FALLBACK_MODEL", "gpt-3.5-turbo")
-            self.max_tokens = int(os.getenv("OPENAI_MAX_TOKENS", 2000))  # Increased from 150 to 2000 for complete responses
+            self.max_tokens = int(os.getenv("OPENAI_MAX_TOKENS", 800))  # Reduced from 2000 to 800 for faster responses (still sufficient for chat)
             self.temperature = float(os.getenv("OPENAI_TEMPERATURE", 0.7))
-            self.max_context_tokens = int(os.getenv("OPENAI_MAX_CONTEXT_TOKENS", 4000))
+            self.max_context_tokens = int(os.getenv("OPENAI_MAX_CONTEXT_TOKENS", 3000))  # Reduced from 4000 for faster processing
             
             # Initialize token encoder
             try:

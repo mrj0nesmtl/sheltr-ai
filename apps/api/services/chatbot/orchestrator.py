@@ -511,7 +511,8 @@ class ChatbotOrchestrator:
                 from services.chatbot.rag_orchestrator import rag_orchestrator
                 import asyncio
                 
-                # Add 8-second timeout for RAG response to prevent slow responses
+                # Add 5-second timeout for RAG response to prevent slow responses
+                # Reduced from 8s to 5s for faster failover
                 rag_response = await asyncio.wait_for(
                     rag_orchestrator.generate_knowledge_enhanced_response(
                         user_message=current_message,
@@ -520,7 +521,7 @@ class ChatbotOrchestrator:
                         agent_type=agent,
                         intent=intent
                     ),
-                    timeout=8.0  # 8 second timeout
+                    timeout=5.0  # 5 second timeout (reduced for faster responses)
                 )
                 
                 logger.info(f"✅ RAG response generated in time with {rag_response.metadata.get('sources_used', 0)} knowledge sources")
@@ -529,7 +530,7 @@ class ChatbotOrchestrator:
             except (asyncio.TimeoutError, Exception) as error:
                 # Handle both timeout and other RAG failures
                 if isinstance(error, asyncio.TimeoutError):
-                    logger.warning(f"⏱️ RAG response timeout (>8s), falling back to standard AI")
+                    logger.warning(f"⏱️ RAG response timeout (>5s), falling back to standard AI")
                 else:
                     logger.warning(f"❌ RAG response failed, falling back to standard AI: {str(error)}")
                 
@@ -538,7 +539,7 @@ class ChatbotOrchestrator:
                     "user_role": context.user_role,
                     "intent_category": intent.category.value,
                     "intent_subcategory": intent.subcategory,
-                    "conversation_history": context.get_recent_context(3),
+                    "conversation_history": context.get_recent_context(2),  # Reduced from 3 to 2 for faster processing
                     "urgency_level": intent.urgency.value,
                     "first_time_user": len(context.message_history) == 0,
                     "escalated": context.escalation_level > 0,
@@ -549,11 +550,14 @@ class ChatbotOrchestrator:
                 # Get enhanced system prompt for this agent
                 system_prompt = get_enhanced_prompt(agent, ai_context)
                 
-                # Generate AI response
-                ai_response = await openai_service.generate_response(
-                    message=current_message,
-                    context=ai_context,
-                    system_prompt=system_prompt
+                # Generate AI response with timeout (7s max for fallback)
+                ai_response = await asyncio.wait_for(
+                    openai_service.generate_response(
+                        message=current_message,
+                        context=ai_context,
+                        system_prompt=system_prompt
+                    ),
+                    timeout=7.0  # 7 second timeout for fallback
                 )
                 
                 # Generate contextual actions based on agent and intent

@@ -22,10 +22,10 @@ class RAGOrchestrator:
         self.knowledge_service = knowledge_service
         self.openai_service = openai_service
         
-        # RAG configuration
-        self.knowledge_search_limit = 3
-        self.similarity_threshold = 0.3  # Lower threshold for better recall
-        self.max_knowledge_tokens = 1500
+        # RAG configuration (optimized for speed)
+        self.knowledge_search_limit = 2  # Reduced from 3 to 2 for faster processing
+        self.similarity_threshold = 0.35  # Slightly higher threshold for better quality matches
+        self.max_knowledge_tokens = 1000  # Reduced from 1500 for faster generation
     
     async def enhance_search_query(self, query: str, agent_type: str = "general", intent=None) -> str:
         """Public method to enhance search queries - used by dashboard service"""
@@ -70,11 +70,11 @@ class RAGOrchestrator:
             if not results:
                 return "No relevant information found in the knowledge base."
             
-            # Return formatted content from top results
+            # Return formatted content from top results (reduced for faster responses)
             content_parts = []
             for result in results[:2]:  # Top 2 results
                 if result.get('similarity', 0) >= self.similarity_threshold:
-                    content_parts.append(result.get('content', '')[:300])
+                    content_parts.append(result.get('content', '')[:250])  # Reduced from 300 to 250 chars
             
             return " ".join(content_parts) if content_parts else "No high-confidence matches found."
             
@@ -316,13 +316,13 @@ class RAGOrchestrator:
         for i, result in enumerate(results, 1):
             similarity_score = result.get('similarity', 0)
             
-            # Only include high-confidence results
+            # Only include high-confidence results (reduced content for faster generation)
             if similarity_score >= self.similarity_threshold:
                 context_parts.append(f"""
                 Knowledge Source {i}:
                 Document: {result.get('document_title', 'Unknown')}
                 Category: {result.get('document_category', 'general')}
-                Content: {result.get('content', '')[:500]}...
+                Content: {result.get('content', '')[:350]}...
                 Relevance: {similarity_score:.2f}
                 """)
         

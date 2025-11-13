@@ -68,10 +68,13 @@ export class PublicTeamService {
         .filter(member => member.showOnTeamPage !== false); // Only show members where showOnTeamPage is not explicitly false
       
       // Fetch slug and profile picture from users collection (source of truth)
+      // Note: This will only work for authenticated users due to Firestore rules
+      // For public access, slug should also be stored in team_members collection
       const membersWithUserData = await Promise.all(
         members.map(async (member) => {
           try {
             // Try to get the user document with the same ID
+            // This may fail for unauthenticated users due to Firestore security rules
             const userRef = doc(db, 'users', member.id);
             const userSnap = await getDoc(userRef);
             
@@ -94,9 +97,11 @@ export class PublicTeamService {
               return updatedMember;
             }
           } catch (error) {
-            console.log(`Note: Could not fetch user data for member ${member.name}`);
+            // Expected for unauthenticated users - slug should be in team_members collection
+            console.log(`Note: Could not fetch user data for member ${member.name} (likely unauthenticated)`);
           }
           
+          // Return member as-is (slug should already be in team_members if public)
           return member;
         })
       );

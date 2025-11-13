@@ -15,7 +15,7 @@ import { goalsService, type Goal as RealGoal } from '@/services/goalsService';
 import { getParticipantProfile, type ParticipantProfile } from '@/services/platformMetrics';
 import { participantProfileService } from '@/services/participantProfileService';
 import { uploadProfilePicture } from '@/services/fileStorageService';
-import { doc, updateDoc, collection, query, where, getDocs } from 'firebase/firestore';
+import { doc, getDoc, updateDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { generateProfileQRCodeUrl, getParticipantProfileUrl, getSharingUrl } from '@/utils/profileUrls';
 import { 
@@ -175,65 +175,45 @@ export default function ParticipantProfile() {
   };
 
   // Function to get participant's real donation data from Firestore
-  const getParticipantDonationData = async (participantId: string): Promise<ParticipantDonationData> => {
+  const getParticipantDonationData = async (userId: string): Promise<ParticipantDonationData> => {
     try {
-      console.log(`🔍 [PROFILE] Fetching real donation data for: ${participantId}`);
+      console.log(`🔍 [PROFILE] Fetching real donation data for user: ${userId}`);
       
-      let totalReceived = 0;
-      let donationCount = 0;
+      // Get data directly from the user document (already aggregated)
+      const userRef = doc(db, 'users', userId);
+      const userSnap = await getDoc(userRef);
       
-      // Query BOTH collections: demo_donations AND tenants/.../donations
+      if (userSnap.exists()) {
+        const userData = userSnap.data();
+        const totalReceived = userData.total_received || 0;
+        const donationCount = userData.donation_count || 0;
+        const housingFundBalance = userData.housing_fund_balance || 0;
+        
+        console.log(`💰 [USER DATA] Found ${donationCount} donations totaling $${totalReceived}`);
+        console.log(`🏠 [HOUSING FUND] Balance: $${housingFundBalance}`);
+        
+        // Calculate estimated stats (in real app, these would come from analytics)
+        const profileViews = donationCount * 5; // Estimate 5 views per donation
+        const supporterCount = donationCount; // Assume each donation is from unique supporter
+        const goalProgress = userData.participantProfile?.goalProgress || 
+                            Math.min(Math.round((totalReceived / 1000) * 100), 100); // Progress toward $1000 goal
+        
+        return {
+          totalReceived,
+          donationCount,
+          profileViews,
+          supporterCount,
+          goalProgress
+        };
+      }
       
-      // 1. Query demo_donations
-      const demoQuery = query(
-        collection(db, 'demo_donations'),
-        where('participant_id', '==', participantId),
-        where('status', '==', 'completed')
-      );
-      const demoSnapshot = await getDocs(demoQuery);
-      
-      demoSnapshot.docs.forEach(doc => {
-        const donationData = doc.data();
-        const amount = donationData.amount?.total || donationData.amount || 0;
-        if (amount > 0) {
-          totalReceived += amount;
-          donationCount++;
-        }
-      });
-      
-      console.log(`💰 [DEMO] Found ${demoSnapshot.size} completed donations in demo_donations`);
-      
-      // 2. Query tenants/YDJCJnuLGMC9mWOWDSOa/donations
-      const tenantQuery = query(
-        collection(db, 'tenants/YDJCJnuLGMC9mWOWDSOa/donations'),
-        where('participant_id', '==', participantId),
-        where('status', '==', 'completed')
-      );
-      const tenantSnapshot = await getDocs(tenantQuery);
-      
-      tenantSnapshot.docs.forEach(doc => {
-        const donationData = doc.data();
-        const amount = donationData.amount?.total || donationData.amount || 0;
-        if (amount > 0) {
-          totalReceived += amount;
-          donationCount++;
-        }
-      });
-      
-      console.log(`💰 [TENANT] Found ${tenantSnapshot.size} completed donations in tenant collection`);
-      console.log(`💰 [TOTAL] ${donationCount} donations totaling $${totalReceived} for ${participantId}`);
-      
-      // Calculate estimated stats (in real app, these would come from analytics)
-      const profileViews = donationCount * 5; // Estimate 5 views per donation
-      const supporterCount = donationCount; // Assume each donation is from unique supporter
-      const goalProgress = Math.min(Math.round((totalReceived / 1000) * 100), 100); // Progress toward $1000 goal
-      
+      console.log('⚠️ [PROFILE] No user document found, returning zeros');
       return {
-        totalReceived,
-        donationCount,
-        profileViews,
-        supporterCount,
-        goalProgress
+        totalReceived: 0,
+        donationCount: 0,
+        profileViews: 0,
+        supporterCount: 0,
+        goalProgress: 0
       };
     } catch (error) {
       console.error('❌ Error fetching participant donation data:', error);
@@ -262,7 +242,7 @@ export default function ParticipantProfile() {
         // Load both participant profile and donation data
         const [participantData, realDonationData] = await Promise.all([
           getParticipantProfile(user.uid),
-          getParticipantDonationData(participantId)
+          getParticipantDonationData(user.uid) // Use user.uid to fetch from users collection
         ]);
         
         setDonationData(realDonationData);

@@ -51,6 +51,7 @@ import { Breadcrumb, buildBreadcrumb } from '@/components/knowledge/Breadcrumb';
 import { GitHubSyncPanel } from '@/components/knowledge/GitHubSyncPanel';
 import { SecureDocumentSync } from '@/components/knowledge/SecureDocumentSync';
 import { PermissionBadge, type PermissionLevel } from '@/components/knowledge';
+import { DocsHubOrderManager } from '@/components/knowledge/DocsHubOrderManager';
 
 export default function KnowledgeDashboard() {
   const { user } = useAuth(); // Get user for access control
@@ -75,6 +76,7 @@ export default function KnowledgeDashboard() {
   const [showViewDialog, setShowViewDialog] = useState(false);
   const [viewingDocument, setViewingDocument] = useState<KnowledgeDocument | null>(null);
   const [showWebScrapingDialog, setShowWebScrapingDialog] = useState(false);
+  const [showOrderManagerDialog, setShowOrderManagerDialog] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
   
   // Folder navigation state
@@ -415,6 +417,22 @@ export default function KnowledgeDashboard() {
             </div>
         
         <div className="flex flex-col sm:flex-row gap-2">
+          <Dialog open={showOrderManagerDialog} onOpenChange={setShowOrderManagerDialog}>
+            <DialogTrigger asChild>
+              <Button variant="outline" className="w-full sm:w-auto border-blue-300 text-blue-600 hover:bg-blue-50">
+                <BookOpen className="h-4 w-4 mr-2" />
+                <span className="hidden sm:inline">Docs Hub Order</span>
+                <span className="sm:hidden">Order</span>
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle>Manage Docs Hub Display Order</DialogTitle>
+              </DialogHeader>
+              <DocsHubOrderManager />
+            </DialogContent>
+          </Dialog>
+
           <Dialog open={showWebScrapingDialog} onOpenChange={setShowWebScrapingDialog}>
             <DialogTrigger asChild>
               <Button variant="outline" className="w-full sm:w-auto">

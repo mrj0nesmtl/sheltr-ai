@@ -294,19 +294,30 @@ export function DocsHubPublisher({
             {/* Display Order */}
             <div className="space-y-2">
               <Label htmlFor="hub-order">
-                Display Order
+                Display Position
                 <span className="text-xs text-muted-foreground ml-2">
-                  (lower numbers appear first)
+                  (1 = first, 2 = second, etc. — currently {settings.hub_order})
                 </span>
               </Label>
               <Input
                 id="hub-order"
                 type="number"
-                min="0"
-                max="9999"
+                min="1"
+                max="50"
                 value={settings.hub_order}
-                onChange={(e) => setSettings(prev => ({ ...prev, hub_order: parseInt(e.target.value) || 999 }))}
+                onChange={(e) => setSettings(prev => ({ ...prev, hub_order: parseInt(e.target.value) || 1 }))}
               />
+              <Alert>
+                <Info className="h-4 w-4" />
+                <AlertDescription className="text-xs">
+                  <strong>Simple positioning:</strong> Enter the exact position (1-50) where you want this document to appear. 
+                  Position 1 appears first, position 2 appears second, and so on.
+                  <br />
+                  <span className="text-muted-foreground mt-1 block">
+                    Tip: Use the Knowledge Dashboard to see all published documents and their current positions.
+                  </span>
+                </AlertDescription>
+              </Alert>
             </div>
 
             {/* Custom Description (Optional) */}

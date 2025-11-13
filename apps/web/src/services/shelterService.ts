@@ -28,6 +28,14 @@ export interface ShelterPublicConfig {
   description?: string;
   mission?: string;
   services?: string[];
+  // Contact & Location
+  address?: string;
+  phone?: string;
+  email?: string;
+  coordinates?: {
+    lat: number;
+    lng: number;
+  };
   qrCode?: {
     url: string;
     storagePath: string;

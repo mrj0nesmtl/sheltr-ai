@@ -134,9 +134,9 @@ export default function SettingsPage() {
           setFormData({
             name: config.name || metrics?.shelterName || '',
             description: config.description || '',
-            address: '', // Will be added to config
-            phone: '', // Will be added to config
-            email: '', // Will be added to config
+            address: config.address || '',
+            phone: config.phone || '',
+            email: config.email || '',
             website: config.socialMedia?.website || '',
             capacity: metrics?.capacity || 0,
             currentOccupancy: metrics?.totalParticipants || 0,
@@ -188,6 +188,9 @@ export default function SettingsPage() {
       const updateData: Partial<ShelterPublicConfig> = {
         name: formData.name,
         description: formData.description,
+        address: formData.address,
+        phone: formData.phone,
+        email: formData.email,
         services: formData.services,
         established: formData.established,
         socialMedia: {
@@ -929,15 +932,49 @@ export default function SettingsPage() {
                       value={formData.address}
                       disabled={!isEditing}
                       rows={3}
-                      className="w-full mt-1 p-2 border rounded-md"
+                      className="w-full mt-1 p-2 border rounded-md dark:bg-gray-800 dark:border-gray-700"
                       onChange={(e) => setFormData({...formData, address: e.target.value})}
+                      placeholder="Enter your shelter's full address"
                     />
                   </div>
-                  <Button variant="outline" className="w-full">
-                    <MapPin className="mr-2 h-4 w-4" />
-                    Set Location on Map
-                  </Button>
-                  <Button variant="outline" className="w-full">
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-sm font-medium">Phone</label>
+                      <input 
+                        type="tel"
+                        value={formData.phone}
+                        disabled={!isEditing}
+                        className="w-full mt-1 p-2 border rounded-md dark:bg-gray-800 dark:border-gray-700"
+                        onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                        placeholder="(555) 123-4567"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium">Email</label>
+                      <input 
+                        type="email"
+                        value={formData.email}
+                        disabled={!isEditing}
+                        className="w-full mt-1 p-2 border rounded-md dark:bg-gray-800 dark:border-gray-700"
+                        onChange={(e) => setFormData({...formData, email: e.target.value})}
+                        placeholder="contact@shelter.org"
+                      />
+                    </div>
+                  </div>
+
+                  <Button 
+                    variant="outline" 
+                    className="w-full"
+                    onClick={() => {
+                      if (formData.address) {
+                        const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(formData.address)}`;
+                        window.open(mapsUrl, '_blank');
+                      } else {
+                        alert('Please enter an address first');
+                      }
+                    }}
+                  >
                     <ExternalLink className="mr-2 h-4 w-4" />
                     View on Google Maps
                   </Button>
@@ -950,12 +987,27 @@ export default function SettingsPage() {
                   <CardDescription>How your location appears to visitors</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="bg-gray-100 dark:bg-gray-800 rounded-lg h-64 flex items-center justify-center">
-                    <div className="text-center">
-                      <Map className="h-12 w-12 mx-auto text-gray-400 mb-2" />
-                      <p className="text-gray-600 dark:text-gray-400">Interactive map will appear here</p>
+                  {formData.address ? (
+                    <div className="rounded-lg overflow-hidden h-64">
+                      <iframe
+                        width="100%"
+                        height="100%"
+                        style={{ border: 0 }}
+                        loading="lazy"
+                        allowFullScreen
+                        src={`https://www.google.com/maps/embed/v1/place?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || 'YOUR_API_KEY'}&q=${encodeURIComponent(formData.address)}`}
+                      />
                     </div>
-                  </div>
+                  ) : (
+                    <div className="bg-gray-100 dark:bg-gray-800 rounded-lg h-64 flex items-center justify-center">
+                      <div className="text-center">
+                        <Map className="h-12 w-12 mx-auto text-gray-400 mb-2" />
+                        <p className="text-gray-600 dark:text-gray-400">
+                          Enter an address to see map preview
+                        </p>
+                      </div>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </div>

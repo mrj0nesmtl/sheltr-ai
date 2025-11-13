@@ -153,12 +153,23 @@ interface ParticipantDonationData {
   goalProgress: number;
 }
 
+// Interface for shelter data
+interface ShelterData {
+  name: string;
+  address: string;
+  coordinates?: {
+    lat: number;
+    lng: number;
+  };
+}
+
 export default function ParticipantProfile() {
   const { user, hasRole } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [profile, setProfile] = useState<ExtendedUserProfile | null>(null);
   const [donationData, setDonationData] = useState<ParticipantDonationData | null>(null);
   const [realGoals, setRealGoals] = useState<RealGoal[]>([]);
+  const [shelterData, setShelterData] = useState<ShelterData | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -172,6 +183,33 @@ export default function ParticipantProfile() {
     }
     // For other participants, derive from email or user ID
     return user?.uid || 'demo-participant-001';
+  };
+
+  // Function to fetch shelter data from Firestore
+  const getShelterData = async (shelterId: string): Promise<ShelterData | null> => {
+    try {
+      console.log(`🏠 [SHELTER] Fetching shelter data for: ${shelterId}`);
+      
+      const shelterRef = doc(db, 'shelters', shelterId);
+      const shelterSnap = await getDoc(shelterRef);
+      
+      if (shelterSnap.exists()) {
+        const data = shelterSnap.data();
+        console.log(`✅ [SHELTER] Found shelter: ${data.name}`);
+        
+        return {
+          name: data.name || 'Unknown Shelter',
+          address: data.address || '',
+          coordinates: data.coordinates || undefined
+        };
+      }
+      
+      console.log('⚠️ [SHELTER] No shelter document found');
+      return null;
+    } catch (error) {
+      console.error('❌ Error fetching shelter data:', error);
+      return null;
+    }
   };
 
   // Function to get participant's real donation data from Firestore
@@ -239,15 +277,31 @@ export default function ParticipantProfile() {
         const participantId = getParticipantId();
         console.log(`🔄 [PROFILE] Loading profile and donation data for: ${participantId}`);
         
-        // Load both participant profile and donation data
-        const [participantData, realDonationData] = await Promise.all([
+        // Get user document to extract shelter_id
+        const userRef = doc(db, 'users', user.uid);
+        const userSnap = await getDoc(userRef);
+        const userData = userSnap.exists() ? userSnap.data() : null;
+        const shelterId = userData?.shelter_id || userData?.tenant_id;
+        
+        // Load participant profile, donation data, and shelter data in parallel
+        const [participantData, realDonationData, realShelterData] = await Promise.all([
           getParticipantProfile(user.uid),
-          getParticipantDonationData(user.uid) // Use user.uid to fetch from users collection
+          getParticipantDonationData(user.uid),
+          shelterId ? getShelterData(shelterId) : Promise.resolve(null)
         ]);
         
         setDonationData(realDonationData);
+        if (realShelterData) {
+          setShelterData(realShelterData);
+        }
         
         if (participantData) {
+          // Extract real participant profile data
+          const participantProfile = userData?.participantProfile || {};
+          const checkInDate = participantProfile.checkInDate || '2023-11-15';
+          const bedAssignment = participantProfile.bedAssignment || 'Not assigned';
+          const caseWorker = participantProfile.caseWorker || 'Sarah Manager';
+          
           // Convert ParticipantProfile to ExtendedUserProfile format
           const profileWithData: ExtendedUserProfile = {
             personalInfo: {
@@ -256,15 +310,15 @@ export default function ParticipantProfile() {
               email: participantData.email || '',
               phone: participantData.phone || '',
               dateOfBirth: participantData.dateOfBirth || '',
-              pronouns: '',
-              preferredLanguage: 'en'
+              pronouns: userData?.pronouns || '',
+              preferredLanguage: userData?.preferredLanguage || 'English'
             },
             shelter: {
-              currentShelter: participantData.shelterName || 'Old Brewery Mission',
-              checkInDate: '2024-11-01',
-              bedNumber: 'B-23',
-              roomType: 'Standard',
-              caseWorker: participantData.caseWorkerName || 'Sarah Johnson'
+              currentShelter: realShelterData?.name || 'Unknown Shelter',
+              checkInDate: checkInDate,
+              bedNumber: bedAssignment,
+              roomType: 'Shared', // This could be added to participantProfile if needed
+              caseWorker: caseWorker
             },
             preferences: {
               notifications: {
@@ -746,6 +800,11 @@ export default function ParticipantProfile() {
                     {profile.shelter?.currentShelter || 'Old Brewery Mission'}
                   </span>
                 </div>
+                {shelterData?.address && (
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                    {shelterData.address}
+                  </p>
+                )}
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
                     <span className="text-gray-600 dark:text-gray-400">Check-in Date:</span>
@@ -759,14 +818,41 @@ export default function ParticipantProfile() {
                   </div>
                   <div>
                     <span className="text-gray-600 dark:text-gray-400">Room Type:</span>
-                    <div className="font-medium">{profile.shelter?.roomType || 'Standard'}</div>
+                    <div className="font-medium">{profile.shelter?.roomType || 'Shared'}</div>
                   </div>
                   <div>
                     <span className="text-gray-600 dark:text-gray-400">Case Worker:</span>
-                    <div className="font-medium">{profile.shelter?.caseWorker || 'Sarah Johnson'}</div>
+                    <div className="font-medium">{profile.shelter?.caseWorker || 'Sarah Manager'}</div>
                   </div>
                 </div>
               </div>
+
+              {/* Google Maps Embed */}
+              {shelterData?.address && process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY && (
+                <div className="rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">
+                  <iframe
+                    width="100%"
+                    height="200"
+                    style={{ border: 0 }}
+                    loading="lazy"
+                    allowFullScreen
+                    referrerPolicy="no-referrer-when-downgrade"
+                    src={`https://www.google.com/maps/embed/v1/place?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&q=${encodeURIComponent(shelterData.address)}`}
+                  />
+                </div>
+              )}
+
+              {/* Fallback: Open in Google Maps button if no API key */}
+              {shelterData?.address && !process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY && (
+                <Button 
+                  variant="outline" 
+                  className="w-full"
+                  onClick={() => window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(shelterData.address)}`, '_blank')}
+                >
+                  <MapPin className="w-4 h-4 mr-2" />
+                  View Shelter Location on Google Maps
+                </Button>
+              )}
 
               <div className="space-y-2">
                 <Button variant="outline" className="w-full">

@@ -7,6 +7,66 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.104.0] - 2025-11-13 (SHELTER ADMIN PROFILE PICTURE FIX) 🏠📸
+
+### 🎯 Shelter Admin Profile Picture Persistence
+
+Fixed critical bug where Shelter Admin profile pictures were not persisting and delete button was missing. Profile pictures now load from Firestore and update in real-time without page reload.
+
+### 🐛 Bug Fixes - Shelter Admin Profile
+
+#### 1. **Profile Picture Not Persisting** 💾
+- **Problem**: Upload function saved to Firestore but required page reload; display used `user.photoURL` instead of Firestore data
+- **Solution**: 
+  - Added `adminProfilePicture` state to store Firestore URL
+  - Added `useEffect` to load profile picture from Firestore on mount
+  - Updated display to use `adminProfilePicture` state
+  - Modified upload function to update local state immediately (no reload needed)
+- **Impact**: Profile pictures now persist and display correctly without page reload
+
+#### 2. **Delete Button Missing** 🗑️
+- **Problem**: Delete button condition checked `user.photoURL` which wasn't updated from Firestore
+- **Solution**: Updated condition to check `adminProfilePicture` state instead
+- **Impact**: Delete button now shows/hides correctly based on actual profile picture
+
+#### 3. **Delete Function Not Working** ❌
+- **Problem**: Delete function checked `user.photoURL` and reloaded page
+- **Solution**: 
+  - Updated to check `adminProfilePicture` state
+  - Modified to update local state immediately (no reload needed)
+- **Impact**: Delete now works instantly without page reload
+
+### ✨ Complete Data Flow
+
+```
+1. Page Load → Fetches profilePicture from Firestore ✅
+2. Upload Photo → Saves to Firestore + Updates local state ✅
+3. Display Updates → Shows new picture immediately ✅
+4. Delete Button → Appears for user-uploaded pictures ✅
+5. Delete Photo → Removes from Firestore + Updates local state ✅
+6. Fallback Protection → Cannot delete /profiles/leadership/ images ✅
+```
+
+### 🔧 Technical Changes
+
+**Files Modified:**
+- `apps/web/src/app/dashboard/shelter-admin/settings/page.tsx`
+  - Added `adminProfilePicture` state
+  - Added `useEffect` to load profile picture from Firestore
+  - Updated `handleAdminProfilePictureUpload` to update local state
+  - Updated `handleAdminProfilePictureDelete` to update local state
+  - Changed display from `user?.photoURL` to `adminProfilePicture`
+  - Updated delete button condition to check `adminProfilePicture`
+
+### 🎨 User Experience Improvements
+
+- **No Page Reloads**: Upload and delete operations update instantly
+- **Real-time Updates**: Changes reflect immediately in the UI
+- **Consistent State**: Profile picture always matches Firestore data
+- **Fallback Protection**: Cannot accidentally delete team fallback images
+
+---
+
 ## [2.103.0] - 2025-11-13 (PARTICIPANT PROFILE PICTURE PERSISTENCE FIX) 🔄📸
 
 ### 🎯 Complete Profile Picture Persistence

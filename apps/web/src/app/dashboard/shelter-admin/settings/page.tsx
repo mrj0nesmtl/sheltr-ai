@@ -105,6 +105,33 @@ export default function SettingsPage() {
     'Housing Assistance': Bed
   };
 
+  // Load admin profile picture from Firestore
+  useEffect(() => {
+    const loadAdminProfilePicture = async () => {
+      if (!user?.uid) return;
+      
+      try {
+        const { doc, getDoc } = await import('firebase/firestore');
+        const { db } = await import('@/lib/firebase');
+        
+        const userDoc = await getDoc(doc(db, 'users', user.uid));
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          setAdminProfilePicture(userData.profilePicture || user.photoURL || '');
+        } else {
+          setAdminProfilePicture(user.photoURL || '');
+        }
+      } catch (error) {
+        console.error('Error loading admin profile picture:', error);
+        setAdminProfilePicture(user.photoURL || '');
+      }
+    };
+
+    if (user) {
+      loadAdminProfilePicture();
+    }
+  }, [user]);
+
   // Load real shelter data and public configuration
   useEffect(() => {
     const loadShelterData = async () => {
@@ -387,6 +414,7 @@ export default function SettingsPage() {
   };
 
   const [uploadingAdminPhoto, setUploadingAdminPhoto] = useState(false);
+  const [adminProfilePicture, setAdminProfilePicture] = useState<string>('');
 
   const handleAdminProfilePictureUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -400,13 +428,18 @@ export default function SettingsPage() {
       // Upload to Firebase Storage
       const photoUrl = await uploadProfilePicture(file, user.uid);
       
-      // Update user's photoURL in Firebase Auth
-      // This will be handled by the user profile service
-      // For now, we'll just show success message
-      alert('Profile picture uploaded successfully! Please refresh the page to see changes.');
+      // CRITICAL: Update Firestore with the new profile picture URL
+      const { doc, updateDoc } = await import('firebase/firestore');
+      const { db } = await import('@/lib/firebase');
+      await updateDoc(doc(db, 'users', user.uid), {
+        profilePicture: photoUrl
+      });
       
-      // Reset file input
-      event.target.value = '';
+      // Update local state immediately
+      setAdminProfilePicture(photoUrl);
+      
+      console.log('✅ Profile picture uploaded and saved to Firestore');
+      alert('Profile picture uploaded successfully!');
       
     } catch (error) {
       console.error('❌ Error uploading profile picture:', error);
@@ -417,10 +450,10 @@ export default function SettingsPage() {
   };
 
   const handleAdminProfilePictureDelete = async () => {
-    if (!user?.uid || !user?.photoURL) return;
+    if (!user?.uid || !adminProfilePicture) return;
     
     // Safety check: Don't delete fallback images from /profiles/leadership/
-    if (user.photoURL.includes('/profiles/leadership/')) {
+    if (adminProfilePicture.includes('/profiles/leadership/')) {
       alert('Cannot delete fallback team images. Please upload your own picture first.');
       return;
     }
@@ -441,7 +474,11 @@ export default function SettingsPage() {
         profilePicture: ''
       });
       
-      alert('Profile picture deleted successfully! Please refresh the page to see changes.');
+      // Update local state immediately
+      setAdminProfilePicture('');
+      
+      console.log('✅ Profile picture deleted from Firestore');
+      alert('Profile picture deleted successfully!');
       
     } catch (error) {
       console.error('❌ Error deleting profile picture:', error);
@@ -810,9 +847,9 @@ export default function SettingsPage() {
                   <div className="space-y-4">
                     <label className="text-sm font-medium">Profile Picture</label>
                     <div className="w-32 h-32 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-full flex items-center justify-center bg-gray-50 dark:bg-gray-900 mx-auto">
-                      {user?.photoURL ? (
+                      {adminProfilePicture ? (
                         <img 
-                          src={user.photoURL} 
+                          src={adminProfilePicture} 
                           alt="Administrator" 
                           className="w-full h-full object-cover rounded-full"
                         />
@@ -849,7 +886,7 @@ export default function SettingsPage() {
                     </Button>
                     
                     {/* Delete Photo Button - Only show if user has uploaded their own picture */}
-                    {user?.photoURL && !user.photoURL.includes('/profiles/leadership/') && (
+                    {adminProfilePicture && !adminProfilePicture.includes('/profiles/leadership/') && (
                       <Button 
                         variant="outline" 
                         size="sm" 

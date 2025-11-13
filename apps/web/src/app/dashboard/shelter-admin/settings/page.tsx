@@ -988,15 +988,32 @@ export default function SettingsPage() {
                 </CardHeader>
                 <CardContent>
                   {formData.address ? (
-                    <div className="rounded-lg overflow-hidden h-64">
-                      <iframe
-                        width="100%"
-                        height="100%"
-                        style={{ border: 0 }}
-                        loading="lazy"
-                        allowFullScreen
-                        src={`https://www.google.com/maps/embed/v1/place?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || 'YOUR_API_KEY'}&q=${encodeURIComponent(formData.address)}`}
-                      />
+                    <div className="space-y-4">
+                      <div className="rounded-lg overflow-hidden h-64 bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
+                        <div className="text-center p-6">
+                          <MapPin className="h-12 w-12 mx-auto text-blue-500 mb-3" />
+                          <p className="font-medium text-gray-900 dark:text-white mb-2">
+                            {formData.address}
+                          </p>
+                          <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                            Click below to view on Google Maps
+                          </p>
+                          <Button 
+                            variant="outline"
+                            size="sm"
+                            onClick={() => {
+                              const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(formData.address)}`;
+                              window.open(mapsUrl, '_blank');
+                            }}
+                          >
+                            <ExternalLink className="mr-2 h-4 w-4" />
+                            Open in Google Maps
+                          </Button>
+                        </div>
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        💡 Tip: To enable live map preview, add a Google Maps API key to your environment variables
+                      </div>
                     </div>
                   ) : (
                     <div className="bg-gray-100 dark:bg-gray-800 rounded-lg h-64 flex items-center justify-center">

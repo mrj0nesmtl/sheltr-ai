@@ -977,8 +977,10 @@ service cloud.firestore {
       // Read: Anyone can read (public team page)
       allow read: if true;
       
-      // Write: Only Super Admin can write
-      allow write, create, update, delete: if isSuperAdmin();
+      // Write: Super Admin can write all, Platform Admins can update their own
+      allow create, delete: if isSuperAdmin();
+      allow update: if isSuperAdmin() || 
+                       (isPlatformAdmin() && isOwner(memberId));
     }
     
     // Founder Card Orders - Custom card ordering for Founders Portal Quick Access Links

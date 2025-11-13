@@ -33,6 +33,7 @@ export function VideoShowcase({
   const [video, setVideo] = useState<VideoData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [thumbnailLoaded, setThumbnailLoaded] = useState(false);
 
   useEffect(() => {
     const fetchVideo = async () => {
@@ -83,6 +84,22 @@ export function VideoShowcase({
     fetchVideo();
   }, [videoTitle]);
 
+  // Preload thumbnail when video data is available
+  useEffect(() => {
+    if (video?.thumbnailUrl) {
+      const img = new Image();
+      img.onload = () => {
+        setThumbnailLoaded(true);
+        console.log('✅ Thumbnail loaded successfully');
+      };
+      img.onerror = () => {
+        console.error('❌ Failed to load thumbnail:', video.thumbnailUrl);
+        setThumbnailLoaded(false);
+      };
+      img.src = video.thumbnailUrl;
+    }
+  }, [video?.thumbnailUrl]);
+
   if (loading) {
     return (
       <Card className={className}>
@@ -122,10 +139,18 @@ export function VideoShowcase({
       <CardContent className="p-0">
         {/* Video Player */}
         <div className="relative aspect-video bg-black group">
+          {/* Show loading state if thumbnail hasn't loaded yet */}
+          {video.thumbnailUrl && !thumbnailLoaded && (
+            <div className="absolute inset-0 flex items-center justify-center bg-gray-900">
+              <Loader2 className="h-8 w-8 animate-spin text-white" />
+            </div>
+          )}
+          
           <video
             controls
             className="w-full h-full"
-            poster={video.thumbnailUrl || undefined}
+            poster={thumbnailLoaded && video.thumbnailUrl ? video.thumbnailUrl : undefined}
+            preload="metadata"
             crossOrigin="anonymous"
             onError={(e) => {
               console.error('Video playback error:', e);

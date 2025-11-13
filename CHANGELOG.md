@@ -7,6 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.106.0] - 2025-01-13 (FIRESTORE SECURITY RULES FIX & TYPESCRIPT CLEANUP) 🔒
+
+### 🐛 Critical Fixes
+
+#### 1. **Firestore Security Rules - Public Gallery Access** 🔓
+- Fixed "Missing or insufficient permissions" error on `/drones/` page in production
+- Added support for both `isPublic` and `public` field names for backward compatibility
+- Changed `gallery_images` list permission from authenticated-only to public
+- Video showcase component now loads correctly for all users without authentication
+
+#### 2. **Participant Profile TypeScript Cleanup** 📝
+- Reduced TypeScript errors from **35 to 6** (83% reduction!)
+- Added `profilePicture` property to `ExtendedUserProfile` interface
+- Fixed `userData` scope issues by moving declaration outside try block
+- Removed unused imports: `PersonalInfo`, `EmergencyContact`, `Goal`, `participantProfileService`
+- Removed unused Firestore functions: `collection`, `query`, `where`, `getDocs`
+- Removed unused icons: `Heart`, `Bell`, `Plus`, `X`, `QrCode`, `ExternalLink`, `Upload`
+- Improved type safety with proper interface definitions
+- Removed `@ts-nocheck` directive (no longer needed)
+- Added `eslint-disable` comment for intentional hook dependency
+
+### 📊 Impact
+- **Production**: Public users can now view drone delivery system video
+- **Development**: Cleaner codebase with 83% fewer linter warnings
+- **Security**: Maintained proper access control while enabling public content
+
+---
+
 ## [2.105.0] - 2025-11-13 (VIDEO SHOWCASE COMPONENT ENHANCEMENT) 🎥
 
 ### 🎯 Video Playback Improvements

@@ -644,30 +644,53 @@ export default function ParticipantProfile() {
               </div>
 
               <div>
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="authEmail" className="flex items-center gap-2">
+                  <Mail className="h-4 w-4" />
+                  Account Email (Login)
+                  <Badge variant="outline" className="text-xs">Read Only</Badge>
+                </Label>
                 <Input
-                  id="email"
-                  type="email"
-                  value={profile.personalInfo.email || ''}
-                  disabled={!isEditing}
-                  onChange={(e) => setProfile(prev => ({
-                    ...prev,
-                    personalInfo: { ...prev.personalInfo, email: e.target.value }
-                  }))}
+                  id="authEmail"
+                  value={user?.email || ''}
+                  disabled={true}
+                  className="bg-muted cursor-not-allowed"
                 />
+                <p className="text-xs text-muted-foreground mt-1">
+                  This is your login email and cannot be changed here. Contact support to update your account email.
+                </p>
               </div>
 
-              <div>
-                <Label htmlFor="phone">Phone Number</Label>
-                <Input
-                  id="phone"
-                  value={profile.personalInfo.phone || ''}
-                  disabled={!isEditing}
-                  onChange={(e) => setProfile(prev => ({
-                    ...prev,
-                    personalInfo: { ...prev.personalInfo, phone: e.target.value }
-                  }))}
-                />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="email">Public Contact Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={profile.personalInfo.email || ''}
+                    disabled={!isEditing}
+                    onChange={(e) => setProfile(prev => ({
+                      ...prev,
+                      personalInfo: { ...prev.personalInfo, email: e.target.value }
+                    }))}
+                    placeholder="public@example.com"
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Shown on your profile page
+                  </p>
+                </div>
+
+                <div>
+                  <Label htmlFor="phone">Phone Number</Label>
+                  <Input
+                    id="phone"
+                    value={profile.personalInfo.phone || ''}
+                    disabled={!isEditing}
+                    onChange={(e) => setProfile(prev => ({
+                      ...prev,
+                      personalInfo: { ...prev.personalInfo, phone: e.target.value }
+                    }))}
+                  />
+                </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">

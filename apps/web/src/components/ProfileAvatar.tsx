@@ -98,32 +98,52 @@ export function ProfileAvatar({ userId, size = 'medium', className = '', showSta
           }
         }
 
-        // Reduced list - only check most common formats to minimize requests
-        const possiblePaths = [
-          `profiles/${userId}/avatar.jpg`,
-          `profiles/${userId}/avatar.png`,
-          `profiles/${userId}/profile.jpg` // Only one fallback naming convention
-        ];
-
         let foundUrl = null;
 
-        // Try each possible path efficiently
-        for (const path of possiblePaths) {
-          try {
-            const storageRef = ref(storage, path);
-            
-            // First check if file exists by getting metadata (more efficient)
-            await getMetadata(storageRef);
-            
-            // If metadata succeeds, file exists - now get download URL
-            const url = await getDownloadURL(storageRef);
-            foundUrl = url;
-            break; // Stop searching once we find one
-          } catch (pathError: any) {
-            // Silently continue for expected "not found" errors
-            // Only log unexpected errors in development
-            if (pathError.code !== 'storage/object-not-found' && process.env.NODE_ENV === 'development') {
-              console.warn(`Profile avatar access error for ${path}:`, pathError.code);
+        // PRIORITY 1: Check Firestore for profilePicture URL (source of truth)
+        try {
+          const { doc, getDoc } = await import('firebase/firestore');
+          const { db } = await import('@/lib/firebase');
+          
+          const userDoc = await getDoc(doc(db, 'users', userId));
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            if (userData.profilePicture) {
+              foundUrl = userData.profilePicture;
+              console.log(`✅ Found profile picture in Firestore for ${userId}`);
+            }
+          }
+        } catch (firestoreError) {
+          console.log(`ℹ️ Could not fetch from Firestore (likely unauthenticated), falling back to Storage`);
+        }
+
+        // PRIORITY 2: If not in Firestore, check Firebase Storage paths
+        if (!foundUrl) {
+          // Reduced list - only check most common formats to minimize requests
+          const possiblePaths = [
+            `profiles/${userId}/avatar.jpg`,
+            `profiles/${userId}/avatar.png`,
+            `profiles/${userId}/profile.jpg` // Only one fallback naming convention
+          ];
+
+          // Try each possible path efficiently
+          for (const path of possiblePaths) {
+            try {
+              const storageRef = ref(storage, path);
+              
+              // First check if file exists by getting metadata (more efficient)
+              await getMetadata(storageRef);
+              
+              // If metadata succeeds, file exists - now get download URL
+              const url = await getDownloadURL(storageRef);
+              foundUrl = url;
+              break; // Stop searching once we find one
+            } catch (pathError: any) {
+              // Silently continue for expected "not found" errors
+              // Only log unexpected errors in development
+              if (pathError.code !== 'storage/object-not-found' && process.env.NODE_ENV === 'development') {
+                console.warn(`Profile avatar access error for ${path}:`, pathError.code);
+              }
             }
           }
         }

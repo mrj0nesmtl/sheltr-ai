@@ -1,5 +1,8 @@
 {
   "devDependencies": {
     "csv-parser": "^3.2.0"
+  },
+  "dependencies": {
+    "mermaid": "^11.12.1"
   }
 }

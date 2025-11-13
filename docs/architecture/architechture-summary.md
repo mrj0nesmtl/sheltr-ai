@@ -42,7 +42,7 @@ architecture/
 
 ## 🌟 Core Architecture Documents
 
-### 🏗️ [System Design](technical/system-design.md)
+### 🏗️ [System Design](platform/system-design.md)
 **Multi-tenant SaaS architecture with enterprise payment flow**
 
 **Key Topics**:
@@ -60,7 +60,7 @@ architecture/
 
 ---
 
-### 🌐 [Website Architecture](technical/website-architecture.md)
+### 🌐 [Website Architecture](platform/website-architecture.md)
 **Complete site structure, role-based access, and QA framework**
 
 **Key Topics**:
@@ -79,12 +79,12 @@ architecture/
 
 ## 💳 Payment Infrastructure
 
-### [Payment Rails](payment-rails/)
+### [Payment Rails](architecture/payment-rails/)
 **Enterprise payment processing with Adyen integration**
 
 **Key Components**:
 
-1. **[Unified Payment Architecture](payment-rails/sheltr-unified-payment-architecture.md)**
+1. **[Unified Payment Architecture](payment-rails/unified-payment-architecture.md)**
    - Single-token stable fund system
    - Enterprise payment processing
    - Blockchain transparency
@@ -119,36 +119,33 @@ architecture/
 
 **Key Documents**:
 
-1. **[Official Whitepaper](technical/tokenomics/whitepaper_final.md)**
+1. **[Official Whitepaper](technical/whitepaper_final.md)**
    - Complete platform vision
    - Token economics model
    - Enterprise infrastructure
    - Investment strategy
    - Risk management
 
-2. **[SHELTR Tokenomics](technical/tokenomics/sheltr-tokenomics.md)**
-   - SmartFund™ distribution (80/15/5)
+2. **[SHELTR Tokenomics](technical/tokenomics.md)**
+   - Strategic vision
+   - Market positioning
+   - Growth strategy
+   - Risk mitigation- SmartFund™ distribution (80/15/5)
    - Token utility
    - Staking mechanisms
    - Governance model
 
-3. **[Blockchain Architecture](technical/tokenomics/blockchain.md)**
+3. **[Blockchain Architecture](technical/blockchain.md)**
    - Base Network integration
    - Smart contract design
    - Security architecture
    - Coinbase integration
 
-4. **[Technical Implementation Guide](technical/tokenomics/TECHNICAL-IMPLEMENTATION-GUIDE.md)**
+4. **[Technical Implementation Guide](technical/base_stable_coin.md)**
    - Step-by-step implementation
    - Code examples
    - Testing strategies
-   - Deployment procedures
-
-5. **[Tokenomics Strategy](technical/tokenomics/SHELTR-TOKENOMICS-STRATEGY.md)**
-   - Strategic vision
-   - Market positioning
-   - Growth strategy
-   - Risk mitigation
+   - Deployment procedures   
 
 **Status**: 📋 **Planned** - Q1 2026 implementation  
 **Innovation**: Single-token stable fund with zero risk
@@ -159,13 +156,13 @@ architecture/
 
 ### Automation & Messaging
 
-**[Automation Dashboard System](technical/automation-dashboard-system.md)**
+**[Automation Dashboard System](automations/automation-dashboard-system.md)**
 - Workflow automation
 - Dashboard management
 - Real-time updates
 - Performance metrics
 
-**[Messaging Automation](technical/messaging-automation-implementation-summary.md)**
+**[Messaging Automation](messaging/messaging-automation-implementation.md)**
 - Automated notifications
 - Communication workflows
 - Integration points

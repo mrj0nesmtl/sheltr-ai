@@ -37,7 +37,7 @@ function TokenomicsContent() {
           <div className="flex items-center space-x-2 text-sm text-muted-foreground">
             <Link href="/" className="hover:text-primary">Home</Link>
             <span>/</span>
-            <span className="text-foreground">Enterprise Tokenomics</span>
+            <span className="text-foreground">Tokenomics</span>
           </div>
         </div>
       )}
@@ -56,7 +56,7 @@ function TokenomicsContent() {
                 </h3>
                 <p className="text-amber-800 dark:text-amber-200 leading-relaxed mb-4">
                   October 1, 2025: Following expert peer-analysis by our collegues and payments specialists, SHELTR is evolving from 
-                  a dual-token architecture to a <strong>Single Stable Token Investment Fund</strong> model.
+                  a dual-token architecture to a <strong>Stable Token Investment Fund</strong> model.
                 </p>
                 <div className="grid md:grid-cols-2 gap-4 text-sm">
                   <div>

@@ -29,6 +29,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Footer from '@/components/Footer';
 import ThemeLogo from '@/components/ThemeLogo';
+import Mermaid from '@/components/Mermaid';
 
 // Component that uses useSearchParams (wrapped in Suspense)
 function SystemDesignContent() {
@@ -213,8 +214,8 @@ function SystemDesignContent() {
                 </CardHeader>
                 <CardContent>
                   <div className="bg-slate-50 dark:bg-slate-900 rounded-lg p-6 overflow-x-auto">
-                    <pre className="text-sm">
-{`graph TD
+                    <Mermaid 
+                      chart={`graph TD
     A[Next.js 15 Website<br/>Shadcn UI + Dark Theme] -->|Firebase SDK| B[Firebase Backend<br/>Auth + Firestore]
     C[Mobile App<br/>Future: React Native] -->|Same Firebase SDK| B
     
@@ -234,12 +235,20 @@ function SystemDesignContent() {
     
     N[Adyen Virtual Cards<br/>Zero Crypto Exposure] -->|Direct Loading| G
     O[Coinbase Prime<br/>Institutional Custody] -->|Secure Staking| J
-    P[Base Network<br/>L2 Optimization] -->|Low-Cost Tracking| K`}
-                    </pre>
+    P[Base Network<br/>L2 Optimization] -->|Low-Cost Tracking| K
+
+    style A fill:#3b82f6,stroke:#2563eb,stroke-width:3px
+    style D fill:#10b981,stroke:#059669,stroke-width:3px
+    style H fill:#8b5cf6,stroke:#7c3aed,stroke-width:3px
+    style B fill:#06b6d4,stroke:#0891b2,stroke-width:3px
+    style F fill:#f43f5e,stroke:#e11d48,stroke-width:3px
+    style G fill:#f97316,stroke:#ea580c,stroke-width:3px`}
+                      className="w-full"
+                    />
                   </div>
                   <div className="mt-4 text-center">
                     <Badge variant="outline" className="text-xs">
-                      Mermaid Diagram - Copy to visualize in your preferred tool
+                      Interactive Mermaid Diagram - Fully Rendered
                     </Badge>
                   </div>
                 </CardContent>
@@ -326,8 +335,8 @@ function SystemDesignContent() {
                 </CardHeader>
                 <CardContent>
                   <div className="bg-slate-50 dark:bg-slate-900 rounded-lg p-6 overflow-x-auto">
-                    <pre className="text-sm">
-{`graph LR
+                    <Mermaid 
+                      chart={`graph LR
     A[Donor Credit Card<br/>💳 Adyen Processing] --> B[SHELTR Main Account<br/>🏦 Traditional Banking]
     
     B --> C[SmartFund Distribution<br/>⚡ 80/15/5 Split]
@@ -348,7 +357,13 @@ function SystemDesignContent() {
     style D fill:#fbbf24,stroke:#f59e0b,stroke-width:2px
     style E fill:#8b5cf6,stroke:#7c3aed,stroke-width:2px
     style F fill:#06b6d4,stroke:#0891b2,stroke-width:2px`}
-                    </pre>
+                      className="w-full"
+                    />
+                  </div>
+                  <div className="mt-4 text-center">
+                    <Badge variant="outline" className="text-xs">
+                      Interactive Payment Flow Diagram - Fully Rendered
+                    </Badge>
                   </div>
                 </CardContent>
               </Card>

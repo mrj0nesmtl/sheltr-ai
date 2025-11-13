@@ -183,6 +183,7 @@ export default function ParticipantProfile() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [activeSection, setActiveSection] = useState('personal');
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
 
   // Get participant ID for data queries - consistent with dashboard
   const getParticipantId = () => {
@@ -468,8 +469,6 @@ export default function ParticipantProfile() {
       return updater(prev);
     });
   };
-
-  const [uploadingPhoto, setUploadingPhoto] = useState(false);
 
   const handlePhotoUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];

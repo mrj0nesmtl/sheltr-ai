@@ -7,6 +7,106 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.102.0] - 2025-11-13 (PROFILE PICTURE DELETE & CONSISTENCY FIX) 🗑️📸
+
+### 🎯 Complete Profile Picture Management System
+
+Implemented comprehensive profile picture delete functionality across all user roles with fallback image protection, and fixed critical profile picture consistency issues.
+
+### ✨ New Features
+
+#### 1. **Profile Picture Delete Functionality** 🗑️
+- **Platform Admin**: Full delete with Super Admin sync
+- **Shelter Admin**: Delete with Firestore updates
+- **Donor**: Delete with profile service integration
+- **Participant**: Complete upload/delete UI with real-time updates
+- **Safety Protection**: Prevents deletion of fallback images from `/profiles/leadership/`
+- **Consistent UI**: Red-styled delete buttons across all roles
+- **Smart Visibility**: Delete button only shows for user-uploaded pictures
+
+**Technical Details:**
+- All delete functions check for `/profiles/leadership/` path before deletion
+- User confirmation required before deletion
+- Loading states during upload/delete operations
+- Firestore updates with proper error handling
+- Profile sync for Platform Admin → Super Admin
+
+#### 2. **ProfileAvatar Component Fix** 🔧
+- **Firestore Priority**: Now checks Firestore `users.profilePicture` URL first (source of truth)
+- **Storage Fallback**: Falls back to Firebase Storage paths if Firestore unavailable
+- **Consistency**: Dashboard and team page now always show the same picture
+- **Performance**: Maintains 30-minute cache for optimal performance
+
+**Before:** ProfileAvatar read directly from Storage paths, causing mismatches
+**After:** ProfileAvatar reads from Firestore first, ensuring consistency
+
+### 🐛 Bug Fixes
+
+- **Profile Picture Mismatch**: Fixed issue where dashboard showed different picture than team page
+- **Data Source Conflict**: Resolved conflict between Storage paths and Firestore URLs
+- **Fallback Image Protection**: Ensured team fallback images cannot be accidentally deleted
+- **Unauthenticated Access**: Improved handling for public users viewing team page
+
+### 🔧 Technical Improvements
+
+**Profile Picture Architecture:**
+```
+Source of Truth: Firestore users.profilePicture (URL)
+  ↓
+ProfileAvatar Component (checks Firestore first)
+  ↓
+Fallback: Firebase Storage paths (if Firestore unavailable)
+  ↓
+Public Access: team_members.profilePicture (synced from users)
+```
+
+**Delete Safety Flow:**
+1. Check if picture exists
+2. Verify not a fallback image (`/profiles/leadership/`)
+3. Confirm with user
+4. Update Firestore
+5. Sync to related collections (if applicable)
+6. Update local state
+7. Clear cache
+
+### 📁 Files Modified
+
+**Profile Picture Delete:**
+- `apps/web/src/app/dashboard/platform-admin/profile/page.tsx` - Added delete handler and UI
+- `apps/web/src/app/dashboard/shelter-admin/settings/page.tsx` - Added delete handler and UI
+- `apps/web/src/app/dashboard/donor/settings/page.tsx` - Added fallback protection
+- `apps/web/src/app/dashboard/participant/profile/page.tsx` - Complete upload/delete implementation
+
+**ProfileAvatar Fix:**
+- `apps/web/src/components/ProfileAvatar.tsx` - Firestore-first architecture
+
+**Scripts:**
+- `scripts/sync-profile-picture.js` - Manual sync utility for troubleshooting
+
+### 🎨 UI/UX Improvements
+
+- **Delete Button Styling**: Consistent red styling with hover effects
+- **Conditional Rendering**: Delete button only visible for user-uploaded pictures
+- **Loading States**: Spinner and "Uploading..." text during operations
+- **Error Messages**: Clear feedback for fallback image deletion attempts
+- **Confirmation Dialogs**: User confirmation required before deletion
+
+### 🔒 Security Enhancements
+
+- **Fallback Protection**: Cannot delete shared team images
+- **User Ownership**: Only delete pictures uploaded by the user
+- **Firestore Rules**: Proper permissions for profile picture updates
+- **Safe Defaults**: Graceful handling of missing or invalid URLs
+
+### 📊 Impact
+
+- **4 User Roles**: Platform Admin, Shelter Admin, Donor, Participant
+- **100% Coverage**: All roles now have complete upload/delete functionality
+- **Zero Data Loss**: Fallback images protected from accidental deletion
+- **Consistent UX**: Same delete pattern across all dashboards
+
+---
+
 ## [2.101.0] - 2025-11-13 (PUBLIC TEAM BIO ACCESS & CHATBOT FAQ IMPROVEMENTS) 🌐💬
 
 ### 🎯 Public Access to Team Bios & Enhanced Chatbot

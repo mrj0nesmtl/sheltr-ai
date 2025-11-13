@@ -59,6 +59,8 @@ class DocsHubCard(BaseModel):
     topics: List[str] = []
     icon: Optional[str] = None
     order: int = 999
+    external_link: Optional[str] = None  # External URL (e.g., GitHub)
+    use_external_link: bool = False  # If true, open external_link instead of local page
 
 
 class DocsHubDocument(BaseModel):
@@ -74,6 +76,8 @@ class DocsHubDocument(BaseModel):
     audience: List[str] = []
     topics: List[str] = []
     view_count: int = 0
+    external_link: Optional[str] = None  # External URL (e.g., GitHub)
+    use_external_link: bool = False  # If true, show external link UI instead of content
 
 
 class PublishToHubRequest(BaseModel):

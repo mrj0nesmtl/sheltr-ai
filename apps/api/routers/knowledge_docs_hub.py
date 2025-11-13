@@ -63,7 +63,9 @@ async def get_docs_hub_documents():
                 audience=doc_data.get('hub_audience') or extract_audience_from_content(doc_data.get('content', '')),
                 topics=doc_data.get('hub_topics') or extract_topics_from_content(doc_data.get('content', ''), doc_data.get('tags', [])),
                 icon=doc_data.get('hub_icon') or get_category_icon(doc_data.get('category', 'Documentation')),
-                order=doc_data.get('hub_order', 999)
+                order=doc_data.get('hub_order', 999),
+                external_link=doc_data.get('external_link'),
+                use_external_link=doc_data.get('use_external_link', False)
             )
             
             cards.append(card)
@@ -134,7 +136,9 @@ async def get_docs_hub_document_by_slug(slug: str):
             updated_at=doc_data.get('updated_at', datetime.now()),
             audience=doc_data.get('hub_audience') or extract_audience_from_content(doc_data.get('content', '')),
             topics=doc_data.get('hub_topics') or extract_topics_from_content(doc_data.get('content', ''), doc_data.get('tags', [])),
-            view_count=doc_data.get('view_count', 0) + 1
+            view_count=doc_data.get('view_count', 0) + 1,
+            external_link=doc_data.get('external_link'),
+            use_external_link=doc_data.get('use_external_link', False)
         )
         
         logger.info(f"✅ Retrieved document '{slug}' for public viewing")

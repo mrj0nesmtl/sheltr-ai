@@ -416,6 +416,41 @@ export default function SettingsPage() {
     }
   };
 
+  const handleAdminProfilePictureDelete = async () => {
+    if (!user?.uid || !user?.photoURL) return;
+    
+    // Safety check: Don't delete fallback images from /profiles/leadership/
+    if (user.photoURL.includes('/profiles/leadership/')) {
+      alert('Cannot delete fallback team images. Please upload your own picture first.');
+      return;
+    }
+    
+    if (!confirm('Are you sure you want to delete your profile picture?')) {
+      return;
+    }
+
+    setUploadingAdminPhoto(true);
+
+    try {
+      console.log('🗑️ Deleting admin profile picture...');
+      
+      // Update Firestore to remove profile picture
+      const { doc, updateDoc } = await import('firebase/firestore');
+      const { db } = await import('@/lib/firebase');
+      await updateDoc(doc(db, 'users', user.uid), {
+        profilePicture: ''
+      });
+      
+      alert('Profile picture deleted successfully! Please refresh the page to see changes.');
+      
+    } catch (error) {
+      console.error('❌ Error deleting profile picture:', error);
+      alert(`Failed to delete profile picture: ${error}`);
+    } finally {
+      setUploadingAdminPhoto(false);
+    }
+  };
+
   // Check if user has shelter admin or super admin access
   if (!hasRole('admin') && !hasRole('super_admin')) {
     return (
@@ -812,6 +847,20 @@ export default function SettingsPage() {
                         </>
                       )}
                     </Button>
+                    
+                    {/* Delete Photo Button - Only show if user has uploaded their own picture */}
+                    {user?.photoURL && !user.photoURL.includes('/profiles/leadership/') && (
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="w-full text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950" 
+                        disabled={!isEditing || uploadingAdminPhoto}
+                        onClick={handleAdminProfilePictureDelete}
+                      >
+                        <Trash2 className="mr-2 h-4 w-4" />
+                        Delete Photo
+                      </Button>
+                    )}
                   </div>
 
                   {/* Admin Details */}

@@ -225,6 +225,13 @@ export default function DonorSettingsPage() {
   const handlePhotoDelete = async () => {
     if (!user?.uid) return;
     
+    // Safety check: Don't delete fallback images from /profiles/leadership/
+    const currentPhoto = donorProfile?.profilePicture || user?.photoURL;
+    if (currentPhoto && currentPhoto.includes('/profiles/leadership/')) {
+      alert('Cannot delete fallback team images. Please upload your own picture first.');
+      return;
+    }
+    
     if (!confirm('Are you sure you want to remove your profile picture?')) return;
     
     try {
@@ -378,10 +385,11 @@ export default function DonorSettingsPage() {
                       </>
                     )}
                   </Button>
-                  {(donorProfile?.profilePicture || user?.photoURL) && (
+                  {(donorProfile?.profilePicture || user?.photoURL) && 
+                   !(donorProfile?.profilePicture || user?.photoURL || '').includes('/profiles/leadership/') && (
                     <Button 
                       variant="outline" 
-                      className="w-full text-red-600 hover:text-red-700"
+                      className="w-full text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950"
                       disabled={!isEditing}
                       onClick={handlePhotoDelete}
                     >

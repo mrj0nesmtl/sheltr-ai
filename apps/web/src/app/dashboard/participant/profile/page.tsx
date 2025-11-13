@@ -469,6 +469,74 @@ export default function ParticipantProfile() {
     });
   };
 
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
+
+  const handlePhotoUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file || !user?.uid) return;
+
+    setUploadingPhoto(true);
+    try {
+      console.log('📸 Uploading participant profile picture...');
+      
+      // Upload to Firebase Storage
+      const photoUrl = await uploadProfilePicture(file, user.uid);
+      
+      // Update Firestore
+      const userRef = doc(db, 'users', user.uid);
+      await updateDoc(userRef, {
+        profilePicture: photoUrl
+      });
+      
+      // Update local state
+      setProfile(prev => prev ? { ...prev, profilePicture: photoUrl } : null);
+      
+      alert('Profile picture uploaded successfully!');
+      
+      // Reset file input
+      event.target.value = '';
+    } catch (error) {
+      console.error('❌ Error uploading profile picture:', error);
+      alert(`Failed to upload profile picture: ${error}`);
+    } finally {
+      setUploadingPhoto(false);
+    }
+  };
+
+  const handlePhotoDelete = async () => {
+    if (!user?.uid) return;
+    
+    // Safety check: Don't delete fallback images from /profiles/leadership/
+    const currentPhoto = profile?.profilePicture || user?.photoURL;
+    if (currentPhoto && currentPhoto.includes('/profiles/leadership/')) {
+      alert('Cannot delete fallback team images. Please upload your own picture first.');
+      return;
+    }
+    
+    if (!confirm('Are you sure you want to remove your profile picture?')) return;
+    
+    setUploadingPhoto(true);
+    try {
+      console.log('🗑️ Deleting participant profile picture...');
+      
+      // Update Firestore
+      const userRef = doc(db, 'users', user.uid);
+      await updateDoc(userRef, {
+        profilePicture: ''
+      });
+      
+      // Update local state
+      setProfile(prev => prev ? { ...prev, profilePicture: '' } : null);
+      
+      alert('Profile picture removed successfully!');
+    } catch (error) {
+      console.error('❌ Error removing profile picture:', error);
+      alert('Failed to remove profile picture. Please try again.');
+    } finally {
+      setUploadingPhoto(false);
+    }
+  };
+
   const handleSave = async () => {
     if (!profile) return;
     
@@ -656,15 +724,58 @@ export default function ParticipantProfile() {
             <CardContent className="space-y-4">
               {/* Profile Picture */}
               <div className="flex items-center space-x-4">
-                <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white text-2xl font-bold">
-                  {getUserDisplayName().split(' ').map(n => n[0]).join('')}
-                </div>
-                <div>
-                  <Button variant="outline" size="sm">
-                    <Camera className="w-4 h-4 mr-2" />
-                    Upload Photo
+                {profile.profilePicture || user?.photoURL ? (
+                  <img 
+                    src={profile.profilePicture || user?.photoURL || ''} 
+                    alt="Profile" 
+                    className="w-20 h-20 rounded-full object-cover"
+                  />
+                ) : (
+                  <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white text-2xl font-bold">
+                    {getUserDisplayName().split(' ').map(n => n[0]).join('')}
+                  </div>
+                )}
+                <div className="space-y-2">
+                  <input
+                    type="file"
+                    id="participant-photo-upload"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handlePhotoUpload}
+                    disabled={!isEditing || uploadingPhoto}
+                  />
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    disabled={!isEditing || uploadingPhoto}
+                    onClick={() => document.getElementById('participant-photo-upload')?.click()}
+                  >
+                    {uploadingPhoto ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Uploading...
+                      </>
+                    ) : (
+                      <>
+                        <Camera className="w-4 h-4 mr-2" />
+                        Upload Photo
+                      </>
+                    )}
                   </Button>
-                  <p className="text-xs text-muted-foreground mt-1">
+                  {(profile.profilePicture || user?.photoURL) && 
+                   !(profile.profilePicture || user?.photoURL || '').includes('/profiles/leadership/') && (
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950"
+                      disabled={!isEditing || uploadingPhoto}
+                      onClick={handlePhotoDelete}
+                    >
+                      <Trash2 className="w-4 h-4 mr-2" />
+                      Remove Photo
+                    </Button>
+                  )}
+                  <p className="text-xs text-muted-foreground">
                     JPG, PNG up to 5MB
                   </p>
                 </div>

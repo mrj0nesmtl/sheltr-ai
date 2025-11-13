@@ -238,6 +238,51 @@ export default function PlatformAdminProfilePage() {
     }
   };
 
+  // Handle profile picture delete
+  const handleProfilePictureDelete = async () => {
+    if (!user?.uid || !profile?.profilePicture) return;
+    
+    // Safety check: Don't delete fallback images from /profiles/leadership/
+    if (profile.profilePicture.includes('/profiles/leadership/')) {
+      alert('Cannot delete fallback team images. Please upload your own picture first.');
+      return;
+    }
+    
+    if (!confirm('Are you sure you want to delete your profile picture?')) {
+      return;
+    }
+
+    try {
+      setUploadingPicture(true);
+      console.log('🗑️ Deleting profile picture...');
+
+      // Update the profile to remove the picture URL
+      const success = await PlatformAdminProfileService.updatePlatformAdminProfile(user.uid, {
+        profilePicture: ''
+      });
+      
+      if (success) {
+        // Sync to Super Admin profile if this user is a Super Admin
+        if (user.role === 'super_admin') {
+          console.log('🔄 Syncing profile picture deletion to Super Admin profile...');
+          await ProfileSyncService.syncPlatformAdminToSuperAdmin(user.uid);
+        }
+        
+        // Reload profile to get updated data
+        const updatedProfile = await PlatformAdminProfileService.getPlatformAdminProfile(user.uid);
+        if (updatedProfile) {
+          setProfile(updatedProfile);
+        }
+        console.log('✅ Profile picture deleted successfully and synced!');
+      }
+    } catch (error) {
+      console.error('❌ Error deleting profile picture:', error);
+      alert('Failed to delete profile picture');
+    } finally {
+      setUploadingPicture(false);
+    }
+  };
+
   // Cancel editing
   const handleCancel = () => {
     if (profile) {
@@ -418,6 +463,19 @@ export default function PlatformAdminProfilePage() {
                       </>
                     )}
                   </Button>
+                  
+                  {/* Delete Photo Button - Only show if user has uploaded their own picture */}
+                  {profile?.profilePicture && !profile.profilePicture.includes('/profiles/leadership/') && (
+                    <Button 
+                      variant="outline" 
+                      className="w-full text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950" 
+                      onClick={handleProfilePictureDelete}
+                      disabled={uploadingPicture}
+                    >
+                      <Trash2 className="h-4 w-4 mr-2" />
+                      Delete Photo
+                    </Button>
+                  )}
                   
                   {/* Sync from LinkedIn Button */}
                   {profile?.linkedIn && (

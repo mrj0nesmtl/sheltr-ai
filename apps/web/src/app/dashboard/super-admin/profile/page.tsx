@@ -297,14 +297,13 @@ export default function SuperAdminProfilePage() {
       </Card>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="profile">Profile</TabsTrigger>
-          <TabsTrigger value="professional">Professional</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="profile">Profile & Bio</TabsTrigger>
           <TabsTrigger value="privacy">Privacy</TabsTrigger>
           <TabsTrigger value="preferences">Preferences</TabsTrigger>
         </TabsList>
 
-        {/* Profile Tab */}
+        {/* Profile & Bio Tab (Consolidated) */}
         <TabsContent value="profile" className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Profile Picture & Basic Info */}
@@ -417,10 +416,8 @@ export default function SuperAdminProfilePage() {
               </CardContent>
             </Card>
           </div>
-        </TabsContent>
 
-        {/* Professional Tab */}
-        <TabsContent value="professional" className="space-y-6">
+          {/* Professional Information Section */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Role Information */}
             <Card>

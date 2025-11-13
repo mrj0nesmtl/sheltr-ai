@@ -425,7 +425,7 @@ export default function KnowledgeDashboard() {
                 <span className="sm:hidden">Order</span>
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+            <DialogContent className="max-w-6xl w-[95vw] max-h-[90vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>Manage Docs Hub Display Order</DialogTitle>
               </DialogHeader>

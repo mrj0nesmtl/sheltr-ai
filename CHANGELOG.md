@@ -7,6 +7,141 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.97.0] - 2025-11-13 (INTUITIVE DOCS HUB ORDERING SYSTEM) 📄✨
+
+### 🎯 Major Enhancement: Visual Document Ordering
+
+**Problem:** The old 1-1000 numbering system for ordering docs hub documents was confusing and unintuitive. Users couldn't easily see which numbers were in use or understand the final order.
+
+**Solution:** Complete redesign with visual ordering interface and simple 1-12 positioning.
+
+### ✨ New Features
+
+#### 1. **Docs Hub Order Manager Component** (NEW)
+- **Visual Overview**: See all 12 published documents at once
+- **Simple Positioning**: Want it 4th? Type `4`! (1 = first, 2 = second, etc.)
+- **Up/Down Arrows**: Easy drag-style reordering with visual buttons
+- **Direct Position Input**: Type exact position (1-50) for each document
+- **Live Preview Links**: Click "Preview" to see each document on `/docs`
+- **Batch Save**: One "Save Order" button updates all positions at once
+- **Auto-Renumbering**: Automatically assigns sequential positions (1, 2, 3...)
+- **Success Messages**: Clear feedback when order is saved
+- **Auto-Refresh**: Reloads clean state after saving
+
+#### 2. **Updated DocsHubPublisher**
+- Changed "Display Order" → **"Display Position"**
+- New label: "(1 = first, 2 = second, etc. — currently X)"
+- Range limited to **1-50** (practical maximum)
+- Helpful **info alert** explaining simple positioning
+- Removed confusing "(lower numbers appear first)" text
+- Min value now **1** instead of **0**
+
+#### 3. **Knowledge Dashboard Integration**
+- New **"Docs Hub Order"** button in header (blue accent)
+- Opens in **wide modal** (max-w-6xl, 95vw width)
+- No horizontal scrolling - all buttons visible
+- Positioned alongside "Web Scraping" and "Add Document"
+- Accessible to super_admin and platform_admin
+
+### 🎨 UX Improvements
+
+**Before (Confusing):**
+```
+Display Order: [___] (1-1000)
+(lower numbers appear first)
+```
+- Unclear what numbers others are using
+- No visual overview of order
+- Hard to coordinate positions
+- Backwards thinking ("lower = first")
+
+**After (Intuitive):**
+```
+Display Position: [4]
+(1 = first, 2 = second, etc.)
+
+Visual List:
+1. Hacking Homelessness [⬆️][⬇️]
+2. Ecosystem Vision    [⬆️][⬇️]
+3. Platform Overview   [⬆️][⬇️]
+4. Development Roadmap [⬆️][⬇️]
+...
+[Save Order]
+```
+
+### 📊 Technical Details
+
+**Component Structure:**
+- `DocsHubOrderManager.tsx` - Main visual ordering interface
+- Fetches all published docs from `knowledge_documents` collection
+- Filters by `published_to_hub: true`
+- Updates `hub_order` field in Firestore
+- Real-time position updates with React state
+- Optimistic UI updates before save
+
+**Modal Sizing:**
+- Width: `max-w-6xl` (96rem / ~1536px)
+- Responsive: `w-[95vw]` on smaller screens
+- Height: `max-h-[90vh]` with scroll
+- All buttons visible without horizontal scroll
+
+### 🎯 User Impact
+
+**For Content Managers:**
+- ✅ **See all docs** at once - no guessing
+- ✅ **Simple numbers** - position 1, 2, 3, not 100, 200, 300
+- ✅ **Visual reordering** - up/down arrows instead of mental math
+- ✅ **Live preview** - verify order before saving
+- ✅ **One-click save** - batch update all positions
+
+**For End Users (Visitors):**
+- ✅ **Consistent order** - docs appear exactly as intended
+- ✅ **Logical flow** - important docs first
+- ✅ **Better discoverability** - prioritized content
+
+### 📁 Files Modified
+
+- `apps/web/src/components/knowledge/DocsHubOrderManager.tsx` - **NEW** visual ordering component
+- `apps/web/src/components/knowledge/DocsHubPublisher.tsx` - Updated position labeling
+- `apps/web/src/app/dashboard/knowledge/page.tsx` - Added "Docs Hub Order" button & dialog
+- `CHANGELOG.md` - Documented v2.97.0 changes
+
+### 🚀 Platform Enhancement
+
+**Documentation Hub Pages:**
+- Platform Overview - Enhanced with mermaid diagrams
+- System Design - Interactive flowcharts on all tabs
+- All 12 docs hub documents - Proper ordering support
+
+### ✅ Testing
+
+**Order Manager:**
+```
+1. Open Knowledge Dashboard
+2. Click "Docs Hub Order" button
+3. See all 12 published documents
+4. Use arrows or type positions to reorder
+5. Click "Save Order"
+6. Verify order on /docs page
+✓ All positions updated correctly
+✓ No horizontal scroll needed
+✓ Buttons always visible
+```
+
+**Individual Document Editor:**
+```
+1. Edit any doc in Knowledge Dashboard
+2. Scroll to "Docs Hub Publishing" section
+3. See "Display Position" field with clear label
+4. Type position number (e.g., 4)
+5. See helpful info alert
+✓ Clear instructions shown
+✓ Range validation (1-50)
+✓ Current position displayed
+```
+
+---
+
 ## [2.96.8] - 2025-11-12 (SECURITY, BUSINESS MODEL & ECOSYSTEM FAQs - 28 NEW) 🔐💰🌐
 
 ### ✨ Enhancement: Security, Business Model & Ecosystem Journey FAQs

@@ -7,6 +7,62 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.105.0] - 2025-11-13 (VIDEO SHOWCASE COMPONENT ENHANCEMENT) 🎥
+
+### 🎯 Video Playback Improvements
+
+Enhanced the `VideoShowcase` component to properly load and display videos from the gallery with better error handling and thumbnail support.
+
+### ✨ Features Added
+
+#### 1. **Thumbnail Support** 🖼️
+- Added `thumbnailUrl` to video data interface
+- Component now displays video thumbnail as poster image
+- Fetches thumbnail URL from Firestore
+
+#### 2. **Enhanced Error Handling** 🐛
+- Added `onError` handler to log video playback errors
+- Added `onLoadedData` handler to confirm successful video load
+- Improved console logging for debugging
+- Added `crossOrigin="anonymous"` for CORS support
+
+#### 3. **Better Logging** 📊
+- Logs full video data object when loaded
+- Logs video source URL and type on error
+- Confirms successful video load in console
+
+### 🔧 Technical Changes
+
+**Files Modified:**
+- `apps/web/src/components/VideoShowcase.tsx`
+  - Added `thumbnailUrl?: string` to `VideoData` interface
+  - Updated video element to use `thumbnailUrl` as poster
+  - Added `crossOrigin="anonymous"` attribute
+  - Added `onError` and `onLoadedData` event handlers
+  - Enhanced logging for video data
+
+**Files Created:**
+- `scripts/check-drone-video.js` - Utility script to verify video data in Firestore
+
+### 🎨 User Experience Improvements
+
+- **Thumbnail Display**: Videos now show proper thumbnail before playback
+- **Better Error Messages**: Console provides detailed error information for debugging
+- **CORS Support**: Added cross-origin support for Firebase Storage videos
+- **Verified Data**: Confirmed "DDS - Drone Delivery System Video" exists in database with correct metadata
+
+### 📝 Database Verification
+
+Confirmed video in `gallery_images` collection:
+- **Title**: "DDS - Drone Delivery System Video"
+- **MediaType**: video ✅
+- **Category**: drones
+- **Public**: true ✅
+- **Duration**: 8 seconds
+- **Thumbnail**: Available ✅
+
+---
+
 ## [2.104.0] - 2025-11-13 (SHELTER ADMIN PROFILE PICTURE FIX) 🏠📸
 
 ### 🎯 Shelter Admin Profile Picture Persistence

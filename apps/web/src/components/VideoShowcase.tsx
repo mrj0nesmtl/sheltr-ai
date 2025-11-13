@@ -21,6 +21,7 @@ interface VideoData {
   src: string;
   type: string;
   tags: string[];
+  thumbnailUrl?: string;
 }
 
 export function VideoShowcase({ 
@@ -57,16 +58,20 @@ export function VideoShowcase({
         const doc = snapshot.docs[0];
         const data = doc.data();
 
-        setVideo({
+        const videoData = {
           id: doc.id,
           title: data.title || videoTitle,
           description: data.description || '',
           src: data.src || '',
           type: data.type || 'video/mp4',
           tags: data.tags || [],
-        });
+          thumbnailUrl: data.thumbnailUrl,
+        };
+        
+        setVideo(videoData);
 
         console.log(`✅ Loaded video: ${videoTitle}`);
+        console.log('Video data:', videoData);
       } catch (err) {
         console.error('Error fetching video:', err);
         setError('Failed to load video');
@@ -120,7 +125,16 @@ export function VideoShowcase({
           <video
             controls
             className="w-full h-full"
-            poster={video.src.replace(/\.[^/.]+$/, '') + '_thumbnail.jpg'} // Optional: if you have thumbnails
+            poster={video.thumbnailUrl || undefined}
+            crossOrigin="anonymous"
+            onError={(e) => {
+              console.error('Video playback error:', e);
+              console.error('Video src:', video.src);
+              console.error('Video type:', video.type);
+            }}
+            onLoadedData={() => {
+              console.log('✅ Video loaded successfully');
+            }}
           >
             <source src={video.src} type={video.type} />
             Your browser does not support the video tag.

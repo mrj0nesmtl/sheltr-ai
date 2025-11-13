@@ -363,14 +363,13 @@ export default function PlatformAdminProfilePage() {
       </Card>
       
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="profile">Profile</TabsTrigger>
-          <TabsTrigger value="professional">Professional</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="profile">Profile & Bio</TabsTrigger>
           <TabsTrigger value="privacy">Privacy</TabsTrigger>
           <TabsTrigger value="preferences">Preferences</TabsTrigger>
         </TabsList>
         
-        {/* Profile Tab */}
+        {/* Profile & Bio Tab (Consolidated) */}
         <TabsContent value="profile" className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Profile Picture & Basic Info */}
@@ -486,25 +485,48 @@ export default function PlatformAdminProfilePage() {
                 </div>
                 
                 <div>
-                  <Label htmlFor="email">Email Address</Label>
+                  <Label htmlFor="authEmail" className="flex items-center gap-2">
+                    <Mail className="h-4 w-4" />
+                    Account Email (Login)
+                    <Badge variant="outline" className="text-xs">Read Only</Badge>
+                  </Label>
                   <Input
-                    id="email"
-                    value={profile.email}
-                    disabled
-                    className="bg-gray-100 dark:bg-gray-800"
+                    id="authEmail"
+                    value={user?.email || ''}
+                    disabled={true}
+                    className="bg-muted cursor-not-allowed"
                   />
-                  <p className="text-xs text-gray-500 mt-1">Email cannot be changed</p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    This is your login email and cannot be changed here. Contact support to update your account email.
+                  </p>
                 </div>
-                
-                <div>
-                  <Label htmlFor="phone">Phone Number</Label>
-                  <Input
-                    id="phone"
-                    value={formData.phone || ''}
-                    onChange={(e) => handleInputChange('phone', e.target.value)}
-                    disabled={!isEditing}
-                    placeholder="(555) 123-4567"
-                  />
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="email">Public Contact Email</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      value={formData.email || ''}
+                      onChange={(e) => handleInputChange('email', e.target.value)}
+                      disabled={!isEditing}
+                      placeholder="public@example.com"
+                    />
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Shown on your team profile page
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="phone">Phone Number</Label>
+                    <Input
+                      id="phone"
+                      value={formData.phone || ''}
+                      onChange={(e) => handleInputChange('phone', e.target.value)}
+                      disabled={!isEditing}
+                      placeholder="(555) 123-4567"
+                    />
+                  </div>
                 </div>
                 
                 <div>
@@ -521,10 +543,8 @@ export default function PlatformAdminProfilePage() {
               </CardContent>
             </Card>
           </div>
-        </TabsContent>
-        
-        {/* Professional Tab */}
-        <TabsContent value="professional" className="space-y-6">
+
+          {/* Professional Information Section */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Role Information */}
             <Card>
@@ -682,7 +702,7 @@ export default function PlatformAdminProfilePage() {
             </CardContent>
           </Card>
         </TabsContent>
-        
+
         {/* Privacy Tab */}
         <TabsContent value="privacy" className="space-y-6">
           <Card>

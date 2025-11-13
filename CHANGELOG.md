@@ -7,6 +7,149 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.98.0] - 2025-11-13 (PROFILE MANAGEMENT CONSOLIDATION) 👤✨
+
+### 🎯 Major UX Improvement: Single Source of Truth for Profiles
+
+**Problem:** Two separate profile configuration interfaces created confusion:
+- System Settings had a "Super Admin" tab for profile management
+- `/dashboard/super-admin/profile` had comprehensive 4-tab profile system
+- Users didn't know which one to use
+- Profile picture uploads created duplicates in Firebase Storage
+- Code duplication and maintenance burden
+
+**Solution:** Consolidated all profile management into single location with improved navigation hierarchy.
+
+### ✨ Changes
+
+#### 1. **Sidebar Navigation Reorganization** ✅
+**Before:**
+```
+... (menu items)
+📱 My Profile
+⚙️  System Settings
+🔒 Security & Compliance
+```
+
+**After:**
+```
+... (menu items)
+━━━━━━━━━━━━━━━━━━━━ (visual separator)
+📱 My Profile
+⚙️  System Settings
+🔒 Security & Compliance
+```
+
+- Moved "My Profile" below horizontal divider
+- Now appears above "System Settings"
+- Better visual hierarchy: personal settings separated from system settings
+
+#### 2. **Removed Duplicate Profile Interface** ✅
+- **Removed**: Super Admin tab from System Settings page
+- **Deleted**: 300+ lines of duplicate profile code
+- **Simplified**: System Settings tab structure (5 tabs → 4 tabs)
+- **Result**: No more conditional tab rendering based on role
+
+**System Settings Now Focuses On:**
+- ✅ General (platform configuration)
+- ✅ Security (system security)
+- ✅ Notifications (system notifications)
+- ✅ Integrations (API integrations)
+- ❌ **Removed**: Super Admin tab (personal profile)
+
+#### 3. **Single Profile Management Location** ✅
+**All profile features now in:** `/dashboard/super-admin/profile`
+
+**4 Comprehensive Tabs:**
+1. **Profile** - Basic info, picture, contact details
+2. **Professional** - Bio, expertise, career highlights
+3. **Privacy** - Visibility settings, data preferences
+4. **Preferences** - Notifications, timezone, language
+
+### 🎯 Benefits
+
+**For Users:**
+- ✅ **No more confusion** - One clear place to manage profile
+- ✅ **Better UX** - Visual separator between personal and system settings
+- ✅ **Clearer hierarchy** - Personal settings grouped together
+- ✅ **Consistent experience** - Same profile interface for all admin roles
+
+**For Developers:**
+- ✅ **Reduced duplication** - 300+ lines of code removed
+- ✅ **Easier maintenance** - Single source of truth
+- ✅ **Cleaner architecture** - Clear separation of concerns
+- ✅ **Better testability** - Fewer code paths to test
+
+### 📁 Files Modified
+
+- `apps/web/src/app/dashboard/layout.tsx` - Sidebar menu reordering (moved My Profile, added separator)
+- `apps/web/src/app/dashboard/settings/page.tsx` - Removed Super Admin tab and all related code (300+ lines)
+
+### 🔧 New Tools
+
+**Created:** `scripts/cleanup-duplicate-profile-pictures.js`
+- Analyzes profile pictures in Firebase Storage
+- Identifies current vs duplicate files
+- Shows file sizes and upload dates
+- Safe dry-run mode by default
+- Uncomment deletion code to actually remove duplicates
+
+**Usage:**
+```bash
+node scripts/cleanup-duplicate-profile-pictures.js
+```
+
+### 📝 Next Steps (Manual)
+
+1. **Review Profile Features:**
+   - Verify all profile features work in `/dashboard/super-admin/profile`
+   - Test profile picture upload
+   - Confirm sync to team pages (`/team` and `/team/joel-yaffe`)
+
+2. **Clean Up Storage:**
+   - Run `cleanup-duplicate-profile-pictures.js` script
+   - Review output to identify duplicates
+   - Uncomment deletion code if safe
+   - Run again to actually delete duplicates
+
+3. **Verify Team Page Sync:**
+   - Update profile in My Profile dashboard
+   - Check that changes appear on `/team` page
+   - Check that changes appear on `/team/joel-yaffe` bio page
+
+### ✅ Testing
+
+**Sidebar Navigation:**
+```
+1. Open dashboard
+2. Scroll to bottom of sidebar
+3. Verify "My Profile" appears below divider
+4. Verify it's above "System Settings"
+✓ Visual hierarchy improved
+✓ Separator clearly visible
+```
+
+**System Settings:**
+```
+1. Navigate to /dashboard/settings
+2. Verify only 4 tabs: General, Security, Notifications, Integrations
+3. Verify no "Super Admin" tab
+✓ Tab structure simplified
+✓ No conditional rendering
+```
+
+**Profile Management:**
+```
+1. Navigate to /dashboard/super-admin/profile
+2. Verify all 4 tabs present: Profile, Professional, Privacy, Preferences
+3. Test profile picture upload
+4. Test saving profile changes
+✓ All features accessible
+✓ Single source of truth
+```
+
+---
+
 ## [2.97.0] - 2025-11-13 (INTUITIVE DOCS HUB ORDERING SYSTEM) 📄✨
 
 ### 🎯 Major Enhancement: Visual Document Ordering

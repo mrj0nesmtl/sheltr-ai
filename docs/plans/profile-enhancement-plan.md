@@ -169,54 +169,81 @@ Comprehensive plan to enhance the Super Admin Profile dashboard based on user fe
 
 ## 🗂️ Implementation Plan
 
-### **Phase 1: Tab Consolidation** (2-3 hours)
+### **Phase 1: Tab Consolidation** (4-6 hours)
 **Priority:** High  
-**Complexity:** Low
+**Complexity:** Low-Medium
+
+**Scope:** Apply to ALL user roles with profile pages
+
+**User Roles to Update:**
+1. ✅ **Super Admin** - `/dashboard/super-admin/profile`
+2. ✅ **Platform Admin** - `/dashboard/platform-admin/profile`
+3. ✅ **Participant** - `/dashboard/participant/profile`
+4. ⚠️ **Donor** - Check if profile page exists
+5. ⚠️ **Shelter Admin** - Check if profile page exists
 
 **Tasks:**
-1. ✅ Merge Profile + Professional tabs
-2. ✅ Reorganize form fields
-3. ✅ Update tab navigation (4 → 3 tabs)
-4. ✅ Test all fields save correctly
-5. ✅ Update documentation
+1. ✅ Audit all profile pages across user roles
+2. ✅ Merge Profile + Professional tabs (where applicable)
+3. ✅ Reorganize form fields
+4. ✅ Update tab navigation (4 → 3 tabs)
+5. ✅ Ensure consistent UX across all roles
+6. ✅ Test all fields save correctly for each role
+7. ✅ Update documentation
 
 **Files to Modify:**
 - `apps/web/src/app/dashboard/super-admin/profile/page.tsx`
+- `apps/web/src/app/dashboard/platform-admin/profile/page.tsx`
+- `apps/web/src/app/dashboard/participant/profile/page.tsx`
+- Check for donor/shelter admin profile pages
 
 ---
 
-### **Phase 2: Email Field Clarification** (1-2 hours)
+### **Phase 2: Email Field Clarification** (2-4 hours)
 **Priority:** High  
-**Complexity:** Low
+**Complexity:** Low-Medium
+
+**Scope:** Apply to ALL user roles with profile pages
 
 **Tasks:**
-1. ✅ Investigate current email behavior
+1. ✅ Investigate current email behavior across all roles
 2. ✅ Split into `authEmail` (read-only) and `publicEmail` (editable)
 3. ✅ Add clear labels and tooltips
-4. ✅ Update UI to show both fields
-5. ✅ Test email changes don't affect login
+4. ✅ Update UI to show both fields for all roles
+5. ✅ Test email changes don't affect login for any role
+6. ✅ Update Firestore schema if needed
 
 **Files to Modify:**
 - `apps/web/src/app/dashboard/super-admin/profile/page.tsx`
+- `apps/web/src/app/dashboard/platform-admin/profile/page.tsx`
+- `apps/web/src/app/dashboard/participant/profile/page.tsx`
 - `apps/web/src/services/systemSettingsService.ts`
+- `apps/web/src/services/platformAdminProfileService.ts` (if exists)
+- `apps/web/src/services/participantProfileService.ts` (if exists)
 
 ---
 
-### **Phase 3: Profile Picture Delete** (2-3 hours)
+### **Phase 3: Profile Picture Delete** (3-5 hours)
 **Priority:** High  
 **Complexity:** Medium
 
+**Scope:** Apply to ALL user roles with profile pages
+
 **Tasks:**
-1. ✅ Create `deleteProfilePicture` function
-2. ✅ Add "Delete Picture" button to UI
-3. ✅ Add confirmation dialog
+1. ✅ Create universal `deleteProfilePicture` function in fileStorageService
+2. ✅ Add "Delete Picture" button to UI for all roles
+3. ✅ Add confirmation dialog with role-appropriate messaging
 4. ✅ Update Firebase Storage rules if needed
-5. ✅ Test deletion works correctly
-6. ✅ Verify default avatar shows after delete
+5. ✅ Test deletion works correctly for each role
+6. ✅ Verify default avatar shows after delete for each role
+7. ✅ Ensure team page sync works after deletion
 
 **Files to Modify:**
 - `apps/web/src/app/dashboard/super-admin/profile/page.tsx`
-- `apps/web/src/services/fileStorageService.ts`
+- `apps/web/src/app/dashboard/platform-admin/profile/page.tsx`
+- `apps/web/src/app/dashboard/participant/profile/page.tsx`
+- `apps/web/src/services/fileStorageService.ts` (create universal delete function)
+- `apps/web/src/components/ProfileAvatar.tsx` (handle null profilePicture)
 - `firestore.rules` (if needed)
 
 ---

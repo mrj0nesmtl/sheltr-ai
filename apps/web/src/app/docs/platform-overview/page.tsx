@@ -142,37 +142,16 @@ export default function PlatformOverviewPage() {
         </div>
       </section>
 
-      {/* Target Audiences */}
-      <section className="py-12 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 border-y">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="flex items-center gap-2 mb-4">
-              <Users className="h-6 w-6 text-purple-600" />
-              <h2 className="text-xl font-semibold">Target Audience</h2>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              <Badge variant="outline" className="justify-center py-2 border-purple-300 text-purple-700 dark:border-purple-700 dark:text-purple-300">
-                Developers
-              </Badge>
-              <Badge variant="outline" className="justify-center py-2 border-purple-300 text-purple-700 dark:border-purple-700 dark:text-purple-300">
-                Donors
-              </Badge>
-              <Badge variant="outline" className="justify-center py-2 border-purple-300 text-purple-700 dark:border-purple-700 dark:text-purple-300">
-                Participants
-              </Badge>
-              <Badge variant="outline" className="justify-center py-2 border-purple-300 text-purple-700 dark:border-purple-700 dark:text-purple-300">
-                Partners
-              </Badge>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Main Content with Tabs */}
       <section className="py-12 px-4">
         <div className="container mx-auto max-w-6xl">
-          <Tabs defaultValue="mission" className="space-y-8">
+          <Tabs defaultValue="impact" className="space-y-8">
             <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 lg:w-auto lg:grid-cols-4">
+              <TabsTrigger value="impact" className="flex items-center gap-2">
+                <BarChart3 className="h-4 w-4" />
+                <span className="hidden sm:inline">Impact Model</span>
+                <span className="sm:hidden">Impact</span>
+              </TabsTrigger>
               <TabsTrigger value="mission" className="flex items-center gap-2">
                 <Heart className="h-4 w-4" />
                 <span className="hidden sm:inline">Mission & Vision</span>
@@ -187,11 +166,6 @@ export default function PlatformOverviewPage() {
                 <Zap className="h-4 w-4" />
                 <span className="hidden sm:inline">Key Features</span>
                 <span className="sm:hidden">Features</span>
-              </TabsTrigger>
-              <TabsTrigger value="impact" className="flex items-center gap-2">
-                <BarChart3 className="h-4 w-4" />
-                <span className="hidden sm:inline">Impact Model</span>
-                <span className="sm:hidden">Impact</span>
               </TabsTrigger>
             </TabsList>
 

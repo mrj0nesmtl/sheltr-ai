@@ -155,14 +155,62 @@ export default function SuperAdminProfilePage() {
           profilePicture: profilePictureUrl
         });
         
+        // Sync to team_members collection for public access
+        await ProfileSyncService.syncSuperAdminToPlatformAdmin(user.uid);
+        
         // Clear cache and reload
         await clearProfilePictureCache(user.uid);
+        
+        // Reload profile data
+        const updatedProfile = await SystemSettingsService.getSuperAdminProfile(user.uid);
+        if (updatedProfile) {
+          setProfile(updatedProfile);
+          setFormData(updatedProfile);
+        }
         
         alert('Profile picture updated successfully!');
       }
     } catch (error) {
       console.error('Error uploading profile picture:', error);
       alert('Failed to upload profile picture');
+    } finally {
+      setUploadingPicture(false);
+    }
+  };
+
+  // Handle profile picture delete
+  const handleProfilePictureDelete = async () => {
+    if (!user?.uid) return;
+    
+    if (!confirm('Are you sure you want to delete your profile picture?')) {
+      return;
+    }
+
+    try {
+      setUploadingPicture(true);
+      
+      // Remove profile picture from Firestore
+      await updateDoc(doc(db, 'users', user.uid), {
+        profilePicture: ''
+      });
+      
+      // Sync to team_members collection
+      await ProfileSyncService.syncSuperAdminToPlatformAdmin(user.uid);
+      
+      // Clear cache
+      await clearProfilePictureCache(user.uid);
+      
+      // Reload profile data
+      const updatedProfile = await SystemSettingsService.getSuperAdminProfile(user.uid);
+      if (updatedProfile) {
+        setProfile(updatedProfile);
+        setFormData(updatedProfile);
+      }
+      
+      alert('Profile picture deleted successfully!');
+    } catch (error) {
+      console.error('Error deleting profile picture:', error);
+      alert('Failed to delete profile picture');
     } finally {
       setUploadingPicture(false);
     }
@@ -343,6 +391,31 @@ export default function SuperAdminProfilePage() {
                 <div>
                   <p className="font-medium">{profile?.firstName} {profile?.lastName}</p>
                   <p className="text-sm text-muted-foreground">{profile?.jobTitle}</p>
+                </div>
+                <div className="flex gap-2 justify-center">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    disabled={uploadingPicture}
+                    onClick={() => document.getElementById('profile-picture-upload')?.click()}
+                    type="button"
+                  >
+                    <Camera className="h-4 w-4 mr-2" />
+                    Upload New Photo
+                  </Button>
+                  {user?.photoURL && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      disabled={uploadingPicture}
+                      onClick={handleProfilePictureDelete}
+                      type="button"
+                      className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                    >
+                      <Trash2 className="h-4 w-4 mr-2" />
+                      Delete Photo
+                    </Button>
+                  )}
                 </div>
               </CardContent>
             </Card>

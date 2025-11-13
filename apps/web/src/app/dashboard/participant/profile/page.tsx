@@ -323,6 +323,11 @@ export default function ParticipantProfile() {
               pronouns: userData?.pronouns || '',
               preferredLanguage: userData?.preferredLanguage || 'English'
             },
+            // CRITICAL: Load profile picture from userData
+            profilePicture: userData?.profilePicture || '',
+            // Load bio and social media from userData
+            bio: userData?.bio || '',
+            socialMedia: userData?.socialMedia || {},
             shelter: {
               currentShelter: realShelterData?.name || 'Unknown Shelter',
               checkInDate: checkInDate,

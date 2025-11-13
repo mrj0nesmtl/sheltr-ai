@@ -215,6 +215,7 @@ function SystemDesignContent() {
                 <CardContent>
                   <div className="bg-slate-50 dark:bg-slate-900 rounded-lg p-6 overflow-x-auto">
                     <Mermaid 
+                      key="system-overview-diagram"
                       chart={`graph TD
     A[Next.js 15 Website<br/>Shadcn UI + Dark Theme] -->|Firebase SDK| B[Firebase Backend<br/>Auth + Firestore]
     C[Mobile App<br/>Future: React Native] -->|Same Firebase SDK| B
@@ -336,6 +337,7 @@ function SystemDesignContent() {
                 <CardContent>
                   <div className="bg-slate-50 dark:bg-slate-900 rounded-lg p-6 overflow-x-auto">
                     <Mermaid 
+                      key="payment-flow-diagram"
                       chart={`graph LR
     A[Donor Credit Card<br/>💳 Adyen Processing] --> B[SHELTR Main Account<br/>🏦 Traditional Banking]
     

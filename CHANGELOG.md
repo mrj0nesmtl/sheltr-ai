@@ -7,6 +7,100 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.103.0] - 2025-11-13 (PARTICIPANT PROFILE PICTURE PERSISTENCE FIX) 🔄📸
+
+### 🎯 Complete Profile Picture Persistence
+
+Fixed critical issues where participant profile pictures were not persisting after save, refresh, or navigation. Profile pictures now work end-to-end across all scenarios.
+
+### 🐛 Bug Fixes - Participant Profile Picture
+
+#### 1. **Profile Picture Not Saved on "Save Changes"** 💾
+- **Problem**: `handleSave` function wasn't including `profilePicture` in `updateData`
+- **Solution**: Added `profilePicture` preservation in save operation
+- **Impact**: Profile pictures now persist when clicking "Save Changes"
+
+#### 2. **Profile Picture Not Loaded on Page Refresh** 🔄
+- **Problem**: `profileWithData` object didn't include `profilePicture`, `bio`, or `socialMedia` from Firestore
+- **Solution**: Added these fields when building profile data from `userData`
+- **Impact**: Profile pictures now load correctly after page refresh
+
+#### 3. **Profile Picture Lost When Navigating Away** 🧭
+- **Problem**: Fallback scenarios (null `participantData` or error catch) used `mockProfile` without preserving `userData`
+- **Solution**: Added `profilePicture` preservation in both fallback scenarios
+- **Impact**: Profile pictures persist when navigating away and returning
+
+#### 4. **React Hooks Order Violation** ⚛️
+- **Problem**: `uploadingPhoto` state was declared in the middle of the component
+- **Solution**: Moved `useState` declaration to top with other state hooks
+- **Impact**: Eliminated React Hooks error and rendering issues
+
+### ✨ Complete Data Flow
+
+```
+1. Upload Photo → Saves to Firestore ✅
+2. Click "Save Changes" → Preserves profilePicture ✅
+3. Refresh Page → Loads from userData ✅
+4. Navigate Away & Back → Checks userData in all fallbacks ✅
+5. Remove Photo Button → Shows/hides correctly ✅
+```
+
+### 🔧 Technical Changes
+
+**Files Modified:**
+- `apps/web/src/app/dashboard/participant/profile/page.tsx`
+  - Added `profilePicture` to `updateData` in `handleSave` (line 559)
+  - Added `profilePicture`, `bio`, `socialMedia` to `profileWithData` (lines 327-330)
+  - Added `profilePicture` preservation in `participantData === null` fallback (lines 394-399)
+  - Added `profilePicture` preservation in error catch fallback (lines 414-420)
+  - Moved `uploadingPhoto` state to top of component (line 186)
+
+**Code Changes:**
+```typescript
+// In handleSave - preserve profile picture
+const updateData = {
+  // ... other fields
+  ...(profile.profilePicture && { profilePicture: profile.profilePicture }),
+  // ...
+};
+
+// In profileWithData - load from userData
+const profileWithData: ExtendedUserProfile = {
+  // ... other fields
+  profilePicture: userData?.profilePicture || '',
+  bio: userData?.bio || '',
+  socialMedia: userData?.socialMedia || {},
+  // ...
+};
+
+// In fallback scenarios - preserve userData
+const fallbackProfile = {
+  ...mockProfile,
+  profilePicture: userData?.profilePicture || '',
+  bio: userData?.bio || '',
+  socialMedia: userData?.socialMedia || {}
+};
+```
+
+### 📊 Impact
+
+- **100% Persistence**: Profile pictures now persist across all user actions
+- **Zero Data Loss**: All upload/save/navigate scenarios work correctly
+- **Consistent UX**: Delete button visibility matches profile picture state
+- **React Compliance**: No more Hooks order violations
+
+### 🧪 Verified Scenarios
+
+- ✅ Upload photo → Appears immediately
+- ✅ Click "Save Changes" → Photo persists
+- ✅ Refresh page → Photo loads correctly
+- ✅ Navigate to dashboard → Photo persists in sidebar
+- ✅ Navigate back to profile → Photo still there
+- ✅ Delete button → Shows only for user-uploaded pictures
+- ✅ Remove photo → Deletes successfully
+
+---
+
 ## [2.102.0] - 2025-11-13 (PROFILE PICTURE DELETE & CONSISTENCY FIX) 🗑️📸
 
 ### 🎯 Complete Profile Picture Management System

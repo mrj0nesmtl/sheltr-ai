@@ -8,6 +8,8 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getShelterMetrics, ShelterMetrics } from '@/services/platformMetrics';
 import { generateShelterQRCode } from '@/services/qrCodeService';
+import { shelterService, ShelterPublicConfig } from '@/services/shelterService';
+import { uploadProfilePicture } from '@/services/fileStorageService';
 import { 
   QrCode, 
   Camera, 
@@ -45,10 +47,14 @@ export default function SettingsPage() {
   const [isEditing, setIsEditing] = useState(false);
   const [previewMode, setPreviewMode] = useState(false);
   const [shelterData, setShelterData] = useState<ShelterMetrics | null>(null);
+  const [publicConfig, setPublicConfig] = useState<ShelterPublicConfig | null>(null);
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [generatingQR, setGeneratingQR] = useState(false);
   const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
+  const [uploadingLogo, setUploadingLogo] = useState(false);
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
 
   // Real shelter configuration - this would come from a detailed shelter profile
   const [formData, setFormData] = useState({
@@ -99,7 +105,7 @@ export default function SettingsPage() {
     'Housing Assistance': Bed
   };
 
-  // Load real shelter data
+  // Load real shelter data and public configuration
   useEffect(() => {
     const loadShelterData = async () => {
       const shelterId = user?.customClaims?.shelter_id || user?.shelterId || (user as any)?.shelter_id;
@@ -112,21 +118,47 @@ export default function SettingsPage() {
 
       try {
         console.log('🏠 Loading shelter settings for:', shelterId);
-        const metrics = await getShelterMetrics(shelterId);
         
+        // Load metrics
+        const metrics = await getShelterMetrics(shelterId);
         if (metrics) {
           setShelterData(metrics);
-          // Update form data with real shelter information
-          setFormData(prevData => ({
-            ...prevData,
-            name: metrics.shelterName,
-            capacity: metrics.capacity,
-            currentOccupancy: metrics.totalParticipants
-          }));
-          console.log('✅ Shelter settings loaded:', metrics);
-        } else {
-          setError('Failed to load shelter data');
         }
+        
+        // Load public configuration
+        const config = await shelterService.getShelterPublicConfig(shelterId);
+        if (config) {
+          setPublicConfig(config);
+          
+          // Update form data with real shelter information
+          setFormData({
+            name: config.name || metrics?.shelterName || '',
+            description: config.description || '',
+            address: '', // Will be added to config
+            phone: '', // Will be added to config
+            email: '', // Will be added to config
+            website: config.socialMedia?.website || '',
+            capacity: metrics?.capacity || 0,
+            currentOccupancy: metrics?.totalParticipants || 0,
+            established: config.established || '',
+            operatingHours: '24/7', // Will be derived from config
+            checkInTime: '', // Will be added to config
+            checkOutTime: '', // Will be added to config
+            qrCode: config.qrCode?.url || '',
+            socialMedia: {
+              facebook: config.socialMedia?.facebook || '',
+              twitter: config.socialMedia?.twitter || '',
+              instagram: config.socialMedia?.instagram || ''
+            },
+            services: config.services || [],
+            photos: [] // Will be loaded separately
+          });
+          
+          console.log('✅ Shelter configuration loaded:', config);
+        } else {
+          console.log('⚠️ No public config found, will create on first save');
+        }
+        
       } catch (error) {
         console.error('❌ Failed to load shelter data:', error);
         setError('Failed to load shelter data');
@@ -140,10 +172,51 @@ export default function SettingsPage() {
     }
   }, [user, hasRole]);
 
-  const handleSave = () => {
-    setIsEditing(false);
-    // Here you would save to your backend
-    console.log('Saving shelter configuration:', formData);
+  const handleSave = async () => {
+    const shelterId = user?.customClaims?.shelter_id || user?.shelterId || (user as any)?.shelter_id;
+    
+    if (!shelterId) {
+      alert('Error: No shelter ID found');
+      return;
+    }
+
+    try {
+      setSaving(true);
+      console.log('💾 Saving shelter configuration...');
+      
+      // Prepare update data
+      const updateData: Partial<ShelterPublicConfig> = {
+        name: formData.name,
+        description: formData.description,
+        services: formData.services,
+        established: formData.established,
+        socialMedia: {
+          website: formData.website,
+          facebook: formData.socialMedia.facebook,
+          twitter: formData.socialMedia.twitter,
+          instagram: formData.socialMedia.instagram
+        }
+      };
+      
+      // Update public configuration
+      await shelterService.updateShelterPublicConfig(shelterId, updateData);
+      
+      console.log('✅ Shelter configuration saved successfully');
+      alert('Settings saved successfully!');
+      setIsEditing(false);
+      
+      // Reload config to get fresh data
+      const updatedConfig = await shelterService.getShelterPublicConfig(shelterId);
+      if (updatedConfig) {
+        setPublicConfig(updatedConfig);
+      }
+      
+    } catch (error) {
+      console.error('❌ Error saving shelter configuration:', error);
+      alert(`Failed to save settings: ${error}`);
+    } finally {
+      setSaving(false);
+    }
   };
 
   const generateQRCode = async () => {
@@ -181,10 +254,46 @@ export default function SettingsPage() {
     }
   };
 
+  const handleLogoUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const shelterId = user?.customClaims?.shelter_id || user?.shelterId || (user as any)?.shelter_id;
+    if (!shelterId) {
+      alert('Error: No shelter ID found');
+      return;
+    }
+
+    try {
+      setUploadingLogo(true);
+      console.log('📸 Uploading shelter logo...');
+      
+      const logoUrl = await shelterService.uploadShelterLogo(shelterId, file);
+      
+      // Update public config with new logo
+      await shelterService.updateShelterPublicConfig(shelterId, { logoUrl });
+      
+      // Reload config
+      const updatedConfig = await shelterService.getShelterPublicConfig(shelterId);
+      if (updatedConfig) {
+        setPublicConfig(updatedConfig);
+      }
+      
+      console.log('✅ Logo uploaded successfully');
+      alert('Logo uploaded successfully!');
+      
+    } catch (error) {
+      console.error('❌ Error uploading logo:', error);
+      alert(`Failed to upload logo: ${error}`);
+    } finally {
+      setUploadingLogo(false);
+    }
+  };
+
   const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || []);
     console.log('Uploading photos:', files);
-    // Handle photo upload logic
+    // Handle photo upload logic - will implement in Photos tab
   };
 
   // Check if user has shelter admin or super admin access
@@ -268,9 +377,22 @@ export default function SettingsPage() {
             </Button>
           )}
           {isEditing ? (
-            <Button onClick={handleSave} className="bg-green-600 hover:bg-green-700">
-              <Save className="mr-2 h-4 w-4" />
-              Save Changes
+            <Button 
+              onClick={handleSave} 
+              disabled={saving}
+              className="bg-green-600 hover:bg-green-700"
+            >
+              {saving ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                <>
+                  <Save className="mr-2 h-4 w-4" />
+                  Save Changes
+                </>
+              )}
             </Button>
           ) : (
             <Button onClick={() => setIsEditing(true)} className="bg-blue-600 hover:bg-blue-700">
@@ -450,9 +572,9 @@ export default function SettingsPage() {
                 <div className="flex items-center space-x-6">
                   <div className="flex-shrink-0">
                     <div className="w-32 h-32 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg flex items-center justify-center bg-gray-50 dark:bg-gray-900">
-                      {formData.photos[0]?.url ? (
+                      {publicConfig?.logoUrl ? (
                         <img 
-                          src={formData.photos[0].url} 
+                          src={publicConfig.logoUrl} 
                           alt="Shelter Logo" 
                           className="w-full h-full object-contain rounded-lg"
                         />
@@ -466,12 +588,48 @@ export default function SettingsPage() {
                       Upload a high-quality logo (recommended: 512x512px, PNG or SVG format)
                     </p>
                     <div className="flex space-x-2">
-                      <Button variant="outline" size="sm" disabled={!isEditing}>
-                        <Upload className="mr-2 h-4 w-4" />
-                        Upload Logo
+                      <input
+                        type="file"
+                        id="logo-upload"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={handleLogoUpload}
+                        disabled={!isEditing || uploadingLogo}
+                      />
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        disabled={!isEditing || uploadingLogo}
+                        onClick={() => document.getElementById('logo-upload')?.click()}
+                      >
+                        {uploadingLogo ? (
+                          <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Uploading...
+                          </>
+                        ) : (
+                          <>
+                            <Upload className="mr-2 h-4 w-4" />
+                            Upload Logo
+                          </>
+                        )}
                       </Button>
-                      {formData.photos[0]?.url && (
-                        <Button variant="outline" size="sm" disabled={!isEditing}>
+                      {publicConfig?.logoUrl && (
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          disabled={!isEditing}
+                          onClick={async () => {
+                            if (confirm('Are you sure you want to remove the logo?')) {
+                              const shelterId = user?.customClaims?.shelter_id || user?.shelterId || (user as any)?.shelter_id;
+                              if (shelterId) {
+                                await shelterService.updateShelterPublicConfig(shelterId, { logoUrl: '' });
+                                const updatedConfig = await shelterService.getShelterPublicConfig(shelterId);
+                                if (updatedConfig) setPublicConfig(updatedConfig);
+                              }
+                            }
+                          }}
+                        >
                           <Trash2 className="mr-2 h-4 w-4" />
                           Remove
                         </Button>

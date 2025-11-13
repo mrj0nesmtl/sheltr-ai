@@ -7,11 +7,14 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { profileService, type UserProfile, type PersonalInfo, type EmergencyContact, type Goal } from '@/services/profileService';
 import { goalsService, type Goal as RealGoal } from '@/services/goalsService';
 import { getParticipantProfile, type ParticipantProfile } from '@/services/platformMetrics';
+import { participantProfileService } from '@/services/participantProfileService';
+import { uploadProfilePicture } from '@/services/fileStorageService';
 import { doc, updateDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { generateProfileQRCodeUrl, getParticipantProfileUrl, getSharingUrl } from '@/utils/profileUrls';
@@ -40,7 +43,10 @@ import {
   ExternalLink,
   Download,
   Upload,
-  FileText
+  FileText,
+  Globe,
+  Loader2,
+  Trash2
 } from 'lucide-react';
 import { FileUpload } from '@/components/FileUpload';
 
@@ -438,6 +444,9 @@ export default function ParticipantProfile() {
         dateOfBirth: profile.personalInfo.dateOfBirth,
         pronouns: profile.personalInfo.pronouns,
         preferredLanguage: profile.personalInfo.preferredLanguage,
+        // Add bio and social media
+        bio: profile.bio || '',
+        socialMedia: profile.socialMedia || {},
         // Add emergency contact if exists
         ...(profile.emergencyContacts && profile.emergencyContacts.length > 0 && {
           emergencyContact: {
@@ -447,6 +456,8 @@ export default function ParticipantProfile() {
             email: profile.emergencyContacts[0].email
           }
         }),
+        // Save emergency contacts array
+        emergencyContacts: profile.emergencyContacts || [],
         // Save goals array
         goals: profile.goals || [],
         // Save preferences
@@ -719,6 +730,25 @@ export default function ParticipantProfile() {
                   />
                 </div>
               </div>
+
+              <div>
+                <Label htmlFor="bio">Personal Bio (Optional)</Label>
+                <Textarea
+                  id="bio"
+                  value={profile.bio || ''}
+                  disabled={!isEditing}
+                  onChange={(e) => setProfile(prev => ({
+                    ...prev,
+                    bio: e.target.value
+                  }))}
+                  placeholder="Share your story, goals, or anything you'd like potential supporters to know..."
+                  rows={4}
+                  className="resize-none"
+                />
+                <p className="text-xs text-muted-foreground mt-1">
+                  This bio will be displayed on your public profile page
+                </p>
+              </div>
             </CardContent>
           </Card>
 
@@ -770,10 +800,103 @@ export default function ParticipantProfile() {
               </div>
             </CardContent>
           </Card>
+
+          {/* Social Media Links (Optional) */}
+          <Card className="lg:col-span-2">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Globe className="h-5 w-5" />
+                Social Media & Website (Optional)
+              </CardTitle>
+              <CardDescription>
+                Connect your social profiles to help build trust with potential supporters
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="participant-tiktok">TikTok</Label>
+                  <Input
+                    id="participant-tiktok"
+                    value={profile.socialMedia?.tiktok || ''}
+                    disabled={!isEditing}
+                    onChange={(e) => setProfile(prev => ({
+                      ...prev,
+                      socialMedia: { ...prev.socialMedia, tiktok: e.target.value }
+                    }))}
+                    placeholder="https://tiktok.com/@username"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="participant-instagram">Instagram</Label>
+                  <Input
+                    id="participant-instagram"
+                    value={profile.socialMedia?.instagram || ''}
+                    disabled={!isEditing}
+                    onChange={(e) => setProfile(prev => ({
+                      ...prev,
+                      socialMedia: { ...prev.socialMedia, instagram: e.target.value }
+                    }))}
+                    placeholder="https://instagram.com/username"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="participant-facebook">Facebook</Label>
+                  <Input
+                    id="participant-facebook"
+                    value={profile.socialMedia?.facebook || ''}
+                    disabled={!isEditing}
+                    onChange={(e) => setProfile(prev => ({
+                      ...prev,
+                      socialMedia: { ...prev.socialMedia, facebook: e.target.value }
+                    }))}
+                    placeholder="https://facebook.com/username"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="participant-youtube">YouTube</Label>
+                  <Input
+                    id="participant-youtube"
+                    value={profile.socialMedia?.youtube || ''}
+                    disabled={!isEditing}
+                    onChange={(e) => setProfile(prev => ({
+                      ...prev,
+                      socialMedia: { ...prev.socialMedia, youtube: e.target.value }
+                    }))}
+                    placeholder="https://youtube.com/@username"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="participant-x">X (Twitter)</Label>
+                  <Input
+                    id="participant-x"
+                    value={profile.socialMedia?.x || ''}
+                    disabled={!isEditing}
+                    onChange={(e) => setProfile(prev => ({
+                      ...prev,
+                      socialMedia: { ...prev.socialMedia, x: e.target.value }
+                    }))}
+                    placeholder="https://x.com/username"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="participant-website">Personal Website</Label>
+                  <Input
+                    id="participant-website"
+                    value={profile.socialMedia?.website || ''}
+                    disabled={!isEditing}
+                    onChange={(e) => setProfile(prev => ({
+                      ...prev,
+                      socialMedia: { ...prev.socialMedia, website: e.target.value }
+                    }))}
+                    placeholder="https://yourwebsite.com"
+                  />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       )}
-
-
 
       {/* Emergency Contacts */}
       {activeSection === 'emergency' && (

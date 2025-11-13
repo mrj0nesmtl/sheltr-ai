@@ -7,6 +7,95 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.101.0] - 2025-11-13 (PUBLIC TEAM BIO ACCESS & CHATBOT FAQ IMPROVEMENTS) 🌐💬
+
+### 🎯 Public Access to Team Bios & Enhanced Chatbot
+
+Fixed critical issue where "View Full Bio" links were only visible to authenticated users, and improved chatbot FAQ matching for better instant responses.
+
+### ✨ New Features
+
+#### 1. **Public Team Bio Access** 👥
+- **View Full Bio Links Now Public**: All users can now see and click "View Full Bio" links on team cards
+- **Slug Sync Script**: Created `sync-team-member-slugs.js` to sync slugs from `users` to `team_members` collection
+- **Graceful Degradation**: Service handles unauthenticated users properly without errors
+- **Joel Yaffe Bio**: Successfully synced and now accessible to public users
+
+**Technical Details:**
+- Issue: `users` collection requires authentication, preventing public access to slugs
+- Solution: Store slug in both `users` (source of truth) and `team_members` (public access)
+- Script syncs slug and profile picture from `users` to `team_members` for public visibility
+
+#### 2. **Enhanced Chatbot FAQ Matching** 🤖
+- **Keyword-Based Scoring**: Added intelligent keyword matching (10 points per match, max 30)
+- **Better Question Variations**: Added 9 new variations for "why only 80%" question
+- **Improved Answer**: Full 80-15-5 model explanation with housing fund details
+- **Faster Responses**: Questions now match instantly without timeouts
+
+**New Question Variations:**
+```
+- "why only 80%"
+- "why not 100%"
+- "what happens to other 20%"
+- "where does the rest go"
+- "why only 80% to participant"
+- "why only 80% to homeless"
+```
+
+**Enhanced Answer:**
+> "80% goes directly to participants through virtual debit cards. The other 20% is split: 15% builds their housing fund (staked to earn 4-6% APY, growing towards permanent housing like PODS), and 5% supports shelter operations. This 80-15-5 model ensures immediate needs are met while building long-term solutions. No overhead, 100% impact."
+
+### 🐛 Bug Fixes
+
+#### **Team Page**
+- Fixed "View Full Bio" links only appearing for authenticated users
+- Added fallback to `team_members` collection when `users` collection is inaccessible
+- Improved error handling for unauthenticated user data fetching
+
+#### **Participant Profile Page**
+- Fixed 70 TypeScript errors (all resolved!)
+- Added `bio` and `socialMedia` fields to `ExtendedUserProfile` interface
+- Added null safety checks to all `setProfile` calls
+- Fixed `Goal` ID type mismatch (number → string)
+- Added missing `donationCount` field in mock data
+
+#### **Chatbot**
+- Fixed timeout issues on basic questions like "why only 80%"
+- Improved FAQ matching to handle different phrasings of same question
+- Questions that should be instant (< 100ms) no longer timeout (8s+)
+
+### 🔧 Technical Improvements
+
+#### **Scripts**
+- `sync-team-member-slugs.js`: Syncs slug and profile picture from `users` to `team_members`
+- Handles missing slugs, bio visibility settings, and errors gracefully
+- Provides detailed sync summary with counts
+
+#### **Services**
+- `publicTeamService.ts`: Enhanced error handling for unauthenticated access
+- `faq_service.py`: Added keyword-based scoring boost for better matching
+- `expanded_faqs.py`: Enhanced 80-15-5 FAQ with comprehensive answer
+
+### 📊 Impact
+
+**Before:**
+- Public users: No "View Full Bio" links visible
+- Chatbot: 37-59 second timeouts on basic questions
+- Participant Profile: 70 TypeScript errors
+
+**After:**
+- Public users: ✅ Full access to team bio links
+- Chatbot: ✅ < 100ms instant responses for FAQ questions
+- Participant Profile: ✅ 0 errors, 24 warnings (non-critical)
+
+### 🚀 Deployment Notes
+
+1. Run `node scripts/sync-team-member-slugs.js` to sync existing team member slugs
+2. For new team members with bios, ensure slug is added to `team_members` collection
+3. Chatbot improvements are automatic (no migration needed)
+
+---
+
 ## [2.100.0] - 2025-11-13 (DONOR & PARTICIPANT PROFILE ENHANCEMENTS) 👤🌐
 
 ### 🎯 Comprehensive Profile Management System

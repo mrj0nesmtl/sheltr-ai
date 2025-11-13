@@ -797,7 +797,7 @@ export default function ParticipantProfile() {
                 <div className="flex items-center space-x-2 mb-2">
                   <MapPin className="w-5 h-5 text-blue-600" />
                   <span className="font-medium text-blue-800 dark:text-blue-200">
-                    {profile.shelter?.currentShelter || 'Old Brewery Mission'}
+                    {shelterData?.name || profile.shelter?.currentShelter || 'Old Brewery Mission'}
                   </span>
                 </div>
                 {shelterData?.address && (

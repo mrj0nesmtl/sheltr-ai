@@ -210,14 +210,14 @@ const getNavigationItems = (userRole: string, messageCount?: number, notificatio
         title: 'My Profile',
         href: '/dashboard/super-admin/profile',
         icon: User,
-        description: 'Manage your super admin profile and preferences'
+        description: 'Manage your super admin profile and preferences',
+        separator: true
       },
       {
         title: 'System Settings',
         href: '/dashboard/settings',
         icon: Cog,
-        description: 'Configure system settings and integrations',
-        separator: true
+        description: 'Configure system settings and integrations'
       },
       {
         title: 'Security & Compliance',

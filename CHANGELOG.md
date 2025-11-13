@@ -7,6 +7,96 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.100.0] - 2025-11-13 (DONOR & PARTICIPANT PROFILE ENHANCEMENTS) 👤🌐
+
+### 🎯 Comprehensive Profile Management System
+
+Implemented full bio and social media features for both Donors and Participants, enabling richer profiles, better storytelling, and increased trust between supporters and participants.
+
+### ✨ New Features
+
+#### 1. **Donor Profile Enhancements** 💝
+- **Personal Bio**: Rich textarea for donors to share their story and motivation
+- **Occupation & Company**: Professional information fields
+- **Social Media Links**: TikTok, Instagram, Facebook, YouTube, X (Twitter), Website
+- **Profile Picture Upload/Delete**: Full Firebase Storage integration with loading states
+- **All Firestore Connected**: Profile, Notifications, Privacy, Payment, Preferences tabs
+- **Loading States**: Proper UX with spinners for save and upload operations
+
+**New Fields:**
+```typescript
+{
+  bio: string,
+  occupation: string,
+  company: string,
+  socialMedia: {
+    tiktok: string,
+    instagram: string,
+    facebook: string,
+    youtube: string,
+    x: string,
+    website: string
+  }
+}
+```
+
+#### 2. **Participant Profile Enhancements** 🏠
+- **Personal Bio**: Textarea for participants to share their journey with potential supporters
+- **Social Media Links**: Full-width card with all social platforms
+- **Firestore Integration**: Bio and social media save alongside existing profile data
+- **Emergency Contacts Array**: Now properly saved to Firestore
+- **Real Profile Stats**: Fixed stats display to show actual donation data ($2,176, 4 donations)
+
+**Profile Stats Now Show:**
+- Total Supporters (based on donation count)
+- Profile Views (estimated from donations)
+- Total Received (from `users.total_received`)
+- Goal Progress (from `users.participantProfile.goalProgress`)
+
+#### 3. **New Profile Services** 🛠️
+
+**`donorProfileService.ts`**
+- `getDonorProfile(userId)` - Load full donor profile
+- `saveDonorProfile(userId, data)` - Create/update profile
+- `updateSocialMedia(userId, links)` - Update social links
+- `updateBio(userId, bio)` - Update bio
+- `updateProfilePicture(userId, url)` - Update photo URL
+- `updateNotificationPreferences(userId, prefs)` - Save notifications
+- `updatePrivacySettings(userId, privacy)` - Save privacy settings
+- `updateDonationPreferences(userId, prefs)` - Save donation preferences
+- `getDonationStats(userId)` - Get donor statistics
+
+**`participantProfileService.ts`**
+- `getParticipantProfile(userId)` - Load full participant profile
+- `saveParticipantProfile(userId, data)` - Create/update profile
+- `updateSocialMedia(userId, links)` - Update social links
+- `updateBio(userId, bio)` - Update bio
+- `updateProfilePicture(userId, url)` - Update photo URL
+- `updateEmergencyContacts(userId, contacts)` - Save emergency contacts
+- `updateGoals(userId, goals)` - Save goals
+- `updatePreferences(userId, prefs)` - Save preferences
+- `getParticipantStats(userId)` - Get participant statistics
+
+### 🐛 Bug Fixes
+
+#### Profile Stats Display
+- **Issue**: Participant profile stats showing zeros instead of real donation data
+- **Root Cause**: Function was querying `demo_donations` collection instead of using aggregated data from `users` document
+- **Fix**: Updated `getParticipantDonationData` to fetch directly from `users.total_received` and `users.donation_count`
+- **Result**: Profile stats now correctly display $2,176 received, 4 donations, 20 profile views, 55% goal progress
+
+### 📁 Files Changed
+- `apps/web/src/services/donorProfileService.ts` (new)
+- `apps/web/src/services/participantProfileService.ts` (new)
+- `apps/web/src/app/dashboard/donor/settings/page.tsx`
+- `apps/web/src/app/dashboard/participant/profile/page.tsx`
+
+### 🧪 Testing
+- **Donor**: Login with `donor@example.com` at `/dashboard/donor/settings`
+- **Participant**: Login with `participant@example.com` at `/dashboard/participant/profile`
+
+---
+
 ## [2.99.0] - 2025-11-13 (SHELTER ADMIN: PHOTOS & MAPS INTEGRATION) 📸🗺️
 
 ### 🎯 Complete Photo Gallery & Maps Implementation

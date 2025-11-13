@@ -18,6 +18,15 @@ import {
 import { db, storage } from '@/lib/firebase';
 import { tenantService, ShelterTenant } from './tenantService';
 
+export interface ShelterPhoto {
+  id: string;
+  url: string;
+  storagePath: string;
+  caption?: string;
+  order: number;
+  uploadedAt: string;
+}
+
 export interface ShelterPublicConfig {
   id: string;
   name: string;
@@ -28,6 +37,7 @@ export interface ShelterPublicConfig {
   description?: string;
   mission?: string;
   services?: string[];
+  photos?: ShelterPhoto[];
   // Contact & Location
   address?: string;
   phone?: string;
@@ -164,6 +174,124 @@ export class ShelterService {
       console.log('✅ Shelter image deleted successfully');
     } catch (error) {
       console.error('❌ Error deleting shelter image:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Upload shelter gallery photo
+   */
+  async uploadShelterPhoto(shelterId: string, file: File, order: number): Promise<ShelterPhoto> {
+    try {
+      console.log(`📷 Uploading photo for shelter: ${shelterId}`);
+      
+      // Generate unique filename
+      const timestamp = Date.now();
+      const photoId = `photo-${timestamp}`;
+      const storagePath = `shelters/${shelterId}/gallery/${photoId}`;
+      
+      // Create storage reference
+      const photoRef = ref(storage, storagePath);
+      
+      // Upload file
+      const snapshot = await uploadBytes(photoRef, file);
+      console.log('✅ Photo uploaded successfully');
+      
+      // Get download URL
+      const downloadURL = await getDownloadURL(snapshot.ref);
+      console.log('📎 Photo URL generated:', downloadURL);
+      
+      const photo: ShelterPhoto = {
+        id: photoId,
+        url: downloadURL,
+        storagePath: storagePath,
+        order: order,
+        uploadedAt: new Date().toISOString()
+      };
+      
+      return photo;
+      
+    } catch (error) {
+      console.error('❌ Error uploading shelter photo:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Delete shelter photo
+   */
+  async deleteShelterPhoto(shelterId: string, photo: ShelterPhoto): Promise<void> {
+    try {
+      console.log(`🗑️ Deleting photo: ${photo.id}`);
+      
+      // Delete from storage
+      await this.deleteShelterImage(photo.storagePath);
+      
+      // Get current config
+      const config = await this.getShelterPublicConfig(shelterId);
+      if (!config || !config.photos) return;
+      
+      // Remove photo from array
+      const updatedPhotos = config.photos.filter(p => p.id !== photo.id);
+      
+      // Update Firestore
+      await this.updateShelterPublicConfig(shelterId, { photos: updatedPhotos });
+      
+      console.log('✅ Photo deleted successfully');
+      
+    } catch (error) {
+      console.error('❌ Error deleting shelter photo:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Update photo caption
+   */
+  async updatePhotoCaption(shelterId: string, photoId: string, caption: string): Promise<void> {
+    try {
+      console.log(`✏️ Updating caption for photo: ${photoId}`);
+      
+      // Get current config
+      const config = await this.getShelterPublicConfig(shelterId);
+      if (!config || !config.photos) return;
+      
+      // Update photo caption
+      const updatedPhotos = config.photos.map(p => 
+        p.id === photoId ? { ...p, caption } : p
+      );
+      
+      // Update Firestore
+      await this.updateShelterPublicConfig(shelterId, { photos: updatedPhotos });
+      
+      console.log('✅ Photo caption updated successfully');
+      
+    } catch (error) {
+      console.error('❌ Error updating photo caption:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Reorder photos
+   */
+  async reorderPhotos(shelterId: string, photos: ShelterPhoto[]): Promise<void> {
+    try {
+      console.log(`🔄 Reordering photos for shelter: ${shelterId}`);
+      
+      // Update order property for each photo
+      const reorderedPhotos = photos.map((photo, index) => ({
+        ...photo,
+        order: index
+      }));
+      
+      // Update Firestore
+      await this.updateShelterPublicConfig(shelterId, { photos: reorderedPhotos });
+      
+      console.log('✅ Photos reordered successfully');
+      
+    } catch (error) {
+      console.error('❌ Error reordering photos:', error);
       throw error;
     }
   }

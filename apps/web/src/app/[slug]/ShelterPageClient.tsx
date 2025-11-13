@@ -526,6 +526,71 @@ export default function ShelterPageClient({ slug }: ShelterPageClientProps) {
               </CardContent>
             </Card>
 
+            {/* Location Map */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <MapPin className="h-5 w-5 text-primary" />
+                  Location
+                </CardTitle>
+                <CardDescription>Find us on the map</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ? (
+                  <div className="space-y-3">
+                    <div className="rounded-lg overflow-hidden h-64 border border-border">
+                      <iframe
+                        width="100%"
+                        height="100%"
+                        style={{ border: 0 }}
+                        loading="lazy"
+                        allowFullScreen
+                        referrerPolicy="no-referrer-when-downgrade"
+                        src={`https://www.google.com/maps/embed/v1/place?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&q=${encodeURIComponent(`${shelter.address}, ${shelter.city}, ${shelter.province} ${shelter.postal_code}`)}`}
+                      />
+                    </div>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      className="w-full"
+                      asChild
+                    >
+                      <a 
+                        href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${shelter.address}, ${shelter.city}, ${shelter.province} ${shelter.postal_code}`)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <ExternalLink className="mr-2 h-4 w-4" />
+                        Open in Google Maps
+                      </a>
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="text-center py-6">
+                    <MapPin className="h-12 w-12 mx-auto text-muted-foreground mb-3" />
+                    <p className="text-sm text-muted-foreground mb-4">
+                      {shelter.address}<br />
+                      {shelter.city}, {shelter.province} {shelter.postal_code}
+                    </p>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      asChild
+                    >
+                      <a 
+                        href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${shelter.address}, ${shelter.city}, ${shelter.province} ${shelter.postal_code}`)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <ExternalLink className="mr-2 h-4 w-4" />
+                        View on Google Maps
+                      </a>
+                    </Button>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
             {/* QR Code & Donation */}
             <Card className="text-center">
               <CardHeader>

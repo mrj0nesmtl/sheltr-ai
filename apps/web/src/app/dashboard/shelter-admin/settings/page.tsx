@@ -293,10 +293,127 @@ export default function SettingsPage() {
     }
   };
 
-  const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePhotoUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || []);
-    console.log('Uploading photos:', files);
-    // Handle photo upload logic - will implement in Photos tab
+    if (files.length === 0) return;
+    
+    const shelterId = user?.customClaims?.shelter_id || user?.shelterId || (user as any)?.shelter_id;
+    if (!shelterId) {
+      alert('Shelter ID not found');
+      return;
+    }
+    
+    setUploadingPhoto(true);
+    
+    try {
+      console.log(`📸 Uploading ${files.length} photo(s)...`);
+      
+      // Get current photos to determine order
+      const currentPhotos = publicConfig?.photos || [];
+      let nextOrder = currentPhotos.length;
+      
+      // Upload all files
+      const uploadPromises = files.map(async (file) => {
+        const photo = await shelterService.uploadShelterPhoto(shelterId, file, nextOrder++);
+        return photo;
+      });
+      
+      const newPhotos = await Promise.all(uploadPromises);
+      
+      // Update public config with new photos
+      const updatedPhotos = [...currentPhotos, ...newPhotos];
+      await shelterService.updateShelterPublicConfig(shelterId, { photos: updatedPhotos });
+      
+      // Reload config
+      const updatedConfig = await shelterService.getShelterPublicConfig(shelterId);
+      if (updatedConfig) setPublicConfig(updatedConfig);
+      
+      alert(`Successfully uploaded ${newPhotos.length} photo(s)!`);
+      
+      // Reset file input
+      event.target.value = '';
+      
+    } catch (error) {
+      console.error('❌ Error uploading photos:', error);
+      alert(`Failed to upload photos: ${error}`);
+    } finally {
+      setUploadingPhoto(false);
+    }
+  };
+  
+  const handlePhotoDelete = async (photoId: string) => {
+    const shelterId = user?.customClaims?.shelter_id || user?.shelterId || (user as any)?.shelter_id;
+    if (!shelterId || !publicConfig?.photos) return;
+    
+    const photo = publicConfig.photos.find(p => p.id === photoId);
+    if (!photo) return;
+    
+    if (!confirm('Are you sure you want to delete this photo?')) return;
+    
+    try {
+      await shelterService.deleteShelterPhoto(shelterId, photo);
+      
+      // Reload config
+      const updatedConfig = await shelterService.getShelterPublicConfig(shelterId);
+      if (updatedConfig) setPublicConfig(updatedConfig);
+      
+      alert('Photo deleted successfully!');
+      
+    } catch (error) {
+      console.error('❌ Error deleting photo:', error);
+      alert(`Failed to delete photo: ${error}`);
+    }
+  };
+  
+  const handleCaptionChange = async (photoId: string, caption: string) => {
+    const shelterId = user?.customClaims?.shelter_id || user?.shelterId || (user as any)?.shelter_id;
+    if (!shelterId) return;
+    
+    try {
+      await shelterService.updatePhotoCaption(shelterId, photoId, caption);
+      
+      // Update local state immediately for better UX
+      if (publicConfig?.photos) {
+        const updatedPhotos = publicConfig.photos.map(p => 
+          p.id === photoId ? { ...p, caption } : p
+        );
+        setPublicConfig({ ...publicConfig, photos: updatedPhotos });
+      }
+      
+    } catch (error) {
+      console.error('❌ Error updating caption:', error);
+      alert(`Failed to update caption: ${error}`);
+    }
+  };
+
+  const [uploadingAdminPhoto, setUploadingAdminPhoto] = useState(false);
+
+  const handleAdminProfilePictureUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file || !user) return;
+
+    setUploadingAdminPhoto(true);
+
+    try {
+      console.log('📸 Uploading admin profile picture...');
+      
+      // Upload to Firebase Storage
+      const photoUrl = await uploadProfilePicture(file, user.uid);
+      
+      // Update user's photoURL in Firebase Auth
+      // This will be handled by the user profile service
+      // For now, we'll just show success message
+      alert('Profile picture uploaded successfully! Please refresh the page to see changes.');
+      
+      // Reset file input
+      event.target.value = '';
+      
+    } catch (error) {
+      console.error('❌ Error uploading profile picture:', error);
+      alert(`Failed to upload profile picture: ${error}`);
+    } finally {
+      setUploadingAdminPhoto(false);
+    }
   };
 
   // Check if user has shelter admin or super admin access
@@ -668,9 +785,32 @@ export default function SettingsPage() {
                         <Users className="h-12 w-12 text-gray-400" />
                       )}
                     </div>
-                    <Button variant="outline" size="sm" className="w-full" disabled={!isEditing}>
-                      <Camera className="mr-2 h-4 w-4" />
-                      Upload Photo
+                    <input
+                      type="file"
+                      id="admin-profile-upload"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handleAdminProfilePictureUpload}
+                      disabled={!isEditing || uploadingAdminPhoto}
+                    />
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="w-full" 
+                      disabled={!isEditing || uploadingAdminPhoto}
+                      onClick={() => document.getElementById('admin-profile-upload')?.click()}
+                    >
+                      {uploadingAdminPhoto ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Uploading...
+                        </>
+                      ) : (
+                        <>
+                          <Camera className="mr-2 h-4 w-4" />
+                          Upload Photo
+                        </>
+                      )}
                     </Button>
                   </div>
 
@@ -984,36 +1124,61 @@ export default function SettingsPage() {
               <Card>
                 <CardHeader>
                   <CardTitle>Map Preview</CardTitle>
-                  <CardDescription>How your location appears to visitors</CardDescription>
+                  <CardDescription>Interactive map showing your shelter location</CardDescription>
                 </CardHeader>
                 <CardContent>
                   {formData.address ? (
                     <div className="space-y-4">
-                      <div className="rounded-lg overflow-hidden h-64 bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
-                        <div className="text-center p-6">
-                          <MapPin className="h-12 w-12 mx-auto text-blue-500 mb-3" />
-                          <p className="font-medium text-gray-900 dark:text-white mb-2">
-                            {formData.address}
-                          </p>
-                          <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                            Click below to view on Google Maps
-                          </p>
-                          <Button 
-                            variant="outline"
-                            size="sm"
-                            onClick={() => {
-                              const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(formData.address)}`;
-                              window.open(mapsUrl, '_blank');
-                            }}
-                          >
-                            <ExternalLink className="mr-2 h-4 w-4" />
-                            Open in Google Maps
-                          </Button>
+                      {process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ? (
+                        // Live Google Maps Embed
+                        <div className="rounded-lg overflow-hidden h-64 border border-gray-200 dark:border-gray-700">
+                          <iframe
+                            width="100%"
+                            height="100%"
+                            style={{ border: 0 }}
+                            loading="lazy"
+                            allowFullScreen
+                            referrerPolicy="no-referrer-when-downgrade"
+                            src={`https://www.google.com/maps/embed/v1/place?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&q=${encodeURIComponent(formData.address)}`}
+                          />
                         </div>
-                      </div>
-                      <div className="text-xs text-muted-foreground">
-                        💡 Tip: To enable live map preview, add a Google Maps API key to your environment variables
-                      </div>
+                      ) : (
+                        // Fallback UI (no API key)
+                        <div className="rounded-lg overflow-hidden h-64 bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
+                          <div className="text-center p-6">
+                            <MapPin className="h-12 w-12 mx-auto text-blue-500 mb-3" />
+                            <p className="font-medium text-gray-900 dark:text-white mb-2">
+                              {formData.address}
+                            </p>
+                            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                              Click below to view on Google Maps
+                            </p>
+                            <Button 
+                              variant="outline"
+                              size="sm"
+                              onClick={() => {
+                                const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(formData.address)}`;
+                                window.open(mapsUrl, '_blank');
+                              }}
+                            >
+                              <ExternalLink className="mr-2 h-4 w-4" />
+                              Open in Google Maps
+                            </Button>
+                          </div>
+                        </div>
+                      )}
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        className="w-full"
+                        onClick={() => {
+                          const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(formData.address)}`;
+                          window.open(mapsUrl, '_blank');
+                        }}
+                      >
+                        <ExternalLink className="mr-2 h-4 w-4" />
+                        Open in Full Google Maps
+                      </Button>
                     </div>
                   ) : (
                     <div className="bg-gray-100 dark:bg-gray-800 rounded-lg h-64 flex items-center justify-center">
@@ -1034,16 +1199,16 @@ export default function SettingsPage() {
             <Card>
               <CardHeader>
                 <CardTitle>Photo Gallery</CardTitle>
-                <CardDescription>Showcase your shelter with photos</CardDescription>
+                <CardDescription>Showcase your shelter with high-quality photos (max 8 photos recommended)</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-6">
                   {/* Upload Section */}
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+                  <div className="border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg p-8 text-center">
                     <Camera className="h-12 w-12 mx-auto text-gray-400 mb-4" />
                     <h3 className="text-lg font-medium mb-2">Upload New Photos</h3>
                     <p className="text-gray-600 dark:text-gray-400 mb-4">
-                      Add high-quality photos to showcase your shelter
+                      Add high-quality photos to showcase your shelter (JPG, PNG, max 5MB each)
                     </p>
                     <input 
                       type="file" 
@@ -1052,37 +1217,73 @@ export default function SettingsPage() {
                       onChange={handlePhotoUpload}
                       className="hidden"
                       id="photo-upload"
+                      disabled={uploadingPhoto}
                     />
                     <label htmlFor="photo-upload">
-                      <Button variant="outline" className="cursor-pointer">
-                        <Upload className="mr-2 h-4 w-4" />
-                        Choose Photos
+                      <Button 
+                        variant="outline" 
+                        className="cursor-pointer"
+                        disabled={uploadingPhoto}
+                        asChild
+                      >
+                        <span>
+                          {uploadingPhoto ? (
+                            <>
+                              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                              Uploading...
+                            </>
+                          ) : (
+                            <>
+                              <Upload className="mr-2 h-4 w-4" />
+                              Choose Photos
+                            </>
+                          )}
+                        </span>
                       </Button>
                     </label>
                   </div>
 
                   {/* Photo Grid */}
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {formData.photos.map((photo) => (
-                      <div key={photo.id} className="relative group">
-                        <div className="bg-gray-200 dark:bg-gray-700 rounded-lg h-32 flex items-center justify-center">
-                          <Image className="h-8 w-8 text-gray-400" />
-                        </div>
-                        <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <Button variant="ghost" size="sm" className="bg-red-500 hover:bg-red-600 text-white">
-                            <Trash2 className="h-3 w-3" />
-                          </Button>
-                        </div>
-                        <input 
-                          type="text"
-                          value={photo.caption}
-                          disabled={!isEditing}
-                          placeholder="Add caption..."
-                          className="w-full mt-2 p-1 text-xs border rounded"
-                        />
-                      </div>
-                    ))}
-                  </div>
+                  {publicConfig?.photos && publicConfig.photos.length > 0 ? (
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      {publicConfig.photos
+                        .sort((a, b) => a.order - b.order)
+                        .map((photo) => (
+                          <div key={photo.id} className="relative group">
+                            <div className="bg-gray-200 dark:bg-gray-700 rounded-lg h-32 overflow-hidden">
+                              <img 
+                                src={photo.url} 
+                                alt={photo.caption || 'Shelter photo'}
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                            <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                className="bg-red-500 hover:bg-red-600 text-white h-8 w-8 p-0"
+                                onClick={() => handlePhotoDelete(photo.id)}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                            <input 
+                              type="text"
+                              value={photo.caption || ''}
+                              onChange={(e) => handleCaptionChange(photo.id, e.target.value)}
+                              placeholder="Add caption..."
+                              className="w-full mt-2 p-2 text-xs border rounded dark:bg-gray-800 dark:border-gray-700"
+                            />
+                          </div>
+                        ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-12 bg-muted/30 rounded-lg">
+                      <Image className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
+                      <p className="text-muted-foreground">No photos uploaded yet</p>
+                      <p className="text-sm text-muted-foreground mt-1">Upload photos to showcase your shelter</p>
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>

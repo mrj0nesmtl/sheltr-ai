@@ -390,7 +390,14 @@ export default function ParticipantProfile() {
         } else {
           // Fallback to mock data for demo participants
           console.log('📝 [PROFILE] No real participant found, using mock profile data');
-          setProfile(mockProfile);
+          // CRITICAL: Preserve profile picture, bio, and social media from userData even in fallback
+          const fallbackProfile = {
+            ...mockProfile,
+            profilePicture: userData?.profilePicture || '',
+            bio: userData?.bio || '',
+            socialMedia: userData?.socialMedia || {}
+          };
+          setProfile(fallbackProfile);
           setDonationData({
             totalReceived: realDonationData.totalReceived,
             donationCount: realDonationData.donationCount,
@@ -402,8 +409,18 @@ export default function ParticipantProfile() {
       } catch (err) {
         console.error('Failed to load profile:', err);
         setError('Failed to load profile. Using default data.');
-        // Fallback to mock data
-        setProfile(profileService.getMockProfile());
+        // Fallback to mock data but preserve userData if available
+        const mockData = profileService.getMockProfile();
+        if (userData) {
+          setProfile({
+            ...mockData,
+            profilePicture: userData.profilePicture || '',
+            bio: userData.bio || '',
+            socialMedia: userData.socialMedia || {}
+          });
+        } else {
+          setProfile(mockData);
+        }
       } finally {
         setLoading(false);
       }

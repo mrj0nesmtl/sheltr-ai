@@ -7,6 +7,192 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.99.0] - 2025-11-13 (SHELTER ADMIN: PHOTOS & MAPS INTEGRATION) 📸🗺️
+
+### 🎯 Complete Photo Gallery & Maps Implementation
+
+Fully implemented photo management and Google Maps integration for shelter administrators, enabling them to showcase their facilities and location to potential participants and donors.
+
+### ✨ New Features
+
+#### 1. **Photo Gallery Management** 📸
+- **Upload Multiple Photos**: Shelter admins can upload multiple photos simultaneously
+- **Real-time Display**: Photos appear immediately after upload
+- **Caption Editing**: Inline caption editing with auto-save to Firestore
+- **Delete Photos**: One-click delete with confirmation (removes from Storage + Firestore)
+- **Ordered Display**: Photos maintain upload order on public pages
+- **Empty State**: Helpful message when no photos uploaded
+- **Loading States**: Visual feedback during uploads (spinner, disabled state)
+
+**Storage Structure:**
+```
+gs://sheltr-ai.firebasestorage.app/
+└── shelters/
+    └── {shelterId}/
+        └── gallery/
+            ├── photo-1234567890
+            ├── photo-1234567891
+            └── photo-1234567892
+```
+
+#### 2. **Google Maps Integration** 🗺️
+- **Admin Settings Map**: Live Google Maps embed showing shelter location
+- **Public Page Map**: Interactive map on shelter public pages
+- **Fallback UI**: Clean fallback when API key not configured
+- **"Open in Google Maps" Button**: Direct link to full Google Maps
+- **Responsive Design**: Maps adapt to mobile/tablet/desktop
+
+**Maps Embed API Configuration:**
+- API Key: `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` in `.env.local`
+- Website Restrictions: `localhost:3000/*`, `https://*.sheltr-ai.web.app/*`
+- API Restrictions: Maps Embed API, Geocoding API, Maps JavaScript API
+
+#### 3. **Shelter Administrator Profile Picture Upload** 👤
+- **Upload Button**: Now functional with hidden file input
+- **Loading State**: Shows "Uploading..." with spinner
+- **Storage Integration**: Uses `uploadProfilePicture()` from fileStorageService
+- **Success Feedback**: Alert message confirming upload
+
+#### 4. **Logo Upload/Delete** 🖼️
+- **Logo Upload**: Working upload with immediate preview
+- **Logo Delete**: One-click remove with confirmation
+- **Storage Path**: `shelters/{shelterId}/logo`
+
+### 🔧 Technical Implementation
+
+#### **New TypeScript Interfaces**
+```typescript
+export interface ShelterPhoto {
+  id: string;
+  url: string;
+  storagePath: string;
+  caption?: string;
+  order: number;
+  uploadedAt: string;
+}
+
+export interface ShelterPublicConfig {
+  // ... existing fields
+  photos?: ShelterPhoto[];
+}
+```
+
+#### **New Service Methods** (`shelterService.ts`)
+```typescript
+- uploadShelterPhoto(shelterId, file, order): Promise<ShelterPhoto>
+- deleteShelterPhoto(shelterId, photo): Promise<void>
+- updatePhotoCaption(shelterId, photoId, caption): Promise<void>
+- reorderPhotos(shelterId, photos): Promise<void>
+```
+
+#### **Component Updates**
+1. **Shelter Admin Settings** (`/dashboard/shelter-admin/settings`)
+   - `handlePhotoUpload()`: Multi-file upload with order tracking
+   - `handlePhotoDelete()`: Delete with confirmation
+   - `handleCaptionChange()`: Auto-save caption edits
+   - `handleAdminProfilePictureUpload()`: Profile pic upload
+   - `uploadingPhoto` state for button feedback
+   - `uploadingAdminPhoto` state for profile pic feedback
+
+2. **Public Shelter Page** (`/[slug]`)
+   - Added "Location" card with Google Maps embed
+   - "Open in Google Maps" button
+   - Responsive map display (h-64, rounded-lg, border)
+
+### 📊 Data Flow
+
+**Photo Upload:**
+```
+User selects files
+  ↓
+handlePhotoUpload() triggered
+  ↓
+Upload to Firebase Storage (shelters/{id}/gallery/{photoId})
+  ↓
+Get download URL
+  ↓
+Create ShelterPhoto object
+  ↓
+Update Firestore public_config
+  ↓
+Reload publicConfig state
+  ↓
+Display photos in grid
+```
+
+**Photo Display on Public Page:**
+```
+Load shelter by slug
+  ↓
+Fetch publicConfig from Firestore
+  ↓
+publicConfig.photos array
+  ↓
+Sort by order property
+  ↓
+Display in grid (2 cols mobile, 4 cols desktop)
+```
+
+### 🎨 UI/UX Improvements
+
+#### **Photos & Media Tab**
+- Dashed border upload area with camera icon
+- "Choose Photos" button (multiple file selection)
+- 2x4 responsive grid (mobile: 2 cols, desktop: 4 cols)
+- Hover overlay with delete button (red background)
+- Caption input below each photo
+- Empty state with large image icon and helper text
+
+#### **Location Card (Public Page)**
+- MapPin icon with "Location" title
+- Interactive map embed (h-64, rounded corners)
+- "Open in Google Maps" button (full width, outline variant)
+- ExternalLink icon for clarity
+- Positioned between Contact Information and QR Code cards
+
+### 🚀 Testing Performed
+- ✅ Logo upload in General Info tab
+- ✅ Photo upload in Photos & Media tab (multiple files)
+- ✅ Photo deletion with confirmation
+- ✅ Caption editing with auto-save
+- ✅ Google Maps display in admin settings
+- ✅ Google Maps display on public shelter page
+- ✅ Responsive design (mobile/tablet/desktop)
+- ✅ Loading states during uploads
+
+### 📁 Files Modified
+```
+apps/web/src/services/shelterService.ts          (+136 lines)
+  - Added ShelterPhoto interface
+  - Added photo management methods
+  - Updated ShelterPublicConfig interface
+
+apps/web/src/app/dashboard/shelter-admin/settings/page.tsx  (+208 lines, -58 lines)
+  - Implemented photo upload/delete/caption handlers
+  - Added admin profile picture upload
+  - Connected Google Maps embed
+  - Added loading states
+
+apps/web/src/app/[slug]/ShelterPageClient.tsx    (+108 lines)
+  - Added Location card with Google Maps
+  - Integrated photo display from Firestore
+  - Responsive map layout
+```
+
+### 🔮 Next Steps (Pending)
+- [ ] Services tab: Add/remove services, save to Firestore
+- [ ] QR Codes tab: Verify generation, download, storage
+- [ ] End-to-end testing of all shelter admin settings
+- [ ] Photo reordering (drag & drop)
+- [ ] Image compression before upload
+- [ ] Bulk photo delete
+
+### 🐛 Known Issues
+- Profile picture requires page refresh to display after upload (will integrate live update in next iteration)
+- No progress bar during photo uploads (uses alert for feedback)
+
+---
+
 ## [2.98.0] - 2025-11-13 (PROFILE MANAGEMENT CONSOLIDATION) 👤✨
 
 ### 🎯 Major UX Improvement: Single Source of Truth for Profiles

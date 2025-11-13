@@ -298,20 +298,26 @@ export class PlatformAdminProfileService {
         });
       }
       
-      // Check if profile is becoming complete
-      const currentProfile = await this.getPlatformAdminProfile(userId);
-      if (currentProfile) {
-        const isComplete = this.checkProfileCompletion(currentProfile, updates);
-        updateData.profileComplete = isComplete;
-      }
-      
-      // Update the document
+      // Update the document first
       await updateDoc(doc(db, 'users', userId), updateData);
       
       // 🔄 SYNC TO PUBLIC TEAM PAGE: Update team_members collection
+      // Fetch profile once after update for both completion check and team sync
       try {
         console.log('🔄 Syncing profile updates to public team_members collection...');
-        await this.syncToPublicTeamCollection(userId, updates);
+        const updatedProfile = await this.getPlatformAdminProfile(userId);
+        
+        if (updatedProfile) {
+          // Check profile completion with fresh data
+          const isComplete = this.checkProfileCompletion(updatedProfile, {});
+          if (isComplete !== updatedProfile.profileComplete) {
+            await updateDoc(doc(db, 'users', userId), { profileComplete: isComplete });
+          }
+          
+          // Sync to team_members with the profile we just fetched
+          await this.syncToPublicTeamCollectionWithProfile(userId, updatedProfile);
+        }
+        
         console.log('✅ Successfully synced to team_members collection');
       } catch (syncError) {
         console.error('⚠️ Warning: Failed to sync to team_members collection:', syncError);
@@ -330,14 +336,14 @@ export class PlatformAdminProfileService {
   /**
    * Sync Platform Admin profile changes to the public team_members collection
    * This ensures the team page always shows current data
+   * @param userId - The user ID
+   * @param fullProfile - The complete profile data (avoids redundant fetch)
    */
-  private static async syncToPublicTeamCollection(
+  private static async syncToPublicTeamCollectionWithProfile(
     userId: string,
-    _updates: PlatformAdminProfileUpdate
+    fullProfile: PlatformAdminProfile
   ): Promise<void> {
     try {
-      // Get the full profile to build complete team member data
-      const fullProfile = await this.getPlatformAdminProfile(userId);
       if (!fullProfile) {
         console.log('⚠️ No profile found to sync to team_members');
         return;

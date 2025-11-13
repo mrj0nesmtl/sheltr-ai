@@ -555,6 +555,8 @@ export default function ParticipantProfile() {
         dateOfBirth: profile.personalInfo.dateOfBirth,
         pronouns: profile.personalInfo.pronouns,
         preferredLanguage: profile.personalInfo.preferredLanguage,
+        // CRITICAL: Preserve profile picture if it exists
+        ...(profile.profilePicture && { profilePicture: profile.profilePicture }),
         // Add bio and social media
         bio: profile.bio || '',
         socialMedia: profile.socialMedia || {},

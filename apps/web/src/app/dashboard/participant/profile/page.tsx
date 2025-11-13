@@ -1,5 +1,4 @@
 "use client";
-// @ts-nocheck
 
 import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -10,12 +9,11 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { profileService, type UserProfile, type PersonalInfo, type EmergencyContact, type Goal } from '@/services/profileService';
+import { profileService, type UserProfile } from '@/services/profileService';
 import { goalsService, type Goal as RealGoal } from '@/services/goalsService';
 import { getParticipantProfile, type ParticipantProfile } from '@/services/platformMetrics';
-import { participantProfileService } from '@/services/participantProfileService';
 import { uploadProfilePicture } from '@/services/fileStorageService';
-import { doc, getDoc, updateDoc, collection, query, where, getDocs } from 'firebase/firestore';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { generateProfileQRCodeUrl, getParticipantProfileUrl, getSharingUrl } from '@/utils/profileUrls';
 import { 
@@ -28,21 +26,14 @@ import {
   MapPin,
   Calendar,
   Target,
-  Heart,
   Settings,
   Shield,
-  Bell,
   CheckCircle,
   AlertCircle,
-  Plus,
-  X,
   Share2,
-  QrCode,
   Eye,
   Copy,
-  ExternalLink,
   Download,
-  Upload,
   FileText,
   Globe,
   Loader2,
@@ -52,6 +43,7 @@ import { FileUpload } from '@/components/FileUpload';
 
 // Extended interface to include shelter info for the participant page
 interface ExtendedUserProfile extends UserProfile {
+  profilePicture?: string;
   shelter?: {
     currentShelter: string;
     checkInDate: string;
@@ -280,6 +272,22 @@ export default function ParticipantProfile() {
     async function loadProfile() {
       if (!user) return;
       
+      // Declare userData outside try block so it's accessible in catch
+      let userData: { 
+        shelter_id?: string; 
+        tenant_id?: string; 
+        profilePicture?: string; 
+        bio?: string; 
+        socialMedia?: Record<string, string>; 
+        pronouns?: string; 
+        preferredLanguage?: string;
+        participantProfile?: {
+          checkInDate?: string;
+          bedAssignment?: string;
+          caseWorker?: string;
+        };
+      } | null = null;
+      
       try {
         setLoading(true);
         setError(null);
@@ -290,7 +298,7 @@ export default function ParticipantProfile() {
         // Get user document to extract shelter_id
         const userRef = doc(db, 'users', user.uid);
         const userSnap = await getDoc(userRef);
-        const userData = userSnap.exists() ? userSnap.data() : null;
+        userData = userSnap.exists() ? userSnap.data() : null;
         const shelterId = userData?.shelter_id || userData?.tenant_id;
         
         // Load participant profile, donation data, and shelter data in parallel
@@ -427,6 +435,7 @@ export default function ParticipantProfile() {
     }
     
     loadProfile();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   // Check if user has participant or super admin access

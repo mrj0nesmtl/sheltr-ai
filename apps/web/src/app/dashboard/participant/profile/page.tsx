@@ -59,6 +59,15 @@ interface ExtendedUserProfile extends UserProfile {
     roomType: string;
     caseWorker: string;
   };
+  bio?: string;
+  socialMedia?: {
+    tiktok?: string;
+    instagram?: string;
+    facebook?: string;
+    youtube?: string;
+    x?: string;
+    website?: string;
+  };
 }
 
 // Mock participant profile data
@@ -95,7 +104,7 @@ const mockProfile = {
   ],
   goals: [
     {
-      id: 1,
+      id: '1',
       title: 'Find permanent housing',
       description: 'Secure affordable apartment within 6 months',
       category: 'Housing',
@@ -104,7 +113,7 @@ const mockProfile = {
       status: 'active'
     },
     {
-      id: 2,
+      id: '2',
       title: 'Complete job training program',
       description: 'Finish culinary arts certification',
       category: 'Employment',
@@ -113,7 +122,7 @@ const mockProfile = {
       status: 'active'
     },
     {
-      id: 3,
+      id: '3',
       title: 'Build emergency savings',
       description: 'Save $1,000 for security deposit',
       category: 'Financial',
@@ -359,7 +368,7 @@ export default function ParticipantProfile() {
             setProfile(prev => prev ? {
               ...prev,
               goals: goals.map(g => ({
-                id: g.id,
+                id: String(g.id), // Convert to string to match Goal interface
                 title: g.title,
                 description: g.description,
                 category: g.category,
@@ -378,6 +387,7 @@ export default function ParticipantProfile() {
           setProfile(mockProfile);
           setDonationData({
             totalReceived: realDonationData.totalReceived,
+            donationCount: realDonationData.donationCount,
             supporterCount: realDonationData.supporterCount,
             profileViews: realDonationData.profileViews,
             goalProgress: 55
@@ -668,10 +678,10 @@ export default function ParticipantProfile() {
                     id="firstName"
                     value={profile.personalInfo.firstName || ''}
                     disabled={!isEditing}
-                    onChange={(e) => setProfile(prev => ({
+                    onChange={(e) => setProfile(prev => prev ? ({
                       ...prev,
                       personalInfo: { ...prev.personalInfo, firstName: e.target.value }
-                    }))}
+                    }) : null)}
                   />
                 </div>
                 <div>
@@ -680,10 +690,10 @@ export default function ParticipantProfile() {
                     id="lastName"
                     value={profile.personalInfo.lastName || ''}
                     disabled={!isEditing}
-                    onChange={(e) => setProfile(prev => ({
+                    onChange={(e) => setProfile(prev => prev ? ({
                       ...prev,
                       personalInfo: { ...prev.personalInfo, lastName: e.target.value }
-                    }))}
+                    }) : null)}
                   />
                 </div>
               </div>
@@ -713,10 +723,10 @@ export default function ParticipantProfile() {
                     type="email"
                     value={profile.personalInfo.email || ''}
                     disabled={!isEditing}
-                    onChange={(e) => setProfile(prev => ({
+                    onChange={(e) => setProfile(prev => prev ? ({
                       ...prev,
                       personalInfo: { ...prev.personalInfo, email: e.target.value }
-                    }))}
+                    }) : null)}
                     placeholder="public@example.com"
                   />
                   <p className="text-xs text-muted-foreground mt-1">
@@ -730,10 +740,10 @@ export default function ParticipantProfile() {
                     id="phone"
                     value={profile.personalInfo.phone || ''}
                     disabled={!isEditing}
-                    onChange={(e) => setProfile(prev => ({
+                    onChange={(e) => setProfile(prev => prev ? ({
                       ...prev,
                       personalInfo: { ...prev.personalInfo, phone: e.target.value }
-                    }))}
+                    }) : null)}
                   />
                 </div>
               </div>
@@ -745,10 +755,10 @@ export default function ParticipantProfile() {
                     id="pronouns"
                     value={profile.personalInfo.pronouns || ''}
                     disabled={!isEditing}
-                    onChange={(e) => setProfile(prev => ({
+                    onChange={(e) => setProfile(prev => prev ? ({
                       ...prev,
                       personalInfo: { ...prev.personalInfo, pronouns: e.target.value }
-                    }))}
+                    }) : null)}
                   />
                 </div>
                 <div>
@@ -757,24 +767,24 @@ export default function ParticipantProfile() {
                     id="language"
                     value={profile.personalInfo.preferredLanguage || ''}
                     disabled={!isEditing}
-                    onChange={(e) => setProfile(prev => ({
+                    onChange={(e) => setProfile(prev => prev ? ({
                       ...prev,
                       personalInfo: { ...prev.personalInfo, preferredLanguage: e.target.value }
-                    }))}
+                    }) : null)}
                   />
                 </div>
               </div>
 
               <div>
                 <Label htmlFor="bio">Personal Bio (Optional)</Label>
-                <Textarea
-                  id="bio"
-                  value={profile.bio || ''}
-                  disabled={!isEditing}
-                  onChange={(e) => setProfile(prev => ({
-                    ...prev,
-                    bio: e.target.value
-                  }))}
+                  <Textarea
+                    id="bio"
+                    value={profile.bio || ''}
+                    disabled={!isEditing}
+                    onChange={(e) => setProfile(prev => prev ? ({
+                      ...prev,
+                      bio: e.target.value
+                    }) : null)}
                   placeholder="Share your story, goals, or anything you'd like potential supporters to know..."
                   rows={4}
                   className="resize-none"
@@ -886,10 +896,10 @@ export default function ParticipantProfile() {
                     id="participant-tiktok"
                     value={profile.socialMedia?.tiktok || ''}
                     disabled={!isEditing}
-                    onChange={(e) => setProfile(prev => ({
+                    onChange={(e) => setProfile(prev => prev ? ({
                       ...prev,
                       socialMedia: { ...prev.socialMedia, tiktok: e.target.value }
-                    }))}
+                    }) : null)}
                     placeholder="https://tiktok.com/@username"
                   />
                 </div>
@@ -899,10 +909,10 @@ export default function ParticipantProfile() {
                     id="participant-instagram"
                     value={profile.socialMedia?.instagram || ''}
                     disabled={!isEditing}
-                    onChange={(e) => setProfile(prev => ({
+                    onChange={(e) => setProfile(prev => prev ? ({
                       ...prev,
                       socialMedia: { ...prev.socialMedia, instagram: e.target.value }
-                    }))}
+                    }) : null)}
                     placeholder="https://instagram.com/username"
                   />
                 </div>
@@ -912,10 +922,10 @@ export default function ParticipantProfile() {
                     id="participant-facebook"
                     value={profile.socialMedia?.facebook || ''}
                     disabled={!isEditing}
-                    onChange={(e) => setProfile(prev => ({
+                    onChange={(e) => setProfile(prev => prev ? ({
                       ...prev,
                       socialMedia: { ...prev.socialMedia, facebook: e.target.value }
-                    }))}
+                    }) : null)}
                     placeholder="https://facebook.com/username"
                   />
                 </div>
@@ -925,10 +935,10 @@ export default function ParticipantProfile() {
                     id="participant-youtube"
                     value={profile.socialMedia?.youtube || ''}
                     disabled={!isEditing}
-                    onChange={(e) => setProfile(prev => ({
+                    onChange={(e) => setProfile(prev => prev ? ({
                       ...prev,
                       socialMedia: { ...prev.socialMedia, youtube: e.target.value }
-                    }))}
+                    }) : null)}
                     placeholder="https://youtube.com/@username"
                   />
                 </div>
@@ -938,10 +948,10 @@ export default function ParticipantProfile() {
                     id="participant-x"
                     value={profile.socialMedia?.x || ''}
                     disabled={!isEditing}
-                    onChange={(e) => setProfile(prev => ({
+                    onChange={(e) => setProfile(prev => prev ? ({
                       ...prev,
                       socialMedia: { ...prev.socialMedia, x: e.target.value }
-                    }))}
+                    }) : null)}
                     placeholder="https://x.com/username"
                   />
                 </div>
@@ -951,10 +961,10 @@ export default function ParticipantProfile() {
                     id="participant-website"
                     value={profile.socialMedia?.website || ''}
                     disabled={!isEditing}
-                    onChange={(e) => setProfile(prev => ({
+                    onChange={(e) => setProfile(prev => prev ? ({
                       ...prev,
                       socialMedia: { ...prev.socialMedia, website: e.target.value }
-                    }))}
+                    }) : null)}
                     placeholder="https://yourwebsite.com"
                   />
                 </div>
@@ -987,7 +997,7 @@ export default function ParticipantProfile() {
                         onChange={(e) => {
                           const updated = [...profile.emergencyContacts];
                           updated[index].name = e.target.value;
-                          setProfile(prev => ({ ...prev, emergencyContacts: updated }));
+                          setProfile(prev => prev ? ({ ...prev, emergencyContacts: updated }) : null);
                         }}
                       />
                     </div>
@@ -999,7 +1009,7 @@ export default function ParticipantProfile() {
                         onChange={(e) => {
                           const updated = [...profile.emergencyContacts];
                           updated[index].relationship = e.target.value;
-                          setProfile(prev => ({ ...prev, emergencyContacts: updated }));
+                          setProfile(prev => prev ? ({ ...prev, emergencyContacts: updated }) : null);
                         }}
                       />
                     </div>
@@ -1011,7 +1021,7 @@ export default function ParticipantProfile() {
                         onChange={(e) => {
                           const updated = [...profile.emergencyContacts];
                           updated[index].phone = e.target.value;
-                          setProfile(prev => ({ ...prev, emergencyContacts: updated }));
+                          setProfile(prev => prev ? ({ ...prev, emergencyContacts: updated }) : null);
                         }}
                       />
                     </div>

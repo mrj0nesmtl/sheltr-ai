@@ -193,14 +193,8 @@ export default function DocsPage() {
               Comprehensive guides, API references, and technical documentation for the SHELTR platform
             </p>
             <div className="flex flex-wrap gap-4">
-              <Button size="lg" variant="default" className="bg-red-600 hover:bg-red-700" asChild>
-                <Link href="#docs">
-                  <BookOpen className="mr-2 h-5 w-5" />
-                  Browse Docs
-                </Link>
-              </Button>
               <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10" asChild>
-                <a href="https://github.com/mrj0nesmtl/sheltr-ai" target="_blank" rel="noopener noreferrer">
+                <a href="https://github.com/mrj0nesmtl/sheltr-ai/tree/main/docs" target="_blank" rel="noopener noreferrer">
                   <Github className="mr-2 h-5 w-5" />
                   View on GitHub
                 </a>

@@ -5,12 +5,15 @@ import { useSearchParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { getDoc, doc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import { donorProfileService, DonorProfile } from '@/services/donorProfileService';
+import { uploadProfilePicture } from '@/services/fileStorageService';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import { 
   User, 
   Bell, 
@@ -29,7 +32,10 @@ import {
   Edit3,
   Save,
   X,
-  Check
+  Check,
+  Loader2,
+  Camera,
+  Globe
 } from 'lucide-react';
 
 export default function DonorSettingsPage() {
@@ -39,6 +45,9 @@ export default function DonorSettingsPage() {
   const [activeTab, setActiveTab] = useState(tabFromUrl || 'profile');
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
+  const [donorProfile, setDonorProfile] = useState<DonorProfile | null>(null);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -47,10 +56,21 @@ export default function DonorSettingsPage() {
     address: '123 Main St, Montreal, QC H2X 1Y5',
     preferredShelter: 'Downtown Hope Shelter',
     defaultDonationAmount: '50',
-    anonymousDonations: false
+    anonymousDonations: false,
+    bio: '',
+    occupation: '',
+    company: '',
+    socialMedia: {
+      tiktok: '',
+      instagram: '',
+      facebook: '',
+      youtube: '',
+      x: '',
+      website: ''
+    }
   });
 
-  // Load real user data from Firestore
+  // Load real user data from Firestore using donorProfileService
   useEffect(() => {
     const loadUserData = async () => {
       if (!user?.uid) {
@@ -59,21 +79,35 @@ export default function DonorSettingsPage() {
       }
 
       try {
-        const userDoc = await getDoc(doc(db, 'users', user.uid));
-        if (userDoc.exists()) {
-          const userData = userDoc.data();
-          console.log('✅ Loaded user data for settings:', userData);
+        const profile = await donorProfileService.getDonorProfile(user.uid);
+        if (profile) {
+          console.log('✅ Loaded donor profile for settings:', profile);
+          setDonorProfile(profile);
           
           setFormData(prev => ({
             ...prev,
-            firstName: userData.firstName || userData.name?.split(' ')[0] || '',
-            lastName: userData.lastName || userData.name?.split(' ').slice(1).join(' ') || '',
-            email: userData.email || user.email || '',
-            phone: userData.phone || prev.phone,
-            address: userData.address || prev.address
+            firstName: profile.firstName || '',
+            lastName: profile.lastName || '',
+            email: profile.email || user.email || '',
+            phone: profile.phone || prev.phone,
+            address: profile.address || prev.address,
+            bio: profile.bio || '',
+            occupation: profile.occupation || '',
+            company: profile.company || '',
+            preferredShelter: profile.preferredShelter || prev.preferredShelter,
+            defaultDonationAmount: profile.defaultDonationAmount?.toString() || prev.defaultDonationAmount,
+            anonymousDonations: profile.anonymousDonations || false,
+            socialMedia: {
+              tiktok: profile.socialMedia?.tiktok || '',
+              instagram: profile.socialMedia?.instagram || '',
+              facebook: profile.socialMedia?.facebook || '',
+              youtube: profile.socialMedia?.youtube || '',
+              x: profile.socialMedia?.x || '',
+              website: profile.socialMedia?.website || ''
+            }
           }));
         } else {
-          console.log('⚠️ No user document found, using defaults');
+          console.log('⚠️ No donor profile found, using defaults');
           // For donor@example.com, set the correct name from database
           if (user.email === 'donor@example.com') {
             setFormData(prev => ({
@@ -85,7 +119,7 @@ export default function DonorSettingsPage() {
           }
         }
       } catch (error) {
-        console.error('❌ Error loading user data:', error);
+        console.error('❌ Error loading donor profile:', error);
       } finally {
         setLoading(false);
       }
@@ -115,15 +149,92 @@ export default function DonorSettingsPage() {
     twoFactorAuth: false
   });
 
-  const handleSave = () => {
-    // Here you would typically save to database
-    setIsEditing(false);
-    // You could also update the user context here
+  const handleSave = async () => {
+    if (!user?.uid) return;
+    
+    setSaving(true);
+    try {
+      // Save profile data to Firestore
+      await donorProfileService.saveDonorProfile(user.uid, {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        displayName: `${formData.firstName} ${formData.lastName}`,
+        email: formData.email,
+        phone: formData.phone,
+        address: formData.address,
+        bio: formData.bio,
+        occupation: formData.occupation,
+        company: formData.company,
+        socialMedia: formData.socialMedia,
+        preferredShelter: formData.preferredShelter,
+        defaultDonationAmount: parseInt(formData.defaultDonationAmount) || 50,
+        anonymousDonations: formData.anonymousDonations
+      });
+      
+      // Save notification preferences
+      await donorProfileService.updateNotificationPreferences(user.uid, notifications);
+      
+      // Save privacy settings
+      await donorProfileService.updatePrivacySettings(user.uid, privacy);
+      
+      setIsEditing(false);
+      alert('Profile saved successfully!');
+      console.log('✅ Donor profile saved successfully');
+    } catch (error) {
+      console.error('❌ Error saving donor profile:', error);
+      alert('Failed to save profile. Please try again.');
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleCancel = () => {
     // Reset form data to original values
     setIsEditing(false);
+  };
+
+  const handlePhotoUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file || !user?.uid) return;
+
+    setUploadingPhoto(true);
+    try {
+      console.log('📸 Uploading donor profile picture...');
+      
+      // Upload to Firebase Storage
+      const photoUrl = await uploadProfilePicture(file, user.uid);
+      
+      // Update profile with new photo URL
+      await donorProfileService.updateProfilePicture(user.uid, photoUrl);
+      
+      // Update local state
+      setDonorProfile(prev => prev ? { ...prev, profilePicture: photoUrl } : null);
+      
+      alert('Profile picture uploaded successfully!');
+      
+      // Reset file input
+      event.target.value = '';
+    } catch (error) {
+      console.error('❌ Error uploading profile picture:', error);
+      alert(`Failed to upload profile picture: ${error}`);
+    } finally {
+      setUploadingPhoto(false);
+    }
+  };
+
+  const handlePhotoDelete = async () => {
+    if (!user?.uid) return;
+    
+    if (!confirm('Are you sure you want to remove your profile picture?')) return;
+    
+    try {
+      await donorProfileService.updateProfilePicture(user.uid, '');
+      setDonorProfile(prev => prev ? { ...prev, profilePicture: '' } : null);
+      alert('Profile picture removed successfully!');
+    } catch (error) {
+      console.error('❌ Error removing profile picture:', error);
+      alert('Failed to remove profile picture. Please try again.');
+    }
   };
 
   const handleNotificationChange = (key: string, value: boolean) => {
@@ -180,13 +291,22 @@ export default function DonorSettingsPage() {
         <div className="flex gap-3">
           {isEditing ? (
             <>
-              <Button variant="outline" onClick={handleCancel}>
+              <Button variant="outline" onClick={handleCancel} disabled={saving}>
                 <X className="h-4 w-4 mr-2" />
                 Cancel
               </Button>
-              <Button onClick={handleSave}>
-                <Save className="h-4 w-4 mr-2" />
-                Save Changes
+              <Button onClick={handleSave} disabled={saving}>
+                {saving ? (
+                  <>
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <Save className="h-4 w-4 mr-2" />
+                    Save Changes
+                  </>
+                )}
               </Button>
             </>
           ) : (
@@ -216,22 +336,59 @@ export default function DonorSettingsPage() {
               <CardHeader>
                 <CardTitle>Profile Picture</CardTitle>
                 <CardDescription>
-                  Your photo helps shelter staff recognize you
+                  Your photo helps personalize your profile
                 </CardDescription>
               </CardHeader>
               <CardContent className="text-center">
-                <div className="w-32 h-32 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <User className="h-16 w-16 text-purple-600" />
+                <div className="w-32 h-32 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center mx-auto mb-4 overflow-hidden">
+                  {donorProfile?.profilePicture || user?.photoURL ? (
+                    <img 
+                      src={donorProfile?.profilePicture || user?.photoURL} 
+                      alt="Profile"
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <User className="h-16 w-16 text-purple-600 dark:text-purple-400" />
+                  )}
                 </div>
                 <div className="space-y-3">
-                  <Button variant="outline" className="w-full">
-                    <Upload className="h-4 w-4 mr-2" />
-                    Upload New Photo
+                  <input
+                    type="file"
+                    id="donor-photo-upload"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handlePhotoUpload}
+                    disabled={!isEditing || uploadingPhoto}
+                  />
+                  <Button 
+                    variant="outline" 
+                    className="w-full"
+                    disabled={!isEditing || uploadingPhoto}
+                    onClick={() => document.getElementById('donor-photo-upload')?.click()}
+                  >
+                    {uploadingPhoto ? (
+                      <>
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        Uploading...
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="h-4 w-4 mr-2" />
+                        Upload New Photo
+                      </>
+                    )}
                   </Button>
-                  <Button variant="outline" className="w-full text-red-600 hover:text-red-700">
-                    <Trash2 className="h-4 w-4 mr-2" />
-                    Remove Photo
-                  </Button>
+                  {(donorProfile?.profilePicture || user?.photoURL) && (
+                    <Button 
+                      variant="outline" 
+                      className="w-full text-red-600 hover:text-red-700"
+                      disabled={!isEditing}
+                      onClick={handlePhotoDelete}
+                    >
+                      <Trash2 className="h-4 w-4 mr-2" />
+                      Remove Photo
+                    </Button>
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -296,9 +453,143 @@ export default function DonorSettingsPage() {
                     disabled={!isEditing}
                   />
                 </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="occupation">Occupation</Label>
+                    <Input
+                      id="occupation"
+                      value={formData.occupation}
+                      onChange={(e) => setFormData(prev => ({ ...prev, occupation: e.target.value }))}
+                      disabled={!isEditing}
+                      placeholder="e.g., Software Engineer"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="company">Company</Label>
+                    <Input
+                      id="company"
+                      value={formData.company}
+                      onChange={(e) => setFormData(prev => ({ ...prev, company: e.target.value }))}
+                      disabled={!isEditing}
+                      placeholder="e.g., Tech Corp"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <Label htmlFor="bio">Public Bio</Label>
+                  <Textarea
+                    id="bio"
+                    value={formData.bio}
+                    onChange={(e) => setFormData(prev => ({ ...prev, bio: e.target.value }))}
+                    disabled={!isEditing}
+                    placeholder="Share a bit about yourself and why you support SHELTR..."
+                    rows={4}
+                    className="resize-none"
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">
+                    This bio may be displayed publicly on your donor profile
+                  </p>
+                </div>
               </CardContent>
             </Card>
           </div>
+
+          {/* Social Media Links */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Globe className="h-5 w-5" />
+                Social Media & Website
+              </CardTitle>
+              <CardDescription>
+                Connect your social media profiles and website (optional)
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="tiktok">TikTok</Label>
+                  <Input
+                    id="tiktok"
+                    value={formData.socialMedia.tiktok}
+                    onChange={(e) => setFormData(prev => ({ 
+                      ...prev, 
+                      socialMedia: { ...prev.socialMedia, tiktok: e.target.value }
+                    }))}
+                    disabled={!isEditing}
+                    placeholder="https://tiktok.com/@username"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="instagram">Instagram</Label>
+                  <Input
+                    id="instagram"
+                    value={formData.socialMedia.instagram}
+                    onChange={(e) => setFormData(prev => ({ 
+                      ...prev, 
+                      socialMedia: { ...prev.socialMedia, instagram: e.target.value }
+                    }))}
+                    disabled={!isEditing}
+                    placeholder="https://instagram.com/username"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="facebook">Facebook</Label>
+                  <Input
+                    id="facebook"
+                    value={formData.socialMedia.facebook}
+                    onChange={(e) => setFormData(prev => ({ 
+                      ...prev, 
+                      socialMedia: { ...prev.socialMedia, facebook: e.target.value }
+                    }))}
+                    disabled={!isEditing}
+                    placeholder="https://facebook.com/username"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="youtube">YouTube</Label>
+                  <Input
+                    id="youtube"
+                    value={formData.socialMedia.youtube}
+                    onChange={(e) => setFormData(prev => ({ 
+                      ...prev, 
+                      socialMedia: { ...prev.socialMedia, youtube: e.target.value }
+                    }))}
+                    disabled={!isEditing}
+                    placeholder="https://youtube.com/@username"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="x">X (Twitter)</Label>
+                  <Input
+                    id="x"
+                    value={formData.socialMedia.x}
+                    onChange={(e) => setFormData(prev => ({ 
+                      ...prev, 
+                      socialMedia: { ...prev.socialMedia, x: e.target.value }
+                    }))}
+                    disabled={!isEditing}
+                    placeholder="https://x.com/username"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="website">Personal Website</Label>
+                  <Input
+                    id="website"
+                    value={formData.socialMedia.website}
+                    onChange={(e) => setFormData(prev => ({ 
+                      ...prev, 
+                      socialMedia: { ...prev.socialMedia, website: e.target.value }
+                    }))}
+                    disabled={!isEditing}
+                    placeholder="https://yourwebsite.com"
+                  />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
           {/* Account Security */}
           <Card>

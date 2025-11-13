@@ -46,6 +46,8 @@ export interface DocsHubDocument {
   audience: string[];
   topics: string[];
   view_count: number;
+  external_link?: string;
+  use_external_link?: boolean;
 }
 
 class DocsHubService {

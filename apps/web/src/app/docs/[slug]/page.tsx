@@ -166,6 +166,96 @@ export default function DocPage() {
     );
   }
 
+  // External Link Document - Show redirect UI
+  if (document.use_external_link && document.external_link) {
+    return (
+      <div className="min-h-screen flex flex-col bg-black">
+        <PublicNavigation />
+        
+        {/* Hero Section */}
+        <section className="relative bg-gradient-to-br from-black via-red-950 to-black text-white py-16 border-b border-white/10">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-red-900/20 via-black/50 to-black"></div>
+          <div className="container mx-auto px-4 sm:px-6 relative z-10">
+            <div className="max-w-4xl">
+              {/* Breadcrumb */}
+              <div className="flex items-center gap-2 text-sm text-gray-400 mb-6">
+                <Link href="/" className="hover:text-white transition">Home</Link>
+                <span>/</span>
+                <Link href="/docs" className="hover:text-white transition">Documentation</Link>
+                <span>/</span>
+                <span className="text-white">{document.title}</span>
+              </div>
+
+              {/* Title & Badge */}
+              <div className="flex flex-wrap items-center gap-4 mb-6">
+                <h1 className="text-4xl md:text-5xl font-bold flex-1">{document.title}</h1>
+                <Badge className={`${getBadgeColor(document.badge)} text-white px-4 py-1`}>
+                  {document.badge}
+                </Badge>
+              </div>
+
+              <p className="text-gray-300 text-lg mb-8">
+                All notable changes to the SHELTR project will be documented in this file.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* External Link CTA */}
+        <main className="flex-grow py-16">
+          <div className="container mx-auto px-4 sm:px-6 max-w-4xl">
+            <Card className="bg-gradient-to-br from-red-900/20 to-black border-red-500/30">
+              <CardContent className="p-12 text-center">
+                <Github className="h-20 w-20 text-red-600 mx-auto mb-6" />
+                <h2 className="text-3xl font-bold text-white mb-4">
+                  View on GitHub
+                </h2>
+                <p className="text-gray-300 text-lg mb-8 max-w-2xl mx-auto">
+                  This document is maintained in our GitHub repository. Click below to view the full changelog with complete version history and commit details.
+                </p>
+                
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <Button 
+                    asChild 
+                    size="lg"
+                    className="bg-red-600 hover:bg-red-700 text-white text-lg px-8 py-6"
+                  >
+                    <a href={document.external_link} target="_blank" rel="noopener noreferrer">
+                      <ExternalLink className="mr-2 h-5 w-5" />
+                      Open Changelog on GitHub
+                    </a>
+                  </Button>
+                  
+                  <Button 
+                    asChild
+                    variant="outline"
+                    size="lg"
+                    className="border-white/20 hover:bg-white/10 text-lg px-8 py-6"
+                  >
+                    <Link href="/docs">
+                      <ArrowLeft className="mr-2 h-5 w-5" />
+                      Back to Docs
+                    </Link>
+                  </Button>
+                </div>
+
+                {/* Additional Info */}
+                <div className="mt-12 pt-8 border-t border-white/10">
+                  <p className="text-gray-400 text-sm">
+                    The format is based on <a href="https://keepachangelog.com/" target="_blank" rel="noopener noreferrer" className="text-red-500 hover:text-red-400 underline">Keep a Changelog</a>, 
+                    and this project adheres to <a href="https://semver.org/" target="_blank" rel="noopener noreferrer" className="text-red-500 hover:text-red-400 underline">Semantic Versioning</a>.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </main>
+
+        <Footer />
+      </div>
+    );
+  }
+
   // Success State - Render Document
   return (
     <div className="min-h-screen flex flex-col bg-black">

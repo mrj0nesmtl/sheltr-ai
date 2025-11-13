@@ -107,9 +107,9 @@ export function DocsHubOrderManager() {
       setMessage(null);
       
       // Update each document with its new position (index + 1)
-      const updates = documents.map(async (doc, index) => {
+      const updates = documents.map(async (document, index) => {
         const position = index + 1;
-        const docRef = doc(db, 'knowledge_documents', doc.id);
+        const docRef = doc(db, 'knowledge_documents', document.id);
         await updateDoc(docRef, { hub_order: position });
       });
       

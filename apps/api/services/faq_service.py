@@ -428,6 +428,14 @@ class FAQService:
                 similarity = difflib.SequenceMatcher(None, user_message_lower, question.lower()).ratio()
                 score = int(similarity * 100)  # Convert to percentage
                 
+                # Boost score if keywords match (helps with different phrasings)
+                if "keywords" in faq_data:
+                    keyword_matches = sum(1 for keyword in faq_data["keywords"] if keyword.lower() in user_message_lower)
+                    if keyword_matches > 0:
+                        # Add 10 points per keyword match (up to 30 points boost)
+                        keyword_boost = min(keyword_matches * 10, 30)
+                        score = min(score + keyword_boost, 100)
+                
                 if score > best_score and score >= self.confidence_threshold:
                     best_score = score
                     best_match = {

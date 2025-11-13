@@ -1892,15 +1892,24 @@ EXPANDED_FAQS = {
             "80% participant allocation",
             "where does 80% go",
             "80 percent to participants",
-            "participant 80%"
+            "participant 80%",
+            "why only 80%",
+            "why only 80 percent",
+            "why not 100%",
+            "why not 100 percent",
+            "what happens to other 20%",
+            "what happens to the other 20 percent",
+            "where does the rest go",
+            "why only 80% to participant",
+            "why only 80% to homeless"
         ],
-        "answer": "80% goes directly to participants through virtual debit cards (Visa/Mastercard network). No crypto exposure, instant access, zero transaction fees. Participants control their funds with complete dignity and privacy. Average delivery time: <1 hour.",
+        "answer": "80% goes directly to participants through virtual debit cards (Visa/Mastercard network). The other 20% is split: 15% builds their housing fund (staked to earn 4-6% APY, growing towards permanent housing like PODS), and 5% supports shelter operations (infrastructure, case workers, services). This 80-15-5 model ensures immediate needs are met while building long-term solutions. No overhead, 100% impact.",
         "category": "tokenomics",
         "agent_suggestion": "donor_relations",
-        "keywords": ["80 percent", "participant", "virtual card", "direct", "instant"],
+        "keywords": ["80 percent", "participant", "only 80", "why not 100", "other 20", "rest go", "80-15-5", "split"],
         "actions": [
-            {"type": "link", "text": "Participant Experience", "url": "/solutions/participants"},
-            {"type": "link", "text": "Donate Now", "url": "/scan-give"}
+            {"type": "link", "text": "SmartFund Details", "url": "/tokenomics"},
+            {"type": "link", "text": "See Full Breakdown", "url": "/model"}
         ]
     },
     

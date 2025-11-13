@@ -822,6 +822,12 @@ export default function FoundersOnlyPage() {
           return true;
         }
         
+        // ALWAYS SHOW: Shelter Research Hub (founder_documents hub, not KB-backed)
+        if (card.id === 'shelter-research') {
+          console.log(`✅ KEEPING: shelter-research card (research hub for 4 documents)`);
+          return true;
+        }
+        
         // For all other cards, check if they have a KB document with published_to_founders: true
         try {
           // Query knowledge_documents for this card

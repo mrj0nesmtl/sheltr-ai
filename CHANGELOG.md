@@ -7,23 +7,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [2.107.0] - 2025-01-14 (THEME-AWARE LOGO FIX FOR IR & FOUNDERS PORTAL) 🎨
+## [2.107.0] - 2025-01-14 (THEME-AWARE LOGO & HERO GRADIENT IMPROVEMENTS) 🎨
 
 ### 🐛 UI Fixes
 
-#### **Theme-Aware Logo Implementation** 🌓
+#### 1. **Theme-Aware Logo Implementation** 🌓
 - Fixed logo visibility issue on `/ir/dataroom` and `/portal/founders-only` pages in light mode
 - Replaced hardcoded logo references with `ThemeLogo` component
 - Logo now automatically switches between white (`/logo.svg`) and black (`/logo-black.svg`) based on theme
 - Improved consistency across all dashboard and portal pages
 
+#### 2. **Hero Section Gradient Redesign** 🖤
+- Replaced blue/purple gradient overlays with clean black gradients on both portal pages
+- Changed from `bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-800` to `bg-black`
+- Updated gradient overlay from colored (`from-blue-900/80 via-blue-800/70 to-indigo-900/80`) to neutral black (`from-black/60 via-black/40 to-black/60`)
+- Increased hero image/video opacity from 40% to 50% for better visibility
+- Changed text colors from theme-specific (`text-blue-50`, `text-purple-50`) to neutral grays (`text-gray-100`, `text-gray-200`)
+- Gradient now flows top-to-bottom for a more professional, cinematic look
+
 ### 📄 Files Modified
-- `apps/web/src/app/ir/dataroom/page.tsx` - Added `ThemeLogo` import and replaced static icon
-- `apps/web/src/app/portal/founders-only/page.tsx` - Added `ThemeLogo` import and replaced text logo
+- `apps/web/src/app/ir/dataroom/page.tsx` - Theme-aware logo + black gradient hero
+- `apps/web/src/app/portal/founders-only/page.tsx` - Theme-aware logo + black gradient hero
 
 ### 📊 Impact
 - **User Experience**: Logo is now visible in both dark and light modes across all portal pages
-- **Consistency**: All pages now use the same theme-aware logo component
+- **Visual Design**: Cleaner, more professional hero sections with neutral black gradients
+- **Consistency**: All pages now use the same theme-aware logo component and gradient style
 - **Maintainability**: Single source of truth for logo rendering logic
 
 ---

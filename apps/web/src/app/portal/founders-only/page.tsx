@@ -1436,7 +1436,7 @@ export default function FoundersOnlyPage() {
       </div>
 
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-r from-purple-600 via-purple-700 to-indigo-800 text-white py-16 overflow-hidden">
+      <section className="relative bg-black text-white py-16 overflow-hidden">
         {/* Hero Image/Video Background */}
         {heroImage ? (
           <div className="absolute inset-0">
@@ -1447,19 +1447,19 @@ export default function FoundersOnlyPage() {
                 loop
                 muted
                 playsInline
-                className="w-full h-full object-cover opacity-40"
+                className="w-full h-full object-cover opacity-50"
               />
             ) : (
               <Image
                 src={heroImage.url}
                 alt={heroImage.alt}
                 fill
-                className="object-cover opacity-40"
+                className="object-cover opacity-50"
                 priority
               />
             )}
-            {/* Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-r from-purple-900/80 via-purple-800/70 to-indigo-900/80"></div>
+            {/* Gradient Overlay - Dark gradient from top to bottom */}
+            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/60"></div>
           </div>
         ) : (
           <>
@@ -1496,13 +1496,13 @@ export default function FoundersOnlyPage() {
               Welcome to SHELTR&apos;s Leadership Command Center
             </h1>
             
-            <p className="text-xl text-purple-50 mb-6 leading-relaxed">
+            <p className="text-xl text-gray-100 mb-6 leading-relaxed">
               Your account credentials provide you with comprehensive access to the SHELTR platform, including full Platform
               Administrator privileges and executive dashboard capabilities. As Administrators, you have unrestricted access to all
               system functions, financial oversight, user management, and strategic analytics.
             </p>
             
-            <p className="text-purple-100 mb-8">
+            <p className="text-gray-200 mb-8">
               Upon logging into the main platform, you will be presented with a Non-Disclosure Agreement (NDA) and a personalized 
               welcome letter tailored to your specific expertise and leadership role within SHELTR. This portal serves as your gateway 
               to confidential business plans, financial reports, and strategic documentation that will be progressively published here 

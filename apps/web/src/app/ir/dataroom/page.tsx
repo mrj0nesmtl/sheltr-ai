@@ -867,7 +867,7 @@ export default function IRInvestorDataRoomPage() {
       </div>
 
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-800 text-white py-16 overflow-hidden">
+      <section className="relative bg-black text-white py-16 overflow-hidden">
         {/* Hero Image/Video Background */}
         {heroImage ? (
           <div className="absolute inset-0">
@@ -878,19 +878,19 @@ export default function IRInvestorDataRoomPage() {
                 loop
                 muted
                 playsInline
-                className="w-full h-full object-cover opacity-40"
+                className="w-full h-full object-cover opacity-50"
               />
             ) : (
               <Image
                 src={heroImage.url}
                 alt={heroImage.alt}
                 fill
-                className="object-cover opacity-40"
+                className="object-cover opacity-50"
                 priority
               />
             )}
-            {/* Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-900/80 via-blue-800/70 to-indigo-900/80"></div>
+            {/* Gradient Overlay - Dark gradient from top to bottom */}
+            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/60"></div>
           </div>
         ) : (
           <>
@@ -927,12 +927,12 @@ export default function IRInvestorDataRoomPage() {
               Welcome{user?.displayName ? `, ${user.displayName}` : user?.email ? `, ${user.email.split('@')[0]}` : ''} to the SHELTR Data Room
             </h1>
             
-            <p className="text-xl text-blue-50 mb-6 leading-relaxed">
+            <p className="text-xl text-gray-100 mb-6 leading-relaxed">
               Thank you for your interest in SHELTR. As a potential partner in our mission to hack homelessness through tech-for-good, 
               your support and expertise are crucial to our success. We&apos;re excited to share our progress, vision, and strategic roadmap with you.
             </p>
             
-            <p className="text-blue-100 mb-8">
+            <p className="text-gray-200 mb-8">
               This secure portal contains confidential investment materials, financial projections, technical documentation, and strategic plans. 
               All materials are proprietary and subject to NDA agreements. We appreciate your commitment to maintaining the confidentiality of these materials.
             </p>

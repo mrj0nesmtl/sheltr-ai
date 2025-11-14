@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.107.0] - 2025-01-14 (THEME-AWARE LOGO FIX FOR IR & FOUNDERS PORTAL) 🎨
+
+### 🐛 UI Fixes
+
+#### **Theme-Aware Logo Implementation** 🌓
+- Fixed logo visibility issue on `/ir/dataroom` and `/portal/founders-only` pages in light mode
+- Replaced hardcoded logo references with `ThemeLogo` component
+- Logo now automatically switches between white (`/logo.svg`) and black (`/logo-black.svg`) based on theme
+- Improved consistency across all dashboard and portal pages
+
+### 📄 Files Modified
+- `apps/web/src/app/ir/dataroom/page.tsx` - Added `ThemeLogo` import and replaced static icon
+- `apps/web/src/app/portal/founders-only/page.tsx` - Added `ThemeLogo` import and replaced text logo
+
+### 📊 Impact
+- **User Experience**: Logo is now visible in both dark and light modes across all portal pages
+- **Consistency**: All pages now use the same theme-aware logo component
+- **Maintainability**: Single source of truth for logo rendering logic
+
+---
+
 ## [2.106.0] - 2025-01-13 (FIRESTORE SECURITY RULES FIX & TYPESCRIPT CLEANUP) 🔒
 
 ### 🐛 Critical Fixes

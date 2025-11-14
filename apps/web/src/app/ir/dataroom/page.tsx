@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { FileText, Lock, Shield, ExternalLink, GripVertical, Save, RotateCcw, LogOut, DollarSign, Home, ChevronRight, AlertTriangle, Image as ImageIcon, CheckCircle, Moon, Sun } from 'lucide-react';
 import Link from 'next/link';
+import ThemeLogo from '@/components/ThemeLogo';
 import { toast } from 'sonner';
 import { db, auth } from '@/lib/firebase';
 import { signOut } from 'firebase/auth';
@@ -779,16 +780,8 @@ export default function IRInvestorDataRoomPage() {
         <div className="container mx-auto px-3 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-2 sm:gap-4 min-w-0">
-              {/* SHELTR Icon */}
-              <div className="relative w-8 h-8 sm:w-10 sm:h-10 flex-shrink-0">
-                <Image
-                  src="/icon.svg"
-                  alt="SHELTR"
-                  fill
-                  className="object-contain"
-                  priority
-                />
-              </div>
+              {/* SHELTR Logo */}
+              <ThemeLogo className="h-6 w-auto sm:h-8" />
               <div className="min-w-0">
                 <h1 className="text-sm sm:text-base lg:text-xl font-bold truncate">
                   Data Room

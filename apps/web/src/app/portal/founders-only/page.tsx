@@ -70,6 +70,7 @@ import { collection, query, where, getDocs, doc, getDoc, setDoc } from 'firebase
 import { BudgetCard } from '@/components/dashboard/BudgetCard';
 import { RevenueCard } from '@/components/dashboard/RevenueCard';
 import { toast } from 'sonner';
+import ThemeLogo from '@/components/ThemeLogo';
 
 // Quick Access Card Type
 interface QuickAccessCard {
@@ -1393,8 +1394,8 @@ export default function FoundersOnlyPage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 gap-4">
             {/* Left: Logo */}
-            <Link href="/dashboard" className="text-2xl font-bold hover:opacity-80 transition-opacity">
-              SHELTR
+            <Link href="/dashboard" className="hover:opacity-80 transition-opacity">
+              <ThemeLogo className="h-6 w-auto" />
             </Link>
             
             {/* Center: Badge */}

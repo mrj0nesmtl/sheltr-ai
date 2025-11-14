@@ -10,6 +10,7 @@ import { getShelterMetrics, ShelterMetrics } from '@/services/platformMetrics';
 import { generateShelterQRCode } from '@/services/qrCodeService';
 import { shelterService, ShelterPublicConfig } from '@/services/shelterService';
 import { uploadProfilePicture } from '@/services/fileStorageService';
+import { ShelterAdminSyncService } from '@/services/shelterAdminSyncService';
 import { 
   QrCode, 
   Camera, 
@@ -105,9 +106,9 @@ export default function SettingsPage() {
     'Housing Assistance': Bed
   };
 
-  // Load admin profile picture from Firestore
+  // Load admin profile picture and profile data from Firestore
   useEffect(() => {
-    const loadAdminProfilePicture = async () => {
+    const loadAdminProfile = async () => {
       if (!user?.uid) return;
       
       try {
@@ -118,17 +119,35 @@ export default function SettingsPage() {
         if (userDoc.exists()) {
           const userData = userDoc.data();
           setAdminProfilePicture(userData.profilePicture || user.photoURL || '');
+          
+          // Load admin profile data
+          setAdminProfile({
+            firstName: userData.firstName || user.displayName?.split(' ')[0] || '',
+            lastName: userData.lastName || user.displayName?.split(' ')[1] || '',
+            title: userData.title || 'Shelter Administrator',
+            email: userData.email || user.email || '',
+            phone: userData.phone || userData.phoneNumber || '',
+            bio: userData.bio || ''
+          });
         } else {
           setAdminProfilePicture(user.photoURL || '');
+          setAdminProfile({
+            firstName: user.displayName?.split(' ')[0] || '',
+            lastName: user.displayName?.split(' ')[1] || '',
+            title: 'Shelter Administrator',
+            email: user.email || '',
+            phone: '',
+            bio: ''
+          });
         }
       } catch (error) {
-        console.error('Error loading admin profile picture:', error);
+        console.error('Error loading admin profile:', error);
         setAdminProfilePicture(user.photoURL || '');
       }
     };
 
     if (user) {
-      loadAdminProfilePicture();
+      loadAdminProfile();
     }
   }, [user]);
 
@@ -415,10 +434,20 @@ export default function SettingsPage() {
 
   const [uploadingAdminPhoto, setUploadingAdminPhoto] = useState(false);
   const [adminProfilePicture, setAdminProfilePicture] = useState<string>('');
+  const [adminProfile, setAdminProfile] = useState({
+    firstName: '',
+    lastName: '',
+    title: 'Shelter Administrator',
+    email: '',
+    phone: '',
+    bio: ''
+  });
 
   const handleAdminProfilePictureUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file || !user) return;
+
+    const shelterId = user?.customClaims?.shelter_id || user?.shelterId || (user as any)?.shelter_id;
 
     setUploadingAdminPhoto(true);
 
@@ -438,6 +467,12 @@ export default function SettingsPage() {
       // Update local state immediately
       setAdminProfilePicture(photoUrl);
       
+      // Sync admin profile to shelter contact info
+      if (shelterId) {
+        console.log('🔄 Syncing admin profile to shelter...');
+        await ShelterAdminSyncService.syncAdminToShelter(user.uid, shelterId);
+      }
+      
       console.log('✅ Profile picture uploaded and saved to Firestore');
       alert('Profile picture uploaded successfully!');
       
@@ -451,6 +486,8 @@ export default function SettingsPage() {
 
   const handleAdminProfilePictureDelete = async () => {
     if (!user?.uid || !adminProfilePicture) return;
+    
+    const shelterId = user?.customClaims?.shelter_id || user?.shelterId || (user as any)?.shelter_id;
     
     // Safety check: Don't delete fallback images from /profiles/leadership/
     if (adminProfilePicture.includes('/profiles/leadership/')) {
@@ -477,6 +514,12 @@ export default function SettingsPage() {
       // Update local state immediately
       setAdminProfilePicture('');
       
+      // Sync admin profile to shelter contact info
+      if (shelterId) {
+        console.log('🔄 Syncing admin profile to shelter...');
+        await ShelterAdminSyncService.syncAdminToShelter(user.uid, shelterId);
+      }
+      
       console.log('✅ Profile picture deleted from Firestore');
       alert('Profile picture deleted successfully!');
       
@@ -485,6 +528,49 @@ export default function SettingsPage() {
       alert(`Failed to delete profile picture: ${error}`);
     } finally {
       setUploadingAdminPhoto(false);
+    }
+  };
+
+  const handleAdminProfileSave = async () => {
+    if (!user?.uid) return;
+    
+    const shelterId = user?.customClaims?.shelter_id || user?.shelterId || (user as any)?.shelter_id;
+    
+    try {
+      setSaving(true);
+      console.log('💾 Saving admin profile...');
+      
+      // Update Firestore with admin profile data
+      const { doc, updateDoc } = await import('firebase/firestore');
+      const { db } = await import('@/lib/firebase');
+      
+      const displayName = `${adminProfile.firstName} ${adminProfile.lastName}`.trim();
+      
+      await updateDoc(doc(db, 'users', user.uid), {
+        firstName: adminProfile.firstName,
+        lastName: adminProfile.lastName,
+        displayName: displayName,
+        title: adminProfile.title,
+        email: adminProfile.email,
+        phone: adminProfile.phone,
+        bio: adminProfile.bio,
+        updatedAt: new Date()
+      });
+      
+      // Sync admin profile to shelter contact info
+      if (shelterId) {
+        console.log('🔄 Syncing admin profile to shelter contact...');
+        await ShelterAdminSyncService.syncAdminToShelter(user.uid, shelterId);
+      }
+      
+      console.log('✅ Admin profile saved and synced successfully');
+      alert('Your profile has been saved and synced to the shelter!');
+      
+    } catch (error) {
+      console.error('❌ Error saving admin profile:', error);
+      alert(`Failed to save profile: ${error}`);
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -907,7 +993,8 @@ export default function SettingsPage() {
                         <label className="text-sm font-medium">First Name</label>
                         <input 
                           type="text" 
-                          value={user?.displayName?.split(' ')[0] || 'Sarah'}
+                          value={adminProfile.firstName}
+                          onChange={(e) => setAdminProfile({...adminProfile, firstName: e.target.value})}
                           disabled={!isEditing}
                           className="w-full mt-1 p-2 border rounded-md bg-white dark:bg-gray-950"
                           placeholder="First Name"
@@ -917,7 +1004,8 @@ export default function SettingsPage() {
                         <label className="text-sm font-medium">Last Name</label>
                         <input 
                           type="text" 
-                          value={user?.displayName?.split(' ')[1] || 'Manager'}
+                          value={adminProfile.lastName}
+                          onChange={(e) => setAdminProfile({...adminProfile, lastName: e.target.value})}
                           disabled={!isEditing}
                           className="w-full mt-1 p-2 border rounded-md bg-white dark:bg-gray-950"
                           placeholder="Last Name"
@@ -928,7 +1016,8 @@ export default function SettingsPage() {
                       <label className="text-sm font-medium">Title / Position</label>
                       <input 
                         type="text" 
-                        value="Shelter Administrator"
+                        value={adminProfile.title}
+                        onChange={(e) => setAdminProfile({...adminProfile, title: e.target.value})}
                         disabled={!isEditing}
                         className="w-full mt-1 p-2 border rounded-md bg-white dark:bg-gray-950"
                         placeholder="e.g., Executive Director"
@@ -938,22 +1027,56 @@ export default function SettingsPage() {
                       <label className="text-sm font-medium">Contact Email</label>
                       <input 
                         type="email" 
-                        value={user?.email || formData.email}
+                        value={adminProfile.email}
+                        onChange={(e) => setAdminProfile({...adminProfile, email: e.target.value})}
                         disabled={!isEditing}
                         className="w-full mt-1 p-2 border rounded-md bg-white dark:bg-gray-950"
                         placeholder="admin@shelter.org"
                       />
                     </div>
                     <div>
+                      <label className="text-sm font-medium">Phone Number</label>
+                      <input 
+                        type="tel" 
+                        value={adminProfile.phone}
+                        onChange={(e) => setAdminProfile({...adminProfile, phone: e.target.value})}
+                        disabled={!isEditing}
+                        className="w-full mt-1 p-2 border rounded-md bg-white dark:bg-gray-950"
+                        placeholder="+1 (555) 123-4567"
+                      />
+                    </div>
+                    <div>
                       <label className="text-sm font-medium">Bio / About</label>
                       <textarea 
+                        value={adminProfile.bio}
+                        onChange={(e) => setAdminProfile({...adminProfile, bio: e.target.value})}
                         disabled={!isEditing}
                         rows={3}
                         className="w-full mt-1 p-2 border rounded-md bg-white dark:bg-gray-950"
                         placeholder="Brief introduction about the administrator..."
-                        defaultValue="Dedicated to providing compassionate care and comprehensive support services to individuals experiencing homelessness in our community."
                       />
                     </div>
+                    
+                    {/* Save Admin Profile Button */}
+                    {isEditing && (
+                      <Button 
+                        onClick={handleAdminProfileSave}
+                        disabled={saving}
+                        className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                      >
+                        {saving ? (
+                          <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Saving & Syncing...
+                          </>
+                        ) : (
+                          <>
+                            <Save className="mr-2 h-4 w-4" />
+                            Save & Sync Profile
+                          </>
+                        )}
+                      </Button>
+                    )}
                   </div>
                 </div>
               </CardContent>

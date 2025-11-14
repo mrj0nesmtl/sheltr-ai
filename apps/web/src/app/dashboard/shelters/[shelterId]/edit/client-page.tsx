@@ -23,6 +23,7 @@ import { doc, getDoc, updateDoc, collection, query, where, getDocs } from 'fireb
 import { db } from '@/lib/firebase';
 import { Shelter } from '@/services/firestore';
 import { AdminUser } from '@/services/platformMetrics';
+import { ShelterAdminSyncService } from '@/services/shelterAdminSyncService';
 
 export default function ShelterEditClient() {
   const params = useParams();
@@ -181,7 +182,15 @@ export default function ShelterEditClient() {
         updatedAt: new Date()
       });
 
-      setSuccessMessage('✅ Shelter updated successfully!');
+      // Sync shelter contact info to assigned admin profile
+      console.log('🔄 Syncing shelter contact to assigned admin...');
+      await ShelterAdminSyncService.syncShelterToAdmin(shelterId, {
+        name: formData.contactName,
+        email: formData.email,
+        phone: formData.phone
+      });
+
+      setSuccessMessage('✅ Shelter updated and synced successfully!');
       
       // Refresh shelter data
       const updatedSnap = await getDoc(shelterRef);
@@ -204,13 +213,12 @@ export default function ShelterEditClient() {
 
   const assignAdmin = async (adminId: string) => {
     try {
-      const userRef = doc(db, 'users', adminId);
-      await updateDoc(userRef, {
-        shelter_id: shelterId
-      });
+      // Assign admin and sync their profile to shelter contact
+      console.log('🔄 Assigning admin and syncing profile...');
+      await ShelterAdminSyncService.syncOnAdminAssignment(adminId, shelterId);
       
       await loadAdministrators(shelterId);
-      setSuccessMessage('✅ Administrator assigned successfully!');
+      setSuccessMessage('✅ Administrator assigned and synced successfully!');
       setTimeout(() => setSuccessMessage(null), 3000);
     } catch (err) {
       console.error('Error assigning admin:', err);

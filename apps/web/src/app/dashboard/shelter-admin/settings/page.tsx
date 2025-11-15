@@ -1407,8 +1407,14 @@ export default function SettingsPage() {
 
               <Card>
                 <CardHeader>
-                  <CardTitle>Social Media Links</CardTitle>
-                  <CardDescription>Connect your social media presence</CardDescription>
+                  <CardTitle className="flex items-center gap-2">
+                    Social Media Links
+                    <Badge variant="outline" className="text-green-600 border-green-600">
+                      <Globe className="h-3 w-3 mr-1" />
+                      Public
+                    </Badge>
+                  </CardTitle>
+                  <CardDescription>These links will be displayed on your public shelter page</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {/* Facebook */}
@@ -1428,6 +1434,9 @@ export default function SettingsPage() {
                         })}
                       />
                     </div>
+                    {formData.socialMedia.facebook && (
+                      <CheckCircle className="h-5 w-5 text-green-500 shrink-0" />
+                    )}
                   </div>
 
                   {/* X (formerly Twitter) */}
@@ -1447,6 +1456,9 @@ export default function SettingsPage() {
                         })}
                       />
                     </div>
+                    {formData.socialMedia.twitter && (
+                      <CheckCircle className="h-5 w-5 text-green-500 shrink-0" />
+                    )}
                   </div>
 
                   {/* Instagram */}
@@ -1466,6 +1478,9 @@ export default function SettingsPage() {
                         })}
                       />
                     </div>
+                    {formData.socialMedia.instagram && (
+                      <CheckCircle className="h-5 w-5 text-green-500 shrink-0" />
+                    )}
                   </div>
 
                   {/* YouTube */}
@@ -1485,6 +1500,9 @@ export default function SettingsPage() {
                         })}
                       />
                     </div>
+                    {formData.socialMedia.youtube && (
+                      <CheckCircle className="h-5 w-5 text-green-500 shrink-0" />
+                    )}
                   </div>
 
                   {/* LinkedIn */}
@@ -1504,6 +1522,9 @@ export default function SettingsPage() {
                         })}
                       />
                     </div>
+                    {formData.socialMedia.linkedin && (
+                      <CheckCircle className="h-5 w-5 text-green-500 shrink-0" />
+                    )}
                   </div>
 
                   {/* TikTok */}
@@ -1525,6 +1546,9 @@ export default function SettingsPage() {
                         })}
                       />
                     </div>
+                    {formData.socialMedia.tiktok && (
+                      <CheckCircle className="h-5 w-5 text-green-500 shrink-0" />
+                    )}
                   </div>
                 </CardContent>
               </Card>

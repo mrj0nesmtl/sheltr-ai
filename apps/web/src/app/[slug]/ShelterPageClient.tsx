@@ -449,6 +449,97 @@ export default function ShelterPageClient({ slug }: ShelterPageClientProps) {
                 </CardContent>
               </Card>
             )}
+
+            {/* Social Media - Public Links */}
+            {shelter.social_media && Object.values(shelter.social_media).some(link => link) && (
+              <Card className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30 border-blue-200 dark:border-blue-800">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-blue-900 dark:text-blue-100">
+                    <Share2 className="h-5 w-5" />
+                    Connect With Us
+                  </CardTitle>
+                  <CardDescription>Follow us on social media for updates and news</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    {shelter.social_media.facebook && (
+                      <Button 
+                        variant="outline" 
+                        className="h-auto flex-col gap-2 py-4 hover:bg-blue-50 dark:hover:bg-blue-950/50 transition-all"
+                        asChild
+                      >
+                        <a href={shelter.social_media.facebook} target="_blank" rel="noopener noreferrer">
+                          <Facebook className="h-6 w-6 text-blue-600" />
+                          <span className="text-xs font-medium">Facebook</span>
+                        </a>
+                      </Button>
+                    )}
+                    {shelter.social_media.twitter && (
+                      <Button 
+                        variant="outline" 
+                        className="h-auto flex-col gap-2 py-4 hover:bg-gray-50 dark:hover:bg-gray-900 transition-all"
+                        asChild
+                      >
+                        <a href={shelter.social_media.twitter} target="_blank" rel="noopener noreferrer">
+                          <Twitter className="h-6 w-6 text-gray-900 dark:text-white" />
+                          <span className="text-xs font-medium">X</span>
+                        </a>
+                      </Button>
+                    )}
+                    {shelter.social_media.instagram && (
+                      <Button 
+                        variant="outline" 
+                        className="h-auto flex-col gap-2 py-4 hover:bg-pink-50 dark:hover:bg-pink-950/50 transition-all"
+                        asChild
+                      >
+                        <a href={shelter.social_media.instagram} target="_blank" rel="noopener noreferrer">
+                          <Instagram className="h-6 w-6 text-pink-600" />
+                          <span className="text-xs font-medium">Instagram</span>
+                        </a>
+                      </Button>
+                    )}
+                    {shelter.social_media.youtube && (
+                      <Button 
+                        variant="outline" 
+                        className="h-auto flex-col gap-2 py-4 hover:bg-red-50 dark:hover:bg-red-950/50 transition-all"
+                        asChild
+                      >
+                        <a href={shelter.social_media.youtube} target="_blank" rel="noopener noreferrer">
+                          <Youtube className="h-6 w-6 text-red-600" />
+                          <span className="text-xs font-medium">YouTube</span>
+                        </a>
+                      </Button>
+                    )}
+                    {shelter.social_media.linkedin && (
+                      <Button 
+                        variant="outline" 
+                        className="h-auto flex-col gap-2 py-4 hover:bg-blue-50 dark:hover:bg-blue-950/50 transition-all"
+                        asChild
+                      >
+                        <a href={shelter.social_media.linkedin} target="_blank" rel="noopener noreferrer">
+                          <Linkedin className="h-6 w-6 text-blue-700" />
+                          <span className="text-xs font-medium">LinkedIn</span>
+                        </a>
+                      </Button>
+                    )}
+                    {shelter.social_media.tiktok && (
+                      <Button 
+                        variant="outline" 
+                        className="h-auto flex-col gap-2 py-4 hover:bg-gray-50 dark:hover:bg-gray-900 transition-all"
+                        asChild
+                      >
+                        <a href={shelter.social_media.tiktok} target="_blank" rel="noopener noreferrer">
+                          <svg className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                          </svg>
+                          <span className="text-xs font-medium">TikTok</span>
+                        </a>
+                      </Button>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
           </div>
 
           {/* Right Column - Contact, Social, QR, & Map */}

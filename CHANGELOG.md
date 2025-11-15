@@ -7,6 +7,90 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.117.0] - 2025-01-15 (PUBLIC SOCIAL MEDIA SECTION) 🌐
+
+### ✨ Feature Enhancement
+
+#### **Social Media Section Added to Public Shelter Page** 🌐
+Added a prominent "Connect With Us" social media section to the public shelter page, displayed below the Languages Spoken section, featuring all 6 social media platforms with large, clickable buttons.
+
+**What's New:**
+- 🎨 **Prominent Social Card** - Blue/purple gradient card below Languages section
+- 📱 **Large Platform Buttons** - 2-3 column responsive grid
+- 🎯 **All 6 Platforms** - Facebook, X, Instagram, YouTube, LinkedIn, TikTok
+- 🖱️ **Hover Effects** - Platform-specific hover colors
+- ✅ **Only Shows If Configured** - Card only appears if shelter has social links
+
+**Admin Settings Enhancement:**
+- 🟢 **"Public" Badge** - Shows in Social Media Links card header
+- ✅ **Green Checkmarks** - Visual confirmation when URLs are added
+- 📝 **Clear Description** - "These links will be displayed on your public shelter page"
+- 🎯 **Visual Feedback** - Admins know links are publicly visible
+
+### 📄 Files Modified
+
+**Public Shelter Page:**
+- `apps/web/src/app/[slug]/ShelterPageClient.tsx`:
+  - Added "Connect With Us" social media card (lines 453-542)
+  - Positioned below Languages Spoken section (left column)
+  - 2-3 column responsive grid (`grid-cols-2 sm:grid-cols-3`)
+  - Blue/purple gradient background for visibility
+  - Platform-specific hover effects for each button
+  - TikTok custom SVG icon
+  - Only renders if `shelter.social_media` has at least one link
+
+**Shelter Admin Settings:**
+- `apps/web/src/app/dashboard/shelter-admin/settings/page.tsx`:
+  - Added "Public" badge to Social Media Links card title (lines 1412-1415)
+  - Updated card description to clarify public visibility (line 1417)
+  - Added green checkmark icons when URLs are filled (lines 1437-1551)
+  - Checkmarks appear for: Facebook, X, Instagram, YouTube, LinkedIn, TikTok
+  - Visual feedback confirms which platforms are configured
+
+### 🎯 User Experience
+
+**Public Visitors:**
+- ✅ **Easy Social Discovery** - Prominent card with all platforms
+- 🖱️ **One-Click Connect** - Large buttons open in new tab
+- 🎨 **Visual Appeal** - Gradient background stands out
+- 📱 **Mobile-Friendly** - 2-column layout on mobile, 3 on desktop
+
+**Shelter Admins:**
+- 👀 **Public Visibility Clear** - "Public" badge shows links are public
+- ✅ **Visual Confirmation** - Green checkmarks show configured platforms
+- 📝 **Clear Instructions** - Description explains public display
+- 🔄 **Real-Time Feedback** - See which platforms will appear on public page
+
+### 📊 Impact
+
+**Engagement:**
+- 🌐 **Social Reach** - Visitors can easily connect on all platforms
+- 📈 **Follow Growth** - One-click access increases follows
+- 🎯 **Multi-Platform** - Support for 6 major social networks
+- 💯 **Accessibility** - Large buttons easy to click/tap
+
+**Admin Confidence:**
+- 🟢 **Public Status** - Clear indicator that links are public
+- ✅ **Configuration Status** - Checkmarks show what's configured
+- 📊 **Complete Control** - Can add/remove platforms easily
+- 🔄 **Immediate Reflection** - Changes appear on public page on save
+
+### 🔍 Technical Notes
+
+- Social media card only renders if at least one platform URL exists
+- Conditional rendering: `{shelter.social_media && Object.values(shelter.social_media).some(link => link) && (...)}`
+- Checkmarks only appear when URL field is not empty: `{formData.socialMedia.facebook && <CheckCircle />}`
+- Card uses same gradient styling as admin preview for consistency
+- All links open in new tab with `target="_blank" rel="noopener noreferrer"`
+- TikTok uses custom SVG path (no lucide-react icon available)
+
+### 🚀 Live Now
+
+- **Public Page**: `http://localhost:3000/old-brewery-mission/` - See "Connect With Us" below Languages
+- **Admin Settings**: `http://localhost:3000/dashboard/shelter-admin/settings` - See "Public" badge and checkmarks
+
+---
+
 ## [2.116.0] - 2025-01-15 (SHELTER SETTINGS DATA SYNC FIX) 🔄
 
 ### 🐛 Bug Fix - Critical Data Sync Issue

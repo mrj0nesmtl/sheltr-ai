@@ -120,11 +120,31 @@ export class TenantService {
         
         console.log(`🔍 Found ${sheltersSnapshot.size} shelter documents in shelters collection`);
         
-        sheltersSnapshot.forEach((shelterDoc) => {
+        // Process shelters - need to load coordinates from public_config
+        for (const shelterDoc of sheltersSnapshot.docs) {
           const shelterId = shelterDoc.id;
           const shelterData = shelterDoc.data();
           
           console.log(`🏠 Processing shelter: ${shelterId} - ${shelterData.name}`);
+          
+          // Try to load coordinates from public_config subcollection
+          let coordinates = shelterData.coordinates || { lat: 45.5017, lng: -73.5673 };
+          try {
+            const publicConfigRef = collection(db, 'shelters', shelterId, 'public_config');
+            const configSnapshot = await getDocs(publicConfigRef);
+            if (!configSnapshot.empty) {
+              const configData = configSnapshot.docs[0].data();
+              if (configData.coordinates) {
+                coordinates = {
+                  lat: configData.coordinates.lat,
+                  lng: configData.coordinates.lng
+                };
+                console.log(`  📍 Loaded coordinates from public_config: (${coordinates.lat}, ${coordinates.lng})`);
+              }
+            }
+          } catch (coordError) {
+            console.warn(`  ⚠️ Could not load coordinates for ${shelterData.name}:`, coordError);
+          }
           
           const shelter: ShelterTenant = {
             id: shelterId,
@@ -136,7 +156,7 @@ export class TenantService {
             participants: shelterData.participants || 0, // Include cached participant count
             status: shelterData.status || 'active',
             contact: shelterData.contact || { name: '', email: '', phone: '' },
-            coordinates: shelterData.coordinates || { lat: 45.5017, lng: -73.5673 }, // Default Montreal
+            coordinates: coordinates,
             features_enabled: {
               participant_management: true,
               donation_processing: true,
@@ -152,7 +172,7 @@ export class TenantService {
           };
           
           shelters.push(shelter);
-        });
+        }
         
       } catch (error) {
         console.error('❌ Error fetching shelters from shelters collection:', error);

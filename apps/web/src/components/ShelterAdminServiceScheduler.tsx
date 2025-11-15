@@ -733,56 +733,22 @@ export function ShelterAdminServiceScheduler({
     try {
       let booking;
       
-      // Handle demo services differently
-      if (selectedService.id.startsWith('demo-')) {
-        // Create a demo booking (just for UI demonstration)
-        booking = {
-          id: `demo-booking-${Date.now()}`,
-          serviceId: selectedService.id,
-          serviceName: selectedService.name,
-          categoryId: selectedService.categoryId,
-          participantId: selectedParticipant.id,
-          shelterId,
-          appointmentDate: { toDate: () => selectedSlot.datetime } as any,
-          duration: selectedSlot.duration,
-          status: 'confirmed' as const,
-          notes: bookingForm.notes,
-          providerNotes: bookingForm.providerNotes,
-          confirmationCode: Math.random().toString(36).substring(2, 8).toUpperCase(),
-          reminderSent: false,
-          createdAt: { toDate: () => new Date() } as any,
-          updatedAt: { toDate: () => new Date() } as any,
-          attendeeInfo: {
-            participantName: `${selectedParticipant.firstName} ${selectedParticipant.lastName}`,
-            participantEmail: selectedParticipant.email,
-            participantPhone: bookingForm.participantPhone || selectedParticipant.phone,
-            emergencyContact: bookingForm.emergencyContact
-          }
-        };
-        
-        // Store demo booking in localStorage
-        const existingBookings = JSON.parse(localStorage.getItem('demoBookings') || '[]');
-        existingBookings.push(booking);
-        localStorage.setItem('demoBookings', JSON.stringify(existingBookings));
-        
-        console.log('✅ Demo booking created:', booking.confirmationCode);
-      } else {
-        // Real booking through Firebase
-        booking = await bookService({
-          serviceId: selectedService.id,
-          participantId: selectedParticipant.id,
-          shelterId,
-          appointmentDate: selectedSlot.datetime,
-          duration: selectedSlot.duration,
-          participantName: `${selectedParticipant.firstName} ${selectedParticipant.lastName}`,
-          participantEmail: selectedParticipant.email,
-          participantPhone: bookingForm.participantPhone || selectedParticipant.phone,
-          emergencyContact: bookingForm.emergencyContact,
-          notes: bookingForm.notes
-        });
-        
-        console.log('✅ Real booking created:', booking.confirmationCode);
-      }
+      // Always save to Firestore for real bookings (even if service is demo)
+      // This ensures bookings are persistent and visible to participants
+      booking = await bookService({
+        serviceId: selectedService.id,
+        participantId: selectedParticipant.id,
+        shelterId,
+        appointmentDate: selectedSlot.datetime,
+        duration: selectedSlot.duration,
+        participantName: `${selectedParticipant.firstName} ${selectedParticipant.lastName}`,
+        participantEmail: selectedParticipant.email,
+        participantPhone: bookingForm.participantPhone || selectedParticipant.phone,
+        emergencyContact: bookingForm.emergencyContact,
+        notes: bookingForm.notes
+      });
+      
+      console.log('✅ Booking saved to Firestore:', booking.confirmationCode);
       
       // Create appointment notification for the participant
       try {

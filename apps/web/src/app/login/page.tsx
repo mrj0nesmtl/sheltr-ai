@@ -11,10 +11,21 @@ export default function LoginPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
 
-  // Redirect if already logged in
+  // Role-based dashboard mapping
+  const ROLE_DASHBOARD_MAP = {
+    'super_admin': '/dashboard',
+    'platform_admin': '/dashboard',
+    'admin': '/dashboard/shelter-admin', 
+    'participant': '/dashboard/participant',
+    'donor': '/dashboard/donor'
+  } as const;
+
+  // Redirect if already logged in - use role-specific dashboard
   useEffect(() => {
-    if (!loading && user) {
-      router.push('/dashboard');
+    if (!loading && user && user.role) {
+      const targetDashboard = ROLE_DASHBOARD_MAP[user.role as keyof typeof ROLE_DASHBOARD_MAP] || '/dashboard';
+      console.log('🔄 Login page redirecting', user.role, 'to', targetDashboard);
+      router.push(targetDashboard);
     }
   }, [user, loading, router]);
 

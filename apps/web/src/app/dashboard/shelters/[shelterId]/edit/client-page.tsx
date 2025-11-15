@@ -182,6 +182,22 @@ export default function ShelterEditClient() {
         updatedAt: new Date()
       });
 
+      // Also update public_config to keep address in sync with shelter admin dashboard
+      console.log('🔄 Syncing address to public_config...');
+      const publicConfigRef = doc(db, 'shelters', shelterId, 'public_config', 'config');
+      try {
+        await updateDoc(publicConfigRef, {
+          address: formData.address,
+          name: formData.name,
+          phone: formData.phone,
+          email: formData.email,
+          updatedAt: new Date()
+        });
+        console.log('✅ Public config updated with new address');
+      } catch (publicConfigError) {
+        console.warn('⚠️ Could not update public_config (may not exist yet):', publicConfigError);
+      }
+
       // Sync shelter contact info to assigned admin profile
       console.log('🔄 Syncing shelter contact to assigned admin...');
       await ShelterAdminSyncService.syncShelterToAdmin(shelterId, {

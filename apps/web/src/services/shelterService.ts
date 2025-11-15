@@ -345,6 +345,37 @@ export class ShelterService {
       await updateDoc(configRef, updateData);
       console.log('✅ Public config updated successfully');
       
+      // Also update critical fields in main shelter document to keep them in sync
+      if (config.address !== undefined || config.name !== undefined || config.phone !== undefined || config.email !== undefined) {
+        console.log('🔄 Syncing critical fields to main shelter document...');
+        const shelterRef = doc(db, 'shelters', shelterId);
+        const shelterUpdateData: any = {
+          updatedAt: Timestamp.now()
+        };
+        
+        if (config.address !== undefined) shelterUpdateData.address = config.address;
+        if (config.name !== undefined) shelterUpdateData.name = config.name;
+        if (config.phone !== undefined || config.email !== undefined) {
+          // Update contact info
+          const shelterSnap = await getDoc(shelterRef);
+          if (shelterSnap.exists()) {
+            const currentContact = shelterSnap.data().contact || {};
+            shelterUpdateData.contact = {
+              ...currentContact,
+              ...(config.phone !== undefined && { phone: config.phone }),
+              ...(config.email !== undefined && { email: config.email })
+            };
+          }
+        }
+        
+        try {
+          await updateDoc(shelterRef, shelterUpdateData);
+          console.log('✅ Main shelter document synced');
+        } catch (syncError) {
+          console.warn('⚠️ Could not sync to main shelter document:', syncError);
+        }
+      }
+      
     } catch (error) {
       console.error(`❌ Error updating public config for ${shelterId}:`, error);
       throw error;

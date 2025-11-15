@@ -554,6 +554,64 @@ export default function ShelterViewClient() {
             </Button>
           </CardContent>
         </Card>
+
+        {/* Location & Map */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <MapPin className="h-5 w-5" />
+              Location & Map
+            </CardTitle>
+            <CardDescription>Interactive map showing shelter location</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {/* Address Display */}
+            <div className="p-3 bg-muted rounded-lg">
+              <label className="text-sm font-medium text-muted-foreground">Full Address</label>
+              <p className="text-sm mt-1">{shelter.address}</p>
+            </div>
+
+            {/* Google Maps Embed */}
+            {process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ? (
+              <div className="relative w-full h-64 rounded-lg overflow-hidden border-2 border-gray-200 dark:border-gray-700">
+                <iframe
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  loading="lazy"
+                  allowFullScreen
+                  referrerPolicy="no-referrer-when-downgrade"
+                  src={`https://www.google.com/maps/embed/v1/place?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&q=${encodeURIComponent(shelter.address)}&zoom=15`}
+                />
+              </div>
+            ) : (
+              <div className="relative w-full h-64 rounded-lg overflow-hidden border-2 border-dashed border-gray-300 dark:border-gray-600 bg-muted flex items-center justify-center">
+                <div className="text-center text-muted-foreground">
+                  <MapPin className="h-12 w-12 mx-auto mb-2 opacity-20" />
+                  <p className="text-sm">Map unavailable</p>
+                  <p className="text-xs">Google Maps API key not configured</p>
+                </div>
+              </div>
+            )}
+
+            {/* View in Google Maps Link */}
+            <Button 
+              variant="outline" 
+              className="w-full"
+              onClick={() => window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(shelter.address)}`, '_blank')}
+            >
+              <Globe className="h-4 w-4 mr-2" />
+              Open in Google Maps
+            </Button>
+
+            {/* Note for Admins */}
+            <div className="p-3 bg-blue-50 dark:bg-blue-900/10 rounded-lg border border-blue-200 dark:border-blue-800">
+              <p className="text-xs text-blue-700 dark:text-blue-300">
+                <strong>Note:</strong> To update the address, use the <Link href={`/dashboard/shelters/${shelterId}/edit`} className="underline hover:text-blue-900 dark:hover:text-blue-100">Edit Shelter</Link> page. Changes will automatically sync to the Shelter Administrator's dashboard.
+              </p>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Shelter Notifications */}

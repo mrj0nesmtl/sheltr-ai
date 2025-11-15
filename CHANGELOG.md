@@ -7,6 +7,86 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.112.0] - 2025-01-15 (SHELTER VIEW MAP + ADDRESS SYNC) 🗺️
+
+### ✨ Feature Enhancement & Bug Fix
+
+#### **Google Maps on Shelter View Details Page** 🗺️
+Added interactive Google Maps component to the Super Admin/Platform Admin Shelter View Details page, providing visual location information alongside shelter data.
+
+**What's New:**
+- **Google Maps Embed**: Interactive map showing shelter location
+- **Address Display**: Prominently displays full shelter address
+- **"Open in Google Maps" Button**: Quick link to open location in full Google Maps
+- **Admin Note**: Guidance on how to edit address with link to edit page
+
+**Implementation:**
+- Added new "Location & Map" card in the details grid
+- Uses Google Maps Embed API with `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`
+- 256px height responsive map container
+- Falls back to placeholder if API key not configured
+- Matches design style of other cards (QR Code, Financial Overview, etc.)
+
+#### **Bi-Directional Address Synchronization** 🔄
+Fixed critical data consistency issue where shelter address updates were not syncing between Super Admin and Shelter Admin dashboards.
+
+**Problem:**
+- **Super Admin Edit Page**: Saved address to `shelters/{id}/address`
+- **Shelter Admin Settings**: Saved address to `shelters/{id}/public_config/settings/address`
+- **Result**: Two different locations = data out of sync! ❌
+
+**Solution:**
+- **Super Admin Edit** now updates BOTH:
+  1. Main shelter document (`shelters/{id}/address`)
+  2. Public config (`shelters/{id}/public_config/settings/address`)
+- **Shelter Admin Settings** now updates BOTH:
+  1. Public config (`shelters/{id}/public_config/settings/address`)
+  2. Main shelter document (`shelters/{id}/address`)
+
+**How It Works:**
+1. Super Admin changes address → Updates shelter doc → Also updates public_config
+2. Shelter Admin changes address → Updates public_config → Also updates shelter doc
+3. Both dashboards now always show the same address! ✅
+
+### 📄 Files Modified
+- `apps/web/src/app/dashboard/shelters/[shelterId]/view/client-page.tsx`:
+  - Added "Location & Map" card (lines 558-614)
+  - Integrated Google Maps Embed API
+  - Added address display and "Open in Google Maps" button
+  - Added admin guidance note with link to edit page
+- `apps/web/src/app/dashboard/shelters/[shelterId]/edit/client-page.tsx`:
+  - Added sync to `public_config` when Super Admin updates address (lines 185-199)
+  - Updates both shelter document and public_config for consistency
+- `apps/web/src/services/shelterService.ts`:
+  - Enhanced `updateShelterPublicConfig()` method (lines 348-377)
+  - Now syncs critical fields (address, name, phone, email) to main shelter document
+  - Maintains bi-directional consistency automatically
+
+### 🎯 User Experience
+- **Super Admins/Platform Admins**: 
+  - Can now visualize shelter locations on view details page
+  - Address changes automatically sync to Shelter Admin dashboard
+  - Clear guidance on how to edit addresses
+- **Shelter Admins**:
+  - Address changes automatically sync to Super Admin dashboards
+  - See updated addresses immediately after Super Admin edits
+  - No more data inconsistencies!
+
+### 📊 Impact
+- **Data Consistency**: Address field now synchronized across all admin dashboards
+- **Visual Context**: Maps provide immediate geographic understanding of shelter locations
+- **Better Workflow**: Admins at all levels see consistent, up-to-date information
+- **Security**: Existing ShelterAdminSyncService continues to sync contact info (name, email, phone)
+
+### 🔍 Technical Notes
+- Google Maps requires `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` environment variable
+- Sync happens automatically during save operations
+- Error handling ensures one update doesn't block the other
+- Console logging for debugging sync operations
+- Fallback UI displayed if Maps API key not configured
+
+---
+
 ## [2.111.0] - 2025-01-15 (SHELTER DIRECTORY QR CODE CARDS) 📱
 
 ### ✨ Feature Enhancement

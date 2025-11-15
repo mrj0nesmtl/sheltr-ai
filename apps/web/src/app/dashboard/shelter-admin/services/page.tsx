@@ -162,57 +162,59 @@ export default function ServicesPage() {
         }}
       />
 
-      {/* Service Categories Overview - Real Data */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-        {loading ? (
-          // Loading state
-          Array.from({ length: 6 }).map((_, index) => (
-            <Card key={index} className="text-center">
-              <CardContent className="p-4">
-                <div className="flex justify-center mb-2">
-                  <div className="p-2 rounded-lg bg-gray-100">
-                    <Loader2 className="h-6 w-6 animate-spin" />
-                  </div>
-                </div>
-                <h3 className="font-semibold text-sm">Loading...</h3>
-                <p className="text-2xl font-bold">-</p>
-                <p className="text-xs text-muted-foreground">Loading data</p>
-              </CardContent>
-            </Card>
-          ))
-        ) : error ? (
-          // Error state
-          <Card className="col-span-full text-center">
-            <CardContent className="p-4">
-              <AlertCircle className="h-8 w-8 mx-auto mb-2 text-red-500" />
-              <p className="text-red-600">{error}</p>
-            </CardContent>
-          </Card>
-        ) : (
-          // Real data from database
-          serviceCategories.map((category) => {
-            const IconComponent = category.icon;
-            const realStats = categoryStats.find(stat => stat.category.toLowerCase() === category.name.toLowerCase());
-            const count = realStats?.count || 0;
-            
-            return (
-              <Card key={category.name} className="text-center">
-                <CardContent className="p-4">
-                  <div className="flex justify-center mb-2">
-                    <div className={`p-2 rounded-lg ${category.color}`}>
-                      <IconComponent className="h-6 w-6" />
-                    </div>
-                  </div>
-                  <h3 className="font-semibold text-sm">{category.name}</h3>
-                  <p className="text-2xl font-bold">{count}</p>
-                  <p className="text-xs text-muted-foreground">
-                    {count > 0 ? 'Real data connected' : 'No services yet'}
-                  </p>
-                </CardContent>
-              </Card>
-            );
-          })
-        )}
+      {/* Calendar & Today's Agenda */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Calendar */}
+        <Card className="lg:col-span-1">
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2">
+              <Calendar className="h-5 w-5" />
+              <span>Calendar</span>
+            </CardTitle>
+            <CardDescription>Select a date to view appointments</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="text-center text-muted-foreground py-8">
+              <Calendar className="h-12 w-12 mx-auto mb-4 opacity-50" />
+              <p className="text-sm">Calendar view coming soon</p>
+              <p className="text-xs mt-2">
+                Full calendar integration with appointment scheduling
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Today's Agenda */}
+        <Card className="lg:col-span-2">
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <Clock className="h-5 w-5" />
+                <span>Today's Agenda</span>
+              </div>
+              <Badge variant="outline">
+                {new Date().toLocaleDateString('en-US', { 
+                  weekday: 'long', 
+                  month: 'long', 
+                  day: 'numeric' 
+                })}
+              </Badge>
+            </CardTitle>
+            <CardDescription>Appointments scheduled for today</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {/* This will be populated with today's appointments */}
+              <div className="text-center text-muted-foreground py-8">
+                <CheckCircle className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                <p className="text-sm font-medium">No appointments scheduled for today</p>
+                <p className="text-xs mt-2">
+                  Use the scheduler above to book appointments for participants
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

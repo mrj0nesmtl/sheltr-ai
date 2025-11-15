@@ -738,6 +738,8 @@ export function ShelterAdminServiceScheduler({
         booking = {
           id: `demo-booking-${Date.now()}`,
           serviceId: selectedService.id,
+          serviceName: selectedService.name,
+          categoryId: selectedService.categoryId,
           participantId: selectedParticipant.id,
           shelterId,
           appointmentDate: { toDate: () => selectedSlot.datetime } as any,

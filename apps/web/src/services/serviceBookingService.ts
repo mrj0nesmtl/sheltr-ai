@@ -68,6 +68,8 @@ export interface ShelterService {
 export interface ServiceBooking {
   id: string;
   serviceId: string;
+  serviceName?: string; // Name of the service for display
+  categoryId?: string; // Category ID for grouping
   participantId: string;
   shelterId: string;
   appointmentDate: Timestamp;
@@ -357,14 +359,31 @@ export async function bookService(bookingData: {
       throw new Error('Service is not available at the requested time');
     }
     
+    // Fetch service details to get the name and category
+    let serviceName = 'Service Appointment';
+    let categoryId = undefined;
+    try {
+      const serviceDoc = await getDoc(doc(db, 'services', bookingData.serviceId));
+      if (serviceDoc.exists()) {
+        const serviceData = serviceDoc.data() as ShelterService;
+        serviceName = serviceData.name;
+        categoryId = serviceData.categoryId;
+      }
+    } catch (serviceError) {
+      console.warn('Could not fetch service details:', serviceError);
+      // Continue with booking even if service details fetch fails
+    }
+    
     // Create booking
     const booking: Omit<ServiceBooking, 'id'> = {
       serviceId: bookingData.serviceId,
+      serviceName,
+      categoryId,
       participantId: bookingData.participantId,
       shelterId: bookingData.shelterId,
       appointmentDate: Timestamp.fromDate(bookingData.appointmentDate),
       duration: bookingData.duration,
-      status: 'pending',
+      status: 'confirmed',
       notes: bookingData.notes,
       confirmationCode: generateConfirmationCode(),
       reminderSent: false,

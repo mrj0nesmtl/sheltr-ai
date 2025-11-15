@@ -593,6 +593,8 @@ export function ServiceBooking({
         booking = {
           id: `demo-booking-${Date.now()}`,
           serviceId: selectedService.id,
+          serviceName: selectedService.name,
+          categoryId: selectedService.categoryId,
           participantId,
           shelterId,
           appointmentDate: { toDate: () => selectedSlot.datetime } as any,
@@ -1070,23 +1072,29 @@ export function ServiceBooking({
                 <Card key={booking.id}>
                   <CardContent className="pt-6">
                     <div className="flex justify-between items-start">
-                      <div>
-                        <div className="flex items-center space-x-2">
-                          <h4 className="font-semibold">Booking #{booking.confirmationCode}</h4>
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-2 mb-2">
+                          <h4 className="font-semibold">
+                            {booking.serviceName || 'Service Appointment'}
+                          </h4>
                           <Badge className={getStatusColor(booking.status)}>
                             {booking.status}
                           </Badge>
                         </div>
-                        <p className="text-gray-600 mt-1">
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                          <strong>Confirmation:</strong> #{booking.confirmationCode}
+                        </p>
+                        <p className="text-gray-600 dark:text-gray-400 mt-1">
+                          <CalendarIcon className="inline h-4 w-4 mr-1" />
                           {formatDate(booking.appointmentDate)} • {booking.duration} minutes
                         </p>
                         {booking.notes && (
-                          <p className="text-sm text-gray-500 mt-2">
+                          <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
                             <strong>Notes:</strong> {booking.notes}
                           </p>
                         )}
                         {booking.providerNotes && (
-                          <p className="text-sm text-gray-500 mt-2">
+                          <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
                             <strong>Provider Notes:</strong> {booking.providerNotes}
                           </p>
                         )}

@@ -161,32 +161,58 @@ export function ServiceBooking({
           // Check if any configured service matches this category
           return publicConfig.services.some(service => {
             const serviceLower = service.toLowerCase();
-            const categoryLower = category.name.toLowerCase();
             
-            // Match by keywords
-            if (serviceLower.includes('medical') || serviceLower.includes('health')) {
-              return category.id === 'healthcare' || category.id === 'counseling';
+            // COMPREHENSIVE KEYWORD MATCHING
+            switch(category.id) {
+              case 'healthcare':
+                return serviceLower.includes('medical') || 
+                       serviceLower.includes('health') || 
+                       serviceLower.includes('clinic') ||
+                       serviceLower.includes('doctor');
+                       
+              case 'employment':
+                return serviceLower.includes('job') || 
+                       serviceLower.includes('employment') || 
+                       serviceLower.includes('training') ||
+                       serviceLower.includes('career') ||
+                       serviceLower.includes('resume') ||
+                       serviceLower.includes('workshop');
+                       
+              case 'legal':
+                return serviceLower.includes('legal') || 
+                       serviceLower.includes('aid') ||
+                       serviceLower.includes('court') ||
+                       serviceLower.includes('lawyer');
+                       
+              case 'counseling':
+                return serviceLower.includes('mental') || 
+                       serviceLower.includes('counseling') || 
+                       serviceLower.includes('substance') ||
+                       serviceLower.includes('therapy') ||
+                       serviceLower.includes('addiction') ||
+                       serviceLower.includes('abuse') ||
+                       serviceLower.includes('support');
+                       
+              case 'meals':
+                return serviceLower.includes('meal') || 
+                       serviceLower.includes('food') ||
+                       serviceLower.includes('nutrition') ||
+                       serviceLower.includes('basic necessities');
+                       
+              case 'benefits':
+                return serviceLower.includes('housing') || 
+                       serviceLower.includes('shelter') || 
+                       serviceLower.includes('case') || 
+                       serviceLower.includes('management') ||
+                       serviceLower.includes('id') ||
+                       serviceLower.includes('government') ||
+                       serviceLower.includes('benefits') ||
+                       serviceLower.includes('emergency') ||
+                       serviceLower.includes('overnight');
+                       
+              default:
+                return false;
             }
-            if (serviceLower.includes('job') || serviceLower.includes('employment') || serviceLower.includes('training')) {
-              return category.id === 'employment';
-            }
-            if (serviceLower.includes('legal') || serviceLower.includes('aid')) {
-              return category.id === 'legal';
-            }
-            if (serviceLower.includes('meal') || serviceLower.includes('food')) {
-              return category.id === 'meals';
-            }
-            if (serviceLower.includes('housing') || serviceLower.includes('shelter')) {
-              return category.id === 'benefits'; // Housing assistance falls under benefits
-            }
-            if (serviceLower.includes('case') || serviceLower.includes('management')) {
-              return category.id === 'benefits';
-            }
-            if (serviceLower.includes('mental') || serviceLower.includes('counseling') || serviceLower.includes('substance')) {
-              return category.id === 'counseling';
-            }
-            
-            return false;
           });
         });
         

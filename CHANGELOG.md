@@ -7,6 +7,54 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.110.0] - 2025-01-15 (GOOGLE MAPS PRODUCTION FIX) 🗺️
+
+### 🐛 Bug Fix
+
+#### **Google Maps Not Working in Production** 🗺️
+Fixed critical issue where Google Maps were working locally but showing "This content is blocked" error in production on public shelter pages.
+
+**Problem Identified:**
+- ✅ Google Maps working perfectly on `localhost:3000`
+- ✅ Google Cloud Console API key restrictions correctly configured
+- ❌ Google Maps showing blocked content error on `sheltr-ai.web.app`
+- ❌ Environment variable missing from production build
+
+**Root Cause:**
+- `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` was present in `.env.local` (development)
+- `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` was **missing** from `.env.production`
+- Next.js static builds require environment variables at build time
+- Production build was not including the Maps API key in the compiled output
+
+**Solution:**
+- Added `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` to `.env.production`
+- Rebuilt Next.js app with production environment variables
+- Redeployed to Firebase Hosting
+
+### 📄 Files Modified
+- `apps/web/.env.production` - Added Google Maps API key
+
+### 📦 Deployment
+- Rebuilt app with: `npm run build` (successfully detected both `.env.local` and `.env.production`)
+- Deployed to Firebase Hosting: `firebase deploy --only hosting`
+- 785 files deployed successfully
+
+### 📊 Impact
+- **Public Shelter Pages**: Google Maps now display correctly in production
+- **Shelter Admin Dashboard**: Maps continue working in admin settings
+- **User Experience**: Visitors can now see shelter locations with interactive maps
+- **Consistency**: Maps work identically in development and production
+
+### 🎯 Technical Details
+- Google Maps Embed API v1 using `place` endpoint
+- API key restrictions properly configured for `sheltr-ai.web.app` domain
+- Maps display on:
+  - Public shelter pages (`/[slug]`)
+  - Shelter admin settings (`/dashboard/shelter-admin/settings`)
+  - Participant profile shelter info (`/dashboard/participant/profile`)
+
+---
+
 ## [2.109.0] - 2025-01-15 (QR CODE SYSTEM COHESION) 📱
 
 ### 🐛 Bug Fixes

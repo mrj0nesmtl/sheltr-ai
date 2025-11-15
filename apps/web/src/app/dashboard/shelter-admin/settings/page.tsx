@@ -1418,136 +1418,298 @@ export default function SettingsPage() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {/* Facebook */}
-                  <div className="flex items-center space-x-3">
-                    <Facebook className="h-5 w-5 text-blue-600 shrink-0" />
+                  <div className="flex items-start space-x-3">
+                    <Facebook className="h-5 w-5 text-blue-600 shrink-0 mt-7" />
                     <div className="flex-1">
                       <label className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1 block">Facebook</label>
-                      <input 
-                        type="url" 
-                        placeholder="https://facebook.com/your-page"
-                        value={formData.socialMedia.facebook}
-                        disabled={!isEditing}
-                        className="w-full p-2 border rounded-md dark:bg-gray-800 dark:border-gray-700"
-                        onChange={(e) => setFormData({
-                          ...formData, 
-                          socialMedia: {...formData.socialMedia, facebook: e.target.value}
-                        })}
-                      />
+                      <div className="flex gap-2">
+                        <input 
+                          type="url" 
+                          placeholder="https://facebook.com/your-page"
+                          value={formData.socialMedia.facebook}
+                          disabled={!isEditing}
+                          className="flex-1 p-2 border rounded-md dark:bg-gray-800 dark:border-gray-700"
+                          onChange={(e) => setFormData({
+                            ...formData, 
+                            socialMedia: {...formData.socialMedia, facebook: e.target.value}
+                          })}
+                        />
+                        {formData.socialMedia.facebook && (
+                          <>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => window.open(formData.socialMedia.facebook, '_blank')}
+                              title="Visit link"
+                            >
+                              <ExternalLink className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => {
+                                navigator.clipboard.writeText(formData.socialMedia.facebook);
+                                alert('Facebook URL copied to clipboard!');
+                              }}
+                              title="Copy URL"
+                            >
+                              <Copy className="h-4 w-4" />
+                            </Button>
+                          </>
+                        )}
+                      </div>
                     </div>
                     {formData.socialMedia.facebook && (
-                      <CheckCircle className="h-5 w-5 text-green-500 shrink-0" />
+                      <CheckCircle className="h-5 w-5 text-green-500 shrink-0 mt-7" />
                     )}
                   </div>
 
                   {/* X (formerly Twitter) */}
-                  <div className="flex items-center space-x-3">
-                    <Twitter className="h-5 w-5 text-gray-900 dark:text-white shrink-0" />
+                  <div className="flex items-start space-x-3">
+                    <Twitter className="h-5 w-5 text-gray-900 dark:text-white shrink-0 mt-7" />
                     <div className="flex-1">
                       <label className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1 block">X (formerly Twitter)</label>
-                      <input 
-                        type="url" 
-                        placeholder="https://x.com/your-handle"
-                        value={formData.socialMedia.twitter}
-                        disabled={!isEditing}
-                        className="w-full p-2 border rounded-md dark:bg-gray-800 dark:border-gray-700"
-                        onChange={(e) => setFormData({
-                          ...formData, 
-                          socialMedia: {...formData.socialMedia, twitter: e.target.value}
-                        })}
-                      />
+                      <div className="flex gap-2">
+                        <input 
+                          type="url" 
+                          placeholder="https://x.com/your-handle"
+                          value={formData.socialMedia.twitter}
+                          disabled={!isEditing}
+                          className="flex-1 p-2 border rounded-md dark:bg-gray-800 dark:border-gray-700"
+                          onChange={(e) => setFormData({
+                            ...formData, 
+                            socialMedia: {...formData.socialMedia, twitter: e.target.value}
+                          })}
+                        />
+                        {formData.socialMedia.twitter && (
+                          <>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => window.open(formData.socialMedia.twitter, '_blank')}
+                              title="Visit link"
+                            >
+                              <ExternalLink className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => {
+                                navigator.clipboard.writeText(formData.socialMedia.twitter);
+                                alert('X/Twitter URL copied to clipboard!');
+                              }}
+                              title="Copy URL"
+                            >
+                              <Copy className="h-4 w-4" />
+                            </Button>
+                          </>
+                        )}
+                      </div>
                     </div>
                     {formData.socialMedia.twitter && (
-                      <CheckCircle className="h-5 w-5 text-green-500 shrink-0" />
+                      <CheckCircle className="h-5 w-5 text-green-500 shrink-0 mt-7" />
                     )}
                   </div>
 
                   {/* Instagram */}
-                  <div className="flex items-center space-x-3">
-                    <Instagram className="h-5 w-5 text-pink-600 shrink-0" />
+                  <div className="flex items-start space-x-3">
+                    <Instagram className="h-5 w-5 text-pink-600 shrink-0 mt-7" />
                     <div className="flex-1">
                       <label className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1 block">Instagram</label>
-                      <input 
-                        type="url" 
-                        placeholder="https://instagram.com/your-account"
-                        value={formData.socialMedia.instagram}
-                        disabled={!isEditing}
-                        className="w-full p-2 border rounded-md dark:bg-gray-800 dark:border-gray-700"
-                        onChange={(e) => setFormData({
-                          ...formData, 
-                          socialMedia: {...formData.socialMedia, instagram: e.target.value}
-                        })}
-                      />
+                      <div className="flex gap-2">
+                        <input 
+                          type="url" 
+                          placeholder="https://instagram.com/your-account"
+                          value={formData.socialMedia.instagram}
+                          disabled={!isEditing}
+                          className="flex-1 p-2 border rounded-md dark:bg-gray-800 dark:border-gray-700"
+                          onChange={(e) => setFormData({
+                            ...formData, 
+                            socialMedia: {...formData.socialMedia, instagram: e.target.value}
+                          })}
+                        />
+                        {formData.socialMedia.instagram && (
+                          <>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => window.open(formData.socialMedia.instagram, '_blank')}
+                              title="Visit link"
+                            >
+                              <ExternalLink className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => {
+                                navigator.clipboard.writeText(formData.socialMedia.instagram);
+                                alert('Instagram URL copied to clipboard!');
+                              }}
+                              title="Copy URL"
+                            >
+                              <Copy className="h-4 w-4" />
+                            </Button>
+                          </>
+                        )}
+                      </div>
                     </div>
                     {formData.socialMedia.instagram && (
-                      <CheckCircle className="h-5 w-5 text-green-500 shrink-0" />
+                      <CheckCircle className="h-5 w-5 text-green-500 shrink-0 mt-7" />
                     )}
                   </div>
 
                   {/* YouTube */}
-                  <div className="flex items-center space-x-3">
-                    <Youtube className="h-5 w-5 text-red-600 shrink-0" />
+                  <div className="flex items-start space-x-3">
+                    <Youtube className="h-5 w-5 text-red-600 shrink-0 mt-7" />
                     <div className="flex-1">
                       <label className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1 block">YouTube</label>
-                      <input 
-                        type="url" 
-                        placeholder="https://youtube.com/@your-channel"
-                        value={formData.socialMedia.youtube}
-                        disabled={!isEditing}
-                        className="w-full p-2 border rounded-md dark:bg-gray-800 dark:border-gray-700"
-                        onChange={(e) => setFormData({
-                          ...formData, 
-                          socialMedia: {...formData.socialMedia, youtube: e.target.value}
-                        })}
-                      />
+                      <div className="flex gap-2">
+                        <input 
+                          type="url" 
+                          placeholder="https://youtube.com/@your-channel"
+                          value={formData.socialMedia.youtube}
+                          disabled={!isEditing}
+                          className="flex-1 p-2 border rounded-md dark:bg-gray-800 dark:border-gray-700"
+                          onChange={(e) => setFormData({
+                            ...formData, 
+                            socialMedia: {...formData.socialMedia, youtube: e.target.value}
+                          })}
+                        />
+                        {formData.socialMedia.youtube && (
+                          <>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => window.open(formData.socialMedia.youtube, '_blank')}
+                              title="Visit link"
+                            >
+                              <ExternalLink className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => {
+                                navigator.clipboard.writeText(formData.socialMedia.youtube);
+                                alert('YouTube URL copied to clipboard!');
+                              }}
+                              title="Copy URL"
+                            >
+                              <Copy className="h-4 w-4" />
+                            </Button>
+                          </>
+                        )}
+                      </div>
                     </div>
                     {formData.socialMedia.youtube && (
-                      <CheckCircle className="h-5 w-5 text-green-500 shrink-0" />
+                      <CheckCircle className="h-5 w-5 text-green-500 shrink-0 mt-7" />
                     )}
                   </div>
 
                   {/* LinkedIn */}
-                  <div className="flex items-center space-x-3">
-                    <Linkedin className="h-5 w-5 text-blue-700 shrink-0" />
+                  <div className="flex items-start space-x-3">
+                    <Linkedin className="h-5 w-5 text-blue-700 shrink-0 mt-7" />
                     <div className="flex-1">
                       <label className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1 block">LinkedIn</label>
-                      <input 
-                        type="url" 
-                        placeholder="https://linkedin.com/company/your-company"
-                        value={formData.socialMedia.linkedin}
-                        disabled={!isEditing}
-                        className="w-full p-2 border rounded-md dark:bg-gray-800 dark:border-gray-700"
-                        onChange={(e) => setFormData({
-                          ...formData, 
-                          socialMedia: {...formData.socialMedia, linkedin: e.target.value}
-                        })}
-                      />
+                      <div className="flex gap-2">
+                        <input 
+                          type="url" 
+                          placeholder="https://linkedin.com/company/your-company"
+                          value={formData.socialMedia.linkedin}
+                          disabled={!isEditing}
+                          className="flex-1 p-2 border rounded-md dark:bg-gray-800 dark:border-gray-700"
+                          onChange={(e) => setFormData({
+                            ...formData, 
+                            socialMedia: {...formData.socialMedia, linkedin: e.target.value}
+                          })}
+                        />
+                        {formData.socialMedia.linkedin && (
+                          <>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => window.open(formData.socialMedia.linkedin, '_blank')}
+                              title="Visit link"
+                            >
+                              <ExternalLink className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => {
+                                navigator.clipboard.writeText(formData.socialMedia.linkedin);
+                                alert('LinkedIn URL copied to clipboard!');
+                              }}
+                              title="Copy URL"
+                            >
+                              <Copy className="h-4 w-4" />
+                            </Button>
+                          </>
+                        )}
+                      </div>
                     </div>
                     {formData.socialMedia.linkedin && (
-                      <CheckCircle className="h-5 w-5 text-green-500 shrink-0" />
+                      <CheckCircle className="h-5 w-5 text-green-500 shrink-0 mt-7" />
                     )}
                   </div>
 
                   {/* TikTok */}
-                  <div className="flex items-center space-x-3">
-                    <svg className="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                  <div className="flex items-start space-x-3">
+                    <svg className="h-5 w-5 shrink-0 mt-7" viewBox="0 0 24 24" fill="currentColor">
                       <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
                     </svg>
                     <div className="flex-1">
                       <label className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1 block">TikTok</label>
-                      <input 
-                        type="url" 
-                        placeholder="https://tiktok.com/@your-account"
-                        value={formData.socialMedia.tiktok}
-                        disabled={!isEditing}
-                        className="w-full p-2 border rounded-md dark:bg-gray-800 dark:border-gray-700"
-                        onChange={(e) => setFormData({
-                          ...formData, 
-                          socialMedia: {...formData.socialMedia, tiktok: e.target.value}
-                        })}
-                      />
+                      <div className="flex gap-2">
+                        <input 
+                          type="url" 
+                          placeholder="https://tiktok.com/@your-account"
+                          value={formData.socialMedia.tiktok}
+                          disabled={!isEditing}
+                          className="flex-1 p-2 border rounded-md dark:bg-gray-800 dark:border-gray-700"
+                          onChange={(e) => setFormData({
+                            ...formData, 
+                            socialMedia: {...formData.socialMedia, tiktok: e.target.value}
+                          })}
+                        />
+                        {formData.socialMedia.tiktok && (
+                          <>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => window.open(formData.socialMedia.tiktok, '_blank')}
+                              title="Visit link"
+                            >
+                              <ExternalLink className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => {
+                                navigator.clipboard.writeText(formData.socialMedia.tiktok);
+                                alert('TikTok URL copied to clipboard!');
+                              }}
+                              title="Copy URL"
+                            >
+                              <Copy className="h-4 w-4" />
+                            </Button>
+                          </>
+                        )}
+                      </div>
                     </div>
                     {formData.socialMedia.tiktok && (
-                      <CheckCircle className="h-5 w-5 text-green-500 shrink-0" />
+                      <CheckCircle className="h-5 w-5 text-green-500 shrink-0 mt-7" />
                     )}
                   </div>
                 </CardContent>

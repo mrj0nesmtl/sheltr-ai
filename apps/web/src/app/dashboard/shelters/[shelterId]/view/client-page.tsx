@@ -24,7 +24,8 @@ import {
   TrendingUp,
   Activity,
   Clock,
-  Bell
+  Bell,
+  Copy
 } from 'lucide-react';
 import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
@@ -49,6 +50,7 @@ export default function ShelterViewClient() {
   const [directDonations, setDirectDonations] = useState(0); // Direct shelter donations
   const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
   const [generatingQR, setGeneratingQR] = useState(false);
+  const [websiteUrl, setWebsiteUrl] = useState<string | null>(null);
 
   useEffect(() => {
     const loadShelter = async () => {
@@ -189,7 +191,7 @@ export default function ShelterViewClient() {
             uniqueDonors: uniqueDonors.size
           });
           
-          // Load QR code from public config
+          // Load QR code and website from public config
           try {
             const publicConfig = await shelterService.getShelterPublicConfig(shelterSnap.id);
             if (publicConfig?.qrCode?.url) {
@@ -198,8 +200,19 @@ export default function ShelterViewClient() {
             } else {
               console.log('⚠️ No QR code found in public config');
             }
+            
+            // Load website URL
+            if (publicConfig?.socialMedia?.website) {
+              setWebsiteUrl(publicConfig.socialMedia.website);
+              console.log('✅ Website loaded:', publicConfig.socialMedia.website);
+            } else if (publicConfig?.website) {
+              setWebsiteUrl(publicConfig.website);
+              console.log('✅ Website loaded:', publicConfig.website);
+            } else {
+              console.log('⚠️ No website found in public config');
+            }
           } catch (qrError) {
-            console.warn('Could not load QR code:', qrError);
+            console.warn('Could not load QR code or website:', qrError);
           }
         } else {
           setError('Shelter not found. Please navigate from the shelters list.');
@@ -441,6 +454,22 @@ export default function ShelterViewClient() {
                 <p className="text-lg">{shelter.contact.name}</p>
               </div>
             </div>
+            {websiteUrl && (
+              <div className="flex items-center gap-3">
+                <Globe className="h-5 w-5 text-muted-foreground" />
+                <div className="flex-1 min-w-0">
+                  <label className="text-sm font-medium text-muted-foreground">Website</label>
+                  <a 
+                    href={websiteUrl} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-lg text-blue-600 dark:text-blue-400 hover:underline block truncate"
+                  >
+                    {websiteUrl.replace(/^https?:\/\//, '')}
+                  </a>
+                </div>
+              </div>
+            )}
           </CardContent>
         </Card>
 
@@ -610,6 +639,92 @@ export default function ShelterViewClient() {
                 <strong>Note:</strong> To update the address, use the <Link href={`/dashboard/shelters/${shelterId}/edit`} className="underline hover:text-blue-900 dark:hover:text-blue-100">Edit Shelter</Link> page. Changes will automatically sync to the Shelter Administrator's dashboard.
               </p>
             </div>
+          </CardContent>
+        </Card>
+
+        {/* Website & Online Presence */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Globe className="h-5 w-5" />
+              Website & Online Presence
+            </CardTitle>
+            <CardDescription>Direct link to shelter's public website</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {/* Website URL Display */}
+            {websiteUrl ? (
+              <>
+                {/* Prominent Website Display */}
+                <div className="relative w-full h-64 rounded-lg overflow-hidden border-2 border-blue-200 dark:border-blue-800 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950 dark:to-blue-900 flex flex-col items-center justify-center p-8 text-center">
+                  <Globe className="h-16 w-16 text-blue-500 dark:text-blue-400 mb-4" />
+                  <p className="text-sm font-medium text-muted-foreground mb-2">Official Website</p>
+                  <a 
+                    href={websiteUrl} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-xl font-bold text-blue-600 dark:text-blue-400 hover:underline mb-4 break-all px-4"
+                  >
+                    {websiteUrl.replace(/^https?:\/\//, '')}
+                  </a>
+                  <div className="flex flex-col gap-2 w-full max-w-xs">
+                    <Button 
+                      size="lg"
+                      className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                      onClick={() => window.open(websiteUrl, '_blank', 'noopener,noreferrer')}
+                    >
+                      <Globe className="h-5 w-5 mr-2" />
+                      Visit Website
+                    </Button>
+                    <Button 
+                      variant="outline"
+                      size="sm"
+                      className="w-full"
+                      onClick={() => {
+                        navigator.clipboard.writeText(websiteUrl);
+                        alert('Website URL copied to clipboard!');
+                      }}
+                    >
+                      <Copy className="h-4 w-4 mr-2" />
+                      Copy URL
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Website Info */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="p-3 bg-muted rounded-lg">
+                    <p className="text-xs text-muted-foreground mb-1">Domain</p>
+                    <p className="text-sm font-medium truncate">
+                      {websiteUrl.replace(/^https?:\/\//, '').split('/')[0]}
+                    </p>
+                  </div>
+                  <div className="p-3 bg-muted rounded-lg">
+                    <p className="text-xs text-muted-foreground mb-1">Protocol</p>
+                    <p className="text-sm font-medium">
+                      {websiteUrl.startsWith('https') ? '🔒 HTTPS' : 'HTTP'}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Note for Admins */}
+                <div className="p-3 bg-green-50 dark:bg-green-900/10 rounded-lg border border-green-200 dark:border-green-800">
+                  <p className="text-xs text-green-700 dark:text-green-300">
+                    <strong>Tip:</strong> Visitors can find more information about the shelter's mission, services, and impact on their official website.
+                  </p>
+                </div>
+              </>
+            ) : (
+              <div className="relative w-full h-64 rounded-lg overflow-hidden border-2 border-dashed border-gray-300 dark:border-gray-600 bg-muted flex items-center justify-center">
+                <div className="text-center text-muted-foreground p-4">
+                  <Globe className="h-12 w-12 mx-auto mb-2 opacity-20" />
+                  <p className="text-sm mb-2">No website configured</p>
+                  <p className="text-xs mb-3">
+                    Website information can be added in the <Link href={`/dashboard/shelters/${shelterId}/edit`} className="underline hover:text-blue-600">Edit Shelter</Link> page
+                  </p>
+                </div>
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>

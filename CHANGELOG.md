@@ -7,6 +7,71 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.113.0] - 2025-01-15 (WEBSITE PREVIEW & CONTACT INFO) 🌐
+
+### ✨ Feature Enhancement
+
+#### **Website Information Card on Shelter View Page** 🌐
+Added a new "Website & Online Presence" card that displays the shelter's public website information with prominent call-to-action buttons, filling the empty space next to the Map card and providing visual balance to the page layout.
+
+**What's New:**
+- **Prominent Website Display**: Beautiful gradient card with large globe icon
+- **Direct Website Link**: Clickable URL prominently displayed
+- **"Visit Website" Button**: Large, prominent button to open website in new tab
+- **"Copy URL" Button**: Quick copy-to-clipboard functionality
+- **Website Metadata**: Shows domain name and security protocol (HTTPS/HTTP)
+- **Website in Contact Info**: Added website to the Contact Information card
+- **Smart Fallback**: Shows helpful message if no website is configured with link to edit page
+
+**Implementation:**
+- Loads website URL from `public_config/socialMedia/website` or `public_config/website`
+- Beautiful gradient background (blue theme) matching card height
+- Responsive design matching the Map card style (256px height)
+- Strips `https://` protocol from URL display for cleaner look
+- Copy-to-clipboard functionality with user feedback
+- Shows security indicator (🔒 HTTPS badge)
+- **Why No Iframe**: Most external websites block iframe embedding due to `X-Frame-Options` security headers (CORS protection). Direct link approach is more reliable and user-friendly.
+
+**Layout Balance:**
+- **Before**: Empty space next to Map card ⚠️
+- **After**: Website Preview card fills the space perfectly! ✅
+- Creates visual symmetry in the 2-column grid
+
+### 📄 Files Modified
+- `apps/web/src/app/dashboard/shelters/[shelterId]/view/client-page.tsx`:
+  - Added `websiteUrl` state (line 52)
+  - Enhanced QR code loading to also load website URL (lines 203-212)
+  - Added "Website & Online Presence" card (lines 628-695)
+  - Added website to Contact Information card (lines 456-471)
+
+### 🎯 User Experience
+- **Super Admins/Platform Admins**:
+  - Quick visual preview of shelter's public website
+  - No need to leave the dashboard to check shelter's online presence
+  - Complete contact information including website
+  - Balanced, professional page layout
+- **Visual Design**:
+  - Fills empty space for better aesthetics
+  - Matches Map card height and style
+  - Creates pleasing 2-column grid layout
+  - Green info box provides helpful context
+
+### 📊 Impact
+- **Page Balance**: Eliminated awkward empty space on the view details page
+- **Admin Efficiency**: Quick website preview without leaving dashboard
+- **Complete Contact Info**: Website now shown alongside email, phone, and contact name
+- **Better UX**: Admins can verify shelter's online presence at a glance
+- **Data Visibility**: Public website information readily accessible to platform administrators
+
+### 🔍 Technical Notes
+- Iframe uses `sandbox` attribute for security: `allow-same-origin allow-scripts allow-popups allow-forms`
+- Loads from `shelters/{id}/public_config/settings/socialMedia/website`
+- Falls back to `public_config/website` for compatibility
+- Website URL displayed with protocol stripped for cleaner look
+- Opens in new tab with `noopener,noreferrer` for security
+
+---
+
 ## [2.112.0] - 2025-01-15 (SHELTER VIEW MAP + ADDRESS SYNC) 🗺️
 
 ### ✨ Feature Enhancement & Bug Fix

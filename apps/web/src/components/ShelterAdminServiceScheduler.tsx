@@ -409,6 +409,7 @@ export function ShelterAdminServiceScheduler({
 
   const loadAllBookings = async () => {
     setLoading(true);
+    setError(null); // Clear any previous errors
     try {
       console.log('📅 Loading all bookings for shelter:', shelterId);
       
@@ -427,24 +428,48 @@ export function ShelterAdminServiceScheduler({
       });
       
       // Also load demo bookings from localStorage
-      const demoBookings = JSON.parse(localStorage.getItem('demoBookings') || '[]');
-      const shelterDemoBookings = demoBookings.filter((b: any) => b.shelterId === shelterId);
+      let shelterDemoBookings: any[] = [];
+      try {
+        const demoBookings = JSON.parse(localStorage.getItem('demoBookings') || '[]');
+        shelterDemoBookings = demoBookings.filter((b: any) => b.shelterId === shelterId);
+      } catch (localStorageErr) {
+        console.warn('Could not load demo bookings from localStorage:', localStorageErr);
+      }
       
       // Combine real and demo bookings
       const allBookingsList = [...bookingsList, ...shelterDemoBookings];
       
-      // Sort by appointment date (newest first)
-      allBookingsList.sort((a, b) => {
-        const dateA = a.appointmentDate.toDate ? a.appointmentDate.toDate() : new Date(a.appointmentDate);
-        const dateB = b.appointmentDate.toDate ? b.appointmentDate.toDate() : new Date(b.appointmentDate);
-        return dateB.getTime() - dateA.getTime();
-      });
+      // Sort by appointment date (newest first) - only if there are bookings
+      if (allBookingsList.length > 0) {
+        allBookingsList.sort((a, b) => {
+          try {
+            const dateA = a.appointmentDate?.toDate ? a.appointmentDate.toDate() : new Date(a.appointmentDate);
+            const dateB = b.appointmentDate?.toDate ? b.appointmentDate.toDate() : new Date(b.appointmentDate);
+            return dateB.getTime() - dateA.getTime();
+          } catch (sortErr) {
+            console.warn('Error sorting bookings:', sortErr);
+            return 0;
+          }
+        });
+      }
       
       console.log(`✅ Loaded ${allBookingsList.length} total bookings (${bookingsList.length} real, ${shelterDemoBookings.length} demo)`);
       setAllBookings(allBookingsList);
+      
+      // If no bookings, that's OK - not an error
+      if (allBookingsList.length === 0) {
+        console.log('ℹ️ No bookings found yet - this is normal for a new shelter');
+      }
     } catch (err) {
       console.error('❌ Error loading bookings:', err);
-      setError('Failed to load bookings');
+      // Don't set error state if it's just "no bookings found"
+      // Only set error for actual failures
+      if (err instanceof Error && !err.message.includes('not found')) {
+        setError('Failed to load bookings');
+      } else {
+        // No bookings is not an error
+        setAllBookings([]);
+      }
     } finally {
       setLoading(false);
     }
@@ -600,7 +625,10 @@ export function ShelterAdminServiceScheduler({
           </div>
           <Button 
             variant="outline" 
-            onClick={() => setError(null)}
+            onClick={() => {
+              setError(null);
+              loadAllBookings();
+            }}
             className="mt-2"
           >
             Try Again

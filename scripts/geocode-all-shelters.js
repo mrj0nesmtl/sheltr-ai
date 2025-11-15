@@ -19,8 +19,8 @@ if (!admin.apps.length) {
 
 const db = admin.firestore();
 
-// Google Maps API Key - replace with your key
-const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY || 'AIzaSyCfJpsIbZmyJxmU7IgkijCNTv1l8SJZM7E';
+// Google Maps API Key - use server-side key (no referrer restrictions)
+const GOOGLE_MAPS_API_KEY = 'AIzaSyDnZUv1_v6xpTfD0j8VRYLcSO03ob6NnUo';
 
 /**
  * Geocode an address using Google Maps Geocoding API
@@ -148,11 +148,14 @@ async function geocodeAllShelters() {
       const publicConfigRef = db.collection('shelters').doc(shelterId).collection('public_config').doc('config');
       const configSnap = await publicConfigRef.get();
       
-      if (configSnap.exists && configSnap.data().coordinates) {
-        console.log(`   ℹ️  Already has coordinates: (${configSnap.data().coordinates.lat}, ${configSnap.data().coordinates.lng})`);
-        console.log(`   Source: ${configSnap.data().coordinates.source || 'unknown'}`);
+      if (configSnap.exists && configSnap.data().coordinates && configSnap.data().coordinates.source === 'google') {
+        console.log(`   ℹ️  Already has Google-geocoded coordinates: (${configSnap.data().coordinates.lat}, ${configSnap.data().coordinates.lng})`);
         skippedCount++;
         continue;
+      }
+      
+      if (configSnap.exists && configSnap.data().coordinates && configSnap.data().coordinates.source === 'fallback') {
+        console.log(`   🔄 Replacing fallback coordinates with proper geocoding...`);
       }
       
       // Geocode the address

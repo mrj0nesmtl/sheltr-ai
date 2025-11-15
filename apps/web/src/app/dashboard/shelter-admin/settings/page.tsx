@@ -43,8 +43,24 @@ import {
   Loader2,
   AlertCircle,
   Share2,
-  Building
+  Building,
+  Stethoscope,
+  Briefcase,
+  Scale,
+  GraduationCap,
+  Home,
+  Utensils,
+  ChevronDown,
+  ChevronUp,
+  FileText,
+  Target,
+  Info
 } from 'lucide-react';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
 export default function SettingsPage() {
   const { user, hasRole } = useAuth();
@@ -105,15 +121,103 @@ export default function SettingsPage() {
     ]
   });
 
-  const serviceIcons = {
+  // Service management state
+  const [showAddServiceDialog, setShowAddServiceDialog] = useState(false);
+  const [expandedService, setExpandedService] = useState<string | null>(null);
+  const [newService, setNewService] = useState({
+    name: '',
+    description: '',
+    duration: '',
+    location: '',
+    provider: '',
+    expectedOutcome: '',
+    requirements: '',
+    category: ''
+  });
+
+  // Comprehensive service icons mapping
+  const serviceIcons: Record<string, any> = {
+    'Emergency Overnight Shelter': Bed,
     'Emergency Shelter': Bed,
-    'Meals (3x daily)': Heart,
-    'Medical Care': Shield,
+    'Meals and Basic Necessities': Utensils,
+    'Meals (3x daily)': Utensils,
+    'Case Management Services': FileText,
+    'Case Management': FileText,
+    'Mental Health Support': Heart,
     'Mental Health Counseling': Heart,
-    'Job Training': Users,
-    'Legal Aid': Shield,
-    'Case Management': Users,
-    'Housing Assistance': Bed
+    'Job Training Programs': Briefcase,
+    'Job Training': Briefcase,
+    'Housing Assistance': Home,
+    'Medical Care Coordination': Stethoscope,
+    'Medical Care': Stethoscope,
+    'Substance Abuse Support': Shield,
+    'Legal Aid': Scale,
+    'Education': GraduationCap,
+    'default': Heart
+  };
+
+  // Get icon for a service
+  const getServiceIcon = (serviceName: string) => {
+    const IconComponent = serviceIcons[serviceName] || serviceIcons['default'];
+    return IconComponent;
+  };
+
+  // Handle adding a new service
+  const handleAddService = async () => {
+    if (!newService.name.trim()) {
+      alert('Please enter a service name');
+      return;
+    }
+
+    const updatedServices = [...formData.services, newService.name];
+    setFormData(prev => ({ ...prev, services: updatedServices }));
+    
+    // Reset form
+    setNewService({
+      name: '',
+      description: '',
+      duration: '',
+      location: '',
+      provider: '',
+      expectedOutcome: '',
+      requirements: '',
+      category: ''
+    });
+    setShowAddServiceDialog(false);
+
+    // Auto-save to Firestore
+    try {
+      const shelterId = user?.customClaims?.shelter_id || user?.shelterId || (user as any)?.shelter_id;
+      if (shelterId) {
+        await shelterService.updateShelterPublicConfig(shelterId, {
+          services: updatedServices
+        });
+        console.log('✅ Service added and saved to Firestore');
+      }
+    } catch (error) {
+      console.error('❌ Error saving service:', error);
+    }
+  };
+
+  // Handle deleting a service
+  const handleDeleteService = async (index: number) => {
+    if (!confirm('Are you sure you want to delete this service?')) return;
+
+    const updatedServices = formData.services.filter((_, i) => i !== index);
+    setFormData(prev => ({ ...prev, services: updatedServices }));
+
+    // Auto-save to Firestore
+    try {
+      const shelterId = user?.customClaims?.shelter_id || user?.shelterId || (user as any)?.shelter_id;
+      if (shelterId) {
+        await shelterService.updateShelterPublicConfig(shelterId, {
+          services: updatedServices
+        });
+        console.log('✅ Service deleted and saved to Firestore');
+      }
+    } catch (error) {
+      console.error('❌ Error deleting service:', error);
+    }
   };
 
   // Load admin profile picture and profile data from Firestore
@@ -814,7 +918,7 @@ export default function SettingsPage() {
                     <CardContent>
                       <div className="grid grid-cols-2 gap-3">
                         {formData.services.slice(0, 8).map((service, index) => {
-                          const IconComponent = serviceIcons[service as keyof typeof serviceIcons] || Heart;
+                          const IconComponent = getServiceIcon(service);
                           return (
                             <div key={index} className="flex items-center gap-2 p-2 rounded-lg bg-muted/50 hover:bg-muted transition-colors">
                               <div className="p-1.5 bg-primary/10 rounded-lg">
@@ -1971,36 +2075,215 @@ export default function SettingsPage() {
           <TabsContent value="services" className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Services Offered</CardTitle>
-                <CardDescription>List the services your shelter provides</CardDescription>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle>Services Offered</CardTitle>
+                    <CardDescription>Manage the services your shelter provides to participants</CardDescription>
+                  </div>
+                  <Dialog open={showAddServiceDialog} onOpenChange={setShowAddServiceDialog}>
+                    <DialogTrigger asChild>
+                      <Button className="bg-blue-600 hover:bg-blue-700">
+                        <Plus className="mr-2 h-4 w-4" />
+                        Add New Service
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+                      <DialogHeader>
+                        <DialogTitle>Add New Service</DialogTitle>
+                        <DialogDescription>
+                          Add a new service that your shelter offers to participants
+                        </DialogDescription>
+                      </DialogHeader>
+                      
+                      <div className="space-y-4 py-4">
+                        <div>
+                          <Label htmlFor="serviceName">Service Name *</Label>
+                          <Input
+                            id="serviceName"
+                            value={newService.name}
+                            onChange={(e) => setNewService(prev => ({ ...prev, name: e.target.value }))}
+                            placeholder="e.g., Mental Health Counseling"
+                          />
+                        </div>
+                        
+                        <div>
+                          <Label htmlFor="serviceDescription">Description</Label>
+                          <Textarea
+                            id="serviceDescription"
+                            value={newService.description}
+                            onChange={(e) => setNewService(prev => ({ ...prev, description: e.target.value }))}
+                            placeholder="Describe what this service provides..."
+                            rows={3}
+                          />
+                        </div>
+                        
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <Label htmlFor="serviceDuration">Duration</Label>
+                            <Input
+                              id="serviceDuration"
+                              value={newService.duration}
+                              onChange={(e) => setNewService(prev => ({ ...prev, duration: e.target.value }))}
+                              placeholder="e.g., 60 minutes"
+                            />
+                          </div>
+                          
+                          <div>
+                            <Label htmlFor="serviceLocation">Location</Label>
+                            <Input
+                              id="serviceLocation"
+                              value={newService.location}
+                              onChange={(e) => setNewService(prev => ({ ...prev, location: e.target.value }))}
+                              placeholder="e.g., Counseling Room A"
+                            />
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <Label htmlFor="serviceProvider">Service Provider</Label>
+                          <Input
+                            id="serviceProvider"
+                            value={newService.provider}
+                            onChange={(e) => setNewService(prev => ({ ...prev, provider: e.target.value }))}
+                            placeholder="e.g., Dr. Sarah Johnson"
+                          />
+                        </div>
+                        
+                        <div>
+                          <Label htmlFor="serviceOutcome">Expected Outcome</Label>
+                          <Textarea
+                            id="serviceOutcome"
+                            value={newService.expectedOutcome}
+                            onChange={(e) => setNewService(prev => ({ ...prev, expectedOutcome: e.target.value }))}
+                            placeholder="What participants can expect to achieve..."
+                            rows={2}
+                          />
+                        </div>
+                        
+                        <div>
+                          <Label htmlFor="serviceRequirements">Requirements</Label>
+                          <Textarea
+                            id="serviceRequirements"
+                            value={newService.requirements}
+                            onChange={(e) => setNewService(prev => ({ ...prev, requirements: e.target.value }))}
+                            placeholder="Any prerequisites or requirements..."
+                            rows={2}
+                          />
+                        </div>
+                      </div>
+                      
+                      <DialogFooter>
+                        <Button variant="outline" onClick={() => setShowAddServiceDialog(false)}>
+                          Cancel
+                        </Button>
+                        <Button onClick={handleAddService} className="bg-blue-600 hover:bg-blue-700">
+                          <Plus className="mr-2 h-4 w-4" />
+                          Add Service
+                        </Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
+                </div>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  {formData.services.map((service, index) => (
-                    <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
-                      <div className="flex items-center space-x-3">
-                        <div className="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
-                          {serviceIcons[service as keyof typeof serviceIcons] && 
-                            React.createElement(serviceIcons[service as keyof typeof serviceIcons], {
-                              className: "h-4 w-4 text-blue-600 dark:text-blue-300"
-                            })
-                          }
-                        </div>
-                        <span className="font-medium">{service}</span>
-                      </div>
-                      {isEditing && (
-                        <Button variant="ghost" size="sm">
-                          <Trash2 className="h-4 w-4 text-red-500" />
-                        </Button>
-                      )}
+                {formData.services.length === 0 ? (
+                  <div className="text-center py-12 bg-muted/30 rounded-lg">
+                    <Heart className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
+                    <p className="text-muted-foreground">No services configured yet</p>
+                    <p className="text-sm text-muted-foreground mt-1">Add services that your shelter provides</p>
+                  </div>
+                ) : (
+                  <Accordion type="single" collapsible className="space-y-2">
+                    {formData.services.map((service, index) => {
+                      const ServiceIcon = getServiceIcon(service);
+                      return (
+                        <AccordionItem key={index} value={`service-${index}`} className="border rounded-lg px-4">
+                          <AccordionTrigger className="hover:no-underline">
+                            <div className="flex items-center space-x-3">
+                              <div className="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
+                                <ServiceIcon className="h-5 w-5 text-blue-600 dark:text-blue-300" />
+                              </div>
+                              <span className="font-medium text-left">{service}</span>
+                            </div>
+                          </AccordionTrigger>
+                          <AccordionContent>
+                            <div className="pt-4 space-y-4">
+                              {/* Service details would go here - for now showing placeholder */}
+                              <div className="grid grid-cols-2 gap-4 text-sm">
+                                <div className="space-y-2">
+                                  <div className="flex items-center gap-2 text-muted-foreground">
+                                    <Clock className="h-4 w-4" />
+                                    <span className="font-medium">Duration:</span>
+                                    <span>Varies</span>
+                                  </div>
+                                  <div className="flex items-center gap-2 text-muted-foreground">
+                                    <MapPin className="h-4 w-4" />
+                                    <span className="font-medium">Location:</span>
+                                    <span>Various locations</span>
+                                  </div>
+                                </div>
+                                <div className="space-y-2">
+                                  <div className="flex items-center gap-2 text-muted-foreground">
+                                    <Users className="h-4 w-4" />
+                                    <span className="font-medium">Provider:</span>
+                                    <span>Staff</span>
+                                  </div>
+                                  <div className="flex items-center gap-2 text-muted-foreground">
+                                    <Target className="h-4 w-4" />
+                                    <span className="font-medium">Outcome:</span>
+                                    <span>Support & guidance</span>
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              <div className="p-3 bg-muted/50 rounded-lg">
+                                <p className="text-sm text-muted-foreground">
+                                  <strong className="text-foreground">Description:</strong> This service provides comprehensive support to help participants achieve their goals and improve their quality of life.
+                                </p>
+                              </div>
+                              
+                              <div className="flex items-center justify-between pt-2 border-t">
+                                <Badge variant="outline" className="text-green-600 border-green-600">
+                                  <CheckCircle className="h-3 w-3 mr-1" />
+                                  Active
+                                </Badge>
+                                <div className="flex gap-2">
+                                  <Button variant="outline" size="sm" disabled>
+                                    <Edit className="h-4 w-4 mr-1" />
+                                    Edit
+                                  </Button>
+                                  <Button 
+                                    variant="outline" 
+                                    size="sm" 
+                                    onClick={() => handleDeleteService(index)}
+                                    className="text-red-600 hover:text-red-700"
+                                  >
+                                    <Trash2 className="h-4 w-4 mr-1" />
+                                    Delete
+                                  </Button>
+                                </div>
+                              </div>
+                            </div>
+                          </AccordionContent>
+                        </AccordionItem>
+                      );
+                    })}
+                  </Accordion>
+                )}
+                
+                <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                  <div className="flex items-start gap-3">
+                    <Info className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5" />
+                    <div className="space-y-1">
+                      <p className="text-sm font-medium text-blue-900 dark:text-blue-100">
+                        Real-time Sync with Participants
+                      </p>
+                      <p className="text-sm text-blue-700 dark:text-blue-300">
+                        Any changes you make here are immediately reflected in the participant services dashboard. 
+                        Participants can only see and book services that you configure here.
+                      </p>
                     </div>
-                  ))}
-                  {isEditing && (
-                    <Button variant="outline" className="w-full">
-                      <Plus className="mr-2 h-4 w-4" />
-                      Add New Service
-                    </Button>
-                  )}
+                  </div>
                 </div>
               </CardContent>
             </Card>

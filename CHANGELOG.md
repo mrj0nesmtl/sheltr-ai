@@ -17,41 +17,58 @@ Fixed critical issue where Google Maps were working locally but showing "This co
 **Problem Identified:**
 - ✅ Google Maps working perfectly on `localhost:3000`
 - ✅ Google Cloud Console API key restrictions correctly configured
-- ❌ Google Maps showing blocked content error on `sheltr-ai.web.app`
-- ❌ Environment variable missing from production build
+- ❌ Google Maps showing "This content is blocked. Contact the site owner to fix the issue." in production
+- ❌ Console error: `Framing 'https://www.google.com/' violates CSP directive: "frame-src 'self'"`
 
-**Root Cause:**
+**Root Causes (Fixed in Two Steps):**
+
+**Issue #1: Missing Environment Variable**
 - `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` was present in `.env.local` (development)
 - `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` was **missing** from `.env.production`
 - Next.js static builds require environment variables at build time
-- Production build was not including the Maps API key in the compiled output
+- **Fix**: Added API key to `.env.production` and rebuilt app
 
-**Solution:**
-- Added `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` to `.env.production`
-- Rebuilt Next.js app with production environment variables
-- Redeployed to Firebase Hosting
+**Issue #2: Content Security Policy (CSP) Blocking Google Maps** 🔒
+- Firebase Hosting `firebase.json` had strict CSP `frame-src` directive
+- `frame-src` only allowed: `'self'`, `accounts.google.com`, Firebase domains, TikTok, Spotify
+- **Missing**: `https://www.google.com` (required for Google Maps Embed API iframes)
+- **Fix**: Added `https://www.google.com` to `frame-src` in CSP headers
+
+**Solutions Applied:**
+1. Added `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` to `.env.production`
+2. Added `https://www.google.com` to `frame-src` directive in `firebase.json`
+3. Rebuilt Next.js app with production environment variables
+4. Redeployed to Firebase Hosting with updated security headers
 
 ### 📄 Files Modified
 - `apps/web/.env.production` - Added Google Maps API key
+- `firebase.json` - Updated CSP `frame-src` to include `https://www.google.com`
 
 ### 📦 Deployment
 - Rebuilt app with: `npm run build` (successfully detected both `.env.local` and `.env.production`)
-- Deployed to Firebase Hosting: `firebase deploy --only hosting`
-- 785 files deployed successfully
+- Deployed to Firebase Hosting: `firebase deploy --only hosting` (2 deployments)
+- 785 files deployed successfully each time
 
 ### 📊 Impact
 - **Public Shelter Pages**: Google Maps now display correctly in production
-- **Shelter Admin Dashboard**: Maps continue working in admin settings
-- **User Experience**: Visitors can now see shelter locations with interactive maps
+- **Shelter Admin Dashboard**: Maps work in admin settings
+- **User Experience**: Visitors can see shelter locations with interactive maps
+- **Security**: CSP still maintains strong security while allowing necessary Google Maps iframes
 - **Consistency**: Maps work identically in development and production
 
 ### 🎯 Technical Details
 - Google Maps Embed API v1 using `place` endpoint
 - API key restrictions properly configured for `sheltr-ai.web.app` domain
+- CSP `frame-src` now includes: `'self' https://www.google.com https://accounts.google.com https://sheltr-ai.firebaseapp.com` + embeds (TikTok, Spotify)
 - Maps display on:
   - Public shelter pages (`/[slug]`)
   - Shelter admin settings (`/dashboard/shelter-admin/settings`)
   - Participant profile shelter info (`/dashboard/participant/profile`)
+
+### 🔍 Debugging Notes
+- CSP violations appear in browser console as "Framing [URL] violates...Content Security Policy directive"
+- Firebase Hosting applies CSP headers from `firebase.json` to all routes
+- Environment variables must be present at build time for Next.js static exports
 
 ---
 

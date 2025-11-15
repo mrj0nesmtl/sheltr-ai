@@ -46,6 +46,7 @@ import {
 import { collection, query, where, getDocs, updateDoc, doc, Timestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { useAuth } from '@/contexts/AuthContext';
+import { shelterService } from '@/services/shelterService';
 
 interface ShelterAdminServiceSchedulerProps {
   shelterId: string;
@@ -74,6 +75,51 @@ const getCategoryIcon = (iconName: string) => {
     GraduationCap: <GraduationCap className="h-6 w-6" />
   };
   return icons[iconName as keyof typeof icons] || <FileText className="h-6 w-6" />;
+};
+
+// Map shelter service names to icons and colors
+const getServiceIconAndColor = (serviceName: string): { icon: string; color: string; description: string } => {
+  const lowerName = serviceName.toLowerCase();
+  
+  // Medical/Healthcare services
+  if (lowerName.includes('medical') || lowerName.includes('health') || lowerName.includes('clinic')) {
+    return { icon: 'Stethoscope', color: 'red', description: 'Medical and health services' };
+  }
+  // Mental Health services
+  if (lowerName.includes('mental') || lowerName.includes('counseling') || lowerName.includes('therapy')) {
+    return { icon: 'Heart', color: 'purple', description: 'Mental health and counseling' };
+  }
+  // Employment/Job services
+  if (lowerName.includes('job') || lowerName.includes('employment') || lowerName.includes('training') || lowerName.includes('career')) {
+    return { icon: 'Briefcase', color: 'blue', description: 'Employment and job training' };
+  }
+  // Housing services
+  if (lowerName.includes('housing') || lowerName.includes('shelter') || lowerName.includes('overnight')) {
+    return { icon: 'Users', color: 'green', description: 'Housing and shelter services' };
+  }
+  // Food/Meals services
+  if (lowerName.includes('meal') || lowerName.includes('food') || lowerName.includes('nutrition')) {
+    return { icon: 'Utensils', color: 'orange', description: 'Meals and nutrition' };
+  }
+  // Case Management services
+  if (lowerName.includes('case') || lowerName.includes('management') || lowerName.includes('coordination')) {
+    return { icon: 'FileText', color: 'teal', description: 'Case management and coordination' };
+  }
+  // Substance Abuse services
+  if (lowerName.includes('substance') || lowerName.includes('addiction') || lowerName.includes('recovery')) {
+    return { icon: 'Heart', color: 'cyan', description: 'Substance abuse support' };
+  }
+  // Legal services
+  if (lowerName.includes('legal')) {
+    return { icon: 'Scale', color: 'purple', description: 'Legal assistance' };
+  }
+  // Education services
+  if (lowerName.includes('education') || lowerName.includes('learning')) {
+    return { icon: 'GraduationCap', color: 'blue', description: 'Education and learning' };
+  }
+  
+  // Default fallback
+  return { icon: 'FileText', color: 'gray', description: 'General services' };
 };
 
 const getCategoryStyle = (color: string) => {
@@ -109,6 +155,7 @@ export function ShelterAdminServiceScheduler({
   const [activeView, setActiveView] = useState<'schedule' | 'all-bookings' | 'manage-services'>('schedule');
   const [selectedCategory, setSelectedCategory] = useState<ServiceCategory | null>(null);
   const [services, setServices] = useState<ShelterService[]>([]);
+  const [configuredServices, setConfiguredServices] = useState<string[]>([]); // NEW: Shelter's configured services from settings
   const [selectedService, setSelectedService] = useState<ShelterService | null>(null);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [availableSlots, setAvailableSlots] = useState<AvailableSlot[]>([]);
@@ -129,6 +176,11 @@ export function ShelterAdminServiceScheduler({
     notes: '',
     providerNotes: ''
   });
+
+  // Load shelter's configured services from public_config
+  useEffect(() => {
+    loadConfiguredServices();
+  }, [shelterId]);
 
   // Load participants for this shelter
   useEffect(() => {
@@ -153,6 +205,24 @@ export function ShelterAdminServiceScheduler({
   useEffect(() => {
     loadAllBookings();
   }, [shelterId]);
+
+  const loadConfiguredServices = async () => {
+    try {
+      console.log('🔍 Loading configured services for shelter:', shelterId);
+      const publicConfig = await shelterService.getShelterPublicConfig(shelterId);
+      
+      if (publicConfig?.services && Array.isArray(publicConfig.services)) {
+        setConfiguredServices(publicConfig.services);
+        console.log(`✅ Loaded ${publicConfig.services.length} configured services:`, publicConfig.services);
+      } else {
+        console.warn('⚠️ No configured services found in public_config');
+        setConfiguredServices([]);
+      }
+    } catch (err) {
+      console.error('❌ Error loading configured services:', err);
+      setConfiguredServices([]);
+    }
+  };
 
   const loadParticipants = async () => {
     try {
@@ -668,31 +738,53 @@ export function ShelterAdminServiceScheduler({
       {/* Schedule Appointment View */}
       {activeView === 'schedule' && (
         <div className="space-y-6">
-          {/* Service Categories */}
+          {/* Configured Services */}
           {!selectedCategory && (
             <div>
               <h3 className="text-lg font-semibold mb-4">Choose a Service Category</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {SERVICE_CATEGORIES.map((category) => (
-                  <Card 
-                    key={category.id}
-                    className="cursor-pointer hover:shadow-md transition-shadow"
-                    onClick={() => setSelectedCategory(category)}
-                  >
-                    <CardContent className="pt-6">
-                      <div className="flex items-center space-x-3">
-                        <div className={`p-3 rounded-lg ${getCategoryStyle(category.color)}`}>
-                          {getCategoryIcon(category.icon)}
-                        </div>
-                        <div>
-                          <h4 className="font-medium">{category.name}</h4>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">{category.description}</p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
+              {configuredServices.length === 0 ? (
+                <Card>
+                  <CardContent className="pt-6 text-center text-muted-foreground">
+                    <p>No services configured yet. Please configure services in Settings → Services.</p>
+                  </CardContent>
+                </Card>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {configuredServices.map((serviceName, index) => {
+                    const { icon, color, description } = getServiceIconAndColor(serviceName);
+                    const serviceCategory: ServiceCategory = {
+                      id: serviceName.toLowerCase().replace(/\s+/g, '-'),
+                      name: serviceName,
+                      description: description,
+                      icon: icon,
+                      color: color,
+                      requiresAppointment: true,
+                      maxDuration: 60,
+                      advanceBookingDays: 14
+                    };
+                    
+                    return (
+                      <Card 
+                        key={index}
+                        className="cursor-pointer hover:shadow-md transition-shadow"
+                        onClick={() => setSelectedCategory(serviceCategory)}
+                      >
+                        <CardContent className="pt-6">
+                          <div className="flex items-center space-x-3">
+                            <div className={`p-3 rounded-lg ${getCategoryStyle(color)}`}>
+                              {getCategoryIcon(icon)}
+                            </div>
+                            <div>
+                              <h4 className="font-medium">{serviceName}</h4>
+                              <p className="text-sm text-gray-600 dark:text-gray-400">{description}</p>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           )}
 

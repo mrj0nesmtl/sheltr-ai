@@ -144,6 +144,13 @@ export function ServiceBooking({
     }
   }, [participantId, showMyBookings]);
 
+  // Load services when a category is selected
+  useEffect(() => {
+    if (selectedCategory) {
+      loadServicesByCategory();
+    }
+  }, [selectedCategory]);
+
   const loadShelterConfiguredServices = async () => {
     try {
       console.log('🏠 Loading shelter configured services for:', shelterId);
@@ -580,21 +587,28 @@ export function ServiceBooking({
   const loadMyBookings = async () => {
     setLoading(true);
     try {
+      console.log('📅 Loading bookings for participant:', participantId);
+      
       // Load real bookings from Firebase
       let realBookings = [];
       try {
         realBookings = await getParticipantBookings(participantId);
+        console.log('✅ Real bookings loaded:', realBookings.length);
       } catch (err) {
-        console.log('No real bookings found, using demo bookings only');
+        console.log('⚠️ No real bookings found, using demo bookings only', err);
       }
       
-      // Load demo bookings from localStorage
-      const demoBookings = JSON.parse(localStorage.getItem('demoBookings') || '[]');
+      // Load demo bookings from localStorage (filter by participant)
+      const allDemoBookings = JSON.parse(localStorage.getItem('demoBookings') || '[]');
+      const myDemoBookings = allDemoBookings.filter((b: any) => b.participantId === participantId);
+      console.log('📦 Demo bookings for this participant:', myDemoBookings.length, 'of', allDemoBookings.length);
       
       // Combine real and demo bookings
-      const allBookings = [...realBookings, ...demoBookings];
+      const allBookings = [...realBookings, ...myDemoBookings];
+      console.log('📋 Total bookings:', allBookings.length);
       setMyBookings(allBookings);
     } catch (err) {
+      console.error('❌ Error loading bookings:', err);
       setError(err instanceof Error ? err.message : 'Failed to load bookings');
     } finally {
       setLoading(false);

@@ -1554,8 +1554,8 @@ Token Role: ${tokenRole || 'MISSING'}`;
     );
   }
 
-  // Show Shelter Admin simulation view
-  if (effectiveRole === 'admin') {
+  // Show Shelter Admin simulation view (only when super admin is simulating)
+  if (effectiveRole === 'admin' && user?.role === 'super_admin' && simulatedRole) {
     return (
       <div className="p-6 max-w-7xl mx-auto">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
@@ -1710,8 +1710,8 @@ Token Role: ${tokenRole || 'MISSING'}`;
     );
   }
 
-  // Show Participant simulation view
-  if (effectiveRole === 'participant') {
+  // Show Participant simulation view (only when super admin is simulating)
+  if (effectiveRole === 'participant' && user?.role === 'super_admin' && simulatedRole) {
     return (
       <div className="p-6 max-w-7xl mx-auto">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
@@ -1872,8 +1872,8 @@ Token Role: ${tokenRole || 'MISSING'}`;
     );
   }
 
-  // Show Donor simulation view
-  if (effectiveRole === 'donor') {
+  // Show Donor simulation view (only when super admin is simulating)
+  if (effectiveRole === 'donor' && user?.role === 'super_admin' && simulatedRole) {
     return (
       <div className="p-6 max-w-7xl mx-auto">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">

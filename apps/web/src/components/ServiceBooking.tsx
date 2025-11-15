@@ -156,78 +156,73 @@ export function ServiceBooking({
         console.log('✅ Shelter has configured services:', publicConfig.services);
         setShelterConfiguredServices(publicConfig.services);
         
-        // Filter categories to only show those that match configured services
-        const matchedCategories = SERVICE_CATEGORIES.filter(category => {
-          // Check if any configured service matches this category
-          return publicConfig.services.some(service => {
-            const serviceLower = service.toLowerCase();
-            
-            // COMPREHENSIVE KEYWORD MATCHING
-            switch(category.id) {
-              case 'healthcare':
-                return serviceLower.includes('medical') || 
-                       serviceLower.includes('health') || 
-                       serviceLower.includes('clinic') ||
-                       serviceLower.includes('doctor');
-                       
-              case 'employment':
-                return serviceLower.includes('job') || 
-                       serviceLower.includes('employment') || 
-                       serviceLower.includes('training') ||
-                       serviceLower.includes('career') ||
-                       serviceLower.includes('resume') ||
-                       serviceLower.includes('workshop');
-                       
-              case 'legal':
-                return serviceLower.includes('legal') || 
-                       serviceLower.includes('aid') ||
-                       serviceLower.includes('court') ||
-                       serviceLower.includes('lawyer');
-                       
-              case 'counseling':
-                return serviceLower.includes('mental') || 
-                       serviceLower.includes('counseling') || 
-                       serviceLower.includes('substance') ||
-                       serviceLower.includes('therapy') ||
-                       serviceLower.includes('addiction') ||
-                       serviceLower.includes('abuse') ||
-                       serviceLower.includes('support');
-                       
-              case 'meals':
-                return serviceLower.includes('meal') || 
-                       serviceLower.includes('food') ||
-                       serviceLower.includes('nutrition') ||
-                       serviceLower.includes('basic necessities');
-                       
-              case 'benefits':
-                return serviceLower.includes('housing') || 
-                       serviceLower.includes('shelter') || 
-                       serviceLower.includes('case') || 
-                       serviceLower.includes('management') ||
-                       serviceLower.includes('id') ||
-                       serviceLower.includes('government') ||
-                       serviceLower.includes('benefits') ||
-                       serviceLower.includes('emergency') ||
-                       serviceLower.includes('overnight');
-                       
-              default:
-                return false;
-            }
-          });
+        // Convert shelter's configured services directly to category cards
+        const serviceCategories: ServiceCategory[] = publicConfig.services.map((serviceName, index) => {
+          const serviceId = serviceName.toLowerCase().replace(/\s+/g, '-');
+          const { icon, color, description } = getServiceIconAndColor(serviceName);
+          
+          return {
+            id: serviceId,
+            name: serviceName,
+            description: description,
+            icon: icon,
+            color: color,
+            requiresAppointment: true,
+            maxDuration: 60,
+            advanceBookingDays: 14
+          };
         });
         
-        console.log('✅ Filtered to', matchedCategories.length, 'matching categories');
-        setFilteredCategories(matchedCategories.length > 0 ? matchedCategories : SERVICE_CATEGORIES);
+        console.log('✅ Created', serviceCategories.length, 'service category cards directly from shelter config');
+        setFilteredCategories(serviceCategories);
       } else {
-        console.log('⚠️ No configured services found, showing all categories');
+        console.log('⚠️ No configured services found, showing default categories');
         setShelterConfiguredServices([]);
         setFilteredCategories(SERVICE_CATEGORIES);
       }
     } catch (err) {
       console.error('❌ Error loading shelter configured services:', err);
-      // Fall back to showing all categories
+      // Fall back to showing default categories
       setFilteredCategories(SERVICE_CATEGORIES);
     }
+  };
+  
+  // Helper function to get icon and color for a service
+  const getServiceIconAndColor = (serviceName: string): { icon: string; color: string; description: string } => {
+    const lowerName = serviceName.toLowerCase();
+    
+    if (lowerName.includes('medical') || lowerName.includes('health') || lowerName.includes('clinic')) {
+      return { icon: 'Stethoscope', color: 'red', description: 'Medical and health services' };
+    }
+    if (lowerName.includes('mental') || lowerName.includes('counseling') || lowerName.includes('therapy')) {
+      return { icon: 'Heart', color: 'purple', description: 'Mental health and counseling' };
+    }
+    if (lowerName.includes('job') || lowerName.includes('employment') || lowerName.includes('training') || lowerName.includes('career')) {
+      return { icon: 'Briefcase', color: 'blue', description: 'Employment and job training' };
+    }
+    if (lowerName.includes('housing') || lowerName.includes('shelter') || lowerName.includes('overnight')) {
+      return { icon: 'Users', color: 'green', description: 'Housing and shelter services' };
+    }
+    if (lowerName.includes('meal') || lowerName.includes('food') || lowerName.includes('nutrition')) {
+      return { icon: 'Utensils', color: 'orange', description: 'Meals and nutrition' };
+    }
+    if (lowerName.includes('case') || lowerName.includes('management') || lowerName.includes('coordination')) {
+      return { icon: 'FileText', color: 'teal', description: 'Case management and coordination' };
+    }
+    if (lowerName.includes('substance') || lowerName.includes('addiction') || lowerName.includes('recovery')) {
+      return { icon: 'Heart', color: 'cyan', description: 'Substance abuse support' };
+    }
+    if (lowerName.includes('legal')) {
+      return { icon: 'Scale', color: 'purple', description: 'Legal assistance' };
+    }
+    if (lowerName.includes('education') || lowerName.includes('learning')) {
+      return { icon: 'GraduationCap', color: 'blue', description: 'Education and learning' };
+    }
+    if (lowerName.includes('benefit') || lowerName.includes('id') || lowerName.includes('government')) {
+      return { icon: 'FileText', color: 'green', description: 'Benefits and ID assistance' };
+    }
+    
+    return { icon: 'FileText', color: 'gray', description: 'Support services' };
   };
 
   const loadServicesByCategory = async () => {

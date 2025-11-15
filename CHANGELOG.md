@@ -7,6 +7,61 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.111.0] - 2025-01-15 (SHELTER DIRECTORY QR CODE CARDS) 📱
+
+### ✨ Feature Enhancement
+
+#### **Shelter Directory Cards Now Display QR Codes** 📱
+Replaced building icons with actual shelter QR codes in the Shelter Network Directory cards, making it easier for admins to quickly access and share shelter donation pages.
+
+**What Changed:**
+- **Before**: Shelter directory cards displayed a generic building icon
+- **After**: Cards now display the shelter's unique QR code (if available)
+- **Fallback**: If QR code is not available, building icon is still shown
+
+**Implementation:**
+- Added `shelterQrCodes` state to track QR codes for all shelters
+- Created `loadShelterQRCodes()` function to fetch QR codes from `public_config` for each shelter
+- Updated both mobile and desktop card layouts to display QR code images
+- QR codes load automatically when shelters are loaded
+- Proper error handling with fallback to building icon
+
+**User Experience:**
+- **Super Admins**: Can now see shelter QR codes at a glance in the directory
+- **Platform Admins**: Quick visual identification of shelters by their QR codes
+- **Efficiency**: No need to open shelter details to see/share QR code
+- **Professional**: Cards now display the actual scannable QR code for donations
+
+### 📄 Files Modified
+- `apps/web/src/app/dashboard/shelters/page.tsx`:
+  - Added `shelterQrCodes` state (line 55)
+  - Added `loadShelterQRCodes()` function (lines 654-675)
+  - Added useEffect to load QR codes when shelters load (lines 683-688)
+  - Updated mobile card layout to display QR code (lines 1093-1103)
+  - Updated desktop card layout to display QR code (lines 1235-1245)
+
+### 🎨 Design Details
+- QR code container: 56x56px (mobile), 64x64px (desktop)
+- White background with 2px border for contrast
+- Padding to ensure QR code doesn't touch edges
+- Rounded corners (rounded-2xl) for modern look
+- Maintains aspect ratio with `object-contain`
+
+### 📊 Impact
+- **Shelter Network Dashboard**: All shelter cards now show their unique QR codes
+- **Admin Workflow**: Faster identification and sharing of shelter donation pages
+- **Visual Consistency**: QR codes match the style used in other admin dashboards
+- **Data Integrity**: Uses same QR code system as public pages and admin views
+
+### 🔍 Technical Notes
+- QR codes loaded from `shelters/{shelterId}/public_config/qrCode/url`
+- Async loading with error handling per shelter
+- Falls back to building icon if QR code not found
+- Console logging for debugging QR code loading
+- No performance impact - QR codes cached in state after initial load
+
+---
+
 ## [2.110.0] - 2025-01-15 (GOOGLE MAPS PRODUCTION FIX) 🗺️
 
 ### 🐛 Bug Fix

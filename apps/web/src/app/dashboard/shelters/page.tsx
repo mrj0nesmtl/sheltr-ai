@@ -52,6 +52,7 @@ export default function ShelterNetwork() {
   const [activeTab, setActiveTab] = useState('directory');
   const [shelterNotifications, setShelterNotifications] = useState<Record<string, number>>({});
   const [shelterParticipants, setShelterParticipants] = useState<Record<string, number>>({});
+  const [shelterQrCodes, setShelterQrCodes] = useState<Record<string, string>>({});
   
   // Edit state
   const [selectedShelterForView, setSelectedShelterForView] = useState<Shelter | null>(null);
@@ -650,11 +651,41 @@ export default function ShelterNetwork() {
     }
   };
 
+  // Load QR codes for all shelters
+  const loadShelterQRCodes = async () => {
+    try {
+      const qrCodeMap: Record<string, string> = {};
+      
+      for (const shelter of shelters) {
+        try {
+          const publicConfig = await shelterService.getShelterPublicConfig(shelter.id);
+          if (publicConfig?.qrCode?.url) {
+            qrCodeMap[shelter.id] = publicConfig.qrCode.url;
+          }
+        } catch (error) {
+          console.warn(`Could not load QR code for shelter ${shelter.id}:`, error);
+        }
+      }
+      
+      setShelterQrCodes(qrCodeMap);
+      console.log(`✅ Loaded ${Object.keys(qrCodeMap).length} shelter QR codes`);
+    } catch (error) {
+      console.error('❌ Error loading shelter QR codes:', error);
+    }
+  };
+
   useEffect(() => {
     loadData();
     loadNotificationCounts();
     loadParticipantCounts();
   }, []);
+
+  // Load QR codes after shelters are loaded
+  useEffect(() => {
+    if (shelters.length > 0) {
+      loadShelterQRCodes();
+    }
+  }, [shelters.length]);
 
   // Calculate donor stats after shelters are loaded
   useEffect(() => {
@@ -1059,8 +1090,16 @@ export default function ShelterNetwork() {
                       <div className="p-4 bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-gray-700">
                         <div className="flex items-start justify-between mb-3">
                           <div className="flex items-center space-x-3 flex-1 min-w-0">
-                            <div className="w-14 h-14 bg-gray-100 dark:bg-gray-800 rounded-2xl flex items-center justify-center border border-gray-200 dark:border-gray-700">
-                              <Building2 className="h-7 w-7 text-gray-700 dark:text-gray-300" />
+                            <div className="w-14 h-14 bg-white dark:bg-gray-800 rounded-2xl flex items-center justify-center border-2 border-gray-200 dark:border-gray-700 p-1">
+                              {shelterQrCodes[shelter.id] ? (
+                                <img 
+                                  src={shelterQrCodes[shelter.id]} 
+                                  alt={`${shelter.name} QR Code`}
+                                  className="w-full h-full object-contain"
+                                />
+                              ) : (
+                                <Building2 className="h-7 w-7 text-gray-700 dark:text-gray-300" />
+                              )}
                             </div>
                             <div className="flex-1 min-w-0">
                               <h3 className="font-bold text-lg leading-tight truncate text-gray-900 dark:text-white">
@@ -1193,8 +1232,16 @@ export default function ShelterNetwork() {
                           </Badge>
                         </div>
                         <div className="flex items-start space-x-4">
-                          <div className="w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-2xl flex items-center justify-center border border-gray-200 dark:border-gray-700">
-                            <Building2 className="h-8 w-8 text-gray-700 dark:text-gray-300" />
+                          <div className="w-16 h-16 bg-white dark:bg-gray-800 rounded-2xl flex items-center justify-center border-2 border-gray-200 dark:border-gray-700 p-1.5">
+                            {shelterQrCodes[shelter.id] ? (
+                              <img 
+                                src={shelterQrCodes[shelter.id]} 
+                                alt={`${shelter.name} QR Code`}
+                                className="w-full h-full object-contain"
+                              />
+                            ) : (
+                              <Building2 className="h-8 w-8 text-gray-700 dark:text-gray-300" />
+                            )}
                           </div>
                           <div className="flex-1 min-w-0">
                             <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-1 truncate">

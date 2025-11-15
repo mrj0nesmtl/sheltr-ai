@@ -7,6 +7,83 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.114.0] - 2025-01-15 (EXPANDED SOCIAL MEDIA LINKS) 🔗
+
+### ✨ Feature Enhancement
+
+#### **Expanded Social Media Links in Shelter Admin Settings** 🔗
+Enhanced the Social Media Links section in the Shelter Administrator settings to include YouTube, LinkedIn, and TikTok, while updating Twitter branding to "X (formerly Twitter)".
+
+**What's New:**
+- ✅ **Facebook** - Already supported
+- 🆕 **X (formerly Twitter)** - Updated branding and label
+- ✅ **Instagram** - Already supported
+- 🆕 **YouTube** - New platform added
+- 🆕 **LinkedIn** - New platform added
+- 🆕 **TikTok** - New platform added
+
+**Enhanced UI:**
+- Added descriptive labels above each input field
+- Better placeholder text for each platform
+- Platform-specific icons with appropriate colors:
+  - Facebook: Blue (#2563eb)
+  - X: Black/White (theme-aware)
+  - Instagram: Pink (#db2777)
+  - YouTube: Red (#dc2626)
+  - LinkedIn: Blue (#1d4ed8)
+  - TikTok: Custom SVG icon
+- Improved layout with better spacing and visual hierarchy
+
+**Data Flow (Bi-Directional Sync):**
+1. **Shelter Admin** enters social media URLs in settings
+2. Saves to `shelters/{id}/public_config/settings/socialMedia`
+3. **`shelterService.updateShelterPublicConfig()`** automatically syncs to main shelter document
+4. **Super Admin/Platform Admin** dashboards display updated social media info
+5. **Public shelter pages** show social media links
+
+### 📄 Files Modified
+- `apps/web/src/app/dashboard/shelter-admin/settings/page.tsx`:
+  - Added `Youtube` and `Linkedin` icon imports (lines 29-30)
+  - Added `youtube`, `linkedin`, `tiktok` fields to form data structure (lines 81-83)
+  - Updated load data to include new social media fields (lines 209-211)
+  - Updated save function to persist new social media fields (lines 261-263)
+  - Completely redesigned Social Media Links UI (lines 1234-1356):
+    - Added labels for each platform
+    - Updated "Twitter" to "X (formerly Twitter)"
+    - Added YouTube input with red icon
+    - Added LinkedIn input with blue icon
+    - Added TikTok input with custom SVG icon
+    - Improved placeholder text for all platforms
+
+### 🎯 User Experience
+- **Shelter Admins**:
+  - Can now add all major social media platforms
+  - Clear labels show which platform is which
+  - Helpful placeholder text guides proper URL format
+  - Changes save to database and sync automatically
+- **Platform Admins**:
+  - See complete social media presence for each shelter
+  - Can verify shelter's online presence across all platforms
+- **Public Visitors**:
+  - Can connect with shelters on their preferred social platform
+
+### 📊 Impact
+- **Complete Social Media Coverage**: Support for 6 major platforms
+- **Modern Branding**: Updated Twitter → X
+- **Better UX**: Labeled inputs with platform-specific styling
+- **Data Consistency**: Automatic sync between admin dashboards
+- **Future-Proof**: Easy to add more platforms as needed
+
+### 🔍 Technical Notes
+- All social media fields stored in `public_config/socialMedia` object
+- Bi-directional sync handled by `shelterService.updateShelterPublicConfig()`
+- TikTok uses custom SVG icon (no lucide-react icon available)
+- Twitter icon kept but rebranded as "X (formerly Twitter)"
+- Form state properly initialized with empty strings for new fields
+- Dark mode support with appropriate icon colors
+
+---
+
 ## [2.113.0] - 2025-01-15 (WEBSITE PREVIEW & CONTACT INFO) 🌐
 
 ### ✨ Feature Enhancement

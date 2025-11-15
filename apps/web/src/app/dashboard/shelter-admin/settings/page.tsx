@@ -26,6 +26,8 @@ import {
   Facebook,
   Twitter,
   Instagram,
+  Youtube,
+  Linkedin,
   Phone,
   Mail,
   Clock,
@@ -75,7 +77,10 @@ export default function SettingsPage() {
     socialMedia: {
       facebook: 'https://facebook.com/OldBreweryMission',
       twitter: 'https://twitter.com/OBMission',
-      instagram: 'https://instagram.com/oldbrewerymission'
+      instagram: 'https://instagram.com/oldbrewerymission',
+      youtube: '',
+      linkedin: '',
+      tiktok: ''
     },
     services: [
       'Emergency Shelter',
@@ -200,7 +205,10 @@ export default function SettingsPage() {
             socialMedia: {
               facebook: config.socialMedia?.facebook || '',
               twitter: config.socialMedia?.twitter || '',
-              instagram: config.socialMedia?.instagram || ''
+              instagram: config.socialMedia?.instagram || '',
+              youtube: config.socialMedia?.youtube || '',
+              linkedin: config.socialMedia?.linkedin || '',
+              tiktok: config.socialMedia?.tiktok || ''
             },
             services: config.services || [],
             photos: [] // Will be loaded separately
@@ -249,7 +257,10 @@ export default function SettingsPage() {
           website: formData.website,
           facebook: formData.socialMedia.facebook,
           twitter: formData.socialMedia.twitter,
-          instagram: formData.socialMedia.instagram
+          instagram: formData.socialMedia.instagram,
+          youtube: formData.socialMedia.youtube,
+          linkedin: formData.socialMedia.linkedin,
+          tiktok: formData.socialMedia.tiktok
         }
       };
       
@@ -1226,47 +1237,120 @@ export default function SettingsPage() {
                   <CardDescription>Connect your social media presence</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
+                  {/* Facebook */}
                   <div className="flex items-center space-x-3">
-                    <Facebook className="h-5 w-5 text-blue-600" />
-                    <input 
-                      type="url" 
-                      placeholder="Facebook URL"
-                      value={formData.socialMedia.facebook}
-                      disabled={!isEditing}
-                      className="flex-1 p-2 border rounded-md"
-                      onChange={(e) => setFormData({
-                        ...formData, 
-                        socialMedia: {...formData.socialMedia, facebook: e.target.value}
-                      })}
-                    />
+                    <Facebook className="h-5 w-5 text-blue-600 shrink-0" />
+                    <div className="flex-1">
+                      <label className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1 block">Facebook</label>
+                      <input 
+                        type="url" 
+                        placeholder="https://facebook.com/your-page"
+                        value={formData.socialMedia.facebook}
+                        disabled={!isEditing}
+                        className="w-full p-2 border rounded-md dark:bg-gray-800 dark:border-gray-700"
+                        onChange={(e) => setFormData({
+                          ...formData, 
+                          socialMedia: {...formData.socialMedia, facebook: e.target.value}
+                        })}
+                      />
+                    </div>
                   </div>
+
+                  {/* X (formerly Twitter) */}
                   <div className="flex items-center space-x-3">
-                    <Twitter className="h-5 w-5 text-blue-400" />
-                    <input 
-                      type="url" 
-                      placeholder="Twitter URL"
-                      value={formData.socialMedia.twitter}
-                      disabled={!isEditing}
-                      className="flex-1 p-2 border rounded-md"
-                      onChange={(e) => setFormData({
-                        ...formData, 
-                        socialMedia: {...formData.socialMedia, twitter: e.target.value}
-                      })}
-                    />
+                    <Twitter className="h-5 w-5 text-gray-900 dark:text-white shrink-0" />
+                    <div className="flex-1">
+                      <label className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1 block">X (formerly Twitter)</label>
+                      <input 
+                        type="url" 
+                        placeholder="https://x.com/your-handle"
+                        value={formData.socialMedia.twitter}
+                        disabled={!isEditing}
+                        className="w-full p-2 border rounded-md dark:bg-gray-800 dark:border-gray-700"
+                        onChange={(e) => setFormData({
+                          ...formData, 
+                          socialMedia: {...formData.socialMedia, twitter: e.target.value}
+                        })}
+                      />
+                    </div>
                   </div>
+
+                  {/* Instagram */}
                   <div className="flex items-center space-x-3">
-                    <Instagram className="h-5 w-5 text-pink-600" />
-                    <input 
-                      type="url" 
-                      placeholder="Instagram URL"
-                      value={formData.socialMedia.instagram}
-                      disabled={!isEditing}
-                      className="flex-1 p-2 border rounded-md"
-                      onChange={(e) => setFormData({
-                        ...formData, 
-                        socialMedia: {...formData.socialMedia, instagram: e.target.value}
-                      })}
-                    />
+                    <Instagram className="h-5 w-5 text-pink-600 shrink-0" />
+                    <div className="flex-1">
+                      <label className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1 block">Instagram</label>
+                      <input 
+                        type="url" 
+                        placeholder="https://instagram.com/your-account"
+                        value={formData.socialMedia.instagram}
+                        disabled={!isEditing}
+                        className="w-full p-2 border rounded-md dark:bg-gray-800 dark:border-gray-700"
+                        onChange={(e) => setFormData({
+                          ...formData, 
+                          socialMedia: {...formData.socialMedia, instagram: e.target.value}
+                        })}
+                      />
+                    </div>
+                  </div>
+
+                  {/* YouTube */}
+                  <div className="flex items-center space-x-3">
+                    <Youtube className="h-5 w-5 text-red-600 shrink-0" />
+                    <div className="flex-1">
+                      <label className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1 block">YouTube</label>
+                      <input 
+                        type="url" 
+                        placeholder="https://youtube.com/@your-channel"
+                        value={formData.socialMedia.youtube}
+                        disabled={!isEditing}
+                        className="w-full p-2 border rounded-md dark:bg-gray-800 dark:border-gray-700"
+                        onChange={(e) => setFormData({
+                          ...formData, 
+                          socialMedia: {...formData.socialMedia, youtube: e.target.value}
+                        })}
+                      />
+                    </div>
+                  </div>
+
+                  {/* LinkedIn */}
+                  <div className="flex items-center space-x-3">
+                    <Linkedin className="h-5 w-5 text-blue-700 shrink-0" />
+                    <div className="flex-1">
+                      <label className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1 block">LinkedIn</label>
+                      <input 
+                        type="url" 
+                        placeholder="https://linkedin.com/company/your-company"
+                        value={formData.socialMedia.linkedin}
+                        disabled={!isEditing}
+                        className="w-full p-2 border rounded-md dark:bg-gray-800 dark:border-gray-700"
+                        onChange={(e) => setFormData({
+                          ...formData, 
+                          socialMedia: {...formData.socialMedia, linkedin: e.target.value}
+                        })}
+                      />
+                    </div>
+                  </div>
+
+                  {/* TikTok */}
+                  <div className="flex items-center space-x-3">
+                    <svg className="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                    </svg>
+                    <div className="flex-1">
+                      <label className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1 block">TikTok</label>
+                      <input 
+                        type="url" 
+                        placeholder="https://tiktok.com/@your-account"
+                        value={formData.socialMedia.tiktok}
+                        disabled={!isEditing}
+                        className="w-full p-2 border rounded-md dark:bg-gray-800 dark:border-gray-700"
+                        onChange={(e) => setFormData({
+                          ...formData, 
+                          socialMedia: {...formData.socialMedia, tiktok: e.target.value}
+                        })}
+                      />
+                    </div>
                   </div>
                 </CardContent>
               </Card>

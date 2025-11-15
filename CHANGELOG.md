@@ -7,6 +7,83 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.109.0] - 2025-01-15 (QR CODE SYSTEM COHESION) 📱
+
+### 🐛 Bug Fixes
+
+#### **QR Code Display Across Admin Dashboards** 📱
+Fixed critical issue where existing QR codes were not being displayed in admin dashboards despite being properly stored in Firestore and working on public pages.
+
+**Problem Identified:**
+- ✅ QR codes existed in database (`shelters/{id}/public_config/settings.qrCode.url`)
+- ✅ QR codes displayed correctly on public shelter pages
+- ❌ QR codes NOT loading in Shelter Admin Settings dashboard
+- ❌ QR codes NOT loading in Super Admin View dashboard  
+- ❌ QR codes showing placeholder icons in Super Admin Shelter Network modal
+- ❌ "Generate QR Code" button in Super Admin View was non-functional
+
+**Root Causes:**
+1. Admin dashboards were not loading existing QR codes from `public_config` on component mount
+2. QR code state was not being set even though data was fetched
+3. Super Admin "Generate QR Code" buttons had no onClick handlers
+4. Shelter Network modal was calling a helper function that returned URL strings instead of loading actual QR code images
+
+**Solutions Implemented:**
+
+1. **Shelter Admin Settings Page** (`/dashboard/shelter-admin/settings`)
+   - Added QR code loading logic in `loadShelterData` useEffect
+   - Now sets `qrCodeUrl` state when `config.qrCode.url` is available
+   - Displays real QR code image immediately on page load
+   - "Regenerate" button works as expected
+
+2. **Super Admin View Page** (`/dashboard/shelters/[shelterId]/view`)
+   - Added `qrCodeUrl` and `generatingQR` state variables
+   - Added QR code loading in `loadShelter` useEffect after shelter data loads
+   - Implemented functional "Generate QR Code" button with loading state
+   - Button text changes from "Generate" to "Regenerate" when QR exists
+   - Displays real QR code image with proper styling
+
+3. **Super Admin Shelter Network Modal** (`/dashboard/shelters`)
+   - Added `viewModalQrCodeUrl` state variable
+   - Added `useEffect` to load QR code when `selectedShelterForView` changes
+   - Fetches QR code from `shelterService.getShelterPublicConfig()`
+   - Displays real QR code image in modal instead of placeholder icon
+   - Gracefully handles shelters without QR codes
+
+### 📄 Files Modified
+- `apps/web/src/app/dashboard/shelter-admin/settings/page.tsx`
+  - Added QR code loading in existing useEffect (lines 179-183)
+  - Sets `qrCodeUrl` state from `config.qrCode.url`
+  
+- `apps/web/src/app/dashboard/shelters/[shelterId]/view/client-page.tsx`
+  - Added imports for `shelterService` and `generateShelterQRCode`
+  - Added `qrCodeUrl` and `generatingQR` state (lines 50-51)
+  - Added QR code loading logic after shelter loads (lines 192-203)
+  - Replaced placeholder with conditional rendering of real QR code (lines 505-555)
+  - Implemented functional generate button with async onClick handler
+  
+- `apps/web/src/app/dashboard/shelters/page.tsx`
+  - Added import for `shelterService`
+  - Added `viewModalQrCodeUrl` state (line 68)
+  - Added `useEffect` to load QR code on shelter selection (lines 679-702)
+  - Updated modal QR code display to show real image (lines 1777-1790)
+
+### 📊 Impact
+- **Shelter Admin**: Can now see their existing QR code immediately on settings page
+- **Super Admin View**: Can view and regenerate QR codes for any shelter
+- **Super Admin Modal**: Quick view modal now displays real QR codes
+- **Consistency**: QR code display is now cohesive across all dashboards
+- **User Experience**: No more confusion about whether QR codes exist or not
+
+### 🎯 Technical Details
+- QR codes are loaded from `shelters/{id}/public_config/settings.qrCode.url`
+- Graceful fallback to placeholder icon if QR code doesn't exist
+- Loading states prevent duplicate generation attempts
+- Console logging helps debug QR code loading issues
+- All existing QR codes (10 shelters) now display correctly
+
+---
+
 ## [2.108.0] - 2025-01-14 (SHELTER ADMIN ↔ SUPER ADMIN SYNC SYSTEM) 🔄
 
 ### ✨ Major Features

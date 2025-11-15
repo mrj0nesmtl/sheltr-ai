@@ -29,6 +29,8 @@ import {
 import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { Shelter } from '@/services/firestore';
+import { shelterService } from '@/services/shelterService';
+import { generateShelterQRCode } from '@/services/qrCodeService';
 import Link from 'next/link';
 
 export default function ShelterViewClient() {
@@ -45,6 +47,8 @@ export default function ShelterViewClient() {
   const [totalDonations, setTotalDonations] = useState(0);
   const [operationsRevenue, setOperationsRevenue] = useState(0); // 5% from participant donations
   const [directDonations, setDirectDonations] = useState(0); // Direct shelter donations
+  const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
+  const [generatingQR, setGeneratingQR] = useState(false);
 
   useEffect(() => {
     const loadShelter = async () => {
@@ -184,6 +188,19 @@ export default function ShelterViewClient() {
             directDonations: directDonationsTotal,
             uniqueDonors: uniqueDonors.size
           });
+          
+          // Load QR code from public config
+          try {
+            const publicConfig = await shelterService.getShelterPublicConfig(shelterSnap.id);
+            if (publicConfig?.qrCode?.url) {
+              setQrCodeUrl(publicConfig.qrCode.url);
+              console.log('✅ Existing QR code loaded:', publicConfig.qrCode.url);
+            } else {
+              console.log('⚠️ No QR code found in public config');
+            }
+          } catch (qrError) {
+            console.warn('Could not load QR code:', qrError);
+          }
         } else {
           setError('Shelter not found. Please navigate from the shelters list.');
         }
@@ -484,16 +501,56 @@ export default function ShelterViewClient() {
             </CardTitle>
             <CardDescription>Quick access to public page</CardDescription>
           </CardHeader>
-          <CardContent className="text-center">
-            <div className="inline-block p-4 bg-white rounded-lg border-2 border-dashed">
-              <QrCode className="h-32 w-32 mx-auto text-gray-400" />
-            </div>
-            <p className="text-sm text-muted-foreground mt-3">
+          <CardContent className="text-center space-y-3">
+            {qrCodeUrl ? (
+              <div className="inline-block p-4 bg-white rounded-lg">
+                <img 
+                  src={qrCodeUrl} 
+                  alt="Shelter QR Code" 
+                  className="h-48 w-48 mx-auto"
+                />
+              </div>
+            ) : (
+              <div className="inline-block p-4 bg-white rounded-lg border-2 border-dashed">
+                <QrCode className="h-32 w-32 mx-auto text-gray-400" />
+              </div>
+            )}
+            <p className="text-sm text-muted-foreground">
               Links to: https://sheltr-ai.web.app/{shelterId}
             </p>
-            <Button variant="outline" className="mt-3">
-              <QrCode className="h-4 w-4 mr-2" />
-              Generate QR Code
+            <Button 
+              variant="outline" 
+              onClick={async () => {
+                if (!shelter) return;
+                try {
+                  setGeneratingQR(true);
+                  const result = await generateShelterQRCode(
+                    shelter.id,
+                    shelter.name,
+                    { size: 400, margin: 2 }
+                  );
+                  setQrCodeUrl(result.qrCodeUrl);
+                  console.log('✅ QR code generated successfully');
+                } catch (error) {
+                  console.error('❌ Error generating QR code:', error);
+                  alert(`Failed to generate QR code: ${error}`);
+                } finally {
+                  setGeneratingQR(false);
+                }
+              }}
+              disabled={generatingQR}
+            >
+              {generatingQR ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current mr-2" />
+                  Generating...
+                </>
+              ) : (
+                <>
+                  <QrCode className="h-4 w-4 mr-2" />
+                  {qrCodeUrl ? 'Regenerate QR Code' : 'Generate QR Code'}
+                </>
+              )}
             </Button>
           </CardContent>
         </Card>

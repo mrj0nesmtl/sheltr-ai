@@ -10,6 +10,7 @@ import { useState, useEffect } from 'react';
 import { firestoreService, Shelter, PendingApplication } from '@/services/firestore';
 import { AdminUser } from '@/services/platformMetrics';
 import { tenantService } from '@/services/tenantService';
+import { shelterService } from '@/services/shelterService';
 import { doc, updateDoc, deleteDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import ShelterNetworkMap from '@/components/ShelterNetworkMap';
@@ -64,6 +65,7 @@ export default function ShelterNetwork() {
   const [shelterAdmins, setShelterAdmins] = useState<AdminUser[]>([]);
   const [availableAdmins, setAvailableAdmins] = useState<AdminUser[]>([]);
   const [mapRefreshTrigger, setMapRefreshTrigger] = useState(0);
+  const [viewModalQrCodeUrl, setViewModalQrCodeUrl] = useState<string | null>(null);
   
   // Filtering state
   const [filters, setFilters] = useState({
@@ -673,6 +675,31 @@ export default function ShelterNetwork() {
       })));
     }
   }, [shelters]);
+
+  // Load QR code when a shelter is selected for viewing
+  useEffect(() => {
+    const loadQRCode = async () => {
+      if (selectedShelterForView) {
+        try {
+          const publicConfig = await shelterService.getShelterPublicConfig(selectedShelterForView.id);
+          if (publicConfig?.qrCode?.url) {
+            setViewModalQrCodeUrl(publicConfig.qrCode.url);
+            console.log('✅ QR code loaded for modal:', publicConfig.qrCode.url);
+          } else {
+            setViewModalQrCodeUrl(null);
+            console.log('⚠️ No QR code found for shelter');
+          }
+        } catch (error) {
+          console.warn('Could not load QR code for modal:', error);
+          setViewModalQrCodeUrl(null);
+        }
+      } else {
+        setViewModalQrCodeUrl(null);
+      }
+    };
+    
+    loadQRCode();
+  }, [selectedShelterForView]);
 
   // Calculate INDUSTRY-STANDARD shelter management KPIs (SESSION 13)
   const totalCapacity = filteredShelters.reduce((acc, s) => acc + s.capacity, 0);
@@ -1747,12 +1774,20 @@ export default function ShelterNetwork() {
                       </CardHeader>
                       <CardContent className="text-center">
                         <div className="bg-white dark:bg-gray-800 p-4 rounded-xl border-2 border-gray-200 dark:border-gray-600 mb-4">
-                          <div className="w-32 h-32 mx-auto bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
-                            <div className="text-center space-y-1">
-                              <QrCode className="h-12 w-12 mx-auto text-gray-400" />
-                              <p className="text-xs text-gray-500">QR Code</p>
+                          {viewModalQrCodeUrl ? (
+                            <img 
+                              src={viewModalQrCodeUrl} 
+                              alt="Shelter QR Code" 
+                              className="w-32 h-32 mx-auto"
+                            />
+                          ) : (
+                            <div className="w-32 h-32 mx-auto bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                              <div className="text-center space-y-1">
+                                <QrCode className="h-12 w-12 mx-auto text-gray-400" />
+                                <p className="text-xs text-gray-500">QR Code</p>
+                              </div>
                             </div>
-                          </div>
+                          )}
                         </div>
                         <p className="text-xs text-gray-500 font-mono mb-4 break-all px-2">
                           {generateShelterQRCode(selectedShelterForView)}

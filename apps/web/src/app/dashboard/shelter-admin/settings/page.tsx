@@ -176,6 +176,12 @@ export default function SettingsPage() {
         if (config) {
           setPublicConfig(config);
           
+          // Load existing QR code if available
+          if (config.qrCode?.url) {
+            setQrCodeUrl(config.qrCode.url);
+            console.log('✅ Existing QR code loaded:', config.qrCode.url);
+          }
+          
           // Update form data with real shelter information
           setFormData({
             name: config.name || metrics?.shelterName || '',

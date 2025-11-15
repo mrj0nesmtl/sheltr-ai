@@ -103,6 +103,8 @@ export function ServiceBooking({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showBookingDialog, setShowBookingDialog] = useState(false);
+  const [shelterConfiguredServices, setShelterConfiguredServices] = useState<string[]>([]);
+  const [filteredCategories, setFilteredCategories] = useState<ServiceCategory[]>(SERVICE_CATEGORIES);
   
   // Booking form data
   const [bookingForm, setBookingForm] = useState({
@@ -112,6 +114,11 @@ export function ServiceBooking({
     emergencyContact: '',
     notes: ''
   });
+
+  // Load shelter's configured services from public_config
+  useEffect(() => {
+    loadShelterConfiguredServices();
+  }, [shelterId]);
 
   // Load services when category is selected
   useEffect(() => {
@@ -134,6 +141,66 @@ export function ServiceBooking({
     }
   }, [participantId, showMyBookings]);
 
+  const loadShelterConfiguredServices = async () => {
+    try {
+      console.log('🏠 Loading shelter configured services for:', shelterId);
+      
+      // Fetch shelter's public_config to get their configured services
+      const { shelterService } = await import('@/services/shelterService');
+      const publicConfig = await shelterService.getShelterPublicConfig(shelterId);
+      
+      if (publicConfig && publicConfig.services && publicConfig.services.length > 0) {
+        console.log('✅ Shelter has configured services:', publicConfig.services);
+        setShelterConfiguredServices(publicConfig.services);
+        
+        // Filter categories to only show those that match configured services
+        const matchedCategories = SERVICE_CATEGORIES.filter(category => {
+          // Check if any configured service matches this category
+          return publicConfig.services.some(service => {
+            const serviceLower = service.toLowerCase();
+            const categoryLower = category.name.toLowerCase();
+            
+            // Match by keywords
+            if (serviceLower.includes('medical') || serviceLower.includes('health')) {
+              return category.id === 'healthcare' || category.id === 'counseling';
+            }
+            if (serviceLower.includes('job') || serviceLower.includes('employment') || serviceLower.includes('training')) {
+              return category.id === 'employment';
+            }
+            if (serviceLower.includes('legal') || serviceLower.includes('aid')) {
+              return category.id === 'legal';
+            }
+            if (serviceLower.includes('meal') || serviceLower.includes('food')) {
+              return category.id === 'meals';
+            }
+            if (serviceLower.includes('housing') || serviceLower.includes('shelter')) {
+              return category.id === 'benefits'; // Housing assistance falls under benefits
+            }
+            if (serviceLower.includes('case') || serviceLower.includes('management')) {
+              return category.id === 'benefits';
+            }
+            if (serviceLower.includes('mental') || serviceLower.includes('counseling') || serviceLower.includes('substance')) {
+              return category.id === 'counseling';
+            }
+            
+            return false;
+          });
+        });
+        
+        console.log('✅ Filtered to', matchedCategories.length, 'matching categories');
+        setFilteredCategories(matchedCategories.length > 0 ? matchedCategories : SERVICE_CATEGORIES);
+      } else {
+        console.log('⚠️ No configured services found, showing all categories');
+        setShelterConfiguredServices([]);
+        setFilteredCategories(SERVICE_CATEGORIES);
+      }
+    } catch (err) {
+      console.error('❌ Error loading shelter configured services:', err);
+      // Fall back to showing all categories
+      setFilteredCategories(SERVICE_CATEGORIES);
+    }
+  };
+
   const loadServicesByCategory = async () => {
     if (!selectedCategory) return;
     
@@ -142,8 +209,31 @@ export function ServiceBooking({
       const categoryServices = await getServicesByCategory(shelterId, selectedCategory.id);
       
       // If no services found in Firestore, provide demo services for the category
+      // BUT filter them based on shelter's configured services
       if (categoryServices.length === 0) {
-        const demoServices = getDemoServicesForCategory(selectedCategory.id);
+        let demoServices = getDemoServicesForCategory(selectedCategory.id);
+        
+        // Filter demo services to match shelter's configuration
+        if (shelterConfiguredServices.length > 0) {
+          demoServices = demoServices.filter(service => {
+            return shelterConfiguredServices.some(configuredService => {
+              const serviceLower = service.name.toLowerCase();
+              const configuredLower = configuredService.toLowerCase();
+              
+              // Check for keyword matches
+              return serviceLower.includes(configuredLower) || 
+                     configuredLower.includes(serviceLower.split(' ')[0]) ||
+                     (serviceLower.includes('medical') && configuredLower.includes('medical')) ||
+                     (serviceLower.includes('health') && configuredLower.includes('health')) ||
+                     (serviceLower.includes('job') && configuredLower.includes('job')) ||
+                     (serviceLower.includes('employment') && configuredLower.includes('employment')) ||
+                     (serviceLower.includes('legal') && configuredLower.includes('legal'));
+            });
+          });
+          
+          console.log('✅ Filtered demo services:', demoServices.length, 'of', getDemoServicesForCategory(selectedCategory.id).length);
+        }
+        
         setServices(demoServices);
       } else {
         setServices(categoryServices);
@@ -616,28 +706,47 @@ export function ServiceBooking({
           {/* Service Categories */}
           {!selectedCategory && (
             <div>
-              <h3 className="text-lg font-semibold mb-4">Choose a Service Category</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {SERVICE_CATEGORIES.map((category) => (
-                  <Card 
-                    key={category.id}
-                    className="cursor-pointer hover:shadow-md transition-shadow"
-                    onClick={() => setSelectedCategory(category)}
-                  >
-                    <CardContent className="pt-6">
-                      <div className="flex items-center space-x-3">
-                        <div className={`p-3 rounded-lg ${getCategoryStyle(category.color)}`}>
-                          {getCategoryIcon(category.icon)}
-                        </div>
-                        <div>
-                          <h4 className="font-medium">{category.name}</h4>
-                          <p className="text-sm text-gray-600">{category.description}</p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold">Choose a Service Category</h3>
+                {shelterConfiguredServices.length > 0 && (
+                  <p className="text-sm text-muted-foreground">
+                    Showing {filteredCategories.length} categories based on your shelter's offerings
+                  </p>
+                )}
               </div>
+              
+              {filteredCategories.length === 0 ? (
+                <Card>
+                  <CardContent className="pt-6">
+                    <div className="text-center text-gray-500">
+                      <p>No services are currently configured by your shelter.</p>
+                      <p className="text-sm mt-2">Please contact your shelter administrator.</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {filteredCategories.map((category) => (
+                    <Card 
+                      key={category.id}
+                      className="cursor-pointer hover:shadow-md transition-shadow"
+                      onClick={() => setSelectedCategory(category)}
+                    >
+                      <CardContent className="pt-6">
+                        <div className="flex items-center space-x-3">
+                          <div className={`p-3 rounded-lg ${getCategoryStyle(category.color)}`}>
+                            {getCategoryIcon(category.icon)}
+                          </div>
+                          <div>
+                            <h4 className="font-medium">{category.name}</h4>
+                            <p className="text-sm text-gray-600">{category.description}</p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 

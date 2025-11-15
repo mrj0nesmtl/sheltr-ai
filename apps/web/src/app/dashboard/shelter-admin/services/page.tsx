@@ -26,6 +26,7 @@ import {
   Loader2
 } from 'lucide-react';
 import { getServiceCategoryStats, getShelterServices, ServiceCategoryStats, ShelterService } from '@/services/platformMetrics';
+import { ShelterAdminServiceScheduler } from '@/components/ShelterAdminServiceScheduler';
 
 // Mock services data
 const mockServices = [
@@ -121,12 +122,14 @@ export default function ServicesPage() {
   const [services, setServices] = useState<ShelterService[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [bookingSuccess, setBookingSuccess] = useState(false);
+
+  // Get shelter ID from user
+  const shelterId = user?.customClaims?.shelter_id || user?.shelterId || (user as any)?.shelter_id;
 
   // Load services data
   useEffect(() => {
     const loadServicesData = async () => {
-      const shelterId = user?.customClaims?.shelter_id;
-      
       if (!shelterId) {
         setError('No shelter assigned to this admin');
         setLoading(false);
@@ -150,10 +153,10 @@ export default function ServicesPage() {
       }
     };
 
-    if (user && hasRole('admin')) {
+    if (user && hasRole('admin') && shelterId) {
       loadServicesData();
     }
-  }, [user, hasRole]);
+  }, [user, hasRole, shelterId]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -174,6 +177,33 @@ export default function ServicesPage() {
     return <UserCheck className="h-4 w-4" />;
   };
 
+  // Check access
+  if (!hasRole('admin')) {
+    return (
+      <div className="text-center py-12">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+          Access Restricted
+        </h2>
+        <p className="text-gray-600 dark:text-gray-400">
+          Shelter administrator access required for this page.
+        </p>
+      </div>
+    );
+  }
+
+  if (!shelterId) {
+    return (
+      <div className="text-center py-12">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+          No Shelter Assigned
+        </h2>
+        <p className="text-gray-600 dark:text-gray-400">
+          Please contact support to be assigned to a shelter.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -184,11 +214,33 @@ export default function ServicesPage() {
             Schedule and manage shelter services and appointments
           </p>
         </div>
-        <Button className="bg-blue-600 hover:bg-blue-700">
-          <Plus className="mr-2 h-4 w-4" />
-          Schedule Service
-        </Button>
       </div>
+
+      {/* Success Message */}
+      {bookingSuccess && (
+        <Card className="border-green-200 bg-green-50 dark:bg-green-900/20">
+          <CardContent className="pt-6">
+            <div className="flex items-center space-x-2 text-green-600">
+              <CheckCircle className="h-5 w-5" />
+              <span>Appointment scheduled successfully!</span>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* NEW: Service Scheduler Component */}
+      <ShelterAdminServiceScheduler 
+        shelterId={shelterId}
+        onBookingComplete={(booking) => {
+          console.log('✅ Appointment scheduled:', booking);
+          setBookingSuccess(true);
+          setTimeout(() => setBookingSuccess(false), 5000);
+          // Reload stats
+          if (shelterId) {
+            getServiceCategoryStats(shelterId).then(setCategoryStats);
+          }
+        }}
+      />
 
       {/* Service Categories Overview - Real Data */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">

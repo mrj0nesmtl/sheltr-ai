@@ -835,9 +835,53 @@ export default function SettingsPage() {
                       </div>
                     </CardContent>
                   </Card>
+
+                  {/* Map - Moved from right column */}
+                  <Card className="border-2 border-primary/20 shadow-sm">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2 text-lg">
+                        <MapPin className="h-4 w-4 text-primary" />
+                        Location
+                      </CardTitle>
+                      <CardDescription className="text-xs">Find us on the map</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      {process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ? (
+                        <div className="space-y-2">
+                          <div className="rounded-lg overflow-hidden h-48 border-2 border-border">
+                            <iframe
+                              width="100%"
+                              height="100%"
+                              style={{ border: 0 }}
+                              loading="lazy"
+                              allowFullScreen
+                              referrerPolicy="no-referrer-when-downgrade"
+                              src={`https://www.google.com/maps/embed/v1/place?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&q=${encodeURIComponent(`${formData.address}, ${formData.city}, ${formData.province}`)}&zoom=15`}
+                            />
+                          </div>
+                          <Button variant="outline" size="sm" className="w-full text-xs">
+                            <ExternalLink className="mr-1.5 h-3 w-3" />
+                            Open in Google Maps
+                          </Button>
+                        </div>
+                      ) : (
+                        <div className="text-center py-4">
+                          <MapPin className="h-8 w-8 mx-auto text-muted-foreground mb-2" />
+                          <p className="text-xs text-muted-foreground mb-3">
+                            {formData.address}<br />
+                            {formData.city}, {formData.province}
+                          </p>
+                          <Button variant="outline" size="sm" className="text-xs">
+                            <ExternalLink className="mr-1.5 h-3 w-3" />
+                            View on Google Maps
+                          </Button>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
                 </div>
 
-                {/* Right Column - Contact, Social, QR, Map */}
+                {/* Right Column - Contact, Social, QR */}
                 <div className="space-y-6">
                   {/* Contact Info */}
                   <Card className="shadow-sm">
@@ -964,50 +1008,6 @@ export default function SettingsPage() {
                         <Heart className="mr-2 h-4 w-4" />
                         Donate Online
                       </Button>
-                    </CardContent>
-                  </Card>
-
-                  {/* Map */}
-                  <Card className="border-2 border-primary/20 shadow-sm">
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2 text-lg">
-                        <MapPin className="h-4 w-4 text-primary" />
-                        Location
-                      </CardTitle>
-                      <CardDescription className="text-xs">Find us on the map</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      {process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ? (
-                        <div className="space-y-2">
-                          <div className="rounded-lg overflow-hidden h-48 border-2 border-border">
-                            <iframe
-                              width="100%"
-                              height="100%"
-                              style={{ border: 0 }}
-                              loading="lazy"
-                              allowFullScreen
-                              referrerPolicy="no-referrer-when-downgrade"
-                              src={`https://www.google.com/maps/embed/v1/place?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&q=${encodeURIComponent(`${formData.address}, ${formData.city}, ${formData.province}`)}&zoom=15`}
-                            />
-                          </div>
-                          <Button variant="outline" size="sm" className="w-full text-xs">
-                            <ExternalLink className="mr-1.5 h-3 w-3" />
-                            Open in Google Maps
-                          </Button>
-                        </div>
-                      ) : (
-                        <div className="text-center py-4">
-                          <MapPin className="h-8 w-8 mx-auto text-muted-foreground mb-2" />
-                          <p className="text-xs text-muted-foreground mb-3">
-                            {formData.address}<br />
-                            {formData.city}, {formData.province}
-                          </p>
-                          <Button variant="outline" size="sm" className="text-xs">
-                            <ExternalLink className="mr-1.5 h-3 w-3" />
-                            View on Google Maps
-                          </Button>
-                        </div>
-                      )}
                     </CardContent>
                   </Card>
                 </div>

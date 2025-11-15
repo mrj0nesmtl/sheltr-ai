@@ -399,32 +399,37 @@ export default function ShelterPageClient({ slug }: ShelterPageClientProps) {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  {shelter.operating_hours ? (
-                    <div className="space-y-2">
-                      {Object.entries(shelter.operating_hours).map(([day, hours]) => (
-                        <div key={day} className="flex justify-between items-center py-2 border-b border-border last:border-0">
-                          <span className="font-medium capitalize">{day}</span>
-                          <span className="text-muted-foreground">
-                            {hours.open} - {hours.close}
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center py-2 border-b border-border">
+                    <span className="font-medium">Check-in Time:</span>
+                    <span className="text-muted-foreground">{shelter.check_in_time || '8:00 PM'}</span>
+                  </div>
+                  <div className="flex justify-between items-center py-2 border-b border-border">
+                    <span className="font-medium">Check-out Time:</span>
+                    <span className="text-muted-foreground">{shelter.check_out_time || '7:00 AM'}</span>
+                  </div>
+                  <div className="flex justify-between items-center py-2">
+                    <span className="font-medium">Operating Hours:</span>
+                    <Badge variant="outline">
+                      {typeof shelter.operating_hours === 'string' 
+                        ? shelter.operating_hours 
+                        : shelter.operating_hours && typeof shelter.operating_hours === 'object' && Object.keys(shelter.operating_hours).length > 0
+                        ? 'See schedule'
+                        : '24/7'}
+                    </Badge>
+                  </div>
+                  {shelter.operating_hours && typeof shelter.operating_hours === 'object' && Object.keys(shelter.operating_hours).length > 0 && (
+                    <div className="mt-4 pt-4 border-t border-border space-y-2">
+                      {Object.entries(shelter.operating_hours).map(([day, hours]: [string, any]) => (
+                        <div key={day} className="flex justify-between items-center py-1">
+                          <span className="text-sm font-medium capitalize">{day}</span>
+                          <span className="text-sm text-muted-foreground">
+                            {typeof hours === 'object' && hours.open && hours.close 
+                              ? `${hours.open} - ${hours.close}` 
+                              : hours}
                           </span>
                         </div>
                       ))}
-                    </div>
-                  ) : (
-                    <div className="space-y-2">
-                      <div className="flex justify-between items-center py-2">
-                        <span className="font-medium">Check-in Time:</span>
-                        <span className="text-muted-foreground">{shelter.check_in_time}</span>
-                      </div>
-                      <div className="flex justify-between items-center py-2">
-                        <span className="font-medium">Check-out Time:</span>
-                        <span className="text-muted-foreground">{shelter.check_out_time}</span>
-                      </div>
-                      <div className="flex justify-between items-center py-2">
-                        <span className="font-medium">Operating Hours:</span>
-                        <Badge variant="outline">24/7</Badge>
-                      </div>
                     </div>
                   )}
                 </div>

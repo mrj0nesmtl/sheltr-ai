@@ -48,6 +48,7 @@ import { db } from '@/lib/firebase';
 import { useAuth } from '@/contexts/AuthContext';
 import { shelterService } from '@/services/shelterService';
 import { createParticipantNotification } from '@/services/unifiedNotificationService';
+import { toast } from 'sonner';
 
 interface ShelterAdminServiceSchedulerProps {
   shelterId: string;
@@ -808,11 +809,17 @@ export function ShelterAdminServiceScheduler({
       }
       
       onBookingComplete?.(booking);
+      
+      // Show success toast
+      toast.success('Appointment Scheduled!', {
+        description: `${selectedParticipant.firstName} ${selectedParticipant.lastName} - ${selectedService.name}`,
+        duration: 4000,
+      });
+      
       setShowBookingDialog(false);
       setActiveView('all-bookings');
-      await loadAllBookings();
       
-      // Reset form
+      // Reset form immediately for better UX
       setSelectedService(null);
       setSelectedSlot(null);
       setSelectedDate(new Date());
@@ -824,9 +831,19 @@ export function ShelterAdminServiceScheduler({
         providerNotes: ''
       });
       
+      // Load bookings in background (don't await to prevent blocking)
+      loadAllBookings().catch(err => {
+        console.error('Error reloading bookings:', err);
+      });
+      
     } catch (err) {
       console.error('❌ Error scheduling appointment:', err);
-      setError(err instanceof Error ? err.message : 'Failed to schedule appointment');
+      const errorMessage = err instanceof Error ? err.message : 'Failed to schedule appointment';
+      setError(errorMessage);
+      toast.error('Booking Failed', {
+        description: errorMessage,
+        duration: 5000,
+      });
     } finally {
       setLoading(false);
     }
@@ -878,14 +895,50 @@ export function ShelterAdminServiceScheduler({
   };
 
   const formatDate = (timestamp: any) => {
-    const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
-    return date.toLocaleDateString([], { 
-      weekday: 'short', 
-      month: 'short', 
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
+    try {
+      // Handle Firestore Timestamp
+      if (timestamp && typeof timestamp.toDate === 'function') {
+        const date = timestamp.toDate();
+        return date.toLocaleDateString([], { 
+          weekday: 'short', 
+          month: 'short', 
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+      }
+      
+      // Handle regular Date object
+      if (timestamp instanceof Date && !isNaN(timestamp.getTime())) {
+        return timestamp.toLocaleDateString([], { 
+          weekday: 'short', 
+          month: 'short', 
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+      }
+      
+      // Handle ISO string
+      if (typeof timestamp === 'string') {
+        const date = new Date(timestamp);
+        if (!isNaN(date.getTime())) {
+          return date.toLocaleDateString([], { 
+            weekday: 'short', 
+            month: 'short', 
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          });
+        }
+      }
+      
+      // Fallback
+      return 'Invalid Date';
+    } catch (error) {
+      console.error('Error formatting date:', error, timestamp);
+      return 'Invalid Date';
+    }
   };
 
   if (error) {
@@ -1252,7 +1305,14 @@ export function ShelterAdminServiceScheduler({
                                 disabled={loading}
                                 className="flex-1"
                               >
-                                {loading ? 'Scheduling...' : 'Confirm Appointment'}
+                                {loading ? (
+                                  <span className="flex items-center gap-2">
+                                    <span className="animate-spin">⏳</span>
+                                    Scheduling appointment...
+                                  </span>
+                                ) : (
+                                  'Confirm Appointment'
+                                )}
                               </Button>
                               <Button 
                                 variant="outline" 

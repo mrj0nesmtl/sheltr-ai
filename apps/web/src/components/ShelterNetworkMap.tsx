@@ -76,86 +76,6 @@ function FitBounds({ shelters }: { shelters: ShelterLocation[] }) {
   return null;
 }
 
-/**
- * Geocode an address using Google Maps Geocoding API
- */
-const geocodeAddress = async (address: string): Promise<{ lat: number; lng: number } | null> => {
-  try {
-    console.log(`🌍 Geocoding with Google Maps: ${address}`);
-    
-    // Get the Google Maps API key from environment variables
-    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
-    
-    if (!apiKey) {
-      console.warn('⚠️ Google Maps API key not found, using fallback coordinates');
-      return null;
-    }
-    
-    const encodedAddress = encodeURIComponent(address + ', Montreal, Quebec, Canada');
-    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodedAddress}&key=${apiKey}`;
-    
-    const response = await fetch(url);
-    
-    if (!response.ok) {
-      throw new Error(`Google Geocoding API error: ${response.status}`);
-    }
-    
-    const data = await response.json();
-    
-    if (data.status === 'OK' && data.results && data.results.length > 0) {
-      const result = data.results[0];
-      const coordinates = {
-        lat: result.geometry.location.lat,
-        lng: result.geometry.location.lng
-      };
-      
-      console.log(`✅ Google geocoded ${address} -> (${coordinates.lat}, ${coordinates.lng})`);
-      console.log(`📍 Formatted address: ${result.formatted_address}`);
-      return coordinates;
-    } else {
-      console.warn(`⚠️ Google geocoding failed for: ${address} (Status: ${data.status})`);
-      if (data.error_message) {
-        console.warn(`   Error: ${data.error_message}`);
-      }
-      return null;
-    }
-  } catch (error) {
-    console.error(`❌ Google geocoding error for "${address}":`, error);
-    return null;
-  }
-};
-
-/**
- * Get fallback coordinates based on address content
- */
-const getFallbackCoordinates = (address: string): { lat: number; lng: number } => {
-  const addressLower = address.toLowerCase();
-  
-  // Montreal neighborhoods with approximate coordinates
-  if (addressLower.includes('westmount')) {
-    return { lat: 45.4833, lng: -73.5978 };
-  } else if (addressLower.includes('plateau') || addressLower.includes('saint-laurent')) {
-    return { lat: 45.5200, lng: -73.5800 };
-  } else if (addressLower.includes('verdun')) {
-    return { lat: 45.4580, lng: -73.5673 };
-  } else if (addressLower.includes('rosemont')) {
-    return { lat: 45.5418, lng: -73.5740 };
-  } else if (addressLower.includes('outremont')) {
-    return { lat: 45.5240, lng: -73.6089 };
-  } else if (addressLower.includes('ndg') || addressLower.includes('notre-dame-de-grâce')) {
-    return { lat: 45.4700, lng: -73.6100 };
-  } else if (addressLower.includes('mile end')) {
-    return { lat: 45.5267, lng: -73.6040 };
-  } else if (addressLower.includes('east') || addressLower.includes('est')) {
-    return { lat: 45.5200, lng: -73.5500 };
-  } else if (addressLower.includes('west') || addressLower.includes('ouest')) {
-    return { lat: 45.4995, lng: -73.5848 };
-  } else {
-    // Default downtown Montreal
-    return { lat: 45.5017, lng: -73.5673 };
-  }
-};
-
 const getStatusColor = (status: string) => {
   switch (status) {
     case 'active': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100';
@@ -170,7 +90,6 @@ export default function ShelterNetworkMap({ className = '', height = '600px', re
   const [isClient, setIsClient] = useState(false);
   const [shelters, setShelters] = useState<ShelterLocation[]>([]);
   const [loading, setLoading] = useState(true);
-  const [geocodingProgress, setGeocodingProgress] = useState({ current: 0, total: 0 });
 
   // Determine if we should use dark mode
   const isDarkMode = theme === 'dark' || (theme === 'system' && systemTheme === 'dark');
@@ -179,7 +98,7 @@ export default function ShelterNetworkMap({ className = '', height = '600px', re
     setIsClient(true);
   }, []);
 
-  // Fetch and geocode shelters with persistence
+  // Fetch shelters with coordinates from Firestore
   useEffect(() => {
     const fetchShelters = async () => {
       try {
@@ -187,107 +106,73 @@ export default function ShelterNetworkMap({ className = '', height = '600px', re
         setLoading(true);
         
         const sheltersSnapshot = await getDocs(collection(db, 'shelters'));
-        const shelterData: Omit<ShelterLocation, 'coordinates'>[] = [];
+        const shelterPromises: Promise<ShelterLocation | null>[] = [];
         
+        // Fetch each shelter's public config for coordinates
         sheltersSnapshot.forEach((doc) => {
-          const data = doc.data();
-          if (data.address && data.name) {
-            shelterData.push({
-              id: doc.id,
-              name: data.name,
-              address: data.address,
-              location: data.location || 'Montreal, QC',
-              status: data.status || 'pending',
-              capacity: data.capacity,
-              currentOccupancy: data.currentOccupancy,
-              contact: data.contact
-            });
-          }
+          const shelterPromise = (async () => {
+            const data = doc.data();
+            if (!data.address || !data.name) {
+              return null;
+            }
+            
+            try {
+              // Get public config with coordinates
+              const publicConfigRef = collection(db, 'shelters', doc.id, 'public_config');
+              const configSnapshot = await getDocs(publicConfigRef);
+              
+              let coordinates = { lat: 45.5017, lng: -73.5673 }; // Default Montreal coordinates
+              
+              if (!configSnapshot.empty) {
+                const configData = configSnapshot.docs[0].data();
+                if (configData.coordinates) {
+                  coordinates = {
+                    lat: configData.coordinates.lat,
+                    lng: configData.coordinates.lng
+                  };
+                  console.log(`✅ ${data.name}: Using stored coordinates (${configData.coordinates.source || 'unknown'})`);
+                } else {
+                  console.warn(`⚠️ ${data.name}: No coordinates in public_config, using default`);
+                }
+              } else {
+                console.warn(`⚠️ ${data.name}: No public_config found, using default coordinates`);
+              }
+              
+              return {
+                id: doc.id,
+                name: data.name,
+                address: data.address,
+                location: data.location || 'Montreal, QC',
+                status: data.status || 'pending',
+                capacity: data.capacity,
+                currentOccupancy: data.currentOccupancy,
+                contact: data.contact,
+                coordinates
+              };
+            } catch (error) {
+              console.error(`❌ Error loading coordinates for ${data.name}:`, error);
+              return {
+                id: doc.id,
+                name: data.name,
+                address: data.address,
+                location: data.location || 'Montreal, QC',
+                status: data.status || 'pending',
+                capacity: data.capacity,
+                currentOccupancy: data.currentOccupancy,
+                contact: data.contact,
+                coordinates: { lat: 45.5017, lng: -73.5673 } // Default
+              };
+            }
+          })();
+          
+          shelterPromises.push(shelterPromise);
         });
         
-        console.log(`📍 Found ${shelterData.length} shelters`);
+        const results = await Promise.all(shelterPromises);
+        const validShelters = results.filter((shelter): shelter is ShelterLocation => shelter !== null);
         
-        // Check for cached coordinates
-        const cacheKey = 'sheltr-geocoded-coordinates';
-        const cachedData = localStorage.getItem(cacheKey);
-        let coordinatesCache: Record<string, { lat: number; lng: number; timestamp: number }> = {};
-        
-        if (cachedData && refreshTrigger === 0) {
-          try {
-            coordinatesCache = JSON.parse(cachedData);
-            console.log('📦 Found cached geocoding data');
-          } catch {
-            console.warn('⚠️ Invalid cached data, will re-geocode');
-          }
-        }
-        
-        const geocodedShelters: ShelterLocation[] = [];
-        let needsGeocoding = 0;
-        
-        // Check which shelters need geocoding
-        for (const shelter of shelterData) {
-          const cached = coordinatesCache[shelter.address];
-          const isExpired = cached && (Date.now() - cached.timestamp > 7 * 24 * 60 * 60 * 1000); // 7 days
-          
-          if (!cached || isExpired || refreshTrigger > 0) {
-            needsGeocoding++;
-          }
-        }
-        
-        if (needsGeocoding > 0) {
-          console.log(`🌍 Need to geocode ${needsGeocoding} shelters`);
-          setGeocodingProgress({ current: 0, total: needsGeocoding });
-        }
-        
-        let currentIndex = 0;
-        
-        // Process each shelter
-        for (const shelter of shelterData) {
-          const cached = coordinatesCache[shelter.address];
-          const isExpired = cached && (Date.now() - cached.timestamp > 7 * 24 * 60 * 60 * 1000);
-          
-          let coordinates;
-          
-          if (cached && !isExpired && refreshTrigger === 0) {
-            // Use cached coordinates
-            coordinates = { lat: cached.lat, lng: cached.lng };
-            console.log(`💾 Using cached coordinates for ${shelter.name}`);
-          } else {
-            // Geocode fresh coordinates
-            currentIndex++;
-            setGeocodingProgress({ current: currentIndex, total: needsGeocoding });
-            
-            coordinates = await geocodeAddress(shelter.address);
-            
-            if (!coordinates) {
-              coordinates = getFallbackCoordinates(shelter.address);
-              console.log(`🔄 Using fallback coordinates for ${shelter.name}`);
-            }
-            
-            // Cache the coordinates
-            coordinatesCache[shelter.address] = {
-              lat: coordinates.lat,
-              lng: coordinates.lng,
-              timestamp: Date.now()
-            };
-            
-            // Rate limiting: wait 1 second between requests
-            if (currentIndex < needsGeocoding) {
-              await new Promise(resolve => setTimeout(resolve, 1000));
-            }
-          }
-          
-          geocodedShelters.push({
-            ...shelter,
-            coordinates
-          });
-        }
-        
-        // Save updated cache
-        localStorage.setItem(cacheKey, JSON.stringify(coordinatesCache));
-        
-        console.log(`✅ Successfully processed ${geocodedShelters.length} shelters (${needsGeocoding} newly geocoded)`);
-        setShelters(geocodedShelters);
+        console.log(`✅ Successfully loaded ${validShelters.length} shelters with coordinates`);
+        setShelters(validShelters);
         
       } catch (error) {
         console.error('❌ Error fetching shelters:', error);

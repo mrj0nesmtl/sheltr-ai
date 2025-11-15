@@ -252,11 +252,30 @@ export default function SettingsPage() {
       setSaving(true);
       console.log('💾 Saving shelter configuration...');
       
+      // Geocode address if it changed
+      let coordinates = publicConfig?.coordinates;
+      const addressChanged = formData.address !== publicConfig?.address;
+      
+      if (addressChanged && formData.address) {
+        console.log('📍 Address changed, geocoding new address...');
+        try {
+          const { geocodeAddressWithFallback } = await import('@/utils/geocoding');
+          coordinates = await geocodeAddressWithFallback(formData.address);
+          console.log('✅ Geocoded coordinates:', coordinates);
+        } catch (geocodeError) {
+          console.error('❌ Geocoding failed:', geocodeError);
+          // Keep existing coordinates or undefined if none exist
+        }
+      }
+      
       // Prepare update data
       const updateData: Partial<ShelterPublicConfig> = {
         name: formData.name,
         description: formData.description,
         address: formData.address,
+        city: formData.city,
+        province: formData.province,
+        postal_code: formData.postalCode,
         phone: formData.phone,
         email: formData.email,
         services: formData.services,
@@ -265,6 +284,7 @@ export default function SettingsPage() {
         check_out_time: formData.checkOutTime,
         operating_hours: formData.operatingHours,
         languages: formData.languages || ['English', 'French'], // Default if not set
+        coordinates: coordinates, // Include geocoded coordinates
         socialMedia: {
           website: formData.website,
           facebook: formData.socialMedia.facebook,

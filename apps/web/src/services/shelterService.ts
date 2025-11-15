@@ -49,6 +49,8 @@ export interface ShelterPublicConfig {
   coordinates?: {
     lat: number;
     lng: number;
+    geocodedAt?: string; // Timestamp when coordinates were last geocoded
+    source?: 'google' | 'manual' | 'fallback'; // How coordinates were obtained
   };
   qrCode?: {
     url: string;

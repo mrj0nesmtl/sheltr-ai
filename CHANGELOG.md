@@ -7,6 +7,119 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.118.0] - 2025-01-15 (CRITICAL LOGIN REDIRECT FIX) 🔧
+
+### 🐛 Critical Bug Fix
+
+#### **Fixed Login Redirect Issue for All User Roles** 🎯
+
+**ISSUE IDENTIFIED:**
+Users reported seeing "two different dashboards" after login - an initial page that appeared briefly, then a redirect to their actual dashboard. Clicking the sidebar "Overview" button showed the correct dashboard, but there was no way to return to the initial page.
+
+**ROOT CAUSE:**
+The `/dashboard/page.tsx` contained "simulation views" for participants, donors, and shelter admins that were meant ONLY for super admins who are simulating other roles. However, these views were being shown to ALL users with those roles, causing confusion.
+
+**THE BUG:**
+```typescript
+// BEFORE (WRONG):
+if (effectiveRole === 'participant') { /* show simulation view */ }
+if (effectiveRole === 'admin') { /* show simulation view */ }
+if (effectiveRole === 'donor') { /* show simulation view */ }
+
+// These conditions matched ACTUAL participants/admins/donors, not just simulations!
+```
+
+**THE FIX:**
+```typescript
+// AFTER (CORRECT):
+if (effectiveRole === 'participant' && user?.role === 'super_admin' && simulatedRole) { /* show simulation */ }
+if (effectiveRole === 'admin' && user?.role === 'super_admin' && simulatedRole) { /* show simulation */ }
+if (effectiveRole === 'donor' && user?.role === 'super_admin' && simulatedRole) { /* show simulation */ }
+
+// Now only shows simulation views when super admin is actively simulating
+```
+
+### ✅ Fixed Behavior
+
+**Login Flow (All Roles):**
+- ✅ **Participants** → Direct redirect to `/dashboard/participant` (no intermediate page)
+- ✅ **Donors** → Direct redirect to `/dashboard/donor` (no intermediate page)
+- ✅ **Shelter Admins** → Direct redirect to `/dashboard/shelter-admin` (no intermediate page)
+- ✅ **Platform Admins** → See their main dashboard at `/dashboard` (correct)
+- ✅ **Super Admins** → See their main dashboard at `/dashboard` (correct)
+- ✅ **Super Admins (simulating)** → See simulation views (correct)
+
+**DashboardRouter:**
+The `DashboardRouter` component was already working correctly with `router.replace()` for instant redirects. The issue was that the generic `/dashboard` page was rendering simulation views before the redirect could happen.
+
+### 📄 Files Modified
+
+**Core Fix:**
+- `apps/web/src/app/dashboard/page.tsx`:
+  - Line 1558: Added super admin + simulation check for shelter admin view
+  - Line 1714: Added super admin + simulation check for participant view
+  - Line 1876: Added super admin + simulation check for donor view
+  - These views now ONLY show when a super admin is actively simulating a role
+
+**Supporting Improvements:**
+- `apps/web/src/components/auth/LoginForm.tsx`:
+  - Cleaned up login redirect logic
+  - Maintained `/dashboard` redirect (DashboardRouter handles role-based routing)
+
+### 🎯 Impact
+
+**Before:**
+1. User logs in → sees generic "Redirecting..." or simulation dashboard
+2. DashboardRouter redirects → sees actual role-specific dashboard
+3. User confused by two different layouts
+4. Sidebar "Overview" button works, but can't get back to initial page
+
+**After:**
+1. User logs in → instant redirect to role-specific dashboard
+2. No intermediate page visible
+3. Consistent experience across all roles
+4. Sidebar navigation works as expected
+
+### 🔍 Technical Details
+
+**Role-Based Routing:**
+```typescript
+const ROLE_DASHBOARD_MAP = {
+  'super_admin': '/dashboard',
+  'platform_admin': '/dashboard',
+  'admin': '/dashboard/shelter-admin', 
+  'participant': '/dashboard/participant',
+  'donor': '/dashboard/donor'
+}
+```
+
+**Simulation Detection:**
+- `effectiveRole`: Returns simulated role if super admin is simulating, otherwise actual role
+- `simulatedRole`: State variable set when super admin activates simulation mode
+- Simulation views now require BOTH conditions to be true
+
+### 🧪 Testing Checklist
+
+- [x] Participant login → direct to `/dashboard/participant`
+- [x] Donor login → direct to `/dashboard/donor`
+- [x] Shelter Admin login → direct to `/dashboard/shelter-admin`
+- [x] Platform Admin login → shows `/dashboard` (their main dashboard)
+- [x] Super Admin login → shows `/dashboard` (their main dashboard)
+- [x] Super Admin simulation → shows simulation views correctly
+- [x] Sidebar navigation works for all roles
+- [x] No "flash" of intermediate pages
+- [x] Production build successful
+
+### 📊 Affected User Roles
+
+- ✅ Participants
+- ✅ Donors
+- ✅ Shelter Administrators
+- ✅ Platform Administrators (unchanged, working correctly)
+- ✅ Super Administrators (unchanged, working correctly)
+
+---
+
 ## [2.117.0] - 2025-01-15 (PUBLIC SOCIAL MEDIA SECTION) 🌐
 
 ### ✨ Feature Enhancement

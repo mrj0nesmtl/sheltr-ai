@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { sendPasswordResetEmail } from 'firebase/auth';
@@ -22,9 +22,28 @@ export const LoginForm: React.FC<LoginFormProps> = ({
   const [showPassword, setShowPassword] = useState(false);
   const [isResetLoading, setIsResetLoading] = useState(false);
   const [resetSuccess, setResetSuccess] = useState(false);
+  const [isRedirecting, setIsRedirecting] = useState(false);
   
-  const { login, loginWithGoogle, error, clearError } = useAuth();
+  const { login, loginWithGoogle, error, clearError, user } = useAuth();
   const router = useRouter();
+
+  // Role-based dashboard mapping
+  const ROLE_DASHBOARD_MAP = {
+    'super_admin': '/dashboard',
+    'platform_admin': '/dashboard',
+    'admin': '/dashboard/shelter-admin', 
+    'participant': '/dashboard/participant',
+    'donor': '/dashboard/donor'
+  } as const;
+
+  // Watch for user state changes after login and redirect to role-specific dashboard
+  useEffect(() => {
+    if (isRedirecting && user && user.role) {
+      const targetDashboard = ROLE_DASHBOARD_MAP[user.role as keyof typeof ROLE_DASHBOARD_MAP] || '/dashboard';
+      console.log('🔄 Redirecting', user.role, 'to', targetDashboard);
+      router.push(targetDashboard);
+    }
+  }, [user, isRedirecting, router]);
 
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,16 +56,12 @@ export const LoginForm: React.FC<LoginFormProps> = ({
     clearError();
 
     try {
-      const userCredential = await login(email, password);
-      
-      // Get user's role and redirect to their specific dashboard
-      // The DashboardRouter will handle this, but we'll help by going straight there
-      router.push('/dashboard');
-      
+      await login(email, password);
+      // Don't redirect here - let the useEffect handle it after user state updates
+      setIsRedirecting(true);
     } catch (error) {
       // Error is handled by the auth context
       console.error('Login failed:', error);
-    } finally {
       setIsLoading(false);
     }
   };
@@ -57,11 +72,11 @@ export const LoginForm: React.FC<LoginFormProps> = ({
 
     try {
       await loginWithGoogle();
-      router.push('/dashboard'); // Redirect to dashboard after login
+      // Don't redirect here - let the useEffect handle it after user state updates
+      setIsRedirecting(true);
     } catch (error) {
       // Error is handled by the auth context
       console.error('Google login failed:', error);
-    } finally {
       setIsLoading(false);
     }
   };

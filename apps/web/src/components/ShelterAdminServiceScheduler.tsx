@@ -414,8 +414,8 @@ export function ShelterAdminServiceScheduler({
       console.log('📅 Loading all bookings for shelter:', shelterId);
       
       // Load real bookings from Firebase
-      const bookingsRef = collection(db, 'bookings');
-      const q = query(bookingsRef, where('shelterId', '==', shelterId));
+      const appointmentsRef = collection(db, 'appointments');
+      const q = query(appointmentsRef, where('shelterId', '==', shelterId));
       const querySnapshot = await getDocs(q);
       
       const bookingsList: ServiceBookingType[] = [];

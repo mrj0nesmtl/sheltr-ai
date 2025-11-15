@@ -307,9 +307,9 @@ export async function checkAvailability(
     }
     
     // Check existing bookings for that time slot
-    const bookingsRef = collection(db, 'bookings');
+    const appointmentsRef = collection(db, 'appointments');
     const q = query(
-      bookingsRef,
+      appointmentsRef,
       where('serviceId', '==', serviceId),
       where('appointmentDate', '>=', Timestamp.fromDate(appointmentDate)),
       where('appointmentDate', '<', Timestamp.fromDate(new Date(appointmentDate.getTime() + duration * 60000))),
@@ -378,8 +378,8 @@ export async function bookService(bookingData: {
       }
     };
     
-    const bookingsRef = collection(db, 'bookings');
-    const docRef = await addDoc(bookingsRef, booking);
+    const appointmentsRef = collection(db, 'appointments');
+    const docRef = await addDoc(appointmentsRef, booking);
     
     return {
       id: docRef.id,
@@ -396,9 +396,9 @@ export async function bookService(bookingData: {
  */
 export async function getParticipantBookings(participantId: string): Promise<ServiceBooking[]> {
   try {
-    const bookingsRef = collection(db, 'bookings');
+    const appointmentsRef = collection(db, 'appointments');
     const q = query(
-      bookingsRef,
+      appointmentsRef,
       where('participantId', '==', participantId),
       orderBy('appointmentDate', 'desc'),
       limit(50)
@@ -420,9 +420,9 @@ export async function getParticipantBookings(participantId: string): Promise<Ser
  */
 export async function getShelterBookings(shelterId: string, status?: string): Promise<ServiceBooking[]> {
   try {
-    const bookingsRef = collection(db, 'bookings');
+    const appointmentsRef = collection(db, 'appointments');
     let q = query(
-      bookingsRef,
+      appointmentsRef,
       where('shelterId', '==', shelterId),
       orderBy('appointmentDate', 'desc')
     );

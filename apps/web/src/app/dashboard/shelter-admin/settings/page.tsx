@@ -69,12 +69,15 @@ export default function SettingsPage() {
     phone: '(514) 935-4590', // Old Brewery Mission real phone
     email: 'info@missionoldbrewery.ca',
     website: 'https://www.missionoldbrewery.ca',
+    city: 'Montreal',
+    province: 'Quebec',
     capacity: 300,
     currentOccupancy: 1,
     established: '1889', // Old Brewery Mission established date
     operatingHours: '24/7',
     checkInTime: '8:00 PM',
     checkOutTime: '7:00 AM',
+    languages: ['English', 'French'],
     qrCode: 'https://sheltr-ai.web.app/old-brewery-mission',
     socialMedia: {
       facebook: 'https://facebook.com/OldBreweryMission',
@@ -197,12 +200,15 @@ export default function SettingsPage() {
             phone: config.phone || '',
             email: config.email || '',
             website: config.socialMedia?.website || '',
+            city: config.city || 'Montreal',
+            province: config.province || 'Quebec',
             capacity: metrics?.capacity || 0,
             currentOccupancy: metrics?.totalParticipants || 0,
             established: config.established || '',
-            operatingHours: '24/7', // Will be derived from config
-            checkInTime: '', // Will be added to config
-            checkOutTime: '', // Will be added to config
+            operatingHours: config.operating_hours || '24/7',
+            checkInTime: config.check_in_time || '8:00 PM',
+            checkOutTime: config.check_out_time || '7:00 AM',
+            languages: config.languages || ['English', 'French'],
             qrCode: config.qrCode?.url || '',
             socialMedia: {
               facebook: config.socialMedia?.facebook || '',
@@ -255,6 +261,10 @@ export default function SettingsPage() {
         email: formData.email,
         services: formData.services,
         established: formData.established,
+        check_in_time: formData.checkInTime,
+        check_out_time: formData.checkOutTime,
+        operating_hours: formData.operatingHours,
+        languages: formData.languages || ['English', 'French'], // Default if not set
         socialMedia: {
           website: formData.website,
           facebook: formData.socialMedia.facebook,

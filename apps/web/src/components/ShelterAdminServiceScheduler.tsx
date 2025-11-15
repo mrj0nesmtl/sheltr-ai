@@ -1310,13 +1310,18 @@ export function ShelterAdminServiceScheduler({
                     <div className="flex justify-between items-start">
                       <div className="flex-1">
                         <div className="flex items-center space-x-2 mb-2">
-                          <h4 className="font-semibold">Booking #{booking.confirmationCode}</h4>
+                          <h4 className="font-semibold text-lg">
+                            {booking.serviceName || 'Service Appointment'}
+                          </h4>
                           <Badge className={getStatusColor(booking.status)}>
                             {booking.status}
                           </Badge>
                         </div>
                         
                         <div className="space-y-1 text-sm">
+                          <p className="text-gray-600 dark:text-gray-400">
+                            <strong>Confirmation:</strong> #{booking.confirmationCode}
+                          </p>
                           <p className="text-gray-600 dark:text-gray-400">
                             <strong>Participant:</strong> {booking.attendeeInfo.participantName}
                           </p>

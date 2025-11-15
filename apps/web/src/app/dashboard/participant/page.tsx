@@ -6,11 +6,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { getShelterMetrics, ShelterMetrics } from '@/services/platformMetrics';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs, orderBy, limit } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import Link from 'next/link';
 import { generateProfileQRCodeUrl, getParticipantProfileUrl } from '@/utils/profileUrls';
 import { useNotifications } from '@/hooks/useNotifications';
+import { getParticipantBookings, ServiceBooking } from '@/services/serviceBookingService';
 import {
   User, 
   Calendar, 
@@ -149,6 +150,7 @@ export default function ParticipantDashboard() {
   const { notifications, unreadCount } = useNotifications();
   const [shelterInfo, setShelterInfo] = useState<ShelterMetrics | null>(null);
   const [participantData, setParticipantData] = useState<ParticipantData | null>(null);
+  const [upcomingBookings, setUpcomingBookings] = useState<ServiceBooking[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -247,6 +249,21 @@ export default function ParticipantDashboard() {
         if (shelterId) {
           const metrics = await getShelterMetrics(shelterId);
           setShelterInfo(metrics);
+        }
+        
+        // Load upcoming bookings
+        try {
+          const bookings = await getParticipantBookings(participantId);
+          // Filter for upcoming/confirmed bookings only
+          const upcoming = bookings.filter(b => 
+            (b.status === 'confirmed' || b.status === 'pending') &&
+            b.appointmentDate.toDate() > new Date()
+          );
+          setUpcomingBookings(upcoming);
+          console.log('✅ Loaded upcoming bookings:', upcoming.length);
+        } catch (bookingError) {
+          console.warn('⚠️ Could not load bookings:', bookingError);
+          // Don't fail the whole page if bookings fail
         }
       } catch (error) {
         console.error('❌ Failed to load participant info:', error);
@@ -602,41 +619,60 @@ export default function ParticipantDashboard() {
           <CardDescription>Your scheduled services and next steps</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
-            {upcomingServices.map((service) => (
-              <div key={service.id} className="flex items-center justify-between p-4 border rounded-lg">
-                <div className="flex items-center space-x-4">
-                  <div className={`h-10 w-10 rounded-lg border-2 flex items-center justify-center bg-transparent ${
-                    service.type === 'Medical' ? 'border-red-500 text-red-600' :
-                    service.type === 'Employment' ? 'border-blue-500 text-blue-600' :
-                    service.type === 'Mental Health' ? 'border-green-500 text-green-600' :
-                    'border-gray-500 text-gray-600'
-                  }`}>
-                    {service.type === 'Medical' && <Stethoscope className="h-5 w-5" />}
-                    {service.type === 'Employment' && <GraduationCap className="h-5 w-5" />}
-                    {service.type === 'Mental Health' && <Heart className="h-5 w-5" />}
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center space-x-2">
-                      <p className="font-medium">{service.service}</p>
-                      <Badge variant={service.status === 'confirmed' ? 'default' : 'outline'}>
-                        {service.status}
-                      </Badge>
-                    </div>
-                    <p className="text-sm text-muted-foreground">
-                      {formatDate(service.date)} at {service.time} • {service.location}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      Provider: {service.provider}
-                    </p>
-                  </div>
-                </div>
-                <Button variant="outline" size="sm">
-                  View Details
+          {upcomingBookings.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">
+              <Calendar className="h-12 w-12 mx-auto mb-3 opacity-50" />
+              <p>No upcoming appointments</p>
+              <Link href="/dashboard/participant/services">
+                <Button variant="outline" className="mt-4">
+                  Browse Services
                 </Button>
-              </div>
-            ))}
-          </div>
+              </Link>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {upcomingBookings.map((booking) => {
+                const appointmentDate = booking.appointmentDate.toDate();
+                const serviceName = booking.serviceName || 'Service Appointment';
+                
+                return (
+                  <div key={booking.id} className="flex items-center justify-between p-4 border rounded-lg">
+                    <div className="flex items-center space-x-4">
+                      <div className="h-10 w-10 rounded-lg border-2 flex items-center justify-center bg-transparent border-blue-500 text-blue-600">
+                        <Calendar className="h-5 w-5" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-2">
+                          <p className="font-medium">{serviceName}</p>
+                          <Badge variant={booking.status === 'confirmed' ? 'default' : 'outline'}>
+                            {booking.status}
+                          </Badge>
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                          {appointmentDate.toLocaleDateString([], { 
+                            weekday: 'short', 
+                            month: 'short', 
+                            day: 'numeric' 
+                          })} at {appointmentDate.toLocaleTimeString([], { 
+                            hour: '2-digit', 
+                            minute: '2-digit' 
+                          })} • {booking.duration} min
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          Confirmation: {booking.confirmationCode}
+                        </p>
+                      </div>
+                    </div>
+                    <Link href="/dashboard/participant/services">
+                      <Button variant="outline" size="sm">
+                        View Details
+                      </Button>
+                    </Link>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </CardContent>
       </Card>
 

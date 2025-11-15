@@ -1048,7 +1048,21 @@ export default function ShelterNetwork() {
                   </div>
                 </div>
               ) : (
-                <ShelterNetworkMap height="600px" refreshTrigger={mapRefreshTrigger} />
+                <ShelterNetworkMap 
+                  height="600px" 
+                  refreshTrigger={mapRefreshTrigger}
+                  shelters={filteredShelters.map(shelter => ({
+                    id: shelter.id,
+                    name: shelter.name,
+                    address: shelter.address,
+                    location: shelter.location,
+                    coordinates: shelter.coordinates || { lat: 45.5017, lng: -73.5673 }, // fallback to Montreal
+                    status: shelter.status,
+                    capacity: shelter.capacity,
+                    currentOccupancy: shelter.currentOccupancy,
+                    contact: shelter.contact
+                  }))}
+                />
               )}
             </CardContent>
           </Card>

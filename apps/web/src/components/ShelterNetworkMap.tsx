@@ -58,6 +58,7 @@ interface ShelterNetworkMapProps {
   className?: string;
   height?: string;
   refreshTrigger?: number; // Used to trigger refresh from parent component
+  shelters?: ShelterLocation[]; // Optional: pass filtered shelters from parent
 }
 
 // Component to fit map bounds to all shelters
@@ -85,11 +86,14 @@ const getStatusColor = (status: string) => {
   }
 };
 
-export default function ShelterNetworkMap({ className = '', height = '600px', refreshTrigger = 0 }: ShelterNetworkMapProps) {
+export default function ShelterNetworkMap({ className = '', height = '600px', refreshTrigger = 0, shelters: externalShelters }: ShelterNetworkMapProps) {
   const { theme, systemTheme } = useTheme();
   const [isClient, setIsClient] = useState(false);
-  const [shelters, setShelters] = useState<ShelterLocation[]>([]);
+  const [internalShelters, setInternalShelters] = useState<ShelterLocation[]>([]);
   const [loading, setLoading] = useState(true);
+  
+  // Use external shelters if provided, otherwise use internal state
+  const shelters = externalShelters || internalShelters;
 
   // Determine if we should use dark mode
   const isDarkMode = theme === 'dark' || (theme === 'system' && systemTheme === 'dark');
@@ -98,8 +102,14 @@ export default function ShelterNetworkMap({ className = '', height = '600px', re
     setIsClient(true);
   }, []);
 
-  // Fetch shelters with coordinates from Firestore
+  // Fetch shelters with coordinates from Firestore (only if not provided externally)
   useEffect(() => {
+    // Skip fetching if shelters are provided externally
+    if (externalShelters) {
+      setLoading(false);
+      return;
+    }
+    
     const fetchShelters = async () => {
       try {
         console.log('🏠 Fetching shelters from database...');
@@ -172,7 +182,7 @@ export default function ShelterNetworkMap({ className = '', height = '600px', re
         const validShelters = results.filter((shelter): shelter is ShelterLocation => shelter !== null);
         
         console.log(`✅ Successfully loaded ${validShelters.length} shelters with coordinates`);
-        setShelters(validShelters);
+        setInternalShelters(validShelters);
         
       } catch (error) {
         console.error('❌ Error fetching shelters:', error);
@@ -184,7 +194,7 @@ export default function ShelterNetworkMap({ className = '', height = '600px', re
     if (isClient) {
       fetchShelters();
     }
-  }, [isClient, refreshTrigger]);
+  }, [isClient, refreshTrigger, externalShelters]);
 
   if (!isClient || loading) {
     return (

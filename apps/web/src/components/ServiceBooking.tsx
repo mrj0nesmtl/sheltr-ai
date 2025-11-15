@@ -38,6 +38,9 @@ import {
   type ServiceCategory
 } from '@/services/serviceBookingService';
 import { useAuth } from '@/contexts/AuthContext';
+import { createShelterNotification } from '@/services/unifiedNotificationService';
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 
 interface ServiceBookingProps {
   shelterId: string;
@@ -626,6 +629,48 @@ export function ServiceBooking({
           emergencyContact: bookingForm.emergencyContact,
           notes: bookingForm.notes
         });
+      }
+      
+      // Notify shelter admin about the new booking
+      try {
+        // Get shelter admin ID
+        const adminsQuery = query(
+          collection(db, 'users'),
+          where('shelter_id', '==', shelterId),
+          where('role', '==', 'admin')
+        );
+        const adminSnap = await getDocs(adminsQuery);
+        
+        if (!adminSnap.empty) {
+          const adminId = adminSnap.docs[0].id;
+          const participantName = user?.displayName || bookingForm.participantName || 'A participant';
+          const appointmentDate = new Date(selectedSlot.datetime);
+          
+          await createShelterNotification({
+            shelter_id: shelterId,
+            tenant_id: shelterId,
+            recipient_id: adminId,
+            type: 'participant_update',
+            title: 'New Appointment Booked',
+            message: `${participantName} has booked an appointment for ${selectedService.name} on ${appointmentDate.toLocaleDateString()} at ${formatTime(appointmentDate)}.`,
+            priority: 'high',
+            category: 'service',
+            data: {
+              participant_id: participantId,
+              participant_name: participantName,
+              service_id: selectedService.id,
+              service_name: selectedService.name,
+              appointment_id: booking.id,
+              appointment_date: appointmentDate.toISOString(),
+              location: selectedService.location,
+              confirmation_code: booking.confirmationCode
+            }
+          });
+          console.log('✅ Notification sent to shelter admin');
+        }
+      } catch (notificationError) {
+        console.error('⚠️ Failed to notify shelter admin:', notificationError);
+        // Don't fail the booking if notification fails
       }
       
       onBookingComplete?.(booking);

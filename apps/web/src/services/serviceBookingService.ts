@@ -354,6 +354,8 @@ export async function bookService(bookingData: {
   participantPhone?: string;
   emergencyContact?: string;
   notes?: string;
+  serviceName?: string; // Optional: caller can provide service name directly
+  categoryId?: string; // Optional: caller can provide category ID directly
 }): Promise<ServiceBooking> {
   try {
     // Check availability first
@@ -367,19 +369,23 @@ export async function bookService(bookingData: {
       throw new Error('Service is not available at the requested time');
     }
     
-    // Fetch service details to get the name and category
-    let serviceName = 'Service Appointment';
-    let categoryId: string | undefined = undefined;
-    try {
-      const serviceDoc = await getDoc(doc(db, 'services', bookingData.serviceId));
-      if (serviceDoc.exists()) {
-        const serviceData = serviceDoc.data() as ShelterService;
-        serviceName = serviceData.name;
-        categoryId = serviceData.categoryId;
+    // Use provided service name/category, or fetch from Firestore
+    let serviceName = bookingData.serviceName || 'Service Appointment';
+    let categoryId: string | undefined = bookingData.categoryId;
+    
+    // Only fetch from Firestore if not provided
+    if (!bookingData.serviceName || !bookingData.categoryId) {
+      try {
+        const serviceDoc = await getDoc(doc(db, 'services', bookingData.serviceId));
+        if (serviceDoc.exists()) {
+          const serviceData = serviceDoc.data() as ShelterService;
+          serviceName = bookingData.serviceName || serviceData.name;
+          categoryId = bookingData.categoryId || serviceData.categoryId;
+        }
+      } catch (serviceError) {
+        console.warn('Could not fetch service details:', serviceError);
+        // Continue with booking even if service details fetch fails
       }
-    } catch (serviceError) {
-      console.warn('Could not fetch service details:', serviceError);
-      // Continue with booking even if service details fetch fails
     }
     
     // Create booking (only include categoryId if it has a value - Firestore doesn't allow undefined)

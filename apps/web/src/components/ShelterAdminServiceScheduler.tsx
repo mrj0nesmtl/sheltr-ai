@@ -737,6 +737,8 @@ export function ShelterAdminServiceScheduler({
       // This ensures bookings are persistent and visible to participants
       booking = await bookService({
         serviceId: selectedService.id,
+        serviceName: selectedService.name, // Pass service name directly
+        categoryId: selectedService.id.toLowerCase().replace(/\s+/g, '-'), // Use service ID as category
         participantId: selectedParticipant.id,
         shelterId,
         appointmentDate: selectedSlot.datetime,

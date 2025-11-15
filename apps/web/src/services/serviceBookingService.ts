@@ -415,21 +415,54 @@ export async function bookService(bookingData: {
  */
 export async function getParticipantBookings(participantId: string): Promise<ServiceBooking[]> {
   try {
+    console.log('🔍 Querying appointments for participant:', participantId);
     const appointmentsRef = collection(db, 'appointments');
-    const q = query(
-      appointmentsRef,
-      where('participantId', '==', participantId),
-      orderBy('appointmentDate', 'desc'),
-      limit(50)
-    );
     
-    const snapshot = await getDocs(q);
-    return snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    })) as ServiceBooking[];
+    // Try with orderBy first (requires index)
+    try {
+      const q = query(
+        appointmentsRef,
+        where('participantId', '==', participantId),
+        orderBy('appointmentDate', 'desc'),
+        limit(50)
+      );
+      
+      const snapshot = await getDocs(q);
+      console.log('✅ Found bookings with orderBy:', snapshot.docs.length);
+      
+      const bookings = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      })) as ServiceBooking[];
+      
+      return bookings;
+    } catch (indexError: any) {
+      // If index doesn't exist, try without orderBy
+      console.warn('⚠️ Index not ready, querying without orderBy:', indexError.message);
+      
+      const q = query(
+        appointmentsRef,
+        where('participantId', '==', participantId),
+        limit(50)
+      );
+      
+      const snapshot = await getDocs(q);
+      console.log('✅ Found bookings without orderBy:', snapshot.docs.length);
+      
+      const bookings = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      })) as ServiceBooking[];
+      
+      // Sort in memory
+      return bookings.sort((a, b) => {
+        const dateA = a.appointmentDate.toDate ? a.appointmentDate.toDate() : new Date(a.appointmentDate);
+        const dateB = b.appointmentDate.toDate ? b.appointmentDate.toDate() : new Date(b.appointmentDate);
+        return dateB.getTime() - dateA.getTime();
+      });
+    }
   } catch (error) {
-    console.error('Error fetching participant bookings:', error);
+    console.error('❌ Error fetching participant bookings:', error);
     return [];
   }
 }

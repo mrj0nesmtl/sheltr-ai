@@ -37,8 +37,12 @@ export const LoginForm: React.FC<LoginFormProps> = ({
     clearError();
 
     try {
-      await login(email, password);
-      router.push('/dashboard'); // Redirect to dashboard after login
+      const userCredential = await login(email, password);
+      
+      // Get user's role and redirect to their specific dashboard
+      // The DashboardRouter will handle this, but we'll help by going straight there
+      router.push('/dashboard');
+      
     } catch (error) {
       // Error is handled by the auth context
       console.error('Login failed:', error);

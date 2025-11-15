@@ -2038,11 +2038,15 @@ Token Role: ${tokenRole || 'MISSING'}`;
     );
   }
 
-  // For all other roles, let DashboardRouter handle the redirect
+  // For all other roles (participant, donor, shelter admin), immediately redirect to their dashboard
+  // The DashboardRouter will handle the actual redirection
   return (
     <DashboardRouter>
-      <div className="text-center py-8">
-        <p className="text-gray-500">Redirecting to your role-specific dashboard...</p>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-gray-400" />
+          <p className="text-gray-500">Loading your dashboard...</p>
+        </div>
       </div>
     </DashboardRouter>
   );

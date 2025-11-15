@@ -7,6 +7,120 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.119.0] - 2025-01-15 (PRODUCTION LOGIN REDIRECT FIX) 🚀
+
+### 🐛 Critical Production Bug Fix
+
+#### **Fixed Login Redirect for Static Export (Production)** 🎯
+
+**PRODUCTION ISSUE:**
+After deploying v2.118.0, participants were still stuck on `/dashboard` with "Loading your dashboard..." message in production, even though the fix worked locally.
+
+**ROOT CAUSE:**
+Next.js static exports (`output: 'export'`) don't support dynamic client-side redirects using `router.replace()` the same way as development mode. The `DashboardRouter` component's redirect logic doesn't work reliably in fully static sites.
+
+**THE SOLUTION:**
+Moved the role-based redirect logic from `DashboardRouter` to the `LoginForm` component, where we can wait for the Firebase auth state to update and then redirect directly to the correct dashboard.
+
+### ✅ Implementation
+
+**New Login Flow:**
+```typescript
+// 1. User logs in
+await login(email, password);
+setIsRedirecting(true);
+
+// 2. useEffect watches for user state change
+useEffect(() => {
+  if (isRedirecting && user && user.role) {
+    const targetDashboard = ROLE_DASHBOARD_MAP[user.role];
+    router.push(targetDashboard); // Direct navigation
+  }
+}, [user, isRedirecting, router]);
+```
+
+**Why This Works with Static Exports:**
+- Waits for Firebase auth state to fully update (user object with role)
+- Uses simple `router.push()` with hardcoded paths (no dynamic routing)
+- No server-side logic or middleware required
+- Works identically in development and production
+
+### 📄 Files Modified
+
+**Core Fix:**
+- `apps/web/src/components/auth/LoginForm.tsx`:
+  - Added `isRedirecting` state flag
+  - Added `useEffect` to watch for user state after login
+  - Imported `useEffect` from React
+  - Added `ROLE_DASHBOARD_MAP` constant (same as DashboardRouter)
+  - Direct redirect to role-specific dashboard when user.role is available
+  - Handles both email and Google login flows
+
+### ✅ Fixed Behavior (Production)
+
+**Login Flow (All Roles):**
+- ✅ **Participants** → Instant redirect to `/dashboard/participant`
+- ✅ **Donors** → Instant redirect to `/dashboard/donor`
+- ✅ **Shelter Admins** → Instant redirect to `/dashboard/shelter-admin`
+- ✅ **Platform Admins** → Redirect to `/dashboard` (their main dashboard)
+- ✅ **Super Admins** → Redirect to `/dashboard` (their main dashboard)
+
+**No More:**
+- ❌ Stuck on `/dashboard` with "Loading..." message
+- ❌ Manual navigation to correct dashboard required
+- ❌ Inconsistent behavior between dev and production
+
+### 🔍 Technical Details
+
+**Static Export Constraints:**
+```typescript
+// Next.js config (production only)
+{
+  output: 'export',        // Fully static HTML/CSS/JS
+  trailingSlash: true,     // All routes end with /
+  distDir: 'out'           // Build output directory
+}
+```
+
+**Why DashboardRouter Didn't Work:**
+- Uses `router.replace()` which requires Next.js middleware
+- Middleware is not available in static exports
+- Redirect happens after page render, causing visible "Loading..." state
+
+**Why LoginForm Works:**
+- Waits for auth state before any navigation
+- Uses `router.push()` with explicit paths
+- No intermediate page render
+- Works with pure client-side routing
+
+### 🧪 Testing Checklist
+
+- [x] Participant login (production) → `/dashboard/participant`
+- [x] Donor login (production) → `/dashboard/donor`
+- [x] Shelter Admin login (production) → `/dashboard/shelter-admin`
+- [x] Platform Admin login (production) → `/dashboard`
+- [x] Super Admin login (production) → `/dashboard`
+- [x] Google login works for all roles
+- [x] Email login works for all roles
+- [x] No "Loading..." flash in production
+- [x] Consistent behavior dev vs production
+
+### 📊 Deployment Notes
+
+**Build Command:**
+```bash
+./deploy.sh
+# Select option 1 (Frontend only)
+```
+
+**Verification:**
+1. Clear browser cache
+2. Login as participant
+3. Should immediately see `/dashboard/participant` URL
+4. No intermediate `/dashboard` page
+
+---
+
 ## [2.118.0] - 2025-01-15 (CRITICAL LOGIN REDIRECT FIX) 🔧
 
 ### 🐛 Critical Bug Fix

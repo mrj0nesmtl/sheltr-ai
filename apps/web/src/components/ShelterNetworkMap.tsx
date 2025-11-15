@@ -191,19 +191,7 @@ export default function ShelterNetworkMap({ className = '', height = '600px', re
       <div className={`w-full bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center ${className}`} style={{ height }}>
         <div className="flex flex-col items-center space-y-2 text-gray-500">
           <MapPin className="h-8 w-8 animate-pulse" />
-          {loading && geocodingProgress.total > 0 ? (
-            <div className="text-center">
-              <div>Geocoding shelters...</div>
-              <div className="text-sm">
-                {geocodingProgress.current} of {geocodingProgress.total}
-              </div>
-              <div className="text-xs text-gray-400 mt-1">
-                Other locations loaded from cache
-              </div>
-            </div>
-          ) : (
-            <span>Loading shelter map...</span>
-          )}
+          <span>Loading shelter map...</span>
         </div>
       </div>
     );

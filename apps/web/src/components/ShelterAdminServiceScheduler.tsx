@@ -260,9 +260,9 @@ export function ShelterAdminServiceScheduler({
       
       // If no services found in Firestore, provide demo services for the category
       if (categoryServices.length === 0) {
-        const demoServices = getDemoServicesForCategory(selectedCategory.id);
+        const demoServices = getDemoServicesForCategory(selectedCategory.id, selectedCategory.name);
         setServices(demoServices);
-        console.log(`⚠️ No real services found, using ${demoServices.length} demo services`);
+        console.log(`⚠️ No real services found, using ${demoServices.length} demo services for "${selectedCategory.name}"`);
       } else {
         setServices(categoryServices);
         console.log(`✅ Loaded ${categoryServices.length} real services`);
@@ -270,15 +270,31 @@ export function ShelterAdminServiceScheduler({
     } catch (err) {
       console.error('Error loading services:', err);
       // Fallback to demo services on error
-      const demoServices = getDemoServicesForCategory(selectedCategory.id);
+      const demoServices = getDemoServicesForCategory(selectedCategory.id, selectedCategory.name);
       setServices(demoServices);
     } finally {
       setLoading(false);
     }
   };
 
-  // Demo services fallback function (same as participant version)
-  const getDemoServicesForCategory = (categoryId: string): ShelterService[] => {
+  // Demo services fallback function with intelligent service name matching
+  const getDemoServicesForCategory = (categoryId: string, categoryName: string): ShelterService[] => {
+    // Map the configured service name to a demo service type
+    const nameToType = (name: string): string => {
+      const lower = name.toLowerCase();
+      if (lower.includes('medical') || lower.includes('health') || lower.includes('clinic')) return 'healthcare';
+      if (lower.includes('mental')) return 'mental-health';
+      if (lower.includes('job') || lower.includes('employment') || lower.includes('training') || lower.includes('career')) return 'employment';
+      if (lower.includes('housing') || lower.includes('shelter') || lower.includes('overnight')) return 'housing';
+      if (lower.includes('meal') || lower.includes('food') || lower.includes('nutrition')) return 'meals';
+      if (lower.includes('case') || lower.includes('management')) return 'case-management';
+      if (lower.includes('substance') || lower.includes('addiction')) return 'substance-abuse';
+      return 'general';
+    };
+    
+    const mappedType = nameToType(categoryName);
+    console.log(`🔄 Mapping "${categoryName}" (${categoryId}) → "${mappedType}" for demo services`);
+    
     const demoServices: { [key: string]: ShelterService[] } = {
       healthcare: [
         {
@@ -394,10 +410,170 @@ export function ShelterAdminServiceScheduler({
           createdAt: { toDate: () => new Date() } as any,
           updatedAt: { toDate: () => new Date() } as any
         }
+      ],
+      'mental-health': [ // Mapped from "Mental Health Support"
+        {
+          id: 'demo-mental-health-1',
+          categoryId: 'mental-health',
+          shelterId: shelterId,
+          name: 'Mental Health Support Session',
+          description: 'Confidential mental health support and counseling',
+          provider: 'Mental Health Counselor',
+          location: 'Private Counseling Room',
+          duration: 60,
+          capacity: 1,
+          cost: 0,
+          requirements: [],
+          isActive: true,
+          schedule: [
+            { dayOfWeek: 1, startTime: '09:00', endTime: '17:00', breakTime: { start: '12:00', end: '13:00' } },
+            { dayOfWeek: 2, startTime: '09:00', endTime: '17:00', breakTime: { start: '12:00', end: '13:00' } },
+            { dayOfWeek: 3, startTime: '09:00', endTime: '17:00', breakTime: { start: '12:00', end: '13:00' } },
+            { dayOfWeek: 4, startTime: '09:00', endTime: '17:00', breakTime: { start: '12:00', end: '13:00' } },
+            { dayOfWeek: 5, startTime: '09:00', endTime: '17:00', breakTime: { start: '12:00', end: '13:00' } }
+          ],
+          createdAt: { toDate: () => new Date() } as any,
+          updatedAt: { toDate: () => new Date() } as any
+        }
+      ],
+      housing: [ // Mapped from "Emergency Overnight Shelter" and "Housing Assistance"
+        {
+          id: 'demo-housing-1',
+          categoryId: 'housing',
+          shelterId: shelterId,
+          name: 'Shelter Bed Assignment',
+          description: 'Emergency overnight shelter bed assignment',
+          provider: 'Intake Coordinator',
+          location: 'Main Shelter Building',
+          duration: 30,
+          capacity: 10,
+          cost: 0,
+          requirements: ['Photo ID preferred but not required'],
+          isActive: true,
+          schedule: [
+            { dayOfWeek: 1, startTime: '16:00', endTime: '20:00' },
+            { dayOfWeek: 2, startTime: '16:00', endTime: '20:00' },
+            { dayOfWeek: 3, startTime: '16:00', endTime: '20:00' },
+            { dayOfWeek: 4, startTime: '16:00', endTime: '20:00' },
+            { dayOfWeek: 5, startTime: '16:00', endTime: '20:00' },
+            { dayOfWeek: 6, startTime: '16:00', endTime: '20:00' },
+            { dayOfWeek: 0, startTime: '16:00', endTime: '20:00' }
+          ],
+          createdAt: { toDate: () => new Date() } as any,
+          updatedAt: { toDate: () => new Date() } as any
+        }
+      ],
+      meals: [ // Mapped from "Meals and Basic Necessities"
+        {
+          id: 'demo-meals-1',
+          categoryId: 'meals',
+          shelterId: shelterId,
+          name: 'Meal Service',
+          description: 'Hot meals served daily',
+          provider: 'Kitchen Staff',
+          location: 'Dining Hall',
+          duration: 15,
+          capacity: 50,
+          cost: 0,
+          requirements: [],
+          isActive: true,
+          schedule: [
+            { dayOfWeek: 1, startTime: '07:00', endTime: '09:00' },
+            { dayOfWeek: 1, startTime: '12:00', endTime: '14:00' },
+            { dayOfWeek: 1, startTime: '17:00', endTime: '19:00' },
+            { dayOfWeek: 2, startTime: '07:00', endTime: '09:00' },
+            { dayOfWeek: 2, startTime: '12:00', endTime: '14:00' },
+            { dayOfWeek: 2, startTime: '17:00', endTime: '19:00' },
+            { dayOfWeek: 3, startTime: '07:00', endTime: '09:00' },
+            { dayOfWeek: 3, startTime: '12:00', endTime: '14:00' },
+            { dayOfWeek: 3, startTime: '17:00', endTime: '19:00' }
+          ],
+          createdAt: { toDate: () => new Date() } as any,
+          updatedAt: { toDate: () => new Date() } as any
+        }
+      ],
+      'case-management': [ // Mapped from "Case Management Services"
+        {
+          id: 'demo-case-management-1',
+          categoryId: 'case-management',
+          shelterId: shelterId,
+          name: 'Case Management Consultation',
+          description: 'Personalized case management and service coordination',
+          provider: 'Case Manager',
+          location: 'Case Management Office',
+          duration: 45,
+          capacity: 2,
+          cost: 0,
+          requirements: [],
+          isActive: true,
+          schedule: [
+            { dayOfWeek: 1, startTime: '09:00', endTime: '17:00', breakTime: { start: '12:00', end: '13:00' } },
+            { dayOfWeek: 2, startTime: '09:00', endTime: '17:00', breakTime: { start: '12:00', end: '13:00' } },
+            { dayOfWeek: 3, startTime: '09:00', endTime: '17:00', breakTime: { start: '12:00', end: '13:00' } },
+            { dayOfWeek: 4, startTime: '09:00', endTime: '17:00', breakTime: { start: '12:00', end: '13:00' } },
+            { dayOfWeek: 5, startTime: '09:00', endTime: '17:00', breakTime: { start: '12:00', end: '13:00' } }
+          ],
+          createdAt: { toDate: () => new Date() } as any,
+          updatedAt: { toDate: () => new Date() } as any
+        }
+      ],
+      'substance-abuse': [ // Mapped from "Substance Abuse Support"
+        {
+          id: 'demo-substance-abuse-1',
+          categoryId: 'substance-abuse',
+          shelterId: shelterId,
+          name: 'Substance Abuse Counseling',
+          description: 'Confidential substance abuse support and recovery planning',
+          provider: 'Addiction Counselor',
+          location: 'Counseling Room C',
+          duration: 60,
+          capacity: 1,
+          cost: 0,
+          requirements: [],
+          isActive: true,
+          schedule: [
+            { dayOfWeek: 1, startTime: '09:00', endTime: '17:00', breakTime: { start: '12:00', end: '13:00' } },
+            { dayOfWeek: 3, startTime: '09:00', endTime: '17:00', breakTime: { start: '12:00', end: '13:00' } },
+            { dayOfWeek: 5, startTime: '09:00', endTime: '17:00', breakTime: { start: '12:00', end: '13:00' } }
+          ],
+          createdAt: { toDate: () => new Date() } as any,
+          updatedAt: { toDate: () => new Date() } as any
+        }
       ]
     };
 
-    return demoServices[categoryId] || [];
+    // Try to find services for the mapped type, fall back to categoryId, then empty array
+    const servicesForType = demoServices[mappedType] || demoServices[categoryId] || [];
+    
+    // If no demo services found, create a generic one for this service
+    if (servicesForType.length === 0) {
+      console.log(`⚠️ No demo services for "${mappedType}", creating generic service for "${categoryName}"`);
+      return [{
+        id: `demo-${categoryId}-1`,
+        categoryId: categoryId,
+        shelterId: shelterId,
+        name: `${categoryName} Appointment`,
+        description: `Schedule an appointment for ${categoryName.toLowerCase()}`,
+        provider: 'Staff Member',
+        location: 'Main Office',
+        duration: 60,
+        capacity: 5,
+        cost: 0,
+        requirements: ['Please arrive 10 minutes early'],
+        isActive: true,
+        schedule: [
+          { dayOfWeek: 1, startTime: '09:00', endTime: '17:00', breakTime: { start: '12:00', end: '13:00' } },
+          { dayOfWeek: 2, startTime: '09:00', endTime: '17:00', breakTime: { start: '12:00', end: '13:00' } },
+          { dayOfWeek: 3, startTime: '09:00', endTime: '17:00', breakTime: { start: '12:00', end: '13:00' } },
+          { dayOfWeek: 4, startTime: '09:00', endTime: '17:00', breakTime: { start: '12:00', end: '13:00' } },
+          { dayOfWeek: 5, startTime: '09:00', endTime: '17:00', breakTime: { start: '12:00', end: '13:00' } }
+        ],
+        createdAt: { toDate: () => new Date() } as any,
+        updatedAt: { toDate: () => new Date() } as any
+      }];
+    }
+    
+    return servicesForType;
   };
 
   const loadAvailableSlots = async () => {

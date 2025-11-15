@@ -165,7 +165,7 @@ export default function ShelterPageClient({ slug }: ShelterPageClientProps) {
             check_out_time: publicConfig?.check_out_time || '7:00 AM',
             languages: publicConfig?.languages || ['English', 'French'],
             amenities: publicConfig?.amenities,
-            social_media: publicConfig?.social_media,
+            social_media: publicConfig?.socialMedia, // Note: publicConfig uses camelCase 'socialMedia'
             images: publicConfig?.images,
             logo: publicConfig?.logo,
             verified: publicConfig?.verified ?? true,
@@ -175,6 +175,11 @@ export default function ShelterPageClient({ slug }: ShelterPageClientProps) {
           };
           
           setShelter(shelterData);
+          
+          // Debug: Log social media data
+          console.log('🔍 DEBUG: publicConfig?.socialMedia:', publicConfig?.socialMedia);
+          console.log('🔍 DEBUG: shelterData.social_media:', shelterData.social_media);
+          console.log('🔍 DEBUG: social_media has values:', shelter?.social_media && Object.values(shelterData.social_media).some(link => link));
           
           // Get participant count from tenant document (public data)
           // This avoids security rule issues with querying the users collection

@@ -45,7 +45,7 @@ export default function ServicesPage() {
   const [bookingSuccess, setBookingSuccess] = useState(false);
 
   // Get shelter ID from user
-  const shelterId = user?.customClaims?.shelter_id || user?.shelterId || (user as any)?.shelter_id;
+  const shelterId = user?.customClaims?.shelter_id || user?.shelterId || (user as Record<string, unknown>)?.shelter_id as string | undefined;
 
   // Load services data
   useEffect(() => {
@@ -190,7 +190,7 @@ export default function ServicesPage() {
             <CardTitle className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <Clock className="h-5 w-5" />
-                <span>Today's Agenda</span>
+                <span>Today&apos;s Agenda</span>
               </div>
               <Badge variant="outline">
                 {new Date().toLocaleDateString('en-US', { 

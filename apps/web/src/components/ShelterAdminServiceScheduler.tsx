@@ -47,6 +47,7 @@ import { collection, query, where, getDocs, updateDoc, doc, Timestamp } from 'fi
 import { db } from '@/lib/firebase';
 import { useAuth } from '@/contexts/AuthContext';
 import { shelterService } from '@/services/shelterService';
+import { createParticipantNotification } from '@/services/unifiedNotificationService';
 
 interface ShelterAdminServiceSchedulerProps {
   shelterId: string;
@@ -778,6 +779,30 @@ export function ShelterAdminServiceScheduler({
         });
         
         console.log('✅ Real booking created:', booking.confirmationCode);
+      }
+      
+      // Create appointment notification for the participant
+      try {
+        const appointmentDate = new Date(selectedSlot.datetime);
+        await createParticipantNotification({
+          userId: selectedParticipant.id,
+          type: 'appointment_reminder',
+          title: 'New Appointment Scheduled',
+          message: `Your appointment for ${selectedService.name} has been scheduled for ${appointmentDate.toLocaleDateString()} at ${formatTime(appointmentDate)}. Location: ${selectedService.location}`,
+          priority: 'high',
+          category: 'appointment',
+          metadata: {
+            service_id: selectedService.id,
+            appointment_id: booking.id,
+            service_name: selectedService.name,
+            appointment_date: appointmentDate.toISOString(),
+            location: selectedService.location
+          }
+        });
+        console.log('✅ Appointment notification sent to participant');
+      } catch (notificationError) {
+        console.error('⚠️ Failed to send notification:', notificationError);
+        // Don't fail the booking if notification fails
       }
       
       onBookingComplete?.(booking);

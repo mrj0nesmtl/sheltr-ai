@@ -41,7 +41,9 @@ import {
   Image,
   Map,
   Loader2,
-  AlertCircle
+  AlertCircle,
+  Share2,
+  Building
 } from 'lucide-react';
 
 export default function SettingsPage() {
@@ -720,125 +722,287 @@ export default function SettingsPage() {
               </a>
             </div>
           </CardHeader>
-          <CardContent className="p-8">
-            {/* Public Page Content */}
-            <div className="max-w-4xl mx-auto space-y-8">
-              {/* Header */}
-              <div className="text-center space-y-4">
-                <h1 className="text-4xl font-bold">{formData.name}</h1>
-                <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+          <CardContent className="p-8 bg-gradient-to-br from-background to-muted">
+            {/* Accurate Public Page Preview */}
+            <div className="max-w-6xl mx-auto space-y-8">
+              
+              {/* Hero Section */}
+              <div className="text-center space-y-6">
+                {/* Shelter Logo/Icon */}
+                <div className="inline-flex items-center justify-center w-20 h-20 bg-background rounded-2xl border-2 border-border shadow-lg">
+                  {publicConfig?.logoUrl ? (
+                    <img 
+                      src={publicConfig.logoUrl} 
+                      alt={formData.name} 
+                      className="w-16 h-16 rounded-lg object-contain"
+                    />
+                  ) : (
+                    <Building className="h-10 w-10 text-primary" />
+                  )}
+                </div>
+
+                {/* Name & Verified Badge */}
+                <div className="flex items-center justify-center gap-3">
+                  <h1 className="text-3xl md:text-4xl font-bold">{formData.name}</h1>
+                  <Badge variant="outline" className="border-green-500 text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20">
+                    <Shield className="h-3 w-3 mr-1" />
+                    Verified
+                  </Badge>
+                </div>
+
+                {/* Description */}
+                <p className="text-base text-muted-foreground max-w-2xl mx-auto">
                   {formData.description}
                 </p>
-                <div className="flex justify-center space-x-4">
-                  <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100">
-                    <Bed className="mr-1 h-3 w-3" />
+
+                {/* Stats Badge */}
+                <div className="inline-flex items-center gap-2 bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-400 px-4 py-2 rounded-full text-sm">
+                  <Bed className="h-4 w-4" />
+                  <span className="font-medium">
                     {formData.capacity - formData.currentOccupancy} beds available (Real Data)
-                  </Badge>
-                  <Badge variant="outline">
-                    <Clock className="mr-1 h-3 w-3" />
+                  </span>
+                  <Badge variant="outline" className="ml-2">
+                    <Clock className="h-3 w-3 mr-1" />
                     {formData.operatingHours}
                   </Badge>
                 </div>
               </div>
 
-              {/* Photo Gallery */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {formData.photos.map((photo) => (
-                  <div key={photo.id} className="relative group">
-                    <div className="bg-gray-200 dark:bg-gray-700 rounded-lg h-32 flex items-center justify-center">
-                      <Image className="h-8 w-8 text-gray-400" />
-                    </div>
-                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">{photo.caption}</p>
-                  </div>
-                ))}
-              </div>
+              {/* Main Content Grid - Balanced 2-Column Layout */}
+              <div className="grid lg:grid-cols-2 gap-6">
+                
+                {/* Left Column - Services & Hours */}
+                <div className="space-y-6">
+                  {/* Services */}
+                  <Card className="shadow-sm">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2 text-lg">
+                        <Heart className="h-5 w-5 text-primary" />
+                        Services We Provide
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid grid-cols-2 gap-3">
+                        {formData.services.slice(0, 8).map((service, index) => {
+                          const IconComponent = serviceIcons[service as keyof typeof serviceIcons] || Heart;
+                          return (
+                            <div key={index} className="flex items-center gap-2 p-2 rounded-lg bg-muted/50 hover:bg-muted transition-colors">
+                              <div className="p-1.5 bg-primary/10 rounded-lg">
+                                <IconComponent className="h-4 w-4 text-primary" />
+                              </div>
+                              <span className="text-xs font-medium">{service}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </CardContent>
+                  </Card>
 
-              {/* Services Grid */}
-              <div>
-                <h2 className="text-2xl font-bold text-center mb-6">Services We Provide</h2>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  {formData.services.map((service, index) => {
-                    const IconComponent = serviceIcons[service as keyof typeof serviceIcons] || Heart;
-                    return (
-                      <div key={index} className="text-center p-4 border rounded-lg">
-                        <div className="flex justify-center mb-2">
-                          <div className="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
-                            <IconComponent className="h-6 w-6 text-blue-600 dark:text-blue-300" />
+                  {/* Hours & Check-in */}
+                  <Card className="shadow-sm">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2 text-lg">
+                        <Clock className="h-5 w-5 text-primary" />
+                        Hours & Check-in
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-2">
+                      <div className="flex justify-between items-center py-1.5 text-sm">
+                        <span className="font-medium">Check-in Time:</span>
+                        <span className="text-muted-foreground">{formData.checkInTime}</span>
+                      </div>
+                      <div className="flex justify-between items-center py-1.5 text-sm border-t">
+                        <span className="font-medium">Check-out Time:</span>
+                        <span className="text-muted-foreground">{formData.checkOutTime}</span>
+                      </div>
+                      <div className="flex justify-between items-center py-1.5 text-sm border-t">
+                        <span className="font-medium">Operating Hours:</span>
+                        <Badge variant="outline">{formData.operatingHours}</Badge>
+                      </div>
+                      <div className="flex justify-between items-center py-1.5 text-sm border-t">
+                        <span className="font-medium">Established:</span>
+                        <span className="text-muted-foreground">{formData.established}</span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                {/* Right Column - Contact, Social, QR, Map */}
+                <div className="space-y-6">
+                  {/* Contact Info */}
+                  <Card className="shadow-sm">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2 text-lg">
+                        <Phone className="h-5 w-5 text-primary" />
+                        Contact Information
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <div className="flex items-start gap-2.5 text-sm">
+                        <MapPin className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
+                        <div>
+                          <p className="font-medium">{formData.address}</p>
+                          <p className="text-muted-foreground text-xs">{formData.city}, {formData.province}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2.5 text-sm">
+                        <Phone className="h-4 w-4 text-muted-foreground shrink-0" />
+                        <span className="font-medium">{formData.phone}</span>
+                      </div>
+                      <div className="flex items-center gap-2.5 text-sm">
+                        <Mail className="h-4 w-4 text-muted-foreground shrink-0" />
+                        <span className="text-xs break-all">{formData.email}</span>
+                      </div>
+                      {formData.website && (
+                        <div className="flex items-center gap-2.5 text-sm">
+                          <Globe className="h-4 w-4 text-muted-foreground shrink-0" />
+                          <span className="text-xs flex items-center gap-1">
+                            Visit Website
+                            <ExternalLink className="h-3 w-3" />
+                          </span>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+
+                  {/* Social Media - Prominent */}
+                  {(formData.socialMedia.facebook || formData.socialMedia.twitter || formData.socialMedia.instagram || 
+                    formData.socialMedia.youtube || formData.socialMedia.linkedin || formData.socialMedia.tiktok) && (
+                    <Card className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30 border-blue-200 dark:border-blue-800 shadow-sm">
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2 text-lg text-blue-900 dark:text-blue-100">
+                          <Share2 className="h-4 w-4" />
+                          Connect With Us
+                        </CardTitle>
+                        <CardDescription className="text-xs">Follow our social media for updates</CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="grid grid-cols-3 gap-2">
+                          {formData.socialMedia.facebook && (
+                            <div className="text-center p-3 border rounded-lg bg-white dark:bg-background hover:bg-blue-50 dark:hover:bg-blue-950/50 transition-colors cursor-pointer">
+                              <Facebook className="h-5 w-5 text-blue-600 mx-auto mb-1" />
+                              <span className="text-[10px]">Facebook</span>
+                            </div>
+                          )}
+                          {formData.socialMedia.twitter && (
+                            <div className="text-center p-3 border rounded-lg bg-white dark:bg-background hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors cursor-pointer">
+                              <Twitter className="h-5 w-5 text-gray-900 dark:text-white mx-auto mb-1" />
+                              <span className="text-[10px]">X</span>
+                            </div>
+                          )}
+                          {formData.socialMedia.instagram && (
+                            <div className="text-center p-3 border rounded-lg bg-white dark:bg-background hover:bg-pink-50 dark:hover:bg-pink-950/50 transition-colors cursor-pointer">
+                              <Instagram className="h-5 w-5 text-pink-600 mx-auto mb-1" />
+                              <span className="text-[10px]">Instagram</span>
+                            </div>
+                          )}
+                          {formData.socialMedia.youtube && (
+                            <div className="text-center p-3 border rounded-lg bg-white dark:bg-background hover:bg-red-50 dark:hover:bg-red-950/50 transition-colors cursor-pointer">
+                              <Youtube className="h-5 w-5 text-red-600 mx-auto mb-1" />
+                              <span className="text-[10px]">YouTube</span>
+                            </div>
+                          )}
+                          {formData.socialMedia.linkedin && (
+                            <div className="text-center p-3 border rounded-lg bg-white dark:bg-background hover:bg-blue-50 dark:hover:bg-blue-950/50 transition-colors cursor-pointer">
+                              <Linkedin className="h-5 w-5 text-blue-700 mx-auto mb-1" />
+                              <span className="text-[10px]">LinkedIn</span>
+                            </div>
+                          )}
+                          {formData.socialMedia.tiktok && (
+                            <div className="text-center p-3 border rounded-lg bg-white dark:bg-background hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors cursor-pointer">
+                              <svg className="h-5 w-5 mx-auto mb-1" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                              </svg>
+                              <span className="text-[10px]">TikTok</span>
+                            </div>
+                          )}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )}
+
+                  {/* QR Code */}
+                  <Card className="text-center bg-gradient-to-br from-green-50 to-blue-50 dark:from-green-950/30 dark:to-blue-950/30 border-green-200 dark:border-green-800 shadow-sm">
+                    <CardHeader>
+                      <CardTitle className="flex items-center justify-center gap-2 text-lg text-green-900 dark:text-green-100">
+                        <Heart className="h-4 w-4 text-red-500" />
+                        Support This Shelter
+                      </CardTitle>
+                      <CardDescription className="text-xs">Scan to make a direct donation</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      {qrCodeUrl ? (
+                        <div className="bg-white dark:bg-gray-950 p-4 rounded-xl inline-block shadow-md border-2 border-green-200 dark:border-green-800">
+                          <img 
+                            src={qrCodeUrl} 
+                            alt="Donation QR Code" 
+                            className="w-36 h-36 mx-auto"
+                          />
+                        </div>
+                      ) : (
+                        <div className="bg-muted p-6 rounded-xl">
+                          <div className="w-32 h-32 mx-auto bg-background rounded-lg flex items-center justify-center border-2 border-dashed">
+                            <QrCode className="h-12 w-12 text-muted-foreground" />
                           </div>
                         </div>
-                        <p className="text-sm font-medium">{service}</p>
-                      </div>
-                    );
-                  })}
+                      )}
+                      <p className="text-[10px] text-muted-foreground px-2">
+                        SmartProof™ 80-15-5 model<br />
+                        <span className="font-medium text-primary">80% to participants</span>
+                      </p>
+                      <Button className="w-full bg-green-600 hover:bg-green-700" size="sm">
+                        <Heart className="mr-2 h-4 w-4" />
+                        Donate Online
+                      </Button>
+                    </CardContent>
+                  </Card>
+
+                  {/* Map */}
+                  <Card className="border-2 border-primary/20 shadow-sm">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2 text-lg">
+                        <MapPin className="h-4 w-4 text-primary" />
+                        Location
+                      </CardTitle>
+                      <CardDescription className="text-xs">Find us on the map</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      {process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ? (
+                        <div className="space-y-2">
+                          <div className="rounded-lg overflow-hidden h-48 border-2 border-border">
+                            <iframe
+                              width="100%"
+                              height="100%"
+                              style={{ border: 0 }}
+                              loading="lazy"
+                              allowFullScreen
+                              referrerPolicy="no-referrer-when-downgrade"
+                              src={`https://www.google.com/maps/embed/v1/place?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&q=${encodeURIComponent(`${formData.address}, ${formData.city}, ${formData.province}`)}&zoom=15`}
+                            />
+                          </div>
+                          <Button variant="outline" size="sm" className="w-full text-xs">
+                            <ExternalLink className="mr-1.5 h-3 w-3" />
+                            Open in Google Maps
+                          </Button>
+                        </div>
+                      ) : (
+                        <div className="text-center py-4">
+                          <MapPin className="h-8 w-8 mx-auto text-muted-foreground mb-2" />
+                          <p className="text-xs text-muted-foreground mb-3">
+                            {formData.address}<br />
+                            {formData.city}, {formData.province}
+                          </p>
+                          <Button variant="outline" size="sm" className="text-xs">
+                            <ExternalLink className="mr-1.5 h-3 w-3" />
+                            View on Google Maps
+                          </Button>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
                 </div>
               </div>
 
-              {/* Contact & Location */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Contact Information</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    <div className="flex items-center space-x-3">
-                      <MapPin className="h-4 w-4 text-gray-500" />
-                      <span className="text-sm">{formData.address}</span>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                      <Phone className="h-4 w-4 text-gray-500" />
-                      <span className="text-sm">{formData.phone}</span>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                      <Mail className="h-4 w-4 text-gray-500" />
-                      <span className="text-sm">{formData.email}</span>
-                    </div>
-                    <div className="flex space-x-3 mt-4">
-                      <Button variant="outline" size="sm">
-                        <Facebook className="h-4 w-4" />
-                      </Button>
-                      <Button variant="outline" size="sm">
-                        <Twitter className="h-4 w-4" />
-                      </Button>
-                      <Button variant="outline" size="sm">
-                        <Instagram className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Hours & Check-in</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    <div className="flex justify-between">
-                      <span className="text-sm font-medium">Operating Hours:</span>
-                      <span className="text-sm">{formData.operatingHours}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm font-medium">Check-in Time:</span>
-                      <span className="text-sm">{formData.checkInTime}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm font-medium">Check-out Time:</span>
-                      <span className="text-sm">{formData.checkOutTime}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm font-medium">Established:</span>
-                      <span className="text-sm">{formData.established}</span>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-
-              {/* QR Code Section */}
-              <div className="text-center">
-                <h3 className="text-xl font-bold mb-4">Quick Access QR Code</h3>
-                <div className="inline-block p-4 border-2 border-dashed border-gray-300 rounded-lg">
-                  <QrCode className="h-32 w-32 mx-auto text-gray-400" />
-                  <p className="text-sm text-gray-600 mt-2">Scan for shelter info & services</p>
-                </div>
-              </div>
             </div>
           </CardContent>
         </Card>

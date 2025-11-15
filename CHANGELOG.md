@@ -7,6 +7,155 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.115.0] - 2025-01-15 (PUBLIC PAGE & PREVIEW REDESIGN) 🎨
+
+### ✨ Complete UI Overhaul
+
+#### **Public Shelter Page Redesigned** 🏠
+Completely redesigned the public shelter page layout with better visual hierarchy, balanced components, and enhanced user experience.
+
+**Layout Changes:**
+- 📐 **2-Column Balanced Layout** - Changed from cramped 3-column to spacious 2-column grid
+- 🎯 **Better Visual Hierarchy** - Hero section → Services & Hours → Contact & Social → QR & Map
+- 📱 **Responsive Design** - Optimized for mobile, tablet, and desktop viewing
+- 🌈 **Enhanced Cards** - Added gradient backgrounds, shadows, and borders for visual interest
+
+**Social Media Integration:**
+- ✅ **All 6 Platforms** - Facebook, X (Twitter), Instagram, YouTube, LinkedIn, TikTok
+- 🎨 **Prominent "Connect With Us" Card** - Gradient blue/purple background
+- 🎯 **Visual Grid Layout** - 3-column grid with platform icons and labels
+- 🖱️ **Interactive Buttons** - Hover states with platform-specific colors
+- 📊 **Platform-Specific Styling**:
+  - Facebook: Blue (#2563eb)
+  - X: Black/White (theme-aware)
+  - Instagram: Pink (#db2777)
+  - YouTube: Red (#dc2626)
+  - LinkedIn: Blue (#1d4ed8)
+  - TikTok: Custom SVG icon
+
+**QR Code Enhancement:**
+- 🎁 **Styled Donation Card** - Green/blue gradient background
+- 🖼️ **Real QR Code Display** - Shows actual generated QR code (not placeholder)
+- 📏 **Better Sizing** - 180x180px with shadow and border
+- 💚 **SmartProof™ Messaging** - Prominently displays 80-15-5 model
+- 🎯 **Enhanced CTA** - Green "Donate Online" button with heart icon
+
+**Map Component:**
+- 🗺️ **Larger Map** - Increased from h-64 to h-72 for better visibility
+- 🎨 **Styled Container** - Border, shadow, and better visual hierarchy
+- 📍 **Zoom Level** - Added zoom=15 parameter for better street view
+- 🔗 **"Open in Google Maps"** - Styled button for external navigation
+
+**Contact Information:**
+- 📍 **Improved Address Display** - Bold main address, muted city/province
+- 📞 **Clickable Links** - Phone and email with hover states
+- 🌐 **Website Link** - Added globe icon with external link indicator
+
+#### **Admin Preview Completely Redesigned** 👨‍💼
+The Shelter Admin settings preview now accurately mirrors the public page instead of showing a simplified mockup.
+
+**What Changed:**
+- 🎯 **Accurate Replica** - Preview now looks identical to public page
+- 📐 **Same 2-Column Layout** - Matches public page structure exactly
+- 🔄 **Real Data Display**:
+  - ✅ Real QR code (from `qrCodeUrl` state)
+  - ✅ Real Google Map embed
+  - ✅ All social media platforms displayed
+  - ✅ Actual shelter logo/icon
+  - ✅ Verified badge
+  - ✅ Real-time bed availability
+
+**Preview Features:**
+- 🎨 **Hero Section** - Logo, name, verified badge, description, stats
+- 🏠 **Services Card** - Grid of 8 services with icons
+- ⏰ **Hours & Check-in Card** - Operating hours, check-in/out times, established date
+- 📞 **Contact Card** - Address, phone, email, website
+- 🌐 **Social Media Card** - All 6 platforms in 3-column grid with gradients
+- 💚 **QR Code Card** - Real QR code with green gradient and donation CTA
+- 🗺️ **Map Card** - Embedded Google Map with "Open in Google Maps" button
+
+**Visual Enhancements:**
+- 🌈 **Gradient Background** - from-background to-muted for depth
+- 🎨 **Card Shadows** - Subtle shadows for depth
+- 📏 **Compact Sizing** - Scaled down appropriately for preview
+- 🎯 **Text Sizing** - Smaller text (text-xs, text-sm) for preview scale
+
+### 📄 Files Modified
+
+**Public Page:**
+- `apps/web/src/app/[slug]/ShelterPageClient.tsx`:
+  - Added `Youtube`, `Linkedin`, `QrCode` icon imports (lines 27-29)
+  - Updated `social_media` interface to include `youtube`, `linkedin`, `tiktok` (lines 60-67)
+  - Changed main layout from `lg:grid-cols-3` to `lg:grid-cols-2` (line 365)
+  - Completely redesigned right column (lines 454-679):
+    - Enhanced contact card with bold address
+    - Added prominent "Connect With Us" social media card with all 6 platforms
+    - Redesigned QR code card with gradients and better CTA
+    - Enhanced map card with larger display and better buttons
+  - Increased map height from h-64 to h-72 (line 627)
+  - Added zoom=15 parameter to Google Maps embed (line 635)
+
+**Admin Preview:**
+- `apps/web/src/app/dashboard/shelter-admin/settings/page.tsx`:
+  - Added gradient background to preview card content (line 723)
+  - Completely replaced preview content (lines 724-1005):
+    - Hero section with logo, verified badge, stats (lines 727-767)
+    - 2-column grid layout matching public page (lines 769-1002)
+    - Left column: Services (lines 774-797), Hours (lines 799-825)
+    - Right column: Contact (lines 830-864), Social Media (lines 866-920), QR Code (lines 922-956), Map (lines 958-1000)
+  - Real QR code display using `qrCodeUrl` state (lines 932-946)
+  - Real Google Map embed with API key (lines 968-999)
+  - All 6 social media platforms with conditional rendering (lines 878-917)
+  - Compact sizing appropriate for preview (text-xs, text-sm throughout)
+
+### 🎯 User Experience
+
+**Before:**
+- ❌ Public page was cramped with 3-column layout
+- ❌ Social media icons were small and hidden at bottom
+- ❌ QR code and map were disconnected
+- ❌ Admin preview looked nothing like public page
+- ❌ Preview showed placeholder icons instead of real data
+
+**After:**
+- ✅ Public page has balanced 2-column layout with breathing room
+- ✅ Social media is prominent in its own styled card
+- ✅ QR code and map are properly sized and styled
+- ✅ Admin preview is an accurate replica of public page
+- ✅ Preview shows real QR code, map, and all social links
+
+### 📊 Impact
+
+**Visual Design:**
+- 🎨 **50% more spacious** - 2-column vs 3-column layout
+- 📏 **Better proportions** - Each section has appropriate size
+- 🌈 **More engaging** - Gradients, shadows, hover states
+- 📱 **Mobile-optimized** - Better responsive breakpoints
+
+**Social Media Visibility:**
+- 📈 **6 platforms supported** (was 3)
+- 🎯 **Dedicated card** (was small icons at bottom)
+- 📊 **3x larger** - Full buttons vs tiny icons
+- 💯 **100% clickable** - All platforms are links
+
+**Admin Preview Accuracy:**
+- 🎯 **Pixel-perfect replica** - Matches public page exactly
+- ✅ **Real data display** - Shows actual QR codes and maps
+- 📊 **Accurate preview** - Admins see exactly what visitors see
+- 🔄 **Live updates** - Changes reflect immediately
+
+### 🔍 Technical Notes
+
+- Both pages use same 2-column `lg:grid-cols-2` layout
+- Social media conditional rendering: `{shelter.social_media && Object.values(shelter.social_media).some(link => link) && (...)}` 
+- TikTok uses custom SVG icon (no lucide-react icon available)
+- QR code loads from `qrCodeUrl` state (already implemented in v2.109.0)
+- Google Maps uses `process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` with zoom=15
+- Preview scales everything down appropriately (h-48 map vs h-72 public)
+- All gradient backgrounds are dark-mode aware
+
+---
+
 ## [2.114.0] - 2025-01-15 (EXPANDED SOCIAL MEDIA LINKS) 🔗
 
 ### ✨ Feature Enhancement

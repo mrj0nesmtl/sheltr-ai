@@ -23,7 +23,10 @@ import {
   Facebook,
   Twitter,
   Instagram,
-  Globe
+  Globe,
+  Youtube,
+  Linkedin,
+  QrCode
 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -58,6 +61,9 @@ interface ShelterConfig {
     facebook?: string;
     twitter?: string;
     instagram?: string;
+    youtube?: string;
+    linkedin?: string;
+    tiktok?: string;
   };
   images?: string[];
   logo?: string;
@@ -355,10 +361,10 @@ export default function ShelterPageClient({ slug }: ShelterPageClientProps) {
           </div>
         )}
 
-        {/* Main Content Grid */}
-        <div className="grid lg:grid-cols-3 gap-8 mb-12">
-          {/* Left Column - Services & Info */}
-          <div className="lg:col-span-2 space-y-6">
+        {/* Main Content Grid - Redesigned Balanced Layout */}
+        <div className="grid lg:grid-cols-2 gap-8 mb-12">
+          {/* Left Column - Services & Operating Info */}
+          <div className="space-y-6">
             {/* Services Section */}
             <Card>
               <CardHeader>
@@ -445,7 +451,7 @@ export default function ShelterPageClient({ slug }: ShelterPageClientProps) {
             )}
           </div>
 
-          {/* Right Column - Contact & QR Code */}
+          {/* Right Column - Contact, Social, QR, & Map */}
           <div className="space-y-6">
             {/* Contact Information */}
             <Card>
@@ -460,8 +466,8 @@ export default function ShelterPageClient({ slug }: ShelterPageClientProps) {
                 <div className="flex items-start gap-3">
                   <MapPin className="h-5 w-5 text-muted-foreground mt-0.5 flex-shrink-0" />
                   <div className="text-sm">
-                    <p>{shelter.address}</p>
-                    <p>{shelter.city}, {shelter.province} {shelter.postal_code}</p>
+                    <p className="font-medium">{shelter.address}</p>
+                    <p className="text-muted-foreground">{shelter.city}, {shelter.province} {shelter.postal_code}</p>
                   </div>
                 </div>
 
@@ -469,7 +475,7 @@ export default function ShelterPageClient({ slug }: ShelterPageClientProps) {
                 {shelter.phone && (
                   <div className="flex items-center gap-3">
                     <Phone className="h-5 w-5 text-muted-foreground flex-shrink-0" />
-                    <a href={`tel:${shelter.phone}`} className="text-sm hover:text-primary transition-colors">
+                    <a href={`tel:${shelter.phone}`} className="text-sm hover:text-primary transition-colors font-medium">
                       {shelter.phone}
                     </a>
                   </div>
@@ -488,46 +494,126 @@ export default function ShelterPageClient({ slug }: ShelterPageClientProps) {
                 {/* Website */}
                 {shelter.website && (
                   <div className="flex items-center gap-3">
-                    <ExternalLink className="h-5 w-5 text-muted-foreground flex-shrink-0" />
-                    <a href={shelter.website} target="_blank" rel="noopener noreferrer" className="text-sm hover:text-primary transition-colors">
+                    <Globe className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+                    <a href={shelter.website} target="_blank" rel="noopener noreferrer" className="text-sm hover:text-primary transition-colors flex items-center gap-1">
                       Visit Website
+                      <ExternalLink className="h-3 w-3" />
                     </a>
-                  </div>
-                )}
-
-                {/* Social Media */}
-                {shelter.social_media && (
-                  <div className="pt-4 border-t">
-                    <div className="flex gap-2">
-                      {shelter.social_media.facebook && (
-                        <Button variant="outline" size="icon" asChild>
-                          <a href={shelter.social_media.facebook} target="_blank" rel="noopener noreferrer">
-                            <Facebook className="h-4 w-4" />
-                          </a>
-                        </Button>
-                      )}
-                      {shelter.social_media.twitter && (
-                        <Button variant="outline" size="icon" asChild>
-                          <a href={shelter.social_media.twitter} target="_blank" rel="noopener noreferrer">
-                            <Twitter className="h-4 w-4" />
-                          </a>
-                        </Button>
-                      )}
-                      {shelter.social_media.instagram && (
-                        <Button variant="outline" size="icon" asChild>
-                          <a href={shelter.social_media.instagram} target="_blank" rel="noopener noreferrer">
-                            <Instagram className="h-4 w-4" />
-                          </a>
-                        </Button>
-                      )}
-                    </div>
                   </div>
                 )}
               </CardContent>
             </Card>
 
-            {/* Location Map */}
-            <Card>
+            {/* Social Media - Expanded and Prominent */}
+            {shelter.social_media && Object.values(shelter.social_media).some(link => link) && (
+              <Card className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30 border-blue-200 dark:border-blue-800">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-blue-900 dark:text-blue-100">
+                    <Share2 className="h-5 w-5" />
+                    Connect With Us
+                  </CardTitle>
+                  <CardDescription>Follow our social media for updates</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-3 gap-3">
+                    {shelter.social_media.facebook && (
+                      <Button variant="outline" className="h-auto flex-col gap-2 py-4 hover:bg-blue-50 dark:hover:bg-blue-950/50" asChild>
+                        <a href={shelter.social_media.facebook} target="_blank" rel="noopener noreferrer">
+                          <Facebook className="h-6 w-6 text-blue-600" />
+                          <span className="text-xs">Facebook</span>
+                        </a>
+                      </Button>
+                    )}
+                    {shelter.social_media.twitter && (
+                      <Button variant="outline" className="h-auto flex-col gap-2 py-4 hover:bg-gray-50 dark:hover:bg-gray-900" asChild>
+                        <a href={shelter.social_media.twitter} target="_blank" rel="noopener noreferrer">
+                          <Twitter className="h-6 w-6 text-gray-900 dark:text-white" />
+                          <span className="text-xs">X</span>
+                        </a>
+                      </Button>
+                    )}
+                    {shelter.social_media.instagram && (
+                      <Button variant="outline" className="h-auto flex-col gap-2 py-4 hover:bg-pink-50 dark:hover:bg-pink-950/50" asChild>
+                        <a href={shelter.social_media.instagram} target="_blank" rel="noopener noreferrer">
+                          <Instagram className="h-6 w-6 text-pink-600" />
+                          <span className="text-xs">Instagram</span>
+                        </a>
+                      </Button>
+                    )}
+                    {shelter.social_media.youtube && (
+                      <Button variant="outline" className="h-auto flex-col gap-2 py-4 hover:bg-red-50 dark:hover:bg-red-950/50" asChild>
+                        <a href={shelter.social_media.youtube} target="_blank" rel="noopener noreferrer">
+                          <Youtube className="h-6 w-6 text-red-600" />
+                          <span className="text-xs">YouTube</span>
+                        </a>
+                      </Button>
+                    )}
+                    {shelter.social_media.linkedin && (
+                      <Button variant="outline" className="h-auto flex-col gap-2 py-4 hover:bg-blue-50 dark:hover:bg-blue-950/50" asChild>
+                        <a href={shelter.social_media.linkedin} target="_blank" rel="noopener noreferrer">
+                          <Linkedin className="h-6 w-6 text-blue-700" />
+                          <span className="text-xs">LinkedIn</span>
+                        </a>
+                      </Button>
+                    )}
+                    {shelter.social_media.tiktok && (
+                      <Button variant="outline" className="h-auto flex-col gap-2 py-4 hover:bg-gray-50 dark:hover:bg-gray-900" asChild>
+                        <a href={shelter.social_media.tiktok} target="_blank" rel="noopener noreferrer">
+                          <svg className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                          </svg>
+                          <span className="text-xs">TikTok</span>
+                        </a>
+                      </Button>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* QR Code & Donation */}
+            <Card className="text-center bg-gradient-to-br from-green-50 to-blue-50 dark:from-green-950/30 dark:to-blue-950/30 border-green-200 dark:border-green-800">
+              <CardHeader>
+                <CardTitle className="flex items-center justify-center gap-2 text-green-900 dark:text-green-100">
+                  <Heart className="h-5 w-5 text-red-500" />
+                  Support This Shelter
+                </CardTitle>
+                <CardDescription>Scan to make a direct donation</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {shelter.qr_code ? (
+                  <div className="bg-white dark:bg-gray-950 p-6 rounded-xl inline-block shadow-lg border-2 border-green-200 dark:border-green-800">
+                    <Image 
+                      src={shelter.qr_code} 
+                      alt={`${shelter.name} Donation QR Code`} 
+                      width={180} 
+                      height={180}
+                      className="mx-auto"
+                      priority
+                    />
+                  </div>
+                ) : (
+                  <div className="bg-muted p-8 rounded-xl">
+                    <div className="w-40 h-40 mx-auto bg-background rounded-lg flex items-center justify-center border-2 border-dashed border-muted-foreground/20">
+                      <QrCode className="h-16 w-16 text-muted-foreground" />
+                    </div>
+                  </div>
+                )}
+                <p className="text-xs text-muted-foreground px-4">
+                  Donations follow our SmartProof™ 80-15-5 model<br />
+                  <span className="font-medium text-primary">80% goes directly to participants</span>
+                </p>
+                <Button className="w-full bg-green-600 hover:bg-green-700" size="lg" asChild>
+                  <Link href={`/donate?shelter=${shelter.id}`}>
+                    <Heart className="mr-2 h-5 w-5" />
+                    Donate Online
+                  </Link>
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Location Map - Enhanced */}
+            <Card className="border-2 border-primary/20">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <MapPin className="h-5 w-5 text-primary" />
@@ -538,7 +624,7 @@ export default function ShelterPageClient({ slug }: ShelterPageClientProps) {
               <CardContent>
                 {process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ? (
                   <div className="space-y-3">
-                    <div className="rounded-lg overflow-hidden h-64 border border-border">
+                    <div className="rounded-lg overflow-hidden h-72 border-2 border-border shadow-sm">
                       <iframe
                         width="100%"
                         height="100%"
@@ -546,7 +632,7 @@ export default function ShelterPageClient({ slug }: ShelterPageClientProps) {
                         loading="lazy"
                         allowFullScreen
                         referrerPolicy="no-referrer-when-downgrade"
-                        src={`https://www.google.com/maps/embed/v1/place?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&q=${encodeURIComponent(`${shelter.address}, ${shelter.city}, ${shelter.province} ${shelter.postal_code}`)}`}
+                        src={`https://www.google.com/maps/embed/v1/place?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&q=${encodeURIComponent(`${shelter.address}, ${shelter.city}, ${shelter.province} ${shelter.postal_code}`)}&zoom=15`}
                       />
                     </div>
                     <Button 
@@ -588,44 +674,6 @@ export default function ShelterPageClient({ slug }: ShelterPageClientProps) {
                     </Button>
                   </div>
                 )}
-              </CardContent>
-            </Card>
-
-            {/* QR Code & Donation */}
-            <Card className="text-center">
-              <CardHeader>
-                <CardTitle className="flex items-center justify-center gap-2">
-                  <Heart className="h-5 w-5 text-red-500" />
-                  Support This Shelter
-                </CardTitle>
-                <CardDescription>Scan to make a direct donation</CardDescription>
-              </CardHeader>
-              <CardContent>
-                {shelter.qr_code ? (
-                  <div className="bg-white p-4 rounded-lg inline-block mb-4">
-                    <Image 
-                      src={shelter.qr_code} 
-                      alt="QR Code for donations" 
-                      width={200} 
-                      height={200}
-                      className="mx-auto"
-                    />
-                  </div>
-                ) : (
-                  <div className="bg-muted p-8 rounded-lg mb-4">
-                    <div className="w-48 h-48 mx-auto bg-background rounded-lg flex items-center justify-center">
-                      <Building className="h-16 w-16 text-muted-foreground" />
-                    </div>
-                  </div>
-                )}
-                <p className="text-xs text-muted-foreground mb-4">
-                  Donations follow our SmartProof™ 80-15-5 model
-                </p>
-                <Button className="w-full" asChild>
-                  <Link href={`/donate?shelter=${shelter.id}`}>
-                    Donate Online
-                  </Link>
-                </Button>
               </CardContent>
             </Card>
           </div>

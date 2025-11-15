@@ -369,7 +369,7 @@ export async function bookService(bookingData: {
     
     // Fetch service details to get the name and category
     let serviceName = 'Service Appointment';
-    let categoryId = undefined;
+    let categoryId: string | undefined = undefined;
     try {
       const serviceDoc = await getDoc(doc(db, 'services', bookingData.serviceId));
       if (serviceDoc.exists()) {
@@ -382,11 +382,11 @@ export async function bookService(bookingData: {
       // Continue with booking even if service details fetch fails
     }
     
-    // Create booking
+    // Create booking (only include categoryId if it has a value - Firestore doesn't allow undefined)
     const booking: Omit<ServiceBooking, 'id'> = {
       serviceId: bookingData.serviceId,
       serviceName,
-      categoryId,
+      ...(categoryId && { categoryId }), // Only include if defined
       participantId: bookingData.participantId,
       shelterId: bookingData.shelterId,
       appointmentDate: Timestamp.fromDate(bookingData.appointmentDate),

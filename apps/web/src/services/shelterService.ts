@@ -40,8 +40,12 @@ export interface ShelterPublicConfig {
   photos?: ShelterPhoto[];
   // Contact & Location
   address?: string;
+  city?: string;
+  province?: string;
+  postal_code?: string;
   phone?: string;
   email?: string;
+  website?: string;
   coordinates?: {
     lat: number;
     lng: number;
@@ -68,6 +72,10 @@ export interface ShelterPublicConfig {
   operatingHours?: {
     [key: string]: string;
   };
+  operating_hours?: string;
+  check_in_time?: string;
+  check_out_time?: string;
+  languages?: string[];
   established?: string;
   certifications?: string[];
   socialMedia?: {
@@ -75,6 +83,9 @@ export interface ShelterPublicConfig {
     facebook?: string;
     twitter?: string;
     instagram?: string;
+    youtube?: string;
+    linkedin?: string;
+    tiktok?: string;
   };
   customizations?: {
     primaryColor?: string;

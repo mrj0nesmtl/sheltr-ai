@@ -432,132 +432,148 @@ export default function AboutPage() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
             {/* QR Code Entry Point */}
-            <Card className="text-center border-2 hover:border-blue-400/50 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20 group">
-              <CardHeader>
-                <div className="mx-auto h-12 w-12 text-blue-500 mb-4 group-hover:scale-110 transition-transform">
-                  <QrCode className="h-full w-full" />
-                </div>
-                <CardTitle className="text-lg">QR Code Gateway</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  Every participant receives a unique QR code linked to their profile. 
-                  Donors scan, give instantly—funds flow directly through SmartFund™ contracts.
-                </p>
-              </CardContent>
-            </Card>
+            <Link href="/scan-give" className="block h-full">
+              <Card className="text-center border-2 hover:border-blue-400/50 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20 group cursor-pointer h-full">
+                <CardHeader>
+                  <div className="mx-auto h-12 w-12 text-blue-500 mb-4 group-hover:scale-110 transition-transform">
+                    <QrCode className="h-full w-full" />
+                  </div>
+                  <CardTitle className="text-lg">QR Code Gateway</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground">
+                    Every participant receives a unique QR code linked to their profile. 
+                    Donors scan, give instantly—funds flow directly through SmartFund™ contracts.
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
 
             {/* SmartFund Distribution */}
-            <Card className="text-center border-2 hover:border-green-400/50 transition-all duration-300 hover:shadow-lg hover:shadow-green-500/20 group">
-              <CardHeader>
-                <div className="mx-auto h-12 w-12 text-green-500 mb-4 group-hover:scale-110 transition-transform">
-                  <Zap className="h-full w-full" />
-                </div>
-                <CardTitle className="text-lg">SmartFund™ Auto-Split</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  Blockchain smart contracts automatically distribute donations: 80% immediate access, 
-                  15% housing fund (staked), 5% operations—transparent and immutable.
-                </p>
-              </CardContent>
-            </Card>
+            <Link href="/tokenomics" className="block h-full">
+              <Card className="text-center border-2 hover:border-green-400/50 transition-all duration-300 hover:shadow-lg hover:shadow-green-500/20 group cursor-pointer h-full">
+                <CardHeader>
+                  <div className="mx-auto h-12 w-12 text-green-500 mb-4 group-hover:scale-110 transition-transform">
+                    <Zap className="h-full w-full" />
+                  </div>
+                  <CardTitle className="text-lg">SmartFund™ Auto-Split</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground">
+                    Blockchain smart contracts automatically distribute donations: 80% immediate access, 
+                    15% housing fund (staked), 5% operations—transparent and immutable.
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
 
             {/* Virtual Cards & DeFi */}
-            <Card className="text-center border-2 hover:border-purple-400/50 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/20 group">
-              <CardHeader>
-                <div className="mx-auto h-12 w-12 text-purple-500 mb-4 group-hover:scale-110 transition-transform">
-                  <CreditCard className="h-full w-full" />
-                </div>
-                <CardTitle className="text-lg">Virtual Cards & DeFi</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  Participants receive virtual debit cards for instant spending. 
-                  Housing funds earn yield through Coinbase institutional staking—zero volatility risk.
-                </p>
-              </CardContent>
-            </Card>
+            <Link href="/docs/payment-rails" className="block h-full">
+              <Card className="text-center border-2 hover:border-purple-400/50 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/20 group cursor-pointer h-full">
+                <CardHeader>
+                  <div className="mx-auto h-12 w-12 text-purple-500 mb-4 group-hover:scale-110 transition-transform">
+                    <CreditCard className="h-full w-full" />
+                  </div>
+                  <CardTitle className="text-lg">Virtual Cards & DeFi</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground">
+                    Participants receive virtual debit cards for instant spending. 
+                    Housing funds earn yield through Coinbase institutional staking—zero volatility risk.
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
 
             {/* Micro-Housing Fund */}
-            <Card className="text-center border-2 hover:border-orange-400/50 transition-all duration-300 hover:shadow-lg hover:shadow-orange-500/20 group">
-              <CardHeader>
-                <div className="mx-auto h-12 w-12 text-orange-500 mb-4 group-hover:scale-110 transition-transform">
-                  <Building2 className="h-full w-full" />
-                </div>
-                <CardTitle className="text-lg">Micro-Housing Fund</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  15% of every donation compounds towards emergency housing units. 
-                  AI-optimized staking grows funds faster—building pathways to permanent shelter.
-                </p>
-              </CardContent>
-            </Card>
+            <Link href="/solutions/participants" className="block h-full">
+              <Card className="text-center border-2 hover:border-orange-400/50 transition-all duration-300 hover:shadow-lg hover:shadow-orange-500/20 group cursor-pointer h-full">
+                <CardHeader>
+                  <div className="mx-auto h-12 w-12 text-orange-500 mb-4 group-hover:scale-110 transition-transform">
+                    <Building2 className="h-full w-full" />
+                  </div>
+                  <CardTitle className="text-lg">Micro-Housing Fund</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground">
+                    15% of every donation compounds towards emergency housing units. 
+                    AI-optimized staking grows funds faster—building pathways to permanent shelter.
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
 
             {/* Agent Orchestra & MCP */}
-            <Card className="text-center border-2 hover:border-cyan-400/50 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/20 group">
-              <CardHeader>
-                <div className="mx-auto h-12 w-12 text-cyan-500 mb-4 group-hover:scale-110 transition-transform">
-                  <Sparkles className="h-full w-full" />
-                </div>
-                <CardTitle className="text-lg">AI Agent Orchestra</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  Multi-agent AI system with MCP (Model Context Protocol) tools. 
-                  Intelligent case management, resource allocation, and 24/7 participant support.
-                </p>
-              </CardContent>
-            </Card>
+            <Link href="/docs/chatbot-architecture" className="block h-full">
+              <Card className="text-center border-2 hover:border-cyan-400/50 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/20 group cursor-pointer h-full">
+                <CardHeader>
+                  <div className="mx-auto h-12 w-12 text-cyan-500 mb-4 group-hover:scale-110 transition-transform">
+                    <Sparkles className="h-full w-full" />
+                  </div>
+                  <CardTitle className="text-lg">AI Agent Orchestra</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground">
+                    Multi-agent AI system with MCP (Model Context Protocol) tools. 
+                    Intelligent case management, resource allocation, and 24/7 participant support.
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
 
             {/* Enterprise HMIS */}
-            <Card className="text-center border-2 hover:border-indigo-400/50 transition-all duration-300 hover:shadow-lg hover:shadow-indigo-500/20 group">
-              <CardHeader>
-                <div className="mx-auto h-12 w-12 text-indigo-500 mb-4 group-hover:scale-110 transition-transform">
-                  <Database className="h-full w-full" />
-                </div>
-                <CardTitle className="text-lg">Enterprise HMIS</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  HUD-compliant Homeless Management Information System. 
-                  Real-time case management, coordinated entry, and comprehensive reporting for shelters.
-                </p>
-              </CardContent>
-            </Card>
+            <Link href="/solutions/organizations/hmis-guide" className="block h-full">
+              <Card className="text-center border-2 hover:border-indigo-400/50 transition-all duration-300 hover:shadow-lg hover:shadow-indigo-500/20 group cursor-pointer h-full">
+                <CardHeader>
+                  <div className="mx-auto h-12 w-12 text-indigo-500 mb-4 group-hover:scale-110 transition-transform">
+                    <Database className="h-full w-full" />
+                  </div>
+                  <CardTitle className="text-lg">Enterprise HMIS</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground">
+                    HUD-compliant Homeless Management Information System. 
+                    Real-time case management, coordinated entry, and comprehensive reporting for shelters.
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
 
             {/* Blockchain Security */}
-            <Card className="text-center border-2 hover:border-emerald-400/50 transition-all duration-300 hover:shadow-lg hover:shadow-emerald-500/20 group">
-              <CardHeader>
-                <div className="mx-auto h-12 w-12 text-emerald-500 mb-4 group-hover:scale-110 transition-transform">
-                  <Shield className="h-full w-full" />
-                </div>
-                <CardTitle className="text-lg">Base L2 Blockchain</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  Built on Coinbase's Base Layer 2. Immutable transaction records, 
-                  sub-cent fees, and complete transparency—every dollar tracked on-chain.
-                </p>
-              </CardContent>
-            </Card>
+            <Link href="/docs/blockchain" className="block h-full">
+              <Card className="text-center border-2 hover:border-emerald-400/50 transition-all duration-300 hover:shadow-lg hover:shadow-emerald-500/20 group cursor-pointer h-full">
+                <CardHeader>
+                  <div className="mx-auto h-12 w-12 text-emerald-500 mb-4 group-hover:scale-110 transition-transform">
+                    <Shield className="h-full w-full" />
+                  </div>
+                  <CardTitle className="text-lg">Base L2 Blockchain</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground">
+                    Built on Coinbase's Base Layer 2. Immutable transaction records, 
+                    sub-cent fees, and complete transparency—every dollar tracked on-chain.
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
 
             {/* Global Infrastructure */}
-            <Card className="text-center border-2 hover:border-pink-400/50 transition-all duration-300 hover:shadow-lg hover:shadow-pink-500/20 group">
-              <CardHeader>
-                <div className="mx-auto h-12 w-12 text-pink-500 mb-4 group-hover:scale-110 transition-transform">
-                  <Globe className="h-full w-full" />
-                </div>
-                <CardTitle className="text-lg">Cloud-Native Scale</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  Google Cloud multi-region deployment with Firebase real-time sync. 
-                  99.9% uptime, instant global access, and enterprise-grade security.
-                </p>
-              </CardContent>
-            </Card>
+            <a href="https://cloud.google.com/" target="_blank" rel="noopener noreferrer" className="block h-full">
+              <Card className="text-center border-2 hover:border-pink-400/50 transition-all duration-300 hover:shadow-lg hover:shadow-pink-500/20 group cursor-pointer h-full">
+                <CardHeader>
+                  <div className="mx-auto h-12 w-12 text-pink-500 mb-4 group-hover:scale-110 transition-transform">
+                    <Globe className="h-full w-full" />
+                  </div>
+                  <CardTitle className="text-lg">Cloud-Native Scale</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground">
+                    Google Cloud multi-region deployment with Firebase real-time sync. 
+                    99.9% uptime, instant global access, and enterprise-grade security.
+                  </p>
+                </CardContent>
+              </Card>
+            </a>
           </div>
 
           {/* Technology Partners */}

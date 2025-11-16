@@ -61,12 +61,12 @@ export default async function IRShelterResearchDocumentPage({ params }: { params
     );
   }
 
-  // Load markdown file from the public directory at build time
+  // Load markdown file from the app directory at build time
   let content = '';
   let error = null;
   
   try {
-    const filePath = path.join(process.cwd(), 'public', 'portal', 'founders-only', 'shelter-research', 'shelter-data', metadata.filename);
+    const filePath = path.join(process.cwd(), 'apps', 'web', 'src', 'app', 'portal', 'founders-only', 'shelter-research', 'shelter-data', metadata.filename);
     content = fs.readFileSync(filePath, 'utf8');
   } catch (err) {
     console.error('Error loading document:', err);

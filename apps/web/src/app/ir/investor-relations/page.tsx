@@ -270,7 +270,7 @@ const investmentSlides = [
       preseed: {
         round: 'Pre-Seed Traditional Equity',
         target: '$250K raise',
-        equity: '8-12%',
+        equity: '8-10%',
         valuation: 'TBD (Pre-Revenue)',
         progress: 0
       },
@@ -2210,14 +2210,14 @@ export default function IRInvestorRelationsPage() {
             <Card className="text-center">
               <CardContent className="pt-6">
                 <Calendar className="h-12 w-12 mx-auto mb-4 text-blue-600" />
-                <h3 className="text-2xl font-bold mb-2">3 Months</h3>
+                <h3 className="text-2xl font-bold mb-2">6 Months</h3>
                 <p className="text-muted-foreground">Development Timeline</p>
               </CardContent>
             </Card>
             <Card className="text-center">
               <CardContent className="pt-6">
                 <Coins className="h-12 w-12 mx-auto mb-4 text-amber-600" />
-                <h3 className="text-2xl font-bold mb-2">8-12%</h3>
+                <h3 className="text-2xl font-bold mb-2">8-10%</h3>
                 <p className="text-muted-foreground">Equity Stake</p>
               </CardContent>
             </Card>
@@ -2280,13 +2280,8 @@ export default function IRInvestorRelationsPage() {
                       </p>
                     </div>
 
-                    {/* Five Stakeholder Pillars */}
-                    <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mt-8">
-                      <div className="text-center p-4 bg-white dark:bg-slate-800 rounded-lg border border-emerald-200 dark:border-emerald-800">
-                        <Shield className="h-8 w-8 mx-auto mb-2 text-emerald-600" />
-                        <div className="font-bold text-sm">Platform Admins</div>
-                        <div className="text-xs text-muted-foreground mt-1">Scale Ecosystem</div>
-                      </div>
+                    {/* Four Stakeholder Pillars */}
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-8">
                       <div className="text-center p-4 bg-white dark:bg-slate-800 rounded-lg border border-blue-200 dark:border-blue-800">
                         <Building className="h-8 w-8 mx-auto mb-2 text-blue-600" />
                         <div className="font-bold text-sm">Shelters</div>
@@ -2314,12 +2309,12 @@ export default function IRInvestorRelationsPage() {
                       <div className="text-center p-4 bg-gradient-to-br from-emerald-50 to-emerald-100 dark:from-emerald-900/20 dark:to-emerald-800/20 rounded-lg">
                         <Rocket className="h-6 w-6 mx-auto mb-2 text-emerald-600" />
                         <div className="font-bold text-sm text-emerald-700 dark:text-emerald-300">Tech Stack</div>
-                        <div className="text-xs text-muted-foreground mt-1">Adyen + Coinbase Base + RAG AI</div>
+                        <div className="text-xs text-muted-foreground mt-1">Google Cloud • Multi-tenant • RAG AI</div>
                       </div>
                       <div className="text-center p-4 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-lg">
                         <Target className="h-6 w-6 mx-auto mb-2 text-blue-600" />
                         <div className="font-bold text-sm text-blue-700 dark:text-blue-300">Market</div>
-                        <div className="text-xs text-muted-foreground mt-1">$45B TAM • 1% = $450M ARR</div>
+                        <div className="text-xs text-muted-foreground mt-1">$13.1B TAM • 1% = $131M ARR</div>
                       </div>
                       <div className="text-center p-4 bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 rounded-lg">
                         <TrendingUp className="h-6 w-6 mx-auto mb-2 text-purple-600" />
@@ -2436,12 +2431,12 @@ export default function IRInvestorRelationsPage() {
                         <h4 className="font-bold text-lg text-blue-700 dark:text-blue-300">Traditional Equity Investment Structure</h4>
                         <div className="space-y-3">
                           <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                            <h5 className="font-semibold">SmartFund™ Distribution Model</h5>
-                            <p className="text-sm text-muted-foreground">Revolutionary 80/15/5 split: Virtual cards for participants, housing fund with guaranteed 4-6% APY, and platform operations.</p>
+                            <h5 className="font-semibold">SEC-Compliant Equity</h5>
+                            <p className="text-sm text-muted-foreground">Traditional equity structure with transparent terms, clear exit strategy through acquisition or IPO, and institutional-grade governance.</p>
                           </div>
                           <div className="p-3 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg">
-                            <h5 className="font-semibold">Enterprise Payment Infrastructure</h5>
-                            <p className="text-sm text-muted-foreground">Adyen + Coinbase Base integration providing zero-risk architecture with institutional-grade staking and transparency.</p>
+                            <h5 className="font-semibold">Enterprise-Ready Platform</h5>
+                            <p className="text-sm text-muted-foreground">Multi-tenant architecture on Google Cloud with guaranteed 4-6% APY on housing fund allocation, delivering both social impact and financial returns.</p>
                           </div>
                         </div>
                       </div>
@@ -3382,7 +3377,7 @@ export default function IRInvestorRelationsPage() {
                           </div>
                           <div className="flex justify-between">
                             <span>Equity Percentage:</span>
-                            <span className="font-mono text-green-600">8-12%</span>
+                            <span className="font-mono text-green-600">8-10%</span>
                           </div>
                         </div>
                         <div className="border-b pb-2">

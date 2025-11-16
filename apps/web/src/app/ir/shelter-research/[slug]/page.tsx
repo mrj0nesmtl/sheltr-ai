@@ -42,8 +42,10 @@ const documentMetadata: Record<string, { title: string; description: string; fil
   }
 };
 
-export default async function IRShelterResearchDocumentPage({ params }: { params: { slug: string } }) {
-  const metadata = documentMetadata[params.slug];
+export default async function IRShelterResearchDocumentPage({ params }: { params: Promise<{ slug: string }> }) {
+  // Await params as required by Next.js 15
+  const { slug } = await params;
+  const metadata = documentMetadata[slug];
 
   if (!metadata) {
     return (
@@ -66,7 +68,8 @@ export default async function IRShelterResearchDocumentPage({ params }: { params
   let error = null;
   
   try {
-    const filePath = path.join(process.cwd(), 'apps', 'web', 'src', 'app', 'portal', 'founders-only', 'shelter-research', 'shelter-data', metadata.filename);
+    // process.cwd() in Next.js points to apps/web, so start from src/
+    const filePath = path.join(process.cwd(), 'src', 'app', 'portal', 'founders-only', 'shelter-research', 'shelter-data', metadata.filename);
     content = fs.readFileSync(filePath, 'utf8');
   } catch (err) {
     console.error('Error loading document:', err);

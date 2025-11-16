@@ -1,6 +1,3 @@
-'use client';
-
-import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Shield, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -8,6 +5,8 @@ import { Badge } from '@/components/ui/badge';
 import { ThemeToggle } from '@/components/theme-toggle';
 import Footer from '@/components/Footer';
 import ThemeLogo from '@/components/ThemeLogo';
+import fs from 'fs';
+import path from 'path';
 import ReactMarkdown from 'react-markdown';
 
 // Generate static params for shelter research documents
@@ -43,38 +42,8 @@ const documentMetadata: Record<string, { title: string; description: string; fil
   }
 };
 
-export default function IRShelterResearchDocumentPage({ params }: { params: { slug: string } }) {
-  const [content, setContent] = useState<string>('');
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
+export default async function IRShelterResearchDocumentPage({ params }: { params: { slug: string } }) {
   const metadata = documentMetadata[params.slug];
-
-  useEffect(() => {
-    const loadDocument = async () => {
-      if (!metadata) {
-        setError('Document not found');
-        setLoading(false);
-        return;
-      }
-
-      try {
-        const response = await fetch(`/portal/founders-only/shelter-research/shelter-data/${metadata.filename}`);
-        if (!response.ok) {
-          throw new Error('Failed to load document');
-        }
-        const text = await response.text();
-        setContent(text);
-      } catch (err) {
-        console.error('Error loading document:', err);
-        setError('Failed to load document content');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadDocument();
-  }, [params.slug, metadata]);
 
   if (!metadata) {
     return (
@@ -90,6 +59,18 @@ export default function IRShelterResearchDocumentPage({ params }: { params: { sl
         </div>
       </div>
     );
+  }
+
+  // Load markdown file from the public directory at build time
+  let content = '';
+  let error = null;
+  
+  try {
+    const filePath = path.join(process.cwd(), 'public', 'portal', 'founders-only', 'shelter-research', 'shelter-data', metadata.filename);
+    content = fs.readFileSync(filePath, 'utf8');
+  } catch (err) {
+    console.error('Error loading document:', err);
+    error = 'Failed to load document content';
   }
 
   return (
@@ -142,13 +123,6 @@ export default function IRShelterResearchDocumentPage({ params }: { params: { sl
       <section className="py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            {loading && (
-              <div className="text-center py-12">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-                <p className="mt-4 text-muted-foreground">Loading document...</p>
-              </div>
-            )}
-
             {error && (
               <div className="text-center py-12">
                 <p className="text-red-500 mb-4">{error}</p>
@@ -161,7 +135,7 @@ export default function IRShelterResearchDocumentPage({ params }: { params: { sl
               </div>
             )}
 
-            {!loading && !error && content && (
+            {!error && content && (
               <div className="prose prose-lg dark:prose-invert max-w-none">
                 <ReactMarkdown>{content}</ReactMarkdown>
               </div>

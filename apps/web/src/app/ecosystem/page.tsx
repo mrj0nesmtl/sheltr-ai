@@ -203,6 +203,14 @@ export default function EcosystemPage() {
                         </div>
                       </div>
                     </div>
+                    <div className="mt-6">
+                      <Link href="/docs/tokenomics">
+                        <Button className="w-full" variant="outline">
+                          Learn More About Tokenomics
+                          <ArrowRight className="ml-2 h-4 w-4" />
+                        </Button>
+                      </Link>
+                    </div>
                   </CardContent>
                 </Card>
               </div>
@@ -252,6 +260,14 @@ export default function EcosystemPage() {
                         <span>Shelter coordination & support services</span>
                       </li>
                     </ul>
+                    <div className="mt-6">
+                      <Link href="/impact">
+                        <Button className="w-full" variant="outline">
+                          See Our Impact
+                          <ArrowRight className="ml-2 h-4 w-4" />
+                        </Button>
+                      </Link>
+                    </div>
                   </CardContent>
                 </Card>
 

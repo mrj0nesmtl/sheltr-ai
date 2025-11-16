@@ -533,7 +533,7 @@ export default function OrganizationsPage() {
       </section>
 
       {/* Competitive Advantage */}
-      <section className="py-20 bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 dark:from-slate-900/20 dark:via-blue-900/20 dark:to-purple-900/20">
+      <section id="hmis-comparison" className="py-20 bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 dark:from-slate-900/20 dark:via-blue-900/20 dark:to-purple-900/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <Badge className="mb-4 bg-purple-100 text-purple-800 border-purple-200">

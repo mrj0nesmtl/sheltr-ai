@@ -2,12 +2,14 @@ import Link from 'next/link';
 import { ArrowLeft, Shield, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
 import { ThemeToggle } from '@/components/theme-toggle';
 import Footer from '@/components/Footer';
 import ThemeLogo from '@/components/ThemeLogo';
 import fs from 'fs';
 import path from 'path';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 // Generate static params for shelter research documents
 export async function generateStaticParams() {
@@ -125,7 +127,7 @@ export default async function IRShelterResearchDocumentPage({ params }: { params
       {/* Document Content */}
       <section className="py-16">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-5xl mx-auto">
             {error && (
               <div className="text-center py-12">
                 <p className="text-red-500 mb-4">{error}</p>
@@ -139,9 +141,44 @@ export default async function IRShelterResearchDocumentPage({ params }: { params
             )}
 
             {!error && content && (
-              <div className="prose prose-lg dark:prose-invert max-w-none">
-                <ReactMarkdown>{content}</ReactMarkdown>
-              </div>
+              <Card className="mb-8">
+                <CardContent className="pt-6">
+                  <div className="prose prose-lg dark:prose-invert max-w-none">
+                    <ReactMarkdown
+                      remarkPlugins={[remarkGfm]}
+                      components={{
+                        h1: ({ ...props }) => <h1 className="text-3xl font-bold mt-8 mb-4" {...props} />,
+                        h2: ({ ...props }) => <h2 className="text-2xl font-bold mt-6 mb-3" {...props} />,
+                        h3: ({ ...props }) => <h3 className="text-xl font-semibold mt-4 mb-2" {...props} />,
+                        h4: ({ ...props }) => <h4 className="text-lg font-semibold mt-3 mb-2" {...props} />,
+                        p: ({ ...props }) => <p className="mb-4 leading-relaxed" {...props} />,
+                        ul: ({ ...props }) => <ul className="list-disc list-inside mb-4 space-y-2" {...props} />,
+                        ol: ({ ...props }) => <ol className="list-decimal list-inside mb-4 space-y-2" {...props} />,
+                        li: ({ ...props }) => <li className="ml-4" {...props} />,
+                        a: ({ ...props }) => <a className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 underline" {...props} />,
+                        code: ({ inline, ...props }: any) =>
+                          inline ? (
+                            <code className="bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded text-sm" {...props} />
+                          ) : (
+                            <code className="block bg-slate-100 dark:bg-slate-800 p-4 rounded-lg overflow-x-auto" {...props} />
+                          ),
+                        table: ({ ...props }) => (
+                          <div className="overflow-x-auto mb-4">
+                            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700" {...props} />
+                          </div>
+                        ),
+                        th: ({ ...props }) => <th className="px-4 py-2 bg-slate-100 dark:bg-slate-800 font-semibold text-left" {...props} />,
+                        td: ({ ...props }) => <td className="px-4 py-2 border-t border-gray-200 dark:border-gray-700" {...props} />,
+                        blockquote: ({ ...props }) => (
+                          <blockquote className="border-l-4 border-blue-600 pl-4 italic my-4 text-muted-foreground" {...props} />
+                        ),
+                      }}
+                    >
+                      {content}
+                    </ReactMarkdown>
+                  </div>
+                </CardContent>
+              </Card>
             )}
           </div>
         </div>

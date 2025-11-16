@@ -52,68 +52,74 @@ export default function AboutPage() {
 
             {/* Core Features - 3 Cards */}
             <div className="grid md:grid-cols-3 gap-8 mb-16">
-              <Card className="border-2 border-gray-200 dark:border-gray-800 hover:border-blue-400 dark:hover:border-blue-600 hover:shadow-lg hover:shadow-blue-500/10 transition-all group">
-                <CardHeader>
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="p-2 rounded-lg bg-blue-500/10 group-hover:bg-blue-500/20 transition-colors">
-                      <QrCode className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+              <Link href="/scan-give" className="block h-full">
+                <Card className="border-2 border-gray-200 dark:border-gray-800 hover:border-blue-400 dark:hover:border-blue-600 hover:shadow-lg hover:shadow-blue-500/10 transition-all group cursor-pointer h-full">
+                  <CardHeader>
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="p-2 rounded-lg bg-blue-500/10 group-hover:bg-blue-500/20 transition-colors">
+                        <QrCode className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                      </div>
+                      <CardTitle className="text-lg">Scan & Give Instantly</CardTitle>
                     </div>
-                    <CardTitle className="text-lg">Scan & Give Instantly</CardTitle>
-                  </div>
-                  <CardDescription>
-                    QR-powered donations with immediate impact
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    <strong>Participants</strong> receive donations via unique QR codes linked to their profiles. 
-                    <strong> Donors</strong> scan and give instantly, with funds flowing directly to those who need them most—
-                    restoring dignity through direct empowerment.
-                  </p>
-                </CardContent>
-              </Card>
+                    <CardDescription>
+                      QR-powered donations with immediate impact
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      <strong>Participants</strong> receive donations via unique QR codes linked to their profiles. 
+                      <strong> Donors</strong> scan and give instantly, with funds flowing directly to those who need them most—
+                      restoring dignity through direct empowerment.
+                    </p>
+                  </CardContent>
+                </Card>
+              </Link>
 
-              <Card className="border-2 border-gray-200 dark:border-gray-800 hover:border-green-400 dark:hover:border-green-600 hover:shadow-lg hover:shadow-green-500/10 transition-all group">
-                <CardHeader>
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="p-2 rounded-lg bg-green-500/10 group-hover:bg-green-500/20 transition-colors">
-                      <Shield className="h-6 w-6 text-green-600 dark:text-green-400" />
+              <Link href="/docs/blockchain" className="block h-full">
+                <Card className="border-2 border-gray-200 dark:border-gray-800 hover:border-green-400 dark:hover:border-green-600 hover:shadow-lg hover:shadow-green-500/10 transition-all group cursor-pointer h-full">
+                  <CardHeader>
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="p-2 rounded-lg bg-green-500/10 group-hover:bg-green-500/20 transition-colors">
+                        <Shield className="h-6 w-6 text-green-600 dark:text-green-400" />
+                      </div>
+                      <CardTitle className="text-lg">Blockchain Transparency</CardTitle>
                     </div>
-                    <CardTitle className="text-lg">Blockchain Transparency</CardTitle>
-                  </div>
-                  <CardDescription>
-                    Every transaction visible and verified
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    Built on Base blockchain with smart contracts that automatically 
-                    distribute funds according to our 80/15/5 model—complete transparency, zero hidden fees, 
-                    and immutable records that build trust across the entire ecosystem.
-                  </p>
-                </CardContent>
-              </Card>
+                    <CardDescription>
+                      Every transaction visible and verified
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      Built on Base blockchain with smart contracts that automatically 
+                      distribute funds according to our 80/15/5 model—complete transparency, zero hidden fees, 
+                      and immutable records that build trust across the entire ecosystem.
+                    </p>
+                  </CardContent>
+                </Card>
+              </Link>
 
-              <Card className="border-2 border-gray-200 dark:border-gray-800 hover:border-purple-400 dark:hover:border-purple-600 hover:shadow-lg hover:shadow-purple-500/10 transition-all group">
-                <CardHeader>
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="p-2 rounded-lg bg-purple-500/10 group-hover:bg-purple-500/20 transition-colors">
-                      <Building2 className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+              <Link href="/solutions/pods" className="block h-full">
+                <Card className="border-2 border-gray-200 dark:border-gray-800 hover:border-purple-400 dark:hover:border-purple-600 hover:shadow-lg hover:shadow-purple-500/10 transition-all group cursor-pointer h-full">
+                  <CardHeader>
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="p-2 rounded-lg bg-purple-500/10 group-hover:bg-purple-500/20 transition-colors">
+                        <Building2 className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+                      </div>
+                      <CardTitle className="text-lg">Housing Solutions</CardTitle>
                     </div>
-                    <CardTitle className="text-lg">Housing Solutions</CardTitle>
-                  </div>
-                  <CardDescription>
-                    From emergency shelter to permanent housing
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    Addressing shelter overflow, emergency housing needs, and micro-housing development. 
-                    Every donation builds towards long-term solutions—creating sustainable pathways from 
-                    crisis to stability to permanent housing.
-                  </p>
-                </CardContent>
-              </Card>
+                    <CardDescription>
+                      From emergency shelter to permanent housing
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      Addressing shelter overflow, emergency housing needs, and micro-housing development. 
+                      Every donation builds towards long-term solutions—creating sustainable pathways from 
+                      crisis to stability to permanent housing.
+                    </p>
+                  </CardContent>
+                </Card>
+              </Link>
             </div>
 
             {/* Four Stakeholder Solutions */}

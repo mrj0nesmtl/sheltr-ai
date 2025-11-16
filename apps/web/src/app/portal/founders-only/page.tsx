@@ -1618,7 +1618,7 @@ export default function FoundersOnlyPage() {
           
           {/* Quick Access Links Accordion */}
           <AccordionItem value="quick-access" className="border-2 border-purple-200 dark:border-purple-800 rounded-lg bg-white dark:bg-slate-900 overflow-hidden">
-            <AccordionTrigger className="px-6 py-4 hover:no-underline hover:bg-purple-50 dark:hover:bg-purple-900/20">
+            <AccordionTrigger className="px-6 py-4 hover:no-underline hover:bg-purple-900/10 dark:hover:bg-purple-900/20">
               <div className="flex items-center gap-4 w-full">
                 <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center">
                   <BookOpen className="h-6 w-6 text-purple-600 dark:text-purple-400" />
@@ -1687,7 +1687,7 @@ export default function FoundersOnlyPage() {
 
           {/* Financial Overview Accordion */}
           <AccordionItem value="financial-overview" className="border-2 border-green-200 dark:border-green-800 rounded-lg bg-white dark:bg-slate-900 overflow-hidden">
-            <AccordionTrigger className="px-6 py-4 hover:no-underline hover:bg-green-50 dark:hover:bg-green-900/20">
+            <AccordionTrigger className="px-6 py-4 hover:no-underline hover:bg-green-900/10 dark:hover:bg-green-900/20">
               <div className="flex items-center gap-4 w-full">
                 <div className="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
                   <DollarSign className="h-6 w-6 text-green-600 dark:text-green-400" />
@@ -1727,7 +1727,7 @@ export default function FoundersOnlyPage() {
 
           {/* QA Testing Accordion */}
           <AccordionItem value="qa-testing" className="border-2 border-blue-200 dark:border-blue-800 rounded-lg bg-white dark:bg-slate-900 overflow-hidden">
-            <AccordionTrigger className="px-6 py-4 hover:no-underline hover:bg-blue-50 dark:hover:bg-blue-900/20">
+            <AccordionTrigger className="px-6 py-4 hover:no-underline hover:bg-blue-900/10 dark:hover:bg-blue-900/20">
               <div className="flex items-center gap-4 w-full">
                 <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
                   <CheckCircle className="h-6 w-6 text-blue-600 dark:text-blue-400" />
@@ -1919,7 +1919,7 @@ export default function FoundersOnlyPage() {
           {/* Founders Gallery Accordion */}
           {galleryItems.length > 0 && (
             <AccordionItem value="founders-gallery" className="border-2 border-pink-200 dark:border-pink-800 rounded-lg bg-white dark:bg-slate-900 overflow-hidden">
-              <AccordionTrigger className="px-6 py-4 hover:no-underline hover:bg-pink-50 dark:hover:bg-pink-900/20">
+              <AccordionTrigger className="px-6 py-4 hover:no-underline hover:bg-pink-900/10 dark:hover:bg-pink-900/20">
                 <div className="flex items-center gap-4 w-full">
                   <div className="w-12 h-12 bg-pink-100 dark:bg-pink-900 rounded-full flex items-center justify-center">
                     <ImageIcon className="h-6 w-6 text-pink-600 dark:text-pink-400" />
@@ -1938,17 +1938,17 @@ export default function FoundersOnlyPage() {
               {galleryItems.map((item, index) => (
                 <Card 
                   key={item.id} 
-                  className="overflow-hidden group hover:shadow-lg transition-all cursor-pointer"
+                  className="overflow-hidden group hover:shadow-xl transition-shadow duration-300 cursor-pointer"
                   onClick={() => openGalleryLightbox(index)}
                 >
-                  <div className="relative aspect-video bg-slate-100 dark:bg-slate-800">
+                  <div className="relative aspect-video bg-slate-100 dark:bg-slate-800 overflow-hidden">
                     {item.type === 'video' && (
-                      <Badge className="absolute top-2 left-2 bg-red-600 text-white">
+                      <Badge className="absolute top-2 left-2 bg-red-600 text-white z-10">
                         Video
                       </Badge>
                     )}
                     {item.duration && (
-                      <Badge className="absolute top-2 right-2 bg-black/70 text-white">
+                      <Badge className="absolute top-2 right-2 bg-black/70 text-white z-10">
                         {item.duration}
                       </Badge>
                     )}
@@ -1956,19 +1956,18 @@ export default function FoundersOnlyPage() {
                       src={item.thumbnail}
                       alt={item.title}
                       fill
-                      className="object-cover group-hover:scale-105 transition-transform"
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
                     />
-                    {/* Clickable Overlay with Eye Icon */}
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors" />
-                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                      <div className="bg-white/90 rounded-full p-3">
-                        <Eye className="h-6 w-6 text-gray-800" />
+                    {/* Single unified overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                      <div className="bg-white/95 dark:bg-slate-900/95 rounded-full p-3 transform scale-90 group-hover:scale-100 transition-transform duration-300">
+                        <Eye className="h-6 w-6 text-gray-800 dark:text-white" />
                       </div>
                     </div>
                     {item.type === 'video' && item.url && (
-                      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none">
-                        <div className="w-12 h-12 bg-white/80 rounded-full flex items-center justify-center">
-                          <Play className="h-6 w-6 text-black ml-0.5" />
+                      <div className="absolute bottom-3 right-3 pointer-events-none z-10">
+                        <div className="w-10 h-10 bg-white/90 dark:bg-slate-900/90 rounded-full flex items-center justify-center">
+                          <Play className="h-5 w-5 text-black dark:text-white ml-0.5" />
                         </div>
                       </div>
                     )}
@@ -1982,8 +1981,8 @@ export default function FoundersOnlyPage() {
                   <CardContent>
                     <div className="flex items-center justify-between">
                       <div className="flex flex-wrap gap-1">
-                        {item.tags.slice(0, 3).map((tag, index) => (
-                          <Badge key={index} variant="outline" className="text-xs">
+                        {item.tags.slice(0, 3).map((tag, tagIndex) => (
+                          <Badge key={tagIndex} variant="outline" className="text-xs">
                             {tag}
                           </Badge>
                         ))}

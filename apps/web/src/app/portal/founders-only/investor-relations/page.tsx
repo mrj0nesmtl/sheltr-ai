@@ -1791,7 +1791,7 @@ export default function InvestorRelationsPage() {
 
   const fundingAllocation = [
     { category: 'Platform Development', percentage: 40, amount: 60000, color: 'bg-blue-500' },
-    { category: 'AI & Knowledge Base', percentage: 20, amount: 30000, color: 'bg-yellow-500' },
+    { category: 'PAI & Knowledge Base', percentage: 20, amount: 30000, color: 'bg-yellow-500' },
     { category: 'Blockchain Infrastructure', percentage: 15, amount: 22500, color: 'bg-green-500' },
     { category: 'Regulatory & Compliance', percentage: 15, amount: 22500, color: 'bg-purple-500' },
     { category: 'Marketing & Partnerships', percentage: 10, amount: 15000, color: 'bg-orange-500' }
@@ -1800,7 +1800,7 @@ export default function InvestorRelationsPage() {
   const milestones = [
     { quarter: 'Q1 2026', title: 'Platform Beta Launch', status: 'completed' },
     { quarter: 'Q2 2026', title: 'Blockchain Integration', status: 'in-progress' },
-    { quarter: 'Q3 2026', title: 'AI & Knowledge Base', status: 'planned' },
+    { quarter: 'Q3 2026', title: 'Pilot Project Integration', status: 'planned' },
     { quarter: 'Q4 2026', title: 'Token Launch ($SHLTR)', status: 'planned' },
     { quarter: 'Q1-Q2 2027', title: 'Market Expansion', status: 'planned' },
     { quarter: 'Q3-Q4 2027', title: 'Multi-City Rollout', status: 'planned' }
@@ -2263,7 +2263,7 @@ export default function InvestorRelationsPage() {
                         Tech for Good • The Only Investment That Matters
                       </Badge>
                       <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-emerald-600 via-blue-600 to-purple-600 bg-clip-text text-transparent leading-tight">
-                        Disrupting a $45B Industry with Enterprise AI & Blockchain
+                        Disrupting a $15B Industry
                       </h2>
                     </div>
 
@@ -2764,7 +2764,7 @@ export default function InvestorRelationsPage() {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Zap className="h-5 w-5 text-yellow-500" />
-                    AI & Knowledge Base Integration
+                   Pilot Project Integration
                   </CardTitle>
                 </CardHeader>
                 <CardContent>

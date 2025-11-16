@@ -7,6 +7,82 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.121.0] - 2025-11-16 (Budget UI & Founders Portal UX Improvements) ✨
+
+### 🎨 UI/UX Enhancements
+
+#### **Budget Table Display & Navigation Improvements**
+
+**Fixed Budget Month Display:**
+- Changed budget table to display exactly **Jan-Dec 2026** (12 months)
+- Previously showed all months after Sep 2025 including extra months beyond Dec
+- Updated `.slice(4)` to `.slice(4, 16)` for precise 12-month range
+- Applied to both `/ir/budget` and `/portal/founders-only/budget`
+
+**Restored Horizontal Scroll Functionality:**
+- Added `max-w-full` to overflow container
+- Added `min-w-max` to Table component  
+- Added `min-w-[100px]` to month header cells
+- Added `min-w-[120px]` to Total column
+- Ensures table is wider than container, triggering horizontal scroll
+
+**Enhanced Sticky Columns:**
+- Maintained sticky Account column (`left-0`)
+- Maintained sticky Role/Description column (`left-200px`)
+- Maintained sticky header row (`top-0`)
+- Added proper z-index layering and background colors
+
+**Updated Timeline References:**
+- Changed "2025-2026 Financial Planning" → "2026 Financial Planning"
+- Changed "Through August 2026" → "Through December 2026"
+- Changed "Sep 2025 - Aug 2026" → "Jan 2026 - Dec 2026"
+- Updated Q1-Q2 2026 expense descriptions
+
+#### **Founders Portal Gallery Card Fixes**
+
+**Fixed Gallery Card Hover Effect Glitch:**
+- Removed multiple overlapping hover effects causing visual glitches
+- Consolidated to single unified overlay with gradient
+- Changed from `transition-all` to specific transitions:
+  - `transition-shadow duration-300` for card shadow
+  - `transition-transform duration-300` for image scale
+  - `transition-opacity duration-300` for overlay fade
+
+**Improved Gallery Card Structure:**
+- Single gradient overlay: `from-black/60 via-transparent to-transparent`
+- Eye icon scales smoothly: `scale-90 → scale-100` on hover
+- Moved Play button to bottom-right corner (videos only)
+- Added explicit z-index layering for badges and overlays
+- Enhanced dark mode support
+
+**Fixed Accordion Card Hover Effects:**
+- **Quick Access Links**: `hover:bg-purple-50` → `hover:bg-purple-900/10`
+- **Financial Overview**: `hover:bg-green-50` → `hover:bg-green-900/10`
+- **QA Testing**: `hover:bg-blue-50` → `hover:bg-blue-900/10`
+- **Founders Gallery**: `hover:bg-pink-50` → `hover:bg-pink-900/10`
+- All cards now have consistent subtle glow effect (10% tint in light mode, 20% in dark mode)
+- Eliminated bright white/colored flashes on hover
+
+### 📁 Files Modified
+
+**Budget Pages:**
+- `apps/web/src/app/portal/founders-only/budget/page.tsx`
+- `apps/web/src/app/ir/budget/page.tsx`
+
+**Founders Portal:**
+- `apps/web/src/app/portal/founders-only/page.tsx`
+
+### 🎯 Impact
+
+- ✅ Budget tables now display correct 12-month period (Jan-Dec 2026)
+- ✅ Horizontal scroll restored for better table navigation
+- ✅ Sticky columns work perfectly while scrolling
+- ✅ Gallery cards have smooth, professional hover effects
+- ✅ All accordion cards have consistent, elegant hover behavior
+- ✅ No more visual glitches or bright flashes
+
+---
+
 ## [2.120.0] - 2025-11-16 (FINAL LOGIN REDIRECT FIX - ALL ROLES) ✅
 
 ### 🎉 Critical Bug Fix - CONFIRMED WORKING

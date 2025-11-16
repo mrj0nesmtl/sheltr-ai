@@ -623,10 +623,10 @@ export default function IRBudgetPage() {
               <div className="overflow-x-auto">
                 <Table>
                   <TableHeader>
-                    <TableRow>
-                      <TableHead className="w-[200px]">Account</TableHead>
-                      <TableHead className="w-[200px]">Role/Description</TableHead>
-                      {budgetData.period.months.map((month) => (
+                    <TableRow className="sticky top-0 z-20 bg-background">
+                      <TableHead className="sticky left-0 z-30 bg-background w-[200px] border-r-2">Account</TableHead>
+                      <TableHead className="sticky left-[200px] z-30 bg-background w-[200px] border-r-2">Role/Description</TableHead>
+                      {budgetData.period.months.slice(4).map((month) => (
                         <TableHead key={month} className="text-right">{month.slice(0, 3)}</TableHead>
                       ))}
                       <TableHead className="text-right font-bold">Total</TableHead>

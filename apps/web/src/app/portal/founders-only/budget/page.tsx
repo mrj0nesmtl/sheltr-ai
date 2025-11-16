@@ -446,7 +446,7 @@ export default function BudgetPage() {
                 </Badge>
               </div>
               <p className="text-muted-foreground">
-                2025-2026 Financial Planning • ${displayData.funding.seed_round.toLocaleString()} Seed Investment
+                2026 Financial Planning • ${displayData.funding.seed_round.toLocaleString()} Seed Investment
               </p>
             </div>
             <div className="flex items-center gap-3">
@@ -497,7 +497,7 @@ export default function BudgetPage() {
               <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
                 {formatCurrency(displayData.calculated.runway.projected_allocation)}
               </div>
-              <p className="text-xs text-muted-foreground mt-1">Through August 2026</p>
+              <p className="text-xs text-muted-foreground mt-1">Through December 2026</p>
             </CardContent>
           </Card>
 
@@ -613,7 +613,7 @@ export default function BudgetPage() {
                 <h3 className="text-2xl font-bold">Monthly Burn Rate by Category</h3>
                 <p className="text-sm text-muted-foreground mt-1">
                   {selectedCategory === 'all' 
-                    ? 'Projected monthly expenses Sep 2025 - Aug 2026 (Click to expand/collapse)'
+                    ? 'Projected monthly expenses Jan 2026 - Dec 2026 (Click to expand/collapse)'
                     : `Filtered to ${selectedCategory.charAt(0).toUpperCase() + selectedCategory.slice(1)} category`
                   }
                 </p>
@@ -773,10 +773,10 @@ export default function BudgetPage() {
               <div className="overflow-x-auto">
                 <Table>
                   <TableHeader>
-                    <TableRow>
-                      <TableHead className="w-[200px]">Account</TableHead>
-                      <TableHead className="w-[200px]">Role/Description</TableHead>
-                      {displayData.period.months.map((month) => (
+                    <TableRow className="sticky top-0 z-20 bg-background">
+                      <TableHead className="sticky left-0 z-30 bg-background w-[200px] border-r-2">Account</TableHead>
+                      <TableHead className="sticky left-[200px] z-30 bg-background w-[200px] border-r-2">Role/Description</TableHead>
+                      {displayData.period.months.slice(4).map((month) => (
                         <TableHead key={month} className="text-right">{month.slice(0, 3)}</TableHead>
                       ))}
                       <TableHead className="text-right font-bold">Total</TableHead>
@@ -794,15 +794,15 @@ export default function BudgetPage() {
                         </TableRow>
                         {displayData.categories.team.items.map((item) => (
                           <TableRow key={item.id}>
-                            <TableCell className="font-medium">{item.name}</TableCell>
-                            <TableCell className="text-sm text-muted-foreground">{item.role}</TableCell>
-                            {item.budget_values.map((value, idx) => (
-                              <TableCell key={idx} className="text-right">
+                            <TableCell className="sticky left-0 z-10 bg-background font-medium border-r-2">{item.name}</TableCell>
+                            <TableCell className="sticky left-[200px] z-10 bg-background text-sm text-muted-foreground border-r-2">{item.role}</TableCell>
+                            {item.budget_values.slice(4).map((value, idx) => (
+                              <TableCell key={idx + 4} className="text-right">
                                 {isEditMode ? (
                                   <Input
                                     type="number"
                                     value={value || 0}
-                                    onChange={(e) => handleValueChange('team', item.id, idx, e.target.value)}
+                                    onChange={(e) => handleValueChange('team', item.id, idx + 4, e.target.value)}
                                     className="w-20 h-8 text-right"
                                   />
                                 ) : (
@@ -811,7 +811,7 @@ export default function BudgetPage() {
                               </TableCell>
                             ))}
                             <TableCell className="text-right font-bold">
-                              {formatCurrency(item.budget_values.reduce((a, b) => a + b, 0))}
+                              {formatCurrency(item.budget_values.slice(4).reduce((a, b) => a + b, 0))}
                             </TableCell>
                           </TableRow>
                         ))}
@@ -829,15 +829,15 @@ export default function BudgetPage() {
                         </TableRow>
                         {displayData.categories.infrastructure.items.map((item) => (
                           <TableRow key={item.id}>
-                            <TableCell className="font-medium">{item.name}</TableCell>
-                            <TableCell className="text-sm text-muted-foreground">{item.role}</TableCell>
-                            {item.budget_values.map((value, idx) => (
-                              <TableCell key={idx} className="text-right">
+                            <TableCell className="sticky left-0 z-10 bg-background font-medium border-r-2">{item.name}</TableCell>
+                            <TableCell className="sticky left-[200px] z-10 bg-background text-sm text-muted-foreground border-r-2">{item.role}</TableCell>
+                            {item.budget_values.slice(4).map((value, idx) => (
+                              <TableCell key={idx + 4} className="text-right">
                                 {isEditMode ? (
                                   <Input
                                     type="number"
                                     value={value || 0}
-                                    onChange={(e) => handleValueChange('infrastructure', item.id, idx, e.target.value)}
+                                    onChange={(e) => handleValueChange('infrastructure', item.id, idx + 4, e.target.value)}
                                     className="w-20 h-8 text-right"
                                   />
                                 ) : (
@@ -846,7 +846,7 @@ export default function BudgetPage() {
                               </TableCell>
                             ))}
                             <TableCell className="text-right font-bold">
-                              {formatCurrency(item.budget_values.reduce((a, b) => a + b, 0))}
+                              {formatCurrency(item.budget_values.slice(4).reduce((a, b) => a + b, 0))}
                             </TableCell>
                           </TableRow>
                         ))}
@@ -864,15 +864,15 @@ export default function BudgetPage() {
                         </TableRow>
                         {displayData.categories.operations.items.map((item) => (
                           <TableRow key={item.id}>
-                            <TableCell className="font-medium">{item.name}</TableCell>
-                            <TableCell className="text-sm text-muted-foreground">{item.role}</TableCell>
-                            {item.budget_values.map((value, idx) => (
-                              <TableCell key={idx} className="text-right">
+                            <TableCell className="sticky left-0 z-10 bg-background font-medium border-r-2">{item.name}</TableCell>
+                            <TableCell className="sticky left-[200px] z-10 bg-background text-sm text-muted-foreground border-r-2">{item.role}</TableCell>
+                            {item.budget_values.slice(4).map((value, idx) => (
+                              <TableCell key={idx + 4} className="text-right">
                                 {isEditMode ? (
                                   <Input
                                     type="number"
                                     value={value || 0}
-                                    onChange={(e) => handleValueChange('operations', item.id, idx, e.target.value)}
+                                    onChange={(e) => handleValueChange('operations', item.id, idx + 4, e.target.value)}
                                     className="w-20 h-8 text-right"
                                   />
                                 ) : (
@@ -881,7 +881,7 @@ export default function BudgetPage() {
                               </TableCell>
                             ))}
                             <TableCell className="text-right font-bold">
-                              {formatCurrency(item.budget_values.reduce((a, b) => a + b, 0))}
+                              {formatCurrency(item.budget_values.slice(4).reduce((a, b) => a + b, 0))}
                             </TableCell>
                           </TableRow>
                         ))}
@@ -899,15 +899,15 @@ export default function BudgetPage() {
                         </TableRow>
                         {displayData.categories.marketing.items.map((item) => (
                           <TableRow key={item.id}>
-                            <TableCell className="font-medium">{item.name}</TableCell>
-                            <TableCell className="text-sm text-muted-foreground">{item.role}</TableCell>
-                            {item.budget_values.map((value, idx) => (
-                              <TableCell key={idx} className="text-right">
+                            <TableCell className="sticky left-0 z-10 bg-background font-medium border-r-2">{item.name}</TableCell>
+                            <TableCell className="sticky left-[200px] z-10 bg-background text-sm text-muted-foreground border-r-2">{item.role}</TableCell>
+                            {item.budget_values.slice(4).map((value, idx) => (
+                              <TableCell key={idx + 4} className="text-right">
                                 {isEditMode ? (
                                   <Input
                                     type="number"
                                     value={value || 0}
-                                    onChange={(e) => handleValueChange('marketing', item.id, idx, e.target.value)}
+                                    onChange={(e) => handleValueChange('marketing', item.id, idx + 4, e.target.value)}
                                     className="w-20 h-8 text-right"
                                   />
                                 ) : (
@@ -916,7 +916,7 @@ export default function BudgetPage() {
                               </TableCell>
                             ))}
                             <TableCell className="text-right font-bold">
-                              {formatCurrency(item.budget_values.reduce((a, b) => a + b, 0))}
+                              {formatCurrency(item.budget_values.slice(4).reduce((a, b) => a + b, 0))}
                             </TableCell>
                           </TableRow>
                         ))}
@@ -925,24 +925,24 @@ export default function BudgetPage() {
 
                     {/* Totals */}
                     <TableRow className="bg-muted font-bold">
-                      <TableCell colSpan={2}>Monthly Burn</TableCell>
-                      {displayData.calculated.budget_monthly_burn.map((burn, idx) => (
-                        <TableCell key={idx} className="text-right">
+                      <TableCell className="sticky left-0 z-10 bg-muted" colSpan={2}>Monthly Burn</TableCell>
+                      {displayData.calculated.budget_monthly_burn.slice(4).map((burn, idx) => (
+                        <TableCell key={idx + 4} className="text-right">
                           {formatCurrency(burn)}
                         </TableCell>
                       ))}
-                      <TableCell className="text-right">{formatCurrency(displayData.calculated.runway.projected_allocation)}</TableCell>
+                      <TableCell className="text-right">{formatCurrency(displayData.calculated.budget_monthly_burn.slice(4).reduce((a, b) => a + b, 0))}</TableCell>
                     </TableRow>
 
                     <TableRow className="bg-muted/50 font-bold">
-                      <TableCell colSpan={2}>Running Total</TableCell>
-                      {displayData.calculated.budget_running_total.map((total, idx) => (
-                        <TableCell key={idx} className="text-right">
+                      <TableCell className="sticky left-0 z-10 bg-muted/50" colSpan={2}>Running Total</TableCell>
+                      {displayData.calculated.budget_running_total.slice(4).map((total, idx) => (
+                        <TableCell key={idx + 4} className="text-right">
                           {formatCurrency(total)}
                         </TableCell>
                       ))}
                       <TableCell className="text-right text-blue-600 dark:text-blue-400">
-                        {formatCurrency(displayData.calculated.runway.projected_allocation)}
+                        {formatCurrency(displayData.calculated.budget_monthly_burn.slice(4).reduce((a, b) => a + b, 0))}
                       </TableCell>
                     </TableRow>
                   </TableBody>
@@ -963,10 +963,10 @@ export default function BudgetPage() {
             </p>
             <div className="border-l-4 border-blue-400 pl-4 space-y-2">
               <p>• <strong>Status:</strong> Funds not yet raised - this represents planned spending once capital is secured</p>
-              <p>• <strong>Timeline:</strong> 12-month runway from raise date (September 2025 - August 2026)</p>
-              <p>• <strong>Major expenses in November-December 2025:</strong> Token listing, payment rails setup, initial POD/MOBI materials</p>
-              <p>• <strong>Stabilized monthly burn:</strong> ~{formatCurrency(displayData.calculated.runway.average_burn)} from January 2026 onwards</p>
-              <p>• <strong>Team ramp-up:</strong> Begins in November 2025 with full team operational by December</p>
+              <p>• <strong>Timeline:</strong> 12-month runway for 2026 (January 2026 - December 2026)</p>
+              <p>• <strong>Major expenses in Q1-Q2 2026:</strong> Token listing, payment rails setup, initial POD/MOBI materials</p>
+              <p>• <strong>Stabilized monthly burn:</strong> ~{formatCurrency(displayData.calculated.runway.average_burn)} throughout 2026</p>
+              <p>• <strong>Team ramp-up:</strong> Full team operational by end of Q1 2026</p>
               <p>• <strong>Reserve buffer:</strong> {formatCurrency(displayData.calculated.runway.reserve_buffer)} ({((displayData.calculated.runway.reserve_buffer / displayData.funding.seed_round) * 100).toFixed(1)}%) held for contingencies and extended runway</p>
             </div>
             <p className="text-xs text-muted-foreground italic mt-4">

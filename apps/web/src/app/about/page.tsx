@@ -44,9 +44,9 @@ export default function AboutPage() {
               </h2>
               <p className="text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
                 We&apos;re a QR-powered donation platform that enables <strong>direct participant empowerment</strong> through 
-                transparent donations and smart contracts. Our focus spans <strong>shelter operations, overflow management, 
+                transparent donations and smart contracts. Our focus spans <strong>shelter operations (HMIS), overflow management, 
                 emergency housing, and micro-housing solutions</strong>—creating an ecosystem built on <strong>dignity, purpose, 
-                and sustainable pathways</strong> out of homelessness for everyone involved.
+                and sustainable pathways</strong> out of homelessness.
               </p>
             </div>
 
@@ -128,129 +128,137 @@ export default function AboutPage() {
               </div>
 
               <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {/* For Shelters */}
+                <Link href="/solutions/organizations" className="block h-full">
+                  <Card className="border-2 hover:border-orange-400/50 dark:hover:border-orange-600/50 transition-all duration-300 hover:shadow-lg hover:shadow-orange-500/20 group cursor-pointer h-full">
+                    <CardHeader className="text-center">
+                      <div className="mx-auto mb-4 p-4 rounded-full bg-orange-500/10 group-hover:bg-orange-500/20 transition-colors w-fit">
+                        <Building2 className="h-8 w-8 text-orange-600 dark:text-orange-400" />
+                      </div>
+                      <CardTitle className="text-lg">For Shelters</CardTitle>
+                      <CardDescription>Operations & Management</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <ul className="text-sm text-muted-foreground space-y-2">
+                        <li className="flex items-start gap-2">
+                          <span className="text-orange-500 mt-0.5">•</span>
+                          <span>Enterprise HMIS platform</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-orange-500 mt-0.5">•</span>
+                          <span>Overflow & capacity management</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-orange-500 mt-0.5">•</span>
+                          <span>Automated reporting & compliance</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-orange-500 mt-0.5">•</span>
+                          <span>5% operational funding stream</span>
+                        </li>
+                      </ul>
+                    </CardContent>
+                  </Card>
+                </Link>
+
                 {/* For Participants */}
-                <Card className="border-2 hover:border-blue-400/50 dark:hover:border-blue-600/50 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20 group">
-                  <CardHeader className="text-center">
-                    <div className="mx-auto mb-4 p-4 rounded-full bg-blue-500/10 group-hover:bg-blue-500/20 transition-colors w-fit">
-                      <UserCheck className="h-8 w-8 text-blue-600 dark:text-blue-400" />
-                    </div>
-                    <CardTitle className="text-lg">For Participants</CardTitle>
-                    <CardDescription>Dignity & Direct Support</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <ul className="text-sm text-muted-foreground space-y-2">
-                      <li className="flex items-start gap-2">
-                        <span className="text-blue-500 mt-0.5">•</span>
-                        <span>Personal QR codes for direct donations</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <span className="text-blue-500 mt-0.5">•</span>
-                        <span>Virtual debit cards for immediate access</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <span className="text-blue-500 mt-0.5">•</span>
-                        <span>Automatic housing fund building</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <span className="text-blue-500 mt-0.5">•</span>
-                        <span>AI-powered case management support</span>
-                      </li>
-                    </ul>
-                  </CardContent>
-                </Card>
+                <Link href="/solutions/participants" className="block h-full">
+                  <Card className="border-2 hover:border-blue-400/50 dark:hover:border-blue-600/50 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20 group cursor-pointer h-full">
+                    <CardHeader className="text-center">
+                      <div className="mx-auto mb-4 p-4 rounded-full bg-blue-500/10 group-hover:bg-blue-500/20 transition-colors w-fit">
+                        <UserCheck className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+                      </div>
+                      <CardTitle className="text-lg">For Participants</CardTitle>
+                      <CardDescription>Dignity & Direct Support</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <ul className="text-sm text-muted-foreground space-y-2">
+                        <li className="flex items-start gap-2">
+                          <span className="text-blue-500 mt-0.5">•</span>
+                          <span>Personal QR codes for direct donations</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-blue-500 mt-0.5">•</span>
+                          <span>Virtual debit cards for immediate access</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-blue-500 mt-0.5">•</span>
+                          <span>Automatic housing fund building</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-blue-500 mt-0.5">•</span>
+                          <span>AI-powered case management support</span>
+                        </li>
+                      </ul>
+                    </CardContent>
+                  </Card>
+                </Link>
 
                 {/* For Donors */}
-                <Card className="border-2 hover:border-green-400/50 dark:hover:border-green-600/50 transition-all duration-300 hover:shadow-lg hover:shadow-green-500/20 group">
-                  <CardHeader className="text-center">
-                    <div className="mx-auto mb-4 p-4 rounded-full bg-green-500/10 group-hover:bg-green-500/20 transition-colors w-fit">
-                      <Heart className="h-8 w-8 text-green-600 dark:text-green-400" />
-                    </div>
-                    <CardTitle className="text-lg">For Donors</CardTitle>
-                    <CardDescription>Transparent Impact</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <ul className="text-sm text-muted-foreground space-y-2">
-                      <li className="flex items-start gap-2">
-                        <span className="text-green-500 mt-0.5">•</span>
-                        <span>Scan QR codes for instant giving</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <span className="text-green-500 mt-0.5">•</span>
-                        <span>Track every dollar on blockchain</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <span className="text-green-500 mt-0.5">•</span>
-                        <span>See real-time impact metrics</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <span className="text-green-500 mt-0.5">•</span>
-                        <span>Tax receipts & donation history</span>
-                      </li>
-                    </ul>
-                  </CardContent>
-                </Card>
-
-                {/* For Shelters */}
-                <Card className="border-2 hover:border-orange-400/50 dark:hover:border-orange-600/50 transition-all duration-300 hover:shadow-lg hover:shadow-orange-500/20 group">
-                  <CardHeader className="text-center">
-                    <div className="mx-auto mb-4 p-4 rounded-full bg-orange-500/10 group-hover:bg-orange-500/20 transition-colors w-fit">
-                      <Building2 className="h-8 w-8 text-orange-600 dark:text-orange-400" />
-                    </div>
-                    <CardTitle className="text-lg">For Shelters</CardTitle>
-                    <CardDescription>Operations & Management</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <ul className="text-sm text-muted-foreground space-y-2">
-                      <li className="flex items-start gap-2">
-                        <span className="text-orange-500 mt-0.5">•</span>
-                        <span>Enterprise HMIS platform</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <span className="text-orange-500 mt-0.5">•</span>
-                        <span>Overflow & capacity management</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <span className="text-orange-500 mt-0.5">•</span>
-                        <span>Automated reporting & compliance</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <span className="text-orange-500 mt-0.5">•</span>
-                        <span>5% operational funding stream</span>
-                      </li>
-                    </ul>
-                  </CardContent>
-                </Card>
+                <Link href="/solutions/donors" className="block h-full">
+                  <Card className="border-2 hover:border-green-400/50 dark:hover:border-green-600/50 transition-all duration-300 hover:shadow-lg hover:shadow-green-500/20 group cursor-pointer h-full">
+                    <CardHeader className="text-center">
+                      <div className="mx-auto mb-4 p-4 rounded-full bg-green-500/10 group-hover:bg-green-500/20 transition-colors w-fit">
+                        <Heart className="h-8 w-8 text-green-600 dark:text-green-400" />
+                      </div>
+                      <CardTitle className="text-lg">For Donors</CardTitle>
+                      <CardDescription>Transparent Impact</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <ul className="text-sm text-muted-foreground space-y-2">
+                        <li className="flex items-start gap-2">
+                          <span className="text-green-500 mt-0.5">•</span>
+                          <span>Scan QR codes for instant giving</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-green-500 mt-0.5">•</span>
+                          <span>Track every dollar on blockchain</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-green-500 mt-0.5">•</span>
+                          <span>See real-time impact metrics</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-green-500 mt-0.5">•</span>
+                          <span>Tax receipts & donation history</span>
+                        </li>
+                      </ul>
+                    </CardContent>
+                  </Card>
+                </Link>
 
                 {/* For Governments */}
-                <Card className="border-2 hover:border-purple-400/50 dark:hover:border-purple-600/50 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/20 group">
-                  <CardHeader className="text-center">
-                    <div className="mx-auto mb-4 p-4 rounded-full bg-purple-500/10 group-hover:bg-purple-500/20 transition-colors w-fit">
-                      <Target className="h-8 w-8 text-purple-600 dark:text-purple-400" />
-                    </div>
-                    <CardTitle className="text-lg">For Governments</CardTitle>
-                    <CardDescription>Data & Accountability</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <ul className="text-sm text-muted-foreground space-y-2">
-                      <li className="flex items-start gap-2">
-                        <span className="text-purple-500 mt-0.5">•</span>
-                        <span>Real-time population data & trends</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <span className="text-purple-500 mt-0.5">•</span>
-                        <span>HUD-compliant reporting</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <span className="text-purple-500 mt-0.5">•</span>
-                        <span>Coordinated entry systems</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <span className="text-purple-500 mt-0.5">•</span>
-                        <span>Outcome tracking & ROI metrics</span>
-                      </li>
-                    </ul>
-                  </CardContent>
-                </Card>
+                <Link href="/solutions/government" className="block h-full">
+                  <Card className="border-2 hover:border-purple-400/50 dark:hover:border-purple-600/50 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/20 group cursor-pointer h-full">
+                    <CardHeader className="text-center">
+                      <div className="mx-auto mb-4 p-4 rounded-full bg-purple-500/10 group-hover:bg-purple-500/20 transition-colors w-fit">
+                        <Target className="h-8 w-8 text-purple-600 dark:text-purple-400" />
+                      </div>
+                      <CardTitle className="text-lg">For Governments</CardTitle>
+                      <CardDescription>Data & Accountability</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <ul className="text-sm text-muted-foreground space-y-2">
+                        <li className="flex items-start gap-2">
+                          <span className="text-purple-500 mt-0.5">•</span>
+                          <span>Real-time population data & trends</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-purple-500 mt-0.5">•</span>
+                          <span>HUD-compliant reporting</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-purple-500 mt-0.5">•</span>
+                          <span>Coordinated entry systems</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-purple-500 mt-0.5">•</span>
+                          <span>Outcome tracking & ROI metrics</span>
+                        </li>
+                      </ul>
+                    </CardContent>
+                  </Card>
+                </Link>
               </div>
             </div>
 

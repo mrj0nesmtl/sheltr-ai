@@ -620,16 +620,16 @@ export default function IRBudgetPage() {
               <CardDescription>Line-item expenses by month</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="overflow-x-auto">
-                <Table>
+              <div className="overflow-x-auto max-w-full">
+                <Table className="min-w-max">
                   <TableHeader>
                     <TableRow className="sticky top-0 z-20 bg-background">
                       <TableHead className="sticky left-0 z-30 bg-background w-[200px] border-r-2">Account</TableHead>
                       <TableHead className="sticky left-[200px] z-30 bg-background w-[200px] border-r-2">Role/Description</TableHead>
-                      {budgetData.period.months.slice(4).map((month) => (
-                        <TableHead key={month} className="text-right">{month.slice(0, 3)}</TableHead>
+                      {budgetData.period.months.slice(4, 16).map((month) => (
+                        <TableHead key={month} className="text-right min-w-[100px]">{month.slice(0, 3)}</TableHead>
                       ))}
-                      <TableHead className="text-right font-bold">Total</TableHead>
+                      <TableHead className="text-right font-bold min-w-[120px]">Total</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -644,15 +644,15 @@ export default function IRBudgetPage() {
                         </TableRow>
                         {budgetData.categories.team.items.map((item) => (
                           <TableRow key={item.id}>
-                            <TableCell className="font-medium">{item.name}</TableCell>
-                            <TableCell className="text-sm text-muted-foreground">{item.role}</TableCell>
-                            {item.budget_values.map((value, idx) => (
-                              <TableCell key={idx} className="text-right">
+                            <TableCell className="sticky left-0 z-10 bg-background font-medium border-r-2">{item.name}</TableCell>
+                            <TableCell className="sticky left-[200px] z-10 bg-background text-sm text-muted-foreground border-r-2">{item.role}</TableCell>
+                            {item.budget_values.slice(4, 16).map((value, idx) => (
+                              <TableCell key={idx + 4} className="text-right">
                                 {value > 0 ? formatCurrency(value) : '-'}
                               </TableCell>
                             ))}
                             <TableCell className="text-right font-bold">
-                              {formatCurrency(item.budget_values.reduce((a, b) => a + b, 0))}
+                              {formatCurrency(item.budget_values.slice(4, 16).reduce((a, b) => a + b, 0))}
                             </TableCell>
                           </TableRow>
                         ))}
@@ -670,15 +670,15 @@ export default function IRBudgetPage() {
                         </TableRow>
                         {budgetData.categories.infrastructure.items.map((item) => (
                           <TableRow key={item.id}>
-                            <TableCell className="font-medium">{item.name}</TableCell>
-                            <TableCell className="text-sm text-muted-foreground">{item.role}</TableCell>
-                            {item.budget_values.map((value, idx) => (
-                              <TableCell key={idx} className="text-right">
+                            <TableCell className="sticky left-0 z-10 bg-background font-medium border-r-2">{item.name}</TableCell>
+                            <TableCell className="sticky left-[200px] z-10 bg-background text-sm text-muted-foreground border-r-2">{item.role}</TableCell>
+                            {item.budget_values.slice(4, 16).map((value, idx) => (
+                              <TableCell key={idx + 4} className="text-right">
                                 {value > 0 ? formatCurrency(value) : '-'}
                               </TableCell>
                             ))}
                             <TableCell className="text-right font-bold">
-                              {formatCurrency(item.budget_values.reduce((a, b) => a + b, 0))}
+                              {formatCurrency(item.budget_values.slice(4, 16).reduce((a, b) => a + b, 0))}
                             </TableCell>
                           </TableRow>
                         ))}
@@ -696,15 +696,15 @@ export default function IRBudgetPage() {
                         </TableRow>
                         {budgetData.categories.operations.items.map((item) => (
                           <TableRow key={item.id}>
-                            <TableCell className="font-medium">{item.name}</TableCell>
-                            <TableCell className="text-sm text-muted-foreground">{item.role}</TableCell>
-                            {item.budget_values.map((value, idx) => (
-                              <TableCell key={idx} className="text-right">
+                            <TableCell className="sticky left-0 z-10 bg-background font-medium border-r-2">{item.name}</TableCell>
+                            <TableCell className="sticky left-[200px] z-10 bg-background text-sm text-muted-foreground border-r-2">{item.role}</TableCell>
+                            {item.budget_values.slice(4, 16).map((value, idx) => (
+                              <TableCell key={idx + 4} className="text-right">
                                 {value > 0 ? formatCurrency(value) : '-'}
                               </TableCell>
                             ))}
                             <TableCell className="text-right font-bold">
-                              {formatCurrency(item.budget_values.reduce((a, b) => a + b, 0))}
+                              {formatCurrency(item.budget_values.slice(4, 16).reduce((a, b) => a + b, 0))}
                             </TableCell>
                           </TableRow>
                         ))}
@@ -722,15 +722,15 @@ export default function IRBudgetPage() {
                         </TableRow>
                         {budgetData.categories.marketing.items.map((item) => (
                           <TableRow key={item.id}>
-                            <TableCell className="font-medium">{item.name}</TableCell>
-                            <TableCell className="text-sm text-muted-foreground">{item.role}</TableCell>
-                            {item.budget_values.map((value, idx) => (
-                              <TableCell key={idx} className="text-right">
+                            <TableCell className="sticky left-0 z-10 bg-background font-medium border-r-2">{item.name}</TableCell>
+                            <TableCell className="sticky left-[200px] z-10 bg-background text-sm text-muted-foreground border-r-2">{item.role}</TableCell>
+                            {item.budget_values.slice(4, 16).map((value, idx) => (
+                              <TableCell key={idx + 4} className="text-right">
                                 {value > 0 ? formatCurrency(value) : '-'}
                               </TableCell>
                             ))}
                             <TableCell className="text-right font-bold">
-                              {formatCurrency(item.budget_values.reduce((a, b) => a + b, 0))}
+                              {formatCurrency(item.budget_values.slice(4, 16).reduce((a, b) => a + b, 0))}
                             </TableCell>
                           </TableRow>
                         ))}
@@ -739,24 +739,24 @@ export default function IRBudgetPage() {
 
                     {/* Totals */}
                     <TableRow className="bg-muted font-bold">
-                      <TableCell colSpan={2}>Monthly Burn</TableCell>
-                      {budgetData.calculated.budget_monthly_burn.map((burn, idx) => (
-                        <TableCell key={idx} className="text-right">
+                      <TableCell className="sticky left-0 z-10 bg-muted" colSpan={2}>Monthly Burn</TableCell>
+                      {budgetData.calculated.budget_monthly_burn.slice(4, 16).map((burn, idx) => (
+                        <TableCell key={idx + 4} className="text-right">
                           {formatCurrency(burn)}
                         </TableCell>
                       ))}
-                      <TableCell className="text-right">{formatCurrency(projectedAllocation)}</TableCell>
+                      <TableCell className="text-right">{formatCurrency(budgetData.calculated.budget_monthly_burn.slice(4, 16).reduce((a, b) => a + b, 0))}</TableCell>
                     </TableRow>
 
                     <TableRow className="bg-muted/50 font-bold">
-                      <TableCell colSpan={2}>Running Total</TableCell>
-                      {budgetData.calculated.budget_running_total.map((total, idx) => (
-                        <TableCell key={idx} className="text-right">
+                      <TableCell className="sticky left-0 z-10 bg-muted/50" colSpan={2}>Running Total</TableCell>
+                      {budgetData.calculated.budget_running_total.slice(4, 16).map((total, idx) => (
+                        <TableCell key={idx + 4} className="text-right">
                           {formatCurrency(total)}
                         </TableCell>
                       ))}
                       <TableCell className="text-right text-blue-600 dark:text-blue-400">
-                        {formatCurrency(projectedAllocation)}
+                        {formatCurrency(budgetData.calculated.budget_monthly_burn.slice(4, 16).reduce((a, b) => a + b, 0))}
                       </TableCell>
                     </TableRow>
                   </TableBody>

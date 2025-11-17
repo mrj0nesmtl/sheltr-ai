@@ -269,7 +269,8 @@ function TeamContent() {
             through innovative technology and compassionate action.
           </p>
           
-          {!loading && (
+          {/* Team Statistics - Commented out until all team members log in and update profiles */}
+          {/* {!loading && (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-2xl mx-auto">
               <div className="text-center">
                 <div className="text-3xl font-bold text-primary">{teamStats.totalMembers}</div>
@@ -284,7 +285,7 @@ function TeamContent() {
                 <div className="text-sm text-muted-foreground">Avg. Experience (Years)</div>
               </div>
             </div>
-          )}
+          )} */}
         </div>
       </section>
 

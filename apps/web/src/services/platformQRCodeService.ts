@@ -65,9 +65,8 @@ export interface QRCodeStats {
 export class PlatformQRCodeService {
   private static readonly COLLECTION = 'platform_qr_codes';
   private static readonly STORAGE_PATH = 'qr-codes/platform';
-  private static readonly BASE_URL = typeof window !== 'undefined' 
-    ? window.location.origin 
-    : 'https://sheltr-ai.web.app';
+  // Always use production URL for QR codes (even in development)
+  private static readonly BASE_URL = 'https://sheltr-ai.web.app';
 
   /**
    * Generate a new QR code for a platform page

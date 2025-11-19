@@ -221,6 +221,26 @@ service cloud.firestore {
     }
     
     // =================================================================
+    // PLATFORM_QR_CODES COLLECTION - Platform-wide QR code management
+    // =================================================================
+    match /platform_qr_codes/{qrCodeId} {
+      // Read: Super Admin and Platform Admin can read all platform QR codes
+      allow read: if isSuperAdmin() || isPlatformAdmin();
+      
+      // Write: Super Admin and Platform Admin can update platform QR codes
+      allow write: if isSuperAdmin() || isPlatformAdmin();
+      
+      // Create: Super Admin and Platform Admin can create platform QR codes
+      allow create: if isSuperAdmin() || isPlatformAdmin();
+      
+      // Delete: Super Admin and Platform Admin can delete platform QR codes
+      allow delete: if isSuperAdmin() || isPlatformAdmin();
+      
+      // List/Query: Super Admin and Platform Admin can query all platform QR codes
+      allow list: if isSuperAdmin() || isPlatformAdmin();
+    }
+    
+    // =================================================================
     // ANALYTICS COLLECTION - Platform analytics and insights
     // =================================================================
     match /analytics/{analyticsId} {

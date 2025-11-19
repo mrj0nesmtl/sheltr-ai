@@ -140,6 +140,51 @@ service firebase.storage {
                       request.resource.size < 5 * 1024 * 1024; // 5MB limit
     }
 
+    // =================================================================
+    // QR CODES - Platform QR code images
+    // Publicly readable (for scanning), admin-writable
+    // =================================================================
+    match /qr-codes/platform/{qrCodeFile} {
+      // Read access: Anyone (public QR codes for scanning)
+      allow read: if true;
+      
+      // Write access: Super Admin and Platform Admin only
+      allow write: if isSuperAdmin() || 
+                      (request.auth != null && getUserData().role == 'platform_admin');
+      
+      // Delete access: Super Admin and Platform Admin only
+      allow delete: if isSuperAdmin() || 
+                       (request.auth != null && getUserData().role == 'platform_admin');
+    }
+    
+    // QR codes for participants (shelter-specific)
+    match /qr-codes/participants/{participantId}/{qrCodeFile} {
+      // Read access: Anyone (public QR codes for donations)
+      allow read: if true;
+      
+      // Write access: Participant owner, their shelter admin, or super admin
+      allow write: if isOwner(participantId) || 
+                      isSuperAdmin() ||
+                      (request.auth != null && getUserData().role == 'admin');
+      
+      // Delete access: Same as write
+      allow delete: if isOwner(participantId) || 
+                       isSuperAdmin() ||
+                       (request.auth != null && getUserData().role == 'admin');
+    }
+    
+    // QR codes for shelters
+    match /qr-codes/shelters/{shelterId}/{qrCodeFile} {
+      // Read access: Anyone (public QR codes for donations)
+      allow read: if true;
+      
+      // Write access: Shelter admin of this shelter or super admin
+      allow write: if isShelterAdmin(shelterId) || isSuperAdmin();
+      
+      // Delete access: Same as write
+      allow delete: if isShelterAdmin(shelterId) || isSuperAdmin();
+    }
+
     // Default deny all other paths
     match /{allPaths=**} {
       allow read, write: if false;

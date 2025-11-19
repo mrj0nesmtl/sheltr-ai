@@ -10,12 +10,16 @@ import { PublicChatbot } from '@/components/PublicChatbot';
 import NewsletterSignup from '@/components/NewsletterSignup';
 import PublicNavigation from '@/components/PublicNavigation';
 import { useHeroImage } from '@/hooks/useHeroImage';
+import { useQRCodeTracking } from '@/hooks/useQRCodeTracking';
 import { StandardHero } from '@/components/StandardHero';
 
 export default function HomePage() {
   
   // Fetch hero image from gallery (or use fallback)
   const { heroImage } = useHeroImage('/', '/backgrounds/hero-bg.jpg');
+  
+  // Track QR code scans
+  useQRCodeTracking();
 
   return (
     <div className="min-h-screen bg-background flex flex-col">

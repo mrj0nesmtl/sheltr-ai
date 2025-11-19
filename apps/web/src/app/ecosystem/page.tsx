@@ -9,10 +9,14 @@ import Footer from '@/components/Footer';
 import { PublicChatbot } from '@/components/PublicChatbot';
 import PublicNavigation from '@/components/PublicNavigation';
 import { useHeroImage } from '@/hooks/useHeroImage';
+import { useQRCodeTracking } from '@/hooks/useQRCodeTracking';
 import { StandardHero } from '@/components/StandardHero';
 
 export default function EcosystemPage() {
   const { heroImage } = useHeroImage('/ecosystem', '/backgrounds/hero-bg.jpg');
+  
+  // Track QR code scans
+  useQRCodeTracking();
 
   return (
     <div className="min-h-screen bg-background flex flex-col">

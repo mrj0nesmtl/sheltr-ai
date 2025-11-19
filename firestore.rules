@@ -227,8 +227,11 @@ service cloud.firestore {
       // Read: Super Admin and Platform Admin can read all platform QR codes
       allow read: if isSuperAdmin() || isPlatformAdmin();
       
-      // Write: Super Admin and Platform Admin can update platform QR codes
-      allow write: if isSuperAdmin() || isPlatformAdmin();
+      // Update: Anyone can update (for scan tracking), but only specific fields
+      // Super Admin and Platform Admin can update all fields
+      allow update: if isSuperAdmin() || 
+                       isPlatformAdmin() ||
+                       (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['scanCount', 'lastScannedAt', 'updatedAt']));
       
       // Create: Super Admin and Platform Admin can create platform QR codes
       allow create: if isSuperAdmin() || isPlatformAdmin();

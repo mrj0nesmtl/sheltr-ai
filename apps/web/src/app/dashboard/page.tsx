@@ -56,6 +56,7 @@ export default function DashboardPage() {
   const [metricsLoading, setMetricsLoading] = useState(false);
   const [refreshingActivity, setRefreshingActivity] = useState(false);
   const [investorMeetingsCount, setInvestorMeetingsCount] = useState<number>(0);
+  const [qrCodeStats, setQrCodeStats] = useState<{ totalCodes: number; totalScans: number; topPerformer: string | null }>({ totalCodes: 0, totalScans: 0, topPerformer: null });
   
   // Role simulation for Super Admin testing
   const [simulatedRole, setSimulatedRole] = useState<string | null>(null);
@@ -648,6 +649,12 @@ Token Role: ${tokenRole || 'MISSING'}`;
       const meetingsCount = investorMeetingsSnapshot.size;
       setInvestorMeetingsCount(meetingsCount);
       console.log(`📅 [INVESTOR MEETINGS] Found ${meetingsCount} scheduled meetings`);
+      
+      // Fetch QR code stats
+      const { PlatformQRCodeService } = await import('@/services/platformQRCodeService');
+      const qrStats = await PlatformQRCodeService.getQRCodeStats();
+      setQrCodeStats(qrStats);
+      console.log(`📊 [QR CODES] Stats loaded:`, qrStats);
       
       const [metrics, investorMetrics, realPlatformAdmins] = await Promise.all([
         getPlatformMetricsFromTenants().then(result => {
@@ -1442,6 +1449,21 @@ Token Role: ${tokenRole || 'MISSING'}`;
               </CardContent>
             </Card>
           </a>
+
+          <Link href="/dashboard/settings?tab=qr-codes">
+            <Card className="cursor-pointer border-2 border-border/60 bg-card hover:border-border hover:shadow-lg hover:scale-[1.02] transition-all duration-200">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Total QR Scans</CardTitle>
+                <QrCode className="h-4 w-4 text-blue-500" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{qrCodeStats.totalScans}</div>
+                <p className="text-xs text-muted-foreground">
+                  All-time scans
+                </p>
+              </CardContent>
+            </Card>
+          </Link>
         </div>
 
         {/* Visitor Analytics Chart */}

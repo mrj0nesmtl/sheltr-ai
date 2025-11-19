@@ -2,6 +2,7 @@
 
 import { useAuth } from '@/contexts/AuthContext';
 import { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { SystemSettingsService } from '@/services/systemSettingsService';
 import { SystemHealthService, SystemHealthMetrics } from '@/services/systemHealthService';
 import { NDAPreview } from '@/components/admin/NDAPreview';
@@ -43,6 +44,7 @@ import {
 
 export default function SystemSettingsPage() {
   const { user, isSuperAdmin, isPlatformAdmin } = useAuth();
+  const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState('general');
   const [isLoading, setIsLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
@@ -204,6 +206,14 @@ export default function SystemSettingsPage() {
     loadSettings();
     loadSystemHealth();
   }, [user?.uid, isSuperAdmin, isPlatformAdmin]);
+
+  // Handle tab query parameter
+  useEffect(() => {
+    const tab = searchParams.get('tab');
+    if (tab && ['general', 'security', 'notifications', 'integrations', 'qr-codes'].includes(tab)) {
+      setActiveTab(tab);
+    }
+  }, [searchParams]);
 
   const handleSaveSettings = async (settingsType: string) => {
     if (!user?.uid) return;

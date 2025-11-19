@@ -7,6 +7,139 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.122.0] - 2025-11-19 (QR Code Tracking System - Production Ready) 🎯
+
+### 🚀 Major Feature: Platform-Wide QR Code Management & Analytics
+
+#### **Comprehensive QR Code System Implementation**
+
+**Platform QR Code Management Component:**
+- Created `PlatformQRCodeManager` component for Super Admin and Platform Admin dashboards
+- Full CRUD operations: Create, Read, Update, Delete QR codes
+- QR code generation with customizable parameters:
+  - Name, description, target URL (dropdown + custom input)
+  - Category selection (Marketing, Events, Documentation, Social Media, Campaign)
+  - UTM parameters (source, medium, campaign, term, content)
+  - Optional expiration dates
+  - Active/Inactive status toggle
+- Real-time statistics dashboard:
+  - Total QR Codes (active count)
+  - Total Scans (all-time)
+  - Top Performer (most scanned QR code)
+- QR code table with thumbnails, target URLs, scan counts, and action buttons
+- Download, toggle status, and delete functionality
+
+**QR Code Service (`platformQRCodeService.ts`):**
+- `generateQRCode()` - Creates QR code image, uploads to Firebase Storage, saves metadata to Firestore
+- `getPlatformQRCodes()` - Fetches all platform QR codes
+- `getQRCodeStats()` - Calculates total codes, scans, and top performer
+- `recordScan()` - Increments scan count and updates last scanned timestamp
+- `toggleQRCodeStatus()` - Activates/deactivates QR codes
+- `deleteQRCode()` - Removes QR code from Firestore and Storage
+- **Production URL Fix:** Hardcoded `https://sheltr-ai.web.app` as base URL for QR codes (even in development)
+
+**Client-Side Scan Tracking (`useQRCodeTracking.ts`):**
+- Custom React hook that detects `?qr=` parameter in URL
+- Automatically calls `recordScan()` when QR code is scanned
+- Prevents duplicate scans per page load
+- Integrated into public pages: `/ecosystem`, `/about`, `/` (homepage)
+
+**Super Admin Dashboard Integration:**
+- Added "Total QR Scans" metric card to Super Admin dashboard
+- Displays all-time scan count with real-time updates
+- Clickable card links to `/dashboard/settings?tab=qr-codes`
+- Positioned after "Investor Meetings" card in stats grid
+- Fetches QR stats on dashboard load alongside other platform metrics
+
+**Settings Dashboard Integration:**
+- Added "QR Codes" tab to `/dashboard/settings` (5th tab)
+- Deep link support via `?tab=qr-codes` query parameter
+- Auto-opens QR Codes tab when navigating from dashboard metric card
+- Accessible to Super Admin and Platform Admin roles only
+
+**Firebase Security Rules Updates:**
+
+*Firestore Rules:*
+```typescript
+match /platform_qr_codes/{qrCodeId} {
+  // Read: Super Admin and Platform Admin
+  allow read: if isSuperAdmin() || isPlatformAdmin();
+  
+  // Update: Anyone can update scan tracking fields only
+  allow update: if isSuperAdmin() || 
+                   isPlatformAdmin() ||
+                   (request.resource.data.diff(resource.data)
+                     .affectedKeys().hasOnly(['scanCount', 'lastScannedAt', 'updatedAt']));
+  
+  // Create/Delete: Super Admin and Platform Admin only
+  allow create, delete: if isSuperAdmin() || isPlatformAdmin();
+  allow list: if isSuperAdmin() || isPlatformAdmin();
+}
+```
+
+*Storage Rules:*
+```typescript
+match /qr-codes/platform/{qrCodeFile} {
+  allow read: if true; // Publicly readable
+  allow write, delete: if isSuperAdmin() || isPlatformAdmin();
+}
+```
+
+### 📁 Files Created
+
+**New Components:**
+- `apps/web/src/components/admin/PlatformQRCodeManager.tsx` - QR code management UI
+
+**New Services:**
+- `apps/web/src/services/platformQRCodeService.ts` - QR code backend logic
+
+**New Hooks:**
+- `apps/web/src/hooks/useQRCodeTracking.ts` - Client-side scan tracking
+
+### 📁 Files Modified
+
+**Dashboard & Settings:**
+- `apps/web/src/app/dashboard/page.tsx` - Added QR Scans metric card to Super Admin dashboard
+- `apps/web/src/app/dashboard/settings/page.tsx` - Added QR Codes tab with deep link support
+
+**Public Pages (Tracking Integration):**
+- `apps/web/src/app/ecosystem/page.tsx` - Integrated `useQRCodeTracking()` hook
+- `apps/web/src/app/about/page.tsx` - Integrated `useQRCodeTracking()` hook
+- `apps/web/src/app/page.tsx` - Integrated `useQRCodeTracking()` hook (homepage)
+
+**Security Rules:**
+- `firestore.rules` - Added `platform_qr_codes` collection rules
+- `storage.rules` - Added `/qr-codes/platform/` path rules
+
+### 🎯 Impact
+
+- ✅ **Platform admins can generate trackable QR codes** for any public page
+- ✅ **Real-time scan tracking** - Every scan is recorded in Firestore
+- ✅ **Analytics dashboard** - View total scans, top performers, and trends
+- ✅ **Production-ready** - QR codes always use production URL (`sheltr-ai.web.app`)
+- ✅ **Secure** - Public can scan and track, only admins can create/delete
+- ✅ **Deep linking** - Dashboard metric card links directly to QR management
+- ✅ **UTM parameters** - Full marketing attribution support
+- ✅ **Expiration dates** - Optional time-limited QR codes
+- ✅ **Status management** - Activate/deactivate QR codes without deleting
+
+### 🧪 Production Testing
+
+**Confirmed Working in Production:**
+- ✅ QR code generation with production URLs
+- ✅ Scan tracking from mobile devices (iPhone tested)
+- ✅ Real-time metric updates on dashboard
+- ✅ Security rules allow public scan recording
+- ✅ Deep link navigation from dashboard to settings
+
+**Test Results:**
+- 2 scans successfully tracked from iPhone
+- Metrics displayed correctly on Super Admin dashboard
+- QR codes downloadable and scannable
+- All CRUD operations working in production
+
+---
+
 ## [2.121.0] - 2025-11-16 (Budget UI & Founders Portal UX Improvements) ✨
 
 ### 🎨 UI/UX Enhancements

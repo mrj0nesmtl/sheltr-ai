@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { SystemSettingsService } from '@/services/systemSettingsService';
 import { SystemHealthService, SystemHealthMetrics } from '@/services/systemHealthService';
 import { NDAPreview } from '@/components/admin/NDAPreview';
+import { PlatformQRCodeManager } from '@/components/admin/PlatformQRCodeManager';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -36,7 +37,8 @@ import {
   Brain,
   Wifi,
   HardDrive,
-  Eye
+  Eye,
+  QrCode
 } from 'lucide-react';
 
 export default function SystemSettingsPage() {
@@ -591,11 +593,15 @@ export default function SystemSettingsPage() {
 
       {/* Settings Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="general">General</TabsTrigger>
           <TabsTrigger value="security">Security</TabsTrigger>
           <TabsTrigger value="notifications">Notifications</TabsTrigger>
           <TabsTrigger value="integrations">Integrations</TabsTrigger>
+          <TabsTrigger value="qr-codes">
+            <QrCode className="h-4 w-4 mr-2" />
+            QR Codes
+          </TabsTrigger>
         </TabsList>
 
         {/* General Settings */}
@@ -1174,6 +1180,11 @@ export default function SystemSettingsPage() {
               </div>
             </CardContent>
           </Card>
+        </TabsContent>
+
+        {/* QR Codes Tab */}
+        <TabsContent value="qr-codes" className="space-y-6">
+          <PlatformQRCodeManager />
         </TabsContent>
       </Tabs>
 

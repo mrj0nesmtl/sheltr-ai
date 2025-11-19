@@ -770,18 +770,19 @@ export default function BudgetPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow className="sticky top-0 z-20 bg-background">
+              <div className="overflow-x-auto w-full">
+                <div className="min-w-[1400px]">
+                  <Table>
+                    <TableHeader>
+                      <TableRow className="sticky top-0 z-20 bg-background">
                       <TableHead className="sticky left-0 z-30 bg-background w-[200px] border-r-2">Account</TableHead>
                       <TableHead className="sticky left-[200px] z-30 bg-background w-[200px] border-r-2">Role/Description</TableHead>
-                      {displayData.period.months.slice(4).map((month) => (
-                        <TableHead key={month} className="text-right">{month.slice(0, 3)}</TableHead>
+                      {displayData.period.months.slice(0, 13).map((month) => (
+                        <TableHead key={month} className="text-right min-w-[100px]">{month.slice(0, 3)}</TableHead>
                       ))}
-                      <TableHead className="text-right font-bold">Total</TableHead>
-                    </TableRow>
-                  </TableHeader>
+                      <TableHead className="text-right font-bold min-w-[120px]">Total</TableHead>
+                      </TableRow>
+                    </TableHeader>
                   <TableBody>
                     {/* Team Section */}
                     {(selectedCategory === 'all' || selectedCategory === 'team') && (
@@ -796,13 +797,13 @@ export default function BudgetPage() {
                           <TableRow key={item.id}>
                             <TableCell className="sticky left-0 z-10 bg-background font-medium border-r-2">{item.name}</TableCell>
                             <TableCell className="sticky left-[200px] z-10 bg-background text-sm text-muted-foreground border-r-2">{item.role}</TableCell>
-                            {item.budget_values.slice(4).map((value, idx) => (
-                              <TableCell key={idx + 4} className="text-right">
+                            {item.budget_values.slice(0, 13).map((value, idx) => (
+                              <TableCell key={idx} className="text-right">
                                 {isEditMode ? (
                                   <Input
                                     type="number"
                                     value={value || 0}
-                                    onChange={(e) => handleValueChange('team', item.id, idx + 4, e.target.value)}
+                                    onChange={(e) => handleValueChange('team', item.id, idx, e.target.value)}
                                     className="w-20 h-8 text-right"
                                   />
                                 ) : (
@@ -811,7 +812,7 @@ export default function BudgetPage() {
                               </TableCell>
                             ))}
                             <TableCell className="text-right font-bold">
-                              {formatCurrency(item.budget_values.slice(4).reduce((a, b) => a + b, 0))}
+                              {formatCurrency(item.budget_values.slice(0, 13).reduce((a, b) => a + b, 0))}
                             </TableCell>
                           </TableRow>
                         ))}
@@ -831,13 +832,13 @@ export default function BudgetPage() {
                           <TableRow key={item.id}>
                             <TableCell className="sticky left-0 z-10 bg-background font-medium border-r-2">{item.name}</TableCell>
                             <TableCell className="sticky left-[200px] z-10 bg-background text-sm text-muted-foreground border-r-2">{item.role}</TableCell>
-                            {item.budget_values.slice(4).map((value, idx) => (
-                              <TableCell key={idx + 4} className="text-right">
+                            {item.budget_values.slice(0, 13).map((value, idx) => (
+                              <TableCell key={idx} className="text-right">
                                 {isEditMode ? (
                                   <Input
                                     type="number"
                                     value={value || 0}
-                                    onChange={(e) => handleValueChange('infrastructure', item.id, idx + 4, e.target.value)}
+                                    onChange={(e) => handleValueChange('infrastructure', item.id, idx, e.target.value)}
                                     className="w-20 h-8 text-right"
                                   />
                                 ) : (
@@ -846,7 +847,7 @@ export default function BudgetPage() {
                               </TableCell>
                             ))}
                             <TableCell className="text-right font-bold">
-                              {formatCurrency(item.budget_values.slice(4).reduce((a, b) => a + b, 0))}
+                              {formatCurrency(item.budget_values.slice(0, 13).reduce((a, b) => a + b, 0))}
                             </TableCell>
                           </TableRow>
                         ))}
@@ -866,13 +867,13 @@ export default function BudgetPage() {
                           <TableRow key={item.id}>
                             <TableCell className="sticky left-0 z-10 bg-background font-medium border-r-2">{item.name}</TableCell>
                             <TableCell className="sticky left-[200px] z-10 bg-background text-sm text-muted-foreground border-r-2">{item.role}</TableCell>
-                            {item.budget_values.slice(4).map((value, idx) => (
-                              <TableCell key={idx + 4} className="text-right">
+                            {item.budget_values.slice(0, 13).map((value, idx) => (
+                              <TableCell key={idx} className="text-right">
                                 {isEditMode ? (
                                   <Input
                                     type="number"
                                     value={value || 0}
-                                    onChange={(e) => handleValueChange('operations', item.id, idx + 4, e.target.value)}
+                                    onChange={(e) => handleValueChange('operations', item.id, idx, e.target.value)}
                                     className="w-20 h-8 text-right"
                                   />
                                 ) : (
@@ -881,7 +882,7 @@ export default function BudgetPage() {
                               </TableCell>
                             ))}
                             <TableCell className="text-right font-bold">
-                              {formatCurrency(item.budget_values.slice(4).reduce((a, b) => a + b, 0))}
+                              {formatCurrency(item.budget_values.slice(0, 13).reduce((a, b) => a + b, 0))}
                             </TableCell>
                           </TableRow>
                         ))}
@@ -901,13 +902,13 @@ export default function BudgetPage() {
                           <TableRow key={item.id}>
                             <TableCell className="sticky left-0 z-10 bg-background font-medium border-r-2">{item.name}</TableCell>
                             <TableCell className="sticky left-[200px] z-10 bg-background text-sm text-muted-foreground border-r-2">{item.role}</TableCell>
-                            {item.budget_values.slice(4).map((value, idx) => (
-                              <TableCell key={idx + 4} className="text-right">
+                            {item.budget_values.slice(0, 13).map((value, idx) => (
+                              <TableCell key={idx} className="text-right">
                                 {isEditMode ? (
                                   <Input
                                     type="number"
                                     value={value || 0}
-                                    onChange={(e) => handleValueChange('marketing', item.id, idx + 4, e.target.value)}
+                                    onChange={(e) => handleValueChange('marketing', item.id, idx, e.target.value)}
                                     className="w-20 h-8 text-right"
                                   />
                                 ) : (
@@ -916,7 +917,7 @@ export default function BudgetPage() {
                               </TableCell>
                             ))}
                             <TableCell className="text-right font-bold">
-                              {formatCurrency(item.budget_values.slice(4).reduce((a, b) => a + b, 0))}
+                              {formatCurrency(item.budget_values.slice(0, 13).reduce((a, b) => a + b, 0))}
                             </TableCell>
                           </TableRow>
                         ))}
@@ -926,27 +927,28 @@ export default function BudgetPage() {
                     {/* Totals */}
                     <TableRow className="bg-muted font-bold">
                       <TableCell className="sticky left-0 z-10 bg-muted" colSpan={2}>Monthly Burn</TableCell>
-                      {displayData.calculated.budget_monthly_burn.slice(4).map((burn, idx) => (
-                        <TableCell key={idx + 4} className="text-right">
+                      {displayData.calculated.budget_monthly_burn.slice(0, 13).map((burn, idx) => (
+                        <TableCell key={idx} className="text-right">
                           {formatCurrency(burn)}
                         </TableCell>
                       ))}
-                      <TableCell className="text-right">{formatCurrency(displayData.calculated.budget_monthly_burn.slice(4).reduce((a, b) => a + b, 0))}</TableCell>
+                      <TableCell className="text-right">{formatCurrency(displayData.calculated.budget_monthly_burn.slice(0, 13).reduce((a, b) => a + b, 0))}</TableCell>
                     </TableRow>
 
                     <TableRow className="bg-muted/50 font-bold">
                       <TableCell className="sticky left-0 z-10 bg-muted/50" colSpan={2}>Running Total</TableCell>
-                      {displayData.calculated.budget_running_total.slice(4).map((total, idx) => (
-                        <TableCell key={idx + 4} className="text-right">
+                      {displayData.calculated.budget_running_total.slice(0, 13).map((total, idx) => (
+                        <TableCell key={idx} className="text-right">
                           {formatCurrency(total)}
                         </TableCell>
                       ))}
                       <TableCell className="text-right text-blue-600 dark:text-blue-400">
-                        {formatCurrency(displayData.calculated.budget_monthly_burn.slice(4).reduce((a, b) => a + b, 0))}
+                        {formatCurrency(displayData.calculated.budget_monthly_burn.slice(0, 13).reduce((a, b) => a + b, 0))}
                       </TableCell>
                     </TableRow>
                   </TableBody>
                 </Table>
+                </div>
               </div>
             </CardContent>
           </Card>

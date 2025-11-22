@@ -47,7 +47,7 @@ The next generation platform for transparent charitable giving and homelessness 
 - **💝 Make a Demo Donation** → [Scan & Give](https://sheltr-ai.web.app/scan-give) with real-time tracking
 - **📚 Explore Documentation** → [Complete Docs Hub](https://sheltr-ai.web.app/docs) (11+ guides)
 - **📝 Read Our Blog** → [SHELTR Blog](https://sheltr-ai.web.app/blog) with technical insights
-- **🏢 For Developers** → [Development Guide](docs/04-development/dev-roadmap.md)
+- **🏢 For Developers** → [Development Guide](docs/04-development/roadmap.md)
 
 ---
 

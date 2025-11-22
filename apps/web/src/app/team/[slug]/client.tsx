@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import { Loader2, ArrowLeft, ArrowRight, Home, Users, ChevronRight } from 'lucide-react';
+import { Loader2, ArrowLeft, ArrowRight, Users } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -175,20 +175,6 @@ export default function TeamMemberBioClient({ slug }: ClientPageProps) {
             <Link href="/" className="flex items-center">
               <ThemeLogo />
             </Link>
-            
-            {/* Breadcrumb */}
-            <div className="hidden md:flex items-center space-x-2 text-sm text-muted-foreground">
-              <Link href="/" className="hover:text-foreground transition-colors flex items-center">
-                <Home className="h-4 w-4" />
-              </Link>
-              <ChevronRight className="h-4 w-4" />
-              <Link href="/team" className="hover:text-foreground transition-colors flex items-center">
-                <Users className="h-4 w-4 mr-1" />
-                Team
-              </Link>
-              <ChevronRight className="h-4 w-4" />
-              <span className="text-foreground font-medium">{userData?.displayName}</span>
-            </div>
             
             {/* Back to Team Button */}
             <Link href="/team">

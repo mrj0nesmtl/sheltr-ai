@@ -27,7 +27,8 @@ We're not just building software—we're **"hacking homelessness"** by creating 
 This document provides a comprehensive overview of our mission, technology, and impact framework. We're always interested in partnerships with organizations, influencers, and community leaders who share our vision of moving the platform and shelter framework forward into the future.
 
 > *"It costs a lot more to manage a problem than it does to solve it."*  
-> — Malcolm Gladwell, ["Million-Dollar Murray,"](https://www.newyorker.com/magazine/2006/02/13/million-dollar-murray) The New Yorker (2006)
+> — Malcolm Gladwell, ["Million-Dollar Murray,"](https://www.newyorker.com/magazine/2006/02/13/million-dollar-murray) The New Yorker (2006)  
+> 📄 [**Read the Original Article (PDF)**](https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/overview/Million-Dollar-Murray.pdf)
 
 ---
 

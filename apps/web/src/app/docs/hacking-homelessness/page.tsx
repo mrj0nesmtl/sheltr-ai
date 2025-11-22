@@ -175,7 +175,17 @@ export default function HackingHomelessnessPage() {
                   <blockquote className="border-l-4 border-purple-500 pl-4 italic text-purple-700 dark:text-purple-300 my-6 bg-purple-50 dark:bg-purple-900/20 py-4 rounded-r-lg">
                     &ldquo;It costs a lot more to manage a problem than it does to solve it.&rdquo;
                     <br />
-                    <cite className="text-sm font-normal">— Malcolm Gladwell, &ldquo;Million-Dollar Murray,&rdquo; The New Yorker (2006)</cite>
+                    <cite className="text-sm font-normal">
+                      — Malcolm Gladwell, <a href="https://www.newyorker.com/magazine/2006/02/13/million-dollar-murray" target="_blank" rel="noopener noreferrer" className="underline hover:text-purple-900 dark:hover:text-purple-100">&ldquo;Million-Dollar Murray,&rdquo;</a> The New Yorker (2006)
+                    </cite>
+                    <div className="mt-3 not-italic">
+                      <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/overview/Million-Dollar-Murray.pdf" target="_blank" rel="noopener noreferrer">
+                        <Button variant="outline" size="sm" className="bg-white dark:bg-slate-800 text-purple-700 dark:text-purple-300 border-purple-300 dark:border-purple-700 hover:bg-purple-100 dark:hover:bg-purple-900/30">
+                          <Download className="h-4 w-4 mr-2" />
+                          Read Original Article (PDF)
+                        </Button>
+                      </a>
+                    </div>
                   </blockquote>
                 </div>
               </div>

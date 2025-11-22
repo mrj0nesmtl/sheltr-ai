@@ -83,7 +83,7 @@ export default function ChatbotArchitecturePage() {
             <div className="prose prose-lg max-w-none dark:prose-invert mb-12">
               <h2 className="text-2xl font-bold mb-4">System Overview</h2>
               <p className="mb-4">
-                SHELTR-AI features a next-generation AI system with three integrated components powered by Model Context Protocol (MCP):
+                SHELTR features an AI chatbot system with three integrated components powered by Model Context Protocol (MCP):
               </p>
               <ul className="list-disc list-inside space-y-2 mb-6">
                 <li><strong>Public Landing Page Chatbot</strong> - Orchestrator-based system with MCP workflow automation</li>

@@ -308,11 +308,11 @@ export default function EcosystemPage() {
                   <div className="bg-gradient-to-br from-orange-500/10 to-red-500/10 rounded-lg p-6 border border-orange-200 dark:border-orange-800">
                     <div className="grid grid-cols-2 gap-4 text-center">
                       <div>
-                        <p className="text-3xl font-bold text-orange-600 dark:text-orange-400">64 sq ft</p>
+                        <p className="text-3xl font-bold text-orange-600 dark:text-orange-400">28-72 sq ft</p>
                         <p className="text-xs text-muted-foreground">Living space</p>
                       </div>
                       <div>
-                        <p className="text-3xl font-bold text-orange-600 dark:text-orange-400">$15K</p>
+                        <p className="text-3xl font-bold text-orange-600 dark:text-orange-400">$3-5K</p>
                         <p className="text-xs text-muted-foreground">Deployment cost</p>
                       </div>
                     </div>

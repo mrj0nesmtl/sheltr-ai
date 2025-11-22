@@ -3,7 +3,7 @@
 > **Revolutionizing charitable giving through technology-driven transparency and direct impact**
 
 [![Mission Driven](https://img.shields.io/badge/mission-tech%20for%20good-brightgreen.svg)]()
-[![Production Ready](https://img.shields.io/badge/status-production%20ready-success.svg)]()
+[![Pilot Ready](https://img.shields.io/badge/status-pilot%20ready-success.svg)]()
 [![Version](https://img.shields.io/badge/version-2.90.0-blue.svg)]()
 
 Understanding SHELTR's mission, vision, and revolutionary approach to solving homelessness through enterprise technology and blockchain innovation.

@@ -2,17 +2,17 @@
 
 **Your Complete Guide to Using SHELTR-AI as a Donation Recipient**
 
-*Version: 2.0 | Updated: July 2025*
+*Version: 2.0 | Updated: November 2025*
 
 ---
 
-## 🎯 Welcome to SHELTR-AI
+## 🎯 Welcome to SHELTR
 
-Welcome! You are at the heart of the SHELTR-AI platform. This guide will help you understand how to use the system to receive donations, manage your profile, and track your progress toward stability and independence.
+Welcome! You are at the heart of the SHELTR experiment. This guide will help you understand how to use the system to receive donations, manage your profile, and track your progress toward stability and independence.
 
-### What is SHELTR-AI?
+### What is SHELTR?
 
-SHELTR-AI is a platform that connects you directly with people who want to help. When someone scans your personal QR code, they can instantly donate money that goes directly to your digital wallet - no delays, no intermediaries.
+SHELTR is a platform that connects you directly with people who want to help. When someone scans your personal QR code, they can instantly donate money that goes directly to your digital wallet - no delays, no intermediaries.
 
 ---
 
@@ -20,17 +20,17 @@ SHELTR-AI is a platform that connects you directly with people who want to help.
 
 ### Step 1: Registration
 
-You can join SHELTR-AI in two ways:
+You can join SHELTR in two ways:
 
 #### Option A: Through a Partner Shelter
-1. **Visit a partner shelter** that works with SHELTR-AI
+1. **Visit a partner shelter** that works with SHELTR
 2. **Speak with staff** about joining the platform
 3. **Provide basic information** (name, contact, needs)
 4. **Complete verification** with shelter staff assistance
 5. **Receive your QR code** and wallet setup
 
 #### Option B: Independent Registration
-1. **Download the SHELTR-AI mobile app** (iOS/Android)
+1. **Download the SHELTR mobile app** (iOS/Android)
 2. **Create your account** with email or phone number
 3. **Complete your profile** with basic information
 4. **Submit verification documents** (ID, proof of situation)
@@ -286,9 +286,9 @@ If you experience any problems:
 
 ### From Other Participants
 
-> *"Started with food donations, saved up enough for a job interview outfit, got hired, and now have my own apartment!"* - Maria, Los Angeles
+> *"Started with food donations, saved up enough for a job interview outfit, got hired, and now have my own POD!"* - Maria, Los Angeles
 
-> *"The housing fund helped me get into transitional housing. Having an address made all the difference for getting services."* - James, Seattle
+> *"The SmartFund helped me get into POD housing. Having co-ordinated made all the difference in getting my shit together."* - James, Seattle
 
 ### Pro Tips for Success
 
@@ -355,9 +355,9 @@ If you experience any problems:
 - **Crisis Support**: National Suicide Prevention Lifeline 988
 - **Homeless Services**: 211 (dial 2-1-1)
 
-#### SHELTR-AI Support
-- **Technical Help**: help@sheltr.ai
-- **User Support**: support@sheltr.ai
+#### SHELTR Support
+- **Technical Help**: admin@arcanaconcept.com
+- **User Support**: support@arcanaconcept.com
 - **Emergency Line**: 1-800-SHELTR-AI
 - **Live Chat**: Available in app 24/7
 
@@ -373,7 +373,7 @@ If you experience any problems:
 
 ### Remember
 
-You are **not defined** by your current situation. SHELTR-AI is a tool to help you on your journey toward stability and independence. Every donation represents someone who believes in you and wants to help you succeed.
+You are **not defined** by your current situation. SHELTR is a tool to help you on your journey toward stability and independence. Every donation represents someone who believes in you and wants to help you succeed.
 
 ### Goals to Consider
 
@@ -388,12 +388,12 @@ You are **not defined** by your current situation. SHELTR-AI is a tool to help y
 - Build support network
 
 #### Long-term (6+ months)
-- Secure permanent housing
+- Secure permanent POD housing
 - Achieve stable employment
 - Give back to the community
 
 ---
 
-**You have the strength to overcome your current challenges. SHELTR-AI is here to support you every step of the way.** 🏠✨
+**You have the strength to overcome your current challenges. SHELTR is here to support you every step of the way.** 🏠✨
 
 *For additional resources and support, visit our [Resource Directory](../resources/) or contact your local partner shelter.* 

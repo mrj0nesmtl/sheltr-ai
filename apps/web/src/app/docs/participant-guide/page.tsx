@@ -51,23 +51,17 @@ export default function ParticipantGuidePage() {
                   <Badge className="bg-teal-500 text-white text-sm">User Guide</Badge>
                 </div>
                 <p className="text-lg text-muted-foreground mb-3">
-                  Your complete guide to using SHELTR-AI as a donation recipient - from QR codes to digital wallets to housing independence
+                  Your complete guide to using SHELTR as a donation recipient - from QR codes to digital wallets to POD independence
                 </p>
                 <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground mb-4">
-                  <span>Version 2.0</span>
+                  <span>Version 2.1</span>
                   <span>•</span>
-                  <span>Updated September 21, 2025</span>
+                  <span>Updated November 21, 2025</span>
                   <span>•</span>
                   <Badge className="bg-green-500 hover:bg-green-600 text-white text-xs">LIVE PLATFORM</Badge>
                 </div>
                 
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                  <Link href="/docs">
-                    <Button className="bg-teal-600 hover:bg-teal-700">
-                      <Users className="h-4 w-4 mr-2" />
-                      View Online
-                    </Button>
-                  </Link>
                   <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/user-guides/participant-guide.md" target="_blank" rel="noopener noreferrer">
                     <Button variant="outline">
                       <Download className="h-4 w-4 mr-2" />
@@ -86,12 +80,12 @@ export default function ParticipantGuidePage() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="prose prose-lg max-w-none dark:prose-invert mb-12">
-              <h2>Welcome to SHELTR-AI</h2>
+              <h2>Welcome to SHELTR</h2>
               <p>
-                <strong>You are at the heart of the SHELTR-AI platform.</strong> This guide will help you understand how to use the system to receive donations, manage your profile, and track your progress toward stability and independence.
+                <strong>You are at the heart of the SHELTR platform.</strong> This guide will help you understand how to use the system to receive donations, manage your profile, and track your progress toward stability and independence.
               </p>
               <p>
-                SHELTR-AI is a platform that connects you directly with people who want to help. When someone scans your personal QR code, they can instantly donate money that goes directly to your digital wallet - no delays, no intermediaries.
+                SHELTR is a platform that connects you directly with people who want to help. When someone scans your personal QR code, they can instantly donate money that goes directly to your digital wallet - no delays, no intermediaries.
               </p>
             </div>
 
@@ -149,7 +143,7 @@ export default function ParticipantGuidePage() {
                     <ul className="space-y-3 text-sm">
                       <li className="flex items-start gap-2">
                         <span className="text-green-500 mt-1">1.</span>
-                        <span><strong>Download the SHELTR-AI mobile app</strong> (iOS/Android)</span>
+                        <span><strong>Download the SHELTR mobile app</strong> (iOS/Android)</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <span className="text-green-500 mt-1">2.</span>
@@ -233,7 +227,7 @@ export default function ParticipantGuidePage() {
                       
                       <div className="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg border text-center">
                         <div className="font-bold text-purple-600 text-xl">15%</div>
-                        <div className="text-sm font-medium">Your Housing Fund</div>
+                        <div className="text-sm font-medium">Your SmartFund™ Housing Fund</div>
                         <div className="text-xs text-muted-foreground mt-1">Automatically invested</div>
                         <div className="text-xs text-muted-foreground">Growing towards permanent housing</div>
                       </div>
@@ -659,19 +653,19 @@ export default function ParticipantGuidePage() {
 
             {/* Success Stories & Inspiration */}
             <div className="mb-12">
-              <h2 className="text-3xl font-bold mb-8 text-center">🌟 Your Journey Forward</h2>
+              <h2 className="text-3xl font-bold mb-8 text-center">🌟 A Journey Forward</h2>
               <div className="bg-gradient-to-br from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 rounded-lg p-8 mb-8">
-                <h3 className="text-2xl font-bold mb-6 text-center">Success Stories from Other Participants</h3>
+                <h3 className="text-2xl font-bold mb-6 text-center">Stories from Other Participants</h3>
                 <div className="grid md:grid-cols-2 gap-8">
                   <blockquote className="bg-white dark:bg-gray-800 p-6 rounded-lg border-l-4 border-green-500">
                     <p className="text-sm italic mb-4">
-                      &ldquo;Started with food donations, saved up enough for a job interview outfit, got hired, and now have my own apartment!&rdquo;
+                      &ldquo;Started with food donations, saved up enough for a job interview outfit, got hired, and now have my own POD!&rdquo;
                     </p>
                     <footer className="text-xs text-muted-foreground">— Maria, Los Angeles</footer>
                   </blockquote>
                   <blockquote className="bg-white dark:bg-gray-800 p-6 rounded-lg border-l-4 border-blue-500">
                     <p className="text-sm italic mb-4">
-                      &ldquo;The housing fund helped me get into transitional housing. Having an address made all the difference for getting services.&rdquo;
+                      &ldquo;The SmartFund helped me get into POD housing. Having my own co-ordinates made all the difference in etting my shit together.&rdquo;
                     </p>
                     <footer className="text-xs text-muted-foreground">— James, Seattle</footer>
                   </blockquote>
@@ -719,52 +713,66 @@ export default function ParticipantGuidePage() {
             </div>
 
             {/* Call to Action */}
-            <div className="bg-gradient-to-r from-teal-600 to-cyan-600 text-white rounded-lg p-8 text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4">🏠 You Have the Strength to Overcome</h2>
-              <p className="text-lg mb-6 opacity-90">
-                <strong>You are not defined by your current situation.</strong> SHELTR-AI is here to support you every step of the way toward stability and independence.
-              </p>
+            <div className="relative rounded-lg overflow-hidden p-8 text-center mb-12">
+              {/* Background Image with Overlay */}
+              <div 
+                className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+                style={{
+                  backgroundImage: "url('https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=2070')",
+                }}
+              />
+              <div className="absolute inset-0 bg-black/50" />
               
-              <div className="grid md:grid-cols-3 gap-6 mb-8">
-                <div className="bg-white/10 rounded-lg p-4">
-                  <div className="text-2xl font-bold">Direct</div>
-                  <div className="text-sm opacity-80">Connection to donors</div>
-                  <div className="text-xs opacity-70 mt-1">No delays, no intermediaries</div>
-                </div>
-                <div className="bg-white/10 rounded-lg p-4">
-                  <div className="text-2xl font-bold">80%</div>
-                  <div className="text-sm opacity-80">Goes directly to you</div>
-                  <div className="text-xs opacity-70 mt-1">15% builds your housing fund</div>
-                </div>
-                <div className="bg-white/10 rounded-lg p-4">
-                  <div className="text-2xl font-bold">24/7</div>
-                  <div className="text-sm opacity-80">Support and assistance</div>
-                  <div className="text-xs opacity-70 mt-1">Help when you need it most</div>
-                </div>
-              </div>
-              
-              <div className="space-y-4">
-                <p className="text-base opacity-90">
-                  Every donation represents someone who believes in you and wants to help you succeed. 
-                  You have the strength to overcome your current challenges.
+              {/* Content */}
+              <div className="relative z-10 text-white">
+                <h2 className="text-3xl font-bold mb-4">🏠 You Have the Strength to Overcome</h2>
+                <p className="text-lg mb-6 opacity-90">
+                  <strong>You are not defined by your current situation.</strong> SHELTR-AI is here to support you every step of the way toward stability and independence.
                 </p>
                 
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Link href="/register">
-                    <Button size="lg" className="bg-white text-teal-600 hover:bg-teal-50 px-8">
-                      <Users className="h-5 w-5 mr-2" />
-                      Start Your Journey
-                    </Button>
-                  </Link>
-                  <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-teal-600 px-8">
-                    <QrCode className="h-5 w-5 mr-2" />
-                    See How It Works
-                  </Button>
+                <div className="grid md:grid-cols-3 gap-6 mb-8">
+                  <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+                    <div className="text-2xl font-bold">Direct</div>
+                    <div className="text-sm opacity-80">Connection to donors</div>
+                    <div className="text-xs opacity-70 mt-1">No delays, no intermediaries</div>
+                  </div>
+                  <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+                    <div className="text-2xl font-bold">80%</div>
+                    <div className="text-sm opacity-80">Goes directly to you</div>
+                    <div className="text-xs opacity-70 mt-1">15% builds your housing fund</div>
+                  </div>
+                  <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+                    <div className="text-2xl font-bold">24/7</div>
+                    <div className="text-sm opacity-80">Support and assistance</div>
+                    <div className="text-xs opacity-70 mt-1">Help when you need it most</div>
+                  </div>
                 </div>
                 
-                <p className="text-sm opacity-75 mt-4">
-                  ✨ SHELTR-AI is a tool to help you on your journey toward stability and independence ✨
-                </p>
+                <div className="space-y-4">
+                  <p className="text-base opacity-90">
+                    Every donation represents someone who believes in you and wants to help you succeed. 
+                    You have the strength to overcome your current challenges.
+                  </p>
+                  
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                    <Link href="/register">
+                      <Button size="lg" className="bg-white text-teal-600 hover:bg-teal-50 px-8">
+                        <Users className="h-5 w-5 mr-2" />
+                        Start Your Journey
+                      </Button>
+                    </Link>
+                    <Link href="/scan-give">
+                      <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-teal-600 px-8">
+                        <QrCode className="h-5 w-5 mr-2" />
+                        See How It Works
+                      </Button>
+                    </Link>
+                  </div>
+                  
+                  <p className="text-sm opacity-75 mt-4">
+                    ✨ SHELTR-AI is a tool to help you on your journey toward stability and independence ✨
+                  </p>
+                </div>
               </div>
             </div>
 

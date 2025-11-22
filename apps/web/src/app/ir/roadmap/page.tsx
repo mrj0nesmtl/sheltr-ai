@@ -24,7 +24,7 @@ import { Progress } from '@/components/ui/progress';
 import Footer from '@/components/Footer';
 import ThemeLogo from '@/components/ThemeLogo';
 
-export default function IRRoadmapPage() {
+export default function RoadmapPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-orange-50 to-red-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
       {/* Header */}
@@ -43,7 +43,7 @@ export default function IRRoadmapPage() {
                 v2.86.0 - RAG & Cost Optimization
               </Badge>
               <Badge variant="outline" className="text-xs">
-                Updated: November 2, 2025
+                Updated: November 21, 2025
               </Badge>
             </div>
           </div>
@@ -71,7 +71,7 @@ export default function IRRoadmapPage() {
               asChild
               className="hover:bg-muted px-2 py-1 h-auto"
             >
-              <Link href="/ir/dataroom">
+              <Link href="/docs">
                 Documentation
               </Link>
             </Button>
@@ -89,14 +89,14 @@ export default function IRRoadmapPage() {
           <div className="text-center mb-12">
             <div className="flex items-center justify-center space-x-2 mb-4">
               <Rocket className="h-8 w-8 text-orange-600" />
-              <Badge className="bg-orange-600 text-white px-4 py-1">180-DAY PRODUCTION PLAN</Badge>
+              <Badge className="bg-orange-600 text-white px-4 py-1">180-DAY</Badge>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
-              Production Launch Timeline
+              Pilot Launch Timeline
             </h1>
             <p className="text-xl text-muted-foreground mb-8 max-w-4xl mx-auto">
               Enterprise-ready platform with complete payment rails, blockchain integration, 
-              and comprehensive testing launching Spring 2026
+              and comprehensive testing launching Summer 2026
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button asChild size="lg" className="bg-orange-600 hover:bg-orange-700">
@@ -107,7 +107,7 @@ export default function IRRoadmapPage() {
                   className="flex items-center gap-2"
                 >
                   <Github className="h-4 w-4" />
-                  Full Roadmap Document
+                  View GitHub Document
                   <ExternalLink className="h-4 w-4" />
                 </a>
               </Button>
@@ -125,8 +125,8 @@ export default function IRRoadmapPage() {
             <h2 className="text-2xl font-bold mb-4">🚀 Development Progress</h2>
             <div className="grid md:grid-cols-4 gap-4 mb-6">
               <div className="bg-white dark:bg-slate-800 rounded-lg p-4">
-                <div className="text-2xl font-bold text-orange-600">145</div>
-                <div className="text-sm text-muted-foreground">Days to Production</div>
+                <div className="text-2xl font-bold text-orange-600">6</div>
+                <div className="text-sm text-muted-foreground">Months in Development</div>
               </div>
               <div className="bg-white dark:bg-slate-800 rounded-lg p-4">
                 <div className="text-2xl font-bold text-green-600">75+</div>
@@ -134,11 +134,11 @@ export default function IRRoadmapPage() {
               </div>
               <div className="bg-white dark:bg-slate-800 rounded-lg p-4">
                 <div className="text-2xl font-bold text-blue-600">56%</div>
-                <div className="text-sm text-muted-foreground">Cost Reduction</div>
+                <div className="text-sm text-muted-foreground">Cost Reduction Achieved</div>
               </div>
               <div className="bg-white dark:bg-slate-800 rounded-lg p-4">
-                <div className="text-2xl font-bold text-purple-600">Q2</div>
-                <div className="text-sm text-muted-foreground">2026 Launch</div>
+                <div className="text-2xl font-bold text-purple-600">Q3</div>
+                <div className="text-sm text-muted-foreground">2026 Payment Rails Launch</div>
               </div>
             </div>
             <Progress value={78} className="w-full max-w-md mx-auto" />
@@ -220,7 +220,7 @@ export default function IRRoadmapPage() {
                     </div>
                     <div>
                       <CardTitle className="text-orange-600">Payment Rails Development</CardTitle>
-                      <CardDescription>November 2025 - January 2026 • 3 Months</CardDescription>
+                      <CardDescription>January 2026 - June 2026 • 6 Months</CardDescription>
                     </div>
                   </div>
                   <Badge className="bg-orange-600 text-white">In Progress</Badge>
@@ -272,7 +272,7 @@ export default function IRRoadmapPage() {
                     </div>
                     <div>
                       <CardTitle className="text-blue-600">Blockchain Integration</CardTitle>
-                      <CardDescription>February - March 2026 • 2 Months</CardDescription>
+                      <CardDescription>June 2026 - October 2026 • 5 Months</CardDescription>
                     </div>
                   </div>
                   <Badge className="bg-blue-600 text-white">Smart Contracts</Badge>
@@ -330,7 +330,7 @@ export default function IRRoadmapPage() {
                     </div>
                     <div>
                       <CardTitle className="text-purple-600">Comprehensive Testing & QA</CardTitle>
-                      <CardDescription>April - May 2026 • 2 Months</CardDescription>
+                      <CardDescription>April - December 2026 • 9 Months</CardDescription>
                     </div>
                   </div>
                   <Badge className="bg-purple-600 text-white">Quality Assurance</Badge>
@@ -467,15 +467,15 @@ export default function IRRoadmapPage() {
       {/* Call to Action */}
       <section className="py-16 px-4 bg-gradient-to-r from-orange-600 to-red-600">
         <div className="container mx-auto max-w-4xl text-center text-white">
-          <h2 className="text-3xl font-bold mb-6">Production-Ready Development</h2>
+          <h2 className="text-3xl font-bold mb-6">Pilot-Ready</h2>
           <p className="text-xl mb-8 opacity-90">
             Comprehensive 180-day development roadmap to deliver a fully-tested, enterprise-grade 
-            platform with complete payment rails and blockchain integration by Spring 2026.
+            platform with complete payment rails and blockchain integration by Fall 2026.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button asChild size="lg" variant="secondary">
               <a 
-                href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/development/dev-roadmap.md" 
+                href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/development/roadmap.md" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="flex items-center gap-2"

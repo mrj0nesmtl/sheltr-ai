@@ -99,7 +99,7 @@ export default function PlatformOverviewPage() {
               <Badge className="bg-blue-600 text-white px-4 py-1">PLATFORM OVERVIEW</Badge>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-emerald-600 bg-clip-text text-transparent">
-              Revolutionizing Charitable Giving
+              Disrupting Charitable Giving
             </h1>
             <p className="text-xl text-muted-foreground mb-8 max-w-4xl mx-auto">
               Technology-driven transparency and direct impact through enterprise infrastructure, 
@@ -130,7 +130,7 @@ export default function PlatformOverviewPage() {
           {/* Version & Status Badges */}
           <div className="flex flex-wrap justify-center gap-2 mb-8">
             <Badge variant="outline" className="bg-green-100 dark:bg-green-900/30 border-green-300 dark:border-green-700">
-              ✓ Production Ready
+              ✓ Pilot Ready
             </Badge>
             <Badge variant="outline" className="bg-blue-100 dark:bg-blue-900/30 border-blue-300 dark:border-blue-700">
               v2.90.0

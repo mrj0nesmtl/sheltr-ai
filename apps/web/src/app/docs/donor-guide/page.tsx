@@ -38,7 +38,7 @@ export default function DonorGuidePage() {
       description: 'Account creation, profile setup, and understanding the SmartFund™ model',
       status: 'Essential',
       color: 'bg-red-50 text-red-700',
-      link: '/user-journeys/donors/',
+      link: '/docs/user-journeys/donors/',
       external: false
     },
     {
@@ -88,7 +88,7 @@ export default function DonorGuidePage() {
       description: 'Getting help, best practices, and donor community resources',
       status: 'Support',
       color: 'bg-gray-50 text-gray-700',
-      link: 'mailto:joel@arcanaconcept.com',
+      link: 'mailto:admin@arcanaconcept.com',
       external: true
     }
   ];
@@ -151,7 +151,7 @@ export default function DonorGuidePage() {
       title: 'View User Journey',
       description: 'Complete donor user journey and workflow guide',
       icon: BookOpen,
-      action: '/user-journeys/donors/',
+      action: '/docs/user-journeys/donors/',
       external: false
     },
     {
@@ -172,7 +172,7 @@ export default function DonorGuidePage() {
       title: 'Contact Support',
       description: 'Get help with donations and platform questions',
       icon: MessageSquare,
-      action: 'mailto:joel@arcanaconcept.com',
+      action: 'mailto:admin@arcanaconcept.com',
       external: true
     }
   ];
@@ -200,7 +200,7 @@ export default function DonorGuidePage() {
                     Donor Guide
                   </h1>
                   <p className="text-gray-600 dark:text-gray-300">
-                    Your complete guide to making transparent, impactful donations through SHELTR-AI
+                    Your complete guide to making transparent, impactful donations with SHELTR
                   </p>
                 </div>
               </div>
@@ -211,20 +211,20 @@ export default function DonorGuidePage() {
                 </Badge>
                 <Badge variant="secondary" className="bg-blue-100 text-blue-800">
                   <Clock className="h-3 w-3 mr-1" />
-                  September 2025
+                  November 2025
                 </Badge>
                 <Badge variant="secondary" className="bg-purple-100 text-purple-800">
                   <Star className="h-3 w-3 mr-1" />
-                  LIVE PLATFORM
+                  Beta Production Online
                 </Badge>
 
               </div>
             </div>
             <div className="text-right">
               <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                Version 2.0 • Updated September 21, 2025
+                Version 2.0 • Updated November 21, 2025
               </p>
-              <Link href="/user-journeys/donors/">
+              <Link href="/docs/user-journeys/donors/">
                 <Button variant="outline" className="border-red-600 text-red-600 hover:bg-red-600 hover:text-white">
                   <BookOpen className="h-4 w-4 mr-2" />
                   View User Journey
@@ -379,7 +379,7 @@ export default function DonorGuidePage() {
         {/* Giving Features */}
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-            Revolutionary Giving Features
+            Our Platform Features
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {givingFeatures.map((feature, index) => (
@@ -432,71 +432,56 @@ export default function DonorGuidePage() {
           </div>
         </div>
 
-        {/* Distance Giving & Participant Connection */}
+        {/* Remote Support & Participant Connections */}
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-            Give at a Distance, Stay Connected
+            Remote Support & Participant Connections
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Link href="/impact">
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer group">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 group-hover:text-red-600 transition-colors">
-                    <Users className="h-5 w-5 text-blue-600" />
-                    Participant Check-ins
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                    Stay connected with participants you&apos;ve supported. Receive progress updates, milestones, and success stories directly from those you&apos;ve helped.
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <Badge className="bg-green-100 text-green-800">Real-time Updates</Badge>
-                    <ArrowRight className="h-4 w-4 text-red-600" />
-                  </div>
-                </CardContent>
-              </Card>
-            </Link>
+            <Card className="hover:shadow-lg transition-shadow group">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Users className="h-5 w-5 text-blue-600" />
+                  Participant Check-ins
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                  Stay connected with participants you&apos;ve supported. Receive progress updates, milestones, and success stories directly from those you&apos;ve helped.
+                </p>
+                <Badge className="bg-green-100 text-green-800">Real-time Updates</Badge>
+              </CardContent>
+            </Card>
             
-            <Link href="/tokenomics">
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer group">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 group-hover:text-red-600 transition-colors">
-                    <Clock className="h-5 w-5 text-purple-600" />
-                    Recurring Donations
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                    Set up automatic recurring donations to provide consistent support. Choose weekly, monthly, or custom schedules that work for your budget.
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <Badge className="bg-purple-100 text-purple-800">Automated Support</Badge>
-                    <ArrowRight className="h-4 w-4 text-red-600" />
-                  </div>
-                </CardContent>
-              </Card>
-            </Link>
+            <Card className="hover:shadow-lg transition-shadow group">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Clock className="h-5 w-5 text-purple-600" />
+                  Recurring Donations
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                  Set up automatic recurring donations to provide consistent support. Choose weekly, monthly, or custom schedules that work for your budget.
+                </p>
+                <Badge className="bg-purple-100 text-purple-800">Automated Support</Badge>
+              </CardContent>
+            </Card>
             
-            <Link href="/solutions">
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer group">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 group-hover:text-red-600 transition-colors">
-                    <Globe className="h-5 w-5 text-orange-600" />
-                    Remote Support
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                    Support participants from anywhere in the world. Technology bridges distance, allowing meaningful connections across cities, states, or countries.
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <Badge className="bg-orange-100 text-orange-800">Global Impact</Badge>
-                    <ArrowRight className="h-4 w-4 text-red-600" />
-                  </div>
-                </CardContent>
-              </Card>
-            </Link>
+            <Card className="hover:shadow-lg transition-shadow group">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Globe className="h-5 w-5 text-orange-600" />
+                  Remote Support
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                  Support participants from anywhere in the world. Technology bridges distance, allowing meaningful connections across cities, states, or countries.
+                </p>
+                <Badge className="bg-orange-100 text-orange-800">Global Impact</Badge>
+              </CardContent>
+            </Card>
           </div>
           
           <div className="mt-8 p-6 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg border">
@@ -870,68 +855,25 @@ export default function DonorGuidePage() {
           </div>
         </div>
 
-        {/* Success Story */}
-        <Card className="bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 border-green-200 dark:border-green-800 mb-8">
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2 text-green-800 dark:text-green-400">
-              <Star className="h-5 w-5" />
-              <span>Donor Success Stories</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-6">
-              <blockquote className="text-lg italic text-gray-700 dark:text-gray-300 mb-4">
-                &ldquo;I started with $10 donations and watched Sarah go from sleeping in her car to getting her own apartment. 
-                Seeing that transformation made me realize how powerful direct giving can be. The transparency of knowing 
-                exactly where my money goes and seeing real results has completely changed how I think about charity.&rdquo;
-              </blockquote>
-              <div className="flex items-center justify-between mb-4">
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  — Anonymous Donor, Seattle
-                </p>
-              </div>
-              
-              <blockquote className="text-lg italic text-gray-700 dark:text-gray-300 mb-4">
-                &ldquo;Our company started a monthly giving campaign through SHELTR. In one year, we helped 25 people find housing and our employees feel more connected to our community impact.&rdquo;
-              </blockquote>
-              <div className="flex items-center justify-between">
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  — Maria Rodriguez, Corporate Social Responsibility Manager
-                </p>
-                <Button variant="outline" size="sm">
-                  <ExternalLink className="h-4 w-4 mr-2" />
-                  Read More Stories
-                </Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
         {/* Call to Action */}
         <div className="text-center">
           <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
             Ready to Make a Real Difference?
           </h3>
           <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-2xl mx-auto">
-            Join thousands of donors who are transforming lives through transparent, direct giving. 
+            Join donors who are transforming lives through transparent, direct giving. 
             Every donation creates immediate impact while building long-term solutions for homelessness.
           </p>
-          <div className="flex justify-center space-x-4">
-            <Link href="/user-journeys/donors/">
+          <div className="flex justify-center">
+            <Link href="/solutions/donors">
               <Button variant="outline" className="border-red-600 text-red-600 hover:bg-red-600 hover:text-white" size="lg">
-                <BookOpen className="h-4 w-4 mr-2" />
-                View User Journey
-              </Button>
-            </Link>
-            <Link href="/docs">
-              <Button variant="outline" size="lg">
-                <FileText className="h-4 w-4 mr-2" />
-                Access Documentation
+                <Heart className="h-4 w-4 mr-2" />
+                Back to Donor Solutions
               </Button>
             </Link>
           </div>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-4">
-            No fees for donors • Bank-level security • Instant impact
+            Clear fees for donors • Bank-level security • Instant impact
           </p>
         </div>
       </div>

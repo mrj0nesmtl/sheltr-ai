@@ -1,19 +1,19 @@
 # White Paper v2.0
 *Enterprise-Grade Solutions for Homelessness - Stability Through Technology*
 
-**Authors**: Joel Yaffe (CTO, Founder)
+**Authors**: Joel Yaffe, Alexander Kline
 **Location**: Montreal, Canada  
 **Version**: 2.0.0  
-**Date**: September 26, 2025  
-**Status**: STRATEGIC IMPLEMENTATION - ENTERPRISE READY** ✅
+**Date**: November 21, 2025  
+**Status**: STRATEGIC PILOT IMPLEMENTATION - TESTNET READY** ✅
 
 ## Abstract
 
-SHELTR represents a revolutionary enterprise-grade platform that addresses homelessness through traditional payment stability combined with blockchain transparency. By integrating **Adyen payment processing**, **Coinbase institutional staking**, and **single-token housing fund tracking**, SHELTR creates a zero-risk bridge between donors and individuals experiencing homelessness while building sustainable long-term solutions. 
+SHELTR represents a enterprise-grade platform that addresses homelessness through traditional payment stability combined with blockchain transparency. By integrating **Adyen payment processing**, **Coinbase institutional staking**, and **single-token housing fund tracking**, SHELTR creates a zero-risk bridge between donors and individuals experiencing homelessness while building sustainable long-term solutions. 
 
-Our breakthrough **single-token stable architecture** uses the SHELTR Stablecoin (USDT-pegged) exclusively for housing fund tracking and transparency, while participants receive **Adyen virtual debit cards** with 80% of donations, eliminating cryptocurrency volatility exposure. This innovative approach ensures **100% of donations reach their intended purposes**: 80% participant support via traditional payment cards, 15% housing fund growth through **guaranteed 4-6% APY institutional staking**, and 5% shelter operations support—all verified on-chain for complete transparency with **zero participant risk**.
+Our **single-token stable architecture** uses the SHELTR Stablecoin (USDT-pegged) exclusively for housing fund tracking and transparency, while participants receive **virtual debit cards** with 80% of donations, eliminating cryptocurrency volatility exposure. This innovative approach ensures **100% of donations reach their intended purposes**: 80% participant support via traditional or virtual  payment cards, 15% housing fund growth through **guaranteed 4-6% APY institutional staking**, and 5% shelter operations support—all verified on-chain for complete transparency with **zero participant risk**.
 
-Our platform launches with **enterprise partnerships** providing institutional-grade infrastructure, **traditional funding models** eliminating ICO speculation, and **guaranteed returns** through Coinbase Prime institutional custody and staking services.
+Our platform will pilot with **enterprise partnerships** providing institutional-grade infrastructure, **traditional funding models** eliminating ICO speculation, and **guaranteed returns** through Coinbase Prime institutional custody and staking services.
 
 ## Executive Summary
 
@@ -92,7 +92,7 @@ graph TD
 
 #### Pillar 1: Immediate Dignity (80% allocation)
 **Objective**: Preserve human dignity through instant, stable value delivery via virtual debit cards
-- **Adyen virtual debit cards** maintain stable value with global Visa/Mastercard acceptance
+- **Virtual debit cards** maintain stable value with global Visa/Mastercard acceptance
 - **Zero cryptocurrency exposure** for participants - traditional payment infrastructure
 - **Zero transaction fees** for participants using essential services
 - **Instant card loading** through enterprise payment processing
@@ -110,14 +110,6 @@ graph TD
 - **SHELTR Stablecoin tracking** (1:1 USDT-backed) for complete transparency
 - **Zero risk** through enterprise custody and traditional financial infrastructure
 - **Transparent tracking** of housing fund growth and allocations
-
-**Housing Fund Allocation**:
-```
-Emergency Housing       40% ($6,000/participant average)
-Transitional Programs   35% ($15,000/participant over 6 months)
-Permanent Solutions     20% ($45,000/participant long-term)
-Support Services        5%  ($2,000/participant wraparound)
-```
 
 #### Pillar 3: Shelter Operations Support (5% allocation)
 **Objective**: Support the participant's registered shelter operations and infrastructure
@@ -144,19 +136,19 @@ Support Services        5%  ($2,000/participant wraparound)
 
 ### 1.5 Measurable Social Outcomes
 
-**Short-term Indicators (0-6 months)**:
+**Short-term Indicators (12 months)**:
 - Reduction in emergency room visits: Target 40%
 - Increase in stable accommodation nights: Target 200%
 - Improvement in mental health scores: Target 35%
 - Financial literacy improvement: Target 60%
 
-**Medium-term Indicators (6-18 months)**:
+**Medium-term Indicators (24 months)**:
 - Transition to stable housing: Target 65%
 - Employment acquisition: Target 45%
 - Reduction in criminal justice involvement: Target 50%
 - Community integration scores: Target 70%
 
-**Long-term Impact (18+ months)**:
+**Long-term Impact (36+ months)**:
 - Permanent housing retention: Target 80%
 - Economic self-sufficiency: Target 55%
 - Community leadership participation: Target 25%
@@ -164,13 +156,13 @@ Support Services        5%  ($2,000/participant wraparound)
 
 ---
 
-## 2. Dual-Token Economic Model
+## 2. Token Economic Model - "Tokenomics"
 
-### 2.1 Executive Overview: Revolutionary Token Architecture
+### 2.1 Executive Overview: SHELTR Token Architecture
 
 SHELTR implements a **single-token stable fund ecosystem** that protects vulnerable populations while creating sustainable growth through institutional partnerships and guaranteed returns.
 
-**Strategic Advantage**: By using a USDT-pegged SHELTR stablecoin for housing fund tracking combined with enterprise payment infrastructure (Adyen virtual debit cards), we eliminate cryptocurrency volatility risk for participants while maintaining complete blockchain transparency and guaranteed 4-6% APY growth through Coinbase institutional staking.
+**Strategic Advantage**: By using a USDT-pegged SHELTR stablecoin for housing fund tracking combined with enterprise payment infrastructure (virtual debit cards), we eliminate cryptocurrency volatility risk for participants while maintaining complete blockchain transparency and guaranteed 4-6% APY growth through Coinbase institutional staking.
 
 ### 2.2 SHELTR-S (Stable Utility Token)
 
@@ -181,8 +173,8 @@ SHELTR implements a **single-token stable fund ecosystem** that protects vulnera
 | **Peg Mechanism** | $1.00 USD | USDC reserve backing |
 | **Volatility** | 0% target | Essential needs protection |
 | **Transaction Fees** | $0 for participants | Dignity preservation |
-| **Welcome Bonus** | 100 tokens/signup | Immediate engagement |
-| **Use Cases** | Food, housing, transport, healthcare | Basic needs coverage |
+| **Welcome Bonus** | 10 tokens/signup | Immediate engagement |
+| **Use Cases** | PODS, MOBI, DRONE |
 
 **Technical Implementation**:
 ```solidity
@@ -199,15 +191,15 @@ contract SHELTRStable {
     
     function welcomeBonus(address newParticipant) external {
         require(!hasReceivedBonus[newParticipant]);
-        mint(newParticipant, 100 * 1e18); // 100 SHELTR-S
+        mint(newParticipant, 10 * 1e18); // 10 SHELTR-S
         hasReceivedBonus[newParticipant] = true;
     }
 }
 ```
 
-### 2.3 SHELTR (Community Governance Token)
+### 2.3 SHELTR MAX 2027 (Community Governance Token)
 
-**Purpose**: Community governance, platform growth, and investor returns
+**Purpose**: Community governance, platform growth, stakeholder
 
 | Specification | Value | Growth Driver |
 |---------------|-------|---------------|
@@ -613,18 +605,18 @@ SHELTR's economic model is designed for long-term sustainability through diversi
 | **Premium Features** | Advanced analytics and reporting tools | Value-added services |
 | **Partnership Revenue** | Integration and API access fees | Ecosystem expansion |
 
-### 7.2 Token Economics & ICO Timeline
+### 7.2 Token Economics - 2027 MAX Vision + Timeline
 
 **SHELTR Token Launch Strategy**:
 ```
-📅 Pre-Seed Round (September 2025)
+📅 Pre-Seed Round (September 2027)
 ├── Token Price: $0.05 (50% discount to public launch)
 ├── Allocation: 3,000,000 SHELTR tokens
 ├── Target Raise: $150,000
 ├── Use of Funds: Legal framework, Coinbase integration, tech development
 └── Vesting: 3-year release schedule (33% annually)
 
-🚀 Public ICO (December 2025)
+🚀 Public ICO (December 2027)
 ├── Launch Price: $0.10
 ├── Progressive Pricing: $0.10 → $0.20 → $0.40 over 3 years
 ├── Market Cap Targets: $1.5M → $6.7M → $13.3M
@@ -702,13 +694,13 @@ Based on consultation with blockchain regulatory experts, SHELTR tokens qualify 
 
 ### 8.3 Regulatory Roadmap
 
-**Immediate Compliance (Q1 2025)**:
+**Immediate Compliance (Q2 2026)**:
 - SEC utility token opinion letter
 - FinCEN money transmitter analysis
 - State regulatory compliance review
 - International tax structure optimization
 
-**Ongoing Monitoring (2025-2026)**:
+**Ongoing Monitoring (2026-2029)**:
 - Regulatory guidance tracking
 - Congressional testimony preparation
 - Industry association participation
@@ -737,10 +729,10 @@ Based on consultation with blockchain regulatory experts, SHELTR tokens qualify 
 ### 9.2 Social Impact Metrics
 
 **Housing Outcomes**:
-- **Transition Rate**: 65% of participants transition to stable housing within 12 months
-- **Retention Rate**: 80% maintain stable housing after 18 months
-- **Cost Effectiveness**: $15,000 average cost per successful housing transition
-- **Time to Housing**: 6 months average from platform enrollment
+- **Transition Rate**: 65% of participants transition to stable housing within 24  months
+- **Retention Rate**: 80% maintain stable housing after 36 months
+- **Cost Effectiveness**: $5,000 average cost per successful POD housing transition
+- **Time to Housing**: 18 months average from platform enrollment
 
 **Quality of Life Improvements**:
 - **Health Outcomes**: 40% reduction in emergency room visits
@@ -843,7 +835,7 @@ We are not just building a platform—we are creating a movement that proves tec
 *This whitepaper contains forward-looking statements based on current expectations and assumptions. Actual results may differ materially. Platform participation and token usage carry inherent risks in emerging technology implementations. Please consult with qualified technical and legal advisors before platform integration. This document is for informational purposes and does not constitute financial advice.*
 
 ---
-*Document Version: 1.4.0*  
-*Last Updated: September 25, 2025*  
-*Status: PEER REVIEW READY* ✅  
-*Classification: Professional Grade Documentation*
+*Document Version: 1.5.0*  
+*Last Updated: Nov 25, 2025*  
+*Status: PEER REVIEWED* ✅  
+*Classification: Pilot Ready, TestNet Ready*

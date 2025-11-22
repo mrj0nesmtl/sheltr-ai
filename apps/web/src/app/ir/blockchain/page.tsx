@@ -123,7 +123,7 @@ export default function IRBlockchainPage() {
                   eliminating participant cryptocurrency exposure while maintaining complete donation transparency.
                 </p>
                 <div className="mt-6">
-                  <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/architecture/technical/tokenomics/blockchain.md" target="_blank" rel="noopener noreferrer">
+                  <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/architecture/technical/blockchain.md" target="_blank" rel="noopener noreferrer">
                     <Button className="bg-emerald-600 hover:bg-emerald-700">
                       <Code className="h-4 w-4 mr-2" />
                       Read Full Technical Specification
@@ -593,7 +593,6 @@ export default function IRBlockchainPage() {
                             >
                               SHELTRPaymentDistributor
                             </a>
-                            : TBD
                           </li>
                           <li>
                             <a 
@@ -604,7 +603,6 @@ export default function IRBlockchainPage() {
                             >
                               SHELTRStablecoin
                             </a>
-                            : TBD
                           </li>
                         </ul>
                       </div>
@@ -620,7 +618,6 @@ export default function IRBlockchainPage() {
                             >
                               AdyenPayoutIntegration
                             </a>
-                            : TBD
                           </li>
                           <li>
                             <a 
@@ -631,7 +628,6 @@ export default function IRBlockchainPage() {
                             >
                               CoinbaseStakingIntegration
                             </a>
-                            : TBD
                           </li>
                           <li>
                             <a 
@@ -642,7 +638,6 @@ export default function IRBlockchainPage() {
                             >
                               BaseNetworkOptimization
                             </a>
-                            : TBD
                           </li>
                         </ul>
                       </div>

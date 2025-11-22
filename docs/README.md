@@ -4,11 +4,11 @@
 > Enterprise-grade multi-tenant SaaS platform revolutionizing charitable giving through technology-driven transparency
 
 [![Status](https://img.shields.io/badge/status-production%20ready-success.svg)]()
-[![Version](https://img.shields.io/badge/version-2.90.0-blue.svg)]()
+[![Version](https://img.shields.io/badge/version-2.124.0-blue.svg)]()
 [![Docs](https://img.shields.io/badge/docs-up%20to%20date-brightgreen.svg)]()
 [![Platform](https://img.shields.io/badge/platform-live-success.svg)](https://sheltr-ai.web.app)
 
-**Last Updated**: November 10, 2025
+**Last Updated**: November 22, 2025
 
 ---
 
@@ -349,6 +349,13 @@ Archived documentation and session logs:
 
 ## 📈 Recent Updates
 
+### November 22, 2025 - Documentation & UX Polish
+- ✅ **Documentation Links Fixed**: All broken links across documentation pages corrected
+- ✅ **User Guide Enhancements**: Improved donor and participant guides with better navigation
+- ✅ **Blockchain Documentation**: Cleaned up contract lists and corrected GitHub links
+- ✅ **Navigation Consistency**: Unified navigation patterns across all documentation pages
+- ✅ **Call-to-Action Improvements**: Simplified and more intuitive CTAs throughout
+
 ### November 2025 - Knowledge Base Revolution
 - ✅ **Comprehensive KB Documentation**: New investor-ready overview
 - ✅ **Platform Overview Update**: Merged and enhanced overview docs
@@ -360,12 +367,6 @@ Archived documentation and session logs:
 - ✅ **Completed Work Archive**: 180+ historical docs organized by feature
 - ✅ **Session Logs**: Quarterly organization (Q3/Q4 2025)
 - ✅ **Enhanced Navigation**: Summary files in all major sections
-
-### October 2025 - Major Platform Releases
-- ✅ **Qualified Investor Portal**: Dual authentication with IR Data Room
-- ✅ **GitHub Sync**: Automated document synchronization
-- ✅ **Blog System**: Production-ready content management
-- ✅ **Cost Optimization**: 56% GCP cost reduction
 
 ---
 
@@ -426,10 +427,10 @@ Archived documentation and session logs:
 
 ---
 
-**Version**: 3.0.1 - Fixed Documentation Links  
-**Last Updated**: November 10, 2025  
+**Version**: 3.1.0 - Documentation & UX Polish Complete  
+**Last Updated**: November 22, 2025  
 **Status**: ✅ Production Ready  
-**Next Update**: November 17, 2025
+**Next Update**: December 1, 2025
 
 ---
 

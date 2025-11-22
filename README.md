@@ -12,7 +12,7 @@ The next generation platform for transparent charitable giving and homelessness 
 [![GitHub Stars](https://img.shields.io/github/stars/mrj0nesmtl/sheltr-ai?style=for-the-badge)](https://github.com/mrj0nesmtl/sheltr-ai)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg?style=for-the-badge)](https://www.python.org/downloads/)
-[![Last Updated](https://img.shields.io/badge/Last%20Updated-October%2021%2C%202025-brightgreen?style=for-the-badge)](https://github.com/mrj0nesmtl/sheltr-ai)
+[![Last Updated](https://img.shields.io/badge/Last%20Updated-November%2022%2C%202025-brightgreen?style=for-the-badge)](https://github.com/mrj0nesmtl/sheltr-ai)
 
 ---
 
@@ -157,49 +157,41 @@ Users can hold multiple roles simultaneously:
 
 ## 📚 Documentation Sections
 
-### 🌟 [01. Overview](docs/01-overview/)
-- [Getting Started & Vision](docs/01-overview/README.md)
-- [Mission: Hacking Homelessness](docs/01-overview/hacking_homelessness.md)
-- [Documentation Strategy](docs/01-overview/SHELTR-AI-DOCS-PLAN.md)
-- [Implementation Roadmap](docs/01-overview/SHELTR-AI-IMPLEMENTATION-PLAN.md)
+### 🌟 [Overview](docs/overview/)
+- [Platform Overview](docs/overview/platform-overview.md) - Comprehensive platform introduction
+- [Mission: Hacking Homelessness](docs/overview/hacking_homelessness.md) - Theory of change (MUST READ)
+- [Changelog](CHANGELOG.md) - Platform evolution and version history
+- [Million-Dollar Murray Research](docs/overview/Million-Dollar-Murray.pdf) - Research foundation
 
-### 🏗️ [02. Architecture](docs/02-architecture/)
-- [System Design](docs/02-architecture/technical/system-design.md)
-- [Official Whitepaper](docs/02-architecture/tokenomics/whitepaper_final.md)
-- [Blockchain Integration](docs/02-architecture/tokenomics/blockchain.md)
-- [SHELTR Tokenomics](docs/02-architecture/tokenomics/sheltr-tokenomics.md)
+### 🏗️ [Architecture](docs/architecture/)
+- [System Design](docs/architecture/technical/system-design.md) - Multi-tenant SaaS architecture
+- [Website Architecture](docs/architecture/technical/website-architecture.md) - Complete site structure
+- [Blockchain Architecture](docs/architecture/technical/blockchain.md) - Single-token stable fund ecosystem
+- [Technical Whitepaper](docs/architecture/technical/whitepaper_final.md) - Complete technical specifications
+- [Payment Rails](docs/architecture/payment-rails/unified-payment-architecture.md) - Enterprise payment infrastructure
 
-### 🔌 [03. API Documentation](docs/03-api/)
-- [FastAPI Overview](docs/03-api/README.md)
-- [Authentication Endpoints](docs/03-api/README.md#authentication)
-- [User Management APIs](docs/03-api/README.md#user-management)
-- [Donation System APIs](docs/03-api/README.md#donations)
-- [🆕 Blog System API](docs/03-api/blog-schema.md) - Blog post management and markdown import ✅ LIVE
-- [🌐 Production Blog](https://sheltr-ai.web.app/blog/) - Live blog with SEO optimization ✅ OPERATIONAL
+### 🔌 [API Documentation](docs/api/)
+- [API Summary](docs/api/api%20summary.md) - API overview and quick reference
+- [Database Schema](docs/api/database-schema.md) - Firestore collection structure
+- [Firestore Setup](docs/api/firestore-setup.md) - Firebase configuration guide
 
-### 👩‍💻 [04. Development](docs/04-development/)
-- [Development Roadmap](docs/04-development/dev-roadmap.md)
-- [🔥 Business Logic Testing Framework](docs/04-development/BUSINESS-LOGIC-TESTING.md)
-- [🤖 Chatbot Architecture Analysis](docs/04-development/CHATBOT-ARCHITECTURE-ANALYSIS.md)
-- [📚 Knowledge Base Strategy](docs/04-development/KNOWLEDGE-BASE-STRATEGY.md)
-- [📚 Knowledge Base Sync System](docs/04-development/KNOWLEDGE-BASE-SYNC-SYSTEM.md)
-- [🆕 FAQ Expansion Complete](docs/04-development/FAQ-EXPANSION-COMPLETE.md) - **200x FASTER CHATBOT** 🚀
-- [🆕 FAQ Expansion Test Results](docs/04-development/FAQ-EXPANSION-TEST-RESULTS.md) - Performance benchmarks
-- [🆕 FAQ Expansion Summary](docs/04-development/FAQ-EXPANSION-SUMMARY.md) - Implementation guide
-- [💬 Chatbot Debug Results](docs/04-development/CHATBOT-DEBUG-RESULTS.md)
-- [📊 Complete Functionality Matrix](docs/04-development/COMPLETE-FUNCTIONALITY-MATRIX-UPDATED.md)
-- [📚 Development Archive](docs/04-development/development_archive/) - Sessions 1-13 historical documentation
+### 💻 [Development](docs/development/)
+- [Development Roadmap](docs/development/roadmap.md) - 180-day launch timeline
+- [Development Summary](docs/development/development-summary.md) - Overview and workflows
+- [Completed Work](docs/development/completed-work/) - Implementation histories (180+ docs)
 
-### 👥 [06. User Guides](docs/06-user-guides/)
-- [Participant Guide](docs/06-user-guides/participant-guide.md) - Complete guide for homeless participants  
-- [Shelter Administrator Guide](docs/06-user-guides/shelter-admin-guide.md) ✅ **NEW** - Comprehensive admin guide
-- [Donor Guide](docs/06-user-guides/donor-guide.md) ✅ **NEW** - Complete donor platform guide
-- SuperAdmin Guide *(Coming Soon)* - Platform administration and oversight
+### ✨ [Features](docs/features/)
+- [Knowledge Base](docs/features/knowledge-base/knowledge-architechture.md) - Complete RAG system
+- [Chatbot System](docs/features/chatbot/AGENT-ARCHITECTURE.md) - AI agent architecture
+- [Blog System](docs/features/blog-system/blog_system.md) - Content management
+- [Messaging](docs/features/messaging/internal-messaging-system.md) - Internal messaging
+- [Notifications](docs/features/notifications/NOTIFICATION-ARCHITECTURE.md) - Real-time notifications
 
-### 🔄 [09. Migration](docs/09-migration/)
-- [Database Migration Complete](docs/09-migration/DATABASE_MIGRATION_COMPLETE.md)
-- [Migration Strategy](docs/09-migration/DATABASE_MIGRATION_PLAN.md)
-- [From Supabase Migration](docs/09-migration/from-supabase.md)
+### 👥 [User Guides](docs/user-guides/)
+- [Participant Guide](docs/user-guides/participant-guide.md) - For service recipients
+- [Donor Guide](docs/user-guides/donor-guide.md) - For donors and supporters  
+- [Shelter Admin Guide](docs/user-guides/shelter-admin-guide.md) - For shelter staff
+- [User Journeys](docs/user-guides/user-journeys.md) - Complete user flows
 
 ### 🤖 AI Agent Documentation
 - [Claude Agent Briefing](docs/CLAUDE-AGENT-BRIEFING.md)
@@ -483,6 +475,6 @@ Every donation automatically distributes through enterprise payment infrastructu
 
 **📖 "Great documentation is the foundation of great software - and great impact."**
 
-*Last Updated: October 15, 2025 - Session 22.23 Complete: FAQ expansion complete with 200x faster chatbot (23s → 129ms), 96 comprehensive FAQs, 97% cost reduction, development status context for 2026-2027 launch*
+*Last Updated: November 22, 2025 - Documentation & UX Polish Complete: Fixed all broken links across documentation pages, enhanced participant and donor guides, cleaned up blockchain documentation, and improved overall navigation consistency*
 
 **🌐 [Visit Live Site](https://sheltr-ai.web.app) | 🚀 [Get Started](docs/01-overview/README.md) | 🤝 [Contribute](CONTRIBUTING.md) | 💝 [Donate](https://sheltr-ai.web.app/scan-give) | 📖 [Documentation Hub](docs/TABLE_OF_CONTENTS.md) | 🪙 [Token Ecosystem](sheltr-tokens/docs/README.md)**

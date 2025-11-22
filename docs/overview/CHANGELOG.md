@@ -7,6 +7,79 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.124.0] - 2025-11-22 (Documentation & UX Polish) 📚
+
+### 🔧 Fixed
+
+#### **Donor Guide Page - User Journey Links**
+- Fixed all broken user journey links (4 instances)
+- Changed `/user-journeys/donors/` to `/docs/user-journeys/donors/`
+- Updated links in:
+  - Getting Started section card
+  - Quick Actions card
+  - Header button
+  - Bottom call-to-action section
+
+#### **Donor Guide Page - Call-to-Action Redesign**
+- Removed redundant "View User Journey" button from bottom CTA
+- Removed "Access Documentation" button
+- Added single "Back to Donor Solutions" button linking to `/solutions/donors`
+- Simplified navigation with Heart icon
+
+#### **Participant Guide Page - Hero Section**
+- Removed redundant "View Online" button (already viewing online)
+- Kept "View on GitHub" button for markdown access
+
+#### **Participant Guide Page - Call-to-Action Section**
+- Removed blue gradient background (`from-teal-600 to-cyan-600`)
+- Added professional background image with 50% black overlay
+- Enhanced stat cards with `backdrop-blur-sm` for better readability
+- Improved z-index layering (background → overlay → content)
+
+#### **Participant Guide Page - "See How It Works" Button**
+- Fixed broken hover effect
+- Added proper Link component to `/scan-give` page
+- Corrected button functionality
+
+#### **Blockchain Pages - GitHub Links**
+- Fixed broken "Read Full Technical Specification" button (bottom of page)
+- Changed incorrect URL: `docs/architecture/technical/tokenomics/blockchain.md`
+- To correct URL: `docs/architecture/technical/blockchain.md`
+- Applied fix to both `/docs/blockchain` and `/ir/blockchain` pages
+
+#### **Blockchain Pages - Contract List Cleanup**
+- Removed all ": TBD" placeholder text from contract links (10 instances total)
+- Cleaned up Core Contracts section:
+  - SHELTRPaymentDistributor
+  - SHELTRStablecoin
+- Cleaned up Integration Contracts section:
+  - AdyenPayoutIntegration
+  - CoinbaseStakingIntegration
+  - BaseNetworkOptimization
+- Applied to both `/docs/blockchain` and `/ir/blockchain` pages
+
+### 🎨 Improved
+
+#### **Visual Enhancements**
+- Participant guide CTA now features emotional background image
+- Better text readability with 50% overlay
+- Professional, modern aesthetic across documentation pages
+- Consistent navigation patterns
+
+#### **User Experience**
+- Simplified navigation flows
+- Removed redundant buttons and links
+- Fixed all broken links across documentation
+- Cleaner contract documentation presentation
+
+### 📊 Files Changed
+- `apps/web/src/app/docs/donor-guide/page.tsx`
+- `apps/web/src/app/docs/participant-guide/page.tsx`
+- `apps/web/src/app/docs/blockchain/page.tsx`
+- `apps/web/src/app/ir/blockchain/page.tsx`
+
+---
+
 ## [2.123.0] - 2025-11-22 (Team Bio Pages - Complete Leadership Profiles) 👥
 
 ### 🎯 Major Feature: Complete Team Biography System

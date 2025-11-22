@@ -9,13 +9,17 @@ interface BioContentProps {
   description: string;
   expertise: string[];
   experience: string;
+  memberName?: string; // Optional: to check if this is Joel Yaffe
 }
 
 export default function BioContent({ 
   description, 
   expertise, 
-  experience 
+  experience,
+  memberName 
 }: BioContentProps) {
+  // Only show quick stats for Joel Yaffe (founder metrics)
+  const showQuickStats = memberName === 'Joel Yaffe';
   return (
     <div className="grid md:grid-cols-3 gap-8">
       {/* Main Bio Content - Takes up 2 columns */}
@@ -57,25 +61,27 @@ export default function BioContent({
 
       {/* Sidebar - Expertise & Experience */}
       <div className="space-y-6">
-        {/* Experience */}
-        <Card className="border-2 border-blue-200 dark:border-blue-800">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Award className="h-5 w-5 text-blue-600" />
-              Experience
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-center">
-              <div className="text-4xl font-bold text-blue-600 mb-2">
-                {experience}
+        {/* Experience - Only show if we have experience data */}
+        {experience && (
+          <Card className="border-2 border-blue-200 dark:border-blue-800">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Award className="h-5 w-5 text-blue-600" />
+                Experience
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-center">
+                <div className="text-4xl font-bold text-blue-600 mb-2">
+                  {experience}
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  of innovation and leadership
+                </p>
               </div>
-              <p className="text-sm text-muted-foreground">
-                of innovation and leadership
-              </p>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Expertise */}
         <Card className="border-2 border-emerald-200 dark:border-emerald-800">
@@ -100,25 +106,27 @@ export default function BioContent({
           </CardContent>
         </Card>
 
-        {/* Quick Stats */}
-        <Card className="border-2 border-purple-200 dark:border-purple-800 bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20">
-          <CardContent className="pt-6">
-            <div className="space-y-4">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-purple-600">$9M+</div>
-                <div className="text-xs text-muted-foreground">Raised in Funding</div>
+        {/* Quick Stats - Only show for Joel Yaffe (founder metrics) */}
+        {showQuickStats && (
+          <Card className="border-2 border-purple-200 dark:border-purple-800 bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20">
+            <CardContent className="pt-6">
+              <div className="space-y-4">
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-purple-600">$9M+</div>
+                  <div className="text-xs text-muted-foreground">Raised in Funding</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-blue-600">160+</div>
+                  <div className="text-xs text-muted-foreground">Cities Worldwide</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-emerald-600">25+</div>
+                  <div className="text-xs text-muted-foreground">Years Experience</div>
+                </div>
               </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-blue-600">160+</div>
-                <div className="text-xs text-muted-foreground">Cities Worldwide</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-emerald-600">25+</div>
-                <div className="text-xs text-muted-foreground">Years Experience</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </div>
   );

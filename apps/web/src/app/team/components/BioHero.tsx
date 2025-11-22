@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Linkedin, Github, Globe, Mail, Twitter } from 'lucide-react';
+import { Linkedin, Github, Globe, Mail, Twitter, Instagram, BookOpen } from 'lucide-react';
 
 interface BioHeroProps {
   name: string;
@@ -15,10 +15,12 @@ interface BioHeroProps {
   department: string;
   socialLinks?: {
     linkedin?: string;
+    instagram?: string;
     github?: string;
     twitter?: string;
     website?: string;
     email?: string;
+    substack?: string;
   };
 }
 
@@ -107,6 +109,18 @@ export default function BioHero({
                     </a>
                   </Button>
                 )}
+                {socialLinks.instagram && (
+                  <Button 
+                    asChild 
+                    variant="outline" 
+                    size="lg"
+                    className="bg-white/10 border-white/30 hover:bg-white/20 text-white"
+                  >
+                    <a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer">
+                      <Instagram className="h-5 w-5" />
+                    </a>
+                  </Button>
+                )}
                 {socialLinks.github && (
                   <Button 
                     asChild 
@@ -140,6 +154,18 @@ export default function BioHero({
                   >
                     <a href={socialLinks.website} target="_blank" rel="noopener noreferrer">
                       <Globe className="h-5 w-5" />
+                    </a>
+                  </Button>
+                )}
+                {socialLinks.substack && (
+                  <Button 
+                    asChild 
+                    variant="outline" 
+                    size="lg"
+                    className="bg-white/10 border-white/30 hover:bg-white/20 text-white"
+                  >
+                    <a href={socialLinks.substack} target="_blank" rel="noopener noreferrer">
+                      <BookOpen className="h-5 w-5" />
                     </a>
                   </Button>
                 )}

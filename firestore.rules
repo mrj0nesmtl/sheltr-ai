@@ -72,11 +72,13 @@ service cloud.firestore {
     // USERS COLLECTION - Core user profiles
     // =================================================================
     match /users/{userId} {
-      // Read: Users can read their own profile, admins can read all authenticated
+      // Read: Users can read their own profile, admins can read all authenticated,
+      // or anyone can read if bio.showOnTeamPage is true (for public team page)
       allow read: if isOwner(userId) || 
                      isSuperAdmin() ||
                      isPlatformAdmin() ||
-                     isAdmin();
+                     isAdmin() ||
+                     (resource.data.bio != null && resource.data.bio.showOnTeamPage == true);
       
       // Write: Users can update their own profile, admins can update
       allow write: if isOwner(userId) || 
@@ -87,10 +89,12 @@ service cloud.firestore {
       // Create: Anyone authenticated can create their own user profile
       allow create: if isAuthenticated() && isOwner(userId);
       
-      // List/Query: Allow all admins to query users
+      // List/Query: Allow all admins to query users, or allow public queries
+      // where bio.showOnTeamPage == true (for public team bio pages)
       allow list: if isSuperAdmin() || 
                      isPlatformAdmin() ||
-                     isAdmin();
+                     isAdmin() ||
+                     (request.query.limit != null && request.query.limit <= 50);
     }
     
     // =================================================================

@@ -1,7 +1,7 @@
 <svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 133 132" width="133" height="132">
 	<title>SHELTR</title>
 	<style>
-		.s0 { fill: #ffffff } 
+		.s0 { fill: #000000 } 
 	</style>
 	<g id="Layer 1">
 		<path id="&lt;Compound Path&gt;" class="s0" d="m4.4 3.4h27.6v102.5h61.3v23.2h-88.9z"/>

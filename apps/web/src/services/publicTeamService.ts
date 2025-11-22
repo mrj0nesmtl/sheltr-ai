@@ -23,8 +23,10 @@ export interface PublicTeamMember {
   // Contact info
   phone?: string;
   linkedIn?: string;
+  instagram?: string;
   twitter?: string;
   website?: string;
+  substack?: string;
   
   // Professional details
   education?: Array<{

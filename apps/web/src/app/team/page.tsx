@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { Mail, Linkedin, Globe, Heart, Users, Award, Building2, Calendar, Twitter, Loader2, Share2, Rss, ExternalLink } from 'lucide-react';
+import { Mail, Linkedin, Globe, Heart, Users, Award, Building2, Calendar, Twitter, Loader2, Share2, Rss, ExternalLink, Instagram, BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -155,13 +155,6 @@ function TeamContent() {
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
-        {/* Bio */}
-        {member.bio && (
-          <p className="text-sm text-muted-foreground text-center leading-relaxed">
-            {member.bio}
-          </p>
-        )}
-        
         {/* Expertise */}
         {member.expertise.length > 0 && (
           <div className="space-y-2">
@@ -184,8 +177,8 @@ function TeamContent() {
           </div>
         )}
         
-        {/* Experience */}
-        {member.yearsOfExperience > 0 && (
+        {/* Experience - Hide for Joel Yaffe */}
+        {member.yearsOfExperience > 0 && member.name !== 'Joel Yaffe' && (
           <div className="flex items-center justify-center text-xs text-muted-foreground">
             <Calendar className="h-3 w-3 mr-1" />
             {member.yearsOfExperience} years experience
@@ -208,6 +201,13 @@ function TeamContent() {
               </a>
             </Button>
           )}
+          {member.instagram && (
+            <Button variant="ghost" size="sm" className="h-8 w-8 p-0" asChild>
+              <a href={member.instagram} target="_blank" rel="noopener noreferrer" title="Instagram">
+                <Instagram className="h-4 w-4" />
+              </a>
+            </Button>
+          )}
           {member.twitter && (
             <Button variant="ghost" size="sm" className="h-8 w-8 p-0" asChild>
               <a href={member.twitter} target="_blank" rel="noopener noreferrer" title="Twitter">
@@ -219,6 +219,13 @@ function TeamContent() {
             <Button variant="ghost" size="sm" className="h-8 w-8 p-0" asChild>
               <a href={member.website} target="_blank" rel="noopener noreferrer" title="Website">
                 <Globe className="h-4 w-4" />
+              </a>
+            </Button>
+          )}
+          {member.substack && (
+            <Button variant="ghost" size="sm" className="h-8 w-8 p-0" asChild>
+              <a href={member.substack} target="_blank" rel="noopener noreferrer" title="Substack">
+                <BookOpen className="h-4 w-4" />
               </a>
             </Button>
           )}

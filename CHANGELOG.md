@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.145.1] - 2025-11-24 (Fix Gemini Method Call) 🔧
+
+### 🐛 Fixed
+
+#### **Corrected Gemini Service Method Calls**
+- **HOTFIX**: Fixed incorrect method name `generate_content()` → `generate_response()`
+- Both orchestrator and RAG orchestrator now use correct Gemini API
+- Resolves `'GeminiService' object has no attribute 'generate_content'` error
+- RAG queries should now complete successfully with Gemini
+
+### 🔧 Technical
+- Updated `apps/api/services/chatbot/orchestrator.py` to use `generate_response()`
+- Updated `apps/api/services/chatbot/rag_orchestrator.py` to use `generate_response()`
+- Passes correct parameters: `message`, `context`, `system_prompt`, `model`
+
+---
+
 ## [2.145.0] - 2025-11-24 (Gemini for RAG Orchestrator) ⚡
 
 ### 🐛 Fixed

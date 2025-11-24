@@ -7,6 +7,156 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.131.0] - 2025-11-24 (Recurring Gifts Counter & PNG Logo) 🔄
+
+### 🔧 Fixed
+
+#### **Active Recurring Gifts Counter**
+- **CRITICAL FIX**: Active recurring gifts now display correct count on donor dashboard
+- Fixed "Active Recurring" metric showing 0 despite having active recurring gifts
+- Integrated real-time query to `recurring_gifts` collection in `getDonorMetrics()`
+- Filters for `status === 'active'` to show only active recurring donations
+- Updates both main dashboard (`/dashboard/donor`) and donations page (`/dashboard/donor/donations`)
+
+#### **Tax Receipt PNG Logo**
+- Replaced text-based logo with actual SHELTR wordmark PNG
+- Converted `apps/web/public/wordmark.png` to base64 for PDF embedding
+- Logo now renders properly in downloaded tax receipts
+- Maintains proper aspect ratio (570x59) at 60pt width
+- Fallback to text if image fails to load
+
+### 🎨 Enhanced
+- Real-time recurring gifts count updates when new recurring donations are created
+- Professional branding in tax receipts with actual logo
+- Improved visual consistency across platform and documents
+
+---
+
+## [2.130.0] - 2025-11-24 (Real Tax Receipt Data Integration) 🎯
+
+### 🔧 Fixed
+
+#### **Tax Receipt Real Data Integration**
+- **CRITICAL FIX**: Tax receipts now pull REAL donation data from Firestore
+- Fixed donor name showing "Valued Donor" instead of actual logged-in user
+- Fixed donation amounts showing mock $600 instead of actual $6,645
+- Integrated with `getDonationHistory()` and `getDonorMetrics()` services
+- Tax receipts now display correct donor name from `user.displayName` or `user.email`
+- Donation counts and amounts now calculated from actual Firestore data
+- Year-by-year donation totals calculated dynamically from real transactions
+
+#### **Tax Receipt Logo Fix**
+- Fixed logo not rendering in PDF (jsPDF doesn't support SVG format)
+- Replaced SVG logo with professional text-based "SHELTR" wordmark
+- Improved header typography with larger, bold branding
+- Added note for future PNG logo conversion if needed
+
+#### **Tax Document Summary Accuracy**
+- Tax year summary now shows real donation totals per year
+- Donation counts reflect actual number of completed transactions
+- Documents generated for years with actual donation activity
+- Current year (2025) properly initialized with real data
+
+### 🎨 Enhanced
+- Integrated `useAuth()` hook for current user context
+- Real-time data fetching when tax modal opens
+- Improved data flow from Firestore → Tax Receipt PDF
+- Better error handling for missing user/donation data
+
+---
+
+## [2.129.0] - 2025-11-24 (Tax Document Persistence & Cleanup) 📄
+
+### 🔧 Fixed
+
+#### **Tax Document Persistence**
+- Implemented localStorage persistence for generated tax documents
+- Fixed issue where newly generated 2025 documents weren't saving to "Available Documents"
+- Documents now persist across page refreshes and browser sessions
+- Each generated document gets unique ID with timestamp
+
+#### **Tax Document Cleanup**
+- Removed mock/old tax documents (2022-2024) from initial load
+- Only current year (2025) shows by default as "pending"
+- Previously generated documents load from localStorage
+- Clean slate for new users without historical mock data
+
+### 🎨 Enhanced
+- Improved tax document state management
+- Better document tracking with unique IDs
+- Cleaner initial UI without cluttered old documents
+
+---
+
+## [2.125.0] - 2025-11-24 (Donor Dashboard Bug Fixes & PDF Generation) 🐛
+
+### 🔧 Fixed
+
+#### **Recurring Gift Setup Error**
+- Added Firestore security rules for `recurring_gifts` collection
+- Donors can now create and manage recurring donations
+- Enhanced error messaging with detailed permission-denied feedback
+- Fixed "Failed to set up recurring gift" error on submission
+
+#### **Tax Receipt PDF Generation**
+- Implemented professional PDF generation using jsPDF library
+- Fixed blank/corrupted PDF downloads
+- Created comprehensive `taxReceiptService.ts` with full CRA compliance:
+  - **SHELTR wordmark logo** embedded as base64 SVG
+  - Complete donor information section
+  - Individual donation details with transaction hashes
+  - SmartFund 80-15-5 distribution breakdown
+  - Blockchain staking account information
+  - IP address and timestamp tracking
+  - Official charitable receipt boilerplate
+  - Professional formatting with automatic page breaks
+  - Footer with SHELTR branding
+
+#### **Recurring Donation Badge**
+- Added elegant outline-style "Recurring" badge to donation history
+- Used emerald color scheme for recurring gift identification
+- Fixed duplicate badge issue (removed redundant type badge)
+- Badge text changed from "Recurring Gift" to "Recurring" for brevity
+- Follows user preference for outline-style badges (transparent background, colored border)
+
+#### **Tax Year 2025**
+- Added current year (2025) to tax document dropdown
+- Dynamically includes current year for tax receipt generation
+- Fixed missing year selection issue
+
+#### **SmartFund Split Correction**
+- Fixed shelter donation split from incorrect 80-15-5 to correct **95% shelter, 5% platform**
+- Participant donations remain 80% direct, 15% housing, 5% infrastructure
+- Updated donation creation logic in `MakeNewDonationModal`
+- Updated donation history display in `platformMetrics` service
+- Fixed calculation display to show correct amounts (not percentages from wrong fields)
+- Impact messages now correctly show split based on donation type
+- Added shelter donation model (95-5) to About page "How We Fund Change" section
+- Both funding models now clearly illustrated with badges and separate sections
+
+### ✨ Added
+- New `taxReceiptService.ts` service for generating professional tax receipts
+- `generateTaxReceiptPDF()` function for creating CRA-compliant receipts
+- `downloadTaxReceipt()` function for client-side PDF downloads
+- Firestore security rules for recurring gifts collection with proper donor access controls
+- jsPDF library dependency (installed with --legacy-peer-deps)
+
+### 🔄 Changed
+- Updated `TaxDocumentsModal.tsx` to use real PDF generation instead of mock downloads
+- Improved recurring gift error handling in `RecurringGiftModal.tsx`
+- Enhanced donation list UI in donor dashboard with recurring gift badges
+- Updated Firestore rules to allow donor CRUD operations on recurring_gifts
+
+### 📊 Files Changed
+- `firestore.rules` - Added recurring_gifts collection rules
+- `apps/web/package.json` - Added jsPDF dependency
+- `apps/web/src/services/taxReceiptService.ts` - NEW: PDF generation service
+- `apps/web/src/components/donor/TaxDocumentsModal.tsx` - Integrated PDF generation
+- `apps/web/src/components/donor/RecurringGiftModal.tsx` - Enhanced error handling
+- `apps/web/src/app/dashboard/donor/page.tsx` - Added recurring gift badge
+
+---
+
 ## [2.124.0] - 2025-11-22 (Documentation & UX Polish) 📚
 
 ### 🔧 Fixed

@@ -229,20 +229,29 @@ Title:"""
                     'response_time': '<1s'
                 })
                 
-                # Return FAQ response with required 'success' key
-                result = {
-                    'success': True,  # CRITICAL: Router expects this key!
-                    'response': response,
-                    'session_id': session_id,
-                    'method': 'faq',
-                    'faq_id': faq_match['id'],
-                    'confidence': faq_match['confidence']
+                # Return FAQ response matching the same structure as RAG responses
+                response_data = {
+                    'message': response,  # Frontend expects 'message' key
+                    'metadata': {
+                        'model': agent_config.get('model', 'faq'),
+                        'provider': 'faq',
+                        'method': 'faq',
+                        'faq_id': faq_match['id'],
+                        'confidence': faq_match['confidence'],
+                        'response_time': '<1s',
+                        'tokens_used': 0  # FAQ doesn't use tokens
+                    }
                 }
                 
+                # Include the generated title if one was created
                 if generated_title:
-                    result['title'] = generated_title
+                    response_data['session_title'] = generated_title
+                    logger.info(f"📤 Returning new session title in response: {generated_title}")
                 
-                return result
+                return {
+                    'success': True,
+                    'data': response_data  # Match RAG response structure
+                }
             
             logger.info(f"❌ FAQ MISS in dashboard (best confidence: {faq_match['confidence'] if faq_match else 0}%) - falling back to RAG")
             

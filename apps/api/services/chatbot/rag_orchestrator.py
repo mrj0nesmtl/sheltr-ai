@@ -124,11 +124,13 @@ class RAGOrchestrator:
             )
             
             # 4. Generate contextual actions
+            logger.info(f"📝 Generating knowledge actions...")
             actions = await self._generate_knowledge_actions(
                 knowledge_results, intent, agent_type
             )
             
             # 5. Generate source citations
+            logger.info(f"📚 Generating citations...")
             citations = self._generate_citations(knowledge_results)
             
             # 6. Determine escalation
@@ -138,17 +140,23 @@ class RAGOrchestrator:
                 agent_type == "emergency"
             )
             
+            # 7. Generate follow-up
+            logger.info(f"💬 Generating follow-up...")
+            follow_up = await self._generate_rag_follow_up(knowledge_results, intent)
+            
+            logger.info(f"✅ RAG pipeline complete, returning response")
             return ChatResponse(
                 message=ai_response,
                 actions=actions,
-                follow_up=await self._generate_rag_follow_up(knowledge_results, intent),
+                follow_up=follow_up,
                 escalation_triggered=escalation_triggered,
                 agent_used=f"{agent_type}_rag",
                 metadata={
                     'knowledge_sources': citations,
                     'sources_used': len(knowledge_results.get('results', [])),
                     'search_time': knowledge_results.get('search_time_seconds', 0),
-                    'knowledge_available': len(knowledge_results.get('results', [])) > 0
+                    'knowledge_available': len(knowledge_results.get('results', [])) > 0,
+                    'method': 'rag'
                 }
             )
             
@@ -366,26 +374,26 @@ class RAGOrchestrator:
         import asyncio
         if use_gemini:
             logger.info(f"🤖 RAG using Gemini 2.5 Flash for public user")
-            # Use Gemini's generate_response method
-            ai_response = await asyncio.wait_for(
-                self.gemini_service.generate_response(
-                    message=rag_prompt,
-                    context=enhanced_context,
-                    system_prompt=system_prompt,
-                    model="gemini-2.5-flash"
-                ),
-                timeout=5.0  # 5 second timeout for Gemini (increased from 2.5s)
+            # Use Gemini's generate_response method (no timeout - Gemini is fast)
+            ai_response = await self.gemini_service.generate_response(
+                message=rag_prompt,
+                context=enhanced_context,
+                system_prompt=system_prompt,
+                model="gemini-2.5-flash"
             )
+            logger.info(f"✅ Gemini RAG response completed")
         else:
             logger.info(f"🤖 RAG using OpenAI GPT-4o-mini for {user_role} user")
+            # Keep timeout for OpenAI
             ai_response = await asyncio.wait_for(
                 self.openai_service.generate_response(
                     message=rag_prompt,
                     context=enhanced_context,
                     system_prompt=system_prompt
                 ),
-                timeout=5.0  # 5 second timeout for OpenAI call (increased from 2.5s)
+                timeout=8.0  # 8 second timeout for OpenAI call
             )
+            logger.info(f"✅ OpenAI RAG response completed")
         
         return ai_response
     

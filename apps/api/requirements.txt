@@ -91,4 +91,7 @@ slowapi==0.1.9
 
 # Documentation
 mkdocs==1.6.1
-mkdocs-material==9.6.19 google-generativeai==0.8.5
+mkdocs-material==9.6.19
+
+# Google Generative AI (Gemini)
+google-generativeai==0.8.5

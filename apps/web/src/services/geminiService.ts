@@ -5,8 +5,8 @@
  * All data stays in Google Cloud (no external API calls).
  * 
  * Models used:
- * - gemini-2.0-flash: Fast, multimodal, 1M token context (auto-updating alias)
- * - gemini-2.0-flash-lite: Faster, lighter version for simple tasks
+ * - gemini-2.5-flash: Fast, multimodal, 1M token context (recommended for production)
+ * - gemini-2.5-flash-lite: Faster, lighter version for simple tasks
  * 
  * References:
  * - https://firebase.google.com/docs/ai-logic
@@ -62,14 +62,14 @@ class GeminiService {
       this.ai = getAI(firebaseApp, { backend: new GoogleAIBackend() });
 
       // Create model instances
-      // gemini-2.0-flash: Auto-updating alias to latest stable version
+      // gemini-2.5-flash: Recommended for production use
       this.flashModel = getGenerativeModel(this.ai, { 
-        model: 'gemini-2.0-flash' 
+        model: 'gemini-2.5-flash' 
       });
 
-      // gemini-2.0-flash-lite: Faster, lighter version
+      // gemini-2.5-flash-lite: Faster, lighter version for simple queries
       this.flashLiteModel = getGenerativeModel(this.ai, { 
-        model: 'gemini-2.0-flash-lite' 
+        model: 'gemini-2.5-flash-lite' 
       });
 
       this.initialized = true;
@@ -90,8 +90,10 @@ class GeminiService {
   /**
    * Generate text from a prompt (one-shot)
    * 
+   * Uses gemini-2.5-flash by default, or gemini-2.5-flash-lite for faster responses
+   * 
    * @param prompt - Text prompt
-   * @param useLite - Use lite model for faster response (default: false)
+   * @param useLite - Use gemini-2.5-flash-lite for faster, simpler responses (default: false)
    * @returns Generated text
    */
   async generateText(prompt: string, useLite = false): Promise<string> {

@@ -25,8 +25,13 @@ class GeminiService:
                 self.available = False
                 return
             
-            # Configure Gemini
-            genai.configure(api_key=api_key)
+            # Configure Gemini with explicit transport to avoid ADC auth issues
+            # This prevents "503 Illegal metadata" errors in Cloud Run
+            import google.generativeai.types as genai_types
+            genai.configure(
+                api_key=api_key,
+                transport='rest'  # Use REST instead of gRPC to avoid ADC conflicts
+            )
             
             # Safety settings (moderate blocking)
             self.safety_settings = {

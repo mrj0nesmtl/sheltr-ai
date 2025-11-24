@@ -7,6 +7,47 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.145.5] - 2025-11-24 (Production Fix - Gemini Secret Manager & Code Fix) 🔐
+
+### 🔧 Fixed
+
+#### **Gemini API Key Now Persistent via Secret Manager**
+- **Issue**: `GEMINI_API_KEY` was lost after container restarts
+- **Root Cause**: Environment variable set with `--update-env-vars` (not persistent)
+- **Solution**: Created secret in Google Cloud Secret Manager
+- **Result**: ✅ API key now persists across all container restarts and deployments
+
+#### **Gemini Conversation History Format Fixed**
+- **Issue**: `❌ Gemini generation error: 'role'` - KeyError in production
+- **Root Cause**: Gemini service expected `{"role": "user", "content": "..."}` format but received orchestrator format `{"user_message": "...", "bot_response": "..."}`
+- **Solution**: Updated `gemini_service.py` to handle multiple conversation history formats
+- **Commit**: `a118a807`
+
+### 🔐 Security Improvements
+
+#### **Secret Manager Implementation**
+```bash
+# Created Gemini secret
+gcloud secrets create gemini-api-key --data-file=-
+
+# Configured Cloud Run to use secret
+gcloud run services update sheltr-api \
+  --update-secrets GEMINI_API_KEY=gemini-api-key:latest
+```
+
+### 📊 Production Status
+- ✅ Gemini secret created in Secret Manager
+- ✅ Cloud Run configured to inject secret
+- ✅ New revision deployed: `sheltr-api-00215-l92`
+- ✅ Gemini service initialized successfully
+- ✅ Conversation history format fixed
+- ✅ Ready for full backend redeployment with latest code
+
+### 📚 Documentation
+- Created `docs/deployment/API-KEYS-PRODUCTION-SETUP.md` - Complete API key configuration guide
+
+---
+
 ## [2.145.4] - 2025-11-24 (Production Fix - Gemini Environment Variable) 🔧
 
 ### 🔧 Fixed

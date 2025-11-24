@@ -45,6 +45,144 @@ EXPANDED_FAQS = {
         ]
     },
     
+    "what_is_sheltr": {
+        "questions": [
+            "what is sheltr",
+            "what's sheltr",
+            "tell me about sheltr",
+            "explain sheltr",
+            "sheltr overview",
+            "what does sheltr do",
+            "describe sheltr",
+            "sheltr platform",
+            "about sheltr",
+            "sheltr info",
+            "how does sheltr work",
+            "sheltr mission"
+        ],
+        "answer": "SHELTR is an innovative platform designed to tackle homelessness through technology, compassion, and community engagement. Our mission is to create sustainable solutions for individuals experiencing homelessness by connecting them with essential services, resources, and support. We use blockchain-verified donations, a transparent SmartFund allocation model (80% direct to participants, 15% housing fund, 5% operations), and a complete ecosystem of PODS housing, MOBI bikes, and AI-powered services. Platform launching 2026-2027.",
+        "category": "platform_info",
+        "agent_suggestion": "public_information",
+        "keywords": ["sheltr", "what", "platform", "overview", "about", "mission", "homeless", "technology"],
+        "priority": "critical",
+        "actions": [
+            {"type": "link", "text": "Learn More", "url": "/about"},
+            {"type": "link", "text": "View Solutions", "url": "/solutions"},
+            {"type": "link", "text": "How It Works", "url": "/solutions/donors"},
+            {"type": "link", "text": "Get Started", "url": "/register"}
+        ]
+    },
+    
+    "how_sheltr_works": {
+        "questions": [
+            "how does sheltr work",
+            "how it works",
+            "explain how sheltr works",
+            "sheltr process",
+            "how do i use sheltr",
+            "sheltr workflow"
+        ],
+        "answer": "SHELTR operates as a unified ecosystem where every stakeholder contributes and benefits. When you donate, funds are strategically distributed: 80% directly empowers participants for immediate needs, 15% is allocated to their housing SmartFund through micro-pod deployment, and 5% sustains platform operations. This creates a self-reinforcing cycle where immediate relief generates lasting systemic change, transforming charity into measurable investment with compound returns for the entire community.",
+        "category": "platform_info",
+        "agent_suggestion": "public_information",
+        "keywords": ["how", "works", "process", "workflow", "smartfund", "80", "15", "5"],
+        "priority": "critical",
+        "actions": [
+            {"type": "link", "text": "View Solutions", "url": "/solutions"},
+            {"type": "link", "text": "SmartFund Details", "url": "/about"},
+            {"type": "link", "text": "Start Donating", "url": "/scan-give"}
+        ]
+    },
+    
+    "sheltr_for_shelters": {
+        "questions": [
+            "sheltr for shelters",
+            "how do shelters use sheltr",
+            "shelter organizations",
+            "can my shelter join",
+            "shelter partnership",
+            "overflow relief",
+            "hmis capabilities"
+        ],
+        "answer": "SHELTR provides overflow relief when you're at capacity, creates new revenue streams through community investment, and modernizes your operations with next-generation HMIS capabilities. Your mission remains yours. Our tech makes it more powerful. We help shelters manage participants, track donations, and provide better services through our unified platform.",
+        "category": "shelter_operations",
+        "agent_suggestion": "public_information",
+        "keywords": ["shelter", "organization", "hmis", "overflow", "capacity", "partnership"],
+        "priority": "high",
+        "actions": [
+            {"type": "link", "text": "Shelter Network", "url": "/shelters"},
+            {"type": "link", "text": "HMIS Guide", "url": "/solutions/organizations/hmis-guide"},
+            {"type": "link", "text": "Contact Us", "url": "/contact"}
+        ]
+    },
+    
+    "sheltr_security": {
+        "questions": [
+            "is sheltr secure",
+            "security features",
+            "data protection",
+            "privacy",
+            "how secure is sheltr",
+            "biometric security",
+            "smart locks"
+        ],
+        "answer": "SHELTR prioritizes security at every level. PODS feature biometric smart locks, GPS tracking, and 24/7 monitoring. All donations are blockchain-verified for transparency. Personal data is encrypted and protected. Participants have full control over their privacy while maintaining the transparency needed for community trust. Security meets dignity in every feature we build.",
+        "category": "security",
+        "agent_suggestion": "technical_support",
+        "keywords": ["security", "secure", "privacy", "biometric", "encryption", "blockchain", "safe"],
+        "priority": "high",
+        "actions": [
+            {"type": "link", "text": "Security Details", "url": "/security"},
+            {"type": "link", "text": "Privacy Policy", "url": "/docs/privacy"},
+            {"type": "link", "text": "Blockchain Info", "url": "/docs/blockchain"}
+        ]
+    },
+    
+    "how_to_donate": {
+        "questions": [
+            "how do i donate",
+            "how to donate",
+            "make a donation",
+            "donate now",
+            "give money",
+            "contribute",
+            "support sheltr"
+        ],
+        "answer": "Donating through SHELTR is easy! You can scan a participant's QR code for direct donations, donate through our website, or set up recurring gifts. Every donation is blockchain-verified and distributed through our SmartFund model: 80% direct to participant, 15% to housing fund, 5% to operations. You'll receive instant confirmation and can track your impact in real-time.",
+        "category": "donations",
+        "agent_suggestion": "donor_relations",
+        "keywords": ["donate", "donation", "give", "contribute", "qr", "scan", "support"],
+        "priority": "critical",
+        "actions": [
+            {"type": "link", "text": "Donate Now", "url": "/scan-give"},
+            {"type": "link", "text": "Donor Guide", "url": "/docs/donor-guide"},
+            {"type": "link", "text": "Track Impact", "url": "/impact"}
+        ]
+    },
+    
+    "participant_signup": {
+        "questions": [
+            "how do i sign up",
+            "become a participant",
+            "join as participant",
+            "register participant",
+            "i need help",
+            "i'm homeless",
+            "get started participant"
+        ],
+        "answer": "Welcome! You can sign up directly through our platform or through a partner shelter. Once registered, you'll get your personal QR code for receiving donations, access to your housing fund dashboard, and connection to essential services. If you're with a shelter, ask if they're a SHELTR partner. If you're street-involved, contact us directly and we'll help you get started. Every person deserves dignity and a path forward.",
+        "category": "participant_support",
+        "agent_suggestion": "participant_support",
+        "keywords": ["signup", "register", "participant", "homeless", "join", "help", "need"],
+        "priority": "critical",
+        "actions": [
+            {"type": "link", "text": "Register Now", "url": "/register"},
+            {"type": "link", "text": "Participant Guide", "url": "/docs/participant-guide"},
+            {"type": "link", "text": "Find Shelters", "url": "/shelters"},
+            {"type": "link", "text": "Contact Us", "url": "/contact"}
+        ]
+    },
+    
     # ==========================================
     # CATEGORY A: SHELTR ECOSYSTEM (10 FAQs)
     # ==========================================

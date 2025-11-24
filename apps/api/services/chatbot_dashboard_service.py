@@ -13,6 +13,7 @@ import logging
 from services.openai_service import OpenAIService
 from services.anthropic_service import anthropic_service
 from services.chatbot.rag_orchestrator import RAGOrchestrator
+from services.gemini_service import gemini_service
 
 logger = logging.getLogger(__name__)
 
@@ -23,6 +24,7 @@ class ChatbotDashboardService:
         self.db = firestore.client()
         self.openai_service = OpenAIService()
         self.anthropic_service = anthropic_service
+        self.gemini_service = gemini_service
         self.rag_orchestrator = RAGOrchestrator()
     
     async def get_chat_sessions(self, user_id: str) -> List[Dict[str, Any]]:
@@ -237,6 +239,12 @@ IMPORTANT: Always provide complete, well-structured responses. Finish your thoug
                     system_prompt=system_message,
                     model=model
                 )
+            elif provider == "gemini":
+                response = await self._generate_gemini_response(
+                    conversation_history=conversation_history,
+                    system_prompt=system_message,
+                    model=model
+                )
             else:  # Default to OpenAI
                 response = await self.openai_service.generate_response(
                     message=user_message,
@@ -386,6 +394,8 @@ IMPORTANT: Always provide complete, well-structured responses. Finish your thoug
         """Determine LLM provider from model name"""
         if model.startswith("claude"):
             return "anthropic"
+        elif model.startswith("gemini"):
+            return "gemini"
         else:
             return "openai"
     
@@ -430,6 +440,48 @@ IMPORTANT: Always provide complete, well-structured responses. Finish your thoug
             except Exception as fallback_error:
                 logger.error(f"❌ OpenAI fallback also failed: {str(fallback_error)}")
                 raise Exception("Both Anthropic and OpenAI services failed")
+    
+    async def _generate_gemini_response(
+        self,
+        conversation_history: List[Dict[str, str]],
+        system_prompt: str,
+        model: str
+    ) -> str:
+        """Generate response using Google Gemini with fallback to OpenAI"""
+        try:
+            if not self.gemini_service.is_available():
+                logger.warning("⚠️ Gemini service not available, falling back to OpenAI")
+                return await self.openai_service.generate_response(
+                    message=conversation_history[-1]['content'] if conversation_history else "",
+                    context={'conversation_history': conversation_history[:-1]},
+                    system_prompt=system_prompt
+                )
+            
+            response = await self.gemini_service.generate_chat_completion(
+                messages=conversation_history,
+                model=model,
+                max_tokens=2000,
+                temperature=0.7,
+                system_prompt=system_prompt
+            )
+            
+            logger.info(f"✅ Gemini response generated successfully with model: {model}")
+            return response
+            
+        except Exception as e:
+            logger.error(f"❌ Gemini generation failed: {str(e)}")
+            logger.info("⚠️ Falling back to OpenAI due to Gemini error")
+            
+            # Fallback to OpenAI
+            try:
+                return await self.openai_service.generate_response(
+                    message=conversation_history[-1]['content'] if conversation_history else "",
+                    context={'conversation_history': conversation_history[:-1]},
+                    system_prompt=system_prompt
+                )
+            except Exception as fallback_error:
+                logger.error(f"❌ OpenAI fallback also failed: {str(fallback_error)}")
+                raise Exception("Both Gemini and OpenAI services failed")
     
     async def generate_share_link(self, session_id: str, user_id: str) -> Dict[str, Any]:
         """Generate a shareable link for a conversation"""

@@ -716,14 +716,21 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
               </Select>
 
               <Select value={selectedModel} onValueChange={setSelectedModel}>
-                <SelectTrigger className="w-full sm:w-32 h-9 sm:h-10 text-sm">
+                <SelectTrigger className="w-full sm:w-40 h-9 sm:h-10 text-sm">
                   <SelectValue placeholder="Model" />
                 </SelectTrigger>
                 <SelectContent>
+                  {/* OpenAI Models */}
                   <SelectItem value="gpt-4o">GPT-4o</SelectItem>
                   <SelectItem value="gpt-4o-mini">GPT-4o Mini</SelectItem>
+                  
+                  {/* Anthropic Models */}
                   <SelectItem value="claude-3-5-sonnet-20241022">Claude 3.5 Sonnet</SelectItem>
                   <SelectItem value="claude-3-5-haiku-20241022">Claude 3.5 Haiku</SelectItem>
+                  
+                  {/* Google Gemini Models (Firebase AI Logic) */}
+                  <SelectItem value="gemini-2.5-flash">Gemini 2.5 Flash ⚡</SelectItem>
+                  <SelectItem value="gemini-2.5-flash-lite">Gemini 2.5 Flash-Lite 🚀</SelectItem>
                 </SelectContent>
               </Select>
             </div>

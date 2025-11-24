@@ -211,6 +211,40 @@ Title:"""
             agent_type = agent_config.get('id', 'general')  # Extract agent type from config
             logger.info(f"🤖 Using agent: {agent_type} for chatbot dashboard session {session_id}")
             
+            # CRITICAL: Check FAQ first before expensive RAG search
+            from services.faq_service import faq_service
+            faq_match = await faq_service.find_faq_match(user_message, user_role="admin")
+            
+            if faq_match and faq_match["confidence"] > 70:
+                logger.info(f"📋 FAQ HIT in dashboard! Using FAQ response: {faq_match['id']} (confidence: {faq_match['confidence']}%)")
+                
+                # Use FAQ answer directly - no RAG needed!
+                response = faq_match["answer"]
+                
+                # Add FAQ response to database
+                await self.add_chat_message(session_id, 'assistant', response, {
+                    'faq_id': faq_match['id'],
+                    'faq_confidence': faq_match['confidence'],
+                    'method': 'faq',
+                    'response_time': '<1s'
+                })
+                
+                # Return FAQ response
+                result = {
+                    'response': response,
+                    'session_id': session_id,
+                    'method': 'faq',
+                    'faq_id': faq_match['id'],
+                    'confidence': faq_match['confidence']
+                }
+                
+                if generated_title:
+                    result['title'] = generated_title
+                
+                return result
+            
+            logger.info(f"❌ FAQ MISS in dashboard (best confidence: {faq_match['confidence'] if faq_match else 0}%) - falling back to RAG")
+            
             # Search knowledge base (handles query enhancement internally)
             # NOTE: search_knowledge_base() calls _search_relevant_knowledge() 
             # which calls _enhance_search_query() internally, so we don't need to enhance separately

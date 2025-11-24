@@ -137,9 +137,20 @@ export function RecurringGiftModal({ isOpen, onClose }: RecurringGiftModalProps)
       // Refresh the page to show the new recurring gift
       window.location.reload();
       
-    } catch (error) {
+    } catch (error: any) {
       console.error('❌ Failed to set up recurring gift:', error);
-      alert('Failed to set up recurring gift. Please try again.');
+      
+      // Provide more detailed error message
+      let errorMessage = 'Failed to set up recurring gift. ';
+      if (error?.code === 'permission-denied') {
+        errorMessage += 'Permission denied. Please ensure you have donor access and try again.';
+      } else if (error?.message) {
+        errorMessage += error.message;
+      } else {
+        errorMessage += 'Please try again or contact support if the issue persists.';
+      }
+      
+      alert(errorMessage);
     } finally {
       setIsProcessing(false);
     }

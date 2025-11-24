@@ -346,6 +346,11 @@ export default function DonorDashboard() {
                           <Badge variant={donation.type === 'recurring' ? 'default' : 'outline'}>
                             {donation.type}
                           </Badge>
+                          {donation.type === 'recurring' && (
+                            <Badge variant="outline" className="border-emerald-500 text-emerald-700 dark:text-emerald-400 bg-transparent">
+                              Recurring Gift
+                            </Badge>
+                          )}
                           {donation.status === 'completed' && (
                             <Badge variant="default" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
                               ✓ Completed

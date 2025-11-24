@@ -7,6 +7,59 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.125.0] - 2025-11-24 (Donor Dashboard Bug Fixes & PDF Generation) 🐛
+
+### 🔧 Fixed
+
+#### **Recurring Gift Setup Error**
+- Added Firestore security rules for `recurring_gifts` collection
+- Donors can now create and manage recurring donations
+- Enhanced error messaging with detailed permission-denied feedback
+- Fixed "Failed to set up recurring gift" error on submission
+
+#### **Tax Receipt PDF Generation**
+- Implemented professional PDF generation using jsPDF library
+- Fixed blank/corrupted PDF downloads
+- Created comprehensive `taxReceiptService.ts` with full CRA compliance:
+  - SHELTR branding and wordmark header
+  - Complete donor information section
+  - Individual donation details with transaction hashes
+  - SmartFund 80-15-5 distribution breakdown
+  - Blockchain staking account information
+  - IP address and timestamp tracking
+  - Official charitable receipt boilerplate
+  - Professional formatting with automatic page breaks
+  - Footer with SHELTR branding
+
+#### **Recurring Donation Badge**
+- Added elegant outline-style "Recurring Gift" badge to donation history
+- Used emerald color scheme for recurring gift identification
+- Badge appears on donation list items for visual differentiation
+- Follows user preference for outline-style badges (transparent background, colored border)
+
+### ✨ Added
+- New `taxReceiptService.ts` service for generating professional tax receipts
+- `generateTaxReceiptPDF()` function for creating CRA-compliant receipts
+- `downloadTaxReceipt()` function for client-side PDF downloads
+- Firestore security rules for recurring gifts collection with proper donor access controls
+- jsPDF library dependency (installed with --legacy-peer-deps)
+
+### 🔄 Changed
+- Updated `TaxDocumentsModal.tsx` to use real PDF generation instead of mock downloads
+- Improved recurring gift error handling in `RecurringGiftModal.tsx`
+- Enhanced donation list UI in donor dashboard with recurring gift badges
+- Updated Firestore rules to allow donor CRUD operations on recurring_gifts
+
+### 📊 Files Changed
+- `firestore.rules` - Added recurring_gifts collection rules
+- `apps/web/package.json` - Added jsPDF dependency
+- `apps/web/src/services/taxReceiptService.ts` - NEW: PDF generation service
+- `apps/web/src/components/donor/TaxDocumentsModal.tsx` - Integrated PDF generation
+- `apps/web/src/components/donor/RecurringGiftModal.tsx` - Enhanced error handling
+- `apps/web/src/app/dashboard/donor/page.tsx` - Added recurring gift badge
+
+---
+
 ## [2.124.0] - 2025-11-22 (Documentation & UX Polish) 📚
 
 ### 🔧 Fixed

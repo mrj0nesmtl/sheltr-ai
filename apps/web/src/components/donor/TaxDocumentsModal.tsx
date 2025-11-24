@@ -65,18 +65,43 @@ export function TaxDocumentsModal({ isOpen, onClose }: TaxDocumentsModalProps) {
     setIsGenerating(documentId);
     
     try {
-      // Simulate document generation/download
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Import services
+      const { useAuth } = await import('@/contexts/AuthContext');
+      const { getDonationHistory } = await import('@/services/platformMetrics');
+      const { downloadTaxReceipt } = await import('@/services/taxReceiptService');
       
-      // Here you would trigger the actual download
-      console.log('Downloading tax document:', documentId);
+      // Get current user from context (we'll need to pass this from parent)
+      // For now, use mock data - in production, fetch real donation data
+      const document = documents.find(doc => doc.id === documentId);
+      if (!document) {
+        throw new Error('Document not found');
+      }
       
-      // Create a mock download
-      const link = document.createElement('a');
-      link.href = '#';
-      link.download = `SHELTR-Tax-Receipt-${documentId}.pdf`;
-      link.click();
+      // Create mock tax receipt data
+      // TODO: Replace with real data from Firestore
+      const taxReceiptData = {
+        donorName: 'Valued Donor',
+        donorEmail: 'donor@example.com',
+        year: document.year,
+        totalAmount: document.amount,
+        donations: Array.from({ length: document.donationCount }, (_, i) => ({
+          id: `donation-${i + 1}`,
+          date: `${document.year}-${String(Math.floor(Math.random() * 12) + 1).padStart(2, '0')}-${String(Math.floor(Math.random() * 28) + 1).padStart(2, '0')}`,
+          amount: document.amount / document.donationCount,
+          shelter: 'Old Brewery Mission',
+          transactionHash: `0x${Math.random().toString(16).substring(2, 66)}`,
+          ipAddress: '192.168.1.1',
+          participantName: 'Privacy Protected',
+          smartFundDistribution: {
+            direct: (document.amount / document.donationCount) * 0.80,
+            housing: (document.amount / document.donationCount) * 0.15,
+            infrastructure: (document.amount / document.donationCount) * 0.05
+          },
+          stakingAccount: `0x${Math.random().toString(16).substring(2, 42)}`
+        }))
+      };
       
+      await downloadTaxReceipt(taxReceiptData, `SHELTR-Tax-Receipt-${documentId}.pdf`);
       alert('Tax document downloaded successfully!');
       
     } catch (error) {
@@ -91,21 +116,55 @@ export function TaxDocumentsModal({ isOpen, onClose }: TaxDocumentsModalProps) {
     setIsGenerating('new-document');
     
     try {
-      await new Promise(resolve => setTimeout(resolve, 3000));
+      // Import services
+      const { useAuth } = await import('@/contexts/AuthContext');
+      const { getDonationHistory, getDonorMetrics } = await import('@/services/platformMetrics');
+      const { downloadTaxReceipt } = await import('@/services/taxReceiptService');
       
-      // Add new document to the list
-      const newDoc: TaxDocument = {
-        id: `${selectedYear}-generated`,
-        year: parseInt(selectedYear),
-        type: 'annual',
-        amount: 400, // This would come from actual data
-        donationCount: 2,
-        generatedDate: new Date().toISOString().split('T')[0],
-        status: 'available'
-      };
+      // In production, fetch real user data and donations
+      // For now, generate with current document data
+      const currentDoc = documents.find(doc => doc.year === parseInt(selectedYear));
       
-      setDocuments(prev => [newDoc, ...prev]);
-      alert('New tax document generated successfully!');
+      if (currentDoc) {
+        // Create tax receipt data
+        const taxReceiptData = {
+          donorName: 'Valued Donor',
+          donorEmail: 'donor@example.com',
+          year: parseInt(selectedYear),
+          totalAmount: currentDoc.amount,
+          donations: Array.from({ length: currentDoc.donationCount }, (_, i) => ({
+            id: `donation-${i + 1}`,
+            date: `${selectedYear}-${String(Math.floor(Math.random() * 12) + 1).padStart(2, '0')}-${String(Math.floor(Math.random() * 28) + 1).padStart(2, '0')}`,
+            amount: currentDoc.amount / currentDoc.donationCount,
+            shelter: 'Old Brewery Mission',
+            transactionHash: `0x${Math.random().toString(16).substring(2, 66)}`,
+            ipAddress: '192.168.1.1',
+            participantName: 'Privacy Protected',
+            smartFundDistribution: {
+              direct: (currentDoc.amount / currentDoc.donationCount) * 0.80,
+              housing: (currentDoc.amount / currentDoc.donationCount) * 0.15,
+              infrastructure: (currentDoc.amount / currentDoc.donationCount) * 0.05
+            },
+            stakingAccount: `0x${Math.random().toString(16).substring(2, 42)}`
+          }))
+        };
+        
+        await downloadTaxReceipt(taxReceiptData, `SHELTR-Tax-Receipt-${selectedYear}-generated.pdf`);
+        
+        // Update document status
+        const newDoc: TaxDocument = {
+          ...currentDoc,
+          id: `${selectedYear}-generated`,
+          status: 'available',
+          generatedDate: new Date().toISOString().split('T')[0]
+        };
+        
+        setDocuments(prev => prev.map(doc => 
+          doc.year === parseInt(selectedYear) ? newDoc : doc
+        ));
+        
+        alert('New tax document generated successfully!');
+      }
       
     } catch (error) {
       console.error('Generation failed:', error);

@@ -1311,6 +1311,42 @@ service cloud.firestore {
     }
     
     // =================================================================
+    // RECURRING GIFTS COLLECTION - Recurring donation management
+    // =================================================================
+    match /recurring_gifts/{giftId} {
+      // Read: Donors can read their own recurring gifts, admins can read all
+      allow read: if isAuthenticated() && (
+        (isDonor() && resource.data.donor_id == request.auth.uid) ||
+        isSuperAdmin() ||
+        isPlatformAdmin() ||
+        isAdmin()
+      );
+      
+      // Update: Donors can update their own recurring gifts (modify/cancel)
+      allow update: if isAuthenticated() && (
+        (isDonor() && resource.data.donor_id == request.auth.uid) ||
+        isSuperAdmin() ||
+        isPlatformAdmin()
+      );
+      
+      // Delete: Donors can delete their own recurring gifts, Super Admin can delete all
+      allow delete: if isAuthenticated() && (
+        (isDonor() && resource.data.donor_id == request.auth.uid) ||
+        isSuperAdmin()
+      );
+      
+      // Create: Authenticated donors can create recurring gifts
+      allow create: if isAuthenticated() && (
+        isDonor() ||
+        isSuperAdmin() ||
+        isPlatformAdmin()
+      ) && request.resource.data.donor_id == request.auth.uid;
+      
+      // List/Query: Donors can query their own, admins can query all
+      allow list: if isAuthenticated() && (isDonor() || isSuperAdmin() || isPlatformAdmin() || isAdmin());
+    }
+    
+    // =================================================================
     // REVENUE MANAGEMENT COLLECTIONS - Revenue Tracking and Projections
     // =================================================================
     

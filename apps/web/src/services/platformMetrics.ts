@@ -1002,12 +1002,18 @@ export const getDonorMetrics = async (donorId: string): Promise<DonorMetrics | n
       console.log('🔄 Querying recurring gifts for donor:', donorId);
       const recurringQuery = query(
         collection(db, 'recurring_gifts'),
-        where('donor_id', '==', donorId),
-        where('status', '==', 'active')
+        where('donor_id', '==', donorId)
       );
       const recurringSnapshot = await getDocs(recurringQuery);
-      recurringDonationsCount = recurringSnapshot.size;
-      console.log(`✅ Found ${recurringDonationsCount} active recurring gift(s)`);
+      
+      // Filter for active status in JavaScript (to avoid index requirements)
+      recurringDonationsCount = recurringSnapshot.docs.filter(doc => {
+        const data = doc.data();
+        const status = data.status || 'active'; // Default to active if no status field
+        return status === 'active';
+      }).length;
+      
+      console.log(`✅ Found ${recurringDonationsCount} active recurring gift(s) out of ${recurringSnapshot.size} total`);
     } catch (error) {
       console.error('❌ Error fetching recurring gifts:', error);
     }

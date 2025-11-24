@@ -564,9 +564,11 @@ class ChatbotOrchestrator:
                         logger.info(f"🤖 Using Gemini 2.5 Flash for public user response")
                         # Generate AI response with Gemini (faster, cheaper)
                         ai_response = await asyncio.wait_for(
-                            gemini_service.generate_content(
-                                prompt=f"{system_prompt}\n\nUser: {current_message}",
-                                model_name="gemini-2.5-flash"
+                            gemini_service.generate_response(
+                                message=current_message,
+                                context=ai_context,
+                                system_prompt=system_prompt,
+                                model="gemini-2.5-flash"
                             ),
                             timeout=4.0
                         )

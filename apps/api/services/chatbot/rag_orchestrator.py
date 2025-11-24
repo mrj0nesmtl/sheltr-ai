@@ -366,12 +366,13 @@ class RAGOrchestrator:
         import asyncio
         if use_gemini:
             logger.info(f"🤖 RAG using Gemini 2.5 Flash for public user")
-            # Combine system prompt and RAG prompt for Gemini
-            full_prompt = f"{system_prompt}\n\n{rag_prompt}"
+            # Use Gemini's generate_response method
             ai_response = await asyncio.wait_for(
-                self.gemini_service.generate_content(
-                    prompt=full_prompt,
-                    model_name="gemini-2.5-flash"
+                self.gemini_service.generate_response(
+                    message=rag_prompt,
+                    context=enhanced_context,
+                    system_prompt=system_prompt,
+                    model="gemini-2.5-flash"
                 ),
                 timeout=2.5  # 2.5 second timeout (leaves 0.5s buffer for 3s RAG timeout)
             )

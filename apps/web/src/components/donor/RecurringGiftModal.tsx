@@ -19,10 +19,13 @@ export function RecurringGiftModal({ isOpen, onClose }: RecurringGiftModalProps)
   const { user } = useAuth();
   const [amount, setAmount] = useState<string>('');
   const [frequency, setFrequency] = useState<string>('monthly');
+  const [targetType, setTargetType] = useState<'shelter' | 'participant'>('shelter');
   const [shelter, setShelter] = useState<string>('');
+  const [participant, setParticipant] = useState<string>('');
   const [startDate, setStartDate] = useState<string>('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [shelters, setShelters] = useState<Array<{ id: string; name: string }>>([]);
+  const [participants, setParticipants] = useState<Array<{ id: string; name: string; shelter: string }>>([]);
 
   const predefinedAmounts = ['25', '50', '100', '200'];
 
@@ -33,13 +36,13 @@ export function RecurringGiftModal({ isOpen, onClose }: RecurringGiftModalProps)
     { value: 'annually', label: 'Annually', description: 'Every year' }
   ];
 
-  // Load active shelters from backend API
+  // Load active shelters and participants from backend API
   React.useEffect(() => {
-    const loadActiveShelters = async () => {
+    const loadDonationTargets = async () => {
       if (!isOpen) return;
       
       try {
-        console.log('🏢 Loading active shelters for recurring gift...');
+        console.log('🏢 Loading active donation targets for recurring gift...');
         const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
         const response = await fetch(`${API_BASE_URL}/api/v1/donations/active-donation-targets`);
         
@@ -48,25 +51,36 @@ export function RecurringGiftModal({ isOpen, onClose }: RecurringGiftModalProps)
         }
         
         const data = await response.json();
+        
         const activeShelters = (data.active_shelters || []).map((s: any) => ({
           id: s.id,
           name: s.name
         }));
         
+        const activeParticipants = (data.verified_participants || []).map((p: any) => ({
+          id: p.id,
+          name: p.name,
+          shelter: p.shelter || 'Unknown Shelter'
+        }));
+        
         setShelters(activeShelters);
-        console.log(`✅ Loaded ${activeShelters.length} active shelter(s) for recurring gift`);
+        setParticipants(activeParticipants);
+        
+        console.log(`✅ Loaded ${activeShelters.length} shelter(s) and ${activeParticipants.length} participant(s)`);
       } catch (error) {
-        console.error('❌ Error loading shelters for recurring gift:', error);
-        // Fallback to empty array if API fails
+        console.error('❌ Error loading donation targets:', error);
         setShelters([]);
+        setParticipants([]);
       }
     };
     
-    loadActiveShelters();
+    loadDonationTargets();
   }, [isOpen]);
 
   const handleSubmit = async () => {
-    if (!amount || !frequency || !shelter || !startDate) {
+    const selectedTarget = targetType === 'shelter' ? shelter : participant;
+    
+    if (!amount || !frequency || !selectedTarget || !startDate) {
       alert('Please fill in all fields');
       return;
     }
@@ -83,7 +97,14 @@ export function RecurringGiftModal({ isOpen, onClose }: RecurringGiftModalProps)
       const { db } = await import('@/lib/firebase');
       
       const donationAmount = parseFloat(amount);
-      const selectedShelter = shelters.find(s => s.id === shelter);
+      
+      const selectedShelter = targetType === 'shelter' 
+        ? shelters.find(s => s.id === shelter)
+        : null;
+      
+      const selectedParticipant = targetType === 'participant'
+        ? participants.find(p => p.id === participant)
+        : null;
       
       // Calculate next payment date based on frequency
       const start = new Date(startDate);
@@ -108,8 +129,13 @@ export function RecurringGiftModal({ isOpen, onClose }: RecurringGiftModalProps)
         donor_id: user.uid,
         donor_email: user.email || '',
         donor_name: user.displayName || user.email || 'Anonymous Donor',
-        shelter_id: shelter,
-        shelter_name: selectedShelter?.name || 'Unknown Shelter',
+        target_type: targetType,
+        shelter_id: targetType === 'shelter' ? shelter : (selectedParticipant?.shelter || ''),
+        shelter_name: targetType === 'shelter' ? (selectedShelter?.name || 'Unknown Shelter') : (selectedParticipant?.shelter || 'Unknown Shelter'),
+        ...(targetType === 'participant' && {
+          participant_id: participant,
+          participant_name: selectedParticipant?.name || 'Unknown Participant'
+        }),
         amount: donationAmount,
         frequency: frequency,
         status: 'active',
@@ -182,41 +208,94 @@ export function RecurringGiftModal({ isOpen, onClose }: RecurringGiftModalProps)
         </DialogHeader>
 
         <div className="space-y-6">
-          {/* Impact Preview */}
-          {amount && (
-            <Card className="bg-blue-50 dark:bg-blue-900/20 border-blue-200">
-              <CardContent className="p-4">
-                <div className="flex items-center gap-2 mb-2">
-                  <Info className="h-4 w-4 text-blue-600" />
-                  <span className="font-medium text-blue-900 dark:text-blue-100">
-                    Annual Impact Preview
-                  </span>
-                </div>
-                <p className="text-blue-800 dark:text-blue-200">
-                  Your ${amount} {frequency} gift will provide ${calculateAnnualImpact().toLocaleString()} 
-                  in annual support, helping provide approximately {Math.floor(calculateAnnualImpact() / 5)} meals 
-                  or {Math.floor(calculateAnnualImpact() / 100)} nights of shelter per year.
-                </p>
-              </CardContent>
-            </Card>
+          {/* Instructions */}
+          <Card className="bg-blue-50 dark:bg-blue-900/20 border-blue-200">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <Info className="h-4 w-4 text-blue-600" />
+                <span className="font-medium text-blue-900 dark:text-blue-100">
+                  Setup Instructions
+                </span>
+              </div>
+              <p className="text-sm text-blue-800 dark:text-blue-200 mb-2">
+                Set up automatic recurring donations to provide consistent support. You can donate to shelters or individual participants.
+              </p>
+              <div className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
+                <p><strong>SmartFund Distribution:</strong></p>
+                <ul className="list-disc list-inside ml-2 space-y-0.5">
+                  <li><strong>Shelters:</strong> 95% to shelter operations, 5% platform fee</li>
+                  <li><strong>Participants:</strong> 80% direct support, 15% housing fund, 5% operations</li>
+                </ul>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Target Type Selection */}
+          <div className="space-y-2">
+            <Label>I want to support</Label>
+            <div className="flex gap-2">
+              <Button
+                type="button"
+                variant={targetType === 'shelter' ? 'default' : 'outline'}
+                onClick={() => {
+                  setTargetType('shelter');
+                  setParticipant('');
+                }}
+                className="flex-1"
+              >
+                A Shelter
+              </Button>
+              <Button
+                type="button"
+                variant={targetType === 'participant' ? 'default' : 'outline'}
+                onClick={() => {
+                  setTargetType('participant');
+                  setShelter('');
+                }}
+                className="flex-1"
+              >
+                A Participant
+              </Button>
+            </div>
+          </div>
+
+          {/* Shelter Selection (shown when targetType is 'shelter') */}
+          {targetType === 'shelter' && (
+            <div className="space-y-2">
+              <Label>Select Shelter</Label>
+              <Select value={shelter} onValueChange={setShelter}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Choose a shelter to support" />
+                </SelectTrigger>
+                <SelectContent>
+                  {shelters.map((s) => (
+                    <SelectItem key={s.id} value={s.id}>
+                      {s.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           )}
 
-          {/* Shelter Selection */}
-          <div className="space-y-2">
-            <Label>Select Shelter</Label>
-            <Select value={shelter} onValueChange={setShelter}>
-              <SelectTrigger>
-                <SelectValue placeholder="Choose a shelter to support" />
-              </SelectTrigger>
-              <SelectContent>
-                {shelters.map((s) => (
-                  <SelectItem key={s.id} value={s.id}>
-                    {s.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+          {/* Participant Selection (shown when targetType is 'participant') */}
+          {targetType === 'participant' && (
+            <div className="space-y-2">
+              <Label>Select Participant</Label>
+              <Select value={participant} onValueChange={setParticipant}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Choose a participant to support" />
+                </SelectTrigger>
+                <SelectContent>
+                  {participants.map((p) => (
+                    <SelectItem key={p.id} value={p.id}>
+                      {p.name} ({p.shelter})
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
 
           {/* Amount Selection */}
           <div className="space-y-4">

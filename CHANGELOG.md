@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.136.0] - 2025-11-24 (Knowledge Base Stats Cache Fix) 📊
+
+### 🔧 Fixed
+
+#### **Knowledge Base Stats Not Updating After Sync**
+- **CRITICAL FIX**: Pending embeddings metric stuck at 16 despite successful sync
+- Implemented smart cache invalidation with `force_refresh` parameter
+- Stats now refresh immediately after GitHub sync completes
+- Documents cache preserved for performance (no slow page reloads)
+- Added `force_refresh` parameter to `get_knowledge_stats()` method
+- Sync endpoint now returns updated stats in response
+
+### 🎨 Enhanced
+- Cache invalidation now surgical (only refreshes what's needed)
+- Performance optimization maintained (1-hour cache TTL for normal loads)
+- One-time Firestore fetch after sync, then re-cached for speed
+
+### 📊 Impact
+- **Stats Accuracy**: Metrics update immediately after sync operations
+- **Performance**: Page load times unchanged (still fast with caching)
+- **User Experience**: No more stale "pending embeddings" counts
+
+---
+
 ## [2.135.0] - 2025-11-24 (GitHub Sync Fixed & Team Bios Secured) 🔐
 
 ### 🔧 Fixed

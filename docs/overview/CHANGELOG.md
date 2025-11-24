@@ -7,6 +7,76 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.136.0] - 2025-11-24 (Knowledge Base Stats Cache Fix) 📊
+
+### 🔧 Fixed
+
+#### **Knowledge Base Stats Not Updating After Sync**
+- **CRITICAL FIX**: Pending embeddings metric stuck at 16 despite successful sync
+- Implemented smart cache invalidation with `force_refresh` parameter
+- Stats now refresh immediately after GitHub sync completes
+- Documents cache preserved for performance (no slow page reloads)
+- Added `force_refresh` parameter to `get_knowledge_stats()` method
+- Sync endpoint now returns updated stats in response
+
+### 🎨 Enhanced
+- Cache invalidation now surgical (only refreshes what's needed)
+- Performance optimization maintained (1-hour cache TTL for normal loads)
+- One-time Firestore fetch after sync, then re-cached for speed
+
+### 📊 Impact
+- **Stats Accuracy**: Metrics update immediately after sync operations
+- **Performance**: Page load times unchanged (still fast with caching)
+- **User Experience**: No more stale "pending embeddings" counts
+
+---
+
+## [2.135.0] - 2025-11-24 (GitHub Sync Fixed & Team Bios Secured) 🔐
+
+### 🔧 Fixed
+
+#### **GitHub Documentation Sync**
+- **CRITICAL FIX**: GitHub Personal Access Token expired, causing sync failures
+- Fixed 401 Unauthorized errors preventing documentation sync
+- Updated `GITHUB_TOKEN` in `apps/api/.env` with new token (expires Feb 2026)
+- GitHub sync now working: detecting 17 new files, 9 modified, 0 deleted
+- Knowledge Base can now receive documentation updates
+
+#### **Recurring Gift Modal Scrolling**
+- Fixed modal height issue preventing access to action buttons at 100% zoom
+- Implemented scrollable content area with fixed header and footer
+- Action buttons now always visible at bottom of modal
+- Works on all screen sizes (desktop, tablet, mobile)
+
+### 🔐 Security
+
+#### **Team Bio Files Moved to Secure Location**
+- **SECURITY ENHANCEMENT**: Moved team bio markdown files from public `docs/team/` to secure `.local-secure-docs/platform-admin/team-bios/`
+- Removed 14 team member bio files from public GitHub repository
+- Files now excluded from public knowledge base sync
+- Website functionality unchanged (reads from Firestore, not markdown files)
+- Created comprehensive architecture documentation explaining data flow
+
+### 📚 Documentation
+
+#### **GitHub Sync Diagnostic Reports**
+- Created `GITHUB-SYNC-DIAGNOSTIC-REPORT.md` with full analysis of sync issue
+- Created `GITHUB-TOKEN-RENEWAL-GUIDE.md` with quick reference for token renewal
+- Created `TEAM-BIO-ARCHITECTURE.md` explaining team bio data flow and security
+- Created `README.md` in team-bios folder documenting purpose and usage
+
+### 🎨 Enhanced
+- Modal UX improved with proper flexbox layout and overflow handling
+- Team bio security improved by removing sensitive files from public repository
+- GitHub sync reliability improved with token renewal process documented
+
+### 📊 Impact
+- **GitHub Sync**: Now tracking 85 documentation files (up from 68)
+- **Security**: 14 team bio files secured and removed from public access
+- **UX**: Recurring gift modal now accessible on all screen sizes
+
+---
+
 ## [2.131.0] - 2025-11-24 (Recurring Gifts Counter & PNG Logo) 🔄
 
 ### 🔧 Fixed

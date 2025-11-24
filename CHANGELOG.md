@@ -7,6 +7,51 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.145.3] - 2025-11-24 (Production Deployment - Gemini 2.5 Flash Live) 🚀
+
+### 🎉 Deployed to Production
+
+#### **Gemini 2.5 Flash Now Live in Production**
+- ✅ **Frontend deployed**: https://sheltr-ai.web.app
+- ✅ **Backend API deployed**: https://sheltr-api-714964620823.us-central1.run.app
+- ✅ **Public chatbot using Gemini 2.5 Flash** for all public users
+- ✅ **Dashboard chatbot using Gemini** when selected
+- ✅ **FAQ system** providing instant responses (<1s)
+- ✅ **RAG system** working with Gemini for complex questions (5-15s)
+
+### 🔧 Fixed
+
+#### **Requirements.txt Syntax Error**
+- **Issue**: `google-generativeai` package was on the same line as `mkdocs-material`
+- **Fix**: Separated packages onto individual lines with proper formatting
+- **Impact**: Cloud Build Docker image now builds successfully
+
+### 📊 Production Performance
+
+#### **Response Times**
+- FAQ questions: <1s (instant)
+- RAG questions: 5-15s (working correctly)
+- Complex blockchain questions: Successfully answered with citations
+
+#### **Cost Savings**
+- 70% reduction in AI costs for public chatbot
+- Gemini: ~$0.0001 per query
+- OpenAI (fallback): ~$0.0003 per query
+- Estimated savings: $200-500/month at scale
+
+### 🔗 Production URLs
+- **Frontend**: https://sheltr-ai.web.app
+- **Dashboard**: https://sheltr-ai.web.app/dashboard
+- **Backend API**: https://sheltr-api-714964620823.us-central1.run.app
+- **API Docs**: https://sheltr-api-714964620823.us-central1.run.app/docs
+
+### 📚 Documentation
+- Production readiness guide: `docs/deployment/GEMINI-PRODUCTION-READY.md`
+- Integration guide: `docs/features/chatbot/GEMINI-CHATBOT-INTEGRATION.md`
+- Testing guide: `docs/testing/PUBLIC-CHATBOT-TEST-GUIDE.md`
+
+---
+
 ## [2.145.2] - 2025-11-24 (Increase RAG Timeouts for Gemini) ⏱️
 
 ### 🔧 Fixed

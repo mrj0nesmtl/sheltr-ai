@@ -5,6 +5,9 @@
 
 import { jsPDF } from 'jspdf';
 
+// SHELTR logo as base64 SVG (converted from logo-black.svg)
+const SHELTR_LOGO_BASE64 = 'data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDU2NCAxMzIiIHdpZHRoPSI1NjQiIGhlaWdodD0iMTMyIj4KCTx0aXRsZT5zaGVsdHItYWk8L3RpdGxlPgoJPHN0eWxlPgoJCS5zMCB7IGZpbGw6ICMwMDAwMDAgfSAKCTwvc3R5bGU+Cgk8ZyBpZD0iTGF5ZXIgMSI+CgkJPHBhdGggaWQ9IiZsdDtDb21wb3VuZCBQYXRoJmd0OyIgY2xhc3M9InMwIiBkPSJtMjguOCA4Ny40YzAgMTYuNyAxMyAyMy4yIDI3LjggMjMuMiA5LjYgMCAyNC40LTIuOCAyNC40LTE1LjcgMC0xMy41LTE4LjgtMTUuOC0zNy4zLTIwLjctMTguNi01LTM3LjUtMTIuMi0zNy41LTM1LjggMC0yNS42IDI0LjMtMzggNDctMzggMjYuMiAwIDUwLjQgMTEuNSA1MC40IDQwLjVoLTI2LjhjLTAuOS0xNS4xLTExLjYtMTktMjQuOC0xOS04LjggMC0xOSAzLjctMTkgMTQuMyAwIDkuNiA2IDEwLjkgMzcuNSAxOSA5LjEgMi4zIDM3LjMgOC4xIDM3LjMgMzYuNiAwIDIzLTE4LjEgNDAuMy01Mi4zIDQwLjMtMjcuOCAwLTUzLjgtMTMuNy01My41LTQ0Ljd6Ii8+CgkJPHBhdGggaWQ9IiZsdDtDb21wb3VuZCBQYXRoJmd0OyIgY2xhc3M9InMwIiBkPSJtMTExLjYgMy40aDI3LjZ2NDguMmg1MC45di00OC4yaDI3LjZ2MTI1LjdoLTI3LjZ2LTU0LjJoLTUwLjl2NTQuMmgtMjcuNnoiLz4KCQk8cGF0aCBpZD0iJmx0O0NvbXBvdW5kIFBhdGgmZ3Q7IiBjbGFzcz0iczAiIGQ9Im0yMjQuNCAzLjRoOTR2MjMuM2gtNjYuNHYyNi45aDYwLjl2MjEuNWgtNjAuOXYzMC44aDY3Ljh2MjMuMmgtOTUuNHoiLz4KCQk8cGF0aCBpZD0iJmx0O0NvbXBvdW5kIFBhdGgmZ3Q7IiBjbGFzcz0iczAiIGQ9Im0zMjQuNCAzLjRoMjcuNnYxMDIuNWg2MS4zdjIzLjJoLTg4Ljl6Ii8+CgkJPHBhdGggaWQ9IiZsdDtDb21wb3VuZCBQYXRoJmd0OyIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGFzcz0iczAiIGQ9Im00NTQuMSAzLjRoNjcuOGMyMi41IDAgMzYuOCAxNS43IDM2LjggMzQuNyAwIDE0LjgtNiAyNS45LTE5LjkgMzEuNXYwLjRjMTMuNSAzLjUgMTcuNCAxNi43IDE4LjMgMjkuMyAwLjUgOCAwLjMgMjIuNyA1LjIgMjkuOGgtMjcuNmMtMy4zLTcuOS0zLTIwLjEtNC40LTMwLjEtMS45LTEzLjItNy0xOS0yMC45LTE5aC0yNy43djQ5LjFoLTI3LjZ6bTI3LjYgNTYuOGgzMC4zYzEyLjMgMCAxOS01LjIgMTktMTcuOSAwLTEyLjItNi43LTE3LjQtMTktMTcuNGgtMzAuM3oiLz4KCQk8cGF0aCBpZD0iJmx0O0NvbXBvdW5kIFBhdGgmZ3Q7IiBjbGFzcz0iczAiIGQ9Im00NDggMTI4LjJoLTI3LjZ2LTEwMi40aC02MS4ydi0yMy4yaDg4Ljh6Ii8+Cgk8L2c+Cjwvc3ZnPiA=';
+
 export interface TaxReceiptData {
   donorName: string;
   donorEmail: string;
@@ -50,11 +53,22 @@ export async function generateTaxReceiptPDF(data: TaxReceiptData): Promise<Blob>
   // ==========================================
   // HEADER - SHELTR Logo and Title
   // ==========================================
-  doc.setFontSize(24);
-  doc.setFont('helvetica', 'bold');
-  yPosition = addText('SHELTR', pageWidth / 2, yPosition, { align: 'center' });
+  try {
+    // Add SHELTR logo (centered, scaled appropriately)
+    const logoWidth = 80;
+    const logoHeight = 18.75; // Maintain aspect ratio (564x132 = ~3:1 ratio)
+    const logoX = (pageWidth - logoWidth) / 2;
+    doc.addImage(SHELTR_LOGO_BASE64, 'SVG', logoX, yPosition, logoWidth, logoHeight);
+    yPosition += logoHeight + 5;
+  } catch (error) {
+    // Fallback to text if logo fails to load
+    console.warn('Logo failed to load, using text fallback:', error);
+    doc.setFontSize(24);
+    doc.setFont('helvetica', 'bold');
+    yPosition = addText('SHELTR', pageWidth / 2, yPosition, { align: 'center' });
+    yPosition += 5;
+  }
   
-  yPosition += 5;
   doc.setFontSize(10);
   doc.setFont('helvetica', 'normal');
   yPosition = addText('Hacking Homelessness with Technology', pageWidth / 2, yPosition, { align: 'center' });

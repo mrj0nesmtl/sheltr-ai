@@ -343,12 +343,13 @@ export default function DonorDashboard() {
                       <div className="flex-1 space-y-1">
                         <div className="flex items-center space-x-2">
                           <p className="text-sm font-medium group-hover:text-primary transition-colors">${donation.amount.toFixed(2)}</p>
-                          <Badge variant={donation.type === 'recurring' ? 'default' : 'outline'}>
-                            {donation.type}
-                          </Badge>
-                          {donation.type === 'recurring' && (
+                          {donation.type === 'recurring' ? (
                             <Badge variant="outline" className="border-emerald-500 text-emerald-700 dark:text-emerald-400 bg-transparent">
-                              Recurring Gift
+                              Recurring
+                            </Badge>
+                          ) : (
+                            <Badge variant="outline">
+                              {donation.type}
                             </Badge>
                           )}
                           {donation.status === 'completed' && (

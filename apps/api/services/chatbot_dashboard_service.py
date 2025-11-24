@@ -229,8 +229,9 @@ Title:"""
                     'response_time': '<1s'
                 })
                 
-                # Return FAQ response
+                # Return FAQ response with required 'success' key
                 result = {
+                    'success': True,  # CRITICAL: Router expects this key!
                     'response': response,
                     'session_id': session_id,
                     'method': 'faq',

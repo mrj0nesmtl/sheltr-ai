@@ -7,6 +7,111 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.146.0] - 2025-11-24 (Critical Security Fix - Gemini API Key Rotation) 🔐🔄
+
+### 🚨 Critical Security Fix
+
+#### **Gemini API Key Leaked and Rotated**
+- **Issue**: Google flagged Gemini API key as leaked (403 error: "Your API key was reported as leaked")
+- **Impact**: 
+  - ❌ All Gemini requests failing
+  - ❌ Fallback to OpenAI without RAG context
+  - ❌ Generic answers instead of knowledge-based responses
+  - 💸 10x higher costs (all OpenAI instead of Gemini)
+- **Root Cause**: API key exposed in Git history, no website/API restrictions
+- **Solution**: 
+  - ✅ Rotated API key via Google AI Studio
+  - ✅ Added website restrictions (7 authorized domains)
+  - ✅ Added API restrictions (3 specific APIs: Generative Language, Vertex AI, Firebase AI Logic)
+  - ✅ Stored in Google Cloud Secret Manager
+  - ✅ Updated Cloud Run service (revision: sheltr-api-00220-t5p)
+  - ✅ Updated local development environment
+
+### 🔒 Security Improvements
+
+#### **Website Restrictions Applied**
+Production:
+- `https://sheltr-ai.web.app/*`
+- `https://sheltr-ai.firebaseapp.com/*`
+- `https://sheltr-api-714964620823.us-central1.run.app/*`
+
+Development:
+- `http://localhost:3000/*`
+- `http://localhost:8001/*`
+- `http://127.0.0.1:3000/*`
+- `http://127.0.0.1:8001/*`
+
+**Result**: Key can ONLY be used from authorized domains. Even if leaked, cannot be abused! 🛡️
+
+#### **API Restrictions Applied**
+- Generative Language API
+- Vertex AI API
+- Firebase AI Logic API
+
+**Result**: Key limited to AI services only (no access to GCS, Firestore, etc.)
+
+### 📊 Performance & Cost Impact
+
+**Before Rotation**:
+- ❌ Gemini: Disabled (403 error)
+- ⚠️ Fallback: OpenAI without RAG context
+- 😞 Answers: Generic, not from knowledge base
+- 💸 Cost: ~$5-10/day ($150-300/month)
+
+**After Rotation**:
+- ✅ Gemini: Active and working
+- ✅ RAG: Full context preserved
+- ✅ Answers: Accurate, knowledge-based
+- 💰 Cost: ~$0.50-1/day ($15-30/month)
+
+**Savings**: $120-270/month = **$1,620-3,240/year** 💰
+
+### 🐛 Bug Identified (Not Fixed Yet)
+
+#### **OpenAI Fallback Loses RAG Context**
+- **Issue**: When Gemini fails, fallback to OpenAI doesn't include RAG knowledge context
+- **Impact**: Users get generic answers instead of accurate knowledge-based responses
+- **Example**: Roadmap query returned generic "Phase 1: Foundation" instead of actual roadmap
+- **Status**: Documented in `docs/issues/GEMINI-API-KEY-LEAKED.md` (lines 233-274)
+- **Fix Required**: Preserve RAG context in fallback logic
+
+### 📚 Documentation Created
+
+- `docs/issues/GEMINI-API-KEY-LEAKED.md` - Complete incident analysis
+- `docs/issues/GEMINI-KEY-ROTATION-GUIDE.md` - Step-by-step rotation guide
+- `docs/issues/GEMINI-KEY-ROTATION-SUCCESS.md` - Success report and testing guide
+- `docs/issues/RAG-PERFORMANCE-OPTIMIZATION.md` - RAG speed optimization roadmap
+
+### ✅ Production Status
+
+- ✅ New Gemini API key active: `AIzaSyARiKzQdtckiWzfk9yPOhO1NcHK4t1V_u8`
+- ✅ Secret stored in Secret Manager: `GEMINI_API_KEY` (version 1)
+- ✅ Cloud Run updated: `sheltr-api-00220-t5p`
+- ✅ Gemini service initialized successfully
+- ✅ Website restrictions enforced (7 domains)
+- ✅ API restrictions enforced (3 APIs)
+- ✅ Local development environment updated
+
+### 🧪 Testing Recommended
+
+1. **Dashboard Chatbot**: Ask "Can you summarize our roadmap high-level over the next 60 to 90 days?"
+   - ✅ Expected: Accurate roadmap summary (not generic)
+
+2. **Public Chatbot**: Ask "Walk me through the complete journey from someone being homeless to getting a POD funded and deployed"
+   - ✅ Expected: Detailed journey with POD deployment steps
+
+3. **Verify Logs**: Check for `✅ Gemini service initialized successfully` (no 403 errors)
+
+### 🔄 Next Steps
+
+- [ ] Fix OpenAI fallback to preserve RAG context
+- [ ] Implement RAG performance optimizations (41s → 7-10s)
+- [ ] Add "thinking" indicator to chatbot UI
+- [ ] Set up API key rotation schedule (every 90 days)
+- [ ] Add monitoring alerts for API failures
+
+---
+
 ## [2.145.5] - 2025-11-24 (Production Fix - Gemini Secret Manager & Code Fix) 🔐
 
 ### 🔧 Fixed

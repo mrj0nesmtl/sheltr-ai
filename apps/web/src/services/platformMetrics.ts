@@ -1090,6 +1090,23 @@ export const getDonationHistory = async (donorId: string): Promise<DonationRecor
       const displayName = donation.participant_name || donation.shelter_name || 'Old Brewery Mission';
       const isDirectToParticipant = !!donation.participant_id;
       
+      // Determine if this is a shelter or participant donation
+      const isShelterDonation = !donation.participant_id && donation.shelter_id;
+      
+      // Calculate impact message based on donation type
+      let impactMessage;
+      if (isShelterDonation) {
+        // Shelter donation: 95% shelter, 5% platform
+        const shelterAmount = breakdown.shelter || (amount.total * 0.95);
+        const platformAmount = breakdown.platform || (amount.total * 0.05);
+        impactMessage = `SmartFund: $${Math.round(shelterAmount * 100) / 100} to ${donation.shelter_name || 'shelter'} (95%), $${Math.round(platformAmount * 100) / 100} platform (5%)`;
+      } else {
+        // Participant donation: 80-15-5
+        impactMessage = isDirectToParticipant
+          ? `SmartFund: $${breakdown.direct || 0} direct, $${breakdown.housing || 0} housing`
+          : `SmartFund: $${breakdown.direct || 0} direct, $${breakdown.housing || 0} housing, $${breakdown.shelter || 0} to ${donation.shelter_name || 'shelter'}`;
+      }
+      
       donationRecords.push({
         id: doc.id,
         date: donationDate.toISOString().split('T')[0],
@@ -1101,9 +1118,7 @@ export const getDonationHistory = async (donorId: string): Promise<DonationRecor
         type: donation.type || donation.donation_type || 'one-time',  // Check both type and donation_type fields
         status: donation.status === 'completed' ? 'completed' : 
                donation.status === 'pending' ? 'pending' : 'failed',
-        impact: isDirectToParticipant
-          ? `SmartFund: $${breakdown.direct || 0} direct, $${breakdown.housing || 0} housing`
-          : `SmartFund: $${breakdown.direct || 0} direct, $${breakdown.housing || 0} housing, $${breakdown.shelter || 0} to ${donation.shelter_name || 'shelter'}`,
+        impact: impactMessage,
         receipt_available: donation.status === 'completed'
       });
     });

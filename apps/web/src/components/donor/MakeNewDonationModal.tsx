@@ -142,21 +142,56 @@ export function MakeNewDonationModal({ isOpen, onClose }: MakeNewDonationModalPr
         shelterName = shelter?.name || 'Unknown Shelter';
       }
       
-      // Calculate SmartProof 80-15-5 breakdown
-      const directAmount = Math.round(donationAmount * 0.80 * 100) / 100;
-      const housingAmount = Math.round(donationAmount * 0.15 * 100) / 100;
-      const shelterAmount = Math.round(donationAmount * 0.05 * 100) / 100;
+      // Calculate SmartFund breakdown based on donation type
+      let directAmount, housingAmount, shelterAmount, platformAmount;
+      let breakdown, smartfundDistribution;
+      
+      if (isShelterDonation) {
+        // 🏠 DIRECT SHELTER DONATION: 95% to shelter, 5% platform
+        shelterAmount = Math.round(donationAmount * 0.95 * 100) / 100;
+        platformAmount = Math.round(donationAmount * 0.05 * 100) / 100;
+        
+        breakdown = {
+          shelter: shelterAmount,
+          platform: platformAmount
+        };
+        
+        smartfundDistribution = {
+          shelter_operations: shelterAmount,
+          platform_fee: platformAmount,
+          shelter_id: shelterId
+        };
+        
+        console.log(`💚 Shelter donation: $${shelterAmount} to shelter (95%), $${platformAmount} platform (5%)`);
+      } else {
+        // 🧑 PARTICIPANT DONATION: 80-15-5 SmartFund
+        directAmount = Math.round(donationAmount * 0.80 * 100) / 100;
+        housingAmount = Math.round(donationAmount * 0.15 * 100) / 100;
+        platformAmount = Math.round(donationAmount * 0.05 * 100) / 100;
+        
+        breakdown = {
+          direct: directAmount,
+          housing: housingAmount,
+          shelter: platformAmount
+        };
+        
+        smartfundDistribution = {
+          direct_to_participant: directAmount,
+          housing_fund: housingAmount,
+          shelter_operations: platformAmount,
+          participant_id: participantId,
+          shelter_id: shelterId
+        };
+        
+        console.log(`💙 Participant donation: $${directAmount} direct (80%), $${housingAmount} housing (15%), $${platformAmount} operations (5%)`);
+      }
       
       // Create donation document
       const donationData = {
         // Core donation info
         amount: {
           total: donationAmount,
-          breakdown: {
-            direct: directAmount,
-            housing: housingAmount,
-            shelter: shelterAmount
-          }
+          breakdown
         },
         status: 'completed',
         created_at: serverTimestamp(),
@@ -182,13 +217,7 @@ export function MakeNewDonationModal({ isOpen, onClose }: MakeNewDonationModalPr
         }),
         
         // SmartFund distribution
-        smartfund_distribution: {
-          direct_to_participant: directAmount,
-          housing_fund: housingAmount,
-          shelter_operations: shelterAmount,
-          ...(shelterId && { shelter_id: shelterId }),
-          ...(participantId && { participant_id: participantId })
-        },
+        smartfund_distribution: smartfundDistribution,
         
         // Payment info
         payment_method: 'quick_action',

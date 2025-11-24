@@ -42,6 +42,8 @@ export function MakeNewDonationModal({ isOpen, onClose }: MakeNewDonationModalPr
   const [selectedTarget, setSelectedTarget] = useState<string>('');
   const [amount, setAmount] = useState<string>('');
   const [donationType, setDonationType] = useState<'one-time' | 'recurring'>('one-time');
+  const [frequency, setFrequency] = useState<string>('monthly');
+  const [startDate, setStartDate] = useState<string>('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [shelters, setShelters] = useState<Shelter[]>([]);
   const [participants, setParticipants] = useState<Participant[]>([]);
@@ -236,6 +238,56 @@ export function MakeNewDonationModal({ isOpen, onClose }: MakeNewDonationModalPr
       const donationRef = await addDoc(collection(db, 'demo_donations'), donationData);
       console.log('✅ Donation created with ID:', donationRef.id);
       
+      // If this is a recurring donation, also create a recurring_gifts schedule
+      if (donationType === 'recurring') {
+        try {
+          // Calculate next payment date
+          const start = startDate ? new Date(startDate) : new Date();
+          let nextPaymentDate = new Date(start);
+          
+          switch (frequency) {
+            case 'weekly':
+              nextPaymentDate.setDate(nextPaymentDate.getDate() + 7);
+              break;
+            case 'monthly':
+              nextPaymentDate.setMonth(nextPaymentDate.getMonth() + 1);
+              break;
+            case 'quarterly':
+              nextPaymentDate.setMonth(nextPaymentDate.getMonth() + 3);
+              break;
+            case 'annually':
+              nextPaymentDate.setFullYear(nextPaymentDate.getFullYear() + 1);
+              break;
+          }
+          
+          const recurringGiftData = {
+            donor_id: user.uid,
+            donor_email: user.email || '',
+            donor_name: user.displayName || user.email || 'Anonymous Donor',
+            shelter_id: shelterId || '',
+            shelter_name: shelterName || 'Unknown',
+            participant_id: participantId || null,
+            participant_name: participantName || null,
+            amount: donationAmount,
+            frequency: frequency,
+            status: 'active',
+            start_date: startDate || new Date().toISOString().split('T')[0],
+            next_payment_date: nextPaymentDate.toISOString().split('T')[0],
+            total_donated: donationAmount, // This first donation counts
+            payment_count: 1, // Already made one payment
+            created_at: serverTimestamp(),
+            updated_at: serverTimestamp()
+          };
+          
+          console.log('🔄 Creating recurring gift schedule:', recurringGiftData);
+          const recurringRef = await addDoc(collection(db, 'recurring_gifts'), recurringGiftData);
+          console.log('✅ Recurring gift schedule created with ID:', recurringRef.id);
+        } catch (error) {
+          console.error('❌ Failed to create recurring gift schedule:', error);
+          console.warn('Donation was successful but recurring schedule was not created');
+        }
+      }
+      
       // ✅ NEW: Create notifications for donor and participant
       if (participantId) {
         try {
@@ -278,6 +330,8 @@ export function MakeNewDonationModal({ isOpen, onClose }: MakeNewDonationModalPr
       setSelectedTarget('');
       setAmount('');
       setDonationType('one-time');
+      setFrequency('monthly');
+      setStartDate('');
       
       // Refresh the page to update stats
       window.location.reload();
@@ -475,10 +529,67 @@ export function MakeNewDonationModal({ isOpen, onClose }: MakeNewDonationModalPr
                   onClick={() => setDonationType('recurring')}
                   size="sm"
                 >
-                  Monthly
+                  Recurring
                 </Button>
               </div>
             </div>
+
+            {/* Recurring Gift Options (shown when recurring is selected) */}
+            {donationType === 'recurring' && (
+              <div className="space-y-4 p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
+                <div className="space-y-2">
+                  <Label>Frequency</Label>
+                  <div className="grid grid-cols-2 gap-2">
+                    <Button
+                      variant={frequency === 'weekly' ? 'default' : 'outline'}
+                      onClick={() => setFrequency('weekly')}
+                      size="sm"
+                      className="justify-start"
+                    >
+                      Weekly
+                    </Button>
+                    <Button
+                      variant={frequency === 'monthly' ? 'default' : 'outline'}
+                      onClick={() => setFrequency('monthly')}
+                      size="sm"
+                      className="justify-start"
+                    >
+                      Monthly
+                    </Button>
+                    <Button
+                      variant={frequency === 'quarterly' ? 'default' : 'outline'}
+                      onClick={() => setFrequency('quarterly')}
+                      size="sm"
+                      className="justify-start"
+                    >
+                      Quarterly
+                    </Button>
+                    <Button
+                      variant={frequency === 'annually' ? 'default' : 'outline'}
+                      onClick={() => setFrequency('annually')}
+                      size="sm"
+                      className="justify-start"
+                    >
+                      Annually
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="start-date">Start Date</Label>
+                  <Input
+                    id="start-date"
+                    type="date"
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                    min={new Date().toISOString().split('T')[0]}
+                  />
+                  <p className="text-xs text-gray-600 dark:text-gray-400">
+                    First payment will be processed on this date
+                  </p>
+                </div>
+              </div>
+            )}
 
             {/* Predefined Amounts */}
             <div className="space-y-2">

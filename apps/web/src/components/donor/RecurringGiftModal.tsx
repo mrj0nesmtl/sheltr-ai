@@ -196,8 +196,8 @@ export function RecurringGiftModal({ isOpen, onClose }: RecurringGiftModalProps)
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl">
-        <DialogHeader>
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
+        <DialogHeader className="flex-shrink-0">
           <DialogTitle className="flex items-center gap-2">
             <PiggyBank className="h-5 w-5 text-blue-500" />
             Setup Recurring Gift
@@ -207,7 +207,7 @@ export function RecurringGiftModal({ isOpen, onClose }: RecurringGiftModalProps)
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-6">
+        <div className="space-y-6 overflow-y-auto flex-1 pr-2">
           {/* Instructions */}
           <Card className="bg-blue-50 dark:bg-blue-900/20 border-blue-200">
             <CardContent className="p-4">
@@ -378,30 +378,30 @@ export function RecurringGiftModal({ isOpen, onClose }: RecurringGiftModalProps)
               </p>
             </CardContent>
           </Card>
+        </div>
 
-          {/* Action Buttons */}
-          <div className="flex gap-2">
-            <Button variant="outline" onClick={onClose} className="flex-1">
-              Cancel
-            </Button>
-            <Button 
-              onClick={handleSubmit} 
-              disabled={isProcessing || !amount || !shelter || !startDate}
-              className="flex-1"
-            >
-              {isProcessing ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Setting up...
-                </>
-              ) : (
-                <>
-                  <CreditCard className="mr-2 h-4 w-4" />
-                  Setup ${amount} {frequency}
-                </>
-              )}
-            </Button>
-          </div>
+        {/* Action Buttons - Fixed at bottom */}
+        <div className="flex gap-2 mt-4 pt-4 border-t flex-shrink-0">
+          <Button variant="outline" onClick={onClose} className="flex-1">
+            Cancel
+          </Button>
+          <Button 
+            onClick={handleSubmit} 
+            disabled={isProcessing || !amount || !(shelter || participant) || !startDate}
+            className="flex-1"
+          >
+            {isProcessing ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Setting up...
+              </>
+            ) : (
+              <>
+                <CreditCard className="mr-2 h-4 w-4" />
+                Setup ${amount} {frequency}
+              </>
+            )}
+          </Button>
         </div>
       </DialogContent>
     </Dialog>

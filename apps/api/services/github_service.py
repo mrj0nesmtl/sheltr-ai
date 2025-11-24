@@ -237,6 +237,7 @@ class GitHubService:
         Excludes:
         - README.md files (navigation/summary only, pollute knowledge base)
         - MacBook setup guides (local development only)
+        - CHANGELOG.md (too large, 13K+ lines, expensive to embed)
         """
         filename_upper = filename.upper()
         filename_lower = filename.lower()
@@ -249,6 +250,11 @@ class GitHubService:
         # Skip MacBook setup guides (local development only)
         if 'macbook-setup' in filename_lower or 'quick-macbook-sync' in filename_lower:
             logger.debug(f"Skipping setup guide: {file_path}")
+            return True
+        
+        # Skip CHANGELOG files (too large, expensive to embed, not useful for search)
+        if filename_upper == 'CHANGELOG.MD' or filename_upper == 'CHANGELOG.MARKDOWN':
+            logger.info(f"⏭️  Skipping CHANGELOG file (too large): {file_path}")
             return True
         
         return False

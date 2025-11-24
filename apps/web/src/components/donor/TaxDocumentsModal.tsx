@@ -394,17 +394,13 @@ export function TaxDocumentsModal({ isOpen, onClose }: TaxDocumentsModalProps) {
                       onClick={() => handleDownload(document.id)}
                       disabled={isGenerating === document.id}
                       size="sm"
+                      variant="outline"
+                      className="px-3"
                     >
                       {isGenerating === document.id ? (
-                        <>
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Downloading...
-                        </>
+                        <Loader2 className="h-4 w-4 animate-spin" />
                       ) : (
-                        <>
-                          <Download className="mr-2 h-4 w-4" />
-                          Download PDF
-                        </>
+                        <Download className="h-4 w-4" />
                       )}
                     </Button>
                   </div>

@@ -48,7 +48,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Participant donations remain 80% direct, 15% housing, 5% infrastructure
 - Updated donation creation logic in `MakeNewDonationModal`
 - Updated donation history display in `platformMetrics` service
+- Fixed calculation display to show correct amounts (not percentages from wrong fields)
 - Impact messages now correctly show split based on donation type
+- Added shelter donation model (95-5) to About page "How We Fund Change" section
+- Both funding models now clearly illustrated with badges and separate sections
 
 ### ✨ Added
 - New `taxReceiptService.ts` service for generating professional tax receipts

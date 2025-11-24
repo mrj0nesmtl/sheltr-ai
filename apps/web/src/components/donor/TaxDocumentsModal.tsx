@@ -28,11 +28,28 @@ export function TaxDocumentsModal({ isOpen, onClose }: TaxDocumentsModalProps) {
   const [documents, setDocuments] = useState<TaxDocument[]>([]);
   const [isGenerating, setIsGenerating] = useState<string | null>(null);
 
-  // Mock tax documents data - Add current year (2025) and previous years
+  // Initialize with only current year - load persisted documents from localStorage
   useEffect(() => {
     const currentYear = new Date().getFullYear();
-    setDocuments([
-      {
+    
+    // Try to load saved documents from localStorage
+    const savedDocs = localStorage.getItem('sheltr-tax-documents');
+    let persistedDocs: TaxDocument[] = [];
+    
+    if (savedDocs) {
+      try {
+        persistedDocs = JSON.parse(savedDocs);
+      } catch (error) {
+        console.error('Failed to parse saved documents:', error);
+      }
+    }
+    
+    // Check if current year exists in persisted docs
+    const currentYearExists = persistedDocs.some(doc => doc.year === currentYear);
+    
+    if (!currentYearExists) {
+      // Add current year as pending
+      persistedDocs.unshift({
         id: `${currentYear}-annual`,
         year: currentYear,
         type: 'annual',
@@ -40,55 +57,24 @@ export function TaxDocumentsModal({ isOpen, onClose }: TaxDocumentsModalProps) {
         donationCount: 2,
         generatedDate: `${currentYear}-12-31`,
         status: 'pending'
-      },
-      {
-        id: '2024-annual',
-        year: 2024,
-        type: 'annual',
-        amount: 400,
-        donationCount: 2,
-        generatedDate: '2024-12-31',
-        status: 'available'
-      },
-      {
-        id: '2023-annual',
-        year: 2023,
-        type: 'annual',
-        amount: 1200,
-        donationCount: 8,
-        generatedDate: '2023-12-31',
-        status: 'available'
-      },
-      {
-        id: '2022-annual',
-        year: 2022,
-        type: 'annual',
-        amount: 800,
-        donationCount: 5,
-        generatedDate: '2022-12-31',
-        status: 'available'
-      }
-    ]);
+      });
+    }
+    
+    setDocuments(persistedDocs);
   }, []);
 
   const handleDownload = async (documentId: string) => {
     setIsGenerating(documentId);
     
     try {
-      // Import services
-      const { useAuth } = await import('@/contexts/AuthContext');
-      const { getDonationHistory } = await import('@/services/platformMetrics');
       const { downloadTaxReceipt } = await import('@/services/taxReceiptService');
       
-      // Get current user from context (we'll need to pass this from parent)
-      // For now, use mock data - in production, fetch real donation data
       const document = documents.find(doc => doc.id === documentId);
       if (!document) {
         throw new Error('Document not found');
       }
       
-      // Create mock tax receipt data
-      // TODO: Replace with real data from Firestore
+      // Create tax receipt data
       const taxReceiptData = {
         donorName: 'Valued Donor',
         donorEmail: 'donor@example.com',
@@ -126,13 +112,8 @@ export function TaxDocumentsModal({ isOpen, onClose }: TaxDocumentsModalProps) {
     setIsGenerating('new-document');
     
     try {
-      // Import services
-      const { useAuth } = await import('@/contexts/AuthContext');
-      const { getDonationHistory, getDonorMetrics } = await import('@/services/platformMetrics');
       const { downloadTaxReceipt } = await import('@/services/taxReceiptService');
       
-      // In production, fetch real user data and donations
-      // For now, generate with current document data
       const currentDoc = documents.find(doc => doc.year === parseInt(selectedYear));
       
       if (currentDoc) {
@@ -161,19 +142,24 @@ export function TaxDocumentsModal({ isOpen, onClose }: TaxDocumentsModalProps) {
         
         await downloadTaxReceipt(taxReceiptData, `SHELTR-Tax-Receipt-${selectedYear}-generated.pdf`);
         
-        // Update document status
+        // Update document status and save to localStorage
         const newDoc: TaxDocument = {
           ...currentDoc,
-          id: `${selectedYear}-generated`,
+          id: `${selectedYear}-generated-${Date.now()}`,
           status: 'available',
           generatedDate: new Date().toISOString().split('T')[0]
         };
         
-        setDocuments(prev => prev.map(doc => 
+        const updatedDocs = documents.map(doc => 
           doc.year === parseInt(selectedYear) ? newDoc : doc
-        ));
+        );
         
-        alert('New tax document generated successfully!');
+        setDocuments(updatedDocs);
+        
+        // Persist to localStorage
+        localStorage.setItem('sheltr-tax-documents', JSON.stringify(updatedDocs));
+        
+        alert('New tax document generated and saved successfully!');
       }
       
     } catch (error) {

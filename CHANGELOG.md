@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.129.0] - 2025-11-24 (Tax Document Persistence & Cleanup) 📄
+
+### 🔧 Fixed
+
+#### **Tax Document Persistence**
+- Implemented localStorage persistence for generated tax documents
+- Fixed issue where newly generated 2025 documents weren't saving to "Available Documents"
+- Documents now persist across page refreshes and browser sessions
+- Each generated document gets unique ID with timestamp
+
+#### **Tax Document Cleanup**
+- Removed mock/old tax documents (2022-2024) from initial load
+- Only current year (2025) shows by default as "pending"
+- Previously generated documents load from localStorage
+- Clean slate for new users without historical mock data
+
+### 🎨 Enhanced
+- Improved tax document state management
+- Better document tracking with unique IDs
+- Cleaner initial UI without cluttered old documents
+
+---
+
 ## [2.125.0] - 2025-11-24 (Donor Dashboard Bug Fixes & PDF Generation) 🐛
 
 ### 🔧 Fixed

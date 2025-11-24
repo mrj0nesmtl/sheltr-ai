@@ -10,6 +10,7 @@ from datetime import datetime
 # SHELTR services
 from services.knowledge_service import knowledge_service
 from services.openai_service import openai_service
+from services.gemini_service import gemini_service
 from services.embeddings_service import embeddings_service
 from services.chatbot.orchestrator import ChatResponse, Intent, IntentCategory, UrgencyLevel
 
@@ -21,6 +22,7 @@ class RAGOrchestrator:
     def __init__(self):
         self.knowledge_service = knowledge_service
         self.openai_service = openai_service
+        self.gemini_service = gemini_service
         
         # RAG configuration (optimized for speed)
         self.knowledge_search_limit = 2  # Reduced from 3 to 2 for faster processing
@@ -117,7 +119,8 @@ class RAGOrchestrator:
                 user_message=user_message,
                 enhanced_context=enhanced_context,
                 agent_type=agent_type,
-                intent=intent
+                intent=intent,
+                user_role=user_role
             )
             
             # 4. Generate contextual actions
@@ -336,7 +339,8 @@ class RAGOrchestrator:
         user_message: str,
         enhanced_context: Dict[str, Any],
         agent_type: str,
-        intent: Intent
+        intent: Intent,
+        user_role: str = "public"
     ) -> str:
         """Generate AI response using RAG with knowledge context"""
         
@@ -355,16 +359,32 @@ class RAGOrchestrator:
             'knowledge_available': enhanced_context['knowledge_available']
         })
         
-        # Generate response with timeout to prevent slow OpenAI calls
+        # Use Gemini for public users (faster), OpenAI for authenticated users
+        use_gemini = user_role == "public" and self.gemini_service.is_available()
+        
+        # Generate response with timeout
         import asyncio
-        ai_response = await asyncio.wait_for(
-            self.openai_service.generate_response(
-                message=rag_prompt,
-                context=enhanced_context,
-                system_prompt=system_prompt
-            ),
-            timeout=2.5  # 2.5 second timeout for OpenAI call (leaves 0.5s buffer for 3s RAG timeout)
-        )
+        if use_gemini:
+            logger.info(f"🤖 RAG using Gemini 2.5 Flash for public user")
+            # Combine system prompt and RAG prompt for Gemini
+            full_prompt = f"{system_prompt}\n\n{rag_prompt}"
+            ai_response = await asyncio.wait_for(
+                self.gemini_service.generate_content(
+                    prompt=full_prompt,
+                    model_name="gemini-2.5-flash"
+                ),
+                timeout=2.5  # 2.5 second timeout (leaves 0.5s buffer for 3s RAG timeout)
+            )
+        else:
+            logger.info(f"🤖 RAG using OpenAI GPT-4o-mini for {user_role} user")
+            ai_response = await asyncio.wait_for(
+                self.openai_service.generate_response(
+                    message=rag_prompt,
+                    context=enhanced_context,
+                    system_prompt=system_prompt
+                ),
+                timeout=2.5  # 2.5 second timeout for OpenAI call
+            )
         
         return ai_response
     

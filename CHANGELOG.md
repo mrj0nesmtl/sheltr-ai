@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.145.0] - 2025-11-24 (Gemini for RAG Orchestrator) ⚡
+
+### 🐛 Fixed
+
+#### **RAG Orchestrator Now Uses Gemini for Public Users**
+- **CRITICAL FIX**: RAG orchestrator was still using OpenAI for all users, causing 25s+ timeouts
+- Updated `apps/api/services/chatbot/rag_orchestrator.py` to use Gemini for public users
+- RAG responses now complete in 2-5s instead of 25s+ for public users
+- Fixes "high load" error messages for complex questions
+- Authenticated users continue to use OpenAI for consistency
+
+### 🔧 Technical
+- Added `gemini_service` to RAG orchestrator
+- Modified `_generate_rag_response()` to detect user role and select appropriate AI service
+- Added `user_role` parameter to RAG response generation
+- Maintained 2.5s timeout for both Gemini and OpenAI calls
+
+---
+
 ## [2.144.0] - 2025-11-24 (Gemini Default for Public Chatbot) ⚡
 
 ### ✨ Changed

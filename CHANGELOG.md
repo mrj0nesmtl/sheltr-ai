@@ -7,6 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.131.0] - 2025-11-24 (Recurring Gifts Counter & PNG Logo) 🔄
+
+### 🔧 Fixed
+
+#### **Active Recurring Gifts Counter**
+- **CRITICAL FIX**: Active recurring gifts now display correct count on donor dashboard
+- Fixed "Active Recurring" metric showing 0 despite having active recurring gifts
+- Integrated real-time query to `recurring_gifts` collection in `getDonorMetrics()`
+- Filters for `status === 'active'` to show only active recurring donations
+- Updates both main dashboard (`/dashboard/donor`) and donations page (`/dashboard/donor/donations`)
+
+#### **Tax Receipt PNG Logo**
+- Replaced text-based logo with actual SHELTR wordmark PNG
+- Converted `apps/web/public/wordmark.png` to base64 for PDF embedding
+- Logo now renders properly in downloaded tax receipts
+- Maintains proper aspect ratio (570x59) at 60pt width
+- Fallback to text if image fails to load
+
+### 🎨 Enhanced
+- Real-time recurring gifts count updates when new recurring donations are created
+- Professional branding in tax receipts with actual logo
+- Improved visual consistency across platform and documents
+
+---
+
 ## [2.130.0] - 2025-11-24 (Real Tax Receipt Data Integration) 🎯
 
 ### 🔧 Fixed

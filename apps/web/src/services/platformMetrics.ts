@@ -996,6 +996,22 @@ export const getDonorMetrics = async (donorId: string): Promise<DonorMetrics | n
       console.error('❌ Error fetching donation data:', error);
     }
 
+    // Query recurring gifts
+    let recurringDonationsCount = 0;
+    try {
+      console.log('🔄 Querying recurring gifts for donor:', donorId);
+      const recurringQuery = query(
+        collection(db, 'recurring_gifts'),
+        where('donor_id', '==', donorId),
+        where('status', '==', 'active')
+      );
+      const recurringSnapshot = await getDocs(recurringQuery);
+      recurringDonationsCount = recurringSnapshot.size;
+      console.log(`✅ Found ${recurringDonationsCount} active recurring gift(s)`);
+    } catch (error) {
+      console.error('❌ Error fetching recurring gifts:', error);
+    }
+
     // Calculate derived metrics
     const taxDeductible = totalDonated; // All donations are tax deductible
     const impactScore = Math.min(100, Math.round((totalDonated / 1000) * 20 + (participantsHelped * 10))); // Scale based on donations and impact
@@ -1008,7 +1024,7 @@ export const getDonorMetrics = async (donorId: string): Promise<DonorMetrics | n
       impactScore,
       donationsThisYear,
       lastDonation,
-      recurringDonations: 0, // TODO: Implement recurring donations
+      recurringDonations: recurringDonationsCount,
       sheltersSupported,
       participantsHelped,
       totalTaxDocuments: donationsThisYear > 0 ? 1 : 0, // Generate tax doc if donations exist

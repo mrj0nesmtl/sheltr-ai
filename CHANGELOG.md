@@ -21,7 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Implemented professional PDF generation using jsPDF library
 - Fixed blank/corrupted PDF downloads
 - Created comprehensive `taxReceiptService.ts` with full CRA compliance:
-  - SHELTR branding and wordmark header
+  - **SHELTR wordmark logo** embedded as base64 SVG
   - Complete donor information section
   - Individual donation details with transaction hashes
   - SmartFund 80-15-5 distribution breakdown
@@ -32,10 +32,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Footer with SHELTR branding
 
 #### **Recurring Donation Badge**
-- Added elegant outline-style "Recurring Gift" badge to donation history
+- Added elegant outline-style "Recurring" badge to donation history
 - Used emerald color scheme for recurring gift identification
-- Badge appears on donation list items for visual differentiation
+- Fixed duplicate badge issue (removed redundant type badge)
+- Badge text changed from "Recurring Gift" to "Recurring" for brevity
 - Follows user preference for outline-style badges (transparent background, colored border)
+
+#### **Tax Year 2025**
+- Added current year (2025) to tax document dropdown
+- Dynamically includes current year for tax receipt generation
+- Fixed missing year selection issue
 
 ### ✨ Added
 - New `taxReceiptService.ts` service for generating professional tax receipts

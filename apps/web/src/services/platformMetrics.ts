@@ -1097,9 +1097,15 @@ export const getDonationHistory = async (donorId: string): Promise<DonationRecor
       let impactMessage;
       if (isShelterDonation) {
         // Shelter donation: 95% shelter, 5% platform
-        const shelterAmount = breakdown.shelter || (amount.total * 0.95);
-        const platformAmount = breakdown.platform || (amount.total * 0.05);
-        impactMessage = `SmartFund: $${Math.round(shelterAmount * 100) / 100} to ${donation.shelter_name || 'shelter'} (95%), $${Math.round(platformAmount * 100) / 100} platform (5%)`;
+        // Check if breakdown has the correct shelter/platform fields or fallback to calculation
+        const totalAmount = amount.total || 0;
+        const shelterAmount = breakdown.shelter && breakdown.platform 
+          ? breakdown.shelter 
+          : Math.round(totalAmount * 0.95 * 100) / 100;
+        const platformAmount = breakdown.platform 
+          ? breakdown.platform 
+          : Math.round(totalAmount * 0.05 * 100) / 100;
+        impactMessage = `SmartFund: $${shelterAmount} to ${donation.shelter_name || 'shelter'} (95%), $${platformAmount} platform (5%)`;
       } else {
         // Participant donation: 80-15-5
         impactMessage = isDirectToParticipant

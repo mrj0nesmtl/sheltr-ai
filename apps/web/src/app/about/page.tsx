@@ -320,12 +320,27 @@ export default function AboutPage() {
               <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">
                 How We Fund Change
               </h2>
-              <p className="text-xl text-gray-200">
-                Our transparent SmartFund™ donation distribution model ensures maximum impact
+              <p className="text-xl text-gray-200 mb-8">
+                Our transparent SmartFund™ donation distribution models ensure maximum impact
               </p>
+              <div className="flex flex-wrap gap-4 justify-center">
+                <Badge className="bg-blue-500/20 text-blue-200 border-blue-400/50 px-4 py-2 text-sm">
+                  Participant Donations: 80-15-5
+                </Badge>
+                <Badge className="bg-orange-500/20 text-orange-200 border-orange-400/50 px-4 py-2 text-sm">
+                  Shelter Donations: 95-5
+                </Badge>
+              </div>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-8 mb-12">
+            {/* Participant Donation Model (80-15-5) */}
+            <div className="mb-16">
+              <h3 className="text-2xl font-bold text-white mb-4 text-center">
+                <Badge className="bg-blue-500/20 text-blue-200 border-blue-400/50 px-4 py-2 mb-4">
+                  Participant Donations (SmartFund™)
+                </Badge>
+              </h3>
+              <div className="grid md:grid-cols-3 gap-8 mb-12">
               {/* 80% - Direct to Participants */}
               <div className="relative group">
                 <div className="bg-gradient-to-br from-blue-900/40 to-blue-800/20 backdrop-blur-sm rounded-xl p-8 border border-blue-400/30 hover:border-blue-400/60 transition-all duration-300 h-full">
@@ -372,7 +387,7 @@ export default function AboutPage() {
                 </div>
               </div>
 
-              {/* 5% - Shelter Operations */}
+              {/* 5% - Infrastructure */}
               <div className="relative group">
                 <div className="bg-gradient-to-br from-orange-900/40 to-orange-800/20 backdrop-blur-sm rounded-xl p-8 border border-orange-400/30 hover:border-orange-400/60 transition-all duration-300 h-full">
                   <div className="flex items-start gap-4 mb-6">
@@ -383,14 +398,71 @@ export default function AboutPage() {
                       <div className="absolute -top-1 -right-1 text-orange-300 text-lg font-semibold">%</div>
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-xl font-semibold text-white mb-2">Shelter Operations</h3>
+                      <h3 className="text-xl font-semibold text-white mb-2">Infrastructure & Platform</h3>
                       <div className="h-1 w-20 bg-gradient-to-r from-orange-400 to-transparent rounded-full"></div>
                     </div>
                   </div>
                   <p className="text-gray-300 leading-relaxed">
-                    Covers the affiliatedshelter&apos;s onboarding, participant training materials, audits, and continuous platform upgrades*.  
+                    Covers the affiliated shelter&apos;s onboarding, participant training materials, audits, and continuous platform upgrades*.  
                     Ensures 99.99% uptime through distributed/redundant cloud architecture and AI-powered systems.
                   </p>
+                </div>
+              </div>
+            </div>
+            </div>
+
+            {/* Shelter Donation Model (95-5) */}
+            <div className="mb-12">
+              <h3 className="text-2xl font-bold text-white mb-4 text-center">
+                <Badge className="bg-orange-500/20 text-orange-200 border-orange-400/50 px-4 py-2 mb-4">
+                  Shelter Donations (Direct Support)
+                </Badge>
+              </h3>
+              <div className="grid md:grid-cols-2 gap-8">
+                {/* 95% - Shelter Operations */}
+                <div className="relative group">
+                  <div className="bg-gradient-to-br from-green-900/40 to-green-800/20 backdrop-blur-sm rounded-xl p-8 border border-green-400/30 hover:border-green-400/60 transition-all duration-300 h-full">
+                    <div className="flex items-start gap-4 mb-6">
+                      <div className="relative">
+                        <div className="w-20 h-20 rounded-lg border-2 border-green-400 bg-green-500/10 flex items-center justify-center">
+                          <span className="text-4xl font-bold text-green-300">95</span>
+                        </div>
+                        <div className="absolute -top-1 -right-1 text-green-300 text-xl font-semibold">%</div>
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-xl font-semibold text-white mb-2">Shelter Operations</h3>
+                        <div className="h-1 w-20 bg-gradient-to-r from-green-400 to-transparent rounded-full"></div>
+                      </div>
+                    </div>
+                    <p className="text-gray-300 leading-relaxed">
+                      When donating directly to a shelter organization, 95% of funds go straight to the shelter&apos;s operations, 
+                      programs, and services. This ensures maximum impact for shelters managing overflow, emergency housing, 
+                      and essential participant services.
+                    </p>
+                  </div>
+                </div>
+
+                {/* 5% - Platform Fee */}
+                <div className="relative group">
+                  <div className="bg-gradient-to-br from-purple-900/40 to-purple-800/20 backdrop-blur-sm rounded-xl p-8 border border-purple-400/30 hover:border-purple-400/60 transition-all duration-300 h-full">
+                    <div className="flex items-start gap-4 mb-6">
+                      <div className="relative">
+                        <div className="w-20 h-20 rounded-lg border-2 border-purple-400 bg-purple-500/10 flex items-center justify-center">
+                          <span className="text-4xl font-bold text-purple-300">5</span>
+                        </div>
+                        <div className="absolute -top-1 -right-1 text-purple-300 text-xl font-semibold">%</div>
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-xl font-semibold text-white mb-2">SHELTR Platform</h3>
+                        <div className="h-1 w-20 bg-gradient-to-r from-purple-400 to-transparent rounded-full"></div>
+                      </div>
+                    </div>
+                    <p className="text-gray-300 leading-relaxed">
+                      A minimal 5% platform fee covers payment processing, blockchain transaction costs, 
+                      QR code generation, shelter onboarding, HMIS integration, and continuous platform development 
+                      to serve the entire homeless services ecosystem.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>

@@ -155,7 +155,16 @@ class GeminiService:
             
             # Add conversation history from context if available
             if context and 'conversation_history' in context:
-                messages.extend(context['conversation_history'])
+                for msg in context['conversation_history']:
+                    # Handle different message formats
+                    if isinstance(msg, dict):
+                        if 'role' in msg and 'content' in msg:
+                            # Standard format: {"role": "user/assistant", "content": "..."}
+                            messages.append(msg)
+                        elif 'user_message' in msg and 'bot_response' in msg:
+                            # Orchestrator format: {"user_message": "...", "bot_response": "..."}
+                            messages.append({"role": "user", "content": msg['user_message']})
+                            messages.append({"role": "assistant", "content": msg['bot_response']})
             
             # Add current message
             messages.append({

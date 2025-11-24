@@ -43,6 +43,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Dynamically includes current year for tax receipt generation
 - Fixed missing year selection issue
 
+#### **SmartFund Split Correction**
+- Fixed shelter donation split from incorrect 80-15-5 to correct **95% shelter, 5% platform**
+- Participant donations remain 80% direct, 15% housing, 5% infrastructure
+- Updated donation creation logic in `MakeNewDonationModal`
+- Updated donation history display in `platformMetrics` service
+- Impact messages now correctly show split based on donation type
+
 ### ✨ Added
 - New `taxReceiptService.ts` service for generating professional tax receipts
 - `generateTaxReceiptPDF()` function for creating CRA-compliant receipts

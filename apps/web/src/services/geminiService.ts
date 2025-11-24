@@ -15,7 +15,7 @@
  */
 
 import { initializeApp, getApps } from 'firebase/app';
-import { getAI, getGenerativeModel, GoogleAIBackend } from 'firebase/ai';
+import { getAI, getGenerativeModel, VertexAIBackend } from 'firebase/ai';
 import type { 
   GenerativeModel, 
   ChatSession,
@@ -36,7 +36,7 @@ const firebaseConfig = {
 
 /**
  * Initialize Firebase AI Logic
- * Uses Gemini Developer API backend (free tier available)
+ * Uses Vertex AI backend (works with Firebase credentials, no separate API key needed!)
  */
 class GeminiService {
   private ai: ReturnType<typeof getAI> | null = null;
@@ -58,8 +58,11 @@ class GeminiService {
         ? getApps()[0] 
         : initializeApp(firebaseConfig);
 
-      // Initialize Gemini Developer API backend
-      this.ai = getAI(firebaseApp, { backend: new GoogleAIBackend() });
+      // Initialize Vertex AI backend (uses Firebase credentials)
+      // No additional config needed - uses Firebase project settings
+      this.ai = getAI(firebaseApp, { 
+        backend: new VertexAIBackend() 
+      });
 
       // Create model instances
       // gemini-2.5-flash: Recommended for production use

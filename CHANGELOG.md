@@ -7,6 +7,59 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.137.0] - 2025-11-24 (Firebase AI Logic Integration - Phase 1) 🤖
+
+### ✨ Added
+
+#### **Firebase AI Logic Integration**
+- **NEW FEATURE**: Integrated Firebase AI Logic with Gemini 2.5 Flash models
+- Created `apps/web/src/services/geminiService.ts` for Gemini API integration
+- Supports both Gemini 2.5 Flash and Flash-Lite models
+- Multi-turn chat conversations with context preservation
+- Structured output generation (JSON parsing)
+- Document analysis (PDFs, images, video)
+- Function calling and tool use capabilities
+- Grounding with Google Search for accurate information
+
+### 📚 Documentation
+
+#### **Comprehensive Setup Guides**
+- Created `SESSION-NOV-24-FIREBASE-AI-LOGIC-SETUP.md` with full integration details
+- Created `FIREBASE-AI-LOGIC-API-KEY-SETUP.md` with API key setup instructions
+- Documented hybrid approach: Gemini for chat, OpenAI for embeddings
+- Cost analysis showing ~50% savings on chat operations
+- Architecture comparison diagrams (before/after)
+
+### ⚠️ Important Notes
+
+#### **Embeddings Limitation Discovered**
+- **CRITICAL**: Firebase AI Logic does NOT support embeddings generation yet
+- Cannot migrate knowledge base embeddings to Gemini
+- **Solution**: Hybrid approach - use Gemini for chat, keep OpenAI for embeddings
+- Still achieves ~50% cost savings on chat portion
+- Can migrate embeddings later when Firebase adds support
+
+#### **API Key Required**
+- Gemini API key needed from [Google AI Studio](https://aistudio.google.com/apikey)
+- Two backend options: GoogleAIBackend (simple) or VertexAIBackend (enterprise)
+- GoogleAIBackend recommended for quick start
+- App Check provides security for client-side API key usage
+
+### 🎯 Next Steps
+- [ ] Get Gemini API key from Google AI Studio
+- [ ] Add to environment variables
+- [ ] Test connection with production API key
+- [ ] Deploy chatbot using Gemini 2.5 Flash
+- [ ] Monitor usage and costs
+
+### 📊 Expected Impact
+- **Cost Savings**: ~50% reduction on chat operations
+- **Performance**: Lower latency for conversational AI (data locality)
+- **Scalability**: 1M token context window (vs 128K for GPT-4o-mini)
+- **Features**: Advanced capabilities (function calling, grounding, code execution)
+
+---
+
 ## [2.136.0] - 2025-11-24 (Knowledge Base Stats Cache Fix) 📊
 
 ### 🔧 Fixed

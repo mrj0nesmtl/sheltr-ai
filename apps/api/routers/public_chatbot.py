@@ -301,10 +301,10 @@ async def public_chat(message_data: PublicChatMessage, request: Request):
                     user_role=actual_user_role,
                     conversation_context=enhanced_context
                 ),
-                timeout=8.0  # Master timeout: 8 seconds maximum for entire operation
+                timeout=15.0  # Master timeout: 15 seconds for RAG queries (increased from 8s for Gemini)
             )
         except asyncio.TimeoutError:
-            logger.error(f"⏱️ Master timeout exceeded (>8s) for public chat")
+            logger.error(f"⏱️ Master timeout exceeded (>15s) for public chat")
             # Return simple fallback response
             from services.chatbot.orchestrator import ChatResponse
             response = ChatResponse(

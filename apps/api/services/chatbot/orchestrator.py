@@ -516,8 +516,8 @@ class ChatbotOrchestrator:
                 from services.chatbot.rag_orchestrator import rag_orchestrator
                 import asyncio
                 
-                # Add 3-second timeout for RAG response to prevent slow responses
-                # Reduced from 5s to 3s for much faster failover
+                # Add 10-second timeout for RAG response (increased for Gemini integration)
+                # Allows time for: embeddings search (2-3s) + Gemini generation (2-3s) + overhead (2-3s)
                 rag_response = await asyncio.wait_for(
                     rag_orchestrator.generate_knowledge_enhanced_response(
                         user_message=current_message,
@@ -526,7 +526,7 @@ class ChatbotOrchestrator:
                         agent_type=agent,
                         intent=intent
                     ),
-                    timeout=3.0  # 3 second timeout (aggressively reduced)
+                    timeout=10.0  # 10 second timeout for full RAG pipeline
                 )
                 
                 logger.info(f"✅ RAG response generated in time with {rag_response.metadata.get('sources_used', 0)} knowledge sources")
@@ -535,7 +535,7 @@ class ChatbotOrchestrator:
             except (asyncio.TimeoutError, Exception) as error:
                 # Handle both timeout and other RAG failures
                 if isinstance(error, asyncio.TimeoutError):
-                    logger.warning(f"⏱️ RAG response timeout (>3s), falling back to standard AI")
+                    logger.warning(f"⏱️ RAG response timeout (>10s), falling back to standard AI")
                 else:
                     logger.warning(f"❌ RAG response failed, falling back to standard AI: {str(error)}")
                 

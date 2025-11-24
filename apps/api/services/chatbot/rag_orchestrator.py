@@ -374,7 +374,7 @@ class RAGOrchestrator:
                     system_prompt=system_prompt,
                     model="gemini-2.5-flash"
                 ),
-                timeout=2.5  # 2.5 second timeout (leaves 0.5s buffer for 3s RAG timeout)
+                timeout=5.0  # 5 second timeout for Gemini (increased from 2.5s)
             )
         else:
             logger.info(f"🤖 RAG using OpenAI GPT-4o-mini for {user_role} user")
@@ -384,7 +384,7 @@ class RAGOrchestrator:
                     context=enhanced_context,
                     system_prompt=system_prompt
                 ),
-                timeout=2.5  # 2.5 second timeout for OpenAI call
+                timeout=5.0  # 5 second timeout for OpenAI call (increased from 2.5s)
             )
         
         return ai_response

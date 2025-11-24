@@ -7,6 +7,77 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.138.0] - 2025-11-24 (Gemini Chatbot Dashboard Integration) 🤖
+
+### ✨ Added
+
+#### **Gemini Models in Dashboard**
+- **NEW FEATURE**: Added Gemini 2.5 Flash models to chatbot dashboard
+- Models available in model selection dropdown:
+  - `Gemini 2.5 Flash ⚡` - Full-featured, fast model
+  - `Gemini 2.5 Flash-Lite 🚀` - Lightweight, ultra-fast model
+- Integrated alongside existing OpenAI and Anthropic models
+
+#### **Backend Gemini Service**
+- Created `apps/api/services/gemini_service.py` with full chat completion support
+- Features:
+  - Chat completion with conversation history
+  - System prompt support
+  - Safety settings (moderate blocking)
+  - Fallback error handling to OpenAI
+  - Health check endpoint
+  - Model selection (Flash vs Flash-Lite)
+
+#### **Dashboard Service Integration**
+- Updated `apps/api/services/chatbot_dashboard_service.py` to route to Gemini
+- Provider detection: Automatically routes to Gemini for `gemini-*` models
+- Response generation with fallback logic (Gemini → OpenAI)
+- Compatible with all 5 dashboard agents:
+  - General Assistant
+  - SHELTR Support
+  - Technical Expert
+  - Business Analyst
+  - Creative Writer
+
+### 📚 Documentation
+
+#### **Comprehensive Integration Guide**
+- Created `docs/features/chatbot/GEMINI-CHATBOT-INTEGRATION.md`
+- Architecture diagrams showing three-tier chatbot system
+- Cost comparison: Gemini 50% cheaper than GPT-4o-mini
+- Performance metrics and benchmarks
+- Configuration guide with environment variables
+- Testing plan and success criteria
+
+### 💰 Cost Savings
+
+#### **Per 1M Tokens**
+- **Gemini 2.5 Flash**: $0.075 (vs GPT-4o-mini $0.15) = 50% savings
+- **Monthly Estimate** (10,000 messages): $3.75 vs $7.50 = $3.75/month saved
+
+### 🎯 Current Status
+
+#### **✅ Working**
+- Dashboard model selection
+- Backend Gemini service
+- Provider routing
+- Fallback logic
+- All 5 agents compatible
+
+#### **🔄 Next Steps**
+- Test public chatbot with authenticated user recognition
+- Verify FAQ and RAG integration
+- Deploy to production
+- Monitor usage and costs
+
+### 📊 Impact
+- **Cost Efficiency**: 50% reduction on chat operations
+- **Performance**: Same speed as GPT-4o-mini (1-2s)
+- **Context Window**: 1M tokens (8x larger than GPT-4o-mini)
+- **Flexibility**: Users can choose between 6 models (OpenAI, Anthropic, Gemini)
+
+---
+
 ## [2.137.0] - 2025-11-24 (Firebase AI Logic Integration - Phase 1) 🤖
 
 ### ✨ Added

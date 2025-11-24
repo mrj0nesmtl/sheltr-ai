@@ -71,7 +71,7 @@ export async function generateTaxReceiptPDF(data: TaxReceiptData): Promise<Blob>
   
   doc.setFontSize(10);
   doc.setFont('helvetica', 'normal');
-  yPosition = addText('Hacking Homelessness with Technology', pageWidth / 2, yPosition, { align: 'center' });
+  yPosition = addText('Better to Solve', pageWidth / 2, yPosition, { align: 'center' });
   
   yPosition += 15;
   doc.setFontSize(18);

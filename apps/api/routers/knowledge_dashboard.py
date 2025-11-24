@@ -374,6 +374,12 @@ async def sync_github_files(
         
         logger.info(f"GitHub sync completed: {results['successful']} successful, {results['failed']} failed")
         
+        # Invalidate cache to reflect updated stats
+        from services.cache_service import cache
+        cache.invalidate('knowledge_documents_all')
+        cache.invalidate('knowledge_stats')
+        logger.info("📊 Cache invalidated after GitHub sync")
+        
         return {
             "success": True,
             "results": results,

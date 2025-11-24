@@ -7,6 +7,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Receipt, Download, FileText, Calendar, DollarSign, Loader2, CheckCircle } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import { getDonationHistory, getDonorMetrics } from '@/services/platformMetrics';
 
 interface TaxDocumentsModalProps {
   isOpen: boolean;
@@ -24,44 +26,103 @@ interface TaxDocument {
 }
 
 export function TaxDocumentsModal({ isOpen, onClose }: TaxDocumentsModalProps) {
+  const { user } = useAuth();
   const [selectedYear, setSelectedYear] = useState<string>(new Date().getFullYear().toString());
   const [documents, setDocuments] = useState<TaxDocument[]>([]);
   const [isGenerating, setIsGenerating] = useState<string | null>(null);
+  const [realDonationData, setRealDonationData] = useState<any>(null);
 
-  // Initialize with only current year - load persisted documents from localStorage
+  // Fetch real donation data when modal opens
   useEffect(() => {
-    const currentYear = new Date().getFullYear();
-    
-    // Try to load saved documents from localStorage
-    const savedDocs = localStorage.getItem('sheltr-tax-documents');
-    let persistedDocs: TaxDocument[] = [];
-    
-    if (savedDocs) {
+    const fetchRealData = async () => {
+      if (!user?.uid || !isOpen) return;
+      
       try {
-        persistedDocs = JSON.parse(savedDocs);
+        console.log('📊 Fetching real donation data for tax receipt...');
+        
+        // Get donor metrics and donation history
+        const [metrics, history] = await Promise.all([
+          getDonorMetrics(user.uid),
+          getDonationHistory(user.uid)
+        ]);
+        
+        console.log('✅ Donor metrics:', metrics);
+        console.log('✅ Donation history:', history);
+        
+        setRealDonationData({ metrics, history });
+        
+        // Calculate year-by-year totals
+        const yearlyData: { [year: number]: { amount: number; count: number } } = {};
+        
+        history.forEach(donation => {
+          if (donation.status !== 'completed') return;
+          
+          const donationDate = new Date(donation.date);
+          const year = donationDate.getFullYear();
+          
+          if (!yearlyData[year]) {
+            yearlyData[year] = { amount: 0, count: 0 };
+          }
+          
+          yearlyData[year].amount += donation.amount;
+          yearlyData[year].count += 1;
+        });
+        
+        // Create documents for each year
+        const currentYear = new Date().getFullYear();
+        const savedDocs = localStorage.getItem('sheltr-tax-documents');
+        let persistedDocs: TaxDocument[] = [];
+        
+        if (savedDocs) {
+          try {
+            persistedDocs = JSON.parse(savedDocs);
+          } catch (error) {
+            console.error('Failed to parse saved documents:', error);
+          }
+        }
+        
+        // Update with real data
+        const years = Object.keys(yearlyData).map(Number).sort((a, b) => b - a);
+        
+        if (!years.includes(currentYear) && yearlyData[currentYear]) {
+          years.unshift(currentYear);
+        }
+        
+        const updatedDocs = years.map(year => {
+          const existing = persistedDocs.find(doc => doc.year === year);
+          return {
+            id: existing?.id || `${year}-annual`,
+            year,
+            type: 'annual' as const,
+            amount: Math.round(yearlyData[year]?.amount || 0),
+            donationCount: yearlyData[year]?.count || 0,
+            generatedDate: existing?.generatedDate || `${year}-12-31`,
+            status: (existing?.status || 'pending') as 'available' | 'generating' | 'pending'
+          };
+        });
+        
+        // Add current year if no donations yet
+        if (!updatedDocs.some(doc => doc.year === currentYear)) {
+          updatedDocs.unshift({
+            id: `${currentYear}-annual`,
+            year: currentYear,
+            type: 'annual',
+            amount: 0,
+            donationCount: 0,
+            generatedDate: `${currentYear}-12-31`,
+            status: 'pending'
+          });
+        }
+        
+        setDocuments(updatedDocs);
+        
       } catch (error) {
-        console.error('Failed to parse saved documents:', error);
+        console.error('❌ Error fetching real donation data:', error);
       }
-    }
+    };
     
-    // Check if current year exists in persisted docs
-    const currentYearExists = persistedDocs.some(doc => doc.year === currentYear);
-    
-    if (!currentYearExists) {
-      // Add current year as pending
-      persistedDocs.unshift({
-        id: `${currentYear}-annual`,
-        year: currentYear,
-        type: 'annual',
-        amount: 600,
-        donationCount: 2,
-        generatedDate: `${currentYear}-12-31`,
-        status: 'pending'
-      });
-    }
-    
-    setDocuments(persistedDocs);
-  }, []);
+    fetchRealData();
+  }, [user, isOpen]);
 
   const handleDownload = async (documentId: string) => {
     setIsGenerating(documentId);
@@ -74,30 +135,40 @@ export function TaxDocumentsModal({ isOpen, onClose }: TaxDocumentsModalProps) {
         throw new Error('Document not found');
       }
       
-      // Create tax receipt data
+      if (!user || !realDonationData) {
+        throw new Error('User data not available');
+      }
+      
+      // Filter donations for this year
+      const yearDonations = realDonationData.history.filter((d: any) => {
+        const donationYear = new Date(d.date).getFullYear();
+        return donationYear === document.year && d.status === 'completed';
+      });
+      
+      // Create tax receipt data with REAL data
       const taxReceiptData = {
-        donorName: 'Valued Donor',
-        donorEmail: 'donor@example.com',
+        donorName: user.displayName || user.email || 'Valued Donor',
+        donorEmail: user.email || 'donor@example.com',
         year: document.year,
         totalAmount: document.amount,
-        donations: Array.from({ length: document.donationCount }, (_, i) => ({
-          id: `donation-${i + 1}`,
-          date: `${document.year}-${String(Math.floor(Math.random() * 12) + 1).padStart(2, '0')}-${String(Math.floor(Math.random() * 28) + 1).padStart(2, '0')}`,
-          amount: document.amount / document.donationCount,
-          shelter: 'Old Brewery Mission',
-          transactionHash: `0x${Math.random().toString(16).substring(2, 66)}`,
-          ipAddress: '192.168.1.1',
-          participantName: 'Privacy Protected',
+        donations: yearDonations.map((donation: any) => ({
+          id: donation.id,
+          date: donation.date,
+          amount: donation.amount,
+          shelter: donation.shelter || 'SHELTR',
+          transactionHash: donation.transaction_hash || `0x${Math.random().toString(16).substring(2, 66)}`,
+          ipAddress: donation.ip_address || '192.168.1.1',
+          participantName: donation.participant_name || 'Privacy Protected',
           smartFundDistribution: {
-            direct: (document.amount / document.donationCount) * 0.80,
-            housing: (document.amount / document.donationCount) * 0.15,
-            infrastructure: (document.amount / document.donationCount) * 0.05
+            direct: donation.amount * 0.80,
+            housing: donation.amount * 0.15,
+            infrastructure: donation.amount * 0.05
           },
-          stakingAccount: `0x${Math.random().toString(16).substring(2, 42)}`
+          stakingAccount: donation.staking_account || `0x${Math.random().toString(16).substring(2, 42)}`
         }))
       };
       
-      await downloadTaxReceipt(taxReceiptData, `SHELTR-Tax-Receipt-${documentId}.pdf`);
+      await downloadTaxReceipt(taxReceiptData, `SHELTR-Tax-Receipt-${document.year}.pdf`);
       alert('Tax document downloaded successfully!');
       
     } catch (error) {
@@ -116,51 +187,59 @@ export function TaxDocumentsModal({ isOpen, onClose }: TaxDocumentsModalProps) {
       
       const currentDoc = documents.find(doc => doc.year === parseInt(selectedYear));
       
-      if (currentDoc) {
-        // Create tax receipt data
-        const taxReceiptData = {
-          donorName: 'Valued Donor',
-          donorEmail: 'donor@example.com',
-          year: parseInt(selectedYear),
-          totalAmount: currentDoc.amount,
-          donations: Array.from({ length: currentDoc.donationCount }, (_, i) => ({
-            id: `donation-${i + 1}`,
-            date: `${selectedYear}-${String(Math.floor(Math.random() * 12) + 1).padStart(2, '0')}-${String(Math.floor(Math.random() * 28) + 1).padStart(2, '0')}`,
-            amount: currentDoc.amount / currentDoc.donationCount,
-            shelter: 'Old Brewery Mission',
-            transactionHash: `0x${Math.random().toString(16).substring(2, 66)}`,
-            ipAddress: '192.168.1.1',
-            participantName: 'Privacy Protected',
-            smartFundDistribution: {
-              direct: (currentDoc.amount / currentDoc.donationCount) * 0.80,
-              housing: (currentDoc.amount / currentDoc.donationCount) * 0.15,
-              infrastructure: (currentDoc.amount / currentDoc.donationCount) * 0.05
-            },
-            stakingAccount: `0x${Math.random().toString(16).substring(2, 42)}`
-          }))
-        };
-        
-        await downloadTaxReceipt(taxReceiptData, `SHELTR-Tax-Receipt-${selectedYear}-generated.pdf`);
-        
-        // Update document status and save to localStorage
-        const newDoc: TaxDocument = {
-          ...currentDoc,
-          id: `${selectedYear}-generated-${Date.now()}`,
-          status: 'available',
-          generatedDate: new Date().toISOString().split('T')[0]
-        };
-        
-        const updatedDocs = documents.map(doc => 
-          doc.year === parseInt(selectedYear) ? newDoc : doc
-        );
-        
-        setDocuments(updatedDocs);
-        
-        // Persist to localStorage
-        localStorage.setItem('sheltr-tax-documents', JSON.stringify(updatedDocs));
-        
-        alert('New tax document generated and saved successfully!');
+      if (!currentDoc || !user || !realDonationData) {
+        throw new Error('Required data not available');
       }
+      
+      // Filter donations for this year
+      const yearDonations = realDonationData.history.filter((d: any) => {
+        const donationYear = new Date(d.date).getFullYear();
+        return donationYear === parseInt(selectedYear) && d.status === 'completed';
+      });
+      
+      // Create tax receipt data with REAL data
+      const taxReceiptData = {
+        donorName: user.displayName || user.email || 'Valued Donor',
+        donorEmail: user.email || 'donor@example.com',
+        year: parseInt(selectedYear),
+        totalAmount: currentDoc.amount,
+        donations: yearDonations.map((donation: any) => ({
+          id: donation.id,
+          date: donation.date,
+          amount: donation.amount,
+          shelter: donation.shelter || 'SHELTR',
+          transactionHash: donation.transaction_hash || `0x${Math.random().toString(16).substring(2, 66)}`,
+          ipAddress: donation.ip_address || '192.168.1.1',
+          participantName: donation.participant_name || 'Privacy Protected',
+          smartFundDistribution: {
+            direct: donation.amount * 0.80,
+            housing: donation.amount * 0.15,
+            infrastructure: donation.amount * 0.05
+          },
+          stakingAccount: donation.staking_account || `0x${Math.random().toString(16).substring(2, 42)}`
+        }))
+      };
+      
+      await downloadTaxReceipt(taxReceiptData, `SHELTR-Tax-Receipt-${selectedYear}.pdf`);
+      
+      // Update document status and save to localStorage
+      const newDoc: TaxDocument = {
+        ...currentDoc,
+        id: `${selectedYear}-generated-${Date.now()}`,
+        status: 'available',
+        generatedDate: new Date().toISOString().split('T')[0]
+      };
+      
+      const updatedDocs = documents.map(doc => 
+        doc.year === parseInt(selectedYear) ? newDoc : doc
+      );
+      
+      setDocuments(updatedDocs);
+      
+      // Persist to localStorage
+      localStorage.setItem('sheltr-tax-documents', JSON.stringify(updatedDocs));
+      
+      alert('New tax document generated and saved successfully!');
       
     } catch (error) {
       console.error('Generation failed:', error);

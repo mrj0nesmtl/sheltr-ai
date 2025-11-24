@@ -53,21 +53,12 @@ export async function generateTaxReceiptPDF(data: TaxReceiptData): Promise<Blob>
   // ==========================================
   // HEADER - SHELTR Logo and Title
   // ==========================================
-  try {
-    // Add SHELTR logo (centered, scaled appropriately)
-    const logoWidth = 80;
-    const logoHeight = 18.75; // Maintain aspect ratio (564x132 = ~3:1 ratio)
-    const logoX = (pageWidth - logoWidth) / 2;
-    doc.addImage(SHELTR_LOGO_BASE64, 'SVG', logoX, yPosition, logoWidth, logoHeight);
-    yPosition += logoHeight + 5;
-  } catch (error) {
-    // Fallback to text if logo fails to load
-    console.warn('Logo failed to load, using text fallback:', error);
-    doc.setFontSize(24);
-    doc.setFont('helvetica', 'bold');
-    yPosition = addText('SHELTR', pageWidth / 2, yPosition, { align: 'center' });
-    yPosition += 5;
-  }
+  // Note: jsPDF doesn't support SVG images directly
+  // Using text-based logo for now (can be replaced with PNG version later)
+  doc.setFontSize(32);
+  doc.setFont('helvetica', 'bold');
+  yPosition = addText('SHELTR', pageWidth / 2, yPosition, { align: 'center' });
+  yPosition += 8;
   
   doc.setFontSize(10);
   doc.setFont('helvetica', 'normal');

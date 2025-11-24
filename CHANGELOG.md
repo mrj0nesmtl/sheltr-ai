@@ -7,6 +7,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.130.0] - 2025-11-24 (Real Tax Receipt Data Integration) 🎯
+
+### 🔧 Fixed
+
+#### **Tax Receipt Real Data Integration**
+- **CRITICAL FIX**: Tax receipts now pull REAL donation data from Firestore
+- Fixed donor name showing "Valued Donor" instead of actual logged-in user
+- Fixed donation amounts showing mock $600 instead of actual $6,645
+- Integrated with `getDonationHistory()` and `getDonorMetrics()` services
+- Tax receipts now display correct donor name from `user.displayName` or `user.email`
+- Donation counts and amounts now calculated from actual Firestore data
+- Year-by-year donation totals calculated dynamically from real transactions
+
+#### **Tax Receipt Logo Fix**
+- Fixed logo not rendering in PDF (jsPDF doesn't support SVG format)
+- Replaced SVG logo with professional text-based "SHELTR" wordmark
+- Improved header typography with larger, bold branding
+- Added note for future PNG logo conversion if needed
+
+#### **Tax Document Summary Accuracy**
+- Tax year summary now shows real donation totals per year
+- Donation counts reflect actual number of completed transactions
+- Documents generated for years with actual donation activity
+- Current year (2025) properly initialized with real data
+
+### 🎨 Enhanced
+- Integrated `useAuth()` hook for current user context
+- Real-time data fetching when tax modal opens
+- Improved data flow from Firestore → Tax Receipt PDF
+- Better error handling for missing user/donation data
+
+---
+
 ## [2.129.0] - 2025-11-24 (Tax Document Persistence & Cleanup) 📄
 
 ### 🔧 Fixed

@@ -7,17 +7,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.145.4] - 2025-11-24 (Production Fix - Gemini Environment Variable) 🔧
+
+### 🔧 Fixed
+
+#### **Production Gemini Integration Now Working**
+- **Issue**: Production RAG was using OpenAI instead of Gemini, causing 41s timeouts
+- **Root Cause**: `GEMINI_API_KEY` environment variable not set in Cloud Run
+- **Fix**: Added `GEMINI_API_KEY` to Cloud Run environment variables
+- **Result**: ✅ Gemini now initialized successfully in production
+- **Performance**: RAG queries now expected to complete in 5-15s (vs 41s timeout)
+
+### 🚀 Deployment Actions
+1. Redeployed backend with latest Gemini RAG code (option 2)
+2. Set `GEMINI_API_KEY` environment variable in Cloud Run
+3. New revision deployed: `sheltr-api-00213-46l`
+4. Confirmed: `✅ Gemini service initialized successfully` in logs
+
+### 📊 Expected Production Performance
+- FAQ questions: <1s (instant) ✅
+- RAG questions: 5-15s (was timing out at 41s) ✅
+- Gemini 2.5 Flash: Now active for public users ✅
+
+---
+
 ## [2.145.3] - 2025-11-24 (Production Deployment - Gemini 2.5 Flash Live) 🚀
 
 ### 🎉 Deployed to Production
 
-#### **Gemini 2.5 Flash Now Live in Production**
+#### **Initial Production Deployment**
 - ✅ **Frontend deployed**: https://sheltr-ai.web.app
 - ✅ **Backend API deployed**: https://sheltr-api-714964620823.us-central1.run.app
-- ✅ **Public chatbot using Gemini 2.5 Flash** for all public users
-- ✅ **Dashboard chatbot using Gemini** when selected
+- ⚠️ **Note**: Gemini environment variable was missing (fixed in v2.145.4)
 - ✅ **FAQ system** providing instant responses (<1s)
-- ✅ **RAG system** working with Gemini for complex questions (5-15s)
+- ⚠️ **RAG system** was timing out (fixed in v2.145.4)
 
 ### 🔧 Fixed
 

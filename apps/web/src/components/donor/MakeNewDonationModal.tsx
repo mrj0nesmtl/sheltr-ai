@@ -194,6 +194,7 @@ export function MakeNewDonationModal({ isOpen, onClose }: MakeNewDonationModalPr
         payment_method: 'quick_action',
         payment_provider: 'internal',
         donation_type: donationType,
+        type: donationType,  // Add 'type' field for consistency with donation history queries
         
         // Metadata
         source: 'donor_dashboard_quick_action',

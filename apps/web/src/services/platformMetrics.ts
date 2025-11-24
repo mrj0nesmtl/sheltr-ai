@@ -1098,7 +1098,7 @@ export const getDonationHistory = async (donorId: string): Promise<DonationRecor
         shelter: displayName,  // Show participant name if available
         shelter_id: donation.shelter_id || donation.participant_id,
         participantName: donation.participant_name,  // Add participant name field
-        type: 'one-time',
+        type: donation.type || donation.donation_type || 'one-time',  // Check both type and donation_type fields
         status: donation.status === 'completed' ? 'completed' : 
                donation.status === 'pending' ? 'pending' : 'failed',
         impact: isDirectToParticipant

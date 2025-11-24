@@ -28,9 +28,19 @@ export function TaxDocumentsModal({ isOpen, onClose }: TaxDocumentsModalProps) {
   const [documents, setDocuments] = useState<TaxDocument[]>([]);
   const [isGenerating, setIsGenerating] = useState<string | null>(null);
 
-  // Mock tax documents data
+  // Mock tax documents data - Add current year (2025) and previous years
   useEffect(() => {
+    const currentYear = new Date().getFullYear();
     setDocuments([
+      {
+        id: `${currentYear}-annual`,
+        year: currentYear,
+        type: 'annual',
+        amount: 600,
+        donationCount: 2,
+        generatedDate: `${currentYear}-12-31`,
+        status: 'pending'
+      },
       {
         id: '2024-annual',
         year: 2024,
@@ -38,7 +48,7 @@ export function TaxDocumentsModal({ isOpen, onClose }: TaxDocumentsModalProps) {
         amount: 400,
         donationCount: 2,
         generatedDate: '2024-12-31',
-        status: 'pending'
+        status: 'available'
       },
       {
         id: '2023-annual',

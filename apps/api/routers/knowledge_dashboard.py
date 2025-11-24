@@ -374,15 +374,17 @@ async def sync_github_files(
         
         logger.info(f"GitHub sync completed: {results['successful']} successful, {results['failed']} failed")
         
-        # Invalidate cache to reflect updated stats
-        from services.cache_service import cache
-        cache.invalidate('knowledge_documents_all')
-        cache.invalidate('knowledge_stats')
-        logger.info("📊 Cache invalidated after GitHub sync")
+        # Force refresh stats to reflect updated embeddings
+        # This will temporarily fetch fresh documents from Firestore, then re-cache them
+        from services.knowledge_dashboard_service import KnowledgeDashboardService
+        kb_service = KnowledgeDashboardService()
+        updated_stats = await kb_service.get_knowledge_stats(force_refresh=True)
+        logger.info(f"📊 Stats refreshed after sync: {updated_stats.get('pending_embeddings', 0)} pending embeddings")
         
         return {
             "success": True,
             "results": results,
+            "updated_stats": updated_stats,
             "timestamp": datetime.utcnow().isoformat()
         }
         

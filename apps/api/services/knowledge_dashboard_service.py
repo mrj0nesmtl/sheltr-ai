@@ -232,7 +232,7 @@ class KnowledgeDashboardService:
         
         return tags[:5]  # Limit to 5 tags
     
-    async def get_knowledge_stats(self) -> Dict[str, Any]:
+    async def get_knowledge_stats(self, force_refresh: bool = False) -> Dict[str, Any]:
         """
         Get knowledge base statistics
         
@@ -240,19 +240,29 @@ class KnowledgeDashboardService:
         - Stats calculated from cached documents when available
         - Reduces redundant Firestore queries
         - Cache TTL: 1 hour (same as documents)
+        
+        Args:
+            force_refresh: If True, bypasses document cache to get fresh stats (used after sync)
         """
         try:
-            # ✅ TRY CACHE FIRST
+            # ✅ TRY CACHE FIRST (unless force refresh)
             cache_key = 'knowledge_stats'
-            cached_stats = cache.get(cache_key)
+            if not force_refresh:
+                cached_stats = cache.get(cache_key)
+                
+                if cached_stats is not None:
+                    logger.info("📊 Returning stats from cache (NO calculation needed!)")
+                    return cached_stats
             
-            if cached_stats is not None:
-                logger.info("📊 Returning stats from cache (NO calculation needed!)")
-                return cached_stats
-            
-            # Cache miss - calculate from documents (which may also be cached)
-            logger.info("🔍 Stats cache MISS - Calculating from documents...")
-            documents = await self.get_knowledge_documents()
+            # Cache miss or force refresh - calculate from documents
+            if force_refresh:
+                logger.info("🔄 Force refresh - Fetching fresh documents from Firestore...")
+                # Temporarily invalidate documents cache to get fresh data
+                cache.invalidate('knowledge_documents_all')
+                documents = await self.get_knowledge_documents()
+            else:
+                logger.info("🔍 Stats cache MISS - Calculating from documents...")
+                documents = await self.get_knowledge_documents()
             
             total_documents = len(documents)
             total_size = sum(doc.get('file_size', 0) for doc in documents)

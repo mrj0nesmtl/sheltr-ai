@@ -367,8 +367,10 @@ class RAGOrchestrator:
             'knowledge_available': enhanced_context['knowledge_available']
         })
         
+        # HOTFIX: Temporarily disable Gemini due to "503 Illegal metadata" errors
         # Use Gemini for public users (faster), OpenAI for authenticated users
-        use_gemini = user_role == "public" and self.gemini_service.is_available()
+        use_gemini = False  # Disabled until Gemini API key issue is resolved
+        # use_gemini = user_role == "public" and self.gemini_service.is_available()
         
         # Generate response with timeout
         import asyncio

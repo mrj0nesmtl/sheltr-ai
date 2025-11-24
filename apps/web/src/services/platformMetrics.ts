@@ -1006,6 +1006,21 @@ export const getDonorMetrics = async (donorId: string): Promise<DonorMetrics | n
       );
       const recurringSnapshot = await getDocs(recurringQuery);
       
+      console.log(`📊 Total recurring_gifts documents found: ${recurringSnapshot.size}`);
+      
+      // Log each gift for debugging
+      recurringSnapshot.docs.forEach((doc, index) => {
+        const data = doc.data();
+        console.log(`  Gift ${index + 1}:`, {
+          id: doc.id,
+          amount: data.amount,
+          shelter: data.shelter_name,
+          frequency: data.frequency,
+          status: data.status,
+          created: data.created_at
+        });
+      });
+      
       // Filter for active status in JavaScript (to avoid index requirements)
       recurringDonationsCount = recurringSnapshot.docs.filter(doc => {
         const data = doc.data();

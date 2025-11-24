@@ -7,6 +7,54 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.144.0] - 2025-11-24 (Gemini Default for Public Chatbot) ⚡
+
+### ✨ Changed
+
+#### **Public Chatbot Default Model**
+- **BREAKING**: Switched from OpenAI GPT-4o-mini to Gemini 2.5 Flash for public/anonymous users
+- Gemini 2.5 Flash provides significantly faster FAQ responses (<1s)
+- **Cost savings**: ~70% reduction in AI costs for public chatbot queries
+- Authenticated users continue to use OpenAI GPT-4o-mini for consistency
+- Automatic fallback to OpenAI if Gemini is unavailable
+
+### ✨ Added
+
+#### **Automated Chatbot Performance Testing**
+- Created `test-chatbot-performance.js`: Node.js script for comprehensive backend testing
+  - Tests 20 FAQ questions (expected <1s response time)
+  - Tests 8 RAG questions (expected 2-8s response time)
+  - Real-time backend log monitoring during tests
+  - Detailed performance reports with cost estimates
+  - FAQ hit rate analysis and optimization recommendations
+- Created `test-chatbot-browser.js`: Browser console script for frontend testing
+  - Runs directly in browser developer console
+  - Color-coded console output for easy analysis
+  - Tests FAQ vs RAG performance
+  - Saves results to `window.chatbotTestResults` for inspection
+
+#### **Public Chatbot Test Guide**
+- Created `docs/testing/PUBLIC-CHATBOT-TEST-GUIDE.md`
+  - Step-by-step testing instructions for anonymous users
+  - Authenticated user testing with role badge verification
+  - Role detection testing scenarios (participant, donor, shelter)
+  - FAQ vs RAG performance benchmarks
+  - Success criteria and common troubleshooting
+  - Quick 5-minute test plan for rapid validation
+
+### 🔧 Technical
+
+#### **Orchestrator Updates**
+- Modified `apps/api/services/chatbot/orchestrator.py` to use Gemini for public users
+- Added `gemini_service` import and integration
+- Added `DEFAULT_PUBLIC_MODEL` environment variable support (defaults to `gemini-2.5-flash`)
+- Enhanced orchestrator to detect user role and select appropriate AI service:
+  - Public users → Gemini 2.5 Flash (fast, cheap)
+  - Authenticated users → OpenAI GPT-4o-mini (consistent, reliable)
+- Added logging to track which AI service is used for each request
+
+---
+
 ## [2.138.0] - 2025-11-24 (Gemini Chatbot Dashboard Integration) 🤖
 
 ### ✨ Added

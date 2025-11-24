@@ -1,7 +1,7 @@
 """
 SHELTR-AI Chatbot Orchestrator
 Master agent that routes user inquiries to specialized AI agents
-Enhanced with OpenAI intelligence, FAQ matching, and user role detection
+Enhanced with Gemini (default) and OpenAI intelligence, FAQ matching, and user role detection
 """
 
 from typing import Dict, Any, List, Optional
@@ -10,14 +10,19 @@ import logging
 import json
 import re
 from enum import Enum
+import os
 
-# Import OpenAI service and prompts
+# Import AI services and prompts
 from services.openai_service import openai_service
+from services.gemini_service import gemini_service
 from services.chatbot.prompts import get_enhanced_prompt, SYSTEM_PROMPTS
 from services.faq_service import faq_service
 from services.chatbot.user_classifier import user_classifier
 
 logger = logging.getLogger(__name__)
+
+# Default AI model for public chatbot (Gemini 2.5 Flash - faster & cheaper)
+DEFAULT_PUBLIC_MODEL = os.getenv("DEFAULT_PUBLIC_MODEL", "gemini-2.5-flash")
 
 class IntentCategory(Enum):
     """Intent categories for message classification"""
@@ -552,15 +557,30 @@ class ChatbotOrchestrator:
                     # Get enhanced system prompt for this agent
                     system_prompt = get_enhanced_prompt(agent, ai_context)
                     
-                    # Generate AI response with timeout (4s max for fallback, aggressively reduced)
-                    ai_response = await asyncio.wait_for(
-                        openai_service.generate_response(
-                            message=current_message,
-                            context=ai_context,
-                            system_prompt=system_prompt
-                        ),
-                        timeout=4.0  # 4 second timeout for fallback (reduced from 6s)
-                    )
+                    # Use Gemini for public users (faster & cheaper), OpenAI for authenticated users
+                    use_gemini = context.user_role == "public" and gemini_service.is_available()
+                    
+                    if use_gemini:
+                        logger.info(f"🤖 Using Gemini 2.5 Flash for public user response")
+                        # Generate AI response with Gemini (faster, cheaper)
+                        ai_response = await asyncio.wait_for(
+                            gemini_service.generate_content(
+                                prompt=f"{system_prompt}\n\nUser: {current_message}",
+                                model_name="gemini-2.5-flash"
+                            ),
+                            timeout=4.0
+                        )
+                    else:
+                        logger.info(f"🤖 Using OpenAI GPT-4o-mini for {context.user_role} user response")
+                        # Generate AI response with OpenAI
+                        ai_response = await asyncio.wait_for(
+                            openai_service.generate_response(
+                                message=current_message,
+                                context=ai_context,
+                                system_prompt=system_prompt
+                            ),
+                            timeout=4.0  # 4 second timeout for fallback (reduced from 6s)
+                        )
                     
                     # Generate contextual actions based on agent and intent
                     actions = await self._generate_contextual_actions(intent, context, agent)

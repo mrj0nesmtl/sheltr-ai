@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.145.2] - 2025-11-24 (Increase RAG Timeouts for Gemini) ⏱️
+
+### 🔧 Fixed
+
+#### **Increased Timeouts for RAG Pipeline**
+- **CRITICAL FIX**: RAG pipeline timeouts were too aggressive, causing "high load" errors
+- Master timeout: 8s → **15s** (public chatbot router)
+- RAG orchestrator timeout: 3s → **10s** (allows full pipeline to complete)
+- Gemini/OpenAI generation timeout: 2.5s → **5s** (more breathing room)
+- Allows time for: embeddings search (2-3s) + AI generation (2-3s) + overhead (2-3s)
+
+### 📊 Expected Performance
+- FAQ questions: <1s (instant)
+- RAG questions: 5-10s (was timing out at 8s)
+- Complex RAG questions: 10-15s (was failing completely)
+
+### 🔧 Technical
+- Updated `apps/api/routers/public_chatbot.py`: master timeout 8s → 15s
+- Updated `apps/api/services/chatbot/orchestrator.py`: RAG timeout 3s → 10s
+- Updated `apps/api/services/chatbot/rag_orchestrator.py`: Gemini timeout 2.5s → 5s
+
+---
+
 ## [2.145.1] - 2025-11-24 (Fix Gemini Method Call) 🔧
 
 ### 🐛 Fixed

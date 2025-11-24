@@ -161,19 +161,28 @@ Tonight's session accomplished **8 major fixes** plus initiated **Firebase AI Lo
 
 ---
 
-### **Phase 2: Knowledge Base Migration** 🔄 NEXT
+### **Phase 2: Knowledge Base Migration** ⚠️ BLOCKED
 
-#### **Tasks**
-- [ ] Test Gemini service in browser
-- [ ] Update embeddings service to use Gemini (when available)
-- [ ] Migrate existing embeddings or regenerate
-- [ ] A/B test: Gemini vs OpenAI for embeddings
-- [ ] Measure cost savings and performance
+#### **CRITICAL LIMITATION DISCOVERED**
 
-#### **Considerations**
-- ⚠️ **Embeddings not yet available** via Firebase AI Logic client SDK
-- ⚠️ May need to use Vertex AI directly for embeddings
-- ⚠️ Or continue using OpenAI for embeddings until supported
+According to [Firebase AI Logic documentation](https://firebase.google.com/docs/ai-logic/models):
+
+> **"When using Firebase AI Logic, the following capabilities are not yet supported:**
+> - ❌ **Embeddings generation**
+> - ❌ Semantic retrieval
+> - ❌ Context caching
+> - ❌ Fine tuning"
+
+#### **Impact**
+- ❌ **Cannot migrate knowledge base embeddings** to Firebase AI Logic
+- ❌ **Cannot use Gemini for semantic search**
+- ✅ **Must keep OpenAI for embeddings** (proven, working solution)
+
+#### **Revised Strategy: Hybrid Approach**
+- ✅ Use **Gemini** for chatbot (text generation, chat, analysis)
+- ✅ Keep **OpenAI** for embeddings (knowledge base, search)
+- ✅ Still achieve **~50% cost savings** on chat portion
+- ✅ Wait for Firebase AI Logic to add embeddings support
 
 ---
 
@@ -268,19 +277,27 @@ Firebase AI Logic includes built-in App Check support:
 
 ### **Scenario**: 10,000 knowledge base queries/month
 
-#### **Current (OpenAI)**
+#### **Current (All OpenAI/Anthropic)**
 - Embeddings: $0.13/1M tokens × 10M = **$1.30**
 - Chat (GPT-4o-mini): $0.15/1M × 50M = **$7.50**
 - Data egress: $0.12/GB × 10GB = **$1.20**
 - **Total: ~$10/month**
 
-#### **With Firebase AI Logic (Gemini)**
-- Embeddings: $0.075/1M × 10M = **$0.75** (when available)
+#### **Hybrid (Gemini Chat + OpenAI Embeddings)** ← RECOMMENDED
+- Embeddings (OpenAI): $0.13/1M × 10M = **$1.30** ← Keep
+- Chat (Gemini 2.0 Flash): $0.075/1M × 50M = **$3.75** ← Switch
+- Data egress (chat): **$0** (stays in Google Cloud)
+- **Total: ~$5/month**
+
+**Savings: ~50%** 💰
+
+#### **Future (When Embeddings Supported)**
+- Embeddings (Gemini): $0.075/1M × 10M = **$0.75**
 - Chat (Gemini 2.0 Flash): $0.075/1M × 50M = **$3.75**
-- Data egress: **$0** (stays in Google Cloud)
+- Data egress: **$0**
 - **Total: ~$4.50/month**
 
-**Savings: ~55%** 💰
+**Potential Future Savings: ~55%** 💰
 
 ---
 

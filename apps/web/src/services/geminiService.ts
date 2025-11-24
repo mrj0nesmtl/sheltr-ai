@@ -115,29 +115,24 @@ class GeminiService {
   /**
    * Generate embeddings for text (for knowledge base search)
    * 
-   * Note: Firebase AI Logic uses the same embedding model as Vertex AI
+   * ⚠️ IMPORTANT: Embeddings are NOT supported by Firebase AI Logic
+   * 
+   * According to Firebase documentation:
+   * "When using Firebase AI Logic, the following capabilities are not yet supported:
+   *  embeddings generation, semantic retrieval..."
+   * 
+   * Recommendation: Continue using OpenAI text-embedding-3-small for embeddings
    * 
    * @param text - Text to embed
    * @returns Embedding vector
+   * @throws Error - Always throws as embeddings are not supported
    */
   async generateEmbedding(text: string): Promise<number[]> {
-    if (!this.isAvailable()) {
-      throw new Error('Gemini service not initialized');
-    }
-
-    try {
-      // TODO: Firebase AI Logic doesn't expose embeddings API yet
-      // For now, we'll need to use Vertex AI directly or keep OpenAI
-      // This is a placeholder for when the feature is available
-      
-      console.warn('⚠️ Embeddings not yet available via Firebase AI Logic');
-      console.warn('   Continue using OpenAI for embeddings until supported');
-      
-      throw new Error('Embeddings not yet supported by Firebase AI Logic');
-    } catch (error) {
-      console.error('❌ Gemini generateEmbedding error:', error);
-      throw error;
-    }
+    throw new Error(
+      '❌ Embeddings are NOT supported by Firebase AI Logic.\n' +
+      '   Use OpenAI embeddings service instead.\n' +
+      '   See: https://firebase.google.com/docs/ai-logic/models#not-yet-supported'
+    );
   }
 
   /**

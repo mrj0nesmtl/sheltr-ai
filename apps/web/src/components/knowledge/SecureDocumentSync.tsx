@@ -195,7 +195,7 @@ export const SecureDocumentSync: React.FC = () => {
               <span className="text-xs font-semibold">FinTec</span>
             </div>
             <Badge className="bg-cyan-600 text-white text-[10px] px-1 py-0">Admin+</Badge>
-          </div>
+              </div>
 
           <div className="p-2 bg-white dark:bg-slate-800 rounded-lg border border-orange-200 dark:border-orange-800">
             <div className="flex items-center gap-1 mb-1">
@@ -211,7 +211,7 @@ export const SecureDocumentSync: React.FC = () => {
               <span className="text-xs font-semibold">Data Room</span>
             </div>
             <Badge className="bg-blue-600 text-white text-[10px] px-1 py-0">Investors</Badge>
-          </div>
+              </div>
 
           <div className="p-2 bg-white dark:bg-slate-800 rounded-lg border border-purple-200 dark:border-purple-800">
             <div className="flex items-center gap-1 mb-1">
@@ -227,7 +227,7 @@ export const SecureDocumentSync: React.FC = () => {
               <span className="text-xs font-semibold">Drafts</span>
             </div>
             <Badge className="bg-gray-600 text-white text-[10px] px-1 py-0">Admin</Badge>
-          </div>
+              </div>
 
           <div className="p-2 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-800">
             <div className="flex items-center gap-1 mb-1">

@@ -239,3 +239,7 @@ docs-backup/
 docs/team/CEO-ONBOARDING-PACKAGE-*.md
 **/CEO-ONBOARDING-PACKAGE-*.md
 backup-full-*
+
+# Session work logs (local development history, not for public repo)
+docs/development/completed-work/
+**/completed-work/

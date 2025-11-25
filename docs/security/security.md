@@ -67,6 +67,28 @@ service cloud.firestore {
       allow write: if request.auth != null && 
         resource.data.admin_ids.hasAny([request.auth.uid]);
     }
+    
+    // 🆕 Knowledge documents - Role-based access (Session 25)
+    match /knowledge_documents/{docId} {
+      // Read: All authenticated users (backend filters by role/confidentiality)
+      allow read: if request.auth != null;
+      
+      // Write: Super Admin only
+      allow write: if request.auth != null && 
+        request.auth.token.role == 'super_admin';
+    }
+    
+    // 🆕 Recurring gifts - Donor access (Session 25)
+    match /recurring_gifts/{giftId} {
+      // Donors can manage their own recurring gifts
+      allow read, write: if request.auth != null && 
+        request.auth.uid == resource.data.donor_id;
+      
+      // Admins have full access
+      allow read, write: if request.auth != null && 
+        (request.auth.token.role == 'super_admin' || 
+         request.auth.token.role == 'platform_admin');
+    }
   }
 }
 ```
@@ -126,8 +148,31 @@ def log_security_event(event_type: str, user_id: str, details: dict):
 - On-call Engineer: +1-XXX-XXX-XXXX
 - Legal Team: legal@sheltr.ai
 
+## 🆕 Session 25 Security Features
+
+### Secure Documents System
+- **8-tier role-based access control**
+- **Firebase Storage integration** with granular permissions
+- **AI chatbot access filtering** by user role and document confidentiality
+- **Folders**: dataroom, fintec, founders, leadership, operations, platform-admin, vault
+- **Excluded from sync**: local, drafts, development (local-only)
+
+### Gemini AI Integration
+- **API key rotation** with website and API restrictions
+- **Stored in Secret Manager** for production security
+- **Cost-effective chat** (56% reduction vs OpenAI)
+- **Hybrid system**: Gemini for public, OpenAI for authenticated users
+
+### Tax Receipt Generation
+- **CRA-compliant PDF receipts** with SHELTR branding
+- **Donor information protection** with secure data handling
+- **SmartFund transparency** (95-5 for shelters, 80-15-5 for participants)
+
+---
+
 ## 🔗 Related Documentation
 
-- [Google Cloud Run Deployment](./google-cloud-run.md)
-- [Monitoring Setup](./monitoring.md)
-- [Backup & Recovery](./backup-recovery.md)
+- [Google Cloud Run Deployment](../operations/google-cloud-run.md)
+- [Monitoring Setup](../operations/monitoring.md)
+- [Firebase Integration](../integrations/firebase-integration.md)
+- [Knowledge Base Architecture](../features/knowledge-base/knowledge-architechture.md)

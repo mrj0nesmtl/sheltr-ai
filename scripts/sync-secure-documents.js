@@ -148,26 +148,28 @@ const COLLECTIONS_TO_SYNC = {
     secure_badge: 'IR Data Room',
     secure_badge_color: 'blue'
   },
-  'development': {
-    permission_level: 'platform_admin',
-    published_to_founders: false,
-    published_to_ir: false,
-    visibility_scope: 'organization',
-    is_private: true,
-    chatbot_accessible: true,              // ✅ CHANGED: Enable AI access for admins
-    secure_badge: 'Development',
-    secure_badge_color: 'purple'
-  },
-  'drafts': {
-    permission_level: 'platform_admin',
-    published_to_founders: false,
-    published_to_ir: false,
-    visibility_scope: 'organization',
-    is_private: true,
-    chatbot_accessible: true,              // ✅ NEW: Enable AI access for admins
-    secure_badge: 'Drafts',
-    secure_badge_color: 'gray'
-  },
+  // ❌ EXCLUDED: 'development' - Local development session logs (not for cloud sync)
+  // 'development': {
+  //   permission_level: 'platform_admin',
+  //   published_to_founders: false,
+  //   published_to_ir: false,
+  //   visibility_scope: 'organization',
+  //   is_private: true,
+  //   chatbot_accessible: true,
+  //   secure_badge: 'Development',
+  //   secure_badge_color: 'purple'
+  // },
+  // ❌ EXCLUDED: 'drafts' - Work-in-progress documents (not for cloud sync)
+  // 'drafts': {
+  //   permission_level: 'platform_admin',
+  //   published_to_founders: false,
+  //   published_to_ir: false,
+  //   visibility_scope: 'organization',
+  //   is_private: true,
+  //   chatbot_accessible: true,
+  //   secure_badge: 'Drafts',
+  //   secure_badge_color: 'gray'
+  // },
   'fintec': {
     permission_level: 'platform_admin',
     published_to_founders: false,
@@ -198,6 +200,17 @@ const COLLECTIONS_TO_SYNC = {
     secure_badge: 'Leadership',
     secure_badge_color: 'indigo'
   },
+  // ❌ EXCLUDED: 'local' - Local-only files (not for cloud sync)
+  // 'local': {
+  //   permission_level: 'platform_admin',
+  //   published_to_founders: false,
+  //   published_to_ir: false,
+  //   visibility_scope: 'organization',
+  //   is_private: true,
+  //   chatbot_accessible: false,
+  //   secure_badge: 'Local Only',
+  //   secure_badge_color: 'gray'
+  // },
   'operations': {
     permission_level: 'platform_admin',
     published_to_founders: false,

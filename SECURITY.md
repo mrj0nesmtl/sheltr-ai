@@ -15,10 +15,13 @@ SHELTR is committed to maintaining security across our platform. We currently su
 
 ### Platform Security
 - **Authentication**: Firebase Auth with multi-factor authentication support
-- **Authorization**: Role-based access control (RBAC) with custom claims
+- **Authorization**: Role-based access control (RBAC) with custom claims (5 roles + 8-tier secure docs)
 - **Data Protection**: End-to-end encryption for sensitive participant data
 - **API Security**: JWT token validation and rate limiting
 - **Blockchain**: Smart contract security audits for donation processing
+- **🆕 Secure Documents**: 8-tier role-based access (dataroom, fintec, founders, leadership, operations, platform-admin, vault)
+- **🆕 AI Access Control**: Chatbot access filtered by user role and document confidentiality
+- **🆕 API Key Management**: Gemini API key with website/API restrictions in Secret Manager
 
 ### Supported Environments
 - **Production**: `https://sheltr-ai.web.app` - Full security hardening
@@ -91,7 +94,7 @@ We thank the following researchers for responsibly disclosing security issues:
 
 ---
 
-**Last Updated**: August 2025  
-**Next Review**: Quarterly
+**Last Updated**: November 25, 2025 (Session 25)  
+**Next Review**: February 2026
 
 > 🔒 Security is fundamental to SHELTR's mission of safely serving vulnerable populations. We take all security reports seriously and appreciate the security community's help in keeping our platform safe.

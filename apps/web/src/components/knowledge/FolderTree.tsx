@@ -174,89 +174,118 @@ export function FolderTree({
 }
 
 // Helper function to build folder tree from documents
+/**
+ * Build hierarchical folder tree from file paths (mirrors GitHub structure)
+ * This creates an actual directory tree based on file_path, not categories
+ */
 export function buildFolderTree(documents: KnowledgeDocument[]): FolderNode[] {
-  const folderMap = new Map<string, FolderNode>();
+  const root: Map<string, FolderNode> = new Map();
   
-  // Define category display metadata (icons and descriptions)
-  const categoryMetadata: Record<string, { icon: string; description: string; order: number }> = {
-    'Platform': { icon: '📋', description: 'Project introduction and goals', order: 1 },
-    'Architecture': { icon: '🏗️', description: 'Technical system design', order: 2 },
-    'API': { icon: '🔌', description: 'API documentation', order: 3 },
-    'Features': { icon: '✨', description: 'Feature documentation', order: 4 },
-    'Development': { icon: '💻', description: 'Development guides', order: 5 },
-    'Deployment': { icon: '🚀', description: 'Deployment guides', order: 6 },
-    'Operations': { icon: '⚙️', description: 'Operations and maintenance', order: 7 },
-    'User Guides': { icon: '👥', description: 'User documentation', order: 8 },
-    'Guides': { icon: '📖', description: 'How-to guides', order: 9 },
-    'Reference': { icon: '📚', description: 'Technical reference', order: 10 },
-    'Integrations': { icon: '🔗', description: 'Third-party integrations', order: 11 },
-    'Products': { icon: '🌐', description: 'Ecosystem and products', order: 12 },
-    'Resources': { icon: '🎯', description: 'Templates and resources', order: 13 },
-    'Archive': { icon: '📦', description: 'Archived documents', order: 99 },
-    'Documentation': { icon: '📄', description: 'General documentation', order: 100 }
+  // Helper to get or create folder node
+  const getOrCreateFolder = (path: string, name: string, fullPath: string): FolderNode => {
+    if (!root.has(path)) {
+      root.set(path, {
+        id: path,
+        name: name,
+        path: fullPath,
+        type: 'folder',
+        children: [],
+        documentCount: 0
+      });
+    }
+    return root.get(path)!;
   };
 
-  // First pass: Dynamically discover all categories from documents
-  const categoriesInUse = new Set<string>();
+  // Process each document
   documents.forEach(doc => {
-    if (doc.category) {
-      categoriesInUse.add(doc.category);
+    const filePath = doc.file_path || doc.github_path || '';
+    if (!filePath) {
+      console.warn(`Document "${doc.title}" has no file path`);
+      return;
     }
-  });
 
-  // Create folder nodes for each category that has documents
-  const rootFolders: FolderNode[] = [];
-  categoriesInUse.forEach(category => {
-    const metadata = categoryMetadata[category] || { icon: '📁', description: category, order: 50 };
-    const node: FolderNode = {
-      id: category.toLowerCase().replace(/\s+/g, '-'),
-      name: `${metadata.icon} ${category}`,
-      path: category.toLowerCase().replace(/\s+/g, '-'),
-      type: 'folder',
-      children: [],
-      documentCount: 0
-    };
-    folderMap.set(category, node);
-    rootFolders.push(node);
-  });
+    // Split path into parts (e.g., "docs/features/chatbot/README.md" -> ["docs", "features", "chatbot", "README.md"])
+    const parts = filePath.split('/').filter(p => p.length > 0);
+    if (parts.length === 0) return;
 
-  // Sort folders by order
-  rootFolders.sort((a, b) => {
-    const aCategory = a.name.replace(/^[^\s]+\s/, ''); // Remove emoji
-    const bCategory = b.name.replace(/^[^\s]+\s/, '');
-    const aOrder = categoryMetadata[aCategory]?.order || 50;
-    const bOrder = categoryMetadata[bCategory]?.order || 50;
-    return aOrder - bOrder;
-  });
+    let currentPath = '';
+    let currentNode: FolderNode | null = null;
 
-  // Add documents to appropriate folders based on their category
-  documents.forEach(doc => {
-    // Use the document's category field to assign it to the correct folder
-    const category = doc.category || 'Documentation';
-    const folder = folderMap.get(category);
-    
-    if (folder) {
-      // Create document node
+    // Build folder hierarchy
+    for (let i = 0; i < parts.length - 1; i++) {
+      const part = parts[i];
+      const parentPath = currentPath;
+      currentPath = currentPath ? `${currentPath}/${part}` : part;
+
+      // Get or create folder
+      let folder = getOrCreateFolder(currentPath, part, currentPath);
+
+      // If this is not a root folder, add it to parent's children
+      if (parentPath) {
+        const parent = root.get(parentPath);
+        if (parent && !parent.children!.some(c => c.id === folder.id)) {
+          parent.children!.push(folder);
+        }
+      }
+
+      currentNode = folder;
+    }
+
+    // Add document to the last folder
+    if (currentNode) {
       const docNode: FolderNode = {
         id: doc.id,
-        name: doc.title || 'Untitled',
-        path: doc.file_path || `${folder.path}/${doc.id}`,
+        name: parts[parts.length - 1], // Use filename
+        path: filePath,
         type: 'document'
       };
-      folder.children!.push(docNode);
-      folder.documentCount = (folder.documentCount || 0) + 1;
+      currentNode.children!.push(docNode);
+      currentNode.documentCount = (currentNode.documentCount || 0) + 1;
     } else {
-      // Category not found - this shouldn't happen if sync is working correctly
-      console.warn(`Document "${doc.title}" has unknown category "${category}"`);
+      // Document is at root level
+      const docNode: FolderNode = {
+        id: doc.id,
+        name: parts[0],
+        path: filePath,
+        type: 'document'
+      };
+      root.set(filePath, docNode);
     }
   });
 
-  // Sort documents within folders
-  rootFolders.forEach(folder => {
-    if (folder.children) {
-      folder.children.sort((a, b) => a.name.localeCompare(b.name));
+  // Extract root-level folders (folders with no parent)
+  const rootFolders: FolderNode[] = [];
+  const allPaths = Array.from(root.keys());
+  
+  allPaths.forEach(path => {
+    // Root level = no '/' in path OR is a document at root
+    if (!path.includes('/')) {
+      rootFolders.push(root.get(path)!);
     }
   });
+
+  // Sort folders and their children recursively
+  const sortNode = (node: FolderNode) => {
+    if (node.children) {
+      // Sort: folders first, then documents, alphabetically within each group
+      node.children.sort((a, b) => {
+        if (a.type === 'folder' && b.type === 'document') return -1;
+        if (a.type === 'document' && b.type === 'folder') return 1;
+        return a.name.localeCompare(b.name);
+      });
+      // Recursively sort children
+      node.children.forEach(sortNode);
+    }
+  };
+
+  rootFolders.forEach(sortNode);
+  rootFolders.sort((a, b) => {
+    if (a.type === 'folder' && b.type === 'document') return -1;
+    if (a.type === 'document' && b.type === 'folder') return 1;
+    return a.name.localeCompare(b.name);
+  });
+
+  console.log('🌳 Built hierarchical folder tree:', rootFolders.map(f => `${f.name} (${f.documentCount || 0} docs)`));
 
   return rootFolders;
 }

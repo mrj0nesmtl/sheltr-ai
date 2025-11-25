@@ -206,6 +206,7 @@ class GitHubService:
             'legacy-migration-archived',
             'migration',
             '09-migration',  # Explicitly exclude migration folder
+            'completed-work',  # Session work logs (local development history)
             'archived',
             'old',
             'deprecated',

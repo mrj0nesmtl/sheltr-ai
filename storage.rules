@@ -185,6 +185,82 @@ service firebase.storage {
       allow delete: if isShelterAdmin(shelterId) || isSuperAdmin();
     }
 
+    // =================================================================
+    // SECURE DOCUMENTS - Role-Based Access
+    // .local-secure-docs synced to Firebase Storage
+    // Access controlled by folder and user role
+    // =================================================================
+    
+    // Founders folder - Founders only
+    match /secure-docs/founders/{document=**} {
+      allow read: if request.auth != null && getUserData().role == 'founders';
+      allow write: if isSuperAdmin(); // Only super admin can upload
+    }
+    
+    // Leadership folder - Leadership + Founders
+    match /secure-docs/leadership/{document=**} {
+      allow read: if request.auth != null && 
+                     (getUserData().role == 'leadership' || getUserData().role == 'founders');
+      allow write: if isSuperAdmin();
+    }
+    
+    // Operations folder - Platform Admin+
+    match /secure-docs/operations/{document=**} {
+      allow read: if request.auth != null && 
+                     (getUserData().role == 'platform_admin' || 
+                      getUserData().role == 'leadership' || 
+                      getUserData().role == 'founders' ||
+                      getUserData().role == 'super_admin');
+      allow write: if isSuperAdmin();
+    }
+    
+    // FinTec folder - Platform Admin+
+    match /secure-docs/fintec/{document=**} {
+      allow read: if request.auth != null && 
+                     (getUserData().role == 'platform_admin' || 
+                      getUserData().role == 'leadership' || 
+                      getUserData().role == 'founders' ||
+                      getUserData().role == 'super_admin');
+      allow write: if isSuperAdmin();
+    }
+    
+    // Data Room folder - Investors + Admin+
+    match /secure-docs/dataroom/{document=**} {
+      allow read: if request.auth != null && 
+                     (getUserData().role == 'qualified_investor' || 
+                      getUserData().role == 'platform_admin' || 
+                      getUserData().role == 'leadership' || 
+                      getUserData().role == 'founders' ||
+                      getUserData().role == 'super_admin');
+      allow write: if isSuperAdmin();
+    }
+    
+    // Development folder - Platform Admin only
+    match /secure-docs/development/{document=**} {
+      allow read: if request.auth != null && 
+                     (getUserData().role == 'platform_admin' || getUserData().role == 'super_admin');
+      allow write: if isSuperAdmin();
+    }
+    
+    // Drafts folder - Platform Admin only
+    match /secure-docs/drafts/{document=**} {
+      allow read: if request.auth != null && 
+                     (getUserData().role == 'platform_admin' || getUserData().role == 'super_admin');
+      allow write: if isSuperAdmin();
+    }
+    
+    // Platform Admin folder - Platform Admin only
+    match /secure-docs/platform-admin/{document=**} {
+      allow read: if request.auth != null && 
+                     (getUserData().role == 'platform_admin' || getUserData().role == 'super_admin');
+      allow write: if isSuperAdmin();
+    }
+    
+    // Vault folder - Super Admin ONLY
+    match /secure-docs/vault/{document=**} {
+      allow read, write: if isSuperAdmin();
+    }
+
     // Default deny all other paths
     match /{allPaths=**} {
       allow read, write: if false;

@@ -136,78 +136,98 @@ const db = admin.firestore();
 
 // Configuration
 const SECURE_DOCS_ROOT = path.join(__dirname, '../.local-secure-docs');
-// MODIFIED: Only sync 3 directories - fintec, operations, platform-admin
+// UPDATED Nov 25, 2025: All 8 directories now sync with chatbot_accessible: true (role-based access)
 const COLLECTIONS_TO_SYNC = {
-  // 'dataroom': {
-  //   permission_level: 'platform_admin',
-  //   published_to_founders: false,
-  //   published_to_ir: false,
-  //   visibility_scope: 'organization',
-  //   is_private: true,
-  //   chatbot_accessible: false,
-  //   secure_badge: 'IR Data Room',
-  //   secure_badge_color: 'emerald'
-  // },
-  // 'development': {
-  //   permission_level: 'platform_admin',
-  //   published_to_founders: false,
-  //   published_to_ir: false,
-  //   visibility_scope: 'organization',
-  //   is_private: true,
-  //   chatbot_accessible: false,
-  //   secure_badge: 'Development',
-  //   secure_badge_color: 'blue'
-  // },
-  'fintec': {
-    permission_level: 'platform_admin',     // Restricted to platform_admin, leadership, super_admin
-    published_to_founders: false,           // Manually activate via UI
+  'dataroom': {
+    permission_level: 'qualified_investor',
+    published_to_founders: false,
+    published_to_ir: true,
+    visibility_scope: 'organization',
+    is_private: true,
+    chatbot_accessible: true,              // ✅ CHANGED: Enable AI access for investors
+    secure_badge: 'IR Data Room',
+    secure_badge_color: 'blue'
+  },
+  'development': {
+    permission_level: 'platform_admin',
+    published_to_founders: false,
     published_to_ir: false,
-    visibility_scope: 'organization',       // Organization-level (not public/global)
-    is_private: true,                       // Private document
-    chatbot_accessible: false,              // NOT accessible to chatbot/MCP
+    visibility_scope: 'organization',
+    is_private: true,
+    chatbot_accessible: true,              // ✅ CHANGED: Enable AI access for admins
+    secure_badge: 'Development',
+    secure_badge_color: 'purple'
+  },
+  'drafts': {
+    permission_level: 'platform_admin',
+    published_to_founders: false,
+    published_to_ir: false,
+    visibility_scope: 'organization',
+    is_private: true,
+    chatbot_accessible: true,              // ✅ NEW: Enable AI access for admins
+    secure_badge: 'Drafts',
+    secure_badge_color: 'gray'
+  },
+  'fintec': {
+    permission_level: 'platform_admin',
+    published_to_founders: false,
+    published_to_ir: false,
+    visibility_scope: 'organization',
+    is_private: true,
+    chatbot_accessible: true,              // ✅ CHANGED: Enable AI access for admins+
     secure_badge: 'FinTec',
     secure_badge_color: 'cyan'
   },
-  // 'founders': {
-  //   permission_level: 'founders',
-  //   published_to_founders: true,
-  //   published_to_ir: false,
-  //   visibility_scope: 'organization',
-  //   is_private: true,
-  //   chatbot_accessible: false,
-  //   secure_badge: 'Founders Only',
-  //   secure_badge_color: 'purple'
-  // },
-  'operations': {
-    permission_level: 'platform_admin',     // Restricted to platform_admin, leadership, super_admin
+  'founders': {
+    permission_level: 'founders',
+    published_to_founders: true,
+    published_to_ir: false,
+    visibility_scope: 'organization',
+    is_private: true,
+    chatbot_accessible: true,              // ✅ CHANGED: Enable AI access for founders
+    secure_badge: 'Founders Only',
+    secure_badge_color: 'amber'
+  },
+  'leadership': {
+    permission_level: 'leadership',
     published_to_founders: false,
     published_to_ir: false,
-    visibility_scope: 'organization',       // Organization-level (not public/global)
-    is_private: true,                       // Private document
-    chatbot_accessible: false,              // NOT accessible to chatbot/MCP
+    visibility_scope: 'organization',
+    is_private: true,
+    chatbot_accessible: true,              // ✅ NEW: Enable AI access for leadership+
+    secure_badge: 'Leadership',
+    secure_badge_color: 'indigo'
+  },
+  'operations': {
+    permission_level: 'platform_admin',
+    published_to_founders: false,
+    published_to_ir: false,
+    visibility_scope: 'organization',
+    is_private: true,
+    chatbot_accessible: true,              // ✅ CHANGED: Enable AI access for admins+
     secure_badge: 'Operations',
     secure_badge_color: 'orange'
   },
   'platform-admin': {
-    permission_level: 'platform_admin',     // Restricted to platform_admin, leadership, super_admin
+    permission_level: 'platform_admin',
     published_to_founders: false,
     published_to_ir: false,
-    visibility_scope: 'organization',       // Organization-level (not public/global)
-    is_private: true,                       // Private document
-    chatbot_accessible: false,              // NOT accessible to chatbot/MCP
+    visibility_scope: 'organization',
+    is_private: true,
+    chatbot_accessible: true,              // ✅ CHANGED: Enable AI access for admins
     secure_badge: 'Admin Only',
     secure_badge_color: 'red'
   },
-  // 'vault': {
-  //   permission_level: 'super_admin',
-  //   published_to_founders: false,
-  //   published_to_ir: false,
-  //   visibility_scope: 'organization',
-  //   is_private: true,
-  //   chatbot_accessible: false,
-  //   secure_badge: 'Vault',
-  //   secure_badge_color: 'slate'
-  // }
+  'vault': {
+    permission_level: 'super_admin',
+    published_to_founders: false,
+    published_to_ir: false,
+    visibility_scope: 'organization',
+    is_private: true,
+    chatbot_accessible: true,              // ✅ CHANGED: Enable AI access for super admins
+    secure_badge: 'Vault',
+    secure_badge_color: 'slate'
+  }
 };
 
 /**

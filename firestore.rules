@@ -308,9 +308,20 @@ service cloud.firestore {
     
     // =================================================================
     // KNOWLEDGE DOCUMENTS COLLECTION - New knowledge base documents
+    // UPDATED Nov 25, 2025: Role-based access for secure documents
     // =================================================================
     match /knowledge_documents/{docId} {
-      // Read: All authenticated users can read published documents
+      // Read: All authenticated users can read documents
+      // NOTE: Role-based filtering happens in backend (knowledge_service.py)
+      // based on permission_level, confidentiality_level, and user role.
+      // Firestore rules allow read access, but backend filters results.
+      // 
+      // Access levels enforced by backend:
+      // - founders: Access founders/ docs
+      // - leadership: Access leadership/ + founders/ docs
+      // - platform_admin: Access operations/, fintec/, development/, drafts/, platform-admin/
+      // - qualified_investor: Access dataroom/ docs
+      // - super_admin: Access all docs including vault/
       allow read: if isAuthenticated();
       
       // Write: Super Admin only

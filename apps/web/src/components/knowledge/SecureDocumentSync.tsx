@@ -120,12 +120,12 @@ export const SecureDocumentSync: React.FC = () => {
       const data: SyncResult = await response.json();
       setSyncResult(data);
 
-      // NOTE: Secure docs have chatbot_accessible: false, so NO embeddings are generated
-      // Documents remain accessible only to Platform Admin, Leadership, Super Admin
-      // if (data.success && data.stats.total > 0) {
-      //   console.log('🧠 Auto-triggering embedding generation...');
-      //   await generateEmbeddings();
-      // }
+      // UPDATED Nov 25, 2025: Secure docs now have chatbot_accessible: true (role-based)
+      // Auto-generate embeddings after successful sync
+      if (data.success && data.stats.total > 0) {
+        console.log('🧠 Auto-triggering embedding generation...');
+        await generateEmbeddings();
+      }
 
     } catch (err) {
       console.error('Sync error:', err);
@@ -159,57 +159,82 @@ export const SecureDocumentSync: React.FC = () => {
       </CardHeader>
 
       <CardContent className="space-y-4">
-        {/* Information Alert */}
-        <Alert className="border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-900/20">
-          <FileText className="h-4 w-4 text-blue-600" />
-          <AlertDescription className="text-sm text-blue-900 dark:text-blue-100">
-            <strong>Platform Admin Access Only</strong> - Syncs metadata to <code className="text-xs">knowledge_documents</code> collection.
+        {/* Information Alert - UPDATED Nov 25, 2025 */}
+        <Alert className="border-emerald-200 bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-900/20">
+          <CheckCircle className="h-4 w-4 text-emerald-600" />
+          <AlertDescription className="text-sm text-emerald-900 dark:text-emerald-100">
+            <strong>Role-Based AI Access</strong> - Syncs full content to <code className="text-xs">knowledge_documents</code> collection.
             <br />
-            <span className="font-mono text-xs text-blue-700 dark:text-blue-300 mt-1 block">
-              ⚠️  Files remain local (NOT uploaded to cloud). No embeddings generated (chatbot cannot access).
+            <span className="font-mono text-xs text-emerald-700 dark:text-emerald-300 mt-1 block">
+              ✅ Files uploaded to secure cloud storage. Embeddings generated for AI-powered search. Chatbot access controlled by user role & document settings.
             </span>
           </AlertDescription>
         </Alert>
 
-        {/* Sync Categories - Only 3 Active Directories */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-          <div className="p-3 bg-white dark:bg-slate-800 rounded-lg border-2 border-cyan-200 dark:border-cyan-800">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
-                <CreditCard className="h-4 w-4 text-cyan-600" />
-                <span className="text-sm font-semibold">FinTec</span>
-              </div>
-              <Badge className="bg-cyan-600 text-white text-xs">Platform Admin</Badge>
+        {/* Sync Categories - ALL 8 Secure Directories (Updated Nov 25, 2025) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
+          <div className="p-2 bg-white dark:bg-slate-800 rounded-lg border border-amber-200 dark:border-amber-800">
+            <div className="flex items-center gap-1 mb-1">
+              <Briefcase className="h-3 w-3 text-amber-600" />
+              <span className="text-xs font-semibold">Founders</span>
             </div>
-            <p className="text-xs text-muted-foreground">
-              Financial technology & payment rails documentation
-            </p>
+            <Badge className="bg-amber-600 text-white text-[10px] px-1 py-0">Founders Only</Badge>
           </div>
 
-          <div className="p-3 bg-white dark:bg-slate-800 rounded-lg border-2 border-orange-200 dark:border-orange-800">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
-                <Settings className="h-4 w-4 text-orange-600" />
-                <span className="text-sm font-semibold">Operations</span>
-              </div>
-              <Badge className="bg-orange-600 text-white text-xs">Platform Admin</Badge>
+          <div className="p-2 bg-white dark:bg-slate-800 rounded-lg border border-indigo-200 dark:border-indigo-800">
+            <div className="flex items-center gap-1 mb-1">
+              <Building className="h-3 w-3 text-indigo-600" />
+              <span className="text-xs font-semibold">Leadership</span>
             </div>
-            <p className="text-xs text-muted-foreground">
-              Operational procedures & workflows
-            </p>
+            <Badge className="bg-indigo-600 text-white text-[10px] px-1 py-0">Leadership+</Badge>
           </div>
 
-          <div className="p-3 bg-white dark:bg-slate-800 rounded-lg border-2 border-red-200 dark:border-red-800">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
-                <Shield className="h-4 w-4 text-red-600" />
-                <span className="text-sm font-semibold">Platform Admin</span>
-              </div>
-              <Badge className="bg-red-600 text-white text-xs">Admin Only</Badge>
+          <div className="p-2 bg-white dark:bg-slate-800 rounded-lg border border-cyan-200 dark:border-cyan-800">
+            <div className="flex items-center gap-1 mb-1">
+              <CreditCard className="h-3 w-3 text-cyan-600" />
+              <span className="text-xs font-semibold">FinTec</span>
             </div>
-            <p className="text-xs text-muted-foreground">
-              Platform admin system documentation
-            </p>
+            <Badge className="bg-cyan-600 text-white text-[10px] px-1 py-0">Admin+</Badge>
+          </div>
+
+          <div className="p-2 bg-white dark:bg-slate-800 rounded-lg border border-orange-200 dark:border-orange-800">
+            <div className="flex items-center gap-1 mb-1">
+              <Settings className="h-3 w-3 text-orange-600" />
+              <span className="text-xs font-semibold">Operations</span>
+            </div>
+            <Badge className="bg-orange-600 text-white text-[10px] px-1 py-0">Admin+</Badge>
+          </div>
+
+          <div className="p-2 bg-white dark:bg-slate-800 rounded-lg border border-blue-200 dark:border-blue-800">
+            <div className="flex items-center gap-1 mb-1">
+              <Briefcase className="h-3 w-3 text-blue-600" />
+              <span className="text-xs font-semibold">Data Room</span>
+            </div>
+            <Badge className="bg-blue-600 text-white text-[10px] px-1 py-0">Investors</Badge>
+          </div>
+
+          <div className="p-2 bg-white dark:bg-slate-800 rounded-lg border border-purple-200 dark:border-purple-800">
+            <div className="flex items-center gap-1 mb-1">
+              <FileText className="h-3 w-3 text-purple-600" />
+              <span className="text-xs font-semibold">Development</span>
+            </div>
+            <Badge className="bg-purple-600 text-white text-[10px] px-1 py-0">Admin</Badge>
+          </div>
+
+          <div className="p-2 bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-gray-800">
+            <div className="flex items-center gap-1 mb-1">
+              <FileText className="h-3 w-3 text-gray-600" />
+              <span className="text-xs font-semibold">Drafts</span>
+            </div>
+            <Badge className="bg-gray-600 text-white text-[10px] px-1 py-0">Admin</Badge>
+          </div>
+
+          <div className="p-2 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-800">
+            <div className="flex items-center gap-1 mb-1">
+              <Shield className="h-3 w-3 text-slate-600" />
+              <span className="text-xs font-semibold">Vault</span>
+            </div>
+            <Badge className="bg-slate-600 text-white text-[10px] px-1 py-0">Super Admin</Badge>
           </div>
         </div>
 
@@ -300,7 +325,7 @@ export const SecureDocumentSync: React.FC = () => {
 
                 <div className="mt-3 pt-3 border-t border-green-200 dark:border-green-800">
                   <p className="text-xs text-green-700 dark:text-green-300">
-                    ✅ <strong>Sync Complete:</strong> Document metadata is now in the Knowledge Base (Platform Admin access only).
+                    ✅ <strong>Sync Complete:</strong> Documents are now in the Knowledge Base with role-based AI access. Embeddings generated for semantic search.
                   </p>
                 </div>
               </div>
@@ -323,14 +348,22 @@ export const SecureDocumentSync: React.FC = () => {
           </Alert>
         )}
 
-        {/* Tip */}
+        {/* Tip - UPDATED Nov 25, 2025 */}
         <div className="text-xs text-muted-foreground">
           <strong>💡 Tip:</strong> After syncing, new documents will automatically:
           <ul className="ml-4 mt-1 space-y-0.5">
             <li>• Be added to the Knowledge Base</li>
-            <li>• <strong>NOT</strong> generate embeddings (chatbot_accessible: false)</li>
-            <li>• Remain accessible to Platform Admin, Leadership, Super Admin only</li>
-            <li>• Respect permission levels automatically</li>
+            <li>• Generate embeddings for AI-powered search</li>
+            <li>• Be accessible via chatbot based on user role:
+              <ul className="ml-4 mt-0.5 space-y-0.5">
+                <li>- <strong>Founders:</strong> Access founders/ docs</li>
+                <li>- <strong>Leadership:</strong> Access leadership/ + founders/ docs</li>
+                <li>- <strong>Platform Admin:</strong> Access operations/, fintec/, development/, drafts/</li>
+                <li>- <strong>Investors:</strong> Access dataroom/ docs</li>
+                <li>- <strong>Super Admin:</strong> Access all docs including vault/</li>
+              </ul>
+            </li>
+            <li>• Respect document-level permission overrides</li>
           </ul>
         </div>
       </CardContent>

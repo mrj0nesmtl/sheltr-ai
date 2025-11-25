@@ -7,6 +7,125 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.147.0] - 2025-11-25 (Strategic Planning Documentation) 📊💰
+
+### 📚 Documentation Added
+
+#### **Corporate Structure Analysis**
+- **New Document**: `docs/strategy/corporate-structure-analysis-canada.md`
+- **Purpose**: Comprehensive analysis of Canadian corporate structure options for SHELTR
+- **Content**:
+  - Detailed comparison of 6 structure options (NFP Charity, For-Profit, BC C3, Hybrid, B Corp, SPC)
+  - Pros/cons analysis for each structure
+  - SHELTR-specific fit scores (1-10)
+  - Regulatory considerations (MSB, crypto, securities, privacy)
+  - Implementation roadmap and cost estimates
+  - Expert consultation requirements
+- **Recommendation**: Hybrid structure (For-Profit + Foundation) for optimal balance of mission protection and operational flexibility
+- **SHELTR Fit Score**: 9/10 (best for crypto + donations + impact)
+
+#### **Fundraising Strategy**
+- **New Document**: `docs/strategy/fundraising-strategy-pilot-stage.md`
+- **Purpose**: Complete fundraising strategy for $250K seed round
+- **Content**:
+  - Funding stage analysis (Pre-Seed/Seed, NOT Series A)
+  - 12-month runway calculation ($250K = 11-12 months, tight but achievable)
+  - Blended fundraising approach (50% grants, 30% impact investors, 20% angels)
+  - 40+ specific grant and investor targets with fit scores
+  - Timeline and milestones (6-9 months to raise)
+  - Required materials (pitch deck, financial model, SAFE, data room)
+  - Pitch strategy and objection handling
+  - Alternative options (accelerators, crowdfunding, strategic partners)
+- **Recommendation**: Raise $300K-350K for 14-17 month runway (more comfortable)
+- **Blended Approach**: $125K grants + $75K impact investors + $50K angels
+
+#### **Strategy Folder**
+- **New Folder**: `docs/strategy/`
+- **Purpose**: Centralized location for strategic planning documents
+- **Contents**:
+  - Corporate structure analysis
+  - Fundraising strategy
+  - README with document index and review schedule
+
+### 🎯 Strategic Insights
+
+**Corporate Structure**:
+- SHELTR's unique combination (tech-for-good + crypto + social impact) requires hybrid approach
+- Hybrid structure (For-Profit + Foundation) provides:
+  - ✅ Mission protection through Foundation
+  - ✅ Operational flexibility through Inc.
+  - ✅ Access to all capital sources (equity, debt, donations, grants)
+  - ✅ Credibility with all stakeholders
+  - ✅ Founder exit path while preserving mission
+- Alternative: BC Community Contribution Company (C3) for simpler single-entity approach
+
+**Fundraising**:
+- Current stage: Pre-Seed/Seed (NOT Series A)
+- $250K target = 11-12 months runway (tight but achievable)
+- Recommended: $300K-350K for 14-17 months (more comfortable)
+- Blended approach optimal for tech-for-good:
+  - Grants (50%): Non-dilutive, mission-aligned
+  - Impact investors (30%): Patient capital, 3% dilution
+  - Angels (20%): Fast, flexible, 2% dilution
+- Total dilution: 5% (acceptable for seed stage)
+- Timeline: 6-9 months to raise $250K
+
+**Priority Actions**:
+1. Decide on corporate structure (Hybrid vs. C3)
+2. Prepare fundraising materials (deck, model, SAFE)
+3. Submit priority grants (CMHC, IRAP, Google.org, Ethereum Foundation)
+4. Outreach to impact investors (Renewal Funds, Spring Impact, Realize Impact)
+5. Outreach to angels (50-100 warm intros)
+
+### 📊 Business Context
+
+**Current Situation**:
+- ✅ Beta platform operational
+- ✅ Pilot projects ready to launch
+- ✅ Technology proven (blockchain, AI, SmartFund™)
+- ❌ Founder capital depleted
+- ❌ No revenue yet (pre-revenue stage)
+- 🎯 Need capital to reach revenue milestones
+
+**Funding Need**:
+- **Amount**: $250K (seed round)
+- **Runway**: 12 months
+- **Use**: Core team, pilot launch, reach revenue milestones
+- **Milestone**: $10K+ MRR by Month 12
+
+**Market Position**:
+- Unique tech-for-good platform (blockchain + AI + physical infrastructure)
+- Strong social mission (ending homelessness)
+- Innovative business model (SmartFund™ 80-15-5 distribution)
+- Regulatory complexity (MSB, crypto, charity)
+- Requires blended capital approach (grants + equity + donations)
+
+### 🎓 Knowledge Base Impact
+
+**For Founders**:
+- Clear decision framework for corporate structure
+- Actionable fundraising roadmap
+- Realistic timeline and expectations
+- Expert consultation requirements
+
+**For Investors**:
+- Understanding of SHELTR's structure and funding needs
+- Clarity on stage (Seed, not Series A)
+- Investment terms (SAFE, $2.5M cap, 20% discount)
+- Expected dilution (5% for $250K)
+
+**For Team**:
+- Context on business strategy and growth plans
+- Understanding of funding timeline
+- Clarity on runway and hiring plans
+
+**For Chatbot/RAG**:
+- Comprehensive strategic context for investor queries
+- Detailed fundraising information for partnership discussions
+- Corporate structure knowledge for legal/compliance questions
+
+---
+
 ## [2.146.0] - 2025-11-24 (Critical Security Fix - Gemini API Key Rotation) 🔐🔄
 
 ### 🚨 Critical Security Fix
@@ -84,7 +203,7 @@ Development:
 
 ### ✅ Production Status
 
-- ✅ New Gemini API key active: `AIzaSyARiKzQdtckiWzfk9yPOhO1NcHK4t1V_u8`
+- ✅ New Gemini API key active: ``
 - ✅ Secret stored in Secret Manager: `GEMINI_API_KEY` (version 1)
 - ✅ Cloud Run updated: `sheltr-api-00220-t5p`
 - ✅ Gemini service initialized successfully

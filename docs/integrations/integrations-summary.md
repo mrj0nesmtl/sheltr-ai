@@ -17,14 +17,16 @@ Documentation for all third-party integrations including Firebase services, paym
 
 ### 🔥 [Firebase Integration](firebase-integration.md)
 **Complete Firebase services setup**
-- Authentication
+- Authentication (5-role RBAC)
 - Firestore database
-- Cloud Storage
+- Cloud Storage (with secure docs)
 - Cloud Functions
 - Hosting
 - Analytics
+- **🆕 Secure Documents** (8-tier access)
+- **🆕 Firebase AI Logic** (Gemini integration)
 
-**Status**: ✅ **Production** - Fully integrated
+**Status**: ✅ **Production** - Fully integrated with Session 25 enhancements
 
 ---
 
@@ -39,6 +41,11 @@ Documentation for all third-party integrations including Firebase services, paym
 - 📧 **SendGrid** - Email delivery (Planned)
 - 📱 **Twilio** - SMS notifications (Planned)
 - 💬 **Slack** - Team notifications (Planned)
+
+### AI Services
+- 🤖 **Google Gemini** - Cost-effective chat (✅ Production)
+- 🧠 **OpenAI** - Embeddings & authenticated chat (✅ Production)
+- 🔮 **Anthropic** - Advanced reasoning (✅ Production)
 
 ### Analytics
 - 📊 **Google Analytics** - Web analytics (Planned)
@@ -58,6 +65,6 @@ Each integration includes:
 
 ---
 
-**Last Updated**: October 30, 2025  
-**Active Integrations**: 1 (Firebase)  
-**Status**: ✅ Growing
+**Last Updated**: November 25, 2025  
+**Active Integrations**: 4 (Firebase, Gemini AI, OpenAI, Anthropic)  
+**Status**: ✅ Growing - Session 25

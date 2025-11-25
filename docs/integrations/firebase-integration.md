@@ -179,6 +179,20 @@ service firebase.storage {
       allow write: if request.auth != null && request.auth.token.role == 'super_admin';
     }
     
+    // 🆕 Secure documents - Role-based access (Session 25)
+    match /secure-docs/{directory}/{document=**} {
+      allow read: if (directory == 'founders' && (isSuperAdmin() || isPlatformAdmin() || getUserRole() == 'founders' || getUserRole() == 'leadership')) ||
+                     (directory == 'leadership' && (isSuperAdmin() || isPlatformAdmin() || getUserRole() == 'leadership')) ||
+                     (directory == 'operations' && (isSuperAdmin() || isPlatformAdmin())) ||
+                     (directory == 'fintec' && (isSuperAdmin() || isPlatformAdmin())) ||
+                     (directory == 'dataroom' && (isSuperAdmin() || isPlatformAdmin() || getUserRole() == 'investor')) ||
+                     (directory == 'development' && (isSuperAdmin() || isPlatformAdmin())) ||
+                     (directory == 'drafts' && (isSuperAdmin() || isPlatformAdmin())) ||
+                     (directory == 'platform-admin' && (isSuperAdmin() || isPlatformAdmin())) ||
+                     (directory == 'vault' && isSuperAdmin());
+      allow write: if isSuperAdmin();
+    }
+    
     // Shelter documents
     match /shelters/{shelterId}/{allPaths=**} {
       allow read: if request.auth != null;
@@ -273,8 +287,49 @@ trackEvent('shelter_viewed', {
 });
 ```
 
+## 🆕 Session 25 Additions
+
+### Gemini AI Integration
+
+```typescript
+// apps/web/src/services/geminiService.ts
+import { getGenerativeModel, VertexAIBackend } from '@google/generative-ai';
+
+const backend = new VertexAIBackend({
+  project: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  location: 'us-central1'
+});
+
+const model = getGenerativeModel(
+  { model: 'gemini-2.5-flash' },
+  { backend }
+);
+
+export async function generateResponse(prompt: string) {
+  const result = await model.generateContent(prompt);
+  return result.response.text();
+}
+```
+
+### Secure Documents System
+
+**8-Tier Access Control**:
+- `founders/` - Founders only
+- `leadership/` - Leadership + Founders
+- `operations/`, `fintec/` - Platform Admin+
+- `dataroom/` - Investors + Admin+
+- `development/`, `drafts/`, `platform-admin/` - Platform Admin only
+- `vault/` - Super Admin ONLY
+
+**AI Integration**:
+- All secure documents generate embeddings
+- Chatbot access filtered by user role
+- Knowledge base queries respect confidentiality levels
+
+---
+
 ## 🔗 Related Documentation
 
 - [Google Cloud Integration](./google-cloud-integration.md)
-- [Database Schema](../07-reference/database-schema.md)
+- [Secure Documents Architecture](../features/knowledge-base/knowledge-architechture.md)
 - [Security Configuration](../05-deployment/security.md)

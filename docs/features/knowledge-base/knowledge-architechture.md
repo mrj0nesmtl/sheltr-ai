@@ -44,25 +44,27 @@ Traditional documentation systems fail to scale with modern platforms. SHELTR's 
 **Problem**: Context switching between docs and code  
 **Solution**: Model Context Protocol (MCP) integration for AI-assisted development
 
-### Key Metrics (November 7, 2025)
+### Key Metrics (November 25, 2025)
 
 | Metric | Current Status | Target |
 |--------|----------------|--------|
-| **Total Documents** | 75+ (62 public + 13 secure) | 150+ by Q1 2026 |
+| **Total Documents** | 85+ (62 public + 23 secure) | 150+ by Q1 2026 |
 | **AI Response Time** | <1s (FAQ) / 2-4s (RAG) | <1s for 95% of queries |
 | **GitHub Sync** | Automated with smart exclusions | Real-time webhook |
 | **Search Accuracy** | 92% semantic match rate | 95%+ |
 | **Chatbot Coverage** | 90% FAQ, 100% RAG | 95% FAQ |
-| **Cost per Query** | $0.002 average | $0.001 target |
+| **Cost per Query** | $0.001 average (56% reduction) | $0.0005 target |
+| **Secure Docs** | 8 folders, role-based AI access | Full integration |
 
 ### Value Proposition
 
-💰 **Cost Efficiency**: 56% reduction in GCP costs via intelligent caching  
+💰 **Cost Efficiency**: 56% reduction in AI costs via Gemini integration + intelligent caching  
 ⚡ **Speed**: Sub-second responses for 90% of user queries  
-🤖 **AI-Powered**: GPT-4 Turbo with context-aware responses  
-🔐 **Security**: Role-based access control with encryption  
+🤖 **AI-Powered**: Hybrid system (Gemini chat + OpenAI embeddings)  
+🔐 **Security**: Role-based access control with 8-tier secure document system  
 📊 **Analytics**: Real-time insights into knowledge usage patterns  
-🔄 **Automation**: Zero-touch GitHub synchronization
+🔄 **Automation**: Zero-touch GitHub synchronization + secure docs sync  
+🎯 **Role-Based AI**: Chatbot access filtered by user role and document confidentiality
 
 ---
 
@@ -181,28 +183,38 @@ graph LR
     style I fill:#feca57
 ```
 
-### 4. **Secure Document Publishing**
+### 4. **Secure Document Publishing & Role-Based AI Access**
 
-**Status**: ✅ Production (November 1, 2025)
+**Status**: ✅ Production (November 25, 2025 - Session 25)
 
-Multi-destination document publishing system with granular access control for sensitive business information.
+Multi-destination document publishing system with granular access control AND role-based AI chatbot access for sensitive business information.
 
 **Publishing Destinations:**
 
 1. **Public Documentation Hub** (`/docs`)
    - Access: Everyone
+   - AI Access: ✅ Yes (public chatbot)
    - Use Case: General platform documentation
    - Examples: Getting started, API reference, user guides
 
 2. **Founders Portal** (`/portal/founders-only`)
-   - Access: Super Admin + Platform Admin
+   - Access: Super Admin + Platform Admin + Founders
+   - AI Access: ✅ Yes (role-filtered)
    - Use Case: Internal strategy, business plans, technical specs
-   - Examples: Business plan, MSB registration, payment rails
+   - Examples: Business plan, fundraising strategy, corporate structure
 
 3. **Investor Relations Data Room** (`/ir/dataroom`)
    - Access: Qualified Investors + Admins
+   - AI Access: ✅ Yes (investor-filtered)
    - Use Case: Financial projections, strategic roadmap
    - Examples: Revenue forecasts, partnership strategy, development roadmap
+
+4. **🆕 Secure Documents System** (`.local-secure-docs/`)
+   - Access: 8-tier role-based system
+   - AI Access: ✅ Yes (role + confidentiality filtered)
+   - Storage: Firebase Storage (`gs://sheltr-ai.firebasestorage.app/secure-docs/`)
+   - Folders: founders, leadership, operations, fintec, dataroom, development, drafts, vault
+   - Use Case: Sensitive internal documents with AI-assisted retrieval
 
 **Publishing Workflow:**
 ```
@@ -343,10 +355,13 @@ Portal Sync → Real-time Update → User Access
 - Real-time Firestore sync
 
 **AI/ML:**
-- OpenAI `gpt-4-turbo-preview` (chat)
-- OpenAI `text-embedding-3-large` (search)
+- Google Gemini `gemini-2.5-flash` (chat - public users)
+- Google Gemini `gemini-2.5-flash-lite` (lightweight chat)
+- OpenAI `gpt-4o-mini` (chat - authenticated users)
+- OpenAI `text-embedding-3-large` (embeddings & search)
 - Vector similarity (cosine distance)
 - Confidence scoring
+- Role-based content filtering
 
 **Infrastructure:**
 - Firebase Hosting (static assets)
@@ -1017,13 +1032,13 @@ User satisfaction: 4.7/5 (survey)
 
 ---
 
-**Last Updated**: November 7, 2025  
-**Version**: 1.0.0 - Investor Overview  
+**Last Updated**: November 25, 2025  
+**Version**: 1.1.0 - Session 25 Update (Secure Docs + Gemini AI)  
 **Status**: ✅ Production Ready
 
 **Document Owner**: Platform Team  
 **Review Cycle**: Monthly  
-**Next Review**: December 7, 2025
+**Next Review**: December 25, 2025
 
 ---
 

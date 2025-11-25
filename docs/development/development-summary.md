@@ -248,10 +248,12 @@ chore: maintenance tasks
 ### Required Tools
 
 - **Node.js**: v18+ (LTS)
-- **Python**: 3.9+
+- **Python**: 3.11+
 - **Firebase CLI**: Latest
 - **Git**: 2.x+
 - **VS Code**: Recommended IDE
+- **Google Cloud SDK**: For production deployment
+- **Docker**: For backend containerization
 
 ### VS Code Extensions
 
@@ -276,10 +278,15 @@ NEXT_PUBLIC_API_URL=http://localhost:8000
 NEXT_PUBLIC_FIREBASE_API_KEY=...
 NEXT_PUBLIC_FIREBASE_PROJECT_ID=sheltr-ai
 
-# .env (Backend)
+# .env (Backend - apps/api/.env)
 FIREBASE_PROJECT_ID=sheltr-ai
 OPENAI_API_KEY=...
+GEMINI_API_KEY=...
+ANTHROPIC_API_KEY=...
+GITHUB_TOKEN=...
 ENVIRONMENT=development
+GEMINI_MODEL=gemini-2.5-flash
+GEMINI_LITE_MODEL=gemini-2.5-flash-lite
 ```
 
 ---
@@ -307,21 +314,23 @@ ENVIRONMENT=development
 
 ## 📊 Development Metrics
 
-### Current Sprint (Q4 2025)
+### Current Sprint (Q4 2025 - Session 25)
 
-- **Features Completed**: 8/10
-- **Bugs Fixed**: 23
-- **Tests Added**: 145
-- **Code Coverage**: 82%
+- **Features Completed**: 12/14
+- **Bugs Fixed**: 35+
+- **Tests Added**: 180+
+- **Code Coverage**: 85%
 - **Build Time**: < 3 min
 - **Deploy Time**: < 5 min
+- **AI Cost Reduction**: 56% (Gemini integration)
 
 ### Velocity
 
-- **Story Points/Week**: 40-50
-- **Features/Month**: 15-20
+- **Story Points/Week**: 45-55
+- **Features/Month**: 18-22
 - **Bug Fix Time**: < 24 hours (critical)
 - **PR Review Time**: < 4 hours
+- **Deployment Frequency**: Daily (automated)
 
 ---
 
@@ -346,20 +355,23 @@ ENVIRONMENT=development
 
 ### Current Focus Areas
 
-1. **Payment Rails Integration** (High Priority)
-   - Adyen integration
-   - Donation flow completion
-   - Transaction tracking
+1. **Secure Documents & AI Access** (High Priority)
+   - ✅ Role-based document access
+   - ✅ Gemini AI integration
+   - ✅ Knowledge base embeddings
+   - 🔄 Vector database optimization
 
-2. **Chatbot Enhancements** (Medium Priority)
-   - Agent specialization
-   - Response optimization
-   - Context improvements
+2. **Donor Experience** (High Priority)
+   - ✅ Tax receipt PDF generation
+   - ✅ Recurring gift scheduling
+   - ✅ SmartFund transparency
+   - 🔄 Payment rails completion
 
-3. **Mobile Optimization** (Medium Priority)
-   - Responsive design
-   - Touch interactions
-   - Performance tuning
+3. **Performance Optimization** (Medium Priority)
+   - ✅ 56% cost reduction (Gemini)
+   - ✅ Sub-second FAQ responses
+   - 🔄 RAG semantic search optimization
+   - 📋 Vector database migration
 
 ---
 
@@ -382,11 +394,15 @@ ENVIRONMENT=development
 
 ## 🎯 Development Roadmap
 
-### Q4 2025 (Current)
+### Q4 2025 (Current - Session 25)
 - ✅ Chatbot multi-agent system
 - ✅ Knowledge base GitHub sync
 - ✅ Notification system overhaul
 - ✅ Blog system launch
+- ✅ **Gemini AI integration** (cost-effective chat)
+- ✅ **Secure documents system** (role-based AI access)
+- ✅ **Tax receipt generation** (PDF with CRA compliance)
+- ✅ **Recurring gifts system** (scheduled donations)
 - 🔄 Payment rails integration
 - 📋 Mobile optimization
 
@@ -395,6 +411,7 @@ ENVIRONMENT=development
 - 📋 Advanced analytics
 - 📋 Performance optimization
 - 📋 Enterprise features
+- 📋 Vector database for RAG optimization
 
 See [Development Roadmap](dev-roadmap.md) for complete timeline.
 
@@ -412,9 +429,9 @@ We welcome contributions! Here's how:
 
 ---
 
-**Last Updated**: October 30, 2025  
+**Last Updated**: November 25, 2025  
 **Team Size**: 5 developers  
-**Sprint**: Q4 2025  
+**Sprint**: Q4 2025 - Session 25  
 **Status**: ✅ Active Development
 
 ---

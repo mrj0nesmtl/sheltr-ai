@@ -106,6 +106,7 @@ deploy_backend() {
     
     # Deploy to Cloud Run
     echo -e "${YELLOW}🚀 Deploying to Cloud Run...${NC}"
+    echo -e "${BLUE}📦 Session 25 Features: Gemini AI + Secure Docs + Role-Based Access${NC}"
     
     # Get GITHUB_TOKEN from environment or .env file
     if [ -z "$GITHUB_TOKEN" ]; then
@@ -132,8 +133,8 @@ deploy_backend() {
         --no-traffic \
         --tag=candidate \
         --service-account firebase-adminsdk-fbsvc@sheltr-ai.iam.gserviceaccount.com \
-        --set-env-vars="GOOGLE_CLOUD_PROJECT=sheltr-ai,ENVIRONMENT=production,FIREBASE_STORAGE_BUCKET=sheltr-ai.firebasestorage.app,OPENAI_MODEL=gpt-4o-mini,OPENAI_MAX_TOKENS=2000,OPENAI_TEMPERATURE=0.7,OPENAI_TIMEOUT=30,OPENAI_FALLBACK_MODEL=gpt-3.5-turbo,OPENAI_MAX_CONTEXT_TOKENS=4000,OPENAI_RATE_LIMIT_PER_MINUTE=60,FRONTEND_URL=https://sheltr-ai.web.app,GITHUB_TOKEN=$GITHUB_TOKEN,GITHUB_OWNER=mrj0nesmtl,GITHUB_REPO=sheltr-ai,GITHUB_DOCS_PATH=docs" \
-        --update-secrets="OPENAI_API_KEY=openai-api-key:latest,ANTHROPIC_API_KEY=anthropic-api-key:latest" \
+        --set-env-vars="GOOGLE_CLOUD_PROJECT=sheltr-ai,ENVIRONMENT=production,FIREBASE_STORAGE_BUCKET=sheltr-ai.firebasestorage.app,OPENAI_MODEL=gpt-4o-mini,OPENAI_MAX_TOKENS=2000,OPENAI_TEMPERATURE=0.7,OPENAI_TIMEOUT=30,OPENAI_FALLBACK_MODEL=gpt-3.5-turbo,OPENAI_MAX_CONTEXT_TOKENS=4000,OPENAI_RATE_LIMIT_PER_MINUTE=60,GEMINI_MODEL=gemini-2.5-flash,GEMINI_LITE_MODEL=gemini-2.5-flash-lite,FRONTEND_URL=https://sheltr-ai.web.app,GITHUB_TOKEN=$GITHUB_TOKEN,GITHUB_OWNER=mrj0nesmtl,GITHUB_REPO=sheltr-ai,GITHUB_DOCS_PATH=docs" \
+        --update-secrets="OPENAI_API_KEY=openai-api-key:latest,ANTHROPIC_API_KEY=anthropic-api-key:latest,GEMINI_API_KEY=GEMINI_API_KEY:latest" \
         >> logs/deploy-backend.log 2>&1
     check_status "Cloud Run deployment"
     
@@ -348,11 +349,33 @@ post_deployment_verification() {
         echo -e "${YELLOW}⚠️  Consider adding security headers in firebase.json${NC}"
     fi
     
-    # Test backend (if deployed)
-    # Note: This would need to be updated with actual function URL
+    # Test backend API (if deployed)
+    echo -e "${YELLOW}🔌 Testing backend API...${NC}"
+    if curl -s --connect-timeout 10 https://sheltr-api-714964620823.us-central1.run.app/health > /dev/null 2>&1; then
+        echo -e "${GREEN}✅ Backend API is accessible${NC}"
+    else
+        echo -e "${YELLOW}⚠️  Backend API health check failed (may take a few minutes to propagate)${NC}"
+    fi
+    
+    # Test AI chatbot endpoint
+    echo -e "${YELLOW}🤖 Testing Gemini AI chatbot...${NC}"
+    if curl -s --connect-timeout 10 https://sheltr-api-714964620823.us-central1.run.app/api/v1/chatbot/health > /dev/null 2>&1; then
+        echo -e "${GREEN}✅ Gemini AI chatbot is ready${NC}"
+    else
+        echo -e "${YELLOW}⚠️  AI chatbot may need time to initialize${NC}"
+    fi
+    
+    # Test knowledge base endpoint
+    echo -e "${YELLOW}📚 Testing knowledge base with secure docs...${NC}"
+    if curl -s --connect-timeout 10 https://sheltr-api-714964620823.us-central1.run.app/api/v1/knowledge/health > /dev/null 2>&1; then
+        echo -e "${GREEN}✅ Knowledge base with role-based access is ready${NC}"
+    else
+        echo -e "${YELLOW}⚠️  Knowledge base may need time to initialize${NC}"
+    fi
     
     echo -e "${GREEN}✅ Post-deployment verification completed${NC}"
     echo -e "${BLUE}📊 Monitor deployment: https://console.firebase.google.com/project/sheltr-ai/hosting${NC}"
+    echo -e "${BLUE}🔐 Monitor Cloud Run: https://console.cloud.google.com/run/detail/us-central1/sheltr-api/metrics${NC}"
 }
 
 # Main deployment flow
@@ -407,10 +430,19 @@ main() {
     if [ $choice -eq 2 ] || [ $choice -eq 3 ]; then
         echo -e "${BLUE}🔌 Backend API:${NC} https://sheltr-api-714964620823.us-central1.run.app"
         echo -e "${BLUE}📚 API Docs:${NC} https://sheltr-api-714964620823.us-central1.run.app/docs"
+        echo -e "${BLUE}🤖 Gemini AI:${NC} gemini-2.5-flash + gemini-2.5-flash-lite"
+        echo -e "${BLUE}🏥 Health Check:${NC} https://sheltr-api-714964620823.us-central1.run.app/health"
     fi
     
+    echo ""
+    echo -e "${GREEN}🎉 Session 25 Features Deployed:${NC}"
+    echo "  • Gemini AI Integration (cost-effective chat)"
+    echo "  • Secure Documents (8 folders with role-based access)"
+    echo "  • Enhanced Knowledge Base (role-based filtering)"
+    echo "  • Hybrid AI System (Gemini + OpenAI)"
+    echo ""
     echo -e "${BLUE}📊 Firebase Console:${NC} https://console.firebase.google.com/project/sheltr-ai"
-    echo -e "${BLUE}🔒 Security Overview:${NC} https://github.com/mrj0nesmtl/sheltr-ai/security"
+    echo -e "${BLUE}🔐 Security Overview:${NC} https://github.com/mrj0nesmtl/sheltr-ai/security"
     echo -e "${BLUE}⚡ GitHub Actions:${NC} https://github.com/mrj0nesmtl/sheltr-ai/actions"
     echo ""
     

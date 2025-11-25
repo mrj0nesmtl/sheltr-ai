@@ -25,6 +25,8 @@ export type PermissionLevel =
   | 'shelter_admin' 
   | 'platform_admin' 
   | 'founders' 
+  | 'leadership'
+  | 'qualified_investor'
   | 'super_admin';
 
 interface PermissionBadgeProps {
@@ -77,6 +79,18 @@ const permissionConfig = {
     color: 'bg-amber-100 text-amber-800 border-amber-300 dark:bg-amber-900/30 dark:text-amber-300 dark:border-amber-700',
     icon: Crown
   },
+  leadership: {
+    label: 'Leadership',
+    description: 'Leadership team',
+    color: 'bg-indigo-100 text-indigo-800 border-indigo-300 dark:bg-indigo-900/30 dark:text-indigo-300 dark:border-indigo-700',
+    icon: Crown
+  },
+  qualified_investor: {
+    label: 'Investor',
+    description: 'Qualified investors',
+    color: 'bg-emerald-100 text-emerald-800 border-emerald-300 dark:bg-emerald-900/30 dark:text-emerald-300 dark:border-emerald-700',
+    icon: Building
+  },
   super_admin: {
     label: 'Super Admin',
     description: 'Highest level access',
@@ -103,7 +117,9 @@ export const PermissionBadge: React.FC<PermissionBadgeProps> = ({
   size = 'md',
   className = ''
 }) => {
-  const config = permissionConfig[permission];
+  // Defensive check: fallback to 'authenticated' if permission is undefined or not in config
+  const safePermission = permission && permissionConfig[permission] ? permission : 'authenticated';
+  const config = permissionConfig[safePermission];
   const Icon = config.icon;
 
   return (

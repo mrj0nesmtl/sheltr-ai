@@ -63,19 +63,20 @@ async def sync_secure_documents(
             )
         
         # Count files to sync - ALL 8 secure directories (updated Nov 25, 2025)
-        # Count files to sync (EXCLUDING: local, drafts, development)
+        # Count files to sync (EXCLUDING: local, drafts, development, vault)
+        blog_files = list((SECURE_DOCS_PATH / "blog-posts").glob("**/*.md")) if (SECURE_DOCS_PATH / "blog-posts").exists() else []
         dataroom_files = list((SECURE_DOCS_PATH / "dataroom").glob("**/*.md")) if (SECURE_DOCS_PATH / "dataroom").exists() else []
         # development_files - EXCLUDED (local development logs)
         # drafts_files - EXCLUDED (work-in-progress)
         # local_files - EXCLUDED (local-only files)
+        # vault_files - EXCLUDED (credentials, too sensitive)
         fintec_files = list((SECURE_DOCS_PATH / "fintec").glob("**/*.md")) if (SECURE_DOCS_PATH / "fintec").exists() else []
         founders_files = list((SECURE_DOCS_PATH / "founders").glob("**/*.md")) if (SECURE_DOCS_PATH / "founders").exists() else []
         leadership_files = list((SECURE_DOCS_PATH / "leadership").glob("**/*.md")) if (SECURE_DOCS_PATH / "leadership").exists() else []
         operations_files = list((SECURE_DOCS_PATH / "operations").glob("**/*.md")) if (SECURE_DOCS_PATH / "operations").exists() else []
         admin_files = list((SECURE_DOCS_PATH / "platform-admin").glob("**/*.md")) if (SECURE_DOCS_PATH / "platform-admin").exists() else []
-        vault_files = list((SECURE_DOCS_PATH / "vault").glob("**/*.md")) if (SECURE_DOCS_PATH / "vault").exists() else []
         
-        total_files = len(dataroom_files) + len(fintec_files) + len(founders_files) + len(leadership_files) + len(operations_files) + len(admin_files) + len(vault_files)
+        total_files = len(blog_files) + len(dataroom_files) + len(fintec_files) + len(founders_files) + len(leadership_files) + len(operations_files) + len(admin_files)
         
         if total_files == 0:
             return SyncSecureDocsResponse(
@@ -127,16 +128,17 @@ async def sync_secure_documents(
             },
             details=[
                 # All 8 secure directories being synced
+                {"directory": "blog-posts", "file_count": len(blog_files)},
                 {"directory": "dataroom", "file_count": len(dataroom_files)},
                 # development - EXCLUDED
                 # drafts - EXCLUDED
                 # local - EXCLUDED
+                # vault - EXCLUDED
                 {"directory": "fintec", "file_count": len(fintec_files)},
                 {"directory": "founders", "file_count": len(founders_files)},
                 {"directory": "leadership", "file_count": len(leadership_files)},
                 {"directory": "operations", "file_count": len(operations_files)},
-                {"directory": "platform-admin", "file_count": len(admin_files)},
-                {"directory": "vault", "file_count": len(vault_files)}
+                {"directory": "platform-admin", "file_count": len(admin_files)}
             ]
         )
         
@@ -166,8 +168,8 @@ async def get_secure_sync_status(
         # Count files in .local-secure-docs - ALL 8 secure directories
         total_files = 0
         if SECURE_DOCS_PATH.exists():
-            # Only count files from synced directories (EXCLUDING: local, drafts, development)
-            for subdir in ["dataroom", "fintec", "founders", "leadership", "operations", "platform-admin", "vault"]:
+            # Only count files from synced directories (EXCLUDING: local, drafts, development, vault)
+            for subdir in ["blog-posts", "dataroom", "fintec", "founders", "leadership", "operations", "platform-admin"]:
                 subdir_path = SECURE_DOCS_PATH / subdir
                 if subdir_path.exists():
                     total_files += len(list(subdir_path.glob("**/*.md")))
@@ -208,8 +210,8 @@ async def list_secure_directories(
         
         directories = []
         # ALL 8 secure directories being synced
-        # Only list synced directories (EXCLUDING: local, drafts, development)
-        for subdir in ["dataroom", "fintec", "founders", "leadership", "operations", "platform-admin", "vault"]:
+        # Only list synced directories (EXCLUDING: local, drafts, development, vault)
+        for subdir in ["blog-posts", "dataroom", "fintec", "founders", "leadership", "operations", "platform-admin"]:
             subdir_path = SECURE_DOCS_PATH / subdir
             if subdir_path.exists():
                 md_files = list(subdir_path.glob("**/*.md"))

@@ -335,61 +335,53 @@ export function buildDualRepositoryTree(documents: KnowledgeDocument[]): FolderN
     });
   }
 
-  // Build Firebase repository node with secure categories
+  // Build Firebase repository node with hierarchical structure from file paths
   if (firebaseDocs.length > 0) {
-    const secureCategories = new Map<string, FolderNode>();
-    
-    // Define secure category metadata - ONLY 3 active directories
-    const secureCategoryMetadata: Record<string, { icon: string; description: string; order: number }> = {
-      'fintec': { icon: '💳', description: 'Financial technology & payment rails', order: 1 },
-      'operations': { icon: '⚙️', description: 'Operational procedures & workflows', order: 2 },
-      'platform-admin': { icon: '🔒', description: 'Platform admin system documentation', order: 3 }
+    // Folder icons for secure directories
+    const folderIcons: Record<string, string> = {
+      'dataroom': '📊',
+      'fintec': '💳',
+      'founders': '👑',
+      'leadership': '🎯',
+      'operations': '⚙️',
+      'blog-posts': '📝'
     };
 
-    // Group Firebase docs by source_directory
-    firebaseDocs.forEach(doc => {
-      const dir = doc.source_directory || 'other';
-      
-      if (!secureCategories.has(dir)) {
-        const metadata = secureCategoryMetadata[dir] || { icon: '🔒', description: 'Secure documents', order: 99 };
-        secureCategories.set(dir, {
-          id: `firebase-${dir}`,
-          name: `${metadata.icon} ${dir.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}`,
-          path: `firebase/${dir}`,
-          type: 'folder',
-          source: 'firebase',
-          children: [],
-          documentCount: 0
-        });
+    // Build hierarchical tree from file_path (e.g., "secure-docs/leadership/strategy/file.md")
+    const firebaseTree = buildFolderTree(firebaseDocs);
+    
+    // Add Firebase source and icons to all nodes
+    const addFirebaseMetadata = (node: FolderNode, depth: number = 0): FolderNode => {
+      const updatedNode: FolderNode = {
+        ...node,
+        source: 'firebase'
+      };
+
+      // Add icon to root-level folders (dataroom, fintec, etc.)
+      if (depth === 1 && node.type === 'folder') {
+        const folderName = node.name.toLowerCase();
+        const icon = folderIcons[folderName] || '🔒';
+        updatedNode.name = `${icon} ${node.name.charAt(0).toUpperCase() + node.name.slice(1)}`;
       }
 
-      const category = secureCategories.get(dir)!;
-      category.children!.push({
-        id: doc.id,
-        name: doc.title || 'Untitled',
-        path: doc.file_path || `firebase/${dir}/${doc.id}`,
-        type: 'document',
-        source: 'firebase',
-        securityLevel: doc.permission_level || 'secure'
-      });
-      category.documentCount = (category.documentCount || 0) + 1;
-    });
-
-    // Sort categories and their documents
-    const sortedCategories = Array.from(secureCategories.values())
-      .sort((a, b) => {
-        const aDir = a.path.split('/')[1];
-        const bDir = b.path.split('/')[1];
-        const aOrder = secureCategoryMetadata[aDir]?.order || 99;
-        const bOrder = secureCategoryMetadata[bDir]?.order || 99;
-        return aOrder - bOrder;
-      });
-
-    sortedCategories.forEach(cat => {
-      if (cat.children) {
-        cat.children.sort((a, b) => a.name.localeCompare(b.name));
+      // Recursively process children
+      if (node.children) {
+        updatedNode.children = node.children.map(child => addFirebaseMetadata(child, depth + 1));
       }
-    });
+
+      return updatedNode;
+    };
+
+    // The tree is wrapped in "secure-docs" folder, extract its children
+    let secureDocsChildren: FolderNode[] = [];
+    if (firebaseTree.length > 0 && firebaseTree[0].name === 'secure-docs') {
+      secureDocsChildren = firebaseTree[0].children || [];
+    } else {
+      secureDocsChildren = firebaseTree;
+    }
+
+    // Add metadata to all nodes
+    const enhancedChildren = secureDocsChildren.map(node => addFirebaseMetadata(node, 1));
 
     repositories.push({
       id: 'firebase-repository',
@@ -397,7 +389,7 @@ export function buildDualRepositoryTree(documents: KnowledgeDocument[]): FolderN
       path: 'firebase',
       type: 'repository',
       source: 'firebase',
-      children: sortedCategories,
+      children: enhancedChildren,
       documentCount: firebaseDocs.length,
       badge: 'Secure'
     });

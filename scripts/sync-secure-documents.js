@@ -138,6 +138,16 @@ const db = admin.firestore();
 const SECURE_DOCS_ROOT = path.join(__dirname, '../.local-secure-docs');
 // UPDATED Nov 25, 2025: All 8 directories now sync with chatbot_accessible: true (role-based access)
 const COLLECTIONS_TO_SYNC = {
+  'blog-posts': {
+    permission_level: 'platform_admin',
+    published_to_founders: false,
+    published_to_ir: false,
+    visibility_scope: 'organization',
+    is_private: true,
+    chatbot_accessible: true,              // ✅ Enable AI access for admins
+    secure_badge: 'Blog Posts',
+    secure_badge_color: 'green'
+  },
   'dataroom': {
     permission_level: 'qualified_investor',
     published_to_founders: false,
@@ -231,16 +241,17 @@ const COLLECTIONS_TO_SYNC = {
     secure_badge: 'Admin Only',
     secure_badge_color: 'red'
   },
-  'vault': {
-    permission_level: 'super_admin',
-    published_to_founders: false,
-    published_to_ir: false,
-    visibility_scope: 'organization',
-    is_private: true,
-    chatbot_accessible: true,              // ✅ CHANGED: Enable AI access for super admins
-    secure_badge: 'Vault',
-    secure_badge_color: 'slate'
-  }
+  // ❌ EXCLUDED: 'vault' - Contains credentials (too sensitive for KB)
+  // 'vault': {
+  //   permission_level: 'super_admin',
+  //   published_to_founders: false,
+  //   published_to_ir: false,
+  //   visibility_scope: 'organization',
+  //   is_private: true,
+  //   chatbot_accessible: false,
+  //   secure_badge: 'Vault',
+  //   secure_badge_color: 'slate'
+  // }
 };
 
 /**

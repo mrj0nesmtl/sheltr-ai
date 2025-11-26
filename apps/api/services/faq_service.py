@@ -494,6 +494,21 @@ class FAQService:
         except Exception as e:
             logger.error(f"Error updating FAQ {faq_id}: {str(e)}")
             return False
+    
+    def get_all_faqs(self) -> List[Dict[str, Any]]:
+        """Get all FAQs in the database"""
+        
+        all_faqs = []
+        for faq_id, faq_data in self.faq_database.items():
+            all_faqs.append({
+                "id": faq_id,
+                "questions": faq_data["questions"],
+                "answer": faq_data["answer"],
+                "category": faq_data.get("category", "general"),
+                "actions": faq_data.get("actions", [])
+            })
+        
+        return all_faqs
 
 # Global FAQ service instance
 faq_service = FAQService()

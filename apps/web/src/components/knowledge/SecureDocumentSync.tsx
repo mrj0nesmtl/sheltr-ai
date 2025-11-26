@@ -41,7 +41,11 @@ interface SyncResult {
   }>;
 }
 
-export const SecureDocumentSync: React.FC = () => {
+interface SecureDocumentSyncProps {
+  onSyncComplete?: () => void;
+}
+
+export const SecureDocumentSync: React.FC<SecureDocumentSyncProps> = ({ onSyncComplete }) => {
   const [syncing, setSyncing] = useState(false);
   const [generatingEmbeddings, setGeneratingEmbeddings] = useState(false);
   const [syncResult, setSyncResult] = useState<SyncResult | null>(null);
@@ -125,6 +129,13 @@ export const SecureDocumentSync: React.FC = () => {
       if (data.success && data.stats.total > 0) {
         console.log('🧠 Auto-triggering embedding generation...');
         await generateEmbeddings();
+      }
+
+      // Call the callback to refresh the knowledge base
+      if (onSyncComplete) {
+        setTimeout(() => {
+          onSyncComplete();
+        }, 1000);
       }
 
     } catch (err) {

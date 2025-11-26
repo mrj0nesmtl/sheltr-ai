@@ -187,14 +187,17 @@ export default function KnowledgeDashboard() {
     setShowViewDialog(true);
   };
 
-  const loadKnowledgeData = async () => {
+  const loadKnowledgeData = async (forceRefresh = false) => {
     try {
       setLoading(true);
       
+      // Add cache-busting timestamp if force refresh
+      const cacheBuster = forceRefresh ? `?_t=${Date.now()}` : '';
+      
       // Get documents and stats from API
       const [documentsResponse, statsResponse] = await Promise.all([
-        knowledgeDashboardService.getKnowledgeDocuments(),
-        knowledgeDashboardService.getKnowledgeStats()
+        knowledgeDashboardService.getKnowledgeDocuments(cacheBuster),
+        knowledgeDashboardService.getKnowledgeStats(cacheBuster)
       ]);
       
       console.log('📊 Knowledge Data Debug:');
@@ -484,7 +487,7 @@ export default function KnowledgeDashboard() {
             </div>
           </AccordionTrigger>
           <AccordionContent className="px-4 pb-4">
-            <GitHubSyncPanel onSyncComplete={loadKnowledgeData} userRole={userRole} />
+            <GitHubSyncPanel onSyncComplete={() => loadKnowledgeData(true)} userRole={userRole} />
           </AccordionContent>
         </AccordionItem>
 
@@ -499,7 +502,7 @@ export default function KnowledgeDashboard() {
               </div>
             </AccordionTrigger>
             <AccordionContent className="px-4 pb-4">
-              <SecureDocumentSync />
+              <SecureDocumentSync onSyncComplete={() => loadKnowledgeData(true)} />
             </AccordionContent>
           </AccordionItem>
         )}

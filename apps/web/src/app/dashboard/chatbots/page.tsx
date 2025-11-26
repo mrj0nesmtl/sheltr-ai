@@ -112,6 +112,7 @@ export default function ChatbotDashboard() {
   const [kbDocCount, setKbDocCount] = useState<{ documents: number; faqs: number } | null>(null);
   const [showKBPicker, setShowKBPicker] = useState(false);
   const [attachedDocs, setAttachedDocs] = useState<string[]>([]);
+  const [attachedKBDocuments, setAttachedKBDocuments] = useState<Array<{ id: string; title: string }>>([]);
 
   // Toolbar state
   const [showToolbar, setShowToolbar] = useState(true);
@@ -1360,11 +1361,12 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
       <KBDocumentPickerModal
         isOpen={showKBPicker}
         onClose={() => setShowKBPicker(false)}
-        onSelect={(docIds) => {
-          setAttachedDocs(docIds);
-          console.log('Attached documents:', docIds);
+        onSelect={(docs) => {
+          setAttachedKBDocuments(docs);
+          setAttachedDocs(docs.map(d => d.id));
+          console.log('Attached documents:', docs);
         }}
-        selectedDocuments={attachedDocs}
+        selectedDocuments={attachedKBDocuments}
       />
     </div>
   );

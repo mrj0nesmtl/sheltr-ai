@@ -43,8 +43,8 @@ interface KBDocument {
 interface KBDocumentPickerModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSelect: (documentIds: string[]) => void;
-  selectedDocuments: string[];
+  onSelect: (documents: KBDocument[]) => void;
+  selectedDocuments: KBDocument[];
 }
 
 export function KBDocumentPickerModal({
@@ -57,7 +57,7 @@ export function KBDocumentPickerModal({
   const [loading, setLoading] = useState(false);
   const [documents, setDocuments] = useState<KBDocument[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selected, setSelected] = useState<string[]>(selectedDocuments);
+  const [selected, setSelected] = useState<KBDocument[]>(selectedDocuments);
 
   useEffect(() => {
     if (isOpen) {
@@ -107,11 +107,11 @@ export function KBDocumentPickerModal({
     doc.file_path?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const toggleDocument = (docId: string) => {
+  const toggleDocument = (doc: KBDocument) => {
     setSelected(prev =>
-      prev.includes(docId)
-        ? prev.filter(id => id !== docId)
-        : [...prev, docId]
+      prev.some(d => d.id === doc.id)
+        ? prev.filter(d => d.id !== doc.id)
+        : [...prev, doc]
     );
   };
 
@@ -191,11 +191,11 @@ export function KBDocumentPickerModal({
           ) : (
             <div className="space-y-2">
               {filteredDocuments.map((doc) => {
-                const isSelected = selected.includes(doc.id);
+                const isSelected = selected.some(d => d.id === doc.id);
                 return (
                   <div
                     key={doc.id}
-                    onClick={() => toggleDocument(doc.id)}
+                    onClick={() => toggleDocument(doc)}
                     className={`
                       p-3 rounded-lg border cursor-pointer transition-all
                       ${isSelected 
@@ -208,7 +208,7 @@ export function KBDocumentPickerModal({
                       <div className="mt-0.5">
                         <Checkbox
                           checked={isSelected}
-                          onCheckedChange={() => toggleDocument(doc.id)}
+                          onCheckedChange={() => toggleDocument(doc)}
                           className="pointer-events-none"
                         />
                       </div>

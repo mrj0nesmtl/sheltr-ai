@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.152.0] - 2025-11-26 (FAQ Document & Change Tracking Fix) 📚🔧
+
+### ✨ **New Features**
+- **Enhanced FAQ Database Document**: Created comprehensive markdown documentation (`docs/reference/enhanced-faq-database.md`) containing all 198 FAQs from the chatbot system, organized by category with editing guidelines for team review and updates.
+
+### 🐛 **Bug Fixes**
+- **Sidebar Tree Refresh**: Fixed issue where newly synced documents (like the FAQ doc) weren't appearing in the knowledge base sidebar tree after GitHub sync. Implemented force refresh mechanism with cache-busting timestamps.
+- **Change Tracking Permissions**: Fixed Firestore permissions error when saving knowledge documents. Added missing security rules for the `document_changes` collection to allow change tracking to work properly.
+
+### ⚙️ **Improvements**
+- **Cache-Busting for Sync**: Added `forceRefresh` parameter to `loadKnowledgeData()` that appends timestamp to API calls to bypass browser cache after sync operations.
+- **Sync Callbacks**: Enhanced both `GitHubSyncPanel` and `SecureDocumentSync` components to trigger force refresh after successful sync completion.
+- **Firestore Rules**: Added comprehensive security rules for `document_changes` collection allowing authenticated users to create change records and admins to read/update them.
+
+### 📚 **Documentation**
+- **`docs/reference/enhanced-faq-database.md`**: New 435-line markdown file documenting all FAQ categories, questions, answers, and editing procedures.
+- **`docs/development/SESSION-25-SIDEBAR-REFRESH-FIX.md`**: Detailed documentation of the sidebar tree refresh fix implementation.
+
+---
+
 ## [2.150.0] - 2025-11-25 (File Update Request System) 📬🔔
 
 ### ✨ **New Features**

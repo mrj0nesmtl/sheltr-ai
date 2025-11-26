@@ -53,7 +53,7 @@ export function KBDocumentPickerModal({
   onSelect,
   selectedDocuments
 }: KBDocumentPickerModalProps) {
-  const { user } = useAuth();
+  const { user, getCurrentToken } = useAuth();
   const [loading, setLoading] = useState(false);
   const [documents, setDocuments] = useState<KBDocument[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -70,7 +70,14 @@ export function KBDocumentPickerModal({
     try {
       setLoading(true);
       const userRole = user?.role || 'participant';
-      const token = await user?.getIdToken();
+      const token = await getCurrentToken();
+      
+      if (!token) {
+        console.error('No auth token available');
+        setLoading(false);
+        return;
+      }
+      
       const response = await fetch(`/api/v1/knowledge/documents?limit=100`, {
         headers: {
           'Authorization': `Bearer ${token}`

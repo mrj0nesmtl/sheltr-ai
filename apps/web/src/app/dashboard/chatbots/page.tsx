@@ -88,7 +88,7 @@ const getAgentColorClass = (agentType: string): string => {
 };
 
 export default function ChatbotDashboard() {
-  const { user } = useAuth();
+  const { user, getCurrentToken } = useAuth();
   const [sessions, setSessions] = useState<ChatSession[]>([]);
   const [currentSession, setCurrentSession] = useState<ChatSession | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -320,8 +320,13 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
   const fetchKBDocumentCount = async () => {
     try {
       const userRole = user?.role || 'participant';
-      const token = await user?.getIdToken();
+      const token = await getCurrentToken();
       console.log('Fetching KB document count for role:', userRole);
+      
+      if (!token) {
+        console.error('No auth token available');
+        return;
+      }
       
       const response = await fetch(`/api/v1/knowledge-dashboard/accessible-count?user_role=${userRole}`, {
         headers: {

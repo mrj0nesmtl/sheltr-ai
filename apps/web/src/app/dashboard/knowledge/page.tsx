@@ -320,8 +320,10 @@ export default function KnowledgeDashboard() {
                          doc.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          doc.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
     // Case-insensitive category matching to handle API vs Api vs api variations
+    // Category filter - check both category and source_directory (for secure docs)
     const matchesCategory = categoryFilter === 'all' || 
-                           doc.category.toLowerCase() === categoryFilter.toLowerCase();
+                           doc.category?.toLowerCase() === categoryFilter.toLowerCase() ||
+                           doc.source_directory?.toLowerCase() === categoryFilter.toLowerCase();
     
     // Status filter - now includes Doc Hub filter
     let matchesStatus = true;
@@ -706,6 +708,12 @@ export default function KnowledgeDashboard() {
                   <SelectItem value="Resources">🎯 Resources</SelectItem>
                   <SelectItem value="Archive">📦 Archive</SelectItem>
                   <SelectItem value="Documentation">📄 Documentation</SelectItem>
+                  <SelectItem value="blog-posts">📝 Blog Posts (Secure)</SelectItem>
+                  <SelectItem value="dataroom">📊 Data Room (Secure)</SelectItem>
+                  <SelectItem value="fintec">💳 FinTec (Secure)</SelectItem>
+                  <SelectItem value="founders">👑 Founders (Secure)</SelectItem>
+                  <SelectItem value="leadership">🎯 Leadership (Secure)</SelectItem>
+                  <SelectItem value="platform-admin">🔒 Platform Admin (Secure)</SelectItem>
                 </SelectContent>
               </Select>
 

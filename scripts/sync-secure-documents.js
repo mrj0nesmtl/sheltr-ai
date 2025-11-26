@@ -306,29 +306,46 @@ function generateDocId(content) {
 }
 
 /**
- * Sync a single document
+ * Sync a single document (supports subdirectories and CSV files)
  */
 async function syncDocument(dirName, filename, config) {
   const filePath = path.join(SECURE_DOCS_ROOT, dirName, filename);
   const content = fs.readFileSync(filePath, 'utf-8');
-  const { frontmatter, content: bodyContent } = parseFrontmatter(content);
+  const isCSV = filename.endsWith('.csv');
+  
+  let bodyContent, frontmatter = {}, wordCount;
+  
+  if (isCSV) {
+    // CSV file handling
+    bodyContent = content;
+    wordCount = content.split('\n').length; // Use line count for CSV
+  } else {
+    // Markdown file handling
+    const parsed = parseFrontmatter(content);
+    frontmatter = parsed.frontmatter;
+    bodyContent = parsed.content;
+    wordCount = countWords(bodyContent);
+  }
   
   // Generate document data
-  const slug = generateSlug(filename);
+  const slug = generateSlug(path.basename(filename));
   const docId = generateDocId(content);
-  const wordCount = countWords(bodyContent);
+  
+  // Get just the filename without path for title
+  const baseFilename = path.basename(filename);
+  const titleFromFilename = baseFilename.replace(/\.(md|csv)$/, '').replace(/-/g, ' ');
   
   const documentData = {
     // Basic info
-    title: frontmatter.title || filename.replace(/\.md$/, '').replace(/-/g, ' '),
+    title: frontmatter.title || titleFromFilename,
     content: bodyContent,
     category: frontmatter.category || 'Secure Documents',
     tags: frontmatter.tags ? frontmatter.tags.split(',').map(t => t.trim()) : [dirName],
     status: 'active',
     
-    // File metadata
+    // File metadata (preserve subfolder structure in file_path)
     file_path: `secure-docs/${dirName}/${filename}`,
-    file_type: 'markdown',
+    file_type: isCSV ? 'csv' : 'markdown',
     file_size: Buffer.byteLength(content, 'utf-8'),
     word_count: wordCount,
     
@@ -441,7 +458,28 @@ async function syncDocument(dirName, filename, config) {
 }
 
 /**
- * Sync all documents from a directory
+ * Recursively get all files from a directory and its subdirectories
+ */
+function getAllFilesRecursively(dirPath, arrayOfFiles = [], baseDir = dirPath) {
+  const files = fs.readdirSync(dirPath);
+  
+  files.forEach(file => {
+    const filePath = path.join(dirPath, file);
+    if (fs.statSync(filePath).isDirectory()) {
+      // Recursively process subdirectories
+      arrayOfFiles = getAllFilesRecursively(filePath, arrayOfFiles, baseDir);
+    } else {
+      // Store relative path from base directory (e.g., "team-bios/joel-yaffe-bio.md")
+      const relativePath = path.relative(baseDir, filePath);
+      arrayOfFiles.push(relativePath);
+    }
+  });
+  
+  return arrayOfFiles;
+}
+
+/**
+ * Sync all documents from a directory (including subdirectories)
  */
 async function syncDirectory(dirName, config) {
   const dirPath = path.join(SECURE_DOCS_ROOT, dirName);
@@ -451,32 +489,39 @@ async function syncDirectory(dirName, config) {
     return [];
   }
   
-  // Read all .md files, but exclude welcome letters, credentials, drafts, and README files
+  // Read all .md and .csv files recursively, but exclude welcome letters, credentials, drafts, and README files
   // Excluded files remain in secure storage but are NOT ingested into knowledge base
-  const allFiles = fs.readdirSync(dirPath).filter(f => f.endsWith('.md'));
+  const allFiles = getAllFilesRecursively(dirPath).filter(f => 
+    f.endsWith('.md') || f.endsWith('.csv')
+  );
+  
   const files = allFiles.filter(f => {
+    const fileName = path.basename(f).toLowerCase();
+    const fullPath = f.toLowerCase();
+    
     // Exclude welcome letter files (used by dashboard sidebar, not for knowledge base)
-    const isWelcomeLetter = f.toLowerCase().includes('welcome') || 
-                           f.toLowerCase().includes('welcome-letter') ||
-                           f.match(/^[a-z]+-welcome\.md$/i);
+    const isWelcomeLetter = fileName.includes('welcome') || 
+                           fileName.includes('welcome-letter') ||
+                           fullPath.includes('welcome-letters/') ||
+                           fileName.match(/^[a-z]+-welcome\.md$/i);
     
     // Exclude sensitive credentials files
-    const isCredentials = f.toLowerCase().includes('credentials') ||
-                         f.toLowerCase().includes('password') ||
-                         f === 'platform-admin-credentials.md';
+    const isCredentials = fileName.includes('credentials') ||
+                         fileName.includes('password') ||
+                         fileName === 'platform-admin-credentials.md';
     
     // Exclude draft blog posts and other drafts
-    const isDraft = f.toLowerCase().includes('draft') ||
-                   f.toLowerCase().includes('blog-post') ||
-                   f.includes('the-sheltr-journey-blog-post');
+    const isDraft = fileName.includes('draft') ||
+                   fileName.includes('blog-post') ||
+                   fullPath.includes('the-sheltr-journey-blog-post');
     
     // Exclude README files (pollute knowledge base with summary links)
     // These are directory overviews, not substantive documentation
-    const isReadme = f.toUpperCase() === 'README.MD';
+    const isReadme = fileName === 'readme.md';
     
     // Exclude MacBook setup guides (local dev only, not for KB)
-    const isSetupGuide = f.toLowerCase().includes('macbook-setup') ||
-                        f.toLowerCase().includes('quick-macbook-sync');
+    const isSetupGuide = fileName.includes('macbook-setup') ||
+                        fileName.includes('quick-macbook-sync');
     
     if (isWelcomeLetter) {
       console.log(`   ⏭️  Skipping welcome letter: ${f} (dashboard use only)`);

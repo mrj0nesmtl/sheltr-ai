@@ -7,6 +7,123 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.150.0] - 2025-11-25 (File Update Request System) 📬🔔
+
+### ✨ **New Features**
+
+#### **File Update Request System**
+- **Request File Update button**: New button in content editor to request source file changes
+- **Clarification banners**: Explains what can/can't be edited in the UI
+- **Request modal**: Beautiful modal for submitting update requests with:
+  - Request type selection (Content Update, Correction, Addition, Removal, Other)
+  - Priority levels (Low, Normal, High, Urgent)
+  - Summary field (100 char limit)
+  - Details field (2000 char limit with Markdown support)
+  - Document info display (title, source, path)
+- **Persistent requests**: Stored in Firestore `file_update_requests` collection
+- **Admin notifications**: Super admins notified of new requests
+- **Status tracking**: Pending → In Progress → Completed/Rejected workflow
+
+#### **UI Clarifications**
+- **Info banner above content editor**: Explains that metadata/settings are editable, but content edits are temporary
+- **Warning below content textarea**: Reminds users that content edits will be overwritten on next sync
+- **Source type indicator**: Shows whether document is from GitHub or Secure Docs
+- **Request button styling**: Purple outline button with FileText icon
+
+### 🔐 **Security Updates**
+
+#### **Firestore Rules**
+- **New collection rules**: `file_update_requests` with role-based access:
+  - **Create**: Any authenticated user can create requests
+  - **Read**: Creator can read their own requests, admins can read all
+  - **Update**: Only super admins and platform admins can update (status, assignment, notes)
+  - **Delete**: Super admin only
+
+### 📚 **New Services**
+
+#### **`fileUpdateRequestService.ts`**
+- **createRequest()**: Create new file update request
+- **getRequestsForDocument()**: Get all requests for a specific document
+- **getPendingRequests()**: Get all pending requests (admin dashboard)
+- **getRequestsByStatus()**: Filter requests by status
+- **getRequestsByUser()**: Get requests created by specific user
+- **updateRequestStatus()**: Update request status with admin assignment
+- **rejectRequest()**: Reject a request with reason
+- **getRequestById()**: Fetch single request by ID
+- **getRequestStats()**: Get statistics (total, pending, in_progress, completed, rejected)
+
+### 🎨 **UI Components**
+
+#### **`FileUpdateRequestModal.tsx`**
+- **Beautiful modal design**: Purple theme with proper spacing
+- **Request type buttons**: 5 types with emoji icons
+- **Priority buttons**: 4 levels with color coding
+- **Character counters**: Real-time feedback on input limits
+- **Success animation**: Green checkmark with auto-close
+- **Error handling**: Clear error messages
+- **Responsive design**: Works on desktop and mobile
+
+### 🔧 **Technical Details**
+
+#### **Files Created**
+- `apps/web/src/components/knowledge/FileUpdateRequestModal.tsx` (300 lines)
+- `apps/web/src/services/fileUpdateRequestService.ts` (250 lines)
+
+#### **Files Modified**
+- `apps/web/src/app/dashboard/knowledge/edit/page.tsx`:
+  - Added clarification banners
+  - Added "Request File Update" button
+  - Integrated FileUpdateRequestModal
+  - Added `showRequestModal` state
+- `apps/web/src/components/knowledge/index.ts`:
+  - Exported FileUpdateRequestModal
+- `firestore.rules`:
+  - Added `file_update_requests` collection rules
+
+#### **Database Schema**
+New Firestore collection: `file_update_requests`
+```typescript
+{
+  document_id: string;
+  document_title: string;
+  document_path: string;
+  source_type: 'github' | 'secure_docs';
+  request_type: 'content_update' | 'correction' | 'addition' | 'removal' | 'other';
+  summary: string;
+  details: string;
+  priority: 'low' | 'normal' | 'high' | 'urgent';
+  status: 'pending' | 'in_progress' | 'completed' | 'rejected';
+  requested_by: string;
+  requested_by_name: string;
+  assigned_to?: string;
+  assigned_to_name?: string;
+  admin_notes?: string;
+  completed_at?: Timestamp;
+  rejected_reason?: string;
+  created_at: Timestamp;
+  updated_at: Timestamp;
+}
+```
+
+### 💡 **Use Cases**
+
+1. **User finds typo**: Click "Request File Update" → Select "Correction" → Submit
+2. **User needs content added**: Click "Request File Update" → Select "Addition" → Describe what to add
+3. **User finds outdated info**: Click "Request File Update" → Select "Content Update" → Explain what needs updating
+4. **Admin reviews requests**: View pending requests in admin dashboard → Assign to self → Mark as completed
+
+### 🎯 **User Experience**
+
+**Before**: Users confused about why content edits were temporary, no way to request permanent changes
+
+**After**: 
+- Clear explanation of what's editable
+- Visual warnings about temporary content edits
+- Easy way to request source file updates
+- Admins notified and can track requests
+
+---
+
 ## [2.149.0] - 2025-11-25 (Document Editing Tracking & Publishing Status Fix) 📝⏰
 
 ### ✨ **New Features**

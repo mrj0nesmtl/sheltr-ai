@@ -208,10 +208,10 @@ export const GitHubSyncPanel: React.FC<GitHubSyncPanelProps> = ({ onSyncComplete
       
       setSyncResults(data.results);
       
-        // Clear progress after 8 seconds (longer for user to read)
+        // Clear progress after 5 seconds (keep success message visible)
         setTimeout(() => {
           setSyncProgress(null);
-        }, 8000);
+        }, 5000);
       
       // Call the callback to refresh the knowledge base with a small delay
       if (onSyncComplete) {
@@ -465,9 +465,9 @@ export const GitHubSyncPanel: React.FC<GitHubSyncPanelProps> = ({ onSyncComplete
 
         {/* Sync Results */}
         {syncResults && (
-          <Alert className="border-green-500 bg-green-50 dark:bg-green-900/20 dark:border-green-400">
+          <Alert className="border-green-500 bg-green-50 dark:bg-green-900/20 dark:border-green-400 relative">
             <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
-            <AlertDescription className="text-green-800 dark:text-green-200">
+            <AlertDescription className="text-green-800 dark:text-green-200 pr-8">
               <strong>Sync Complete!</strong> {syncResults.successful} files synced successfully.
               {syncResults.failed > 0 && (
                 <span className="text-red-600 dark:text-red-400 block">
@@ -475,6 +475,13 @@ export const GitHubSyncPanel: React.FC<GitHubSyncPanelProps> = ({ onSyncComplete
                 </span>
               )}
             </AlertDescription>
+            <button
+              onClick={() => setSyncResults(null)}
+              className="absolute top-2 right-2 text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-200"
+              aria-label="Close"
+            >
+              <XCircle className="h-4 w-4" />
+            </button>
           </Alert>
         )}
 

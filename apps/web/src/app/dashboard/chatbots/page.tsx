@@ -460,18 +460,28 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
           status: 'active' as const
         };
         
-        // IMPORTANT: Override the model with the session's model
-        // This ensures the correct model (including Claude) is used
+        // IMPORTANT: Use user-selected model (from dropdown), NOT agent's hardcoded model
+        // This allows users to choose any model for any agent
         const selectedAgentConfig = {
           ...baseAgentConfig,
-          model: currentSession.model || baseAgentConfig.model
+          model: selectedModel || currentSession.model || baseAgentConfig.model
         };
+        
+        // Extract KB document IDs to send to backend
+        const kbDocumentIds = attachedKBDocuments.map(doc => doc.id);
+        
+        console.log('📤 Sending message with:', {
+          model: selectedAgentConfig.model,
+          agent: sessionAgentType,
+          kbDocuments: kbDocumentIds.length
+        });
         
         // Use the chatbot dashboard service to send message and save to session
         const response = await chatbotDashboardService.sendMessage(
           currentSession.id,
           userMessage.content,
-          selectedAgentConfig
+          selectedAgentConfig,
+          kbDocumentIds  // Send attached KB document IDs
         );
         
         if (response.success) {

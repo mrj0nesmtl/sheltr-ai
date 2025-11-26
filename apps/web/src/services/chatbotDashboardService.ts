@@ -192,11 +192,17 @@ class ChatbotDashboardService {
   /**
    * Send a message and get AI response
    */
-  async sendMessage(sessionId: string, message: string, agentConfig: AgentConfig): Promise<SendMessageResponse> {
+  async sendMessage(
+    sessionId: string, 
+    message: string, 
+    agentConfig: AgentConfig, 
+    kbDocumentIds: string[] = []
+  ): Promise<SendMessageResponse> {
     try {
       const formData = new FormData();
       formData.append('message', message);
       formData.append('agent_config', JSON.stringify(agentConfig));
+      formData.append('kb_document_ids', JSON.stringify(kbDocumentIds));
 
       const token = await this.getAuthToken();
       const response = await fetch(`${this.baseUrl}/api/v1/chatbot-dashboard/sessions/${sessionId}/send`, {

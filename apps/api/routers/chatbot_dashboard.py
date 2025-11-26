@@ -91,24 +91,35 @@ async def send_message(
     session_id: str,
     message: str = Form(...),
     agent_config: str = Form(...),  # JSON string of agent configuration
+    kb_document_ids: str = Form("[]"),  # JSON string of KB document IDs (optional)
     current_user: Dict[str, Any] = Depends(get_current_user)
 ):
-    """Send a message and get AI response"""
+    """Send a message and get AI response with optional KB document context"""
     
     try:
         import json
         agent_config_dict = json.loads(agent_config)
+        kb_doc_ids_list = json.loads(kb_document_ids)
+        
+        logger.info(f"📨 Message received with {len(kb_doc_ids_list)} KB documents attached")
         
         chatbot_service = ChatbotDashboardService()
-        response = await chatbot_service.send_message(session_id, message, agent_config_dict)
+        response = await chatbot_service.send_message(
+            session_id, 
+            message, 
+            agent_config_dict,
+            kb_doc_ids_list,
+            current_user
+        )
         
         if response['success']:
             return response
         else:
             raise HTTPException(status_code=500, detail=response['error'])
         
-    except json.JSONDecodeError:
-        raise HTTPException(status_code=400, detail="Invalid agent configuration format")
+    except json.JSONDecodeError as e:
+        logger.error(f"JSON decode error: {str(e)}")
+        raise HTTPException(status_code=400, detail="Invalid JSON format")
     except Exception as e:
         logger.error(f"Failed to send message: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Failed to send message: {str(e)}")

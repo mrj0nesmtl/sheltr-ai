@@ -169,9 +169,18 @@ Title:"""
             logger.error(f"Failed to add chat message: {str(e)}")
             raise Exception(f"Failed to add chat message: {str(e)}")
     
-    async def send_message(self, session_id: str, user_message: str, agent_config: Dict[str, Any]) -> Dict[str, Any]:
-        """Send a message and get AI response"""
+    async def send_message(
+        self, 
+        session_id: str, 
+        user_message: str, 
+        agent_config: Dict[str, Any],
+        kb_document_ids: List[str] = [],
+        current_user: Dict[str, Any] = None
+    ) -> Dict[str, Any]:
+        """Send a message and get AI response with optional KB document context"""
         try:
+            logger.info(f"📨 Processing message with {len(kb_document_ids)} KB documents")
+            
             # Add user message to database
             await self.add_chat_message(session_id, 'user', user_message)
             
@@ -255,13 +264,24 @@ Title:"""
             
             logger.info(f"❌ FAQ MISS in dashboard (best confidence: {faq_match['confidence'] if faq_match else 0}%) - falling back to RAG")
             
-            # Search knowledge base (handles query enhancement internally)
-            # NOTE: search_knowledge_base() calls _search_relevant_knowledge() 
-            # which calls _enhance_search_query() internally, so we don't need to enhance separately
-            relevant_context = await self.rag_orchestrator.search_knowledge_base(
-                user_message,  # Pass original query, not pre-enhanced
-                agent_type=agent_type
-            )
+            # Search knowledge base with optional specific document filtering
+            # If KB documents are attached, prioritize those documents in the search
+            if kb_document_ids:
+                logger.info(f"🎯 Using {len(kb_document_ids)} attached KB documents for focused context")
+                # Fetch specific documents and use their content
+                relevant_context = await self._get_kb_documents_content(
+                    kb_document_ids, 
+                    user_message,
+                    current_user
+                )
+            else:
+                # Search knowledge base normally (handles query enhancement internally)
+                # NOTE: search_knowledge_base() calls _search_relevant_knowledge() 
+                # which calls _enhance_search_query() internally, so we don't need to enhance separately
+                relevant_context = await self.rag_orchestrator.search_knowledge_base(
+                    user_message,  # Pass original query, not pre-enhanced
+                    agent_type=agent_type
+                )
             
             # Prepare system message with context
             system_message = f"""{instructions}
@@ -615,6 +635,58 @@ IMPORTANT: Always provide complete, well-structured responses. Finish your thoug
         except Exception as e:
             logger.error(f"Failed to get shared conversation: {str(e)}")
             raise Exception(f"Failed to get shared conversation: {str(e)}")
+    
+    async def _get_kb_documents_content(
+        self, 
+        document_ids: List[str], 
+        user_query: str,
+        current_user: Dict[str, Any] = None
+    ) -> str:
+        """Fetch content from specific KB documents for focused context"""
+        try:
+            from services.knowledge_service import KnowledgeService
+            
+            knowledge_service = KnowledgeService()
+            user_role = current_user.get('role', 'participant') if current_user else 'participant'
+            shelter_id = current_user.get('shelter_id') if current_user else None
+            
+            combined_content = []
+            
+            for doc_id in document_ids:
+                # Fetch document
+                doc = await knowledge_service.get_document(doc_id)
+                
+                if not doc:
+                    logger.warning(f"⚠️  KB document {doc_id} not found")
+                    continue
+                
+                # Check access (role-based filtering)
+                if not knowledge_service._check_document_access(doc, user_role, shelter_id):
+                    logger.warning(f"⚠️  User {user_role} does not have access to document {doc_id}")
+                    continue
+                
+                # Extract relevant content
+                doc_title = doc.get('title', 'Untitled')
+                doc_content = doc.get('content', '')
+                
+                # Truncate if too long (keep first 2000 chars per document)
+                if len(doc_content) > 2000:
+                    doc_content = doc_content[:2000] + "...[truncated]"
+                
+                combined_content.append(f"## {doc_title}\n\n{doc_content}")
+                logger.info(f"✅ Loaded KB document: {doc_title} ({len(doc_content)} chars)")
+            
+            if not combined_content:
+                logger.warning("⚠️  No accessible KB documents found")
+                return "No specific context available from attached documents."
+            
+            result = "\n\n---\n\n".join(combined_content)
+            logger.info(f"📚 Combined {len(combined_content)} KB documents ({len(result)} total chars)")
+            return result
+            
+        except Exception as e:
+            logger.error(f"Error fetching KB documents: {str(e)}")
+            return "Error loading attached documents."
     
     async def export_to_knowledge_base(
         self,

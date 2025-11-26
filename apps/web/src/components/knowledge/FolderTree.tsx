@@ -383,6 +383,32 @@ export function buildDualRepositoryTree(documents: KnowledgeDocument[]): FolderN
     // Add metadata to all nodes
     const enhancedChildren = secureDocsChildren.map(node => addFirebaseMetadata(node, 1));
 
+    // Ensure blog-posts folder always appears (even if empty due to all drafts)
+    const expectedFolders = ['blog-posts', 'dataroom', 'fintec', 'founders', 'leadership', 'operations'];
+    const existingFolders = enhancedChildren.map(node => node.name.toLowerCase().replace(/^[^\s]+\s/, '')); // Remove icon
+    
+    expectedFolders.forEach(folderName => {
+      if (!existingFolders.includes(folderName)) {
+        const icon = folderIcons[folderName] || '📁';
+        enhancedChildren.unshift({
+          id: `firebase-${folderName}`,
+          name: `${icon} ${folderName.charAt(0).toUpperCase() + folderName.slice(1)}`,
+          path: `firebase/${folderName}`,
+          type: 'folder',
+          source: 'firebase',
+          children: [],
+          documentCount: 0
+        });
+      }
+    });
+
+    // Sort folders alphabetically
+    enhancedChildren.sort((a, b) => {
+      const nameA = a.name.toLowerCase().replace(/^[^\s]+\s/, '');
+      const nameB = b.name.toLowerCase().replace(/^[^\s]+\s/, '');
+      return nameA.localeCompare(nameB);
+    });
+
     repositories.push({
       id: 'firebase-repository',
       name: '🔥 Firebase Secure Docs',

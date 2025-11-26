@@ -171,8 +171,32 @@ export const SecureDocumentSync: React.FC = () => {
           </AlertDescription>
         </Alert>
 
-        {/* Sync Categories - ALL 8 Secure Directories (Updated Nov 25, 2025) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
+        {/* Sync Categories - 6 Active Directories (Excluding: vault, development, drafts, local) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+          <div className="p-2 bg-white dark:bg-slate-800 rounded-lg border border-green-200 dark:border-green-800">
+            <div className="flex items-center gap-1 mb-1">
+              <FileText className="h-3 w-3 text-green-600" />
+              <span className="text-xs font-semibold">Blog Posts</span>
+            </div>
+            <Badge className="bg-green-600 text-white text-[10px] px-1 py-0">Admin+</Badge>
+          </div>
+
+          <div className="p-2 bg-white dark:bg-slate-800 rounded-lg border border-blue-200 dark:border-blue-800">
+            <div className="flex items-center gap-1 mb-1">
+              <Briefcase className="h-3 w-3 text-blue-600" />
+              <span className="text-xs font-semibold">Data Room</span>
+            </div>
+            <Badge className="bg-blue-600 text-white text-[10px] px-1 py-0">Investors</Badge>
+          </div>
+
+          <div className="p-2 bg-white dark:bg-slate-800 rounded-lg border border-cyan-200 dark:border-cyan-800">
+            <div className="flex items-center gap-1 mb-1">
+              <CreditCard className="h-3 w-3 text-cyan-600" />
+              <span className="text-xs font-semibold">FinTec</span>
+            </div>
+            <Badge className="bg-cyan-600 text-white text-[10px] px-1 py-0">Admin+</Badge>
+          </div>
+
           <div className="p-2 bg-white dark:bg-slate-800 rounded-lg border border-amber-200 dark:border-amber-800">
             <div className="flex items-center gap-1 mb-1">
               <Briefcase className="h-3 w-3 text-amber-600" />
@@ -189,14 +213,6 @@ export const SecureDocumentSync: React.FC = () => {
             <Badge className="bg-indigo-600 text-white text-[10px] px-1 py-0">Leadership+</Badge>
           </div>
 
-          <div className="p-2 bg-white dark:bg-slate-800 rounded-lg border border-cyan-200 dark:border-cyan-800">
-            <div className="flex items-center gap-1 mb-1">
-              <CreditCard className="h-3 w-3 text-cyan-600" />
-              <span className="text-xs font-semibold">FinTec</span>
-            </div>
-            <Badge className="bg-cyan-600 text-white text-[10px] px-1 py-0">Admin+</Badge>
-              </div>
-
           <div className="p-2 bg-white dark:bg-slate-800 rounded-lg border border-orange-200 dark:border-orange-800">
             <div className="flex items-center gap-1 mb-1">
               <Settings className="h-3 w-3 text-orange-600" />
@@ -204,63 +220,51 @@ export const SecureDocumentSync: React.FC = () => {
             </div>
             <Badge className="bg-orange-600 text-white text-[10px] px-1 py-0">Admin+</Badge>
           </div>
-
-          <div className="p-2 bg-white dark:bg-slate-800 rounded-lg border border-blue-200 dark:border-blue-800">
-            <div className="flex items-center gap-1 mb-1">
-              <Briefcase className="h-3 w-3 text-blue-600" />
-              <span className="text-xs font-semibold">Data Room</span>
-            </div>
-            <Badge className="bg-blue-600 text-white text-[10px] px-1 py-0">Investors</Badge>
-              </div>
-
-          <div className="p-2 bg-white dark:bg-slate-800 rounded-lg border border-purple-200 dark:border-purple-800">
-            <div className="flex items-center gap-1 mb-1">
-              <FileText className="h-3 w-3 text-purple-600" />
-              <span className="text-xs font-semibold">Development</span>
-            </div>
-            <Badge className="bg-purple-600 text-white text-[10px] px-1 py-0">Admin</Badge>
-          </div>
-
-          <div className="p-2 bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-gray-800">
-            <div className="flex items-center gap-1 mb-1">
-              <FileText className="h-3 w-3 text-gray-600" />
-              <span className="text-xs font-semibold">Drafts</span>
-            </div>
-            <Badge className="bg-gray-600 text-white text-[10px] px-1 py-0">Admin</Badge>
-              </div>
-
-          <div className="p-2 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-800">
-            <div className="flex items-center gap-1 mb-1">
-              <Shield className="h-3 w-3 text-slate-600" />
-              <span className="text-xs font-semibold">Vault</span>
-            </div>
-            <Badge className="bg-slate-600 text-white text-[10px] px-1 py-0">Super Admin</Badge>
-          </div>
         </div>
 
-        {/* Sync Button */}
-        <Button
-          onClick={handleSync}
-          disabled={syncing || generatingEmbeddings}
-          className="w-full bg-purple-600 hover:bg-purple-700 text-white"
-        >
-          {syncing ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Syncing Documents...
-            </>
-          ) : generatingEmbeddings ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Generating Embeddings...
-            </>
-          ) : (
-            <>
-              <RefreshCw className="mr-2 h-4 w-4" />
-              Sync Secure Documents
-            </>
+        {/* Sync Button with 2-Stage Progress */}
+        <div className="space-y-2">
+          <Button
+            onClick={handleSync}
+            disabled={syncing || generatingEmbeddings}
+            className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+          >
+            {syncing ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Stage 1/2: Syncing Documents...
+              </>
+            ) : generatingEmbeddings ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Stage 2/2: Generating Embeddings...
+              </>
+            ) : (
+              <>
+                <RefreshCw className="mr-2 h-4 w-4" />
+                Sync Secure Documents
+              </>
+            )}
+          </Button>
+          
+          {/* Progress Indicator */}
+          {(syncing || generatingEmbeddings) && (
+            <div className="flex items-center justify-between text-xs text-muted-foreground px-2">
+              <div className="flex items-center gap-2">
+                <div className={`w-2 h-2 rounded-full ${syncing ? 'bg-purple-600 animate-pulse' : 'bg-green-600'}`} />
+                <span className={syncing ? 'font-semibold text-purple-600' : 'text-green-600'}>
+                  {syncing ? 'Uploading to Firestore...' : '✓ Documents synced'}
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className={`w-2 h-2 rounded-full ${generatingEmbeddings ? 'bg-purple-600 animate-pulse' : syncing ? 'bg-gray-400' : 'bg-green-600'}`} />
+                <span className={generatingEmbeddings ? 'font-semibold text-purple-600' : syncing ? 'text-gray-400' : 'text-green-600'}>
+                  {generatingEmbeddings ? 'Processing embeddings...' : syncing ? 'Waiting...' : '✓ Embeddings generated'}
+                </span>
+              </div>
+            </div>
           )}
-        </Button>
+        </div>
 
         {/* Success Result */}
         {syncResult && syncResult.success && (

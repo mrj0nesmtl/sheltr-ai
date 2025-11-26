@@ -352,7 +352,9 @@ class GitHubService:
                                 # Update permission level with auto-detected value
                                 'permission_level': auto_permission.value,
                                 'synced_from_github': True,
-                                'github_path': file_path
+                                'github_path': file_path,
+                                'is_live': True,  # Ensure it's published
+                                'chatbot_accessible': True  # Ensure chatbot can access
                             }
                         )
                     else:
@@ -375,7 +377,9 @@ class GitHubService:
                             'published_to_founders': False,  # Founders Portal toggle OFF
                             'published_to_ir': False,  # IR Dataroom toggle OFF
                             'visibility_scope': 'global',  # Global visibility for public docs
-                            'status': 'active'  # Active for chatbot access
+                            'status': 'active',  # Active for chatbot access
+                            'is_live': True,  # Published and available for chatbot
+                            'chatbot_accessible': True  # Explicitly mark as chatbot-accessible
                         }
                         document_id = await kb_service.create_knowledge_document(document_data)
                     

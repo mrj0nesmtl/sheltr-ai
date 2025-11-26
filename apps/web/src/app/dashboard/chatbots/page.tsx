@@ -969,6 +969,29 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
                           </>
                         )}
                       </div>
+                      
+                      {/* Attached KB Documents */}
+                      {attachedKBDocuments.length > 0 && (
+                        <div className="flex items-center gap-2 mt-2 flex-wrap">
+                          <span className="text-xs text-muted-foreground">Context:</span>
+                          {attachedKBDocuments.map((doc) => (
+                            <Badge 
+                              key={doc.id} 
+                              variant="outline" 
+                              className="text-xs border-purple-400 text-purple-600 dark:text-purple-400 gap-1"
+                            >
+                              <FileText className="h-3 w-3" />
+                              {doc.title}
+                              <button
+                                onClick={() => setAttachedKBDocuments(prev => prev.filter(d => d.id !== doc.id))}
+                                className="ml-1 hover:text-purple-800 dark:hover:text-purple-200"
+                              >
+                                <XCircle className="h-3 w-3" />
+                              </button>
+                            </Badge>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   </div>
                   

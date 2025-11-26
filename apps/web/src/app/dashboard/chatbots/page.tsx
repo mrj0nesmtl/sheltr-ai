@@ -71,6 +71,7 @@ import {
 } from 'lucide-react';
 import { chatbotDashboardService, ChatSession, ChatMessage, AgentConfig } from '@/services/chatbotDashboardService';
 import { useAuth } from '@/contexts/AuthContext';
+import { KBDocumentPickerModal } from '@/components/chatbot/KBDocumentPickerModal';
 
 // Agent color mapping for badges (outline style)
 const agentColors: Record<string, string> = {
@@ -106,6 +107,11 @@ export default function ChatbotDashboard() {
   const [renameDialogOpen, setRenameDialogOpen] = useState(false);
   const [sessionToRename, setSessionToRename] = useState<ChatSession | null>(null);
   const [newSessionTitle, setNewSessionTitle] = useState('');
+
+  // KB Document state
+  const [kbDocCount, setKbDocCount] = useState<{ documents: number; faqs: number } | null>(null);
+  const [showKBPicker, setShowKBPicker] = useState(false);
+  const [attachedDocs, setAttachedDocs] = useState<string[]>([]);
 
   // Toolbar state
   const [showToolbar, setShowToolbar] = useState(true);
@@ -300,11 +306,34 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
         // Fall back to empty sessions list if backend is unavailable
         setSessions([]);
       }
+
+      // Load KB document count
+      fetchKBDocumentCount();
       
     } catch (error) {
       console.error('Error loading chatbot data:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchKBDocumentCount = async () => {
+    try {
+      const userRole = user?.role || 'participant';
+      const response = await fetch(`/api/v1/knowledge-dashboard/accessible-count?user_role=${userRole}`, {
+        headers: {
+          'Authorization': `Bearer ${await user?.getIdToken()}`
+        }
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success) {
+          setKbDocCount(data.data);
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching KB document count:', error);
     }
   };
 
@@ -902,7 +931,7 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
                     
                     <div>
                       <h2 className="font-semibold text-base">{currentSession.title}</h2>
-                      <div className="flex items-center gap-2 mt-1">
+                      <div className="flex items-center gap-2 mt-1 flex-wrap">
                         <Badge variant="outline" className={`text-xs ${getAgentColorClass(currentSession.agent_type)}`}>
                           {currentSession.agent_type}
                         </Badge>
@@ -912,6 +941,20 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
                         <Badge variant="outline" className="text-xs">
                           {messages.length} messages
                         </Badge>
+                        
+                        {/* KB Document Count Badges */}
+                        {kbDocCount && (
+                          <>
+                            <Badge variant="outline" className="text-xs border-blue-400 text-blue-600 dark:text-blue-400">
+                              <BookOpen className="h-3 w-3 mr-1" />
+                              {kbDocCount.documents} Docs
+                            </Badge>
+                            <Badge variant="outline" className="text-xs border-amber-400 text-amber-600 dark:text-amber-400">
+                              <Lightbulb className="h-3 w-3 mr-1" />
+                              {kbDocCount.faqs} FAQs
+                            </Badge>
+                          </>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -1067,11 +1110,16 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
                       variant="ghost" 
                       size="sm" 
                       className="h-7 px-2 text-xs hidden sm:flex"
-                      title="Upload file to Knowledge Base"
-                      disabled={true}
+                      title="Connect Knowledge Base Documents"
+                      onClick={() => setShowKBPicker(true)}
                     >
-                      <File className="h-3 w-3 mr-1" />
+                      <BookOpen className="h-3 w-3 mr-1" />
                       Knowledge
+                      {attachedDocs.length > 0 && (
+                        <Badge className="ml-1 h-4 w-4 p-0 flex items-center justify-center text-[10px]">
+                          {attachedDocs.length}
+                        </Badge>
+                      )}
                     </Button>
                     <Button 
                       variant="ghost" 
@@ -1271,6 +1319,17 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* KB Document Picker Modal */}
+      <KBDocumentPickerModal
+        isOpen={showKBPicker}
+        onClose={() => setShowKBPicker(false)}
+        onSelect={(docIds) => {
+          setAttachedDocs(docIds);
+          console.log('Attached documents:', docIds);
+        }}
+        selectedDocuments={attachedDocs}
+      />
     </div>
   );
 }

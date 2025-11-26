@@ -3,7 +3,7 @@ Knowledge Dashboard Router for SHELTR-AI
 Handles knowledge document management and dashboard data
 """
 
-from fastapi import APIRouter, Depends, HTTPException, Form, UploadFile, File
+from fastapi import APIRouter, Depends, HTTPException, Form, UploadFile, File, Query
 from typing import List, Dict, Any, Optional
 from pydantic import BaseModel
 from services.knowledge_dashboard_service import KnowledgeDashboardService
@@ -97,6 +97,39 @@ async def get_knowledge_stats(
     except Exception as e:
         logger.error(f"Failed to get knowledge stats: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to retrieve knowledge statistics")
+
+@router.get("/accessible-count")
+async def get_accessible_document_count(
+    user_role: str = Query("participant", description="User role for access control"),
+    current_user: Dict[str, Any] = Depends(get_current_user)
+):
+    """Get count of documents and FAQs accessible to user based on role"""
+    
+    try:
+        from services.knowledge_service import knowledge_service
+        from services.faq_service import faq_service
+        
+        # Get accessible documents count
+        documents = await knowledge_service.list_documents(
+            user_role=user_role,
+            limit=1000  # Get all to count
+        )
+        
+        # Get FAQ count (FAQs are accessible to all authenticated users)
+        faqs = faq_service.get_all_faqs()
+        
+        return {
+            "success": True,
+            "data": {
+                "documents": len(documents),
+                "faqs": len(faqs),
+                "user_role": user_role
+            }
+        }
+        
+    except Exception as e:
+        logger.error(f"Failed to get accessible document count: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to retrieve document count")
 
 @router.post("/documents")
 async def create_knowledge_document(

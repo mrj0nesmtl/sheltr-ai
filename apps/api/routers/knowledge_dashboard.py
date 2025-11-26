@@ -425,7 +425,10 @@ async def clear_knowledge_base(
             documents = [doc for doc in all_documents if doc.get('synced_from_github') == True]
             logger.info(f"Found {len(documents)} GitHub-synced documents to clear (out of {len(all_documents)} total)")
         elif clear_type == "secure_only":
-            documents = [doc for doc in all_documents if doc.get('source_directory') == '.local-secure-docs']
+            # Secure docs have source_directory set to folder name (dataroom, fintec, founders, leadership, operations, etc.)
+            # NOT '.local-secure-docs' - filter by checking if source_directory exists and is NOT empty
+            secure_folders = ['dataroom', 'fintec', 'founders', 'leadership', 'operations', 'platform-admin', 'vault', 'blog-posts']
+            documents = [doc for doc in all_documents if doc.get('source_directory') in secure_folders]
             logger.info(f"Found {len(documents)} secure documents to clear (out of {len(all_documents)} total)")
         else:  # "all"
             documents = all_documents

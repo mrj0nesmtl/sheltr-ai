@@ -320,17 +320,24 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
   const fetchKBDocumentCount = async () => {
     try {
       const userRole = user?.role || 'participant';
+      const token = await user?.getIdToken();
+      console.log('Fetching KB document count for role:', userRole);
+      
       const response = await fetch(`/api/v1/knowledge-dashboard/accessible-count?user_role=${userRole}`, {
         headers: {
-          'Authorization': `Bearer ${await user?.getIdToken()}`
+          'Authorization': `Bearer ${token}`
         }
       });
       
       if (response.ok) {
         const data = await response.json();
+        console.log('KB document count response:', data);
         if (data.success) {
           setKbDocCount(data.data);
+          console.log('KB doc count set:', data.data);
         }
+      } else {
+        console.error('Failed to fetch KB count:', response.status, response.statusText);
       }
     } catch (error) {
       console.error('Error fetching KB document count:', error);

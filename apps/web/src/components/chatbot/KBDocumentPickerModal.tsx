@@ -70,17 +70,21 @@ export function KBDocumentPickerModal({
     try {
       setLoading(true);
       const userRole = user?.role || 'participant';
-      const response = await fetch(`/api/v1/knowledge/list?user_role=${userRole}&limit=100`, {
+      const token = await user?.getIdToken();
+      const response = await fetch(`/api/v1/knowledge/documents?limit=100`, {
         headers: {
-          'Authorization': `Bearer ${await user?.getIdToken()}`
+          'Authorization': `Bearer ${token}`
         }
       });
       
       if (response.ok) {
         const data = await response.json();
-        if (data.success && data.data) {
-          setDocuments(data.data);
+        console.log('KB Documents response:', data);
+        if (data.success && data.data && data.data.documents) {
+          setDocuments(data.data.documents);
         }
+      } else {
+        console.error('Failed to fetch documents:', response.status, response.statusText);
       }
     } catch (error) {
       console.error('Error fetching KB documents:', error);

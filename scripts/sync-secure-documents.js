@@ -36,9 +36,9 @@
  *   - Patterns: *credentials*.md, *password*.md, platform-admin-credentials.md
  *   
  *   DRAFT DOCUMENTS:
- *   - Blog post drafts and work-in-progress documents excluded
+ *   - Work-in-progress documents excluded
  *   - Should be moved to /drafts folder or marked with -draft suffix
- *   - Patterns: *draft*.md, *blog-post*.md, the-sheltr-journey-blog-post*.md
+ *   - Patterns: *draft*.md (only files with "draft" in filename)
  *   
  *   README FILES:
  *   - Directory navigation/overview files excluded from knowledge base
@@ -510,10 +510,8 @@ async function syncDirectory(dirName, config) {
                          fileName.includes('password') ||
                          fileName === 'platform-admin-credentials.md';
     
-    // Exclude draft blog posts and other drafts
-    const isDraft = fileName.includes('draft') ||
-                   fileName.includes('blog-post') ||
-                   fullPath.includes('the-sheltr-journey-blog-post');
+    // Exclude draft documents (only files with "draft" in filename)
+    const isDraft = fileName.includes('draft');
     
     // Exclude README files (pollute knowledge base with summary links)
     // These are directory overviews, not substantive documentation

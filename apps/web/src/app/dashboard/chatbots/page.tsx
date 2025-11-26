@@ -319,6 +319,7 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
 
   const fetchKBDocumentCount = async () => {
     try {
+      const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
       const userRole = user?.role || 'participant';
       const token = await getCurrentToken();
       console.log('Fetching KB document count for role:', userRole);
@@ -328,7 +329,7 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
         return;
       }
       
-      const response = await fetch(`/api/v1/knowledge-dashboard/accessible-count?user_role=${userRole}`, {
+      const response = await fetch(`${apiBaseUrl}/api/v1/knowledge-dashboard/accessible-count?user_role=${userRole}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

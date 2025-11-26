@@ -69,6 +69,7 @@ export function KBDocumentPickerModal({
   const fetchDocuments = async () => {
     try {
       setLoading(true);
+      const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
       const userRole = user?.role || 'participant';
       const token = await getCurrentToken();
       
@@ -78,7 +79,7 @@ export function KBDocumentPickerModal({
         return;
       }
       
-      const response = await fetch(`/api/v1/knowledge/documents?limit=100`, {
+      const response = await fetch(`${apiBaseUrl}/api/v1/knowledge/documents?limit=100`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

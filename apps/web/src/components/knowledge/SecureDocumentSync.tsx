@@ -362,9 +362,8 @@ export const SecureDocumentSync: React.FC = () => {
               <ul className="ml-4 mt-0.5 space-y-0.5">
                 <li>- <strong>Founders:</strong> Access founders/ docs</li>
                 <li>- <strong>Leadership:</strong> Access leadership/ + founders/ docs</li>
-                <li>- <strong>Platform Admin:</strong> Access operations/, fintec/, development/, drafts/</li>
+                <li>- <strong>Platform Admin:</strong> Access operations/, fintec/, blog-posts/</li>
                 <li>- <strong>Investors:</strong> Access dataroom/ docs</li>
-                <li>- <strong>Super Admin:</strong> Access all docs including vault/</li>
               </ul>
             </li>
             <li>• Respect document-level permission overrides</li>

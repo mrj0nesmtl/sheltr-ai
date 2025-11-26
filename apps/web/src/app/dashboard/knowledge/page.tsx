@@ -9,6 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { useAuth } from '@/contexts/AuthContext';
 import { 
   Plus, 
@@ -454,78 +455,102 @@ export default function KnowledgeDashboard() {
         </div>
       </div>
 
-      {/* GitHub Sync Panel - Full Width at Top */}
-      <div className="mb-6">
-        <GitHubSyncPanel onSyncComplete={loadKnowledgeData} userRole={userRole} />
-      </div>
+      {/* Collapsible Sync & Info Panels */}
+      <Accordion type="multiple" defaultValue={["github-sync"]} className="mb-6 space-y-4">
+        {/* GitHub Sync Panel */}
+        <AccordionItem value="github-sync" className="border rounded-lg">
+          <AccordionTrigger className="px-4 hover:no-underline">
+            <div className="flex items-center gap-2">
+              <RefreshCw className="h-4 w-4 text-green-600" />
+              <span className="font-semibold">GitHub Documentation Sync</span>
+              <Badge variant="outline" className="ml-2">Online</Badge>
+            </div>
+          </AccordionTrigger>
+          <AccordionContent className="px-4 pb-4">
+            <GitHubSyncPanel onSyncComplete={loadKnowledgeData} userRole={userRole} />
+          </AccordionContent>
+        </AccordionItem>
 
-      {/* Secure Document Sync Panel - NEW! */}
-      {(userRole === 'super_admin' || userRole === 'platform_admin') && (
-        <div className="mb-6">
-          <SecureDocumentSync />
-        </div>
-      )}
+        {/* Secure Document Sync Panel */}
+        {(userRole === 'super_admin' || userRole === 'platform_admin') && (
+          <AccordionItem value="secure-sync" className="border rounded-lg">
+            <AccordionTrigger className="px-4 hover:no-underline">
+              <div className="flex items-center gap-2">
+                <Shield className="h-4 w-4 text-orange-600" />
+                <span className="font-semibold">Secure Document Sync</span>
+                <Badge variant="outline" className="ml-2 bg-orange-50 border-orange-200">Beta</Badge>
+              </div>
+            </AccordionTrigger>
+            <AccordionContent className="px-4 pb-4">
+              <SecureDocumentSync />
+            </AccordionContent>
+          </AccordionItem>
+        )}
 
-      {/* AI Knowledge Helper Component */}
-      <Card className="mb-6 bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 border-purple-200 dark:border-purple-800">
-        <CardContent className="p-4">
-          <div className="flex items-start gap-4">
-            <div className="flex-shrink-0">
-              <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
-                <Brain className="h-6 w-6 text-white" />
+        {/* AI Knowledge Helper */}
+        <AccordionItem value="ai-knowledge" className="border rounded-lg bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20">
+          <AccordionTrigger className="px-4 hover:no-underline">
+            <div className="flex items-center gap-2">
+              <Brain className="h-4 w-4 text-purple-600" />
+              <span className="font-semibold">🤖 How SHELTR&apos;s AI Knowledge System Works</span>
+            </div>
+          </AccordionTrigger>
+          <AccordionContent className="px-4 pb-4">
+            <div className="flex items-start gap-4">
+              <div className="flex-shrink-0">
+                <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
+                  <Brain className="h-6 w-6 text-white" />
+                </div>
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <FileText className="h-4 w-4 text-purple-600" />
+                      <span className="font-medium">1. Document Processing</span>
+                    </div>
+                    <p className="text-muted-foreground text-xs leading-relaxed">
+                      Your documents are broken into smart &quot;chunks&quot; - small, meaningful pieces that our AI can understand and search through quickly.
+                    </p>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <Sparkles className="h-4 w-4 text-blue-600" />
+                      <span className="font-medium">2. AI Embeddings</span>
+                    </div>
+                    <p className="text-muted-foreground text-xs leading-relaxed">
+                      Each chunk gets converted into &quot;embeddings&quot; - mathematical representations that capture the meaning, allowing instant semantic search.
+                    </p>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <Brain className="h-4 w-4 text-green-600" />
+                      <span className="font-medium">3. Smart Chatbot</span>
+                    </div>
+                    <p className="text-muted-foreground text-xs leading-relaxed">
+                      When users ask questions, our chatbot finds the most relevant chunks and provides accurate, contextual answers from your knowledge base.
+                    </p>
+                  </div>
+                </div>
+                <div className="mt-3 flex items-center gap-4 text-xs text-muted-foreground">
+                  <div className="flex items-center gap-1">
+                    <Hash className="h-3 w-3" />
+                    <span>{stats.total_chunks} chunks processed</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <CheckCircle className="h-3 w-3 text-green-500" />
+                    <span>{stats.active_documents} documents live</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <BookOpen className="h-3 w-3" />
+                    <span>{stats.total_words?.toLocaleString() || 0} words indexed</span>
+                  </div>
+                </div>
               </div>
             </div>
-            <div className="flex-1 min-w-0">
-              <h3 className="text-lg font-semibold text-purple-900 dark:text-purple-100 mb-2">
-                🤖 How SHELTR&apos;s AI Knowledge System Works
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <FileText className="h-4 w-4 text-purple-600" />
-                    <span className="font-medium">1. Document Processing</span>
-                  </div>
-                  <p className="text-muted-foreground text-xs leading-relaxed">
-                    Your documents are broken into smart &quot;chunks&quot; - small, meaningful pieces that our AI can understand and search through quickly.
-                  </p>
-                </div>
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <Sparkles className="h-4 w-4 text-blue-600" />
-                    <span className="font-medium">2. AI Embeddings</span>
-                  </div>
-                  <p className="text-muted-foreground text-xs leading-relaxed">
-                    Each chunk gets converted into &quot;embeddings&quot; - mathematical representations that capture the meaning, allowing instant semantic search.
-                  </p>
-                </div>
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <Brain className="h-4 w-4 text-green-600" />
-                    <span className="font-medium">3. Smart Chatbot</span>
-                  </div>
-                  <p className="text-muted-foreground text-xs leading-relaxed">
-                    When users ask questions, our chatbot finds the most relevant chunks and provides accurate, contextual answers from your knowledge base.
-                  </p>
-                </div>
-              </div>
-              <div className="mt-3 flex items-center gap-4 text-xs text-muted-foreground">
-                <div className="flex items-center gap-1">
-                  <Hash className="h-3 w-3" />
-                  <span>{stats.total_chunks} chunks processed</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <CheckCircle className="h-3 w-3 text-green-500" />
-                  <span>{stats.active_documents} documents live</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <BookOpen className="h-3 w-3" />
-                  <span>{stats.total_words?.toLocaleString() || 0} words indexed</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
 
       {/* Enhanced Stats Row - Better Desktop Layout */}
       <div className="grid grid-cols-2 lg:grid-cols-6 gap-3 sm:gap-4 mb-6 sm:mb-8">

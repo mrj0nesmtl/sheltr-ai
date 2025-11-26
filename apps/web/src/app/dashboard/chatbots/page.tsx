@@ -377,6 +377,10 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
         setSessions(prev => [newSession, ...prev]);
         setCurrentSession(newSession);
         setMessages([]);
+        
+        // Clear attached KB documents for new session
+        setAttachedKBDocuments([]);
+        setAttachedDocs([]);
       } else {
         throw new Error('Failed to create session on backend');
       }
@@ -390,6 +394,10 @@ Help tell SHELTR's story in ways that inspire action and build community.`,
   const selectSession = async (session: ChatSession) => {
     try {
       setCurrentSession(session);
+      
+      // Clear attached KB documents when switching sessions
+      setAttachedKBDocuments([]);
+      setAttachedDocs([]);
       
       // Load actual messages from backend
       try {

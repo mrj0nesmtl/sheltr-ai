@@ -379,7 +379,7 @@ async function syncDocument(dirName, filename, config) {
     // Legacy fields
     sharing_level: 'role_based',
     access_roles: [config.permission_level],
-    is_live: false,
+    is_live: true,  // Set to true so documents show as "Published" not "Draft"
     confidentiality_level: 'confidential',
     
     // Timestamps

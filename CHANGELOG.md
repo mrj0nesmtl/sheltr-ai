@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.153.0] - 2025-11-26 (KB Document Picker & Chatbot Context) 🤖📚
+
+### ✨ **New Features**
+- **KB Document Search**: GitHub-synced documents (including FAQ Database) now appear in the chatbot's KB document picker for attaching context to conversations.
+- **Document Attachment**: Users can search and attach knowledge base documents to provide focused context for AI responses.
+
+### 🐛 **Bug Fixes**
+- **KB Document Visibility**: Fixed issue where GitHub-synced documents weren't appearing in the KB document picker. All GitHub docs now have `is_live: true` and `chatbot_accessible: true` set automatically during sync.
+- **Document Persistence Bug**: Fixed issue where attached KB documents persisted across new chat sessions. Documents now clear when creating a new session or switching between sessions.
+
+### ⚙️ **Improvements**
+- **GitHub Sync Enhancement**: Updated `github_service.py` to automatically set `is_live: true` and `chatbot_accessible: true` for all synced documents (both new and updates).
+- **Migration Script**: Created `scripts/fix-github-docs-is-live.py` to update 39 existing GitHub-synced documents with proper flags.
+- **Session Management**: Enhanced `createNewSession()` and `selectSession()` functions to clear attached KB documents, ensuring clean slate for each conversation.
+
+### 📚 **Documentation**
+- **39 GitHub Documents**: All GitHub-synced docs now properly marked as chatbot-accessible, including FAQ Database, roadmaps, guides, and technical documentation.
+
+---
+
 ## [2.152.0] - 2025-11-26 (FAQ Document & Change Tracking Fix) 📚🔧
 
 ### ✨ **New Features**

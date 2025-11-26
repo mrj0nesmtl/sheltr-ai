@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.154.0] - 2025-11-26 (Changelog Capsule for AI Access) 📝🤖
+
+### ✨ **New Features**
+- **Changelog Capsule**: Created condensed changelog (`docs/overview/CHANGELOG-CAPSULE.md`) containing the most recent 30 days of changes for AI-accessible knowledge base queries.
+- **Cost Optimization**: Full CHANGELOG.md (14,000+ lines) remains excluded from embeddings to reduce costs, while capsule provides recent context.
+- **Platform Admin Access**: Authenticated platform administrators can now ask chatbots about recent changes, features, and bug fixes.
+
+### 📚 **Documentation**
+- **`docs/overview/CHANGELOG-CAPSULE.md`**: 307-line condensed changelog covering versions 2.153.0 → 2.140.0 (last 30 days)
+- **Coverage**: 14 releases, 8 major features, 25+ bug fixes, 3 security updates
+- **Regeneration Schedule**: Weekly during sprints, bi-weekly during maintenance, on-demand for major releases
+
+### ⚙️ **Improvements**
+- **AI Context**: Chatbots can now answer questions like "What changed in the last month?" or "What new features were added recently?"
+- **Quick Stats**: Capsule includes summary metrics (versions, features, fixes, docs)
+- **Key Achievements**: Organized by category (Security, AI & Chatbot, Knowledge Base, Donor Experience, Infrastructure)
+
+---
+
 ## [2.153.0] - 2025-11-26 (KB Document Picker & Chatbot Context) 🤖📚
 
 ### ✨ **New Features**

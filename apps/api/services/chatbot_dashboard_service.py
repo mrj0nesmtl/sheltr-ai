@@ -284,9 +284,17 @@ Title:"""
                 )
             
             # Prepare system message with context
+            # If KB documents are attached, use full context (up to 12,000 chars)
+            # Otherwise, limit to 2,000 chars for general RAG
+            context_limit = 12000 if kb_document_ids else 2000
+            context_text = relevant_context[:context_limit] if relevant_context else 'No specific context available.'
+            
+            # Add document count info if KB docs are attached
+            doc_info = f"\n\nYou have been provided with {len(kb_document_ids)} specific knowledge base documents as context for this query. Use them to provide detailed, document-specific answers." if kb_document_ids else ""
+            
             system_message = f"""{instructions}
 
-Relevant context: {relevant_context[:1000] if relevant_context else 'No specific context available.'}
+Relevant context: {context_text}{doc_info}
 
 IMPORTANT: Always provide complete, well-structured responses. Finish your thoughts completely rather than cutting off mid-sentence. Aim for comprehensive yet concise answers that fully address the user's question."""
             

@@ -373,6 +373,23 @@ service cloud.firestore {
     }
     
     // =================================================================
+    // DOCUMENT CHANGES - Change tracking for knowledge documents
+    // =================================================================
+    match /document_changes/{changeId} {
+      // Read: Super Admin and Platform Admin can read all changes
+      allow read: if isSuperAdmin() || isPlatformAdmin();
+      
+      // Create: Authenticated users can track changes
+      allow create: if isAuthenticated();
+      
+      // Update: Super Admin and Platform Admin can update (mark GitHub sync completed)
+      allow update: if isSuperAdmin() || isPlatformAdmin();
+      
+      // Delete: Super Admin only
+      allow delete: if isSuperAdmin();
+    }
+    
+    // =================================================================
     // PLATFORM CONFIGURATION - System settings and configuration
     // =================================================================
     match /platform_config/{configId} {

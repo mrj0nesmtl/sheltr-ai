@@ -321,9 +321,18 @@ export default function KnowledgeDashboard() {
                          doc.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
     // Case-insensitive category matching to handle API vs Api vs api variations
     // Category filter - check both category and source_directory (for secure docs)
-    const matchesCategory = categoryFilter === 'all' || 
-                           doc.category?.toLowerCase() === categoryFilter.toLowerCase() ||
-                           doc.source_directory?.toLowerCase() === categoryFilter.toLowerCase();
+    // Special filters: __github__ and __secure__
+    let matchesCategory = false;
+    if (categoryFilter === 'all') {
+      matchesCategory = true;
+    } else if (categoryFilter === '__github__') {
+      matchesCategory = doc.synced_from_github === true;
+    } else if (categoryFilter === '__secure__') {
+      matchesCategory = doc.source_directory !== null && doc.source_directory !== undefined;
+    } else {
+      matchesCategory = doc.category?.toLowerCase() === categoryFilter.toLowerCase() ||
+                       doc.source_directory?.toLowerCase() === categoryFilter.toLowerCase();
+    }
     
     // Status filter - now includes Doc Hub filter
     let matchesStatus = true;
@@ -699,6 +708,8 @@ export default function KnowledgeDashboard() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Categories</SelectItem>
+                  <SelectItem value="__github__">📂 All GitHub</SelectItem>
+                  <SelectItem value="__secure__">🔥 All Firestore (Secure)</SelectItem>
                   <SelectItem value="Platform">📋 Platform</SelectItem>
                   <SelectItem value="Architecture">🏗️ Architecture</SelectItem>
                   <SelectItem value="API">🔌 API</SelectItem>

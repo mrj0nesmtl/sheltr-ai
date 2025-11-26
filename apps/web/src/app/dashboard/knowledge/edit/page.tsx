@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Separator } from '@/components/ui/separator';
 import { 
   ArrowLeft,
   Save,
@@ -18,7 +19,8 @@ import {
   XCircle,
   BookOpen,
   Globe,
-  Lock
+  Lock,
+  Clock
 } from 'lucide-react';
 import { knowledgeDashboardService, KnowledgeDocument } from '@/services/knowledgeDashboardService';
 import { docsHubService } from '@/services/docsHubService';
@@ -214,7 +216,9 @@ export default function EditKnowledgeDocumentPage() {
       // Merge formData with permissionSettings to save everything together
       const dataToSave = {
         ...formData,
-        ...permissionSettings  // Include permission fields!
+        ...permissionSettings,  // Include permission fields!
+        updated_by: user.email || 'Unknown',  // Track who made the edit
+        updated_by_name: user.displayName || user.email || 'Unknown User'
       };
 
       await knowledgeDashboardService.updateKnowledgeDocument(documentId, dataToSave);
@@ -770,6 +774,71 @@ export default function EditKnowledgeDocumentPage() {
                   </div>
                   <div className="text-xs text-muted-foreground">Views</div>
                 </div>
+              </div>
+
+              {/* Timestamp Tracking */}
+              <Separator className="my-4" />
+              
+              <div className="space-y-3">
+                {/* Last Synced - Original import from GitHub or Local */}
+                {document.created_at && (
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-muted-foreground flex items-center gap-1">
+                      <Clock className="h-3 w-3" />
+                      Last Synced
+                    </span>
+                    <span className="font-medium">
+                      {new Date((document.created_at as unknown as { seconds: number }).seconds * 1000).toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })}
+                    </span>
+                  </div>
+                )}
+                
+                {/* Last Edited - UI edits via Save & Regenerate */}
+                {document.updated_at && (document.updated_at as unknown as { seconds: number }).seconds !== (document.created_at as unknown as { seconds: number })?.seconds && (
+                  <>
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-muted-foreground flex items-center gap-1">
+                        <FileText className="h-3 w-3" />
+                        Last Edited
+                      </span>
+                      <span className="font-medium text-amber-600 dark:text-amber-400">
+                        {new Date((document.updated_at as unknown as { seconds: number }).seconds * 1000).toLocaleDateString('en-US', {
+                          month: 'short',
+                          day: 'numeric',
+                          year: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        })}
+                      </span>
+                    </div>
+                    
+                    {/* Show who made the edit */}
+                    {(document as KnowledgeDocument & { updated_by?: string; updated_by_name?: string }).updated_by && (
+                      <div className="flex items-center gap-2 p-2 bg-amber-50 dark:bg-amber-900/20 rounded-lg">
+                        <Badge variant="outline" className="text-xs border-amber-400 text-amber-700 dark:text-amber-300">
+                          <Shield className="h-3 w-3 mr-1" />
+                          {(document as KnowledgeDocument & { updated_by_name?: string }).updated_by_name || (document as KnowledgeDocument & { updated_by?: string }).updated_by}
+                        </Badge>
+                      </div>
+                    )}
+                  </>
+                )}
+
+                {/* Document Source Badge */}
+                {document.source_directory && (
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-muted-foreground">Source</span>
+                    <Badge variant="outline" className="text-xs">
+                      {document.synced_from_github ? '🔗 GitHub' : '🔒 Secure Docs'}
+                    </Badge>
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>

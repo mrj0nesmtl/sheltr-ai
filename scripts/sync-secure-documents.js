@@ -344,6 +344,7 @@ async function syncDocument(dirName, filename, config) {
     status: 'active',
     
     // File metadata (preserve subfolder structure in file_path)
+    file_name: baseFilename,
     file_path: `secure-docs/${dirName}/${filename}`,
     file_type: isCSV ? 'csv' : 'markdown',
     file_size: Buffer.byteLength(content, 'utf-8'),
@@ -406,6 +407,7 @@ async function syncDocument(dirName, filename, config) {
     const fieldsToUpdate = {
       content: bodyContent,
       title: documentData.title,
+      file_name: baseFilename,
       word_count: wordCount,
       file_size: documentData.file_size,
       tags: documentData.tags,

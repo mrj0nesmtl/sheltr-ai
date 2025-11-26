@@ -338,8 +338,14 @@ export default function KnowledgeDashboard() {
     }
     
     // Folder filtering
+    // Folder filter - check if doc path contains the selected folder
+    // Handle both GitHub paths (docs/features/) and Firebase paths (secure-docs/founders/)
     const matchesFolder = !selectedFolder || 
-                         (doc.file_path && doc.file_path.includes(`/${selectedFolder}/`));
+                         (doc.file_path && (
+                           doc.file_path.includes(`/${selectedFolder}/`) ||
+                           doc.file_path.includes(`${selectedFolder}/`) ||
+                           doc.source_directory === selectedFolder
+                         ));
     
     return matchesSearch && matchesCategory && matchesStatus && matchesFolder;
   });
@@ -713,7 +719,6 @@ export default function KnowledgeDashboard() {
                   <SelectItem value="fintec">💳 FinTec (Secure)</SelectItem>
                   <SelectItem value="founders">👑 Founders (Secure)</SelectItem>
                   <SelectItem value="leadership">🎯 Leadership (Secure)</SelectItem>
-                  <SelectItem value="platform-admin">🔒 Platform Admin (Secure)</SelectItem>
                 </SelectContent>
               </Select>
 

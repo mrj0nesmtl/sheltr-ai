@@ -7,6 +7,77 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.149.0] - 2025-11-25 (Document Editing Tracking & Publishing Status Fix) 📝⏰
+
+### ✨ **New Features**
+
+#### **Document Edit Tracking**
+- **Last Synced timestamp**: Shows when document was originally imported from GitHub/local files
+- **Last Edited timestamp**: Shows when document was last edited in the UI (amber highlight)
+- **User attribution**: Display user badge showing who made the last edit
+- **Source badge**: Shows whether document is from GitHub or Secure Docs
+- **Visual distinction**: Synced (gray) vs Edited (amber) timestamps
+
+#### **Change Tracking Enhancement**
+- **`updated_by` field**: Tracks user email who made the edit
+- **`updated_by_name` field**: Tracks user's display name
+- **Automatic tracking**: Set on every "Save & Regenerate" action
+- **Persistent history**: Stored in Firestore for audit trail
+
+### 🐛 **Bug Fixes**
+
+#### **Publishing Status Display**
+- **Fixed "Draft" badge issue**: Secure documents now show "🟢 Published" instead of "🔴 Draft"
+- **Updated sync script**: Set `is_live: true` for all secure documents
+- **Batch updated 42 documents**: Changed existing secure docs to `is_live: true` in Firestore
+
+### 📚 **Documentation**
+
+#### **New Documentation**
+- **`docs/features/knowledge-base/DOCUMENT-EDITING-FLOW.md`**:
+  - Comprehensive guide to document editing architecture
+  - Explains one-way sync from GitHub/local → Firestore
+  - Details what happens when you click "Save & Regenerate"
+  - Clarifies UI edits vs. source file edits
+  - Best practices for permanent changes
+  - FAQ section for common questions
+
+#### **Architecture Clarification**
+- **Source of truth**: GitHub (`docs/`) and local (`.local-secure-docs/`)
+- **Firestore**: Enhanced copies with embeddings and UI edits
+- **UI edits**: Saved to Firestore only, NOT pushed back to source
+- **Next sync behavior**: Source files win, UI edits overwritten if source changed
+- **GitHub token**: Read-only permissions (no write/push access)
+
+### 🎨 **UI Improvements**
+
+#### **Document Info Card Updates**
+- Added "Timestamp Tracking" section with separator
+- Added "Last Synced" display (gray text)
+- Added "Last Edited" display (amber text with user badge)
+- Added "Source" badge (GitHub vs Secure Docs)
+- Improved visual hierarchy and spacing
+
+### 🔧 **Technical Details**
+
+#### **Files Modified**
+- `apps/web/src/app/dashboard/knowledge/edit/page.tsx`:
+  - Added timestamp display section
+  - Added `updated_by` and `updated_by_name` to save function
+  - Imported `Clock` and `Separator` components
+  - Added proper TypeScript type casting for Firestore timestamps
+- `scripts/sync-secure-documents.js`:
+  - Changed `is_live: false` → `is_live: true`
+  - Ensures new synced documents show as "Published"
+
+#### **Database Schema Updates**
+- `knowledge_documents` collection:
+  - Added `updated_by` field (string) - User email
+  - Added `updated_by_name` field (string) - Display name
+  - Modified `is_live` field (boolean) - Now `true` for secure docs
+
+---
+
 ## [2.148.0] - 2025-11-25 (Secure Documents Cleanup & Role-Based AI Access) 🧹🔐
 
 ### 🎯 **Major Refactor**

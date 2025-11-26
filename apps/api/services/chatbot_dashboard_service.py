@@ -285,12 +285,34 @@ Title:"""
             
             # Prepare system message with context
             # If KB documents are attached, use full context (up to 12,000 chars)
+            # For time-based/changelog queries, increase to 20,000 chars to capture full history
             # Otherwise, limit to 2,000 chars for general RAG
-            context_limit = 12000 if kb_document_ids else 2000
+            is_time_based_query = any(keyword in user_message.lower() for keyword in ['past', 'last', 'recent', 'week', 'days', 'month', 'changelog', 'history', 'accomplishments', 'changes'])
+            
+            if kb_document_ids and is_time_based_query:
+                context_limit = 20000  # Increased for changelog/time-based queries
+            elif kb_document_ids:
+                context_limit = 12000  # Standard for attached KB docs
+            else:
+                context_limit = 2000   # General RAG
+            
             context_text = relevant_context[:context_limit] if relevant_context else 'No specific context available.'
             
             # Add document count info if KB docs are attached
-            doc_info = f"\n\nYou have been provided with {len(kb_document_ids)} specific knowledge base documents as context for this query. Use them to provide detailed, document-specific answers." if kb_document_ids else ""
+            if kb_document_ids:
+                doc_info = f"\n\nYou have been provided with {len(kb_document_ids)} specific knowledge base documents as context for this query."
+                
+                # Special handling for changelog/time-based queries
+                if any(keyword in user_message.lower() for keyword in ['past', 'last', 'recent', 'week', 'days', 'month', 'changelog', 'history', 'accomplishments', 'changes']):
+                    doc_info += "\n\n🔍 TIME-BASED QUERY DETECTED: The user is asking about a time period or historical changes. You MUST:"
+                    doc_info += "\n- Analyze the ENTIRE provided context, not just the first entry"
+                    doc_info += "\n- Include ALL relevant versions, releases, or entries within the requested timeframe"
+                    doc_info += "\n- Provide a comprehensive summary covering the full scope of the time period"
+                    doc_info += "\n- If the context contains a changelog, summarize EVERY version/release in the requested date range"
+                else:
+                    doc_info += "\n\nUse the provided documents to give detailed, document-specific answers."
+            else:
+                doc_info = ""
             
             system_message = f"""{instructions}
 

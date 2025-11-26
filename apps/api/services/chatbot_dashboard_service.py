@@ -680,6 +680,13 @@ IMPORTANT: Always provide complete, well-structured responses. Finish your thoug
             user_role = current_user.get('role', 'participant') if current_user else 'participant'
             shelter_id = current_user.get('shelter_id') if current_user else None
             
+            # Detect if this is a time-based/changelog query
+            is_time_based_query = any(keyword in user_query.lower() for keyword in 
+                ['past', 'last', 'recent', 'week', 'days', 'month', 'changelog', 'history', 'accomplishments', 'changes'])
+            
+            # Set per-document limit based on query type
+            per_doc_limit = 20000 if is_time_based_query else 2000
+            
             combined_content = []
             
             for doc_id in document_ids:
@@ -698,10 +705,12 @@ IMPORTANT: Always provide complete, well-structured responses. Finish your thoug
                 # Extract relevant content
                 doc_title = doc.get('title', 'Untitled')
                 doc_content = doc.get('content', '')
+                original_length = len(doc_content)
                 
-                # Truncate if too long (keep first 2000 chars per document)
-                if len(doc_content) > 2000:
-                    doc_content = doc_content[:2000] + "...[truncated]"
+                # Truncate if too long (keep first N chars per document based on query type)
+                if len(doc_content) > per_doc_limit:
+                    doc_content = doc_content[:per_doc_limit] + "...[truncated]"
+                    logger.info(f"📄 Truncated {doc_title}: {original_length} → {per_doc_limit} chars")
                 
                 combined_content.append(f"## {doc_title}\n\n{doc_content}")
                 logger.info(f"✅ Loaded KB document: {doc_title} ({len(doc_content)} chars)")

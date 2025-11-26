@@ -352,6 +352,27 @@ service cloud.firestore {
     }
     
     // =================================================================
+    // FILE UPDATE REQUESTS - Requests for source file updates
+    // =================================================================
+    match /file_update_requests/{requestId} {
+      // Read: Creator can read their own requests, admins can read all
+      allow read: if isAuthenticated() && (
+        resource.data.requested_by == request.auth.token.email ||
+        isSuperAdmin() ||
+        isPlatformAdmin()
+      );
+      
+      // Create: Any authenticated user can create requests
+      allow create: if isAuthenticated();
+      
+      // Update: Only admins can update (status, assignment, notes)
+      allow update: if isSuperAdmin() || isPlatformAdmin();
+      
+      // Delete: Super Admin only
+      allow delete: if isSuperAdmin();
+    }
+    
+    // =================================================================
     // PLATFORM CONFIGURATION - System settings and configuration
     // =================================================================
     match /platform_config/{configId} {

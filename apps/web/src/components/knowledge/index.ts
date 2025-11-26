@@ -10,5 +10,6 @@ export { PermissionManager, type PermissionSettings } from './PermissionManager'
 export { DocsHubPublisher, type DocsHubSettings } from './DocsHubPublisher';
 export { SecureDocumentPublisher } from './SecureDocumentPublisher';
 export { SecureDocumentSync } from './SecureDocumentSync';
+export { FileUpdateRequestModal } from './FileUpdateRequestModal';
 export type { SecurePublishingSettings } from '@/services/securePublishingService';
 

@@ -16,6 +16,7 @@ import {
   FileText,
   Shield,
   AlertTriangle,
+  AlertCircle,
   XCircle,
   BookOpen,
   Globe,
@@ -27,6 +28,7 @@ import { docsHubService } from '@/services/docsHubService';
 import { securePublishingService } from '@/services/securePublishingService';
 import { useAuth } from '@/contexts/AuthContext';
 import { ChangeTracker, useChangeTracker } from '@/components/knowledge/ChangeTracker';
+import { FileUpdateRequestModal } from '@/components/knowledge/FileUpdateRequestModal';
 import { 
   PermissionManager, 
   type PermissionSettings, 
@@ -51,6 +53,7 @@ export default function EditKnowledgeDocumentPage() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [originalFormData, setOriginalFormData] = useState<typeof formData | null>(null);
+  const [showRequestModal, setShowRequestModal] = useState(false);
 
   // Change tracking
   const { trackChange } = useChangeTracker(
@@ -633,7 +636,41 @@ export default function EditKnowledgeDocumentPage() {
           {/* Content */}
           <Card>
             <CardHeader>
-              <CardTitle>Content</CardTitle>
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex-1">
+                  <CardTitle>Content</CardTitle>
+                  
+                  {/* Editing Clarification Banner */}
+                  <div className="mt-3 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+                    <div className="flex items-start gap-2">
+                      <AlertCircle className="h-4 w-4 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+                      <div className="text-xs text-blue-800 dark:text-blue-200 space-y-1">
+                        <p className="font-semibold">📝 What You&apos;re Editing:</p>
+                        <p>
+                          You&apos;re editing <strong>metadata and settings</strong> (title, category, tags, permissions). 
+                          Changes are saved to Firestore and will persist until the next sync.
+                        </p>
+                        <p className="mt-2">
+                          <strong>⚠️ Content edits are temporary:</strong> The actual document content must be edited 
+                          in the source file ({document.synced_from_github ? 'GitHub repository' : 'local secure docs'}). 
+                          Use the &quot;Request File Update&quot; button below to notify admins of needed content changes.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Request File Update Button */}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowRequestModal(true)}
+                  className="flex items-center gap-2 border-purple-300 hover:bg-purple-50 dark:border-purple-700 dark:hover:bg-purple-900/20"
+                >
+                  <FileText className="h-4 w-4" />
+                  Request File Update
+                </Button>
+              </div>
             </CardHeader>
             <CardContent>
               <Textarea
@@ -642,6 +679,15 @@ export default function EditKnowledgeDocumentPage() {
                 placeholder="Enter document content (Markdown supported)"
                 className="min-h-[400px] font-mono text-sm"
               />
+              
+              {/* Content Edit Warning */}
+              <div className="mt-3 p-2 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded text-xs text-amber-800 dark:text-amber-200 flex items-center gap-2">
+                <AlertTriangle className="h-3 w-3 flex-shrink-0" />
+                <span>
+                  Content edits here are <strong>temporary</strong> and will be overwritten on next sync. 
+                  For permanent changes, request a file update or edit the source file directly.
+                </span>
+              </div>
             </CardContent>
           </Card>
 
@@ -851,6 +897,16 @@ export default function EditKnowledgeDocumentPage() {
           />
         </div>
       </div>
+
+      {/* File Update Request Modal */}
+      <FileUpdateRequestModal
+        isOpen={showRequestModal}
+        onClose={() => setShowRequestModal(false)}
+        documentId={documentId || ''}
+        documentTitle={document?.title || 'Unknown Document'}
+        documentPath={document?.file_path}
+        sourceType={document?.synced_from_github ? 'github' : 'secure_docs'}
+      />
     </div>
   );
 }

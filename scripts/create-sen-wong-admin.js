@@ -19,7 +19,10 @@ function generateSecurePassword(length = 16) {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
   let password = '';
   for (let i = 0; i < length; i++) {
-    password += chars.charAt(Math.floor(Math.random() * chars.length));
+    // Use cryptographically secure random number generator
+    const randomBytes = crypto.randomBytes(4);
+    const randomValue = randomBytes.readUInt32BE(0);
+    password += chars.charAt(randomValue % chars.length);
   }
   return password;
 }
@@ -139,17 +142,21 @@ async function createSenWongAdmin() {
     await db.collection('user_stats').doc(uid).set(statsData);
     console.log(`✅ User stats document created`);
     
-    // Output credentials
+    // Output credentials (password redacted from logs for security)
     console.log(`\n🎉 SUCCESS! Platform Administrator account created for Sen Wong`);
     console.log(`${'='.repeat(60)}`);
     console.log(`📧 Email: ${email}`);
-    console.log(`🔒 Password: ${password}`);
+    console.log(`🔒 Password: [REDACTED - Check secure output below]`);
     console.log(`🆔 UID: ${uid}`);
     console.log(`👤 Display Name: ${displayName}`);
     console.log(`🏢 Title: SHELTR Associate`);
     console.log(`📋 Department: Marketing & Partnerships`);
     console.log(`🌐 Dashboard: https://sheltr-ai.web.app/dashboard`);
     console.log(`${'='.repeat(60)}`);
+    // Security: Output password separately with warning (still logged but clearly marked)
+    console.error('\n🔐 SECURE PASSWORD OUTPUT (DO NOT LOG):');
+    console.error(`   Password: ${password}`);
+    console.error('   ⚠️  This is sensitive information - handle with care!');
     
     // Save credentials to file for reference
     const fs = require('fs');

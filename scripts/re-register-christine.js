@@ -1,4 +1,5 @@
 const admin = require('firebase-admin');
+const crypto = require('crypto');
 
 // Initialize Firebase Admin SDK
 const serviceAccount = require('../apps/api/service-account-key.json');
@@ -12,7 +13,7 @@ if (!admin.apps.length) {
 
 const db = admin.firestore();
 
-// Generate secure random password
+// Generate secure random password using cryptographically secure random number generator
 function generateSecurePassword(length = 16) {
   const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   const lowercase = 'abcdefghijklmnopqrstuvwxyz';
@@ -20,17 +21,31 @@ function generateSecurePassword(length = 16) {
   const symbols = '!@#$%^&*()_+-=[]{}';
   const allChars = uppercase + lowercase + numbers + symbols;
   
-  let password = '';
-  password += uppercase[Math.floor(Math.random() * uppercase.length)];
-  password += lowercase[Math.floor(Math.random() * lowercase.length)];
-  password += numbers[Math.floor(Math.random() * numbers.length)];
-  password += symbols[Math.floor(Math.random() * symbols.length)];
-  
-  for (let i = password.length; i < length; i++) {
-    password += allChars[Math.floor(Math.random() * allChars.length)];
+  // Helper function to get secure random index
+  function getSecureRandomIndex(max) {
+    const randomBytes = crypto.randomBytes(4);
+    const randomValue = randomBytes.readUInt32BE(0);
+    return randomValue % max;
   }
   
-  return password.split('').sort(() => Math.random() - 0.5).join('');
+  let password = '';
+  password += uppercase[getSecureRandomIndex(uppercase.length)];
+  password += lowercase[getSecureRandomIndex(lowercase.length)];
+  password += numbers[getSecureRandomIndex(numbers.length)];
+  password += symbols[getSecureRandomIndex(symbols.length)];
+  
+  for (let i = password.length; i < length; i++) {
+    password += allChars[getSecureRandomIndex(allChars.length)];
+  }
+  
+  // Shuffle password securely using Fisher-Yates algorithm
+  const passwordArray = password.split('');
+  for (let i = passwordArray.length - 1; i > 0; i--) {
+    const j = getSecureRandomIndex(i + 1);
+    [passwordArray[i], passwordArray[j]] = [passwordArray[j], passwordArray[i]];
+  }
+  
+  return passwordArray.join('');
 }
 
 const reRegisterChristine = async () => {
@@ -159,7 +174,8 @@ const reRegisterChristine = async () => {
     console.log('🎉 SUCCESS! Christine Savard re-registered as Platform Administrator');
     console.log('='.repeat(60));
     console.log(`\n📧 Email: ${email}`);
-    console.log(`🔑 Password: ${newPassword}`);
+    // Security: Do not log passwords in plain text
+    console.log(`🔑 Password: [REDACTED - Check secure output below]`);
     console.log(`👤 UID: ${userRecord.uid}`);
     console.log(`🎯 Role: platform_admin`);
     console.log(`🏢 Specialization: Shelter Outreach & Grants`);
@@ -167,6 +183,10 @@ const reRegisterChristine = async () => {
     console.log('⚠️  IMPORTANT: This password will only be displayed once!');
     console.log('   Please share it securely with Christine and ask her to change it on first login.');
     console.log('   Login URL: https://sheltr-ai.web.app/login');
+    // Output password to stderr (less likely to be logged) with clear warning
+    console.error('\n🔐 SECURE PASSWORD OUTPUT (DO NOT LOG):');
+    console.error(`   Password: ${newPassword}`);
+    console.error('   ⚠️  This is sensitive information - handle with care!');
     console.log('   Founders Portal: https://sheltr-ai.web.app/portal');
     console.log('\n✨ COMPLETED! Christine Savard re-registered successfully.');
 

@@ -10,6 +10,17 @@ import { Receipt, Download, FileText, Calendar, DollarSign, Loader2, CheckCircle
 import { useAuth } from '@/contexts/AuthContext';
 import { getDonationHistory, getDonorMetrics } from '@/services/platformMetrics';
 
+/**
+ * Generate a cryptographically secure random hex string
+ * @param length - Length of hex string to generate (default: 64)
+ * @returns Secure random hex string
+ */
+function generateSecureRandomHex(length: number = 64): string {
+  const bytes = new Uint8Array(Math.ceil(length / 2));
+  crypto.getRandomValues(bytes);
+  return Array.from(bytes, byte => byte.toString(16).padStart(2, '0')).join('').substring(0, length);
+}
+
 interface TaxDocumentsModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -156,7 +167,7 @@ export function TaxDocumentsModal({ isOpen, onClose }: TaxDocumentsModalProps) {
           date: donation.date,
           amount: donation.amount,
           shelter: donation.shelter || 'SHELTR',
-          transactionHash: donation.transaction_hash || `0x${Math.random().toString(16).substring(2, 66)}`,
+          transactionHash: donation.transaction_hash || `0x${generateSecureRandomHex(64)}`,
           ipAddress: donation.ip_address || '192.168.1.1',
           participantName: donation.participant_name || 'Privacy Protected',
           smartFundDistribution: {
@@ -164,7 +175,7 @@ export function TaxDocumentsModal({ isOpen, onClose }: TaxDocumentsModalProps) {
             housing: donation.amount * 0.15,
             infrastructure: donation.amount * 0.05
           },
-          stakingAccount: donation.staking_account || `0x${Math.random().toString(16).substring(2, 42)}`
+          stakingAccount: donation.staking_account || `0x${generateSecureRandomHex(40)}`
         }))
       };
       
@@ -210,7 +221,7 @@ export function TaxDocumentsModal({ isOpen, onClose }: TaxDocumentsModalProps) {
           date: donation.date,
           amount: donation.amount,
           shelter: donation.shelter || 'SHELTR',
-          transactionHash: donation.transaction_hash || `0x${Math.random().toString(16).substring(2, 66)}`,
+          transactionHash: donation.transaction_hash || `0x${generateSecureRandomHex(64)}`,
           ipAddress: donation.ip_address || '192.168.1.1',
           participantName: donation.participant_name || 'Privacy Protected',
           smartFundDistribution: {
@@ -218,7 +229,7 @@ export function TaxDocumentsModal({ isOpen, onClose }: TaxDocumentsModalProps) {
             housing: donation.amount * 0.15,
             infrastructure: donation.amount * 0.05
           },
-          stakingAccount: donation.staking_account || `0x${Math.random().toString(16).substring(2, 42)}`
+          stakingAccount: donation.staking_account || `0x${generateSecureRandomHex(40)}`
         }))
       };
       
@@ -282,7 +293,7 @@ export function TaxDocumentsModal({ isOpen, onClose }: TaxDocumentsModalProps) {
           date: donation.date,
           amount: donation.amount,
           shelter: donation.shelter || 'SHELTR',
-          transactionHash: donation.transaction_hash || `0x${Math.random().toString(16).substring(2, 66)}`,
+          transactionHash: donation.transaction_hash || `0x${generateSecureRandomHex(64)}`,
           ipAddress: donation.ip_address || '192.168.1.1',
           participantName: donation.participant_name || 'Privacy Protected',
           smartFundDistribution: {
@@ -290,7 +301,7 @@ export function TaxDocumentsModal({ isOpen, onClose }: TaxDocumentsModalProps) {
             housing: donation.amount * 0.15,
             infrastructure: donation.amount * 0.05
           },
-          stakingAccount: donation.staking_account || `0x${Math.random().toString(16).substring(2, 42)}`
+          stakingAccount: donation.staking_account || `0x${generateSecureRandomHex(40)}`
         }))
       };
       

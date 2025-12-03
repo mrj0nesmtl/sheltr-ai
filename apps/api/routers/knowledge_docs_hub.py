@@ -179,14 +179,17 @@ async def publish_document_to_hub(
         
         doc_data = doc.to_dict()
         
-        # DEBUG: Log all permission-related fields
-        logger.info(f"🔍 PERMISSION DEBUG for document {document_id}:")
-        logger.info(f"  permission_level: {doc_data.get('permission_level')}")
-        logger.info(f"  access_level: {doc_data.get('access_level')}")
-        logger.info(f"  sharing_level: {doc_data.get('sharing_level')}")
-        logger.info(f"  confidentiality_level: {doc_data.get('confidentiality_level')}")
-        logger.info(f"  is_private: {doc_data.get('is_private')}")
-        logger.info(f"  All fields: {list(doc_data.keys())}")
+        # DEBUG: Log permission-related fields (excluding sensitive content)
+        logger.debug(f"🔍 PERMISSION DEBUG for document {document_id}:")
+        logger.debug(f"  permission_level: {doc_data.get('permission_level')}")
+        logger.debug(f"  access_level: {doc_data.get('access_level')}")
+        logger.debug(f"  sharing_level: {doc_data.get('sharing_level')}")
+        logger.debug(f"  confidentiality_level: {doc_data.get('confidentiality_level')}")
+        logger.debug(f"  is_private: {doc_data.get('is_private')}")
+        # Security: Do not log all fields as they may contain sensitive data
+        # Only log field names, not values
+        field_names = [k for k in doc_data.keys() if k not in ['content', 'embeddings', 'raw_content']]
+        logger.debug(f"  Field names (excluding sensitive): {field_names}")
         
         # Verify document is public (check multiple possible field names for backward compatibility)
         permission = doc_data.get('permission_level') or doc_data.get('access_level') or doc_data.get('sharing_level')

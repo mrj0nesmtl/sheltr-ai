@@ -1,19 +1,63 @@
 /**
  * Gemini 2.5 Flash Connection Test
  * Run with: npx tsx test-gemini-connection.ts
+ * 
+ * Requires environment variables from .env.local:
+ * - NEXT_PUBLIC_FIREBASE_API_KEY
+ * - NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+ * - NEXT_PUBLIC_FIREBASE_PROJECT_ID
+ * - NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+ * - NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+ * - NEXT_PUBLIC_FIREBASE_APP_ID
  */
 
+import { config } from 'dotenv';
+import { resolve, dirname } from 'path';
+import { fileURLToPath } from 'url';
 import { initializeApp } from 'firebase/app';
 import { getAI, getGenerativeModel, VertexAIBackend } from 'firebase/ai';
 
-// Firebase config
+// Get current directory for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Load environment variables from .env.local
+config({ path: resolve(__dirname, '.env.local') });
+
+// Validate required environment variables
+const requiredEnvVars = {
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+};
+
+// Check for missing environment variables
+const missingVars = Object.entries(requiredEnvVars)
+  .filter(([, value]) => !value)
+  .map(([key]) => {
+    // Convert camelCase to UPPER_SNAKE_CASE
+    const envKey = key.replace(/([A-Z])/g, '_$1').toUpperCase();
+    return `NEXT_PUBLIC_FIREBASE_${envKey}`;
+  });
+
+if (missingVars.length > 0) {
+  console.error('\n❌ Missing required environment variables:');
+  missingVars.forEach(varName => console.error(`   - ${varName}`));
+  console.error('\n💡 Please ensure .env.local exists and contains all Firebase configuration variables.');
+  process.exit(1);
+}
+
+// Firebase config from environment variables
 const firebaseConfig = {
-  apiKey: "AIzaSyDvKr2pJhqNqNOzSGXZOqfQZXkKFxJGSHo",
-  authDomain: "sheltr-ai.firebaseapp.com",
-  projectId: "sheltr-ai",
-  storageBucket: "sheltr-ai.firebasestorage.app",
-  messagingSenderId: "714964620823",
-  appId: "1:714964620823:web:d5b1e3a7c8f9d0e1a2b3c4"
+  apiKey: requiredEnvVars.apiKey!,
+  authDomain: requiredEnvVars.authDomain!,
+  projectId: requiredEnvVars.projectId!,
+  storageBucket: requiredEnvVars.storageBucket!,
+  messagingSenderId: requiredEnvVars.messagingSenderId!,
+  appId: requiredEnvVars.appId!,
 };
 
 console.log('\n🤖 Testing Gemini 2.5 Flash Connection...\n');
@@ -92,11 +136,12 @@ async function testGemini() {
     console.log('   ✅ Multi-turn chat: SUCCESS');
     console.log('\n🎉 Gemini 2.5 Flash is ready for production!\n');
 
-  } catch (error: any) {
+  } catch (error) {
     console.error('\n❌ TEST FAILED!');
     console.error('━'.repeat(60));
-    console.error('Error:', error.message);
-    if (error.stack) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error('Error:', errorMessage);
+    if (error instanceof Error && error.stack) {
       console.error('\nStack trace:');
       console.error(error.stack);
     }

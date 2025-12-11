@@ -179,17 +179,19 @@ async def publish_document_to_hub(
         
         doc_data = doc.to_dict()
         
-        # DEBUG: Log permission-related fields (excluding sensitive content)
+        # SECURITY: Only log non-sensitive permission metadata for debugging
+        # Never log document content, embeddings, or user data
         logger.debug(f"🔍 PERMISSION DEBUG for document {document_id}:")
         logger.debug(f"  permission_level: {doc_data.get('permission_level')}")
         logger.debug(f"  access_level: {doc_data.get('access_level')}")
         logger.debug(f"  sharing_level: {doc_data.get('sharing_level')}")
         logger.debug(f"  confidentiality_level: {doc_data.get('confidentiality_level')}")
         logger.debug(f"  is_private: {doc_data.get('is_private')}")
-        # Security: Do not log all fields as they may contain sensitive data
-        # Only log field names, not values
-        field_names = [k for k in doc_data.keys() if k not in ['content', 'embeddings', 'raw_content']]
-        logger.debug(f"  Field names (excluding sensitive): {field_names}")
+        # SECURITY: Do not log field names as they may reveal document structure
+        # Only log count of fields for debugging purposes
+        sensitive_fields = ['content', 'embeddings', 'raw_content', 'user_data', 'email', 'phone']
+        field_count = len([k for k in doc_data.keys() if k not in sensitive_fields])
+        logger.debug(f"  Non-sensitive field count: {field_count}")
         
         # Verify document is public (check multiple possible field names for backward compatibility)
         permission = doc_data.get('permission_level') or doc_data.get('access_level') or doc_data.get('sharing_level')

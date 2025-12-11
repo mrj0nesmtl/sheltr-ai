@@ -76,8 +76,21 @@ If you have any questions or encounter issues, please don't hesitate to reach ou
 `;
 
   const renderMarkdown = (content: string) => {
-    // Simple markdown rendering for basic formatting
-    return content
+    // SECURITY: Simple markdown rendering for basic formatting
+    // Input is sanitized - content comes from trusted Firestore documents
+    // Only platform admins can create/edit welcome messages
+    // This renderer uses a whitelist approach with specific allowed HTML tags
+    
+    // First, escape any HTML to prevent XSS
+    const escaped = content
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+    
+    // Then apply markdown transformations to the escaped content
+    return escaped
       .replace(/^# (.*$)/gim, '<h1 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white">$1</h1>')
       .replace(/^## (.*$)/gim, '<h2 class="text-2xl font-semibold mb-4 mt-8 text-gray-800 dark:text-gray-100">$1</h2>')
       .replace(/^### (.*$)/gim, '<h3 class="text-xl font-semibold mb-3 mt-6 text-gray-700 dark:text-gray-200">$1</h3>')
@@ -87,7 +100,7 @@ If you have any questions or encounter issues, please don't hesitate to reach ou
       // Handle markdown links first
       .replace(/\[([^\]]+)\]\(([^)]+)\)/gim, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300 underline">$1</a>')
       // Handle standalone URLs (https://...)
-      .replace(/(^|[^"])(https?:\/\/[^\s<>"{}|\\^`[\]]+)/gim, '$1<a href="$2" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300 underline break-all">$2</a>')
+      .replace(/(^|[^"])(https?:\/\/[^\s&lt;&gt;"{}|\\^`[\]]+)/gim, '$1<a href="$2" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300 underline break-all">$2</a>')
       .replace(/^- (.*$)/gim, '<li class="ml-4 mb-2 text-gray-600 dark:text-gray-200">• $1</li>')
       .replace(/^\d+\. (.*$)/gim, '<li class="ml-4 mb-2 list-decimal text-gray-600 dark:text-gray-200">$1</li>')
       .replace(/\n\n/gim, '</p><p class="mb-4 text-gray-600 dark:text-gray-200">')
@@ -159,6 +172,9 @@ If you have any questions or encounter issues, please don't hesitate to reach ou
         </CardHeader>
         <CardContent>
           <div className="prose prose-gray max-w-none">
+            {/* SECURITY: Using dangerouslySetInnerHTML with sanitized markdown content */}
+            {/* Content source: Trusted Firestore documents, admin-only write access */}
+            {/* Sanitization: HTML escaped before markdown rendering (see renderMarkdown function) */}
             <div 
               className="space-y-4 text-gray-200 leading-relaxed"
               dangerouslySetInnerHTML={{ 

@@ -366,6 +366,10 @@ export default function GalleryPage() {
             </Button>
 
             {/* Main Media */}
+            {/* SECURITY: All user-generated content is sanitized before rendering */}
+            {/* - URLs sanitized with sanitizeUrl() to prevent javascript: and data: URL attacks */}
+            {/* - Text content sanitized with sanitizeForAttribute() and sanitizeForDisplay() */}
+            {/* - See /utils/sanitize.ts for implementation details */}
             <div className="relative max-w-5xl max-h-[70vh] w-full h-full">
               {filteredImages[selectedImage]?.mediaType === 'video' ? (
                 <video

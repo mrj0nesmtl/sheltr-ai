@@ -2,7 +2,7 @@
 
 **Secure, Mobile, Functional Emergency Housing Units**
 
-*Version: 2.0 | Updated: October 2, 2025*
+*Version: 3.0 | Updated: December 11, 2025*
 
 ---
 
@@ -10,21 +10,28 @@
 
 The SHELTR PODS (Portable Optimized Dwelling System) represents a revolutionary approach to emergency housing, combining security, mobility, and functionality in a compact, deployable unit. Each POD is designed to provide dignified temporary housing while participants work toward permanent solutions.
 
-SHELTR mobile micro-housing units are engineered to provide safe, insulated, and weather-resistant accommodations for one or two occupants. Each unit is fabricated with mobility in mind (caster wheels or optional bike hitch) and incorporates sustainable power via solar energy, water systems, and emergency sanitation. Units are specifically engineered for Canadian and northern climates.
+**One Model. Infinite Possibilities.**
+
+SHELTR has simplified its product line to focus on a single, optimized **Model A flat-pack design**. This strategic pivot delivers faster deployment, lower costs, and easier logistics while maintaining our commitment to dignified emergency housing. Each unit ships disassembled in flat-pack configuration and assembles in 2-4 hours with basic tools and two people.
+
+The Model A is engineered for Canadian and northern climates, featuring modular construction, integrated EcoFlow power systems, and partnership with ATS Containers for world-class manufacturing quality.
 
 ### Key Specifications
 
 | Specification | Value | Details |
 |---------------|--------|---------|
-| **Model A (1-Person)** | 7' L × 4' W × 6.5' H | ~28 sq ft usable floor area |
-| **Model B (2-Person)** | 12' L × 6' W × 7' H | ~72 sq ft usable floor area |
-| **Weight (Model A)** | 800 lbs (fully equipped) | Bike-towable option available |
-| **Weight (Model B)** | 1,450 lbs (fully equipped) | Towable by standard vehicle |
-| **Capacity** | 1-2 persons | Single or couple occupancy |
-| **Power System** | 200-400W Solar + 100-200Ah Battery | Off-grid capable |
-| **Deployment Time** | < 30 minutes | Rapid emergency response |
-| **Mobility** | Heavy-duty caster wheels | Relocatable as needed |
+| **Model** | Model A (Flat-Pack) | Single SKU, modular design |
+| **Assembled Dimensions** | 7' L × 4' W × 6.5' H | ~28 sq ft usable floor area |
+| **Flat-Pack Dimensions** | 7' L × 4' W × 1.5' H | Ships on 3 standard pallets |
+| **Shipping Weight** | 600 lbs | Reduced from previous 800 lbs |
+| **Assembled Weight** | 650 lbs | Lightweight materials |
+| **Assembly Time** | 2-4 hours | 2 people, no heavy equipment |
+| **Capacity** | 1 person | Single occupancy |
+| **Power System** | EcoFlow DELTA 2 (1kWh) | Expandable to 3kWh |
+| **Solar Panels** | 400W rooftop array | EcoFlow compatible |
+| **Insulation** | R-20 walls, R-30 roof | EPS foam + Polyurea + steel composite |
 | **Winter Rating** | -25°C / -13°F | Sustained cold weather operation |
+| **Price Target** | $10,000-$12,000 CAD | Reduced from $15,000 |
 | **Canadian Standards** | CSA, NBC 2020, CAN/ULC-S102 | Fully compliant |
 
 ---
@@ -33,24 +40,32 @@ SHELTR mobile micro-housing units are engineered to provide safe, insulated, and
 
 ### Core Components
 
-#### 1. Structural Framework
+#### 1. Flat-Pack Modular Structure
 
-**Primary Structure**
+**Modular Frame System**
 ```
-🏗️ Frame Construction:
-├── Frame: Welded 6063-T5 aluminum square tubing
+🏗️ Flat-Pack Frame Construction:
+├── Frame Components: Modular 6063-T5 aluminum sections
 │   ├── Powder-coated for corrosion resistance
 │   ├── ASTM B221 compliant
+│   ├── Bolt-together assembly (no welding required)
 │   └── Lightweight yet high structural integrity
-├── Exterior Panels: Powder-coated galvanized steel
-│   ├── Impact-resistant: 250 J/m
-│   ├── UV-resistant coating
-│   └── Matte dark gray finish standard
-├── Structural Insulated Panels (SIPs):
-│   ├── Core: 3" rigid closed-cell polyurethane foam
+├── Advanced Composite Wall Panels:
+│   ├── Pre-fabricated modular panels
+│   ├── Core: 2" EPS (Expanded Polystyrene) foam
+│   ├── Coating: Polyurea spray coating on both sides
+│   ├── Reinforcement: Steel plates on exterior and interior faces
 │   ├── Wall Insulation: R-20 thermal value
 │   ├── Roof Insulation: R-30 thermal value (4" polyisocyanurate foam)
 │   └── Floor Insulation: R-10 (2" XPS foam)
+├── Exterior Finish: Powder-coated galvanized steel
+│   ├── Impact-resistant: 250 J/m
+│   ├── UV-resistant coating
+│   └── Matte dark gray finish standard
+├── Panel Connections: Snap-fit and bolt system
+│   ├── Weather-sealed gaskets
+│   ├── Tamper-evident fasteners
+│   └── Tool-free assembly where possible
 └── Interior Lining: Marine-grade plywood with water-resistant laminate finish
 ```
 
@@ -83,31 +98,61 @@ SHELTR mobile micro-housing units are engineered to provide safe, insulated, and
 **Mobility & Anchoring**
 ```
 🚚 Transport & Stability:
-├── Wheels: Heavy-duty locking caster wheels
+├── Flat-Pack Shipping: Standard pallet configuration (3 pallets)
+├── Assembled Mobility: Heavy-duty locking caster wheels (optional)
 ├── Stabilizers: Retractable steel stabilizer legs
-├── Hitch: Optional bicycle hitch adapter (Model A)
-└── Tow Dolly: Compatible with standard tow systems
+└── Foundation: Can be permanently mounted or remain mobile
 ```
 
-#### 2. Power & Electrical Systems
+#### 2. Power & Electrical Systems - EcoFlow Integration
+
+**Partnership: EcoFlow DELTA Series**
+
 ```
-⚡ Power Infrastructure:
+⚡ Integrated Power Infrastructure:
+├── Power Station: EcoFlow DELTA 2
+│   ├── Capacity: 1kWh (expandable to 3kWh)
+│   ├── Output: 1800W (3600W surge)
+│   ├── Battery: LiFePO4 (3000+ cycles, 10-year lifespan)
+│   ├── Fast Charging: 80% in 1 hour (AC input)
+│   └── 5-year warranty
 ├── Solar Panel Array:
-│   ├── Model A: 200-300W rooftop array (expandable)
-│   └── Model B: 400W monocrystalline panels
-├── Battery Storage:
-│   ├── 12V deep-cycle AGM or LiFePO4 (100-200Ah)
-│   └── Battery Management System with health monitoring
-├── Charge Controller (MPPT 40A)
-├── Inverter/Charger:
-│   ├── Model A: 600-1000W capacity
-│   └── Model B: 2000W pure sine wave
-├── 12V/24V DC distribution
-├── 120V AC outlets (1-4 interior)
-├── USB charging ports (2-6 total)
-├── LED lighting system (low-wattage, 1-2 fixtures)
-└── GFCI-protected electrical outlets
+│   ├── 400W rooftop monocrystalline panels
+│   ├── EcoFlow compatible MPPT input
+│   ├── Pre-wired harness for plug-and-play
+│   └── Weather-resistant mounting system
+├── Power Distribution:
+│   ├── 120V AC outlets (4 total via DELTA 2)
+│   ├── USB-C ports (2× 100W)
+│   ├── USB-A ports (4× standard)
+│   ├── 12V DC outlets (2× car socket)
+│   └── Wireless charging pad (15W)
+├── Smart Features:
+│   ├── Mobile app monitoring (iOS/Android)
+│   ├── Remote power management
+│   ├── Energy usage analytics
+│   ├── Battery health tracking
+│   └── OTA firmware updates
+├── Lighting System:
+│   ├── LED fixtures (low-wattage, 2-3 zones)
+│   ├── Smart dimming capability
+│   └── Emergency backup lighting
+└── Safety Features:
+    ├── GFCI protection on all AC outlets
+    ├── Overload protection
+    ├── Temperature monitoring
+    └── Automatic shutdown safeguards
 ```
+
+**EcoFlow DELTA 2 Specifications:**
+- **Capacity**: 1024Wh (expandable with Extra Battery)
+- **AC Output**: 1800W (3600W surge)
+- **Solar Input**: 500W max (11-60V)
+- **Charging Time**: 50 min to 80% (AC), 3-6 hours (solar)
+- **Weight**: 27 lbs (12 kg)
+- **Lifespan**: 3000 cycles to 80% capacity
+- **Operating Temperature**: -4°F to 113°F (-20°C to 45°C)
+- **Warranty**: 5 years
 
 #### 3. Climate Control
 ```
@@ -116,34 +161,231 @@ SHELTR mobile micro-housing units are engineered to provide safe, insulated, and
 │   ├── Roof-mounted low-energy fan
 │   ├── Two operable windows for passive cross-ventilation
 │   └── Intake/exhaust ventilation system
+├── Heating: 12V ceramic heater (powered by EcoFlow DELTA 2)
+│   ├── 1500W capacity
+│   ├── Programmable thermostat
+│   └── Energy-efficient operation
 ├── Air Conditioning: Optional 12V A/C unit (9000 BTU)
-├── Heating Options:
-│   ├── Model A: 12V ceramic heater (battery + solar powered)
-│   ├── Model B: Propane-compatible vented heater (optional upgrade)
-│   └── Diesel/electric heating system
-├── Air Filtration (HEPA)
-├── Humidity control
-├── Temperature monitoring
-└── Double-pane polycarbonate windows with low-E coating
+│   ├── Powered by EcoFlow system
+│   └── Energy monitoring via app
+├── Air Quality:
+│   ├── HEPA filtration
+│   ├── Humidity control
+│   └── Temperature monitoring
+└── Windows: Double-pane polycarbonate with low-E coating
+    ├── Weather-sealed gaskets
+    └── Integrated into modular panels
 ```
 
 #### 4. Water & Sanitation
 ```
 💧 Water Systems:
-├── Fresh Water Tank:
-│   ├── Model A: 10L capacity
-│   └── Model B: 20 gallons (76L)
-├── Gray water tank (15 gallons)
-├── Water pump (12V low-flow pressure pump)
-├── Sink: Compact stainless steel single-basin with folding faucet
-├── Hot water heater (6 gallon)
-├── Shower system (compact)
-├── Sanitation:
-│   ├── Porta Potty: 5L chemical-based unit
-│   ├── Model A: Concealed beneath trunk seat
-│   └── Model B: Under desk or separate compartment
-└── Waste management and drain system
+├── Fresh Water Tank: 10L capacity
+│   ├── Food-grade plastic construction
+│   ├── Integrated fill port
+│   └── Level indicator
+├── Water Pump: 12V low-flow pressure pump
+│   ├── Powered by EcoFlow system
+│   └── Quiet operation
+├── Sink: Compact stainless steel single-basin
+│   ├── Folding faucet
+│   └── Integrated drain system
+├── Sanitation: 5L porta potty
+│   ├── Chemical-based unit
+│   ├── Concealed beneath storage trunk
+│   └── Easy removal for servicing
+└── Plumbing: Quick-connect modular system
+    ├── Tool-free assembly
+    └── Leak-proof connections
 ```
+
+---
+
+## 🔧 Flat-Pack Assembly System
+
+### Assembly Overview
+
+The Model A flat-pack design enables rapid deployment without heavy equipment or specialized skills. The entire unit ships disassembled on three standard pallets and can be assembled by two people in 2-4 hours.
+
+### Component Breakdown
+
+```
+📦 Flat-Pack Components:
+├── Pallet 1: Frame & Structure (250 lbs)
+│   ├── Aluminum frame sections (12 pieces)
+│   ├── Corner connectors and brackets
+│   ├── Stabilizer legs (4 units)
+│   └── Hardware kit (bolts, fasteners)
+├── Pallet 2: Panels & Insulation (200 lbs)
+│   ├── Wall panels (4 SIP units)
+│   ├── Roof panels (2 SIP units)
+│   ├── Floor panel (1 SIP unit)
+│   ├── Door assembly (pre-hung)
+│   └── Window units (2 double-pane)
+├── Pallet 3: Systems & Interior (150 lbs)
+│   ├── EcoFlow DELTA 2 power station
+│   ├── Solar panels (400W array)
+│   ├── Electrical harness (pre-wired)
+│   ├── Plumbing kit (quick-connect)
+│   ├── Interior fixtures and furniture
+│   └── Assembly manual and tools
+```
+
+### Assembly Sequence
+
+**Phase 1: Foundation & Frame (45 minutes)**
+1. Site preparation and leveling
+2. Lay floor panel and secure
+3. Assemble aluminum frame sections
+4. Install corner connectors
+5. Verify frame square and level
+
+**Phase 2: Panel Installation (60 minutes)**
+1. Install wall panels (snap-fit connections)
+2. Secure panels with weatherproof bolts
+3. Install roof panels
+4. Apply weather sealing tape
+5. Install door and window units
+
+**Phase 3: Systems Integration (45 minutes)**
+1. Connect electrical harness
+2. Mount EcoFlow DELTA 2 power station
+3. Install solar panels on roof
+4. Connect plumbing quick-connects
+5. Test all systems
+
+**Phase 4: Interior & Finishing (30 minutes)**
+1. Install interior fixtures
+2. Mount furniture and storage
+3. Connect lighting fixtures
+4. Final weatherproofing check
+5. System activation and testing
+
+### Tool Requirements
+
+**Included in Hardware Kit:**
+- Hex key set (metric)
+- Torque wrench (pre-set)
+- Level (2-foot)
+- Weather sealing tape
+- Assembly instructions (illustrated)
+
+**Required (Not Included):**
+- Power drill with bits
+- Adjustable wrench
+- Rubber mallet
+- Safety equipment (gloves, glasses)
+
+### Quality Control Checkpoints
+
+```
+✓ Assembly Verification:
+  ├── Frame alignment and squareness
+  ├── Panel sealing and weatherproofing
+  ├── Electrical system functionality
+  ├── Plumbing leak testing
+  ├── Door and window operation
+  ├── Climate control testing
+  └── Final safety inspection
+```
+
+---
+
+## 📦 Shipping & Logistics
+
+### Pallet Configuration
+
+**Shipping Specifications:**
+- **Total Pallets**: 3 standard pallets
+- **Pallet Dimensions**: 7' L × 4' W × 1.5' H each
+- **Total Shipping Weight**: 600 lbs
+- **Shipping Volume**: 42 cubic feet (60% reduction vs. assembled)
+- **Stackable**: Up to 4 units high (12 pallets)
+
+### Shipping Benefits
+
+**Cost Savings:**
+- 60% smaller shipping volume
+- Standard pallet shipping rates
+- No oversized load permits required
+- Reduced freight costs (estimated 40-50% savings)
+
+**Logistics Advantages:**
+- Ships via standard freight carriers
+- No special handling equipment needed
+- Easier international shipping
+- Reduced carbon footprint per unit
+
+### Storage Requirements
+
+**Warehouse Storage:**
+- Standard pallet racking compatible
+- Climate-controlled storage recommended
+- 6-month shelf life (unopened)
+- Moisture protection required
+
+**On-Site Storage:**
+- Can be stored outdoors (weatherproof wrapping)
+- Compact footprint for staging areas
+- Quick deployment from storage
+
+---
+
+## 🤝 Strategic Partnerships
+
+### ATS Containers - Manufacturing Partner
+
+**Partnership Role**: Primary structural components and flat-pack engineering
+
+**Company Profile:**
+- **Website**: https://www.atscontainers.com/
+- **Location**: Ontario, Canada
+- **Expertise**: Modular container design and flat-pack solutions
+- **Certifications**: ISO-certified manufacturing
+
+**Integration Points:**
+- Aluminum frame design and fabrication
+- Flat-pack panel engineering
+- SIP panel manufacturing
+- Quality control and testing
+- Logistics and shipping optimization
+- Canadian manufacturing standards compliance
+
+**Benefits:**
+- Domestic Canadian production
+- Reduced manufacturing costs
+- Faster production timelines
+- Quality assurance
+- Local supply chain
+
+### EcoFlow - Power Systems Partner
+
+**Partnership Role**: Integrated power solutions
+
+**Company Profile:**
+- **Website**: https://ca.ecoflow.com/collections/delta-series
+- **Product**: EcoFlow DELTA 2 power station
+- **Expertise**: Portable power and solar integration
+
+**Integration Strategy:**
+- Pre-mounted power station in POD
+- Integrated solar panel wiring
+- Weatherproof external connections
+- Mobile app integration
+- Expandable battery modules
+- Extended warranty programs
+
+**Cost Optimization:**
+- Bulk purchase agreements
+- Co-branding opportunities
+- Service and support partnership
+- Volume pricing discounts
+
+**Technical Support:**
+- Dedicated POD integration team
+- Custom mounting solutions
+- Warranty and service coordination
+- Training for assembly teams
 
 ---
 
@@ -310,23 +552,12 @@ SHELTR PODS can be customized with premium features to meet specific needs and p
 **Skylight Window** - *From $600 CAD*
 ```
 ☀️ Skylight Features:
-├── Size: 24" × 24" (Model B only)
+├── Size: 18" × 18" (roof panel integration)
 ├── Material: UV-resistant acrylic dome
 ├── Insulation: Double-wall construction (R-5)
-├── Ventilation: Manual or powered vent option
+├── Ventilation: Manual vent option
 ├── Shade: Integrated blackout blind
-└── Weather: Rain sensor auto-close (powered option)
-```
-
-**Bunk Bed System** - *From $1,200 CAD*
-```
-🛏️ Bunk Configuration:
-├── Compatibility: Model B only (7'+ interior height)
-├── Frame: Aluminum construction with safety rails
-├── Mattresses: Memory foam (3" thickness)
-├── Weight Capacity: 300 lbs per bunk
-├── Storage: Integrated shelf and reading lights
-└── Assembly: Tool-free installation/removal
+└── Weather: Sealed gasket system
 ```
 
 **Premium Lighting Upgrade** - *From $400 CAD*
@@ -346,15 +577,15 @@ SHELTR PODS can be customized with premium features to meet specific needs and p
 - Upgraded heating system (2000W ceramic)
 - Enhanced insulation (R-30 walls, R-40 roof)
 - Heated floor mat
-- Extended battery capacity (200Ah)
+- EcoFlow Extra Battery (1kWh additional)
 - Arctic-rated door seals
 
 **Power Pro Package** - *From $2,500 CAD*
-- 400W solar panel array (expandable)
-- 200Ah LiFePO4 battery system
-- 2000W pure sine wave inverter
-- Additional 110V outlets (4 total)
+- EcoFlow DELTA Pro upgrade (3.6kWh)
+- 800W solar panel array
+- Additional battery expansion
 - Smart power monitoring system
+- Extended warranty (10 years)
 
 **Climate Control Pro** - *From $1,600 CAD*
 - 12,000 BTU air conditioning unit
@@ -376,57 +607,90 @@ SHELTR PODS can be customized with premium features to meet specific needs and p
 - Voice assistant integration (Alexa/Google)
 - Smart outlet control
 - Automated climate scheduling
-- Energy usage analytics
+- Energy usage analytics via EcoFlow app
 - Remote system management
 
 #### **Water & Sanitation**
 
 **Water Upgrade** - *From $1,400 CAD*
-- Expanded water tank (40L Model A / 60L Model B)
-- Hot water heater (6 gallon)
+- Expanded water tank (20L capacity)
+- Hot water heater (compact 3 gallon)
 - Upgraded pump system
 - Water filtration system
-- Greywater management
+- Greywater collection
 
 ---
 
-## 🔋 Power Management
+## 🔋 Power Management - EcoFlow DELTA 2 System
 
-### Solar Power System
+### Integrated Solar Power System
 
-#### Panel Configuration
+#### EcoFlow DELTA 2 Power Station
+
+**Core Specifications:**
+- **Capacity**: 1024Wh (1kWh) LiFePO4 battery
+- **Expandable**: Up to 3kWh with Extra Battery
+- **AC Output**: 1800W continuous (3600W surge)
+- **Cycle Life**: 3000+ cycles to 80% capacity
+- **Warranty**: 5 years standard
+- **Weight**: 27 lbs (12 kg)
+- **Dimensions**: 15.7 × 8.3 × 11 inches
+
+#### Solar Panel Configuration
 - **Monocrystalline panels** (400W total)
 - **Tilt-adjustable mounting** for optimal sun exposure
-- **Maximum Power Point Tracking** (MPPT) controller
+- **EcoFlow MPPT controller** (integrated in DELTA 2)
 - **Weather-resistant design** (IP67 rating)
+- **Pre-wired harness** for plug-and-play installation
+- **Solar Input**: 500W max (11-60V)
 
-#### Battery Management
-```python
-# Battery Management System
-class BatteryManagement:
-    def __init__(self):
-        self.capacity = 200  # Ah
-        self.voltage = 12    # V nominal
-        self.chemistry = "LiFePO4"
-        self.cycles = 3000   # Expected cycle life
-    
-    def monitor_health(self):
-        return {
-            "state_of_charge": self.get_soc(),
-            "voltage": self.get_voltage(),
-            "current": self.get_current(),
-            "temperature": self.get_temperature(),
-            "cycle_count": self.get_cycles(),
-            "health": self.calculate_health()
-        }
+#### Charging Options
 ```
+⚡ Multi-Source Charging:
+├── Solar Charging: 3-6 hours (400W panels)
+├── AC Wall Charging: 50 min to 80% (X-Stream technology)
+├── Car Charging: 12V DC input available
+├── Generator Charging: Compatible with portable generators
+└── Dual Charging: Solar + AC simultaneously
+```
+
+#### Power Distribution
+```
+🔌 Output Ports (EcoFlow DELTA 2):
+├── AC Outlets: 4× 120V (1800W total)
+├── USB-C: 2× 100W PD (laptop charging)
+├── USB-A: 4× standard (phone/tablet charging)
+├── 12V DC: 2× car socket outlets
+├── Wireless Charging: 15W pad (top surface)
+└── XT60 Output: For specialized equipment
+```
+
+#### Smart Energy Management
+
+**EcoFlow Mobile App Features:**
+- Real-time power monitoring
+- Battery health tracking
+- Charging status and estimates
+- Power usage analytics
+- Remote power control
+- Firmware updates (OTA)
+- Energy consumption history
+- Solar input optimization
+
+**Intelligent Load Management:**
+- Automatic load balancing
+- Priority power allocation
+- Low battery warnings
+- Overload protection
+- Temperature monitoring
+- Smart charging algorithms
 
 #### Energy Efficiency
 - **LED lighting** throughout (< 50W total)
-- **DC appliances** where possible
-- **Smart load management** system
-- **Energy harvesting** from movement/vibration
-- **Grid-tie capability** when available
+- **DC appliances** powered directly from DELTA 2
+- **Smart load management** via EcoFlow app
+- **Energy monitoring** for optimization
+- **Grid-tie capability** when available (with additional equipment)
 
 ---
 
@@ -441,43 +705,56 @@ class BatteryManagement:
 📐 Interior Layout (~28 sq ft):
 ┌─────────────────────┐
 │  Entry/Storage      │
+│  - EcoFlow DELTA 2  │
+│  - Coat hooks       │
 ├─────────────────────┤
 │  Sleeping Area      │
-│  (Single bed with   │
-│   storage trunk)    │
+│  - Single bed       │
+│  - Storage trunk    │
+│  - Reading light    │
 ├─────────────────────┤
 │  Work Area          │
-│  (Folding desk)     │
+│  - Folding desk     │
+│  - Shelving         │
+│  - USB charging     │
 └─────────────────────┘
-```
-
-**Model B: Two-Person Unit (8' × 12' × 8')**
-```
-📐 Interior Layout (~96 sq ft):
-┌─────────────────────────────────────┐
-│  Entry  │        Living Area       │
-├─────────┼─────────────────────────┤
-│ Kitchen │     Sleeping Area       │
-│  Area   │                         │
-├─────────┼─────────────────────────┤
-│ Bathroom│      Storage Area       │
-└─────────────────────────────────────┘
 ```
 
 #### Functional Areas
 
-**Model A: One-Person Configuration**
-- **Sleeping Area**: Single bed with storage trunk underneath (conceals Porta Potty)
-- **Work Area**: Folding wall-mounted desk with integrated shelving
-- **Storage**: Compact shelving and under-bed storage
-- **Basic Amenities**: Sink module with water tank
+**Modular Interior Configuration:**
 
-**Model B: Two-Person Configuration**
-- **Living Area (48 sq ft)**: Convertible seating/work space, fold-down table/desk, storage compartments, entertainment system mount
-- **Sleeping Area (32 sq ft)**: Two single beds or one full-size bed with under-bed storage, personal storage drawers, reading lights, privacy curtains
-- **Kitchen Area (16 sq ft)**: Compact refrigerator (12V), microwave oven, sink with hot/cold water, storage for food/supplies
-- **Bathroom (12 sq ft)**: Composting toilet, compact shower, sink and mirror, ventilation system
-- **Utility Area**: Laundry washer/dryer combo (compact 24"), desk with integrated shelving
+- **Sleeping Area**: 
+  - Single bed (6' × 2.5')
+  - Memory foam mattress (3" thickness)
+  - Storage trunk underneath (conceals porta potty)
+  - Reading light with dimmer
+  - Personal storage compartments
+
+- **Work Area**: 
+  - Folding wall-mounted desk (24" × 18")
+  - Integrated shelving system
+  - Multiple USB charging ports
+  - LED task lighting
+  - Cable management
+
+- **Storage Solutions**: 
+  - Overhead shelving
+  - Under-bed storage trunk
+  - Wall-mounted hooks and organizers
+  - Compact closet rod
+
+- **Amenities**: 
+  - Sink module with water tank
+  - EcoFlow DELTA 2 power station (accessible)
+  - Climate control panel
+  - Smart lock control interface
+
+- **Modular Furniture**:
+  - All furniture pre-assembled or tool-free assembly
+  - Lightweight but durable construction
+  - Optimized for small space living
+  - Easy to remove for customization
 
 ---
 
@@ -535,43 +812,64 @@ class EmergencyResponse:
 
 ## 🚚 Deployment & Logistics
 
-### Transportation & Setup
+### Flat-Pack Transportation & Setup
 
-#### Mobility Features
-- **Trailer chassis** with electric brakes
-- **Heavy-duty caster wheels** with locking mechanism
-- **Retractable steel stabilizer legs** for stationary placement
-- **Optional bicycle hitch** or tow dolly adapter
-- **Stabilizing jacks** for leveling
-- **Utility connections** (quick-connect)
-- **Towing package** included
+#### Shipping & Delivery
+- **Flat-pack pallets** (3 standard pallets)
+- **Standard freight** shipping
+- **Forklift delivery** or manual unloading
+- **Compact footprint** for staging
+- **Weather-protected** packaging
 - **GPS tracking** during transport
+- **Assembly manual** included with shipment
 
-#### Deployment Process
-1. **Site preparation** (30 minutes)
-   - Level ground assessment
-   - Utility connection planning
+#### Assembly & Deployment Process
+
+**Total Time: 2-4 hours (2 people)**
+
+1. **Site Preparation** (30 minutes)
+   - Level ground assessment (±5 degrees)
+   - Staging area for components
+   - Tool and equipment check
    - Safety perimeter establishment
 
-2. **POD positioning** (15 minutes)
-   - Trailer unhitching
-   - Stabilization and leveling
-   - Utility connections
+2. **Foundation & Frame Assembly** (45 minutes)
+   - Unpack and inventory components
+   - Lay floor panel and secure
+   - Assemble aluminum frame sections
+   - Install corner connectors
+   - Verify frame square and level
 
-3. **System activation** (15 minutes)
-   - Power system startup
-   - Network connectivity
-   - Security system activation
-   - Climate control initialization
+3. **Panel Installation** (60 minutes)
+   - Install wall panels (snap-fit)
+   - Secure panels with weatherproof bolts
+   - Install roof panels
+   - Apply weather sealing
+   - Install door and window units
+
+4. **Systems Integration** (45 minutes)
+   - Connect electrical harness
+   - Mount EcoFlow DELTA 2
+   - Install solar panels on roof
+   - Connect plumbing quick-connects
+   - Test all systems
+
+5. **Interior & Final Setup** (30 minutes)
+   - Install interior fixtures
+   - Mount furniture and storage
+   - Connect lighting fixtures
+   - Final weatherproofing check
+   - System activation and testing
 
 ### Site Requirements
 
 #### Minimum Site Specifications
 - **Level ground** (±5 degrees)
-- **Clear access** for delivery vehicle
+- **Clear access** for delivery vehicle (standard truck)
+- **Staging area** (minimum 15' × 10')
 - **Drainage** considerations
-- **Utility access** (optional)
-- **Safety clearances** (10 ft minimum)
+- **Power tools access** (110V outlet helpful but not required)
+- **Safety clearances** (10 ft minimum around assembly area)
 
 ---
 
@@ -643,17 +941,42 @@ monthly_maintenance = {
 
 ### Cost Analysis
 
-#### Initial Investment
-- **Manufacturing cost**: $45,000 per unit
-- **Installation & setup**: $3,000
-- **First-year maintenance**: $2,400
-- **Total first-year cost**: $50,400
+#### Flat-Pack Model A Pricing
+
+**Base Unit Cost: $10,000 - $12,000 CAD**
+
+**Cost Breakdown:**
+- **Manufacturing**: $8,000 - $9,500
+  - Frame and panels: $3,500
+  - EcoFlow DELTA 2 system: $1,800
+  - Solar panels (400W): $800
+  - Interior fixtures: $1,200
+  - Assembly hardware: $400
+  - Quality control: $300
+  
+- **Shipping & Logistics**: $500 - $800
+  - Flat-pack shipping (60% cost reduction)
+  - Standard freight rates
+  - Packaging materials
+  
+- **Assembly Support**: $500 - $700
+  - Assembly manual (illustrated)
+  - Video tutorials
+  - Technical support hotline
+  - Optional on-site assembly service
 
 #### Operational Costs (Annual)
-- **Maintenance & repairs**: $2,400
-- **Insurance**: $1,200
-- **Technology updates**: $800
-- **Total annual operating**: $4,400
+- **Maintenance & repairs**: $1,200
+- **Insurance**: $800
+- **Technology updates**: $400
+- **EcoFlow warranty**: Included (5 years)
+- **Total annual operating**: $2,400
+
+#### Cost Savings vs. Previous Model
+- **Manufacturing**: 40% reduction (simplified design)
+- **Shipping**: 50% reduction (flat-pack)
+- **Assembly**: Eliminated crane/heavy equipment costs
+- **Total Savings**: ~$5,000 per unit
 
 ---
 
@@ -691,23 +1014,32 @@ monthly_maintenance = {
 
 ### Technology Roadmap
 
-#### Phase 2 Features (Q1 2026)
-- **Modular expansion** capability
+#### Phase 1 (Q1 2026): Flat-Pack Optimization
+- **Assembly time reduction** (target: 90 minutes)
+- **Tool-free connection systems** (snap-fit improvements)
+- **AR assembly guide** (mobile app with 3D visualization)
+- **Quality control automation** (pre-assembly testing)
+- **Modular customization** options
+
+#### Phase 2 (Q3 2026): Modular Expansion
+- **Multi-unit connection system** (link multiple Model A units)
+- **Shared utility integration** (combined power/water)
+- **Community pod configurations** (cluster deployments)
+- **Scalable deployment strategies** (rapid village setup)
+- **Enhanced EcoFlow integration** (shared battery banks)
+
+#### Phase 3 (Q1 2027): Advanced Features
 - **Advanced AI** for predictive maintenance
 - **Mesh networking** between PODs
 - **Enhanced water recycling** system
-
-#### Phase 3 Features (Q3 2026)
-- **Autonomous positioning** system
 - **Integrated hydroponics** for food production
 - **Advanced materials** for weight reduction
-- **Swarm coordination** for multi-POD deployments
 
 #### Long-term Vision
-- **Self-replicating** manufacturing capability
-- **Fully autonomous** operation
+- **Fully modular** manufacturing (mix-and-match components)
 - **Integration with** smart city infrastructure
 - **Disaster response** optimization
+- **Global deployment** network
 
 ---
 
@@ -770,22 +1102,23 @@ monthly_maintenance = {
 
 | Property | Value |
 |----------|-------|
-| **Document Version** | 2.0 |
-| **Last Updated** | October 2, 2025 |
+| **Document Version** | 3.0 |
+| **Last Updated** | December 11, 2025 |
 | **Author** | SHELTR Engineering Team |
-| **Status** | Current Production Specifications |
+| **Status** | Current Production Specifications - Flat-Pack Model A |
 | **Review Cycle** | Quarterly |
-| **Next Review** | January 1, 2026 |
+| **Next Review** | March 1, 2026 |
 
 ### Revision History
 
 | Version | Date | Changes | Author |
 |---------|------|---------|--------|
+| 3.0 | Dec 11, 2025 | **Major Update**: Simplified to single Model A flat-pack design, removed Model B and Mobi, integrated EcoFlow DELTA 2, added ATS Containers partnership, comprehensive flat-pack assembly documentation | Engineering Team |
 | 2.0 | Oct 2, 2025 | Added Canadian standards, connectivity features, comprehensive customization options | Engineering Team |
 | 1.0 | Sep 10, 2025 | Initial technical documentation | Engineering Team |
 
 ---
 
-**The SHELTR PODS system represents the future of emergency housing - secure, sustainable, and dignified temporary shelter that preserves human dignity while providing pathways to permanent solutions.** 🏠✨
+**The SHELTR PODS Model A flat-pack system represents the future of emergency housing - secure, sustainable, and dignified temporary shelter that preserves human dignity while providing pathways to permanent solutions. One model. Infinite possibilities.** 🏠✨
 
 *For questions, feedback, or to report issues with this documentation, please contact: docs@sheltr.ai*

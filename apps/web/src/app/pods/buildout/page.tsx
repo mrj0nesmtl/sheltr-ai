@@ -204,11 +204,11 @@ export default function PodsBuildoutPage() {
                     </h4>
                     <div className="space-y-4 text-sm">
                       <div className="bg-white dark:bg-slate-800 p-4 rounded-lg border">
-                        <strong className="text-blue-600">Wall SIPs (Structural Insulated Panels):</strong>
-                        <p className="mt-2">3&quot; rigid closed-cell polyurethane foam core. Thermal resistance: R-20 minimum. Vapor barrier integrated. Fire-rated Class A (ASTM E84).</p>
+                        <strong className="text-blue-600">Advanced Composite Wall Panels:</strong>
+                        <p className="mt-2">2&quot; EPS foam core with Polyurea spray coating on both sides. Steel plate reinforcement bonded to exterior and interior faces. Thermal resistance: R-20 minimum. Waterproof barrier. Fire-rated Class A (ASTM E84).</p>
                         <div className="mt-2 flex items-center gap-2 text-xs text-blue-600 font-semibold">
                           <Thermometer className="h-3 w-3" />
-                          <span>-25°C Winter Rated</span>
+                          <span>-25°C Winter Rated • 40% Stronger</span>
                         </div>
                       </div>
 
@@ -223,8 +223,8 @@ export default function PodsBuildoutPage() {
                       </div>
 
                       <div className="bg-white dark:bg-slate-800 p-4 rounded-lg border">
-                        <strong className="text-blue-600">Interior Lining:</strong>
-                        <p className="mt-2">5/8&quot; marine-grade plywood with water-resistant melamine laminate. Antimicrobial coating. Easy-clean glossy white finish.</p>
+                        <strong className="text-blue-600">Interior Finish:</strong>
+                        <p className="mt-2">Smooth white coating applied over interior steel plate. Antimicrobial properties. Easy-clean durable finish. Mold-resistant.</p>
                       </div>
                     </div>
                   </div>

@@ -300,20 +300,20 @@ export default function IREcosystemPage() {
             <div className="relative">
               <div className="grid md:grid-cols-2 gap-8 items-center">
                 <div className="text-center md:text-right order-2 md:order-1">
-                  <h3 className="text-2xl font-bold mb-4 text-orange-600 dark:text-orange-400">Micro-Housing Solution</h3>
+                  <h3 className="text-2xl font-bold mb-4 text-orange-600 dark:text-orange-400">Flat-Pack Housing Solution</h3>
                   <p className="text-muted-foreground leading-relaxed mb-4">
-                    When the housing fund reaches the threshold, a POD is deployed. These aren&apos;t just shelters—they&apos;re 
-                    dignified, secure, climate-controlled micro-homes with power, connectivity, and privacy.
+                    When the housing fund reaches the threshold, a Model A POD is deployed. These aren&apos;t just shelters—they&apos;re 
+                    dignified, secure, climate-controlled micro-homes with EcoFlow power, connectivity, and privacy. Ships flat, assembles in 2-4 hours.
                   </p>
                   <div className="bg-gradient-to-br from-orange-500/10 to-red-500/10 rounded-lg p-6 border border-orange-200 dark:border-orange-800">
                     <div className="grid grid-cols-2 gap-4 text-center">
                       <div>
-                        <p className="text-3xl font-bold text-orange-600 dark:text-orange-400">28-72 sq ft</p>
+                        <p className="text-3xl font-bold text-orange-600 dark:text-orange-400">28 sq ft</p>
                         <p className="text-xs text-muted-foreground">Living space</p>
                       </div>
                       <div>
-                        <p className="text-3xl font-bold text-orange-600 dark:text-orange-400">$3-5K</p>
-                        <p className="text-xs text-muted-foreground">Deployment cost</p>
+                        <p className="text-3xl font-bold text-orange-600 dark:text-orange-400">2-4 hrs</p>
+                        <p className="text-xs text-muted-foreground">Assembly time</p>
                       </div>
                     </div>
                   </div>
@@ -334,29 +334,29 @@ export default function IREcosystemPage() {
                   </CardHeader>
                   <CardContent>
                     <p className="text-muted-foreground leading-relaxed mb-4">
-                      Our modular PODs provide immediate, dignified housing. Each unit is equipped with everything 
-                      needed for safety, comfort, and the first steps toward stability.
+                      Our flat-pack Model A PODs provide immediate, dignified housing. Each unit ships on 2-3 pallets 
+                      and assembles in hours with everything needed for safety, comfort, and stability.
                     </p>
                     <ul className="space-y-2 text-sm text-muted-foreground mb-6">
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="h-5 w-5 text-orange-500 flex-shrink-0 mt-0.5" />
+                        <span>EcoFlow DELTA 2 power (1kWh + 400W solar)</span>
+                      </li>
                       <li className="flex items-start gap-2">
                         <CheckCircle className="h-5 w-5 text-orange-500 flex-shrink-0 mt-0.5" />
                         <span>Climate-controlled with heating/cooling</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <CheckCircle className="h-5 w-5 text-orange-500 flex-shrink-0 mt-0.5" />
-                        <span>Power outlets & USB charging</span>
+                        <span>Smart lock with QR code access</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <CheckCircle className="h-5 w-5 text-orange-500 flex-shrink-0 mt-0.5" />
-                        <span>Secure locking door & window</span>
+                        <span>Bed, desk, storage, sink included</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <CheckCircle className="h-5 w-5 text-orange-500 flex-shrink-0 mt-0.5" />
-                        <span>Bed, storage, lighting included</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <CheckCircle className="h-5 w-5 text-orange-500 flex-shrink-0 mt-0.5" />
-                        <span>Rapid deployment (24-48 hours)</span>
+                        <span>2-4 hour assembly time</span>
                       </li>
                     </ul>
                     <Link href="/pods">
@@ -375,48 +375,48 @@ export default function IREcosystemPage() {
               </div>
             </div>
 
-            {/* Step 5: Mobi & Drone Support */}
+            {/* Step 5: Basecamp & Drone Support */}
             <div className="relative">
               <div className="grid md:grid-cols-2 gap-8 items-center">
                 <Card className="border-2 border-cyan-400/50 hover:border-cyan-400 transition-all hover:shadow-xl hover:shadow-cyan-500/20">
                   <CardHeader>
                     <div className="flex items-center gap-4 mb-4">
                       <div className="p-4 rounded-full bg-cyan-500/10">
-                        <Truck className="h-12 w-12 text-cyan-500" />
+                        <Home className="h-12 w-12 text-cyan-500" />
                       </div>
                       <div>
                         <Badge className="mb-2 bg-cyan-500/20 text-cyan-700 dark:text-cyan-300">STEP 5</Badge>
-                        <CardTitle className="text-3xl">Mobi Delivery</CardTitle>
+                        <CardTitle className="text-3xl">Basecamp Hub</CardTitle>
                       </div>
                     </div>
-                    <CardDescription className="text-base">Mobile support units</CardDescription>
+                    <CardDescription className="text-base">Community support center</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <p className="text-muted-foreground leading-relaxed mb-4">
-                      Our Mobi units are mobile service centers that bring resources directly to participants—meals, 
-                      supplies, medical care, and case management, all in one vehicle.
+                      Basecamp is a larger POD facility staffed by community volunteers 7 days a week. It serves as the 
+                      central hub for growing POD communities, providing essential services and coordination.
                     </p>
                     <ul className="space-y-2 text-sm text-muted-foreground mb-6">
                       <li className="flex items-start gap-2">
                         <CheckCircle className="h-5 w-5 text-cyan-500 flex-shrink-0 mt-0.5" />
-                        <span>Hot meals & emergency supplies</span>
+                        <span>24/7 staffed community support</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <CheckCircle className="h-5 w-5 text-cyan-500 flex-shrink-0 mt-0.5" />
-                        <span>Mobile case management station</span>
+                        <span>Case management & resource coordination</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <CheckCircle className="h-5 w-5 text-cyan-500 flex-shrink-0 mt-0.5" />
-                        <span>Medical screening & telehealth</span>
+                        <span>Meal services & emergency supplies</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <CheckCircle className="h-5 w-5 text-cyan-500 flex-shrink-0 mt-0.5" />
-                        <span>WiFi hotspot & device charging</span>
+                        <span>Community gathering & support space</span>
                       </li>
                     </ul>
-                    <Link href="/pods/mobi">
+                    <Link href="/basecamp">
                       <Button variant="outline" className="w-full border-cyan-400 text-cyan-600 hover:bg-cyan-50 dark:hover:bg-cyan-950">
-                        Explore Mobi Units
+                        Explore Basecamp
                         <ArrowRight className="h-4 w-4 ml-2" />
                       </Button>
                     </Link>

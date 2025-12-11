@@ -132,9 +132,11 @@ export default function EcosystemPage() {
                     This isn&apos;t just a donation—it&apos;s the beginning of a journey. The QR code is the participant&apos;s 
                     digital identity, their connection to resources, and their pathway to stability.
                   </p>
-                  <div className="inline-flex items-center gap-2 text-sm text-muted-foreground bg-muted/50 rounded-lg px-4 py-2">
-                    <Zap className="h-4 w-4 text-yellow-500" />
-                    <span>Average scan-to-donation time: <strong>8 seconds</strong></span>
+                  <div className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 rounded-lg p-6 border border-green-200 dark:border-green-800">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <Zap className="h-4 w-4 text-yellow-500" />
+                      <span>Average scan-to-donation time: <strong className="text-foreground">8 seconds</strong></span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -154,9 +156,11 @@ export default function EcosystemPage() {
                     Smart contracts automatically split every donation according to our proven 80-15-5 model. 
                     No overhead, no delays—just instant, intelligent distribution.
                   </p>
-                  <div className="inline-flex items-center gap-2 text-sm text-muted-foreground bg-muted/50 rounded-lg px-4 py-2">
-                    <Shield className="h-4 w-4 text-blue-500" />
-                    <span>Blockchain-verified • Immutable • Transparent</span>
+                  <div className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-lg p-6 border border-blue-200 dark:border-blue-800">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground justify-center md:justify-end">
+                      <Shield className="h-4 w-4 text-blue-500" />
+                      <span><strong className="text-foreground">Blockchain-verified</strong> • Immutable • Transparent</span>
+                    </div>
                   </div>
                 </div>
 
@@ -555,38 +559,7 @@ export default function EcosystemPage() {
             {/* Step 7: Reintegration */}
             <div className="relative">
               <div className="grid md:grid-cols-2 gap-8 items-center">
-                <div className="text-center md:text-right order-2 md:order-1">
-                  <h3 className="text-2xl font-bold mb-4 text-emerald-600 dark:text-emerald-400">The Ultimate Goal</h3>
-                  <p className="text-muted-foreground leading-relaxed mb-4">
-                    This is where the ecosystem comes full circle. With stable housing, ongoing support, and 
-                    coordinated services, participants rebuild their lives and reintegrate into society.
-                  </p>
-                  <div className="bg-gradient-to-br from-emerald-500/10 to-green-500/10 rounded-lg p-6 border border-emerald-200 dark:border-emerald-800">
-                    <p className="text-sm text-muted-foreground mb-3">
-                      <strong className="text-foreground">Success metrics we track:</strong>
-                    </p>
-                    <div className="grid grid-cols-2 gap-3 text-xs">
-                      <div className="flex items-center gap-2">
-                        <CheckCircle className="h-4 w-4 text-emerald-500" />
-                        <span>Employment secured</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <CheckCircle className="h-4 w-4 text-emerald-500" />
-                        <span>Permanent housing</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <CheckCircle className="h-4 w-4 text-emerald-500" />
-                        <span>Healthcare access</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <CheckCircle className="h-4 w-4 text-emerald-500" />
-                        <span>Social reconnection</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <Card className="border-2 border-emerald-400/50 hover:border-emerald-400 transition-all hover:shadow-xl hover:shadow-emerald-500/20 order-1 md:order-2">
+                <Card className="border-2 border-emerald-400/50 hover:border-emerald-400 transition-all hover:shadow-xl hover:shadow-emerald-500/20">
                   <CardHeader>
                     <div className="flex items-center gap-4 mb-4">
                       <div className="p-4 rounded-full bg-emerald-500/10">
@@ -628,6 +601,37 @@ export default function EcosystemPage() {
                     </ul>
                   </CardContent>
                 </Card>
+
+                <div className="text-center md:text-left">
+                  <h3 className="text-2xl font-bold mb-4 text-emerald-600 dark:text-emerald-400">The Ultimate Goal</h3>
+                  <p className="text-muted-foreground leading-relaxed mb-4">
+                    This is where the ecosystem comes full circle. With stable housing, ongoing support, and 
+                    coordinated services, participants rebuild their lives and reintegrate into society.
+                  </p>
+                  <div className="bg-gradient-to-br from-emerald-500/10 to-green-500/10 rounded-lg p-6 border border-emerald-200 dark:border-emerald-800">
+                    <p className="text-sm text-muted-foreground mb-3">
+                      <strong className="text-foreground">Success metrics we track:</strong>
+                    </p>
+                    <div className="grid grid-cols-2 gap-3 text-xs">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle className="h-4 w-4 text-emerald-500" />
+                        <span>Employment secured</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <CheckCircle className="h-4 w-4 text-emerald-500" />
+                        <span>Permanent housing</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <CheckCircle className="h-4 w-4 text-emerald-500" />
+                        <span>Healthcare access</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <CheckCircle className="h-4 w-4 text-emerald-500" />
+                        <span>Social reconnection</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

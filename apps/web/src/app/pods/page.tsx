@@ -22,16 +22,15 @@ import {
   Fingerprint,
   Sun,
   Home,
-  Users,
-  User,
-  Bike,
   Smartphone,
   Zap,
   Snowflake,
   CheckCircle,
   Eye,
   Wrench,
-  Paintbrush
+  Paintbrush,
+  Package,
+  Recycle
 } from 'lucide-react';
 
 export default function PodsPage() {
@@ -48,13 +47,8 @@ export default function PodsPage() {
   const podImages = [
     {
       src: '/images/sheltr_units/sleeper-1.jpeg',
-      alt: 'SHELTR Model A - One-Person Unit',
-      title: 'Model A - One-Person Unit'
-    },
-    {
-      src: '/images/sheltr_units/sleeper-2.jpeg',
-      alt: 'SHELTR Model B - Two-Person Unit', 
-      title: 'Model B - Two-Person Unit'
+      alt: 'SHELTR Model A - Flat-Pack Emergency Housing',
+      title: 'Model A - Flat-Pack Design'
     }
   ];
 
@@ -79,17 +73,21 @@ export default function PodsPage() {
       {/* Hero Section - Standardized */}
       <StandardHero
         imageUrl={heroImage.url}
-        title="PODS"
-        subtitle="Secure, Mobile, Functional."
+        title={
+          <>
+            Model A <span className="text-blue-400">Flat-Pack</span>
+          </>
+        }
+        subtitle="One Model. Infinite Possibilities."
       >
         <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
           <Button 
             size="lg" 
             variant="outline"
             className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-black transition-all duration-300"
-            onClick={() => document.getElementById('pod-models')?.scrollIntoView({ behavior: 'smooth' })}
+            onClick={() => document.getElementById('flat-pack-features')?.scrollIntoView({ behavior: 'smooth' })}
           >
-            Explore Models
+            Explore Features
           </Button>
           <Link href="/pods/buildout">
             <Button 
@@ -106,58 +104,71 @@ export default function PodsPage() {
       {/* Overview Section */}
       <section className="py-20 px-4 max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold mb-6">Urban Micro-Housing</h2>
+          <h2 className="text-4xl font-bold mb-6">Flat-Pack Modular Emergency Housing</h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-          PODS (Personal Optimized Dwelling System) represents a real-world approach to emergency housing, combining security, mobility, and functionality in a compact, deployable unit. Each POD is designed to provide dignified temporary housing while participants work toward permanent solutions. SHELTR PODS provide safe, insulated, and weather-resistant accommodations 
-            designed for dignity, mobility, and sustainability.
+            The SHELTR Model A represents a revolutionary flat-pack approach to emergency housing. Ships disassembled on standard pallets, assembles in 2-4 hours with two people and basic tools. No heavy equipment required. Simplified logistics, reduced costs, faster deployment—all while maintaining our commitment to dignified temporary housing.
           </p>
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
+            <Badge variant="outline" className="text-base px-4 py-2">
+              🏗️ Flat-Pack Design
+            </Badge>
+            <Badge variant="outline" className="text-base px-4 py-2">
+              ⚡ EcoFlow Powered
+            </Badge>
+            <Badge variant="outline" className="text-base px-4 py-2">
+              🔧 2-Hour Assembly
+            </Badge>
+            <Badge variant="outline" className="text-base px-4 py-2">
+              🌍 Canadian Made
+            </Badge>
+          </div>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
           <Card className="border-2">
             <CardContent className="p-6 text-center">
-              <Snowflake className="h-12 w-12 mx-auto mb-4 text-blue-500" />
-              <h3 className="text-xl font-semibold mb-2">Winter Rated</h3>
-              <p className="text-muted-foreground">Rated for -25°C sustained temperatures with R-20 wall insulation</p>
+              <Package className="h-12 w-12 mx-auto mb-4 text-blue-500" />
+              <h3 className="text-xl font-semibold mb-2">Ships Flat</h3>
+              <p className="text-muted-foreground">60% smaller shipping volume on 3 standard pallets</p>
             </CardContent>
           </Card>
           
           <Card className="border-2">
             <CardContent className="p-6 text-center">
-              <Sun className="h-12 w-12 mx-auto mb-4 text-yellow-500" />
-              <h3 className="text-xl font-semibold mb-2">Solar Powered</h3>
-              <p className="text-muted-foreground">200-300W rooftop solar array with battery storage and 110V outlets</p>
+              <Wrench className="h-12 w-12 mx-auto mb-4 text-orange-500" />
+              <h3 className="text-xl font-semibold mb-2">Easy Assembly</h3>
+              <p className="text-muted-foreground">2-4 hours with 2 people, no heavy equipment needed</p>
             </CardContent>
           </Card>
           
           <Card className="border-2">
             <CardContent className="p-6 text-center">
-              <Shield className="h-12 w-12 mx-auto mb-4 text-green-500" />
-              <h3 className="text-xl font-semibold mb-2">Smart Security</h3>
-              <p className="text-muted-foreground">Biometric locks with remote access and tamper protection</p>
+              <Zap className="h-12 w-12 mx-auto mb-4 text-yellow-500" />
+              <h3 className="text-xl font-semibold mb-2">EcoFlow Power</h3>
+              <p className="text-muted-foreground">Integrated DELTA 2 system with 400W solar array</p>
             </CardContent>
           </Card>
 
           <Card className="border-2">
             <CardContent className="p-6 text-center">
-              <Wifi className="h-12 w-12 mx-auto mb-4 text-purple-500" />
-              <h3 className="text-xl font-semibold mb-2">Global Connectivity</h3>
-              <p className="text-muted-foreground">Starlink satellite internet integration for connectivity anywhere</p>
+              <Recycle className="h-12 w-12 mx-auto mb-4 text-green-500" />
+              <h3 className="text-xl font-semibold mb-2">Modular Design</h3>
+              <p className="text-muted-foreground">Expandable and recyclable with Canadian manufacturing</p>
             </CardContent>
           </Card>
         </div>
       </section>
 
-      {/* Pod Models Section */}
-      <section id="pod-models" className="py-20 bg-muted/30">
+      {/* Flat-Pack Features Section */}
+      <section id="flat-pack-features" className="py-20 bg-muted/30">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-6">2026 Models</h2>
-            <p className="text-xl text-muted-foreground">All models are guaranteed to help you get your shit together.</p>
+            <h2 className="text-4xl font-bold mb-6">Model A Specifications</h2>
+            <p className="text-xl text-muted-foreground">Single model, optimized design, maximum impact.</p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Model A - One Person */}
+          <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            {/* Model A - Flat-Pack Specifications */}
             <Card className="border-2 overflow-hidden">
               <div 
                 className="relative h-64 bg-muted/20 cursor-pointer group"
@@ -169,8 +180,9 @@ export default function PodsPage() {
                   fill
                   className="object-contain transition-transform group-hover:scale-105"
                 />
-                <div className="absolute top-4 left-4">
+                <div className="absolute top-4 left-4 flex gap-2">
                   <Badge className="bg-blue-600 text-white">Model A</Badge>
+                  <Badge variant="outline" className="bg-white/90 text-black border-0">Flat-Pack</Badge>
                 </div>
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
                   <div className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 rounded-full p-2">
@@ -180,32 +192,40 @@ export default function PodsPage() {
               </div>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <User className="h-6 w-6" />
-                  One-Person Unit
+                  <Package className="h-6 w-6" />
+                  Assembled Specifications
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <strong>Dimensions:</strong><br />
+                    <strong>Assembled:</strong><br />
                     7&apos; × 4&apos; × 6.5&apos;
+                  </div>
+                  <div>
+                    <strong>Flat-Pack:</strong><br />
+                    3 pallets (60% smaller)
+                  </div>
+                  <div>
+                    <strong>Assembly Time:</strong><br />
+                    2-4 hours
+                  </div>
+                  <div>
+                    <strong>Weight:</strong><br />
+                    650 lbs assembled
                   </div>
                   <div>
                     <strong>Floor Area:</strong><br />
                     ~28 sq. ft.
                   </div>
                   <div>
-                    <strong>Water Tank:</strong><br />
-                    10L capacity
-                  </div>
-                  <div>
-                    <strong>Occupancy:</strong><br />
-                    1 person
+                    <strong>Price:</strong><br />
+                    $10K-$12K CAD
                   </div>
                 </div>
                 
                 <div className="space-y-2">
-                  <h4 className="font-semibold">Features:</h4>
+                  <h4 className="font-semibold">Interior Features:</h4>
                   <ul className="text-sm space-y-1">
                     <li className="flex items-center gap-2">
                       <CheckCircle className="h-4 w-4 text-green-500" />
@@ -217,11 +237,11 @@ export default function PodsPage() {
                     </li>
                     <li className="flex items-center gap-2">
                       <CheckCircle className="h-4 w-4 text-green-500" />
-                      Compact shelving
+                      10L water tank with pump
                     </li>
                     <li className="flex items-center gap-2">
                       <CheckCircle className="h-4 w-4 text-green-500" />
-                      12V ceramic heater
+                      Compact shelving system
                     </li>
                     <li className="flex items-center gap-2">
                       <CheckCircle className="h-4 w-4 text-green-500" />
@@ -232,153 +252,117 @@ export default function PodsPage() {
               </CardContent>
             </Card>
 
-            {/* MOBI - Electric Bike */}
+            {/* Flat-Pack Features Card */}
             <Card className="border-2 overflow-hidden">
-              <div className="relative h-64 bg-muted/20 group">
-                <Image
-                  src={podModelImages.mobi.url}
-                  alt={podModelImages.mobi.alt}
-                  fill
-                  className="object-cover transition-transform group-hover:scale-105"
-                />
-                <div className="absolute top-4 left-4">
-                  <Badge className="bg-green-600 text-white">MOBI</Badge>
+              <div className="relative h-64 bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                <div className="text-white text-center p-6">
+                  <Package className="h-16 w-16 mx-auto mb-4" />
+                  <h3 className="text-2xl font-bold mb-2">Flat-Pack Innovation</h3>
+                  <p className="text-white/90">Revolutionizing emergency housing deployment</p>
                 </div>
               </div>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Bike className="h-6 w-6" />
-                  MOBI Cycle
+                  <Wrench className="h-6 w-6" />
+                  Power & Systems
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <strong>Type:</strong><br />
-                    Electric Mountain Bike
+                <div className="space-y-3 text-sm">
+                  <div className="flex items-start gap-3">
+                    <Zap className="h-5 w-5 text-yellow-500 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <strong>EcoFlow DELTA 2:</strong><br />
+                      1kWh capacity, 1800W output, expandable to 3kWh
+                    </div>
                   </div>
-                  <div>
-                    <strong>Range:</strong><br />
-                    50+ miles
+                  <div className="flex items-start gap-3">
+                    <Sun className="h-5 w-5 text-orange-500 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <strong>Solar Array:</strong><br />
+                      400W rooftop panels with MPPT controller
+                    </div>
                   </div>
-                  <div>
-                    <strong>Cargo:</strong><br />
-                    Integrated storage
+                  <div className="flex items-start gap-3">
+                    <Snowflake className="h-5 w-5 text-blue-500 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <strong>Winter Rated:</strong><br />
+                      -25°C sustained with R-20 walls, R-30 roof
+                    </div>
                   </div>
-                  <div>
-                    <strong>Terrain:</strong><br />
-                    All-terrain capable
+                  <div className="flex items-start gap-3">
+                    <Shield className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <strong>Smart Security:</strong><br />
+                      QR code, biometric, PIN, and app access
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <Home className="h-5 w-5 text-purple-500 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <strong>Canadian Made:</strong><br />
+                      ATS Containers partnership (Ontario)
+                    </div>
                   </div>
                 </div>
-                
-                <div className="space-y-2">
-                  <h4 className="font-semibold">Features:</h4>
-                  <ul className="text-sm space-y-1">
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      Pod transport hitch
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      Mountain bike design
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      Weather resistant
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      Built for daily use
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      Cargo capacity
-                    </li>
-                  </ul>
-                </div>
-                
-                <Link href="/pods/mobi">
-                  <Button className="w-full mt-4" variant="outline">
-                    Learn More About MOBI
-                  </Button>
-                </Link>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Assembly Process Section */}
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-6">Simple Assembly Process</h2>
+            <p className="text-xl text-muted-foreground">From flat-pack to fully functional in 2-4 hours</p>
+          </div>
+
+          <div className="grid md:grid-cols-4 gap-6">
+            <Card className="border-2">
+              <CardContent className="p-6 text-center">
+                <div className="w-12 h-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mx-auto mb-4 text-xl font-bold">1</div>
+                <h3 className="font-semibold mb-2">Foundation & Frame</h3>
+                <p className="text-sm text-muted-foreground">45 minutes - Lay floor panel, assemble aluminum frame</p>
               </CardContent>
             </Card>
 
-            {/* Model B - Two Person */}
-            <Card className="border-2 overflow-hidden">
-              <div 
-                className="relative h-64 bg-muted/20 cursor-pointer group"
-                onClick={() => openImageViewer(1)}
-              >
-                <Image
-                  src={podModelImages.modelB.url}
-                  alt={podModelImages.modelB.alt}
-                  fill
-                  className="object-contain transition-transform group-hover:scale-105"
-                />
-                <div className="absolute top-4 left-4">
-                  <Badge className="bg-purple-600 text-white">Model B</Badge>
-                </div>
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
-                  <div className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 rounded-full p-2">
-                    <Eye className="h-6 w-6 text-gray-800" />
-                  </div>
-                </div>
-              </div>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Users className="h-6 w-6" />
-                  Two-Person Unit
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <strong>Dimensions:</strong><br />
-                    12&apos; × 6&apos; × 7&apos;
-                  </div>
-                  <div>
-                    <strong>Floor Area:</strong><br />
-                    ~72 sq. ft.
-                  </div>
-                  <div>
-                    <strong>Water Tank:</strong><br />
-                    20L capacity
-                  </div>
-                  <div>
-                    <strong>Occupancy:</strong><br />
-                    2 persons
-                  </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <h4 className="font-semibold">Features:</h4>
-                  <ul className="text-sm space-y-1">
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      Two single beds or one full bed
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      Desk with integrated shelving
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      Compact washer/dryer combo
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      Propane-compatible heater
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      Full sink module
-                    </li>
-                  </ul>
-                </div>
+            <Card className="border-2">
+              <CardContent className="p-6 text-center">
+                <div className="w-12 h-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mx-auto mb-4 text-xl font-bold">2</div>
+                <h3 className="font-semibold mb-2">Panel Installation</h3>
+                <p className="text-sm text-muted-foreground">60 minutes - Snap-fit wall and roof panels</p>
               </CardContent>
             </Card>
+
+            <Card className="border-2">
+              <CardContent className="p-6 text-center">
+                <div className="w-12 h-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mx-auto mb-4 text-xl font-bold">3</div>
+                <h3 className="font-semibold mb-2">Systems Integration</h3>
+                <p className="text-sm text-muted-foreground">45 minutes - EcoFlow, solar, plumbing, smart lock</p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-2">
+              <CardContent className="p-6 text-center">
+                <div className="w-12 h-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mx-auto mb-4 text-xl font-bold">4</div>
+                <h3 className="font-semibold mb-2">Interior & Finishing</h3>
+                <p className="text-sm text-muted-foreground">30 minutes - Furniture, fixtures, final inspection</p>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="mt-12 text-center">
+            <p className="text-lg text-muted-foreground mb-6">
+              No heavy equipment required • Tool-free assembly where possible • Comprehensive assembly guide included
+            </p>
+            <Link href="/pods/buildout">
+              <Button size="lg" variant="outline">
+                <Wrench className="h-4 w-4 mr-2" />
+                View Assembly Guide
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
@@ -388,7 +372,7 @@ export default function PodsPage() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-6">Advanced Security System</h2>
-            <p className="text-xl text-muted-foreground">Smart locks with biometric authentication and remote control</p>
+            <p className="text-xl text-muted-foreground">Multi-factor authentication with local resilience and remote management</p>
           </div>
 
           <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
@@ -417,6 +401,10 @@ export default function PodsPage() {
                 <TabsContent value="authentication" className="space-y-4">
                   <div className="space-y-3">
                     <div className="flex items-center gap-3">
+                      <Smartphone className="h-5 w-5 text-blue-500" />
+                      <span><strong>QR Code Access:</strong> Platform-generated codes (primary method)</span>
+                    </div>
+                    <div className="flex items-center gap-3">
                       <Fingerprint className="h-5 w-5 text-blue-500" />
                       <span><strong>Biometric Scanner:</strong> 99.9% recognition accuracy</span>
                     </div>
@@ -426,7 +414,7 @@ export default function PodsPage() {
                     </div>
                     <div className="flex items-center gap-3">
                       <Smartphone className="h-5 w-5 text-blue-500" />
-                      <span><strong>Remote Access:</strong> Web app control with real-time status</span>
+                      <span><strong>Mobile App:</strong> Bluetooth and remote unlock capability</span>
                     </div>
                   </div>
                 </TabsContent>
@@ -531,32 +519,33 @@ export default function PodsPage() {
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-6">Professional-Grade Construction</h2>
-            <p className="text-xl text-muted-foreground">Built to Canadian Standards with premium materials</p>
+            <h2 className="text-4xl font-bold mb-6">Flat-Pack Modular Construction</h2>
+            <p className="text-xl text-muted-foreground">Manufactured by ATS Containers (Ontario) to Canadian Standards</p>
           </div>
 
           <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
             <div className="space-y-6">
-              <div className="flex items-center gap-3 mb-6">
-                <Badge className="bg-blue-600 text-white px-4 py-2">CSA Certified</Badge>
-                <Badge className="bg-green-600 text-white px-4 py-2">NBC 2020 Compliant</Badge>
+              <div className="flex items-center gap-3 mb-6 flex-wrap">
+                <Badge className="bg-blue-600 text-white px-4 py-2">ISO Certified</Badge>
+                <Badge className="bg-green-600 text-white px-4 py-2">NBC 2020</Badge>
+                <Badge variant="outline" className="px-4 py-2">🍁 Canadian Made</Badge>
               </div>
 
               <Card className="border-2">
                 <CardHeader>
-                  <CardTitle>Structural Framework</CardTitle>
+                  <CardTitle>Modular Frame System</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <div className="flex items-start gap-3">
                     <CheckCircle className="h-5 w-5 text-green-500 mt-1 flex-shrink-0" />
                     <div>
-                      <strong>Aluminum Frame:</strong> Welded 6063-T5 aluminum square tubing with powder-coat finish (ASTM B221 compliant)
+                      <strong>Aluminum Frame:</strong> Bolt-together 6063-T5 aluminum sections (no welding required) with powder-coat finish (ASTM B221)
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
                     <CheckCircle className="h-5 w-5 text-green-500 mt-1 flex-shrink-0" />
                     <div>
-                      <strong>SIP Panels:</strong> 3&quot; closed-cell polyurethane insulation (R-20 walls, R-30 roof)
+                      <strong>Composite Wall Panels:</strong> 2&quot; EPS foam core with Polyurea coating and steel plate reinforcement (R-20 walls, R-30 roof)
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
@@ -616,6 +605,100 @@ export default function PodsPage() {
         </div>
       </section>
 
+      {/* Strategic Partnerships Section */}
+      <section className="py-20 bg-muted/30">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-6">Strategic Partnerships</h2>
+            <p className="text-xl text-muted-foreground">World-class manufacturing and power systems integration</p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* ATS Containers Partnership */}
+            <Card className="border-2">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Home className="h-6 w-6 text-blue-600" />
+                  ATS Containers (Ontario)
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-muted-foreground">
+                  Primary manufacturing partner for flat-pack engineering and modular container design.
+                </p>
+                <div className="space-y-2">
+                  <h4 className="font-semibold">Manufacturing Expertise:</h4>
+                  <ul className="text-sm space-y-1">
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      ISO-certified manufacturing facility
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      Aluminum frame fabrication
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      SIP panel production
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      Quality control and testing
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      Domestic Canadian production
+                    </li>
+                  </ul>
+                </div>
+                <Badge variant="outline" className="mt-3">🍁 Made in Canada</Badge>
+              </CardContent>
+            </Card>
+
+            {/* EcoFlow Partnership */}
+            <Card className="border-2">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Zap className="h-6 w-6 text-yellow-600" />
+                  EcoFlow DELTA Series
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-muted-foreground">
+                  Integrated power solutions with the EcoFlow DELTA 2 portable power station.
+                </p>
+                <div className="space-y-2">
+                  <h4 className="font-semibold">Power System Features:</h4>
+                  <ul className="text-sm space-y-1">
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      1kWh capacity (expandable to 3kWh)
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      1800W continuous output
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      400W solar array integration
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      Mobile app monitoring
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      5-year warranty
+                    </li>
+                  </ul>
+                </div>
+                <Badge variant="outline" className="mt-3">⚡ Pre-Integrated</Badge>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
       {/* Customization Options Section */}
       <section 
         className="py-20 relative"
@@ -647,17 +730,17 @@ export default function PodsPage() {
               <CardContent className="p-6 text-center">
                 <Sun className="h-10 w-10 mx-auto mb-4 text-blue-400" />
                 <h3 className="font-semibold mb-2 text-white">Skylight Window</h3>
-                <p className="text-sm text-gray-300">Natural light with ventilation</p>
+                <p className="text-sm text-gray-300">18&quot; × 18&quot; with ventilation</p>
                 <Badge variant="outline" className="mt-3 border-blue-400 text-blue-300">From $600</Badge>
               </CardContent>
             </Card>
 
             <Card className="border-2 hover:border-green-400 transition-colors bg-black/40 backdrop-blur-sm">
               <CardContent className="p-6 text-center">
-                <Home className="h-10 w-10 mx-auto mb-4 text-green-400" />
-                <h3 className="font-semibold mb-2 text-white">Bunk Bed System</h3>
-                <p className="text-sm text-gray-300">Space-saving sleep configuration</p>
-                <Badge variant="outline" className="mt-3 border-green-400 text-green-300">From $1,200</Badge>
+                <Battery className="h-10 w-10 mx-auto mb-4 text-green-400" />
+                <h3 className="font-semibold mb-2 text-white">Power Pro Package</h3>
+                <p className="text-sm text-gray-300">EcoFlow DELTA Pro upgrade (3.6kWh)</p>
+                <Badge variant="outline" className="mt-3 border-green-400 text-green-300">From $2,500</Badge>
               </CardContent>
             </Card>
 
@@ -812,11 +895,11 @@ export default function PodsPage() {
                 <div>
                   <h4 className="font-semibold mb-2">Frame & Panels</h4>
                   <ul className="text-sm space-y-1 text-muted-foreground">
-                    <li>• Welded lightweight aluminum square tubing</li>
+                    <li>• Bolt-together aluminum frame (no welding)</li>
                     <li>• Powder-coated for corrosion resistance</li>
-                    <li>• Structural Insulated Panels (SIPs)</li>
+                    <li>• Modular SIP panels (snap-fit)</li>
                     <li>• Galvanized steel exterior skin</li>
-                    <li>• Rigid closed-cell polyurethane core</li>
+                    <li>• EPS foam core with Polyurea coating and steel reinforcement</li>
                     <li>• Marine-grade plywood interior</li>
                   </ul>
                 </div>
@@ -842,23 +925,23 @@ export default function PodsPage() {
                 <div>
                   <h4 className="font-semibold mb-2">Power & Electrical</h4>
                   <ul className="text-sm space-y-1 text-muted-foreground">
-                    <li>• 200-300W rooftop solar array</li>
-                    <li>• 12V deep-cycle battery storage</li>
-                    <li>• 600-1000W inverter/charger</li>
-                    <li>• 110V AC outlets + USB charging</li>
+                    <li>• EcoFlow DELTA 2 (1kWh, 1800W)</li>
+                    <li>• 400W rooftop solar array</li>
+                    <li>• 4× 110V AC outlets</li>
+                    <li>• 2× USB-C (100W) + 4× USB-A</li>
                     <li>• Low-wattage LED lighting</li>
-                    <li>• GFCI-protected electrical</li>
+                    <li>• Mobile app monitoring</li>
                   </ul>
                 </div>
                 <div>
                   <h4 className="font-semibold mb-2">Water & Sanitation</h4>
                   <ul className="text-sm space-y-1 text-muted-foreground">
-                    <li>• 10L (Model A) / 20L (Model B) water tank</li>
+                    <li>• 10L fresh water tank</li>
                     <li>• 12V low-flow pump system</li>
                     <li>• Compact stainless steel sink</li>
+                    <li>• Quick-connect plumbing</li>
                     <li>• 5L chemical porta potty</li>
                     <li>• Concealed storage design</li>
-                    <li>• Drain system integration</li>
                   </ul>
                 </div>
               </CardContent>

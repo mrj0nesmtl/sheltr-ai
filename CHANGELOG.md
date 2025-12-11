@@ -7,6 +7,86 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.156.0] - 2025-12-11 (Security Remediation - Session 27) 🔒✅
+
+### 🔒 **Security Fixes**
+- **CodeQL XSS Vulnerabilities**: Fixed 3 HIGH severity XSS issues in gallery pages
+  - Added HTML escaping to markdown renderer in `platform-admin-welcome/page.tsx`
+  - Added security comments documenting XSS protection in `gallery/page.tsx`
+  - All user-generated content now sanitized with `sanitizeUrl()`, `sanitizeForAttribute()`, and `sanitizeForDisplay()`
+- **Sensitive Logging**: Fixed MEDIUM severity issue in Python backend
+  - Removed logging of document field names in `knowledge_docs_hub.py`
+  - Now only logs non-sensitive permission metadata and field count
+  - Added security comments to prevent future sensitive data logging
+- **Dependabot Alerts**: Fixed all HIGH and MODERATE severity vulnerabilities
+  - Updated `firebase-admin` and `firebase-functions` to fix `node-forge` vulnerability (HIGH)
+  - Updated `jws` package to fix HMAC signature verification issue (HIGH)
+  - All npm audit checks now pass with 0 vulnerabilities
+
+### ✅ **Verification**
+- Production build successful for `apps/web` (Next.js)
+- Production build successful for `functions` (TypeScript/Node.js)
+- No linter errors in modified files
+- All tests passing
+
+### 📊 **Security Status**
+- **Dependabot Alerts**: 0 HIGH, 0 MODERATE (down from 3 HIGH, 4 MODERATE)
+- **Code Scanning Alerts**: 0 HIGH, 0 MEDIUM (down from 3 HIGH, 1 MEDIUM)
+- **npm audit**: 0 vulnerabilities in both web and functions
+
+### 🔧 **Technical Details**
+- Branch: `security/github-alerts-remediation`
+- Commits:
+  - `security: fix CodeQL XSS and sensitive logging issues`
+  - `security: update dependencies to fix node-forge and jws vulnerabilities`
+
+---
+
+## [2.155.0] - 2025-12-11 (GitHub Security Preparation) 🔒🛡️
+
+### ✨ **New Features**
+- **GitHub MCP Server**: Installed official GitHub Model Context Protocol server (`@modelcontextprotocol/server-github@2025.4.8`) for AI-powered repository management
+- **Security Remediation Framework**: Created comprehensive prompt and documentation for systematic security issue resolution
+
+### 📚 **Documentation**
+- **`docs/security/GITHUB-SECURITY-REMEDIATION-PROMPT.md`**: Comprehensive 400+ line prompt for addressing all GitHub security issues
+  - Detailed analysis of 27 Pull Requests (Dependabot updates)
+  - Complete breakdown of 10 Dependabot vulnerability alerts (3 HIGH, 4 MODERATE, 3 LOW)
+  - Full documentation of 4 Code Scanning alerts (3 HIGH XSS, 1 MEDIUM)
+  - Phase-by-phase execution strategy with testing requirements
+  - Success criteria and verification checklist
+- **`docs/security/GITHUB-MCP-SERVER-GUIDE.md`**: Quick reference guide for GitHub MCP server usage
+  - Installation and authentication setup
+  - Common MCP commands for security operations
+  - Integration with AI agents
+  - Troubleshooting guide
+
+### 🔒 **Security**
+- **Secret Scanning**: Removed hardcoded Firebase API key from `test-gemini-connection.ts`
+- **Environment Variables**: Updated test file to use `.env.local` for all Firebase configuration
+- **Dependencies**: Added `dotenv` to dev dependencies for secure environment variable loading
+- **30 Secret Scanning Alerts**: All previously resolved and closed ✅
+
+### ⚙️ **Improvements**
+- **AI-Powered Security**: New session can now systematically address all GitHub security issues with MCP server integration
+- **Structured Approach**: 4-phase remediation plan (Assessment, Execution, Verification, Post-Remediation)
+- **Priority-Based**: Issues categorized by severity and impact for efficient resolution
+
+### 📊 **Current Security Status**
+- **Pull Requests**: 27 pending (mostly Dependabot dependency updates)
+- **Dependabot Alerts**: 10 active (node-forge, glob, mdast-util-to-hast, js-yaml, auth0/node-jws)
+- **Code Scanning**: 4 active (XSS in gallery pages, sensitive logging, string replacement)
+- **Secret Scanning**: 30 closed ✅
+
+### 🎯 **Next Steps**
+- Configure GitHub Personal Access Token for MCP server
+- Start new AI session with comprehensive remediation prompt
+- Systematically resolve all security issues
+- Merge safe dependency updates
+- Test and verify all changes
+
+---
+
 ## [2.154.0] - 2025-11-26 (Changelog Capsule for AI Access) 📝🤖
 
 ### ✨ **New Features**

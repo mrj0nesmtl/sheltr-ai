@@ -27,7 +27,9 @@ def fix_github_links():
             'hacking-homelessness': 'docs/overview/hacking_homelessness.md',
             'platform-overview': 'docs/overview/platform-overview.md',
             'whitepaper': 'docs/architecture/technical/whitepaper_final.md',
-            'system-design': 'docs/architecture/platform/system-design.md'
+            'system-design': 'docs/architecture/platform/system-design.md',
+            'roadmap': 'docs/development/roadmap.md',
+            'donor-guide': 'docs/user-guides/donor-guide.md'
         }
         
         logger.info("🔗 Fixing GitHub links for docs hub documents...")

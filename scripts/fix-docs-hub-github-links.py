@@ -25,7 +25,9 @@ def fix_github_links():
         # Documents to update with their correct github_path
         updates = {
             'hacking-homelessness': 'docs/overview/hacking_homelessness.md',
-            'platform-overview': 'docs/overview/platform-overview.md'
+            'platform-overview': 'docs/overview/platform-overview.md',
+            'whitepaper': 'docs/architecture/technical/whitepaper_final.md',
+            'system-design': 'docs/architecture/platform/system-design.md'
         }
         
         logger.info("🔗 Fixing GitHub links for docs hub documents...")

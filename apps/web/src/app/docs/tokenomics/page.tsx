@@ -245,12 +245,215 @@ function TokenomicsContent() {
         </div>
       </section>
 
+      {/* Shelter Ledger - NEW SECTION */}
+      <section className="py-20 bg-gradient-to-r from-blue-500/5 to-purple-500/5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <Badge variant="outline" className="mb-4 text-blue-600 border-blue-600">
+              <Eye className="h-4 w-4 mr-2" />
+              PUBLIC TRANSPARENCY
+            </Badge>
+            <h2 className="text-4xl font-bold mb-4">The Shelter Ledger</h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              Every donation tracked. Every payout verified. Complete transparency through blockchain-powered public accountability.
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-3 gap-8 mb-12">
+            {/* Track & Trace */}
+            <Card className="border-2 border-blue-500/20 bg-gradient-to-br from-blue-500/5 to-blue-500/10">
+              <CardHeader>
+                <div className="w-12 h-12 bg-blue-500/10 rounded-full flex items-center justify-center mb-4">
+                  <Eye className="h-6 w-6 text-blue-600" />
+                </div>
+                <CardTitle className="text-blue-600 dark:text-blue-400">Track & Trace</CardTitle>
+                <CardDescription>Real-time donation flow visibility</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="flex items-start space-x-3">
+                  <CheckCircle className="h-5 w-5 text-blue-600 mt-0.5" />
+                  <div>
+                    <div className="font-semibold">Every Donation Tracked</div>
+                    <p className="text-sm text-muted-foreground">From donor credit card to participant wallet</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <CheckCircle className="h-5 w-5 text-blue-600 mt-0.5" />
+                  <div>
+                    <div className="font-semibold">Every Payout Verified</div>
+                    <p className="text-sm text-muted-foreground">80/15/5 split recorded on-chain</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <CheckCircle className="h-5 w-5 text-blue-600 mt-0.5" />
+                  <div>
+                    <div className="font-semibold">Real-Time Updates</div>
+                    <p className="text-sm text-muted-foreground">Instant blockchain confirmation</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Immutable Records */}
+            <Card className="border-2 border-purple-500/20 bg-gradient-to-br from-purple-500/5 to-purple-500/10">
+              <CardHeader>
+                <div className="w-12 h-12 bg-purple-500/10 rounded-full flex items-center justify-center mb-4">
+                  <Shield className="h-6 w-6 text-purple-600" />
+                </div>
+                <CardTitle className="text-purple-600 dark:text-purple-400">Immutable Records</CardTitle>
+                <CardDescription>Tamper-proof blockchain storage</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="flex items-start space-x-3">
+                  <CheckCircle className="h-5 w-5 text-purple-600 mt-0.5" />
+                  <div>
+                    <div className="font-semibold">Permanent Storage</div>
+                    <p className="text-sm text-muted-foreground">Base network blockchain security</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <CheckCircle className="h-5 w-5 text-purple-600 mt-0.5" />
+                  <div>
+                    <div className="font-semibold">Cannot Be Altered</div>
+                    <p className="text-sm text-muted-foreground">Cryptographic verification</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <CheckCircle className="h-5 w-5 text-purple-600 mt-0.5" />
+                  <div>
+                    <div className="font-semibold">Audit Trail Forever</div>
+                    <p className="text-sm text-muted-foreground">Historical transaction access</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Public Access */}
+            <Card className="border-2 border-emerald-500/20 bg-gradient-to-br from-emerald-500/5 to-emerald-500/10">
+              <CardHeader>
+                <div className="w-12 h-12 bg-emerald-500/10 rounded-full flex items-center justify-center mb-4">
+                  <BookOpen className="h-6 w-6 text-emerald-600" />
+                </div>
+                <CardTitle className="text-emerald-600 dark:text-emerald-400">Public Access</CardTitle>
+                <CardDescription>Open books for complete accountability</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="flex items-start space-x-3">
+                  <CheckCircle className="h-5 w-5 text-emerald-600 mt-0.5" />
+                  <div>
+                    <div className="font-semibold">Anyone Can Verify</div>
+                    <p className="text-sm text-muted-foreground">Public blockchain explorer access</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <CheckCircle className="h-5 w-5 text-emerald-600 mt-0.5" />
+                  <div>
+                    <div className="font-semibold">Real-Time Auditing</div>
+                    <p className="text-sm text-muted-foreground">No waiting for annual reports</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <CheckCircle className="h-5 w-5 text-emerald-600 mt-0.5" />
+                  <div>
+                    <div className="font-semibold">Crystal Clear Books</div>
+                    <p className="text-sm text-muted-foreground">100% financial transparency</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Participant Wallet Dashboard */}
+          <Card className="border-2 border-blue-500/20 bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-blue-900/20">
+            <CardHeader>
+              <div className="text-center">
+                <h3 className="text-2xl font-bold mb-2">Participant Wallet Dashboard</h3>
+                <p className="text-muted-foreground">Every participant receives a blockchain wallet upon registration</p>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="grid md:grid-cols-2 gap-8">
+                <div className="space-y-4">
+                  <h4 className="font-semibold text-lg flex items-center space-x-2">
+                    <Users className="h-5 w-5 text-blue-600" />
+                    <span>Automatic Wallet Creation</span>
+                  </h4>
+                  <div className="space-y-3 pl-7">
+                    <div className="flex items-start space-x-3">
+                      <div className="w-2 h-2 bg-blue-600 rounded-full mt-2"></div>
+                      <div>
+                        <div className="font-medium">Registration Trigger</div>
+                        <p className="text-sm text-muted-foreground">Wallet auto-generated when participant joins SHELTR</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <div className="w-2 h-2 bg-blue-600 rounded-full mt-2"></div>
+                      <div>
+                        <div className="font-medium">Unique Address</div>
+                        <p className="text-sm text-muted-foreground">Personal blockchain address for all transactions</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <div className="w-2 h-2 bg-blue-600 rounded-full mt-2"></div>
+                      <div>
+                        <div className="font-medium">Zero Complexity</div>
+                        <p className="text-sm text-muted-foreground">Participants never see crypto - just their dashboard</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <h4 className="font-semibold text-lg flex items-center space-x-2">
+                    <TrendingUp className="h-5 w-5 text-emerald-600" />
+                    <span>Real-Time Tracking</span>
+                  </h4>
+                  <div className="space-y-3 pl-7">
+                    <div className="flex items-start space-x-3">
+                      <div className="w-2 h-2 bg-emerald-600 rounded-full mt-2"></div>
+                      <div>
+                        <div className="font-medium">Housing Fund Balance</div>
+                        <p className="text-sm text-muted-foreground">View 15% allocation + staking rewards growth</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <div className="w-2 h-2 bg-emerald-600 rounded-full mt-2"></div>
+                      <div>
+                        <div className="font-medium">Transaction History</div>
+                        <p className="text-sm text-muted-foreground">Complete record of all donations received</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <div className="w-2 h-2 bg-emerald-600 rounded-full mt-2"></div>
+                      <div>
+                        <div className="font-medium">Growth Analytics</div>
+                        <p className="text-sm text-muted-foreground">4-6% APY tracking with projections</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-8 p-6 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-lg border border-blue-500/20">
+                <div className="text-center">
+                  <h4 className="font-bold text-lg mb-2">Complete Transparency</h4>
+                  <p className="text-muted-foreground">
+                    Participants can monitor their SmartFund investment growth in real-time, view every donation allocation, 
+                    and track their path to stable housing - all through a simple, user-friendly dashboard.
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
       {/* Single Token Architecture */}
       <section className="py-20 bg-gradient-to-r from-emerald-500/5 to-blue-500/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4">Stablecoin Architecture</h2>
-            <p className="text-xl text-muted-foreground">Utility token for transparent housing fund tracking</p>
+            <h2 className="text-3xl font-bold mb-4">SHELTR Utility Token</h2>
+            <p className="text-xl text-muted-foreground">Tracking every dollar in the housing fund with blockchain precision</p>
           </div>
 
           <div className="max-w-4xl mx-auto">
@@ -261,8 +464,8 @@ function TokenomicsContent() {
                     <Shield className="h-8 w-8 text-emerald-600 dark:text-emerald-400" />
                   </div>
                   <div className="text-center">
-                    <CardTitle className="text-3xl text-emerald-600 dark:text-emerald-400">SHELTR Stablecoin</CardTitle>
-                    <CardDescription className="text-emerald-600/70 text-lg">Housing Fund Tracking Token</CardDescription>
+                    <CardTitle className="text-3xl text-emerald-600 dark:text-emerald-400">SHELTR Utility Token</CardTitle>
+                    <CardDescription className="text-emerald-600/70 text-lg">Track & Trace Every Dollar</CardDescription>
                   </div>
                 </div>
               </CardHeader>
@@ -274,23 +477,23 @@ function TokenomicsContent() {
                 
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <h4 className="font-semibold mb-3 text-emerald-600 dark:text-emerald-400">Core Purpose:</h4>
+                    <h4 className="font-semibold mb-3 text-emerald-600 dark:text-emerald-400">Utility Token Purpose:</h4>
                     <div className="space-y-2">
                       <div className="flex items-center space-x-3">
                         <CheckCircle className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
-                        <span>Housing fund allocation tracking</span>
+                        <span>Track every donation in the system</span>
                       </div>
                       <div className="flex items-center space-x-3">
                         <CheckCircle className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
-                        <span>Blockchain transparency for donors</span>
+                        <span>Trace every payout and allocation</span>
                       </div>
                       <div className="flex items-center space-x-3">
                         <CheckCircle className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
-                        <span>Growth measurement and reporting</span>
+                        <span>Housing fund balance tracking</span>
                       </div>
                       <div className="flex items-center space-x-3">
                         <CheckCircle className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
-                        <span>Participant housing fund balance</span>
+                        <span>Public ledger accountability</span>
                       </div>
                     </div>
                   </div>

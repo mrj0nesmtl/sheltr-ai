@@ -9,9 +9,9 @@
 
 ## Abstract
 
-SHELTR represents a enterprise-grade platform that addresses homelessness through traditional payment stability combined with blockchain transparency. By integrating **Adyen payment processing**, **Coinbase institutional staking**, and **single-token housing fund tracking**, SHELTR creates a zero-risk bridge between donors and individuals experiencing homelessness while building sustainable long-term solutions. 
+SHELTR represents an enterprise-grade platform that addresses homelessness through traditional payment stability combined with blockchain transparency via the **Shelter Ledger** - our revolutionary public accountability system that tracks and traces every donation and every payout. By integrating **Adyen payment processing**, **Coinbase institutional staking**, and **SHELTR utility token tracking**, SHELTR creates a zero-risk bridge between donors and individuals experiencing homelessness while building sustainable long-term solutions. 
 
-Our **single-token stable architecture** uses the SHELTR Stablecoin (USDT-pegged) exclusively for housing fund tracking and transparency, while participants receive **virtual debit cards** with 80% of donations, eliminating cryptocurrency volatility exposure. This innovative approach ensures **100% of donations reach their intended purposes**: 80% participant support via traditional or virtual  payment cards, 15% housing fund growth through **guaranteed 4-6% APY institutional staking**, and 5% shelter operations support—all verified on-chain for complete transparency with **zero participant risk**.
+Our **single-token stable architecture** uses the SHELTR Utility Token (USDT-pegged) to create an immutable public ledger where every transaction is recorded, verified, and accessible for audit. Participants receive **virtual debit cards** with 80% of donations and automatic **blockchain wallet creation** for monitoring their 15% housing fund allocation, all while eliminating cryptocurrency volatility exposure. This innovative approach ensures **100% of donations reach their intended purposes**: 80% participant support via virtual payment cards, 15% housing fund growth through **guaranteed 4-6% APY institutional staking**, and 5% shelter operations support—all verified on-chain through the Shelter Ledger for complete transparency with **zero participant risk**.
 
 Our platform will pilot with **enterprise partnerships** providing institutional-grade infrastructure, **traditional funding models** eliminating ICO speculation, and **guaranteed returns** through Coinbase Prime institutional custody and staking services.
 
@@ -158,23 +158,94 @@ graph TD
 
 ## 2. Token Economic Model - "Tokenomics"
 
-### 2.1 Executive Overview: SHELTR Token Architecture
+### 2.1 The Shelter Ledger: Revolutionary Public Accountability
+
+**The Problem with Traditional Charity**: Donors have no way to verify their money reached its intended recipient. Annual reports provide limited visibility, and financial audits happen months after transactions occur.
+
+**The SHELTR Solution**: The **Shelter Ledger** is our blockchain-powered public accountability system that tracks and traces every donation and every payout in real-time. Built on Base network, it creates an immutable, publicly-accessible audit trail that anyone can verify.
+
+#### Shelter Ledger Core Capabilities
+
+**1. Track Every Donation**
+- Real-time recording from credit card to participant wallet
+- Automatic 80/15/5 split verification
+- Blockchain timestamp and transaction hash
+- Donor confirmation within seconds
+- Geographic and demographic data (anonymized)
+
+**2. Trace Every Payout**
+- Participant virtual card loads (80%)
+- Housing fund allocations (15%)
+- Shelter operations transfers (5%)
+- Staking rewards distribution
+- Housing program expenditures
+
+**3. Immutable Public Records**
+- Permanent blockchain storage on Base network
+- Cryptographically secured transactions
+- Cannot be altered or deleted
+- Historical audit trail forever
+- Third-party verification available
+
+**4. Participant Wallet System**
+
+Upon registration, every participant automatically receives:
+- **Unique blockchain address** for all transactions
+- **Housing fund dashboard** with real-time balance
+- **Transaction history** showing all donations
+- **Growth analytics** displaying 4-6% APY accumulation
+- **Zero complexity interface** - no crypto knowledge required
+
+```typescript
+interface ParticipantWallet {
+  address: string;                    // Unique blockchain address
+  housingFundBalance: number;         // Current balance with rewards
+  totalDonationsReceived: number;     // Lifetime donation total
+  cardAllocations: number;            // 80% sent to virtual card
+  housingAllocations: number;         // 15% in housing fund
+  stakingRewards: number;             // Accumulated APY growth
+  transactionHistory: Transaction[];  // Complete audit trail
+  projectedGrowth: GrowthProjection;  // Future value estimates
+}
+```
+
+#### Public Access & Transparency
+
+**Anyone Can Verify:**
+- Platform-wide donation metrics
+- Real-time transaction confirmation
+- Housing fund growth rates
+- Participant outcomes (anonymized)
+- Shelter operational efficiency
+
+**Public API Endpoints:**
+```bash
+GET /api/shelter-ledger/verify/{transactionId}
+GET /api/shelter-ledger/metrics
+GET /api/shelter-ledger/housing-fund
+GET /api/shelter-ledger/participant/{anonymizedId}
+```
+
+### 2.2 Executive Overview: SHELTR Token Architecture
 
 SHELTR implements a **single-token stable fund ecosystem** that protects vulnerable populations while creating sustainable growth through institutional partnerships and guaranteed returns.
 
-**Strategic Advantage**: By using a USDT-pegged SHELTR stablecoin for housing fund tracking combined with enterprise payment infrastructure (virtual debit cards), we eliminate cryptocurrency volatility risk for participants while maintaining complete blockchain transparency and guaranteed 4-6% APY growth through Coinbase institutional staking.
+**Strategic Advantage**: By using a USDT-pegged SHELTR utility token for donation tracking and housing fund management combined with enterprise payment infrastructure (virtual debit cards), we eliminate cryptocurrency volatility risk for participants while maintaining complete blockchain transparency through the Shelter Ledger and guaranteed 4-6% APY growth through Coinbase institutional staking.
 
-### 2.2 SHELTR-S (Stable Utility Token)
+### 2.3 SHELTR Utility Token (Track & Trace Stablecoin)
 
-**Purpose**: Participant protection and essential transaction stability
+**Primary Purpose**: Track every donation, trace every payout, create public accountability ledger
+
+**Secondary Purpose**: Housing fund allocation tracking and guaranteed yield generation
 
 | Specification | Value | Rationale |
 |---------------|-------|-----------|
-| **Peg Mechanism** | $1.00 USD | USDC reserve backing |
+| **Peg Mechanism** | $1.00 USD | USDT reserve backing (Coinbase custody) |
 | **Volatility** | 0% target | Essential needs protection |
-| **Transaction Fees** | $0 for participants | Dignity preservation |
-| **Welcome Bonus** | 10 tokens/signup | Immediate engagement |
-| **Use Cases** | PODS, MOBI, DRONE |
+| **Primary Utility** | Track & trace all transactions | Public accountability via Shelter Ledger |
+| **Secondary Utility** | Housing fund tracking | 15% allocation with 4-6% APY |
+| **Participant Access** | Wallet dashboard | Real-time balance monitoring |
+| **Public Access** | Shelter Ledger API | Anyone can verify transactions |
 
 **Technical Implementation**:
 ```solidity

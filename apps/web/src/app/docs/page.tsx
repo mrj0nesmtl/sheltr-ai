@@ -124,21 +124,61 @@ export default function DocsPage() {
   // Helper: Get badge color
   const getBadgeColor = (badge: string) => {
     const colorMap: Record<string, string> = {
-      'Strategic Vision': 'border-purple-400 text-purple-400',
-      'Architecture': 'border-blue-400 text-blue-400',
-      'Published': 'border-emerald-400 text-emerald-400',
-      'Implementation': 'border-orange-400 text-orange-400',
-      'Technical': 'border-red-400 text-red-400',
-      'Enterprise': 'border-indigo-400 text-indigo-400',
-      'Launch Plan': 'border-pink-400 text-pink-400',
-      'AI System': 'border-cyan-400 text-cyan-400',
-      'MCP System': 'border-teal-400 text-teal-400',
-      'QA Framework': 'border-yellow-400 text-yellow-400',
-      'Admin Guide': 'border-gray-400 text-gray-400',
-      'Donor Guide': 'border-rose-400 text-rose-400',
-      'User Guide': 'border-sky-400 text-sky-400'
+      'Strategic Vision': 'border-purple-500/50 text-purple-700 dark:border-purple-400 dark:text-purple-400',
+      'Architecture': 'border-blue-500/50 text-blue-700 dark:border-blue-400 dark:text-blue-400',
+      'Published': 'border-emerald-500/50 text-emerald-700 dark:border-emerald-400 dark:text-emerald-400',
+      'Implementation': 'border-orange-500/50 text-orange-700 dark:border-orange-400 dark:text-orange-400',
+      'Technical': 'border-red-500/50 text-red-700 dark:border-red-400 dark:text-red-400',
+      'Enterprise': 'border-indigo-500/50 text-indigo-700 dark:border-indigo-400 dark:text-indigo-400',
+      'Launch Plan': 'border-pink-500/50 text-pink-700 dark:border-pink-400 dark:text-pink-400',
+      'AI System': 'border-cyan-500/50 text-cyan-700 dark:border-cyan-400 dark:text-cyan-400',
+      'MCP System': 'border-teal-500/50 text-teal-700 dark:border-teal-400 dark:text-teal-400',
+      'QA Framework': 'border-yellow-500/50 text-yellow-700 dark:border-yellow-400 dark:text-yellow-400',
+      'Admin Guide': 'border-slate-500/50 text-slate-700 dark:border-gray-400 dark:text-gray-400',
+      'Donor Guide': 'border-rose-500/50 text-rose-700 dark:border-rose-400 dark:text-rose-400',
+      'User Guide': 'border-sky-500/50 text-sky-700 dark:border-sky-400 dark:text-sky-400'
     };
-    return colorMap[badge] || 'border-gray-400 text-gray-400';
+    return colorMap[badge] || 'border-slate-500/50 text-slate-700 dark:border-gray-400 dark:text-gray-400';
+  };
+
+  // Helper: Get icon color based on badge
+  const getIconColor = (badge: string) => {
+    const colorMap: Record<string, string> = {
+      'Strategic Vision': 'text-purple-600 dark:text-purple-400',
+      'Architecture': 'text-blue-600 dark:text-blue-400',
+      'Published': 'text-emerald-600 dark:text-emerald-400',
+      'Implementation': 'text-orange-600 dark:text-orange-400',
+      'Technical': 'text-red-600 dark:text-red-400',
+      'Enterprise': 'text-indigo-600 dark:text-indigo-400',
+      'Launch Plan': 'text-pink-600 dark:text-pink-400',
+      'AI System': 'text-cyan-600 dark:text-cyan-400',
+      'MCP System': 'text-teal-600 dark:text-teal-400',
+      'QA Framework': 'text-yellow-600 dark:text-yellow-400',
+      'Admin Guide': 'text-slate-600 dark:text-gray-400',
+      'Donor Guide': 'text-rose-600 dark:text-rose-400',
+      'User Guide': 'text-sky-600 dark:text-sky-400'
+    };
+    return colorMap[badge] || 'text-slate-600 dark:text-gray-400';
+  };
+
+  // Helper: Get icon background color based on badge
+  const getIconBgColor = (badge: string) => {
+    const colorMap: Record<string, string> = {
+      'Strategic Vision': 'bg-purple-100 dark:bg-purple-600/20',
+      'Architecture': 'bg-blue-100 dark:bg-blue-600/20',
+      'Published': 'bg-emerald-100 dark:bg-emerald-600/20',
+      'Implementation': 'bg-orange-100 dark:bg-orange-600/20',
+      'Technical': 'bg-red-100 dark:bg-red-600/20',
+      'Enterprise': 'bg-indigo-100 dark:bg-indigo-600/20',
+      'Launch Plan': 'bg-pink-100 dark:bg-pink-600/20',
+      'AI System': 'bg-cyan-100 dark:bg-cyan-600/20',
+      'MCP System': 'bg-teal-100 dark:bg-teal-600/20',
+      'QA Framework': 'bg-yellow-100 dark:bg-yellow-600/20',
+      'Admin Guide': 'bg-slate-100 dark:bg-white/5',
+      'Donor Guide': 'bg-rose-100 dark:bg-rose-600/20',
+      'User Guide': 'bg-sky-100 dark:bg-sky-600/20'
+    };
+    return colorMap[badge] || 'bg-slate-100 dark:bg-white/5';
   };
 
   // Calculate category counts
@@ -176,14 +216,14 @@ export default function DocsPage() {
 
       {/* Hero Section */}
       <section 
-        className="relative bg-gradient-to-br from-slate-50 via-red-50 to-slate-100 dark:from-black dark:via-red-950 dark:to-black py-24 overflow-hidden"
+        className="relative bg-gradient-to-br from-slate-50 via-slate-100 to-slate-50 dark:from-black dark:via-red-950 dark:to-black py-24 overflow-hidden border-b"
         style={{
-          backgroundImage: heroImage ? `linear-gradient(to bottom right, rgba(248, 250, 252, 0.95), rgba(254, 242, 242, 0.9)), url(${heroImage})` : undefined,
+          backgroundImage: heroImage ? `linear-gradient(to bottom right, rgba(248, 250, 252, 0.95), rgba(248, 250, 252, 0.9)), url(${heroImage})` : undefined,
           backgroundSize: 'cover',
           backgroundPosition: 'center'
         }}
       >
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-red-100/20 via-slate-50/50 to-slate-100 dark:from-red-900/20 dark:via-black/50 dark:to-black"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-slate-100/30 via-slate-50/50 to-slate-100 dark:from-red-900/20 dark:via-black/50 dark:to-black"></div>
         <div className="container mx-auto px-4 sm:px-6 relative z-10">
           <div className="max-w-3xl">
             <h1 className="text-5xl md:text-6xl font-bold mb-6 text-foreground">
@@ -239,7 +279,7 @@ export default function DocsPage() {
                     className={`
                       flex items-center gap-2 px-3 py-1.5 rounded transition-all
                       ${viewMode === 'grid' 
-                        ? 'bg-red-600 text-white' 
+                        ? 'bg-red-500 text-white dark:bg-red-600' 
                         : 'text-muted-foreground hover:text-foreground'
                       }
                     `}
@@ -253,7 +293,7 @@ export default function DocsPage() {
                     className={`
                       flex items-center gap-2 px-3 py-1.5 rounded transition-all
                       ${viewMode === 'list' 
-                        ? 'bg-red-600 text-white' 
+                        ? 'bg-red-500 text-white dark:bg-red-600' 
                         : 'text-muted-foreground hover:text-foreground'
                       }
                     `}
@@ -277,14 +317,14 @@ export default function DocsPage() {
                         className={`
                           flex items-center gap-2 px-4 py-2 rounded-lg border transition-all
                           ${isActive 
-                            ? 'bg-red-600 border-red-500 text-white' 
+                            ? 'bg-red-500 border-red-500 text-white dark:bg-red-600 dark:border-red-600' 
                             : 'bg-muted border-border text-foreground hover:bg-accent'
                           }
                         `}
                       >
                         <Icon className="h-4 w-4" />
                         <span className="font-medium">{category.name}</span>
-                        <Badge variant="outline" className="ml-1">
+                        <Badge variant="outline" className={`ml-1 ${isActive ? 'border-white/30' : ''}`}>
                           {category.count}
                         </Badge>
                       </button>
@@ -383,11 +423,11 @@ export default function DocsPage() {
                     const Icon = getBadgeIcon(doc.badge);
                     
                     return (
-                      <Card key={doc.id} className="hover:shadow-lg transition-all group">
+                      <Card key={doc.id} className="hover:shadow-lg transition-all group border-2">
                         <CardHeader>
                           <div className="flex items-start justify-between mb-4">
-                            <div className="p-3 bg-red-600/20 rounded-lg group-hover:bg-red-600/30 transition-colors">
-                              <Icon className="h-6 w-6 text-red-400" />
+                            <div className={`p-3 ${getIconBgColor(doc.badge)} rounded-lg transition-colors`}>
+                              <Icon className={`h-6 w-6 ${getIconColor(doc.badge)}`} />
                             </div>
                             <Badge variant="outline" className={`${getBadgeColor(doc.badge)} text-xs px-2 py-1`}>
                               {doc.badge}
@@ -430,12 +470,12 @@ export default function DocsPage() {
                               </div>
                               <div className="flex flex-wrap gap-1">
                                 {doc.topics.slice(0, 3).map((topic, idx) => (
-                                  <Badge key={idx} variant="outline" className="border-red-500/30 text-red-600 dark:text-red-400 text-xs">
+                                  <Badge key={idx} variant="outline" className="border-slate-300 text-slate-600 dark:border-red-500/30 dark:text-red-400 text-xs">
                                     {topic}
                                   </Badge>
                                 ))}
                                 {doc.topics.length > 3 && (
-                                  <Badge variant="outline" className="border-red-500/30 text-red-600 dark:text-red-400 text-xs">
+                                  <Badge variant="outline" className="border-slate-300 text-slate-600 dark:border-red-500/30 dark:text-red-400 text-xs">
                                     +{doc.topics.length - 3}
                                   </Badge>
                                 )}
@@ -446,14 +486,14 @@ export default function DocsPage() {
                           {/* Actions */}
                           <div className="flex gap-2 pt-2 border-t">
                             {doc.use_external_link && doc.external_link ? (
-                              <Button asChild className="flex-1 bg-red-600 hover:bg-red-700">
+                              <Button asChild className="flex-1 bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700">
                                 <a href={doc.external_link} target="_blank" rel="noopener noreferrer">
                                   <ExternalLink className="mr-2 h-4 w-4" />
                                   View on GitHub
                                 </a>
                               </Button>
                             ) : (
-                              <Button asChild className="flex-1 bg-red-600 hover:bg-red-700">
+                              <Button asChild className="flex-1 bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700">
                                 <Link href={doc.link}>
                                   <Eye className="mr-2 h-4 w-4" />
                                   View Online
@@ -488,12 +528,12 @@ export default function DocsPage() {
                     const Icon = getBadgeIcon(doc.badge);
                     
                     return (
-                      <Card key={doc.id} className="hover:shadow-lg transition-all">
+                      <Card key={doc.id} className="hover:shadow-lg transition-all border-2">
                         <CardContent className="p-6">
                           <div className="flex items-start gap-6">
                             {/* Icon */}
-                            <div className="p-3 bg-red-600/20 rounded-lg flex-shrink-0">
-                              <Icon className="h-6 w-6 text-red-400" />
+                            <div className={`p-3 ${getIconBgColor(doc.badge)} rounded-lg flex-shrink-0`}>
+                              <Icon className={`h-6 w-6 ${getIconColor(doc.badge)}`} />
                             </div>
 
                             {/* Content */}
@@ -539,12 +579,12 @@ export default function DocsPage() {
                                     <BookOpen className="h-4 w-4 text-muted-foreground" />
                                     <div className="flex flex-wrap gap-1">
                                       {doc.topics.slice(0, 3).map((topic, idx) => (
-                                        <Badge key={idx} variant="outline" className="border-red-500/30 text-red-600 dark:text-red-400 text-xs">
+                                        <Badge key={idx} variant="outline" className="border-slate-300 text-slate-600 dark:border-red-500/30 dark:text-red-400 text-xs">
                                           {topic}
                                         </Badge>
                                       ))}
                                       {doc.topics.length > 3 && (
-                                        <Badge variant="outline" className="border-red-500/30 text-red-600 dark:text-red-400 text-xs">
+                                        <Badge variant="outline" className="border-slate-300 text-slate-600 dark:border-red-500/30 dark:text-red-400 text-xs">
                                           +{doc.topics.length - 3}
                                         </Badge>
                                       )}
@@ -562,14 +602,14 @@ export default function DocsPage() {
                               {/* Actions */}
                               <div className="flex gap-2">
                                 {doc.use_external_link && doc.external_link ? (
-                                  <Button asChild size="sm" className="bg-red-600 hover:bg-red-700">
+                                  <Button asChild size="sm" className="bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700">
                                     <a href={doc.external_link} target="_blank" rel="noopener noreferrer">
                                       <ExternalLink className="mr-2 h-3 w-3" />
                                       View on GitHub
                                     </a>
                                   </Button>
                                 ) : (
-                                  <Button asChild size="sm" className="bg-red-600 hover:bg-red-700">
+                                  <Button asChild size="sm" className="bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700">
                                     <Link href={doc.link}>
                                       <Eye className="mr-2 h-3 w-3" />
                                       View Online
@@ -611,11 +651,11 @@ export default function DocsPage() {
                     const Icon = getBadgeIcon(doc.badge);
                     
                     return (
-                      <Card key={doc.id} className="hover:shadow-lg transition-all">
+                      <Card key={doc.id} className="hover:shadow-lg transition-all border-2">
                         <CardHeader className="pb-3">
                           <div className="flex items-start gap-3">
-                            <div className="p-2 bg-muted rounded">
-                              <Icon className="h-5 w-5 text-muted-foreground" />
+                            <div className={`p-2 ${getIconBgColor(doc.badge)} rounded`}>
+                              <Icon className={`h-5 w-5 ${getIconColor(doc.badge)}`} />
                             </div>
                             <div className="flex-1">
                               <CardTitle className="text-lg mb-1">{doc.title}</CardTitle>
@@ -662,12 +702,12 @@ export default function DocsPage() {
                     const Icon = getBadgeIcon(doc.badge);
                     
                     return (
-                      <Card key={doc.id} className="hover:shadow-lg transition-all">
+                      <Card key={doc.id} className="hover:shadow-lg transition-all border-2">
                         <CardContent className="p-4">
                           <div className="flex items-center gap-4">
                             {/* Icon */}
-                            <div className="p-2 bg-muted rounded flex-shrink-0">
-                              <Icon className="h-5 w-5 text-muted-foreground" />
+                            <div className={`p-2 ${getIconBgColor(doc.badge)} rounded flex-shrink-0`}>
+                              <Icon className={`h-5 w-5 ${getIconColor(doc.badge)}`} />
                             </div>
 
                             {/* Content */}
@@ -734,7 +774,7 @@ export default function DocsPage() {
                       required
                       className="flex-1"
                     />
-                    <Button type="submit" disabled={isSubmitting} className="bg-red-600 hover:bg-red-700">
+                    <Button type="submit" disabled={isSubmitting} className="bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700">
                       {isSubmitting ? (
                         <>
                           <Loader2 className="mr-2 h-4 w-4 animate-spin" />

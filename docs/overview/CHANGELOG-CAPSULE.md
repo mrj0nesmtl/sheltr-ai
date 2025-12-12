@@ -1,6 +1,6 @@
 # 📝 SHELTR Changelog Capsule - Recent Changes
 
-**Last Updated**: December 11, 2025  
+**Last Updated**: December 12, 2025  
 **Coverage**: Most recent 30 days of development  
 **Purpose**: AI-accessible summary of recent platform changes for authenticated administrators
 
@@ -10,11 +10,39 @@
 
 ## 🎯 Quick Stats (Last 30 Days)
 
-- **Versions Released**: 2.156.0 → 2.140.0 (17 releases)
-- **Major Features**: 10 new features
+- **Versions Released**: 2.157.0 → 2.140.0 (18 releases)
+- **Major Features**: 11 new features
 - **Bug Fixes**: 30+ critical fixes
-- **Security Updates**: **MAJOR SESSION 27 REMEDIATION** 🔒
-- **Documentation**: 20+ new docs created
+- **Security Updates**: **SESSION 27 + Next.js Security Patch** 🔒
+- **Documentation**: 25+ docs updated/created
+
+---
+
+## [2.157.0] - 2025-12-12 (Documentation Hub Overhaul & Ecosystem Refinement) 📚🏗️
+
+### 🎯 **Session Highlights**
+- **Documentation Hub**: Fixed all 10 GitHub links on `/docs` page
+- **Ecosystem Overhaul**: Simplified to POD Model A + Basecamp + Drones (2027)
+- **Shelter Ledger**: Amplified blockchain transparency and public accountability
+- **Security Patch**: Next.js 15.5.7 → 15.5.9 (HIGH + MODERATE vulnerabilities fixed)
+
+### 📚 **Documentation Updates**
+- Fixed GitHub links for: Hacking Homelessness, Platform Overview, White Paper, System Design, Roadmap, Donor Guide, Participant Guide, Agent Architecture, Blockchain, Tokenomics
+- Updated Hacking Homelessness thesis to v3.0.0 - QR-Scan-to-POD Ecosystem
+- Enhanced Shelter Ledger documentation with complete track & trace specifications
+- Removed MOBI bikes, added Basecamp infrastructure
+- Updated POD pricing to $7,500 (single-SKU Model A)
+
+### ⛓️ **Shelter Ledger Enhancements**
+- Public accountability system for all donations and payouts
+- Real-time blockchain verification with public API access
+- Automatic participant wallet creation with housing fund tracking
+- Complete audit trail for regulatory compliance
+- Zero crypto exposure for participants (Adyen virtual cards)
+
+### 🔒 **Security**
+- Next.js critical security patch (DoS + Source Code Exposure vulnerabilities)
+- All documentation properly linked to GitHub source files
 
 ---
 

@@ -57,10 +57,10 @@ function SystemDesignContent() {
             </Link>
             <div className="flex items-center space-x-4">
               <Badge className="bg-blue-600 hover:bg-blue-700 text-white">
-                v2.86.0 - Complete RAG System
+                v3.0.0 - Shelter Ledger + RAG System
               </Badge>
               <Badge variant="outline" className="text-xs">
-                Updated: November 2, 2025
+                Updated: December 12, 2025
               </Badge>
             </div>
           </div>
@@ -113,7 +113,8 @@ function SystemDesignContent() {
               Multi-Tenant Cloud Architecture
             </h1>
             <p className="text-xl text-muted-foreground mb-8 max-w-4xl mx-auto">
-              Enterprise donation and housing fund infrastructure with single-token stable fund architecture, 
+              Enterprise donation infrastructure with Shelter Ledger public accountability system, 
+              dual-purpose SHELTR utility token for track & trace transparency, 
               zero cryptocurrency exposure for participants, and guaranteed institutional returns
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -195,8 +196,9 @@ function SystemDesignContent() {
               <div className="text-center mb-8">
                 <h2 className="text-3xl font-bold mb-4">Enterprise System Overview</h2>
                 <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-                  SHELTR combines Next.js 15 frontend with Firebase backend, complete RAG Knowledge Base with AI embeddings, 
-                  enterprise payment processing (Adyen), and Base network blockchain integration for housing fund transparency. 
+                  SHELTR combines Next.js 15 frontend with Firebase backend, revolutionary Shelter Ledger public accountability system, 
+                  complete RAG Knowledge Base with AI embeddings, enterprise payment processing (Adyen), 
+                  and Base network blockchain integration with dual-purpose SHELTR utility token for track & trace transparency. 
                   Now with 56% cost optimization and hybrid secure portal architecture.
                 </p>
               </div>
@@ -225,11 +227,11 @@ function SystemDesignContent() {
     E -->|SmartFund Distribution| F[80/15/5 Allocation<br/>Auto-executed]
     
     F -->|80%| G[Virtual Debit Cards<br/>Participant Access - Zero Crypto]
-    F -->|15%| H[Coinbase Base Network<br/>SHELTR Stablecoin Pool Fund]
+    F -->|15%| H[Coinbase Base Network<br/>SHELTR Utility Token + Shelter Ledger]
     F -->|5%| I[Platform Operations<br/>Sustainable Revenue]
     
     H -->|USDT Backing| J[Institutional Staking<br/>4-6% Guaranteed APY]
-    H -->|Blockchain Tracking| K[Housing Fund Transparency<br/>Base Network]
+    H -->|Track & Trace| K[Shelter Ledger Transparency<br/>Immutable Public Records]
     
     B -->|User Management| L[Four Stakeholder Types<br/>Orgs/Gov/Participants/Donors]
     B -->|Real-time Data| M[Impact Analytics<br/>Blockchain + Traditional Verified]
@@ -318,8 +320,9 @@ function SystemDesignContent() {
               <div className="text-center mb-8">
                 <h2 className="text-3xl font-bold mb-4">Enterprise Payment Flow</h2>
                 <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-                  Revolutionary SmartFund™ distribution combining traditional payment stability 
-                  with blockchain transparency and guaranteed returns.
+                  Revolutionary SmartFund™ distribution with Shelter Ledger track & trace, 
+                  combining traditional payment stability with complete blockchain transparency, 
+                  immutable public records, and guaranteed returns.
                 </p>
               </div>
 
@@ -344,14 +347,16 @@ function SystemDesignContent() {
     B --> C[SmartFund Distribution<br/>⚡ 80/15/5 Split]
     
     C -->|80%| D[Virtual Debit Cards<br/>💳 Participant Access<br/>🚫 Zero Crypto Risk]
-    C -->|15%| E[Housing Fund<br/>🏠 SHELTR Stablecoin<br/>📈 4-6% Guaranteed APY]
+    C -->|15%| E[Housing Fund<br/>🏠 SHELTR Utility Token<br/>📈 4-6% Guaranteed APY]
     C -->|5%| F[Platform Operations<br/>⚙️ Sustainable Revenue]
     
-    E --> G[Coinbase Base Network<br/>⛓️ Blockchain Tracking]
-    E --> H[USDT Backing<br/>💰 Institutional Staking]
+    E --> G[Shelter Ledger<br/>📖 Track & Trace Every Dollar]
+    E --> H[Coinbase Base Network<br/>⛓️ Immutable Public Records]
+    E --> I[USDT Backing<br/>💰 Institutional Staking]
     
-    G --> I[Housing Fund Transparency<br/>📊 Real-time Tracking]
-    H --> J[Guaranteed Returns<br/>💹 Coinbase Prime Custody]
+    G --> J[Donation Transparency<br/>📊 Real-time Public Access]
+    H --> K[Blockchain Verification<br/>🔒 Permanent Audit Trail]
+    I --> L[Guaranteed Returns<br/>💹 Coinbase Prime Custody]
     
     D --> K[Retail Purchases<br/>🛒 Visa/Mastercard Networks]
     
@@ -628,25 +633,25 @@ function SystemDesignContent() {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Coins className="h-5 w-5 text-purple-600" />
-                      SHELTR Stablecoin Features
+                      SHELTR Utility Token (Dual-Purpose)
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3">
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                      <span className="text-sm">USDT-backed 1:1 peg</span>
+                      <span className="text-sm font-semibold">Primary: Track & Trace transparency</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                      <span className="text-sm">Housing fund tracking only</span>
+                      <span className="text-sm">Immutable donation records</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                      <span className="text-sm">4-6% guaranteed APY</span>
+                      <span className="text-sm font-semibold">Secondary: SmartFund™ investment</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                      <span className="text-sm">OpenZeppelin security standards</span>
+                      <span className="text-sm">USDT-backed with 4-6% APY</span>
                     </div>
                   </CardContent>
                 </Card>
@@ -666,54 +671,108 @@ function SystemDesignContent() {
                 <CardContent>
                   <div className="bg-slate-50 dark:bg-slate-900 rounded-lg p-6 overflow-x-auto">
                     <pre className="text-xs font-mono">
-{`// SHELTR Enterprise Payment System on Base Network
+{`// SHELTR Utility Token - Dual-Purpose Architecture
+// Primary: Shelter Ledger Track & Trace | Secondary: SmartFund™ Investment
 pragma solidity ^0.8.19;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 
-// SHELTR Stablecoin (Housing Fund Tracking Only)
-contract SHELTRStablecoin is ERC20, AccessControl, ReentrancyGuard {
+contract SHELTRUtilityToken is ERC20, AccessControl, ReentrancyGuard {
     bytes32 public constant FUND_MANAGER_ROLE = keccak256("FUND_MANAGER_ROLE");
     
     IERC20 public immutable USDT;
     uint256 public totalHousingFund;
     uint256 public guaranteedAPY = 500; // 5.00% (basis points)
     
+    // Shelter Ledger: Track & Trace mappings
     mapping(address => uint256) public participantAllocations;
-    mapping(address => uint256) public lastStakeTime;
+    mapping(address => uint256) public totalDonationsReceived;
+    mapping(address => Transaction[]) public transactionHistory;
+    mapping(string => DonationRecord) public donationLedger;
     
-    constructor(address _usdt) ERC20("SHELTR Housing Fund", "SHELTR") {
+    struct Transaction {
+        uint256 amount;
+        uint256 timestamp;
+        TransactionType txType;
+        string donationId;
+        bool isPublic;
+    }
+    
+    struct DonationRecord {
+        address donor;
+        address participant;
+        uint256 totalAmount;
+        uint256 timestamp;
+        bool verified;
+    }
+    
+    enum TransactionType {
+        DONATION_RECEIVED,
+        HOUSING_FUND_DEPOSIT,
+        VIRTUAL_CARD_LOAD,
+        INTEREST_ACCRUED
+    }
+    
+    constructor(address _usdt) ERC20("SHELTR Utility Token", "SHELTR") {
         USDT = IERC20(_usdt);
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
     }
     
-    function depositHousingFund(address participant, uint256 amount) 
-        external onlyRole(FUND_MANAGER_ROLE) nonReentrant {
-        // Verify USDT backing
-        require(
-            USDT.balanceOf(address(this)) >= amount,
-            "Insufficient USDT reserve"
-        );
+    // PRIMARY PURPOSE: Track donation in Shelter Ledger
+    function trackDonation(
+        string memory donationId,
+        address donor,
+        address participant,
+        uint256 amount
+    ) external onlyRole(FUND_MANAGER_ROLE) nonReentrant {
+        donationLedger[donationId] = DonationRecord({
+            donor: donor,
+            participant: participant,
+            totalAmount: amount,
+            timestamp: block.timestamp,
+            verified: true
+        });
+        
+        totalDonationsReceived[participant] += amount;
+        
+        emit DonationTracked(donationId, participant, amount);
+    }
+    
+    // SECONDARY PURPOSE: Deposit to housing fund with guaranteed APY
+    function depositHousingFund(
+        address participant, 
+        uint256 amount,
+        string memory donationId
+    ) external onlyRole(FUND_MANAGER_ROLE) nonReentrant {
+        require(USDT.balanceOf(address(this)) >= amount, "Insufficient USDT");
         
         participantAllocations[participant] += amount;
         totalHousingFund += amount;
-        lastStakeTime[participant] = block.timestamp;
         
-        _mint(address(this), amount); // Mint tokens for tracking only
+        _mint(address(this), amount); // Mint for tracking
         
-        emit HousingFundDeposit(participant, amount);
+        // Record in Shelter Ledger
+        transactionHistory[participant].push(Transaction({
+            amount: amount,
+            timestamp: block.timestamp,
+            txType: TransactionType.HOUSING_FUND_DEPOSIT,
+            donationId: donationId,
+            isPublic: true
+        }));
+        
+        emit HousingFundDeposit(participant, amount, donationId);
     }
     
-    function calculateReturns(address participant) external view returns (uint256) {
-        uint256 allocation = participantAllocations[participant];
-        uint256 timeStaked = block.timestamp - lastStakeTime[participant];
-        uint256 annualReturn = (allocation * guaranteedAPY) / 10000;
-        return (annualReturn * timeStaked) / 365 days;
+    // Public verification function (Shelter Ledger)
+    function verifyDonation(string memory donationId) 
+        external view returns (bool) {
+        return donationLedger[donationId].verified;
     }
     
-    event HousingFundDeposit(address indexed participant, uint256 amount);
+    event DonationTracked(string indexed donationId, address participant, uint256 amount);
+    event HousingFundDeposit(address indexed participant, uint256 amount, string donationId);
 }`}
                     </pre>
                   </div>
@@ -807,10 +866,10 @@ contract SHELTRStablecoin is ERC20, AccessControl, ReentrancyGuard {
                           <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                           <span>Coinbase Prime integration</span>
                         </li>
-                        <li className="flex items-center gap-2">
-                          <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                          <span>SHELTR Stablecoin deployment</span>
-                        </li>
+                      <li className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                        <span>SHELTR Utility Token + Shelter Ledger deployment</span>
+                      </li>
                         <li className="flex items-center gap-2">
                           <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                           <span>Mobile React Native app</span>
@@ -845,7 +904,8 @@ contract SHELTRStablecoin is ERC20, AccessControl, ReentrancyGuard {
                   </CardHeader>
                   <CardContent>
                     <ul className="space-y-2 text-sm">
-                      <li>• Deploy SHELTR Stablecoin on Base</li>
+                      <li>• Deploy SHELTR Utility Token + Shelter Ledger</li>
+                      <li>• Implement track & trace public API</li>
                       <li>• Set up Coinbase Prime custody</li>
                       <li>• Adyen payment processing</li>
                       <li>• Virtual debit card system</li>

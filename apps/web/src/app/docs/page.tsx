@@ -4,26 +4,21 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { 
   FileText, 
-  Download, 
   ExternalLink, 
   Users, 
   Shield, 
   Book,
   Code,
   Building,
-  ArrowRight,
   Rocket,
   Heart,
   Building2,
-  Mail,
   Send,
   MessageSquare,
   CheckSquare,
   BookOpen,
   Eye,
   Github,
-  CreditCard,
-  TreePine,
   Search,
   X,
   Filter,
@@ -108,7 +103,7 @@ export default function DocsPage() {
 
   // Helper: Get icon based on badge
   const getBadgeIcon = (badge: string) => {
-    const iconMap: Record<string, any> = {
+    const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
       'Strategic Vision': Users,
       'Architecture': Building,
       'Published': FileText,
@@ -181,24 +176,24 @@ export default function DocsPage() {
 
       {/* Hero Section */}
       <section 
-        className="relative bg-gradient-to-br from-black via-red-950 to-black text-white py-24 overflow-hidden"
+        className="relative bg-gradient-to-br from-slate-50 via-red-50 to-slate-100 dark:from-black dark:via-red-950 dark:to-black py-24 overflow-hidden"
         style={{
-          backgroundImage: heroImage ? `linear-gradient(to bottom right, rgba(0, 0, 0, 0.9), rgba(139, 0, 0, 0.8)), url(${heroImage})` : undefined,
+          backgroundImage: heroImage ? `linear-gradient(to bottom right, rgba(248, 250, 252, 0.95), rgba(254, 242, 242, 0.9)), url(${heroImage})` : undefined,
           backgroundSize: 'cover',
           backgroundPosition: 'center'
         }}
       >
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-red-900/20 via-black/50 to-black"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-red-100/20 via-slate-50/50 to-slate-100 dark:from-red-900/20 dark:via-black/50 dark:to-black"></div>
         <div className="container mx-auto px-4 sm:px-6 relative z-10">
           <div className="max-w-3xl">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6">
+            <h1 className="text-5xl md:text-6xl font-bold mb-6 text-foreground">
               Documentation Hub
             </h1>
-            <p className="text-xl text-gray-200 mb-8">
+            <p className="text-xl text-muted-foreground mb-8">
               Comprehensive guides, API references, and technical documentation for the SHELTR platform
             </p>
             <div className="flex flex-wrap gap-4">
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10" asChild>
+              <Button size="lg" variant="outline" asChild>
                 <a href="https://github.com/mrj0nesmtl/sheltr-ai/tree/main/docs" target="_blank" rel="noopener noreferrer">
                   <Github className="mr-2 h-5 w-5" />
                   View on GitHub
@@ -210,7 +205,7 @@ export default function DocsPage() {
       </section>
 
       {/* Main Content */}
-      <main className="flex-grow bg-black">
+      <main className="flex-grow bg-background">
         <div className="container mx-auto px-4 sm:px-6 py-16" id="docs">
           
           {/* Search and Category Filter Section */}
@@ -218,18 +213,18 @@ export default function DocsPage() {
             <div className="flex flex-col lg:flex-row gap-6 items-start lg:items-center justify-between">
               {/* Search */}
               <div className="relative flex-1 max-w-md">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
                 <Input
                   type="text"
                   placeholder="Search documentation..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 pr-10 bg-white/5 border-white/10 text-white placeholder:text-gray-400"
+                  className="pl-10 pr-10"
                 />
                 {searchQuery && (
                   <button
                     onClick={() => setSearchQuery('')}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
                   >
                     <X className="h-4 w-4" />
                   </button>
@@ -238,14 +233,14 @@ export default function DocsPage() {
 
               <div className="flex items-center gap-4">
                 {/* View Mode Toggle (Desktop Only) */}
-                <div className="hidden lg:flex items-center gap-1 bg-white/5 border border-white/10 rounded-lg p-1">
+                <div className="hidden lg:flex items-center gap-1 bg-muted border rounded-lg p-1">
                   <button
                     onClick={() => setViewMode('grid')}
                     className={`
                       flex items-center gap-2 px-3 py-1.5 rounded transition-all
                       ${viewMode === 'grid' 
                         ? 'bg-red-600 text-white' 
-                        : 'text-gray-400 hover:text-white'
+                        : 'text-muted-foreground hover:text-foreground'
                       }
                     `}
                     title="Grid View"
@@ -259,7 +254,7 @@ export default function DocsPage() {
                       flex items-center gap-2 px-3 py-1.5 rounded transition-all
                       ${viewMode === 'list' 
                         ? 'bg-red-600 text-white' 
-                        : 'text-gray-400 hover:text-white'
+                        : 'text-muted-foreground hover:text-foreground'
                       }
                     `}
                     title="List View"
@@ -283,13 +278,13 @@ export default function DocsPage() {
                           flex items-center gap-2 px-4 py-2 rounded-lg border transition-all
                           ${isActive 
                             ? 'bg-red-600 border-red-500 text-white' 
-                            : 'bg-white/5 border-white/10 text-gray-300 hover:bg-white/10'
+                            : 'bg-muted border-border text-foreground hover:bg-accent'
                           }
                         `}
                       >
                         <Icon className="h-4 w-4" />
                         <span className="font-medium">{category.name}</span>
-                        <Badge variant="outline" className={`ml-1 ${isActive ? 'border-white/30' : 'border-white/20'}`}>
+                        <Badge variant="outline" className="ml-1">
                           {category.count}
                         </Badge>
                       </button>
@@ -301,18 +296,18 @@ export default function DocsPage() {
 
             {/* Active filters indicator */}
             {(searchQuery || selectedCategory !== 'all') && (
-              <div className="mt-4 flex items-center gap-2 text-sm text-gray-400">
+              <div className="mt-4 flex items-center gap-2 text-sm text-muted-foreground">
                 <Filter className="h-4 w-4" />
                 <span>
                   Showing {filteredDocuments.length} of {documents.length} documents
                 </span>
                 {searchQuery && (
-                  <Badge variant="outline" className="border-red-500 text-red-400">
-                    Search: "{searchQuery}"
+                  <Badge variant="outline" className="border-red-500 text-red-600 dark:text-red-400">
+                    Search: &quot;{searchQuery}&quot;
                   </Badge>
                 )}
                 {selectedCategory !== 'all' && (
-                  <Badge variant="outline" className="border-blue-500 text-blue-400">
+                  <Badge variant="outline" className="border-blue-500 text-blue-600 dark:text-blue-400">
                     Category: {categories.find(c => c.id === selectedCategory)?.name}
                   </Badge>
                 )}
@@ -321,7 +316,7 @@ export default function DocsPage() {
                     setSearchQuery('');
                     setSelectedCategory('all');
                   }}
-                  className="text-red-400 hover:text-red-300 underline ml-2"
+                  className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 underline ml-2"
                 >
                   Clear filters
                 </button>
@@ -333,7 +328,7 @@ export default function DocsPage() {
           {loading && (
             <div className="flex flex-col items-center justify-center py-20">
               <Loader2 className="h-12 w-12 text-red-600 animate-spin mb-4" />
-              <p className="text-gray-400">Loading documentation...</p>
+              <p className="text-muted-foreground">Loading documentation...</p>
             </div>
           )}
 
@@ -341,9 +336,9 @@ export default function DocsPage() {
           {error && !loading && (
             <div className="flex flex-col items-center justify-center py-20">
               <AlertCircle className="h-12 w-12 text-red-600 mb-4" />
-              <p className="text-red-400 text-lg font-medium mb-2">Failed to Load Documentation</p>
-              <p className="text-gray-400 mb-4">{error}</p>
-              <Button onClick={loadDocuments} variant="outline" className="border-red-500 text-red-400 hover:bg-red-900/20">
+              <p className="text-red-600 dark:text-red-400 text-lg font-medium mb-2">Failed to Load Documentation</p>
+              <p className="text-muted-foreground mb-4">{error}</p>
+              <Button onClick={loadDocuments} variant="outline">
                 Try Again
               </Button>
             </div>
@@ -352,9 +347,9 @@ export default function DocsPage() {
           {/* Empty State */}
           {!loading && !error && filteredDocuments.length === 0 && (
             <div className="text-center py-20">
-              <BookOpen className="h-16 w-16 text-gray-600 mx-auto mb-4" />
-              <h3 className="text-2xl font-bold text-white mb-2">No documents found</h3>
-              <p className="text-gray-400 mb-6">
+              <BookOpen className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+              <h3 className="text-2xl font-bold mb-2">No documents found</h3>
+              <p className="text-muted-foreground mb-6">
                 {searchQuery || selectedCategory !== 'all'
                   ? 'Try adjusting your filters or search query'
                   : 'No published documentation available yet'}
@@ -366,7 +361,6 @@ export default function DocsPage() {
                     setSelectedCategory('all');
                   }}
                   variant="outline"
-                  className="border-red-500 text-red-400 hover:bg-red-900/20"
                 >
                   Clear Filters
                 </Button>
@@ -378,8 +372,8 @@ export default function DocsPage() {
           {!loading && !error && coreDocuments.length > 0 && (
             <>
               <div className="mb-8">
-                <h2 className="text-3xl font-bold text-white mb-2">Core Documentation</h2>
-                <p className="text-gray-400">Essential guides and primary platform documentation</p>
+                <h2 className="text-3xl font-bold mb-2">Core Documentation</h2>
+                <p className="text-muted-foreground">Essential guides and primary platform documentation</p>
               </div>
 
               {/* Grid View */}
@@ -389,7 +383,7 @@ export default function DocsPage() {
                     const Icon = getBadgeIcon(doc.badge);
                     
                     return (
-                      <Card key={doc.id} className="bg-white/5 border-white/10 hover:bg-white/10 transition-all group">
+                      <Card key={doc.id} className="hover:shadow-lg transition-all group">
                         <CardHeader>
                           <div className="flex items-start justify-between mb-4">
                             <div className="p-3 bg-red-600/20 rounded-lg group-hover:bg-red-600/30 transition-colors">
@@ -399,8 +393,8 @@ export default function DocsPage() {
                               {doc.badge}
                             </Badge>
                           </div>
-                          <CardTitle className="text-xl text-white mb-2">{doc.title}</CardTitle>
-                          <CardDescription className="text-gray-400 text-sm leading-relaxed">
+                          <CardTitle className="text-xl mb-2">{doc.title}</CardTitle>
+                          <CardDescription className="text-sm leading-relaxed">
                             {doc.description}
                           </CardDescription>
                         </CardHeader>
@@ -408,18 +402,18 @@ export default function DocsPage() {
                           {/* Audience */}
                           {doc.audience.length > 0 && (
                             <div>
-                              <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
+                              <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
                                 <Users className="h-3 w-3" />
                                 <span>Target Audience</span>
                               </div>
                               <div className="flex flex-wrap gap-1">
                                 {doc.audience.slice(0, 3).map((aud, idx) => (
-                                  <Badge key={idx} variant="outline" className="border-white/20 text-white/70 text-xs">
+                                  <Badge key={idx} variant="outline" className="text-xs">
                                     {aud}
                                   </Badge>
                                 ))}
                                 {doc.audience.length > 3 && (
-                                  <Badge variant="outline" className="border-white/20 text-white/70 text-xs">
+                                  <Badge variant="outline" className="text-xs">
                                     +{doc.audience.length - 3}
                                   </Badge>
                                 )}
@@ -430,18 +424,18 @@ export default function DocsPage() {
                           {/* Topics */}
                           {doc.topics.length > 0 && (
                             <div>
-                              <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
+                              <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
                                 <BookOpen className="h-3 w-3" />
                                 <span>Key Topics</span>
                               </div>
                               <div className="flex flex-wrap gap-1">
                                 {doc.topics.slice(0, 3).map((topic, idx) => (
-                                  <Badge key={idx} variant="outline" className="border-red-500/30 text-red-400/90 text-xs">
+                                  <Badge key={idx} variant="outline" className="border-red-500/30 text-red-600 dark:text-red-400 text-xs">
                                     {topic}
                                   </Badge>
                                 ))}
                                 {doc.topics.length > 3 && (
-                                  <Badge variant="outline" className="border-red-500/30 text-red-400/90 text-xs">
+                                  <Badge variant="outline" className="border-red-500/30 text-red-600 dark:text-red-400 text-xs">
                                     +{doc.topics.length - 3}
                                   </Badge>
                                 )}
@@ -450,7 +444,7 @@ export default function DocsPage() {
                           )}
 
                           {/* Actions */}
-                          <div className="flex gap-2 pt-2 border-t border-white/10">
+                          <div className="flex gap-2 pt-2 border-t">
                             {doc.use_external_link && doc.external_link ? (
                               <Button asChild className="flex-1 bg-red-600 hover:bg-red-700">
                                 <a href={doc.external_link} target="_blank" rel="noopener noreferrer">
@@ -467,7 +461,7 @@ export default function DocsPage() {
                               </Button>
                             )}
                             {doc.github_link && !doc.use_external_link && (
-                              <Button asChild variant="outline" className="border-white/20 hover:bg-white/10" size="icon">
+                              <Button asChild variant="outline" size="icon">
                                 <a href={doc.github_link} target="_blank" rel="noopener noreferrer">
                                   <Github className="h-4 w-4" />
                                 </a>
@@ -476,9 +470,9 @@ export default function DocsPage() {
                           </div>
 
                           {/* Last Updated */}
-                          <div className="text-xs text-gray-500 flex items-center gap-1">
+                          <div className="text-xs text-muted-foreground flex items-center gap-1">
                             <span>Last updated:</span>
-                            <span className="text-gray-400">{doc.updated}</span>
+                            <span>{doc.updated}</span>
                           </div>
                         </CardContent>
                       </Card>
@@ -494,7 +488,7 @@ export default function DocsPage() {
                     const Icon = getBadgeIcon(doc.badge);
                     
                     return (
-                      <Card key={doc.id} className="bg-white/5 border-white/10 hover:bg-white/10 transition-all">
+                      <Card key={doc.id} className="hover:shadow-lg transition-all">
                         <CardContent className="p-6">
                           <div className="flex items-start gap-6">
                             {/* Icon */}
@@ -507,12 +501,12 @@ export default function DocsPage() {
                               <div className="flex items-start justify-between gap-4 mb-3">
                                 <div className="flex-1">
                                   <div className="flex items-center gap-3 mb-2">
-                                    <h3 className="text-xl font-bold text-white">{doc.title}</h3>
+                                    <h3 className="text-xl font-bold">{doc.title}</h3>
                                     <Badge variant="outline" className={`${getBadgeColor(doc.badge)} text-xs px-2 py-1 flex-shrink-0`}>
                                       {doc.badge}
                                     </Badge>
                                   </div>
-                                  <p className="text-gray-400 text-sm leading-relaxed mb-4">
+                                  <p className="text-muted-foreground text-sm leading-relaxed mb-4">
                                     {doc.description}
                                   </p>
                                 </div>
@@ -523,15 +517,15 @@ export default function DocsPage() {
                                 {/* Audience */}
                                 {doc.audience.length > 0 && (
                                   <div className="flex items-center gap-2">
-                                    <Users className="h-4 w-4 text-gray-500" />
+                                    <Users className="h-4 w-4 text-muted-foreground" />
                                     <div className="flex flex-wrap gap-1">
                                       {doc.audience.slice(0, 2).map((aud, idx) => (
-                                        <Badge key={idx} variant="outline" className="border-white/20 text-white/70 text-xs">
+                                        <Badge key={idx} variant="outline" className="text-xs">
                                           {aud}
                                         </Badge>
                                       ))}
                                       {doc.audience.length > 2 && (
-                                        <Badge variant="outline" className="border-white/20 text-white/70 text-xs">
+                                        <Badge variant="outline" className="text-xs">
                                           +{doc.audience.length - 2}
                                         </Badge>
                                       )}
@@ -542,15 +536,15 @@ export default function DocsPage() {
                                 {/* Topics */}
                                 {doc.topics.length > 0 && (
                                   <div className="flex items-center gap-2">
-                                    <BookOpen className="h-4 w-4 text-gray-500" />
+                                    <BookOpen className="h-4 w-4 text-muted-foreground" />
                                     <div className="flex flex-wrap gap-1">
                                       {doc.topics.slice(0, 3).map((topic, idx) => (
-                                        <Badge key={idx} variant="outline" className="border-red-500/30 text-red-400/90 text-xs">
+                                        <Badge key={idx} variant="outline" className="border-red-500/30 text-red-600 dark:text-red-400 text-xs">
                                           {topic}
                                         </Badge>
                                       ))}
                                       {doc.topics.length > 3 && (
-                                        <Badge variant="outline" className="border-red-500/30 text-red-400/90 text-xs">
+                                        <Badge variant="outline" className="border-red-500/30 text-red-600 dark:text-red-400 text-xs">
                                           +{doc.topics.length - 3}
                                         </Badge>
                                       )}
@@ -559,9 +553,9 @@ export default function DocsPage() {
                                 )}
 
                                 {/* Last Updated */}
-                                <div className="text-xs text-gray-500 flex items-center gap-1">
+                                <div className="text-xs text-muted-foreground flex items-center gap-1">
                                   <span>Updated:</span>
-                                  <span className="text-gray-400">{doc.updated}</span>
+                                  <span>{doc.updated}</span>
                                 </div>
                               </div>
 
@@ -583,7 +577,7 @@ export default function DocsPage() {
                                   </Button>
                                 )}
                                 {doc.github_link && !doc.use_external_link && (
-                                  <Button asChild size="sm" variant="outline" className="border-white/20 hover:bg-white/10">
+                                  <Button asChild size="sm" variant="outline">
                                     <a href={doc.github_link} target="_blank" rel="noopener noreferrer">
                                       <Github className="mr-2 h-3 w-3" />
                                       GitHub
@@ -606,8 +600,8 @@ export default function DocsPage() {
           {!loading && !error && additionalResources.length > 0 && (
             <>
               <div className="mb-8">
-                <h2 className="text-3xl font-bold text-white mb-2">Additional Resources</h2>
-                <p className="text-gray-400">Supporting materials and supplementary documentation</p>
+                <h2 className="text-3xl font-bold mb-2">Additional Resources</h2>
+                <p className="text-muted-foreground">Supporting materials and supplementary documentation</p>
               </div>
 
               {/* Grid View */}
@@ -617,29 +611,29 @@ export default function DocsPage() {
                     const Icon = getBadgeIcon(doc.badge);
                     
                     return (
-                      <Card key={doc.id} className="bg-white/5 border-white/10 hover:bg-white/10 transition-all">
+                      <Card key={doc.id} className="hover:shadow-lg transition-all">
                         <CardHeader className="pb-3">
                           <div className="flex items-start gap-3">
-                            <div className="p-2 bg-white/5 rounded">
-                              <Icon className="h-5 w-5 text-gray-400" />
+                            <div className="p-2 bg-muted rounded">
+                              <Icon className="h-5 w-5 text-muted-foreground" />
                             </div>
                             <div className="flex-1">
-                              <CardTitle className="text-lg text-white mb-1">{doc.title}</CardTitle>
-                              <CardDescription className="text-sm text-gray-400">{doc.description}</CardDescription>
+                              <CardTitle className="text-lg mb-1">{doc.title}</CardTitle>
+                              <CardDescription className="text-sm">{doc.description}</CardDescription>
                             </div>
                           </div>
                         </CardHeader>
                         <CardContent>
                           <div className="flex gap-2">
                             {doc.use_external_link && doc.external_link ? (
-                              <Button asChild size="sm" variant="outline" className="flex-1 border-white/20 hover:bg-white/10">
+                              <Button asChild size="sm" variant="outline" className="flex-1">
                                 <a href={doc.external_link} target="_blank" rel="noopener noreferrer">
                                   <ExternalLink className="mr-2 h-3 w-3" />
                                   View on GitHub
                                 </a>
                               </Button>
                             ) : (
-                              <Button asChild size="sm" variant="outline" className="flex-1 border-white/20 hover:bg-white/10">
+                              <Button asChild size="sm" variant="outline" className="flex-1">
                                 <Link href={doc.link}>
                                   <Eye className="mr-2 h-3 w-3" />
                                   View
@@ -647,7 +641,7 @@ export default function DocsPage() {
                               </Button>
                             )}
                             {doc.github_link && !doc.use_external_link && (
-                              <Button asChild size="sm" variant="ghost" className="hover:bg-white/10">
+                              <Button asChild size="sm" variant="ghost">
                                 <a href={doc.github_link} target="_blank" rel="noopener noreferrer">
                                   <Github className="h-4 w-4" />
                                 </a>
@@ -668,31 +662,31 @@ export default function DocsPage() {
                     const Icon = getBadgeIcon(doc.badge);
                     
                     return (
-                      <Card key={doc.id} className="bg-white/5 border-white/10 hover:bg-white/10 transition-all">
+                      <Card key={doc.id} className="hover:shadow-lg transition-all">
                         <CardContent className="p-4">
                           <div className="flex items-center gap-4">
                             {/* Icon */}
-                            <div className="p-2 bg-white/5 rounded flex-shrink-0">
-                              <Icon className="h-5 w-5 text-gray-400" />
+                            <div className="p-2 bg-muted rounded flex-shrink-0">
+                              <Icon className="h-5 w-5 text-muted-foreground" />
                             </div>
 
                             {/* Content */}
                             <div className="flex-1 min-w-0">
-                              <h3 className="text-lg font-semibold text-white mb-1">{doc.title}</h3>
-                              <p className="text-sm text-gray-400">{doc.description}</p>
+                              <h3 className="text-lg font-semibold mb-1">{doc.title}</h3>
+                              <p className="text-sm text-muted-foreground">{doc.description}</p>
                             </div>
 
                             {/* Actions */}
                             <div className="flex gap-2 flex-shrink-0">
                               {doc.use_external_link && doc.external_link ? (
-                                <Button asChild size="sm" variant="outline" className="border-white/20 hover:bg-white/10">
+                                <Button asChild size="sm" variant="outline">
                                   <a href={doc.external_link} target="_blank" rel="noopener noreferrer">
                                     <ExternalLink className="mr-2 h-3 w-3" />
                                     View on GitHub
                                   </a>
                                 </Button>
                               ) : (
-                                <Button asChild size="sm" variant="outline" className="border-white/20 hover:bg-white/10">
+                                <Button asChild size="sm" variant="outline">
                                   <Link href={doc.link}>
                                     <Eye className="mr-2 h-3 w-3" />
                                     View
@@ -700,7 +694,7 @@ export default function DocsPage() {
                                 </Button>
                               )}
                               {doc.github_link && !doc.use_external_link && (
-                                <Button asChild size="sm" variant="ghost" className="hover:bg-white/10">
+                                <Button asChild size="sm" variant="ghost">
                                   <a href={doc.github_link} target="_blank" rel="noopener noreferrer">
                                     <Github className="h-4 w-4" />
                                   </a>
@@ -719,16 +713,16 @@ export default function DocsPage() {
         </div>
 
         {/* CTA Section */}
-        <section className="border-t border-white/10 bg-gradient-to-r from-red-900/20 to-black py-16">
+        <section className="border-t py-16 bg-gradient-to-r from-red-50 to-slate-50 dark:from-red-900/20 dark:to-black">
           <div className="container mx-auto px-4 sm:px-6">
-            <Card className="bg-white/5 border-white/10">
+            <Card>
               <CardContent className="p-8 md:p-12">
                 <div className="max-w-2xl mx-auto text-center">
                   <MessageSquare className="h-12 w-12 text-red-400 mx-auto mb-6" />
-                  <h2 className="text-3xl font-bold text-white mb-4">
+                  <h2 className="text-3xl font-bold mb-4">
                     Need Help or Have Questions?
                   </h2>
-                  <p className="text-gray-400 mb-8">
+                  <p className="text-muted-foreground mb-8">
                     Our team is here to help you get started with SHELTR. Get in touch for technical support, integration assistance, or partnership inquiries.
                   </p>
                   <form onSubmit={handleEmailSubmit} className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
@@ -738,7 +732,7 @@ export default function DocsPage() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
-                      className="flex-1 bg-white/10 border-white/20 text-white placeholder:text-gray-500"
+                      className="flex-1"
                     />
                     <Button type="submit" disabled={isSubmitting} className="bg-red-600 hover:bg-red-700">
                       {isSubmitting ? (
@@ -755,7 +749,7 @@ export default function DocsPage() {
                     </Button>
                   </form>
                   {submitMessage && (
-                    <p className="mt-4 text-sm text-center">{submitMessage}</p>
+                    <p className="mt-4 text-sm text-center text-muted-foreground">{submitMessage}</p>
                   )}
                 </div>
               </CardContent>

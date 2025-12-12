@@ -56,8 +56,8 @@ export default function DocsPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
   
-  // View Mode State (grid or list)
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  // View Mode State (grid or list) - Default to list
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('list');
   
   // Fetch hero image from gallery (or use fallback)
   const { heroImage } = useHeroImage('/docs', '/backgrounds/hero-bg.jpg');

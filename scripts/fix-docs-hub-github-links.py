@@ -31,6 +31,8 @@ def fix_github_links():
             'roadmap': 'docs/development/roadmap.md',
             'donor-guide': 'docs/user-guides/donor-guide.md',
             'participant-guide': 'docs/user-guides/participant-guide.md',
+            'blockchain': 'docs/architecture/technical/blockchain.md',
+            'tokenomics': 'docs/architecture/technical/tokenomics.md',
         }
         
         # Try multiple possible slugs for agent architecture

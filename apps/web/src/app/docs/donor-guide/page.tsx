@@ -4,6 +4,9 @@ import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { ThemeToggle } from '@/components/theme-toggle';
+import ThemeLogo from '@/components/ThemeLogo';
+import Footer from '@/components/Footer';
 import { 
   Heart, 
   QrCode, 
@@ -178,64 +181,74 @@ export default function DonorGuidePage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-50 to-pink-100 dark:from-gray-900 dark:to-gray-800">
-      {/* Header */}
-      <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <Link 
-            href="/docs" 
-            className="inline-flex items-center text-sm text-muted-foreground hover:text-primary mb-6 transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Documentation
-          </Link>
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="flex items-center space-x-3 mb-4">
-                <div className="p-2 bg-red-600 rounded-lg">
-                  <Heart className="h-6 w-6 text-white" />
-                </div>
-                <div>
-                  <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-                    Donor Guide
-                  </h1>
-                  <p className="text-gray-600 dark:text-gray-300">
-                    Your complete guide to making transparent, impactful donations with SHELTR
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center space-x-4">
-                <Badge variant="secondary" className="bg-green-100 text-green-800">
-                  <CheckCircle className="h-3 w-3 mr-1" />
-                  Latest Features
-                </Badge>
-                <Badge variant="secondary" className="bg-blue-100 text-blue-800">
-                  <Clock className="h-3 w-3 mr-1" />
-                  November 2025
-                </Badge>
-                <Badge variant="secondary" className="bg-purple-100 text-purple-800">
-                  <Star className="h-3 w-3 mr-1" />
-                  Beta Production Online
-                </Badge>
-
-              </div>
-            </div>
-            <div className="text-right">
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                Version 2.0 • Updated November 21, 2025
-              </p>
-              <Link href="/docs/user-journeys/donors/">
-                <Button variant="outline" className="border-red-600 text-red-600 hover:bg-red-600 hover:text-white">
-                  <BookOpen className="h-4 w-4 mr-2" />
-                  View User Journey
+    <div className="min-h-screen bg-background">
+      {/* Navigation */}
+      <nav className="bg-background/95 backdrop-blur-sm sticky top-0 z-50 border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <Link href="/" className="flex items-center">
+              <ThemeLogo />
+            </Link>
+            <div className="flex items-center space-x-4">
+              <Link href="/docs">
+                <Button variant="ghost" size="sm">
+                  <ArrowLeft className="h-4 w-4 mr-2" />
+                  Back to Docs
                 </Button>
               </Link>
+              <ThemeToggle />
             </div>
           </div>
         </div>
-      </div>
+      </nav>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Document Header */}
+      <section className="py-12 bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-900/20 dark:to-pink-900/20">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <Link 
+              href="/docs" 
+              className="inline-flex items-center text-sm text-muted-foreground hover:text-primary mb-6 transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Documentation
+            </Link>
+            <div className="flex items-start gap-4 mb-6">
+              <Heart className="h-12 w-12 text-red-600 mt-1" />
+              <div className="flex-1">
+                <div className="mb-3">
+                  <h1 className="text-3xl sm:text-4xl font-bold mb-2 leading-tight">Donor Guide</h1>
+                  <Badge className="bg-red-500 text-white text-sm">User Guide</Badge>
+                </div>
+                <p className="text-lg text-muted-foreground mb-3">
+                  Your complete guide to making transparent, impactful donations with SHELTR
+                </p>
+                <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground mb-4">
+                  <span>Version 2.0</span>
+                  <span>•</span>
+                  <span>Updated November 21, 2025</span>
+                  <span>•</span>
+                  <Badge className="bg-green-500 hover:bg-green-600 text-white text-xs">LIVE PLATFORM</Badge>
+                </div>
+                
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                  <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/user-guides/donor-guide.md" target="_blank" rel="noopener noreferrer">
+                    <Button variant="outline">
+                      <Download className="h-4 w-4 mr-2" />
+                      View on GitHub
+                    </Button>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Main Content */}
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
         {/* SmartFund™ Model */}
         <div className="mb-8">
           <Card className="bg-gradient-to-r from-blue-50 to-green-50 dark:from-blue-900/20 dark:to-green-900/20 border-blue-200 dark:border-blue-800">
@@ -876,7 +889,11 @@ export default function DonorGuidePage() {
             Clear fees for donors • Bank-level security • Instant impact
           </p>
         </div>
-      </div>
+          </div>
+        </div>
+      </section>
+
+      <Footer />
     </div>
   );
 }

@@ -111,16 +111,20 @@ export default function BlockchainPage() {
               <h2 className="text-3xl font-bold mb-6">Executive Summary</h2>
               <div className="prose prose-lg max-w-none dark:prose-invert">
                 <p>
-                  SHELTR implements a revolutionary <strong>single-token stable fund ecosystem</strong> that combines 
-                  traditional payment stability with blockchain transparency. Our architecture ensures <strong>zero participant risk</strong> 
-                  through virtual debit cards for 80% allocation, <strong>guaranteed 4-6% APY growth</strong> for 15% housing fund 
-                  via Coinbase institutional staking, and complete <strong>blockchain transparency</strong> through SHELTR Stablecoin tracking.
+                  SHELTR implements a revolutionary <strong>single-token stable fund ecosystem</strong> powered by the <strong>Shelter Ledger</strong> 
+                  - our blockchain-based public accountability system that tracks and traces every donation and every payout. 
+                  The <strong>SHELTR Utility Token</strong> serves a dual purpose: <strong>Track & Trace</strong> all transactions for complete transparency, 
+                  and manage the <strong>SmartFund™ investment vehicle</strong> with guaranteed 4-6% APY growth through Coinbase institutional staking.
                 </p>
                 <p>
+                  Our architecture ensures <strong>zero participant risk</strong> through virtual debit cards for 80% allocation, 
+                  while the 15% housing fund grows through institutional staking - all recorded on the immutable Shelter Ledger. 
                   Built on <strong>Base network</strong> for ultra-low fees (~$0.01) and enterprise-grade security, our smart contracts 
-                  implement <strong>OpenZeppelin standards</strong> with multi-signature governance and emergency pause capabilities. 
-                  The SHELTR Stablecoin serves exclusively as a <strong>housing fund tracking token</strong> with 1:1 USDT backing, 
-                  eliminating participant cryptocurrency exposure while maintaining complete donation transparency.
+                  implement <strong>OpenZeppelin standards</strong> with multi-signature governance and emergency pause capabilities.
+                </p>
+                <p>
+                  Every participant receives an <strong>automatic blockchain wallet</strong> upon registration, enabling real-time monitoring 
+                  of their housing fund balance, transaction history, and 4-6% APY growth - all without cryptocurrency complexity.
                 </p>
                 <div className="mt-6">
                   <a href="https://github.com/mrj0nesmtl/sheltr-ai/blob/main/docs/architecture/technical/blockchain.md" target="_blank" rel="noopener noreferrer">
@@ -130,6 +134,131 @@ export default function BlockchainPage() {
                     </Button>
                   </a>
                 </div>
+              </div>
+            </div>
+
+            {/* Shelter Ledger - NEW SECTION */}
+            <div className="mb-8">
+              <h2 className="text-3xl font-bold mb-6">The Shelter Ledger: Public Accountability System</h2>
+              <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-6 mb-6">
+                <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-3 text-lg">
+                  Every Donation Tracked. Every Payout Verified. Complete Transparency.
+                </h3>
+                <p className="text-blue-700 dark:text-blue-300 text-sm mb-4">
+                  The Shelter Ledger is SHELTR's blockchain-powered public accountability system. Unlike traditional charities 
+                  that provide annual reports, the Shelter Ledger offers real-time, immutable verification of all financial flows.
+                </p>
+              </div>
+
+              <div className="grid md:grid-cols-3 gap-6 mb-6">
+                <Card className="border-2 border-blue-500/20">
+                  <CardHeader>
+                    <CardTitle className="text-blue-600 text-lg">Track & Trace</CardTitle>
+                  </CardHeader>
+                  <CardContent className="text-sm">
+                    <ul className="space-y-2">
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="h-4 w-4 text-blue-500 mt-0.5" />
+                        <span>Every donation tracked from credit card to participant wallet</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="h-4 w-4 text-blue-500 mt-0.5" />
+                        <span>Every payout traced across 80/15/5 split</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="h-4 w-4 text-blue-500 mt-0.5" />
+                        <span>Real-time blockchain confirmation</span>
+                      </li>
+                    </ul>
+                  </CardContent>
+                </Card>
+
+                <Card className="border-2 border-purple-500/20">
+                  <CardHeader>
+                    <CardTitle className="text-purple-600 text-lg">Immutable Records</CardTitle>
+                  </CardHeader>
+                  <CardContent className="text-sm">
+                    <ul className="space-y-2">
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="h-4 w-4 text-purple-500 mt-0.5" />
+                        <span>Permanent blockchain storage on Base network</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="h-4 w-4 text-purple-500 mt-0.5" />
+                        <span>Cannot be altered or deleted</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="h-4 w-4 text-purple-500 mt-0.5" />
+                        <span>Complete historical audit trail</span>
+                      </li>
+                    </ul>
+                  </CardContent>
+                </Card>
+
+                <Card className="border-2 border-emerald-500/20">
+                  <CardHeader>
+                    <CardTitle className="text-emerald-600 text-lg">Public Access</CardTitle>
+                  </CardHeader>
+                  <CardContent className="text-sm">
+                    <ul className="space-y-2">
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="h-4 w-4 text-emerald-500 mt-0.5" />
+                        <span>Anyone can verify transactions</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="h-4 w-4 text-emerald-500 mt-0.5" />
+                        <span>Real-time auditing capability</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="h-4 w-4 text-emerald-500 mt-0.5" />
+                        <span>Crystal clear financial books</span>
+                      </li>
+                    </ul>
+                  </CardContent>
+                </Card>
+              </div>
+
+              <Card className="border-2 border-blue-500/20 bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-blue-900/20">
+                <CardHeader>
+                  <CardTitle>Participant Wallet Dashboard</CardTitle>
+                  <CardDescription>Automatic wallet creation upon registration for complete transparency</CardDescription>
+                </CardHeader>
+                <CardContent className="text-sm">
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div>
+                      <h4 className="font-semibold mb-2">Automatic Features:</h4>
+                      <ul className="space-y-1 text-muted-foreground">
+                        <li>• Unique blockchain address assigned</li>
+                        <li>• Real-time housing fund balance</li>
+                        <li>• Complete transaction history</li>
+                        <li>• 4-6% APY growth tracking</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold mb-2">Zero Complexity:</h4>
+                      <ul className="space-y-1 text-muted-foreground">
+                        <li>• No crypto knowledge required</li>
+                        <li>• Simple dashboard interface</li>
+                        <li>• Managed by platform</li>
+                        <li>• Enterprise-grade security</li>
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* SHELTR Utility Token - Dual Purpose */}
+            <div className="mb-8">
+              <h2 className="text-3xl font-bold mb-6">SHELTR Utility Token: Dual-Purpose Architecture</h2>
+              <div className="bg-gradient-to-r from-emerald-50 to-blue-50 dark:from-emerald-900/20 dark:to-blue-900/20 border border-emerald-200 dark:border-emerald-800 rounded-lg p-6 mb-6">
+                <h3 className="font-semibold text-emerald-800 dark:text-emerald-200 mb-3 text-lg">
+                  Primary: Track & Trace | Secondary: SmartFund™ Investment Vehicle
+                </h3>
+                <p className="text-emerald-700 dark:text-emerald-300 text-sm">
+                  The SHELTR token serves two critical functions: tracking every dollar for public accountability, 
+                  and managing the housing fund investment with guaranteed institutional returns.
+                </p>
               </div>
             </div>
 
@@ -195,11 +324,11 @@ export default function BlockchainPage() {
             <div className="mb-8">
               <h2 className="text-3xl font-bold mb-6">Single-Token Stable Architecture</h2>
               <div className="bg-muted/20 rounded-lg p-6 mb-6">
-                <h3 className="text-xl font-semibold mb-4 text-center">SHELTR Stablecoin (Housing Fund Tracking Only)</h3>
+                <h3 className="text-xl font-semibold mb-4 text-center">SHELTR Utility Token (Track & Trace + SmartFund™)</h3>
                 <div className="grid md:grid-cols-4 gap-4 text-center">
                   <div className="bg-emerald-50 dark:bg-emerald-900/20 p-4 rounded-lg">
                     <div className="text-lg font-bold text-emerald-600">Purpose</div>
-                    <div className="text-sm text-muted-foreground">Housing fund tracking, transparency, yield</div>
+                    <div className="text-sm text-muted-foreground">Track & trace + SmartFund™ management</div>
                   </div>
                   <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
                     <div className="text-lg font-bold text-blue-600">Network</div>
@@ -217,15 +346,15 @@ export default function BlockchainPage() {
                 <div className="mt-6 grid md:grid-cols-3 gap-4 text-center">
                   <div className="bg-gray-50 dark:bg-gray-900/20 p-4 rounded-lg">
                     <div className="text-lg font-bold text-gray-600">Volatility</div>
-                    <div className="text-sm text-muted-foreground">0% (Stable)</div>
+                    <div className="text-sm text-muted-foreground">0% (USDT-pegged)</div>
                   </div>
                   <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
                     <div className="text-lg font-bold text-green-600">Yield</div>
-                    <div className="text-sm text-muted-foreground">4-6% APY</div>
+                    <div className="text-sm text-muted-foreground">4-6% APY (SmartFund™)</div>
                   </div>
-                  <div className="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg">
-                    <div className="text-lg font-bold text-red-600">Purpose</div>
-                    <div className="text-sm text-muted-foreground">Housing fund only</div>
+                  <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+                    <div className="text-lg font-bold text-blue-600">Transparency</div>
+                    <div className="text-sm text-muted-foreground">Shelter Ledger tracking</div>
                   </div>
                 </div>
               </div>

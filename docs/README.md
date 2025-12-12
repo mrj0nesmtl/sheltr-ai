@@ -8,7 +8,7 @@
 [![Docs](https://img.shields.io/badge/docs-up%20to%20date-brightgreen.svg)]()
 [![Platform](https://img.shields.io/badge/platform-live-success.svg)](https://sheltr-ai.web.app)
 
-**Last Updated**: November 22, 2025
+**Last Updated**: December 11, 2025
 
 ---
 
@@ -23,7 +23,7 @@
 | 🧪 **QA Engineers** | [QA Testing](#-qa-testing) | Testing Guides, Business Logic Tests |
 | 🚀 **DevOps** | [Operations](#️-operations) | Deployment, Monitoring, Security |
 | 👥 **End Users** | [User Guides](#-user-guides) | Role-specific tutorials and journeys |
-| 💰 **Investors** | [Overview](#-overview) | Platform Overview, Roadmap, IR Data Room |
+| ✍️ **Stakeholders** | [Overview](#-overview) | Platform Overview, Roadmap, IR Data Room |
 
 ---
 
@@ -428,9 +428,9 @@ Archived documentation and session logs:
 ---
 
 **Version**: 3.1.0 - Documentation & UX Polish Complete  
-**Last Updated**: November 22, 2025  
-**Status**: ✅ Production Ready  
-**Next Update**: December 1, 2025
+**Last Updated**: December 11, 2025  
+**Status**: ✅ BETA ONLINE  
+**Next Update**: December 30, 2025
 
 ---
 

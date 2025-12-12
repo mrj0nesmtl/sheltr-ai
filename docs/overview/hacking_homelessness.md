@@ -11,19 +11,19 @@ SHELTR was born from a simple but powerful realization: **"It's better to solve 
 
 This journey into tech-for-good wasn't born in a boardroom—it emerged from witnessing the disconnect between charitable intentions and measurable impact. Too often, well-meaning donations disappeared into administrative overhead, leaving both donors frustrated and those in need still struggling.
 
-SHELTR represents more than a platform—we're building a **complete QR-Scan-to-POD ecosystem** powered by the Shelter Ledger dual-purpose blockchain. Our revolutionary POD Model A housing units, Basecamp community infrastructure, and future drone delivery systems (2027) transform donations into tangible assets. The **Shelter Ledger** provides immutable track & trace for every dollar while enabling SmartFund™ investment growth, proving that blockchain transparency and social innovation can create lasting, structural change.
+SHELTR represents more than a platform—we're building a **complete ecosystem** powered by the Shelter Ledger dual-purpose blockchain. Disruptive POD micro housing units, Basecamp community infrastructure, and future drone delivery systems (2027) transform donations into tangible assets. The **Shelter Ledger** provides immutable track & trace for every dollar while enabling SmartFund™ investment growth, proving that blockchain transparency and social innovation can create lasting, structural change.
 
-Our revolutionary **SmartFund™ distribution model** ensures 80% of donations reach participants through virtual debit cards with zero cryptocurrency exposure, 15% builds POD Model A housing units tracked by the **Shelter Ledger with guaranteed 4-6% APY institutional staking**, and 5% supports the participant's registered shelter operations. The **Shelter Ledger dual-purpose token** provides immutable donation tracking AND SmartFund™ investment transparency, eliminating participant risk while maintaining complete public accountability.
+Our **SmartFund™ distribution model** ensures 80% donations reach participants through virtual debit cards with zero cryptocurrency exposure, 15% allocated towards funding micro housing units intelligently deployed by the **Shelter Ledger**, and 5% supports the participant's registered shelter operations. The **Shelter Ledger dual-purpose token** provides immutable donation tracking AND the SmartFund™ a projected 4-6% APY institutional staking return for investment transparency, eliminating participant risk while maintaining complete public accountability.
 
-**The QR-Scan-to-POD Ecosystem** transforms donations into tangible infrastructure:
-- **POD Model A**: Single-SKU modular housing solution with climate control and security
-- **Basecamp Infrastructure**: Community resource centers providing 24/7 support services
-- **Shelter Ledger**: Dual-purpose blockchain for public track & trace + SmartFund™ transparency
+**The Scan-to-POD Ecosystem** transforms donations into tangible infrastructure:
 - **QR-Scan System**: Instant donation-to-impact verification and virtual card loading
-- **Drone Network (2027)**: Future rapid delivery of essential supplies and emergency services
 - **Enterprise Payment Infrastructure**: Zero-risk virtual debit cards with global acceptance
+- **Shelter Ledger**: Dual-purpose blockchain for public track & trace + SmartFund™ transparency
+- **The POD - Model A**: Single-SKU modular housing solution with climate control and security
+- **Basecamp Infrastructure**: Community resource centers providing 24/7 support services
+- **Drone Network (2027)**: Future rapid delivery of essential supplies and emergency services
 
-We're not just building software—we're **"hacking homelessness"** through our ScanQR-Scan-to-POD system where every donation is tracked by the Shelter Ledger, transforming digital contributions into POD Model A housing units and Basecamp community infrastructure. The Shelter Ledger's dual-purpose architecture provides public accountability through immutable track & trace while enabling SmartFund™ investment growth, merging blockchain transparency with compassionate action for sustainable, structural change.
+We're not just building software—we're **"hacking homelessness"** through a system where every donation is tracked by the Shelter Ledger, transforming digital contributions into POD micro housing units and Basecamp community infrastructure. The Shelter Ledger's dual-purpose architecture provides public accountability through immutable track & trace while enabling SmartFund™ investment growth, merging blockchain transparency with compassionate action for sustainable, structural change.
 
 This document provides a comprehensive overview of our mission, technology, and impact framework. We're always interested in partnerships with organizations, influencers, and community leaders who share our vision of moving the platform and shelter framework forward into the future.
 
@@ -146,7 +146,7 @@ graph TD
 interface InfrastructureFundAllocation {
   podModelA: {
     percentage: 60,
-    unitCost: 15000, // USD per POD Model A unit
+    unitCost: 7500, // USD per POD Model A unit
     capacity: 'Single-SKU modular housing',
     features: 'Climate control, security, mobility, solar power, standardized design',
     shelterLedgerTracking: 'Every POD deployment publicly verified'
@@ -202,7 +202,7 @@ interface InfrastructureFundAllocation {
 
 ---
 
-## 🏗️ The QR-Scan-to-POD Ecosystem: Complete Infrastructure Solutions
+## QR-Donation Ecosystem: Complete Infrastructure Solutions
 
 ### Comprehensive Product Line
 
@@ -502,7 +502,7 @@ function processDonation(address donor, address participant, uint256 amount, byt
 
 ## 🚀 Implementation Roadmap: Path to Global Impact
 
-### Phase 1: Foundation (December 2025) - QR-Scan-to-POD Launch ✅
+### Phase 1: Foundation (December 2025) - QR-Scan-to-POD Beta Launch ✅
 
 **Technical Deliverables**:
 - ✅ Complete platform architecture with QR-Scan system
@@ -520,7 +520,7 @@ function processDonation(address donor, address participant, uint256 amount, byt
 - ✅ Fabrication pipeline strategy for POD Model A manufacturing
 - ✅ Strategic partnerships framework with shelter organizations
 
-### Phase 2: Manufacturing Launch (Q1-Q2 2025) - POD Model A & Shelter Ledger Deployment
+### Phase 2: Manufacturing Launch (Q1-Q2 2026) - POD Model A & Shelter Ledger Deployment
 
 **Manufacturing Deliverables**:
 - POD Model A prototype completion and testing (single-SKU design)
@@ -560,7 +560,7 @@ function processDonation(address donor, address participant, uint256 amount, byt
 - $600,000 monthly donation volume with $90,000 monthly to POD manufacturing
 - 200+ manufacturing and deployment jobs created
 
-### Phase 4: Global Expansion (2026+) - QR-Scan-to-POD Global Replication
+### Phase 4: Global Expansion (2027+) - QR-Scan-to-POD Global Replication
 
 **International Infrastructure Scaling**:
 - Regional fabrication facilities in major international markets for POD Model A
@@ -696,7 +696,7 @@ We are not just building a platform; we are creating a complete QR-Scan-to-POD e
 
 <div align="center">
 
-**🏠 SHELTR: Building a Better Future Through Technology 🚀**
+**SHELTR: Tech-for-Good**
 
 [Platform Overview](https://sheltr-ai.web.app) • [Technical Documentation](https://sheltr-ai.web.app/docs) • [GitHub Repository](https://github.com/mrj0nesmtl/sheltr-ai) • [Community](https://bsky.app/profile/sheltrops.bsky.social)
 

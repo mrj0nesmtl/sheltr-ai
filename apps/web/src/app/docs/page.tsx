@@ -28,7 +28,9 @@ import {
   X,
   Filter,
   Loader2,
-  AlertCircle
+  AlertCircle,
+  LayoutGrid,
+  List
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -53,6 +55,9 @@ export default function DocsPage() {
   // Category and Search State
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
+  
+  // View Mode State (grid or list)
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   
   // Fetch hero image from gallery (or use fallback)
   const { heroImage } = useHeroImage('/docs', '/backgrounds/hero-bg.jpg');
@@ -231,32 +236,66 @@ export default function DocsPage() {
                 )}
               </div>
 
-              {/* Category Tabs */}
-              <div className="flex flex-wrap gap-2">
-                {categories.map((category) => {
-                  const Icon = category.icon;
-                  const isActive = selectedCategory === category.id;
-                  
-                  return (
-                    <button
-                      key={category.id}
-                      onClick={() => setSelectedCategory(category.id)}
-                      className={`
-                        flex items-center gap-2 px-4 py-2 rounded-lg border transition-all
-                        ${isActive 
-                          ? 'bg-red-600 border-red-500 text-white' 
-                          : 'bg-white/5 border-white/10 text-gray-300 hover:bg-white/10'
-                        }
-                      `}
-                    >
-                      <Icon className="h-4 w-4" />
-                      <span className="font-medium">{category.name}</span>
-                      <Badge variant="outline" className={`ml-1 ${isActive ? 'border-white/30' : 'border-white/20'}`}>
-                        {category.count}
-                      </Badge>
-                    </button>
-                  );
-                })}
+              <div className="flex items-center gap-4">
+                {/* View Mode Toggle (Desktop Only) */}
+                <div className="hidden lg:flex items-center gap-1 bg-white/5 border border-white/10 rounded-lg p-1">
+                  <button
+                    onClick={() => setViewMode('grid')}
+                    className={`
+                      flex items-center gap-2 px-3 py-1.5 rounded transition-all
+                      ${viewMode === 'grid' 
+                        ? 'bg-red-600 text-white' 
+                        : 'text-gray-400 hover:text-white'
+                      }
+                    `}
+                    title="Grid View"
+                  >
+                    <LayoutGrid className="h-4 w-4" />
+                    <span className="text-sm font-medium">Grid</span>
+                  </button>
+                  <button
+                    onClick={() => setViewMode('list')}
+                    className={`
+                      flex items-center gap-2 px-3 py-1.5 rounded transition-all
+                      ${viewMode === 'list' 
+                        ? 'bg-red-600 text-white' 
+                        : 'text-gray-400 hover:text-white'
+                      }
+                    `}
+                    title="List View"
+                  >
+                    <List className="h-4 w-4" />
+                    <span className="text-sm font-medium">List</span>
+                  </button>
+                </div>
+
+                {/* Category Tabs */}
+                <div className="flex flex-wrap gap-2">
+                  {categories.map((category) => {
+                    const Icon = category.icon;
+                    const isActive = selectedCategory === category.id;
+                    
+                    return (
+                      <button
+                        key={category.id}
+                        onClick={() => setSelectedCategory(category.id)}
+                        className={`
+                          flex items-center gap-2 px-4 py-2 rounded-lg border transition-all
+                          ${isActive 
+                            ? 'bg-red-600 border-red-500 text-white' 
+                            : 'bg-white/5 border-white/10 text-gray-300 hover:bg-white/10'
+                          }
+                        `}
+                      >
+                        <Icon className="h-4 w-4" />
+                        <span className="font-medium">{category.name}</span>
+                        <Badge variant="outline" className={`ml-1 ${isActive ? 'border-white/30' : 'border-white/20'}`}>
+                          {category.count}
+                        </Badge>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             </div>
 
@@ -343,108 +382,223 @@ export default function DocsPage() {
                 <p className="text-gray-400">Essential guides and primary platform documentation</p>
               </div>
 
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-                {coreDocuments.map((doc) => {
-                  const Icon = getBadgeIcon(doc.badge);
-                  
-                  return (
-                    <Card key={doc.id} className="bg-white/5 border-white/10 hover:bg-white/10 transition-all group">
-                      <CardHeader>
-                        <div className="flex items-start justify-between mb-4">
-                          <div className="p-3 bg-red-600/20 rounded-lg group-hover:bg-red-600/30 transition-colors">
-                            <Icon className="h-6 w-6 text-red-400" />
+              {/* Grid View */}
+              {viewMode === 'grid' && (
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+                  {coreDocuments.map((doc) => {
+                    const Icon = getBadgeIcon(doc.badge);
+                    
+                    return (
+                      <Card key={doc.id} className="bg-white/5 border-white/10 hover:bg-white/10 transition-all group">
+                        <CardHeader>
+                          <div className="flex items-start justify-between mb-4">
+                            <div className="p-3 bg-red-600/20 rounded-lg group-hover:bg-red-600/30 transition-colors">
+                              <Icon className="h-6 w-6 text-red-400" />
+                            </div>
+                            <Badge variant="outline" className={`${getBadgeColor(doc.badge)} text-xs px-2 py-1`}>
+                              {doc.badge}
+                            </Badge>
                           </div>
-                          <Badge variant="outline" className={`${getBadgeColor(doc.badge)} text-xs px-2 py-1`}>
-                            {doc.badge}
-                          </Badge>
-                        </div>
-                        <CardTitle className="text-xl text-white mb-2">{doc.title}</CardTitle>
-                        <CardDescription className="text-gray-400 text-sm leading-relaxed">
-                          {doc.description}
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent className="space-y-4">
-                        {/* Audience */}
-                        {doc.audience.length > 0 && (
-                          <div>
-                            <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
-                              <Users className="h-3 w-3" />
-                              <span>Target Audience</span>
+                          <CardTitle className="text-xl text-white mb-2">{doc.title}</CardTitle>
+                          <CardDescription className="text-gray-400 text-sm leading-relaxed">
+                            {doc.description}
+                          </CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                          {/* Audience */}
+                          {doc.audience.length > 0 && (
+                            <div>
+                              <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
+                                <Users className="h-3 w-3" />
+                                <span>Target Audience</span>
+                              </div>
+                              <div className="flex flex-wrap gap-1">
+                                {doc.audience.slice(0, 3).map((aud, idx) => (
+                                  <Badge key={idx} variant="outline" className="border-white/20 text-white/70 text-xs">
+                                    {aud}
+                                  </Badge>
+                                ))}
+                                {doc.audience.length > 3 && (
+                                  <Badge variant="outline" className="border-white/20 text-white/70 text-xs">
+                                    +{doc.audience.length - 3}
+                                  </Badge>
+                                )}
+                              </div>
                             </div>
-                            <div className="flex flex-wrap gap-1">
-                              {doc.audience.slice(0, 3).map((aud, idx) => (
-                                <Badge key={idx} variant="outline" className="border-white/20 text-white/70 text-xs">
-                                  {aud}
-                                </Badge>
-                              ))}
-                              {doc.audience.length > 3 && (
-                                <Badge variant="outline" className="border-white/20 text-white/70 text-xs">
-                                  +{doc.audience.length - 3}
-                                </Badge>
-                              )}
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Topics */}
-                        {doc.topics.length > 0 && (
-                          <div>
-                            <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
-                              <BookOpen className="h-3 w-3" />
-                              <span>Key Topics</span>
-                            </div>
-                            <div className="flex flex-wrap gap-1">
-                              {doc.topics.slice(0, 3).map((topic, idx) => (
-                                <Badge key={idx} variant="outline" className="border-red-500/30 text-red-400/90 text-xs">
-                                  {topic}
-                                </Badge>
-                              ))}
-                              {doc.topics.length > 3 && (
-                                <Badge variant="outline" className="border-red-500/30 text-red-400/90 text-xs">
-                                  +{doc.topics.length - 3}
-                                </Badge>
-                              )}
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Actions */}
-                        <div className="flex gap-2 pt-2 border-t border-white/10">
-                          {/* Use external link if configured, otherwise use internal link */}
-                          {doc.use_external_link && doc.external_link ? (
-                            <Button asChild className="flex-1 bg-red-600 hover:bg-red-700">
-                              <a href={doc.external_link} target="_blank" rel="noopener noreferrer">
-                                <ExternalLink className="mr-2 h-4 w-4" />
-                                View on GitHub
-                              </a>
-                            </Button>
-                          ) : (
-                            <Button asChild className="flex-1 bg-red-600 hover:bg-red-700">
-                              <Link href={doc.link}>
-                                <Eye className="mr-2 h-4 w-4" />
-                                View Online
-                              </Link>
-                            </Button>
                           )}
-                          {doc.github_link && !doc.use_external_link && (
-                            <Button asChild variant="outline" className="border-white/20 hover:bg-white/10" size="icon">
-                              <a href={doc.github_link} target="_blank" rel="noopener noreferrer">
-                                <Github className="h-4 w-4" />
-                              </a>
-                            </Button>
-                          )}
-                        </div>
 
-                        {/* Last Updated */}
-                        <div className="text-xs text-gray-500 flex items-center gap-1">
-                          <span>Last updated:</span>
-                          <span className="text-gray-400">{doc.updated}</span>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  );
-                })}
-              </div>
+                          {/* Topics */}
+                          {doc.topics.length > 0 && (
+                            <div>
+                              <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
+                                <BookOpen className="h-3 w-3" />
+                                <span>Key Topics</span>
+                              </div>
+                              <div className="flex flex-wrap gap-1">
+                                {doc.topics.slice(0, 3).map((topic, idx) => (
+                                  <Badge key={idx} variant="outline" className="border-red-500/30 text-red-400/90 text-xs">
+                                    {topic}
+                                  </Badge>
+                                ))}
+                                {doc.topics.length > 3 && (
+                                  <Badge variant="outline" className="border-red-500/30 text-red-400/90 text-xs">
+                                    +{doc.topics.length - 3}
+                                  </Badge>
+                                )}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Actions */}
+                          <div className="flex gap-2 pt-2 border-t border-white/10">
+                            {doc.use_external_link && doc.external_link ? (
+                              <Button asChild className="flex-1 bg-red-600 hover:bg-red-700">
+                                <a href={doc.external_link} target="_blank" rel="noopener noreferrer">
+                                  <ExternalLink className="mr-2 h-4 w-4" />
+                                  View on GitHub
+                                </a>
+                              </Button>
+                            ) : (
+                              <Button asChild className="flex-1 bg-red-600 hover:bg-red-700">
+                                <Link href={doc.link}>
+                                  <Eye className="mr-2 h-4 w-4" />
+                                  View Online
+                                </Link>
+                              </Button>
+                            )}
+                            {doc.github_link && !doc.use_external_link && (
+                              <Button asChild variant="outline" className="border-white/20 hover:bg-white/10" size="icon">
+                                <a href={doc.github_link} target="_blank" rel="noopener noreferrer">
+                                  <Github className="h-4 w-4" />
+                                </a>
+                              </Button>
+                            )}
+                          </div>
+
+                          {/* Last Updated */}
+                          <div className="text-xs text-gray-500 flex items-center gap-1">
+                            <span>Last updated:</span>
+                            <span className="text-gray-400">{doc.updated}</span>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    );
+                  })}
+                </div>
+              )}
+
+              {/* List View */}
+              {viewMode === 'list' && (
+                <div className="space-y-4 mb-16">
+                  {coreDocuments.map((doc) => {
+                    const Icon = getBadgeIcon(doc.badge);
+                    
+                    return (
+                      <Card key={doc.id} className="bg-white/5 border-white/10 hover:bg-white/10 transition-all">
+                        <CardContent className="p-6">
+                          <div className="flex items-start gap-6">
+                            {/* Icon */}
+                            <div className="p-3 bg-red-600/20 rounded-lg flex-shrink-0">
+                              <Icon className="h-6 w-6 text-red-400" />
+                            </div>
+
+                            {/* Content */}
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-start justify-between gap-4 mb-3">
+                                <div className="flex-1">
+                                  <div className="flex items-center gap-3 mb-2">
+                                    <h3 className="text-xl font-bold text-white">{doc.title}</h3>
+                                    <Badge variant="outline" className={`${getBadgeColor(doc.badge)} text-xs px-2 py-1 flex-shrink-0`}>
+                                      {doc.badge}
+                                    </Badge>
+                                  </div>
+                                  <p className="text-gray-400 text-sm leading-relaxed mb-4">
+                                    {doc.description}
+                                  </p>
+                                </div>
+                              </div>
+
+                              {/* Meta Information */}
+                              <div className="flex flex-wrap items-center gap-6 mb-4">
+                                {/* Audience */}
+                                {doc.audience.length > 0 && (
+                                  <div className="flex items-center gap-2">
+                                    <Users className="h-4 w-4 text-gray-500" />
+                                    <div className="flex flex-wrap gap-1">
+                                      {doc.audience.slice(0, 2).map((aud, idx) => (
+                                        <Badge key={idx} variant="outline" className="border-white/20 text-white/70 text-xs">
+                                          {aud}
+                                        </Badge>
+                                      ))}
+                                      {doc.audience.length > 2 && (
+                                        <Badge variant="outline" className="border-white/20 text-white/70 text-xs">
+                                          +{doc.audience.length - 2}
+                                        </Badge>
+                                      )}
+                                    </div>
+                                  </div>
+                                )}
+
+                                {/* Topics */}
+                                {doc.topics.length > 0 && (
+                                  <div className="flex items-center gap-2">
+                                    <BookOpen className="h-4 w-4 text-gray-500" />
+                                    <div className="flex flex-wrap gap-1">
+                                      {doc.topics.slice(0, 3).map((topic, idx) => (
+                                        <Badge key={idx} variant="outline" className="border-red-500/30 text-red-400/90 text-xs">
+                                          {topic}
+                                        </Badge>
+                                      ))}
+                                      {doc.topics.length > 3 && (
+                                        <Badge variant="outline" className="border-red-500/30 text-red-400/90 text-xs">
+                                          +{doc.topics.length - 3}
+                                        </Badge>
+                                      )}
+                                    </div>
+                                  </div>
+                                )}
+
+                                {/* Last Updated */}
+                                <div className="text-xs text-gray-500 flex items-center gap-1">
+                                  <span>Updated:</span>
+                                  <span className="text-gray-400">{doc.updated}</span>
+                                </div>
+                              </div>
+
+                              {/* Actions */}
+                              <div className="flex gap-2">
+                                {doc.use_external_link && doc.external_link ? (
+                                  <Button asChild size="sm" className="bg-red-600 hover:bg-red-700">
+                                    <a href={doc.external_link} target="_blank" rel="noopener noreferrer">
+                                      <ExternalLink className="mr-2 h-3 w-3" />
+                                      View on GitHub
+                                    </a>
+                                  </Button>
+                                ) : (
+                                  <Button asChild size="sm" className="bg-red-600 hover:bg-red-700">
+                                    <Link href={doc.link}>
+                                      <Eye className="mr-2 h-3 w-3" />
+                                      View Online
+                                    </Link>
+                                  </Button>
+                                )}
+                                {doc.github_link && !doc.use_external_link && (
+                                  <Button asChild size="sm" variant="outline" className="border-white/20 hover:bg-white/10">
+                                    <a href={doc.github_link} target="_blank" rel="noopener noreferrer">
+                                      <Github className="mr-2 h-3 w-3" />
+                                      GitHub
+                                    </a>
+                                  </Button>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    );
+                  })}
+                </div>
+              )}
             </>
           )}
 
@@ -456,54 +610,110 @@ export default function DocsPage() {
                 <p className="text-gray-400">Supporting materials and supplementary documentation</p>
               </div>
 
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {additionalResources.map((doc) => {
-                  const Icon = getBadgeIcon(doc.badge);
-                  
-                  return (
-                    <Card key={doc.id} className="bg-white/5 border-white/10 hover:bg-white/10 transition-all">
-                      <CardHeader className="pb-3">
-                        <div className="flex items-start gap-3">
-                          <div className="p-2 bg-white/5 rounded">
-                            <Icon className="h-5 w-5 text-gray-400" />
+              {/* Grid View */}
+              {viewMode === 'grid' && (
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {additionalResources.map((doc) => {
+                    const Icon = getBadgeIcon(doc.badge);
+                    
+                    return (
+                      <Card key={doc.id} className="bg-white/5 border-white/10 hover:bg-white/10 transition-all">
+                        <CardHeader className="pb-3">
+                          <div className="flex items-start gap-3">
+                            <div className="p-2 bg-white/5 rounded">
+                              <Icon className="h-5 w-5 text-gray-400" />
+                            </div>
+                            <div className="flex-1">
+                              <CardTitle className="text-lg text-white mb-1">{doc.title}</CardTitle>
+                              <CardDescription className="text-sm text-gray-400">{doc.description}</CardDescription>
+                            </div>
                           </div>
-                          <div className="flex-1">
-                            <CardTitle className="text-lg text-white mb-1">{doc.title}</CardTitle>
-                            <CardDescription className="text-sm text-gray-400">{doc.description}</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="flex gap-2">
+                            {doc.use_external_link && doc.external_link ? (
+                              <Button asChild size="sm" variant="outline" className="flex-1 border-white/20 hover:bg-white/10">
+                                <a href={doc.external_link} target="_blank" rel="noopener noreferrer">
+                                  <ExternalLink className="mr-2 h-3 w-3" />
+                                  View on GitHub
+                                </a>
+                              </Button>
+                            ) : (
+                              <Button asChild size="sm" variant="outline" className="flex-1 border-white/20 hover:bg-white/10">
+                                <Link href={doc.link}>
+                                  <Eye className="mr-2 h-3 w-3" />
+                                  View
+                                </Link>
+                              </Button>
+                            )}
+                            {doc.github_link && !doc.use_external_link && (
+                              <Button asChild size="sm" variant="ghost" className="hover:bg-white/10">
+                                <a href={doc.github_link} target="_blank" rel="noopener noreferrer">
+                                  <Github className="h-4 w-4" />
+                                </a>
+                              </Button>
+                            )}
                           </div>
-                        </div>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="flex gap-2">
-                          {/* Use external link if configured, otherwise use internal link */}
-                          {doc.use_external_link && doc.external_link ? (
-                            <Button asChild size="sm" variant="outline" className="flex-1 border-white/20 hover:bg-white/10">
-                              <a href={doc.external_link} target="_blank" rel="noopener noreferrer">
-                                <ExternalLink className="mr-2 h-3 w-3" />
-                                View on GitHub
-                              </a>
-                            </Button>
-                          ) : (
-                            <Button asChild size="sm" variant="outline" className="flex-1 border-white/20 hover:bg-white/10">
-                              <Link href={doc.link}>
-                                <Eye className="mr-2 h-3 w-3" />
-                                View
-                              </Link>
-                            </Button>
-                          )}
-                          {doc.github_link && !doc.use_external_link && (
-                            <Button asChild size="sm" variant="ghost" className="hover:bg-white/10">
-                              <a href={doc.github_link} target="_blank" rel="noopener noreferrer">
-                                <Github className="h-4 w-4" />
-                              </a>
-                            </Button>
-                          )}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  );
-                })}
-              </div>
+                        </CardContent>
+                      </Card>
+                    );
+                  })}
+                </div>
+              )}
+
+              {/* List View */}
+              {viewMode === 'list' && (
+                <div className="space-y-3">
+                  {additionalResources.map((doc) => {
+                    const Icon = getBadgeIcon(doc.badge);
+                    
+                    return (
+                      <Card key={doc.id} className="bg-white/5 border-white/10 hover:bg-white/10 transition-all">
+                        <CardContent className="p-4">
+                          <div className="flex items-center gap-4">
+                            {/* Icon */}
+                            <div className="p-2 bg-white/5 rounded flex-shrink-0">
+                              <Icon className="h-5 w-5 text-gray-400" />
+                            </div>
+
+                            {/* Content */}
+                            <div className="flex-1 min-w-0">
+                              <h3 className="text-lg font-semibold text-white mb-1">{doc.title}</h3>
+                              <p className="text-sm text-gray-400">{doc.description}</p>
+                            </div>
+
+                            {/* Actions */}
+                            <div className="flex gap-2 flex-shrink-0">
+                              {doc.use_external_link && doc.external_link ? (
+                                <Button asChild size="sm" variant="outline" className="border-white/20 hover:bg-white/10">
+                                  <a href={doc.external_link} target="_blank" rel="noopener noreferrer">
+                                    <ExternalLink className="mr-2 h-3 w-3" />
+                                    View on GitHub
+                                  </a>
+                                </Button>
+                              ) : (
+                                <Button asChild size="sm" variant="outline" className="border-white/20 hover:bg-white/10">
+                                  <Link href={doc.link}>
+                                    <Eye className="mr-2 h-3 w-3" />
+                                    View
+                                  </Link>
+                                </Button>
+                              )}
+                              {doc.github_link && !doc.use_external_link && (
+                                <Button asChild size="sm" variant="ghost" className="hover:bg-white/10">
+                                  <a href={doc.github_link} target="_blank" rel="noopener noreferrer">
+                                    <Github className="h-4 w-4" />
+                                  </a>
+                                </Button>
+                              )}
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    );
+                  })}
+                </div>
+              )}
             </>
           )}
         </div>

@@ -1,16 +1,30 @@
-# Base Stable Coin Implementation Guide
-*Utility Token Stable Fund Technical Implementation*
+# SHELTR Utility Token Implementation Guide
+*Dual-Purpose Architecture: Shelter Ledger Track & Trace + SmartFund™ Investment Vehicle*
 
-**Document Version**: 2.0.0  
-**Last Updated**: September 26, 2025  
+**Document Version**: 3.0.0  
+**Last Updated**: December 12, 2025  
 **Status**: Technical Specification  
-**Architecture**: Based on DK's Strategic Recommendations
+**Architecture**: Shelter Ledger Public Accountability System
 
 ---
 
 ## 🎯 **Implementation Overview**
 
-This guide provides the technical implementation details for SHELTR's revolutionary Single-Token Stable Fund architecture, integrating Adyen payment rails with Coinbase Base blockchain infrastructure.
+This guide provides the technical implementation details for SHELTR's revolutionary **dual-purpose utility token architecture**, integrating the Shelter Ledger public accountability system with enterprise payment rails (Adyen) and Coinbase Base blockchain infrastructure.
+
+### **Dual-Purpose Architecture**
+
+**PRIMARY PURPOSE: Shelter Ledger - Track & Trace Every Dollar**
+- Immutable record of every donation received
+- Complete transparency of all fund distributions
+- Public access for anyone to verify transactions
+- Automatic participant wallet creation upon registration
+
+**SECONDARY PURPOSE: SmartFund™ Investment Vehicle**
+- 15% of donations allocated to participant housing fund
+- Guaranteed 4-6% APY through Coinbase institutional staking
+- Zero cryptocurrency exposure for participants
+- Real-time balance monitoring via dashboard
 
 ---
 
@@ -184,9 +198,9 @@ class AdyenIssuingService:
 
 ### **2. Coinbase Base Integration**
 
-#### **A. SHELTR Stablecoin Contract**
+#### **A. SHELTR Utility Token Contract (Dual-Purpose)**
 ```solidity
-// contracts/SHELTRStablecoin.sol
+// contracts/SHELTRUtilityToken.sol
 pragma solidity ^0.8.19;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
@@ -194,7 +208,12 @@ import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
-contract SHELTRStablecoin is ERC20, Pausable, AccessControl, ReentrancyGuard {
+/**
+ * @title SHELTR Utility Token
+ * @notice Dual-purpose token for Shelter Ledger transparency and SmartFund™ housing investment
+ * @dev Primary: Track & Trace all donations and payouts | Secondary: Housing fund with 4-6% APY
+ */
+contract SHELTRUtilityToken is ERC20, Pausable, AccessControl, ReentrancyGuard {
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     bytes32 public constant STAKER_ROLE = keccak256("STAKER_ROLE");
     
@@ -205,19 +224,56 @@ contract SHELTRStablecoin is ERC20, Pausable, AccessControl, ReentrancyGuard {
     address public coinbaseStakingPool;
     uint256 public targetAPY = 500; // 5.00% (basis points)
     
-    // Housing fund tracking
+    // Housing fund tracking (Secondary Purpose)
     mapping(address => uint256) public participantHousingFunds;
     uint256 public totalHousingFund;
     uint256 public totalStakedAmount;
     
+    // Shelter Ledger: Track & Trace (Primary Purpose)
+    mapping(address => uint256) public totalDonationsReceived;
+    mapping(address => Transaction[]) public transactionHistory;
+    mapping(string => DonationRecord) public donationLedger;
+    uint256 public totalTransactionsTracked;
+    
+    struct Transaction {
+        uint256 amount;
+        uint256 timestamp;
+        TransactionType txType;
+        string donationId;
+        bool isPublic;
+    }
+    
+    struct DonationRecord {
+        address donor;
+        address participant;
+        uint256 totalAmount;
+        uint256 virtualCardAmount;
+        uint256 housingFundAmount;
+        uint256 operationsAmount;
+        uint256 timestamp;
+        bool verified;
+    }
+    
+    enum TransactionType {
+        DONATION_RECEIVED,
+        VIRTUAL_CARD_LOAD,
+        HOUSING_FUND_DEPOSIT,
+        INTEREST_ACCRUED,
+        PAYOUT_DISTRIBUTED
+    }
+    
+    // Events for Shelter Ledger transparency
     event HousingFundDeposit(address indexed participant, uint256 amount, uint256 timestamp);
     event StakingRewardsDistributed(uint256 totalRewards, uint256 timestamp);
     event ParticipantHousingAllocation(address indexed participant, uint256 amount);
+    event DonationTracked(string indexed donationId, address indexed participant, uint256 amount);
+    event PayoutTraced(address indexed participant, uint256 amount, TransactionType txType);
+    event ShelterLedgerEntry(address indexed participant, uint256 amount, TransactionType txType);
     
     constructor(
         address _usdt,
         address _coinbaseStakingPool
-    ) ERC20("SHELTR Stablecoin", "SHELTR") {
+    ) ERC20("SHELTR Utility Token", "SHELTR") {
         USDT = IERC20(_usdt);
         coinbaseStakingPool = _coinbaseStakingPool;
         
@@ -227,13 +283,67 @@ contract SHELTRStablecoin is ERC20, Pausable, AccessControl, ReentrancyGuard {
     }
     
     /**
-     * @dev Deposit USDT to housing fund and mint SHELTR tokens
+     * @dev Track donation in Shelter Ledger (Primary Purpose)
+     * @param donationId Unique donation identifier
+     * @param donor Address of the donor
+     * @param participant Address of the participant
+     * @param totalAmount Total donation amount
+     * @param virtualCardAmount Amount loaded to virtual card (80%)
+     * @param housingFundAmount Amount allocated to housing fund (15%)
+     * @param operationsAmount Amount for platform operations (5%)
+     */
+    function trackDonation(
+        string memory donationId,
+        address donor,
+        address participant,
+        uint256 totalAmount,
+        uint256 virtualCardAmount,
+        uint256 housingFundAmount,
+        uint256 operationsAmount
+    ) external onlyRole(MINTER_ROLE) nonReentrant {
+        require(bytes(donationId).length > 0, "Invalid donation ID");
+        require(participant != address(0), "Invalid participant address");
+        require(totalAmount > 0, "Amount must be greater than 0");
+        
+        // Record in Shelter Ledger
+        donationLedger[donationId] = DonationRecord({
+            donor: donor,
+            participant: participant,
+            totalAmount: totalAmount,
+            virtualCardAmount: virtualCardAmount,
+            housingFundAmount: housingFundAmount,
+            operationsAmount: operationsAmount,
+            timestamp: block.timestamp,
+            verified: true
+        });
+        
+        // Update participant totals
+        totalDonationsReceived[participant] += totalAmount;
+        totalTransactionsTracked++;
+        
+        // Add to transaction history
+        transactionHistory[participant].push(Transaction({
+            amount: totalAmount,
+            timestamp: block.timestamp,
+            txType: TransactionType.DONATION_RECEIVED,
+            donationId: donationId,
+            isPublic: true
+        }));
+        
+        emit DonationTracked(donationId, participant, totalAmount);
+        emit ShelterLedgerEntry(participant, totalAmount, TransactionType.DONATION_RECEIVED);
+    }
+    
+    /**
+     * @dev Deposit USDT to housing fund and mint SHELTR tokens (Secondary Purpose)
      * @param participant The participant this housing fund is for
      * @param usdtAmount Amount of USDT to deposit
+     * @param donationId Associated donation ID for tracking
      */
     function depositHousingFund(
         address participant, 
-        uint256 usdtAmount
+        uint256 usdtAmount,
+        string memory donationId
     ) external onlyRole(MINTER_ROLE) nonReentrant {
         require(usdtAmount > 0, "Amount must be greater than 0");
         
@@ -250,8 +360,54 @@ contract SHELTRStablecoin is ERC20, Pausable, AccessControl, ReentrancyGuard {
         // Stake USDT in Coinbase for yield
         _stakeToCoinbase(usdtAmount);
         
+        // Record in Shelter Ledger
+        transactionHistory[participant].push(Transaction({
+            amount: usdtAmount,
+            timestamp: block.timestamp,
+            txType: TransactionType.HOUSING_FUND_DEPOSIT,
+            donationId: donationId,
+            isPublic: true
+        }));
+        
         emit HousingFundDeposit(participant, usdtAmount, block.timestamp);
         emit ParticipantHousingAllocation(participant, participantHousingFunds[participant]);
+        emit ShelterLedgerEntry(participant, usdtAmount, TransactionType.HOUSING_FUND_DEPOSIT);
+    }
+    
+    /**
+     * @dev Get participant's complete transaction history (Shelter Ledger)
+     * @param participant Address of the participant
+     * @return Array of all transactions
+     */
+    function getTransactionHistory(address participant) external view returns (Transaction[] memory) {
+        return transactionHistory[participant];
+    }
+    
+    /**
+     * @dev Get donation record from Shelter Ledger
+     * @param donationId Unique donation identifier
+     * @return Complete donation record
+     */
+    function getDonationRecord(string memory donationId) external view returns (DonationRecord memory) {
+        return donationLedger[donationId];
+    }
+    
+    /**
+     * @dev Verify donation on Shelter Ledger (Public Access)
+     * @param donationId Unique donation identifier
+     * @return verified Whether the donation exists and is verified
+     */
+    function verifyDonation(string memory donationId) external view returns (bool verified) {
+        return donationLedger[donationId].verified;
+    }
+    
+    /**
+     * @dev Get total donations received by participant (Shelter Ledger)
+     * @param participant Address of the participant
+     * @return Total amount of all donations received
+     */
+    function getTotalDonationsReceived(address participant) external view returns (uint256) {
+        return totalDonationsReceived[participant];
     }
     
     /**
@@ -855,4 +1011,184 @@ class MonitoringService:
 
 ---
 
-*This implementation guide provides the technical foundation for SHELTR v2.0's revolutionary single-token stable fund architecture, ensuring maximum impact with minimal risk for all participants.*
+## 📖 **Shelter Ledger Public API**
+
+### **Public Verification Endpoints (No Authentication Required)**
+
+```python
+# apps/api/routers/shelter_ledger.py
+from fastapi import APIRouter, HTTPException
+from typing import List, Optional
+
+router = APIRouter(prefix="/api/v1/ledger", tags=["shelter-ledger"])
+
+@router.get("/donations/{donation_id}")
+async def verify_donation(donation_id: str):
+    """
+    Public endpoint to verify any donation on the Shelter Ledger
+    Anyone can verify donations for complete transparency
+    """
+    try:
+        donation = await blockchain_service.get_donation_record(donation_id)
+        
+        return {
+            "donationId": donation_id,
+            "verified": donation.verified,
+            "totalAmount": float(donation.totalAmount),
+            "participant": donation.participant,
+            "timestamp": donation.timestamp,
+            "distribution": {
+                "virtualCard": float(donation.virtualCardAmount),
+                "housingFund": float(donation.housingFundAmount),
+                "operations": float(donation.operationsAmount)
+            },
+            "blockchainTx": donation.transactionHash,
+            "immutable": True
+        }
+    except Exception as e:
+        raise HTTPException(status_code=404, detail="Donation not found")
+
+@router.get("/participant/{participant_id}/balance")
+async def get_participant_balance(participant_id: str):
+    """
+    Public endpoint to view participant's housing fund balance
+    Promotes transparency while protecting privacy
+    """
+    try:
+        balance = await blockchain_service.get_participant_housing_balance(participant_id)
+        total_donations = await blockchain_service.get_total_donations_received(participant_id)
+        
+        return {
+            "participantId": participant_id,
+            "housingFundBalance": float(balance),
+            "totalDonationsReceived": float(total_donations),
+            "projectedAPY": "4-6%",
+            "lastUpdated": datetime.utcnow().isoformat()
+        }
+    except Exception as e:
+        raise HTTPException(status_code=404, detail="Participant not found")
+
+@router.get("/stats/platform")
+async def get_platform_stats():
+    """
+    Public endpoint for overall platform statistics
+    Complete transparency of platform performance
+    """
+    try:
+        stats = await blockchain_service.get_total_housing_fund_stats()
+        
+        return {
+            "totalHousingFund": stats["total_housing_fund_usd"],
+            "totalStaked": stats["total_staked_usd"],
+            "currentAPY": stats["current_apy"],
+            "totalParticipants": stats["total_participants"],
+            "totalTransactionsTracked": stats["total_transactions"],
+            "platformTransparency": "100%",
+            "lastUpdated": datetime.utcnow().isoformat()
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Failed to fetch stats")
+
+@router.get("/transactions/{participant_id}")
+async def get_transaction_history(
+    participant_id: str,
+    limit: int = 50,
+    offset: int = 0
+):
+    """
+    Public endpoint to view participant's transaction history
+    Complete transparency of all fund movements
+    """
+    try:
+        transactions = await blockchain_service.get_transaction_history(
+            participant_id,
+            limit=limit,
+            offset=offset
+        )
+        
+        return {
+            "participantId": participant_id,
+            "transactions": [
+                {
+                    "amount": float(tx.amount),
+                    "timestamp": tx.timestamp,
+                    "type": tx.txType.name,
+                    "donationId": tx.donationId,
+                    "isPublic": tx.isPublic
+                }
+                for tx in transactions
+            ],
+            "total": len(transactions),
+            "limit": limit,
+            "offset": offset
+        }
+    except Exception as e:
+        raise HTTPException(status_code=404, detail="Transactions not found")
+```
+
+### **Participant Wallet Dashboard Interface**
+
+```typescript
+// apps/web/src/types/wallet.ts
+export interface ParticipantWallet {
+  walletAddress: string;
+  housingFundBalance: number;
+  totalDonationsReceived: number;
+  housingFundGrowth: number;
+  projectedBalance: number;
+  transactionHistory: WalletTransaction[];
+  createdAt: Date;
+  lastUpdated: Date;
+}
+
+export interface WalletTransaction {
+  id: string;
+  amount: number;
+  timestamp: Date;
+  type: 'DONATION_RECEIVED' | 'HOUSING_FUND_DEPOSIT' | 'INTEREST_ACCRUED' | 'VIRTUAL_CARD_LOAD';
+  donationId?: string;
+  verified: boolean;
+  blockchainTx: string;
+}
+
+export interface WalletDashboardProps {
+  participantId: string;
+  wallet: ParticipantWallet;
+  showTransactions?: boolean;
+  showProjections?: boolean;
+}
+```
+
+---
+
+## 🎯 **Shelter Ledger Benefits**
+
+### **For Participants**
+✅ **Complete Visibility**: View every donation and payout in real-time  
+✅ **Housing Fund Tracking**: Monitor investment growth with 4-6% APY  
+✅ **Zero Complexity**: No cryptocurrency knowledge required  
+✅ **Automatic Wallet**: Created upon registration, no setup needed
+
+### **For Donors**
+✅ **Donation Verification**: Verify your donation was received and distributed correctly  
+✅ **Impact Tracking**: See exactly how your contribution was allocated  
+✅ **Public Transparency**: Anyone can audit the system  
+✅ **Immutable Records**: Donations cannot be altered or hidden
+
+### **For Auditors & Regulators**
+✅ **Public Access**: No special permissions needed to verify transactions  
+✅ **Complete Audit Trail**: Every dollar tracked from donation to distribution  
+✅ **Blockchain Security**: Cryptographically secure and immutable  
+✅ **Real-Time Monitoring**: Live data available 24/7
+
+### **For the Platform**
+✅ **Trust Building**: Complete transparency builds donor confidence  
+✅ **Regulatory Compliance**: Meets highest standards for charitable organizations  
+✅ **Fraud Prevention**: Immutable records prevent manipulation  
+✅ **Scalability**: Blockchain handles millions of transactions efficiently
+
+---
+
+*This implementation guide provides the technical foundation for SHELTR v3.0's revolutionary **dual-purpose utility token architecture**, combining the Shelter Ledger public accountability system with the SmartFund™ investment vehicle, ensuring maximum transparency, impact, and minimal risk for all participants.*
+
+**Last Updated: December 12, 2025 - Shelter Ledger Implementation Complete**

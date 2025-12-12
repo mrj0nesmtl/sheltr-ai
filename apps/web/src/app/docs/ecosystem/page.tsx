@@ -9,14 +9,29 @@ import Footer from '@/components/Footer';
 import { PublicChatbot } from '@/components/PublicChatbot';
 import PublicNavigation from '@/components/PublicNavigation';
 import { useHeroImage } from '@/hooks/useHeroImage';
+import { useQRCodeTracking } from '@/hooks/useQRCodeTracking';
 import { StandardHero } from '@/components/StandardHero';
 
-export default function EcosystemPage() {
+export default function DocsEcosystemPage() {
   const { heroImage } = useHeroImage('/ecosystem', '/backgrounds/hero-bg.jpg');
+  
+  // Track QR code scans
+  useQRCodeTracking();
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <PublicNavigation />
+
+      {/* Breadcrumb */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+          <Link href="/" className="hover:text-primary">Home</Link>
+          <span>/</span>
+          <Link href="/docs" className="hover:text-primary">Docs</Link>
+          <span>/</span>
+          <span className="text-foreground">Ecosystem</span>
+        </div>
+      </div>
 
       {/* Hero Section */}
       <StandardHero
@@ -128,9 +143,11 @@ export default function EcosystemPage() {
                     This isn&apos;t just a donation—it&apos;s the beginning of a journey. The QR code is the participant&apos;s 
                     digital identity, their connection to resources, and their pathway to stability.
                   </p>
-                  <div className="inline-flex items-center gap-2 text-sm text-muted-foreground bg-muted/50 rounded-lg px-4 py-2">
-                    <Zap className="h-4 w-4 text-yellow-500" />
-                    <span>Average scan-to-donation time: <strong>8 seconds</strong></span>
+                  <div className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 rounded-lg p-6 border border-green-200 dark:border-green-800">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <Zap className="h-4 w-4 text-yellow-500" />
+                      <span>Average scan-to-donation time: <strong className="text-foreground">8 seconds</strong></span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -150,9 +167,11 @@ export default function EcosystemPage() {
                     Smart contracts automatically split every donation according to our proven 80-15-5 model. 
                     No overhead, no delays—just instant, intelligent distribution.
                   </p>
-                  <div className="inline-flex items-center gap-2 text-sm text-muted-foreground bg-muted/50 rounded-lg px-4 py-2">
-                    <Shield className="h-4 w-4 text-blue-500" />
-                    <span>Blockchain-verified • Immutable • Transparent</span>
+                  <div className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-lg p-6 border border-blue-200 dark:border-blue-800">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground justify-center md:justify-end">
+                      <Shield className="h-4 w-4 text-blue-500" />
+                      <span><strong className="text-foreground">Blockchain-verified</strong> • Immutable • Transparent</span>
+                    </div>
                   </div>
                 </div>
 
@@ -375,7 +394,7 @@ export default function EcosystemPage() {
               </div>
             </div>
 
-            {/* Step 5: Basecamp & Drone Support */}
+            {/* Step 5: Basecamp Hub */}
             <div className="relative">
               <div className="grid md:grid-cols-2 gap-8 items-center">
                 <Card className="border-2 border-cyan-400/50 hover:border-cyan-400 transition-all hover:shadow-xl hover:shadow-cyan-500/20">
@@ -423,14 +442,87 @@ export default function EcosystemPage() {
                   </CardContent>
                 </Card>
 
-                <Card className="border-2 border-indigo-400/50 hover:border-indigo-400 transition-all hover:shadow-xl hover:shadow-indigo-500/20">
+                <div className="text-center md:text-left">
+                  <h3 className="text-2xl font-bold mb-4 text-cyan-600 dark:text-cyan-400">Community-Centered Support</h3>
+                  <p className="text-muted-foreground leading-relaxed mb-4">
+                    Basecamp transforms isolated POD living into a thriving community. With dedicated staff and 
+                    coordinated services, participants have access to resources, social connection, and professional 
+                    support—all within walking distance of their POD.
+                  </p>
+                  <div className="bg-gradient-to-br from-cyan-500/10 to-blue-500/10 rounded-lg p-6 border border-cyan-200 dark:border-cyan-800">
+                    <p className="text-sm text-muted-foreground mb-3">
+                      <strong className="text-foreground">Basecamp services include:</strong>
+                    </p>
+                    <div className="grid grid-cols-2 gap-3 text-xs">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle className="h-4 w-4 text-cyan-500" />
+                        <span>Hot meals daily</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <CheckCircle className="h-4 w-4 text-cyan-500" />
+                        <span>Laundry facilities</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <CheckCircle className="h-4 w-4 text-cyan-500" />
+                        <span>Medical clinic</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <CheckCircle className="h-4 w-4 text-cyan-500" />
+                        <span>Job placement help</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Connector Arrow */}
+              <div className="hidden md:flex justify-center my-8">
+                <ArrowRight className="h-12 w-12 text-muted-foreground/30" />
+              </div>
+            </div>
+
+            {/* Step 6: Drone Delivery */}
+            <div className="relative">
+              <div className="grid md:grid-cols-2 gap-8 items-center">
+                <div className="text-center md:text-right order-2 md:order-1">
+                  <h3 className="text-2xl font-bold mb-4 text-indigo-600 dark:text-indigo-400">Emergency Response Innovation</h3>
+                  <p className="text-muted-foreground leading-relaxed mb-4">
+                    When time is critical, our autonomous drone network delivers life-saving supplies directly to 
+                    participants wherever they are. No roads required, no delays—just fast, reliable emergency support.
+                  </p>
+                  <div className="bg-gradient-to-br from-indigo-500/10 to-purple-500/10 rounded-lg p-6 border border-indigo-200 dark:border-indigo-800">
+                    <p className="text-sm text-muted-foreground mb-3">
+                      <strong className="text-foreground">Emergency delivery capabilities:</strong>
+                    </p>
+                    <div className="grid grid-cols-2 gap-3 text-xs">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle className="h-4 w-4 text-indigo-500" />
+                        <span>Medicine & first aid</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <CheckCircle className="h-4 w-4 text-indigo-500" />
+                        <span>Food & water</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <CheckCircle className="h-4 w-4 text-indigo-500" />
+                        <span>Warm blankets</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <CheckCircle className="h-4 w-4 text-indigo-500" />
+                        <span>Emergency kits</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <Card className="border-2 border-indigo-400/50 hover:border-indigo-400 transition-all hover:shadow-xl hover:shadow-indigo-500/20 order-1 md:order-2">
                   <CardHeader>
                     <div className="flex items-center gap-4 mb-4">
                       <div className="p-4 rounded-full bg-indigo-500/10">
                         <Drone className="h-12 w-12 text-indigo-500" />
                       </div>
                       <div>
-                        <Badge className="mb-2 bg-indigo-500/20 text-indigo-700 dark:text-indigo-300">STEP 5</Badge>
+                        <Badge className="mb-2 bg-indigo-500/20 text-indigo-700 dark:text-indigo-300">STEP 6</Badge>
                         <CardTitle className="text-3xl">Drone Delivery</CardTitle>
                       </div>
                     </div>
@@ -475,48 +567,17 @@ export default function EcosystemPage() {
               </div>
             </div>
 
-            {/* Step 6: Reintegration */}
+            {/* Step 7: Reintegration */}
             <div className="relative">
               <div className="grid md:grid-cols-2 gap-8 items-center">
-                <div className="text-center md:text-right order-2 md:order-1">
-                  <h3 className="text-2xl font-bold mb-4 text-emerald-600 dark:text-emerald-400">The Ultimate Goal</h3>
-                  <p className="text-muted-foreground leading-relaxed mb-4">
-                    This is where the ecosystem comes full circle. With stable housing, ongoing support, and 
-                    coordinated services, participants rebuild their lives and reintegrate into society.
-                  </p>
-                  <div className="bg-gradient-to-br from-emerald-500/10 to-green-500/10 rounded-lg p-6 border border-emerald-200 dark:border-emerald-800">
-                    <p className="text-sm text-muted-foreground mb-3">
-                      <strong className="text-foreground">Success metrics we track:</strong>
-                    </p>
-                    <div className="grid grid-cols-2 gap-3 text-xs">
-                      <div className="flex items-center gap-2">
-                        <CheckCircle className="h-4 w-4 text-emerald-500" />
-                        <span>Employment secured</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <CheckCircle className="h-4 w-4 text-emerald-500" />
-                        <span>Permanent housing</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <CheckCircle className="h-4 w-4 text-emerald-500" />
-                        <span>Healthcare access</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <CheckCircle className="h-4 w-4 text-emerald-500" />
-                        <span>Social reconnection</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <Card className="border-2 border-emerald-400/50 hover:border-emerald-400 transition-all hover:shadow-xl hover:shadow-emerald-500/20 order-1 md:order-2">
+                <Card className="border-2 border-emerald-400/50 hover:border-emerald-400 transition-all hover:shadow-xl hover:shadow-emerald-500/20">
                   <CardHeader>
                     <div className="flex items-center gap-4 mb-4">
                       <div className="p-4 rounded-full bg-emerald-500/10">
                         <Users className="h-12 w-12 text-emerald-500" />
                       </div>
                       <div>
-                        <Badge className="mb-2 bg-emerald-500/20 text-emerald-700 dark:text-emerald-300">STEP 6</Badge>
+                        <Badge className="mb-2 bg-emerald-500/20 text-emerald-700 dark:text-emerald-300">STEP 7</Badge>
                         <CardTitle className="text-3xl">Reintegration</CardTitle>
                       </div>
                     </div>
@@ -551,6 +612,37 @@ export default function EcosystemPage() {
                     </ul>
                   </CardContent>
                 </Card>
+
+                <div className="text-center md:text-left">
+                  <h3 className="text-2xl font-bold mb-4 text-emerald-600 dark:text-emerald-400">The Ultimate Goal</h3>
+                  <p className="text-muted-foreground leading-relaxed mb-4">
+                    This is where the ecosystem comes full circle. With stable housing, ongoing support, and 
+                    coordinated services, participants rebuild their lives and reintegrate into society.
+                  </p>
+                  <div className="bg-gradient-to-br from-emerald-500/10 to-green-500/10 rounded-lg p-6 border border-emerald-200 dark:border-emerald-800">
+                    <p className="text-sm text-muted-foreground mb-3">
+                      <strong className="text-foreground">Success metrics we track:</strong>
+                    </p>
+                    <div className="grid grid-cols-2 gap-3 text-xs">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle className="h-4 w-4 text-emerald-500" />
+                        <span>Employment secured</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <CheckCircle className="h-4 w-4 text-emerald-500" />
+                        <span>Permanent housing</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <CheckCircle className="h-4 w-4 text-emerald-500" />
+                        <span>Healthcare access</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <CheckCircle className="h-4 w-4 text-emerald-500" />
+                        <span>Social reconnection</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -678,4 +770,3 @@ export default function EcosystemPage() {
     </div>
   );
 }
-

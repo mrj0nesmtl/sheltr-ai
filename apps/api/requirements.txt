@@ -11,7 +11,7 @@ google-cloud-storage==3.4.1
 google-auth==2.43.0
 
 # Database and ORM (if needed for complex queries)
-sqlalchemy==2.0.44
+sqlalchemy==2.0.45
 alembic==1.13.1
 asyncpg==0.31.0
 

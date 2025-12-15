@@ -7,6 +7,95 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.158.0] - 2025-12-15 (Dependency Updates & Google Cloud MCP Integration) 🔄☁️
+
+### 🎯 **Session Highlights - December 15, 2025**
+Major dependency update session with 26 Dependabot PRs processed, Google Cloud MCP server integration, and continued security posture maintenance.
+
+### ☁️ **Google Cloud MCP Integration**
+- **Installed Google Cloud MCP Servers**: Added official Google Cloud MCP integration
+  - `@google-cloud/gcloud-mcp` - Execute gcloud commands via natural language
+  - `@google-cloud/observability-mcp` - Logs, metrics, traces, and error reporting
+  - `@google-cloud/storage-mcp` - GCS bucket and object management
+  - Enhanced automation capabilities for Firebase and GCP infrastructure
+  - Complements existing GitHub, Firebase, Shadcn, and Playwright MCP servers
+  - Documentation: https://github.com/googleapis/gcloud-mcp
+
+### ⬆️ **Dependency Updates (16 PRs Merged)**
+- **Functions Updates** (2 merged):
+  - `eslint` 9.39.0 → 9.39.2 (patch)
+  - `@typescript-eslint/eslint-plugin` 8.46.2 → 8.49.0 (minor)
+- **Web Updates** (9 merged):
+  - `@typescript-eslint/eslint-plugin` 8.44.0 → 8.49.0 (minor)
+  - `@reduxjs/toolkit` 2.9.0 → 2.11.1 (minor)
+  - `@radix-ui/react-progress` 1.1.7 → 1.1.8 (patch)
+  - `@eslint/plugin-kit` 0.4.0 → 0.4.1 (patch)
+  - `@eslint-community/regexpp` 4.12.1 → 4.12.2 (patch)
+  - `@typescript-eslint/parser` 8.46.2 → 8.49.0 (minor)
+  - `tailwind-merge` 3.3.1 → 3.4.0 (minor)
+  - `@types/leaflet` 1.9.20 → 1.9.21 (patch)
+  - `lucide-react` 0.544.0 → 0.561.0 (minor)
+- **API Updates** (6 merged):
+  - `pandas` 2.3.2 → 2.3.3 (patch)
+  - `google-auth` 2.40.3 → 2.43.0 (minor)
+  - `mkdocs-material` 9.6.19 → 9.7.0 (minor)
+  - `asyncpg` 0.30.0 → 0.31.0 (minor)
+  - `sqlalchemy` 2.0.44 → 2.0.45 (patch)
+  - `black` 25.1.0 → 25.12.0 (minor)
+- **Actions Updates** (1 merged):
+  - `actions/checkout` 5 → 6 (major - GitHub Actions, low risk)
+
+### 🔒 **Security Status**
+- **CodeQL Alerts**: 4 alerts (already fixed in Session 27, awaiting GitHub re-scan)
+  - 2 HIGH: XSS in gallery/page.tsx (fixed with sanitization)
+  - 1 HIGH: Sensitive logging in knowledge_docs_hub.py (fixed)
+  - 1 MEDIUM: String replacement in platform-admin-welcome/page.tsx (fixed)
+- **npm audit**: **0 vulnerabilities** in web and functions workspaces ✅
+- **Dependabot**: 10 PRs closed (7 merge conflicts + 3 deferred major versions)
+
+### 📦 **Deferred Major Version Updates**
+- **firebase-functions** 6.6.0 → 7.0.1 (MAJOR)
+  - Breaking: Drops Node.js 16, removes `functions.config()`, TypeScript 5
+  - Requires testing before upgrade
+- **numpy** 1.25.2 → 2.3.5 (MAJOR)
+  - Breaking changes requiring API testing
+- **fastapi** 0.104.1 → 0.124.2 (MAJOR)
+  - Significant version jump requiring testing
+- **pytest-asyncio** 0.21.1 → 1.3.0 (MAJOR)
+  - Testing framework update requiring validation
+
+### 🏗️ **Build & Deployment**
+- ✅ **Web Build**: Successful production build (Next.js 15.5.9)
+- ✅ **Functions Build**: Successful TypeScript compilation
+- ✅ **Security Audit**: Zero vulnerabilities in production dependencies
+- ✅ **Deployment**: Full deployment (frontend + backend) via deploy.sh
+  - Frontend: https://sheltr-ai.web.app
+  - Backend API: https://sheltr-api-714964620823.us-central1.run.app
+  - All health checks passed
+
+### 🛠️ **Technical Improvements**
+- **MCP Configuration**: Updated `~/.cursor/mcp.json` with Google Cloud servers
+- **Gitignore**: Added `apps/api/venv/` to prevent untracked directory warnings
+- **Merge Strategy**: Conservative approach - merged safe updates, deferred risky major versions
+- **Automation**: Used GitHub CLI (`gh`) for efficient PR management
+
+### 📊 **Impact Summary**
+- ✅ 16 safe dependency updates merged and deployed
+- ✅ Zero vulnerabilities maintained across all workspaces
+- ✅ Google Cloud MCP integration for enhanced automation
+- ✅ 10 PRs closed (merge conflicts will be auto-recreated by Dependabot)
+- ✅ 4 major version updates deferred for dedicated testing session
+- ✅ Production deployment successful with all health checks passing
+
+### 🎯 **Next Steps**
+- Monitor GitHub CodeQL re-scan to clear 4 existing alerts
+- Plan dedicated testing session for major version updates:
+  - firebase-functions 7.x (Node 18+, TypeScript 5)
+  - numpy 2.x, fastapi 0.124.x, pytest-asyncio 1.3.x
+- Leverage new Google Cloud MCP tools for infrastructure automation
+
+---
+
 ## [2.157.0] - 2025-12-12 (Documentation Hub Overhaul & Ecosystem Refinement) 📚🏗️
 
 ### 🎯 **Session Highlights - December 12, 2025 @ 2:00 AM**

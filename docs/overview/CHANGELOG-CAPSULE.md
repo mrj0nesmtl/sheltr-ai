@@ -1,20 +1,48 @@
 # 📝 SHELTR Changelog Capsule - Recent Changes
 
-**Last Updated**: December 12, 2025  
+**Last Updated**: December 15, 2025  
 **Coverage**: Most recent 30 days of development  
 **Purpose**: AI-accessible summary of recent platform changes for authenticated administrators
 
-> **Note**: This is a condensed version of the full CHANGELOG.md (14,000+ lines). The full changelog is excluded from AI embeddings to reduce costs. This capsule is regenerated regularly to keep the AI informed of recent changes.
+> **Note**: This is a condensed version of the full CHANGELOG.md (15,000+ lines). The full changelog is excluded from AI embeddings to reduce costs. This capsule is regenerated regularly to keep the AI informed of recent changes.
 
 ---
 
 ## 🎯 Quick Stats (Last 30 Days)
 
-- **Versions Released**: 2.157.0 → 2.140.0 (18 releases)
-- **Major Features**: 11 new features
+- **Versions Released**: 2.158.0 → 2.140.0 (19 releases)
+- **Major Features**: 12 new features
 - **Bug Fixes**: 30+ critical fixes
-- **Security Updates**: **SESSION 27 + Next.js Security Patch** 🔒
+- **Security Updates**: **SESSION 27 + Dependency Updates** 🔒
 - **Documentation**: 25+ docs updated/created
+- **MCP Servers**: 8 integrated (GitHub, Firebase, Google Cloud, Shadcn, Playwright, Context7)
+
+---
+
+## [2.158.0] - 2025-12-15 (Dependency Updates & Google Cloud MCP Integration) 🔄☁️
+
+### 🎯 **Session Highlights**
+- **Google Cloud MCP**: Installed 3 official Google Cloud MCP servers for enhanced automation
+- **Dependency Updates**: Merged 16 safe patch/minor updates across web, functions, and API
+- **Security Maintained**: Zero vulnerabilities in all workspaces
+- **Deployment**: Full production deployment successful
+
+### ☁️ **Google Cloud MCP Integration**
+- Installed `@google-cloud/gcloud-mcp` for natural language gcloud commands
+- Installed `@google-cloud/observability-mcp` for logs, metrics, traces
+- Installed `@google-cloud/storage-mcp` for GCS management
+- Enhanced automation alongside GitHub, Firebase, Shadcn, Playwright MCP servers
+
+### ⬆️ **Dependency Updates (16 Merged)**
+- Functions: eslint, @typescript-eslint/* updates
+- Web: Redux Toolkit, Radix UI, ESLint, Tailwind, Lucide React updates
+- API: pandas, google-auth, mkdocs, asyncpg, sqlalchemy, black updates
+- Actions: actions/checkout 5 → 6
+
+### 🔒 **Security & Deferred Updates**
+- Zero vulnerabilities maintained (npm audit clean)
+- 4 CodeQL alerts awaiting GitHub re-scan (already fixed in Session 27)
+- Deferred 4 major version updates for testing: firebase-functions 7.x, numpy 2.x, fastapi 0.124.x, pytest-asyncio 1.3.x
 
 ---
 

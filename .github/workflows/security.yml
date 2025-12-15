@@ -24,7 +24,7 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
       
     - name: Setup Node.js
       uses: actions/setup-node@v5
@@ -71,7 +71,7 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
       with:
         fetch-depth: 0  # Fetch full history for TruffleHog
       
@@ -90,7 +90,7 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
       
     - name: Check if Dockerfile exists
       id: check-dockerfile
@@ -132,7 +132,7 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
       
     - name: Setup Node.js
       uses: actions/setup-node@v5
@@ -160,7 +160,7 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
       
     - name: Run Checkov
       uses: bridgecrewio/checkov-action@master
@@ -185,7 +185,7 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
       
     - name: Validate SECURITY.md exists
       run: |

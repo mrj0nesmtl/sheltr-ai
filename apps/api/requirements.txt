@@ -7,7 +7,7 @@ pydantic-settings==2.11.0
 # Firebase and Google Cloud
 firebase-admin==6.4.0
 google-cloud-firestore==2.21.0
-google-cloud-storage==3.4.1
+google-cloud-storage==3.7.0
 google-auth==2.43.0
 
 # Database and ORM (if needed for complex queries)

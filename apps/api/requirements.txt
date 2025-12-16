@@ -12,7 +12,7 @@ google-auth==2.43.0
 
 # Database and ORM (if needed for complex queries)
 sqlalchemy==2.0.45
-alembic==1.13.1
+alembic==1.17.2
 asyncpg==0.31.0
 
 # Authentication and Security

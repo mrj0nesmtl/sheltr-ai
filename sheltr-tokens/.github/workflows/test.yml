@@ -5,6 +5,10 @@ on:
   pull_request:
   workflow_dispatch:
 
+# Top-level permissions - restrict to minimum required
+permissions:
+  contents: read
+
 env:
   FOUNDRY_PROFILE: ci
 

@@ -8,6 +8,12 @@ on:
   schedule:
     - cron: '23 2 * * 1'  # Weekly on Mondays at 2:23 AM UTC
 
+# Top-level permissions - restrict to minimum required
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
 jobs:
   analyze:
     name: Analyze (${{ matrix.language }})

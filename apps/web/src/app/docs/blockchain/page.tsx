@@ -33,20 +33,20 @@ export default function BlockchainPage() {
       </nav>
 
       {/* Strategic Pivot Alert */}
-      <section className="py-8 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border-b border-amber-200 dark:border-amber-800">
+      <section className="py-8 bg-gradient-to-r from-emerald-50 to-blue-50 dark:from-emerald-900/20 dark:to-blue-900/20 border-b border-emerald-200 dark:border-emerald-800">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="flex items-start gap-4">
-              <div className="w-10 h-10 bg-amber-500 rounded-full flex items-center justify-center flex-shrink-0">
-                <AlertTriangle className="h-5 w-5 text-white" />
+              <div className="w-10 h-10 bg-emerald-500 rounded-full flex items-center justify-center flex-shrink-0">
+                <CheckCircle className="h-5 w-5 text-white" />
               </div>
               <div>
-                <h3 className="text-lg font-bold mb-2 text-amber-900 dark:text-amber-100">
-                  Blockchain Architecture v2.0
+                <h3 className="text-lg font-bold mb-2 text-emerald-900 dark:text-emerald-100">
+                  Blockchain Architecture v3.0 - Shelter Ledger + x402 Protocol
                 </h3>
-                <p className="text-amber-800 dark:text-amber-200 text-sm leading-relaxed">
-                  Our blockchain implementation has evolved from dual-token complexity to a <strong>single-token stable fund ecosystem</strong> 
-                  with enterprise-grade infrastructure and zero participant cryptocurrency exposure.
+                <p className="text-emerald-800 dark:text-emerald-200 text-sm leading-relaxed">
+                  Our blockchain implementation features a <strong>dual-purpose SHELTR Utility Token</strong> (Shelter Ledger for public accountability + SmartFund™ investment vehicle) 
+                  with <strong>dual-rail payment infrastructure</strong> (Adyen for traditional donations + x402 for micropayments) and zero participant cryptocurrency exposure.
                 </p>
               </div>
             </div>
@@ -62,18 +62,20 @@ export default function BlockchainPage() {
               <Shield className="h-12 w-12 text-emerald-600 mt-1" />
               <div className="flex-1">
                 <div className="mb-3">
-                  <h1 className="text-3xl sm:text-4xl font-bold mb-2 leading-tight">SHELTR Blockchain Architecture v2.0</h1>
-                  <Badge className="bg-emerald-500 text-white text-sm">TESTNET ARCHITECTURE</Badge>
+                  <h1 className="text-3xl sm:text-4xl font-bold mb-2 leading-tight">SHELTR Blockchain Architecture v3.0</h1>
+                  <Badge className="bg-emerald-500 text-white text-sm">SHELTER LEDGER + x402</Badge>
                 </div>
                 <p className="text-lg text-muted-foreground mb-3">
-                  Single-token stable fund ecosystem with enterprise payment infrastructure and guaranteed institutional returns
+                  Dual-purpose SHELTR Utility Token (Shelter Ledger) with dual-rail payment infrastructure (Adyen + x402) and guaranteed institutional returns
                 </p>
                 <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground mb-4">
-                  <span>Version 2.0.0</span>
+                  <span>Version 3.0.0</span>
                   <span>•</span>
-                  <span>September 26, 2025</span>
+                  <span>December 16, 2025</span>
                   <span>•</span>
                   <Badge className="bg-blue-500 text-white text-xs">ENTERPRISE-GRADE</Badge>
+                  <span>•</span>
+                  <Badge className="bg-purple-500 text-white text-xs">x402 READY</Badge>
                 </div>
                 
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">

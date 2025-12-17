@@ -291,6 +291,911 @@ event HousingOutcome(
 
 ---
 
+## 🌐 x402 Micropayment Protocol Layer
+
+### Complementary Payment Infrastructure
+
+The **x402 payment protocol** operates as a **complementary layer** on top of our Base network infrastructure, enabling programmatic micropayments without replacing our core Adyen payment rails. This integration creates a hybrid payment architecture that maximizes donation capture across all amount ranges.
+
+### Architecture Integration
+
+```mermaid
+graph TD
+    subgraph "Payment Rails Layer"
+        A1[Adyen Credit Cards<br/>$5+ donations] --> C[Payment Aggregator]
+        A2[x402 Micropayments<br/>$0.10-$5 donations] --> C
+        A3[x402 AI Agents<br/>Autonomous giving] --> C
+    end
+    
+    subgraph "Base Network Layer"
+        C --> D[X402PaymentProcessor]
+        D --> E[SHELTRPaymentDistributor]
+        E --> F[SHELTR Utility Token]
+        F --> G[Shelter Ledger]
+    end
+    
+    subgraph "Distribution Layer"
+        G --> H[80% Adyen Virtual Cards]
+        G --> I[15% Housing Fund + Staking]
+        G --> J[5% Shelter Operations]
+    end
+    
+    subgraph "Transparency Layer"
+        H --> K[Public Ledger API]
+        I --> K
+        J --> K
+    end
+    
+    style A1 fill:#0abf53
+    style A2 fill:#0052ff
+    style A3 fill:#0052ff
+    style F fill:#f3ba2f
+    style G fill:#ff6b6b
+    style K fill:#4ecdc4
+```
+
+### Strategic Positioning
+
+**x402 Complements, Not Replaces**
+
+| **Aspect** | **Adyen (Primary)** | **x402 (Secondary)** |
+|------------|---------------------|----------------------|
+| **Network** | Traditional banking | Base blockchain (L2) |
+| **Use Case** | Credit card donations | Crypto micropayments, AI agents |
+| **Amount Range** | $5.00+ optimal | $0.10 - $5.00 optimal |
+| **Fee Structure** | 2.9% + $0.30 | ~$0.01 (Base gas) |
+| **Settlement** | T+1 | Instant on-chain |
+| **Donor Type** | Traditional donors | Crypto-native, AI agents, APIs |
+| **Smart Contract** | AdyenPayoutIntegration.sol | X402PaymentProcessor.sol |
+
+### Smart Contract Enhancements
+
+#### X402PaymentProcessor Contract (NEW)
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.19;
+
+import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
+
+/**
+ * @title X402PaymentProcessor
+ * @notice Processes x402 micropayments and integrates with SHELTR SmartFund distribution
+ * @dev Handles payment verification, deduplication, and routing to SmartFund distributor
+ */
+contract X402PaymentProcessor is AccessControl, ReentrancyGuard, Pausable {
+    using ECDSA for bytes32;
+    
+    // Role definitions
+    bytes32 public constant FACILITATOR_ROLE = keccak256("FACILITATOR_ROLE");
+    bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
+    
+    // Integration contracts
+    ISHELTRPaymentDistributor public immutable distributor;
+    ISHELTRUtilityToken public immutable sheltrToken;
+    IERC20 public immutable USDC;
+    
+    // x402 facilitator for payment verification
+    address public x402Facilitator;
+    
+    // Payment tracking
+    mapping(bytes32 => bool) public processedPayments;
+    mapping(address => uint256) public participantX402Total;
+    uint256 public totalX402Payments;
+    uint256 public totalX402Volume;
+    
+    // Amount limits
+    uint256 public constant MIN_PAYMENT = 0.10 ether;  // $0.10
+    uint256 public constant MAX_PAYMENT = 5.00 ether;  // $5.00
+    
+    // Rate limiting
+    mapping(address => uint256) public dailyPaymentCount;
+    mapping(address => uint256) public lastPaymentDay;
+    uint256 public constant MAX_DAILY_PAYMENTS = 100;
+    
+    struct X402PaymentRequest {
+        address participant;
+        uint256 amount;
+        bytes32 x402TxHash;
+        bytes signature;
+        uint256 timestamp;
+        PaymentType paymentType;
+    }
+    
+    enum PaymentType {
+        MICROPAYMENT,
+        AI_AGENT,
+        API_PAYMENT,
+        M2M_OPERATION
+    }
+    
+    // Events
+    event X402PaymentProcessed(
+        bytes32 indexed x402TxHash,
+        address indexed participant,
+        uint256 amount,
+        PaymentType paymentType,
+        uint256 timestamp
+    );
+    
+    event X402PaymentVerified(
+        bytes32 indexed x402TxHash,
+        address facilitator,
+        bool valid
+    );
+    
+    event X402DistributionCompleted(
+        bytes32 indexed x402TxHash,
+        address indexed participant,
+        uint256 cardAmount,
+        uint256 housingAmount,
+        uint256 opsAmount
+    );
+    
+    event FacilitatorUpdated(
+        address indexed oldFacilitator,
+        address indexed newFacilitator
+    );
+    
+    constructor(
+        address _distributor,
+        address _sheltrToken,
+        address _usdc,
+        address _x402Facilitator
+    ) {
+        require(_distributor != address(0), "Invalid distributor");
+        require(_sheltrToken != address(0), "Invalid token");
+        require(_usdc != address(0), "Invalid USDC");
+        require(_x402Facilitator != address(0), "Invalid facilitator");
+        
+        distributor = ISHELTRPaymentDistributor(_distributor);
+        sheltrToken = ISHELTRUtilityToken(_sheltrToken);
+        USDC = IERC20(_usdc);
+        x402Facilitator = _x402Facilitator;
+        
+        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        _grantRole(ADMIN_ROLE, msg.sender);
+        _grantRole(FACILITATOR_ROLE, _x402Facilitator);
+    }
+    
+    /**
+     * @dev Process x402 micropayment and trigger SmartFund distribution
+     * @param request X402 payment request details
+     */
+    function processX402Payment(
+        X402PaymentRequest calldata request
+    ) external onlyRole(FACILITATOR_ROLE) nonReentrant whenNotPaused {
+        // Validation
+        require(!processedPayments[request.x402TxHash], "Payment already processed");
+        require(request.amount >= MIN_PAYMENT && request.amount <= MAX_PAYMENT, "Amount out of range");
+        require(request.participant != address(0), "Invalid participant");
+        require(block.timestamp - request.timestamp < 300, "Payment request expired"); // 5 min window
+        
+        // Rate limiting
+        _checkRateLimit(request.participant);
+        
+        // Verify x402 payment signature
+        require(
+            _verifyX402Signature(request),
+            "Invalid x402 signature"
+        );
+        
+        emit X402PaymentVerified(request.x402TxHash, msg.sender, true);
+        
+        // Mark as processed
+        processedPayments[request.x402TxHash] = true;
+        
+        // Update statistics
+        participantX402Total[request.participant] += request.amount;
+        totalX402Payments++;
+        totalX402Volume += request.amount;
+        
+        // Transfer USDC from x402 facilitator to distributor
+        require(
+            USDC.transferFrom(x402Facilitator, address(distributor), request.amount),
+            "USDC transfer failed"
+        );
+        
+        // Calculate SmartFund distribution
+        (uint256 cardAmount, uint256 housingAmount, uint256 opsAmount) = _calculateDistribution(request.amount);
+        
+        // Track in Shelter Ledger
+        sheltrToken.trackX402Donation(
+            request.x402TxHash,
+            msg.sender,
+            request.participant,
+            request.amount,
+            request.paymentType
+        );
+        
+        // Trigger standard SmartFund distribution
+        distributor.processDonation(
+            request.participant,
+            msg.sender, // x402 facilitator as "donor"
+            request.amount,
+            request.x402TxHash
+        );
+        
+        emit X402PaymentProcessed(
+            request.x402TxHash,
+            request.participant,
+            request.amount,
+            request.paymentType,
+            block.timestamp
+        );
+        
+        emit X402DistributionCompleted(
+            request.x402TxHash,
+            request.participant,
+            cardAmount,
+            housingAmount,
+            opsAmount
+        );
+    }
+    
+    /**
+     * @dev Verify x402 payment signature from facilitator
+     */
+    function _verifyX402Signature(
+        X402PaymentRequest calldata request
+    ) internal view returns (bool) {
+        bytes32 messageHash = keccak256(abi.encodePacked(
+            request.participant,
+            request.amount,
+            request.x402TxHash,
+            request.timestamp,
+            uint8(request.paymentType)
+        ));
+        
+        bytes32 ethSignedMessageHash = messageHash.toEthSignedMessageHash();
+        address signer = ethSignedMessageHash.recover(request.signature);
+        
+        return signer == x402Facilitator;
+    }
+    
+    /**
+     * @dev Calculate SmartFund distribution (80/15/5)
+     */
+    function _calculateDistribution(uint256 amount) internal pure returns (
+        uint256 cardAmount,
+        uint256 housingAmount,
+        uint256 opsAmount
+    ) {
+        cardAmount = (amount * 80) / 100;
+        housingAmount = (amount * 15) / 100;
+        opsAmount = (amount * 5) / 100;
+        
+        return (cardAmount, housingAmount, opsAmount);
+    }
+    
+    /**
+     * @dev Check and update rate limiting
+     */
+    function _checkRateLimit(address participant) internal {
+        uint256 today = block.timestamp / 1 days;
+        
+        if (lastPaymentDay[participant] != today) {
+            // New day, reset counter
+            dailyPaymentCount[participant] = 0;
+            lastPaymentDay[participant] = today;
+        }
+        
+        require(
+            dailyPaymentCount[participant] < MAX_DAILY_PAYMENTS,
+            "Daily payment limit exceeded"
+        );
+        
+        dailyPaymentCount[participant]++;
+    }
+    
+    /**
+     * @dev Update x402 facilitator address
+     */
+    function updateFacilitator(address newFacilitator) external onlyRole(ADMIN_ROLE) {
+        require(newFacilitator != address(0), "Invalid facilitator");
+        
+        address oldFacilitator = x402Facilitator;
+        x402Facilitator = newFacilitator;
+        
+        _revokeRole(FACILITATOR_ROLE, oldFacilitator);
+        _grantRole(FACILITATOR_ROLE, newFacilitator);
+        
+        emit FacilitatorUpdated(oldFacilitator, newFacilitator);
+    }
+    
+    /**
+     * @dev Get x402 payment statistics
+     */
+    function getX402Stats() external view returns (
+        uint256 payments,
+        uint256 volume,
+        uint256 averageAmount
+    ) {
+        return (
+            totalX402Payments,
+            totalX402Volume,
+            totalX402Payments > 0 ? totalX402Volume / totalX402Payments : 0
+        );
+    }
+    
+    /**
+     * @dev Get participant's x402 payment history
+     */
+    function getParticipantX402Stats(address participant) external view returns (
+        uint256 totalReceived,
+        uint256 dailyCount,
+        bool canReceiveMore
+    ) {
+        uint256 today = block.timestamp / 1 days;
+        uint256 count = lastPaymentDay[participant] == today ? dailyPaymentCount[participant] : 0;
+        
+        return (
+            participantX402Total[participant],
+            count,
+            count < MAX_DAILY_PAYMENTS
+        );
+    }
+    
+    /**
+     * @dev Emergency pause function
+     */
+    function pause() external onlyRole(ADMIN_ROLE) {
+        _pause();
+    }
+    
+    /**
+     * @dev Resume operations after emergency
+     */
+    function unpause() external onlyRole(ADMIN_ROLE) {
+        _unpause();
+    }
+}
+
+// Interfaces
+interface ISHELTRPaymentDistributor {
+    function processDonation(
+        address participant,
+        address donor,
+        uint256 amount,
+        bytes32 transactionId
+    ) external;
+}
+
+interface ISHELTRUtilityToken {
+    function trackX402Donation(
+        bytes32 x402TxHash,
+        address payer,
+        address participant,
+        uint256 amount,
+        uint8 paymentType
+    ) external;
+}
+```
+
+#### Enhanced Shelter Ledger with x402 Tracking
+
+```solidity
+// Enhanced SHELTR Utility Token with comprehensive x402 support
+contract SHELTRUtilityToken is ERC20, AccessControl {
+    // Existing Shelter Ledger tracking
+    mapping(string => DonationRecord) public donationLedger;
+    mapping(address => Transaction[]) public transactionHistory;
+    
+    // NEW: x402-specific tracking
+    mapping(bytes32 => X402Donation) public x402Donations;
+    mapping(address => X402Stats) public participantX402Stats;
+    uint256 public totalX402Donations;
+    uint256 public totalX402Volume;
+    
+    // x402 payment type counters
+    uint256 public micropaymentCount;
+    uint256 public aiAgentCount;
+    uint256 public apiPaymentCount;
+    uint256 public m2mOperationCount;
+    
+    struct X402Donation {
+        address payer;
+        address participant;
+        uint256 amount;
+        bytes32 x402TxHash;
+        uint256 timestamp;
+        PaymentType paymentType;
+        bool verified;
+        Distribution distribution;
+    }
+    
+    struct X402Stats {
+        uint256 totalReceived;
+        uint256 donationCount;
+        uint256 lastDonationTime;
+        uint256 averageAmount;
+    }
+    
+    struct Distribution {
+        uint256 participantCard;    // 80%
+        uint256 housingFund;         // 15%
+        uint256 operations;          // 5%
+    }
+    
+    enum PaymentType {
+        ADYEN_CREDIT_CARD,
+        X402_MICROPAYMENT,
+        X402_AI_AGENT,
+        X402_API_PAYMENT,
+        X402_M2M_OPERATION
+    }
+    
+    event X402DonationTracked(
+        bytes32 indexed x402TxHash,
+        address indexed participant,
+        uint256 amount,
+        PaymentType paymentType,
+        uint256 timestamp
+    );
+    
+    event X402StatsUpdated(
+        address indexed participant,
+        uint256 totalReceived,
+        uint256 donationCount
+    );
+    
+    /**
+     * @dev Track x402 donation in Shelter Ledger
+     */
+    function trackX402Donation(
+        bytes32 x402TxHash,
+        address payer,
+        address participant,
+        uint256 amount,
+        PaymentType paymentType
+    ) external onlyRole(X402_PROCESSOR_ROLE) {
+        require(!x402Donations[x402TxHash].verified, "Already tracked");
+        require(amount >= 0.10 ether && amount <= 5.00 ether, "Amount out of range");
+        
+        // Calculate distribution
+        Distribution memory dist = Distribution({
+            participantCard: (amount * 80) / 100,
+            housingFund: (amount * 15) / 100,
+            operations: (amount * 5) / 100
+        });
+        
+        // Record x402 donation
+        x402Donations[x402TxHash] = X402Donation({
+            payer: payer,
+            participant: participant,
+            amount: amount,
+            x402TxHash: x402TxHash,
+            timestamp: block.timestamp,
+            paymentType: paymentType,
+            verified: true,
+            distribution: dist
+        });
+        
+        // Update participant stats
+        X402Stats storage stats = participantX402Stats[participant];
+        stats.totalReceived += amount;
+        stats.donationCount++;
+        stats.lastDonationTime = block.timestamp;
+        stats.averageAmount = stats.totalReceived / stats.donationCount;
+        
+        // Update global counters
+        totalX402Donations++;
+        totalX402Volume += amount;
+        
+        // Update payment type counters
+        if (paymentType == PaymentType.X402_MICROPAYMENT) {
+            micropaymentCount++;
+        } else if (paymentType == PaymentType.X402_AI_AGENT) {
+            aiAgentCount++;
+        } else if (paymentType == PaymentType.X402_API_PAYMENT) {
+            apiPaymentCount++;
+        } else if (paymentType == PaymentType.X402_M2M_OPERATION) {
+            m2mOperationCount++;
+        }
+        
+        // Add to transaction history
+        transactionHistory[participant].push(Transaction({
+            amount: amount,
+            timestamp: block.timestamp,
+            txType: TransactionType.DONATION_RECEIVED,
+            donationId: bytes32ToString(x402TxHash),
+            isPublic: true
+        }));
+        
+        emit X402DonationTracked(x402TxHash, participant, amount, paymentType, block.timestamp);
+        emit X402StatsUpdated(participant, stats.totalReceived, stats.donationCount);
+    }
+    
+    /**
+     * @dev Get comprehensive x402 statistics
+     */
+    function getX402Stats() external view returns (
+        uint256 donations,
+        uint256 volume,
+        uint256 averageAmount,
+        uint256 micropayments,
+        uint256 aiAgents,
+        uint256 apiPayments,
+        uint256 m2mOps
+    ) {
+        return (
+            totalX402Donations,
+            totalX402Volume,
+            totalX402Donations > 0 ? totalX402Volume / totalX402Donations : 0,
+            micropaymentCount,
+            aiAgentCount,
+            apiPaymentCount,
+            m2mOperationCount
+        );
+    }
+    
+    /**
+     * @dev Get participant's x402 statistics
+     */
+    function getParticipantX402Stats(address participant) external view returns (
+        uint256 totalReceived,
+        uint256 donationCount,
+        uint256 averageAmount,
+        uint256 lastDonationTime
+    ) {
+        X402Stats memory stats = participantX402Stats[participant];
+        return (
+            stats.totalReceived,
+            stats.donationCount,
+            stats.averageAmount,
+            stats.lastDonationTime
+        );
+    }
+    
+    /**
+     * @dev Verify x402 donation (Public Access)
+     */
+    function verifyX402Donation(bytes32 x402TxHash) external view returns (
+        bool verified,
+        address participant,
+        uint256 amount,
+        PaymentType paymentType,
+        Distribution memory distribution
+    ) {
+        X402Donation memory donation = x402Donations[x402TxHash];
+        return (
+            donation.verified,
+            donation.participant,
+            donation.amount,
+            donation.paymentType,
+            donation.distribution
+        );
+    }
+}
+```
+
+### Public Ledger API Extensions
+
+```typescript
+// NEW: x402-specific Shelter Ledger endpoints
+interface X402LedgerAPI {
+    /**
+     * Verify x402 micropayment on Shelter Ledger
+     */
+    verifyX402Payment(x402TxHash: string): Promise<{
+        verified: boolean;
+        participant: string;
+        payer: string;
+        amount: number;
+        paymentType: 'micropayment' | 'ai_agent' | 'api_payment' | 'm2m';
+        timestamp: number;
+        blockchainTx: string;
+        distribution: {
+            participantCard: number;
+            housingFund: number;
+            operations: number;
+        };
+    }>;
+    
+    /**
+     * Get x402 platform statistics
+     */
+    getX402PlatformStats(): Promise<{
+        totalDonations: number;
+        totalVolume: number;
+        averageAmount: number;
+        micropayments: number;
+        aiAgentDonations: number;
+        apiPayments: number;
+        m2mOperations: number;
+        costSavingsVsAdyen: number;
+    }>;
+    
+    /**
+     * Get participant's x402 history
+     */
+    getParticipantX402History(participantId: string): Promise<{
+        totalReceived: number;
+        donationCount: number;
+        averageAmount: number;
+        lastDonationTime: Date;
+        donations: Array<{
+            x402TxHash: string;
+            amount: number;
+            paymentType: string;
+            timestamp: Date;
+            verified: boolean;
+        }>;
+    }>;
+    
+    /**
+     * Get AI agent giving statistics
+     */
+    getAIAgentStats(): Promise<{
+        totalAgents: number;
+        totalDonated: number;
+        participantsHelped: number;
+        averageDonationPerAgent: number;
+        topAgents: Array<{
+            agentAddress: string;
+            totalDonated: number;
+            donationCount: number;
+        }>;
+    }>;
+    
+    /**
+     * Get API payment statistics
+     */
+    getAPIPaymentStats(): Promise<{
+        totalAPIPayments: number;
+        totalRevenue: number;
+        averagePaymentAmount: number;
+        topPartners: Array<{
+            partnerAddress: string;
+            totalPaid: number;
+            requestCount: number;
+        }>;
+    }>;
+}
+```
+
+### Network Configuration
+
+```typescript
+const X402_INTEGRATION_CONFIG = {
+    // Base network configuration
+    network: 'base-mainnet',
+    chainId: 8453,
+    rpcUrl: 'https://mainnet.base.org',
+    
+    // Smart contracts
+    contracts: {
+        x402Processor: '0x...', // X402PaymentProcessor.sol
+        sheltrToken: '0x...', // SHELTRUtilityToken.sol (enhanced)
+        distributor: '0x...', // SHELTRPaymentDistributor.sol
+        usdc: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913' // USDC on Base
+    },
+    
+    // x402 facilitator
+    facilitator: {
+        url: 'https://facilitator.coinbase.com',
+        verifyEndpoint: '/verify',
+        network: 'eip155:8453',
+        feeStructure: 'fee-free' // via Coinbase CDP
+    },
+    
+    // Payment configuration
+    paymentConfig: {
+        minAmount: 0.10, // $0.10 minimum
+        maxAmount: 5.00, // $5.00 maximum
+        currency: 'USDC',
+        network: 'eip155:8453',
+        expiryWindow: 300, // 5 minutes
+        maxDailyPayments: 100 // per participant
+    },
+    
+    // Integration strategy
+    integration: {
+        primary: 'Adyen for $5+ donations',
+        secondary: 'x402 for <$5 micropayments',
+        fallback: 'Adyen for all amounts if x402 unavailable',
+        coexistence: 'Both rails active simultaneously'
+    },
+    
+    // Security
+    security: {
+        signatureVerification: true,
+        rateLimiting: true,
+        amountLimits: true,
+        deduplication: true,
+        pausable: true,
+        multiSigAdmin: true
+    }
+} as const;
+```
+
+### Transaction Verification System
+
+#### Enhanced Verification Architecture
+
+```mermaid
+sequenceDiagram
+    participant Donor as Donor/AI Agent
+    participant API as SHELTR API
+    participant x402Proc as X402Processor
+    participant Facilitator as Coinbase Facilitator
+    participant Base as Base Network
+    participant Distributor as PaymentDistributor
+    participant Ledger as Shelter Ledger
+    
+    Donor->>API: POST /donate (amount: $0.50)
+    API->>Donor: 402 Payment Required<br/>{payment instructions}
+    
+    Donor->>Base: Sign & send USDC payment
+    Note over Donor,Base: On-chain transaction
+    
+    Donor->>API: POST /verify<br/>PAYMENT-SIGNATURE: {txHash, sig}
+    API->>Facilitator: Verify payment
+    Facilitator->>Base: Check transaction
+    Base->>Facilitator: Confirmed
+    Facilitator->>API: Payment valid + signature
+    
+    API->>x402Proc: processX402Payment()
+    x402Proc->>x402Proc: Verify signature
+    x402Proc->>x402Proc: Check deduplication
+    x402Proc->>x402Proc: Rate limit check
+    
+    x402Proc->>Ledger: trackX402Donation()
+    Ledger->>Ledger: Record transaction
+    
+    x402Proc->>Distributor: processDonation()
+    Distributor->>Distributor: Calculate 80/15/5 split
+    
+    Distributor->>Donor: 200 OK + Receipt
+    Note over Distributor,Donor: SmartFund distribution complete
+```
+
+### Security Architecture
+
+#### x402-Specific Security Measures
+
+**1. Payment Verification**
+```solidity
+// Multi-layer verification
+function _verifyX402Signature(request) internal view returns (bool) {
+    // 1. Signature verification
+    bytes32 messageHash = keccak256(abi.encodePacked(...));
+    address signer = messageHash.recover(request.signature);
+    require(signer == x402Facilitator, "Invalid signer");
+    
+    // 2. Timestamp verification
+    require(block.timestamp - request.timestamp < 300, "Expired");
+    
+    // 3. Amount verification
+    require(request.amount >= MIN_PAYMENT && request.amount <= MAX_PAYMENT, "Invalid amount");
+    
+    return true;
+}
+```
+
+**2. Deduplication Protection**
+```solidity
+// Prevent double-spending
+mapping(bytes32 => bool) public processedPayments;
+
+function processX402Payment(request) external {
+    require(!processedPayments[request.x402TxHash], "Already processed");
+    processedPayments[request.x402TxHash] = true;
+    // ... process payment
+}
+```
+
+**3. Rate Limiting**
+```solidity
+// Prevent abuse
+mapping(address => uint256) public dailyPaymentCount;
+uint256 public constant MAX_DAILY_PAYMENTS = 100;
+
+function _checkRateLimit(participant) internal {
+    require(
+        dailyPaymentCount[participant] < MAX_DAILY_PAYMENTS,
+        "Daily limit exceeded"
+    );
+    dailyPaymentCount[participant]++;
+}
+```
+
+**4. Amount Limits**
+```solidity
+// Prevent dust attacks and excessive payments
+uint256 public constant MIN_PAYMENT = 0.10 ether;  // $0.10
+uint256 public constant MAX_PAYMENT = 5.00 ether;  // $5.00
+
+require(amount >= MIN_PAYMENT && amount <= MAX_PAYMENT, "Amount out of range");
+```
+
+**5. Emergency Controls**
+```solidity
+// Pausable for emergency situations
+function pause() external onlyRole(ADMIN_ROLE) {
+    _pause();
+}
+
+function unpause() external onlyRole(ADMIN_ROLE) {
+    _unpause();
+}
+```
+
+### Implementation Roadmap
+
+#### Phase 1: Research & Prototyping (Q2 2027)
+- **Duration**: 3 months
+- **Deliverables**:
+  - x402 SDK integration testing
+  - Smart contract prototyping
+  - Security model design
+  - Cost-benefit analysis
+  - Stakeholder approval
+
+#### Phase 2: Smart Contract Development (Q3 2027)
+- **Duration**: 3 months
+- **Deliverables**:
+  - X402PaymentProcessor contract development
+  - Enhanced SHELTRUtilityToken with x402 tracking
+  - Integration with existing contracts
+  - Comprehensive unit tests
+  - Security audits (2+ firms)
+
+#### Phase 3: Testnet Deployment (Q3 2027)
+- **Duration**: 2 months
+- **Deliverables**:
+  - Base testnet deployment
+  - Integration testing
+  - Performance optimization
+  - Gas optimization
+  - Bug fixes and refinement
+
+#### Phase 4: Mainnet Deployment (Q4 2027)
+- **Duration**: 1 month
+- **Deliverables**:
+  - Mainnet contract deployment
+  - Production monitoring setup
+  - Emergency response procedures
+  - Documentation completion
+  - Launch announcement
+
+#### Phase 5: Ecosystem Expansion (2028)
+- **Duration**: 12 months
+- **Deliverables**:
+  - AI agent integration framework
+  - Partner API monetization
+  - M2M automation features
+  - Advanced analytics
+  - International expansion
+
+### Success Metrics
+
+#### Technical KPIs
+- **Smart Contract Uptime**: 99.99%
+- **Gas Optimization**: <$0.02 per transaction
+- **Payment Success Rate**: >99.5%
+- **Transaction Speed**: <30 seconds average
+- **Security Incidents**: Zero successful attacks
+
+#### Business KPIs
+- **x402 Payment Volume**: $536K+ in Year 1
+- **Cost Savings**: $156K+ vs traditional rails
+- **New Donor Acquisition**: 10,000+ crypto-native donors
+- **AI Agent Integrations**: 100+ autonomous systems
+- **API Revenue**: $180K+ annually
+
+#### Impact KPIs
+- **Additional Participants Served**: 2,500+ via micropayments
+- **Housing Fund Growth**: +$53K from x402 allocations
+- **Platform Sustainability**: +$536K annual revenue
+- **Transparency Score**: 100% (all transactions on-chain)
+
+---
+
 ## Single-Token Stable Architecture
 
 ### SHELTR Utility Token

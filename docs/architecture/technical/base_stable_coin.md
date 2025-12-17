@@ -845,6 +845,823 @@ class BlockchainService:
 
 ---
 
+## 🌐 **x402 Micropayment Service Integration**
+
+### Strategic Overview
+
+The x402 payment protocol extends SHELTR's payment capabilities by enabling **programmatic micropayments** ($0.10-$5.00) that complement our traditional Adyen payment rails. This section provides comprehensive backend and frontend implementation details for x402 integration.
+
+### Backend x402 Payment Service
+
+```python
+# apps/api/services/x402_payment_service.py
+from web3 import Web3
+from decimal import Decimal
+from typing import Dict, Any, Optional
+import httpx
+import os
+import logging
+from datetime import datetime, timezone
+
+logger = logging.getLogger(__name__)
+
+class X402PaymentService:
+    """
+    Service for processing x402 micropayments through Coinbase facilitator
+    Handles payment creation, verification, and integration with SmartFund distribution
+    """
+    
+    def __init__(self):
+        # Coinbase x402 facilitator configuration
+        self.facilitator_url = os.getenv('X402_FACILITATOR_URL', 'https://facilitator.coinbase.com')
+        self.facilitator_api_key = os.getenv('COINBASE_CDP_API_KEY')
+        
+        # Base network configuration
+        self.w3 = Web3(Web3.HTTPProvider(os.getenv('BASE_RPC_URL')))
+        self.chain_id = 8453  # Base mainnet
+        
+        # Smart contracts
+        self.x402_processor = self._load_contract('X402PaymentProcessor')
+        self.sheltr_token = self._load_contract('SHELTRUtilityToken')
+        
+        # Payment limits
+        self.min_amount = Decimal('0.10')
+        self.max_amount = Decimal('5.00')
+        
+    def _load_contract(self, contract_name: str):
+        """Load smart contract instance"""
+        address = os.getenv(f'{contract_name.upper()}_ADDRESS')
+        abi_path = f'contracts/abi/{contract_name}.json'
+        
+        with open(abi_path, 'r') as f:
+            abi = json.load(f)
+        
+        return self.w3.eth.contract(address=address, abi=abi)
+    
+    async def create_x402_payment_request(
+        self,
+        participant_id: str,
+        amount: Decimal,
+        payment_type: str = 'micropayment'
+    ) -> Dict[str, Any]:
+        """
+        Create x402 payment request for micropayment donation
+        
+        Args:
+            participant_id: SHELTR participant ID
+            amount: Donation amount in USD (min $0.10, max $5.00)
+            payment_type: Type of payment (micropayment, ai_agent, api_payment)
+            
+        Returns:
+            x402 payment request with 402 response headers
+            
+        Raises:
+            ValueError: If amount is out of range
+            HTTPException: If participant not found
+        """
+        # Validate amount range
+        if amount < self.min_amount:
+            raise ValueError(f"Minimum x402 payment is ${self.min_amount}")
+        if amount > self.max_amount:
+            raise ValueError(f"Maximum x402 payment is ${self.max_amount}. Use Adyen for larger amounts.")
+        
+        # Get participant blockchain address
+        participant = await self._get_participant(participant_id)
+        if not participant:
+            raise HTTPException(status_code=404, detail="Participant not found")
+        
+        participant_address = participant.blockchain_address
+        
+        # Generate unique donation ID
+        donation_id = str(uuid.uuid4())
+        
+        # Create x402 payment request
+        payment_request = {
+            "network": "eip155:8453",  # Base network
+            "amount": str(amount),
+            "currency": "USDC",
+            "recipient": os.getenv('X402_PROCESSOR_ADDRESS'),
+            "facilitator": self.facilitator_url,
+            "metadata": {
+                "donation_id": donation_id,
+                "participant_id": participant_id,
+                "participant_address": participant_address,
+                "payment_type": payment_type,
+                "sheltr_smartfund": "true",
+                "timestamp": datetime.now(timezone.utc).isoformat()
+            }
+        }
+        
+        # Store pending donation record
+        await self._store_pending_donation(
+            donation_id=donation_id,
+            participant_id=participant_id,
+            amount=amount,
+            payment_request=payment_request
+        )
+        
+        logger.info(f"Created x402 payment request: {donation_id} for ${amount}")
+        
+        return {
+            "status": 402,
+            "donation_id": donation_id,
+            "payment_required": payment_request,
+            "message": "Payment required for donation"
+        }
+    
+    async def verify_x402_payment(
+        self,
+        x402_tx_hash: str,
+        donation_id: str,
+        payment_signature: str
+    ) -> Dict[str, Any]:
+        """
+        Verify x402 payment through Coinbase facilitator
+        
+        Args:
+            x402_tx_hash: Transaction hash from x402 payment
+            donation_id: SHELTR donation ID
+            payment_signature: Payment signature from facilitator
+            
+        Returns:
+            Verification result with payment details
+            
+        Raises:
+            HTTPException: If verification fails
+        """
+        try:
+            # Get pending donation record
+            donation = await self._get_pending_donation(donation_id)
+            if not donation:
+                raise HTTPException(status_code=404, detail="Donation not found")
+            
+            participant_id = donation['participant_id']
+            amount = Decimal(donation['amount'])
+            
+            # Call Coinbase facilitator to verify payment
+            async with httpx.AsyncClient() as client:
+                response = await client.post(
+                    f"{self.facilitator_url}/verify",
+                    json={
+                        "txHash": x402_tx_hash,
+                        "network": "eip155:8453",
+                        "expectedAmount": str(amount),
+                        "expectedRecipient": os.getenv('X402_PROCESSOR_ADDRESS'),
+                        "expectedCurrency": "USDC"
+                    },
+                    headers={
+                        "X-API-KEY": self.facilitator_api_key,
+                        "Content-Type": "application/json"
+                    },
+                    timeout=30.0
+                )
+                
+                if response.status_code != 200:
+                    raise HTTPException(
+                        status_code=response.status_code,
+                        detail=f"Facilitator verification failed: {response.text}"
+                    )
+                
+                verification = response.json()
+                
+                if not verification.get('valid'):
+                    raise HTTPException(
+                        status_code=400,
+                        detail="Payment verification failed"
+                    )
+                
+                logger.info(f"x402 payment verified: {x402_tx_hash}")
+                
+                # Process payment through smart contract
+                blockchain_tx_hash = await self._process_x402_payment(
+                    x402_tx_hash=x402_tx_hash,
+                    donation_id=donation_id,
+                    participant_id=participant_id,
+                    amount=amount,
+                    verification=verification
+                )
+                
+                # Update donation record
+                await self._update_donation_status(
+                    donation_id=donation_id,
+                    status='completed',
+                    x402_tx_hash=x402_tx_hash,
+                    blockchain_tx_hash=blockchain_tx_hash,
+                    verification=verification
+                )
+                
+                return {
+                    "success": True,
+                    "verified": True,
+                    "donation_id": donation_id,
+                    "x402_tx_hash": x402_tx_hash,
+                    "blockchain_tx_hash": blockchain_tx_hash,
+                    "participant_id": participant_id,
+                    "amount": float(amount),
+                    "distribution": {
+                        "participant_card": float(amount * Decimal('0.80')),
+                        "housing_fund": float(amount * Decimal('0.15')),
+                        "operations": float(amount * Decimal('0.05'))
+                    },
+                    "timestamp": verification.get('timestamp'),
+                    "facilitator_signature": verification.get('signature')
+                }
+                
+        except httpx.TimeoutException:
+            logger.error(f"x402 facilitator timeout for {x402_tx_hash}")
+            raise HTTPException(status_code=504, detail="Payment verification timeout")
+        except Exception as e:
+            logger.error(f"x402 payment verification failed: {str(e)}")
+            raise HTTPException(status_code=500, detail=f"Verification failed: {str(e)}")
+    
+    async def _process_x402_payment(
+        self,
+        x402_tx_hash: str,
+        donation_id: str,
+        participant_id: str,
+        amount: Decimal,
+        verification: Dict[str, Any]
+    ) -> str:
+        """
+        Process verified x402 payment through smart contract
+        
+        Args:
+            x402_tx_hash: x402 transaction hash
+            donation_id: SHELTR donation ID
+            participant_id: Participant ID
+            amount: Payment amount
+            verification: Verification data from facilitator
+            
+        Returns:
+            Blockchain transaction hash
+        """
+        try:
+            # Get participant blockchain address
+            participant = await self._get_participant(participant_id)
+            participant_address = participant.blockchain_address
+            
+            # Convert amount to Wei (18 decimals)
+            amount_wei = int(amount * 10**18)
+            
+            # Determine payment type
+            payment_type = verification.get('metadata', {}).get('payment_type', 'micropayment')
+            payment_type_enum = self._get_payment_type_enum(payment_type)
+            
+            # Build smart contract transaction
+            tx = self.x402_processor.functions.processX402Payment({
+                'participant': participant_address,
+                'amount': amount_wei,
+                'x402TxHash': bytes.fromhex(x402_tx_hash[2:]),  # Remove '0x' prefix
+                'signature': bytes.fromhex(verification['signature'][2:]),
+                'timestamp': verification['timestamp'],
+                'paymentType': payment_type_enum
+            }).build_transaction({
+                'chainId': self.chain_id,
+                'gas': 400000,  # Increased gas limit for x402 processing
+                'gasPrice': self.w3.eth.gas_price,
+                'nonce': self.w3.eth.get_transaction_count(self.account.address)
+            })
+            
+            # Sign transaction
+            private_key = os.getenv('BLOCKCHAIN_PRIVATE_KEY')
+            signed_tx = self.w3.eth.account.sign_transaction(tx, private_key)
+            
+            # Send transaction
+            tx_hash = self.w3.eth.send_raw_transaction(signed_tx.rawTransaction)
+            
+            # Wait for confirmation
+            receipt = self.w3.eth.wait_for_transaction_receipt(tx_hash, timeout=300)
+            
+            if receipt.status == 1:
+                logger.info(f"x402 payment processed on-chain: {tx_hash.hex()}")
+                return tx_hash.hex()
+            else:
+                raise Exception("Smart contract transaction failed")
+                
+        except Exception as e:
+            logger.error(f"Failed to process x402 payment on-chain: {str(e)}")
+            raise
+    
+    def _get_payment_type_enum(self, payment_type: str) -> int:
+        """Convert payment type string to enum value"""
+        payment_types = {
+            'micropayment': 1,
+            'ai_agent': 2,
+            'api_payment': 3,
+            'm2m_operation': 4
+        }
+        return payment_types.get(payment_type, 1)
+    
+    async def get_x402_stats(self) -> Dict[str, Any]:
+        """
+        Get x402 payment statistics from smart contract
+        
+        Returns:
+            Dictionary with x402 statistics
+        """
+        try:
+            # Call smart contract
+            stats = self.x402_processor.functions.getX402Stats().call()
+            
+            return {
+                "total_payments": stats[0],
+                "total_volume": float(Decimal(stats[1]) / Decimal(10**18)),
+                "average_amount": float(Decimal(stats[2]) / Decimal(10**18)),
+                "cost_savings_vs_adyen": self._calculate_cost_savings(stats[1])
+            }
+            
+        except Exception as e:
+            logger.error(f"Failed to get x402 stats: {str(e)}")
+            return {}
+    
+    def _calculate_cost_savings(self, total_volume_wei: int) -> float:
+        """Calculate cost savings vs Adyen for x402 payments"""
+        total_volume = float(Decimal(total_volume_wei) / Decimal(10**18))
+        
+        # Adyen cost: 2.9% + $0.30 per transaction
+        # Assume average $0.50 payment
+        avg_payment = 0.50
+        num_payments = int(total_volume / avg_payment)
+        adyen_cost = (total_volume * 0.029) + (num_payments * 0.30)
+        
+        # x402 cost: ~$0.01 per transaction
+        x402_cost = num_payments * 0.01
+        
+        savings = adyen_cost - x402_cost
+        return round(savings, 2)
+    
+    async def _get_participant(self, participant_id: str):
+        """Get participant from database"""
+        # Implementation depends on your database structure
+        pass
+    
+    async def _store_pending_donation(self, **kwargs):
+        """Store pending donation in Firestore"""
+        # Implementation depends on your database structure
+        pass
+    
+    async def _get_pending_donation(self, donation_id: str):
+        """Get pending donation from Firestore"""
+        # Implementation depends on your database structure
+        pass
+    
+    async def _update_donation_status(self, **kwargs):
+        """Update donation status in Firestore"""
+        # Implementation depends on your database structure
+        pass
+```
+
+### Frontend x402 Integration
+
+```typescript
+// apps/web/src/services/x402DonationService.ts
+import { useX402 } from '@coinbase/x402-react';
+
+export interface X402PaymentRequest {
+    network: string;
+    amount: string;
+    currency: string;
+    recipient: string;
+    facilitator: string;
+    metadata: Record<string, any>;
+}
+
+export interface X402DonationResult {
+    success: boolean;
+    donationId: string;
+    x402TxHash: string;
+    blockchainTxHash: string;
+    amount: number;
+    distribution: {
+        participantCard: number;
+        housingFund: number;
+        operations: number;
+    };
+}
+
+export class X402DonationService {
+    private apiBaseUrl: string;
+    
+    constructor() {
+        this.apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || '';
+    }
+    
+    /**
+     * Create x402 micropayment donation request
+     * Returns 402 Payment Required with payment instructions
+     */
+    async createMicropayment(
+        participantId: string,
+        amount: number,
+        paymentType: 'micropayment' | 'ai_agent' | 'api_payment' = 'micropayment'
+    ): Promise<{
+        donationId: string;
+        paymentRequired: X402PaymentRequest;
+    }> {
+        // Validate amount range
+        if (amount < 0.10 || amount > 5.00) {
+            throw new Error('x402 payments must be between $0.10 and $5.00');
+        }
+        
+        // Request 402 payment from backend
+        const response = await fetch(
+            `${this.apiBaseUrl}/api/v2/donations/x402/create`,
+            {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    participant_id: participantId,
+                    amount: amount,
+                    payment_type: paymentType
+                })
+            }
+        );
+        
+        if (response.status !== 402) {
+            const error = await response.json();
+            throw new Error(error.detail || 'Failed to create x402 payment request');
+        }
+        
+        const data = await response.json();
+        
+        return {
+            donationId: data.donation_id,
+            paymentRequired: data.payment_required
+        };
+    }
+    
+    /**
+     * Process x402 payment using Coinbase SDK
+     * Handles wallet connection, payment signing, and verification
+     */
+    async processPayment(
+        donationId: string,
+        paymentRequired: X402PaymentRequest,
+        walletAddress: string
+    ): Promise<X402DonationResult> {
+        try {
+            // Use Coinbase x402 SDK to process payment
+            const { fetchWithPayment } = useX402();
+            
+            // Make payment and get transaction hash
+            const paymentResponse = await fetchWithPayment(
+                `${this.apiBaseUrl}/api/v2/donations/x402/verify`,
+                {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        donation_id: donationId,
+                        payment_required: paymentRequired,
+                        wallet_address: walletAddress
+                    })
+                },
+                {
+                    network: paymentRequired.network,
+                    amount: paymentRequired.amount,
+                    currency: paymentRequired.currency,
+                    recipient: paymentRequired.recipient
+                }
+            );
+            
+            if (!paymentResponse.ok) {
+                const error = await paymentResponse.json();
+                throw new Error(error.detail || 'Payment verification failed');
+            }
+            
+            const result = await paymentResponse.json();
+            
+            if (!result.verified) {
+                throw new Error('Payment verification failed');
+            }
+            
+            return {
+                success: true,
+                donationId: result.donation_id,
+                x402TxHash: result.x402_tx_hash,
+                blockchainTxHash: result.blockchain_tx_hash,
+                amount: result.amount,
+                distribution: result.distribution
+            };
+            
+        } catch (error) {
+            console.error('x402 payment processing failed:', error);
+            throw error;
+        }
+    }
+    
+    /**
+     * Get x402 payment statistics
+     */
+    async getX402Stats(): Promise<{
+        totalPayments: number;
+        totalVolume: number;
+        averageAmount: number;
+        costSavingsVsAdyen: number;
+    }> {
+        const response = await fetch(
+            `${this.apiBaseUrl}/api/v2/donations/x402/stats`
+        );
+        
+        if (!response.ok) {
+            throw new Error('Failed to fetch x402 statistics');
+        }
+        
+        return await response.json();
+    }
+}
+
+// React Hook for x402 donations
+export function useX402Donation() {
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const service = new X402DonationService();
+    
+    const createMicropayment = async (
+        participantId: string,
+        amount: number
+    ) => {
+        setLoading(true);
+        setError(null);
+        
+        try {
+            const result = await service.createMicropayment(participantId, amount);
+            return result;
+        } catch (err) {
+            setError(err.message);
+            throw err;
+        } finally {
+            setLoading(false);
+        }
+    };
+    
+    const processPayment = async (
+        donationId: string,
+        paymentRequired: X402PaymentRequest,
+        walletAddress: string
+    ) => {
+        setLoading(true);
+        setError(null);
+        
+        try {
+            const result = await service.processPayment(
+                donationId,
+                paymentRequired,
+                walletAddress
+            );
+            return result;
+        } catch (err) {
+            setError(err.message);
+            throw err;
+        } finally {
+            setLoading(false);
+        }
+    };
+    
+    return {
+        createMicropayment,
+        processPayment,
+        loading,
+        error
+    };
+}
+```
+
+### API Router for x402 Donations
+
+```python
+# apps/api/routers/x402_donations.py
+from fastapi import APIRouter, HTTPException, Depends, Response
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel, Field
+from decimal import Decimal
+from typing import Optional
+import logging
+
+logger = logging.getLogger(__name__)
+
+router = APIRouter(prefix="/api/v2/donations/x402", tags=["x402-micropayments"])
+
+class X402DonationRequest(BaseModel):
+    participant_id: str = Field(..., description="SHELTR participant ID")
+    amount: Decimal = Field(..., ge=0.10, le=5.00, description="Donation amount ($0.10-$5.00)")
+    payment_type: Optional[str] = Field('micropayment', description="Payment type")
+
+class X402VerificationRequest(BaseModel):
+    donation_id: str = Field(..., description="SHELTR donation ID")
+    x402_tx_hash: str = Field(..., description="x402 transaction hash")
+    payment_signature: str = Field(..., description="Payment signature from facilitator")
+
+@router.post("/create")
+async def create_x402_donation(
+    request: X402DonationRequest,
+    response: Response,
+    x402_service: X402PaymentService = Depends(get_x402_service)
+):
+    """
+    Create x402 micropayment donation request
+    Returns HTTP 402 Payment Required with payment instructions
+    
+    Amount Range: $0.10 - $5.00
+    For amounts over $5.00, use Adyen payment endpoint
+    """
+    try:
+        # Validate amount range
+        if request.amount < Decimal('0.10') or request.amount > Decimal('5.00'):
+            raise HTTPException(
+                status_code=400,
+                detail="x402 payments must be between $0.10 and $5.00. Use Adyen for larger amounts."
+            )
+        
+        # Create x402 payment request
+        payment_request = await x402_service.create_x402_payment_request(
+            participant_id=request.participant_id,
+            amount=request.amount,
+            payment_type=request.payment_type
+        )
+        
+        # Return 402 Payment Required
+        return JSONResponse(
+            status_code=402,
+            content=payment_request,
+            headers={
+                'PAYMENT-REQUIRED': json.dumps(payment_request['payment_required'])
+            }
+        )
+        
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        logger.error(f"x402 donation creation failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to create donation: {str(e)}")
+
+@router.post("/verify")
+async def verify_x402_donation(
+    request: X402VerificationRequest,
+    x402_service: X402PaymentService = Depends(get_x402_service)
+):
+    """
+    Verify x402 payment and process donation through SmartFund
+    
+    This endpoint:
+    1. Verifies payment with Coinbase facilitator
+    2. Processes payment through smart contract
+    3. Triggers SmartFund 80/15/5 distribution
+    4. Records transaction on Shelter Ledger
+    """
+    try:
+        # Verify payment through Coinbase facilitator
+        verification = await x402_service.verify_x402_payment(
+            x402_tx_hash=request.x402_tx_hash,
+            donation_id=request.donation_id,
+            payment_signature=request.payment_signature
+        )
+        
+        logger.info(f"x402 donation verified and processed: {request.donation_id}")
+        
+        return {
+            "success": True,
+            "verified": True,
+            "data": verification
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"x402 verification failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Verification failed: {str(e)}")
+
+@router.get("/stats")
+async def get_x402_stats(
+    x402_service: X402PaymentService = Depends(get_x402_service)
+):
+    """
+    Get x402 micropayment statistics
+    
+    Returns:
+    - Total number of x402 payments
+    - Total volume in USD
+    - Average payment amount
+    - Cost savings vs Adyen
+    """
+    try:
+        stats = await x402_service.get_x402_stats()
+        
+        return {
+            "success": True,
+            "data": {
+                "total_micropayments": stats['total_payments'],
+                "total_volume_usd": stats['total_volume'],
+                "average_amount_usd": stats['average_amount'],
+                "cost_savings_vs_adyen": stats['cost_savings_vs_adyen'],
+                "efficiency": "98% (vs 40-60% with Adyen for micropayments)"
+            }
+        }
+        
+    except Exception as e:
+        logger.error(f"Failed to get x402 stats: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to fetch statistics: {str(e)}")
+
+@router.get("/participant/{participant_id}/history")
+async def get_participant_x402_history(
+    participant_id: str,
+    limit: int = 50,
+    offset: int = 0,
+    blockchain_service: BlockchainService = Depends(get_blockchain_service)
+):
+    """
+    Get participant's x402 donation history
+    
+    Returns complete transaction history including:
+    - All x402 donations received
+    - Payment types (micropayment, AI agent, API)
+    - Amounts and timestamps
+    - Blockchain verification links
+    """
+    try:
+        history = await blockchain_service.get_participant_x402_history(
+            participant_id=participant_id,
+            limit=limit,
+            offset=offset
+        )
+        
+        return {
+            "success": True,
+            "data": history
+        }
+        
+    except Exception as e:
+        logger.error(f"Failed to get participant x402 history: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to fetch history: {str(e)}")
+
+# Dependency injection
+def get_x402_service() -> X402PaymentService:
+    """Get x402 payment service instance"""
+    return X402PaymentService()
+
+def get_blockchain_service() -> BlockchainService:
+    """Get blockchain service instance"""
+    return BlockchainService()
+```
+
+### Testing & Validation
+
+```python
+# tests/test_x402_integration.py
+import pytest
+from decimal import Decimal
+
+class TestX402Integration:
+    """Test suite for x402 micropayment integration"""
+    
+    @pytest.mark.asyncio
+    async def test_create_x402_payment_request(self, x402_service, test_participant):
+        """Test creating x402 payment request"""
+        result = await x402_service.create_x402_payment_request(
+            participant_id=test_participant.id,
+            amount=Decimal('0.50')
+        )
+        
+        assert result['status'] == 402
+        assert 'donation_id' in result
+        assert 'payment_required' in result
+        assert result['payment_required']['network'] == 'eip155:8453'
+        assert result['payment_required']['amount'] == '0.50'
+    
+    @pytest.mark.asyncio
+    async def test_verify_x402_payment(self, x402_service, test_donation):
+        """Test verifying x402 payment"""
+        result = await x402_service.verify_x402_payment(
+            x402_tx_hash='0xabc123...',
+            donation_id=test_donation.id,
+            payment_signature='0xdef456...'
+        )
+        
+        assert result['success'] is True
+        assert result['verified'] is True
+        assert result['distribution']['participant_card'] == 0.40  # 80% of $0.50
+        assert result['distribution']['housing_fund'] == 0.075      # 15% of $0.50
+        assert result['distribution']['operations'] == 0.025        # 5% of $0.50
+    
+    @pytest.mark.asyncio
+    async def test_amount_validation(self, x402_service, test_participant):
+        """Test amount validation"""
+        # Too small
+        with pytest.raises(ValueError):
+            await x402_service.create_x402_payment_request(
+                participant_id=test_participant.id,
+                amount=Decimal('0.05')
+            )
+        
+        # Too large
+        with pytest.raises(ValueError):
+            await x402_service.create_x402_payment_request(
+                participant_id=test_participant.id,
+                amount=Decimal('10.00')
+            )
+```
+
+---
+
 ## 🚀 **Deployment Instructions**
 
 ### **1. Environment Setup**

@@ -12,7 +12,7 @@ The next generation platform for transparent charitable giving and homelessness 
 [![GitHub Stars](https://img.shields.io/github/stars/mrj0nesmtl/sheltr-ai?style=for-the-badge)](https://github.com/mrj0nesmtl/sheltr-ai)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg?style=for-the-badge)](https://www.python.org/downloads/)
-[![Last Updated](https://img.shields.io/badge/Last%20Updated-November%2022%2C%202025-brightgreen?style=for-the-badge)](https://github.com/mrj0nesmtl/sheltr-ai)
+[![Last Updated](https://img.shields.io/badge/Last%20Updated-December%2016%2C%202025-brightgreen?style=for-the-badge)](https://github.com/mrj0nesmtl/sheltr-ai)
 
 ---
 
@@ -245,28 +245,29 @@ Users can hold multiple roles simultaneously:
 
 ---
 
-## 🪙 **SHELTR Enterprise Single-Token Architecture**
+## 🪙 **SHELTR Enterprise Dual-Rail Payment Architecture v3.0**
 
 ### **Revolutionary Payment & Blockchain Ecosystem**
 
-SHELTR has evolved to a **single-token stable fund architecture** that eliminates participant cryptocurrency exposure while maintaining complete blockchain transparency.
+SHELTR implements a **dual-rail payment architecture** combining traditional payment processing with blockchain transparency, eliminating participant cryptocurrency exposure while maintaining complete accountability.
 
-#### **🎯 Enterprise Single-Token Model**
-- **🔵 SHELTR Stablecoin** - Housing fund tracking only (1:1 USDT-backed)
-- **💳 Virtual Debit Cards** - 80% allocation with zero crypto exposure for participants
-- **🏦 Guaranteed Returns** - 4-6% APY through Coinbase institutional staking
-- **⛓️ Base Network** - Ultra-low fees (~$0.01) with sub-second finality
+#### **🎯 Dual-Rail Payment Strategy**
+- **💳 Adyen for Platforms** - Traditional credit card donations ($5+) with virtual debit card issuance
+- **⚡ x402 Protocol** - Fee-free micropayments (<$5) and AI agent payments on Base network
+- **⛓️ Shelter Ledger** - Dual-purpose blockchain (track & trace + SmartFund™ investment)
+- **🏦 Guaranteed Returns** - 4-6% APY through Coinbase Prime institutional staking
+- **🛡️ Zero Crypto Exposure** - Participants receive Adyen virtual cards, never touch cryptocurrency
 
-#### **💰 Enterprise SmartFund™ Distribution**
-Every donation automatically distributes through enterprise payment infrastructure:
+#### **💰 Enterprise SmartFund™ Distribution (Dual-Rail)**
+Every donation automatically distributes through dual-rail payment infrastructure:
 
 ```
-💳 $100 Credit Card Donation
+💳 Traditional Rail: $100 Credit Card Donation (Adyen)
     ↓ (Enterprise Payment Processing)
-🏦 Global Payment Gateway (PCI DSS Level 1)
+🏦 Adyen for Platforms (PCI DSS Level 1)
     ↓ (Instant Smart Distribution)
 ┌─────────────────────────────────────────────────────────────┐
-│ 80% → Virtual Debit Card ($80)                             │
+│ 80% → Adyen Virtual Debit Card ($80)                       │
 │      ✅ Zero cryptocurrency exposure                        │
 │      ✅ Global Visa/Mastercard acceptance                   │
 │      ✅ Instant loading and activation                      │
@@ -274,29 +275,39 @@ Every donation automatically distributes through enterprise payment infrastructu
 │ 15% → Housing Fund ($15)                                   │
 │      ✅ Coinbase Prime institutional custody                │
 │      ✅ Guaranteed 4-6% APY returns                        │
-│      ✅ SHELTR token tracking (1:1 USDT)                   │
+│      ✅ Shelter Ledger tracking (dual-purpose token)       │
 ├─────────────────────────────────────────────────────────────┤
 │ 5% → Shelter Operations ($5)                               │
 │      ✅ Community support and operations                    │
 │      ✅ AI-powered resource allocation                      │
 └─────────────────────────────────────────────────────────────┘
     ↓ (Complete Transparency)
-⛓️ Base Network Blockchain Verification (~$0.01 fees)
+⛓️ Shelter Ledger: Base Network Blockchain Verification (~$0.01 fees)
+
+⚡ Micropayment Rail: $3 Micro-Donation (x402 Protocol)
+    ↓ (Fee-Free USDC on Base)
+🔮 x402 Payment Protocol
+    ↓ (Same 80-15-5 Split)
+    ✅ Fee-free instant settlement
+    ✅ AI agent autonomous payments
+    ✅ Partner API monetization
 ```
 
 #### **🏢 Enterprise Partnership Stack**
-- **🔵 Base Network**: Coinbase-incubated Ethereum L2 for ultra-low fees
-- **💳 Payment Processing**: Global payment infrastructure with virtual card issuance
-- **🏦 Coinbase Staking**: Institutional custody with guaranteed 4-6% APY returns
-- **🛡️ Zero Risk Model**: Participants never exposed to cryptocurrency volatility
-- **⚡ Sub-Second Finality**: 2-second transaction confirmations on Base
+- **💳 Adyen for Platforms**: Global payment processing with virtual card issuance ($5+ donations)
+- **⚡ x402 Protocol**: Fee-free micropayments on Base network (<$5 donations, AI agents)
+- **🔵 Base Network**: Coinbase-incubated Ethereum L2 for ultra-low fees (~$0.01)
+- **🏦 Coinbase Prime**: Institutional custody with guaranteed 4-6% APY returns
+- **⛓️ Shelter Ledger**: Dual-purpose blockchain (public accountability + investment tracking)
+- **🛡️ Zero Risk Model**: Participants receive Adyen cards, never exposed to cryptocurrency
 
-#### **🎯 Why Single-Token Architecture?**
-- **✅ Government-Ready**: Traditional payment infrastructure with blockchain transparency
-- **✅ CFO-Approved**: Zero participant cryptocurrency exposure, guaranteed returns
-- **✅ Enterprise-Grade**: PCI DSS Level 1 compliance, SOC 2 Type II custody
+#### **🎯 Why Dual-Rail Architecture?**
+- **✅ Government-Ready**: Traditional payment infrastructure (Adyen) with blockchain transparency (Shelter Ledger)
+- **✅ CFO-Approved**: Zero participant cryptocurrency exposure, guaranteed institutional returns
+- **✅ Enterprise-Grade**: PCI DSS Level 1 compliance (Adyen), SOC 2 Type II custody (Coinbase)
+- **✅ Flexible**: Adyen for traditional donors, x402 for micropayments and AI agents
 - **✅ Scalable**: Base Network enables global expansion with minimal transaction costs
-- **✅ Measurable Impact**: Complete blockchain verification of housing fund growth
+- **✅ Measurable Impact**: Complete blockchain verification via Shelter Ledger
 
 **→ [Complete Enterprise Token Documentation](sheltr-tokens/docs/README.md)**  
 **→ [Enterprise Strategy Guide](sheltr-tokens/docs/SHELTR-TOKENOMICS-STRATEGY.md)**  
@@ -322,11 +333,12 @@ Every donation automatically distributes through enterprise payment infrastructu
 - **Storage**: Firebase Storage + Google Cloud Storage
 - **Queue**: Google Cloud Tasks + Pub/Sub
 
-#### **🆕 Blockchain & Enterprise Payments**
+#### **🆕 Blockchain & Dual-Rail Payments**
 - **Framework**: Foundry + Solidity 0.8.24 + OpenZeppelin
-- **Token**: SHELTR Stablecoin (1:1 USDT-backed, housing fund tracking only)
+- **Token**: SHELTR Utility Token (Shelter Ledger - dual-purpose: track & trace + investment)
 - **Network**: Base (Coinbase L2) for ultra-low fees (~$0.01 per transaction)
-- **Payment Processing**: Global virtual card issuance with zero participant crypto exposure
+- **Payment Rails**: Adyen for Platforms (traditional) + x402 Protocol (micropayments)
+- **Virtual Cards**: Adyen global virtual card issuance with zero participant crypto exposure
 - **Institutional Staking**: Coinbase Prime custody with guaranteed 4-6% APY returns
 - **Security**: Multi-sig wallets + reentrancy protection + PCI DSS Level 1 compliance
 
@@ -364,14 +376,18 @@ Every donation automatically distributes through enterprise payment infrastructu
 ✅ **Knowledge Base Dashboard** - Document management, embeddings, semantic search  
 ✅ **Chatbot Control Panel** - Configurable AI agents, session management  
 
-### **🆕 New Features in SHELTR-AI 2.0**
+### **🆕 New Features in SHELTR-AI 3.0**
+🆕 **Dual-Rail Payment Architecture** - Adyen for Platforms + x402 Protocol for maximum flexibility  
+🆕 **Shelter Ledger v3.0** - Dual-purpose blockchain (track & trace + investment vehicle)  
+🆕 **x402 Micropayments** - Fee-free USDC payments on Base for micro-donations and AI agents  
+🆕 **Basecamp Community Centers** - Essential services, job training, and community support  
+🆕 **POD Model A Focus** - Single SKU strategy for streamlined manufacturing  
 🆕 **Independent Participant Registration** - No shelter requirement  
 🆕 **Firebase Real-time Sync** - Live updates across all platforms  
 🆕 **Google Cloud Run Backend** - Serverless, auto-scaling API  
-🆕 **Enterprise Single-Token Architecture** - Zero participant crypto exposure + guaranteed returns  
+🆕 **Zero Crypto Exposure** - Participants receive Adyen virtual cards, never touch cryptocurrency  
 🆕 **Base Network Integration** - Ultra-low fees (~$0.01) with Coinbase L2  
-🆕 **Payment Processing Infrastructure** - Global virtual card issuance  
-🆕 **Coinbase Institutional Staking** - Guaranteed 4-6% APY housing fund returns  
+🆕 **Coinbase Prime Staking** - Guaranteed 4-6% APY housing fund returns  
 🆕 **Advanced AI Analytics** - Predictive insights + impact modeling  
 🆕 **Monorepo Architecture** - Streamlined development workflow  
 🆕 **Docker Containerization** - Consistent deployment environments  
@@ -386,7 +402,7 @@ Every donation automatically distributes through enterprise payment infrastructu
 
 ## 🚀 **Development Status & Roadmap**
 
-### **🎯 Current Phase: SESSION 22 COMPLETE ✅ - Dual Donation System + Public Page Excellence**
+### **🎯 Current Phase: SESSION 29 COMPLETE ✅ - Documentation v3.0 + Dual-Rail Architecture**
 - ✅ Repository structure and documentation
 - ✅ Python virtual environment setup  
 - ✅ FastAPI backend foundation
@@ -436,7 +452,11 @@ Every donation automatically distributes through enterprise payment infrastructu
 - ✅ **🆕 PUBLIC PAGE REDESIGNS**: Modern shelter and participant pages with email signup
 - ✅ **🆕 INTERNAL MESSAGING ENHANCEMENTS**: @mention autocomplete + auto-recipient detection
 - ✅ **🆕 SHELTER ADMIN TOOLS**: Tenant-specific notification center with accurate metrics
-- 🔄 **NEXT: PAYMENT INTEGRATION**: Adyen integration for live transaction processing
+- ✅ **🆕 SESSION 29 - DOCUMENTATION v3.0**: Updated 13 web pages with dual-rail architecture
+- ✅ **🆕 ECOSYSTEM CLEANUP**: Removed MOBI, added Basecamp, focused on POD Model A
+- ✅ **🆕 SHELTER LEDGER v3.0**: Enhanced dual-purpose token messaging across platform
+- ✅ **🆕 x402 INTEGRATION**: Added micropayment protocol references to all payment docs
+- 🔄 **NEXT: PAYMENT INTEGRATION**: Adyen + x402 integration for live transaction processing
 - ⏳ Mobile app development and production launch preparation
 
 ### **📅 Upcoming Milestones**
@@ -478,6 +498,6 @@ Every donation automatically distributes through enterprise payment infrastructu
 
 **📖 "Great documentation is the foundation of great software - and great impact."**
 
-*Last Updated: December 11, 2025 - Session 27 Security Remediation Complete: Achieved zero Dependabot vulnerabilities (0/0), zero npm audit issues, fixed all XSS vulnerabilities, removed sensitive logging, merged 20 dependency PRs, and improved CI/CD security workflows. Production builds passing with enterprise-grade security posture.*
+*Last Updated: December 16, 2025 - Session 29 Documentation v3.0 Complete: Updated 13 web pages with dual-rail payment architecture (Adyen + x402), enhanced Shelter Ledger messaging, removed MOBI references, added Basecamp community centers, and achieved complete ecosystem alignment. All documentation now reflects v3.0 specifications with zero crypto exposure for participants and guaranteed institutional returns.*
 
 **🌐 [Visit Live Site](https://sheltr-ai.web.app) | 🚀 [Get Started](docs/01-overview/README.md) | 🤝 [Contribute](CONTRIBUTING.md) | 💝 [Donate](https://sheltr-ai.web.app/scan-give) | 📖 [Documentation Hub](docs/TABLE_OF_CONTENTS.md) | 🪙 [Token Ecosystem](sheltr-tokens/docs/README.md)**

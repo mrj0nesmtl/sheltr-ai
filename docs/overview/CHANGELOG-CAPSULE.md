@@ -1,6 +1,6 @@
 # 📝 SHELTR Changelog Capsule - Recent Changes
 
-**Last Updated**: December 15, 2025  
+**Last Updated**: December 16, 2025  
 **Coverage**: Most recent 30 days of development  
 **Purpose**: AI-accessible summary of recent platform changes for authenticated administrators
 
@@ -10,12 +10,58 @@
 
 ## 🎯 Quick Stats (Last 30 Days)
 
-- **Versions Released**: 2.158.0 → 2.140.0 (19 releases)
-- **Major Features**: 12 new features
+- **Versions Released**: 2.159.0 → 2.140.0 (20 releases)
+- **Major Features**: 13 new features
 - **Bug Fixes**: 30+ critical fixes
 - **Security Updates**: **SESSION 27 + Dependency Updates** 🔒
-- **Documentation**: 25+ docs updated/created
+- **Documentation**: 38+ docs updated/created
 - **MCP Servers**: 8 integrated (GitHub, Firebase, Google Cloud, Shadcn, Playwright, Context7)
+
+---
+
+## [2.159.0] - 2025-12-16 (Documentation v3.0 Overhaul & Ecosystem Cleanup) 📚✨
+
+### 🎯 **Session Highlights**
+- **Documentation v3.0**: Updated 13 web pages to reflect dual-rail payment architecture
+- **MOBI Removal**: Cleaned ecosystem to focus on POD Model A + Basecamp
+- **x402 Integration**: Added micropayment protocol references across all payment docs
+- **Shelter Ledger**: Enhanced dual-purpose token messaging throughout platform
+
+### 📚 **Documentation Pages Updated (13 Total)**
+**Task 1: Architecture Updates (8 pages)**
+- ✅ Blockchain page → v3.0 with Shelter Ledger + x402 Protocol
+- ✅ Functionality Matrix → v3.0.0 with payment rails ready badge
+- ✅ Payment Rails → Comprehensive dual-rail strategy (Adyen + x402)
+- ✅ Platform Overview → v2.158.0 with dual-rail mentions
+- ✅ System Design → Already v3.0.0 (verified)
+- ✅ Tokenomics (docs) → v3.0 Dual-Rail Architecture
+- ✅ Tokenomics (public) → v3.0 Dual-Rail Architecture
+- ✅ Whitepaper → v3.0.0 with x402 Enhanced badge
+
+**Task 2: Ecosystem Cleanup (5 pages)**
+- ✅ Participants page → MOBI replaced with Basecamp Centers
+- ✅ Pods page → No MOBI references (verified)
+- ✅ Buildout page → Removed MOBI Transport Systems section
+- ✅ Docs/Ecosystem page → No MOBI references (verified)
+- ✅ Ecosystem page → No MOBI references (verified)
+
+### 🏗️ **Architecture Enhancements**
+- **Dual-Rail Payment Strategy**: Adyen for Platforms (traditional) + x402 Protocol (micropayments)
+- **Shelter Ledger Emphasis**: Dual-purpose token (track & trace + investment) consistently highlighted
+- **Basecamp Integration**: Community support centers replace MOBI bikes in ecosystem
+- **POD Model A Focus**: Single SKU strategy with enhanced portability messaging
+
+### 🎨 **UI/UX Improvements**
+- Updated hero sections with dual-rail payment messaging
+- Enhanced architecture component cards with x402 details
+- Improved theme-aware styling across documentation pages
+- Added future-ready badges (x402 READY, PAYMENT RAILS READY)
+
+### 📊 **Content Updates**
+- Version numbers updated to v3.0.0 / v2.158.0 across all pages
+- Dates updated to December 16, 2025
+- Gemini AI cost reduction (56%) mentioned
+- Zero crypto exposure for participants clarified
 
 ---
 

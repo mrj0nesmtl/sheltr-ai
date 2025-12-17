@@ -1,11 +1,39 @@
-# 🗺️ Development Roadmap v4.0
-## Enterprise-Grade Platform Strategy: 180-Day Production Launch
+# 🗺️ Development Roadmap v4.1
+## Strategic Refactoring + Production Launch Plan
 
 > **Vision**: Launch SHELTR as production-ready enterprise SaaS platform with comprehensive testing  
-> **Timeline**: 180 days to pilot launch (April 2026)  
-> **Architecture**: Firebase + Adyen + Coinbase + Next.js 15 + AI Hyper Chatbot + Knowledge Base
+> **Current Phase**: 6-Week MVP Refactoring Sprint (January - February 2026)  
+> **Architecture**: Firebase + Adyen + Coinbase + Next.js 15 + AI Hyper Chatbot + Knowledge Base  
 > **Strategic Lead**: JY, CTO + Team  
-> **Launch Target**: Fully-tested platform with payment rails and blockchain integration by Fall 2026
+> **Launch Target**: MVP by Q1 2026, Full platform by Fall 2026
+
+---
+
+## 🔄 **STRATEGIC PIVOT: MVP Refactoring (December 2025)**
+
+### **New Strategic Direction**
+After 6-9 months of development, we're implementing a **focused 6-week refactoring sprint** to polish the 80% that works brilliantly and fix the 20% that needs attention. This strategic pivot prioritizes:
+
+1. **Quality over Quantity**: 10 core features working perfectly per dashboard
+2. **Performance First**: Sub-2-second dashboard loads with optimized data pipelines
+3. **User Experience**: Simple, intuitive interfaces across all 5 user roles
+4. **Production Readiness**: MVP launch by Q1 2026
+
+### **What's Already Excellent**
+- ✅ Public site (design, content, SEO, mobile experience)
+- ✅ Blog system (content management, SEO)
+- ✅ Gallery management (drag-and-drop, Firebase Storage)
+- ✅ Knowledge base (75+ docs, GitHub sync, RAG)
+- ✅ AI chatbot (Gemini 2.5 Flash, role-aware, cost-optimized)
+- ✅ Authentication (5-role RBAC, custom claims)
+
+### **What Needs Refinement**
+- ⚠️ Dashboard metrics (calculated on-the-fly, slow)
+- ⚠️ Notification system (too complex, 13 categories)
+- ⚠️ Real-time data (listeners not optimized)
+- ⚠️ Feature completion (many partially implemented)
+
+**📋 Detailed Refactoring Plan**: See [REFACTORING-ROADMAP-v1.0.md](REFACTORING-ROADMAP-v1.0.md)
 
 ---
 
@@ -215,9 +243,33 @@ gantt
 
 ---
 
-## 🚀 **180-DAY PRODUCTION ROADMAP (November 2, 2025 - March 28, 2026)**
+## 🚀 **UPDATED PRODUCTION ROADMAP (December 2025 - Fall 2026)**
 
-### **Phase 0: RAG Knowledge Base & Cost Optimization (October - November 2025)** ✅ **COMPLETE**
+### **Phase 0: 6-Week MVP Refactoring Sprint (January - February 2026)** 🎯 **CURRENT FOCUS**
+
+**Goal**: Production-ready MVP with 10 core features working perfectly
+
+**Timeline**: 6 weeks (42 days)
+
+**Focus Areas**:
+1. **Week 1-2**: Data Pipeline Overhaul (aggregation, Cloud Functions, performance)
+2. **Week 3**: Notification System Redesign (3-tier system, simplified preferences)
+3. **Week 4**: Dashboard Feature Audit (remove broken features, polish core 10)
+4. **Week 5**: Real-Time Optimization (query optimization, caching, performance)
+5. **Week 6**: Testing & Documentation (all roles, critical journeys, polish)
+
+**Success Metrics**:
+- ✅ Dashboard load < 2 seconds
+- ✅ Firestore reads reduced 60%+
+- ✅ 10 core features per dashboard working perfectly
+- ✅ All 5 user roles tested thoroughly
+- ✅ Ready for production deployment
+
+**📋 Complete Details**: See [REFACTORING-ROADMAP-v1.0.md](REFACTORING-ROADMAP-v1.0.md) for full implementation plan
+
+---
+
+### **Phase 0.5: RAG Knowledge Base & Cost Optimization (October - November 2025)** ✅ **COMPLETE**
 
 #### **Complete RAG System Implementation**
 - **75+ Documents**: Complete knowledge base with 62 GitHub docs and 13 secure documents
@@ -233,7 +285,9 @@ gantt
 - **Cache Invalidation**: Smart invalidation on CRUD operations maintaining data freshness
 - **Expected Savings**: $648/year infrastructure cost reduction
 
-### **Phase 1: Payment Rails Development (November 2025 - January 2026)** 🎯 **CRITICAL MILESTONE**
+### **Phase 1: Payment Rails Development (March - May 2026)** 🎯 **POST-REFACTORING**
+
+**Note**: Payment rails development now begins after 6-week MVP refactoring sprint completes (February 2026)
 
 #### **🎯 Late October 2025: SHELTR Introductory Team Call**
 - **Date**: Late October 2025 (TBD)
@@ -256,7 +310,7 @@ gantt
 - **Testing Infrastructure**: Comprehensive testing framework for payment processing
 - **Documentation**: Complete technical documentation for payment systems
 
-### **Phase 2: Blockchain Integration (February - March 2026)** 🏢 **SMART CONTRACTS**
+### **Phase 2: Blockchain Integration (June - August 2026)** 🏢 **SMART CONTRACTS**
 - **Smart Contract Development**: SHELTR Stablecoin and distribution contracts
 - **Base Network Integration**: Coinbase Base L2 network deployment and optimization
 - **Token Distribution Logic**: Automated SmartFund™ distribution via blockchain
@@ -264,7 +318,7 @@ gantt
 - **Integration Testing**: End-to-end blockchain integration with payment systems
 - **Performance Optimization**: Gas optimization and transaction efficiency
 
-### **Phase 3: Comprehensive Testing & QA (April - May 2026)** 🌟 **PRODUCTION READY**
+### **Phase 3: Comprehensive Testing & QA (September - October 2026)** 🌟 **PRODUCTION READY**
 - **End-to-End Testing**: Complete user role testing across all dashboards and workflows
 - **Security Validation**: Comprehensive security audit of entire platform
 - **Performance Benchmarking**: Load testing and performance optimization
@@ -543,15 +597,16 @@ Each development session is planned as **2-4 hour focused blocks** with specific
 
 ---
 
-**Roadmap Status**: ✅ **FOUNDATION COMPLETE WITH AI HYPER CHATBOT**  
-**Current Phase**: 180-Day Production Development - Payment Rails Development  
-**Next Milestone**: Blockchain Integration - Smart Contracts and Base Network  
-**Launch Target**: Spring 2026 - Production Platform with Complete Payment Rails
+**Roadmap Status**: 🔄 **STRATEGIC REFACTORING PHASE**  
+**Current Phase**: 6-Week MVP Refactoring Sprint (January - February 2026)  
+**Next Milestone**: MVP Production Launch - Q1 2026  
+**Launch Target**: Fall 2026 - Full Production Platform with Payment Rails & Blockchain
 
 ---
 
-**Last Updated**: November 2, 2025  
-**Version**: v2.86.0 - Complete RAG System & Cost Optimization  
-**Next Review**: January 2026 - After Payment Rails Development  
+**Last Updated**: December 16, 2025  
+**Version**: v4.1 - Strategic Refactoring Roadmap  
+**Next Review**: February 2026 - After MVP Refactoring Sprint  
 **Repository**: [github.com/mrj0nesmtl/sheltr-ai](https://github.com/mrj0nesmtl/sheltr-ai)  
-**Live Platform**: [sheltr-ai.web.app](https://sheltr-ai.web.app) (Development Platform) 
+**Live Platform**: [sheltr-ai.web.app](https://sheltr-ai.web.app) (Development Platform)  
+**Refactoring Plan**: [REFACTORING-ROADMAP-v1.0.md](REFACTORING-ROADMAP-v1.0.md) 

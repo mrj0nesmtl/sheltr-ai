@@ -176,6 +176,100 @@ function SystemDesignContent() {
               </CardContent>
             </Card>
           </div>
+
+          {/* Dual-Purpose Platform Mission */}
+          <div className="bg-gradient-to-r from-blue-50 via-purple-50 to-indigo-50 dark:from-blue-900/20 dark:via-purple-900/20 dark:to-indigo-900/20 border-2 border-blue-200 dark:border-blue-800 rounded-xl p-8 mb-12">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                Dual-Purpose Platform: Four Integrated Pillars
+              </h2>
+              <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+                SHELTR revolutionizes homeless services through a comprehensive ecosystem combining fundraising, shelter management, physical infrastructure, and financial services
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              <Card className="border-2 border-blue-500/20">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-blue-600">
+                    <Globe className="h-5 w-5" />
+                    1. Crowdfunding & Donation Platform
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm">
+                  <p className="mb-3">
+                    Enterprise-grade fundraising infrastructure enabling direct donations to participants via QR codes, with instant virtual card loading and complete Shelter Ledger transparency.
+                  </p>
+                  <ul className="space-y-1 text-muted-foreground">
+                    <li>• Real-time blockchain donation tracking</li>
+                    <li>• Instant QR-Scan virtual card loading</li>
+                    <li>• Zero cryptocurrency exposure for participants</li>
+                    <li>• 100% donation efficiency with SmartFund™</li>
+                  </ul>
+                </CardContent>
+              </Card>
+
+              <Card className="border-2 border-purple-500/20">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-purple-600">
+                    <Database className="h-5 w-5" />
+                    2. HMIS-Compliant Shelter Management
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm">
+                  <p className="mb-3">
+                    Full-featured Homeless Management Information System (HMIS) providing comprehensive tools for participant intake, case management, and regulatory compliance.
+                  </p>
+                  <ul className="space-y-1 text-muted-foreground">
+                    <li>• Complete participant intake & case management</li>
+                    <li>• Service coordination & bed management</li>
+                    <li>• Multi-tenant data isolation & security</li>
+                    <li>• HMIS regulatory compliance reporting</li>
+                  </ul>
+                </CardContent>
+              </Card>
+
+              <Card className="border-2 border-emerald-500/20">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-emerald-600">
+                    <Building2 className="h-5 w-5" />
+                    3. POD Deployment & Infrastructure
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm">
+                  <p className="mb-3">
+                    QR-Scan-to-POD ecosystem transforming digital donations into tangible housing solutions with complete Shelter Ledger public accountability.
+                  </p>
+                  <ul className="space-y-1 text-muted-foreground">
+                    <li>• POD Model A modular housing deployment</li>
+                    <li>• Basecamp community infrastructure</li>
+                    <li>• 15% SmartFund™ housing allocation</li>
+                    <li>• Future drone delivery network (2027)</li>
+                  </ul>
+                </CardContent>
+              </Card>
+
+              <Card className="border-2 border-orange-500/20">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-orange-600">
+                    <CreditCard className="h-5 w-5" />
+                    4. Digital Banking & Payments
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm">
+                  <p className="mb-3">
+                    Zero-risk financial services through Adyen virtual cards, guaranteed housing fund growth, and automated SmartFund™ distribution.
+                  </p>
+                  <ul className="space-y-1 text-muted-foreground">
+                    <li>• 80% Adyen virtual debit cards (zero crypto)</li>
+                    <li>• 15% housing fund (4-6% guaranteed APY)</li>
+                    <li>• 5% shelter operations support</li>
+                    <li>• Enterprise payment infrastructure (Adyen + Base)</li>
+                  </ul>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
         </div>
       </section>
 

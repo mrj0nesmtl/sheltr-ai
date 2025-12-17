@@ -3,8 +3,26 @@
 **Multi-Tenant SaaS Architecture with Single-Token Stable Fund Enterprise Payment Infrastructure**
 
 *Based on: Next.js 15 + Firebase + Adyen + Coinbase Base Integration*  
-*Date: December 12, 2025*  
+*Date: December 16, 2025*  
 *Status: Production Beta Online with Shelter Ledger + Complete RAG System + Cost Optimization + IR Dataroom* ✅
+
+---
+
+## 🎯 Platform Core Mission: Dual-Purpose Ecosystem
+
+**SHELTR is fundamentally a dual-purpose platform designed to revolutionize homeless services through four integrated pillars:**
+
+### 1. 🌐 **Crowdfunding & Donation Platform**
+Enterprise-grade fundraising infrastructure enabling direct donations to participants via QR codes, with instant virtual card loading and complete Shelter Ledger transparency. Donors can track their impact in real-time through blockchain verification while participants receive immediate support with zero cryptocurrency exposure.
+
+### 2. 🏥 **HMIS-Compliant Shelter Management System**
+Full-featured Homeless Management Information System (HMIS) providing shelters with comprehensive tools for participant intake, case management, service coordination, bed management, and regulatory compliance reporting. Multi-tenant architecture ensures complete data isolation while enabling cross-shelter analytics and best practice sharing.
+
+### 3. 🏠 **POD Deployment & Physical Infrastructure**
+QR-Scan-to-POD ecosystem transforming digital donations into tangible housing solutions. The SmartFund™ 15% housing allocation funds POD Model A modular housing units, Basecamp community infrastructure, and future drone delivery networks, all tracked publicly via the Shelter Ledger for complete accountability.
+
+### 4. 💳 **Digital Banking & Enterprise Payment Infrastructure**
+Zero-risk financial services for vulnerable populations through Adyen virtual debit cards (80% allocation), guaranteed 4-6% APY housing fund growth via Coinbase institutional staking (15% allocation), and automated SmartFund™ distribution ensuring 100% donation efficiency with traditional payment stability.
 
 ---
 
